@@ -1,0 +1,33 @@
+.container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+}
+
+.video {
+  margin: 20px;
+}
+
+.title {
+  color: #777777;
+  font-size: 12px;
+  font-weight: initial;
+}
+
+img {
+  border-radius: 20px;
+  border: 1px solid black;
+  cursor: pointer;
+  height: 140px;
+  width: 200px;
+}
+
+button {
+  background: #EE88BB;
+  cursor: pointer;
+  border-radius: 10px;
+  border: 1px solid white;
+  height: 50px;
+  width: 200px;
+}

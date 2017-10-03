@@ -1,0 +1,27 @@
+
+<div
+  class='screencaps'
+  [ngStyle]="{background: 'url(' + photo + ')'}"
+>
+
+  <div
+    (mouseleave)="stopCycle()"
+    (mouseover)="cycleImages()"
+    class="preview-hover-area"
+  >
+  </div>
+
+
+  <div *ngFor="let item of stuff; let i = index"
+       class="hover-me-{{ i + 1 }}"
+  >
+    <li></li>
+  </div>
+
+  <img *ngFor="let item of stuff; let i = index"
+       src="{{ item }}"
+       class="screencap screen{{ i + 1 }}">
+
+  <div class="overlay"></div>
+
+</div>

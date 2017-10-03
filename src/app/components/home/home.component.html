@@ -1,0 +1,17 @@
+<h1 class="title">
+  {{ selectedSourceFolder }}
+</h1>
+
+<br>
+
+<button (click)="hello()">Import</button>
+
+<br>
+
+<div class="container">
+  <div class="video" *ngFor="let item of finalArray; index as i">
+    <div class="item">
+      <app-gallery-item (click)="openVideo(i)" [stuff]="item[2]"></app-gallery-item>
+    </div>
+  </div>
+</div>
