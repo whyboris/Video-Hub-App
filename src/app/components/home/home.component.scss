@@ -27,35 +27,12 @@ $top-region: 100px;
   position: fixed;
   top: $top-region;
   left: 202px;
-  width: calc(100vw - 204px);
+  width: calc(100vw - 200px);
+  height: calc(100vh - 100px);
   border: 2px solid yellow;
   box-sizing: border-box;
-}
-
-.gallery {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  width: 100%;
-}
-
-.video {
-  margin: 10px;
-  cursor: pointer;
-}
-
-.title {
-  color: #777777;
-  font-size: 12px;
-  font-weight: initial;
-}
-
-input {
-  border-radius: 5px;
-  font-size: 12px;
-  padding: 8px;
-  border: 1px solid #666666;
-  outline: none;
+  overflow-y: scroll;
+  padding-bottom: 100px;
 }
 
 button {

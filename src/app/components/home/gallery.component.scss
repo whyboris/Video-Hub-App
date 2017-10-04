@@ -1,11 +1,30 @@
+
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  width: 100%;
+}
+
 .item {
+  margin: 10px;
+  max-width: 300px;
+  cursor: pointer;
+  border: 1px solid black;
+}
+
+.preview {
   width: 180px;
   height: 90px;
   margin: 10px;
 }
 
-.container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
+.title {
+  color: #777777;
+  font-size: 12px;
+}
+
+.folder {
+  color: #9C9C9C;
+  font-size: 8px;
 }

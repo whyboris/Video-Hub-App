@@ -5,7 +5,9 @@ import { ElectronService } from '../../providers/electron.service';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss', './gallery.component.scss']
+  styleUrls: ['./home.component.scss',
+              './search.component.scss',
+              './gallery.component.scss']
 })
 export class HomeComponent implements OnInit {
 
