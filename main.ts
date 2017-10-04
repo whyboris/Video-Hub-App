@@ -103,14 +103,13 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 
 const fs = require('fs');
 // const path = require('path');
+const shell = require('electron').shell;
 
 let finalArray = [];
 let fileCounter = 0;
 
-
 const selectedSourceFolder = '/Users/byakubchik/Desktop/VideoHub/input';  // later = ''
-
-const shell = require('electron').shell;
+const selectedOutputFolder = '/Users/byakubchik/Desktop/VideoHub/output'; // later = ''
 
 ipc.on('openThisFile', function (event, fullFilePath) {
   shell.openItem(fullFilePath);
@@ -132,13 +131,27 @@ ipc.on('open-file-dialog', function (event, theDirectory) {
   });
 
   setTimeout(() => {
-    event.sender.send('filesArrayReturning', finalArray);
+    // format the json
+    const json = JSON.stringify({
+      inputDir: selectedSourceFolder,
+      outputDir: selectedOutputFolder,
+      images: finalArray
+    });
+    // write the file
+    fs.writeFile(selectedOutputFolder + '/images.json', json, 'utf8', () => { console.log("file written") });
+    // send it back
+    event.sender.send('filesArrayReturning', JSON.parse(json));
   }, 2000);
 })
 
+ipc.on('load-the-file', function (event, somethingElse) {
+  console.log(somethingElse);
+  fs.readFile(selectedOutputFolder + '/images.json', (err, data) => {
+    if (err) throw err;
+    event.sender.send('filesArrayReturning', JSON.parse(data));
+  });
+})
 
-// EXTRACT SCREENSHOTS
-const selectedOutputFolder = '/Users/byakubchik/Desktop/VideoHub/output'; // later = ''
 
 // ============================================================
 // Extracts screenshot
@@ -163,7 +176,7 @@ const extractScreenshot = function (filePath, currentFile) {
     .screenshots({
       // timestamps: ['25%', '50%', '75%'],
       timestamps: ['10%', '30%', '50%', '70%', '90%'],
-      filename: 'thumbnail-at-%s-seconds.png',
+      filename: 'thumb%s.png',
       folder: selectedOutputFolder + '/boris',
       size: '200x200'
     });

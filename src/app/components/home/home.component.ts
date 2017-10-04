@@ -24,7 +24,7 @@ export class HomeComponent implements OnInit {
     this.electronService.ipcRenderer.on('filesArrayReturning', (event, files) => {
       console.log('all the files are: ');
       console.log(files);
-      this.finalArray = files;
+      this.finalArray = files.images;
       // this.changeDisplayedPath(files[2][1]);
     });
 
@@ -36,11 +36,14 @@ export class HomeComponent implements OnInit {
 
   }
 
-  public hello() {
-    console.log('hi');
-
+  public importFresh() {
+    console.log('fresh import');
     this.electronService.ipcRenderer.send('open-file-dialog', 'this directory -- lol');
+  }
 
+  public loadFromFile() {
+    console.log('loading file');
+    this.electronService.ipcRenderer.send('load-the-file', 'some thing sent');
   }
 
   public changeDisplayedPath(thePathString: string): void {
