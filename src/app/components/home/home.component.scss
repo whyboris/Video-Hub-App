@@ -1,4 +1,38 @@
-.container {
+$top-region: 100px;
+
+.everything {
+  width: 100%;
+  height: 100vh;
+  border: 2px solid red;
+  box-sizing: border-box;
+}
+
+.top {
+  padding: 10px;
+  width: 100%;
+  height: $top-region;
+  border: 2px solid green;
+  box-sizing: border-box;
+}
+
+.search {
+  padding: 10px;
+  width: 200px;
+  height: calc( 100vh - 120px );
+  border: 2px solid blue;
+  box-sizing: border-box;
+}
+
+.gallery-container {
+  position: fixed;
+  top: $top-region;
+  left: 202px;
+  width: calc(100vw - 204px);
+  border: 2px solid yellow;
+  box-sizing: border-box;
+}
+
+.gallery {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -6,7 +40,8 @@
 }
 
 .video {
-  margin: 20px;
+  margin: 10px;
+  cursor: pointer;
 }
 
 .title {
@@ -15,19 +50,18 @@
   font-weight: initial;
 }
 
-img {
-  border-radius: 20px;
-  border: 1px solid black;
-  cursor: pointer;
-  height: 140px;
-  width: 200px;
+input {
+  border-radius: 5px;
+  font-size: 12px;
+  padding: 8px;
+  border: 1px solid #666666;
+  outline: none;
 }
 
 button {
   background: #EE88BB;
   cursor: pointer;
-  border-radius: 10px;
+  border-radius: 5px;
   border: 1px solid white;
-  height: 50px;
-  width: 200px;
+  padding: 10px;
 }

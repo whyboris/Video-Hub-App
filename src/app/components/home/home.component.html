@@ -1,24 +1,33 @@
-<h1 class="title">
-  {{ selectedSourceFolder }}
-</h1>
-
-<br>
-
-<button (click)="importFresh()">Import Fresh</button>
-<button (click)="loadFromFile()">Load from file</button>
+<div class="everything">
 
 
-<input [(ngModel)]="searchString" type="text">
-
-<br>
-{{ searchString }}
-<br>
-
-<div class="container">
-  <div class="video" *ngFor="let item of finalArray | searchPipe: searchString; index as i">
-    <div class="item">
-      <app-gallery-item (click)="openVideo(i)" [stuff]="item[2]"></app-gallery-item>
-      <p>{{ item[1] }}</p>
-    </div>
+  <div class="top">
+    <h1 class="title">
+      {{ selectedSourceFolder }}
+    </h1>
+    <button (click)="importFresh()">Import Fresh</button>
+    <button (click)="loadFromFile()">Load from file</button>
   </div>
+
+  <div class="search">
+
+    <input [(ngModel)]="searchString" type="text">
+
+  </div>
+
+  <div class="gallery-container">
+
+    <div class="gallery">
+      <div class="video" *ngFor="let item of finalArray | searchPipe: searchString; index as i">
+        <div class="item">
+          <app-gallery-item (click)="openVideo(i)" [stuff]="item[2]"></app-gallery-item>
+          <span class="title">
+            {{ item[1] }}
+          </span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
 </div>
