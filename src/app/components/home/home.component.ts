@@ -11,6 +11,8 @@ export class HomeComponent implements OnInit {
 
   title = `App works !`;
 
+  searchString = '';
+
   selectedSourceFolder = '/Users/byakubchik/Desktop/VideoHub/input';  // later = ''
   selectedOutputFolder = '/Users/byakubchik/Desktop/VideoHub/output'; // later = ''
 

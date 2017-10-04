@@ -7,12 +7,18 @@
 <button (click)="importFresh()">Import Fresh</button>
 <button (click)="loadFromFile()">Load from file</button>
 
+
+<input [(ngModel)]="searchString" type="text">
+
+<br>
+{{ searchString }}
 <br>
 
 <div class="container">
-  <div class="video" *ngFor="let item of finalArray; index as i">
+  <div class="video" *ngFor="let item of finalArray | searchPipe: searchString; index as i">
     <div class="item">
       <app-gallery-item (click)="openVideo(i)" [stuff]="item[2]"></app-gallery-item>
+      <p>{{ item[1] }}</p>
     </div>
   </div>
 </div>

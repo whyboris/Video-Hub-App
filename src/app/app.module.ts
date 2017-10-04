@@ -9,6 +9,7 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { PreviewComponent } from './components/home/preview.component';
+import { SearchPipe } from './components/home/search.pipe';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -18,7 +19,8 @@ import { ElectronService } from './providers/electron.service';
   declarations: [
     AppComponent,
     HomeComponent,
-    PreviewComponent
+    PreviewComponent,
+    SearchPipe
   ],
   imports: [
     BrowserModule,
