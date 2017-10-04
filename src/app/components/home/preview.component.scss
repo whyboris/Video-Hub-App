@@ -1,3 +1,9 @@
+.wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
 .screencaps {
   background-repeat: no-repeat !important;
   background-size: 100% 100% !important;
@@ -7,7 +13,7 @@
   height: 100%;
   margin: 0;
   overflow: hidden;
-  position: relative;
+  position: absolute;
   // width: 300px;
   width: 100%;
 }
