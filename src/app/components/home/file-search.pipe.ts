@@ -11,7 +11,7 @@ export class FileSearchPipe implements PipeTransform {
    * @param args            the search string
    */
   transform(hashtagArray: any, args?: string): Array<string> {
-    console.log('pipe working');
+    console.log('file search pipe working');
     console.log(hashtagArray);
     if (args === '') {
       return hashtagArray;

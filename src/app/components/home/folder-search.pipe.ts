@@ -11,7 +11,7 @@ export class FolderSearchPipe implements PipeTransform {
    * @param args            the search string
    */
   transform(hashtagArray: any, args?: string): Array<string> {
-    console.log('pipe working');
+    console.log('folder search pipe working');
     console.log(hashtagArray);
     if (args === '') {
       return hashtagArray;

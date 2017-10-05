@@ -14,7 +14,10 @@ export class HomeComponent implements OnInit {
   title = `App works !`;
 
   folderSearchString = '';
+  folderSearchStringSaved = '';
+
   fileSearchString = '';
+  fileSearchStringSaved = '';
 
   selectedSourceFolder = '/Users/byakubchik/Desktop/VideoHub/input';  // later = ''
   selectedOutputFolder = '/Users/byakubchik/Desktop/VideoHub/output'; // later = ''
@@ -71,6 +74,16 @@ export class HomeComponent implements OnInit {
   public openExternalFile(fullPath) {
     console.log('trying to open ' + fullPath);
     this.electronService.ipcRenderer.send('openThisFile', fullPath);
+  }
+
+  onFolderEnter(value: string) {
+    this.folderSearchString = '';
+    this.folderSearchStringSaved = value;
+  }
+
+  onFileEnter(value: string) {
+    this.fileSearchString = '';
+    this.fileSearchStringSaved = value;
   }
 
 }
