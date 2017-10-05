@@ -3,7 +3,7 @@
 
   <div
     class='screencaps'
-    [ngStyle]="{background: 'url(' + photo + ')'}"
+    [ngStyle]="{background: 'url(' + folderPath + '/' + photo + ')'}"
   >
 
     <div
@@ -21,7 +21,7 @@
     </div>
 
     <img *ngFor="let item of stuff; let i = index"
-        src="{{ item }}"
+        src="{{ folderPath + '/' + item }}"
         class="screencap screen{{ i + 1 }}">
 
     <div class="overlay"></div>

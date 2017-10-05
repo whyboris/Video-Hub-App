@@ -102,40 +102,45 @@ const selectedOutputFolder = '/Users/byakubchik/Desktop/VideoHub/output'; // lat
 // Functions
 // ============================================================
 
-ipc.on('openThisFile', function (event, fullFilePath) {
-  shell.openItem(fullFilePath);
-})
-
 ipc.on('open-file-dialog', function (event, theDirectory) {
-  console.log(theDirectory);
+  // console.log(theDirectory);
   finalArray = [];
   fileCounter = 0;
+
+  // no need to return anything, walkSync updates `finalArray`
+  // second param is needed for its own recursion
   walkSync(selectedSourceFolder, []);
+
   console.log(finalArray);
 
   finalArray.forEach((element, index) => {
-    console.log('forEach running:');
-    console.log(element);
-    console.log(index);
-    extractScreenshot(element[0] + '/' + element[1], index);
+    // console.log('forEach running:');
+    // console.log(element);
+    // console.log(index);
+    extractScreenshot(path.join(selectedSourceFolder, element[0], element[1]), index);
   });
 
   setTimeout(() => {
     // format the json
-    const json = JSON.stringify({
+    const finalObject = {
       inputDir: selectedSourceFolder,
       outputDir: selectedOutputFolder,
       images: finalArray
-    });
+    };
+
+    const json = JSON.stringify(finalObject);
     // write the file
-    fs.writeFile(selectedOutputFolder + '/images.json', json, 'utf8', () => { console.log("file written") });
+    fs.writeFile(selectedOutputFolder + '/images.json', json, 'utf8', () => {
+      console.log('file written:');
+    });
+    console.log(finalObject);
     // send it back
     event.sender.send('filesArrayReturning', JSON.parse(json));
   }, 2000);
 })
 
 ipc.on('load-the-file', function (event, somethingElse) {
-  console.log(somethingElse);
+  // console.log(somethingElse);
   fs.readFile(selectedOutputFolder + '/images.json', (err, data) => {
     if (err) {
       throw err;
@@ -144,13 +149,16 @@ ipc.on('load-the-file', function (event, somethingElse) {
   });
 })
 
+ipc.on('openThisFile', function (event, fullFilePath) {
+  shell.openItem(fullFilePath);
+})
+
 // ============================================================
 // Extracts screenshot
 // ============================================================
 
 const extractScreenshot = function (filePath, currentFile) {
-  console.log('Extracting 3 screenshots');
-  console.log('file:///' + filePath);
+  // console.log('file:///' + filePath);
   const theFile = 'file:///' + filePath;
 
   ffmpeg(theFile)
@@ -159,17 +167,17 @@ const extractScreenshot = function (filePath, currentFile) {
       finalArray[currentFile][2] = [];
       // prepend full path to each
       filenames.forEach((element, index) => {
-        finalArray[currentFile][2][index] = selectedOutputFolder + '/boris/' + element;
+        finalArray[currentFile][2][index] = '/boris/' + element;
       });
       console.log(finalArray[currentFile][2]);
     })
     .on('end', function () {
-      console.log('Screenshots taken and finished');
+      // console.log('one file processed');
     })
     .screenshots({
       // timestamps: ['25%', '50%', '75%'],
       timestamps: ['10%', '30%', '50%', '70%', '90%'],
-      filename: 'thumb%s.png',
+      filename: '%b%i.png',
       folder: selectedOutputFolder + '/boris',
       size: '200x200'
     });
@@ -189,10 +197,11 @@ const walkSync = function(dir, filelist) {
     if (fs.statSync(path.join(dir, file)).isDirectory()) {
       filelist = walkSync(path.join(dir, file), filelist);
     } else {
-      // filter out anything other than .mp4
+      // if file type is .mp4
       if (file.indexOf('.mp4') !== -1) {
-        filelist.push(dir + '/' + file);
-        finalArray[fileCounter] = [dir, file];
+        // before adding, remove the redundant prefix: selectedSourceFolder
+        // filelist.push((dir).replace(selectedSourceFolder, '') + '/' + file);
+        finalArray[fileCounter] = [dir.replace(selectedSourceFolder, ''), file];
         fileCounter++;
       }
     }

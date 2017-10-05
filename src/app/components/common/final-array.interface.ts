@@ -16,7 +16,7 @@ Each item in the images array is formatted thus:
       'full-path-and-filename-to-2nd-screenshot',
       'full-path-and-filename-to-3rd-screenshot',
       'full-path-and-filename-to-4th-screenshot',
-      'full-path-and-filename-to-5th-screenshot', // currently only 5, later up to 10.
+      'full-path-and-filename-to-5th-screenshot', // currently only 5, later: 1, 5, or 10.
     ]
   ]
 
