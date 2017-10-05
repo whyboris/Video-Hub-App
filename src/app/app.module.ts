@@ -9,7 +9,9 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { PreviewComponent } from './components/home/preview.component';
-import { SearchPipe } from './components/home/search.pipe';
+
+import { FolderSearchPipe } from './components/home/folder-search.pipe';
+import { FileSearchPipe } from './components/home/file-search.pipe';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -20,7 +22,8 @@ import { ElectronService } from './providers/electron.service';
     AppComponent,
     HomeComponent,
     PreviewComponent,
-    SearchPipe
+    FolderSearchPipe,
+    FileSearchPipe
   ],
   imports: [
     BrowserModule,

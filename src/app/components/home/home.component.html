@@ -12,7 +12,11 @@
 
   <div class="search">
 
-    <input [(ngModel)]="searchString" type="text">
+    <span>Folder:</span>
+    <input [(ngModel)]="folderSearchString" type="text">
+
+    <span>File:</span>
+    <input [(ngModel)]="fileSearchString" type="text">
 
   </div>
 
@@ -20,22 +24,21 @@
 
     <div class="gallery">
 
-      <div class="item" *ngFor="let item of finalArray | searchPipe: searchString; index as i">
+      <div class="item" *ngFor="let item of finalArray | folderSearchPipe: folderSearchString | fileSearchPipe: fileSearchString; index as i">
 
         <div class="preview">
           <app-gallery-item (click)="openVideo(i)" [stuff]="item[2]"></app-gallery-item>
         </div>
 
-        <span class="folder">
+        <div class="folder">
           {{ item[0] }}
-        </span>
+        </div>
 
         <br>
 
-        <span class="title">
+        <div class="title">
           {{ item[1] }}
-        </span>
-
+        </div>
 
       </div>
 

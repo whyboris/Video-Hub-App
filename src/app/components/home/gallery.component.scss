@@ -20,13 +20,16 @@
 // }
 
 .title {
+  display: inline-block;
   color: #777777;
   font-size: 12px;
 }
 
 .folder {
+  display: inline-block;
   color: #9C9C9C;
   font-size: 8px;
+  padding-top: 10px;
 }
 
 
@@ -39,10 +42,10 @@
 }
 .item {
   flex: auto;
-  width: 200px;
   margin: 1.3vw;
-  margin-bottom: 60px; // for folder and file name
-  max-width: 260px;
+  margin-bottom: 60px; // room for folder and file name
+  width: 200px;
+  max-width: 300px;
 
   &:after {
     padding-top: 56%; // to preserve ratio
@@ -55,3 +58,25 @@
   height: 100%;
 }
 
+
+
+
+// .gallery {
+//   display: grid;
+//   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+//   grid-auto-rows: minmax(110px, 150px);
+//   grid-gap: 20px;
+// }
+
+// .item {
+//   position: relative;
+//   background: yellow;
+//   // text-align: center;
+//   border: 1px solid red;
+//   min-height: 50px;
+// }
+
+// .preview {
+//   width: 100%;
+//   height: 100%;
+// }

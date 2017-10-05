@@ -1,9 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'searchPipe'
+  name: 'folderSearchPipe'
 })
-export class SearchPipe implements PipeTransform {
+export class FolderSearchPipe implements PipeTransform {
 
   /**
    * Return only items that match search string
@@ -16,7 +16,7 @@ export class SearchPipe implements PipeTransform {
     if (args === '') {
       return hashtagArray;
     } else {
-      return hashtagArray.filter(item => item[1].toLowerCase().indexOf(args.toLowerCase()) !== -1);
+      return hashtagArray.filter(item => item[0].toLowerCase().indexOf(args.toLowerCase()) !== -1);
     }
   }
 
