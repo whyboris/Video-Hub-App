@@ -69,17 +69,18 @@ try {
   // throw e;
 }
 
-
-
-
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
+// ============================================================
+// My imports
+// ============================================================
 
-const ipc = require('electron').ipcMain
-const dialog = require('electron').dialog
+const fs = require('fs');
 
-
+const dialog = require('electron').dialog;
+const ipc = require('electron').ipcMain;
+const shell = require('electron').shell;
 
 const ffprobePath = require('@ffprobe-installer/ffprobe').path;
 const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
@@ -87,23 +88,9 @@ const ffmpeg = require('fluent-ffmpeg');
 ffmpeg.setFfprobePath(ffprobePath);
 ffmpeg.setFfmpegPath(ffmpegPath);
 
-
-
-
-
-// ipc.on('open-file-dialog', function (event) {
-//   dialog.showOpenDialog({
-//     properties: ['openFile', 'openDirectory']
-//   }, function (files) {
-//     if (files) {
-//       event.sender.send('selected-directory', files);
-//     }
-//   })
-// })
-
-const fs = require('fs');
-// const path = require('path');
-const shell = require('electron').shell;
+// ============================================================
+// My variables
+// ============================================================
 
 let finalArray = [];
 let fileCounter = 0;
@@ -111,10 +98,13 @@ let fileCounter = 0;
 const selectedSourceFolder = '/Users/byakubchik/Desktop/VideoHub/input';  // later = ''
 const selectedOutputFolder = '/Users/byakubchik/Desktop/VideoHub/output'; // later = ''
 
+// ============================================================
+// Functions
+// ============================================================
+
 ipc.on('openThisFile', function (event, fullFilePath) {
   shell.openItem(fullFilePath);
 })
-
 
 ipc.on('open-file-dialog', function (event, theDirectory) {
   console.log(theDirectory);
@@ -147,14 +137,17 @@ ipc.on('open-file-dialog', function (event, theDirectory) {
 ipc.on('load-the-file', function (event, somethingElse) {
   console.log(somethingElse);
   fs.readFile(selectedOutputFolder + '/images.json', (err, data) => {
-    if (err) throw err;
+    if (err) {
+      throw err;
+    }
     event.sender.send('filesArrayReturning', JSON.parse(data));
   });
 })
 
-
 // ============================================================
 // Extracts screenshot
+// ============================================================
+
 const extractScreenshot = function (filePath, currentFile) {
   console.log('Extracting 3 screenshots');
   console.log('file:///' + filePath);
@@ -182,11 +175,9 @@ const extractScreenshot = function (filePath, currentFile) {
     });
 }
 
-
-
-
+// ============================================================
 // WALK FILE
-
+// ============================================================
 
 const walkSync = function(dir, filelist) {
   console.log('walk started');
@@ -209,4 +200,19 @@ const walkSync = function(dir, filelist) {
 
   return filelist;
 };
+
+
+// ============================================================
+// MISC
+// ============================================================
+
+// ipc.on('open-file-dialog', function (event) {
+//   dialog.showOpenDialog({
+//     properties: ['openFile', 'openDirectory']
+//   }, function (files) {
+//     if (files) {
+//       event.sender.send('selected-directory', files);
+//     }
+//   })
+// })
 

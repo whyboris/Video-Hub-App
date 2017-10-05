@@ -24,6 +24,9 @@ export class HomeComponent implements OnInit {
   selectedSourceFolder = '/Users/byakubchik/Desktop/VideoHub/input';  // later = ''
   selectedOutputFolder = '/Users/byakubchik/Desktop/VideoHub/output'; // later = ''
 
+  currentPlayingFile = '';
+  currentPlayingFolder = '';
+
   public finalArray = [];
 
   constructor(
@@ -59,13 +62,18 @@ export class HomeComponent implements OnInit {
   // HTML calls this
   public openVideo(number) {
     console.log('trying to open video');
+
+    this.currentPlayingFolder = this.finalArray[number][0];
+    this.currentPlayingFile = this.finalArray[number][1];
+
     this.openExternalFile(this.finalArray[number][0] + '/' + this.finalArray[number][1]);
   }
 
   // !!! EASILY OPEN A FILE IN SYSTEM DEFAULT PROGRAM
   public openExternalFile(fullPath) {
     console.log('trying to open ' + fullPath);
-    this.electronService.ipcRenderer.send('openThisFile', fullPath);
+    console.log('sike! DISABLED :)')
+    // this.electronService.ipcRenderer.send('openThisFile', fullPath);
   }
 
   onFolderEnter(value: string) {

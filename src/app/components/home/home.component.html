@@ -1,13 +1,9 @@
 <div class="everything">
 
-
   <div class="top">
-    <span class="title">
-      {{ selectedSourceFolder }}
-    </span>
+    <span>{{ currentPlayingFolder }}</span>
     <br>
-    <button (click)="importFresh()">Import Fresh</button>
-    <button (click)="loadFromFile()">Load from file</button>
+    <span>{{ currentPlayingFile }}</span>
   </div>
 
   <div class="search">
@@ -33,6 +29,21 @@
       [(ngModel)]="magicSearchString"
       type="text"
     >
+
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <button (click)="importFresh()" style="background: #FF3333">Import Fresh</button>
+    <br>
+    <br>
+    <span class="title" style="width: 180px; overflow-wrap: break-word">
+      {{ selectedSourceFolder }}
+    </span>
+    <br>
+    <br>
+    <button (click)="loadFromFile()">Load from file</button>
 
   </div>
 
