@@ -7,16 +7,15 @@ export class FolderSearchPipe implements PipeTransform {
 
   /**
    * Return only items that match search string
-   * @param hashtagArray
+   * @param finalArray
    * @param args            the search string
    */
-  transform(hashtagArray: any, args?: string): Array<string> {
-    console.log('folder search pipe working');
-    console.log(hashtagArray);
+  transform(finalArray: any, args?: string): any {
     if (args === '') {
-      return hashtagArray;
+      return finalArray;
     } else {
-      return hashtagArray.filter(item => item[0].toLowerCase().indexOf(args.toLowerCase()) !== -1);
+      console.log('folder search pipe working');
+      return finalArray.filter(item => item[0].toLowerCase().indexOf(args.toLowerCase()) !== -1);
     }
   }
 

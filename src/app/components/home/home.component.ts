@@ -32,14 +32,10 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.electronService.ipcRenderer.on('filesArrayReturning', (event, files) => {
-      console.log('all the files are: ');
-      console.log(files);
       this.finalArray = files.images;
-      // this.changeDisplayedPath(files[2][1]);
     });
 
     this.electronService.ipcRenderer.on('selected-directory', (event, files) => {
-      console.log('Path selected by user: ');
       console.log(files[0]);
       this.changeDisplayedPath(files[0]);
     });
@@ -57,13 +53,7 @@ export class HomeComponent implements OnInit {
   }
 
   public changeDisplayedPath(thePathString: string): void {
-    console.log(thePathString);
-    setTimeout(() => {
-      console.log('timout finished');
-      // this.selectedSourceFolder = 'fourth';
-    }, 1000);
     this.selectedSourceFolder = thePathString;
-    // this.selectedSourceFolder = 'third';
   }
 
   // HTML calls this

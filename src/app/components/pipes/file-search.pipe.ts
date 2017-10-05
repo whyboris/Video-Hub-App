@@ -7,16 +7,15 @@ export class FileSearchPipe implements PipeTransform {
 
   /**
    * Return only items that match search string
-   * @param hashtagArray
+   * @param finalArray
    * @param args            the search string
    */
-  transform(hashtagArray: any, args?: string): Array<string> {
-    console.log('file search pipe working');
-    console.log(hashtagArray);
+  transform(finalArray: any, args?: string): any {
     if (args === '') {
-      return hashtagArray;
+      return finalArray;
     } else {
-      return hashtagArray.filter(item => item[1].toLowerCase().indexOf(args.toLowerCase()) !== -1);
+      console.log('file search pipe working');
+      return finalArray.filter(item => item[1].toLowerCase().indexOf(args.toLowerCase()) !== -1);
     }
   }
 

@@ -10,9 +10,9 @@ import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
 import { PreviewComponent } from './components/home/preview.component';
 
-import { FolderSearchPipe } from './components/home/folder-search.pipe';
-import { FileSearchPipe } from './components/home/file-search.pipe';
-import { MagicSearchPipe } from './components/home/magic-search.pipe';
+import { FolderSearchPipe } from './components/pipes/folder-search.pipe';
+import { FileSearchPipe } from './components/pipes/file-search.pipe';
+import { MagicSearchPipe } from './components/pipes/magic-search.pipe';
 
 import { AppRoutingModule } from './app-routing.module';
 
