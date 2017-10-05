@@ -13,10 +13,26 @@
   <div class="search">
 
     <span>Folder: {{ folderSearchStringSaved }}</span>
-    <input #folder [(ngModel)]="folderSearchString" type="text" (keyup.enter)="onFolderEnter(folder.value)">
+    <input
+      #folder
+      (keyup.enter)="onFolderEnter(folder.value)"
+      [(ngModel)]="folderSearchString"
+      type="text"
+    >
 
     <span>File: {{ fileSearchStringSaved }} </span>
-    <input #file [(ngModel)]="fileSearchString" type="text" (keyup.enter)="onFileEnter(file.value)">
+    <input
+      #file
+      (keyup.enter)="onFileEnter(file.value)"
+      [(ngModel)]="fileSearchString"
+      type="text"
+    >
+
+    <span>Magic: {{ magicSearchString }}</span>
+    <input
+      [(ngModel)]="magicSearchString"
+      type="text"
+    >
 
   </div>
 
@@ -26,7 +42,11 @@
 
       <div
         class="item"
-        *ngFor="let item of finalArray | folderSearchPipe: folderSearchStringSaved | fileSearchPipe: fileSearchStringSaved; index as i"
+        *ngFor="let item of finalArray
+          | magicSearchPipe: magicSearchString
+          | folderSearchPipe: folderSearchStringSaved
+          | fileSearchPipe: fileSearchStringSaved
+          ; index as i"
       >
 
         <div class="preview">

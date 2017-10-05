@@ -12,6 +12,7 @@ import { PreviewComponent } from './components/home/preview.component';
 
 import { FolderSearchPipe } from './components/home/folder-search.pipe';
 import { FileSearchPipe } from './components/home/file-search.pipe';
+import { MagicSearchPipe } from './components/home/magic-search.pipe';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -23,7 +24,8 @@ import { ElectronService } from './providers/electron.service';
     HomeComponent,
     PreviewComponent,
     FolderSearchPipe,
-    FileSearchPipe
+    FileSearchPipe,
+    MagicSearchPipe
   ],
   imports: [
     BrowserModule,

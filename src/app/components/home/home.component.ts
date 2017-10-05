@@ -19,6 +19,8 @@ export class HomeComponent implements OnInit {
   fileSearchString = '';
   fileSearchStringSaved = '';
 
+  magicSearchString = '';
+
   selectedSourceFolder = '/Users/byakubchik/Desktop/VideoHub/input';  // later = ''
   selectedOutputFolder = '/Users/byakubchik/Desktop/VideoHub/output'; // later = ''
 
@@ -77,6 +79,7 @@ export class HomeComponent implements OnInit {
   }
 
   onFolderEnter(value: string) {
+    console.log(value);
     this.folderSearchString = '';
     this.folderSearchStringSaved = value;
   }
