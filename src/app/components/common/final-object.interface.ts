@@ -1,4 +1,4 @@
-export interface FinalArray {
+export interface FinalObject {
   inputDir: string;   // later may support array of many input directories
   outputDir: string;  // always just one -- for screenshots and JSON file
   images: Array<any>; // see below

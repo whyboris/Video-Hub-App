@@ -1,9 +1,9 @@
 <div class="everything">
 
   <div class="top">
-    <span>{{ currentPlayingFolder }}</span>
+    <img src="../../../assets/folder.png" class="icon"><span class="folder">{{ currentPlayingFolder }}</span>
     <br>
-    <span>{{ currentPlayingFile }}</span>
+    <span class="file">{{ currentPlayingFile }}</span>
   </div>
 
   <div class="search">
@@ -61,7 +61,7 @@
       >
 
         <div class="preview">
-          <app-gallery-item (click)="openVideo(i)" [stuff]="item[2]" [folderPath]="selectedOutputFolder"></app-gallery-item>
+          <app-gallery-item (click)="openVideo(i)" [stuff]="item[3]" [folderPath]="selectedOutputFolder"></app-gallery-item>
         </div>
 
         <div class="folder">

@@ -92,6 +92,8 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 // My variables
 // ============================================================
 
+import { FinalObject } from './src/app/components/common/final-object.interface';
+
 let finalArray = [];
 let fileCounter = 0;
 
@@ -122,7 +124,7 @@ ipc.on('open-file-dialog', function (event, theDirectory) {
 
   setTimeout(() => {
     // format the json
-    const finalObject = {
+    const finalObject: FinalObject = {
       inputDir: selectedSourceFolder,
       outputDir: selectedOutputFolder,
       images: finalArray
@@ -164,12 +166,12 @@ const extractScreenshot = function (filePath, currentFile) {
   ffmpeg(theFile)
     .on('filenames', function (filenames) {
       // console.log('Screenshots: ' + filenames.join(', '));
-      finalArray[currentFile][2] = [];
-      // prepend full path to each
+      finalArray[currentFile][3] = [];
+      // prepend partial path to each
       filenames.forEach((element, index) => {
-        finalArray[currentFile][2][index] = '/boris/' + element;
+        finalArray[currentFile][3][index] = '/boris/' + element;
       });
-      console.log(finalArray[currentFile][2]);
+      console.log(finalArray[currentFile][3]);
     })
     .on('end', function () {
       // console.log('one file processed');
@@ -188,7 +190,7 @@ const extractScreenshot = function (filePath, currentFile) {
 // ============================================================
 
 const walkSync = function(dir, filelist) {
-  console.log('walk started');
+  // console.log('walk started');
   const files = fs.readdirSync(dir);
   // console.log(files);
 
@@ -200,8 +202,15 @@ const walkSync = function(dir, filelist) {
       // if file type is .mp4
       if (file.indexOf('.mp4') !== -1) {
         // before adding, remove the redundant prefix: selectedSourceFolder
-        // filelist.push((dir).replace(selectedSourceFolder, '') + '/' + file);
-        finalArray[fileCounter] = [dir.replace(selectedSourceFolder, ''), file];
+        const partialPath = dir.replace(selectedSourceFolder, '');
+
+        console.log(file);
+        // clean up the file name <--- later will depend on user options
+        let cleanedUpFileName = file.replace('_', ' '); // no underscores
+        cleanedUpFileName = file.replace('  ', ' ');    // no double spaces
+        console.log(cleanedUpFileName);
+
+        finalArray[fileCounter] = [partialPath, file, cleanedUpFileName];
         fileCounter++;
       }
     }

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 
 import { ElectronService } from '../../providers/electron.service';
 
+import { FinalObject } from '../common/final-object.interface';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -34,8 +36,8 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.electronService.ipcRenderer.on('filesArrayReturning', (event, files) => {
-      this.finalArray = files.images;
+    this.electronService.ipcRenderer.on('filesArrayReturning', (event, finalObject: FinalObject) => {
+      this.finalArray = finalObject.images;
     });
 
     this.electronService.ipcRenderer.on('selected-directory', (event, files) => {
@@ -66,10 +68,10 @@ export class HomeComponent implements OnInit {
     this.currentPlayingFolder = this.finalArray[number][0];
     this.currentPlayingFile = this.finalArray[number][1];
 
-    this.openExternalFile(this.finalArray[number][0] + '/' + this.finalArray[number][1]);
+    this.openExternalFile(this.selectedSourceFolder + this.finalArray[number][0] + '/' + this.finalArray[number][1]);
   }
 
-  // !!! EASILY OPEN A FILE IN SYSTEM DEFAULT PROGRAM
+  // Open the file in system default program
   public openExternalFile(fullPath) {
     console.log('trying to open ' + fullPath);
     console.log('sike! DISABLED :)')

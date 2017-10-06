@@ -19,7 +19,7 @@ export class PreviewComponent implements OnInit {
     // Loads up the initial photo and shows it as main photo
     this.initialPhoto = this.stuff[0];
     this.photo = this.initialPhoto;
-    console.log(this.stuff);
+    // console.log(this.stuff);
   }
 
   /**
@@ -29,7 +29,7 @@ export class PreviewComponent implements OnInit {
     this.photo = this.initialPhoto;
     let current = 1;
     this.timer = setInterval(() => {
-      this.photo = this.folderPath + '/' + this.stuff[current];
+      this.photo = this.stuff[current];
       current++;
       if (current >= this.stuff.length) {
         current = 0;
