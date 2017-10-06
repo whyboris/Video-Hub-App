@@ -4,6 +4,13 @@
     <img src="../../../assets/folder.png" class="icon"><span class="folder">{{ currentPlayingFolder }}</span>
     <br>
     <span class="file">{{ currentPlayingFile }}</span>
+
+    <app-top-component
+      style="position: absolute; left: 400px; top: 30px;"
+      [fileString]="currentPlayingFile"
+      [folderString]="currentPlayingFolder"
+    ></app-top-component>
+
   </div>
 
   <div class="search">
@@ -65,7 +72,7 @@
         </div>
 
         <div class="folder">
-          {{ item[0] }}
+          {{ item[0] || '&emsp;' }}
         </div>
 
         <br>

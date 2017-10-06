@@ -7,8 +7,10 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
+
 import { HomeComponent } from './components/home/home.component';
 import { PreviewComponent } from './components/home/preview.component';
+import { TopComponent } from './components/home/top.component';
 
 import { FolderSearchPipe } from './components/pipes/folder-search.pipe';
 import { FileSearchPipe } from './components/pipes/file-search.pipe';
@@ -25,7 +27,8 @@ import { ElectronService } from './providers/electron.service';
     PreviewComponent,
     FolderSearchPipe,
     FileSearchPipe,
-    MagicSearchPipe
+    MagicSearchPipe,
+    TopComponent
   ],
   imports: [
     BrowserModule,
