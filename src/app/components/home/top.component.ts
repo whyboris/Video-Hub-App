@@ -22,7 +22,7 @@ export class TopComponent implements OnInit {
 
   @Input() set fileString(fileString: string) {
     this._name2 = (fileString && fileString.trim()) || '<no name set>';
-    this.wipArray2 = this._name2.split('_');
+    this.wipArray2 = this._name2.split(' ');
   }
 
   get fileString(): string { return this._name2; }

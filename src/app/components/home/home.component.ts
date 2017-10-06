@@ -66,7 +66,7 @@ export class HomeComponent implements OnInit {
     console.log('trying to open video');
 
     this.currentPlayingFolder = this.finalArray[number][0];
-    this.currentPlayingFile = this.finalArray[number][1];
+    this.currentPlayingFile = this.finalArray[number][2];
 
     this.openExternalFile(this.selectedSourceFolder + this.finalArray[number][0] + '/' + this.finalArray[number][1]);
   }

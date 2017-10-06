@@ -204,13 +204,9 @@ const walkSync = function(dir, filelist) {
         // before adding, remove the redundant prefix: selectedSourceFolder
         const partialPath = dir.replace(selectedSourceFolder, '');
 
-        console.log(file);
-        // clean up the file name <--- later will depend on user options
-        let cleanedUpFileName = file.replace('_', ' '); // no underscores
-        cleanedUpFileName = file.replace('  ', ' ');    // no double spaces
-        console.log(cleanedUpFileName);
+        const cleanFileName = cleanUpFileName(file);
 
-        finalArray[fileCounter] = [partialPath, file, cleanedUpFileName];
+        finalArray[fileCounter] = [partialPath, file, cleanFileName];
         fileCounter++;
       }
     }
@@ -219,6 +215,23 @@ const walkSync = function(dir, filelist) {
   return filelist;
 };
 
+/**
+ * Clean up the file name
+ * (1) underscores
+ * (2) double spaces
+ * (3) remove filename
+ * @param original {string}
+ * @return {string}
+ */
+const cleanUpFileName = function(original: string): string {
+  let result = original;
+
+  result = result.split('_').join(' ');           // (1)
+  result = result.split('  ').join(' ');          // (2)
+  result = result.split('.').slice(0, -1).join()  // (3)
+
+  return result;
+}
 
 // ============================================================
 // MISC
