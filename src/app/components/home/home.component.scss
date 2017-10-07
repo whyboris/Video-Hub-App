@@ -1,11 +1,7 @@
+// variable
 $top-region: 100px;
 
-.top-content-position {
-  position: absolute;
-  left: 20px;
-  top: 20px;
-}
-
+// styling
 .everything {
   width: 100%;
   height: 100vh;
@@ -14,31 +10,37 @@ $top-region: 100px;
 }
 
 .top {
+  background: #F3F3F3;
+  height: $top-region;
   padding: 10px;
   width: 100%;
-  height: $top-region;
-  border: 2px solid green;
-  box-sizing: border-box;
 }
 
+.top-content-position {
+  left: 20px;
+  position: absolute;
+  top: 20px;
+}
 .search {
-  padding: 10px;
-  width: 200px;
-  height: calc( 100vh - 120px );
-  border: 2px solid blue;
+  background: #DDDDDD;
   box-sizing: border-box;
+  height: calc( 100vh - 100px );
+  padding: 10px;
+  position: absolute;
+  top: 100px;
+  width: 200px;
 }
 
 .gallery-container {
-  position: fixed;
-  top: $top-region;
-  left: 202px;
-  width: calc(100vw - 200px);
-  height: calc(100vh - 100px);
-  border: 2px solid yellow;
+  background: #AAAAAA;
   box-sizing: border-box;
+  height: calc(100vh - 100px);
+  left: 200px;
   overflow-y: scroll;
   padding-bottom: 100px;
+  position: fixed;
+  top: $top-region;
+  width: calc(100vw - 200px);
 }
 
 button {

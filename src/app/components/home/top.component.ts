@@ -11,8 +11,12 @@ export class TopComponent implements OnInit {
   private _name = '';
 
   @Input() set folderString(folderString: string) {
-    this._name = (folderString && folderString.trim()) || ' ';
+    this._name = (folderString && folderString.trim()) || '';
+
+    // @TODO need to remove the first slash !!!
+
     this.folderNameArray = this._name.split('/');
+    console.log(this.folderNameArray);
   }
 
   get folderString(): string { return this._name; }
@@ -21,15 +25,15 @@ export class TopComponent implements OnInit {
   private _name2 = '';
 
   @Input() set fileString(fileString: string) {
-    this._name2 = (fileString && fileString.trim()) || ' ';
+    this._name2 = (fileString && fileString.trim()) || '';
     this.fileNameArray = this._name2.split(' ');
   }
 
   get fileString(): string { return this._name2; }
 
 
-  public folderNameArray = ['third', 'fourth'];
-  public fileNameArray = ['fourth', 'fifth'];
+  public folderNameArray: Array<string>;
+  public fileNameArray: Array<string>;
 
   // @Input() folderString: string;
   // @Input() fileString: string;
