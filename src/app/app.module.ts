@@ -17,6 +17,7 @@ import { TopComponent } from './components/home/top.component';
 import { FolderSearchPipe } from './components/pipes/folder-search.pipe';
 import { FileSearchPipe } from './components/pipes/file-search.pipe';
 import { MagicSearchPipe } from './components/pipes/magic-search.pipe';
+import { LimitPipe } from './components/pipes/show-limit.pipe';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -30,7 +31,8 @@ import { ElectronService } from './providers/electron.service';
     FolderSearchPipe,
     FileSearchPipe,
     MagicSearchPipe,
-    TopComponent
+    TopComponent,
+    LimitPipe
   ],
   imports: [
     BrowserModule,

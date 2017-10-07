@@ -71,7 +71,8 @@
           *ngFor="let item of finalArray
             | magicSearchPipe: magicSearchString
             | folderSearchPipe: folderSearchStringSaved
-            | fileSearchPipe: fileSearchStringSaved;
+            | fileSearchPipe: fileSearchStringSaved
+            | limitPipe: numberToShow;
             index as i"
         >
 

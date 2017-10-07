@@ -15,6 +15,8 @@ export class HomeComponent implements OnInit {
 
   title = `App works !`;
 
+  numberToShow = 10;
+
   folderSearchString = '';
   folderSearchStringSaved = '';
 
