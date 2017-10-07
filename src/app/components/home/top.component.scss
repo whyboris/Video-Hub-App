@@ -1,17 +1,37 @@
 .icon {
-  left: 0px;
-  height: 10px;
   position: absolute;
-  top: 3px;
+  height: 10px;
   width: 10px;
+  left: 0px;
 }
 
-.folder {
+.folder-icon {
+  top: 3px;
+}
+
+.video-icon {
+  top: 33px;
+}
+
+.folder-name {
   color: #777777;
   font-size: 12px;
+  margin-right: 5px;
+
+  &:after {
+    content: '>'
+  }
 }
 
-.file {
+.file-container {
+  position: absolute;
+  top: 33px;
+  left: 20px;
+  width: 100%;
+}
+
+.file-words {
   color: #444444;
   font-size: 20px;
+  margin-right: 5px;
 }

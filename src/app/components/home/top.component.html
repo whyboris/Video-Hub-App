@@ -1,10 +1,11 @@
 
 <div class='wrapper'>
 
-    <img src="../../../assets/folder.png" class="icon">
+    <img src="../../../assets/folder.png" class="icon folder-icon">
+
+    <img src="../../../assets/folder.png" class="icon video-icon">
 
     <div *ngFor="let item of folderNameArray" style="display: inline-block">
-      &emsp; <span> > </span> &emsp;
       <span (click)="folderWordClicked(item)" class="folder">
         {{ item }}
       </span>
@@ -12,10 +13,12 @@
 
     <br>
 
-    <div *ngFor="let item of fileNameArray" style="display: inline-block">
-      <span (click)="fileWordClicked(item)" class="file">
-        {{ item }}
-      </span>
+    <div class="file-container">
+      <div *ngFor="let item of fileNameArray" style="display: inline-block">
+        <span (click)="fileWordClicked(item)" class="file-words">
+          {{ item }}
+        </span>
+      </div>
     </div>
 
 </div>

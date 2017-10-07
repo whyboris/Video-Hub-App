@@ -46,11 +46,11 @@ export class TopComponent implements OnInit {
 
 
   public folderWordClicked(item) {
-    console.log('folder item' + item);
+    console.log('folder item: ' + item);
   }
 
   public fileWordClicked(item) {
-    console.log('file item:' + item);
+    console.log('file item: ' + item);
   }
 
 }
