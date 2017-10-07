@@ -5,10 +5,12 @@
 
     <img src="../../../assets/folder.png" class="icon video-icon">
 
-    <div *ngFor="let item of folderNameArray" style="display: inline-block">
-      <span (click)="folderWordClicked(item)" class="folder">
-        {{ item }}
-      </span>
+    <div class="folder-container">
+      <div *ngFor="let item of folderNameArray" style="display: inline-block">
+        <span (click)="folderWordClicked(item)" class="folder-word">
+          {{ item }}
+        </span>
+      </div>
     </div>
 
     <br>

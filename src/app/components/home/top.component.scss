@@ -13,7 +13,14 @@
   top: 33px;
 }
 
-.folder-name {
+.folder-container {
+  position: absolute;
+  top: 0px;
+  left: 22px;
+  min-width: calc(100vw - 100px);
+}
+
+.folder-word {
   color: #777777;
   font-size: 12px;
   margin-right: 5px;
@@ -25,9 +32,10 @@
 
 .file-container {
   position: absolute;
-  top: 33px;
+  top: 26px;
   left: 20px;
   width: 100%;
+  min-width: calc(100vw - 100px);
 }
 
 .file-words {
