@@ -97,58 +97,83 @@ import { FinalObject } from './src/app/components/common/final-object.interface'
 let finalArray = [];
 let fileCounter = 0;
 
-const selectedSourceFolder = '/Users/byakubchik/Desktop/VideoHub/input';  // later = ''
-const selectedOutputFolder = '/Users/byakubchik/Desktop/VideoHub/output'; // later = ''
+let selectedSourceFolder = '/Users/byakubchik/Desktop/VideoHub/input';  // later = ''
+let selectedOutputFolder = '/Users/byakubchik/Desktop/VideoHub/output'; // later = ''
 
 // ============================================================
 // Functions
 // ============================================================
 
-ipc.on('open-file-dialog', function (event, theDirectory) {
-  // console.log(theDirectory);
+ipc.on('open-file-dialog', function (event, someMessage) {
+  // console.log(someMessage);
   finalArray = [];
   fileCounter = 0;
 
-  // no need to return anything, walkSync updates `finalArray`
-  // second param is needed for its own recursion
-  walkSync(selectedSourceFolder, []);
+  // ask user for input folder
+  dialog.showOpenDialog({
+    properties: ['openDirectory']
+  }, function (files) {
+    if (files) {
+      console.log('the user has chosen this directory: ' + files[0]);
+      selectedSourceFolder = files[0];
 
-  console.log(finalArray);
+      // no need to return anything, walkSync updates `finalArray`
+      // second param is needed for its own recursion
+      walkSync(selectedSourceFolder, []);
 
-  finalArray.forEach((element, index) => {
-    // console.log('forEach running:');
-    // console.log(element);
-    // console.log(index);
-    extractScreenshot(path.join(selectedSourceFolder, element[0], element[1]), index);
-  });
+      console.log(finalArray);
 
-  setTimeout(() => {
-    // format the json
-    const finalObject: FinalObject = {
-      inputDir: selectedSourceFolder,
-      outputDir: selectedOutputFolder,
-      images: finalArray
-    };
+      finalArray.forEach((element, index) => {
+        // console.log('forEach running:');
+        // console.log(element);
+        // console.log(index);
+        extractScreenshot(path.join(selectedSourceFolder, element[0], element[1]), index);
+      });
 
-    const json = JSON.stringify(finalObject);
-    // write the file
-    fs.writeFile(selectedOutputFolder + '/images.json', json, 'utf8', () => {
-      console.log('file written:');
-    });
-    console.log(finalObject);
-    // send it back
-    event.sender.send('filesArrayReturning', JSON.parse(json));
-  }, 2000);
+      setTimeout(() => {
+        // format the json
+        const finalObject: FinalObject = {
+          inputDir: selectedSourceFolder,
+          outputDir: selectedOutputFolder,
+          images: finalArray
+        };
+
+        const json = JSON.stringify(finalObject);
+        // write the file
+        fs.writeFile(selectedOutputFolder + '/images.json', json, 'utf8', () => {
+          console.log('file written:');
+        });
+        console.log(finalObject);
+        // send it back
+        event.sender.send('filesArrayReturning', JSON.parse(json));
+      }, 5000);
+
+    }
+  })
 })
 
 ipc.on('load-the-file', function (event, somethingElse) {
   // console.log(somethingElse);
-  fs.readFile(selectedOutputFolder + '/images.json', (err, data) => {
-    if (err) {
-      throw err;
-    }
-    event.sender.send('filesArrayReturning', JSON.parse(data));
-  });
+
+  dialog.showOpenDialog({
+      properties: ['openFile']
+    }, function (files) {
+      if (files) {
+        console.log('the user has chosen this directory: ' + files[0]);
+        // TODO: check if file ends in .json before parsing !!!
+        selectedOutputFolder = files[0].replace('/images.json', '');
+
+
+        fs.readFile(selectedOutputFolder + '/images.json', (err, data) => {
+          if (err) {
+            throw err;
+          }
+          event.sender.send('finalObjectReturning', JSON.parse(data));
+        });
+
+      }
+    })
+
 })
 
 ipc.on('openThisFile', function (event, fullFilePath) {
@@ -199,8 +224,10 @@ const walkSync = function(dir, filelist) {
     if (fs.statSync(path.join(dir, file)).isDirectory()) {
       filelist = walkSync(path.join(dir, file), filelist);
     } else {
-      // if file type is .mp4
-      if (file.indexOf('.mp4') !== -1) {
+      // if file type is .mp4, .m4v, or .avi
+      if (file.indexOf('.mp4') !== -1
+        || file.indexOf('.avi') !== -1
+        || file.indexOf('.m4v') !== -1) {
         // before adding, remove the redundant prefix: selectedSourceFolder
         const partialPath = dir.replace(selectedSourceFolder, '');
 
@@ -237,13 +264,5 @@ const cleanUpFileName = function(original: string): string {
 // MISC
 // ============================================================
 
-// ipc.on('open-file-dialog', function (event) {
-//   dialog.showOpenDialog({
-//     properties: ['openFile', 'openDirectory']
-//   }, function (files) {
-//     if (files) {
-//       event.sender.send('selected-directory', files);
-//     }
-//   })
-// })
+
 

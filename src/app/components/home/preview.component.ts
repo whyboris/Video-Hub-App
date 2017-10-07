@@ -10,14 +10,15 @@ export class PreviewComponent implements OnInit {
   @Input() stuff: any;
   @Input() folderPath: string;
 
-  title = 'app';
-  initialPhoto: string;
+  initialPhoto = '';
   photo: string;
   timer: any;
 
   ngOnInit() {
     // Loads up the initial photo and shows it as main photo
-    this.initialPhoto = this.stuff[0];
+    if (this.stuff) {
+      this.initialPhoto = this.stuff[0];
+    }
     this.photo = this.initialPhoto;
     // console.log(this.stuff);
   }

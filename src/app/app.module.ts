@@ -6,6 +6,8 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
+import { VirtualScrollModule } from 'angular2-virtual-scroll';
+
 import { AppComponent } from './app.component';
 
 import { HomeComponent } from './components/home/home.component';
@@ -34,7 +36,8 @@ import { ElectronService } from './providers/electron.service';
     BrowserModule,
     FormsModule,
     HttpModule,
-    AppRoutingModule
+    AppRoutingModule,
+    VirtualScrollModule
   ],
   providers: [ElectronService],
   bootstrap: [AppComponent]

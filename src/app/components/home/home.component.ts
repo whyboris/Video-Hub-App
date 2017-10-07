@@ -36,7 +36,9 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.electronService.ipcRenderer.on('filesArrayReturning', (event, finalObject: FinalObject) => {
+    this.electronService.ipcRenderer.on('finalObjectReturning', (event, finalObject: FinalObject) => {
+      this.selectedOutputFolder = finalObject.outputDir;
+      this.selectedSourceFolder = finalObject.inputDir;
       this.finalArray = finalObject.images;
     });
 
@@ -49,7 +51,7 @@ export class HomeComponent implements OnInit {
 
   public importFresh() {
     console.log('fresh import');
-    this.electronService.ipcRenderer.send('open-file-dialog', 'this directory -- lol');
+    this.electronService.ipcRenderer.send('open-file-dialog', 'sending some message');
   }
 
   public loadFromFile() {

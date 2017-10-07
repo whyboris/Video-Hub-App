@@ -58,30 +58,40 @@
 
     <div class="gallery">
 
-      <div
-        class="item"
-        *ngFor="let item of finalArray
-          | magicSearchPipe: magicSearchString
-          | folderSearchPipe: folderSearchStringSaved
-          | fileSearchPipe: fileSearchStringSaved;
-          index as i"
-      >
+      <!-- <virtual-scroll
+        [items]="finalArray"
+        [bufferAmount]="5"
+        [childWidth]="100"
+        [childHeight]="100"
+        (update)="viewPortItems = $event"
+      > -->
 
-        <div class="preview">
-          <app-gallery-item (click)="openVideo(i)" [stuff]="item[3]" [folderPath]="selectedOutputFolder"></app-gallery-item>
+        <div
+          class="item"
+          *ngFor="let item of finalArray
+            | magicSearchPipe: magicSearchString
+            | folderSearchPipe: folderSearchStringSaved
+            | fileSearchPipe: fileSearchStringSaved;
+            index as i"
+        >
+
+          <div class="preview">
+            <app-gallery-item (click)="openVideo(i)" [stuff]="item[3]" [folderPath]="selectedOutputFolder"></app-gallery-item>
+          </div>
+
+          <div class="folder">
+            {{ item[0] || '&emsp;' }}
+          </div>
+
+          <br>
+
+          <div class="title">
+            {{ item[2] }}
+          </div>
+
         </div>
 
-        <div class="folder">
-          {{ item[0] || '&emsp;' }}
-        </div>
-
-        <br>
-
-        <div class="title">
-          {{ item[2] }}
-        </div>
-
-      </div>
+      <!-- </virtual-scroll> -->
 
     </div>
 
