@@ -11,8 +11,8 @@ export class TopComponent implements OnInit {
   private _name = '';
 
   @Input() set folderString(folderString: string) {
-    this._name = (folderString && folderString.trim()) || '<no name set>';
-    this.wipArray = this._name.split('/');
+    this._name = (folderString && folderString.trim()) || ' ';
+    this.folderNameArray = this._name.split('/');
   }
 
   get folderString(): string { return this._name; }
@@ -21,15 +21,15 @@ export class TopComponent implements OnInit {
   private _name2 = '';
 
   @Input() set fileString(fileString: string) {
-    this._name2 = (fileString && fileString.trim()) || '<no name set>';
-    this.wipArray2 = this._name2.split(' ');
+    this._name2 = (fileString && fileString.trim()) || ' ';
+    this.fileNameArray = this._name2.split(' ');
   }
 
   get fileString(): string { return this._name2; }
 
 
-  public wipArray = ['third', 'fourth'];
-  public wipArray2 = ['fourth', 'fifth'];
+  public folderNameArray = ['third', 'fourth'];
+  public fileNameArray = ['fourth', 'fifth'];
 
   // @Input() folderString: string;
   // @Input() fileString: string;
@@ -42,7 +42,11 @@ export class TopComponent implements OnInit {
 
 
   public folderWordClicked(item) {
-    console.log(item);
+    console.log('folder item' + item);
+  }
+
+  public fileWordClicked(item) {
+    console.log('file item:' + item);
   }
 
 }

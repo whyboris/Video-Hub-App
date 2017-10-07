@@ -1,12 +1,9 @@
 <div class="everything">
 
   <div class="top">
-    <img src="../../../assets/folder.png" class="icon"><span class="folder">{{ currentPlayingFolder }}</span>
-    <br>
-    <span class="file">{{ currentPlayingFile }}</span>
 
     <app-top-component
-      style="position: absolute; left: 400px; top: 30px;"
+      class="top-content-position"
       [fileString]="currentPlayingFile"
       [folderString]="currentPlayingFolder"
     ></app-top-component>

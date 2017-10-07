@@ -1,14 +1,21 @@
 
 <div class='wrapper'>
 
-    <span *ngFor="let item of wipArray" (click)="folderWordClicked(item)">
-      {{ item }}
-    </span>
+    <img src="../../../assets/folder.png" class="icon">
+
+    <div *ngFor="let item of folderNameArray" style="display: inline-block">
+      &emsp; <span> > </span> &emsp;
+      <span (click)="folderWordClicked(item)" class="folder">
+        {{ item }}
+      </span>
+    </div>
 
     <br>
 
-    <span *ngFor="let item of wipArray2" (click)="folderWordClicked(item)">
-      {{ item }}
-    </span>
+    <div *ngFor="let item of fileNameArray" style="display: inline-block">
+      <span (click)="fileWordClicked(item)" class="file">
+        {{ item }}
+      </span>
+    </div>
 
 </div>

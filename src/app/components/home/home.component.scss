@@ -1,5 +1,11 @@
 $top-region: 100px;
 
+.top-content-position {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+}
+
 .everything {
   width: 100%;
   height: 100vh;
@@ -13,31 +19,6 @@ $top-region: 100px;
   height: $top-region;
   border: 2px solid green;
   box-sizing: border-box;
-
-  .folder {
-    color: #777777;
-    font-size: 12px;
-    position: absolute;
-    top: 20px;
-    left: 40px;
-  }
-
-  .file {
-    color: #444444;
-    font-size: 20px;
-    position: absolute;
-    position: absolute;
-    top: 50px;
-    left: 20px;
-  }
-
-  .icon {
-    left: 22px;
-    height: 10px;
-    position: absolute;
-    top: 32px;
-    width: 10px;
-  }
 }
 
 .search {
