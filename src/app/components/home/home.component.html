@@ -1,6 +1,6 @@
 <div class="everything">
 
-  <div class="top">
+  <div class="top toolbar toolbar-header">
 
     <app-top-component
       class="top-content-position"
@@ -9,8 +9,8 @@
     ></app-top-component>
 
   </div>
-
-  <div class="search">
+<div class="pane-group">
+  <div class="search pane-sm sidebar">
 
     <span>Folder: {{ folderSearchStringSaved }}</span>
     <input
@@ -50,7 +50,7 @@
     <button (click)="loadFromFile()">Load from file</button>
 
   </div>
-
+</div>
   <div class="gallery-container">
 
     <div class="gallery">

@@ -3,7 +3,8 @@ import { Component, Input, OnInit, OnChanges } from '@angular/core';
 @Component({
   selector: 'app-top-component',
   templateUrl: './top.component.html',
-  styleUrls: ['./top.component.scss']
+  styleUrls: ['./top.component.scss',
+              './photon/photon.min.css']
 })
 export class TopComponent implements OnInit {
 

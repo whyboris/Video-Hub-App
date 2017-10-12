@@ -1,5 +1,5 @@
 // variable
-$top-region: 100px;
+$top-region: 50px;
 
 // styling
 .everything {
@@ -10,29 +10,29 @@ $top-region: 100px;
 .top {
   background: #F3F3F3;
   height: $top-region;
-  padding: 10px;
   width: 100%;
 }
 
 .top-content-position {
   left: 20px;
   position: absolute;
-  top: 20px;
+  top: 5px;
 }
+
 .search {
   background: #DDDDDD;
   box-sizing: border-box;
-  height: calc( 100vh - 100px );
+  height: calc( 100vh - 50px );
   padding: 10px;
   position: absolute;
-  top: 100px;
+  top: 50px;
   width: 200px;
 }
 
 .gallery-container {
   background: #AAAAAA;
   box-sizing: border-box;
-  height: calc(100vh - 100px);
+  height: calc(100vh - 50px);
   left: 200px;
   overflow-y: scroll;
   padding-bottom: 100px;

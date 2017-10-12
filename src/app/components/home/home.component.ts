@@ -9,7 +9,8 @@ import { FinalObject } from '../common/final-object.interface';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss',
               './search.component.scss',
-              './gallery.component.scss']
+              './gallery.component.scss',
+              './photon/photon.min.css']
 })
 export class HomeComponent implements OnInit {
 
