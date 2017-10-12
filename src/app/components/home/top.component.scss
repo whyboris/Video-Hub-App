@@ -10,7 +10,7 @@
 }
 
 .video-icon {
-  top: 33px;
+  top: 22px;
 }
 
 .folder-container {
@@ -26,13 +26,14 @@
   margin-right: 5px;
 
   &:after {
-    content: '>'
+    font-family:photon-entypo;
+    content: '\e875';
   }
 }
 
 .file-container {
   position: absolute;
-  top: 26px;
+  top: 18px;
   left: 20px;
   width: 100%;
   min-width: calc(100vw - 100px);
@@ -40,6 +41,6 @@
 
 .file-words {
   color: #444444;
-  font-size: 20px;
+  font-size: 16px;
   margin-right: 5px;
 }

@@ -18,6 +18,8 @@
       (keyup.enter)="onFolderEnter(folder.value)"
       [(ngModel)]="folderSearchString"
       type="text"
+      class="form-control"
+      placeholder="Search folders"
     >
 
     <span>File: {{ fileSearchStringSaved }} </span>
@@ -26,12 +28,16 @@
       (keyup.enter)="onFileEnter(file.value)"
       [(ngModel)]="fileSearchString"
       type="text"
+      class="form-control"
+      placeholder="Search files"
     >
 
     <span>Magic: {{ magicSearchString }}</span>
     <input
       [(ngModel)]="magicSearchString"
       type="text"
+      class="form-control"
+      placeholder="Magic search"
     >
 
     <br>
