@@ -1,27 +1,16 @@
-.icon {
-  position: absolute;
-  height: 10px;
-  width: 10px;
-  left: 0px;
-}
-
-.folder-icon {
-  top: 3px;
-}
-
-.video-icon {
-  top: 22px;
+.icon-video,
+.icon-folder {
+  font-size: 12px;
+  margin-right: 5px;
 }
 
 .folder-container {
-  position: absolute;
-  top: 0px;
-  left: 22px;
   min-width: calc(100vw - 100px);
 }
 
 .folder-word {
   color: #777777;
+  cursor: pointer;
   font-size: 12px;
   margin-right: 5px;
 
@@ -32,15 +21,12 @@
 }
 
 .file-container {
-  position: absolute;
-  top: 18px;
-  left: 20px;
-  width: 100%;
   min-width: calc(100vw - 100px);
 }
 
 .file-words {
   color: #444444;
-  font-size: 16px;
+  cursor: pointer;
+  font-size: 14px;
   margin-right: 5px;
 }
