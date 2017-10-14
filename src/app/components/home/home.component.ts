@@ -14,6 +14,12 @@ import { FinalObject } from '../common/final-object.interface';
 })
 export class HomeComponent implements OnInit {
 
+  searchOptions = {
+    folder: true,
+    file: true,
+    magic: true
+  };
+
   title = `App works !`;
 
   numberToShow = 10;
@@ -92,6 +98,10 @@ export class HomeComponent implements OnInit {
   onFileEnter(value: string) {
     this.fileSearchString = '';
     this.fileSearchStringSaved = value;
+  }
+
+  toggleThis(button: string) {
+    this.searchOptions[button] = !this.searchOptions[button];
   }
 
 }

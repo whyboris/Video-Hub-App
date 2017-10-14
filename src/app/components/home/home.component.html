@@ -17,13 +17,25 @@
 
 
           <div class="btn-group">
-            <button class="active btn btn-mini btn-default">
+            <button
+              (click)="toggleThis('folder')"
+              [ngClass]="{active: searchOptions.folder}"
+              class="btn btn-mini btn-default"
+            >
               <span class="icon icon-folder"></span>
             </button>
-            <button class="active btn btn-mini btn-default">
+            <button
+              (click)="toggleThis('file')"
+              [ngClass]="{active: searchOptions.file}"
+              class="active btn btn-mini btn-default"
+            >
               <span class="icon icon-video"></span>
             </button>
-            <button class="btn btn-mini btn-default">
+            <button
+              (click)="toggleThis('magic')"
+              [ngClass]="{active: searchOptions.magic}"
+              class="btn btn-mini btn-default"
+            >
               <span class="icon icon-search"></span>
             </button>
           </div>
@@ -31,57 +43,69 @@
 
           <nav class="nav-group">
 
-            <h5 class="nav-group-title">
-              <input
+            <ng-container *ngIf="searchOptions.folder">
+
+              <h5 class="nav-group-title">
+                <input
                 #folder
                 (keyup.enter)="onFolderEnter(folder.value)"
                 [(ngModel)]="folderSearchString"
                 class="form-control"
                 placeholder="Search folders"
                 type="text"
-              >
-            </h5>
+                >
+              </h5>
 
-            <h5 class="nav-group-title">
-              Folder: {{ folderSearchStringSaved }}
-              <br>
-              <br>
-            </h5>
+              <h5 class="nav-group-title">
+                Folder: {{ folderSearchStringSaved }}
+                <br>
+                <br>
+              </h5>
 
-            <h5 class="nav-group-title">
-              <input
+            </ng-container>
+
+            <ng-container *ngIf="searchOptions.file">
+
+              <h5 class="nav-group-title">
+                <input
                 #file
                 (keyup.enter)="onFileEnter(file.value)"
                 [(ngModel)]="fileSearchString"
                 class="form-control"
                 placeholder="Search files"
                 type="text"
-              >
-            </h5>
+                >
+              </h5>
 
-            <h5 class="nav-group-title">
-              File: {{ fileSearchStringSaved }}
-              <br>
-              <br>
-            </h5>
+              <h5 class="nav-group-title">
+                File: {{ fileSearchStringSaved }}
+                <br>
+                <br>
+              </h5>
 
-            <h5 class="nav-group-title">
-              <input
+            </ng-container>
+
+            <ng-container *ngIf="searchOptions.magic">
+
+              <h5 class="nav-group-title">
+                <input
                 [(ngModel)]="magicSearchString"
                 type="text"
                 class="form-control"
                 placeholder="Magic search"
-              >
-            </h5>
+                >
+              </h5>
 
-            <h5 class="nav-group-title">
-              <span class="icon icon-record" style="color: #fc605b; margin-right: 5px;"></span>Magic: {{ magicSearchString }}
+              <h5 class="nav-group-title">
+                <span class="icon icon-record" style="color: #fc605b; margin-right: 5px;"></span>Magic: {{ magicSearchString }}
+                <br>
+                <br>
+              </h5>
+
               <br>
               <br>
-            </h5>
 
-            <br>
-            <br>
+            </ng-container>
 
             <h5 class="nav-group-title">
 
@@ -109,6 +133,10 @@
 
           </nav>
         </div>
+
+
+        <!-- THE GALLERY PANE -->
+
 
         <div class="pane">
 
@@ -153,129 +181,6 @@
 
           </div>
 
-
-
-
-          <table class="table-striped">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Kind</th>
-                <th>Date Modified</th>
-                <th>Author</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>bars.scss</td>
-                <td>Document</td>
-                <td>Oct 13, 2015</td>
-                <td>connors</td>
-              </tr>
-              <tr>
-                <td>base.scss</td>
-                <td>Document</td>
-                <td>Oct 13, 2015</td>
-                <td>connors</td>
-              </tr>
-              <tr>
-                <td>button-groups.scss</td>
-                <td>Document</td>
-                <td>Oct 13, 2015</td>
-                <td>connors</td>
-              </tr>
-              <tr>
-                <td>buttons.scss</td>
-                <td>Document</td>
-                <td>Oct 13, 2015</td>
-                <td>connors</td>
-              </tr>
-              <tr>
-                <td>docs.scss</td>
-                <td>Document</td>
-                <td>Oct 13, 2015</td>
-                <td>connors</td>
-              </tr>
-              <tr>
-                <td>forms.scss</td>
-                <td>Document</td>
-                <td>Oct 13, 2015</td>
-                <td>connors</td>
-              </tr>
-              <tr>
-                <td>grid.scss</td>
-                <td>Document</td>
-                <td>Oct 13, 2015</td>
-                <td>connors</td>
-              </tr>
-              <tr>
-                <td>icons.scss</td>
-                <td>Document</td>
-                <td>Oct 13, 2015</td>
-                <td>connors</td>
-              </tr>
-              <tr>
-                <td>images.scss</td>
-                <td>Document</td>
-                <td>Oct 13, 2015</td>
-                <td>connors</td>
-              </tr>
-              <tr>
-                <td>lists.scss</td>
-                <td>Document</td>
-                <td>Oct 13, 2015</td>
-                <td>connors</td>
-              </tr>
-              <tr>
-                <td>mixins.scss</td>
-                <td>Document</td>
-                <td>Oct 13, 2015</td>
-                <td>connors</td>
-              </tr>
-              <tr>
-                <td>navs.scss</td>
-                <td>Document</td>
-                <td>Oct 13, 2015</td>
-                <td>connors</td>
-              </tr>
-              <tr>
-                <td>normalize.scss</td>
-                <td>Document</td>
-                <td>Oct 13, 2015</td>
-                <td>connors</td>
-              </tr>
-              <tr>
-                <td>photon.scss</td>
-                <td>Document</td>
-                <td>Oct 13, 2015</td>
-                <td>connors</td>
-              </tr>
-              <tr>
-                <td>tables.scss</td>
-                <td>Document</td>
-                <td>Oct 13, 2015</td>
-                <td>connors</td>
-              </tr>
-              <tr>
-                <td>tabs.scss</td>
-                <td>Document</td>
-                <td>Oct 13, 2015</td>
-                <td>connors</td>
-              </tr>
-              <tr>
-                <td>utilities.scss</td>
-                <td>Document</td>
-                <td>Oct 13, 2015</td>
-                <td>connors</td>
-              </tr>
-              <tr>
-                <td>variables.scss</td>
-                <td>Document</td>
-                <td>Oct 13, 2015</td>
-                <td>connors</td>
-              </tr>
-            </tbody>
-          </table>
         </div>
       </div>
     </div>

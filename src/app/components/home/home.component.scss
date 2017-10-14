@@ -58,3 +58,13 @@ button {
 .btn-group {
   margin: 10px 0 0 10px;
 }
+
+.form-control:focus {
+  box-shadow: none !important;
+}
+
+input {
+  &::placeholder {
+    color: #DDDDDD;
+  }
+}
