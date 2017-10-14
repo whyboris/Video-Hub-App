@@ -1,0 +1,13 @@
+.filmOverride {
+  display: initial;
+
+  .item {
+    width: initial;
+    max-width: 90%;
+    margin-bottom: initial;
+
+    &:after {
+      padding-top: 0;
+    }
+  }
+}

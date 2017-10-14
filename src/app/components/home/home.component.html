@@ -140,9 +140,30 @@
 
         <div class="pane">
 
+
+
+
+
           <div class="gallery-container">
 
-            <div class="gallery">
+            <div class="btn-group">
+              <button
+                (click)="toggleThis('thumbNotFilm')"
+                [ngClass]="{active: searchOptions.thumbNotFilm}"
+                class="btn btn-mini btn-default"
+              >
+                <span class="icon icon-layout"></span>
+              </button>
+              <button
+                (click)="toggleThis('thumbNotFilm')"
+                [ngClass]="{active: !searchOptions.thumbNotFilm}"
+                class="active btn btn-mini btn-default"
+              >
+                <span class="icon icon-menu"></span>
+              </button>
+            </div>
+
+            <div class="gallery" [ngClass]="{filmOverride: !searchOptions.thumbNotFilm}">
 
               <!-- <virtual-scroll
                       [items]="finalArray"
@@ -159,7 +180,7 @@
                           | limitPipe: numberToShow;
                           index as i">
 
-                  <div *ngIf="thumbNotFilm; else filmStrip" class="preview">
+                  <div *ngIf="searchOptions.thumbNotFilm; else filmStrip" class="preview">
                     <app-gallery-item
                       (click)="openVideo(i)"
                       [stuff]="item[3]"

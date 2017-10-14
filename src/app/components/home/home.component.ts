@@ -10,17 +10,18 @@ import { FinalObject } from '../common/final-object.interface';
   styleUrls: ['./home.component.scss',
               './search.component.scss',
               './gallery.component.scss',
-              './photon/photon.min.css']
+              './photon/photon.min.css',
+              './film-override.scss']
 })
 export class HomeComponent implements OnInit {
 
   searchOptions = {
     folder: true,
     file: true,
-    magic: true
+    magic: true,
+    thumbNotFilm: true
   };
 
-  thumbNotFlim = false;
 
   title = `App works !`;
 
