@@ -20,6 +20,8 @@ export class HomeComponent implements OnInit {
     magic: true
   };
 
+  thumbNotFlim = false;
+
   title = `App works !`;
 
   numberToShow = 10;

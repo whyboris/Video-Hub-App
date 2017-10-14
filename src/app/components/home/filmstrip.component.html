@@ -1,0 +1,13 @@
+<div class="filmstrip-container">
+
+  <img *ngFor="let item of stuff; let i = index"
+    src="{{ folderPath + '/' + item }}"
+    class="screencap screen{{ i + 1 }}">
+
+    <!-- <img src="{{ stuff[0] }}" class="screencap screen1">
+    <img src="{{ stuff[1] }}" class="screencap screen2">
+    <img src="{{ stuff[2] }}" class="screencap screen3">
+    <img src="{{ stuff[3] }}" class="screencap screen4">
+    <img src="{{ stuff[4] }}" class="screencap screen5"> -->
+
+</div>

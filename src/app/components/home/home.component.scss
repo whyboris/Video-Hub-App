@@ -33,12 +33,12 @@ $top-region: 50px;
   background: #AAAAAA;
   box-sizing: border-box;
   height: calc(100vh - 50px);
-  left: 290px;
+  // left: 290px;
   overflow-y: scroll;
   padding-bottom: 100px;
-  position: fixed;
-  top: $top-region;
-  width: calc(100vw - 200px);
+  // position: fixed;
+  // top: $top-region;
+  // width: calc(100vw - 200px);
 }
 
 button {
@@ -47,6 +47,7 @@ button {
   border-radius: 5px;
   border: 1px solid white;
   padding: 10px;
+  min-width: 30px;
 }
 
 /* overrides */

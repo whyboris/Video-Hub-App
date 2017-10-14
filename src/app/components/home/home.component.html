@@ -159,9 +159,23 @@
                           | limitPipe: numberToShow;
                           index as i">
 
-                <div class="preview">
-                  <app-gallery-item (click)="openVideo(i)" [stuff]="item[3]" [folderPath]="selectedOutputFolder"></app-gallery-item>
-                </div>
+                  <div *ngIf="thumbNotFilm; else filmStrip" class="preview">
+                    <app-gallery-item
+                      (click)="openVideo(i)"
+                      [stuff]="item[3]"
+                      [folderPath]="selectedOutputFolder"
+                    ></app-gallery-item>
+                  </div>
+
+                  <ng-template #filmStrip>
+
+                    <app-filmstrip-item
+                      (click)="openVideo(i)"
+                      [stuff]="item[3]"
+                      [folderPath]="selectedOutputFolder"
+                    ></app-filmstrip-item>
+
+                  </ng-template>
 
                 <div class="folder">
                   {{ item[0] || '&emsp;' }}

@@ -10,6 +10,7 @@ import { VirtualScrollModule } from 'angular2-virtual-scroll';
 
 import { AppComponent } from './app.component';
 
+import { FilmstripComponent } from 'app/components/home/filmstrip.component';
 import { HomeComponent } from './components/home/home.component';
 import { PreviewComponent } from './components/home/preview.component';
 import { TopComponent } from './components/home/top.component';
@@ -26,13 +27,14 @@ import { ElectronService } from './providers/electron.service';
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
-    PreviewComponent,
-    FolderSearchPipe,
     FileSearchPipe,
+    FilmstripComponent,
+    FolderSearchPipe,
+    HomeComponent,
+    LimitPipe,
     MagicSearchPipe,
-    TopComponent,
-    LimitPipe
+    PreviewComponent,
+    TopComponent
   ],
   imports: [
     BrowserModule,
