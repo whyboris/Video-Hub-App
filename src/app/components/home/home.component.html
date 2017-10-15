@@ -209,7 +209,10 @@
                       (update)="viewPortItems = $event"
                     > -->
 
-              <div class="item" *ngFor="let item of finalArray
+              <div
+                class="item"
+                [ngClass]="{fileNamePadding: !searchOptions.showFileName}"
+                *ngFor="let item of finalArray
                           | magicSearchPipe: magicSearchString
                           | folderSearchPipe: folderSearchStringSaved
                           | fileSearchPipe: fileSearchStringSaved

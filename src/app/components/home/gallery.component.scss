@@ -44,8 +44,6 @@ list-item {
   padding-top: 10px;
 }
 
-
-
 .gallery {
   padding: .5vw;
   font-size: 0;
@@ -55,7 +53,7 @@ list-item {
 .item {
   flex: auto;
   height: 100px;
-  margin-bottom: 40px; // room for folder and file name
+  margin-bottom: 40px !important; // room for folder and file name
   margin: 10px;
   min-width: 174px; // 16:9 ratio with height
   max-width: 174px; //      rounded down from 178px to avoid common black bars
@@ -71,7 +69,9 @@ list-item {
   height: 100%;
 }
 
-
+.fileNamePadding {
+  margin-bottom: 0px !important;
+}
 
 
 // .gallery {

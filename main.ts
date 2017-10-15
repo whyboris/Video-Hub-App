@@ -127,8 +127,11 @@ ipc.on('open-file-dialog', function (event, someMessage) {
       // second param is needed for its own recursion
       walkSync(selectedSourceFolder, []);
 
+      // store the reference to the Angular app
       theOriginalOpenFileDialogEvent = event;
 
+      // reset files Processed
+      filesProcessed = 1;
       extractAllScreenshots();
     }
   })
