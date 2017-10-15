@@ -29,7 +29,7 @@
 .screencap {
   position: absolute;
   top: 0px;
-  width: 20%;
+  // width: 20%;
   height: 100px;
   display: block;
   float: right;
@@ -43,9 +43,9 @@
   box-shadow: 10px 0px 10px rgba(0,0,0,0.4);
   border: 3px solid black;
   box-sizing: border-box;
-  width: 130px;
+  // width: 130px;
   &:hover {
-    width: 130px;
+    // width: 130px;
     z-index: 20;
   }
 }
