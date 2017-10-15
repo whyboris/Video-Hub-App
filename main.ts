@@ -101,7 +101,7 @@ let fileCounter = 0;
 let totalNumberOfFiles = 0;
 let filesProcessed = 1;
 
-let selectedSourceFolder = '/Users/byakubchik/Desktop/VideoHub/input';  // later = ''
+let selectedSourceFolder = '';  // later = ''
 let selectedOutputFolder = '/Users/byakubchik/Desktop/VideoHub/output'; // later = ''
 
 let theOriginalOpenFileDialogEvent;
@@ -137,6 +137,22 @@ ipc.on('open-file-dialog', function (event, someMessage) {
   })
 })
 
+ipc.on('choose-output', function (event, someMessage) {
+
+  // ask user for input folder
+  dialog.showOpenDialog({
+    properties: ['openDirectory']
+  }, function (files) {
+    if (files) {
+      console.log('the user has chosen this OUTPUT directory: ' + files[0]);
+      selectedOutputFolder = files[0];
+
+      event.sender.send('outputFolderChosen', selectedOutputFolder);
+
+    }
+  })
+})
+
 // TODO: Ask for output folder !!!!!!!!!!!!!!!!!!!!!!!
 // create "/boris" inside it so that there is no `EEXIST` error when extracting.
 
@@ -147,7 +163,7 @@ ipc.on('load-the-file', function (event, somethingElse) {
       properties: ['openFile']
     }, function (files) {
       if (files) {
-        console.log('the user has chosen this directory: ' + files[0]);
+        console.log('the user has chosen this INPUT directory: ' + files[0]);
         // TODO: check if file ends in .json before parsing !!!
         selectedOutputFolder = files[0].replace('/images.json', '');
 

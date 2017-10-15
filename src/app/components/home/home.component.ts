@@ -33,8 +33,8 @@ export class HomeComponent implements OnInit {
 
   magicSearchString = '';
 
-  selectedSourceFolder = '/Users/byakubchik/Desktop/VideoHub/input';  // later = ''
-  selectedOutputFolder = '/Users/byakubchik/Desktop/VideoHub/output'; // later = ''
+  selectedOutputFolder = 'no output chosen'; // later = ''
+  selectedSourceFolder = 'no source chosen';  // later = ''
 
   currentPlayingFile = '';
   currentPlayingFolder = '';
@@ -49,6 +49,7 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
     this.electronService.ipcRenderer.on('finalObjectReturning', (event, finalObject: FinalObject) => {
       this.selectedOutputFolder = finalObject.outputDir;
       this.selectedSourceFolder = finalObject.inputDir;
@@ -56,8 +57,11 @@ export class HomeComponent implements OnInit {
     });
 
     this.electronService.ipcRenderer.on('selected-directory', (event, files) => {
-      console.log(files[0]);
-      this.changeDisplayedPath(files[0]);
+      this.selectedSourceFolder = files;
+    });
+
+    this.electronService.ipcRenderer.on('outputFolderChosen', (event, files) => {
+      this.selectedOutputFolder = files;
     });
 
     this.electronService.ipcRenderer.on('processingProgress', (event, a, b) => {
@@ -75,13 +79,14 @@ export class HomeComponent implements OnInit {
     this.electronService.ipcRenderer.send('open-file-dialog', 'sending some message');
   }
 
+  public selectOutputDirectory() {
+    console.log('select output directory');
+    this.electronService.ipcRenderer.send('choose-output', 'sending some message also');
+  }
+
   public loadFromFile() {
     console.log('loading file');
     this.electronService.ipcRenderer.send('load-the-file', 'some thing sent');
-  }
-
-  public changeDisplayedPath(thePathString: string): void {
-    this.selectedSourceFolder = thePathString;
   }
 
   // HTML calls this

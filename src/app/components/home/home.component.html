@@ -126,6 +126,20 @@
             <h5 class="nav-group-title">
 
                 <button
+                  (click)="selectOutputDirectory()"
+                  class="btn btn-mini btn-negative"
+                >
+                Select output directory
+              </button>
+            </h5>
+
+            <h5 class="nav-group-title">
+              {{ selectedOutputFolder }}
+            </h5>
+
+            <h5 class="nav-group-title">
+
+                <button
                   (click)="importFresh()"
                   class="btn btn-mini btn-negative"
                 >
