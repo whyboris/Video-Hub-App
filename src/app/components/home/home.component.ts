@@ -19,11 +19,9 @@ export class HomeComponent implements OnInit {
     folder: true,
     file: true,
     magic: true,
-    thumbNotFilm: true
+    thumbNotFilm: true,
+    showFileName: true
   };
-
-
-  title = `App works !`;
 
   numberToShow = 10;
 

@@ -21,6 +21,7 @@
               (click)="toggleThis('folder')"
               [ngClass]="{active: searchOptions.folder}"
               class="btn btn-mini btn-default"
+              title="File search"
             >
               <span class="icon icon-folder"></span>
             </button>
@@ -28,6 +29,7 @@
               (click)="toggleThis('file')"
               [ngClass]="{active: searchOptions.file}"
               class="active btn btn-mini btn-default"
+              title="Folder search"
             >
               <span class="icon icon-video"></span>
             </button>
@@ -35,6 +37,7 @@
               (click)="toggleThis('magic')"
               [ngClass]="{active: searchOptions.magic}"
               class="btn btn-mini btn-default"
+              title="Magic search"
             >
               <span class="icon icon-search"></span>
             </button>
@@ -163,6 +166,26 @@
               </button>
             </div>
 
+            <div class="btn-group">
+              <button
+                (click)="toggleThis('showFileName')"
+                [ngClass]="{active: searchOptions.showFileName}"
+                class="btn btn-mini btn-default"
+              >
+                <span class="icon icon-doc-landscape"></span>
+              </button>
+            </div>
+
+            <div class="btn-group">
+              <button
+                (click)="toggleThis('none')"
+                [ngClass]="{active: searchOptions.none}"
+                class="active btn btn-mini btn-default"
+              >
+                <span class="icon icon-cog"></span>
+              </button>
+            </div>
+
             <div class="gallery" [ngClass]="{filmOverride: !searchOptions.thumbNotFilm}">
 
               <!-- <virtual-scroll
@@ -198,14 +221,18 @@
 
                   </ng-template>
 
-                <div class="folder">
-                  {{ item[0] || '&emsp;' }}
-                </div>
+                <div *ngIf="searchOptions.showFileName">
 
-                <br>
+                  <div class="folder">
+                    {{ item[0] || '&emsp;' }}
+                  </div>
 
-                <div class="title">
-                  {{ item[2] }}
+                  <br>
+
+                  <div class="title">
+                    {{ item[2] }}
+                  </div>
+
                 </div>
 
               </div>

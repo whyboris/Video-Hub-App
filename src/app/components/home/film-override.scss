@@ -3,7 +3,7 @@
 
   .item {
     width: initial;
-    max-width: 90%;
+    max-width: calc(100% - 130px);
     margin-bottom: initial;
 
     &:after {
