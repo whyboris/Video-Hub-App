@@ -5,16 +5,16 @@
 }
 
 .screencaps {
+  // background-size: 100% 100% !important;
+  // border-radius: 10px;
+  background-color: black !important;
+  background-position: center !important;
   background-repeat: no-repeat !important;
-  background-size: 100% 100% !important;
-  border-radius: 10px;
   border: 1px solid black;
-  // height: 200px;
   height: 100%;
   margin: 0;
   overflow: hidden;
   position: absolute;
-  // width: 300px;
   width: 100%;
 }
 

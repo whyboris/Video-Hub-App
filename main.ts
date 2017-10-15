@@ -203,16 +203,18 @@ const extractScreenshot = function (filePath, currentFile) {
       }
     })
     .screenshots({
+      // count: 10, // can do count rather than timestamps
       // timestamps: ['25%', '50%', '75%'],
       timestamps: ['10%', '30%', '50%', '70%', '90%'],
       // timestamps: ['5%', '15%', '25%', '35%', '45%', '55%', '65%', '75%', '85%', '95%'],
       filename: currentFile + '-%i.png',
       folder: selectedOutputFolder + '/boris',
-      size: '200x200'
+      size: '?x100' // fix height at 100px compute width automatically
     });
 }
 
 function sendFinalResultHome() {
+
   const finalObject: FinalObject = {
     inputDir: selectedSourceFolder,
     outputDir: selectedOutputFolder,
@@ -262,7 +264,7 @@ const walkSync = function(dir, filelist) {
 /**
  * Clean up the file name
  * (1) underscores
- * (2) double spaces / tripple spaces / quadrupple spaces
+ * (2) double spaces / tripple spaces
  * (3) remove filename
  * (4) strip periods
  * @param original {string}
@@ -275,7 +277,6 @@ const cleanUpFileName = function(original: string): string {
   result = result.split('.').slice(0, -1).join('.');  // (3)
   result = result.split('.').join(' ');               // (4)
 
-  result = result.split('    ').join(' ');             // (2)
   result = result.split('   ').join(' ');              // (2)
   result = result.split('  ').join(' ');               // (2)
 
