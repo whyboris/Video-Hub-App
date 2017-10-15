@@ -150,8 +150,11 @@ ipc.on('choose-output', function (event, someMessage) {
       console.log('the user has chosen this OUTPUT directory: ' + files[0]);
       selectedOutputFolder = files[0];
 
-      // TODO: here
       // create "/boris" inside the output directory it so that there is no `EEXIST` error when extracting.
+      if (!fs.existsSync(selectedOutputFolder + '/boris')) {
+        console.log('boris folder did not exist, creating');
+        fs.mkdirSync(selectedOutputFolder + '/boris');
+      }
 
       event.sender.send('outputFolderChosen', selectedOutputFolder);
     }

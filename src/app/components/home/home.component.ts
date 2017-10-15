@@ -33,8 +33,8 @@ export class HomeComponent implements OnInit {
 
   magicSearchString = '';
 
-  selectedOutputFolder = 'no output chosen'; // later = ''
-  selectedSourceFolder = 'no source chosen';  // later = ''
+  selectedOutputFolder = ''; // later = ''
+  selectedSourceFolder = '';  // later = ''
 
   currentPlayingFile = '';
   currentPlayingFolder = '';

@@ -118,12 +118,24 @@
 
               </h5>
 
-              <br>
-              <br>
 
             </ng-container>
 
+            <br>
+            <br>
+
             <h5 class="nav-group-title">
+
+              <button (click)="loadFromFile()" class="btn btn-mini btn-positive">
+                Load from file
+              </button>
+            </h5>
+
+            <br>
+            <h5 class="nav-group-title">or</h5>
+            <br>
+
+            <h5 class="nav-group-title" *ngIf="selectedOutputFolder === ''; else chooseSource">
 
                 <button
                   (click)="selectOutputDirectory()"
@@ -133,33 +145,26 @@
               </button>
             </h5>
 
-            <h5 class="nav-group-title">
+            <!-- <h5 class="nav-group-title">
               {{ selectedOutputFolder }}
-            </h5>
+            </h5> -->
 
-            <h5 class="nav-group-title">
+            <ng-template #chooseSource>
+
+              <h5 class="nav-group-title">
 
                 <button
                   (click)="importFresh()"
                   class="btn btn-mini btn-negative"
                 >
-                Import Fresh
-              </button>
-            </h5>
+                  Import Fresh
+                </button>
+              </h5>
 
-            <h5 class="nav-group-title">
+            </ng-template>
+            <!-- <h5 class="nav-group-title">
               {{ selectedSourceFolder }}
-            </h5>
-
-            <h5 class="nav-group-title">
-
-              <button
-                (click)="loadFromFile()"
-                class="btn btn-mini btn-positive"
-              >
-                Load from file
-              </button>
-            </h5>
+            </h5> -->
 
           </nav>
         </div>
