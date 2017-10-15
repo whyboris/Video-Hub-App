@@ -1,17 +1,285 @@
-<h1 class="title">
-  {{ selectedSourceFolder }}
-</h1>
+<div class="window">
 
-<br>
+  <header class="top toolbar toolbar-header">
 
-<button (click)="hello()">Import</button>
+    <div *ngIf="importDone; else progressBar">
+      <app-top-component
+        class="top-content-position"
+        [fileString]="currentPlayingFile"
+        [folderString]="currentPlayingFolder"
+      ></app-top-component>
+    </div>
 
-<br>
+    <ng-template #progressBar>
+      <div *ngIf="progressPercent != 0" class="progress-container">
+        <div class="current-progress" [ngStyle]="{width: progressPercent * 100 + '%'}"></div>
+      </div>
+    </ng-template>
 
-<div class="container">
-  <div class="video" *ngFor="let item of finalArray; index as i">
-    <div class="item">
-      <app-gallery-item (click)="openVideo(i)" [stuff]="item[2]"></app-gallery-item>
+  </header>
+
+
+    <div class="window-content">
+      <div class="pane-group">
+        <div class="pane pane-sm sidebar">
+
+
+          <div class="btn-group">
+            <button
+              (click)="toggleThis('folder')"
+              [ngClass]="{active: searchOptions.folder}"
+              class="btn btn-mini btn-default"
+              title="File search"
+            >
+              <span class="icon icon-folder"></span>
+            </button>
+            <button
+              (click)="toggleThis('file')"
+              [ngClass]="{active: searchOptions.file}"
+              class="active btn btn-mini btn-default"
+              title="Folder search"
+            >
+              <span class="icon icon-video"></span>
+            </button>
+            <button
+              (click)="toggleThis('magic')"
+              [ngClass]="{active: searchOptions.magic}"
+              class="btn btn-mini btn-default"
+              title="Magic search"
+            >
+              <span class="icon icon-search"></span>
+            </button>
+          </div>
+
+
+          <nav class="nav-group">
+
+            <ng-container *ngIf="searchOptions.folder">
+
+              <h5 class="nav-group-title">
+                <input
+                  #folder
+                  (keyup.enter)="onFolderEnter(folder.value)"
+                  [(ngModel)]="folderSearchString"
+                  class="form-control"
+                  placeholder="Search folders"
+                  type="text"
+                >
+              </h5>
+
+              <h5 class="nav-group-title">
+                Folder: {{ folderSearchStringSaved }}
+                <br>
+                <br>
+              </h5>
+
+            </ng-container>
+
+            <ng-container *ngIf="searchOptions.file">
+
+              <h5 class="nav-group-title">
+                <input
+                  #file
+                  (keyup.enter)="onFileEnter(file.value)"
+                  [(ngModel)]="fileSearchString"
+                  class="form-control"
+                  placeholder="Search files"
+                  type="text"
+                >
+              </h5>
+
+              <h5 class="nav-group-title">
+                File: {{ fileSearchStringSaved }}
+                <br>
+                <br>
+              </h5>
+
+            </ng-container>
+
+            <ng-container *ngIf="searchOptions.magic">
+
+              <h5 class="nav-group-title">
+                <input
+                  [(ngModel)]="magicSearchString"
+                  type="text"
+                  class="form-control"
+                  placeholder="Magic search"
+                >
+              </h5>
+
+              <h5 class="nav-group-title">
+                <span
+                  class="icon icon-record"
+                  style="color: #fc605b; margin-right: 5px;"
+                ></span>Magic: {{ magicSearchString }}
+
+                <br>
+                <br>
+
+              </h5>
+
+
+            </ng-container>
+
+            <br>
+            <br>
+
+            <h5 class="nav-group-title">
+
+              <button (click)="loadFromFile()" class="btn btn-mini btn-positive">
+                Load from file
+              </button>
+            </h5>
+
+            <br>
+            <h5 class="nav-group-title">or</h5>
+            <br>
+
+            <h5 class="nav-group-title" *ngIf="selectedOutputFolder === ''; else chooseSource">
+
+                <button
+                  (click)="selectOutputDirectory()"
+                  class="btn btn-mini btn-negative"
+                >
+                Select output directory
+              </button>
+            </h5>
+
+            <!-- <h5 class="nav-group-title">
+              {{ selectedOutputFolder }}
+            </h5> -->
+
+            <ng-template #chooseSource>
+
+              <h5 class="nav-group-title">
+
+                <button
+                  (click)="importFresh()"
+                  class="btn btn-mini btn-negative"
+                >
+                  Import Fresh
+                </button>
+              </h5>
+
+            </ng-template>
+            <!-- <h5 class="nav-group-title">
+              {{ selectedSourceFolder }}
+            </h5> -->
+
+          </nav>
+        </div>
+
+
+        <!-- THE GALLERY PANE -->
+
+
+        <div class="pane">
+
+
+
+
+
+          <div class="gallery-container">
+
+            <div class="btn-group">
+              <button
+                (click)="toggleThis('thumbNotFilm')"
+                [ngClass]="{active: searchOptions.thumbNotFilm}"
+                class="btn btn-mini btn-default"
+              >
+                <span class="icon icon-layout"></span>
+              </button>
+              <button
+                (click)="toggleThis('thumbNotFilm')"
+                [ngClass]="{active: !searchOptions.thumbNotFilm}"
+                class="active btn btn-mini btn-default"
+              >
+                <span class="icon icon-menu"></span>
+              </button>
+            </div>
+
+            <div class="btn-group">
+              <button
+                (click)="toggleThis('showFileName')"
+                [ngClass]="{active: searchOptions.showFileName}"
+                class="btn btn-mini btn-default"
+              >
+                <span class="icon icon-tag"></span>
+              </button>
+            </div>
+
+            <!-- <div class="btn-group">
+              <button
+                (click)="toggleThis('none')"
+                [ngClass]="{active: searchOptions.none}"
+                class="active btn btn-mini btn-default"
+              >
+                <span class="icon icon-cog"></span>
+              </button>
+            </div> -->
+
+            <div class="gallery" [ngClass]="{filmOverride: !searchOptions.thumbNotFilm}">
+
+              <!-- <virtual-scroll
+                      [items]="finalArray"
+                      [bufferAmount]="5"
+                      [childWidth]="100"
+                      [childHeight]="100"
+                      (update)="viewPortItems = $event"
+                    > -->
+
+              <div
+                class="item"
+                [ngClass]="{fileNamePadding: !searchOptions.showFileName}"
+                *ngFor="let item of finalArray
+                          | magicSearchPipe: magicSearchString
+                          | folderSearchPipe: folderSearchStringSaved
+                          | fileSearchPipe: fileSearchStringSaved
+                          | limitPipe: numberToShow;
+                          index as i">
+
+                  <div *ngIf="searchOptions.thumbNotFilm; else filmStrip" class="preview">
+                    <app-gallery-item
+                      (click)="openVideo(i)"
+                      [stuff]="item[3]"
+                      [folderPath]="selectedOutputFolder"
+                    ></app-gallery-item>
+                  </div>
+
+                  <ng-template #filmStrip>
+
+                    <app-filmstrip-item
+                      (click)="openVideo(i)"
+                      [stuff]="item[3]"
+                      [folderPath]="selectedOutputFolder"
+                    ></app-filmstrip-item>
+
+                  </ng-template>
+
+                <div *ngIf="searchOptions.showFileName">
+
+                  <div class="folder">
+                    {{ item[0] || '&emsp;' }}
+                  </div>
+
+                  <br>
+
+                  <div class="title">
+                    {{ item[2] }}
+                  </div>
+
+                </div>
+
+              </div>
+
+              <!-- </virtual-scroll> -->
+
+            </div>
+
+          </div>
+
+        </div>
+      </div>
     </div>
   </div>
-</div>
+

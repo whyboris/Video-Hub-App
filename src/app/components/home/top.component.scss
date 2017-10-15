@@ -1,0 +1,32 @@
+.icon-video,
+.icon-folder {
+  font-size: 12px;
+  margin-right: 5px;
+}
+
+.folder-container {
+  min-width: calc(100vw - 100px);
+}
+
+.folder-word {
+  color: #777777;
+  cursor: pointer;
+  font-size: 12px;
+  margin-right: 5px;
+
+  &:after {
+    font-family:photon-entypo;
+    content: '\e875';
+  }
+}
+
+.file-container {
+  min-width: calc(100vw - 100px);
+}
+
+.file-words {
+  color: #444444;
+  cursor: pointer;
+  font-size: 14px;
+  margin-right: 5px;
+}

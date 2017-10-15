@@ -1,24 +1,31 @@
+.wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
 .screencaps {
+  // background-size: 100% 100% !important;
+  // border-radius: 10px;
+  // border: 1px solid black;
+  box-shadow: 2px 2px 7px rgba(0,0,0,0.2);
+  background-color: black !important;
+  background-position: center !important;
   background-repeat: no-repeat !important;
-  background-size: 100% 100% !important;
-  border-radius: 10px;
-  border: 1px solid black;
-  // height: 200px;
   height: 100%;
   margin: 0;
   overflow: hidden;
-  position: relative;
-  // width: 300px;
+  position: absolute;
   width: 100%;
 }
 
 .screencap {
+  height: 100%;
+  left: 50%;
   position: relative;
   top: 0px;
-  left: 0px;
+  transform: translate(-50%, 0);
   z-index: 0;
-  width: 100%;
-  height: 100%;
 }
 
 .preview-hover-area {

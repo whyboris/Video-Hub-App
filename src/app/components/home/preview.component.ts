@@ -8,21 +8,25 @@ import { Component, Input, OnInit } from '@angular/core';
 export class PreviewComponent implements OnInit {
 
   @Input() stuff: any;
+  @Input() folderPath: string;
 
-  title = 'app';
-  initialPhoto: string;
+  initialPhoto = '';
   photo: string;
   timer: any;
 
   ngOnInit() {
-    this.initialPhoto = this.stuff[0];
+    // Loads up the initial photo and shows it as main photo
+    if (this.stuff) {
+      this.initialPhoto = this.stuff[0];
+    }
     this.photo = this.initialPhoto;
-    console.log('app-gallery-item is:');
-    console.log(this.stuff);
+    // console.log(this.stuff);
   }
 
-  public cycleImages() {
-    console.log('hi');
+  /**
+   * Starts showing preview using a time interval
+   */
+  public startCycle() {
     this.photo = this.initialPhoto;
     let current = 1;
     this.timer = setInterval(() => {
@@ -31,12 +35,13 @@ export class PreviewComponent implements OnInit {
       if (current >= this.stuff.length) {
         current = 0;
       }
-      console.log('tick: ' + current);
     }, 500);
   }
 
+  /**
+   * Stops preview clearing the interval
+   */
   public stopCycle() {
-    console.log('bye');
     this.photo = this.initialPhoto;
     clearInterval(this.timer);
   }

@@ -44,13 +44,14 @@
     "@angular/platform-browser": "4.4.3",
     "@angular/platform-browser-dynamic": "4.4.3",
     "@angular/router": "4.4.3",
-    "core-js": "2.4.1",
-    "enhanced-resolve": "3.3.0",
-    "rxjs": "5.4.3",
-    "zone.js": "0.8.17",
     "@ffmpeg-installer/ffmpeg": "^1.0.13",
     "@ffprobe-installer/ffprobe": "^1.0.8",
-    "fluent-ffmpeg": "^2.1.2"
+    "angular2-virtual-scroll": "^0.3.1",
+    "core-js": "2.4.1",
+    "enhanced-resolve": "3.3.0",
+    "fluent-ffmpeg": "^2.1.2",
+    "rxjs": "5.4.3",
+    "zone.js": "0.8.17"
   },
   "devDependencies": {
     "@angular/cli": "1.4.3",
