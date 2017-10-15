@@ -1,6 +1,21 @@
 // variable
 $top-region: 50px;
 
+.progress-container {
+  background: #8A8A8A;
+  border-radius: 3px;
+  border: 1px solid #696969;
+  box-sizing: border-box;
+  height: 19px;
+  margin: 15px;
+
+  .current-progress {
+    background: #66b452;
+    border-radius: 3px;
+    height: 17px;
+  }
+}
+
 // styling
 .everything {
   width: 100%;

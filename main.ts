@@ -200,6 +200,8 @@ const extractScreenshot = function (filePath, currentFile) {
       filesProcessed++;
       if (filesProcessed === totalNumberOfFiles + 1) {
         sendFinalResultHome();
+      } else {
+        sendCurrentProgress(filesProcessed, totalNumberOfFiles);
       }
     })
     .screenshots({
@@ -211,6 +213,10 @@ const extractScreenshot = function (filePath, currentFile) {
       folder: selectedOutputFolder + '/boris',
       size: '?x100' // fix height at 100px compute width automatically
     });
+}
+
+function sendCurrentProgress(current, total) {
+  theOriginalOpenFileDialogEvent.sender.send('processingProgress', current, total);
 }
 
 function sendFinalResultHome() {

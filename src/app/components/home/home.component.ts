@@ -39,6 +39,9 @@ export class HomeComponent implements OnInit {
   currentPlayingFile = '';
   currentPlayingFolder = '';
 
+  importDone = false;
+  progressPercent = 0;
+
   public finalArray = [];
 
   constructor(
@@ -55,6 +58,14 @@ export class HomeComponent implements OnInit {
     this.electronService.ipcRenderer.on('selected-directory', (event, files) => {
       console.log(files[0]);
       this.changeDisplayedPath(files[0]);
+    });
+
+    this.electronService.ipcRenderer.on('processingProgress', (event, a, b) => {
+      console.log(a + ' out of ' + b);
+      this.progressPercent = a / b;
+      if (a === b) {
+        this.importDone = true;
+      }
     });
 
   }

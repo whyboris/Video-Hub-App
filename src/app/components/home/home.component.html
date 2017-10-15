@@ -2,11 +2,19 @@
 
   <header class="top toolbar toolbar-header">
 
-    <app-top-component
-      class="top-content-position"
-      [fileString]="currentPlayingFile"
-      [folderString]="currentPlayingFolder"
-    ></app-top-component>
+    <div *ngIf="importDone; else progressBar">
+      <app-top-component
+        class="top-content-position"
+        [fileString]="currentPlayingFile"
+        [folderString]="currentPlayingFolder"
+      ></app-top-component>
+    </div>
+
+    <ng-template #progressBar>
+      <div *ngIf="progressPercent != 0" class="progress-container">
+        <div class="current-progress" [ngStyle]="{width: progressPercent * 100 + '%'}"></div>
+      </div>
+    </ng-template>
 
   </header>
 
@@ -50,12 +58,12 @@
 
               <h5 class="nav-group-title">
                 <input
-                #folder
-                (keyup.enter)="onFolderEnter(folder.value)"
-                [(ngModel)]="folderSearchString"
-                class="form-control"
-                placeholder="Search folders"
-                type="text"
+                  #folder
+                  (keyup.enter)="onFolderEnter(folder.value)"
+                  [(ngModel)]="folderSearchString"
+                  class="form-control"
+                  placeholder="Search folders"
+                  type="text"
                 >
               </h5>
 
@@ -71,12 +79,12 @@
 
               <h5 class="nav-group-title">
                 <input
-                #file
-                (keyup.enter)="onFileEnter(file.value)"
-                [(ngModel)]="fileSearchString"
-                class="form-control"
-                placeholder="Search files"
-                type="text"
+                  #file
+                  (keyup.enter)="onFileEnter(file.value)"
+                  [(ngModel)]="fileSearchString"
+                  class="form-control"
+                  placeholder="Search files"
+                  type="text"
                 >
               </h5>
 
@@ -92,17 +100,22 @@
 
               <h5 class="nav-group-title">
                 <input
-                [(ngModel)]="magicSearchString"
-                type="text"
-                class="form-control"
-                placeholder="Magic search"
+                  [(ngModel)]="magicSearchString"
+                  type="text"
+                  class="form-control"
+                  placeholder="Magic search"
                 >
               </h5>
 
               <h5 class="nav-group-title">
-                <span class="icon icon-record" style="color: #fc605b; margin-right: 5px;"></span>Magic: {{ magicSearchString }}
+                <span
+                  class="icon icon-record"
+                  style="color: #fc605b; margin-right: 5px;"
+                ></span>Magic: {{ magicSearchString }}
+
                 <br>
                 <br>
+
               </h5>
 
               <br>
@@ -113,8 +126,8 @@
             <h5 class="nav-group-title">
 
                 <button
-                (click)="importFresh()"
-                class="btn btn-mini btn-negative"
+                  (click)="importFresh()"
+                  class="btn btn-mini btn-negative"
                 >
                 Import Fresh
               </button>
