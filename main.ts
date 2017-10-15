@@ -98,8 +98,13 @@ import { FinalObject } from './src/app/components/common/final-object.interface'
 let finalArray = [];
 let fileCounter = 0;
 
+let totalNumberOfFiles = 0;
+let filesProcessed = 1;
+
 let selectedSourceFolder = '/Users/byakubchik/Desktop/VideoHub/input';  // later = ''
 let selectedOutputFolder = '/Users/byakubchik/Desktop/VideoHub/output'; // later = ''
+
+let theOriginalOpenFileDialogEvent;
 
 // ============================================================
 // Functions
@@ -122,36 +127,15 @@ ipc.on('open-file-dialog', function (event, someMessage) {
       // second param is needed for its own recursion
       walkSync(selectedSourceFolder, []);
 
-      console.log(finalArray);
+      theOriginalOpenFileDialogEvent = event;
 
-      finalArray.forEach((element, index) => {
-        // console.log('forEach running:');
-        // console.log(element);
-        // console.log(index);
-        extractScreenshot(path.join(selectedSourceFolder, element[0], element[1]), index);
-      });
-
-      setTimeout(() => {
-        // format the json
-        const finalObject: FinalObject = {
-          inputDir: selectedSourceFolder,
-          outputDir: selectedOutputFolder,
-          images: finalArray
-        };
-
-        const json = JSON.stringify(finalObject);
-        // write the file
-        fs.writeFile(selectedOutputFolder + '/images.json', json, 'utf8', () => {
-          console.log('file written:');
-        });
-        console.log(finalObject);
-        // send it back
-        event.sender.send('filesArrayReturning', JSON.parse(json));
-      }, 2000);
-
+      extractAllScreenshots();
     }
   })
 })
+
+// TODO: Ask for output folder !!!!!!!!!!!!!!!!!!!!!!!
+// create "/boris" inside it so that there is no `EEXIST` error when extracting.
 
 ipc.on('load-the-file', function (event, somethingElse) {
   // console.log(somethingElse);
@@ -185,6 +169,18 @@ ipc.on('openThisFile', function (event, fullFilePath) {
 // Extracts screenshot
 // ============================================================
 
+function extractAllScreenshots() {
+  // console.log(finalArray);
+  totalNumberOfFiles = finalArray.length;
+  console.log('there are a total of: ' + totalNumberOfFiles + ' files');
+  finalArray.forEach((element, index) => {
+    // console.log('forEach running:');
+    // console.log(element);
+    // console.log(index);
+    extractScreenshot(path.join(selectedSourceFolder, element[0], element[1]), index);
+  });
+}
+
 const extractScreenshot = function (filePath, currentFile) {
   // console.log('file:///' + filePath);
   const theFile = 'file:///' + filePath;
@@ -197,10 +193,14 @@ const extractScreenshot = function (filePath, currentFile) {
       filenames.forEach((element, index) => {
         finalArray[currentFile][3][index] = '/boris/' + element;
       });
-      console.log(finalArray[currentFile][3]);
+      // console.log(finalArray[currentFile][3]);
     })
     .on('end', function () {
-      // console.log('one file processed');
+      console.log('processed ' + filesProcessed + ' out of ' + totalNumberOfFiles);
+      filesProcessed++;
+      if (filesProcessed === totalNumberOfFiles + 1) {
+        sendFinalResultHome();
+      }
     })
     .screenshots({
       // timestamps: ['25%', '50%', '75%'],
@@ -210,6 +210,21 @@ const extractScreenshot = function (filePath, currentFile) {
       folder: selectedOutputFolder + '/boris',
       size: '200x200'
     });
+}
+
+function sendFinalResultHome() {
+  const finalObject: FinalObject = {
+    inputDir: selectedSourceFolder,
+    outputDir: selectedOutputFolder,
+    images: finalArray
+  };
+
+  const json = JSON.stringify(finalObject);
+  // write the file
+  fs.writeFile(selectedOutputFolder + '/images.json', json, 'utf8', () => {
+    console.log('file written:');
+    theOriginalOpenFileDialogEvent.sender.send('finalObjectReturning', JSON.parse(json));
+  });
 }
 
 // ============================================================
@@ -247,7 +262,7 @@ const walkSync = function(dir, filelist) {
 /**
  * Clean up the file name
  * (1) underscores
- * (2) double spaces / tripple spaces
+ * (2) double spaces / tripple spaces / quadrupple spaces
  * (3) remove filename
  * (4) strip periods
  * @param original {string}
@@ -259,8 +274,10 @@ const cleanUpFileName = function(original: string): string {
   result = result.split('_').join(' ');               // (1)
   result = result.split('.').slice(0, -1).join('.');  // (3)
   result = result.split('.').join(' ');               // (4)
+
+  result = result.split('    ').join(' ');             // (2)
   result = result.split('   ').join(' ');              // (2)
-  result = result.split('  ').join(' ');              // (2)
+  result = result.split('  ').join(' ');               // (2)
 
   return result;
 }
