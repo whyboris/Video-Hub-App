@@ -106,10 +106,9 @@ let selectedOutputFolder = '/Users/byakubchik/Desktop/VideoHub/output'; // later
 
 let theOriginalOpenFileDialogEvent;
 
-// ============================================================
-// Functions
-// ============================================================
-
+/**
+ * Summon system modal to choose directory from which to import videos
+ */
 ipc.on('open-file-dialog', function (event, someMessage) {
   // console.log(someMessage);
   finalArray = [];
@@ -137,6 +136,10 @@ ipc.on('open-file-dialog', function (event, someMessage) {
   })
 })
 
+/**
+ * Summon system modal to choose output directory
+ * where the final json and all screenshots will be saved
+ */
 ipc.on('choose-output', function (event, someMessage) {
 
   // ask user for input folder
@@ -147,15 +150,17 @@ ipc.on('choose-output', function (event, someMessage) {
       console.log('the user has chosen this OUTPUT directory: ' + files[0]);
       selectedOutputFolder = files[0];
 
-      event.sender.send('outputFolderChosen', selectedOutputFolder);
+      // TODO: here
+      // create "/boris" inside the output directory it so that there is no `EEXIST` error when extracting.
 
+      event.sender.send('outputFolderChosen', selectedOutputFolder);
     }
   })
 })
 
-// TODO: Ask for output folder !!!!!!!!!!!!!!!!!!!!!!!
-// create "/boris" inside it so that there is no `EEXIST` error when extracting.
-
+/**
+ * Summon system modal to choose the images.json file
+ */
 ipc.on('load-the-file', function (event, somethingElse) {
   // console.log(somethingElse);
 
@@ -163,10 +168,9 @@ ipc.on('load-the-file', function (event, somethingElse) {
       properties: ['openFile']
     }, function (files) {
       if (files) {
-        console.log('the user has chosen this INPUT directory: ' + files[0]);
+        console.log('the user has chosen this previously-saved json file: ' + files[0]);
         // TODO: check if file ends in .json before parsing !!!
         selectedOutputFolder = files[0].replace('/images.json', '');
-
 
         fs.readFile(selectedOutputFolder + '/images.json', (err, data) => {
           if (err) {
@@ -184,10 +188,10 @@ ipc.on('openThisFile', function (event, fullFilePath) {
   shell.openItem(fullFilePath);
 })
 
-// ============================================================
-// Extracts screenshot
-// ============================================================
-
+/**
+ * Extract all screenshots
+ * by calling extractScreenshot on every item in finalArray[]
+ */
 function extractAllScreenshots() {
   // console.log(finalArray);
   totalNumberOfFiles = finalArray.length;
@@ -200,7 +204,15 @@ function extractAllScreenshots() {
   });
 }
 
-const extractScreenshot = function (filePath, currentFile) {
+/**
+ * Extract all screenshots from a particular file
+ * Writes files to HD
+ * Updates finalArray with array of files written to disk
+ * Calls function to send progress or to send final result home
+ * @param filePath
+ * @param currentFile
+ */
+function extractScreenshot(filePath: string, currentFile: number): void {
   // console.log('file:///' + filePath);
   const theFile = 'file:///' + filePath;
 
@@ -234,10 +246,18 @@ const extractScreenshot = function (filePath, currentFile) {
     });
 }
 
-function sendCurrentProgress(current, total) {
+/**
+ * Sends progress to Angular App
+ * @param current number
+ * @param total unmber
+ */
+function sendCurrentProgress(current: number, total: number): void {
   theOriginalOpenFileDialogEvent.sender.send('processingProgress', current, total);
 }
 
+/**
+ * Writes the json file and sends contents back to Angular App
+ */
 function sendFinalResultHome() {
 
   const finalObject: FinalObject = {
@@ -254,11 +274,12 @@ function sendFinalResultHome() {
   });
 }
 
-// ============================================================
-// WALK FILE
-// ============================================================
-
-const walkSync = function(dir, filelist) {
+/**
+ * Recursively walk through the input directory
+ * compiling files to process
+ * updates the finalArray[]
+ */
+function walkSync(dir, filelist) {
   // console.log('walk started');
   const files = fs.readdirSync(dir);
   // console.log(files);
@@ -295,7 +316,7 @@ const walkSync = function(dir, filelist) {
  * @param original {string}
  * @return {string}
  */
-const cleanUpFileName = function(original: string): string {
+function cleanUpFileName(original: string): string {
   let result = original;
 
   result = result.split('_').join(' ');               // (1)
