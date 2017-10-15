@@ -57,8 +57,8 @@ list-item {
   height: 100px;
   margin-bottom: 40px; // room for folder and file name
   margin: 10px;
-  min-width: 178px; // 16:9 ratio with height
-  max-width: 178px; // 16:9 ratio with height
+  min-width: 174px; // 16:9 ratio with height
+  max-width: 174px; //      rounded down from 178px to avoid common black bars
 
   &:after {
     padding-top: 56%; // to preserve ratio
