@@ -1,7 +1,7 @@
 <div class="filmstrip-container">
 
   <img *ngFor="let item of stuff; let i = index"
-    src="{{ folderPath + '/' + item }}"
+    [src]="sanitizer.bypassSecurityTrustUrl(folderPath + '/' + item)"
     class="screencap screen{{ i + 1 }}">
 
     <!-- <img src="{{ stuff[0] }}" class="screencap screen1">

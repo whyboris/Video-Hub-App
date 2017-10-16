@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-filmstrip-item',
@@ -9,6 +10,8 @@ export class FilmstripComponent implements OnInit {
 
   @Input() stuff: any;
   @Input() folderPath: string;
+
+  constructor(public sanitizer: DomSanitizer) {}
 
   ngOnInit() { }
 

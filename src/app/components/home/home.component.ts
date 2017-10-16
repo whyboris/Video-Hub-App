@@ -103,7 +103,7 @@ export class HomeComponent implements OnInit {
   public openExternalFile(fullPath) {
     console.log('trying to open ' + fullPath);
     console.log('sike! DISABLED :)')
-    // this.electronService.ipcRenderer.send('openThisFile', fullPath);
+    this.electronService.ipcRenderer.send('openThisFile', fullPath);
   }
 
   onFolderEnter(value: string) {

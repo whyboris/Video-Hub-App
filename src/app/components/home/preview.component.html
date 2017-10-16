@@ -3,10 +3,7 @@
 
 <div class='wrapper'>
 
-  <div
-    class='screencaps'
-    [ngStyle]="{background: 'url(' + folderPath + '/' + photo + ')'}"
-  >
+  <div class='screencaps'>
 
     <div
       (mouseleave)="stopCycle()"
@@ -22,9 +19,11 @@
       <li></li>
     </div>
 
-    <img *ngFor="let item of stuff; let i = index"
-        src="{{ folderPath + '/' + item }}"
-        class="screencap screen{{ i + 1 }}">
+    <img 
+      *ngFor="let item of stuff; let i = index"
+      [src]="sanitizer.bypassSecurityTrustUrl(folderPath + '/' + item)"
+      class="screencap screen{{ i + 1 }}"
+    >
 
     <div class="overlay"></div>
 

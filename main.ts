@@ -173,7 +173,7 @@ ipc.on('load-the-file', function (event, somethingElse) {
       if (files) {
         console.log('the user has chosen this previously-saved json file: ' + files[0]);
         // TODO: check if file ends in .json before parsing !!!
-        selectedOutputFolder = files[0].replace('/images.json', '');
+        selectedOutputFolder = files[0].replace('\images.json', '');
 
         fs.readFile(selectedOutputFolder + '/images.json', (err, data) => {
           if (err) {
@@ -216,8 +216,8 @@ function extractAllScreenshots() {
  * @param currentFile
  */
 function extractScreenshot(filePath: string, currentFile: number): void {
-  // console.log('file:///' + filePath);
-  const theFile = 'file:///' + filePath;
+  console.log('extracting ' + filePath);
+  const theFile = filePath;
 
   ffmpeg(theFile)
     .on('filenames', function (filenames) {

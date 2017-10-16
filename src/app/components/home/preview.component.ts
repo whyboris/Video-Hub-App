@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-gallery-item',
@@ -14,13 +15,14 @@ export class PreviewComponent implements OnInit {
   photo: string;
   timer: any;
 
+  constructor(public sanitizer: DomSanitizer) { }
+
   ngOnInit() {
     // Loads up the initial photo and shows it as main photo
     if (this.stuff) {
       this.initialPhoto = this.stuff[0];
     }
     this.photo = this.initialPhoto;
-    // console.log(this.stuff);
   }
 
   /**

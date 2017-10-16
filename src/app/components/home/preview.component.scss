@@ -25,7 +25,6 @@
   position: relative;
   top: 0px;
   transform: translate(-50%, 0);
-  z-index: 0;
 }
 
 .preview-hover-area {
@@ -83,11 +82,6 @@ li {
 
 .hover-me-1 {
   left: 0;
-  &:hover {
-    ~ .screen1 {
-      display: block !important;
-    }
-  }
 }
 
 .hover-me-2 {
@@ -95,6 +89,10 @@ li {
   &:hover {
     ~ .screen2 {
       display: block !important;
+    }
+
+    ~ .screen1 {
+      display: none;
     }
   }
 }
@@ -105,6 +103,10 @@ li {
     ~ .screen3 {
       display: block !important;
     }
+
+    ~ .screen1 {
+      display: none;
+    }
   }
 }
 
@@ -114,6 +116,10 @@ li {
     ~ .screen4 {
       display: block !important;
     }
+
+    ~ .screen1 {
+      display: none;
+    }
   }
 }
 .hover-me-5 {
@@ -122,10 +128,17 @@ li {
     ~ .screen5 {
       display: block !important;
     }
+
+    ~ .screen1 {
+      display: none;
+    }
   }
 }
 
-.screen1,
+.screen1 {
+  display: block;
+}
+
 .screen2,
 .screen3,
 .screen4,
