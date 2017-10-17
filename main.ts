@@ -196,15 +196,17 @@ ipc.on('openThisFile', function (event, fullFilePath) {
  * by calling extractScreenshot on every item in finalArray[]
  */
 function extractAllScreenshots() {
-  // console.log(finalArray);
   totalNumberOfFiles = finalArray.length;
   console.log('there are a total of: ' + totalNumberOfFiles + ' files');
-  finalArray.forEach((element, index) => {
-    // console.log('forEach running:');
-    // console.log(element);
-    // console.log(index);
-    extractScreenshot(path.join(selectedSourceFolder, element[0], element[1]), index);
-  });
+  extractNextScreenshot();
+}
+
+let fileNumberTracker = 0;
+
+function extractNextScreenshot() {
+  const index = fileNumberTracker;
+  extractScreenshot(path.join(selectedSourceFolder, finalArray[index][0], finalArray[index][1]), index);
+  fileNumberTracker++
 }
 
 /**
@@ -236,6 +238,7 @@ function extractScreenshot(filePath: string, currentFile: number): void {
         sendFinalResultHome();
       } else {
         sendCurrentProgress(filesProcessed, totalNumberOfFiles);
+        extractNextScreenshot();
       }
     })
     .screenshots({
