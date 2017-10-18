@@ -10,6 +10,7 @@ export class FilmstripComponent implements OnInit {
 
   @Input() stuff: any;
   @Input() folderPath: string;
+  @Input() width: number;
 
   constructor(public sanitizer: DomSanitizer) {}
 
