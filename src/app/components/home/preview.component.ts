@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-gallery-item',
@@ -10,9 +10,17 @@ export class PreviewComponent implements OnInit {
   @Input() stuff: any;
   @Input() folderPath: string;
 
+  hover: boolean;
   initialPhoto = '';
   photo: string;
   timer: any;
+
+  @HostListener('mouseenter') onMouseEnter() {
+    this.hover = true;
+  }
+  @HostListener('mouseleave') onMouseLeave() {
+    this.hover = false;
+  }
 
   ngOnInit() {
     // Loads up the initial photo and shows it as main photo
