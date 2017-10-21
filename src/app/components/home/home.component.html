@@ -252,7 +252,7 @@
                       (click)="openVideo(i)"
                       [stuff]="item[3]"
                       [folderPath]="selectedOutputFolder"
-                      [width]="171"
+                      [width]="item[6] || 171"
                     ></app-filmstrip-item>
 
                   </ng-template>
@@ -266,7 +266,7 @@
                   <br>
 
                   <div class="title">
-                    {{ item[2] }}
+                    {{ item[2] }} {{ item[4] | lengthPipe }} {{ item[5] }}
                   </div>
 
                 </div>

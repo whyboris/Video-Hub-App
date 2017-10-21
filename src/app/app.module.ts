@@ -19,6 +19,7 @@ import { FolderSearchPipe } from './components/pipes/folder-search.pipe';
 import { FileSearchPipe } from './components/pipes/file-search.pipe';
 import { MagicSearchPipe } from './components/pipes/magic-search.pipe';
 import { LimitPipe } from './components/pipes/show-limit.pipe';
+import { LengthPipe } from './components/pipes/length.pipe';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -31,6 +32,7 @@ import { ElectronService } from './providers/electron.service';
     FilmstripComponent,
     FolderSearchPipe,
     HomeComponent,
+    LengthPipe,
     LimitPipe,
     MagicSearchPipe,
     PreviewComponent,

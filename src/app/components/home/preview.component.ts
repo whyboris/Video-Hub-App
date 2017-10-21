@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
@@ -11,11 +11,19 @@ export class PreviewComponent implements OnInit {
   @Input() stuff: any;
   @Input() folderPath: string;
 
+  hover: boolean;
   initialPhoto = '';
   photo: string;
   timer: any;
 
   constructor(public sanitizer: DomSanitizer) { }
+  
+  @HostListener('mouseenter') onMouseEnter() {
+    this.hover = true;
+  }
+  @HostListener('mouseleave') onMouseLeave() {
+    this.hover = false;
+  }
 
   ngOnInit() {
     // Loads up the initial photo and shows it as main photo

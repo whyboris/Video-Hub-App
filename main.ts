@@ -233,6 +233,12 @@ function extractScreenshot(filePath: string, currentFile: number): void {
     })
     .on('end', function () {
       console.log('processed ' + filesProcessed + ' out of ' + totalNumberOfFiles);
+
+      // ffmpeg.ffprobe(theFile, (err, metadata) => {
+      //   console.log('duration: ');
+      //   console.log(metadata.streams[0].duration);
+      // });
+
       filesProcessed++;
       if (filesProcessed === totalNumberOfFiles + 1) {
         sendFinalResultHome();
@@ -249,6 +255,28 @@ function extractScreenshot(filePath: string, currentFile: number): void {
       filename: currentFile + '-%i.png',
       folder: selectedOutputFolder + '/boris',
       size: '?x100' // fix height at 100px compute width automatically
+    })
+    .ffprobe((err, metadata) => {
+      // console.log('duration of clip #' + currentFile + ': ');
+      finalArray[currentFile][4] = Math.round(metadata.streams[0].duration); // 4th item is duration
+
+      const origWidth = metadata.streams[0].width;
+      const origHeight = metadata.streams[0].height;
+
+      if (origWidth === 1280 && origHeight === 720) {
+        finalArray[currentFile][5] = '720'; // 5th item is size (720, 1080, etc)
+      } else if (origWidth === 1920 && origHeight === 1080) {
+        finalArray[currentFile][5] = '1080'; // 5th item is size (720, 1080, etc)
+      } else if (origWidth < 720) {
+        finalArray[currentFile][5] = 'SD'; // 5th item is size (720, 1080, etc)
+      } else if (origWidth > 720) {
+        finalArray[currentFile][5] = 'HD'; // 5th item is size (720, 1080, etc)
+      } else {
+        finalArray[currentFile][5] = ''; // 5th item is size (720, 1080, etc)
+      }
+
+      finalArray[currentFile][6] = Math.round(100 * origWidth / origHeight); // 6th item is width of screenshot (130) for ex
+
     });
 }
 
