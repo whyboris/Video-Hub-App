@@ -6,7 +6,7 @@
   <div
     *ngIf="!hover; else advanced"
     class='screencaps'
-    [style.backgroundImage]="sanitizer.bypassSecurityTrustStyle('url(' + sanitizer.bypassSecurityTrustUrl(folderPath) + '/' + photo + ')')"
+    [style.backgroundImage]="'url(' + folderPath + '/' + photo + ')'"
   >
   </div>
 
