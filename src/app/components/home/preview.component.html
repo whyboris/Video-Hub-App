@@ -3,10 +3,11 @@
 
 <div class='wrapper'>
 
-  <div 
-    *ngIf="!hover; else advanced" 
-    class='screencaps' 
-    [ngStyle]="{background: 'url(' + folderPath + '/' + photo + ')'}">
+  <div
+    *ngIf="!hover; else advanced"
+    class='screencaps'
+    [style.backgroundImage]="sanitizer.bypassSecurityTrustStyle('url(' + sanitizer.bypassSecurityTrustUrl(folderPath) + '/' + photo + ')')"
+  >
   </div>
 
   <ng-template #advanced>
@@ -15,7 +16,7 @@
 
     <div
       class='screencaps'
-      [ngStyle]="{background: 'url(' + folderPath + '/' + photo + ')'}"
+      [style.backgroundImage]="sanitizer.bypassSecurityTrustStyle('url(' + sanitizer.bypassSecurityTrustUrl(folderPath) + '/' + photo + ')')"
     >
 
       <div
@@ -25,16 +26,18 @@
       >
       </div>
 
-      <div 
+      <div
         *ngFor="let item of stuff; let i = index"
         class="hover-me-{{ i + 1 }}"
       >
         <li></li>
       </div>
 
-      <img *ngFor="let item of stuff; let i = index"
-          src="{{ folderPath + '/' + item }}"
-          class="screencap screen{{ i + 1 }}">
+      <img
+        *ngFor="let item of stuff; let i = index"
+        [src]="sanitizer.bypassSecurityTrustUrl(folderPath + '/' + item)"
+        class="screencap screen{{ i + 1 }}"
+      >
 
       <div class="overlay"></div>
 

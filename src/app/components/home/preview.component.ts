@@ -17,7 +17,7 @@ export class PreviewComponent implements OnInit {
   timer: any;
 
   constructor(public sanitizer: DomSanitizer) { }
-  
+
   @HostListener('mouseenter') onMouseEnter() {
     this.hover = true;
   }
@@ -26,6 +26,7 @@ export class PreviewComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this.folderPath);
     // Loads up the initial photo and shows it as main photo
     if (this.stuff) {
       this.initialPhoto = this.stuff[0];
@@ -37,9 +38,11 @@ export class PreviewComponent implements OnInit {
    * Starts showing preview using a time interval
    */
   public startCycle() {
+    console.log('hi');
     this.photo = this.initialPhoto;
     let current = 1;
     this.timer = setInterval(() => {
+      console.log('hi2');
       this.photo = this.stuff[current];
       current++;
       if (current >= this.stuff.length) {
