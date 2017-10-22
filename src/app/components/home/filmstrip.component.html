@@ -1,37 +1,18 @@
 <div class="filmstrip-container">
 
-  <!-- <img *ngFor="let item of stuff; let i = index"
-    [src]="sanitizer.bypassSecurityTrustUrl(folderPath + '/' + item)"
-    class="screencap screen{{ i + 1 }}"> -->
-
-  <!-- <img *ngFor="let item of stuff; let i = index"
-    src="{{ folderPath + '/' + item }}"
-    class="screencap screen{{ i + 1 }}"> -->
-
-    <img
-      [src]="sanitizer.bypassSecurityTrustUrl(folderPath + '/' + stuff[0])"
-      class="screencap screen1"
-      [ngStyle]="{'left': 0 + 'px'}"
-    >
-    <img
-      [src]="sanitizer.bypassSecurityTrustUrl(folderPath + '/' + stuff[1])"
-      class="screencap screen2"
-      [ngStyle]="{'right': 'calc(3*(100% - ' + width + 'px)/4)'}"
-    >
-    <img
-      [src]="sanitizer.bypassSecurityTrustUrl(folderPath + '/' + stuff[2])"
-      class="screencap screen3"
-      [ngStyle]="{'right': 'calc(2*(100% - ' + width + 'px)/4)'}"
-    >
-    <img
-      [src]="sanitizer.bypassSecurityTrustUrl(folderPath + '/' + stuff[3])"
-      class="screencap screen4"
-      [ngStyle]="{'right': 'calc(1*(100% - ' + width + 'px)/4)'}"
-    >
-    <img
-      [src]="sanitizer.bypassSecurityTrustUrl(folderPath + '/' + stuff[4])"
-      class="screencap screen5"
-      [ngStyle]="{'right': 0 + 'px'}"
-    >
+  <div 
+    (mouseover)="showThisOne(i)"
+    *ngFor="let item of stuff; let i = index"
+    [ngStyle]="{'left': 10 * i + '%' }"
+    class="hoverable"
+  >
+  </div>
+  
+  <img
+    *ngFor="let item of stuff; let i = index"
+    [ngStyle]="{'right': 'calc(' + (9 - i) + ' * (100% - ' + width + 'px)/9)', 'z-index': indexArray[i] }"
+    class="screencap"
+    [src]="sanitizer.bypassSecurityTrustUrl(folderPath + '/' + stuff[i])"
+  >
 
 </div>
