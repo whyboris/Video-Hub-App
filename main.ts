@@ -102,7 +102,7 @@ let totalNumberOfFiles = 0;
 let filesProcessed = 1;
 
 let selectedSourceFolder = '';  // later = ''
-let selectedOutputFolder = '/Users/byakubchik/Desktop/VideoHub/output'; // later = ''
+let selectedOutputFolder = ''; // later = ''
 
 let theOriginalOpenFileDialogEvent;
 
@@ -123,7 +123,15 @@ ipc.on('start-the-import', function (event, someMessage) {
 
   // reset files Processed
   filesProcessed = 1;
-  extractAllScreenshots();
+
+  totalNumberOfFiles = finalArray.length;
+  console.log('there are a total of: ' + totalNumberOfFiles + ' files');
+  if (totalNumberOfFiles > 0) {
+    extractNextScreenshot();
+  } else {
+    // TODO: handle case when number of screenshots is zero!
+    console.error('NO VIDEO FILES IN THIS DIRECTORY!');
+  }
 
 })
 
@@ -204,95 +212,18 @@ ipc.on('openThisFile', function (event, fullFilePath) {
   shell.openItem(fullFilePath);
 })
 
-/**
- * Extract all screenshots
- * by calling extractScreenshot on every item in finalArray[]
- */
-function extractAllScreenshots() {
-  totalNumberOfFiles = finalArray.length;
-  console.log('there are a total of: ' + totalNumberOfFiles + ' files');
-  extractNextScreenshot();
-}
 
 let fileNumberTracker = 0;
 
+/**
+ * Extract the next screenshot
+ */
 function extractNextScreenshot() {
   const index = fileNumberTracker;
   // extractScreenshot(path.join(selectedSourceFolder, finalArray[index][0], finalArray[index][1]), index); // OLD NEVER USE AGAIN
   takeScreenshots(path.join(selectedSourceFolder, finalArray[index][0], finalArray[index][1]), index);
   fileNumberTracker++
 }
-
-/**
- * Extract all screenshots from a particular file
- * Writes files to HD
- * Updates finalArray with array of files written to disk
- * Calls function to send progress or to send final result home
- * @param filePath
- * @param currentFile
-//  */
-// function extractScreenshot(filePath: string, currentFile: number): void {
-//   console.log('extracting ' + filePath);
-//   const theFile = filePath;
-
-//   ffmpeg(theFile)
-//     .on('filenames', function (filenames) {
-//       // console.log('Screenshots: ' + filenames.join(', '));
-//       finalArray[currentFile][3] = [];
-//       // prepend partial path to each
-//       filenames.forEach((element, index) => {
-//         finalArray[currentFile][3][index] = '/boris/' + element;
-//       });
-//       // console.log(finalArray[currentFile][3]);
-//     })
-//     .on('end', function () {
-//       console.log('processed ' + filesProcessed + ' out of ' + totalNumberOfFiles);
-
-//       // ffmpeg.ffprobe(theFile, (err, metadata) => {
-//       //   console.log('duration: ');
-//       //   console.log(metadata.streams[0].duration);
-//       // });
-
-//       filesProcessed++;
-//       if (filesProcessed === totalNumberOfFiles + 1) {
-//         sendFinalResultHome();
-//       } else {
-//         sendCurrentProgress(filesProcessed, totalNumberOfFiles);
-//         extractNextScreenshot();
-//       }
-//     })
-//     .screenshots({
-//       // count: 10, // can do count rather than timestamps
-//       // timestamps: ['25%', '50%', '75%'],
-//       timestamps: ['10%', '30%', '50%', '70%', '90%'],
-//       // timestamps: ['5%', '15%', '25%', '35%', '45%', '55%', '65%', '75%', '85%', '95%'],
-//       filename: currentFile + '-%i.png',
-//       folder: selectedOutputFolder + '/boris',
-//       size: '?x100' // fix height at 100px compute width automatically
-//     })
-//     .ffprobe((err, metadata) => {
-//       // console.log('duration of clip #' + currentFile + ': ');
-//       finalArray[currentFile][4] = Math.round(metadata.streams[0].duration); // 4th item is duration
-
-//       const origWidth = metadata.streams[0].width;
-//       const origHeight = metadata.streams[0].height;
-
-//       if (origWidth === 1280 && origHeight === 720) {
-//         finalArray[currentFile][5] = '720'; // 5th item is size (720, 1080, etc)
-//       } else if (origWidth === 1920 && origHeight === 1080) {
-//         finalArray[currentFile][5] = '1080'; // 5th item is size (720, 1080, etc)
-//       } else if (origWidth < 720) {
-//         finalArray[currentFile][5] = 'SD'; // 5th item is size (720, 1080, etc)
-//       } else if (origWidth > 720) {
-//         finalArray[currentFile][5] = 'HD'; // 5th item is size (720, 1080, etc)
-//       } else {
-//         finalArray[currentFile][5] = ''; // 5th item is size (720, 1080, etc)
-//       }
-
-//       finalArray[currentFile][6] = Math.round(100 * origWidth / origHeight); // 6th item is width of screenshot (130) for ex
-
-//     });
-// }
 
 /**
  * Sends progress to Angular App
@@ -400,111 +331,114 @@ if (!timestamps.length) {
 
 let i = 0;
 function takeScreenshots(file, currentFile) {
-    ffmpeg(file)
-        .on('start', () => {
-            if (i < 1) {
-                console.log(`start taking screenshots`);
-            }
-        })
-        .on('end', () => {
-            i = i + 1;
+  ffmpeg(file)
+    .on('end', () => {
+      i = i + 1;
 
-            if (i < count) {
-                takeScreenshots(file, currentFile);
-            }
+      if (i < count) {
+        takeScreenshots(file, currentFile);
+      }
 
-            if (i === count) {
-              console.log('extracted #' + currentFile);
-              // reset i and start with the next file here !!!
-              i = 0;
+      if (i === count) {
+        // console.log('extracted #' + currentFile);
+        // reset i and start with the next file here !!!
+        i = 0;
 
-              // store the screenshot number (e.g. 42 in 42-0.jpg)
-              finalArray[currentFile][3] = currentFile;
+        // store the screenshot number (e.g. 42 in 42-0.jpg)
+        finalArray[currentFile][3] = currentFile;
 
-              filesProcessed++;
-              if (filesProcessed === totalNumberOfFiles + 1) {
+        filesProcessed++;
 
-                extractAllMetadata();
-                // sendFinalResultHome();
+        if (filesProcessed === totalNumberOfFiles + 1) {
 
-              } else {
-                sendCurrentProgress(filesProcessed, totalNumberOfFiles);
-                extractNextScreenshot();
-              }
+          // if all files processed, start extracting metadata !!!
+          filesProcessed = 1;
+          extractNextMetadata();
 
-            }
-        })
-        .screenshots({
-            count: 1,
-            timemarks: [timestamps[i]],
-            filename: currentFile + `-${i + 1}.jpg`,
-            size: '?x200'
-        }, path.join(selectedOutputFolder, 'boris'));
-}
-
-
-// filename: currentFile + '-%i.png',
-// folder: selectedOutputFolder + '/boris',
-// size: '?x100' // fix height at 100px compute width automatically
-
-
-function extractAllMetadata() {
-  filesProcessed = 1;
-  extractNextMetadata();
+        } else {
+          sendCurrentProgress(filesProcessed, totalNumberOfFiles);
+          extractNextScreenshot();
+        }
+      }
+    })
+    .screenshots({
+      count: 1,
+      timemarks: [timestamps[i]],
+      filename: currentFile + `-${i + 1}.jpg`,
+      size: '?x100'       // can be 200px -- should be option when importing later
+    }, path.join(selectedOutputFolder, 'boris'));
 }
 
 let metaDataIndex = 0;
 
+/**
+ * Extract the next file's metadata
+ */
 function extractNextMetadata() {
   const index = metaDataIndex;
-  // extractScreenshot(path.join(selectedSourceFolder, finalArray[index][0], finalArray[index][1]), index); // OLD NEVER USE AGAIN
   extractMetadata(path.join(selectedSourceFolder, finalArray[index][0], finalArray[index][1]), index);
   metaDataIndex++
 }
 
+/**
+ * Extract the meta data
+ * @param filePath
+ * @param currentFile
+ */
 function extractMetadata(filePath: string, currentFile: number): void {
-  console.log('extracting metadata from ' + filePath);
+  // console.log('extracting metadata from ' + filePath);
   const theFile = filePath;
 
   ffmpeg.ffprobe(theFile, (err, metadata) => {
+    if (err) {
+      console.log(err);
+    }
 
-      if (err) {
-        console.log(err);
-      }
+    // console.log('duration of clip #' + currentFile + ': ');
+    finalArray[currentFile][4] = Math.round(metadata.streams[0].duration); // 4th item is duration
 
-      // console.log('duration of clip #' + currentFile + ': ');
-      finalArray[currentFile][4] = Math.round(metadata.streams[0].duration); // 4th item is duration
+    const origWidth = metadata.streams[0].width;
+    const origHeight = metadata.streams[0].height;
 
-      const origWidth = metadata.streams[0].width;
-      const origHeight = metadata.streams[0].height;
-
-      if (origWidth === 1280 && origHeight === 720) {
-        finalArray[currentFile][5] = '720'; // 5th item is size (720, 1080, etc)
-      } else if (origWidth === 1920 && origHeight === 1080) {
-        finalArray[currentFile][5] = '1080'; // 5th item is size (720, 1080, etc)
-      } else if (origWidth < 720) {
-        finalArray[currentFile][5] = 'SD'; // 5th item is size (720, 1080, etc)
-      } else if (origWidth > 720) {
-        finalArray[currentFile][5] = 'HD'; // 5th item is size (720, 1080, etc)
-      } else {
-        finalArray[currentFile][5] = ''; // 5th item is size (720, 1080, etc)
-      }
-
+    if (origWidth && origHeight) {
+      finalArray[currentFile][5] = labelVideo(origWidth, origHeight);        // 5th item is the label, e.g. 'HD' 
       finalArray[currentFile][6] = Math.round(100 * origWidth / origHeight); // 6th item is width of screenshot (130) for ex
+    } else {
+      finalArray[currentFile][5] = '';
+      finalArray[currentFile][6] = 169;
+    }
 
-      console.log('processed ' + filesProcessed + ' out of ' + totalNumberOfFiles);
+    // console.log('processed ' + filesProcessed + ' out of ' + totalNumberOfFiles);
 
-      // ffmpeg.ffprobe(theFile, (err, metadata) => {
-      //   console.log('duration: ');
-      //   console.log(metadata.streams[0].duration);
-      // });
+    filesProcessed++;
 
-      filesProcessed++;
-      if (filesProcessed === totalNumberOfFiles + 1) {
-        sendFinalResultHome();
-      } else {
-        extractNextMetadata();
-      }
+    if (filesProcessed === totalNumberOfFiles + 1) {
+      sendFinalResultHome();
+    } else {
+      extractNextMetadata();
+    }
 
-    });
+  });
 }
+
+/**
+ * Label the video according to these rules
+ * @param width
+ * @param height
+ */
+function labelVideo(width: number, height: number): string {
+  let size = '';
+
+  if (width === 1280 && height === 720) {
+    size = '720'; // 5th item is size (720, 1080, etc)
+  } else if (width === 1920 && height === 1080) {
+    size = '1080'; // 5th item is size (720, 1080, etc)
+  } else if (width > 720) {
+    size = 'HD'; // 5th item is size (720, 1080, etc)
+  }
+//  else if (width < 720)
+//  size = 'SD'; // 5th item is size (720, 1080, etc)
+
+  return size;
+}
+
