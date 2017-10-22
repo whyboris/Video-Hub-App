@@ -8,10 +8,11 @@ import { FinalObject } from '../common/final-object.interface';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss',
-              './search.component.scss',
-              './gallery.component.scss',
+              './search.scss',
+              './gallery.scss',
               './photon/photon.min.css',
-              './film-override.scss']
+              './film-override.scss',
+              './wizard.scss']
 })
 export class HomeComponent implements OnInit {
 
@@ -40,6 +41,7 @@ export class HomeComponent implements OnInit {
   currentPlayingFolder = '';
 
   importDone = false;
+  inProgress = false;
   progressPercent = 0;
 
   public finalArray = [];
@@ -49,44 +51,50 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    // Returning Input
+    this.electronService.ipcRenderer.on('inputFolderChosen', (event, filePath) => {
+      this.selectedSourceFolder = filePath;
+    });
 
+    // Returning Output
+    this.electronService.ipcRenderer.on('outputFolderChosen', (event, filePath) => {
+      this.selectedOutputFolder = filePath;
+    });
+
+    // Progress bar messages
+    this.electronService.ipcRenderer.on('processingProgress', (event, a, b) => {
+      this.inProgress = true; // handle this variable better later
+      console.log(a + ' out of ' + b);
+      this.progressPercent = a / b;
+    });
+
+    // Final object returns
     this.electronService.ipcRenderer.on('finalObjectReturning', (event, finalObject: FinalObject) => {
       this.selectedOutputFolder = finalObject.outputDir;
       this.selectedSourceFolder = finalObject.inputDir;
+      this.importDone = true;
       this.finalArray = finalObject.images;
     });
-
-    this.electronService.ipcRenderer.on('selected-directory', (event, files) => {
-      this.selectedSourceFolder = files;
-    });
-
-    this.electronService.ipcRenderer.on('outputFolderChosen', (event, files) => {
-      this.selectedOutputFolder = files;
-    });
-
-    this.electronService.ipcRenderer.on('processingProgress', (event, a, b) => {
-      console.log(a + ' out of ' + b);
-      this.progressPercent = a / b;
-      if (a === b) {
-        this.importDone = true;
-      }
-    });
-
-  }
-
-  public importFresh() {
-    console.log('fresh import');
-    this.electronService.ipcRenderer.send('open-file-dialog', 'sending some message');
-  }
-
-  public selectOutputDirectory() {
-    console.log('select output directory');
-    this.electronService.ipcRenderer.send('choose-output', 'sending some message also');
   }
 
   public loadFromFile() {
-    console.log('loading file');
+    // console.log('loading file');
     this.electronService.ipcRenderer.send('load-the-file', 'some thing sent');
+  }
+
+  public selectSourceDirectory() {
+    // console.log('select input directory');
+    this.electronService.ipcRenderer.send('choose-input', 'sending some message also');
+  }
+
+  public selectOutputDirectory() {
+    // console.log('select output directory');
+    this.electronService.ipcRenderer.send('choose-output', 'sending some message also');
+  }
+
+  public importFresh() {
+    // console.log('fresh import');
+    this.electronService.ipcRenderer.send('start-the-import', 'sending some message');
   }
 
   // HTML calls this
@@ -102,8 +110,8 @@ export class HomeComponent implements OnInit {
   // Open the file in system default program
   public openExternalFile(fullPath) {
     console.log('trying to open ' + fullPath);
-    console.log('sike! DISABLED :)')
-    // this.electronService.ipcRenderer.send('openThisFile', fullPath);
+    // console.log('sike! DISABLED :)')
+    this.electronService.ipcRenderer.send('openThisFile', fullPath);
   }
 
   onFolderEnter(value: string) {

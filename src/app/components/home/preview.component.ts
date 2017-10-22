@@ -1,4 +1,5 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-gallery-item',
@@ -10,40 +11,33 @@ export class PreviewComponent implements OnInit {
   @Input() stuff: any;
   @Input() folderPath: string;
 
-  initialPhoto = '';
-  photo: string;
-  timer: any;
+  hover: boolean;
+  currentlyShowing = 1;
+
+  constructor(
+    public sanitizer: DomSanitizer
+  ) { }
+
+  @HostListener('mouseenter') onMouseEnter() {
+    this.hover = true;
+  }
+  @HostListener('mouseleave') onMouseLeave() {
+    this.hover = false;
+  }
 
   ngOnInit() {
-    // Loads up the initial photo and shows it as main photo
-    if (this.stuff) {
-      this.initialPhoto = this.stuff[0];
+
+    // hack -- populate hardcoded values -- fix later
+    const fileNumber = this.stuff;
+    this.stuff = [];
+
+    for (let i = 0; i < 10; i++) {
+      this.stuff[i] = 'boris/' + fileNumber + '-' + (i + 1) + '.jpg';
     }
-    this.photo = this.initialPhoto;
-    // console.log(this.stuff);
   }
 
-  /**
-   * Starts showing preview using a time interval
-   */
-  public startCycle() {
-    this.photo = this.initialPhoto;
-    let current = 1;
-    this.timer = setInterval(() => {
-      this.photo = this.stuff[current];
-      current++;
-      if (current >= this.stuff.length) {
-        current = 0;
-      }
-    }, 500);
-  }
-
-  /**
-   * Stops preview clearing the interval
-   */
-  public stopCycle() {
-    this.photo = this.initialPhoto;
-    clearInterval(this.timer);
+  showThisOne(screen: number): void {
+    this.currentlyShowing = screen;
   }
 
 }

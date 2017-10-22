@@ -1,33 +1,18 @@
+<div class="filmstrip-container">
 
-<!-- <img src="{{ folderPath + '/' + photo }}"> -->
-
-<div class='wrapper'>
-
-  <div
-    class='screencaps'
-    [ngStyle]="{background: 'url(' + folderPath + '/' + photo + ')'}"
-  >
-
-    <div
-      (mouseleave)="stopCycle()"
-      (mouseover)="startCycle()"
-      class="preview-hover-area"
+  <div *ngIf="hover">
+    <div 
+      (mouseover)="showThisOne(i)"
+      *ngFor="let item of stuff; let i = index"
+      [ngStyle]="{'left': 10 * i + '%' }"
+      class="hoverable"
     >
     </div>
-
-
-    <div *ngFor="let item of stuff; let i = index"
-      class="hover-me-{{ i + 1 }}"
-    >
-      <li></li>
-    </div>
-
-    <img *ngFor="let item of stuff; let i = index"
-        src="{{ folderPath + '/' + item }}"
-        class="screencap screen{{ i + 1 }}">
-
-    <div class="overlay"></div>
-
   </div>
+  
+  <img
+    [src]="sanitizer.bypassSecurityTrustUrl(folderPath + '/' + stuff[currentlyShowing])"
+    class="screencap"
+  >
 
 </div>
