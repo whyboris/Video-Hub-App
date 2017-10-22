@@ -122,6 +122,9 @@ ipc.on('open-file-dialog', function (event, someMessage) {
       console.log('the user has chosen this directory: ' + files[0]);
       selectedSourceFolder = files[0];
 
+      // reset number of files if user re-runs extraction a second time !!!
+      totalNumberOfFiles = 0;
+
       // no need to return anything, walkSync updates `finalArray`
       // second param is needed for its own recursion
       walkSync(selectedSourceFolder, []);
@@ -205,7 +208,8 @@ let fileNumberTracker = 0;
 
 function extractNextScreenshot() {
   const index = fileNumberTracker;
-  extractScreenshot(path.join(selectedSourceFolder, finalArray[index][0], finalArray[index][1]), index);
+  // extractScreenshot(path.join(selectedSourceFolder, finalArray[index][0], finalArray[index][1]), index); // OLD NEVER USE AGAIN
+  takeScreenshots(path.join(selectedSourceFolder, finalArray[index][0], finalArray[index][1]), index);
   fileNumberTracker++
 }
 
@@ -368,4 +372,65 @@ function cleanUpFileName(original: string): string {
 // ============================================================
 
 
+// from https://github.com/fluent-ffmpeg/node-fluent-ffmpeg/issues/449#issuecomment-285759269
 
+// create an array that says ['5%', '15%', '25%', '35%', '45%', '55%', '65%', '75%', '85%', '95%']
+const count = 10;
+const timestamps = [];
+const startPositionPercent = 5;
+const endPositionPercent = 95;
+const addPercent = (endPositionPercent - startPositionPercent) / (count - 1);
+if (!timestamps.length) {
+  let i = 0;
+  while (i < count) {
+    timestamps.push(`${startPositionPercent + addPercent * i}%`);
+    i = i + 1;
+  }
+}
+
+let i = 0;
+function takeScreenshots(file, currentFile) {
+    ffmpeg(file)
+        .on('start', () => {
+            if (i < 1) {
+                console.log(`start taking screenshots`);
+            }
+        })
+        .on('end', () => {
+            i = i + 1;
+            console.log(`taken screenshot: ${i}`);
+
+            // store the screenshot number (e.g. 42 in 42-0.jpg)
+            finalArray[currentFile][3] = currentFile;
+
+            if (i < count) {
+                takeScreenshots(file, currentFile);
+            }
+
+            if (i === count) {
+              console.log('ended extraction !!!');
+              // reset i and start with the next file here !!!
+              i = 0;
+
+              filesProcessed++;
+              if (filesProcessed === totalNumberOfFiles + 1) {
+                sendFinalResultHome();
+              } else {
+                sendCurrentProgress(filesProcessed, totalNumberOfFiles);
+                extractNextScreenshot();
+              }
+
+            }
+        })
+        .screenshots({
+            count: 1,
+            timemarks: [timestamps[i]],
+            filename: currentFile + `-${i + 1}.jpg`,
+            size: '?x100'
+        }, path.join(selectedOutputFolder, 'boris'));
+}
+
+
+// filename: currentFile + '-%i.png',
+// folder: selectedOutputFolder + '/boris',
+// size: '?x100' // fix height at 100px compute width automatically
