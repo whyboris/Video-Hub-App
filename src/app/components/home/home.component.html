@@ -257,7 +257,15 @@
 
                   </ng-template>
 
-                <div *ngIf="searchOptions.showFileName">
+                <div class="metadata" *ngIf="searchOptions.showFileName">
+
+                  <div class="length">
+                    {{ item[4] | lengthPipe }}
+                  </div>
+
+                  <div class="size">
+                    {{ item[5] }}
+                  </div>
 
                   <div class="folder">
                     {{ item[0] || '&emsp;' }}
@@ -266,7 +274,7 @@
                   <br>
 
                   <div class="title">
-                    {{ item[2] }} {{ item[4] | lengthPipe }} {{ item[5] }}
+                    {{ item[2] }}
                   </div>
 
                 </div>

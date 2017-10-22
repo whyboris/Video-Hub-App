@@ -11,6 +11,28 @@ list-item {
 }
 
 
+.metadata {
+  position: relative;
+}
+
+.length {
+  color: #330000;
+  font-size: 10px;
+  position: absolute;
+  right: 0;
+  // transform: translate(-4px, -14px);
+  text-shadow: 0 0 1px white;
+}
+
+.size {
+  color: #003300;
+  font-size: 10px;
+  position: absolute;
+  left: 0;
+  // transform: translate(4px, -14px);
+  text-shadow: 0 0 1px white;
+}
+
 // .gallery {
 //   display: flex;
 //   flex-wrap: wrap;

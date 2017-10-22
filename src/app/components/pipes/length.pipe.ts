@@ -10,10 +10,10 @@ export class LengthPipe implements PipeTransform {
    * @param numOfSec
    */
   transform(numOfSec: number, arg: any): string {
-    if (numOfSec < 30) {
-      return '<30sec';
+    if (numOfSec < 60) {
+      return '1min';
     } else {
-      return '>30sec'
+      return Math.round(numOfSec / 60) + 'min'
     }
   }
 
