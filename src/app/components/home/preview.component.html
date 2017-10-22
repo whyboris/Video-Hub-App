@@ -1,48 +1,18 @@
+<div class="filmstrip-container">
 
-<!-- <img src="{{ folderPath + '/' + photo }}"> -->
-
-<div class='wrapper'>
-
-  <div
-    *ngIf="!hover; else advanced"
-    class='screencaps'
-    [style.backgroundImage]="'url(' + folderPath + '/' + photo + ')'"
-  >
-  </div>
-
-  <ng-template #advanced>
-
-  <!-- clean up the template -->
-
-    <div
-      class='screencaps'
-      [style.backgroundImage]="sanitizer.bypassSecurityTrustStyle('url(' + sanitizer.bypassSecurityTrustUrl(folderPath) + '/' + photo + ')')"
+  <div *ngIf="hover">
+    <div 
+      (mouseover)="showThisOne(i)"
+      *ngFor="let item of stuff; let i = index"
+      [ngStyle]="{'left': 10 * i + '%' }"
+      class="hoverable"
     >
-
-      <div
-        (mouseleave)="stopCycle()"
-        (mouseover)="startCycle()"
-        class="preview-hover-area"
-      >
-      </div>
-
-      <div
-        *ngFor="let item of stuff; let i = index"
-        class="hover-me-{{ i + 1 }}"
-      >
-        <li></li>
-      </div>
-
-      <img
-        *ngFor="let item of stuff; let i = index"
-        [src]="sanitizer.bypassSecurityTrustUrl(folderPath + '/' + item)"
-        class="screencap screen{{ i + 1 }}"
-      >
-
-      <div class="overlay"></div>
-
     </div>
-
-  </ng-template>
+  </div>
+  
+  <img
+    [src]="sanitizer.bypassSecurityTrustUrl(folderPath + '/' + stuff[currentlyShowing])"
+    class="screencap"
+  >
 
 </div>
