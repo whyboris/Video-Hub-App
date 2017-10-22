@@ -109,38 +109,45 @@ let theOriginalOpenFileDialogEvent;
 /**
  * Summon system modal to choose directory from which to import videos
  */
-ipc.on('open-file-dialog', function (event, someMessage) {
+ipc.on('start-the-import', function (event, someMessage) {
   // console.log(someMessage);
   finalArray = [];
   fileCounter = 0;
+
+  // reset number of files if user re-runs extraction a second time !!!
+  totalNumberOfFiles = 0;
+
+  // no need to return anything, walkSync updates `finalArray`
+  // second param is needed for its own recursion
+  walkSync(selectedSourceFolder, []);
+
+  // reset files Processed
+  filesProcessed = 1;
+  extractAllScreenshots();
+
+})
+
+/**
+ * Summon system modal to choose INPUT directory
+ * where all the videos are located
+ */
+ipc.on('choose-input', function (event, someMessage) {
 
   // ask user for input folder
   dialog.showOpenDialog({
     properties: ['openDirectory']
   }, function (files) {
     if (files) {
-      console.log('the user has chosen this directory: ' + files[0]);
+      console.log('the user has chosen this INPUT directory: ' + files[0]);
       selectedSourceFolder = files[0];
 
-      // reset number of files if user re-runs extraction a second time !!!
-      totalNumberOfFiles = 0;
-
-      // no need to return anything, walkSync updates `finalArray`
-      // second param is needed for its own recursion
-      walkSync(selectedSourceFolder, []);
-
-      // store the reference to the Angular app
-      theOriginalOpenFileDialogEvent = event;
-
-      // reset files Processed
-      filesProcessed = 1;
-      extractAllScreenshots();
+      event.sender.send('inputFolderChosen', selectedSourceFolder);
     }
   })
 })
 
 /**
- * Summon system modal to choose output directory
+ * Summon system modal to choose OUTPUT directory
  * where the final json and all screenshots will be saved
  */
 ipc.on('choose-output', function (event, someMessage) {
@@ -158,6 +165,9 @@ ipc.on('choose-output', function (event, someMessage) {
         console.log('boris folder did not exist, creating');
         fs.mkdirSync(selectedOutputFolder + '/boris');
       }
+
+      // store the reference to the Angular app
+      theOriginalOpenFileDialogEvent = event;
 
       event.sender.send('outputFolderChosen', selectedOutputFolder);
     }

@@ -263,12 +263,19 @@
       </button>
     </h5>
     
-    <br>
     <h5 class="nav-group-title">or</h5>
-    <br>
+
+    <h5 class="nav-group-title">
+      <button (click)="selectSourceDirectory()" class="btn btn-mini btn-negative">
+        Select input directory
+      </button>
+    </h5>
     
-    <h5 class="nav-group-title" *ngIf="selectedOutputFolder === ''; else chooseSource">
-    
+    <h5 class="nav-group-title">
+      Source: {{ selectedSourceFolder }}
+    </h5>
+
+    <h5 class="nav-group-title">
       <button (click)="selectOutputDirectory()" class="btn btn-mini btn-negative">
         Select output directory
       </button>
@@ -277,19 +284,15 @@
     <h5 class="nav-group-title">
       Output: {{ selectedOutputFolder }}
     </h5>
-    
-    <ng-template #chooseSource>
-    
-      <h5 class="nav-group-title">
-    
-        <button (click)="importFresh()" class="btn btn-mini btn-negative">
-          Import Fresh
-        </button>
-      </h5>
-    
-    </ng-template>
+
     <h5 class="nav-group-title">
-      Source: {{ selectedSourceFolder }}
+      <button 
+        [disabled]="selectedOutputFolder === '' && selectedSourceFolder === ''" 
+        (click)="importFresh()" 
+        class="btn btn-mini btn-positive"
+      >
+        Start the import
+      </button>
     </h5>
   </div>
 
