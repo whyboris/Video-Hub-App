@@ -121,51 +121,6 @@
 
             </ng-container>
 
-            <br>
-            <br>
-
-            <h5 class="nav-group-title">
-
-              <button (click)="loadFromFile()" class="btn btn-mini btn-positive">
-                Load from file
-              </button>
-            </h5>
-
-            <br>
-            <h5 class="nav-group-title">or</h5>
-            <br>
-
-            <h5 class="nav-group-title" *ngIf="selectedOutputFolder === ''; else chooseSource">
-
-                <button
-                  (click)="selectOutputDirectory()"
-                  class="btn btn-mini btn-negative"
-                >
-                Select output directory
-              </button>
-            </h5>
-
-            <!-- <h5 class="nav-group-title">
-              {{ selectedOutputFolder }}
-            </h5> -->
-
-            <ng-template #chooseSource>
-
-              <h5 class="nav-group-title">
-
-                <button
-                  (click)="importFresh()"
-                  class="btn btn-mini btn-negative"
-                >
-                  Import Fresh
-                </button>
-              </h5>
-
-            </ng-template>
-            <!-- <h5 class="nav-group-title">
-              {{ selectedSourceFolder }}
-            </h5> -->
-
           </nav>
         </div>
 
@@ -236,26 +191,29 @@
                           | folderSearchPipe: folderSearchStringSaved
                           | fileSearchPipe: fileSearchStringSaved
                           | limitPipe: numberToShow;
-                          index as i">
+                          index as i"
+              >
 
-                  <div *ngIf="searchOptions.thumbNotFilm; else filmStrip" class="preview">
-                    <app-gallery-item
-                      (click)="openVideo(i)"
-                      [stuff]="item[3]"
-                      [folderPath]="selectedOutputFolder"
-                    ></app-gallery-item>
-                  </div>
+                <div *ngIf="searchOptions.thumbNotFilm; else filmStrip" class="preview">
 
-                  <ng-template #filmStrip>
+                  <app-gallery-item
+                    (click)="openVideo(item[3])"
+                    [stuff]="item[3]"
+                    [folderPath]="selectedOutputFolder"
+                  ></app-gallery-item>
+                  
+                </div>
 
-                    <app-filmstrip-item
-                      (click)="openVideo(i)"
-                      [stuff]="item[3]"
-                      [folderPath]="selectedOutputFolder"
-                      [width]="item[6] || 171"
-                    ></app-filmstrip-item>
+                <ng-template #filmStrip>
 
-                  </ng-template>
+                  <app-filmstrip-item
+                    (click)="openVideo(item[3])"
+                    [stuff]="item[3]"
+                    [folderPath]="selectedOutputFolder"
+                    [width]="item[6] || 171"
+                  ></app-filmstrip-item>
+
+                </ng-template>
 
                 <div class="metadata" *ngIf="searchOptions.showFileName">
 
@@ -290,5 +248,48 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div *ngIf="!importDone" class="wizard">
+
+    <div [ngClass]="{'disabled-overlay': inProgress}"></div>
+    
+    <h3>Welcome to VideoHub</h3>
+
+    <h5 class="nav-group-title">
+    
+      <button (click)="loadFromFile()" class="btn btn-mini btn-positive">
+        Load from file
+      </button>
+    </h5>
+    
+    <br>
+    <h5 class="nav-group-title">or</h5>
+    <br>
+    
+    <h5 class="nav-group-title" *ngIf="selectedOutputFolder === ''; else chooseSource">
+    
+      <button (click)="selectOutputDirectory()" class="btn btn-mini btn-negative">
+        Select output directory
+      </button>
+    </h5>
+    
+    <h5 class="nav-group-title">
+      Output: {{ selectedOutputFolder }}
+    </h5>
+    
+    <ng-template #chooseSource>
+    
+      <h5 class="nav-group-title">
+    
+        <button (click)="importFresh()" class="btn btn-mini btn-negative">
+          Import Fresh
+        </button>
+      </h5>
+    
+    </ng-template>
+    <h5 class="nav-group-title">
+      Source: {{ selectedSourceFolder }}
+    </h5>
   </div>
 

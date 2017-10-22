@@ -8,10 +8,11 @@ import { FinalObject } from '../common/final-object.interface';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss',
-              './search.component.scss',
-              './gallery.component.scss',
+              './search.scss',
+              './gallery.scss',
               './photon/photon.min.css',
-              './film-override.scss']
+              './film-override.scss',
+              './wizard.scss']
 })
 export class HomeComponent implements OnInit {
 
@@ -40,6 +41,7 @@ export class HomeComponent implements OnInit {
   currentPlayingFolder = '';
 
   importDone = false;
+  inProgress = false;
   progressPercent = 0;
 
   public finalArray = [];
@@ -53,6 +55,7 @@ export class HomeComponent implements OnInit {
     this.electronService.ipcRenderer.on('finalObjectReturning', (event, finalObject: FinalObject) => {
       this.selectedOutputFolder = finalObject.outputDir;
       this.selectedSourceFolder = finalObject.inputDir;
+      this.importDone = true;
       this.finalArray = finalObject.images;
     });
 
@@ -65,11 +68,9 @@ export class HomeComponent implements OnInit {
     });
 
     this.electronService.ipcRenderer.on('processingProgress', (event, a, b) => {
+      this.inProgress = true; // handle this variable better later
       console.log(a + ' out of ' + b);
       this.progressPercent = a / b;
-      if (a === b) {
-        this.importDone = true;
-      }
     });
 
   }

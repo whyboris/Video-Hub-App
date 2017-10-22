@@ -1,0 +1,18 @@
+.wizard {
+  background: #EEEEEE;
+  height: 100vh;
+  margin-top: 50px;
+  padding: 50px;
+  position: fixed;
+  width: 100vh;
+  z-index: 100;
+}
+
+.disabled-overlay {
+  background: rgba(0, 0, 0, 0.2);
+  height: 100vh;
+  left: 0;
+  position: fixed;
+  top: 50px;
+  width: 100%;
+}
