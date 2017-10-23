@@ -194,14 +194,14 @@
                           index as i"
               >
 
-                <div *ngIf="searchOptions.thumbNotFilm; else filmStrip" class="preview">
+                <div *ngIf="searchOptions.thumbNotFilm; else filmStrip">
 
                   <app-gallery-item
                     (click)="openVideo(item[3])"
                     [stuff]="item[3]"
                     [folderPath]="selectedOutputFolder"
                   ></app-gallery-item>
-                  
+
                 </div>
 
                 <ng-template #filmStrip>
@@ -253,16 +253,16 @@
   <div *ngIf="!importDone" class="wizard">
 
     <div [ngClass]="{'disabled-overlay': inProgress}"></div>
-    
+
     <h3>Welcome to VideoHub</h3>
 
     <h5 class="nav-group-title">
-    
+
       <button (click)="loadFromFile()" class="btn btn-mini btn-positive">
         Load from file
       </button>
     </h5>
-    
+
     <h5 class="nav-group-title">or</h5>
 
     <h5 class="nav-group-title">
@@ -270,7 +270,7 @@
         Select input directory
       </button>
     </h5>
-    
+
     <h5 class="nav-group-title">
       Source: {{ selectedSourceFolder }}
     </h5>
@@ -280,15 +280,15 @@
         Select output directory
       </button>
     </h5>
-    
+
     <h5 class="nav-group-title">
       Output: {{ selectedOutputFolder }}
     </h5>
 
     <h5 class="nav-group-title">
-      <button 
-        [disabled]="selectedOutputFolder === '' && selectedSourceFolder === ''" 
-        (click)="importFresh()" 
+      <button
+        [disabled]="selectedOutputFolder === '' && selectedSourceFolder === ''"
+        (click)="importFresh()"
         class="btn btn-mini btn-positive"
       >
         Start the import

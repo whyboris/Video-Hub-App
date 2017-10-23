@@ -14,22 +14,23 @@ list-item {
   position: relative;
 }
 
-.length {
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 10px;
-  position: absolute;
-  right: 0;
-  transform: translate(-4px, -14px);
-  // text-shadow: 0 0 1px black;
-}
-
+.length,
 .size {
   color: rgba(255, 255, 255, 0.5);
   font-size: 10px;
   position: absolute;
+  z-index: 200;
+  // text-shadow: 0 0 1px black;
+}
+
+.length {
+  right: 0;
+  transform: translate(-4px, -14px);
+}
+
+.size {
   left: 0;
   transform: translate(4px, -14px);
-  // text-shadow: 0 0 1px black;
 }
 
 // .gallery {
@@ -53,16 +54,26 @@ list-item {
 // }
 
 .title {
-  display: inline-block;
-  color: #777777;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  color: #5D5D5D;
+  display: -webkit-box;
   font-size: 12px;
+  margin: 6px 2px 0px;
+  max-height: 50px;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  width: 100%;
+  word-wrap: break-word;
 }
 
 .folder {
-  display: inline-block;
-  color: #5D5D5D;
-  font-size: 8px;
-  padding-top: 10px;
+  display: none; // may eventually delete the folder display !!!
+  // display: inline-block;
+  color: #777777;
+  font-size: 9px;
+  padding-top: 5px;
 }
 
 .gallery {
@@ -74,24 +85,13 @@ list-item {
 .item {
   flex: auto;
   height: 100px;
-  margin-bottom: 40px !important; // room for folder and file name
-  margin: 10px;
+  margin: 15px 15px 50px;
   min-width: 174px; // 16:9 ratio with height
   max-width: 174px; //      rounded down from 178px to avoid common black bars
-
-  &:after {
-    padding-top: 56%; // to preserve ratio
-    display: block;
-    content: '';
-  }
-}
-.preview {
-  width: 100%;
-  height: 100%;
 }
 
 .fileNamePadding {
-  margin-bottom: 0px !important;
+  margin-bottom: 15px !important;
 }
 
 

@@ -63,6 +63,10 @@ button {
   border: 1px solid white;
   padding: 10px;
   min-width: 30px;
+
+  span {
+    cursor: pointer;
+  }
 }
 
 /* overrides */

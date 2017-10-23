@@ -17,7 +17,7 @@ export class LimitPipe implements PipeTransform {
       console.log('file search pipe working');
       let shownSoFar = 0;
       return finalArray.filter(item => {
-        if (shownSoFar < 10) {
+        if (shownSoFar < 30) {
           shownSoFar++;
           return true;
         } else {

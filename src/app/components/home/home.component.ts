@@ -7,12 +7,14 @@ import { FinalObject } from '../common/final-object.interface';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss',
-              './search.scss',
-              './gallery.scss',
-              './photon/photon.min.css',
-              './film-override.scss',
-              './wizard.scss']
+  styleUrls: [
+    './home.component.scss',
+    './search.scss',
+    './photon/photon.min.css',
+    './gallery.scss',
+    './film-override.scss',
+    './wizard.scss'
+  ]
 })
 export class HomeComponent implements OnInit {
 
