@@ -4,6 +4,7 @@ import { ElectronService } from '../../providers/electron.service';
 
 import { FinalObject } from '../common/final-object.interface';
 
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -22,7 +23,8 @@ export class HomeComponent implements OnInit {
     folder: true,
     file: true,
     magic: true,
-    thumbNotFilm: true,
+    // type galleryView = 'thumbs' | 'filmstrip' | 'files'
+    galleryView: 'thumbs',
     showFileName: true
   };
 
@@ -129,6 +131,10 @@ export class HomeComponent implements OnInit {
 
   toggleThis(button: string) {
     this.searchOptions[button] = !this.searchOptions[button];
+  }
+
+  switchGalleryView(view: string) {
+    this.searchOptions.galleryView = view;
   }
 
 }

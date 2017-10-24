@@ -138,15 +138,22 @@
 
             <div class="btn-group">
               <button
-                (click)="toggleThis('thumbNotFilm')"
-                [ngClass]="{active: searchOptions.thumbNotFilm}"
+                (click)="switchGalleryView('thumbs')"
+                [ngClass]="{active: (searchOptions.galleryView === 'thumbs')}"
                 class="btn btn-mini btn-default"
               >
                 <span class="icon icon-layout"></span>
               </button>
               <button
-                (click)="toggleThis('thumbNotFilm')"
-                [ngClass]="{active: !searchOptions.thumbNotFilm}"
+                (click)="switchGalleryView('filmstrip')"
+                [ngClass]="{active: (searchOptions.galleryView === 'filmstrip')}"
+                class="active btn btn-mini btn-default"
+              >
+                <span class="icon icon-menu"></span>
+              </button>
+              <button
+                (click)="switchGalleryView('files')"
+                [ngClass]="{active: (searchOptions.galleryView === 'files')}"
                 class="active btn btn-mini btn-default"
               >
                 <span class="icon icon-menu"></span>
@@ -173,7 +180,7 @@
               </button>
             </div> -->
 
-            <div class="gallery" [ngClass]="{filmOverride: !searchOptions.thumbNotFilm}">
+            <div class="gallery" [ngClass]="{filmOverride: searchOptions.galleryView !== 'thumbs'}">
 
               <!-- <virtual-scroll
                       [items]="finalArray"
@@ -185,7 +192,10 @@
 
               <div
                 class="item"
-                [ngClass]="{fileNamePadding: !searchOptions.showFileName}"
+                [ngClass]="{
+                  fileNamePadding: !searchOptions.showFileName,
+                  filesView: searchOptions.galleryView === 'files'
+                }"
                 *ngFor="let item of finalArray
                           | magicSearchPipe: magicSearchString
                           | folderSearchPipe: folderSearchStringSaved
@@ -194,7 +204,7 @@
                           index as i"
               >
 
-                <div *ngIf="searchOptions.thumbNotFilm; else filmStrip">
+                <div *ngIf="searchOptions.galleryView === 'thumbs'">
 
                   <app-gallery-item
                     (click)="openVideo(item[3])"
@@ -204,7 +214,7 @@
 
                 </div>
 
-                <ng-template #filmStrip>
+                <div *ngIf="searchOptions.galleryView === 'filmstrip'">
 
                   <app-filmstrip-item
                     (click)="openVideo(item[3])"
@@ -213,7 +223,7 @@
                     [width]="item[6] || 171"
                   ></app-filmstrip-item>
 
-                </ng-template>
+                </div>
 
                 <div class="metadata" *ngIf="searchOptions.showFileName">
 

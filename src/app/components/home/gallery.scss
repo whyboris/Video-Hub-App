@@ -10,6 +10,20 @@ list-item {
   height: 30px;
 }
 
+.filesView {
+  margin: 5px 40px !important;
+  height: auto !important;
+
+  .length {
+    transform: translate(0px, 7px) !important;
+  }
+  .size {
+    text-align: right;
+    transform: translate(-35px, 7px) !important;
+    width: 30px;
+  }
+}
+
 .metadata {
   position: relative;
 }
