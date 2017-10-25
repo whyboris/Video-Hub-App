@@ -225,6 +225,12 @@
 
                 </div>
 
+                <div *ngIf="searchOptions.galleryView === 'files'">
+                  <div class="folder" *ngIf="true | folderViewPipe: item[0]">
+                    <span class="icon icon-folder"></span><span [innerHtml]="item[0] | folderArrowsPipe"></span>
+                  </div>
+                </div>
+
                 <div class="metadata" *ngIf="searchOptions.showFileName">
 
                   <div class="length">
@@ -235,13 +241,7 @@
                     {{ item[5] }}
                   </div>
 
-                  <div class="folder">
-                    {{ item[0] || '&emsp;' }}
-                  </div>
-
-                  <br>
-
-                  <div class="title">
+                  <div class="title" (click)="openVideo(item[3])">
                     {{ item[2] }}
                   </div>
 

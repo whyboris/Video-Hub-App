@@ -36,7 +36,8 @@ export class PreviewComponent implements OnInit, OnDestroy {
       this.stuff[i] = 'boris/' + fileNumber + '-' + (i + 1) + '.jpg';
     }
 
-    this.loop();
+    // this.loop(); // disabled -- can have a toggle in gallery that will feed variable as input into this component that will start
+    this.showRandom();
   }
 
 
@@ -45,13 +46,12 @@ export class PreviewComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.showRandom();
       if (this.looper) {
-        // this.loop();
+        this.loop();
       }
     }, rand);
   }
 
   showRandom(): void {
-    console.log('random');
     this.showThisOne(Math.floor(Math.random() * 9) + 1 );
   }
 

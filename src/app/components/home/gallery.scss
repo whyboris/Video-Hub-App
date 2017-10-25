@@ -15,11 +15,11 @@ list-item {
   height: auto !important;
 
   .length {
-    transform: translate(0px, 7px) !important;
+    transform: translate(0px, 1px) !important;
   }
   .size {
     text-align: right;
-    transform: translate(-35px, 7px) !important;
+    transform: translate(-35px, 1px) !important;
     width: 30px;
   }
 }
@@ -39,12 +39,12 @@ list-item {
 
 .length {
   right: 0;
-  transform: translate(-4px, -14px);
+  transform: translate(-4px, -20px);
 }
 
 .size {
   left: 0;
-  transform: translate(4px, -14px);
+  transform: translate(4px, -20px);
 }
 
 // .gallery {
@@ -71,6 +71,7 @@ list-item {
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
   color: #5D5D5D;
+  cursor: pointer;
   display: -webkit-box;
   font-size: 12px;
   margin: 6px 2px 0px;
@@ -82,12 +83,33 @@ list-item {
   word-wrap: break-word;
 }
 
+// OLD VERSION
+// .folder {
+//   color: #777777;
+//   font-size: 9px;
+//   padding-top: 5px;
+//   transform: translate(3px, 2px);
+// }
+
 .folder {
-  display: none; // may eventually delete the folder display !!!
-  // display: inline-block;
-  color: #777777;
-  font-size: 9px;
-  padding-top: 5px;
+  color: #333333;
+  font-size: 12px;
+  font-weight: bold;
+  margin: 16px 0 10px -19px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+
+  .icon-folder {
+    color: #444444;
+    margin-right: 2px;
+  }
+}
+
+// add arrows styling to what the folder-arrows.pipe puts out
+/deep/ .icon-arrow:before{
+  color: #444444;
+  content: '\e875';
+  font-family: "photon-entypo";
+  margin: 0 5px;
 }
 
 .gallery {
