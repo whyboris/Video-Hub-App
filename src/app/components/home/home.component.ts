@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 
 import { ElectronService } from '../../providers/electron.service';
 
@@ -25,7 +25,8 @@ export class HomeComponent implements OnInit {
     magic: true,
     // type galleryView = 'thumbs' | 'filmstrip' | 'files'
     galleryView: 'thumbs',
-    showFileName: true
+    showFileName: true,
+    gallerySettingsToggle: true
   };
 
   numberToShow = 10;

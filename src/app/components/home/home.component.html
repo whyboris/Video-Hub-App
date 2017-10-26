@@ -136,49 +136,66 @@
 
           <div class="gallery-container">
 
-            <div class="btn-group">
-              <button
-                (click)="switchGalleryView('thumbs')"
-                [ngClass]="{active: (searchOptions.galleryView === 'thumbs')}"
-                class="btn btn-mini btn-default"
-              >
-                <span class="icon icon-layout"></span>
-              </button>
-              <button
-                (click)="switchGalleryView('filmstrip')"
-                [ngClass]="{active: (searchOptions.galleryView === 'filmstrip')}"
-                class="active btn btn-mini btn-default"
-              >
-                <span class="icon icon-menu"></span>
-              </button>
-              <button
-                (click)="switchGalleryView('files')"
-                [ngClass]="{active: (searchOptions.galleryView === 'files')}"
-                class="active btn btn-mini btn-default"
-              >
-                <span class="icon icon-menu"></span>
-              </button>
-            </div>
+            <div
+              [ngClass]="{settingsRotated: searchOptions.gallerySettingsToggle}"
+              class="gallerySettingsButtons"
+            >
 
-            <div class="btn-group">
-              <button
-                (click)="toggleThis('showFileName')"
-                [ngClass]="{active: searchOptions.showFileName}"
-                class="btn btn-mini btn-default"
-              >
-                <span class="icon icon-tag"></span>
-              </button>
-            </div>
+                <div class="btn-group">
+                    <button
+                      (click)="toggleThis('gallerySettingsToggle')"
+                      [ngClass]="{active: searchOptions.gallerySettingsToggle}"
+                      class="btn btn-mini btn-default gallerySettingsToggle"
+                    >
+                      <span class="icon icon-cog"></span>
+                    </button>
+                  </div>
 
-            <!-- <div class="btn-group">
-              <button
-                (click)="toggleThis('none')"
-                [ngClass]="{active: searchOptions.none}"
-                class="active btn btn-mini btn-default"
-              >
-                <span class="icon icon-cog"></span>
-              </button>
-            </div> -->
+              <div class="btn-group">
+                <button
+                  (click)="switchGalleryView('thumbs')"
+                  [ngClass]="{active: (searchOptions.galleryView === 'thumbs')}"
+                  class="btn btn-mini btn-default"
+                >
+                  <span class="icon icon-layout"></span>
+                </button>
+                <button
+                  (click)="switchGalleryView('filmstrip')"
+                  [ngClass]="{active: (searchOptions.galleryView === 'filmstrip')}"
+                  class="active btn btn-mini btn-default"
+                >
+                  <span class="icon icon-menu"></span>
+                </button>
+                <button
+                  (click)="switchGalleryView('files')"
+                  [ngClass]="{active: (searchOptions.galleryView === 'files')}"
+                  class="active btn btn-mini btn-default"
+                >
+                  <span class="icon icon-menu"></span>
+                </button>
+              </div>
+
+              <div class="btn-group">
+                <button
+                  (click)="toggleThis('showFileName')"
+                  [ngClass]="{active: searchOptions.showFileName}"
+                  class="btn btn-mini btn-default"
+                >
+                  <span class="icon icon-tag"></span>
+                </button>
+              </div>
+
+              <!-- <div class="btn-group">
+                <button
+                  (click)="toggleThis('none')"
+                  [ngClass]="{active: searchOptions.none}"
+                  class="active btn btn-mini btn-default"
+                >
+                  <span class="icon icon-cog"></span>
+                </button>
+              </div> -->
+
+            </div>
 
             <div class="gallery" [ngClass]="{filmOverride: searchOptions.galleryView !== 'thumbs'}">
 
@@ -193,8 +210,9 @@
               <div
                 class="item"
                 [ngClass]="{
-                  fileNamePadding: !searchOptions.showFileName,
-                  filesView: searchOptions.galleryView === 'files'
+                  fileNamePadding: !searchOptions.showFileName && searchOptions.galleryView != 'files',
+                  filesView: searchOptions.galleryView === 'files',
+                  whenFilenamesHidden: searchOptions.galleryView === 'filmstrip' && !searchOptions.showFileName
                 }"
                 *ngFor="let item of finalArray
                           | magicSearchPipe: magicSearchString
@@ -225,19 +243,19 @@
 
                 </div>
 
-                <div *ngIf="searchOptions.galleryView === 'files'">
+                <div *ngIf="searchOptions.galleryView === 'files' && searchOptions.showFileName">
                   <div class="folder" *ngIf="true | folderViewPipe: item[0]">
                     <span class="icon icon-folder"></span><span [innerHtml]="item[0] | folderArrowsPipe"></span>
                   </div>
                 </div>
 
-                <div class="metadata" *ngIf="searchOptions.showFileName">
+                <div class="metadata" *ngIf="searchOptions.showFileName || searchOptions.galleryView === 'files'">
 
-                  <div class="length">
+                  <div class="length" *ngIf="searchOptions.showFileName">
                     {{ item[4] | lengthPipe }}
                   </div>
 
-                  <div class="size">
+                  <div class="size" *ngIf="searchOptions.showFileName">
                     {{ item[5] }}
                   </div>
 
