@@ -28,7 +28,7 @@
           <div class="btn-group">
             <button
               *ngFor="let button of searchButtons; index as i"
-              (click)="toggleThis2(i)"
+              (click)="toggleSearchButton(i)"
               [ngClass]="{ active: button.toggled }"
               class="btn btn-mini btn-default"
               title="{{ button.title }}"
@@ -105,16 +105,16 @@
 <!-- GALLERY BUTTONS -->
 
             <div
-              [ngClass]="{settingsRotated: galleryOptions.gallerySettingsToggle}"
+              [ngClass]="{settingsRotated: buttonsInView}"
               class="gallerySettingsButtons"
             >
 
             <!-- toggle button that triggers the rotation - should be styled uniquely -->
               <div class="btn-group">
                 <button
-                  (click)="toggleThis('gallerySettingsToggle')"
-                  [ngClass]="{active: galleryOptions.gallerySettingsToggle}"
-                  class="btn btn-mini btn-default gallerySettingsToggle"
+                  (click)="rotateSettings()"
+                  [ngClass]="{active: buttonsInView}"
+                  class="btn btn-mini btn-default"
                 >
                   <span class="icon icon-cog"></span>
                 </button>
@@ -144,49 +144,11 @@
 
               </div>
 
-<!-- BELOW buttons to consolidate -->
-
-              <div class="btn-group">
-                <button
-                  (click)="switchGalleryView('thumbs')"
-                  [ngClass]="{active: (galleryOptions.galleryView === 'thumbs')}"
-                  class="btn btn-mini btn-default"
-                >
-                  <span class="icon icon-layout"></span>
-                </button>
-                <button
-                  (click)="switchGalleryView('filmstrip')"
-                  [ngClass]="{active: (galleryOptions.galleryView === 'filmstrip')}"
-                  class="active btn btn-mini btn-default"
-                >
-                  <span class="icon icon-menu"></span>
-                </button>
-                <button
-                  (click)="switchGalleryView('files')"
-                  [ngClass]="{active: (galleryOptions.galleryView === 'files')}"
-                  class="active btn btn-mini btn-default"
-                >
-                  <span class="icon icon-menu"></span>
-                </button>
-              </div>
-
-              <div class="btn-group">
-                <button
-                  (click)="toggleThis('showFileName')"
-                  [ngClass]="{active: galleryOptions.showFileName}"
-                  class="btn btn-mini btn-default"
-                >
-                  <span class="icon icon-tag"></span>
-                </button>
-              </div>
-
-<!-- ABOVE buttons to consolidate -->
-
             </div>
 
 <!-- GALLERY CODE -->
 
-            <div class="gallery" [ngClass]="{filmOverride: galleryOptions.galleryView !== 'thumbs'}">
+            <div class="gallery" [ngClass]="{filmOverride: currentView !== 'thumbs'}">
 
               <!-- <virtual-scroll
                       [items]="finalArray"
@@ -199,9 +161,9 @@
               <div
                 class="item"
                 [ngClass]="{
-                    fileNamePadding: !galleryOptions.showFileName && galleryOptions.galleryView != 'files',
-                    filesView: galleryOptions.galleryView === 'files',
-                    whenFilenamesHidden: galleryOptions.galleryView === 'filmstrip' && !galleryOptions.showFileName
+                    fileNamePadding: !showMoreInfo && currentView != 'files',
+                    filesView: currentView === 'files',
+                    whenFilenamesHidden: currentView === 'filmstrip' && !showMoreInfo
                   }"
                 *ngFor="let item of finalArray
                           | magicSearchPipe: magicSearchString
@@ -213,7 +175,7 @@
                           index as i"
               >
 
-                <div *ngIf="galleryOptions.galleryView === 'thumbs'">
+                <div *ngIf="currentView === 'thumbs'">
 
                   <app-gallery-item
                     (click)="openVideo(item[3])"
@@ -223,7 +185,7 @@
 
                 </div>
 
-                <div *ngIf="galleryOptions.galleryView === 'filmstrip'">
+                <div *ngIf="currentView === 'filmstrip'">
 
                   <app-filmstrip-item
                     (click)="openVideo(item[3])"
@@ -234,19 +196,19 @@
 
                 </div>
 
-                <div *ngIf="galleryOptions.galleryView === 'files' && galleryOptions.showFileName">
+                <div *ngIf="currentView === 'files' && showMoreInfo">
                   <div class="folder" *ngIf="true | folderViewPipe: item[0]">
                     <span class="icon icon-folder"></span><span [innerHtml]="item[0] | folderArrowsPipe"></span>
                   </div>
                 </div>
 
-                <div class="metadata" *ngIf="galleryOptions.showFileName || galleryOptions.galleryView === 'files'">
+                <div class="metadata" *ngIf="showMoreInfo || currentView === 'files'">
 
-                  <div class="length" *ngIf="galleryOptions.showFileName">
+                  <div class="length" *ngIf="showMoreInfo">
                     {{ item[4] | lengthPipe }}
                   </div>
 
-                  <div class="size" *ngIf="galleryOptions.showFileName">
+                  <div class="size" *ngIf="showMoreInfo">
                     {{ item[5] }}
                   </div>
 

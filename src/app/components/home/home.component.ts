@@ -21,7 +21,7 @@ export class HomeComponent implements OnInit {
 
   // searchButtons & filters -- arrays must be in the same order to correspond correctly !!!
 
-  searchButtons: object[] = [
+  searchButtons = [
     {
       uniqueKey: 'folderUnion',
       hidden: false,
@@ -57,7 +57,7 @@ export class HomeComponent implements OnInit {
 
   // string = search string, array = array of filters, bool = dummy to flip to trigger pipe
   // array for `file`, `fileUnion`, `folder`, `folderUnion`
-  filters: object[] = [
+  filters = [
     {
      uniqueKey: 'folderUnion',
      string: '',
@@ -89,13 +89,9 @@ export class HomeComponent implements OnInit {
     }
   ];
 
-  galleryOptions = {
-    // type galleryView = 'thumbs' | 'filmstrip' | 'files'
-    galleryView: 'thumbs',
-    showFileName: true,
-    gallerySettingsToggle: true
-  };
-
+  currentView = 'thumbs' // can be 'thumbs' | 'filmstrip' | 'files'
+  showMoreInfo = true;
+  buttonsInView = true;
 
   // Array is in the order in which the buttons will be rendered
   galleryButtons = [
@@ -200,49 +196,51 @@ export class HomeComponent implements OnInit {
 
   // HTML calls this
   public openVideo(number) {
-    console.log('trying to open video');
-
     this.currentPlayingFolder = this.finalArray[number][0];
     this.currentPlayingFile = this.finalArray[number][2];
-
     this.openExternalFile(this.selectedSourceFolder + this.finalArray[number][0] + '/' + this.finalArray[number][1]);
   }
 
   // Open the file in system default program
   public openExternalFile(fullPath) {
-    console.log('trying to open ' + fullPath);
+    // console.log('trying to open ' + fullPath);
     // console.log('sike! DISABLED :)')
     this.electronService.ipcRenderer.send('openThisFile', fullPath);
   }
 
-  toggleThis(button: string) {
-    this.galleryOptions[button] = !this.galleryOptions[button];
-  }
+  // -----------------------------------------------------------------------------------------------
+  // Interaction functions
 
-  toggleThis2(button: string) {
+  toggleSearchButton(button: string) {
     this.searchButtons[button].toggled = !this.searchButtons[button].toggled;
   }
 
-  switchGalleryView(view: string) {
-    this.galleryOptions.galleryView = view;
+  rotateSettings() {
+    this.buttonsInView = !this.buttonsInView;
   }
 
-
+  // MAYBE CLEAN UP !?!!
   galleryButtonClicked(index: number): void {
     if (index === 0) {
-      this.galleryButtons[0].toggled = true;
       this.galleryButtons[1].toggled = false;
       this.galleryButtons[2].toggled = false;
+      this.galleryButtons[0].toggled = true;
+      this.currentView = 'thumbs';
     } else if (index === 1) {
       this.galleryButtons[0].toggled = false;
-      this.galleryButtons[1].toggled = true;
       this.galleryButtons[2].toggled = false;
+      this.galleryButtons[1].toggled = true;
+      this.currentView = 'filmstrip';
     } else if (index === 2) {
       this.galleryButtons[0].toggled = false;
       this.galleryButtons[1].toggled = false;
       this.galleryButtons[2].toggled = true;
-    } else {
+      this.currentView = 'files';
+    } else if (index === 3) {
+      this.showMoreInfo = !this.showMoreInfo;
       this.galleryButtons[index].toggled = !this.galleryButtons[index].toggled;
+    } else {
+      console.log('what did you press?');
     }
 
   }
@@ -263,7 +261,12 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  removeThisOneGeneral(item: number, origin: string): void {
+  /**
+   * Removes item from particular search array
+   * @param item    {number}  index within array of search strings
+   * @param origin  {number}  index within filters array
+   */
+  removeThisOneGeneral(item: number, origin: number): void {
     this.filters[origin].array.splice(item, 1);
     this.filters[origin].bool = !this.filters[origin].bool;
   }
