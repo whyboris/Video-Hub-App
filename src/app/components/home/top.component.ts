@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnChanges } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
 
 @Component({
   selector: 'app-top-component',
@@ -8,30 +8,27 @@ import { Component, Input, OnInit, OnChanges } from '@angular/core';
 })
 export class TopComponent implements OnInit {
 
-
-  private _name = '';
-
+  private _folder = '';
   @Input() set folderString(folderString: string) {
-    this._name = (folderString && folderString.trim()) || '';
+    this._folder = (folderString && folderString.trim()) || '';
 
     // @TODO need to remove the first slash !!!
 
-    this.folderNameArray = this._name.split('/');
+    this.folderNameArray = this._folder.split('/');
     console.log(this.folderNameArray);
   }
+  get folderString(): string { return this._folder; }
 
-  get folderString(): string { return this._name; }
 
-
-  private _name2 = '';
-
+  private _file = '';
   @Input() set fileString(fileString: string) {
-    this._name2 = (fileString && fileString.trim()) || '';
-    this.fileNameArray = this._name2.split(' ');
+    this._file = (fileString && fileString.trim()) || '';
+    this.fileNameArray = this._file.split(' ');
   }
+  get fileString(): string { return this._file; }
 
-  get fileString(): string { return this._name2; }
-
+  @Output() onFileWordClicked = new EventEmitter<string>();
+  @Output() onFolderWordClicked = new EventEmitter<string>();
 
   public folderNameArray: Array<string>;
   public fileNameArray: Array<string>;
@@ -40,18 +37,18 @@ export class TopComponent implements OnInit {
   // @Input() fileString: string;
 
   ngOnInit() {
-    console.log(this.folderString);
-    console.log(this.fileString);
+    // console.log(this.folderString);
+    // console.log(this.fileString);
     // this.wipArray = this.folderString.split('_');
   }
 
 
   public folderWordClicked(item) {
-    console.log('folder item: ' + item);
+    this.onFolderWordClicked.emit(item.trim());
   }
 
   public fileWordClicked(item) {
-    console.log('file item: ' + item);
+    this.onFileWordClicked.emit(item.trim());
   }
 
 }

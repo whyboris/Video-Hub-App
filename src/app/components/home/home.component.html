@@ -7,6 +7,8 @@
         class="top-content-position"
         [fileString]="currentPlayingFile"
         [folderString]="currentPlayingFolder"
+        (onFileWordClicked)="handleFileWordClicked($event)"
+        (onFolderWordClicked)="handleFolderWordClicked($event)"
       ></app-top-component>
     </div>
 
@@ -48,7 +50,7 @@
                 <h5 class="nav-group-title">
                   <input
                     (keyup.enter)="onEnterKey(filter.string, j)"
-                    (keyup.backspace)="onBackspace(filter.string, j)"
+                    (keyup.backspace)="onBackspace(j)"
                     [(ngModel)]="filter.string"
                     class="form-control"
                     placeholder={{filter.placeholder}}
@@ -61,7 +63,7 @@
                     <span class="conjunction" *ngIf="i > 0">
                       {{ filter.conjunction }}
                     </span>
-                    <span (click)="removeThisOneGeneral(i, j)" class="searchWord">
+                    <span (click)="removeThisFilter(i, j)" class="searchWord">
                       {{ string }}
                     </span>
                   </ng-container>

@@ -215,6 +215,27 @@ export class HomeComponent implements OnInit {
   }
 
   // -----------------------------------------------------------------------------------------------
+  // handle output from top.component
+
+  /**
+   * Add filter to FILE search when word in file is clicked
+   * @param filter
+   */
+  handleFileWordClicked(filter: string) {
+    this.onEnterKey(filter, 3); // 3rd item is the `file` filter
+  }
+
+
+  /**
+   * Add filter to FOLDER search when word in folder is clicked
+   * @param filter
+   */
+  handleFolderWordClicked(filter: string) {
+    this.onEnterKey(filter, 1); // 1st item is the `folder` filter
+  }
+
+
+  // -----------------------------------------------------------------------------------------------
   // Interaction functions
 
   toggleSearchButton(button: string) {
@@ -258,7 +279,7 @@ export class HomeComponent implements OnInit {
    * @param value  -- the string to filter
    * @param origin -- can be `file`, `fileUnion`, `folder`, `folderUnion` -- KEYS for the `filters` Array
    */
-  onEnterKey(value: string, origin: string): void {
+  onEnterKey(value: string, origin: number): void {
     const trimmed = value.trim();
     if (trimmed) {
       this.filters[origin].array.push(trimmed);
@@ -267,8 +288,12 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  onBackspace(value: string, origin: string): void {
-    console.log('hi');
+  /**
+   * Removes last-added filter
+   * When user presses the `BACKSPACE` key
+   * @param origin  -- array from which to .pop()
+   */
+  onBackspace(origin: number): void {
     if (this.filters[origin].array.length > 0) {
       this.filters[origin].array.pop();
       this.filters[origin].bool = !this.filters[origin].bool;
@@ -277,10 +302,11 @@ export class HomeComponent implements OnInit {
 
   /**
    * Removes item from particular search array
+   * When user clicks on a particular search word
    * @param item    {number}  index within array of search strings
    * @param origin  {number}  index within filters array
    */
-  removeThisOneGeneral(item: number, origin: number): void {
+  removeThisFilter(item: number, origin: number): void {
     this.filters[origin].array.splice(item, 1);
     this.filters[origin].bool = !this.filters[origin].bool;
   }
