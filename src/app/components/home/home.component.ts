@@ -20,7 +20,9 @@ import { FinalObject } from '../common/final-object.interface';
 export class HomeComponent implements OnInit {
 
   searchOptions = {
-    folder: true,
+    folderUnion: true,
+    folder: true, // whether to show or hide
+    fileUnion: true,
     file: true,
     magic: true,
     // type galleryView = 'thumbs' | 'filmstrip' | 'files'
@@ -32,33 +34,38 @@ export class HomeComponent implements OnInit {
   numberToShow = 10;
 
   // string = search string, array = array of filters, bool = dummy to flip to trigger pipe
-  filters = {
-    file: {
-      string: '',
-      array: [],
-      bool: true,
-      placeholder: 'Search files',
-      conjunction: 'and' },
-    fileUnion: {
-      string: '',
-      array: [],
-      bool: true,
-      placeholder: 'Search files union',
-      conjunction: 'or' },
-    folder: {
+  // array for `file`, `fileUnion`, `folder`, `folderUnion`
+  filters = [
+    {
+     uniqueKey: 'folderUnion',
+     string: '',
+     array: [],
+     bool: true,
+     placeholder: 'Search folders union',
+     conjunction: 'or'
+    }, {
+      uniqueKey: 'folder',
       string: '',
       array: [],
       bool: true,
       placeholder: 'Search folders',
-      conjunction: 'and' },
-    folderUnion: {
+      conjunction: 'and'
+    }, {
+      uniqueKey: 'fileUnion',
       string: '',
       array: [],
       bool: true,
-      placeholder: 'Search folders union',
+      placeholder: 'Search files union',
       conjunction: 'or'
+    }, {
+      uniqueKey: 'file',
+      string: '',
+      array: [],
+      bool: true,
+      placeholder: 'Search files',
+      conjunction: 'and',
     }
-  }
+  ]
 
   magicSearchString = '';
 
@@ -157,6 +164,8 @@ export class HomeComponent implements OnInit {
    * @param origin -- can be `file`, `fileUnion`, `folder`, `folderUnion` -- KEYS for the `filters` Array
    */
   onEnterGeneral(value: string, origin: string): void {
+    console.log(origin);
+    console.log(value);
     const trimmed = value.trim();
     if (trimmed) {
       this.filters[origin].array.push(trimmed);

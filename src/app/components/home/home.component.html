@@ -27,12 +27,28 @@
 
           <div class="btn-group">
             <button
+              (click)="toggleThis('folderUnion')"
+              [ngClass]="{active: searchOptions.folder}"
+              class="btn btn-mini btn-default"
+              title="File search"
+            >
+              <span class="icon icon-folder"></span>
+            </button>
+            <button
               (click)="toggleThis('folder')"
               [ngClass]="{active: searchOptions.folder}"
               class="btn btn-mini btn-default"
               title="File search"
             >
               <span class="icon icon-folder"></span>
+            </button>
+            <button
+              (click)="toggleThis('fileUnion')"
+              [ngClass]="{active: searchOptions.file}"
+              class="active btn btn-mini btn-default"
+              title="Folder search"
+            >
+              <span class="icon icon-video"></span>
             </button>
             <button
               (click)="toggleThis('file')"
@@ -56,103 +72,36 @@
 
           <nav class="nav-group">
 
-<!-- COMBINE INTO A SINGLE NG IF, watch out for AND/OR,maybe pass options object -->
+            <ng-container *ngFor="let filter of filters; index as j">
 
-            <ng-container *ngIf="searchOptions.folder">
+              <ng-container *ngIf="searchOptions[filter.uniqueKey]">
 
-              <h5 class="nav-group-title">
-                <input
-                  #folderUnionInput
-                  (keyup.enter)="onEnterGeneral(folderUnionInput.value, 'folderUnion')"
-                  [(ngModel)]="filters.folderUnion.string"
-                  class="form-control"
-                  placeholder="Search folders union"
-                  type="text"
-                >
-              </h5>
+                <h5 class="nav-group-title">
+                  <input
+                    (keyup.enter)="onEnterGeneral(filter.string, j)"
+                    [(ngModel)]="filter.string"
+                    class="form-control"
+                    placeholder={{filter.placeholder}}
+                    type="text"
+                  >
+                </h5>
 
-              <h5 class="nav-group-title">
-                <ng-container *ngFor="let string of filters.folderUnion.array; index as i">
-                  <span class="conjunction" *ngIf="i > 0">or</span>
-                  <span (click)="removeThisOneGeneral(i, 'folderUnion')" class="searchWord">
-                    {{string}}
-                  </span>
-                </ng-container>
-              </h5>
+                <h5 class="nav-group-title">
+                  <ng-container *ngFor="let string of filter.array; index as i">
+                    <span class="conjunction" *ngIf="i > 0">
+                      {{ filter.conjunction }}
+                    </span>
+                    <span (click)="removeThisOneGeneral(i, j)" class="searchWord">
+                      {{ string }}
+                    </span>
+                  </ng-container>
+                </h5>
 
-            </ng-container>
-
-            <ng-container *ngIf="searchOptions.folder">
-
-              <h5 class="nav-group-title">
-                <input
-                  #folderInput
-                  (keyup.enter)="onEnterGeneral(folderInput.value, 'folder')"
-                  [(ngModel)]="filters.folder.string"
-                  class="form-control"
-                  placeholder="Search folders"
-                  type="text"
-                >
-              </h5>
-
-              <h5 class="nav-group-title">
-                <ng-container *ngFor="let string of filters.folder.array; index as i">
-                  <span class="conjunction" *ngIf="i > 0">and</span>
-                  <span (click)="removeThisOneGeneral(i, 'folder')" class="searchWord">
-                    {{string}}
-                  </span>
-                </ng-container>
-              </h5>
+              </ng-container>
 
             </ng-container>
 
-            <ng-container *ngIf="searchOptions.file">
-
-              <h5 class="nav-group-title">
-                <input
-                  #fileUnionInput
-                  (keyup.enter)="onEnterGeneral(fileUnionInput.value, 'fileUnion')"
-                  [(ngModel)]="filters.fileUnion.string"
-                  class="form-control"
-                  placeholder="Search files union"
-                  type="text"
-                >
-              </h5>
-
-              <h5 class="nav-group-title">
-                <ng-container *ngFor="let string of filters.fileUnion.array; index as i">
-                  <span class="conjunction" *ngIf="i > 0">or</span>
-                  <span (click)="removeThisOneGeneral(i, 'fileUnion')" class="searchWord">
-                    {{string}}
-                  </span>
-                </ng-container>
-              </h5>
-
-            </ng-container>
-
-            <ng-container *ngIf="searchOptions.file">
-
-              <h5 class="nav-group-title">
-                <input
-                  #fileInput
-                  (keyup.enter)="onEnterGeneral(fileInput.value, 'file')"
-                  [(ngModel)]="filters.file.string"
-                  class="form-control"
-                  placeholder="Search files intersection"
-                  type="text"
-                >
-              </h5>
-
-              <h5 class="nav-group-title">
-                <ng-container *ngFor="let string of filters.file.array; index as i">
-                  <span class="conjunction" *ngIf="i > 0">and</span>
-                  <span (click)="removeThisOneGeneral(i, 'file')" class="searchWord">
-                    {{string}}
-                  </span>
-                </ng-container>
-              </h5>
-
-            </ng-container>
+<!-- magic search and exclude search fields -->
 
             <ng-container *ngIf="searchOptions.magic">
 
@@ -272,10 +221,10 @@
                   }"
                 *ngFor="let item of finalArray
                           | magicSearchPipe: magicSearchString
-                          | fileSearchPipe: filters.folderUnion.array : filters.folderUnion.bool  : true  : false
-                          | fileSearchPipe: filters.folder.array      : filters.folder.bool       : false : false
-                          | fileSearchPipe: filters.fileUnion.array   : filters.fileUnion.bool    : true  : true
-                          | fileSearchPipe: filters.file.array        : filters.file.bool         : false : true
+                          | fileSearchPipe: filters[0].array : filters[0].bool : true  : false
+                          | fileSearchPipe: filters[1].array : filters[1].bool : false : false
+                          | fileSearchPipe: filters[2].array : filters[2].bool : true  : true
+                          | fileSearchPipe: filters[3].array : filters[3].bool : false : true
                           | limitPipe: numberToShow;
                           index as i"
               >
