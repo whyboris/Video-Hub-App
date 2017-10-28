@@ -19,6 +19,42 @@ import { FinalObject } from '../common/final-object.interface';
 })
 export class HomeComponent implements OnInit {
 
+  // searchButtons & filters -- arrays must be in the same order to correspond correctly !!!
+
+  searchButtons = [
+    {
+      uniqueKey: 'folderUnion',
+      hidden: 'false',
+      toggled: 'true',
+      iconName: 'icon-folder',
+      title: 'Folder union search'
+    }, {
+      uniqueKey: 'folder',
+      hidden: 'false',
+      toggled: 'true',
+      iconName: 'icon-folder',
+      title: 'Folder search'
+    }, {
+      uniqueKey: 'fileUnion',
+      hidden: 'false',
+      toggled: 'true',
+      iconName: 'icon-video',
+      title: 'File union search'
+    }, {
+      uniqueKey: 'file',
+      hidden: 'false',
+      toggled: 'true',
+      iconName: 'icon-video',
+      title: 'File search'
+    }, {
+      uniqueKey: 'magic',
+      hidden: 'false',
+      toggled: 'true',
+      iconName: 'icon-search',
+      title: 'Magic search'
+    }
+]
+
   searchOptions = {
     folderUnion: true,
     folder: true, // whether to show or hide
@@ -152,6 +188,10 @@ export class HomeComponent implements OnInit {
 
   toggleThis(button: string) {
     this.searchOptions[button] = !this.searchOptions[button];
+  }
+
+  toggleThis2(button: string) {
+    this.searchButtons[button].toggled = !this.searchButtons[button].toggled;
   }
 
   switchGalleryView(view: string) {

@@ -27,44 +27,13 @@
 
           <div class="btn-group">
             <button
-              (click)="toggleThis('folderUnion')"
-              [ngClass]="{active: searchOptions.folder}"
+              *ngFor="let button of searchButtons; index as i"
+              (click)="toggleThis2(i)"
+              [ngClass]="{ active: button.toggled }"
               class="btn btn-mini btn-default"
-              title="File search"
+              title="Folder union search"
             >
-              <span class="icon icon-folder"></span>
-            </button>
-            <button
-              (click)="toggleThis('folder')"
-              [ngClass]="{active: searchOptions.folder}"
-              class="btn btn-mini btn-default"
-              title="File search"
-            >
-              <span class="icon icon-folder"></span>
-            </button>
-            <button
-              (click)="toggleThis('fileUnion')"
-              [ngClass]="{active: searchOptions.file}"
-              class="active btn btn-mini btn-default"
-              title="Folder search"
-            >
-              <span class="icon icon-video"></span>
-            </button>
-            <button
-              (click)="toggleThis('file')"
-              [ngClass]="{active: searchOptions.file}"
-              class="active btn btn-mini btn-default"
-              title="Folder search"
-            >
-              <span class="icon icon-video"></span>
-            </button>
-            <button
-              (click)="toggleThis('magic')"
-              [ngClass]="{active: searchOptions.magic}"
-              class="btn btn-mini btn-default"
-              title="Magic search"
-            >
-              <span class="icon icon-search"></span>
+              <span class="icon {{ button.iconName }}"></span>
             </button>
           </div>
 
@@ -74,7 +43,7 @@
 
             <ng-container *ngFor="let filter of filters; index as j">
 
-              <ng-container *ngIf="searchOptions[filter.uniqueKey]">
+              <ng-container *ngIf="searchButtons[j].toggled">
 
                 <h5 class="nav-group-title">
                   <input
@@ -103,7 +72,7 @@
 
 <!-- magic search and exclude search fields -->
 
-            <ng-container *ngIf="searchOptions.magic">
+            <ng-container *ngIf="searchButtons[4].toggled">
 
               <h5 class="nav-group-title">
                 <input
