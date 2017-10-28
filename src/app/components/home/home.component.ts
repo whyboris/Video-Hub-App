@@ -21,61 +21,47 @@ export class HomeComponent implements OnInit {
 
   // searchButtons & filters -- arrays must be in the same order to correspond correctly !!!
 
-  searchButtons = [
+  searchButtons: object[] = [
     {
       uniqueKey: 'folderUnion',
-      hidden: 'false',
-      toggled: 'true',
+      hidden: false,
+      toggled: true,
       iconName: 'icon-folder',
       title: 'Folder union search'
     }, {
       uniqueKey: 'folder',
-      hidden: 'false',
-      toggled: 'true',
+      hidden: false,
+      toggled: true,
       iconName: 'icon-folder',
       title: 'Folder search'
     }, {
       uniqueKey: 'fileUnion',
-      hidden: 'false',
-      toggled: 'true',
+      hidden: false,
+      toggled: true,
       iconName: 'icon-video',
       title: 'File union search'
     }, {
       uniqueKey: 'file',
-      hidden: 'false',
-      toggled: 'true',
+      hidden: false,
+      toggled: true,
       iconName: 'icon-video',
       title: 'File search'
     }, {
       uniqueKey: 'magic',
-      hidden: 'false',
-      toggled: 'true',
+      hidden: false,
+      toggled: true,
       iconName: 'icon-search',
       title: 'Magic search'
     }
-]
-
-  searchOptions = {
-    folderUnion: true,
-    folder: true, // whether to show or hide
-    fileUnion: true,
-    file: true,
-    magic: true,
-    // type galleryView = 'thumbs' | 'filmstrip' | 'files'
-    galleryView: 'thumbs',
-    showFileName: true,
-    gallerySettingsToggle: true
-  };
-
-  numberToShow = 10;
+  ];
 
   // string = search string, array = array of filters, bool = dummy to flip to trigger pipe
   // array for `file`, `fileUnion`, `folder`, `folderUnion`
-  filters = [
+  filters: object[] = [
     {
      uniqueKey: 'folderUnion',
      string: '',
-     array: [],
+     array: [], // contains search strings
      bool: true,
      placeholder: 'Search folders union',
      conjunction: 'or'
@@ -101,7 +87,50 @@ export class HomeComponent implements OnInit {
       placeholder: 'Search files',
       conjunction: 'and',
     }
-  ]
+  ];
+
+  galleryOptions = {
+    // type galleryView = 'thumbs' | 'filmstrip' | 'files'
+    galleryView: 'thumbs',
+    showFileName: true,
+    gallerySettingsToggle: true
+  };
+
+
+  // Array is in the order in which the buttons will be rendered
+  galleryButtons = [
+    {
+      uniqueKey: 'showThumbnails',
+      hidden: false,
+      toggled: true,
+      iconName: 'icon-layout',
+      title: 'Show thumbnails',
+      spaceAfter: false,
+    }, {
+      uniqueKey: 'showFilmstrip',
+      hidden: false,
+      toggled: false,
+      iconName: 'icon-menu',
+      title: 'Show filmstrip',
+      spaceAfter: false,
+    }, {
+      uniqueKey: 'showFiles',
+      hidden: false,
+      toggled: false,
+      iconName: 'icon-menu',
+      title: 'Show files',
+      spaceAfter: true,
+    }, {
+      uniqueKey: 'showMoreInfo',
+      hidden: false,
+      toggled: true,
+      iconName: 'icon-tag',
+      title: 'Show more info',
+      spaceAfter: false,
+    }
+  ];
+
+  numberToShow = 20;
 
   magicSearchString = '';
 
@@ -187,7 +216,7 @@ export class HomeComponent implements OnInit {
   }
 
   toggleThis(button: string) {
-    this.searchOptions[button] = !this.searchOptions[button];
+    this.galleryOptions[button] = !this.galleryOptions[button];
   }
 
   toggleThis2(button: string) {
@@ -195,7 +224,27 @@ export class HomeComponent implements OnInit {
   }
 
   switchGalleryView(view: string) {
-    this.searchOptions.galleryView = view;
+    this.galleryOptions.galleryView = view;
+  }
+
+
+  galleryButtonClicked(index: number): void {
+    if (index === 0) {
+      this.galleryButtons[0].toggled = true;
+      this.galleryButtons[1].toggled = false;
+      this.galleryButtons[2].toggled = false;
+    } else if (index === 1) {
+      this.galleryButtons[0].toggled = false;
+      this.galleryButtons[1].toggled = true;
+      this.galleryButtons[2].toggled = false;
+    } else if (index === 2) {
+      this.galleryButtons[0].toggled = false;
+      this.galleryButtons[1].toggled = false;
+      this.galleryButtons[2].toggled = true;
+    } else {
+      this.galleryButtons[index].toggled = !this.galleryButtons[index].toggled;
+    }
+
   }
 
   /**
