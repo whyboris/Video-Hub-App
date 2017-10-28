@@ -23,6 +23,7 @@
       <div class="pane-group">
         <div class="pane pane-sm sidebar">
 
+<!-- SEARCH BUTTONS -->
 
           <div class="btn-group">
             <button
@@ -51,6 +52,7 @@
             </button>
           </div>
 
+<!-- SEARCH BOXES -->
 
           <nav class="nav-group">
 
@@ -68,9 +70,9 @@
               </h5>
 
               <h5 class="nav-group-title">
-                Folder: {{ folderSearchStringSaved }}
-                <br>
-                <br>
+                <span class="searchWord" *ngIf="folderSearchStringSaved !== ''">
+                  {{ folderSearchStringSaved }}
+                </span>
               </h5>
 
             </ng-container>
@@ -89,9 +91,11 @@
               </h5>
 
               <h5 class="nav-group-title">
-                File: {{ fileSearchStringSaved }}
-                <br>
-                <br>
+                <ng-container *ngFor="let string of fileSearchStringArray; index as i">
+                  <span (click)="removeThisOne(i)" class="searchWord">
+                    {{string}}
+                  </span>
+                </ng-container>
               </h5>
 
             </ng-container>
@@ -124,17 +128,13 @@
           </nav>
         </div>
 
-
-        <!-- THE GALLERY PANE -->
-
+<!-- THE GALLERY PANE -->
 
         <div class="pane">
 
-
-
-
-
           <div class="gallery-container">
+
+<!-- GALLERY BUTTONS -->
 
             <div
               [ngClass]="{settingsRotated: searchOptions.gallerySettingsToggle}"
@@ -197,6 +197,8 @@
 
             </div>
 
+<!-- GALLERY CODE -->
+
             <div class="gallery" [ngClass]="{filmOverride: searchOptions.galleryView !== 'thumbs'}">
 
               <!-- <virtual-scroll
@@ -217,7 +219,7 @@
                 *ngFor="let item of finalArray
                           | magicSearchPipe: magicSearchString
                           | folderSearchPipe: folderSearchStringSaved
-                          | fileSearchPipe: fileSearchStringSaved
+                          | fileSearchPipe: fileSearchStringArray : flippingBool
                           | limitPipe: numberToShow;
                           index as i"
               >
@@ -277,6 +279,8 @@
       </div>
     </div>
   </div>
+
+<!-- WIZARD -->
 
   <div *ngIf="!importDone" class="wizard">
 

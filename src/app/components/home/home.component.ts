@@ -36,6 +36,7 @@ export class HomeComponent implements OnInit {
 
   fileSearchString = '';
   fileSearchStringSaved = '';
+  fileSearchStringArray: string[] = [];
 
   magicSearchString = '';
 
@@ -48,6 +49,8 @@ export class HomeComponent implements OnInit {
   importDone = false;
   inProgress = false;
   progressPercent = 0;
+
+  flippingBool = true;
 
   public finalArray = [];
 
@@ -128,6 +131,11 @@ export class HomeComponent implements OnInit {
   onFileEnter(value: string) {
     this.fileSearchString = '';
     this.fileSearchStringSaved = value;
+    const trimmed = value.trim();
+    if (trimmed) {
+      this.fileSearchStringArray.push(trimmed);
+      this.flippingBool = !this.flippingBool;
+    }
   }
 
   toggleThis(button: string) {
@@ -136,6 +144,11 @@ export class HomeComponent implements OnInit {
 
   switchGalleryView(view: string) {
     this.searchOptions.galleryView = view;
+  }
+
+  removeThisOne(item: number): void {
+    this.fileSearchStringArray.splice(item, 1);
+    this.flippingBool = !this.flippingBool;
   }
 
 }

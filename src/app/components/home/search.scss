@@ -8,3 +8,14 @@ input {
   margin: 10px;
   width: calc(100% - 40px);
 }
+
+.searchWord {
+  background: #AAFFAA;
+  border: 1px solid gray;
+  display: inline-block;
+  margin: 3px;
+  padding: 2px;
+  &:hover {
+    text-decoration: line-through;
+  }
+}
