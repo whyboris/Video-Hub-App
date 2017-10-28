@@ -11,9 +11,14 @@ export class FileSearchPipe implements PipeTransform {
    * @param arrOfStrings            the search string array
    * @param useless                 boolean that is flipped just to trigger pipe to work
    */
-  transform(finalArray: any, arrOfStrings?: string[], useless?: boolean): any {
+  transform(finalArray: any, arrOfStrings?: string[], useless?: boolean, union?: boolean, fileNotFolder?: boolean): any {
     console.log('fileSearchPipe triggered');
     console.log(arrOfStrings);
+
+    // search through the FILE or FOLDER array !!!
+    const fileOrFolder = fileNotFolder ? 1 : 0;
+
+
     if (arrOfStrings.length === 0) {
       return finalArray;
     } else {
@@ -23,12 +28,16 @@ export class FileSearchPipe implements PipeTransform {
         let matchFound = 0;
 
         arrOfStrings.forEach(element => {
-          if (item[1].toLowerCase().indexOf(element.toLowerCase()) !== -1) {
+          if (item[fileOrFolder].toLowerCase().indexOf(element.toLowerCase()) !== -1) {
             matchFound++;
           }
         });
 
-        return matchFound === arrOfStrings.length;
+        if (union) {
+          return matchFound > 0;
+        } else {
+          return matchFound === arrOfStrings.length;
+        }
 
       });
     }

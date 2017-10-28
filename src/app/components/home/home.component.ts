@@ -31,12 +31,34 @@ export class HomeComponent implements OnInit {
 
   numberToShow = 10;
 
-  folderSearchString = '';
-  folderSearchStringSaved = '';
-
-  fileSearchString = '';
-  fileSearchStringSaved = '';
-  fileSearchStringArray: string[] = [];
+  // string = search string, array = array of filters, bool = dummy to flip to trigger pipe
+  filters = {
+    file: {
+      string: '',
+      array: [],
+      bool: true,
+      placeholder: 'Search files',
+      conjunction: 'and' },
+    fileUnion: {
+      string: '',
+      array: [],
+      bool: true,
+      placeholder: 'Search files union',
+      conjunction: 'or' },
+    folder: {
+      string: '',
+      array: [],
+      bool: true,
+      placeholder: 'Search folders',
+      conjunction: 'and' },
+    folderUnion: {
+      string: '',
+      array: [],
+      bool: true,
+      placeholder: 'Search folders union',
+      conjunction: 'or'
+    }
+  }
 
   magicSearchString = '';
 
@@ -50,7 +72,6 @@ export class HomeComponent implements OnInit {
   inProgress = false;
   progressPercent = 0;
 
-  flippingBool = true;
 
   public finalArray = [];
 
@@ -122,22 +143,6 @@ export class HomeComponent implements OnInit {
     this.electronService.ipcRenderer.send('openThisFile', fullPath);
   }
 
-  onFolderEnter(value: string) {
-    console.log(value);
-    this.folderSearchString = '';
-    this.folderSearchStringSaved = value;
-  }
-
-  onFileEnter(value: string) {
-    this.fileSearchString = '';
-    this.fileSearchStringSaved = value;
-    const trimmed = value.trim();
-    if (trimmed) {
-      this.fileSearchStringArray.push(trimmed);
-      this.flippingBool = !this.flippingBool;
-    }
-  }
-
   toggleThis(button: string) {
     this.searchOptions[button] = !this.searchOptions[button];
   }
@@ -146,9 +151,23 @@ export class HomeComponent implements OnInit {
     this.searchOptions.galleryView = view;
   }
 
-  removeThisOne(item: number): void {
-    this.fileSearchStringArray.splice(item, 1);
-    this.flippingBool = !this.flippingBool;
+  /**
+   * Add search string to filter array
+   * @param value  -- the string to filter
+   * @param origin -- can be `file`, `fileUnion`, `folder`, `folderUnion` -- KEYS for the `filters` Array
+   */
+  onEnterGeneral(value: string, origin: string): void {
+    const trimmed = value.trim();
+    if (trimmed) {
+      this.filters[origin].array.push(trimmed);
+      this.filters[origin].bool = !this.filters[origin].bool;
+      this.filters[origin].string = '';
+    }
+  }
+
+  removeThisOneGeneral(item: number, origin: string): void {
+    this.filters[origin].array.splice(item, 1);
+    this.filters[origin].bool = !this.filters[origin].bool;
   }
 
 }

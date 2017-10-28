@@ -20,7 +20,6 @@ import { TopComponent } from './components/home/top.component';
 
 import { FileSearchPipe } from './components/pipes/file-search.pipe';
 import { FolderArrowsPipe } from 'app/components/pipes/folder-arrows.pipe';
-import { FolderSearchPipe } from './components/pipes/folder-search.pipe';
 import { FolderViewPipe } from 'app/components/pipes/folder-view.pipe';
 import { LengthPipe } from './components/pipes/length.pipe';
 import { LimitPipe } from './components/pipes/show-limit.pipe';
@@ -34,7 +33,6 @@ import { AppRoutingModule } from './app-routing.module';
     FileSearchPipe,
     FilmstripComponent,
     FolderArrowsPipe,
-    FolderSearchPipe,
     FolderViewPipe,
     HomeComponent,
     LengthPipe,

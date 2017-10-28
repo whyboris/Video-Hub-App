@@ -56,13 +56,39 @@
 
           <nav class="nav-group">
 
+<!-- COMBINE INTO A SINGLE NG IF, watch out for AND/OR,maybe pass options object -->
+
             <ng-container *ngIf="searchOptions.folder">
 
               <h5 class="nav-group-title">
                 <input
-                  #folder
-                  (keyup.enter)="onFolderEnter(folder.value)"
-                  [(ngModel)]="folderSearchString"
+                  #folderUnionInput
+                  (keyup.enter)="onEnterGeneral(folderUnionInput.value, 'folderUnion')"
+                  [(ngModel)]="filters.folderUnion.string"
+                  class="form-control"
+                  placeholder="Search folders union"
+                  type="text"
+                >
+              </h5>
+
+              <h5 class="nav-group-title">
+                <ng-container *ngFor="let string of filters.folderUnion.array; index as i">
+                  <span class="conjunction" *ngIf="i > 0">or</span>
+                  <span (click)="removeThisOneGeneral(i, 'folderUnion')" class="searchWord">
+                    {{string}}
+                  </span>
+                </ng-container>
+              </h5>
+
+            </ng-container>
+
+            <ng-container *ngIf="searchOptions.folder">
+
+              <h5 class="nav-group-title">
+                <input
+                  #folderInput
+                  (keyup.enter)="onEnterGeneral(folderInput.value, 'folder')"
+                  [(ngModel)]="filters.folder.string"
                   class="form-control"
                   placeholder="Search folders"
                   type="text"
@@ -70,9 +96,12 @@
               </h5>
 
               <h5 class="nav-group-title">
-                <span class="searchWord" *ngIf="folderSearchStringSaved !== ''">
-                  {{ folderSearchStringSaved }}
-                </span>
+                <ng-container *ngFor="let string of filters.folder.array; index as i">
+                  <span class="conjunction" *ngIf="i > 0">and</span>
+                  <span (click)="removeThisOneGeneral(i, 'folder')" class="searchWord">
+                    {{string}}
+                  </span>
+                </ng-container>
               </h5>
 
             </ng-container>
@@ -81,18 +110,43 @@
 
               <h5 class="nav-group-title">
                 <input
-                  #file
-                  (keyup.enter)="onFileEnter(file.value)"
-                  [(ngModel)]="fileSearchString"
+                  #fileUnionInput
+                  (keyup.enter)="onEnterGeneral(fileUnionInput.value, 'fileUnion')"
+                  [(ngModel)]="filters.fileUnion.string"
                   class="form-control"
-                  placeholder="Search files"
+                  placeholder="Search files union"
                   type="text"
                 >
               </h5>
 
               <h5 class="nav-group-title">
-                <ng-container *ngFor="let string of fileSearchStringArray; index as i">
-                  <span (click)="removeThisOne(i)" class="searchWord">
+                <ng-container *ngFor="let string of filters.fileUnion.array; index as i">
+                  <span class="conjunction" *ngIf="i > 0">or</span>
+                  <span (click)="removeThisOneGeneral(i, 'fileUnion')" class="searchWord">
+                    {{string}}
+                  </span>
+                </ng-container>
+              </h5>
+
+            </ng-container>
+
+            <ng-container *ngIf="searchOptions.file">
+
+              <h5 class="nav-group-title">
+                <input
+                  #fileInput
+                  (keyup.enter)="onEnterGeneral(fileInput.value, 'file')"
+                  [(ngModel)]="filters.file.string"
+                  class="form-control"
+                  placeholder="Search files intersection"
+                  type="text"
+                >
+              </h5>
+
+              <h5 class="nav-group-title">
+                <ng-container *ngFor="let string of filters.file.array; index as i">
+                  <span class="conjunction" *ngIf="i > 0">and</span>
+                  <span (click)="removeThisOneGeneral(i, 'file')" class="searchWord">
                     {{string}}
                   </span>
                 </ng-container>
@@ -212,14 +266,16 @@
               <div
                 class="item"
                 [ngClass]="{
-                  fileNamePadding: !searchOptions.showFileName && searchOptions.galleryView != 'files',
-                  filesView: searchOptions.galleryView === 'files',
-                  whenFilenamesHidden: searchOptions.galleryView === 'filmstrip' && !searchOptions.showFileName
-                }"
+                    fileNamePadding: !searchOptions.showFileName && searchOptions.galleryView != 'files',
+                    filesView: searchOptions.galleryView === 'files',
+                    whenFilenamesHidden: searchOptions.galleryView === 'filmstrip' && !searchOptions.showFileName
+                  }"
                 *ngFor="let item of finalArray
                           | magicSearchPipe: magicSearchString
-                          | folderSearchPipe: folderSearchStringSaved
-                          | fileSearchPipe: fileSearchStringArray : flippingBool
+                          | fileSearchPipe: filters.folderUnion.array : filters.folderUnion.bool  : true  : false
+                          | fileSearchPipe: filters.folder.array      : filters.folder.bool       : false : false
+                          | fileSearchPipe: filters.fileUnion.array   : filters.fileUnion.bool    : true  : true
+                          | fileSearchPipe: filters.file.array        : filters.file.bool         : false : true
                           | limitPipe: numberToShow;
                           index as i"
               >
