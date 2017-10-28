@@ -89,10 +89,6 @@ export class HomeComponent implements OnInit {
     }
   ];
 
-  currentView = 'thumbs' // can be 'thumbs' | 'filmstrip' | 'files'
-  showMoreInfo = true;
-  buttonsInView = true;
-
   // Array is in the order in which the buttons will be rendered
   galleryButtons = [
     {
@@ -119,27 +115,33 @@ export class HomeComponent implements OnInit {
     }, {
       uniqueKey: 'showMoreInfo',
       hidden: false,
-      toggled: true,
+      toggled: true,              // coincides with `this.showMoreInfo` variable
       iconName: 'icon-tag',
       title: 'Show more info',
       spaceAfter: false,
     }
   ];
 
-  numberToShow = 20;
+  // App state to save -- so it can be exported and saved after closing
+  appState = {
+    selectedOutputFolder: '',
+    selectedSourceFolder: '',
+    currentView: 'thumbs', // can be 'thumbs' | 'filmstrip' | 'files'
 
-  magicSearchString = '';
+    buttonsInView: true,
 
-  selectedOutputFolder = ''; // later = ''
-  selectedSourceFolder = '';  // later = ''
+    numberToShow: 20,
+  }
 
+  // REORGANIZE / keep
   currentPlayingFile = '';
   currentPlayingFolder = '';
+  magicSearchString = '';
+  showMoreInfo = true;
 
   importDone = false;
   inProgress = false;
   progressPercent = 0;
-
 
   public finalArray = [];
 
@@ -148,14 +150,18 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
+    // later -- when restoring saved state from file
+    this.showMoreInfo = this.galleryButtons[3].toggled;   // WARNING -- [3] coincides with the button `showMoreInfo`
+
     // Returning Input
     this.electronService.ipcRenderer.on('inputFolderChosen', (event, filePath) => {
-      this.selectedSourceFolder = filePath;
+      this.appState.selectedSourceFolder = filePath;
     });
 
     // Returning Output
     this.electronService.ipcRenderer.on('outputFolderChosen', (event, filePath) => {
-      this.selectedOutputFolder = filePath;
+      this.appState.selectedOutputFolder = filePath;
     });
 
     // Progress bar messages
@@ -167,8 +173,8 @@ export class HomeComponent implements OnInit {
 
     // Final object returns
     this.electronService.ipcRenderer.on('finalObjectReturning', (event, finalObject: FinalObject) => {
-      this.selectedOutputFolder = finalObject.outputDir;
-      this.selectedSourceFolder = finalObject.inputDir;
+      this.appState.selectedOutputFolder = finalObject.outputDir;
+      this.appState.selectedSourceFolder = finalObject.inputDir;
       this.importDone = true;
       this.finalArray = finalObject.images;
     });
@@ -198,7 +204,7 @@ export class HomeComponent implements OnInit {
   public openVideo(number) {
     this.currentPlayingFolder = this.finalArray[number][0];
     this.currentPlayingFile = this.finalArray[number][2];
-    this.openExternalFile(this.selectedSourceFolder + this.finalArray[number][0] + '/' + this.finalArray[number][1]);
+    this.openExternalFile(this.appState.selectedSourceFolder + this.finalArray[number][0] + '/' + this.finalArray[number][1]);
   }
 
   // Open the file in system default program
@@ -216,7 +222,7 @@ export class HomeComponent implements OnInit {
   }
 
   rotateSettings() {
-    this.buttonsInView = !this.buttonsInView;
+    this.appState.buttonsInView = !this.appState.buttonsInView;
   }
 
   // MAYBE CLEAN UP !?!!
@@ -225,39 +231,47 @@ export class HomeComponent implements OnInit {
       this.galleryButtons[1].toggled = false;
       this.galleryButtons[2].toggled = false;
       this.galleryButtons[0].toggled = true;
-      this.currentView = 'thumbs';
+      this.appState.currentView = 'thumbs';
     } else if (index === 1) {
       this.galleryButtons[0].toggled = false;
       this.galleryButtons[2].toggled = false;
       this.galleryButtons[1].toggled = true;
-      this.currentView = 'filmstrip';
+      this.appState.currentView = 'filmstrip';
     } else if (index === 2) {
       this.galleryButtons[0].toggled = false;
       this.galleryButtons[1].toggled = false;
       this.galleryButtons[2].toggled = true;
-      this.currentView = 'files';
+      this.appState.currentView = 'files';
     } else if (index === 3) {
       this.showMoreInfo = !this.showMoreInfo;
-      this.galleryButtons[index].toggled = !this.galleryButtons[index].toggled;
+      this.galleryButtons[3].toggled = !this.galleryButtons[3].toggled;
     } else {
       console.log('what did you press?');
+      // this.galleryButtons[index].toggled = !this.galleryButtons[index].toggled;
     }
 
   }
 
   /**
    * Add search string to filter array
+   * When user presses the `ENTER` key
    * @param value  -- the string to filter
    * @param origin -- can be `file`, `fileUnion`, `folder`, `folderUnion` -- KEYS for the `filters` Array
    */
-  onEnterGeneral(value: string, origin: string): void {
-    console.log(origin);
-    console.log(value);
+  onEnterKey(value: string, origin: string): void {
     const trimmed = value.trim();
     if (trimmed) {
       this.filters[origin].array.push(trimmed);
       this.filters[origin].bool = !this.filters[origin].bool;
       this.filters[origin].string = '';
+    }
+  }
+
+  onBackspace(value: string, origin: string): void {
+    console.log('hi');
+    if (this.filters[origin].array.length > 0) {
+      this.filters[origin].array.pop();
+      this.filters[origin].bool = !this.filters[origin].bool;
     }
   }
 

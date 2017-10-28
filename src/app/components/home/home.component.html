@@ -47,7 +47,8 @@
 
                 <h5 class="nav-group-title">
                   <input
-                    (keyup.enter)="onEnterGeneral(filter.string, j)"
+                    (keyup.enter)="onEnterKey(filter.string, j)"
+                    (keyup.backspace)="onBackspace(filter.string, j)"
                     [(ngModel)]="filter.string"
                     class="form-control"
                     placeholder={{filter.placeholder}}
@@ -105,22 +106,23 @@
 <!-- GALLERY BUTTONS -->
 
             <div
-              [ngClass]="{settingsRotated: buttonsInView}"
+              [ngClass]="{settingsRotated: appState.buttonsInView}"
               class="gallerySettingsButtons"
             >
 
             <!-- toggle button that triggers the rotation - should be styled uniquely -->
+
               <div class="btn-group">
                 <button
                   (click)="rotateSettings()"
-                  [ngClass]="{active: buttonsInView}"
+                  [ngClass]="{active: appState.buttonsInView}"
                   class="btn btn-mini btn-default"
                 >
                   <span class="icon icon-cog"></span>
                 </button>
               </div>
 
-              <!-- consolidated buttons into ngFor -->
+              <!-- all the gallery buttons -->
 
               <div class="btn-group">
 
@@ -148,7 +150,7 @@
 
 <!-- GALLERY CODE -->
 
-            <div class="gallery" [ngClass]="{filmOverride: currentView !== 'thumbs'}">
+            <div class="gallery" [ngClass]="{filmOverride: appState.currentView !== 'thumbs'}">
 
               <!-- <virtual-scroll
                       [items]="finalArray"
@@ -161,9 +163,9 @@
               <div
                 class="item"
                 [ngClass]="{
-                    fileNamePadding: !showMoreInfo && currentView != 'files',
-                    filesView: currentView === 'files',
-                    whenFilenamesHidden: currentView === 'filmstrip' && !showMoreInfo
+                    fileNamePadding: !showMoreInfo && appState.currentView != 'files',
+                    filesView: appState.currentView === 'files',
+                    whenFilenamesHidden: appState.currentView === 'filmstrip' && !showMoreInfo
                   }"
                 *ngFor="let item of finalArray
                           | magicSearchPipe: magicSearchString
@@ -171,38 +173,38 @@
                           | fileSearchPipe: filters[1].array : filters[1].bool : false : false
                           | fileSearchPipe: filters[2].array : filters[2].bool : true  : true
                           | fileSearchPipe: filters[3].array : filters[3].bool : false : true
-                          | limitPipe: numberToShow;
+                          | limitPipe: appState.numberToShow;
                           index as i"
               >
 
-                <div *ngIf="currentView === 'thumbs'">
+                <div *ngIf="appState.currentView === 'thumbs'">
 
                   <app-gallery-item
                     (click)="openVideo(item[3])"
                     [stuff]="item[3]"
-                    [folderPath]="selectedOutputFolder"
+                    [folderPath]="appState.selectedOutputFolder"
                   ></app-gallery-item>
 
                 </div>
 
-                <div *ngIf="currentView === 'filmstrip'">
+                <div *ngIf="appState.currentView === 'filmstrip'">
 
                   <app-filmstrip-item
                     (click)="openVideo(item[3])"
                     [stuff]="item[3]"
-                    [folderPath]="selectedOutputFolder"
+                    [folderPath]="appState.selectedOutputFolder"
                     [width]="item[6] || 171"
                   ></app-filmstrip-item>
 
                 </div>
 
-                <div *ngIf="currentView === 'files' && showMoreInfo">
+                <div *ngIf="appState.currentView === 'files' && showMoreInfo">
                   <div class="folder" *ngIf="true | folderViewPipe: item[0]">
                     <span class="icon icon-folder"></span><span [innerHtml]="item[0] | folderArrowsPipe"></span>
                   </div>
                 </div>
 
-                <div class="metadata" *ngIf="showMoreInfo || currentView === 'files'">
+                <div class="metadata" *ngIf="showMoreInfo || appState.currentView === 'files'">
 
                   <div class="length" *ngIf="showMoreInfo">
                     {{ item[4] | lengthPipe }}
@@ -255,7 +257,7 @@
     </h5>
 
     <h5 class="nav-group-title">
-      Source: {{ selectedSourceFolder }}
+      Source: {{ appState.selectedSourceFolder }}
     </h5>
 
     <h5 class="nav-group-title">
@@ -265,12 +267,12 @@
     </h5>
 
     <h5 class="nav-group-title">
-      Output: {{ selectedOutputFolder }}
+      Output: {{ appState.selectedOutputFolder }}
     </h5>
 
     <h5 class="nav-group-title">
       <button
-        [disabled]="selectedOutputFolder === '' && selectedSourceFolder === ''"
+        [disabled]="appState.selectedOutputFolder === '' && appState.selectedSourceFolder === ''"
         (click)="importFresh()"
         class="btn btn-mini btn-positive"
       >
