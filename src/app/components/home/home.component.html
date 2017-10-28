@@ -13,7 +13,7 @@
     </div>
 
     <ng-template #progressBar>
-      <div *ngIf="progressPercent != 0" class="progress-container">
+      <div *ngIf="progressPercent !== 0" class="progress-container">
         <div class="current-progress" [ngStyle]="{width: progressPercent * 100 + '%'}"></div>
       </div>
     </ng-template>
@@ -86,12 +86,17 @@
                 >
               </h5>
 
-              <h5 class="nav-group-title">
+              <h5 class="nav-group-title" *ngIf="magicSearchString !== ''">
                 <span
                   class="icon icon-record"
                   style="color: #fc605b; margin-right: 5px;"
                 ></span>
-                Magic: {{ magicSearchString }}
+                <span
+                  (click)="magicSearchString = ''"
+                  class="searchWord"
+                >
+                  {{ magicSearchString }}
+                </span>
               </h5>
 
             </ng-container>
@@ -117,8 +122,8 @@
               <div class="btn-group">
                 <button
                   (click)="rotateSettings()"
-                  [ngClass]="{active: appState.buttonsInView}"
-                  class="btn btn-mini btn-default"
+                  [ngClass]="{gearButtonActive: appState.buttonsInView}"
+                  class="gearButton"
                 >
                   <span class="icon icon-cog"></span>
                 </button>
@@ -132,7 +137,7 @@
                   *ngFor="let button of galleryButtons; index as i"
                 >
                   <button
-                    (click)="galleryButtonClicked(i)"
+                    (click)="toggleGalleryButton(i)"
                     [ngClass]="{ active: button.toggled }"
                     class="btn btn-mini btn-default"
                     title="{{ button.title }}"

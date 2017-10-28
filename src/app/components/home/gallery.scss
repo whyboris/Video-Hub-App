@@ -12,6 +12,19 @@
 
 // ABOVE IS UNUSED
 
+.gearButton {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  transition: 370ms;
+}
+
+.gearButtonActive {
+  transform: rotate(-100deg);
+  transition: 370ms;
+}
+
 .buttonSpacer {
   display: block;
   float: left;

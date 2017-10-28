@@ -225,7 +225,6 @@ export class HomeComponent implements OnInit {
     this.onEnterKey(filter, 3); // 3rd item is the `file` filter
   }
 
-
   /**
    * Add filter to FOLDER search when word in folder is clicked
    * @param filter
@@ -233,7 +232,6 @@ export class HomeComponent implements OnInit {
   handleFolderWordClicked(filter: string) {
     this.onEnterKey(filter, 1); // 1st item is the `folder` filter
   }
-
 
   // -----------------------------------------------------------------------------------------------
   // Interaction functions
@@ -247,7 +245,7 @@ export class HomeComponent implements OnInit {
   }
 
   // MAYBE CLEAN UP !?!!
-  galleryButtonClicked(index: number): void {
+  toggleGalleryButton(index: number): void {
     if (index === 0) {
       this.galleryButtons[1].toggled = false;
       this.galleryButtons[2].toggled = false;
