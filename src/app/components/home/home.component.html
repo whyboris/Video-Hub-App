@@ -66,8 +66,8 @@
         <div class="showButtonLabel">show button in menu</div>
         <div
           *ngFor="let button of searchButtons; index as i"
-          class="buttonDescription"
           [ngClass]="{ buttonOpacityLower: button.hidden }"
+          class="buttonDescription"
         >
           <input
             class="inputCheckbox"
@@ -87,9 +87,10 @@
         <ng-container
           *ngFor="let button of galleryButtons; index as i"
         >
-        <button
+          <button
+            *ngIf="!button.hidden || !appState.buttonsInView"
             (click)="toggleGalleryButton(i)"
-            [ngClass]="{ active: button.toggled, buttonRightSideUp: !appState.buttonsInView }"
+            [ngClass]="{ active: button.toggled, buttonRightSideUp: !appState.buttonsInView, buttonOpacityLower: button.hidden }"
             title="{{ button.title }}"
           >
             <span class="icon {{ button.iconName }}"></span>
@@ -103,6 +104,29 @@
           </ng-container>
         </ng-container>
 
+      </div>
+
+      <!-- Gallery buttons settings -->
+
+      <div
+        [ngClass]="{ galleryButtonsSettingsInView: !appState.buttonsInView }"
+        class="galleryButtonsSettings"
+      >
+        <div class="showButtonLabel">show button in menu</div>
+        <div
+          *ngFor="let button of galleryButtons; index as i"
+          class="buttonDescription"
+          [ngClass]="{ buttonOpacityLower: button.hidden }"
+          [ngStyle]="{ 'min-height': button.spaceAfter ? '82px' : '41px' }"
+        >
+          <input
+            class="inputCheckbox"
+            [checked]="!button.hidden"
+            (change)="galleryInputBoxClicked(i)"
+            type="checkbox"
+          >
+          <span class="buttonDescriptionText buttonDescriptionTextGallery">{{ button.description }}</span>
+        </div>
       </div>
 
       <!-- VERTICAL DIVIDER -->

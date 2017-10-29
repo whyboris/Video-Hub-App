@@ -105,6 +105,7 @@ export class HomeComponent implements OnInit {
       iconName: 'icon-layout',
       title: 'Show thumbnails',
       spaceAfter: false,
+      description: 'Show thumbnails view'
     }, {
       uniqueKey: 'showFilmstrip',
       hidden: false,
@@ -112,6 +113,7 @@ export class HomeComponent implements OnInit {
       iconName: 'icon-menu',
       title: 'Show filmstrip',
       spaceAfter: false,
+      description: 'Show filmstrip view'
     }, {
       uniqueKey: 'showFiles',
       hidden: false,
@@ -119,6 +121,7 @@ export class HomeComponent implements OnInit {
       iconName: 'icon-menu',
       title: 'Show files',
       spaceAfter: true,
+      description: 'Show files view'
     }, {
       uniqueKey: 'showMoreInfo',
       hidden: false,
@@ -126,6 +129,7 @@ export class HomeComponent implements OnInit {
       iconName: 'icon-tag',
       title: 'Show more info',
       spaceAfter: false,
+      description: 'Show more info'
     }
   ];
 
@@ -323,6 +327,14 @@ export class HomeComponent implements OnInit {
    */
   filterInputBoxClicked(item: number) {
     this.searchButtons[item].hidden = !this.searchButtons[item].hidden;
+  }
+
+  /**
+   * Toggle the visibility of the galleryButtons
+   * @param item  -- index within the galleryButtons array to toggle
+   */
+  galleryInputBoxClicked(item: number) {
+    this.galleryButtons[item].hidden = !this.galleryButtons[item].hidden;
   }
 
 }

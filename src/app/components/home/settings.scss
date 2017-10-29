@@ -89,11 +89,12 @@ button {
 }
 
 .gallerySettingsButtons {
-  transition: $transition-length;
-  transform-origin: 13px 13px;
+  left: 205px;
   position: absolute;
   top: 4px;
-  left: 205px;
+  transform-origin: 13px 13px;
+  transition: $transition-length;
+  width: 500px; // done so when you rotate and maxe the screen width small, the buttons don't bunch up
   z-index: 2;
 }
 
@@ -129,16 +130,25 @@ button {
   transition: $transition-length;
 }
 
-.searchButtonsSettings {
+.searchButtonsSettings,
+.galleryButtonsSettings {
   position: absolute;
-  left: 50px;
   top: 59px;
   max-width: 200px;
   opacity: 0;
   transition: 100ms;
 }
 
-.searchButtonsSettingsInView {
+.searchButtonsSettings {
+  left: 50px;
+}
+
+.galleryButtonsSettings {
+  left: 300px;
+}
+
+.searchButtonsSettingsInView,
+.galleryButtonsSettingsInView {
   transform: translate(-10px, 0);
   opacity: 1;
   transition: 700ms;
@@ -148,7 +158,7 @@ button {
   display: block;
   max-height: 41px;
   max-width: 200px;
-  min-height: 41px;
+  min-height: 41px;   // also hardcoded in home.component as [ngStyle]
   position: relative;
 }
 
@@ -160,6 +170,14 @@ button {
   position: absolute;
   top: -4px;
   width: 168px;
+}
+
+.buttonDescriptionTextGallery {
+  max-height: 30px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  top: 3px;
+  width: calc(100vw - 330px);
 }
 
 .buttonOpacityLower {
