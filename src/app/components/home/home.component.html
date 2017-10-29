@@ -1,6 +1,6 @@
 <div class="window">
 
-  <header class="top toolbar toolbar-header">
+  <header class="top">
 
     <div *ngIf="importDone; else progressBar">
       <app-top-component
@@ -20,207 +20,209 @@
 
   </header>
 
+  <div class="window-content">
 
-    <div class="window-content">
+    <div class="allSettings">
 
-        <div class="sidebar">
+      trololol
 
-          <!-- ALL SEARCH BUTTONS-->
-          <div class="searchButtons">
+    </div>
+
+    <div class="sidebar">
+
+      <!-- ALL SEARCH BUTTONS-->
+      <div class="searchButtons">
+        <button
+          *ngFor="let button of searchButtons; index as i"
+          (click)="toggleSearchButton(i)"
+          [ngClass]="{ active: button.toggled }"
+          title="{{ button.title }}"
+        >
+          <span class="icon {{ button.iconName }}"></span>
+        </button>
+      </div>
+
+      <!-- SEARCH BOXES -->
+      <ng-container *ngFor="let filter of filters; index as j">
+        <ng-container *ngIf="searchButtons[j].toggled">
+
+          <input
+            (keyup.enter)="onEnterKey(filter.string, j)"
+            (keyup.backspace)="onBackspace(j)"
+            [(ngModel)]="filter.string"
+            placeholder="{{ filter.placeholder }}"
+            type="text"
+          >
+
+          <div class="filteredWords">
+            <ng-container
+              *ngFor="let string of filter.array; index as i"
+            >
+              <span class="conjunction" *ngIf="i > 0">
+                {{ filter.conjunction }}
+              </span>
+              <span (click)="removeThisFilter(i, j)" class="searchWord">
+                {{ string }}
+              </span>
+            </ng-container>
+          </div>
+
+        </ng-container>
+      </ng-container>
+
+      <!-- magic search and exclude fields -->
+      <ng-container *ngIf="searchButtons[4].toggled">
+        <input
+          [(ngModel)]="magicSearchString"
+          type="text"
+          placeholder="Magic search"
+        >
+
+        <div
+          *ngIf="magicSearchString !== ''"
+          class="filteredWords"
+        >
+          <span
+            class="icon icon-record"
+            style="color: #fc605b; margin-right: 5px;"
+          ></span>
+          <span
+            (click)="magicSearchString = ''"
+            class="searchWord"
+          >
+            {{ magicSearchString }}
+          </span>
+        </div>
+      </ng-container>
+      <!-- END OF MAGIC SEARCH & exclude fields -->
+
+    </div> <!-- closing the SIDEBAR -->
+
+<!-- THE GALLERY PANE -->
+
+      <div class="gallery-container">
+
+<!-- GALLERY BUTTONS -->
+
+        <div
+          [ngClass]="{ settingsRotated: appState.buttonsInView }"
+          class="gallerySettingsButtons"
+        >
+
+        <!-- toggle button that triggers the rotation
+          - should be styled uniquely
+          - should lie outside this group - INDEPENDENTLY !!! -->
+
+          <button
+            (click)="rotateSettings()"
+            [ngClass]="{ gearButtonActive: appState.buttonsInView }"
+            class="gearButton"
+          >
+            <span class="icon icon-cog"></span>
+          </button>
+
+          <!-- all the gallery buttons -->
+
+          <ng-container
+            *ngFor="let button of galleryButtons; index as i"
+          >
             <button
-              *ngFor="let button of searchButtons; index as i"
-              (click)="toggleSearchButton(i)"
+              (click)="toggleGalleryButton(i)"
               [ngClass]="{ active: button.toggled }"
-              class="btn btn-mini btn-default"
               title="{{ button.title }}"
             >
               <span class="icon {{ button.iconName }}"></span>
             </button>
-          </div>
 
-          <!-- SEARCH BOXES -->
-          <ng-container *ngFor="let filter of filters; index as j">
-            <ng-container *ngIf="searchButtons[j].toggled">
-
-              <input
-                (keyup.enter)="onEnterKey(filter.string, j)"
-                (keyup.backspace)="onBackspace(j)"
-                [(ngModel)]="filter.string"
-                placeholder={{filter.placeholder}}
-                type="text"
-              >
-
-              <div class="filteredWords">
-                <ng-container
-                  *ngFor="let string of filter.array; index as i"
-                >
-                  <span class="conjunction" *ngIf="i > 0">
-                    {{ filter.conjunction }}
-                  </span>
-                  <span (click)="removeThisFilter(i, j)" class="searchWord">
-                    {{ string }}
-                  </span>
-                </ng-container>
-              </div>
-
+            <ng-container *ngIf="button.spaceAfter">
+              <div class="buttonSpacer"></div>
             </ng-container>
+
           </ng-container>
 
-          <!-- magic search and exclude fields -->
-          <ng-container *ngIf="searchButtons[4].toggled">
-            <input
-              [(ngModel)]="magicSearchString"
-              type="text"
-              placeholder="Magic search"
-            >
-
-            <div
-              *ngIf="magicSearchString !== ''"
-              class="filteredWords"
-            >
-              <span
-                class="icon icon-record"
-                style="color: #fc605b; margin-right: 5px;"
-              ></span>
-              <span
-                (click)="magicSearchString = ''"
-                class="searchWord"
-              >
-                {{ magicSearchString }}
-              </span>
-            </div>
-          </ng-container>
-          <!-- END OF MAGIC SEARCH & exclude fields -->
-
-        </div> <!-- closing the SIDEBAR -->
-
-<!-- THE GALLERY PANE -->
-
-          <div class="gallery-container">
-
-<!-- GALLERY BUTTONS -->
-
-            <div
-              [ngClass]="{settingsRotated: appState.buttonsInView}"
-              class="gallerySettingsButtons"
-            >
-
-            <!-- toggle button that triggers the rotation
-              - should be styled uniquely
-              - should lie outside this group - INDEPENDENTLY !!! -->
-
-              <button
-                (click)="rotateSettings()"
-                [ngClass]="{gearButtonActive: appState.buttonsInView}"
-                class="gearButton"
-              >
-                <span class="icon icon-cog"></span>
-              </button>
-
-              <!-- all the gallery buttons -->
-
-              <ng-container
-                *ngFor="let button of galleryButtons; index as i"
-              >
-                <button
-                  (click)="toggleGalleryButton(i)"
-                  [ngClass]="{ active: button.toggled }"
-                  class="btn btn-mini btn-default"
-                  title="{{ button.title }}"
-                >
-                  <span class="icon {{ button.iconName }}"></span>
-                </button>
-
-                <ng-container *ngIf="button.spaceAfter">
-                  <div class="buttonSpacer"></div>
-                </ng-container>
-
-              </ng-container>
-
-            </div>
+        </div>
 
 <!-- GALLERY CODE -->
 
-            <div class="gallery" [ngClass]="{filmOverride: appState.currentView !== 'thumbs'}">
+        <div class="gallery" [ngClass]="{filmOverride: appState.currentView !== 'thumbs'}">
 
-              <!-- <virtual-scroll
-                      [items]="finalArray"
-                      [bufferAmount]="5"
-                      [childWidth]="100"
-                      [childHeight]="100"
-                      (update)="viewPortItems = $event"
-                    > -->
+          <!-- <virtual-scroll
+                  [items]="finalArray"
+                  [bufferAmount]="5"
+                  [childWidth]="100"
+                  [childHeight]="100"
+                  (update)="viewPortItems = $event"
+                > -->
 
-              <div
-                class="item"
-                [ngClass]="{
-                    fileNamePadding: !showMoreInfo && appState.currentView != 'files',
-                    filesView: appState.currentView === 'files',
-                    whenFilenamesHidden: appState.currentView === 'filmstrip' && !showMoreInfo
-                  }"
-                *ngFor="let item of finalArray
-                          | magicSearchPipe: magicSearchString
-                          | fileSearchPipe: filters[0].array : filters[0].bool : true  : false
-                          | fileSearchPipe: filters[1].array : filters[1].bool : false : false
-                          | fileSearchPipe: filters[2].array : filters[2].bool : true  : true
-                          | fileSearchPipe: filters[3].array : filters[3].bool : false : true
-                          | limitPipe: appState.numberToShow;
-                          index as i"
-              >
+          <div
+            class="item"
+            [ngClass]="{
+                fileNamePadding: !showMoreInfo && appState.currentView != 'files',
+                filesView: appState.currentView === 'files',
+                whenFilenamesHidden: appState.currentView === 'filmstrip' && !showMoreInfo
+              }"
+            *ngFor="let item of finalArray
+                      | magicSearchPipe: magicSearchString
+                      | fileSearchPipe: filters[0].array : filters[0].bool : true  : false
+                      | fileSearchPipe: filters[1].array : filters[1].bool : false : false
+                      | fileSearchPipe: filters[2].array : filters[2].bool : true  : true
+                      | fileSearchPipe: filters[3].array : filters[3].bool : false : true
+                      | limitPipe: appState.numberToShow;
+                      index as i"
+          >
 
-                <div *ngIf="appState.currentView === 'thumbs'">
+            <div *ngIf="appState.currentView === 'thumbs'">
 
-                  <app-gallery-item
-                    (click)="openVideo(item[3])"
-                    [stuff]="item[3]"
-                    [folderPath]="appState.selectedOutputFolder"
-                  ></app-gallery-item>
+              <app-gallery-item
+                (click)="openVideo(item[3])"
+                [stuff]="item[3]"
+                [folderPath]="appState.selectedOutputFolder"
+              ></app-gallery-item>
 
-                </div>
+            </div>
 
-                <div *ngIf="appState.currentView === 'filmstrip'">
+            <div *ngIf="appState.currentView === 'filmstrip'">
 
-                  <app-filmstrip-item
-                    (click)="openVideo(item[3])"
-                    [stuff]="item[3]"
-                    [folderPath]="appState.selectedOutputFolder"
-                    [width]="item[6] || 171"
-                  ></app-filmstrip-item>
+              <app-filmstrip-item
+                (click)="openVideo(item[3])"
+                [stuff]="item[3]"
+                [folderPath]="appState.selectedOutputFolder"
+                [width]="item[6] || 171"
+              ></app-filmstrip-item>
 
-                </div>
+            </div>
 
-                <div *ngIf="appState.currentView === 'files' && showMoreInfo">
-                  <div class="folder" *ngIf="true | folderViewPipe: item[0]">
-                    <span class="icon icon-folder"></span><span [innerHtml]="item[0] | folderArrowsPipe"></span>
-                  </div>
-                </div>
+            <div *ngIf="appState.currentView === 'files' && showMoreInfo">
+              <div class="folder" *ngIf="true | folderViewPipe: item[0]">
+                <span class="icon icon-folder"></span><span [innerHtml]="item[0] | folderArrowsPipe"></span>
+              </div>
+            </div>
 
-                <div class="metadata" *ngIf="showMoreInfo || appState.currentView === 'files'">
+            <div class="metadata" *ngIf="showMoreInfo || appState.currentView === 'files'">
 
-                  <div class="length" *ngIf="showMoreInfo">
-                    {{ item[4] | lengthPipe }}
-                  </div>
-
-                  <div class="size" *ngIf="showMoreInfo">
-                    {{ item[5] }}
-                  </div>
-
-                  <div class="title" (click)="openVideo(item[3])">
-                    {{ item[2] }}
-                  </div>
-
-                </div>
-
+              <div class="length" *ngIf="showMoreInfo">
+                {{ item[4] | lengthPipe }}
               </div>
 
-              <!-- </virtual-scroll> -->
+              <div class="size" *ngIf="showMoreInfo">
+                {{ item[5] }}
+              </div>
+
+              <div class="title" (click)="openVideo(item[3])">
+                {{ item[2] }}
+              </div>
 
             </div>
 
           </div>
 
+          <!-- </virtual-scroll> -->
+
+        </div>
 
       </div>
+
+    </div>
 
   </div>
 
@@ -232,28 +234,33 @@
 
     <h3>Welcome to VideoHub</h3>
 
-    <button (click)="loadFromFile()" class="btn btn-mini btn-positive">
+    <button (click)="loadFromFile()">
       Load from file
     </button>
 
+    <br><br>
     or
+    <br><br>
 
-    <button (click)="selectSourceDirectory()" class="btn btn-mini btn-negative">
+    <button (click)="selectSourceDirectory()">
       Select input directory
     </button>
 
+    <br>
     Source: {{ appState.selectedSourceFolder }}
+    <br>
 
-    <button (click)="selectOutputDirectory()" class="btn btn-mini btn-negative">
+    <button (click)="selectOutputDirectory()">
       Select output directory
     </button>
 
+    <br>
     Output: {{ appState.selectedOutputFolder }}
+    <br>
 
     <button
       [disabled]="appState.selectedOutputFolder === '' && appState.selectedSourceFolder === ''"
       (click)="importFresh()"
-      class="btn btn-mini btn-positive"
     >
       Start the import
     </button>
