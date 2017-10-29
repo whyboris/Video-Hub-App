@@ -22,12 +22,11 @@
 
 
     <div class="window-content">
-      <div class="pane-group">
-        <div class="pane pane-sm sidebar">
 
-<!-- SEARCH BUTTONS -->
+        <div class="sidebar">
 
-          <div class="btn-group">
+          <!-- ALL SEARCH BUTTONS-->
+          <div class="searchButtons">
             <button
               *ngFor="let button of searchButtons; index as i"
               (click)="toggleSearchButton(i)"
@@ -39,74 +38,63 @@
             </button>
           </div>
 
-<!-- SEARCH BOXES -->
+          <!-- SEARCH BOXES -->
+          <ng-container *ngFor="let filter of filters; index as j">
+            <ng-container *ngIf="searchButtons[j].toggled">
 
-          <nav class="nav-group">
+              <input
+                (keyup.enter)="onEnterKey(filter.string, j)"
+                (keyup.backspace)="onBackspace(j)"
+                [(ngModel)]="filter.string"
+                placeholder={{filter.placeholder}}
+                type="text"
+              >
 
-            <ng-container *ngFor="let filter of filters; index as j">
-
-              <ng-container *ngIf="searchButtons[j].toggled">
-
-                <h5 class="nav-group-title">
-                  <input
-                    (keyup.enter)="onEnterKey(filter.string, j)"
-                    (keyup.backspace)="onBackspace(j)"
-                    [(ngModel)]="filter.string"
-                    class="form-control"
-                    placeholder={{filter.placeholder}}
-                    type="text"
-                  >
-                </h5>
-
-                <h5 class="nav-group-title">
-                  <ng-container *ngFor="let string of filter.array; index as i">
-                    <span class="conjunction" *ngIf="i > 0">
-                      {{ filter.conjunction }}
-                    </span>
-                    <span (click)="removeThisFilter(i, j)" class="searchWord">
-                      {{ string }}
-                    </span>
-                  </ng-container>
-                </h5>
-
-              </ng-container>
+              <div class="filteredWords">
+                <ng-container
+                  *ngFor="let string of filter.array; index as i"
+                >
+                  <span class="conjunction" *ngIf="i > 0">
+                    {{ filter.conjunction }}
+                  </span>
+                  <span (click)="removeThisFilter(i, j)" class="searchWord">
+                    {{ string }}
+                  </span>
+                </ng-container>
+              </div>
 
             </ng-container>
+          </ng-container>
 
-<!-- magic search and exclude search fields -->
+          <!-- magic search and exclude fields -->
+          <ng-container *ngIf="searchButtons[4].toggled">
+            <input
+              [(ngModel)]="magicSearchString"
+              type="text"
+              placeholder="Magic search"
+            >
 
-            <ng-container *ngIf="searchButtons[4].toggled">
+            <div
+              *ngIf="magicSearchString !== ''"
+              class="filteredWords"
+            >
+              <span
+                class="icon icon-record"
+                style="color: #fc605b; margin-right: 5px;"
+              ></span>
+              <span
+                (click)="magicSearchString = ''"
+                class="searchWord"
+              >
+                {{ magicSearchString }}
+              </span>
+            </div>
+          </ng-container>
+          <!-- END OF MAGIC SEARCH & exclude fields -->
 
-              <h5 class="nav-group-title">
-                <input
-                  [(ngModel)]="magicSearchString"
-                  type="text"
-                  class="form-control"
-                  placeholder="Magic search"
-                >
-              </h5>
-
-              <h5 class="nav-group-title" *ngIf="magicSearchString !== ''">
-                <span
-                  class="icon icon-record"
-                  style="color: #fc605b; margin-right: 5px;"
-                ></span>
-                <span
-                  (click)="magicSearchString = ''"
-                  class="searchWord"
-                >
-                  {{ magicSearchString }}
-                </span>
-              </h5>
-
-            </ng-container>
-
-          </nav>
-        </div>
+        </div> <!-- closing the SIDEBAR -->
 
 <!-- THE GALLERY PANE -->
-
-        <div class="pane">
 
           <div class="gallery-container">
 
@@ -117,41 +105,37 @@
               class="gallerySettingsButtons"
             >
 
-            <!-- toggle button that triggers the rotation - should be styled uniquely -->
+            <!-- toggle button that triggers the rotation
+              - should be styled uniquely
+              - should lie outside this group - INDEPENDENTLY !!! -->
 
-              <div class="btn-group">
-                <button
-                  (click)="rotateSettings()"
-                  [ngClass]="{gearButtonActive: appState.buttonsInView}"
-                  class="gearButton"
-                >
-                  <span class="icon icon-cog"></span>
-                </button>
-              </div>
+              <button
+                (click)="rotateSettings()"
+                [ngClass]="{gearButtonActive: appState.buttonsInView}"
+                class="gearButton"
+              >
+                <span class="icon icon-cog"></span>
+              </button>
 
               <!-- all the gallery buttons -->
 
-              <div class="btn-group">
-
-                <ng-container
-                  *ngFor="let button of galleryButtons; index as i"
+              <ng-container
+                *ngFor="let button of galleryButtons; index as i"
+              >
+                <button
+                  (click)="toggleGalleryButton(i)"
+                  [ngClass]="{ active: button.toggled }"
+                  class="btn btn-mini btn-default"
+                  title="{{ button.title }}"
                 >
-                  <button
-                    (click)="toggleGalleryButton(i)"
-                    [ngClass]="{ active: button.toggled }"
-                    class="btn btn-mini btn-default"
-                    title="{{ button.title }}"
-                  >
-                    <span class="icon {{ button.iconName }}"></span>
-                  </button>
+                  <span class="icon {{ button.iconName }}"></span>
+                </button>
 
-                  <ng-container *ngIf="button.spaceAfter">
-                    <div class="buttonSpacer"></div>
-                  </ng-container>
-
+                <ng-container *ngIf="button.spaceAfter">
+                  <div class="buttonSpacer"></div>
                 </ng-container>
 
-              </div>
+              </ng-container>
 
             </div>
 
@@ -235,9 +219,9 @@
 
           </div>
 
-        </div>
+
       </div>
-    </div>
+
   </div>
 
 <!-- WIZARD -->
@@ -248,43 +232,31 @@
 
     <h3>Welcome to VideoHub</h3>
 
-    <h5 class="nav-group-title">
+    <button (click)="loadFromFile()" class="btn btn-mini btn-positive">
+      Load from file
+    </button>
 
-      <button (click)="loadFromFile()" class="btn btn-mini btn-positive">
-        Load from file
-      </button>
-    </h5>
+    or
 
-    <h5 class="nav-group-title">or</h5>
+    <button (click)="selectSourceDirectory()" class="btn btn-mini btn-negative">
+      Select input directory
+    </button>
 
-    <h5 class="nav-group-title">
-      <button (click)="selectSourceDirectory()" class="btn btn-mini btn-negative">
-        Select input directory
-      </button>
-    </h5>
+    Source: {{ appState.selectedSourceFolder }}
 
-    <h5 class="nav-group-title">
-      Source: {{ appState.selectedSourceFolder }}
-    </h5>
+    <button (click)="selectOutputDirectory()" class="btn btn-mini btn-negative">
+      Select output directory
+    </button>
 
-    <h5 class="nav-group-title">
-      <button (click)="selectOutputDirectory()" class="btn btn-mini btn-negative">
-        Select output directory
-      </button>
-    </h5>
+    Output: {{ appState.selectedOutputFolder }}
 
-    <h5 class="nav-group-title">
-      Output: {{ appState.selectedOutputFolder }}
-    </h5>
+    <button
+      [disabled]="appState.selectedOutputFolder === '' && appState.selectedSourceFolder === ''"
+      (click)="importFresh()"
+      class="btn btn-mini btn-positive"
+    >
+      Start the import
+    </button>
 
-    <h5 class="nav-group-title">
-      <button
-        [disabled]="appState.selectedOutputFolder === '' && appState.selectedSourceFolder === ''"
-        (click)="importFresh()"
-        class="btn btn-mini btn-positive"
-      >
-        Start the import
-      </button>
-    </h5>
   </div>
 

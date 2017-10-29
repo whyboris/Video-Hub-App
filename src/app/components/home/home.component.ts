@@ -11,7 +11,8 @@ import { FinalObject } from '../common/final-object.interface';
   styleUrls: [
     './home.component.scss',
     './search.scss',
-    './photon/photon.min.css',
+    './photon/buttons.scss',
+    './photon/icons.scss',
     './gallery.scss',
     './film-override.scss',
     './wizard.scss'

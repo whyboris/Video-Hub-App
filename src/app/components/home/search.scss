@@ -1,11 +1,12 @@
 
 input {
   border-radius: 5px;
-  font-size: 12px;
-  padding: 8px;
   border: 1px solid #666666;
+  box-sizing: border-box;
+  font-size: 12px;
   outline: none;
-  margin: 10px;
+  padding: 6px;
+  margin: 5px 0 10px;
   width: calc(100% - 40px);
 }
 
@@ -13,9 +14,20 @@ input {
   background: #AAFFAA;
   border: 1px solid gray;
   display: inline-block;
+  font-size: 10px;
   margin: 3px;
   padding: 2px;
   &:hover {
     text-decoration: line-through;
   }
+}
+
+.filteredWords {
+  display: block;
+  margin-bottom: 5px;
+  min-height: 25px;
+}
+
+.conjunction {
+  font-size: 10px;
 }

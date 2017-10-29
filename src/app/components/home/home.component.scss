@@ -16,14 +16,15 @@ $top-region: 50px;
   }
 }
 
-// styling
+// LAYOUT STYLING
 .everything {
   width: 100%;
   height: 100vh;
 }
 
 .top {
-  background: #F3F3F3;
+  // background: #F3F3F3;
+  background-image: linear-gradient(to bottom, #e8e6e8 0%, #d1cfd1 100%);
   height: $top-region;
   width: 100%;
 }
@@ -34,27 +35,42 @@ $top-region: 50px;
   top: 5px;
 }
 
-.search {
+.sidebar {
   background: #DDDDDD;
   box-sizing: border-box;
-  height: calc( 100vh - 50px );
+  height: calc(100vh - 50px);
+  max-width: 190px !important;
   padding: 10px;
   position: absolute;
   top: 50px;
-  width: 200px;
+  width: 190px;
 }
 
 .gallery-container {
   background: #AAAAAA;
   box-sizing: border-box;
   height: calc(100vh - 50px);
-  // left: 290px;
+  left: 190px;
   overflow-y: scroll;
   padding-bottom: 100px;
-  // position: fixed;
-  // top: $top-region;
-  // width: calc(100vw - 200px);
+  position: fixed;
+  top: $top-region;
+  width: calc(100vw - 190px);
 }
+// SCROLL BAR STYLING !!!
+.gallery-container::-webkit-scrollbar-track {
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #d3d3d3;
+}
+.gallery-container::-webkit-scrollbar {
+	width: 6px;
+	// background-color: #bbbbbb;
+}
+.gallery-container::-webkit-scrollbar-thumb {
+	background-color: #868686;
+}
+
+// OTHER STYLING
 
 button {
   background: #FFB0D7;
@@ -69,22 +85,18 @@ button {
   }
 }
 
+.searchButtons {
+  border: 1px solid red;
+}
+
 /* overrides */
 
-.pane-sm {
-  max-width: 190px !important;
-}
-
-.btn-group {
-  margin: 10px 0 0 10px;
-}
-
-.form-control:focus {
-  box-shadow: none !important;
+.active {
+  background: rgb(127, 179, 127) !important;
 }
 
 input {
   &::placeholder {
-    color: #DDDDDD;
+    color: #c5c5c5;
   }
 }
