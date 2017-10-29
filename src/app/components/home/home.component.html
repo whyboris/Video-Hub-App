@@ -7,11 +7,13 @@
         class="top-content-position"
         [fileString]="currentPlayingFile"
         [folderString]="currentPlayingFolder"
+        (onFileWordClicked)="handleFileWordClicked($event)"
+        (onFolderWordClicked)="handleFolderWordClicked($event)"
       ></app-top-component>
     </div>
 
     <ng-template #progressBar>
-      <div *ngIf="progressPercent != 0" class="progress-container">
+      <div *ngIf="progressPercent !== 0" class="progress-container">
         <div class="current-progress" [ngStyle]="{width: progressPercent * 100 + '%'}"></div>
       </div>
     </ng-template>
@@ -23,80 +25,57 @@
       <div class="pane-group">
         <div class="pane pane-sm sidebar">
 
+<!-- SEARCH BUTTONS -->
 
           <div class="btn-group">
             <button
-              (click)="toggleThis('folder')"
-              [ngClass]="{active: searchOptions.folder}"
+              *ngFor="let button of searchButtons; index as i"
+              (click)="toggleSearchButton(i)"
+              [ngClass]="{ active: button.toggled }"
               class="btn btn-mini btn-default"
-              title="File search"
+              title="{{ button.title }}"
             >
-              <span class="icon icon-folder"></span>
-            </button>
-            <button
-              (click)="toggleThis('file')"
-              [ngClass]="{active: searchOptions.file}"
-              class="active btn btn-mini btn-default"
-              title="Folder search"
-            >
-              <span class="icon icon-video"></span>
-            </button>
-            <button
-              (click)="toggleThis('magic')"
-              [ngClass]="{active: searchOptions.magic}"
-              class="btn btn-mini btn-default"
-              title="Magic search"
-            >
-              <span class="icon icon-search"></span>
+              <span class="icon {{ button.iconName }}"></span>
             </button>
           </div>
 
+<!-- SEARCH BOXES -->
 
           <nav class="nav-group">
 
-            <ng-container *ngIf="searchOptions.folder">
+            <ng-container *ngFor="let filter of filters; index as j">
 
-              <h5 class="nav-group-title">
-                <input
-                  #folder
-                  (keyup.enter)="onFolderEnter(folder.value)"
-                  [(ngModel)]="folderSearchString"
-                  class="form-control"
-                  placeholder="Search folders"
-                  type="text"
-                >
-              </h5>
+              <ng-container *ngIf="searchButtons[j].toggled">
 
-              <h5 class="nav-group-title">
-                Folder: {{ folderSearchStringSaved }}
-                <br>
-                <br>
-              </h5>
+                <h5 class="nav-group-title">
+                  <input
+                    (keyup.enter)="onEnterKey(filter.string, j)"
+                    (keyup.backspace)="onBackspace(j)"
+                    [(ngModel)]="filter.string"
+                    class="form-control"
+                    placeholder={{filter.placeholder}}
+                    type="text"
+                  >
+                </h5>
 
-            </ng-container>
+                <h5 class="nav-group-title">
+                  <ng-container *ngFor="let string of filter.array; index as i">
+                    <span class="conjunction" *ngIf="i > 0">
+                      {{ filter.conjunction }}
+                    </span>
+                    <span (click)="removeThisFilter(i, j)" class="searchWord">
+                      {{ string }}
+                    </span>
+                  </ng-container>
+                </h5>
 
-            <ng-container *ngIf="searchOptions.file">
-
-              <h5 class="nav-group-title">
-                <input
-                  #file
-                  (keyup.enter)="onFileEnter(file.value)"
-                  [(ngModel)]="fileSearchString"
-                  class="form-control"
-                  placeholder="Search files"
-                  type="text"
-                >
-              </h5>
-
-              <h5 class="nav-group-title">
-                File: {{ fileSearchStringSaved }}
-                <br>
-                <br>
-              </h5>
+              </ng-container>
 
             </ng-container>
 
-            <ng-container *ngIf="searchOptions.magic">
+<!-- magic search and exclude search fields -->
+
+            <ng-container *ngIf="searchButtons[4].toggled">
 
               <h5 class="nav-group-title">
                 <input
@@ -107,73 +86,78 @@
                 >
               </h5>
 
-              <h5 class="nav-group-title">
+              <h5 class="nav-group-title" *ngIf="magicSearchString !== ''">
                 <span
                   class="icon icon-record"
                   style="color: #fc605b; margin-right: 5px;"
-                ></span>Magic: {{ magicSearchString }}
-
-                <br>
-                <br>
-
+                ></span>
+                <span
+                  (click)="magicSearchString = ''"
+                  class="searchWord"
+                >
+                  {{ magicSearchString }}
+                </span>
               </h5>
-
 
             </ng-container>
 
           </nav>
         </div>
 
-
-        <!-- THE GALLERY PANE -->
-
+<!-- THE GALLERY PANE -->
 
         <div class="pane">
 
-
-
-
-
           <div class="gallery-container">
 
-            <div class="btn-group">
-              <button
-                (click)="toggleThis('thumbNotFilm')"
-                [ngClass]="{active: searchOptions.thumbNotFilm}"
-                class="btn btn-mini btn-default"
-              >
-                <span class="icon icon-layout"></span>
-              </button>
-              <button
-                (click)="toggleThis('thumbNotFilm')"
-                [ngClass]="{active: !searchOptions.thumbNotFilm}"
-                class="active btn btn-mini btn-default"
-              >
-                <span class="icon icon-menu"></span>
-              </button>
+<!-- GALLERY BUTTONS -->
+
+            <div
+              [ngClass]="{settingsRotated: appState.buttonsInView}"
+              class="gallerySettingsButtons"
+            >
+
+            <!-- toggle button that triggers the rotation - should be styled uniquely -->
+
+              <div class="btn-group">
+                <button
+                  (click)="rotateSettings()"
+                  [ngClass]="{gearButtonActive: appState.buttonsInView}"
+                  class="gearButton"
+                >
+                  <span class="icon icon-cog"></span>
+                </button>
+              </div>
+
+              <!-- all the gallery buttons -->
+
+              <div class="btn-group">
+
+                <ng-container
+                  *ngFor="let button of galleryButtons; index as i"
+                >
+                  <button
+                    (click)="toggleGalleryButton(i)"
+                    [ngClass]="{ active: button.toggled }"
+                    class="btn btn-mini btn-default"
+                    title="{{ button.title }}"
+                  >
+                    <span class="icon {{ button.iconName }}"></span>
+                  </button>
+
+                  <ng-container *ngIf="button.spaceAfter">
+                    <div class="buttonSpacer"></div>
+                  </ng-container>
+
+                </ng-container>
+
+              </div>
+
             </div>
 
-            <div class="btn-group">
-              <button
-                (click)="toggleThis('showFileName')"
-                [ngClass]="{active: searchOptions.showFileName}"
-                class="btn btn-mini btn-default"
-              >
-                <span class="icon icon-tag"></span>
-              </button>
-            </div>
+<!-- GALLERY CODE -->
 
-            <!-- <div class="btn-group">
-              <button
-                (click)="toggleThis('none')"
-                [ngClass]="{active: searchOptions.none}"
-                class="active btn btn-mini btn-default"
-              >
-                <span class="icon icon-cog"></span>
-              </button>
-            </div> -->
-
-            <div class="gallery" [ngClass]="{filmOverride: !searchOptions.thumbNotFilm}">
+            <div class="gallery" [ngClass]="{filmOverride: appState.currentView !== 'thumbs'}">
 
               <!-- <virtual-scroll
                       [items]="finalArray"
@@ -185,53 +169,59 @@
 
               <div
                 class="item"
-                [ngClass]="{fileNamePadding: !searchOptions.showFileName}"
+                [ngClass]="{
+                    fileNamePadding: !showMoreInfo && appState.currentView != 'files',
+                    filesView: appState.currentView === 'files',
+                    whenFilenamesHidden: appState.currentView === 'filmstrip' && !showMoreInfo
+                  }"
                 *ngFor="let item of finalArray
                           | magicSearchPipe: magicSearchString
-                          | folderSearchPipe: folderSearchStringSaved
-                          | fileSearchPipe: fileSearchStringSaved
-                          | limitPipe: numberToShow;
+                          | fileSearchPipe: filters[0].array : filters[0].bool : true  : false
+                          | fileSearchPipe: filters[1].array : filters[1].bool : false : false
+                          | fileSearchPipe: filters[2].array : filters[2].bool : true  : true
+                          | fileSearchPipe: filters[3].array : filters[3].bool : false : true
+                          | limitPipe: appState.numberToShow;
                           index as i"
               >
 
-                <div *ngIf="searchOptions.thumbNotFilm; else filmStrip">
+                <div *ngIf="appState.currentView === 'thumbs'">
 
                   <app-gallery-item
                     (click)="openVideo(item[3])"
                     [stuff]="item[3]"
-                    [folderPath]="selectedOutputFolder"
+                    [folderPath]="appState.selectedOutputFolder"
                   ></app-gallery-item>
 
                 </div>
 
-                <ng-template #filmStrip>
+                <div *ngIf="appState.currentView === 'filmstrip'">
 
                   <app-filmstrip-item
                     (click)="openVideo(item[3])"
                     [stuff]="item[3]"
-                    [folderPath]="selectedOutputFolder"
+                    [folderPath]="appState.selectedOutputFolder"
                     [width]="item[6] || 171"
                   ></app-filmstrip-item>
 
-                </ng-template>
+                </div>
 
-                <div class="metadata" *ngIf="searchOptions.showFileName">
+                <div *ngIf="appState.currentView === 'files' && showMoreInfo">
+                  <div class="folder" *ngIf="true | folderViewPipe: item[0]">
+                    <span class="icon icon-folder"></span><span [innerHtml]="item[0] | folderArrowsPipe"></span>
+                  </div>
+                </div>
 
-                  <div class="length">
+                <div class="metadata" *ngIf="showMoreInfo || appState.currentView === 'files'">
+
+                  <div class="length" *ngIf="showMoreInfo">
                     {{ item[4] | lengthPipe }}
                   </div>
 
-                  <div class="size">
+                  <div class="size" *ngIf="showMoreInfo">
                     {{ item[5] }}
                   </div>
 
-                  <div class="folder">
-                    {{ item[0] || '&emsp;' }}
-                  </div>
-
-                  <br>
-
-                  <div class="title">
+                  <div class="title" (click)="openVideo(item[3])">
                     {{ item[2] }}
                   </div>
 
@@ -249,6 +239,8 @@
       </div>
     </div>
   </div>
+
+<!-- WIZARD -->
 
   <div *ngIf="!importDone" class="wizard">
 
@@ -272,7 +264,7 @@
     </h5>
 
     <h5 class="nav-group-title">
-      Source: {{ selectedSourceFolder }}
+      Source: {{ appState.selectedSourceFolder }}
     </h5>
 
     <h5 class="nav-group-title">
@@ -282,12 +274,12 @@
     </h5>
 
     <h5 class="nav-group-title">
-      Output: {{ selectedOutputFolder }}
+      Output: {{ appState.selectedOutputFolder }}
     </h5>
 
     <h5 class="nav-group-title">
       <button
-        [disabled]="selectedOutputFolder === '' && selectedSourceFolder === ''"
+        [disabled]="appState.selectedOutputFolder === '' && appState.selectedSourceFolder === ''"
         (click)="importFresh()"
         class="btn btn-mini btn-positive"
       >
