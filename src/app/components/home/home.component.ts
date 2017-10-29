@@ -27,21 +27,21 @@ export class HomeComponent implements OnInit {
     {
       uniqueKey: 'folderUnion',
       hidden: true,
-      toggled: true,
+      toggled: false,
       iconName: 'icon-folder',
       title: 'Folder union search',
       description: 'Search in all folders containing any of the search words'
     }, {
       uniqueKey: 'folder',
       hidden: false,
-      toggled: true,
+      toggled: false,
       iconName: 'icon-folder',
       title: 'Folder search',
       description: 'Search in folders containing each of the search words'
     }, {
       uniqueKey: 'fileUnion',
       hidden: true,
-      toggled: true,
+      toggled: false,
       iconName: 'icon-video',
       title: 'Video union search',
       description: 'Search for videos containing any of the search words'
@@ -142,6 +142,8 @@ export class HomeComponent implements OnInit {
     buttonsInView: true,
 
     numberToShow: 20,
+    menuHidden: false,
+    topHidden: false
   }
 
   // REORGANIZE / keep
@@ -153,6 +155,7 @@ export class HomeComponent implements OnInit {
   importDone = false;
   inProgress = false;
   progressPercent = 0;
+
 
   public finalArray = [];
 
@@ -335,6 +338,18 @@ export class HomeComponent implements OnInit {
    */
   galleryInputBoxClicked(item: number) {
     this.galleryButtons[item].hidden = !this.galleryButtons[item].hidden;
+  }
+
+  toggleSettingsMenu() {
+    this.appState.menuHidden = !this.appState.menuHidden;
+  }
+
+  toggleTopVisible() {
+    this.appState.topHidden = !this.appState.topHidden;
+  }
+
+  initiateClose() {
+    console.log('the user tried to close the app, lol!');
   }
 
 }
