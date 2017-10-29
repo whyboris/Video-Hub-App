@@ -30,10 +30,11 @@ $sidebar-width: 190px;
 .top {
   // background: #F3F3F3;
   background-image: linear-gradient(to bottom, #e8e6e8 0%, #d1cfd1 100%);
+  border-bottom: 1px solid #888888;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
   height: $top-region;
-  width: 100%;
-  border-bottom: 1px solid #696969;
   position: absolute;
+  width: 100%;
   z-index: 400;
 }
 
@@ -49,20 +50,23 @@ $sidebar-width: 190px;
 }
 
 .allSettings {
-  width: 100%;
+  background: #C0C0C0;
+  border-bottom: 1px solid #777777;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  box-sizing: border-box;
   height: $settings-height;
   padding: 5px;
   position: absolute;
-  background: #CCCCCC;
-  border-bottom: 1px solid #414141;
-  box-sizing: border-box;
-  z-index: 500;
   transition: 300ms;
+  width: 100%;
+  z-index: 500;
+  overflow: hidden;
 }
 
 .allSettingsExpanded {
   height: 100vh;
   transition: 300ms;
+  background: #DDDDDD;
 }
 
 .sidebar {

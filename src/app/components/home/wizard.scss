@@ -6,6 +6,13 @@
   position: fixed;
   width: 100%;
   z-index: 100;
+
+  button {
+    margin: 15px;
+    max-height: 50px;
+    max-width: 300px;
+    padding: 10px;
+  }
 }
 
 .disabled-overlay {

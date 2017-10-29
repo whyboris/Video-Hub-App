@@ -1,29 +1,53 @@
+$transition-length: 300ms;
+
 button {
-  background: #FFB0D7;
+  border: 1px solid #BBBBBB; // don't alphabetize this one
+  background: #dadada;
+  border-left: 1px solid #EEEEEE;
   border-radius: 5px;
-  border: 1px solid #313131;
+  border-top: 1px solid #EEEEEE;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
   cursor: pointer;
-  margin-right: 5px;
-  min-width: 25px;
+  margin: 0;
+  min-width: 22px;
+  min-height: 22px;
+  max-width: 22px;
+  max-height: 22px;
   outline: none;
   padding: 2px;
+  transition: $transition-length;
 
   span {
+    color: #000000;
     cursor: pointer;
+    transition: $transition-length;
   }
 }
 
-.searchSettingsButtons {
-  // border: 1px solid #ffa8a8;
-  max-width: 170px;
-  overflow: hidden;
+.active {
+  background: #a9a9a9 !important;
+  box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+  border-left: 0px;
+  border-right: 1px solid rgba(255, 255, 255, 0.5);
+  border-top: 0px;
+  transform: translate(1px, 1px);
+  margin-bottom: 1px;
+
+  span {
+    color: #FFFFFF;
+    transition: $transition-length;
+  }
 }
 
-.active {
-  background: rgb(127, 179, 127) !important;
+.gearButtonContainer {
+  position: absolute;
+  left: 5px;
+  top: 5px;
 }
 
 .gearButton {
+  box-shadow: none;
   background: transparent;
   border: 0;
   padding: 0;
@@ -36,28 +60,70 @@ button {
   transition: 370ms;
 }
 
+.searchSettingsButtons {
+  position: absolute;
+  left: 30px;
+  overflow: hidden;
+  transform-origin: 13px 13px;
+  transition: $transition-length;
+  z-index: 2;
+}
+
+.buttonRightSideUp {
+  transform: rotate(-90deg);
+  transition: $transition-length;
+  margin-right: 15px;
+}
+
 .buttonSpacer {
   display: inline-block;
   height: 10px;
   margin: 3px;
   width: 10px;
+  transition: $transition-length;
+}
+
+.buttonSpacerExpanded {
+  width: 30px;
+  transition: $transition-length;
 }
 
 .gallerySettingsButtons {
-  transition: 300ms;
+  transition: $transition-length;
   transform-origin: 13px 13px;
   position: absolute;
   top: 4px;
   left: 205px;
+  z-index: 2;
 }
 
-.settingsRotated {
-  transform: rotate(90deg);
-  transition: 300ms;
+.searchSettingsRotated {
+  transform: translate(-27px, 50px) rotate(90deg);
+  transition: $transition-length;
 }
 
-.gearButtonContainer {
+.gallerySettingsRotated {
+  transform: translate(55px, 50px) rotate(90deg);
+  transition: $transition-length;
+}
+
+.verticalDivider {
+  background-color: rgba(0, 0, 0, 0);
+  border-left: 1px solid rgba(0, 0, 0, 0);
+  height: 100vh;
+  left: 190px;
+  min-width: 100vw;
+  pointer-events: none;
   position: absolute;
-  left: 177px;
-  top: 5px;
+  top: 0;
+  transition: $transition-length;
+  width: 190px;
+  z-index: 1;
+}
+.verticalDividerInView {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-left: 1px solid rgba(0, 0, 0, 0.3);
+  left: 250px;
+  top: 0;
+  transition: $transition-length;
 }

@@ -27,18 +27,7 @@
       class="allSettings"
     >
 
-      <!-- ALL SEARCH BUTTONS-->
-      <div class="searchSettingsButtons">
-        <button
-          *ngFor="let button of searchButtons; index as i"
-          (click)="toggleSearchButton(i)"
-          [ngClass]="{ active: button.toggled }"
-          title="{{ button.title }}"
-        >
-          <span class="icon {{ button.iconName }}"></span>
-        </button>
-      </div>
-
+      <!-- GEAR BUTTON -->
       <div class="gearButtonContainer">
         <button
           (click)="rotateSettings()"
@@ -49,37 +38,55 @@
         </button>
       </div>
 
+      <!-- SEARCH BUTTONS-->
+      <div
+        [ngClass]="{ searchSettingsRotated: !appState.buttonsInView }"
+        class="searchSettingsButtons"
+      >
+      <ng-container
+        *ngFor="let button of searchButtons; index as i"
+      >
+        <button
+          (click)="toggleSearchButton(i)"
+          [ngClass]="{ active: button.toggled, buttonRightSideUp: !appState.buttonsInView }"
+          title="{{ button.title }}"
+        >
+          <span class="icon {{ button.iconName }}"></span>
+        </button>
+        </ng-container>
+      </div>
+
       <!-- GALLERY BUTTONS -->
       <div
-        [ngClass]="{ settingsRotated: !appState.buttonsInView }"
+        [ngClass]="{ gallerySettingsRotated: !appState.buttonsInView }"
         class="gallerySettingsButtons"
       >
-
-      <!-- toggle button that triggers the rotation
-        - should be styled uniquely
-        - should lie outside this group - INDEPENDENTLY !!! -->
-
-
-
-        <!-- all the gallery buttons -->
-
         <ng-container
           *ngFor="let button of galleryButtons; index as i"
         >
-          <button
+        <button
             (click)="toggleGalleryButton(i)"
-            [ngClass]="{ active: button.toggled }"
+            [ngClass]="{ active: button.toggled, buttonRightSideUp: !appState.buttonsInView }"
             title="{{ button.title }}"
           >
             <span class="icon {{ button.iconName }}"></span>
           </button>
-
           <ng-container *ngIf="button.spaceAfter">
-            <div class="buttonSpacer"></div>
+            <div
+              [ngClass]="{ buttonSpacerExpanded: !appState.buttonsInView }"
+              class="buttonSpacer"
+            >
+            </div>
           </ng-container>
-
         </ng-container>
 
+      </div>
+
+      <!-- VERTICAL DIVIDER -->
+      <div
+        [ngClass]="{ verticalDividerInView: !appState.buttonsInView }"
+        class="verticalDivider"
+      >
       </div>
 
     </div>
