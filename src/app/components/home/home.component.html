@@ -1,5 +1,14 @@
 <div class="window">
 
+  <div class="titleBar">
+    <div class="draggable">
+      Video Hub
+    </div>
+    <div (click)="initiateClose()" class="closeButton">
+      <span class="icon icon-cancel"></span>
+    </div>
+  </div>
+
   <!-- [ngStyle]="{ display: appState.topHidden ? 'none' : initial }" -->
   <header
     *ngIf="!appState.topHidden"
@@ -38,15 +47,15 @@
     >
 
       <!-- GEAR BUTTON -->
-      <div class="gearButtonContainer">
-        <button
-          (click)="rotateSettings()"
-          [ngClass]="{ gearButtonActive: appState.buttonsInView }"
-          class="gearButton"
-        >
+      <!-- <div class="gearButtonContainer"> -->
+      <div
+        (click)="rotateSettings()"
+        [ngClass]="{ gearButtonActive: appState.buttonsInView }"
+        class="gearButton"
+      >
           <span class="icon icon-cog"></span>
-        </button>
       </div>
+      <!-- </div> -->
 
       <!-- SEARCH BUTTONS-->
       <div

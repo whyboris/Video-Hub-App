@@ -17,6 +17,10 @@ button {
   padding: 2px;
   transition: $transition-length;
 
+  &:hover {
+    background-color: #EEEEEE;
+  }
+
   span {
     color: #000000;
     cursor: pointer;
@@ -34,25 +38,28 @@ button {
   transform: translate(1px, 1px);
   margin-bottom: 1px;
 
+  &:hover {
+    background-color: #B5B5B5 !important;
+  }
+
   span {
     color: #FFFFFF;
     transition: $transition-length;
   }
 }
 
-.gearButtonContainer {
-  position: absolute;
-  left: 5px;
-  top: 5px;
-}
-
 .gearButton {
-  box-shadow: none;
-  background: transparent;
-  border: 0;
-  padding: 0;
-  margin: 0;
+  color: #555555;
+  font-size: 14px;
+  left: 10px;
+  position: absolute;
+  top: 8px;
   transition: 370ms;
+
+  &:hover {
+    text-shadow: 0 0 7px rgba(255, 255, 255, 0.5);
+    transition: 370ms;
+  }
 }
 
 .gearButtonActive {
@@ -62,7 +69,7 @@ button {
 
 .searchSettingsButtons {
   position: absolute;
-  left: 30px;
+  left: 35px;
   overflow: hidden;
   transform-origin: 13px 13px;
   transition: $transition-length;

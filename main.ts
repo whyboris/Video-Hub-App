@@ -19,9 +19,13 @@ function createWindow() {
   win = new BrowserWindow({
     x: 0,
     y: 0,
-    width: size.width,
-    height: size.height,
-    icon: path.join(__dirname, 'assets/icons/png/64x64.png')
+    // width: size.width,
+    // height: size.height,
+    width: 600,
+    height: 400,
+    icon: path.join(__dirname, 'assets/icons/png/64x64.png'),
+    frame: false
+    // BORIS !!! the above removes the frame from the window completely !!!
   });
 
   // and load the index.html of the app.
@@ -39,6 +43,11 @@ function createWindow() {
     // when you should delete the corresponding element.
     win = null;
   });
+
+  // BORIS !!!
+  // BEFORE BUILDING !!!
+  // REMOVE ALL file / edit / view / etc
+  // win.setMenu(null);
 }
 
 try {
@@ -401,7 +410,7 @@ function extractMetadata(filePath: string, currentFile: number): void {
     const origHeight = metadata.streams[0].height;
 
     if (origWidth && origHeight) {
-      finalArray[currentFile][5] = labelVideo(origWidth, origHeight);        // 5th item is the label, e.g. 'HD' 
+      finalArray[currentFile][5] = labelVideo(origWidth, origHeight);        // 5th item is the label, e.g. 'HD'
       finalArray[currentFile][6] = Math.round(100 * origWidth / origHeight); // 6th item is width of screenshot (130) for ex
     } else {
       finalArray[currentFile][5] = '';

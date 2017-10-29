@@ -348,4 +348,8 @@ export class HomeComponent implements OnInit {
     this.appState.topHidden = !this.appState.topHidden;
   }
 
+  initiateClose() {
+    console.log('the user tried to close the app, lol!');
+  }
+
 }
