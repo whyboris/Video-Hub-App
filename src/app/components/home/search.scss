@@ -1,25 +1,38 @@
-input {
-  border-radius: 5px;
-  border: 1px solid #666666;
-  box-sizing: border-box;
+.filteringTotal {
+  color: #BBBBBB;
   font-size: 12px;
+  margin: 10px 20px;
+}
+
+input {
+  border: 0;
+  border-bottom: 1px solid #AAAAAA;
+  background: #DDDDDD; // same as search background
+  // border-radius: 5px;
+  // border: 1px solid #666666;
+  box-sizing: border-box;
+  font-size: 15px;
   outline: none;
   padding: 6px;
+  padding-bottom: 0;
   margin: 5px 0 10px;
   width: 100%;
 
   &::placeholder {
-    color: #c5c5c5;
+    color: #999999;
   }
 }
 
 .searchWord {
-  background: #AAFFAA;
+  background: #DDFFDD;
+  border-radius: 5px;
   border: 1px solid gray;
+  cursor: pointer;
   display: inline-block;
   font-size: 10px;
-  margin: 3px;
+  margin: 3px 0;
   padding: 2px;
+
   &:hover {
     text-decoration: line-through;
   }
@@ -33,4 +46,10 @@ input {
 
 .conjunction {
   font-size: 10px;
+  margin: 3px; // coincides with .searchWord margin-left: 0;
+}
+
+.notFiltered {
+  font-size: 10px;
+
 }

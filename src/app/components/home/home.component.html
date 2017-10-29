@@ -86,28 +86,34 @@
 
     <div class="sidebar">
 
+      <div class="filteringTotal">
+        Filtering  2,493 videos
+      </div>
+
       <!-- SEARCH BOXES -->
       <ng-container *ngFor="let filter of filters; index as j">
         <ng-container *ngIf="searchButtons[j].toggled">
 
           <input
             (keyup.enter)="onEnterKey(filter.string, j)"
-            (keyup.backspace)="onBackspace(j)"
+            (keyup.backspace)="onBackspace(filter.string, j)"
             [(ngModel)]="filter.string"
             placeholder="{{ filter.placeholder }}"
             type="text"
           >
 
           <div class="filteredWords">
-            <ng-container
-              *ngFor="let string of filter.array; index as i"
-            >
-              <span class="conjunction" *ngIf="i > 0">
-                {{ filter.conjunction }}
-              </span>
-              <span (click)="removeThisFilter(i, j)" class="searchWord">
-                {{ string }}
-              </span>
+            <ng-container *ngIf="filter.array.length > 0">
+              <ng-container
+                *ngFor="let string of filter.array; index as i"
+              >
+                <span class="conjunction" *ngIf="i > 0">
+                  {{ filter.conjunction }}
+                </span>
+                <span (click)="removeThisFilter(i, j)" class="searchWord">
+                  {{ string }}
+                </span>
+              </ng-container>
             </ng-container>
           </div>
 
@@ -119,17 +125,17 @@
         <input
           [(ngModel)]="magicSearchString"
           type="text"
-          placeholder="Magic search"
+          placeholder="Folder or file contains"
         >
 
         <div
           *ngIf="magicSearchString !== ''"
           class="filteredWords"
         >
-          <span
+          <!-- <span
             class="icon icon-record"
             style="color: #fc605b; margin-right: 5px;"
-          ></span>
+          ></span> -->
           <span
             (click)="magicSearchString = ''"
             class="searchWord"

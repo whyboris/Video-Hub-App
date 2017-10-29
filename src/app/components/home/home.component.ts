@@ -65,28 +65,28 @@ export class HomeComponent implements OnInit {
      string: '',
      array: [], // contains search strings
      bool: true,
-     placeholder: 'Search folders union',
+     placeholder: 'Folder union',
      conjunction: 'or'
     }, {
       uniqueKey: 'folder',
       string: '',
       array: [],
       bool: true,
-      placeholder: 'Search folders',
+      placeholder: 'Folder contains',
       conjunction: 'and'
     }, {
       uniqueKey: 'fileUnion',
       string: '',
       array: [],
       bool: true,
-      placeholder: 'Search files union',
+      placeholder: 'File union',
       conjunction: 'or'
     }, {
       uniqueKey: 'file',
       string: '',
       array: [],
       bool: true,
-      placeholder: 'Search files',
+      placeholder: 'File contains',
       conjunction: 'and',
     }
   ];
@@ -293,8 +293,9 @@ export class HomeComponent implements OnInit {
    * When user presses the `BACKSPACE` key
    * @param origin  -- array from which to .pop()
    */
-  onBackspace(origin: number): void {
-    if (this.filters[origin].array.length > 0) {
+  onBackspace(value: string, origin: number): void {
+    // TODO -- bug -- if user removes the 1st character with a backspace key, it removes last-entered filter
+    if (value === '' && this.filters[origin].array.length > 0) {
       this.filters[origin].array.pop();
       this.filters[origin].bool = !this.filters[origin].bool;
     }
