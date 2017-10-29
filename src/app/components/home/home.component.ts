@@ -26,34 +26,39 @@ export class HomeComponent implements OnInit {
   searchButtons = [
     {
       uniqueKey: 'folderUnion',
-      hidden: false,
+      hidden: true,
       toggled: true,
       iconName: 'icon-folder',
-      title: 'Folder union search'
+      title: 'Folder union search',
+      description: 'Search in all folders containing any of the search words'
     }, {
       uniqueKey: 'folder',
       hidden: false,
       toggled: true,
       iconName: 'icon-folder',
-      title: 'Folder search'
+      title: 'Folder search',
+      description: 'Search in folders containing each of the search words'
     }, {
       uniqueKey: 'fileUnion',
-      hidden: false,
+      hidden: true,
       toggled: true,
       iconName: 'icon-video',
-      title: 'File union search'
+      title: 'Video union search',
+      description: 'Search for videos containing any of the search words'
     }, {
       uniqueKey: 'file',
       hidden: false,
       toggled: true,
       iconName: 'icon-video',
-      title: 'File search'
+      title: 'Video search',
+      description: 'Search for videos containing each of the search words'
     }, {
       uniqueKey: 'magic',
       hidden: false,
       toggled: true,
       iconName: 'icon-search',
-      title: 'Magic search'
+      title: 'Magic search',
+      description: 'Live search showing all files and files inside folders that contain search words'
     }
   ];
 
@@ -310,6 +315,14 @@ export class HomeComponent implements OnInit {
   removeThisFilter(item: number, origin: number): void {
     this.filters[origin].array.splice(item, 1);
     this.filters[origin].bool = !this.filters[origin].bool;
+  }
+
+  /**
+   * Toggle the visibility of the searchButtons
+   * @param item  -- index within the searchButtons array to toggle
+   */
+  filterInputBoxClicked(item: number) {
+    this.searchButtons[item].hidden = !this.searchButtons[item].hidden;
   }
 
 }

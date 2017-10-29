@@ -120,10 +120,63 @@ button {
   width: 190px;
   z-index: 1;
 }
+
 .verticalDividerInView {
   background-color: rgba(0, 0, 0, 0.1);
   border-left: 1px solid rgba(0, 0, 0, 0.3);
   left: 250px;
   top: 0;
   transition: $transition-length;
+}
+
+.searchButtonsSettings {
+  position: absolute;
+  left: 50px;
+  top: 59px;
+  max-width: 200px;
+  opacity: 0;
+  transition: 100ms;
+}
+
+.searchButtonsSettingsInView {
+  transform: translate(-10px, 0);
+  opacity: 1;
+  transition: 700ms;
+}
+
+.buttonDescription {
+  display: block;
+  max-height: 41px;
+  max-width: 200px;
+  min-height: 41px;
+  position: relative;
+}
+
+.buttonDescriptionText {
+  color: #838383;
+  display: block;
+  font-size: 12px;
+  left: 27px;
+  position: absolute;
+  top: -4px;
+  width: 168px;
+}
+
+.buttonOpacityLower {
+  opacity: 0.5;
+}
+
+.inputCheckbox {
+  display: inline-block;
+}
+
+.showButtonLabel {
+  bottom: 0;
+  color: #AAAAAA;
+  font-size: 10px;
+  left: 0;
+  position: absolute;
+  text-align: center;
+  transform: translate(-17px, 45px);
+  width: 50px;
 }
