@@ -5,6 +5,10 @@ $settings-height: 32px;
 
 $sidebar-width: 190px;
 
+/deep/ * {
+  user-select: none;
+}
+
 .progress-container {
   background: #8A8A8A;
   border-radius: 3px;

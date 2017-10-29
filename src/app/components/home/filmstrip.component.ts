@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, HostListener } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
@@ -13,9 +13,18 @@ export class FilmstripComponent implements OnInit {
   @Input() width: number;
   indexArray: Array<number> = []; // to set z-index on css
 
+  hover = false;
+
   constructor(
     public sanitizer: DomSanitizer
   ) { }
+
+  @HostListener('mouseenter') onMouseEnter() {
+    this.hover = true;
+  }
+  @HostListener('mouseleave') onMouseLeave() {
+    this.hover = false;
+  }
 
   ngOnInit() {
 

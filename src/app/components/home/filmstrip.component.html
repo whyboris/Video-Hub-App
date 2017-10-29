@@ -1,13 +1,15 @@
 <div class="filmstrip-container">
 
-  <div 
-    (mouseover)="showThisOne(i)"
-    *ngFor="let item of stuff; let i = index"
-    [ngStyle]="{'left': 10 * i + '%' }"
-    class="hoverable"
-  >
-  </div>
-  
+  <ng-container *ngIf="hover">
+    <div
+      (mouseover)="showThisOne(i)"
+      *ngFor="let item of stuff; let i = index"
+      [ngStyle]="{'left': 10 * i + '%' }"
+      class="hoverable"
+    >
+    </div>
+  </ng-container>
+
   <img
     *ngFor="let item of stuff; let i = index"
     [ngStyle]="{'right': 'calc(' + (9 - i) + ' * (100% - ' + width + 'px)/9)', 'z-index': indexArray[i] }"

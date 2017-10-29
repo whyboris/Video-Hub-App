@@ -43,17 +43,41 @@
         [ngClass]="{ searchSettingsRotated: !appState.buttonsInView }"
         class="searchSettingsButtons"
       >
-      <ng-container
-        *ngFor="let button of searchButtons; index as i"
-      >
-        <button
-          (click)="toggleSearchButton(i)"
-          [ngClass]="{ active: button.toggled, buttonRightSideUp: !appState.buttonsInView }"
-          title="{{ button.title }}"
+        <ng-container
+          *ngFor="let button of searchButtons; index as i"
         >
-          <span class="icon {{ button.iconName }}"></span>
-        </button>
+          <button
+            *ngIf="!button.hidden || !appState.buttonsInView"
+            (click)="toggleSearchButton(i)"
+            [ngClass]="{ active: button.toggled, buttonRightSideUp: !appState.buttonsInView, buttonOpacityLower: button.hidden }"
+            title="{{ button.title }}"
+          >
+            <span class="icon {{ button.iconName }}"></span>
+          </button>
         </ng-container>
+      </div>
+
+      <!-- Search buttons settings -->
+
+      <div
+        [ngClass]="{ searchButtonsSettingsInView: !appState.buttonsInView }"
+        class="searchButtonsSettings"
+      >
+        <div class="showButtonLabel">show button in menu</div>
+        <div
+          *ngFor="let button of searchButtons; index as i"
+          [ngClass]="{ buttonOpacityLower: button.hidden }"
+          class="buttonDescription"
+        >
+          <input
+            (change)="filterInputBoxClicked(i)"
+            [checked]="!button.hidden"
+            class="inputCheckbox"
+            id="{{ button.uniqueKey }}"
+            type="checkbox"
+          >
+          <label for="{{ button.uniqueKey }}" class="buttonDescriptionText">{{ button.description }}</label>
+        </div>
       </div>
 
       <!-- GALLERY BUTTONS -->
@@ -64,9 +88,10 @@
         <ng-container
           *ngFor="let button of galleryButtons; index as i"
         >
-        <button
+          <button
+            *ngIf="!button.hidden || !appState.buttonsInView"
             (click)="toggleGalleryButton(i)"
-            [ngClass]="{ active: button.toggled, buttonRightSideUp: !appState.buttonsInView }"
+            [ngClass]="{ active: button.toggled, buttonRightSideUp: !appState.buttonsInView, buttonOpacityLower: button.hidden }"
             title="{{ button.title }}"
           >
             <span class="icon {{ button.iconName }}"></span>
@@ -82,6 +107,30 @@
 
       </div>
 
+      <!-- Gallery buttons settings -->
+
+      <div
+        [ngClass]="{ galleryButtonsSettingsInView: !appState.buttonsInView }"
+        class="galleryButtonsSettings"
+      >
+        <div class="showButtonLabel">show button in menu</div>
+        <div
+          *ngFor="let button of galleryButtons; index as i"
+          class="buttonDescription"
+          [ngClass]="{ buttonOpacityLower: button.hidden }"
+          [ngStyle]="{ 'min-height': button.spaceAfter ? '82px' : '41px' }"
+        >
+          <input
+            (change)="galleryInputBoxClicked(i)"
+            [checked]="!button.hidden"
+            class="inputCheckbox"
+            id="{{ button.uniqueKey }}"
+            type="checkbox"
+          >
+          <label for="{{ button.uniqueKey }}"class="buttonDescriptionText buttonDescriptionTextGallery">{{ button.description }}</label>
+        </div>
+      </div>
+
       <!-- VERTICAL DIVIDER -->
       <div
         [ngClass]="{ verticalDividerInView: !appState.buttonsInView }"
@@ -94,7 +143,8 @@
     <div class="sidebar">
 
       <div class="filteringTotal">
-        Filtering  2,493 videos
+        42 folders<br>
+        2,493 videos
       </div>
 
       <!-- SEARCH BOXES -->
@@ -103,8 +153,10 @@
 
           <input
             (keyup.enter)="onEnterKey(filter.string, j)"
-            (keyup.backspace)="onBackspace(filter.string, j)"
+            (keydown.backspace)="onBackspace(filter.string, j)"
+            (keydown.escape)="filter.string = ''"
             [(ngModel)]="filter.string"
+            class="inputFilter"
             placeholder="{{ filter.placeholder }}"
             type="text"
           >
@@ -130,8 +182,10 @@
       <!-- magic search and exclude fields -->
       <ng-container *ngIf="searchButtons[4].toggled">
         <input
+          (keydown.escape)="magicSearchString = ''"
           [(ngModel)]="magicSearchString"
           type="text"
+          class="inputFilter"
           placeholder="Folder or file contains"
         >
 

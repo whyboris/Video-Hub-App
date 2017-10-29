@@ -89,11 +89,12 @@ button {
 }
 
 .gallerySettingsButtons {
-  transition: $transition-length;
-  transform-origin: 13px 13px;
+  left: 205px;
   position: absolute;
   top: 4px;
-  left: 205px;
+  transform-origin: 13px 13px;
+  transition: $transition-length;
+  width: 500px; // done so when you rotate and maxe the screen width small, the buttons don't bunch up
   z-index: 2;
 }
 
@@ -120,10 +121,81 @@ button {
   width: 190px;
   z-index: 1;
 }
+
 .verticalDividerInView {
   background-color: rgba(0, 0, 0, 0.1);
   border-left: 1px solid rgba(0, 0, 0, 0.3);
   left: 250px;
   top: 0;
   transition: $transition-length;
+}
+
+.searchButtonsSettings,
+.galleryButtonsSettings {
+  position: absolute;
+  top: 59px;
+  max-width: 200px;
+  opacity: 0;
+  transition: 100ms;
+}
+
+.searchButtonsSettings {
+  left: 50px;
+}
+
+.galleryButtonsSettings {
+  left: 300px;
+}
+
+.searchButtonsSettingsInView,
+.galleryButtonsSettingsInView {
+  transform: translate(-10px, 0);
+  opacity: 1;
+  transition: 700ms;
+}
+
+.buttonDescription {
+  display: block;
+  max-height: 41px;
+  max-width: 200px;
+  min-height: 41px;   // also hardcoded in home.component as [ngStyle]
+  position: relative;
+}
+
+.buttonDescriptionText {
+  color: #838383;
+  cursor: pointer;
+  display: block;
+  font-size: 12px;
+  left: 27px;
+  position: absolute;
+  top: -4px;
+  width: 168px;
+}
+
+.buttonDescriptionTextGallery {
+  max-height: 30px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  top: 3px;
+  width: calc(100vw - 330px);
+}
+
+.buttonOpacityLower {
+  opacity: 0.5;
+}
+
+.inputCheckbox {
+  display: inline-block;
+}
+
+.showButtonLabel {
+  bottom: 0;
+  color: #AAAAAA;
+  font-size: 10px;
+  left: 0;
+  position: absolute;
+  text-align: center;
+  transform: translate(-17px, 45px);
+  width: 50px;
 }

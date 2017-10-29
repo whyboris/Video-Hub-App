@@ -26,34 +26,39 @@ export class HomeComponent implements OnInit {
   searchButtons = [
     {
       uniqueKey: 'folderUnion',
-      hidden: false,
+      hidden: true,
       toggled: true,
       iconName: 'icon-folder',
-      title: 'Folder union search'
+      title: 'Folder union search',
+      description: 'Search in all folders containing any of the search words'
     }, {
       uniqueKey: 'folder',
       hidden: false,
       toggled: true,
       iconName: 'icon-folder',
-      title: 'Folder search'
+      title: 'Folder search',
+      description: 'Search in folders containing each of the search words'
     }, {
       uniqueKey: 'fileUnion',
-      hidden: false,
+      hidden: true,
       toggled: true,
       iconName: 'icon-video',
-      title: 'File union search'
+      title: 'Video union search',
+      description: 'Search for videos containing any of the search words'
     }, {
       uniqueKey: 'file',
       hidden: false,
       toggled: true,
       iconName: 'icon-video',
-      title: 'File search'
+      title: 'Video search',
+      description: 'Search for videos containing each of the search words'
     }, {
       uniqueKey: 'magic',
       hidden: false,
       toggled: true,
       iconName: 'icon-search',
-      title: 'Magic search'
+      title: 'Magic search',
+      description: 'Live search showing all files and files inside folders that contain search words'
     }
   ];
 
@@ -100,6 +105,7 @@ export class HomeComponent implements OnInit {
       iconName: 'icon-layout',
       title: 'Show thumbnails',
       spaceAfter: false,
+      description: 'Show thumbnails view'
     }, {
       uniqueKey: 'showFilmstrip',
       hidden: false,
@@ -107,6 +113,7 @@ export class HomeComponent implements OnInit {
       iconName: 'icon-menu',
       title: 'Show filmstrip',
       spaceAfter: false,
+      description: 'Show filmstrip view'
     }, {
       uniqueKey: 'showFiles',
       hidden: false,
@@ -114,6 +121,7 @@ export class HomeComponent implements OnInit {
       iconName: 'icon-menu',
       title: 'Show files',
       spaceAfter: true,
+      description: 'Show files view'
     }, {
       uniqueKey: 'showMoreInfo',
       hidden: false,
@@ -121,6 +129,7 @@ export class HomeComponent implements OnInit {
       iconName: 'icon-tag',
       title: 'Show more info',
       spaceAfter: false,
+      description: 'Show more info'
     }
   ];
 
@@ -310,6 +319,22 @@ export class HomeComponent implements OnInit {
   removeThisFilter(item: number, origin: number): void {
     this.filters[origin].array.splice(item, 1);
     this.filters[origin].bool = !this.filters[origin].bool;
+  }
+
+  /**
+   * Toggle the visibility of the searchButtons
+   * @param item  -- index within the searchButtons array to toggle
+   */
+  filterInputBoxClicked(item: number) {
+    this.searchButtons[item].hidden = !this.searchButtons[item].hidden;
+  }
+
+  /**
+   * Toggle the visibility of the galleryButtons
+   * @param item  -- index within the galleryButtons array to toggle
+   */
+  galleryInputBoxClicked(item: number) {
+    this.galleryButtons[item].hidden = !this.galleryButtons[item].hidden;
   }
 
 }
