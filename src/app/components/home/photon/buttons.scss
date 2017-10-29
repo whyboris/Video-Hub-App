@@ -1,0 +1,76 @@
+//
+// Buttons.css
+// --------------------------------------------------
+
+@import './variables';
+@import './mixins';
+
+.btn {
+  display: inline-block;
+  padding: 3px 8px;
+  margin-bottom: 0;
+  font-size: 12px;
+  line-height: 1.4;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: default;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: $default-border-radius;
+  box-shadow: 0 1px 1px rgba(0,0,0,.06);
+  -webkit-app-region: no-drag;
+
+  &:focus {
+    outline: none;
+    box-shadow: none;
+  }
+}
+
+// Normal buttons
+.btn-default {
+  color: $gray-color;
+  border-top-color: $dark-border-color;
+  border-right-color: $dark-border-color;
+  border-bottom-color: $darker-bottom-border-color;
+  border-left-color: $dark-border-color;
+  @include linear-gradient(#fcfcfc, #f1f1f1);
+
+  &:active {
+    background-color: #ddd;
+    background-image: none;
+  }
+}
+
+// Button variations
+.btn-primary,
+.btn-positive,
+.btn-negative,
+.btn-warning {
+  color: #fff;
+  text-shadow: 0 1px 1px rgba(0,0,0,.1);
+}
+
+// Icons in buttons
+.btn .icon {
+  float: left;
+  width: 14px;
+  height: 14px;
+  margin-top: 1px;
+  margin-bottom: 1px;
+  color: #737475;
+  font-size: 14px;
+  line-height: 1;
+}
+
+// Add the margin next to the icon if there is text in the button too
+.btn .icon-text {
+  margin-right: 5px;
+}
+
+// This utility class add a down arrow icon to the button
+.btn-dropdown:after {
+  font-family: "photon-entypo";
+  margin-left: 5px;
+  content: '\e873'
+}

@@ -1,0 +1,105 @@
+// variable
+$top-region: 50px;
+
+$settings-height: 32px;
+
+$sidebar-width: 190px;
+
+.progress-container {
+  background: #8A8A8A;
+  border-radius: 3px;
+  border: 1px solid #696969;
+  box-sizing: border-box;
+  height: 19px;
+  margin: 15px;
+
+  .current-progress {
+    background: #66b452;
+    border-radius: 3px;
+    height: 17px;
+  }
+}
+
+// LAYOUT STYLING
+.window {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.top {
+  // background: #F3F3F3;
+  background-image: linear-gradient(to bottom, #e8e6e8 0%, #d1cfd1 100%);
+  border-bottom: 1px solid #888888;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  height: $top-region;
+  position: absolute;
+  width: 100%;
+  z-index: 400;
+}
+
+.top-content-position {
+  left: 10px;
+  position: absolute;
+  top: 5px;
+}
+
+.window-content {
+  position: relative;
+  transform: translate(0, $top-region);
+}
+
+.allSettings {
+  background: #C0C0C0;
+  border-bottom: 1px solid #777777;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  box-sizing: border-box;
+  height: $settings-height;
+  padding: 5px;
+  position: absolute;
+  transition: 300ms;
+  width: 100%;
+  z-index: 500;
+  overflow: hidden;
+}
+
+.allSettingsExpanded {
+  height: 100vh;
+  transition: 300ms;
+  background: #DDDDDD;
+}
+
+.sidebar {
+  background: #DDDDDD;
+  box-sizing: border-box;
+  height: calc(100vh - #{$settings-height});
+  max-width: $sidebar-width !important;
+  padding: 10px;
+  position: absolute;
+  top: $settings-height;
+  width: $sidebar-width;
+}
+
+.gallery-container {
+  background: #AAAAAA;
+  box-sizing: border-box;
+  height: calc(100vh - #{$settings-height});
+  left: $sidebar-width;
+  overflow-y: scroll;
+  padding-bottom: 100px;
+  position: absolute;
+  top: $settings-height;
+  width: calc(100vw - #{$sidebar-width});
+}
+// SCROLL BAR STYLING !!!
+.gallery-container::-webkit-scrollbar-track {
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+	background-color: #d3d3d3;
+}
+.gallery-container::-webkit-scrollbar {
+	width: 6px;
+	// background-color: #bbbbbb;
+}
+.gallery-container::-webkit-scrollbar-thumb {
+	background-color: #868686;
+}
