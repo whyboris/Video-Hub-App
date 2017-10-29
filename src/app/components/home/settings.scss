@@ -147,6 +147,22 @@ button {
   left: 300px;
 }
 
+.extraSettings {
+  left: 300px;
+  opacity: 1;
+  position: absolute;
+  min-width: calc(100vw - 330px);
+  top: 400px;
+}
+
+.extraSettingsText {
+  color: #838383;
+  font-size: 12px;
+  left: 27px;
+  position: absolute;
+  line-height: 20px;
+}
+
 .searchButtonsSettingsInView,
 .galleryButtonsSettingsInView {
   transform: translate(-10px, 0);

@@ -1,3 +1,28 @@
+.hidingSettingsMenu {
+  cursor: pointer;
+  left: 13px;
+  position: absolute;
+  top: 4px;
+  transition: 100ms;
+  transform-origin: 4px 8px;
+
+  &:hover {
+    transition: 100ms;
+    transform: scale(1.5);
+  }
+
+}
+
+.flipped {
+  transition: 100ms;
+  transform: rotate(180deg);
+
+  &:hover {
+    transition: 100ms;
+    transform: rotate(180deg) scale(1.5);
+  }
+}
+
 .filteringTotal {
   color: #BBBBBB;
   font-size: 12px;

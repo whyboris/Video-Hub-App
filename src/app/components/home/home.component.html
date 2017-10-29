@@ -1,6 +1,10 @@
 <div class="window">
 
-  <header class="top">
+  <!-- [ngStyle]="{ display: appState.topHidden ? 'none' : initial }" -->
+  <header
+    *ngIf="!appState.topHidden"
+    class="top"
+  >
 
     <div *ngIf="importDone; else progressBar">
       <app-top-component
@@ -20,7 +24,13 @@
 
   </header>
 
-  <div class="window-content">
+  <div
+    class="window-content"
+    [ngStyle]="{
+      transition: '300ms',
+      transform: appState.menuHidden ? 'translate(0, -32px)' : 'translate(0, 0)'
+    }"
+  >
 
     <div
       [ngClass]="{ allSettingsExpanded: !appState.buttonsInView }"
@@ -131,6 +141,25 @@
         </div>
       </div>
 
+      <div
+        class="extraSettings"
+      >
+        <input
+          (change)="toggleTopVisible()"
+          [checked]="!appState.topHidden"
+          class="inputCheckbox"
+          id="hideTopBar"
+          type="checkbox"
+        >
+        <label for="hideTopBar" class="extraSettingsText">
+          Show the top bar.
+          <br>
+          <em>
+            It shows the folder path and file name, each of which is clickable for quick searching.
+          </em>
+        </label>
+      </div>
+
       <!-- VERTICAL DIVIDER -->
       <div
         [ngClass]="{ verticalDividerInView: !appState.buttonsInView }"
@@ -141,6 +170,14 @@
     </div>
 
     <div class="sidebar">
+
+      <div
+        (click)="toggleSettingsMenu()"
+        [ngClass]="{ flipped: !appState.menuHidden }"
+        class="hidingSettingsMenu"
+      >
+        <span class="icon icon-down-open-mini"></span>
+      </div>
 
       <div class="filteringTotal">
         42 folders<br>
