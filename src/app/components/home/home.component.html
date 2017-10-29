@@ -70,12 +70,13 @@
           class="buttonDescription"
         >
           <input
-            class="inputCheckbox"
-            [checked]="!button.hidden"
             (change)="filterInputBoxClicked(i)"
+            [checked]="!button.hidden"
+            class="inputCheckbox"
+            id="{{ button.uniqueKey }}"
             type="checkbox"
           >
-          <span class="buttonDescriptionText">{{ button.description }}</span>
+          <label for="{{ button.uniqueKey }}" class="buttonDescriptionText">{{ button.description }}</label>
         </div>
       </div>
 
@@ -120,12 +121,13 @@
           [ngStyle]="{ 'min-height': button.spaceAfter ? '82px' : '41px' }"
         >
           <input
-            class="inputCheckbox"
-            [checked]="!button.hidden"
             (change)="galleryInputBoxClicked(i)"
+            [checked]="!button.hidden"
+            class="inputCheckbox"
+            id="{{ button.uniqueKey }}"
             type="checkbox"
           >
-          <span class="buttonDescriptionText buttonDescriptionTextGallery">{{ button.description }}</span>
+          <label for="{{ button.uniqueKey }}"class="buttonDescriptionText buttonDescriptionTextGallery">{{ button.description }}</label>
         </div>
       </div>
 
