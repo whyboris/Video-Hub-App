@@ -22,16 +22,13 @@
 
   <div class="window-content">
 
-    <div class="allSettings">
-
-      trololol
-
-    </div>
-
-    <div class="sidebar">
+    <div
+      [ngClass]="{ allSettingsExpanded: !appState.buttonsInView }"
+      class="allSettings"
+    >
 
       <!-- ALL SEARCH BUTTONS-->
-      <div class="searchButtons">
+      <div class="searchSettingsButtons">
         <button
           *ngFor="let button of searchButtons; index as i"
           (click)="toggleSearchButton(i)"
@@ -41,6 +38,53 @@
           <span class="icon {{ button.iconName }}"></span>
         </button>
       </div>
+
+      <div class="gearButtonContainer">
+        <button
+          (click)="rotateSettings()"
+          [ngClass]="{ gearButtonActive: appState.buttonsInView }"
+          class="gearButton"
+        >
+          <span class="icon icon-cog"></span>
+        </button>
+      </div>
+
+      <!-- GALLERY BUTTONS -->
+      <div
+        [ngClass]="{ settingsRotated: !appState.buttonsInView }"
+        class="gallerySettingsButtons"
+      >
+
+      <!-- toggle button that triggers the rotation
+        - should be styled uniquely
+        - should lie outside this group - INDEPENDENTLY !!! -->
+
+
+
+        <!-- all the gallery buttons -->
+
+        <ng-container
+          *ngFor="let button of galleryButtons; index as i"
+        >
+          <button
+            (click)="toggleGalleryButton(i)"
+            [ngClass]="{ active: button.toggled }"
+            title="{{ button.title }}"
+          >
+            <span class="icon {{ button.iconName }}"></span>
+          </button>
+
+          <ng-container *ngIf="button.spaceAfter">
+            <div class="buttonSpacer"></div>
+          </ng-container>
+
+        </ng-container>
+
+      </div>
+
+    </div>
+
+    <div class="sidebar">
 
       <!-- SEARCH BOXES -->
       <ng-container *ngFor="let filter of filters; index as j">
@@ -102,49 +146,9 @@
 
       <div class="gallery-container">
 
-<!-- GALLERY BUTTONS -->
-
-        <div
-          [ngClass]="{ settingsRotated: appState.buttonsInView }"
-          class="gallerySettingsButtons"
-        >
-
-        <!-- toggle button that triggers the rotation
-          - should be styled uniquely
-          - should lie outside this group - INDEPENDENTLY !!! -->
-
-          <button
-            (click)="rotateSettings()"
-            [ngClass]="{ gearButtonActive: appState.buttonsInView }"
-            class="gearButton"
-          >
-            <span class="icon icon-cog"></span>
-          </button>
-
-          <!-- all the gallery buttons -->
-
-          <ng-container
-            *ngFor="let button of galleryButtons; index as i"
-          >
-            <button
-              (click)="toggleGalleryButton(i)"
-              [ngClass]="{ active: button.toggled }"
-              title="{{ button.title }}"
-            >
-              <span class="icon {{ button.iconName }}"></span>
-            </button>
-
-            <ng-container *ngIf="button.spaceAfter">
-              <div class="buttonSpacer"></div>
-            </ng-container>
-
-          </ng-container>
-
-        </div>
-
 <!-- GALLERY CODE -->
 
-        <div class="gallery" [ngClass]="{filmOverride: appState.currentView !== 'thumbs'}">
+        <div class="gallery" [ngClass]="{ filmOverride: appState.currentView !== 'thumbs' }">
 
           <!-- <virtual-scroll
                   [items]="finalArray"
@@ -230,7 +234,7 @@
 
   <div *ngIf="!importDone" class="wizard">
 
-    <div [ngClass]="{'disabled-overlay': inProgress}"></div>
+    <div [ngClass]="{ 'disabled-overlay': inProgress }"></div>
 
     <h3>Welcome to VideoHub</h3>
 

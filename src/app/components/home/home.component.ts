@@ -9,7 +9,8 @@ import { FinalObject } from '../common/final-object.interface';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: [
-    './home.component.scss',
+    './layout.scss',
+    './settings.scss',
     './search.scss',
     './photon/buttons.scss',
     './photon/icons.scss',

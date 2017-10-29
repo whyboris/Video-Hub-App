@@ -1,0 +1,63 @@
+button {
+  background: #FFB0D7;
+  border-radius: 5px;
+  border: 1px solid #313131;
+  cursor: pointer;
+  margin-right: 5px;
+  min-width: 25px;
+  outline: none;
+  padding: 2px;
+
+  span {
+    cursor: pointer;
+  }
+}
+
+.searchSettingsButtons {
+  // border: 1px solid #ffa8a8;
+  max-width: 170px;
+  overflow: hidden;
+}
+
+.active {
+  background: rgb(127, 179, 127) !important;
+}
+
+.gearButton {
+  background: transparent;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  transition: 370ms;
+}
+
+.gearButtonActive {
+  transform: rotate(-100deg);
+  transition: 370ms;
+}
+
+.buttonSpacer {
+  display: inline-block;
+  height: 10px;
+  margin: 3px;
+  width: 10px;
+}
+
+.gallerySettingsButtons {
+  transition: 300ms;
+  transform-origin: 13px 13px;
+  position: absolute;
+  top: 4px;
+  left: 205px;
+}
+
+.settingsRotated {
+  transform: rotate(90deg);
+  transition: 300ms;
+}
+
+.gearButtonContainer {
+  position: absolute;
+  left: 177px;
+  top: 5px;
+}

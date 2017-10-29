@@ -1,6 +1,10 @@
 // variable
 $top-region: 50px;
 
+$settings-height: 32px;
+
+$sidebar-width: 190px;
+
 .progress-container {
   background: #8A8A8A;
   border-radius: 3px;
@@ -28,6 +32,9 @@ $top-region: 50px;
   background-image: linear-gradient(to bottom, #e8e6e8 0%, #d1cfd1 100%);
   height: $top-region;
   width: 100%;
+  border-bottom: 1px solid #696969;
+  position: absolute;
+  z-index: 400;
 }
 
 .top-content-position {
@@ -38,35 +45,47 @@ $top-region: 50px;
 
 .window-content {
   position: relative;
+  transform: translate(0, $top-region);
 }
 
 .allSettings {
   width: 100%;
-  height: 50px;
+  height: $settings-height;
+  padding: 5px;
   position: absolute;
+  background: #CCCCCC;
+  border-bottom: 1px solid #414141;
+  box-sizing: border-box;
+  z-index: 500;
+  transition: 300ms;
+}
+
+.allSettingsExpanded {
+  height: 100vh;
+  transition: 300ms;
 }
 
 .sidebar {
   background: #DDDDDD;
   box-sizing: border-box;
-  height: calc(100vh - 50px);
-  max-width: 190px !important;
+  height: calc(100vh - #{$settings-height});
+  max-width: $sidebar-width !important;
   padding: 10px;
   position: absolute;
-  top: 50px;
-  width: 190px;
+  top: $settings-height;
+  width: $sidebar-width;
 }
 
 .gallery-container {
   background: #AAAAAA;
   box-sizing: border-box;
-  height: calc(100vh - 50px);
-  left: 190px;
+  height: calc(100vh - #{$settings-height});
+  left: $sidebar-width;
   overflow-y: scroll;
   padding-bottom: 100px;
   position: absolute;
-  top: $top-region;
-  width: calc(100vw - 190px);
+  top: $settings-height;
+  width: calc(100vw - #{$sidebar-width});
 }
 // SCROLL BAR STYLING !!!
 .gallery-container::-webkit-scrollbar-track {
@@ -79,37 +98,4 @@ $top-region: 50px;
 }
 .gallery-container::-webkit-scrollbar-thumb {
 	background-color: #868686;
-}
-
-// OTHER STYLING
-
-button {
-  background: #FFB0D7;
-  border-radius: 5px;
-  border: 1px solid #313131;
-  cursor: pointer;
-  margin-right: 5px;
-  min-width: 25px;
-  outline: none;
-  padding: 2px;
-
-  span {
-    cursor: pointer;
-  }
-}
-
-.searchButtons {
-  border: 1px solid red;
-}
-
-/* overrides */
-
-.active {
-  background: rgb(127, 179, 127) !important;
-}
-
-input {
-  &::placeholder {
-    color: #c5c5c5;
-  }
 }
