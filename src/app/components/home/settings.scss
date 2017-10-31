@@ -17,12 +17,19 @@ button {
   padding: 2px;
   transition: $transition-length;
 
+  & .icon {
+    &:before {
+      color: #000000;
+      transform: translate(-1px, -1px);
+      transition: $transition-length;
+    }
+  }
+
   &:hover {
     background-color: #EEEEEE;
   }
 
   span {
-    color: #000000;
     cursor: pointer;
     transition: $transition-length;
   }
@@ -42,8 +49,15 @@ button {
     background-color: #B5B5B5 !important;
   }
 
+  & .icon {
+    &:before {
+      color: #FFFFFF;
+      transform: translate(0px, 0px);
+      transition: $transition-length;
+    }
+  }
+
   span {
-    color: #FFFFFF;
     transition: $transition-length;
   }
 }
