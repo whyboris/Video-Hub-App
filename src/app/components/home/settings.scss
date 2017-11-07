@@ -110,7 +110,7 @@ button {
 }
 
 .gallerySettingsButtons {
-  left: 205px;
+  left: 253px;
   position: absolute;
   top: 4px;
   transform-origin: 13px 13px;
@@ -146,7 +146,7 @@ button {
 .verticalDividerInView {
   background-color: rgba(0, 0, 0, 0.1);
   border-left: 1px solid rgba(0, 0, 0, 0.3);
-  left: 250px;
+  left: 300px;
   top: 0;
   transition: $transition-length;
 }
@@ -165,14 +165,14 @@ button {
 }
 
 .galleryButtonsSettings {
-  left: 300px;
+  left: 354px;
 }
 
 .extraSettings {
-  left: 300px;
+  left: 354px;
   opacity: 1;
   position: absolute;
-  min-width: calc(100vw - 330px);
+  min-width: calc(100vw - 380px);
   top: 400px;
 }
 
@@ -207,7 +207,7 @@ button {
   left: 27px;
   position: absolute;
   top: -4px;
-  width: 168px;
+  width: 220px;
 }
 
 .buttonDescriptionTextGallery {

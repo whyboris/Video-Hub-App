@@ -1,9 +1,10 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit, HostListener } from '@angular/core';
 
 import { ElectronService } from '../../providers/electron.service';
+import { ShowLimitService } from 'app/components/pipes/show-limit.service';
+import { WordFrequencyService } from 'app/components/pipes/word-frequency.service';
 
 import { FinalObject } from '../common/final-object.interface';
-
 
 @Component({
   selector: 'app-home',
@@ -59,6 +60,13 @@ export class HomeComponent implements OnInit {
       iconName: 'icon-search',
       title: 'Magic search',
       description: 'Live search showing all files and files inside folders that contain search words'
+    }, {
+      uniqueKey: 'showFreq',
+      hidden: false,
+      toggled: true,
+      iconName: 'icon-cloud',
+      title: 'Word cloud',
+      description: 'Show the nine most frequent words in current file names'
     }
   ];
 
@@ -133,7 +141,7 @@ export class HomeComponent implements OnInit {
     }
   ];
 
-  // App state to save -- so it can be exported and saved after closing
+  // App state to save -- so it can be exported and saved when closing the app
   appState = {
     selectedOutputFolder: '',
     selectedSourceFolder: '',
@@ -156,14 +164,31 @@ export class HomeComponent implements OnInit {
   inProgress = false;
   progressPercent = 0;
 
+  // temp
+  wordFreqArr: any;
+  currResults: any = { showing: 0, total: 0 };
 
   public finalArray = [];
 
   constructor(
+    public cd: ChangeDetectorRef,
+    public showLimitService: ShowLimitService,
+    public wordFrequencyService: WordFrequencyService,
     public electronService: ElectronService
   ) { }
 
   ngOnInit() {
+
+    setTimeout(() => {
+      this.wordFrequencyService.finalMapBehaviorSubject.subscribe((value) => {
+        this.wordFreqArr = value;
+        // this.cd.detectChanges();
+      });
+      this.showLimitService.searchResults.subscribe((value) => {
+        this.currResults = value;
+        this.cd.detectChanges();
+      });
+    }, 100);
 
     // later -- when restoring saved state from file
     this.showMoreInfo = this.galleryButtons[3].toggled;   // WARNING -- [3] coincides with the button `showMoreInfo`

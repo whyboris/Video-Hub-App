@@ -77,5 +77,14 @@
 
 .notFiltered {
   font-size: 10px;
+}
 
+.frequency {
+  margin-top: 20px; 
+  color: #555555;
+
+  span {
+    margin: 0 4px;
+    cursor: pointer;
+  }
 }

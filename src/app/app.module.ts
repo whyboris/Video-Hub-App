@@ -11,6 +11,8 @@ import { VirtualScrollModule } from 'angular2-virtual-scroll';
 
 import { ElectronService } from './providers/electron.service';
 import { FolderViewService } from 'app/components/pipes/folder-view.service';
+import { ShowLimitService } from 'app/components/pipes/show-limit.service';
+import { WordFrequencyService } from 'app/components/pipes/word-frequency.service';
 
 import { AppComponent } from './app.component';
 import { FilmstripComponent } from 'app/components/home/filmstrip.component';
@@ -24,6 +26,7 @@ import { FolderViewPipe } from 'app/components/pipes/folder-view.pipe';
 import { LengthPipe } from './components/pipes/length.pipe';
 import { LimitPipe } from './components/pipes/show-limit.pipe';
 import { MagicSearchPipe } from './components/pipes/magic-search.pipe';
+import { WordFrequencyPipe } from 'app/components/pipes/word-frequency.pipe';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -39,7 +42,8 @@ import { AppRoutingModule } from './app-routing.module';
     LimitPipe,
     MagicSearchPipe,
     PreviewComponent,
-    TopComponent
+    TopComponent,
+    WordFrequencyPipe
   ],
   imports: [
     BrowserModule,
@@ -48,7 +52,12 @@ import { AppRoutingModule } from './app-routing.module';
     AppRoutingModule,
     VirtualScrollModule
   ],
-  providers: [ElectronService, FolderViewService],
+  providers: [
+    ElectronService,
+    FolderViewService,
+    ShowLimitService,
+    WordFrequencyService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
