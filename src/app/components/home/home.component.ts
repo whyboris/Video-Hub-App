@@ -1,9 +1,9 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit, HostListener } from '@angular/core';
 
 import { ElectronService } from '../../providers/electron.service';
+import { WordFrequencyService } from 'app/components/pipes/word-frequency.service';
 
 import { FinalObject } from '../common/final-object.interface';
-
 
 @Component({
   selector: 'app-home',
@@ -133,7 +133,7 @@ export class HomeComponent implements OnInit {
     }
   ];
 
-  // App state to save -- so it can be exported and saved after closing
+  // App state to save -- so it can be exported and saved when closing the app
   appState = {
     selectedOutputFolder: '',
     selectedSourceFolder: '',
@@ -156,14 +156,25 @@ export class HomeComponent implements OnInit {
   inProgress = false;
   progressPercent = 0;
 
+  // temp
+  wordFreqArr: any;
 
   public finalArray = [];
 
   constructor(
+    public cd: ChangeDetectorRef,
+    public wordFrequencyService: WordFrequencyService,
     public electronService: ElectronService
   ) { }
 
   ngOnInit() {
+
+    setTimeout(() => {
+      this.wordFrequencyService.finalMapBehaviorSubject.subscribe((value) => {
+        this.wordFreqArr = value;
+        this.cd.detectChanges();
+      });
+    }, 100);
 
     // later -- when restoring saved state from file
     this.showMoreInfo = this.galleryButtons[3].toggled;   // WARNING -- [3] coincides with the button `showMoreInfo`

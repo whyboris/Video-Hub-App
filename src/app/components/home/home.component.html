@@ -236,7 +236,6 @@
         >
 
         <div
-          *ngIf="magicSearchString !== ''"
           class="filteredWords"
         >
           <!-- <span
@@ -244,6 +243,7 @@
             style="color: #fc605b; margin-right: 5px;"
           ></span> -->
           <span
+            *ngIf="magicSearchString !== ''"
             (click)="magicSearchString = ''"
             class="searchWord"
           >
@@ -252,6 +252,17 @@
         </div>
       </ng-container>
       <!-- END OF MAGIC SEARCH & exclude fields -->
+
+      <div class="frequency">
+        <ng-container *ngFor="let word of wordFreqArr; index as i">
+          <span
+            [ngStyle]="{'font-size': (16 - i) + 'px' }"
+            (click)="handleFileWordClicked(word.word)"
+          >
+            {{ word.word }}
+          </span>
+        </ng-container>
+      </div>
 
     </div> <!-- closing the SIDEBAR -->
 
@@ -284,8 +295,8 @@
                       | fileSearchPipe: filters[1].array : filters[1].bool : false : false
                       | fileSearchPipe: filters[2].array : filters[2].bool : true  : true
                       | fileSearchPipe: filters[3].array : filters[3].bool : false : true
-                      | limitPipe: appState.numberToShow
-                      | wordFrequencyPipe: true;
+                      | wordFrequencyPipe: true
+                      | limitPipe: appState.numberToShow;
                       index as i"
           >
 

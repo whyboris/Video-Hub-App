@@ -1,9 +1,18 @@
 import { Injectable } from '@angular/core';
 
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+
 @Injectable()
 export class WordFrequencyService {
 
   wordMap: Map<string, number> = new Map();
+  finalMapBehaviorSubject = new BehaviorSubject([]);
+
+  ignore: string[] = [
+    'and', 'the', 'to', 'a', 'of', 'for', 'as', 'i', 'with',
+    'it', 'is', 'on', 'that', 'this', 'can', 'in', 'be', 'has',
+    'if', '1', '2', '3', '4', '5', '6', '7', '8', '9', '', ' '
+  ];
 
   constructor() { }
 
@@ -18,7 +27,9 @@ export class WordFrequencyService {
   public addString(filename) {
     const wordArray = filename.split(' ');
     wordArray.forEach(word => {
-      this.addWord(word);
+      if (!this.ignore.includes(word.toLowerCase())) {
+        this.addWord(word.toLowerCase());
+      }
     });
   }
 
@@ -85,6 +96,8 @@ export class WordFrequencyService {
         }
       }
     }
+    console.log('behavior subject updated');
+    this.finalMapBehaviorSubject.next(finalResult);
     return finalResult;
   }
 
