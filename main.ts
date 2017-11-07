@@ -277,17 +277,19 @@ function walkSync(dir, filelist) {
     if (fs.statSync(path.join(dir, file)).isDirectory()) {
       filelist = walkSync(path.join(dir, file), filelist);
     } else {
-      // if file type is .mp4, .m4v, or .avi
-      if (file.indexOf('.mp4') !== -1
-        || file.indexOf('.avi') !== -1
-        || file.indexOf('.m4v') !== -1) {
-        // before adding, remove the redundant prefix: selectedSourceFolder
-        const partialPath = dir.replace(selectedSourceFolder, '');
+      // if file type is .mp4, .mpg, mpeg, .m4v, or .avi
+      if (file.toLowerCase().indexOf('.mp4') !== -1
+        || file.toLowerCase().indexOf('.avi') !== -1
+        || file.toLowerCase().indexOf('.mpg') !== -1
+        || file.toLowerCase().indexOf('.mpeg') !== -1
+        || file.toLowerCase().indexOf('.m4v') !== -1) {
+          // before adding, remove the redundant prefix: selectedSourceFolder
+          const partialPath = dir.replace(selectedSourceFolder, '');
 
-        const cleanFileName = cleanUpFileName(file);
+          const cleanFileName = cleanUpFileName(file);
 
-        finalArray[fileCounter] = [partialPath, file, cleanFileName];
-        fileCounter++;
+          finalArray[fileCounter] = [partialPath, file, cleanFileName];
+          fileCounter++;
       }
     }
   });
