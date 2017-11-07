@@ -1,6 +1,7 @@
 import { Component, ChangeDetectorRef, OnInit, HostListener } from '@angular/core';
 
 import { ElectronService } from '../../providers/electron.service';
+import { ShowLimitService } from 'app/components/pipes/show-limit.service';
 import { WordFrequencyService } from 'app/components/pipes/word-frequency.service';
 
 import { FinalObject } from '../common/final-object.interface';
@@ -59,6 +60,13 @@ export class HomeComponent implements OnInit {
       iconName: 'icon-search',
       title: 'Magic search',
       description: 'Live search showing all files and files inside folders that contain search words'
+    }, {
+      uniqueKey: 'showFreq',
+      hidden: false,
+      toggled: true,
+      iconName: 'icon-cloud',
+      title: 'Word cloud',
+      description: 'Show the nine most frequent words in current file names'
     }
   ];
 
@@ -158,11 +166,13 @@ export class HomeComponent implements OnInit {
 
   // temp
   wordFreqArr: any;
+  currResults: any = { showing: 0, total: 0 };
 
   public finalArray = [];
 
   constructor(
     public cd: ChangeDetectorRef,
+    public showLimitService: ShowLimitService,
     public wordFrequencyService: WordFrequencyService,
     public electronService: ElectronService
   ) { }
@@ -172,6 +182,10 @@ export class HomeComponent implements OnInit {
     setTimeout(() => {
       this.wordFrequencyService.finalMapBehaviorSubject.subscribe((value) => {
         this.wordFreqArr = value;
+        // this.cd.detectChanges();
+      });
+      this.showLimitService.searchResults.subscribe((value) => {
+        this.currResults = value;
         this.cd.detectChanges();
       });
     }, 100);

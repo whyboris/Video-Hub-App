@@ -20,15 +20,18 @@ export class WordFrequencyPipe implements PipeTransform {
 
     console.log('Word frequency pipe RUNNING !!!');
 
-    this.wordFrequencyService.resetMap();
+    if (finalArray.length > 0) {
 
-    finalArray.forEach(element => {
-      this.wordFrequencyService.addString(element[2]);
-    });
+      this.wordFrequencyService.resetMap();
 
-    this.wordFrequencyService.cleanMap();
+      finalArray.forEach(element => {
+        this.wordFrequencyService.addString(element[2]);
+      });
 
-    console.log(this.wordFrequencyService.getFrequencyArray());
+      this.wordFrequencyService.cleanMap();
+
+      this.wordFrequencyService.computeFrequencyArray();
+    }
 
     return finalArray;
 

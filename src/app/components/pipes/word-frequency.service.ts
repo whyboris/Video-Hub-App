@@ -8,12 +8,6 @@ export class WordFrequencyService {
   wordMap: Map<string, number> = new Map();
   finalMapBehaviorSubject = new BehaviorSubject([]);
 
-  ignore: string[] = [
-    'and', 'the', 'to', 'a', 'of', 'for', 'as', 'i', 'with',
-    'it', 'is', 'on', 'that', 'this', 'can', 'in', 'be', 'has',
-    'if', '1', '2', '3', '4', '5', '6', '7', '8', '9', '', ' '
-  ];
-
   constructor() { }
 
   /**
@@ -27,7 +21,7 @@ export class WordFrequencyService {
   public addString(filename) {
     const wordArray = filename.split(' ');
     wordArray.forEach(word => {
-      if (!this.ignore.includes(word.toLowerCase())) {
+      if (!(word.length < 3)) {
         this.addWord(word.toLowerCase());
       }
     });
@@ -54,7 +48,6 @@ export class WordFrequencyService {
         this.wordMap.delete(key);
       }
     });
-    console.log(this.wordMap);
   }
 
   /**
@@ -82,9 +75,11 @@ export class WordFrequencyService {
   }
 
   /**
-   * Return an array 9 objects long with most frequent words
+   * Computes the array 9 objects long with most frequent words
+   * Creates `height` property, scaled between 8 and 22 proportionally
+   * calls `.next` on BehaviorSubject
    */
-  public getFrequencyArray() {
+  public computeFrequencyArray(): void {
     const finalResult = []; // array of objects
     for (let i = 0; i < 9; i++) {
       if (this.wordMap.size > 0) {
@@ -96,9 +91,20 @@ export class WordFrequencyService {
         }
       }
     }
-    console.log('behavior subject updated');
+
+    if (finalResult.length > 0) {
+      const largest = finalResult[0].freq;
+      const smallest = finalResult[finalResult.length - 1].freq;
+      const scaleFactor = 14 / (largest - smallest);
+      // 14 is the range between 8 and 22 -- smallest and largest I'd like text to be (px).
+
+      finalResult.forEach((element) => {
+        element.height = 8 + (element.freq - smallest) * scaleFactor;
+      });
+    }
+
+    // console.log(finalResult);
     this.finalMapBehaviorSubject.next(finalResult);
-    return finalResult;
   }
 
 }

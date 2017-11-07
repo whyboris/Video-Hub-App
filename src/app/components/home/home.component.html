@@ -253,10 +253,14 @@
       </ng-container>
       <!-- END OF MAGIC SEARCH & exclude fields -->
 
-      <div class="frequency">
+      <div class="filteringTotal">
+        <span>{{ currResults.total }} found</span>
+      </div>
+
+      <div *ngIf="searchButtons[5].toggled" class="frequency">
         <ng-container *ngFor="let word of wordFreqArr; index as i">
           <span
-            [ngStyle]="{'font-size': (16 - i) + 'px' }"
+            [ngStyle]="{'font-size': word.height + 'px' }"
             (click)="handleFileWordClicked(word.word)"
           >
             {{ word.word }}

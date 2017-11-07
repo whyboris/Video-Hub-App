@@ -11,6 +11,7 @@ import { VirtualScrollModule } from 'angular2-virtual-scroll';
 
 import { ElectronService } from './providers/electron.service';
 import { FolderViewService } from 'app/components/pipes/folder-view.service';
+import { ShowLimitService } from 'app/components/pipes/show-limit.service';
 import { WordFrequencyService } from 'app/components/pipes/word-frequency.service';
 
 import { AppComponent } from './app.component';
@@ -51,7 +52,12 @@ import { AppRoutingModule } from './app-routing.module';
     AppRoutingModule,
     VirtualScrollModule
   ],
-  providers: [ElectronService, FolderViewService, WordFrequencyService],
+  providers: [
+    ElectronService,
+    FolderViewService,
+    ShowLimitService,
+    WordFrequencyService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
