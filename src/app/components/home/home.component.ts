@@ -138,6 +138,14 @@ export class HomeComponent implements OnInit {
       title: 'Show more info',
       spaceAfter: false,
       description: 'Show more info'
+    }, {
+      uniqueKey: 'previewSize',
+      hidden: false,
+      toggled: true,              // coincides with `this.showMoreInfo` variable
+      iconName: 'icon-resize-full',
+      title: 'Toggle preview size',
+      spaceAfter: false,
+      description: 'Make the preview items larger or smaller'
     }
   ];
 
@@ -159,6 +167,7 @@ export class HomeComponent implements OnInit {
   currentPlayingFolder = '';
   magicSearchString = '';
   showMoreInfo = true;
+  previewSize = true;
 
   importDone = false;
   inProgress = false;
@@ -303,6 +312,9 @@ export class HomeComponent implements OnInit {
     } else if (index === 3) {
       this.showMoreInfo = !this.showMoreInfo;
       this.galleryButtons[3].toggled = !this.galleryButtons[3].toggled;
+    } else if (index === 4) {
+      this.previewSize = !this.previewSize;
+      this.galleryButtons[4].toggled = !this.galleryButtons[4].toggled;
     } else {
       console.log('what did you press?');
       // this.galleryButtons[index].toggled = !this.galleryButtons[index].toggled;

@@ -1,4 +1,7 @@
-<div class="filmstrip-container">
+<div
+  [ngClass]="{ 'larger-size': largerSize }"
+  class="filmstrip-container"
+>
 
   <div *ngIf="hover">
     <div 
@@ -12,6 +15,7 @@
   
   <img
     [src]="sanitizer.bypassSecurityTrustUrl(folderPath + '/' + stuff[currentlyShowing])"
+    [ngClass]="{ 'larger-size': largerSize }"
     class="screencap"
   >
 

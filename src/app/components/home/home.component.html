@@ -291,7 +291,8 @@
           [ngClass]="{
               fileNamePadding: !showMoreInfo && appState.currentView != 'files',
               filesView: appState.currentView === 'files',
-              whenFilenamesHidden: appState.currentView === 'filmstrip' && !showMoreInfo
+              whenFilenamesHidden: appState.currentView === 'filmstrip' && !showMoreInfo,
+              'item-big': previewSize
             }"
           *ngFor="let item of finalArray
                     | magicSearchPipe: magicSearchString
@@ -310,6 +311,7 @@
               (click)="openVideo(item[3])"
               [stuff]="item[3]"
               [folderPath]="appState.selectedOutputFolder"
+              [largerSize]="previewSize"
             ></app-gallery-item>
 
           </div>
