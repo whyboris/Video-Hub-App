@@ -272,131 +272,163 @@
 
 <!-- THE GALLERY PANE -->
 
-      <div class="gallery-container">
+    <div class="gallery-container">
 
 <!-- GALLERY CODE -->
 
-        <div class="gallery" [ngClass]="{ filmOverride: appState.currentView !== 'thumbs' }">
+      <div class="gallery" [ngClass]="{ filmOverride: appState.currentView !== 'thumbs' }">
 
-          <!-- <virtual-scroll
-                  [items]="finalArray"
-                  [bufferAmount]="5"
-                  [childWidth]="100"
-                  [childHeight]="100"
-                  (update)="viewPortItems = $event"
-                > -->
+        <!-- <virtual-scroll
+                [items]="finalArray"
+                [bufferAmount]="5"
+                [childWidth]="100"
+                [childHeight]="100"
+                (update)="viewPortItems = $event"
+              > -->
 
-          <div
-            class="item"
-            [ngClass]="{
-                fileNamePadding: !showMoreInfo && appState.currentView != 'files',
-                filesView: appState.currentView === 'files',
-                whenFilenamesHidden: appState.currentView === 'filmstrip' && !showMoreInfo
-              }"
-            *ngFor="let item of finalArray
-                      | magicSearchPipe: magicSearchString
-                      | fileSearchPipe: filters[0].array : filters[0].bool : true  : false
-                      | fileSearchPipe: filters[1].array : filters[1].bool : false : false
-                      | fileSearchPipe: filters[2].array : filters[2].bool : true  : true
-                      | fileSearchPipe: filters[3].array : filters[3].bool : false : true
-                      | wordFrequencyPipe: true
-                      | limitPipe: appState.numberToShow;
-                      index as i"
-          >
+        <div
+          class="item"
+          [ngClass]="{
+              fileNamePadding: !showMoreInfo && appState.currentView != 'files',
+              filesView: appState.currentView === 'files',
+              whenFilenamesHidden: appState.currentView === 'filmstrip' && !showMoreInfo
+            }"
+          *ngFor="let item of finalArray
+                    | magicSearchPipe: magicSearchString
+                    | fileSearchPipe: filters[0].array : filters[0].bool : true  : false
+                    | fileSearchPipe: filters[1].array : filters[1].bool : false : false
+                    | fileSearchPipe: filters[2].array : filters[2].bool : true  : true
+                    | fileSearchPipe: filters[3].array : filters[3].bool : false : true
+                    | wordFrequencyPipe: true
+                    | limitPipe: appState.numberToShow;
+                    index as i"
+        >
 
-            <div *ngIf="appState.currentView === 'thumbs'">
+          <div *ngIf="appState.currentView === 'thumbs'">
 
-              <app-gallery-item
-                (click)="openVideo(item[3])"
-                [stuff]="item[3]"
-                [folderPath]="appState.selectedOutputFolder"
-              ></app-gallery-item>
+            <app-gallery-item
+              (click)="openVideo(item[3])"
+              [stuff]="item[3]"
+              [folderPath]="appState.selectedOutputFolder"
+            ></app-gallery-item>
 
+          </div>
+
+          <div *ngIf="appState.currentView === 'filmstrip'">
+
+            <app-filmstrip-item
+              (click)="openVideo(item[3])"
+              [stuff]="item[3]"
+              [folderPath]="appState.selectedOutputFolder"
+              [width]="item[6] || 171"
+            ></app-filmstrip-item>
+
+          </div>
+
+          <div *ngIf="appState.currentView === 'files' && showMoreInfo">
+            <div class="folder" *ngIf="true | folderViewPipe: item[0]">
+              <span class="icon icon-folder"></span><span [innerHtml]="item[0] | folderArrowsPipe"></span>
+            </div>
+          </div>
+
+          <div class="metadata" *ngIf="showMoreInfo || appState.currentView === 'files'">
+
+            <div class="length" *ngIf="showMoreInfo">
+              {{ item[4] | lengthPipe }}
             </div>
 
-            <div *ngIf="appState.currentView === 'filmstrip'">
-
-              <app-filmstrip-item
-                (click)="openVideo(item[3])"
-                [stuff]="item[3]"
-                [folderPath]="appState.selectedOutputFolder"
-                [width]="item[6] || 171"
-              ></app-filmstrip-item>
-
+            <div class="size" *ngIf="showMoreInfo">
+              {{ item[5] }}
             </div>
 
-            <div *ngIf="appState.currentView === 'files' && showMoreInfo">
-              <div class="folder" *ngIf="true | folderViewPipe: item[0]">
-                <span class="icon icon-folder"></span><span [innerHtml]="item[0] | folderArrowsPipe"></span>
-              </div>
-            </div>
-
-            <div class="metadata" *ngIf="showMoreInfo || appState.currentView === 'files'">
-
-              <div class="length" *ngIf="showMoreInfo">
-                {{ item[4] | lengthPipe }}
-              </div>
-
-              <div class="size" *ngIf="showMoreInfo">
-                {{ item[5] }}
-              </div>
-
-              <div class="title" (click)="openVideo(item[3])">
-                {{ item[2] }}
-              </div>
-
+            <div class="title" (click)="openVideo(item[3])">
+              {{ item[2] }}
             </div>
 
           </div>
 
-          <!-- </virtual-scroll> -->
-
         </div>
 
-      </div>
+        <!-- </virtual-scroll> -->
 
-    </div>
+      </div> <!-- end of gallery -->
 
-  </div>
+    </div> <!-- end of gallery-container -->
+
+  </div> <!-- end of window-content -->
+
+</div> <!-- end of window -->
 
 <!-- WIZARD -->
 
-  <div *ngIf="!importDone" class="wizard">
+<div *ngIf="!importDone" class="wizard">
 
-    <div [ngClass]="{ 'disabled-overlay': inProgress }"></div>
+  <div [ngClass]="{ 'disabled-overlay': inProgress }"></div>
 
-    <h3>Welcome to VideoHub</h3>
+  <div class="left-side">
+
+    <h1>Open previous hub</h1>
 
     <button (click)="loadFromFile()">
       Load from file
     </button>
 
-    <br><br>
-    or
-    <br><br>
+  </div>
 
+  <div class="right-side">
+
+    <h1>Import new hub</h1>
+
+    <div
+      [ngClass]="{ 'current-step': appState.selectedSourceFolder === '' }"
+      class="steps" 
+    >
+      1
+    </div>
     <button (click)="selectSourceDirectory()">
-      Select input directory
+      {{ appState.selectedSourceFolder === '' ? 'Select' : 'Change' }} input directory
     </button>
-
-    <br>
-    Source: {{ appState.selectedSourceFolder }}
-    <br>
-
-    <button (click)="selectOutputDirectory()">
-      Select output directory
+    
+    <span class="description">
+      Importing from:
+    </span>
+    <span class="path">
+      {{ appState.selectedSourceFolder }}
+    </span>
+    
+    <div 
+      [ngClass]="{ 'current-step': appState.selectedSourceFolder !== '' && appState.selectedOutputFolder === '' }"
+      class="steps"
+    >
+      2
+    </div>
+    <button 
+      (click)="selectOutputDirectory()"
+      [disabled]="appState.selectedSourceFolder === ''"
+    >
+      {{ appState.selectedOutputFolder === '' ? 'Select' : 'Change' }} output directory
     </button>
-
-    <br>
-    Output: {{ appState.selectedOutputFolder }}
-    <br>
-
+    
+    <span class="description">
+      Saving screenshots to:
+    </span>
+    <span class="path">
+      {{ appState.selectedOutputFolder }}
+    </span>
+    
+    <div 
+      [ngClass]="{ 'current-step': appState.selectedOutputFolder !== '' && appState.selectedSourceFolder !== '' }"
+      class="steps"
+    >
+      3
+    </div>
     <button
-      [disabled]="appState.selectedOutputFolder === '' && appState.selectedSourceFolder === ''"
+      [disabled]="appState.selectedOutputFolder === '' || appState.selectedSourceFolder === ''"
       (click)="importFresh()"
     >
       Start the import
     </button>
-
+  
   </div>
 
+</div>
