@@ -276,7 +276,10 @@
 
 <!-- GALLERY CODE -->
 
-      <div class="gallery" [ngClass]="{ filmOverride: appState.currentView !== 'thumbs' }">
+      <div 
+        [ngClass]="{ filmOverride: appState.currentView !== 'thumbs' }"
+        class="gallery" 
+      >
 
         <!-- <virtual-scroll
                 [items]="finalArray"
@@ -292,7 +295,8 @@
               fileNamePadding: !showMoreInfo && appState.currentView != 'files',
               filesView: appState.currentView === 'files',
               whenFilenamesHidden: appState.currentView === 'filmstrip' && !showMoreInfo,
-              'item-big': previewSize
+              'item-big': previewSize,
+              'large-filmstrip': appState.currentView === 'filmstrip' && previewSize
             }"
           *ngFor="let item of finalArray
                     | magicSearchPipe: magicSearchString
@@ -322,7 +326,8 @@
               (click)="openVideo(item[3])"
               [stuff]="item[3]"
               [folderPath]="appState.selectedOutputFolder"
-              [width]="item[6] || 171"
+              [width]="previewSize ? (2 * item[6] || 342) : (item[6] || 171)"
+              [largerSize]="previewSize"
             ></app-filmstrip-item>
 
           </div>
@@ -333,17 +338,30 @@
             </div>
           </div>
 
-          <div class="metadata" *ngIf="showMoreInfo || appState.currentView === 'files'">
+          <div 
+            *ngIf="showMoreInfo || appState.currentView === 'files'"
+            class="metadata" 
+          >
 
-            <div class="length" *ngIf="showMoreInfo">
+            <div 
+              *ngIf="showMoreInfo"
+              class="length" 
+            >
               {{ item[4] | lengthPipe }}
             </div>
 
-            <div class="size" *ngIf="showMoreInfo">
+            <div 
+              *ngIf="showMoreInfo"
+              class="size" 
+            >
               {{ item[5] }}
             </div>
 
-            <div class="title" (click)="openVideo(item[3])">
+            <div 
+              (click)="openVideo(item[3])"
+              [ngClass]="{ 'larger-font': previewSize }"
+              class="title" 
+            >
               {{ item[2] }}
             </div>
 

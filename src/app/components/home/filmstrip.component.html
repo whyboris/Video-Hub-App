@@ -1,9 +1,12 @@
-<div class="filmstrip-container">
+<div 
+  [ngClass]="{ 'larger-size': largerSize }"
+  class="filmstrip-container"
+>
 
   <ng-container *ngIf="hover">
     <div
-      (mouseover)="showThisOne(i)"
       *ngFor="let item of stuff; let i = index"
+      (mouseover)="showThisOne(i)"
       [ngStyle]="{'left': 10 * i + '%' }"
       class="hoverable"
     >
@@ -12,9 +15,10 @@
 
   <img
     *ngFor="let item of stuff; let i = index"
+    [ngClass]="{ 'larger-size': largerSize }"
     [ngStyle]="{'right': 'calc(' + (9 - i) + ' * (100% - ' + width + 'px)/9)', 'z-index': indexArray[i] }"
-    class="screencap"
     [src]="sanitizer.bypassSecurityTrustUrl(folderPath + '/' + stuff[i])"
+    class="screencap"
   >
 
 </div>
