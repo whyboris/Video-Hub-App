@@ -91,8 +91,9 @@
           <input
             (change)="filterInputBoxClicked(i)"
             [checked]="!button.hidden"
-            class="inputCheckbox"
+            [ngClass]="{ inputCheckboxDisabled: button.hidden }"
             id="{{ button.uniqueKey }}"
+            class="inputCheckbox"
             type="checkbox"
           >
           <label for="{{ button.uniqueKey }}" class="buttonDescriptionText">{{ button.description }}</label>
@@ -142,11 +143,17 @@
           <input
             (change)="galleryInputBoxClicked(i)"
             [checked]="!button.hidden"
-            class="inputCheckbox"
+            [ngClass]="{ inputCheckboxDisabled: button.hidden }"
             id="{{ button.uniqueKey }}"
+            class="inputCheckbox"
             type="checkbox"
           >
-          <label for="{{ button.uniqueKey }}"class="buttonDescriptionText buttonDescriptionTextGallery">{{ button.description }}</label>
+          <label 
+            for="{{ button.uniqueKey }}"
+            class="buttonDescriptionText buttonDescriptionTextGallery"
+          >
+            {{ button.description }}
+          </label>
         </div>
       </div>
 
@@ -156,8 +163,9 @@
         <input
           (change)="toggleTopVisible()"
           [checked]="!appState.topHidden"
-          class="inputCheckbox"
+          [ngClass]="{ inputCheckboxDisabled: !appState.topHidden }"
           id="hideTopBar"
+          class="inputCheckbox"
           type="checkbox"
         >
         <label for="hideTopBar" class="extraSettingsText">

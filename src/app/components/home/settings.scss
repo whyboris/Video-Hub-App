@@ -171,11 +171,11 @@ button {
 }
 
 .extraSettings {
-  left: 354px;
+  left: 344px;
   opacity: 1;
   position: absolute;
   min-width: calc(100vw - 380px);
-  top: 400px;
+  top: 460px;
 }
 
 .extraSettingsText {
@@ -199,6 +199,10 @@ button {
   max-width: 200px;
   min-height: 41px;   // also hardcoded in home.component as [ngStyle]
   position: relative;
+
+  input {
+    display: none;
+  }
 }
 
 .buttonDescriptionText {
@@ -214,8 +218,8 @@ button {
 
 .buttonDescriptionTextGallery {
   max-height: 30px;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  // overflow: hidden;
+  // text-overflow: ellipsis;
   top: 3px;
   width: calc(100vw - 330px);
 }
@@ -226,6 +230,27 @@ button {
 
 .inputCheckbox {
   display: inline-block;
+  cursor: pointer;
+
+  &:checked + label {
+    &:before {
+      font-family: "photon-entypo";
+      content: '\e826';
+      transform: translate(-20px, 0);
+      display: inline-block;
+    }
+  }
+}
+
+.inputCheckboxDisabled {
+  + label {
+    &:before {
+      font-family: "photon-entypo";
+      content: '\e87b';
+      transform: translate(-20px, 0);
+      display: inline-block;
+    }
+  }
 }
 
 .showButtonLabel {
