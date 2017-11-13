@@ -154,6 +154,14 @@ export class HomeComponent implements OnInit {
       title: 'Toggle hover animations',
       spaceAfter: false,
       description: 'Scrolling over preview shows different screenshots'
+    }, {
+      uniqueKey: 'randomImage',
+      hidden: false,
+      toggled: true,              // coincides with `this.randomImage` variable
+      iconName: 'icon-shuffle',
+      title: 'Show random screenshot',
+      spaceAfter: false,
+      description: 'Show random screenshot in the preview'
     }
   ];
 
@@ -177,6 +185,7 @@ export class HomeComponent implements OnInit {
   showMoreInfo = true;
   previewSize = true;
   hoverDisabled = false;
+  randomImage = true;
 
   importDone = false;
   inProgress = false;
@@ -327,6 +336,9 @@ export class HomeComponent implements OnInit {
     } else if (index === 5) {
       this.hoverDisabled = !this.hoverDisabled;
       this.galleryButtons[5].toggled = !this.galleryButtons[5].toggled;
+    } else if (index === 6) {
+      this.randomImage = !this.randomImage;
+      this.galleryButtons[6].toggled = !this.galleryButtons[6].toggled;
     } else {
       console.log('what did you press?');
       // this.galleryButtons[index].toggled = !this.galleryButtons[index].toggled;

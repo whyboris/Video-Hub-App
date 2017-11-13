@@ -12,6 +12,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
   @Input() folderPath: string;
   @Input() largerSize: boolean;
   @Input() hoverDisabled: boolean;
+  @Input() randomImage: boolean;
 
   hover: boolean;
   currentlyShowing = 1;
@@ -39,7 +40,11 @@ export class PreviewComponent implements OnInit, OnDestroy {
     }
 
     // this.loop(); // disabled -- can have a toggle in gallery that will feed variable as input into this component that will start
-    this.showRandom();
+    if (this.randomImage) {
+      this.showRandom();
+    } else {
+      this.showThisOne(1);
+    }
   }
 
 
