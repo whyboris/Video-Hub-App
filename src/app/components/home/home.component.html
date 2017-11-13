@@ -316,6 +316,7 @@
               [stuff]="item[3]"
               [folderPath]="appState.selectedOutputFolder"
               [largerSize]="previewSize"
+              [hoverDisabled]="hoverDisabled"
             ></app-gallery-item>
 
           </div>
@@ -328,6 +329,7 @@
               [folderPath]="appState.selectedOutputFolder"
               [width]="previewSize ? (2 * item[6] || 342) : (item[6] || 171)"
               [largerSize]="previewSize"
+              [hoverDisabled]="hoverDisabled"
             ></app-filmstrip-item>
 
           </div>

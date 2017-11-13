@@ -11,6 +11,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
   @Input() stuff: any;
   @Input() folderPath: string;
   @Input() largerSize: boolean;
+  @Input() hoverDisabled: boolean;
 
   hover: boolean;
   currentlyShowing = 1;

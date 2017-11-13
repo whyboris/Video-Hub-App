@@ -3,7 +3,7 @@
   class="filmstrip-container"
 >
 
-  <ng-container *ngIf="hover">
+  <ng-container *ngIf="!hoverDisabled && hover">
     <div
       *ngFor="let item of stuff; let i = index"
       (mouseover)="showThisOne(i)"

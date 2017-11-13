@@ -141,11 +141,19 @@ export class HomeComponent implements OnInit {
     }, {
       uniqueKey: 'previewSize',
       hidden: false,
-      toggled: true,              // coincides with `this.showMoreInfo` variable
+      toggled: true,              // coincides with `this.previewSize` variable
       iconName: 'icon-resize-full',
       title: 'Toggle preview size',
       spaceAfter: false,
       description: 'Make the preview items larger or smaller'
+    }, {
+      uniqueKey: 'hoverDisabled',
+      hidden: false,
+      toggled: false,              // coincides with `this.hoverDisabled` variable
+      iconName: 'icon-feather',
+      title: 'Toggle hover animations',
+      spaceAfter: false,
+      description: 'Scrolling over preview shows different screenshots'
     }
   ];
 
@@ -168,6 +176,7 @@ export class HomeComponent implements OnInit {
   magicSearchString = '';
   showMoreInfo = true;
   previewSize = true;
+  hoverDisabled = false;
 
   importDone = false;
   inProgress = false;
@@ -315,6 +324,9 @@ export class HomeComponent implements OnInit {
     } else if (index === 4) {
       this.previewSize = !this.previewSize;
       this.galleryButtons[4].toggled = !this.galleryButtons[4].toggled;
+    } else if (index === 5) {
+      this.hoverDisabled = !this.hoverDisabled;
+      this.galleryButtons[5].toggled = !this.galleryButtons[5].toggled;
     } else {
       console.log('what did you press?');
       // this.galleryButtons[index].toggled = !this.galleryButtons[index].toggled;
