@@ -178,15 +178,14 @@
 
     </div>
 
-    <div class="sidebar">
+    <div (click)="toggleSettingsMenu()" [ngClass]="{ flipped: !appState.menuHidden }" class="hidingSettingsMenu">
+      <span class="icon icon-down-open-mini"></span>
+    </div>
 
-      <div
-        (click)="toggleSettingsMenu()"
-        [ngClass]="{ flipped: !appState.menuHidden }"
-        class="hidingSettingsMenu"
-      >
-        <span class="icon icon-down-open-mini"></span>
-      </div>
+    <div
+      [ngClass]="{ 'sidebar-hidden': searchButtons[6].toggled }"
+      class="sidebar"
+    >
 
       <div class="filteringTotal">
         42 folders<br>
@@ -272,7 +271,10 @@
 
 <!-- THE GALLERY PANE -->
 
-    <div class="gallery-container">
+    <div
+      [ngClass]="{ 'gallery-container-full-width': searchButtons[6].toggled}"
+      class="gallery-container"
+    >
 
 <!-- GALLERY CODE -->
 

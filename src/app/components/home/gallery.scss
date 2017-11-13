@@ -77,10 +77,11 @@
 }
 
 .gallery {
-  padding: 1px;
-  font-size: 0;
-  flex-flow: row wrap;
   display: flex;
+  flex-flow: row wrap;
+  font-size: 0;
+  margin-top: 10px;
+  padding: 1px;
 }
 
 .item {

@@ -116,6 +116,13 @@ $sidebar-width: 190px;
   position: absolute;
   top: $settings-height;
   width: $sidebar-width;
+  transform: translate(0, 0);
+  transition: 300ms;
+}
+
+.sidebar-hidden {
+  transform: translate(-$sidebar-width, 0);
+  transition: 300ms;
 }
 
 .gallery-container {
@@ -127,6 +134,7 @@ $sidebar-width: 190px;
   padding-bottom: 100px;
   position: absolute;
   top: $settings-height;
+  transition: 300ms;
   width: calc(100vw - #{$sidebar-width});
 }
 // SCROLL BAR STYLING !!!
@@ -140,4 +148,10 @@ $sidebar-width: 190px;
 }
 .gallery-container::-webkit-scrollbar-thumb {
 	background-color: #868686;
+}
+
+.gallery-container-full-width {
+  left: 0;
+  transition: 300ms;
+  width: 100vw;
 }

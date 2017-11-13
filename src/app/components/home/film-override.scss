@@ -2,9 +2,10 @@
   display: initial;
 
   .item {
-    width: initial;
-    max-width: calc(100% - 22px);
     height: 85px;
+    margin: 5px 15px 50px;
+    max-width: calc(100% - 22px);
+    width: initial;
 
     &:after {
       padding-top: 0;

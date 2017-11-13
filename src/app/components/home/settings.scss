@@ -63,7 +63,7 @@ button {
 }
 
 .gearButton {
-  color: #555555;
+  color: #AAAAAA;
   font-size: 14px;
   left: 10px;
   position: absolute;
@@ -73,10 +73,12 @@ button {
   &:hover {
     text-shadow: 0 0 7px rgba(255, 255, 255, 0.5);
     transition: 370ms;
+    color: #777777;
   }
 }
 
 .gearButtonActive {
+  color: #666666;
   transform: rotate(-100deg);
   transition: 370ms;
 }

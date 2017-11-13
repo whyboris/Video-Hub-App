@@ -67,6 +67,13 @@ export class HomeComponent implements OnInit {
       iconName: 'icon-cloud',
       title: 'Word cloud',
       description: 'Show the nine most frequent words in current file names'
+    }, {
+      uniqueKey: 'hideSidebar',
+      hidden: false,
+      toggled: false,
+      iconName: 'icon-left-circled',
+      title: 'Hide sidebar',
+      description: 'Hides the search filter sidebar'
     }
   ];
 
@@ -141,7 +148,7 @@ export class HomeComponent implements OnInit {
     }, {
       uniqueKey: 'previewSize',
       hidden: false,
-      toggled: true,              // coincides with `this.previewSize` variable
+      toggled: false,              // coincides with `this.previewSize` variable
       iconName: 'icon-resize-full',
       title: 'Toggle preview size',
       spaceAfter: false,
@@ -183,7 +190,7 @@ export class HomeComponent implements OnInit {
   currentPlayingFolder = '';
   magicSearchString = '';
   showMoreInfo = true;
-  previewSize = true;
+  previewSize = false;
   hoverDisabled = false;
   randomImage = true;
 
