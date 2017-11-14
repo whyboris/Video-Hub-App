@@ -1,6 +1,9 @@
-<div class="filmstrip-container">
+<div
+  [ngClass]="{ 'larger-size': largerSize }"
+  class="filmstrip-container"
+>
 
-  <div *ngIf="hover">
+  <div *ngIf="!hoverDisabled && hover">
     <div 
       (mouseover)="showThisOne(i)"
       *ngFor="let item of stuff; let i = index"
@@ -12,6 +15,7 @@
   
   <img
     [src]="sanitizer.bypassSecurityTrustUrl(folderPath + '/' + stuff[currentlyShowing])"
+    [ngClass]="{ 'larger-size': largerSize }"
     class="screencap"
   >
 

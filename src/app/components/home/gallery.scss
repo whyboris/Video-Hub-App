@@ -51,6 +51,10 @@
   word-wrap: break-word;
 }
 
+.larger-font {
+  font-size: 16px;
+}
+
 .folder {
   color: #333333;
   font-size: 12px;
@@ -73,17 +77,25 @@
 }
 
 .gallery {
-  padding: 1px;
-  font-size: 0;
-  flex-flow: row wrap;
   display: flex;
+  flex-flow: row wrap;
+  font-size: 0;
+  margin-top: 10px;
+  padding: 1px;
 }
+
 .item {
   flex: auto;
   height: 100px;
   margin: 15px 15px 50px;
   min-width: 174px; // 16:9 ratio with height
   max-width: 174px; //      rounded down from 178px to avoid common black bars
+}
+
+.item-big {
+  min-width: 348px;
+  max-width: 348px;
+  height: 200px;
 }
 
 .fileNamePadding {

@@ -2,15 +2,15 @@
   cursor: pointer;
   left: 13px;
   position: absolute;
-  top: 4px;
+  top: 34px;
   transition: 100ms;
   transform-origin: 4px 8px;
+  z-index: 20;
 
   &:hover {
     transition: 100ms;
     transform: scale(1.5);
   }
-
 }
 
 .flipped {
@@ -26,7 +26,7 @@
 .filteringTotal {
   color: #BBBBBB;
   font-size: 12px;
-  margin: 5px 0 15px;
+  margin: 15px 0 15px;
   text-align: right;
 }
 

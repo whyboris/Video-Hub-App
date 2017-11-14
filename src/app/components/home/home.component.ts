@@ -67,6 +67,13 @@ export class HomeComponent implements OnInit {
       iconName: 'icon-cloud',
       title: 'Word cloud',
       description: 'Show the nine most frequent words in current file names'
+    }, {
+      uniqueKey: 'hideSidebar',
+      hidden: false,
+      toggled: false,
+      iconName: 'icon-left-circled',
+      title: 'Hide sidebar',
+      description: 'Hides the search filter sidebar'
     }
   ];
 
@@ -138,6 +145,30 @@ export class HomeComponent implements OnInit {
       title: 'Show more info',
       spaceAfter: false,
       description: 'Show more info'
+    }, {
+      uniqueKey: 'previewSize',
+      hidden: false,
+      toggled: false,              // coincides with `this.previewSize` variable
+      iconName: 'icon-resize-full',
+      title: 'Toggle preview size',
+      spaceAfter: false,
+      description: 'Make the preview items larger or smaller'
+    }, {
+      uniqueKey: 'hoverDisabled',
+      hidden: false,
+      toggled: false,              // coincides with `this.hoverDisabled` variable
+      iconName: 'icon-feather',
+      title: 'Toggle hover animations',
+      spaceAfter: false,
+      description: 'Scrolling over preview shows different screenshots'
+    }, {
+      uniqueKey: 'randomImage',
+      hidden: false,
+      toggled: true,              // coincides with `this.randomImage` variable
+      iconName: 'icon-shuffle',
+      title: 'Show random screenshot',
+      spaceAfter: false,
+      description: 'Show random screenshot in the preview'
     }
   ];
 
@@ -159,6 +190,9 @@ export class HomeComponent implements OnInit {
   currentPlayingFolder = '';
   magicSearchString = '';
   showMoreInfo = true;
+  previewSize = false;
+  hoverDisabled = false;
+  randomImage = true;
 
   importDone = false;
   inProgress = false;
@@ -303,6 +337,15 @@ export class HomeComponent implements OnInit {
     } else if (index === 3) {
       this.showMoreInfo = !this.showMoreInfo;
       this.galleryButtons[3].toggled = !this.galleryButtons[3].toggled;
+    } else if (index === 4) {
+      this.previewSize = !this.previewSize;
+      this.galleryButtons[4].toggled = !this.galleryButtons[4].toggled;
+    } else if (index === 5) {
+      this.hoverDisabled = !this.hoverDisabled;
+      this.galleryButtons[5].toggled = !this.galleryButtons[5].toggled;
+    } else if (index === 6) {
+      this.randomImage = !this.randomImage;
+      this.galleryButtons[6].toggled = !this.galleryButtons[6].toggled;
     } else {
       console.log('what did you press?');
       // this.galleryButtons[index].toggled = !this.galleryButtons[index].toggled;

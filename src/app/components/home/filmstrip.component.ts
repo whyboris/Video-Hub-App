@@ -11,6 +11,9 @@ export class FilmstripComponent implements OnInit {
   @Input() stuff: any;
   @Input() folderPath: string;
   @Input() width: number;
+  @Input() largerSize: boolean;
+  @Input() hoverDisabled: boolean;
+
   indexArray: Array<number> = []; // to set z-index on css
 
   hover = false;

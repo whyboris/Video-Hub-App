@@ -1,17 +1,79 @@
 .wizard {
   background: #EEEEEE;
   height: 100vh;
-  top: 50px;
-  padding: 50px;
+  top: 72px;
+  padding-top: 30px;
   position: fixed;
   width: 100%;
   z-index: 100;
+  overflow-y: scroll;
+
+  h1 {
+    font-size: 14px;
+    color: #555555;
+  }
+
+  span {
+    display: block;
+    font-size: 12px;
+    color: #555555;
+  }
+
+  .steps {
+    background-color: #FFCACA;
+    border-radius: 9px;
+    box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.07);
+    color: #FFFFFF;
+    font-size: 9px;
+    height: 18px;
+    line-height: 18px;
+    position: absolute;
+    text-align: center;
+    transform: translate(-24px, 24px);
+    width: 18px;
+    transition: 300ms;
+  }
+
+  .current-step {
+    background-color: #ff7777;
+    transition: 300ms;
+  }
+
+  .description {
+    color: #CCCCCC;
+    margin-bottom: 10px;
+  }
+
+  .path {
+    min-height: 20px;
+  }
+
+  .left-side {
+    float: left;
+    padding: 50px;
+    width: 40vw;
+    box-sizing: border-box;
+    height: calc(100vh - 130px);
+    min-height: 350px;
+    border-right: 1px solid #CCCCCC;
+  }
+
+  .right-side {
+    float: left;
+    max-width: 60vw;
+    padding: 50px 50px 160px;
+  }
 
   button {
     margin: 15px;
     max-height: 50px;
     max-width: 300px;
     padding: 10px;
+
+    &:disabled {
+      cursor: initial;
+      pointer-events: none;
+    }
   }
 }
 
