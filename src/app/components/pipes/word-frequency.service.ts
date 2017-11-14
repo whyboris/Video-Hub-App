@@ -17,8 +17,16 @@ export class WordFrequencyService {
     this.wordMap = new Map();
   }
 
-
-  public addString(filename) {
+  /**
+   * Add each word from the file name to the wordMap via the `addWord` method
+   * Ignore all words less than 2 characters long
+   * Strip out all parantheses, brackets, and a few other words
+   * @param filename
+   */
+  public addString(filename: string): void {
+    // Strip out: {}()[] as well as 'for', 'her'
+    const regex = /{|}|\(|\)|\[|\]|for|her/g;
+    filename = filename.replace(regex, '');
     const wordArray = filename.split(' ');
     wordArray.forEach(word => {
       if (!(word.length < 3)) {
@@ -31,7 +39,7 @@ export class WordFrequencyService {
    * Populate the frequency map
    * @param word
    */
-  private addWord(word) {
+  private addWord(word: string): void {
     if (this.wordMap.has(word)) {
       this.wordMap.set(word, this.wordMap.get(word) + 1);
     } else {
@@ -42,7 +50,7 @@ export class WordFrequencyService {
   /**
    * Remove all elements with 3 or fewer occurences
    */
-  public cleanMap() {
+  public cleanMap(): void {
     this.wordMap.forEach((value, key) => {
       if (value < 3) {
         this.wordMap.delete(key);

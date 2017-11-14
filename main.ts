@@ -21,8 +21,11 @@ function createWindow() {
     y: 0,
     // width: size.width,
     // height: size.height,
-    width: 600,
-    height: 400,
+    center: true,
+    width: 800,
+    height: 600,
+    minWidth: 420,
+    minHeight: 250,
     icon: path.join(__dirname, 'assets/icons/png/64x64.png'),
     frame: false
     // BORIS !!! the above removes the frame from the window completely !!!
