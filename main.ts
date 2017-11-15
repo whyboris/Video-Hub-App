@@ -303,6 +303,7 @@ function walkSync(dir, filelist) {
         || file.toLowerCase().indexOf('.avi') !== -1
         || file.toLowerCase().indexOf('.mpg') !== -1
         || file.toLowerCase().indexOf('.mpeg') !== -1
+        || file.toLowerCase().indexOf('.mkv') !== -1
         || file.toLowerCase().indexOf('.m4v') !== -1) {
           // before adding, remove the redundant prefix: selectedSourceFolder
           const partialPath = dir.replace(selectedSourceFolder, '');

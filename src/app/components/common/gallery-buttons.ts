@@ -53,7 +53,23 @@ export let GalleryButtons = [
     toggled: true,              // coincides with `this.randomImage` variable
     iconName: 'icon-shuffle',
     title: 'Show random screenshot',
-    spaceAfter: false,
+    spaceAfter: true,
     description: 'Show random screenshot in the preview'
+  }, {
+    uniqueKey: 'makeSmaller',
+    hidden: false,
+    toggled: false,
+    iconName: 'icon-minus',
+    title: 'Decrease preview size',
+    spaceAfter: false,
+    description: 'Decrease preview size'
+  }, {
+    uniqueKey: 'makeLarger',
+    hidden: false,
+    toggled: false,
+    iconName: 'icon-plus',
+    title: 'Increase preview size',
+    spaceAfter: true,
+    description: 'Increase preview size'
   }
 ]

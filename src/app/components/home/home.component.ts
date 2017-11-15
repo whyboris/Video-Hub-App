@@ -107,6 +107,8 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  // INTERACT WITH ELECTRON
+
   public loadFromFile() {
     // console.log('loading file');
     this.electronService.ipcRenderer.send('load-the-file', 'some thing sent');
@@ -125,6 +127,14 @@ export class HomeComponent implements OnInit {
   public importFresh() {
     // console.log('fresh import');
     this.electronService.ipcRenderer.send('start-the-import', 'sending some message');
+  }
+
+  public initiateMinimize() {
+    this.electronService.ipcRenderer.send('minimize-window', 'lol');
+  }
+
+  public initiateClose() {
+    this.electronService.ipcRenderer.send('close-window', 'lol');
   }
 
   // HTML calls this
@@ -192,8 +202,8 @@ export class HomeComponent implements OnInit {
       this.showMoreInfo = !this.showMoreInfo;
       this.galleryButtons[3].toggled = !this.galleryButtons[3].toggled;
     } else if (index === 4) {
+      // toggle the font size
       this.previewSize = !this.previewSize;
-      this.imgHeight = this.imgHeight === 100 ? 200 : 100;
       this.galleryButtons[4].toggled = !this.galleryButtons[4].toggled;
     } else if (index === 5) {
       this.hoverDisabled = !this.hoverDisabled;
@@ -201,11 +211,27 @@ export class HomeComponent implements OnInit {
     } else if (index === 6) {
       this.randomImage = !this.randomImage;
       this.galleryButtons[6].toggled = !this.galleryButtons[6].toggled;
+    } else if (index === 7) {
+      this.decreaseSize();
+    } else if (index === 8) {
+      this.increaseSize();
     } else {
       console.log('what did you press?');
       // this.galleryButtons[index].toggled = !this.galleryButtons[index].toggled;
     }
 
+  }
+
+  public decreaseSize(): void {
+    if (this.imgHeight > 50) {
+      this.imgHeight = this.imgHeight - 25;
+    }
+  }
+
+  public increaseSize(): void {
+    if (this.imgHeight < 200) {
+      this.imgHeight = this.imgHeight + 25;
+    }
   }
 
   /**
@@ -269,14 +295,6 @@ export class HomeComponent implements OnInit {
 
   toggleTopVisible() {
     this.appState.topHidden = !this.appState.topHidden;
-  }
-
-  initiateClose() {
-    this.electronService.ipcRenderer.send('close-window', 'lol');
-  }
-
-  initiateMinimize() {
-    this.electronService.ipcRenderer.send('minimize-window', 'lol');
   }
 
 }
