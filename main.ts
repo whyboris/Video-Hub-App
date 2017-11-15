@@ -119,6 +119,24 @@ let selectedOutputFolder = ''; // later = ''
 let theOriginalOpenFileDialogEvent;
 
 /**
+ * Close the window
+ */
+ipc.on('close-window', function (event, someMessage) {
+  console.log('window closed by user');
+  BrowserWindow.getFocusedWindow().close();
+});
+
+/**
+ * Minimize the window
+ */
+ipc.on('minimize-window', function (event, someMessage) {
+  console.log('window minimized by user');
+  if (BrowserWindow.getFocusedWindow()) {
+    BrowserWindow.getFocusedWindow().minimize();
+  }
+});
+
+/**
  * Summon system modal to choose directory from which to import videos
  */
 ipc.on('start-the-import', function (event, someMessage) {

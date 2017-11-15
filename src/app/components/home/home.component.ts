@@ -417,7 +417,11 @@ export class HomeComponent implements OnInit {
   }
 
   initiateClose() {
-    console.log('the user tried to close the app, lol!');
+    this.electronService.ipcRenderer.send('close-window', 'lol');
+  }
+
+  initiateMinimize() {
+    this.electronService.ipcRenderer.send('minimize-window', 'lol');
   }
 
 }
