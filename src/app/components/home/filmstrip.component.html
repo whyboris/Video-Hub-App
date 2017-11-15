@@ -1,6 +1,6 @@
-<div 
-  [ngClass]="{ 'larger-size': largerSize }"
+<div
   class="filmstrip-container"
+  [ngStyle]="{ height: imgHeight + 'px'}"
 >
 
   <ng-container *ngIf="!hoverDisabled && hover">
@@ -15,8 +15,11 @@
 
   <img
     *ngFor="let item of stuff; let i = index"
-    [ngClass]="{ 'larger-size': largerSize }"
-    [ngStyle]="{'right': 'calc(' + (9 - i) + ' * (100% - ' + width + 'px)/9)', 'z-index': indexArray[i] }"
+    [ngStyle]="{
+        'right': 'calc(' + (9 - i) + ' * (100% - ' + width + 'px)/9)',
+        'z-index': indexArray[i],
+        'height': imgHeight + 'px'
+      }"
     [src]="sanitizer.bypassSecurityTrustUrl(folderPath + '/' + stuff[i])"
     class="screencap"
   >

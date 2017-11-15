@@ -4,6 +4,9 @@
     <div class="draggable">
       Video Hub
     </div>
+    <div (click)="initiateMinimize()" class="minimizeButton">
+      <span class="icon icon-minus"></span>
+    </div>
     <div (click)="initiateClose()" class="closeButton">
       <span class="icon icon-cancel"></span>
     </div>
@@ -148,7 +151,7 @@
             class="inputCheckbox"
             type="checkbox"
           >
-          <label 
+          <label
             for="{{ button.uniqueKey }}"
             class="buttonDescriptionText buttonDescriptionTextGallery"
           >
@@ -286,9 +289,9 @@
 
 <!-- GALLERY CODE -->
 
-      <div 
+      <div
         [ngClass]="{ filmOverride: appState.currentView !== 'thumbs' }"
-        class="gallery" 
+        class="gallery"
       >
 
         <!-- <virtual-scroll
@@ -304,9 +307,12 @@
           [ngClass]="{
               fileNamePadding: !showMoreInfo && appState.currentView != 'files',
               filesView: appState.currentView === 'files',
-              whenFilenamesHidden: appState.currentView === 'filmstrip' && !showMoreInfo,
-              'item-big': previewSize,
-              'large-filmstrip': appState.currentView === 'filmstrip' && previewSize
+              whenFilenamesHidden: appState.currentView === 'filmstrip' && !showMoreInfo
+            }"
+          [ngStyle]="{
+              height: imgHeight + 'px',
+              'min-width': ((imgHeight / 100) * 174) + 'px',
+              'max-width': (appState.currentView === 'thumbs') ? ((imgHeight / 100) * 174) + 'px' : 'calc(100vw - 240px)'
             }"
           *ngFor="let item of finalArray
                     | magicSearchPipe: magicSearchString
@@ -325,7 +331,7 @@
               (click)="openVideo(item[3])"
               [stuff]="item[3]"
               [folderPath]="appState.selectedOutputFolder"
-              [largerSize]="previewSize"
+              [imgHeight]="imgHeight"
               [hoverDisabled]="hoverDisabled"
               [randomImage]="randomImage"
             ></app-gallery-item>
@@ -338,8 +344,8 @@
               (click)="openVideo(item[3])"
               [stuff]="item[3]"
               [folderPath]="appState.selectedOutputFolder"
-              [width]="previewSize ? (2 * item[6] || 342) : (item[6] || 171)"
-              [largerSize]="previewSize"
+              [width]="(imgHeight / 100) * item[6] || (imgHeight / 100) * 171"
+              [imgHeight]="imgHeight"
               [hoverDisabled]="hoverDisabled"
             ></app-filmstrip-item>
 
@@ -351,29 +357,29 @@
             </div>
           </div>
 
-          <div 
+          <div
             *ngIf="showMoreInfo || appState.currentView === 'files'"
-            class="metadata" 
+            class="metadata"
           >
 
-            <div 
+            <div
               *ngIf="showMoreInfo"
-              class="length" 
+              class="length"
             >
               {{ item[4] | lengthPipe }}
             </div>
 
-            <div 
+            <div
               *ngIf="showMoreInfo"
-              class="size" 
+              class="size"
             >
               {{ item[5] }}
             </div>
 
-            <div 
+            <div
               (click)="openVideo(item[3])"
               [ngClass]="{ 'larger-font': previewSize }"
-              class="title" 
+              class="title"
             >
               {{ item[2] }}
             </div>
@@ -414,42 +420,42 @@
 
     <div
       [ngClass]="{ 'current-step': appState.selectedSourceFolder === '' }"
-      class="steps" 
+      class="steps"
     >
       1
     </div>
     <button (click)="selectSourceDirectory()">
       {{ appState.selectedSourceFolder === '' ? 'Select' : 'Change' }} input directory
     </button>
-    
+
     <span class="description">
       Importing from:
     </span>
     <span class="path">
       {{ appState.selectedSourceFolder }}
     </span>
-    
-    <div 
+
+    <div
       [ngClass]="{ 'current-step': appState.selectedSourceFolder !== '' && appState.selectedOutputFolder === '' }"
       class="steps"
     >
       2
     </div>
-    <button 
+    <button
       (click)="selectOutputDirectory()"
       [disabled]="appState.selectedSourceFolder === ''"
     >
       {{ appState.selectedOutputFolder === '' ? 'Select' : 'Change' }} output directory
     </button>
-    
+
     <span class="description">
       Saving screenshots to:
     </span>
     <span class="path">
       {{ appState.selectedOutputFolder }}
     </span>
-    
-    <div 
+
+    <div
       [ngClass]="{ 'current-step': appState.selectedOutputFolder !== '' && appState.selectedSourceFolder !== '' }"
       class="steps"
     >
@@ -461,7 +467,7 @@
     >
       Start the import
     </button>
-  
+
   </div>
 
 </div>

@@ -21,8 +21,11 @@ function createWindow() {
     y: 0,
     // width: size.width,
     // height: size.height,
-    width: 600,
-    height: 400,
+    center: true,
+    width: 830,
+    height: 600,
+    minWidth: 420,
+    minHeight: 250,
     icon: path.join(__dirname, 'assets/icons/png/64x64.png'),
     frame: false
     // BORIS !!! the above removes the frame from the window completely !!!
@@ -114,6 +117,24 @@ let selectedSourceFolder = '';  // later = ''
 let selectedOutputFolder = ''; // later = ''
 
 let theOriginalOpenFileDialogEvent;
+
+/**
+ * Close the window
+ */
+ipc.on('close-window', function (event, someMessage) {
+  console.log('window closed by user');
+  BrowserWindow.getFocusedWindow().close();
+});
+
+/**
+ * Minimize the window
+ */
+ipc.on('minimize-window', function (event, someMessage) {
+  console.log('window minimized by user');
+  if (BrowserWindow.getFocusedWindow()) {
+    BrowserWindow.getFocusedWindow().minimize();
+  }
+});
 
 /**
  * Summon system modal to choose directory from which to import videos
@@ -282,6 +303,7 @@ function walkSync(dir, filelist) {
         || file.toLowerCase().indexOf('.avi') !== -1
         || file.toLowerCase().indexOf('.mpg') !== -1
         || file.toLowerCase().indexOf('.mpeg') !== -1
+        || file.toLowerCase().indexOf('.mkv') !== -1
         || file.toLowerCase().indexOf('.m4v') !== -1) {
           // before adding, remove the redundant prefix: selectedSourceFolder
           const partialPath = dir.replace(selectedSourceFolder, '');

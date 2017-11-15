@@ -6,6 +6,11 @@ import { WordFrequencyService } from 'app/components/pipes/word-frequency.servic
 
 import { FinalObject } from '../common/final-object.interface';
 
+import { SearchButtons } from '../common/search-buttons';
+import { Filters } from '../common/filters';
+import { GalleryButtons } from '../common/gallery-buttons';
+import { AppState } from '../common/app-state';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -23,167 +28,14 @@ import { FinalObject } from '../common/final-object.interface';
 export class HomeComponent implements OnInit {
 
   // searchButtons & filters -- arrays must be in the same order to correspond correctly !!!
-
-  searchButtons = [
-    {
-      uniqueKey: 'folderUnion',
-      hidden: true,
-      toggled: false,
-      iconName: 'icon-folder',
-      title: 'Folder union search',
-      description: 'Search in all folders containing any of the search words'
-    }, {
-      uniqueKey: 'folder',
-      hidden: false,
-      toggled: false,
-      iconName: 'icon-folder',
-      title: 'Folder search',
-      description: 'Search in folders containing each of the search words'
-    }, {
-      uniqueKey: 'fileUnion',
-      hidden: true,
-      toggled: false,
-      iconName: 'icon-video',
-      title: 'Video union search',
-      description: 'Search for videos containing any of the search words'
-    }, {
-      uniqueKey: 'file',
-      hidden: false,
-      toggled: true,
-      iconName: 'icon-video',
-      title: 'Video search',
-      description: 'Search for videos containing each of the search words'
-    }, {
-      uniqueKey: 'magic',
-      hidden: false,
-      toggled: true,
-      iconName: 'icon-search',
-      title: 'Magic search',
-      description: 'Live search showing all files and files inside folders that contain search words'
-    }, {
-      uniqueKey: 'showFreq',
-      hidden: false,
-      toggled: true,
-      iconName: 'icon-cloud',
-      title: 'Word cloud',
-      description: 'Show the nine most frequent words in current file names'
-    }, {
-      uniqueKey: 'hideSidebar',
-      hidden: false,
-      toggled: false,
-      iconName: 'icon-left-circled',
-      title: 'Hide sidebar',
-      description: 'Hides the search filter sidebar'
-    }
-  ];
-
-  // string = search string, array = array of filters, bool = dummy to flip to trigger pipe
-  // array for `file`, `fileUnion`, `folder`, `folderUnion`
-  filters = [
-    {
-     uniqueKey: 'folderUnion',
-     string: '',
-     array: [], // contains search strings
-     bool: true,
-     placeholder: 'Folder union',
-     conjunction: 'or'
-    }, {
-      uniqueKey: 'folder',
-      string: '',
-      array: [],
-      bool: true,
-      placeholder: 'Folder contains',
-      conjunction: 'and'
-    }, {
-      uniqueKey: 'fileUnion',
-      string: '',
-      array: [],
-      bool: true,
-      placeholder: 'File union',
-      conjunction: 'or'
-    }, {
-      uniqueKey: 'file',
-      string: '',
-      array: [],
-      bool: true,
-      placeholder: 'File contains',
-      conjunction: 'and',
-    }
-  ];
+  searchButtons = SearchButtons;
+  filters = Filters;
 
   // Array is in the order in which the buttons will be rendered
-  galleryButtons = [
-    {
-      uniqueKey: 'showThumbnails',
-      hidden: false,
-      toggled: true,
-      iconName: 'icon-layout',
-      title: 'Show thumbnails',
-      spaceAfter: false,
-      description: 'Show thumbnails view'
-    }, {
-      uniqueKey: 'showFilmstrip',
-      hidden: false,
-      toggled: false,
-      iconName: 'icon-menu',
-      title: 'Show filmstrip',
-      spaceAfter: false,
-      description: 'Show filmstrip view'
-    }, {
-      uniqueKey: 'showFiles',
-      hidden: false,
-      toggled: false,
-      iconName: 'icon-menu',
-      title: 'Show files',
-      spaceAfter: true,
-      description: 'Show files view'
-    }, {
-      uniqueKey: 'showMoreInfo',
-      hidden: false,
-      toggled: true,              // coincides with `this.showMoreInfo` variable
-      iconName: 'icon-tag',
-      title: 'Show more info',
-      spaceAfter: false,
-      description: 'Show more info'
-    }, {
-      uniqueKey: 'previewSize',
-      hidden: false,
-      toggled: false,              // coincides with `this.previewSize` variable
-      iconName: 'icon-resize-full',
-      title: 'Toggle preview size',
-      spaceAfter: false,
-      description: 'Make the preview items larger or smaller'
-    }, {
-      uniqueKey: 'hoverDisabled',
-      hidden: false,
-      toggled: false,              // coincides with `this.hoverDisabled` variable
-      iconName: 'icon-feather',
-      title: 'Toggle hover animations',
-      spaceAfter: false,
-      description: 'Scrolling over preview shows different screenshots'
-    }, {
-      uniqueKey: 'randomImage',
-      hidden: false,
-      toggled: true,              // coincides with `this.randomImage` variable
-      iconName: 'icon-shuffle',
-      title: 'Show random screenshot',
-      spaceAfter: false,
-      description: 'Show random screenshot in the preview'
-    }
-  ];
+  galleryButtons = GalleryButtons;
 
   // App state to save -- so it can be exported and saved when closing the app
-  appState = {
-    selectedOutputFolder: '',
-    selectedSourceFolder: '',
-    currentView: 'thumbs', // can be 'thumbs' | 'filmstrip' | 'files'
-
-    buttonsInView: true,
-
-    numberToShow: 20,
-    menuHidden: false,
-    topHidden: false
-  }
+  appState = AppState;
 
   // REORGANIZE / keep
   currentPlayingFile = '';
@@ -197,6 +49,8 @@ export class HomeComponent implements OnInit {
   importDone = false;
   inProgress = false;
   progressPercent = 0;
+
+  imgHeight = 100;
 
   // temp
   wordFreqArr: any;
@@ -253,6 +107,8 @@ export class HomeComponent implements OnInit {
     });
   }
 
+  // INTERACT WITH ELECTRON
+
   public loadFromFile() {
     // console.log('loading file');
     this.electronService.ipcRenderer.send('load-the-file', 'some thing sent');
@@ -271,6 +127,14 @@ export class HomeComponent implements OnInit {
   public importFresh() {
     // console.log('fresh import');
     this.electronService.ipcRenderer.send('start-the-import', 'sending some message');
+  }
+
+  public initiateMinimize() {
+    this.electronService.ipcRenderer.send('minimize-window', 'lol');
+  }
+
+  public initiateClose() {
+    this.electronService.ipcRenderer.send('close-window', 'lol');
   }
 
   // HTML calls this
@@ -338,6 +202,7 @@ export class HomeComponent implements OnInit {
       this.showMoreInfo = !this.showMoreInfo;
       this.galleryButtons[3].toggled = !this.galleryButtons[3].toggled;
     } else if (index === 4) {
+      // toggle the font size
       this.previewSize = !this.previewSize;
       this.galleryButtons[4].toggled = !this.galleryButtons[4].toggled;
     } else if (index === 5) {
@@ -346,11 +211,27 @@ export class HomeComponent implements OnInit {
     } else if (index === 6) {
       this.randomImage = !this.randomImage;
       this.galleryButtons[6].toggled = !this.galleryButtons[6].toggled;
+    } else if (index === 7) {
+      this.decreaseSize();
+    } else if (index === 8) {
+      this.increaseSize();
     } else {
       console.log('what did you press?');
       // this.galleryButtons[index].toggled = !this.galleryButtons[index].toggled;
     }
 
+  }
+
+  public decreaseSize(): void {
+    if (this.imgHeight > 50) {
+      this.imgHeight = this.imgHeight - 25;
+    }
+  }
+
+  public increaseSize(): void {
+    if (this.imgHeight < 200) {
+      this.imgHeight = this.imgHeight + 25;
+    }
   }
 
   /**
@@ -414,10 +295,6 @@ export class HomeComponent implements OnInit {
 
   toggleTopVisible() {
     this.appState.topHidden = !this.appState.topHidden;
-  }
-
-  initiateClose() {
-    console.log('the user tried to close the app, lol!');
   }
 
 }

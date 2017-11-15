@@ -66,6 +66,21 @@ $sidebar-width: 190px;
   }
 }
 
+.minimizeButton {
+  color: #333333;
+  cursor: pointer;
+  font-size: 14px;
+  position: fixed;
+  right: 34px;
+  top: 5px;
+  transition: 100ms;
+
+  &:hover {
+    transition: 100ms;
+    color: #ff6666;
+  }
+}
+
 .top {
   // background: #F3F3F3;
   background-image: linear-gradient(to bottom, #e8e6e8 0%, #d1cfd1 100%);
