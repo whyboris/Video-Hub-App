@@ -198,6 +198,8 @@ export class HomeComponent implements OnInit {
   inProgress = false;
   progressPercent = 0;
 
+  imgHeight = 100;
+
   // temp
   wordFreqArr: any;
   currResults: any = { showing: 0, total: 0 };
@@ -339,6 +341,7 @@ export class HomeComponent implements OnInit {
       this.galleryButtons[3].toggled = !this.galleryButtons[3].toggled;
     } else if (index === 4) {
       this.previewSize = !this.previewSize;
+      this.imgHeight = this.imgHeight === 100 ? 200 : 100;
       this.galleryButtons[4].toggled = !this.galleryButtons[4].toggled;
     } else if (index === 5) {
       this.hoverDisabled = !this.hoverDisabled;

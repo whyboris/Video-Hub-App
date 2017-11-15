@@ -307,9 +307,12 @@
           [ngClass]="{
               fileNamePadding: !showMoreInfo && appState.currentView != 'files',
               filesView: appState.currentView === 'files',
-              whenFilenamesHidden: appState.currentView === 'filmstrip' && !showMoreInfo,
-              'item-big': previewSize,
-              'large-filmstrip': appState.currentView === 'filmstrip' && previewSize
+              whenFilenamesHidden: appState.currentView === 'filmstrip' && !showMoreInfo
+            }"
+          [ngStyle]="{
+              height: imgHeight + 'px',
+              'min-width': ((imgHeight / 100) * 174) + 'px',
+              'max-width': (appState.currentView === 'thumbs') ? ((imgHeight / 100) * 174) + 'px' : 'calc(100vw - 240px)'
             }"
           *ngFor="let item of finalArray
                     | magicSearchPipe: magicSearchString
@@ -328,7 +331,7 @@
               (click)="openVideo(item[3])"
               [stuff]="item[3]"
               [folderPath]="appState.selectedOutputFolder"
-              [largerSize]="previewSize"
+              [imgHeight]="imgHeight"
               [hoverDisabled]="hoverDisabled"
               [randomImage]="randomImage"
             ></app-gallery-item>
@@ -341,8 +344,8 @@
               (click)="openVideo(item[3])"
               [stuff]="item[3]"
               [folderPath]="appState.selectedOutputFolder"
-              [width]="previewSize ? (2 * item[6] || 342) : (item[6] || 171)"
-              [largerSize]="previewSize"
+              [width]="(imgHeight / 100) * item[6] || (imgHeight / 100) * 171"
+              [imgHeight]="imgHeight"
               [hoverDisabled]="hoverDisabled"
             ></app-filmstrip-item>
 

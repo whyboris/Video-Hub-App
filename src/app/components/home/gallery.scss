@@ -69,7 +69,7 @@
 }
 
 // add arrows styling to what the folder-arrows.pipe puts out
-/deep/ .icon-arrow:before{
+/deep/ .icon-arrow:before {
   color: #444444;
   content: '\e875';
   font-family: "photon-entypo";
@@ -86,16 +86,7 @@
 
 .item {
   flex: auto;
-  height: 100px;
   margin: 15px 15px 50px;
-  min-width: 174px; // 16:9 ratio with height
-  max-width: 174px; //      rounded down from 178px to avoid common black bars
-}
-
-.item-big {
-  min-width: 348px;
-  max-width: 348px;
-  height: 200px;
 }
 
 .fileNamePadding {

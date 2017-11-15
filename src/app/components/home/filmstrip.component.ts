@@ -8,11 +8,11 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class FilmstripComponent implements OnInit {
 
-  @Input() stuff: any;
   @Input() folderPath: string;
-  @Input() width: number;
-  @Input() largerSize: boolean;
   @Input() hoverDisabled: boolean;
+  @Input() imgHeight: number;
+  @Input() stuff: any;
+  @Input() width: number;
 
   indexArray: Array<number> = []; // to set z-index on css
 
