@@ -6,12 +6,15 @@
 }
 
 .folder-container {
+  max-height: 18px;
   min-width: calc(100vw - 100px);
+  overflow: hidden;
 }
 
 .folder-word {
   color: #777777;
   cursor: pointer;
+  display: inline-block;
   font-size: 12px;
   margin-right: 5px;
 
@@ -22,12 +25,15 @@
 }
 
 .file-container {
+  max-height: 20px;
   min-width: calc(100vw - 100px);
+  overflow: hidden;
 }
 
 .file-words {
   color: #444444;
   cursor: pointer;
+  display: inline-block;
   font-size: 14px;
   margin-right: 5px;
 }

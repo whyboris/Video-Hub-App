@@ -22,7 +22,7 @@ function createWindow() {
     // width: size.width,
     // height: size.height,
     center: true,
-    width: 800,
+    width: 830,
     height: 600,
     minWidth: 420,
     minHeight: 250,

@@ -1,17 +1,22 @@
 <div class="folder-container">
   <span class="icon icon-folder"></span>
-  <div *ngFor="let item of folderNameArray" style="display: inline-block">
-    <span (click)="folderWordClicked(item)" class="folder-word">
-      {{ item }}
-    </span>
-  </div>
+  <span
+  *ngFor="let item of folderNameArray"
+    (click)="folderWordClicked(item)"
+    class="folder-word"
+  >
+    {{ item }}
+  </span>
+
 </div>
 
 <div class="file-container">
   <span class="icon icon-video"></span>
-  <div *ngFor="let item of fileNameArray" style="display: inline-block">
-    <span (click)="fileWordClicked(item)" class="file-words">
-      {{ item }}
-    </span>
-  </div>
+  <span
+    *ngFor="let item of fileNameArray"
+    (click)="fileWordClicked(item)"
+    class="file-words"
+  >
+    {{ item }}
+  </span>
 </div>

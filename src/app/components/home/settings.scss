@@ -84,9 +84,10 @@ button {
 }
 
 .searchSettingsButtons {
-  position: absolute;
   left: 35px;
+  max-height: 23px;
   overflow: hidden;
+  position: absolute;
   transform-origin: 13px 13px;
   transition: $transition-length;
   z-index: 2;
