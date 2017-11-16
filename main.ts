@@ -118,6 +118,12 @@ let selectedOutputFolder = ''; // later = ''
 
 let theOriginalOpenFileDialogEvent;
 
+let fileNumberTracker = 0;
+
+// ============================================================
+// Methods that interact with Angular
+// ============================================================
+
 /**
  * Close the window
  */
@@ -135,35 +141,6 @@ ipc.on('minimize-window', function (event, someMessage) {
     BrowserWindow.getFocusedWindow().minimize();
   }
 });
-
-/**
- * Summon system modal to choose directory from which to import videos
- */
-ipc.on('start-the-import', function (event, someMessage) {
-  // console.log(someMessage);
-  finalArray = [];
-  fileCounter = 0;
-
-  // reset number of files if user re-runs extraction a second time !!!
-  totalNumberOfFiles = 0;
-
-  // no need to return anything, walkSync updates `finalArray`
-  // second param is needed for its own recursion
-  walkSync(selectedSourceFolder, []);
-
-  // reset files Processed
-  filesProcessed = 1;
-
-  totalNumberOfFiles = finalArray.length;
-  console.log('there are a total of: ' + totalNumberOfFiles + ' files');
-  if (totalNumberOfFiles > 0) {
-    extractNextScreenshot();
-  } else {
-    // TODO: handle case when number of screenshots is zero!
-    console.error('NO VIDEO FILES IN THIS DIRECTORY!');
-  }
-
-})
 
 /**
  * Summon system modal to choose INPUT directory
@@ -213,6 +190,35 @@ ipc.on('choose-output', function (event, someMessage) {
 })
 
 /**
+ * Start extracting the screenshots into a chosen output folder from a chosen input folder
+ */
+ipc.on('start-the-import', function (event, someMessage) {
+  // console.log(someMessage);
+  finalArray = [];
+  fileCounter = 0;
+
+  // reset number of files if user re-runs extraction a second time !!!
+  totalNumberOfFiles = 0;
+
+  // no need to return anything, walkSync updates `finalArray`
+  // second param is needed for its own recursion
+  walkSync(selectedSourceFolder, []);
+
+  // reset files Processed
+  filesProcessed = 1;
+
+  totalNumberOfFiles = finalArray.length;
+  console.log('there are a total of: ' + totalNumberOfFiles + ' files');
+  if (totalNumberOfFiles > 0) {
+    extractNextScreenshot();
+  } else {
+    // TODO: handle case when number of screenshots is zero!
+    console.error('NO VIDEO FILES IN THIS DIRECTORY!');
+  }
+
+})
+
+/**
  * Summon system modal to choose the images.json file
  */
 ipc.on('load-the-file', function (event, somethingElse) {
@@ -238,12 +244,16 @@ ipc.on('load-the-file', function (event, somethingElse) {
 
 })
 
+/**
+ * Open a particular video file clicked inside Angular
+ */
 ipc.on('openThisFile', function (event, fullFilePath) {
   shell.openItem(fullFilePath);
 })
 
-
-let fileNumberTracker = 0;
+// ============================================================
+// Methods to extract screenshots, build file list, etc
+// ============================================================
 
 /**
  * Extract the next screenshot
@@ -272,6 +282,7 @@ function sendFinalResultHome() {
   const finalObject: FinalObject = {
     inputDir: selectedSourceFolder,
     outputDir: selectedOutputFolder,
+    lastScreen: totalNumberOfFiles,
     images: finalArray
   };
 
@@ -355,12 +366,13 @@ const startPositionPercent = 5;
 const endPositionPercent = 95;
 const addPercent = (endPositionPercent - startPositionPercent) / (count - 1);
 if (!timestamps.length) {
-  let i = 0;
-  while (i < count) {
-    timestamps.push(`${startPositionPercent + addPercent * i}%`);
-    i = i + 1;
+  let t = 0;
+  while (t < count) {
+    timestamps.push(`${startPositionPercent + addPercent * t}%`);
+    t = t + 1;
   }
 }
+// all of above can be replaced with a simple array
 
 let i = 0;
 function takeScreenshots(file, currentFile) {
@@ -475,3 +487,22 @@ function labelVideo(width: number, height: number): string {
   return size;
 }
 
+
+
+function reScanDirectory(sourceFolder: string, fullFilePath: string) {
+
+  // 1 use regular file walking to scan full directory and create main file _WITHOUT SCREENSHOTS_
+
+  // 2 open the regular file
+
+  // 3 for each full directory, check if there is corresponding in regular file
+
+    // (a) if there is, copy over and you're done
+    // (b) if there is not, scan the screenshot
+
+  // 1 opens the fullFilePath file
+  // 2 parses it as json
+  // 3 independently scans sourceFolder
+  // 4 tries to reconcile things ...
+
+}
