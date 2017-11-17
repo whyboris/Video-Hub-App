@@ -1,6 +1,12 @@
 $transition-length: 300ms;
 $button-toggle-length: 75ms;
 
+h2 {
+  font-size: 16px;
+  color: #666666;
+  margin: 15px 0 0 10px;
+}
+
 button {
   border: 1px solid #BBBBBB; // don't alphabetize this one
   background: #dadada;
@@ -97,6 +103,20 @@ button {
   }
 }
 
+.closeSettings {
+  opacity: 1;
+  position: fixed;
+  right: 29px;
+  top: 270px;
+  transition-delay: 300ms;
+  transition-duration: 300ms;
+}
+
+.closeSettingsHidden {
+  opacity: 0;
+  transition: 50ms;
+}
+
 .gearButtonActive {
   color: #666666;
   transform: rotate(-100deg);
@@ -113,12 +133,6 @@ button {
   z-index: 2;
 }
 
-.buttonRightSideUp {
-  transform: rotate(-90deg);
-  transition: $transition-length;
-  margin-right: 15px;
-}
-
 .buttonSpacer {
   display: inline-block;
   height: 10px;
@@ -133,77 +147,35 @@ button {
 }
 
 .gallerySettingsButtons {
-  left: 253px;
+  left: 245px;
   position: absolute;
   top: 4px;
-  transform-origin: 13px 13px;
-  transition: $transition-length;
-  width: 500px; // done so when you rotate and maxe the screen width small, the buttons don't bunch up
   z-index: 2;
 }
 
-.searchSettingsRotated {
-  transform: translate(-27px, 50px) rotate(90deg);
-  transition: $transition-length;
-}
-
-.gallerySettingsRotated {
-  transform: translate(55px, 50px) rotate(90deg);
-  transition: $transition-length;
-}
-
-.verticalDivider {
-  background-color: rgba(0, 0, 0, 0);
-  border-left: 1px solid rgba(0, 0, 0, 0);
-  height: 100vh;
-  left: 190px;
-  min-width: 100vw;
-  pointer-events: none;
-  position: absolute;
-  top: 0;
-  transition: $transition-length;
-  width: 190px;
-  z-index: 1;
-}
-
-.verticalDividerInView {
-  background-color: rgba(0, 0, 0, 0.1);
-  border-left: 1px solid rgba(0, 0, 0, 0.3);
-  left: 300px;
-  top: 0;
-  transition: $transition-length;
+.horizontalDivider {
+  margin: 20px 10px 0px;
+  border-bottom: 1px solid #AAAAAA;
 }
 
 .searchButtonsSettings,
 .galleryButtonsSettings {
-  position: absolute;
-  top: 59px;
-  max-width: 200px;
+  left: 20px;
+  max-width: calc(100% - 30px);
   opacity: 0;
+  position: relative;
+  top: 20px;
   transition: 100ms;
 }
 
-.searchButtonsSettings {
-  left: 50px;
-}
-
-.galleryButtonsSettings {
-  left: 354px;
-}
-
 .extraSettings {
-  left: 344px;
-  opacity: 1;
-  position: absolute;
-  min-width: calc(100vw - 380px);
-  top: 460px;
+  margin: 15px 15px 15px 50px;
 }
 
 .extraSettingsText {
   color: #838383;
   font-size: 12px;
   left: 27px;
-  position: absolute;
   line-height: 20px;
 }
 
@@ -217,7 +189,6 @@ button {
 .buttonDescription {
   display: block;
   max-height: 41px;
-  max-width: 200px;
   min-height: 41px;   // also hardcoded in home.component as [ngStyle]
   position: relative;
 
@@ -231,10 +202,9 @@ button {
   cursor: pointer;
   display: block;
   font-size: 12px;
-  left: 27px;
+  left: 60px;
   position: absolute;
-  top: -4px;
-  width: 220px;
+  top: 5px;
 }
 
 .buttonDescriptionTextGallery {

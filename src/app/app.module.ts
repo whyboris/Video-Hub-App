@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 // DISABLE THIS LATER !!?!?!?!?!!!
-import { VirtualScrollModule } from 'angular2-virtual-scroll';
+// import { VirtualScrollModule } from 'angular2-virtual-scroll';
 
 import { ElectronService } from './providers/electron.service';
 import { FolderViewService } from 'app/components/pipes/folder-view.service';
@@ -50,7 +50,7 @@ import { AppRoutingModule } from './app-routing.module';
     FormsModule,
     HttpModule,
     AppRoutingModule,
-    VirtualScrollModule
+    // VirtualScrollModule
   ],
   providers: [
     ElectronService,
