@@ -104,12 +104,18 @@ button {
 }
 
 .closeSettings {
+  cursor: pointer;
   opacity: 1;
   position: fixed;
   right: 29px;
   top: 270px;
   transition-delay: 300ms;
   transition-duration: 300ms;
+  &:hover {
+    color: #990000;
+    transition-delay: 50ms;
+    transition-duration: 300ms;
+  }
 }
 
 .closeSettingsHidden {

@@ -252,7 +252,11 @@
                 <span class="conjunction" *ngIf="i > 0">
                   {{ filter.conjunction }}
                 </span>
-                <span (click)="removeThisFilter(i, j)" class="searchWord">
+                <span 
+                  (click)="removeThisFilter(i, j)"
+                  [ngStyle]="{ background: filter.color }"
+                  class="searchWord"
+                >
                   {{ string }}
                 </span>
               </ng-container>
@@ -282,6 +286,7 @@
           <span
             *ngIf="magicSearchString !== ''"
             (click)="magicSearchString = ''"
+            [ngStyle]="{ background: '#DD99DD' }"
             class="searchWord"
           >
             {{ magicSearchString }}
