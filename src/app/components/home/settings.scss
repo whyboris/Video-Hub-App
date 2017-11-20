@@ -1,18 +1,20 @@
+@import "variables";
+
 $transition-length: 300ms;
 $button-toggle-length: 75ms;
 
 h2 {
   font-size: 16px;
-  color: #666666;
+  color: $gray-60;
   margin: 15px 0 0 10px;
 }
 
 button {
-  border: 1px solid #BBBBBB; // don't alphabetize this one
-  background: #dadada;
-  border-left: 1px solid #EEEEEE;
+  border: 1px solid $gray-30; // don't alphabetize this one
+  background: $gray-15;
+  border-left: 1px solid $gray-10;
   border-radius: 5px;
-  border-top: 1px solid #EEEEEE;
+  border-top: 1px solid $gray-10;
   box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
   cursor: pointer;
   margin: 0;
@@ -26,7 +28,7 @@ button {
 
   & .icon {
     &:before {
-      color: #000000;
+      color: $black;
       transform: translate(-1px, -1px);
       transition: $button-toggle-length;
     }
@@ -37,7 +39,7 @@ button {
   }
 
   &:active {
-    background: #a9a9a9 !important;
+    background: $gray-30 !important;
     box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
     border-bottom: 1px solid rgba(255, 255, 255, 0.5);
     border-left: 0px;
@@ -48,7 +50,7 @@ button {
 
     & .icon {
       &:before {
-        color: #FFFFFF;
+        color: $white;
         transform: translate(0px, 0px);
         transition: $button-toggle-length;
       }
@@ -72,12 +74,12 @@ button {
   margin-bottom: 1px;
 
   &:hover {
-    background-color: #B5B5B5 !important;
+    background-color: $gray-30 !important;
   }
 
   & .icon {
     &:before {
-      color: #FFFFFF;
+      color: $white;
       transform: translate(0px, 0px);
       transition: $button-toggle-length;
     }
@@ -89,7 +91,7 @@ button {
 }
 
 .gearButton {
-  color: #AAAAAA;
+  color: $gray-40;
   font-size: 14px;
   left: 10px;
   position: absolute;
@@ -99,7 +101,7 @@ button {
   &:hover {
     text-shadow: 0 0 7px rgba(255, 255, 255, 0.5);
     transition: 370ms;
-    color: #777777;
+    color: $gray-50;
   }
 }
 
@@ -124,7 +126,7 @@ button {
 }
 
 .gearButtonActive {
-  color: #666666;
+  color: $gray-60;
   transform: rotate(-100deg);
   transition: 370ms;
 }
@@ -161,7 +163,7 @@ button {
 
 .horizontalDivider {
   margin: 20px 10px 0px;
-  border-bottom: 1px solid #AAAAAA;
+  border-bottom: 1px solid $gray-40;
 }
 
 .searchButtonsSettings,
@@ -179,7 +181,7 @@ button {
 }
 
 .extraSettingsText {
-  color: #838383;
+  color: $gray-50;
   font-size: 12px;
   left: 27px;
   line-height: 20px;
@@ -204,7 +206,7 @@ button {
 }
 
 .buttonDescriptionText {
-  color: #838383;
+  color: $gray-50;
   cursor: pointer;
   display: block;
   font-size: 12px;
@@ -252,7 +254,7 @@ button {
 
 .showButtonLabel {
   bottom: 0;
-  color: #AAAAAA;
+  color: $gray-40;
   font-size: 10px;
   left: 0;
   position: absolute;

@@ -1,5 +1,7 @@
+@import "variables";
+
 .wizard {
-  background: #EEEEEE;
+  background: $gray-10;
   height: 100vh;
   top: 72px;
   padding-top: 30px;
@@ -10,20 +12,20 @@
 
   h1 {
     font-size: 14px;
-    color: #555555;
+    color: $gray-60;
   }
 
   span {
     display: block;
     font-size: 12px;
-    color: #555555;
+    color: $gray-60;
   }
 
   .steps {
     background-color: #FFCACA;
     border-radius: 9px;
     box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.07);
-    color: #FFFFFF;
+    color: $white;
     font-size: 9px;
     height: 18px;
     line-height: 18px;
@@ -40,7 +42,7 @@
   }
 
   .description {
-    color: #CCCCCC;
+    color: $gray-20;
     margin-bottom: 10px;
   }
 
@@ -55,7 +57,7 @@
     box-sizing: border-box;
     height: calc(100vh - 130px);
     min-height: 350px;
-    border-right: 1px solid #CCCCCC;
+    border-right: 1px solid $gray-20;
   }
 
   .right-side {
@@ -75,18 +77,8 @@
       pointer-events: none;
     }
   }
-}
-// SCROLL BAR STYLING !!!
-.wizard::-webkit-scrollbar-track {
-	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-	background-color: #d3d3d3;
-}
-.wizard::-webkit-scrollbar {
-	width: 6px;
-	// background-color: #bbbbbb;
-}
-.wizard::-webkit-scrollbar-thumb {
-	background-color: #868686;
+
+  @include scrollBar;
 }
 
 .disabled-overlay {
@@ -100,7 +92,7 @@
 
 @media (max-width: 600px) {
   .left-side {
-    border-bottom: 1px solid #CCCCCC;
+    border-bottom: 1px solid $gray-20;
     border-right: 0 !important;
     height: 160px !important;
     margin-left: 50px;

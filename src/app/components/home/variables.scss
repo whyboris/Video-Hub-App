@@ -1,5 +1,7 @@
+$white: #FFFFFF;
 $gray-05: #F2F2F2;
 $gray-10: #E6E6E6;
+$gray-15: #d8d8d8;
 $gray-20: #CCCCCC;
 $gray-30: #B3B3B3;
 $gray-40: #999999;
@@ -8,3 +10,18 @@ $gray-60: #666666;
 $gray-70: #4D4D4D;
 $gray-80: #333333;
 $gray-90: #1A1A1A;
+$black: #000000;
+
+@mixin scrollBar {
+  &::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    background-color: $gray-15;
+  }
+  &::-webkit-scrollbar {
+    width: 6px;
+    // background-color: #bbbbbb;
+  }
+  &::-webkit-scrollbar-thumb {
+    background-color: $gray-50;
+  }
+}
