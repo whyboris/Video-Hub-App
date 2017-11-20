@@ -25,3 +25,16 @@ $black: #000000;
     background-color: $gray-50;
   }
 }
+
+@mixin scrollBarHidden {
+  &::-webkit-scrollbar-track {
+    visibility: hidden;
+  }
+  &::-webkit-scrollbar {
+    width: 6px;
+    visibility: hidden;
+  }
+  &::-webkit-scrollbar-thumb {
+    visibility: hidden;
+  }
+}

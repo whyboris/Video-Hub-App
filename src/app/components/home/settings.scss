@@ -93,8 +93,8 @@ button {
 .gearButton {
   color: $gray-40;
   font-size: 14px;
-  left: 10px;
   position: absolute;
+  right: 10px;
   top: 8px;
   transition: 370ms;
 
@@ -132,7 +132,6 @@ button {
 }
 
 .searchSettingsButtons {
-  left: 35px;
   max-height: 23px;
   overflow: hidden;
   position: absolute;

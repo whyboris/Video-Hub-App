@@ -40,6 +40,11 @@ $sidebar-width: 190px;
   position: relative;
   width: 100%;
   z-index: 9999;
+
+  img {
+    position: relative;
+    top: 1px;
+  }
 }
 
 .draggable {
@@ -148,12 +153,16 @@ $sidebar-width: 190px;
   box-sizing: border-box;
   height: 100vh;
   max-width: $sidebar-width !important;
-  padding: 10px;
+  padding: 10px 10px 140px;
   position: absolute;
   top: $settings-height;
-  width: $sidebar-width;
   transform: translate(0, 0);
   transition: 300ms;
+  width: $sidebar-width;
+  // don't alphabetize for some reason
+  overflow-y: scroll;
+
+  @include scrollBarHidden;
 }
 
 .sidebar-hidden {

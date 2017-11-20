@@ -2,7 +2,7 @@
 
   <div class="titleBar">
     <div class="draggable">
-      Video Hub
+      <img width="10px" height="10px" src="../../../assets/logo.png"> Video Hub
     </div>
     <div (click)="initiateMinimize()" class="minimizeButton">
       <span class="icon icon-minus"></span>
@@ -14,12 +14,13 @@
 
   <!-- SETTINGS -->
   <div
+    *ngIf="settingsNowShown"
     [ngClass]="{ allSettingsExpanded: !appState.buttonsInView }"
     class="allSettings2"
   >
 
     <div
-      (click)="rotateSettings()"
+      (click)="toggleSettings()"
       [ngClass]="{ closeSettingsHidden: appState.buttonsInView }"
       class="closeSettings"
     >
@@ -165,7 +166,7 @@
 
       <!-- GEAR BUTTON -->
       <div
-        (click)="rotateSettings()"
+        (click)="toggleSettings()"
         [ngClass]="{ gearButtonActive: appState.buttonsInView }"
         class="gearButton"
       >
