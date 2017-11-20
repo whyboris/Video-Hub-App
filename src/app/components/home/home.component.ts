@@ -236,6 +236,8 @@ export class HomeComponent implements OnInit {
       this.decreaseSize();
     } else if (index === 8) {
       this.increaseSize();
+    } else if (index === 9) {
+      this.galleryButtons[9].toggled = !this.galleryButtons[9].toggled;
     } else {
       console.log('what did you press?');
       // this.galleryButtons[index].toggled = !this.galleryButtons[index].toggled;

@@ -253,7 +253,7 @@
                 <span class="conjunction" *ngIf="i > 0">
                   {{ filter.conjunction }}
                 </span>
-                <span 
+                <span
                   (click)="removeThisFilter(i, j)"
                   [ngStyle]="{ background: filter.color }"
                   class="searchWord"
@@ -317,6 +317,7 @@
 
     <div
       [ngClass]="{ 'gallery-container-full-width': searchButtons[6].toggled}"
+      [ngStyle]="{ 'background': galleryButtons[9].toggled ? '#000000' : '#999999' }"
       class="gallery-container"
     >
 

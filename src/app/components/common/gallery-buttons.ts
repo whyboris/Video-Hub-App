@@ -71,5 +71,13 @@ export let GalleryButtons = [
     title: 'Increase preview size',
     spaceAfter: true,
     description: 'Increase preview size'
+  }, {
+    uniqueKey: 'darkMode',
+    hidden: false,
+    toggled: false,
+    iconName: 'icon-adjust',
+    title: 'Dark mode',
+    spaceAfter: false,
+    description: 'Dark mode'
   }
 ]
