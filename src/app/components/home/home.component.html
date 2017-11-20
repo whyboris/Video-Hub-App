@@ -12,6 +12,121 @@
     </div>
   </div>
 
+  <!-- SETTINGS -->
+  <div
+    [ngClass]="{ allSettingsExpanded: !appState.buttonsInView }"
+    class="allSettings2"
+  >
+
+    <div
+      (click)="rotateSettings()"
+      [ngClass]="{ closeSettingsHidden: appState.buttonsInView }"
+      class="closeSettings"
+    >
+      <span class="icon icon-cancel"></span>
+    </div>
+
+    <h2>Search & filter settings</h2>
+
+    <div
+      [ngClass]="{ searchButtonsSettingsInView: !appState.buttonsInView }"
+      class="searchButtonsSettings"
+    >
+
+      <div
+        *ngFor="let button of searchButtons; index as i"
+        [ngClass]="{ buttonOpacityLower: button.hidden }"
+        class="buttonDescription"
+      >
+        <button
+          (click)="toggleSearchButton(i)"
+          [ngClass]="{ active: button.toggled, buttonOpacityLower: button.hidden }"
+          title="{{ button.title }}"
+        >
+          <span class="icon {{ button.iconName }}"></span>
+        </button>
+
+        <input
+          (change)="filterInputBoxClicked(i)"
+          [checked]="!button.hidden"
+          [ngClass]="{ inputCheckboxDisabled: button.hidden }"
+          id="{{ button.uniqueKey }}"
+          class="inputCheckbox"
+          type="checkbox"
+        >
+        <label for="{{ button.uniqueKey }}" class="buttonDescriptionText">{{ button.description }}</label>
+      </div>
+    </div>
+
+    <div class="horizontalDivider">
+    </div>
+
+    <h2>Gallery & view settings</h2>
+
+    <div
+      [ngClass]="{ galleryButtonsSettingsInView: !appState.buttonsInView }"
+      class="galleryButtonsSettings"
+    >
+
+      <div
+        *ngFor="let button of galleryButtons; index as i"
+        class="buttonDescription"
+        [ngClass]="{ buttonOpacityLower: button.hidden }"
+        [ngStyle]="{ 'min-height': button.spaceAfter ? '50px' : '40px' }"
+      >
+        <button
+          *ngIf="!button.hidden || !appState.buttonsInView"
+          (click)="toggleGalleryButton(i)"
+          [ngClass]="{ active: button.toggled, buttonOpacityLower: button.hidden }"
+          title="{{ button.title }}"
+        >
+          <span class="icon {{ button.iconName }}"></span>
+        </button>
+
+        <input
+          (change)="galleryInputBoxClicked(i)"
+          [checked]="!button.hidden"
+          [ngClass]="{ inputCheckboxDisabled: button.hidden }"
+          id="{{ button.uniqueKey }}"
+          class="inputCheckbox"
+          type="checkbox"
+        >
+        <label
+          for="{{ button.uniqueKey }}"
+          class="buttonDescriptionText buttonDescriptionTextGallery"
+        >
+          {{ button.description }}
+        </label>
+      </div>
+    </div>
+
+    <div class="horizontalDivider">
+    </div>
+
+    <h2>Other settings</h2>
+
+    <div
+      class="extraSettings"
+    >
+      <input
+        (change)="toggleTopVisible()"
+        [checked]="!appState.topHidden"
+        [ngClass]="{ inputCheckboxDisabled: !appState.topHidden }"
+        id="hideTopBar"
+        class="inputCheckbox"
+        type="checkbox"
+      >
+      <label for="hideTopBar" class="extraSettingsText">
+        Show the top bar.
+        <br>
+        <em>
+          It shows the folder path and file name, each of which is clickable for quick searching.
+        </em>
+      </label>
+    </div>
+
+  </div>
+
   <!-- [ngStyle]="{ display: appState.topHidden ? 'none' : initial }" -->
   <header
     *ngIf="!appState.topHidden"
@@ -45,33 +160,29 @@
   >
 
     <div
-      [ngClass]="{ allSettingsExpanded: !appState.buttonsInView }"
       class="allSettings"
     >
 
       <!-- GEAR BUTTON -->
-      <!-- <div class="gearButtonContainer"> -->
       <div
         (click)="rotateSettings()"
         [ngClass]="{ gearButtonActive: appState.buttonsInView }"
         class="gearButton"
       >
-          <span class="icon icon-cog"></span>
+        <span class="icon icon-cog"></span>
       </div>
-      <!-- </div> -->
 
       <!-- SEARCH BUTTONS-->
       <div
-        [ngClass]="{ searchSettingsRotated: !appState.buttonsInView }"
         class="searchSettingsButtons"
       >
         <ng-container
           *ngFor="let button of searchButtons; index as i"
         >
           <button
-            *ngIf="!button.hidden || !appState.buttonsInView"
+            *ngIf="!button.hidden"
             (click)="toggleSearchButton(i)"
-            [ngClass]="{ active: button.toggled, buttonRightSideUp: !appState.buttonsInView, buttonOpacityLower: button.hidden }"
+            [ngClass]="{ active: button.toggled }"
             title="{{ button.title }}"
           >
             <span class="icon {{ button.iconName }}"></span>
@@ -79,49 +190,23 @@
         </ng-container>
       </div>
 
-      <!-- Search buttons settings -->
-
-      <div
-        [ngClass]="{ searchButtonsSettingsInView: !appState.buttonsInView }"
-        class="searchButtonsSettings"
-      >
-        <div class="showButtonLabel">show button in menu</div>
-        <div
-          *ngFor="let button of searchButtons; index as i"
-          [ngClass]="{ buttonOpacityLower: button.hidden }"
-          class="buttonDescription"
-        >
-          <input
-            (change)="filterInputBoxClicked(i)"
-            [checked]="!button.hidden"
-            [ngClass]="{ inputCheckboxDisabled: button.hidden }"
-            id="{{ button.uniqueKey }}"
-            class="inputCheckbox"
-            type="checkbox"
-          >
-          <label for="{{ button.uniqueKey }}" class="buttonDescriptionText">{{ button.description }}</label>
-        </div>
-      </div>
-
       <!-- GALLERY BUTTONS -->
       <div
-        [ngClass]="{ gallerySettingsRotated: !appState.buttonsInView }"
         class="gallerySettingsButtons"
       >
         <ng-container
           *ngFor="let button of galleryButtons; index as i"
         >
           <button
-            *ngIf="!button.hidden || !appState.buttonsInView"
+            *ngIf="!button.hidden"
             (click)="toggleGalleryButton(i)"
-            [ngClass]="{ active: button.toggled, buttonRightSideUp: !appState.buttonsInView, buttonOpacityLower: button.hidden }"
+            [ngClass]="{ active: button.toggled }"
             title="{{ button.title }}"
           >
             <span class="icon {{ button.iconName }}"></span>
           </button>
           <ng-container *ngIf="button.spaceAfter">
             <div
-              [ngClass]="{ buttonSpacerExpanded: !appState.buttonsInView }"
               class="buttonSpacer"
             >
             </div>
@@ -129,64 +214,6 @@
         </ng-container>
 
       </div>
-
-      <!-- Gallery buttons settings -->
-
-      <div
-        [ngClass]="{ galleryButtonsSettingsInView: !appState.buttonsInView }"
-        class="galleryButtonsSettings"
-      >
-        <div class="showButtonLabel">show button in menu</div>
-        <div
-          *ngFor="let button of galleryButtons; index as i"
-          class="buttonDescription"
-          [ngClass]="{ buttonOpacityLower: button.hidden }"
-          [ngStyle]="{ 'min-height': button.spaceAfter ? '82px' : '41px' }"
-        >
-          <input
-            (change)="galleryInputBoxClicked(i)"
-            [checked]="!button.hidden"
-            [ngClass]="{ inputCheckboxDisabled: button.hidden }"
-            id="{{ button.uniqueKey }}"
-            class="inputCheckbox"
-            type="checkbox"
-          >
-          <label
-            for="{{ button.uniqueKey }}"
-            class="buttonDescriptionText buttonDescriptionTextGallery"
-          >
-            {{ button.description }}
-          </label>
-        </div>
-      </div>
-
-      <div
-        class="extraSettings"
-      >
-        <input
-          (change)="toggleTopVisible()"
-          [checked]="!appState.topHidden"
-          [ngClass]="{ inputCheckboxDisabled: !appState.topHidden }"
-          id="hideTopBar"
-          class="inputCheckbox"
-          type="checkbox"
-        >
-        <label for="hideTopBar" class="extraSettingsText">
-          Show the top bar.
-          <br>
-          <em>
-            It shows the folder path and file name, each of which is clickable for quick searching.
-          </em>
-        </label>
-      </div>
-
-      <!-- VERTICAL DIVIDER -->
-      <div
-        [ngClass]="{ verticalDividerInView: !appState.buttonsInView }"
-        class="verticalDivider"
-      >
-      </div>
-
     </div>
 
     <div (click)="toggleSettingsMenu()" [ngClass]="{ flipped: !appState.menuHidden }" class="hidingSettingsMenu">
@@ -225,7 +252,11 @@
                 <span class="conjunction" *ngIf="i > 0">
                   {{ filter.conjunction }}
                 </span>
-                <span (click)="removeThisFilter(i, j)" class="searchWord">
+                <span 
+                  (click)="removeThisFilter(i, j)"
+                  [ngStyle]="{ background: filter.color }"
+                  class="searchWord"
+                >
                   {{ string }}
                 </span>
               </ng-container>
@@ -255,6 +286,7 @@
           <span
             *ngIf="magicSearchString !== ''"
             (click)="magicSearchString = ''"
+            [ngStyle]="{ background: '#DD99DD' }"
             class="searchWord"
           >
             {{ magicSearchString }}
@@ -406,7 +438,7 @@
 
   <div class="left-side">
 
-    <h1>Open previous hub</h1>
+    <h2>Open previous hub</h2>
 
     <button (click)="loadFromFile()">
       Load from file
@@ -416,7 +448,7 @@
 
   <div class="right-side">
 
-    <h1>Import new hub</h1>
+    <h2>Import new hub</h2>
 
     <div
       [ngClass]="{ 'current-step': appState.selectedSourceFolder === '' }"

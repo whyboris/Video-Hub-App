@@ -1,3 +1,5 @@
+@import "variables";
+
 .hidingSettingsMenu {
   cursor: pointer;
   left: 13px;
@@ -24,7 +26,7 @@
 }
 
 .filteringTotal {
-  color: #BBBBBB;
+  color: $gray-30;
   font-size: 12px;
   margin: 15px 0 15px;
   text-align: right;
@@ -32,10 +34,8 @@
 
 .inputFilter {
   border: 0;
-  border-bottom: 1px solid #AAAAAA;
-  background: #DDDDDD; // same as search background
-  // border-radius: 5px;
-  // border: 1px solid #666666;
+  border-bottom: 1px solid $gray-40;
+  background: transparent;
   box-sizing: border-box;
   font-size: 15px;
   outline: none;
@@ -43,14 +43,15 @@
   padding-bottom: 0;
   margin: 5px 0 10px;
   width: 100%;
+  // border-radius: 5px;
+  // border: 1px solid #666666;
 
   &::placeholder {
-    color: #999999;
+    color: $gray-40;
   }
 }
 
 .searchWord {
-  background: #DDFFDD;
   border-radius: 5px;
   border: 1px solid gray;
   cursor: pointer;
@@ -81,7 +82,7 @@
 
 .frequency {
   margin-top: 20px; 
-  color: #555555;
+  color: $gray-50;
 
   span {
     margin: 0 4px;
