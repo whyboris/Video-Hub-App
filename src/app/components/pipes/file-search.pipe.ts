@@ -12,8 +12,16 @@ export class FileSearchPipe implements PipeTransform {
    * @param useless         {boolean} that is flipped just to trigger pipe to work
    * @param union           {boolean} whether it's a union or intersection
    * @param fileNotFolder   {boolean} whether searching through files or folders
+   * @param exclude         {boolean} whether excluding results that contain the word
    */
-  transform(finalArray: any, arrOfStrings?: string[], useless?: boolean, union?: boolean, fileNotFolder?: boolean): any {
+  transform(
+    finalArray: any,
+    arrOfStrings?: string[],
+    useless?: boolean,
+    union?: boolean,
+    fileNotFolder?: boolean,
+    exclude?: boolean
+  ): any {
     console.log('fileSearchPipe triggered');
     console.log(arrOfStrings);
 
@@ -35,7 +43,9 @@ export class FileSearchPipe implements PipeTransform {
           }
         });
 
-        if (union) {
+        if (exclude) {
+          return matchFound === 0;
+        } else if (union) {
           // at least one filter exists in searched string
           return matchFound > 0;
         } else {
