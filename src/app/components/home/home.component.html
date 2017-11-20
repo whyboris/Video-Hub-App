@@ -226,6 +226,7 @@
 
     <div
       [ngClass]="{ 'sidebar-hidden': searchButtons[7].toggled }"
+      [ngStyle]="{ 'background': galleryButtons[9].toggled ? '#444444' : '#d8d8d8' }"
       class="sidebar"
     >
 
@@ -238,6 +239,7 @@
       <ng-container *ngFor="let filter of filters; index as j">
         <ng-container *ngIf="searchButtons[j].toggled">
 
+          <span class="icon input-icon {{ searchButtons[j].iconName }}"></span>
           <input
             (keyup.enter)="onEnterKey(filter.string, j)"
             (keydown.backspace)="onBackspace(filter.string, j)"
@@ -272,6 +274,7 @@
 
       <!-- magic search -->
       <ng-container *ngIf="searchButtons[5].toggled">
+        <span class="icon input-icon {{ searchButtons[5].iconName }}"></span>
         <input
           (keydown.escape)="magicSearchString = ''"
           [(ngModel)]="magicSearchString"
