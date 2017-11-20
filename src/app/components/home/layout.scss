@@ -58,34 +58,34 @@ $sidebar-width: 190px;
   width: calc(100vw - 100px);
 }
 
-.closeButton {
+.winBtn {
   color: #333333;
   cursor: pointer;
-  font-size: 14px;
   position: fixed;
-  right: 7px;
-  top: 2px;
   transition: 100ms;
-
   &:hover {
     transition: 100ms;
     color: #ff6666;
   }
+
+}
+
+.closeButton {
+  font-size: 14px;
+  right: 7px;
+  top: 2px;
+}
+
+.maximizeButton {
+  font-size: 12px;
+  right: 22px;
+  top: 4px;
 }
 
 .minimizeButton {
-  color: #333333;
-  cursor: pointer;
   font-size: 14px;
-  position: fixed;
-  right: 34px;
+  right: 44px;
   top: 5px;
-  transition: 100ms;
-
-  &:hover {
-    transition: 100ms;
-    color: #ff6666;
-  }
 }
 
 .top {

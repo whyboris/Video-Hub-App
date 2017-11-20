@@ -51,6 +51,8 @@ export class HomeComponent implements OnInit {
   inProgress = false;
   progressPercent = 0;
 
+  appMaximized = false;
+
   imgHeight = 100;
 
   settingsNowShown = false;
@@ -134,6 +136,16 @@ export class HomeComponent implements OnInit {
 
   public initiateMinimize() {
     this.electronService.ipcRenderer.send('minimize-window', 'lol');
+  }
+
+  public initiateMaximize() {
+    if (this.appMaximized === false) {
+      this.electronService.ipcRenderer.send('maximize-window', 'lol');
+      this.appMaximized = true;
+    } else {
+      this.electronService.ipcRenderer.send('un-maximize-window', 'lol');
+      this.appMaximized = false;
+    }
   }
 
   public initiateClose() {

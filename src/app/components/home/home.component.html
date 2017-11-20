@@ -4,10 +4,13 @@
     <div class="draggable">
       <img width="10px" height="10px" src="../../../assets/logo.png"> Video Hub
     </div>
-    <div (click)="initiateMinimize()" class="minimizeButton">
+    <div (click)="initiateMinimize()" class="winBtn minimizeButton">
       <span class="icon icon-minus"></span>
     </div>
-    <div (click)="initiateClose()" class="closeButton">
+    <div (click)="initiateMaximize()" class="winBtn maximizeButton">
+      <span class="icon icon-doc-landscape"></span>
+    </div>
+    <div (click)="initiateClose()" class="winBtn closeButton">
       <span class="icon icon-cancel"></span>
     </div>
   </div>
