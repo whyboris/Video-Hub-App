@@ -28,6 +28,13 @@ export let SearchButtons = [
     title: 'Video search',
     description: 'Search for videos containing each of the search words'
   }, {
+    uniqueKey: 'exclude',
+    hidden: false,
+    toggled: true,
+    iconName: 'icon-thumbs-down',
+    title: 'Exclude filter',
+    description: 'Exclude any files that contain this string'
+  }, {
     uniqueKey: 'magic',
     hidden: false,
     toggled: true,

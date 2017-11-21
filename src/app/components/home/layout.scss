@@ -40,6 +40,11 @@ $sidebar-width: 190px;
   position: relative;
   width: 100%;
   z-index: 9999;
+
+  img {
+    position: relative;
+    top: 1px;
+  }
 }
 
 .draggable {
@@ -53,34 +58,34 @@ $sidebar-width: 190px;
   width: calc(100vw - 100px);
 }
 
-.closeButton {
+.winBtn {
   color: #333333;
   cursor: pointer;
-  font-size: 14px;
   position: fixed;
-  right: 7px;
-  top: 2px;
   transition: 100ms;
-
   &:hover {
     transition: 100ms;
     color: #ff6666;
   }
+
+}
+
+.closeButton {
+  font-size: 14px;
+  right: 7px;
+  top: 2px;
+}
+
+.maximizeButton {
+  font-size: 12px;
+  right: 22px;
+  top: 4px;
 }
 
 .minimizeButton {
-  color: #333333;
-  cursor: pointer;
   font-size: 14px;
-  position: fixed;
-  right: 34px;
+  right: 44px;
   top: 5px;
-  transition: 100ms;
-
-  &:hover {
-    transition: 100ms;
-    color: #ff6666;
-  }
 }
 
 .top {
@@ -144,16 +149,19 @@ $sidebar-width: 190px;
 }
 
 .sidebar {
-  background: $gray-15;
   box-sizing: border-box;
   height: 100vh;
   max-width: $sidebar-width !important;
-  padding: 10px;
+  padding: 10px 10px 140px;
   position: absolute;
   top: $settings-height;
-  width: $sidebar-width;
   transform: translate(0, 0);
   transition: 300ms;
+  width: $sidebar-width;
+  // don't alphabetize for some reason
+  overflow-y: scroll;
+
+  @include scrollBarHidden;
 }
 
 .sidebar-hidden {
@@ -162,7 +170,6 @@ $sidebar-width: 190px;
 }
 
 .gallery-container {
-  background: $gray-40;
   box-sizing: border-box;
   height: 100vh;
   left: $sidebar-width;

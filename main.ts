@@ -133,6 +133,26 @@ ipc.on('close-window', function (event, someMessage) {
 });
 
 /**
+ * Maximize the window
+ */
+ipc.on('maximize-window', function (event, someMessage) {
+  console.log('window maximized by user');
+  if (BrowserWindow.getFocusedWindow()) {
+    BrowserWindow.getFocusedWindow().maximize();
+  }
+});
+
+/**
+ * Un-Maximize the window
+ */
+ipc.on('un-maximize-window', function (event, someMessage) {
+  console.log('window maximized by user');
+  if (BrowserWindow.getFocusedWindow()) {
+    BrowserWindow.getFocusedWindow().unmaximize();
+  }
+});
+
+/**
  * Minimize the window
  */
 ipc.on('minimize-window', function (event, someMessage) {

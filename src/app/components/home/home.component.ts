@@ -10,6 +10,7 @@ import { SearchButtons } from '../common/search-buttons';
 import { Filters } from '../common/filters';
 import { GalleryButtons } from '../common/gallery-buttons';
 import { AppState } from '../common/app-state';
+import { setTimeout } from 'timers';
 
 @Component({
   selector: 'app-home',
@@ -50,7 +51,11 @@ export class HomeComponent implements OnInit {
   inProgress = false;
   progressPercent = 0;
 
+  appMaximized = false;
+
   imgHeight = 100;
+
+  settingsNowShown = false;
 
   // temp
   wordFreqArr: any;
@@ -133,6 +138,16 @@ export class HomeComponent implements OnInit {
     this.electronService.ipcRenderer.send('minimize-window', 'lol');
   }
 
+  public initiateMaximize() {
+    if (this.appMaximized === false) {
+      this.electronService.ipcRenderer.send('maximize-window', 'lol');
+      this.appMaximized = true;
+    } else {
+      this.electronService.ipcRenderer.send('un-maximize-window', 'lol');
+      this.appMaximized = false;
+    }
+  }
+
   public initiateClose() {
     this.electronService.ipcRenderer.send('close-window', 'lol');
   }
@@ -173,12 +188,30 @@ export class HomeComponent implements OnInit {
   // -----------------------------------------------------------------------------------------------
   // Interaction functions
 
+  /**
+   * Toggle a search button
+   * @param button
+   */
   toggleSearchButton(button: string) {
     this.searchButtons[button].toggled = !this.searchButtons[button].toggled;
   }
 
-  rotateSettings() {
-    this.appState.buttonsInView = !this.appState.buttonsInView;
+  /**
+   * Show or hide settings
+   * settingsNowShown used for *ngIf
+   */
+  toggleSettings() {
+    if (this.settingsNowShown === false) {
+      this.settingsNowShown = true;
+      setTimeout(() => {
+        this.appState.buttonsInView = false;
+      }, 10);
+    } else {
+      this.appState.buttonsInView = true;
+      setTimeout(() => {
+        this.settingsNowShown = false;
+      }, 500);
+    }
   }
 
   // MAYBE CLEAN UP !?!!
@@ -215,6 +248,8 @@ export class HomeComponent implements OnInit {
       this.decreaseSize();
     } else if (index === 8) {
       this.increaseSize();
+    } else if (index === 9) {
+      this.galleryButtons[9].toggled = !this.galleryButtons[9].toggled;
     } else {
       console.log('what did you press?');
       // this.galleryButtons[index].toggled = !this.galleryButtons[index].toggled;
@@ -222,12 +257,18 @@ export class HomeComponent implements OnInit {
 
   }
 
+  /**
+   * Decrease preview size
+   */
   public decreaseSize(): void {
     if (this.imgHeight > 50) {
       this.imgHeight = this.imgHeight - 25;
     }
   }
 
+  /**
+   * Increase preview size
+   */
   public increaseSize(): void {
     if (this.imgHeight < 200) {
       this.imgHeight = this.imgHeight + 25;
@@ -289,10 +330,16 @@ export class HomeComponent implements OnInit {
     this.galleryButtons[item].hidden = !this.galleryButtons[item].hidden;
   }
 
+  /**
+   * Show or hide the settings menu
+   */
   toggleSettingsMenu() {
     this.appState.menuHidden = !this.appState.menuHidden;
   }
 
+  /**
+   * Hide or show the top of the app
+   */
   toggleTopVisible() {
     this.appState.topHidden = !this.appState.topHidden;
   }

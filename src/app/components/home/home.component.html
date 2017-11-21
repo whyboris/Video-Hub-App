@@ -2,24 +2,28 @@
 
   <div class="titleBar">
     <div class="draggable">
-      Video Hub
+      <img width="10px" height="10px" src="../../../assets/logo.png"> Video Hub
     </div>
-    <div (click)="initiateMinimize()" class="minimizeButton">
+    <div (click)="initiateMinimize()" class="winBtn minimizeButton">
       <span class="icon icon-minus"></span>
     </div>
-    <div (click)="initiateClose()" class="closeButton">
+    <div (click)="initiateMaximize()" class="winBtn maximizeButton">
+      <span class="icon icon-doc-landscape"></span>
+    </div>
+    <div (click)="initiateClose()" class="winBtn closeButton">
       <span class="icon icon-cancel"></span>
     </div>
   </div>
 
   <!-- SETTINGS -->
   <div
+    *ngIf="settingsNowShown"
     [ngClass]="{ allSettingsExpanded: !appState.buttonsInView }"
     class="allSettings2"
   >
 
     <div
-      (click)="rotateSettings()"
+      (click)="toggleSettings()"
       [ngClass]="{ closeSettingsHidden: appState.buttonsInView }"
       class="closeSettings"
     >
@@ -165,7 +169,7 @@
 
       <!-- GEAR BUTTON -->
       <div
-        (click)="rotateSettings()"
+        (click)="toggleSettings()"
         [ngClass]="{ gearButtonActive: appState.buttonsInView }"
         class="gearButton"
       >
@@ -221,7 +225,8 @@
     </div>
 
     <div
-      [ngClass]="{ 'sidebar-hidden': searchButtons[6].toggled }"
+      [ngClass]="{ 'sidebar-hidden': searchButtons[7].toggled }"
+      [ngStyle]="{ 'background': galleryButtons[9].toggled ? '#444444' : '#d8d8d8' }"
       class="sidebar"
     >
 
@@ -234,6 +239,7 @@
       <ng-container *ngFor="let filter of filters; index as j">
         <ng-container *ngIf="searchButtons[j].toggled">
 
+          <span class="icon input-icon {{ searchButtons[j].iconName }}"></span>
           <input
             (keyup.enter)="onEnterKey(filter.string, j)"
             (keydown.backspace)="onBackspace(filter.string, j)"
@@ -252,7 +258,7 @@
                 <span class="conjunction" *ngIf="i > 0">
                   {{ filter.conjunction }}
                 </span>
-                <span 
+                <span
                   (click)="removeThisFilter(i, j)"
                   [ngStyle]="{ background: filter.color }"
                   class="searchWord"
@@ -266,8 +272,9 @@
         </ng-container>
       </ng-container>
 
-      <!-- magic search and exclude fields -->
-      <ng-container *ngIf="searchButtons[4].toggled">
+      <!-- magic search -->
+      <ng-container *ngIf="searchButtons[5].toggled">
+        <span class="icon input-icon {{ searchButtons[5].iconName }}"></span>
         <input
           (keydown.escape)="magicSearchString = ''"
           [(ngModel)]="magicSearchString"
@@ -293,13 +300,14 @@
           </span>
         </div>
       </ng-container>
-      <!-- END OF MAGIC SEARCH & exclude fields -->
 
+      <!-- total found -->
       <div class="filteringTotal">
         <span>{{ currResults.total }} found</span>
       </div>
 
-      <div *ngIf="searchButtons[5].toggled" class="frequency">
+      <!-- word cloud -->
+      <div *ngIf="searchButtons[6].toggled" class="frequency">
         <ng-container *ngFor="let word of wordFreqArr; index as i">
           <span
             [ngStyle]="{'font-size': word.height + 'px' }"
@@ -315,7 +323,8 @@
 <!-- THE GALLERY PANE -->
 
     <div
-      [ngClass]="{ 'gallery-container-full-width': searchButtons[6].toggled}"
+      [ngClass]="{ 'gallery-container-full-width': searchButtons[7].toggled}"
+      [ngStyle]="{ 'background': galleryButtons[9].toggled ? '#000000' : '#999999' }"
       class="gallery-container"
     >
 
@@ -348,10 +357,11 @@
             }"
           *ngFor="let item of finalArray
                     | magicSearchPipe: magicSearchString
-                    | fileSearchPipe: filters[0].array : filters[0].bool : true  : false
-                    | fileSearchPipe: filters[1].array : filters[1].bool : false : false
-                    | fileSearchPipe: filters[2].array : filters[2].bool : true  : true
-                    | fileSearchPipe: filters[3].array : filters[3].bool : false : true
+                    | fileSearchPipe: filters[0].array : filters[0].bool : true  : false : false
+                    | fileSearchPipe: filters[1].array : filters[1].bool : false : false : false
+                    | fileSearchPipe: filters[2].array : filters[2].bool : true  : true : false
+                    | fileSearchPipe: filters[3].array : filters[3].bool : false : true : false
+                    | fileSearchPipe: filters[4].array : filters[4].bool : true : true : true
                     | wordFrequencyPipe: true
                     | limitPipe: appState.numberToShow;
                     index as i"

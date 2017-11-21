@@ -32,6 +32,13 @@
   text-align: right;
 }
 
+.input-icon {
+  color: $gray-50;
+  font-size: 12px;
+  position: absolute;
+  transform: translate(3px, 14px);
+}
+
 .inputFilter {
   border: 0;
   border-bottom: 1px solid $gray-40;
@@ -39,7 +46,7 @@
   box-sizing: border-box;
   font-size: 15px;
   outline: none;
-  padding: 6px;
+  padding: 6px 6px 6px 20px;
   padding-bottom: 0;
   margin: 5px 0 10px;
   width: 100%;
@@ -81,7 +88,7 @@
 }
 
 .frequency {
-  margin-top: 20px; 
+  margin-top: 20px;
   color: $gray-50;
 
   span {

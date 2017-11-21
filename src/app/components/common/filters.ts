@@ -33,5 +33,13 @@ export let Filters = [
     placeholder: 'File contains',
     conjunction: 'and',
     color: '#DDFF88'
+  }, {
+    uniqueKey: 'exclude',
+    string: '',
+    array: [],
+    bool: true,
+    placeholder: 'File does not contain',
+    conjunction: 'or',
+    color: '#FF8888'
   }
 ];
