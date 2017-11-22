@@ -1,0 +1,124 @@
+@import "variables";
+
+$button-toggle-length: 275ms;
+
+button {
+  cursor: pointer;
+  outline: none;
+}
+
+.flatSettingsButton {
+  background: transparent;
+  border: none;
+  color: $gray-50;
+  margin-right: 4px;
+  transition: $button-toggle-length;
+
+  &:hover {
+    text-shadow: 0 0 3px $white;
+    transition: $button-toggle-length;
+  }
+
+  &:active {
+    color: #b5cbff;
+    transition: $button-toggle-length;
+  }
+
+  &:last-child {
+    margin-right: 8px;
+  }
+
+}
+
+.flatSettingsButtonToggled {
+  color: #729aff;
+  transition: $button-toggle-length;
+}
+
+.defaultSettingsButton {
+  border: 1px solid $gray-30; // don't alphabetize this one
+  background: $gray-15;
+  border-left: 1px solid $gray-10;
+  border-radius: 1px;
+  border-top: 1px solid $gray-10;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  margin: 0;
+  min-width: 22px;
+  min-height: 22px;
+  max-width: 22px;
+  max-height: 22px;
+  padding: 2px;
+  transition: $button-toggle-length;
+
+  & .icon {
+    &:before {
+      color: $black;
+      transform: translate(-1px, -1px);
+      transition: $button-toggle-length;
+    }
+  }
+
+  &:first-child {
+    border-top-left-radius: 5px !important;
+    border-bottom-left-radius: 5px !important;
+  }
+  &:last-child {
+    border-top-right-radius: 5px !important;
+    border-bottom-right-radius: 5px !important;
+  }
+
+  &:hover {
+    background-color: #EEEEEE;
+  }
+
+  &:active {
+    background: $gray-30 !important;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+    border-left: 0px;
+    border-right: 1px solid rgba(255, 255, 255, 0.5);
+    border-top: 0px;
+    transform: translate(1px, 1px);
+    margin-bottom: 1px;
+
+    & .icon {
+      &:before {
+        color: $white;
+        transform: translate(0px, 0px);
+        transition: $button-toggle-length;
+      }
+    }
+  }
+
+  span {
+    cursor: pointer;
+    transition: $button-toggle-length;
+  }
+}
+
+.defaultSettingsButtonToggled {
+  background: $gray-40 !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+  border-left: 0px;
+  border-right: 1px solid $gray-40;
+  border-top: 0px;
+  box-shadow: none;
+  margin-bottom: 1px;
+  transform: translate(0, 1px);
+
+  &:hover {
+    background-color: $gray-30 !important;
+  }
+
+  & .icon {
+    &:before {
+      color: $white;
+      transform: translate(0px, 0px);
+      transition: $button-toggle-length;
+    }
+  }
+
+  span {
+    transition: $button-toggle-length;
+  }
+}

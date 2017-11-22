@@ -51,14 +51,19 @@
         >
           <button
             (click)="toggleButton(buttonKey)"
-            [ngClass]="{ active: settingsButtons[buttonKey].toggled, buttonOpacityLower: settingsButtons[buttonKey].hidden }"
+            [ngClass]="{
+                defaultSettingsButtonToggled: settingsButtons[buttonKey].toggled,
+                buttonOpacityLower: settingsButtons[buttonKey].hidden
+              }"
+            class="defaultSettingsButton"
             title="{{ settingsButtons[buttonKey].title }}"
           >
             <span class="icon {{ settingsButtons[buttonKey].iconName }}"></span>
           </button>
 
           <div
-            (click)="toggleHideSearchButton(buttonKey)"
+            *ngIf="settingsButtons[buttonKey].iconName !== 'icon-check'"
+            (click)="toggleHideButton(buttonKey)"
             class="inputCheckbox"
           >
             <span
@@ -78,29 +83,10 @@
     <div *ngIf="settingsCategories[i] !== ''" class="horizontalDivider">
     </div>
 
-    <h2>Other settings</h2>
-
-    <div
-      class="extraSettings"
-    >
-      <input
-        (change)="toggleTopVisible()"
-        [checked]="!appState.topHidden"
-        [ngClass]="{ inputCheckboxDisabled: !appState.topHidden }"
-        id="hideTopBar"
-        class="inputCheckbox"
-        type="checkbox"
-      >
-      <label for="hideTopBar" class="extraSettingsText">
-        Hide / show the top bar.
-      </label>
-    </div>
-
   </div> <!-- END OF SETTINGS -->
 
-  <!-- [ngStyle]="{ display: appState.topHidden ? 'none' : initial }" -->
   <header
-    *ngIf="!appState.topHidden"
+    *ngIf="!settingsButtons['hideTop'].toggled"
     class="top"
   >
 
@@ -142,9 +128,14 @@
             *ngFor="let buttonKey of btnGroup"
           ><!--
           --><button
-              *ngIf="!settingsButtons[buttonKey].hidden"
+              *ngIf="!settingsButtons[buttonKey].hidden && settingsButtons[buttonKey].iconName !== 'icon-check'"
               (click)="toggleButton(buttonKey)"
-              [ngClass]="{ active: settingsButtons[buttonKey].toggled }"
+              [ngClass]="{
+                  defaultSettingsButton:        settingsButtons['flatIcons'].toggled === false,
+                  defaultSettingsButtonToggled: settingsButtons['flatIcons'].toggled === false && settingsButtons[buttonKey].toggled,
+                  flatSettingsButton:           settingsButtons['flatIcons'].toggled === true,
+                  flatSettingsButtonToggled:    settingsButtons['flatIcons'].toggled === true && settingsButtons[buttonKey].toggled
+                }"
               title="{{ settingsButtons[buttonKey].title }}"
             >
               <span class="icon {{ settingsButtons[buttonKey].iconName }}"></span>

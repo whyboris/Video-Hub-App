@@ -18,6 +18,7 @@ import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from 'app/
   styleUrls: [
     './layout.scss',
     './settings.scss',
+    './buttons.scss',
     './search.scss',
     './photon/buttons.scss',
     './photon/icons.scss',
@@ -285,18 +286,10 @@ export class HomeComponent implements OnInit {
   }
 
   /**
-   * Toggle the visibility of the searchButtons
+   * Toggle the visibility of the settings button
    * @param item  -- index within the searchButtons array to toggle
    */
-  toggleHideSearchButton(item: string) {
-    this.settingsButtons[item].hidden = !this.settingsButtons[item].hidden;
-  }
-
-  /**
-   * Toggle the visibility of the galleryButtons
-   * @param item  -- index within the galleryButtons array to toggle
-   */
-  toggleHideGalleryButton(item: string) {
+  toggleHideButton(item: string) {
     this.settingsButtons[item].hidden = !this.settingsButtons[item].hidden;
   }
 
@@ -305,13 +298,6 @@ export class HomeComponent implements OnInit {
    */
   toggleSettingsMenu() {
     this.appState.menuHidden = !this.appState.menuHidden;
-  }
-
-  /**
-   * Hide or show the top of the app
-   */
-  toggleTopVisible() {
-    this.appState.topHidden = !this.appState.topHidden;
   }
 
 }

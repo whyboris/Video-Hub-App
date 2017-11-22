@@ -7,5 +7,6 @@ export let AppState = {
 
   numberToShow: 20,
   menuHidden: false,
-  topHidden: false
+
+  flatButtons: true
 }

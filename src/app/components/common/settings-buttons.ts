@@ -30,6 +30,10 @@ export const SettingsButtonsGroups = [
     'fontSizeLarger',
     'hoverDisabled',
     'randomImage'
+  ],
+  [
+    'hideTop',
+    'flatIcons'
   ]
 ];
 
@@ -41,7 +45,8 @@ export const SettingsCategories = [
   'Gallery & view settings',
   '',
   '',
-  ''
+  '',
+  'Other settings'
 ]
 
 export let SettingsButtons = {
@@ -170,5 +175,19 @@ export let SettingsButtons = {
     iconName: 'icon-left-circled',
     title: 'Hide sidebar',
     description: 'Hides the search filter sidebar'
+  },
+  'hideTop': {
+    hidden: false,
+    toggled: false,
+    iconName: 'icon-up-circled',
+    title: 'Hide top',
+    description: 'Hide the top bar'
+  },
+  'flatIcons': {
+    hidden: false,
+    toggled: false,
+    iconName: 'icon-check', // this specific icon makes the setting only appear in All Settings (behind gear button)
+    title: 'Flat icons',
+    description: 'Flat icon style'
   }
 }
