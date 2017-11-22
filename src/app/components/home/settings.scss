@@ -223,31 +223,31 @@ button {
 }
 
 .buttonOpacityLower {
-  opacity: 0.5;
+  opacity: 0.7;
 }
 
 .inputCheckbox {
   display: inline-block;
   cursor: pointer;
+}
 
-  &:checked + label {
-    &:before {
-      font-family: "photon-entypo";
-      content: '\e826';
-      transform: translate(-20px, 0);
-      display: inline-block;
-    }
+.eye-open {
+  &:before {
+    font-family: "photon-entypo";
+    content: '\e826';
+    transform: translate(8px, 1px);
+    font-size: 13px !important;
+    display: inline-block;
   }
 }
 
-.inputCheckboxDisabled {
-  + label {
-    &:before {
-      font-family: "photon-entypo";
-      content: '\e87b';
-      transform: translate(-20px, 0);
-      display: inline-block;
-    }
+.eye-closed {
+  &:before {
+    font-family: "photon-entypo";
+    content: '\e87b';
+    transform: translate(8px, 1px);
+    font-size: 13px !important;
+    display: inline-block;
   }
 }
 

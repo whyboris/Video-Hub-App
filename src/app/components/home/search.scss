@@ -59,13 +59,14 @@
 }
 
 .searchWord {
-  border-radius: 5px;
-  border: 1px solid gray;
+  border-radius: 6px;
+  // border: 1px solid $gray-40;
+  box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.3);
   cursor: pointer;
   display: inline-block;
   font-size: 10px;
   margin: 3px 0;
-  padding: 2px;
+  padding: 2px 4px 2px 4px;
 
   &:hover {
     text-decoration: line-through;

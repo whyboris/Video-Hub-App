@@ -6,9 +6,9 @@ import { WordFrequencyService } from 'app/components/pipes/word-frequency.servic
 
 import { FinalObject } from '../common/final-object.interface';
 
-import { SearchButtons } from '../common/search-buttons';
+import { SearchButtons, SearchButtonsOrder } from '../common/search-buttons';
 import { Filters } from '../common/filters';
-import { GalleryButtons } from '../common/gallery-buttons';
+import { GalleryButtons, GalleryButtonsOrder } from '../common/gallery-buttons';
 import { AppState } from '../common/app-state';
 import { setTimeout } from 'timers';
 
@@ -30,10 +30,12 @@ export class HomeComponent implements OnInit {
 
   // searchButtons & filters -- arrays must be in the same order to correspond correctly !!!
   searchButtons = SearchButtons;
+  searchButtonsOrder = SearchButtonsOrder;
   filters = Filters;
 
   // Array is in the order in which the buttons will be rendered
   galleryButtons = GalleryButtons;
+  galleryButtonsOrder = GalleryButtonsOrder;
 
   // App state to save -- so it can be exported and saved when closing the app
   appState = AppState;
@@ -42,7 +44,6 @@ export class HomeComponent implements OnInit {
   currentPlayingFile = '';
   currentPlayingFolder = '';
   magicSearchString = '';
-  showMoreInfo = true;
   previewSize = false;
   hoverDisabled = false;
   randomImage = true;
@@ -82,9 +83,6 @@ export class HomeComponent implements OnInit {
         this.cd.detectChanges();
       });
     }, 100);
-
-    // later -- when restoring saved state from file
-    this.showMoreInfo = this.galleryButtons[3].toggled;   // WARNING -- [3] coincides with the button `showMoreInfo`
 
     // Returning Input
     this.electronService.ipcRenderer.on('inputFolderChosen', (event, filePath) => {
@@ -215,41 +213,40 @@ export class HomeComponent implements OnInit {
   }
 
   // MAYBE CLEAN UP !?!!
-  toggleGalleryButton(index: number): void {
-    if (index === 0) {
-      this.galleryButtons[1].toggled = false;
-      this.galleryButtons[2].toggled = false;
-      this.galleryButtons[0].toggled = true;
+  toggleGalleryButton(index: string): void {
+    if (index === 'showThumbnails') {
+      this.galleryButtons['showThumbnails'].toggled = true;
+      this.galleryButtons['showFilmstrip'].toggled = false;
+      this.galleryButtons['showFiles'].toggled = false;
       this.appState.currentView = 'thumbs';
-    } else if (index === 1) {
-      this.galleryButtons[0].toggled = false;
-      this.galleryButtons[2].toggled = false;
-      this.galleryButtons[1].toggled = true;
+    } else if (index === 'showFilmstrip') {
+      this.galleryButtons['showThumbnails'].toggled = false;
+      this.galleryButtons['showFilmstrip'].toggled = true;
+      this.galleryButtons['showFiles'].toggled = false;
       this.appState.currentView = 'filmstrip';
-    } else if (index === 2) {
-      this.galleryButtons[0].toggled = false;
-      this.galleryButtons[1].toggled = false;
-      this.galleryButtons[2].toggled = true;
+    } else if (index === 'showFiles') {
+      this.galleryButtons['showThumbnails'].toggled = false;
+      this.galleryButtons['showFilmstrip'].toggled = false;
+      this.galleryButtons['showFiles'].toggled = true;
       this.appState.currentView = 'files';
-    } else if (index === 3) {
-      this.showMoreInfo = !this.showMoreInfo;
-      this.galleryButtons[3].toggled = !this.galleryButtons[3].toggled;
-    } else if (index === 4) {
+    } else if (index === 'showMoreInfo') {
+      this.galleryButtons['showMoreInfo'].toggled = !this.galleryButtons['showMoreInfo'].toggled;
+    } else if (index === 'previewSize') {
       // toggle the font size
       this.previewSize = !this.previewSize;
-      this.galleryButtons[4].toggled = !this.galleryButtons[4].toggled;
-    } else if (index === 5) {
+      this.galleryButtons['previewSize'].toggled = !this.galleryButtons['previewSize'].toggled;
+    } else if (index === 'hoverDisabled') {
       this.hoverDisabled = !this.hoverDisabled;
-      this.galleryButtons[5].toggled = !this.galleryButtons[5].toggled;
-    } else if (index === 6) {
+      this.galleryButtons['hoverDisabled'].toggled = !this.galleryButtons['hoverDisabled'].toggled;
+    } else if (index === 'randomImage') {
       this.randomImage = !this.randomImage;
-      this.galleryButtons[6].toggled = !this.galleryButtons[6].toggled;
-    } else if (index === 7) {
+      this.galleryButtons['randomImage'].toggled = !this.galleryButtons['randomImage'].toggled;
+    } else if (index === 'makeSmaller') {
       this.decreaseSize();
-    } else if (index === 8) {
+    } else if (index === 'makeLarger') {
       this.increaseSize();
-    } else if (index === 9) {
-      this.galleryButtons[9].toggled = !this.galleryButtons[9].toggled;
+    } else if (index === 'darkMode') {
+      this.galleryButtons['darkMode'].toggled = !this.galleryButtons['darkMode'].toggled;
     } else {
       console.log('what did you press?');
       // this.galleryButtons[index].toggled = !this.galleryButtons[index].toggled;
@@ -318,7 +315,7 @@ export class HomeComponent implements OnInit {
    * Toggle the visibility of the searchButtons
    * @param item  -- index within the searchButtons array to toggle
    */
-  filterInputBoxClicked(item: number) {
+  toggleHideSearchButton(item: string) {
     this.searchButtons[item].hidden = !this.searchButtons[item].hidden;
   }
 
@@ -326,7 +323,7 @@ export class HomeComponent implements OnInit {
    * Toggle the visibility of the galleryButtons
    * @param item  -- index within the galleryButtons array to toggle
    */
-  galleryInputBoxClicked(item: number) {
+  toggleHideGalleryButton(item: string) {
     this.galleryButtons[item].hidden = !this.galleryButtons[item].hidden;
   }
 

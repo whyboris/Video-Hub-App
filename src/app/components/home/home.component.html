@@ -38,27 +38,31 @@
     >
 
       <div
-        *ngFor="let button of searchButtons; index as i"
-        [ngClass]="{ buttonOpacityLower: button.hidden }"
+        *ngFor="let buttonKey of searchButtonsOrder"
+        [ngClass]="{ buttonOpacityLower: searchButtons[buttonKey].hidden }"
         class="buttonDescription"
       >
         <button
-          (click)="toggleSearchButton(i)"
-          [ngClass]="{ active: button.toggled, buttonOpacityLower: button.hidden }"
-          title="{{ button.title }}"
+          (click)="toggleSearchButton(buttonKey)"
+          [ngClass]="{ active: searchButtons[buttonKey].toggled, buttonOpacityLower: searchButtons[buttonKey].hidden }"
+          title="{{ searchButtons[buttonKey].title }}"
         >
-          <span class="icon {{ button.iconName }}"></span>
+          <span class="icon {{ searchButtons[buttonKey].iconName }}"></span>
         </button>
 
-        <input
-          (change)="filterInputBoxClicked(i)"
-          [checked]="!button.hidden"
-          [ngClass]="{ inputCheckboxDisabled: button.hidden }"
-          id="{{ button.uniqueKey }}"
+        <div
+          (click)="toggleHideSearchButton(buttonKey)"
           class="inputCheckbox"
-          type="checkbox"
         >
-        <label for="{{ button.uniqueKey }}" class="buttonDescriptionText">{{ button.description }}</label>
+          <span
+            class="icon {{ searchButtons[buttonKey].hidden ? 'eye-closed' : 'eye-open' }}"
+          ></span>
+        </div>
+        <span
+          class="buttonDescriptionText"
+        >
+          {{ searchButtons[buttonKey].description }}
+        </span>
       </div>
     </div>
 
@@ -73,34 +77,33 @@
     >
 
       <div
-        *ngFor="let button of galleryButtons; index as i"
+        *ngFor="let buttonKey of galleryButtonsOrder"
         class="buttonDescription"
-        [ngClass]="{ buttonOpacityLower: button.hidden }"
-        [ngStyle]="{ 'min-height': button.spaceAfter ? '50px' : '40px' }"
+        [ngClass]="{ buttonOpacityLower: galleryButtons[buttonKey].hidden }"
+        [ngStyle]="{ 'min-height': galleryButtons[buttonKey].spaceAfter ? '50px' : '40px' }"
       >
         <button
-          *ngIf="!button.hidden || !appState.buttonsInView"
-          (click)="toggleGalleryButton(i)"
-          [ngClass]="{ active: button.toggled, buttonOpacityLower: button.hidden }"
-          title="{{ button.title }}"
+          *ngIf="!galleryButtons[buttonKey].hidden || !appState.buttonsInView"
+          (click)="toggleGalleryButton(buttonKey)"
+          [ngClass]="{ active: galleryButtons[buttonKey].toggled, buttonOpacityLower: galleryButtons[buttonKey].hidden }"
+          title="{{ galleryButtons[buttonKey].title }}"
         >
-          <span class="icon {{ button.iconName }}"></span>
+          <span class="icon {{ galleryButtons[buttonKey].iconName }}"></span>
         </button>
 
-        <input
-          (change)="galleryInputBoxClicked(i)"
-          [checked]="!button.hidden"
-          [ngClass]="{ inputCheckboxDisabled: button.hidden }"
-          id="{{ button.uniqueKey }}"
+        <div
+          (click)="toggleHideGalleryButton(buttonKey)"
           class="inputCheckbox"
-          type="checkbox"
         >
-        <label
-          for="{{ button.uniqueKey }}"
-          class="buttonDescriptionText buttonDescriptionTextGallery"
+          <span
+            class="icon {{ galleryButtons[buttonKey].hidden ? 'eye-closed' : 'eye-open' }}"
+          ></span>
+        </div>
+        <span
+          class="buttonDescriptionText"
         >
-          {{ button.description }}
-        </label>
+          {{ galleryButtons[buttonKey].description }}
+        </span>
       </div>
     </div>
 
@@ -121,11 +124,7 @@
         type="checkbox"
       >
       <label for="hideTopBar" class="extraSettingsText">
-        Show the top bar.
-        <br>
-        <em>
-          It shows the folder path and file name, each of which is clickable for quick searching.
-        </em>
+        Hide / show the top bar.
       </label>
     </div>
 
@@ -181,15 +180,15 @@
         class="searchSettingsButtons"
       >
         <ng-container
-          *ngFor="let button of searchButtons; index as i"
+          *ngFor="let buttonKey of searchButtonsOrder"
         >
           <button
-            *ngIf="!button.hidden"
-            (click)="toggleSearchButton(i)"
-            [ngClass]="{ active: button.toggled }"
-            title="{{ button.title }}"
+            *ngIf="!searchButtons[buttonKey].hidden"
+            (click)="toggleSearchButton(buttonKey)"
+            [ngClass]="{ active: searchButtons[buttonKey].toggled }"
+            title="{{ searchButtons[buttonKey].title }}"
           >
-            <span class="icon {{ button.iconName }}"></span>
+            <span class="icon {{ searchButtons[buttonKey].iconName }}"></span>
           </button>
         </ng-container>
       </div>
@@ -199,17 +198,17 @@
         class="gallerySettingsButtons"
       >
         <ng-container
-          *ngFor="let button of galleryButtons; index as i"
+          *ngFor="let buttonKey of galleryButtonsOrder; index as i"
         >
           <button
-            *ngIf="!button.hidden"
-            (click)="toggleGalleryButton(i)"
-            [ngClass]="{ active: button.toggled }"
-            title="{{ button.title }}"
+            *ngIf="!galleryButtons[buttonKey].hidden"
+            (click)="toggleGalleryButton(buttonKey)"
+            [ngClass]="{ active: galleryButtons[buttonKey].toggled }"
+            title="{{ galleryButtons[buttonKey].title }}"
           >
-            <span class="icon {{ button.iconName }}"></span>
+            <span class="icon {{ galleryButtons[buttonKey].iconName }}"></span>
           </button>
-          <ng-container *ngIf="button.spaceAfter">
+          <ng-container *ngIf="galleryButtons[buttonKey].spaceAfter">
             <div
               class="buttonSpacer"
             >
@@ -225,8 +224,8 @@
     </div>
 
     <div
-      [ngClass]="{ 'sidebar-hidden': searchButtons[7].toggled }"
-      [ngStyle]="{ 'background': galleryButtons[9].toggled ? '#444444' : '#d8d8d8' }"
+      [ngClass]="{ 'sidebar-hidden': searchButtons['hideSidebar'].toggled }"
+      [ngStyle]="{ 'background': galleryButtons['darkMode'].toggled ? '#444444' : '#d8d8d8' }"
       class="sidebar"
     >
 
@@ -237,9 +236,9 @@
 
       <!-- SEARCH BOXES -->
       <ng-container *ngFor="let filter of filters; index as j">
-        <ng-container *ngIf="searchButtons[j].toggled">
+        <ng-container *ngIf="searchButtons[filter.uniqueKey].toggled">
 
-          <span class="icon input-icon {{ searchButtons[j].iconName }}"></span>
+          <span class="icon input-icon {{ searchButtons[filter.uniqueKey].iconName }}"></span>
           <input
             (keyup.enter)="onEnterKey(filter.string, j)"
             (keydown.backspace)="onBackspace(filter.string, j)"
@@ -273,8 +272,8 @@
       </ng-container>
 
       <!-- magic search -->
-      <ng-container *ngIf="searchButtons[5].toggled">
-        <span class="icon input-icon {{ searchButtons[5].iconName }}"></span>
+      <ng-container *ngIf="searchButtons['magic'].toggled">
+        <span class="icon input-icon {{ searchButtons['magic'].iconName }}"></span>
         <input
           (keydown.escape)="magicSearchString = ''"
           [(ngModel)]="magicSearchString"
@@ -307,7 +306,7 @@
       </div>
 
       <!-- word cloud -->
-      <div *ngIf="searchButtons[6].toggled" class="frequency">
+      <div *ngIf="searchButtons['showFreq'].toggled" class="frequency">
         <ng-container *ngFor="let word of wordFreqArr; index as i">
           <span
             [ngStyle]="{'font-size': word.height + 'px' }"
@@ -323,8 +322,8 @@
 <!-- THE GALLERY PANE -->
 
     <div
-      [ngClass]="{ 'gallery-container-full-width': searchButtons[7].toggled}"
-      [ngStyle]="{ 'background': galleryButtons[9].toggled ? '#000000' : '#999999' }"
+      [ngClass]="{ 'gallery-container-full-width': searchButtons['hideSidebar'].toggled}"
+      [ngStyle]="{ 'background': galleryButtons['darkMode'].toggled ? '#000000' : '#999999' }"
       class="gallery-container"
     >
 
@@ -346,9 +345,9 @@
         <div
           class="item"
           [ngClass]="{
-              fileNamePadding: !showMoreInfo && appState.currentView != 'files',
+              fileNamePadding: !galleryButtons['showMoreInfo'].toggled && appState.currentView != 'files',
               filesView: appState.currentView === 'files',
-              whenFilenamesHidden: appState.currentView === 'filmstrip' && !showMoreInfo
+              whenFilenamesHidden: appState.currentView === 'filmstrip' && !galleryButtons['showMoreInfo'].toggled
             }"
           [ngStyle]="{
               height: imgHeight + 'px',
@@ -393,26 +392,26 @@
 
           </div>
 
-          <div *ngIf="appState.currentView === 'files' && showMoreInfo">
+          <div *ngIf="appState.currentView === 'files' && galleryButtons['showMoreInfo'].toggled">
             <div class="folder" *ngIf="true | folderViewPipe: item[0]">
               <span class="icon icon-folder"></span><span [innerHtml]="item[0] | folderArrowsPipe"></span>
             </div>
           </div>
 
           <div
-            *ngIf="showMoreInfo || appState.currentView === 'files'"
+            *ngIf="galleryButtons['showMoreInfo'].toggled || appState.currentView === 'files'"
             class="metadata"
           >
 
             <div
-              *ngIf="showMoreInfo"
+              *ngIf="galleryButtons['showMoreInfo'].toggled"
               class="length"
             >
               {{ item[4] | lengthPipe }}
             </div>
 
             <div
-              *ngIf="showMoreInfo"
+              *ngIf="galleryButtons['showMoreInfo'].toggled"
               class="size"
             >
               {{ item[5] }}
