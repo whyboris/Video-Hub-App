@@ -13,7 +13,7 @@ button {
   border: 1px solid $gray-30; // don't alphabetize this one
   background: $gray-15;
   border-left: 1px solid $gray-10;
-  border-radius: 5px;
+  border-radius: 1px;
   border-top: 1px solid $gray-10;
   box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
   cursor: pointer;
@@ -32,6 +32,15 @@ button {
       transform: translate(-1px, -1px);
       transition: $button-toggle-length;
     }
+  }
+
+  &:first-child {
+    border-top-left-radius: 5px !important;
+    border-bottom-left-radius: 5px !important;
+  }
+  &:last-child {
+    border-top-right-radius: 5px !important;
+    border-bottom-right-radius: 5px !important;
   }
 
   &:hover {
@@ -132,11 +141,9 @@ button {
 }
 
 .searchSettingsButtons {
+  float: left;
+  margin-right: 8px;
   max-height: 23px;
-  overflow: hidden;
-  position: absolute;
-  transform-origin: 13px 13px;
-  transition: $transition-length;
   z-index: 2;
 }
 

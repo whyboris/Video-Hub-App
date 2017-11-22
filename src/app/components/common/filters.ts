@@ -1,5 +1,5 @@
 // string = search string, array = array of filters, bool = dummy to flip to trigger pipe
-// array for `file`, `fileUnion`, `folder`, `folderUnion`
+// array for `file`, `fileUnion`, `folder`, `folderUnion`, and `exclude`
 export let Filters = [
   {
     uniqueKey: 'folderUnion',

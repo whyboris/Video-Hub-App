@@ -1,16 +1,16 @@
 import { Component, ChangeDetectorRef, OnInit, HostListener } from '@angular/core';
 
+import { setTimeout } from 'timers';
+
 import { ElectronService } from '../../providers/electron.service';
 import { ShowLimitService } from 'app/components/pipes/show-limit.service';
 import { WordFrequencyService } from 'app/components/pipes/word-frequency.service';
 
 import { FinalObject } from '../common/final-object.interface';
 
-import { SearchButtons, SearchButtonsOrder } from '../common/search-buttons';
-import { Filters } from '../common/filters';
-import { GalleryButtons, GalleryButtonsOrder } from '../common/gallery-buttons';
 import { AppState } from '../common/app-state';
-import { setTimeout } from 'timers';
+import { Filters } from '../common/filters';
+import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from 'app/components/common/settings-buttons';
 
 @Component({
   selector: 'app-home',
@@ -28,14 +28,11 @@ import { setTimeout } from 'timers';
 })
 export class HomeComponent implements OnInit {
 
-  // searchButtons & filters -- arrays must be in the same order to correspond correctly !!!
-  searchButtons = SearchButtons;
-  searchButtonsOrder = SearchButtonsOrder;
-  filters = Filters;
+  settingsButtons = SettingsButtons;
+  settingsButtonsGroups = SettingsButtonsGroups;
+  settingsCategories = SettingsCategories;
 
-  // Array is in the order in which the buttons will be rendered
-  galleryButtons = GalleryButtons;
-  galleryButtonsOrder = GalleryButtonsOrder;
+  filters = Filters;
 
   // App state to save -- so it can be exported and saved when closing the app
   appState = AppState;
@@ -184,14 +181,6 @@ export class HomeComponent implements OnInit {
   // Interaction functions
 
   /**
-   * Toggle a search button
-   * @param button
-   */
-  toggleSearchButton(button: string) {
-    this.searchButtons[button].toggled = !this.searchButtons[button].toggled;
-  }
-
-  /**
    * Show or hide settings
    * settingsNowShown used for *ngIf
    */
@@ -210,31 +199,31 @@ export class HomeComponent implements OnInit {
   }
 
   /**
-   * Perform appropriate action when a gallery button is clicked
+   * Perform appropriate action when a button is clicked
    * @param   uniqueKey   the uniqueKey string of the button
    */
-  toggleGalleryButton(uniqueKey: string): void {
+  toggleButton(uniqueKey: string): void {
     if (uniqueKey === 'showThumbnails') {
-      this.galleryButtons['showThumbnails'].toggled = true;
-      this.galleryButtons['showFilmstrip'].toggled = false;
-      this.galleryButtons['showFiles'].toggled = false;
+      this.settingsButtons['showThumbnails'].toggled = true;
+      this.settingsButtons['showFilmstrip'].toggled = false;
+      this.settingsButtons['showFiles'].toggled = false;
       this.appState.currentView = 'thumbs';
     } else if (uniqueKey === 'showFilmstrip') {
-      this.galleryButtons['showThumbnails'].toggled = false;
-      this.galleryButtons['showFilmstrip'].toggled = true;
-      this.galleryButtons['showFiles'].toggled = false;
+      this.settingsButtons['showThumbnails'].toggled = false;
+      this.settingsButtons['showFilmstrip'].toggled = true;
+      this.settingsButtons['showFiles'].toggled = false;
       this.appState.currentView = 'filmstrip';
     } else if (uniqueKey === 'showFiles') {
-      this.galleryButtons['showThumbnails'].toggled = false;
-      this.galleryButtons['showFilmstrip'].toggled = false;
-      this.galleryButtons['showFiles'].toggled = true;
+      this.settingsButtons['showThumbnails'].toggled = false;
+      this.settingsButtons['showFilmstrip'].toggled = false;
+      this.settingsButtons['showFiles'].toggled = true;
       this.appState.currentView = 'files';
     } else if (uniqueKey === 'makeSmaller') {
       this.decreaseSize();
     } else if (uniqueKey === 'makeLarger') {
       this.increaseSize();
     } else {
-      this.galleryButtons[uniqueKey].toggled = !this.galleryButtons[uniqueKey].toggled;
+      this.settingsButtons[uniqueKey].toggled = !this.settingsButtons[uniqueKey].toggled;
     }
   }
 
@@ -300,7 +289,7 @@ export class HomeComponent implements OnInit {
    * @param item  -- index within the searchButtons array to toggle
    */
   toggleHideSearchButton(item: string) {
-    this.searchButtons[item].hidden = !this.searchButtons[item].hidden;
+    this.settingsButtons[item].hidden = !this.settingsButtons[item].hidden;
   }
 
   /**
@@ -308,7 +297,7 @@ export class HomeComponent implements OnInit {
    * @param item  -- index within the galleryButtons array to toggle
    */
   toggleHideGalleryButton(item: string) {
-    this.galleryButtons[item].hidden = !this.galleryButtons[item].hidden;
+    this.settingsButtons[item].hidden = !this.settingsButtons[item].hidden;
   }
 
   /**
