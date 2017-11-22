@@ -2,13 +2,13 @@ export const GalleryButtonsOrder = [
   'showThumbnails',
   'showFilmstrip',
   'showFiles',
-  'showMoreInfo',
-  'previewSize',
-  'hoverDisabled',
-  'randomImage',
   'makeSmaller',
   'makeLarger',
-  'darkMode'
+  'darkMode',
+  'showMoreInfo',
+  'fontSizeLarger',
+  'hoverDisabled',
+  'randomImage'
 ]
 
 export let GalleryButtons = {
@@ -38,23 +38,23 @@ export let GalleryButtons = {
   },
   'showMoreInfo': {
     hidden: false,
-    toggled: true,              // coincides with `this.showMoreInfo` variable
+    toggled: true,
     iconName: 'icon-tag',
     title: 'Show more info',
     spaceAfter: false,
     description: 'Show more info'
   },
-  'previewSize': {
+  'fontSizeLarger': {
     hidden: false,
-    toggled: false,              // coincides with `this.previewSize` variable
+    toggled: false,
     iconName: 'icon-resize-full',
-    title: 'Toggle preview size',
+    title: 'Toggle font size',
     spaceAfter: false,
-    description: 'Make the preview items larger or smaller'
+    description: 'Make the font larger or smaller'
   },
   'hoverDisabled': {
     hidden: false,
-    toggled: false,              // coincides with `this.hoverDisabled` variable
+    toggled: false,
     iconName: 'icon-feather',
     title: 'Toggle hover animations',
     spaceAfter: false,
@@ -62,7 +62,7 @@ export let GalleryButtons = {
   },
   'randomImage': {
     hidden: false,
-    toggled: true,              // coincides with `this.randomImage` variable
+    toggled: true,
     iconName: 'icon-shuffle',
     title: 'Show random screenshot',
     spaceAfter: true,
@@ -89,7 +89,7 @@ export let GalleryButtons = {
     toggled: false,
     iconName: 'icon-adjust',
     title: 'Dark mode',
-    spaceAfter: false,
+    spaceAfter: true,
     description: 'Dark mode'
   }
 }

@@ -373,8 +373,8 @@
               [stuff]="item[3]"
               [folderPath]="appState.selectedOutputFolder"
               [imgHeight]="imgHeight"
-              [hoverDisabled]="hoverDisabled"
-              [randomImage]="randomImage"
+              [hoverDisabled]="galleryButtons['hoverDisabled'].toggled"
+              [randomImage]="galleryButtons['randomImage'].toggled"
             ></app-gallery-item>
 
           </div>
@@ -387,7 +387,7 @@
               [folderPath]="appState.selectedOutputFolder"
               [width]="(imgHeight / 100) * item[6] || (imgHeight / 100) * 171"
               [imgHeight]="imgHeight"
-              [hoverDisabled]="hoverDisabled"
+              [hoverDisabled]="galleryButtons['hoverDisabled'].toggled"
             ></app-filmstrip-item>
 
           </div>
@@ -419,7 +419,7 @@
 
             <div
               (click)="openVideo(item[3])"
-              [ngClass]="{ 'larger-font': previewSize }"
+              [ngClass]="{ 'larger-font': galleryButtons['fontSizeLarger'].toggled }"
               class="title"
             >
               {{ item[2] }}

@@ -44,9 +44,6 @@ export class HomeComponent implements OnInit {
   currentPlayingFile = '';
   currentPlayingFolder = '';
   magicSearchString = '';
-  previewSize = false;
-  hoverDisabled = false;
-  randomImage = true;
 
   importDone = false;
   inProgress = false;
@@ -212,46 +209,33 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  // MAYBE CLEAN UP !?!!
-  toggleGalleryButton(index: string): void {
-    if (index === 'showThumbnails') {
+  /**
+   * Perform appropriate action when a gallery button is clicked
+   * @param   uniqueKey   the uniqueKey string of the button
+   */
+  toggleGalleryButton(uniqueKey: string): void {
+    if (uniqueKey === 'showThumbnails') {
       this.galleryButtons['showThumbnails'].toggled = true;
       this.galleryButtons['showFilmstrip'].toggled = false;
       this.galleryButtons['showFiles'].toggled = false;
       this.appState.currentView = 'thumbs';
-    } else if (index === 'showFilmstrip') {
+    } else if (uniqueKey === 'showFilmstrip') {
       this.galleryButtons['showThumbnails'].toggled = false;
       this.galleryButtons['showFilmstrip'].toggled = true;
       this.galleryButtons['showFiles'].toggled = false;
       this.appState.currentView = 'filmstrip';
-    } else if (index === 'showFiles') {
+    } else if (uniqueKey === 'showFiles') {
       this.galleryButtons['showThumbnails'].toggled = false;
       this.galleryButtons['showFilmstrip'].toggled = false;
       this.galleryButtons['showFiles'].toggled = true;
       this.appState.currentView = 'files';
-    } else if (index === 'showMoreInfo') {
-      this.galleryButtons['showMoreInfo'].toggled = !this.galleryButtons['showMoreInfo'].toggled;
-    } else if (index === 'previewSize') {
-      // toggle the font size
-      this.previewSize = !this.previewSize;
-      this.galleryButtons['previewSize'].toggled = !this.galleryButtons['previewSize'].toggled;
-    } else if (index === 'hoverDisabled') {
-      this.hoverDisabled = !this.hoverDisabled;
-      this.galleryButtons['hoverDisabled'].toggled = !this.galleryButtons['hoverDisabled'].toggled;
-    } else if (index === 'randomImage') {
-      this.randomImage = !this.randomImage;
-      this.galleryButtons['randomImage'].toggled = !this.galleryButtons['randomImage'].toggled;
-    } else if (index === 'makeSmaller') {
+    } else if (uniqueKey === 'makeSmaller') {
       this.decreaseSize();
-    } else if (index === 'makeLarger') {
+    } else if (uniqueKey === 'makeLarger') {
       this.increaseSize();
-    } else if (index === 'darkMode') {
-      this.galleryButtons['darkMode'].toggled = !this.galleryButtons['darkMode'].toggled;
     } else {
-      console.log('what did you press?');
-      // this.galleryButtons[index].toggled = !this.galleryButtons[index].toggled;
+      this.galleryButtons[uniqueKey].toggled = !this.galleryButtons[uniqueKey].toggled;
     }
-
   }
 
   /**
