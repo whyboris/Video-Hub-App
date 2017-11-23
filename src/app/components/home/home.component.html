@@ -52,29 +52,29 @@
           <button
             (click)="toggleButton(buttonKey)"
             [ngClass]="{
-                defaultSettingsButtonToggled: settingsButtons[buttonKey].toggled,
-                buttonOpacityLower: settingsButtons[buttonKey].hidden
+                buttonOpacityLower: settingsButtons[buttonKey].hidden,
+                defaultSettingsButton:        settingsButtons['flatIcons'].toggled === false,
+                defaultSettingsButtonToggled: settingsButtons['flatIcons'].toggled === false && settingsButtons[buttonKey].toggled,
+                flatSettingsButton:           settingsButtons['flatIcons'].toggled === true,
+                flatSettingsButtonToggled:    settingsButtons['flatIcons'].toggled === true && settingsButtons[buttonKey].toggled
               }"
-            class="defaultSettingsButton"
             title="{{ settingsButtons[buttonKey].title }}"
           >
             <span class="icon {{ settingsButtons[buttonKey].iconName }}"></span>
           </button>
 
-          <div
+          <span
             *ngIf="settingsButtons[buttonKey].iconName !== 'icon-check'"
             (click)="toggleHideButton(buttonKey)"
-            class="inputCheckbox"
-          >
-            <span
-              class="icon {{ settingsButtons[buttonKey].hidden ? 'eye-closed' : 'eye-open' }}"
-            ></span>
-          </div>
+            class="eyeIconContainer icon {{ settingsButtons[buttonKey].hidden ? 'eye-closed' : 'eye-open' }}"
+          ></span>
+
           <span
             class="buttonDescriptionText"
           >
             {{ settingsButtons[buttonKey].description }}
           </span>
+
         </div>
       </div>
 

@@ -122,7 +122,7 @@ h2 {
 
 .buttonDescriptionText {
   color: $gray-50;
-  cursor: pointer;
+  cursor: initial;
   display: block;
   font-size: 12px;
   left: 60px;
@@ -130,21 +130,16 @@ h2 {
   top: 5px;
 }
 
-.buttonDescriptionTextGallery {
-  max-height: 30px;
-  // overflow: hidden;
-  // text-overflow: ellipsis;
-  top: 3px;
-  width: calc(100vw - 330px);
-}
-
 .buttonOpacityLower {
   opacity: 0.7;
 }
 
-.inputCheckbox {
-  display: inline-block;
+.eyeIconContainer {
   cursor: pointer;
+  display: block;
+  left: 28px;
+  position: absolute;
+  top: 1px;
 }
 
 .eye-open {

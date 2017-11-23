@@ -13,6 +13,7 @@ button {
   color: $gray-50;
   margin-right: 4px;
   transition: $button-toggle-length;
+  transition-property: color;
 
   &:hover {
     text-shadow: 0 0 3px $white;
@@ -49,10 +50,11 @@ button {
   max-height: 22px;
   padding: 2px;
   transition: $button-toggle-length;
+  transition-property: color, transform, background-color, margin;
 
   & .icon {
     &:before {
-      color: $black;
+      color: $gray-70;
       transform: translate(-1px, -1px);
       transition: $button-toggle-length;
     }
