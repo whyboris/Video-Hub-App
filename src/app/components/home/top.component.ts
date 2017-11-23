@@ -38,6 +38,9 @@ export class TopComponent {
   }
 
   public fileWordClicked(item) {
+    // Strip away any of: {}()[].,
+    const regex = /{|}|\(|\)|\[|\]|\.|\,/g;
+    item = item.replace(regex, '');
     this.onFileWordClicked.emit(item.trim());
   }
 

@@ -120,6 +120,14 @@ h2 {
   }
 }
 
+.eyeIconContainer {
+  cursor: pointer;
+  display: block;
+  left: 28px;
+  position: absolute;
+  top: -1px;
+}
+
 .buttonDescriptionText {
   color: $gray-50;
   cursor: initial;
@@ -127,19 +135,11 @@ h2 {
   font-size: 12px;
   left: 60px;
   position: absolute;
-  top: 5px;
+  top: 3px;
 }
 
 .buttonOpacityLower {
   opacity: 0.7;
-}
-
-.eyeIconContainer {
-  cursor: pointer;
-  display: block;
-  left: 28px;
-  position: absolute;
-  top: 1px;
 }
 
 .eye-open {
