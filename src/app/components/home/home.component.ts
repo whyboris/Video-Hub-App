@@ -1,16 +1,16 @@
 import { Component, ChangeDetectorRef, OnInit, HostListener } from '@angular/core';
 
+import { setTimeout } from 'timers';
+
 import { ElectronService } from '../../providers/electron.service';
 import { ShowLimitService } from 'app/components/pipes/show-limit.service';
 import { WordFrequencyService } from 'app/components/pipes/word-frequency.service';
 
 import { FinalObject } from '../common/final-object.interface';
 
-import { SearchButtons } from '../common/search-buttons';
-import { Filters } from '../common/filters';
-import { GalleryButtons } from '../common/gallery-buttons';
 import { AppState } from '../common/app-state';
-import { setTimeout } from 'timers';
+import { Filters } from '../common/filters';
+import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from 'app/components/common/settings-buttons';
 
 @Component({
   selector: 'app-home',
@@ -18,6 +18,7 @@ import { setTimeout } from 'timers';
   styleUrls: [
     './layout.scss',
     './settings.scss',
+    './buttons.scss',
     './search.scss',
     './photon/buttons.scss',
     './photon/icons.scss',
@@ -28,12 +29,11 @@ import { setTimeout } from 'timers';
 })
 export class HomeComponent implements OnInit {
 
-  // searchButtons & filters -- arrays must be in the same order to correspond correctly !!!
-  searchButtons = SearchButtons;
-  filters = Filters;
+  settingsButtons = SettingsButtons;
+  settingsButtonsGroups = SettingsButtonsGroups;
+  settingsCategories = SettingsCategories;
 
-  // Array is in the order in which the buttons will be rendered
-  galleryButtons = GalleryButtons;
+  filters = Filters;
 
   // App state to save -- so it can be exported and saved when closing the app
   appState = AppState;
@@ -42,10 +42,6 @@ export class HomeComponent implements OnInit {
   currentPlayingFile = '';
   currentPlayingFolder = '';
   magicSearchString = '';
-  showMoreInfo = true;
-  previewSize = false;
-  hoverDisabled = false;
-  randomImage = true;
 
   importDone = false;
   inProgress = false;
@@ -82,9 +78,6 @@ export class HomeComponent implements OnInit {
         this.cd.detectChanges();
       });
     }, 100);
-
-    // later -- when restoring saved state from file
-    this.showMoreInfo = this.galleryButtons[3].toggled;   // WARNING -- [3] coincides with the button `showMoreInfo`
 
     // Returning Input
     this.electronService.ipcRenderer.on('inputFolderChosen', (event, filePath) => {
@@ -189,14 +182,6 @@ export class HomeComponent implements OnInit {
   // Interaction functions
 
   /**
-   * Toggle a search button
-   * @param button
-   */
-  toggleSearchButton(button: string) {
-    this.searchButtons[button].toggled = !this.searchButtons[button].toggled;
-  }
-
-  /**
    * Show or hide settings
    * settingsNowShown used for *ngIf
    */
@@ -214,47 +199,33 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  // MAYBE CLEAN UP !?!!
-  toggleGalleryButton(index: number): void {
-    if (index === 0) {
-      this.galleryButtons[1].toggled = false;
-      this.galleryButtons[2].toggled = false;
-      this.galleryButtons[0].toggled = true;
+  /**
+   * Perform appropriate action when a button is clicked
+   * @param   uniqueKey   the uniqueKey string of the button
+   */
+  toggleButton(uniqueKey: string): void {
+    if (uniqueKey === 'showThumbnails') {
+      this.settingsButtons['showThumbnails'].toggled = true;
+      this.settingsButtons['showFilmstrip'].toggled = false;
+      this.settingsButtons['showFiles'].toggled = false;
       this.appState.currentView = 'thumbs';
-    } else if (index === 1) {
-      this.galleryButtons[0].toggled = false;
-      this.galleryButtons[2].toggled = false;
-      this.galleryButtons[1].toggled = true;
+    } else if (uniqueKey === 'showFilmstrip') {
+      this.settingsButtons['showThumbnails'].toggled = false;
+      this.settingsButtons['showFilmstrip'].toggled = true;
+      this.settingsButtons['showFiles'].toggled = false;
       this.appState.currentView = 'filmstrip';
-    } else if (index === 2) {
-      this.galleryButtons[0].toggled = false;
-      this.galleryButtons[1].toggled = false;
-      this.galleryButtons[2].toggled = true;
+    } else if (uniqueKey === 'showFiles') {
+      this.settingsButtons['showThumbnails'].toggled = false;
+      this.settingsButtons['showFilmstrip'].toggled = false;
+      this.settingsButtons['showFiles'].toggled = true;
       this.appState.currentView = 'files';
-    } else if (index === 3) {
-      this.showMoreInfo = !this.showMoreInfo;
-      this.galleryButtons[3].toggled = !this.galleryButtons[3].toggled;
-    } else if (index === 4) {
-      // toggle the font size
-      this.previewSize = !this.previewSize;
-      this.galleryButtons[4].toggled = !this.galleryButtons[4].toggled;
-    } else if (index === 5) {
-      this.hoverDisabled = !this.hoverDisabled;
-      this.galleryButtons[5].toggled = !this.galleryButtons[5].toggled;
-    } else if (index === 6) {
-      this.randomImage = !this.randomImage;
-      this.galleryButtons[6].toggled = !this.galleryButtons[6].toggled;
-    } else if (index === 7) {
+    } else if (uniqueKey === 'makeSmaller') {
       this.decreaseSize();
-    } else if (index === 8) {
+    } else if (uniqueKey === 'makeLarger') {
       this.increaseSize();
-    } else if (index === 9) {
-      this.galleryButtons[9].toggled = !this.galleryButtons[9].toggled;
     } else {
-      console.log('what did you press?');
-      // this.galleryButtons[index].toggled = !this.galleryButtons[index].toggled;
+      this.settingsButtons[uniqueKey].toggled = !this.settingsButtons[uniqueKey].toggled;
     }
-
   }
 
   /**
@@ -315,19 +286,11 @@ export class HomeComponent implements OnInit {
   }
 
   /**
-   * Toggle the visibility of the searchButtons
+   * Toggle the visibility of the settings button
    * @param item  -- index within the searchButtons array to toggle
    */
-  filterInputBoxClicked(item: number) {
-    this.searchButtons[item].hidden = !this.searchButtons[item].hidden;
-  }
-
-  /**
-   * Toggle the visibility of the galleryButtons
-   * @param item  -- index within the galleryButtons array to toggle
-   */
-  galleryInputBoxClicked(item: number) {
-    this.galleryButtons[item].hidden = !this.galleryButtons[item].hidden;
+  toggleHideButton(item: string) {
+    this.settingsButtons[item].hidden = !this.settingsButtons[item].hidden;
   }
 
   /**
@@ -335,13 +298,6 @@ export class HomeComponent implements OnInit {
    */
   toggleSettingsMenu() {
     this.appState.menuHidden = !this.appState.menuHidden;
-  }
-
-  /**
-   * Hide or show the top of the app
-   */
-  toggleTopVisible() {
-    this.appState.topHidden = !this.appState.topHidden;
   }
 
 }

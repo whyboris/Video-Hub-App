@@ -4,8 +4,6 @@ export let AppState = {
   currentView: 'thumbs', // can be 'thumbs' | 'filmstrip' | 'files'
 
   buttonsInView: true,
-
-  numberToShow: 20,
   menuHidden: false,
-  topHidden: false
+  numberToShow: 20,
 }
