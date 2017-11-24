@@ -71,8 +71,8 @@
 // add arrows styling to what the folder-arrows.pipe puts out
 /deep/ .icon-arrow:before {
   color: #444444;
-  content: '\e875';
-  font-family: "photon-entypo";
+  content: '\f1a0'; // chevron-right
+  font-family: "vh-icon-font";
   margin: 0 5px;
 }
 

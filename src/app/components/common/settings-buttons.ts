@@ -81,7 +81,7 @@ export let SettingsButtons = {
   'fontSizeLarger': {
     hidden: false,
     toggled: false,
-    iconName: 'icon-video-blank',
+    iconName: 'icon-larger',
     title: 'Toggle font size',
     description: 'Make the font larger or smaller'
   },
@@ -95,7 +95,7 @@ export let SettingsButtons = {
   'randomImage': {
     hidden: false,
     toggled: true,
-    iconName: 'icon-video-blank',
+    iconName: 'icon-random',
     title: 'Show random screenshot',
     description: 'Show random screenshot in the preview'
   },
@@ -130,7 +130,7 @@ export let SettingsButtons = {
   'folder': {
     hidden: false,
     toggled: false,
-    iconName: 'icon-folder-plus',
+    iconName: 'icon-folder-minus',
     title: 'Folder search',
     description: 'Search in folders containing each of the search words'
   },
@@ -144,7 +144,7 @@ export let SettingsButtons = {
   'file': {
     hidden: false,
     toggled: true,
-    iconName: 'icon-video-blank',
+    iconName: 'icon-video-minus',
     title: 'Video search',
     description: 'Search for videos containing each of the search words'
   },
@@ -172,14 +172,14 @@ export let SettingsButtons = {
   'hideSidebar': {
     hidden: false,
     toggled: false,
-    iconName: 'icon-video-blank',
+    iconName: 'icon-chevron-left',
     title: 'Hide sidebar',
     description: 'Hides the search filter sidebar'
   },
   'hideTop': {
     hidden: false,
     toggled: false,
-    iconName: 'icon-video-blank',
+    iconName: 'icon-chevron-up',
     title: 'Hide top',
     description: 'Hide the top bar'
   },

@@ -27,7 +27,7 @@
       [ngClass]="{ closeSettingsHidden: appState.buttonsInView }"
       class="closeSettings"
     >
-      <span class="icon icon-cancel"></span>
+      <span class="icon icon-close"></span>
     </div>
 
 
@@ -64,7 +64,7 @@
           </button>
 
           <span
-            *ngIf="settingsButtons[buttonKey].iconName !== 'icon-check'"
+            *ngIf="settingsButtons[buttonKey].iconName !== 'icon-checkmark'"
             (click)="toggleHideButton(buttonKey)"
             class="eyeIconContainer icon {{ settingsButtons[buttonKey].hidden ? 'eye-closed' : 'eye-open' }}"
           ></span>
@@ -128,7 +128,7 @@
             *ngFor="let buttonKey of btnGroup"
           ><!--
           --><button
-              *ngIf="!settingsButtons[buttonKey].hidden && settingsButtons[buttonKey].iconName !== 'icon-check'"
+              *ngIf="!settingsButtons[buttonKey].hidden && settingsButtons[buttonKey].iconName !== 'icon-checkmark'"
               (click)="toggleButton(buttonKey)"
               [ngClass]="{
                   defaultSettingsButton:        settingsButtons['flatIcons'].toggled === false,
@@ -157,7 +157,7 @@
     </div>
 
     <div (click)="toggleSettingsMenu()" [ngClass]="{ flipped: !appState.menuHidden }" class="hidingSettingsMenu">
-      <span class="icon icon-down-open-mini"></span>
+      <span class="icon icon-chevron-down-mini"></span>
     </div>
 
     <div
