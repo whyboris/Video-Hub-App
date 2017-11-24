@@ -38,19 +38,22 @@ button {
 
 .defaultSettingsButton {
   border: 1px solid $gray-30; // don't alphabetize this one
+
   background: $gray-15;
   border-left: 1px solid $gray-10;
-  border-radius: 1px;
+  border-radius: 0;
   border-top: 1px solid $gray-10;
   box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  box-sizing: border-box;
   margin: 0;
-  min-width: 22px;
-  min-height: 22px;
-  max-width: 22px;
-  max-height: 22px;
-  padding: 2px;
+  max-height: 21px;
+  max-width: 21px;
+  min-height: 21px;
+  min-width: 21px;
+  padding: 0;
+  text-align: center;
   transition: $button-toggle-length;
-  transition-property: color, transform, background-color, margin;
+  transition-property: color, transform, background-color, margin, opacity;
 
   & .icon {
     &:before {
@@ -100,10 +103,10 @@ button {
 
 .defaultSettingsButtonToggled {
   background: $gray-40 !important;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-  border-left: 0px;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
   border-right: 1px solid $gray-40;
-  border-top: 0px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  border-left: 0px;
   box-shadow: none;
   margin-bottom: 1px;
   transform: translate(0, 1px);
