@@ -44,7 +44,7 @@ button {
   border-left: 1px solid $gray-10;
   border-radius: 0;
   border-top: 1px solid $gray-10;
-  box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  // box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
   box-sizing: border-box;
   margin: 0;
   max-height: 21px;
@@ -110,7 +110,7 @@ button {
   border-left: 0px;
   box-shadow: none;
   margin-bottom: 1px;
-  transform: translate(0, 1px);
+  // transform: translate(0, 1px);
 
   &:hover {
     background-color: $gray-30 !important;
@@ -121,6 +121,7 @@ button {
       color: $white;
       transform: translate(0px, 0px);
       transition: $button-toggle-length;
+      text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.3);
     }
   }
 

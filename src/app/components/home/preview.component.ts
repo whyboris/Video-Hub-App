@@ -9,7 +9,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class PreviewComponent implements OnInit, OnDestroy {
 
   @Input() folderPath: string;
-  @Input() hoverDisabled: boolean;
+  @Input() hoverScrub: boolean;
   @Input() imgHeight: number;
   @Input() randomImage: boolean;
   @Input() stuff: any;

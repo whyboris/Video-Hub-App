@@ -28,7 +28,7 @@ export const SettingsButtonsGroups = [
   [
     'showMoreInfo',
     'fontSizeLarger',
-    'hoverDisabled',
+    'hoverScrub',
     'randomImage'
   ],
   [
@@ -79,15 +79,15 @@ export let SettingsButtons = {
     description: 'Show more info'
   },
   'fontSizeLarger': {
-    hidden: false,
+    hidden: true,
     toggled: false,
     iconName: 'icon-larger',
     title: 'Toggle font size',
     description: 'Make the font larger or smaller'
   },
-  'hoverDisabled': {
+  'hoverScrub': {
     hidden: false,
-    toggled: false,
+    toggled: true,
     iconName: 'icon-toggle-scrub',
     title: 'Toggle hover animations',
     description: 'Scrolling over preview shows different screenshots'
@@ -121,7 +121,7 @@ export let SettingsButtons = {
     description: 'Dark mode'
   },
   'folderUnion': {
-    hidden: true,
+    hidden: false,
     toggled: false,
     iconName: 'icon-folder-plus',
     title: 'Folder union search',
@@ -135,7 +135,7 @@ export let SettingsButtons = {
     description: 'Search in folders containing each of the search words'
   },
   'fileUnion': {
-    hidden: true,
+    hidden: false,
     toggled: false,
     iconName: 'icon-video-plus',
     title: 'Video union search',

@@ -3,7 +3,7 @@
   [ngStyle]="{ height: imgHeight + 'px'}"
 >
 
-  <div *ngIf="!hoverDisabled && hover">
+  <div *ngIf="hoverScrub && hover">
     <div
       (mouseover)="showThisOne(i)"
       *ngFor="let item of stuff; let i = index"

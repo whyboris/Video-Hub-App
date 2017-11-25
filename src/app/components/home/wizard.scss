@@ -3,7 +3,7 @@
 .wizard {
   background: $gray-10;
   height: 100vh;
-  top: 72px;
+  top: 67px; // accounts for draggable region and the .top (height = 45px)
   padding-top: 30px;
   position: fixed;
   width: 100%;

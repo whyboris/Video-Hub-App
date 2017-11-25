@@ -15,11 +15,11 @@
     </div>
   </div>
 
-  <!-- SETTINGS -->
+  <!-- SETTINGS / OPTIONS MODAL -->
   <div
     *ngIf="settingsNowShown"
     [ngClass]="{ allSettingsExpanded: !appState.buttonsInView }"
-    class="allSettings2"
+    class="settingsModal"
   >
 
     <div
@@ -229,7 +229,7 @@
           <span
             *ngIf="magicSearchString !== ''"
             (click)="magicSearchString = ''"
-            [ngStyle]="{ background: '#DD99DD' }"
+            [ngStyle]="{ background: '#70ff76' }"
             class="searchWord"
           >
             {{ magicSearchString }}
@@ -310,7 +310,7 @@
               [stuff]="item[3]"
               [folderPath]="appState.selectedOutputFolder"
               [imgHeight]="imgHeight"
-              [hoverDisabled]="settingsButtons['hoverDisabled'].toggled"
+              [hoverScrub]="settingsButtons['hoverScrub'].toggled"
               [randomImage]="settingsButtons['randomImage'].toggled"
             ></app-gallery-item>
 
@@ -324,7 +324,7 @@
               [folderPath]="appState.selectedOutputFolder"
               [width]="(imgHeight / 100) * item[6] || (imgHeight / 100) * 171"
               [imgHeight]="imgHeight"
-              [hoverDisabled]="settingsButtons['hoverDisabled'].toggled"
+              [hoverScrub]="settingsButtons['hoverScrub'].toggled"
             ></app-filmstrip-item>
 
           </div>
