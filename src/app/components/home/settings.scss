@@ -9,6 +9,7 @@ h2 {
 }
 
 .gearButton {
+  cursor: pointer;
   color: $gray-40;
   font-size: 14px;
   position: absolute;
@@ -120,14 +121,6 @@ h2 {
   }
 }
 
-.eyeIconContainer {
-  cursor: pointer;
-  display: block;
-  left: 28px;
-  position: absolute;
-  top: -1px;
-}
-
 .buttonDescriptionText {
   color: $gray-50;
   cursor: initial;
@@ -142,22 +135,26 @@ h2 {
   opacity: 0.7;
 }
 
+.eyeIconContainer {
+  cursor: pointer;
+  display: block;
+  left: 35px;
+  position: absolute;
+  top: 1px;
+}
+
 .eye-open {
   &:before {
-    font-family: "photon-entypo";
-    content: '\e826';
-    transform: translate(8px, 1px);
-    font-size: 13px !important;
+    font-family: "vh-icon-font";
+    content: '\f17f';
     display: inline-block;
   }
 }
 
 .eye-closed {
   &:before {
-    font-family: "photon-entypo";
-    content: '\e87b';
-    transform: translate(8px, 1px);
-    font-size: 13px !important;
+    font-family: "vh-icon-font";
+    content: '\f17b';
     display: inline-block;
   }
 }

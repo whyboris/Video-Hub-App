@@ -9,7 +9,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 export class FilmstripComponent implements OnInit {
 
   @Input() folderPath: string;
-  @Input() hoverDisabled: boolean;
+  @Input() hoverScrub: boolean;
   @Input() imgHeight: number;
   @Input() stuff: any;
   @Input() width: number;

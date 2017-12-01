@@ -1,7 +1,7 @@
 @import "variables";
 
 // variable
-$top-region: 50px;
+$top-region: 45px;
 
 $settings-height: 32px;
 
@@ -55,7 +55,7 @@ $sidebar-width: 190px;
   position: absolute;
   text-align: center;
   top: 4px;
-  width: calc(100vw - 100px);
+  width: calc(100vw - 110px);
 }
 
 .winBtn {
@@ -71,28 +71,26 @@ $sidebar-width: 190px;
 }
 
 .closeButton {
-  font-size: 14px;
   right: 7px;
   top: 2px;
 }
 
 .maximizeButton {
-  font-size: 12px;
-  right: 22px;
-  top: 4px;
+  right: 26px;
+  top: 2px;
 }
 
 .minimizeButton {
-  font-size: 14px;
-  right: 44px;
-  top: 5px;
+  right: 46px;
+  top: 2px;
 }
 
 .top {
   // background: #F3F3F3;
-  background-image: linear-gradient(to bottom, #e8e6e8 0%, #d1cfd1 100%);
-  border-bottom: 1px solid $gray-50;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  // background: $gray-20;
+  background-image: linear-gradient(to bottom, #e4e4e4 0%, #cfcfcf 100%);
+  border-bottom: 1px solid $gray-30;
+  // box-shadow: 0 2px 10px rgba(0,0,0,0.2);
   height: $top-region;
   position: relative;
   width: 100%;
@@ -111,7 +109,7 @@ $sidebar-width: 190px;
 
 .allSettings {
   background: $gray-20;
-  border-bottom: 1px solid $gray-50;
+  border-bottom: 1px solid $gray-40;
   box-shadow: 0 2px 10px rgba(0,0,0,0.2);
   box-sizing: border-box;
   height: $settings-height;
@@ -123,7 +121,7 @@ $sidebar-width: 190px;
   overflow: hidden;
 }
 
-.allSettings2 {
+.settingsModal {
   background: $gray-15;
   border-bottom-left-radius: 10px;
   border-top-left-radius: 10px;

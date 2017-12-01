@@ -8,7 +8,7 @@ export let Filters = [
     bool: true,
     placeholder: 'Folder union',
     conjunction: 'or',
-    color: '#AAFFDD'
+    color: '#FFD672'
   }, {
     uniqueKey: 'folder',
     string: '',
@@ -16,7 +16,7 @@ export let Filters = [
     bool: true,
     placeholder: 'Folder contains',
     conjunction: 'and',
-    color: '#DDFFDD'
+    color: '#ffe5a5'
   }, {
     uniqueKey: 'fileUnion',
     string: '',
@@ -24,7 +24,7 @@ export let Filters = [
     bool: true,
     placeholder: 'File union',
     conjunction: 'or',
-    color: '#DDFFAA'
+    color: '#6e96ff'
   }, {
     uniqueKey: 'file',
     string: '',
@@ -32,7 +32,7 @@ export let Filters = [
     bool: true,
     placeholder: 'File contains',
     conjunction: 'and',
-    color: '#DDFF88'
+    color: '#b1c6fd'
   }, {
     uniqueKey: 'exclude',
     string: '',

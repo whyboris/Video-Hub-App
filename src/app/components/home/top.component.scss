@@ -1,3 +1,5 @@
+@import "variables";
+
 .icon-video,
 .icon-folder {
   font-size: 12px;
@@ -6,6 +8,7 @@
 }
 
 .folder-container {
+  color: $gray-60;
   max-height: 18px;
   min-width: calc(100vw - 100px);
   overflow: hidden;
@@ -19,12 +22,15 @@
   margin-right: 5px;
 
   &:after {
-    font-family:photon-entypo;
-    content: '\e875';
+    content: '\f1a0'; // chevron-right
+    font-family: "vh-icon-font";
+    padding-left: 3px;
+    padding-right: 3px;
   }
 }
 
 .file-container {
+  color: $gray-60;
   max-height: 20px;
   min-width: calc(100vw - 100px);
   overflow: hidden;
