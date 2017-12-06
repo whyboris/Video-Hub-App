@@ -1,4 +1,6 @@
-export const SettingsButtonsGroups = [
+import { SettingsButton } from './settings-buttons.interface';
+
+export const SettingsButtonsGroups: string[][] = [
   [
     'hideSidebar',
   ],
@@ -33,12 +35,13 @@ export const SettingsButtonsGroups = [
   ],
   [
     'hideTop',
-    'flatIcons'
+    'flatIcons',
+    'startWizard'
   ]
 ];
 
 // correspond to each group above
-export const SettingsCategories = [
+export const SettingsCategories: string[] = [
   'Search & filter settings',
   '',
   '',
@@ -49,7 +52,7 @@ export const SettingsCategories = [
   'Other settings'
 ]
 
-export let SettingsButtons = {
+export let SettingsButtons: { [s: string]: SettingsButton } = {
   'showThumbnails': {
     hidden: false,
     toggled: true,
@@ -189,5 +192,12 @@ export let SettingsButtons = {
     iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
     title: 'Flat icons',
     description: 'Flat icon style'
+  },
+  'startWizard': {
+    hidden: false,
+    toggled: false,
+    iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
+    title: 'Start wizard',
+    description: 'Start wizard again'
   }
 }

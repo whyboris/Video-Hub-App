@@ -127,10 +127,46 @@ let fileNumberTracker = 0;
 /**
  * Close the window
  */
-ipc.on('close-window', function (event, someMessage) {
+ipc.on('close-window', function (event, settingsToSave) {
   console.log('window closed by user');
-  BrowserWindow.getFocusedWindow().close();
+  console.log(settingsToSave);
+  console.log('closing temporarily disabled');
+
+  const json = JSON.stringify(settingsToSave);
+
+  const pathToAppData = app.getPath('appData')
+  console.log(pathToAppData);
+
+
+  try {
+    fs.statSync(pathToAppData + '/video-hub-app');
+  } catch (e) {
+    fs.mkdirSync(pathToAppData + '/video-hub-app');
+  }
+
+  // TODO -- catch bug if user closes before selecting the output folder
+  fs.writeFile(pathToAppData + '/video-hub-app' + '/settings.json', json, 'utf8', () => {
+    console.log('settings file written:');
+    // BrowserWindow.getFocusedWindow().close();
+  });
+
 });
+
+/**
+ * Just started -- hello -- send over the settings
+ */
+ipc.on('just-started', function (event, someMessage) {
+  const pathToAppData = app.getPath('appData')
+  console.log('app just started');
+  fs.readFile(pathToAppData + '/video-hub-app' + '/settings.json', (err, data) => {
+    if (err) {
+      console.log(err); // maybe better error handling later
+    } else {
+      event.sender.send('settingsReturning', JSON.parse(data));
+    }
+  });
+});
+
 
 /**
  * Maximize the window
@@ -240,6 +276,8 @@ ipc.on('start-the-import', function (event, someMessage) {
 
 /**
  * Summon system modal to choose the images.json file
+ * send images object to App
+ * send settings object to App
  */
 ipc.on('load-the-file', function (event, somethingElse) {
   // console.log(somethingElse);
@@ -254,13 +292,28 @@ ipc.on('load-the-file', function (event, somethingElse) {
 
         fs.readFile(selectedOutputFolder + '/images.json', (err, data) => {
           if (err) {
-            throw err;
+            throw err; // later maybe only log it ???
+          } else {
+            event.sender.send('finalObjectReturning', JSON.parse(data));
           }
-          event.sender.send('finalObjectReturning', JSON.parse(data));
         });
-
       }
     })
+
+})
+
+/**
+ * Import this JSON file
+ */
+ipc.on('load-this-json-file', function (event, pathToJsonFile) {
+  console.log('the app is auto loading this JSON file: ' + pathToJsonFile);
+  fs.readFile(pathToJsonFile, (err, data) => {
+    if (err) {
+      throw err; // later maybe only log it ???
+    } else {
+      event.sender.send('finalObjectReturning', JSON.parse(data));
+    }
+  });
 
 })
 
@@ -488,27 +541,31 @@ function extractMetadata(filePath: string, currentFile: number): void {
 
 /**
  * Label the video according to these rules
+ * 5th item is size (720, 1080, etc)
  * @param width
  * @param height
  */
 function labelVideo(width: number, height: number): string {
   let size = '';
-
-  if (width === 1280 && height === 720) {
-    size = '720'; // 5th item is size (720, 1080, etc)
+  if        (width === 3840 && height === 2160) {
+    size = '4k'
   } else if (width === 1920 && height === 1080) {
-    size = '1080'; // 5th item is size (720, 1080, etc)
+    size = '1080';
+  } else if (width === 1280 && height === 720) {
+    size = '720';
+  } else if (width > 3840) {
+    size = '4K+';
+  } else if (width > 1920) {
+    size = '1080+';
   } else if (width > 720) {
-    size = 'HD'; // 5th item is size (720, 1080, etc)
+    size = '720+';
   }
-//  else if (width < 720)
-//  size = 'SD'; // 5th item is size (720, 1080, etc)
-
   return size;
 }
 
-
-
+/**
+ * Rescan the directory -- updating files etc -- SUPER COMPLICATED
+ */
 function reScanDirectory(sourceFolder: string, fullFilePath: string) {
 
   // 1 use regular file walking to scan full directory and create main file _WITHOUT SCREENSHOTS_

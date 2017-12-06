@@ -80,9 +80,6 @@
 
     </ng-container>
 
-    <div *ngIf="settingsCategories[i] !== ''" class="horizontalDivider">
-    </div>
-
   </div> <!-- END OF SETTINGS -->
 
   <header
@@ -181,6 +178,7 @@
             (keydown.backspace)="onBackspace(filter.string, j)"
             (keydown.escape)="filter.string = ''"
             [(ngModel)]="filter.string"
+            [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
             class="inputFilter"
             placeholder="{{ filter.placeholder }}"
             type="text"
@@ -214,6 +212,7 @@
         <input
           (keydown.escape)="magicSearchString = ''"
           [(ngModel)]="magicSearchString"
+          [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
           type="text"
           class="inputFilter"
           placeholder="Folder or file contains"
@@ -229,7 +228,7 @@
           <span
             *ngIf="magicSearchString !== ''"
             (click)="magicSearchString = ''"
-            [ngStyle]="{ background: '#70ff76' }"
+            [ngStyle]="{ background: '#aaffaa' }"
             class="searchWord"
           >
             {{ magicSearchString }}

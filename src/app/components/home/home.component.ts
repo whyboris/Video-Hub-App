@@ -59,6 +59,12 @@ export class HomeComponent implements OnInit {
 
   public finalArray = [];
 
+  // Listen for key presses
+  // @HostListener('document:keypress', ['$event'])
+  // handleKeyboardEvent(event: KeyboardEvent) {
+  //   console.log(event.key);
+  // }
+
   constructor(
     public cd: ChangeDetectorRef,
     public showLimitService: ShowLimitService,
@@ -103,35 +109,51 @@ export class HomeComponent implements OnInit {
       this.importDone = true;
       this.finalArray = finalObject.images;
     });
+
+    // Returning settings
+    this.electronService.ipcRenderer.on('settingsReturning', (event, settingsObject: any) => {
+      this.restoreSettingsFromBefore(settingsObject);
+      if (settingsObject.appState.selectedOutputFolder && settingsObject.appState.selectedSourceFolder) {
+        console.log(settingsObject.appState);
+        this.loadThisJsonFile(settingsObject.appState.selectedOutputFolder + '/images.json');
+      }
+    });
+
+    this.justStarted();
   }
 
   // INTERACT WITH ELECTRON
 
-  public loadFromFile() {
-    // console.log('loading file');
-    this.electronService.ipcRenderer.send('load-the-file', 'some thing sent');
+  // Send initial hello message -- used to grab settings
+  public justStarted(): void {
+    this.electronService.ipcRenderer.send('just-started', 'lol');
   }
 
-  public selectSourceDirectory() {
-    // console.log('select input directory');
-    this.electronService.ipcRenderer.send('choose-input', 'sending some message also');
+  public loadThisJsonFile(fullPath: string): void {
+    this.electronService.ipcRenderer.send('load-this-json-file', fullPath);
   }
 
-  public selectOutputDirectory() {
-    // console.log('select output directory');
-    this.electronService.ipcRenderer.send('choose-output', 'sending some message also');
+  public loadFromFile(): void {
+    this.electronService.ipcRenderer.send('load-the-file', 'lol');
   }
 
-  public importFresh() {
-    // console.log('fresh import');
-    this.electronService.ipcRenderer.send('start-the-import', 'sending some message');
+  public selectSourceDirectory(): void {
+    this.electronService.ipcRenderer.send('choose-input', 'lol');
   }
 
-  public initiateMinimize() {
+  public selectOutputDirectory(): void {
+    this.electronService.ipcRenderer.send('choose-output', 'lol');
+  }
+
+  public importFresh(): void {
+    this.electronService.ipcRenderer.send('start-the-import', 'lol');
+  }
+
+  public initiateMinimize(): void {
     this.electronService.ipcRenderer.send('minimize-window', 'lol');
   }
 
-  public initiateMaximize() {
+  public initiateMaximize(): void {
     if (this.appMaximized === false) {
       this.electronService.ipcRenderer.send('maximize-window', 'lol');
       this.appMaximized = true;
@@ -141,21 +163,14 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  public initiateClose() {
-    this.electronService.ipcRenderer.send('close-window', 'lol');
+  public initiateClose(): void {
+    this.electronService.ipcRenderer.send('close-window', this.getSettingsForSave());
   }
 
-  // HTML calls this
-  public openVideo(number) {
+  public openVideo(number): void {
     this.currentPlayingFolder = this.finalArray[number][0];
     this.currentPlayingFile = this.finalArray[number][2];
-    this.openExternalFile(this.appState.selectedSourceFolder + this.finalArray[number][0] + '/' + this.finalArray[number][1]);
-  }
-
-  // Open the file in system default program
-  public openExternalFile(fullPath) {
-    // console.log('trying to open ' + fullPath);
-    // console.log('sike! DISABLED :)')
+    const fullPath = this.appState.selectedSourceFolder + this.finalArray[number][0] + '/' + this.finalArray[number][1];
     this.electronService.ipcRenderer.send('openThisFile', fullPath);
   }
 
@@ -166,7 +181,7 @@ export class HomeComponent implements OnInit {
    * Add filter to FILE search when word in file is clicked
    * @param filter
    */
-  handleFileWordClicked(filter: string) {
+  handleFileWordClicked(filter: string): void {
     this.onEnterKey(filter, 3); // 3rd item is the `file` filter
   }
 
@@ -174,7 +189,7 @@ export class HomeComponent implements OnInit {
    * Add filter to FOLDER search when word in folder is clicked
    * @param filter
    */
-  handleFolderWordClicked(filter: string) {
+  handleFolderWordClicked(filter: string): void {
     this.onEnterKey(filter, 1); // 1st item is the `folder` filter
   }
 
@@ -185,7 +200,7 @@ export class HomeComponent implements OnInit {
    * Show or hide settings
    * settingsNowShown used for *ngIf
    */
-  toggleSettings() {
+  toggleSettings(): void {
     if (this.settingsNowShown === false) {
       this.settingsNowShown = true;
       setTimeout(() => {
@@ -223,9 +238,19 @@ export class HomeComponent implements OnInit {
       this.decreaseSize();
     } else if (uniqueKey === 'makeLarger') {
       this.increaseSize();
+    } else if (uniqueKey === 'startWizard') {
+      this.startWizard();
     } else {
       this.settingsButtons[uniqueKey].toggled = !this.settingsButtons[uniqueKey].toggled;
     }
+  }
+
+  /**
+   * Start the wizard again
+   */
+  public startWizard(): void {
+    this.toggleSettings();
+    this.importDone = false;
   }
 
   /**
@@ -267,7 +292,6 @@ export class HomeComponent implements OnInit {
    * @param origin  -- array from which to .pop()
    */
   onBackspace(value: string, origin: number): void {
-    // TODO -- bug -- if user removes the 1st character with a backspace key, it removes last-entered filter
     if (value === '' && this.filters[origin].array.length > 0) {
       this.filters[origin].array.pop();
       this.filters[origin].bool = !this.filters[origin].bool;
@@ -289,15 +313,70 @@ export class HomeComponent implements OnInit {
    * Toggle the visibility of the settings button
    * @param item  -- index within the searchButtons array to toggle
    */
-  toggleHideButton(item: string) {
+  toggleHideButton(item: string): void {
     this.settingsButtons[item].hidden = !this.settingsButtons[item].hidden;
   }
 
   /**
    * Show or hide the settings menu
    */
-  toggleSettingsMenu() {
+  toggleSettingsMenu(): void {
     this.appState.menuHidden = !this.appState.menuHidden;
+  }
+
+  // ---- HANDLE EXTRACTING AND RESTORING SETTINGS ON OPEN AND BEFORE CLOSE ------
+
+  /**
+   * Prepare and return the settings object for saving
+   * happens right before closing the app !!!
+   */
+  getSettingsForSave(): any {
+
+    const buttonSettings = {};
+
+    this.grabAllSettingsKeys().forEach(element => {
+      buttonSettings[element] = {};
+      buttonSettings[element].toggled = this.settingsButtons[element].toggled;
+      buttonSettings[element].hidden = this.settingsButtons[element].hidden;
+    });
+
+    // console.log(buttonSettings);
+    return {
+      buttonSettings: buttonSettings,
+      appState: this.appState
+    };
+  }
+
+  /**
+   * Return all keys from the settings-buttons
+   */
+  grabAllSettingsKeys(): string[] {
+    const objectKeys: string[] = [];
+
+    this.settingsButtonsGroups.forEach(element => {
+      element.forEach(key => {
+        objectKeys.push(key);
+      })
+    });
+
+    // console.log(objectKeys);
+    return(objectKeys);
+  }
+
+  /**
+   * restore settings from saved file
+   */
+  restoreSettingsFromBefore(settingsObject): void {
+    // console.log(settingsObject);
+    if (settingsObject.appState) {
+      this.appState = settingsObject.appState;
+    }
+    this.grabAllSettingsKeys().forEach(element => {
+      if (settingsObject.buttonSettings[element]) {
+        this.settingsButtons[element].toggled = settingsObject.buttonSettings[element].toggled;
+        this.settingsButtons[element].hidden = settingsObject.buttonSettings[element].hidden;
+      }
+    });
   }
 
 }
