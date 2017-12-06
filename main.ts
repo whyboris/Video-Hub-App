@@ -134,12 +134,39 @@ ipc.on('close-window', function (event, settingsToSave) {
 
   const json = JSON.stringify(settingsToSave);
 
+  const pathToAppData = app.getPath('appData')
+  console.log(pathToAppData);
+
+
+  try {
+    fs.statSync(pathToAppData + '/video-hub-app');
+  } catch (e) {
+    fs.mkdirSync(pathToAppData + '/video-hub-app');
+  }
+
   // TODO -- catch bug if user closes before selecting the output folder
-  fs.writeFile(selectedOutputFolder + '/settings.json', json, 'utf8', () => {
+  fs.writeFile(pathToAppData + '/video-hub-app' + '/settings.json', json, 'utf8', () => {
     console.log('settings file written:');
     //BrowserWindow.getFocusedWindow().close();
   });
+
 });
+
+/**
+ * Just started -- hello -- send over the settings
+ */
+ipc.on('just-started', function (event, someMessage) {
+  const pathToAppData = app.getPath('appData')
+  console.log('app just started');
+  fs.readFile(pathToAppData + '/video-hub-app' + '/settings.json', (err, data) => {
+    if (err) {
+      console.log(err); // maybe better error handling later
+    } else {
+      event.sender.send('settingsReturning', JSON.parse(data));
+    }
+  });
+});
+
 
 /**
  * Maximize the window
@@ -265,16 +292,10 @@ ipc.on('load-the-file', function (event, somethingElse) {
 
         fs.readFile(selectedOutputFolder + '/images.json', (err, data) => {
           if (err) {
-            throw err;
+            throw err; // later maybe only log it ???
+          } else {
+            event.sender.send('finalObjectReturning', JSON.parse(data));
           }
-          event.sender.send('finalObjectReturning', JSON.parse(data));
-        });
-
-        fs.readFile(selectedOutputFolder + '/settings.json', (err, data) => {
-          if (err) {
-            throw err;
-          }
-          event.sender.send('settingsReturning', JSON.parse(data));
         });
       }
     })

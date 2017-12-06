@@ -114,9 +114,16 @@ export class HomeComponent implements OnInit {
     this.electronService.ipcRenderer.on('settingsReturning', (event, settingsObject: any) => {
       this.restoreSettingsFromBefore(settingsObject);
     });
+
+    this.justStarted();
   }
 
   // INTERACT WITH ELECTRON
+
+  // Send initial hello message -- used to grab settings
+  public justStarted(): void {
+    this.electronService.ipcRenderer.send('just-started', 'lol');
+  }
 
   public loadFromFile(): void {
     this.electronService.ipcRenderer.send('load-the-file', 'some thing sent');
@@ -301,19 +308,23 @@ export class HomeComponent implements OnInit {
 
   /**
    * Prepare and return the settings object for saving
+   * happens right before closing the app !!!
    */
   getSettingsForSave(): any {
 
-    const finalObject = {};
+    const buttonSettings = {};
 
     this.grabAllSettingsKeys().forEach(element => {
-      finalObject[element] = {};
-      finalObject[element].toggled = this.settingsButtons[element].toggled;
-      finalObject[element].hidden = this.settingsButtons[element].hidden;
+      buttonSettings[element] = {};
+      buttonSettings[element].toggled = this.settingsButtons[element].toggled;
+      buttonSettings[element].hidden = this.settingsButtons[element].hidden;
     });
 
-    console.log(finalObject);
-    return finalObject;
+    console.log(buttonSettings);
+    return {
+      buttonSettings: buttonSettings,
+      appState: this.appState
+    };
   }
 
   /**
@@ -338,10 +349,14 @@ export class HomeComponent implements OnInit {
    */
   restoreSettingsFromBefore(settingsObject): void {
     console.log(settingsObject);
+    if (settingsObject.appState) {
+      console.log('hshsh');
+      this.appState = settingsObject.appState;
+    }
     this.grabAllSettingsKeys().forEach(element => {
       if (this.settingsButtons[element]) {
-        this.settingsButtons[element].toggled = settingsObject[element].toggled;
-        this.settingsButtons[element].hidden = settingsObject[element].hidden;
+        this.settingsButtons[element].toggled = settingsObject.buttonSettings[element].toggled;
+        this.settingsButtons[element].hidden = settingsObject.buttonSettings[element].hidden;
       }
     });
   }
