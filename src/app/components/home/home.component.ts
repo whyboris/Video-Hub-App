@@ -59,6 +59,12 @@ export class HomeComponent implements OnInit {
 
   public finalArray = [];
 
+  // Listen for key presses
+  // @HostListener('document:keypress', ['$event'])
+  // handleKeyboardEvent(event: KeyboardEvent) {
+  //   console.log(event.key);
+  // }
+
   constructor(
     public cd: ChangeDetectorRef,
     public showLimitService: ShowLimitService,
