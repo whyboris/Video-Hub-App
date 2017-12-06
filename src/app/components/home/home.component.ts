@@ -113,6 +113,10 @@ export class HomeComponent implements OnInit {
     // Returning settings
     this.electronService.ipcRenderer.on('settingsReturning', (event, settingsObject: any) => {
       this.restoreSettingsFromBefore(settingsObject);
+      if (settingsObject.appState.selectedOutputFolder && settingsObject.appState.selectedSourceFolder) {
+        console.log(settingsObject.appState);
+        this.loadThisJsonFile(settingsObject.appState.selectedOutputFolder + '/images.json');
+      }
     });
 
     this.justStarted();
@@ -123,6 +127,10 @@ export class HomeComponent implements OnInit {
   // Send initial hello message -- used to grab settings
   public justStarted(): void {
     this.electronService.ipcRenderer.send('just-started', 'lol');
+  }
+
+  public loadThisJsonFile(fullPath: string): void {
+    this.electronService.ipcRenderer.send('load-this-json-file', fullPath);
   }
 
   public loadFromFile(): void {
@@ -306,6 +314,8 @@ export class HomeComponent implements OnInit {
     this.appState.menuHidden = !this.appState.menuHidden;
   }
 
+  // ---- HANDLE EXTRACTING AND RESTORING SETTINGS ON OPEN AND BEFORE CLOSE ------
+
   /**
    * Prepare and return the settings object for saving
    * happens right before closing the app !!!
@@ -320,7 +330,7 @@ export class HomeComponent implements OnInit {
       buttonSettings[element].hidden = this.settingsButtons[element].hidden;
     });
 
-    console.log(buttonSettings);
+    // console.log(buttonSettings);
     return {
       buttonSettings: buttonSettings,
       appState: this.appState
@@ -339,8 +349,7 @@ export class HomeComponent implements OnInit {
       })
     });
 
-    console.log(objectKeys);
-
+    // console.log(objectKeys);
     return(objectKeys);
   }
 
@@ -348,13 +357,12 @@ export class HomeComponent implements OnInit {
    * restore settings from saved file
    */
   restoreSettingsFromBefore(settingsObject): void {
-    console.log(settingsObject);
+    // console.log(settingsObject);
     if (settingsObject.appState) {
-      console.log('hshsh');
       this.appState = settingsObject.appState;
     }
     this.grabAllSettingsKeys().forEach(element => {
-      if (this.settingsButtons[element]) {
+      if (settingsObject.buttonSettings[element]) {
         this.settingsButtons[element].toggled = settingsObject.buttonSettings[element].toggled;
         this.settingsButtons[element].hidden = settingsObject.buttonSettings[element].hidden;
       }

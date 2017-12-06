@@ -147,7 +147,7 @@ ipc.on('close-window', function (event, settingsToSave) {
   // TODO -- catch bug if user closes before selecting the output folder
   fs.writeFile(pathToAppData + '/video-hub-app' + '/settings.json', json, 'utf8', () => {
     console.log('settings file written:');
-    //BrowserWindow.getFocusedWindow().close();
+    // BrowserWindow.getFocusedWindow().close();
   });
 
 });
@@ -299,6 +299,21 @@ ipc.on('load-the-file', function (event, somethingElse) {
         });
       }
     })
+
+})
+
+/**
+ * Import this JSON file
+ */
+ipc.on('load-this-json-file', function (event, pathToJsonFile) {
+  console.log('the app is auto loading this JSON file: ' + pathToJsonFile);
+  fs.readFile(pathToJsonFile, (err, data) => {
+    if (err) {
+      throw err; // later maybe only log it ???
+    } else {
+      event.sender.send('finalObjectReturning', JSON.parse(data));
+    }
+  });
 
 })
 
