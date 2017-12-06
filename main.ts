@@ -127,9 +127,18 @@ let fileNumberTracker = 0;
 /**
  * Close the window
  */
-ipc.on('close-window', function (event, someMessage) {
+ipc.on('close-window', function (event, settingsToSave) {
   console.log('window closed by user');
-  BrowserWindow.getFocusedWindow().close();
+  console.log(settingsToSave);
+  console.log('closing temporarily disabled');
+
+  const json = JSON.stringify(settingsToSave);
+
+  // TODO -- catch bug if user closes before selecting the output folder
+  fs.writeFile(selectedOutputFolder + '/settings.json', json, 'utf8', () => {
+    console.log('settings file written:');
+    //BrowserWindow.getFocusedWindow().close();
+  });
 });
 
 /**
@@ -240,6 +249,8 @@ ipc.on('start-the-import', function (event, someMessage) {
 
 /**
  * Summon system modal to choose the images.json file
+ * send images object to App
+ * send settings object to App
  */
 ipc.on('load-the-file', function (event, somethingElse) {
   // console.log(somethingElse);
@@ -259,6 +270,12 @@ ipc.on('load-the-file', function (event, somethingElse) {
           event.sender.send('finalObjectReturning', JSON.parse(data));
         });
 
+        fs.readFile(selectedOutputFolder + '/settings.json', (err, data) => {
+          if (err) {
+            throw err;
+          }
+          event.sender.send('settingsReturning', JSON.parse(data));
+        });
       }
     })
 

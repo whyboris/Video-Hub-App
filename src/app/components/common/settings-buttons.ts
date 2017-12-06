@@ -1,4 +1,6 @@
-export const SettingsButtonsGroups = [
+import { SettingsButton } from './settings-buttons.interface';
+
+export const SettingsButtonsGroups: string[][] = [
   [
     'hideSidebar',
   ],
@@ -38,7 +40,7 @@ export const SettingsButtonsGroups = [
 ];
 
 // correspond to each group above
-export const SettingsCategories = [
+export const SettingsCategories: string[] = [
   'Search & filter settings',
   '',
   '',
@@ -49,7 +51,7 @@ export const SettingsCategories = [
   'Other settings'
 ]
 
-export let SettingsButtons = {
+export let SettingsButtons: { [s: string]: SettingsButton } = {
   'showThumbnails': {
     hidden: false,
     toggled: true,

@@ -109,35 +109,36 @@ export class HomeComponent implements OnInit {
       this.importDone = true;
       this.finalArray = finalObject.images;
     });
+
+    // Returning settings
+    this.electronService.ipcRenderer.on('settingsReturning', (event, settingsObject: any) => {
+      this.restoreSettingsFromBefore(settingsObject);
+    });
   }
 
   // INTERACT WITH ELECTRON
 
-  public loadFromFile() {
-    // console.log('loading file');
+  public loadFromFile(): void {
     this.electronService.ipcRenderer.send('load-the-file', 'some thing sent');
   }
 
-  public selectSourceDirectory() {
-    // console.log('select input directory');
+  public selectSourceDirectory(): void {
     this.electronService.ipcRenderer.send('choose-input', 'sending some message also');
   }
 
-  public selectOutputDirectory() {
-    // console.log('select output directory');
+  public selectOutputDirectory(): void {
     this.electronService.ipcRenderer.send('choose-output', 'sending some message also');
   }
 
-  public importFresh() {
-    // console.log('fresh import');
+  public importFresh(): void {
     this.electronService.ipcRenderer.send('start-the-import', 'sending some message');
   }
 
-  public initiateMinimize() {
+  public initiateMinimize(): void {
     this.electronService.ipcRenderer.send('minimize-window', 'lol');
   }
 
-  public initiateMaximize() {
+  public initiateMaximize(): void {
     if (this.appMaximized === false) {
       this.electronService.ipcRenderer.send('maximize-window', 'lol');
       this.appMaximized = true;
@@ -147,21 +148,14 @@ export class HomeComponent implements OnInit {
     }
   }
 
-  public initiateClose() {
-    this.electronService.ipcRenderer.send('close-window', 'lol');
+  public initiateClose(): void {
+    this.electronService.ipcRenderer.send('close-window', this.getSettingsForSave());
   }
 
-  // HTML calls this
-  public openVideo(number) {
+  public openVideo(number): void {
     this.currentPlayingFolder = this.finalArray[number][0];
     this.currentPlayingFile = this.finalArray[number][2];
-    this.openExternalFile(this.appState.selectedSourceFolder + this.finalArray[number][0] + '/' + this.finalArray[number][1]);
-  }
-
-  // Open the file in system default program
-  public openExternalFile(fullPath) {
-    // console.log('trying to open ' + fullPath);
-    // console.log('sike! DISABLED :)')
+    const fullPath = this.appState.selectedSourceFolder + this.finalArray[number][0] + '/' + this.finalArray[number][1];
     this.electronService.ipcRenderer.send('openThisFile', fullPath);
   }
 
@@ -172,7 +166,7 @@ export class HomeComponent implements OnInit {
    * Add filter to FILE search when word in file is clicked
    * @param filter
    */
-  handleFileWordClicked(filter: string) {
+  handleFileWordClicked(filter: string): void {
     this.onEnterKey(filter, 3); // 3rd item is the `file` filter
   }
 
@@ -180,7 +174,7 @@ export class HomeComponent implements OnInit {
    * Add filter to FOLDER search when word in folder is clicked
    * @param filter
    */
-  handleFolderWordClicked(filter: string) {
+  handleFolderWordClicked(filter: string): void {
     this.onEnterKey(filter, 1); // 1st item is the `folder` filter
   }
 
@@ -191,7 +185,7 @@ export class HomeComponent implements OnInit {
    * Show or hide settings
    * settingsNowShown used for *ngIf
    */
-  toggleSettings() {
+  toggleSettings(): void {
     if (this.settingsNowShown === false) {
       this.settingsNowShown = true;
       setTimeout(() => {
@@ -273,7 +267,6 @@ export class HomeComponent implements OnInit {
    * @param origin  -- array from which to .pop()
    */
   onBackspace(value: string, origin: number): void {
-    // TODO -- bug -- if user removes the 1st character with a backspace key, it removes last-entered filter
     if (value === '' && this.filters[origin].array.length > 0) {
       this.filters[origin].array.pop();
       this.filters[origin].bool = !this.filters[origin].bool;
@@ -295,15 +288,62 @@ export class HomeComponent implements OnInit {
    * Toggle the visibility of the settings button
    * @param item  -- index within the searchButtons array to toggle
    */
-  toggleHideButton(item: string) {
+  toggleHideButton(item: string): void {
     this.settingsButtons[item].hidden = !this.settingsButtons[item].hidden;
   }
 
   /**
    * Show or hide the settings menu
    */
-  toggleSettingsMenu() {
+  toggleSettingsMenu(): void {
     this.appState.menuHidden = !this.appState.menuHidden;
+  }
+
+  /**
+   * Prepare and return the settings object for saving
+   */
+  getSettingsForSave(): any {
+
+    const finalObject = {};
+
+    this.grabAllSettingsKeys().forEach(element => {
+      finalObject[element] = {};
+      finalObject[element].toggled = this.settingsButtons[element].toggled;
+      finalObject[element].hidden = this.settingsButtons[element].hidden;
+    });
+
+    console.log(finalObject);
+    return finalObject;
+  }
+
+  /**
+   * Return all keys from the settings-buttons
+   */
+  grabAllSettingsKeys(): string[] {
+    const objectKeys: string[] = [];
+
+    this.settingsButtonsGroups.forEach(element => {
+      element.forEach(key => {
+        objectKeys.push(key);
+      })
+    });
+
+    console.log(objectKeys);
+
+    return(objectKeys);
+  }
+
+  /**
+   * restore settings from saved file
+   */
+  restoreSettingsFromBefore(settingsObject): void {
+    console.log(settingsObject);
+    this.grabAllSettingsKeys().forEach(element => {
+      if (this.settingsButtons[element]) {
+        this.settingsButtons[element].toggled = settingsObject[element].toggled;
+        this.settingsButtons[element].hidden = settingsObject[element].hidden;
+      }
+    });
   }
 
 }
