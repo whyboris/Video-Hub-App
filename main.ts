@@ -541,27 +541,31 @@ function extractMetadata(filePath: string, currentFile: number): void {
 
 /**
  * Label the video according to these rules
+ * 5th item is size (720, 1080, etc)
  * @param width
  * @param height
  */
 function labelVideo(width: number, height: number): string {
   let size = '';
-
-  if (width === 1280 && height === 720) {
-    size = '720'; // 5th item is size (720, 1080, etc)
+  if        (width === 3840 && height === 2160) {
+    size = '4k'
   } else if (width === 1920 && height === 1080) {
-    size = '1080'; // 5th item is size (720, 1080, etc)
+    size = '1080';
+  } else if (width === 1280 && height === 720) {
+    size = '720';
+  } else if (width > 3840) {
+    size = '4K+';
+  } else if (width > 1920) {
+    size = '1080+';
   } else if (width > 720) {
-    size = 'HD'; // 5th item is size (720, 1080, etc)
+    size = '720+';
   }
-//  else if (width < 720)
-//  size = 'SD'; // 5th item is size (720, 1080, etc)
-
   return size;
 }
 
-
-
+/**
+ * Rescan the directory -- updating files etc -- SUPER COMPLICATED
+ */
 function reScanDirectory(sourceFolder: string, fullFilePath: string) {
 
   // 1 use regular file walking to scan full directory and create main file _WITHOUT SCREENSHOTS_
