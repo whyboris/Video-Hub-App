@@ -134,19 +134,19 @@ export class HomeComponent implements OnInit {
   }
 
   public loadFromFile(): void {
-    this.electronService.ipcRenderer.send('load-the-file', 'some thing sent');
+    this.electronService.ipcRenderer.send('load-the-file', 'lol');
   }
 
   public selectSourceDirectory(): void {
-    this.electronService.ipcRenderer.send('choose-input', 'sending some message also');
+    this.electronService.ipcRenderer.send('choose-input', 'lol');
   }
 
   public selectOutputDirectory(): void {
-    this.electronService.ipcRenderer.send('choose-output', 'sending some message also');
+    this.electronService.ipcRenderer.send('choose-output', 'lol');
   }
 
   public importFresh(): void {
-    this.electronService.ipcRenderer.send('start-the-import', 'sending some message');
+    this.electronService.ipcRenderer.send('start-the-import', 'lol');
   }
 
   public initiateMinimize(): void {
@@ -238,9 +238,19 @@ export class HomeComponent implements OnInit {
       this.decreaseSize();
     } else if (uniqueKey === 'makeLarger') {
       this.increaseSize();
+    } else if (uniqueKey === 'startWizard') {
+      this.startWizard();
     } else {
       this.settingsButtons[uniqueKey].toggled = !this.settingsButtons[uniqueKey].toggled;
     }
+  }
+
+  /**
+   * Start the wizard again
+   */
+  public startWizard(): void {
+    this.toggleSettings();
+    this.importDone = false;
   }
 
   /**

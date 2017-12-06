@@ -19,7 +19,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-checkmark:before { content: "\f194"; }
+.icon-checkmark:before { content: "\f18c"; } // checkmark was `\f194` but now the same as maximize
 .icon-chevron-down-mini:before { content: "\f1a1"; }
 .icon-chevron-left:before { content: "\f1a4"; }
 .icon-chevron-right:before { content: "\f1a0"; }

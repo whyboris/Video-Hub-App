@@ -35,7 +35,8 @@ export const SettingsButtonsGroups: string[][] = [
   ],
   [
     'hideTop',
-    'flatIcons'
+    'flatIcons',
+    'startWizard'
   ]
 ];
 
@@ -191,5 +192,12 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
     title: 'Flat icons',
     description: 'Flat icon style'
+  },
+  'startWizard': {
+    hidden: false,
+    toggled: false,
+    iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
+    title: 'Start wizard',
+    description: 'Start wizard again'
   }
 }
