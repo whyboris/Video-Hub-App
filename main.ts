@@ -275,6 +275,15 @@ ipc.on('start-the-import', function (event, someMessage) {
 })
 
 /**
+ * Initiate rescan of the directory
+ */
+ipc.on('rescan-current-directory', function (event, inputAndOutput) {
+  console.log('ABOUT TO RESCAN THE DIRECTORY !!!');
+  reScanDirectory(inputAndOutput.inputFolder, inputAndOutput.outputFolder);
+  // after done, send back the whole object or something
+})
+
+/**
  * Summon system modal to choose the images.json file
  * send images object to App
  * send settings object to App
@@ -566,7 +575,31 @@ function labelVideo(width: number, height: number): string {
 /**
  * Rescan the directory -- updating files etc -- SUPER COMPLICATED
  */
-function reScanDirectory(sourceFolder: string, fullFilePath: string) {
+function reScanDirectory(inputFolder: string, outputFolder: string) {
+
+  console.log('inputFolder: ' + inputFolder);
+  console.log('outputFolder: ' + outputFolder);
+
+  let currentJson: any = {};
+
+  fs.readFile(outputFolder + '/images.json', (err, data) => {
+    if (err) {
+      console.log(err); // maybe better error handling later
+    } else {
+      console.log('file read:');
+      currentJson = JSON.parse(data);
+      console.log(currentJson);
+      console.log('last screenshot number:');
+      console.log(currentJson.lastScreen);
+    }
+  });
+
+  console.log('finalArray before the re-walk');
+  console.log(finalArray);
+
+  walkSync(inputFolder, []);
+  console.log('finalArray after the re-walk');
+  console.log(finalArray);
 
   // 1 use regular file walking to scan full directory and create main file _WITHOUT SCREENSHOTS_
 
