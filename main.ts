@@ -105,6 +105,8 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 // My variables
 // ============================================================
 
+import { cleanUpFileName, labelVideo } from './main-support';
+
 import { FinalObject } from './src/app/components/common/final-object.interface';
 
 let finalArray = [];
@@ -341,7 +343,7 @@ ipc.on('openThisFile', function (event, fullFilePath) {
 /**
  * Extract the next screenshot
  */
-function extractNextScreenshot() {
+function extractNextScreenshot(): void {
   const index = fileNumberTracker;
   takeScreenshots(path.join(selectedSourceFolder, finalArray[index][0], finalArray[index][1]), index);
   fileNumberTracker++
@@ -359,7 +361,7 @@ function sendCurrentProgress(current: number, total: number): void {
 /**
  * Writes the json file and sends contents back to Angular App
  */
-function sendFinalResultHome() {
+function sendFinalResultHome(): void {
 
   const finalObject: FinalObject = {
     inputDir: selectedSourceFolder,
@@ -412,41 +414,19 @@ function walkSync(dir, filelist) {
   return filelist;
 };
 
-/**
- * Clean up the file name
- * (1) underscores
- * (2) double spaces / tripple spaces
- * (3) remove filename
- * (4) strip periods
- * @param original {string}
- * @return {string}
- */
-function cleanUpFileName(original: string): string {
-  let result = original;
-
-  result = result.split('_').join(' ');               // (1)
-  result = result.split('.').slice(0, -1).join('.');  // (3)
-  result = result.split('.').join(' ');               // (4)
-
-  result = result.split('   ').join(' ');              // (2)
-  result = result.split('  ').join(' ');               // (2)
-
-  return result;
-}
-
 // ============================================================
 // MISC
 // ============================================================
 
 
-// from https://github.com/fluent-ffmpeg/node-fluent-ffmpeg/issues/449#issuecomment-285759269
 
-// create an array that says ['5%', '15%', '25%', '35%', '45%', '55%', '65%', '75%', '85%', '95%']
 const count = 10;
+// from https://github.com/fluent-ffmpeg/node-fluent-ffmpeg/issues/449#issuecomment-285759269
 const timestamps = [];
 const startPositionPercent = 5;
 const endPositionPercent = 95;
 const addPercent = (endPositionPercent - startPositionPercent) / (count - 1);
+// create an array that says ['5%', '15%', '25%', '35%', '45%', '55%', '65%', '75%', '85%', '95%']
 if (!timestamps.length) {
   let t = 0;
   while (t < count) {
@@ -454,7 +434,7 @@ if (!timestamps.length) {
     t = t + 1;
   }
 }
-// all of above can be replaced with a simple array
+// some of the above can be replaced with a simple array
 
 let i = 0;
 function takeScreenshots(file, currentFile) {
@@ -510,7 +490,7 @@ let metaDataIndex = 0;
 /**
  * Extract the next file's metadata
  */
-function extractNextMetadata() {
+function extractNextMetadata(): void {
   const index = metaDataIndex;
   extractMetadata(path.join(selectedSourceFolder, finalArray[index][0], finalArray[index][1]), index);
   metaDataIndex++
@@ -561,34 +541,9 @@ function extractMetadata(filePath: string, currentFile: number): void {
 }
 
 /**
- * Label the video according to these rules
- * 5th item is size (720, 1080, etc)
- * @param width
- * @param height
- */
-function labelVideo(width: number, height: number): string {
-  let size = '';
-  if        (width === 3840 && height === 2160) {
-    size = '4k'
-  } else if (width === 1920 && height === 1080) {
-    size = '1080';
-  } else if (width === 1280 && height === 720) {
-    size = '720';
-  } else if (width > 3840) {
-    size = '4K+';
-  } else if (width > 1920) {
-    size = '1080+';
-  } else if (width > 720) {
-    size = '720+';
-  }
-  return size;
-}
-
-/**
  * Rescan the directory -- updating files etc -- SUPER COMPLICATED
  */
-function reScanDirectory(inputFolder: string, outputFolder: string) {
-
+function reScanDirectory(inputFolder: string, outputFolder: string): void {
 
   let oldFileList = [];
   let newFileList = [];
@@ -635,7 +590,11 @@ function reScanDirectory(inputFolder: string, outputFolder: string) {
 
 }
 
-function findTheDiff(oldFileList, newFileList, inputFolder) {
+// ONLY FINDS THE NEWLY ADDED FILES
+// later TODO -- find deleted files
+function findTheDiff(oldFileList, newFileList, inputFolder): void {
+
+  const theDiff = [];
 
   newFileList.forEach((newElement) => {
     let matchFound = false;
@@ -650,14 +609,13 @@ function findTheDiff(oldFileList, newFileList, inputFolder) {
     if (matchFound) {
       // reset match and continue to next newElement
       matchFound = false;
-      console.log('.');
     } else {
-      console.log('new element found !!!!!');
-      console.log(newElement);
+      theDiff.push(newElement);
     }
 
   });
 
   console.log('the difference is: ');
+  console.log(theDiff);
 
 }
