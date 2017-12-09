@@ -112,9 +112,6 @@ import { FinalObject } from './src/app/components/common/final-object.interface'
 let finalArray = [];
 let fileCounter = 0;
 
-let totalNumberOfFiles = 0;
-let filesProcessed = 1;
-
 let selectedSourceFolder = '';  // later = ''
 let selectedOutputFolder = ''; // later = ''
 
@@ -325,6 +322,7 @@ function sendCurrentProgress(current: number, total: number): void {
   theOriginalOpenFileDialogEvent.sender.send('processingProgress', current, total);
 }
 
+let totalNumberOfFiles = 0;
 /**
  * Writes the json file and sends contents back to Angular App
  */
@@ -351,6 +349,7 @@ type ExtractorMessage = 'screenShotExtracted'
                       | 'metaError'
                       | 'freshStart';
 
+let filesProcessed = 1;
 /**
  * Master directing screenshot and meta extraction flow
  * @param message what event has finished
@@ -383,8 +382,7 @@ function theExtractor(message: ExtractorMessage, dataObject?: any): void {
     finalArray[theMetadata.currentFile][5] = theMetadata.sizeLabel; // 5th item is the label, e.g. 'HD'
     finalArray[theMetadata.currentFile][6] = theMetadata.width;     // 6th item is width of screenshot (130) for ex
 
-    console.log('processed ' + filesProcessed + ' out of ' + totalNumberOfFiles);
-
+    // console.log('processed ' + filesProcessed + ' out of ' + totalNumberOfFiles);
     filesProcessed++;
 
     if (filesProcessed === totalNumberOfFiles + 1) {
@@ -400,7 +398,6 @@ function theExtractor(message: ExtractorMessage, dataObject?: any): void {
 
   } else if (message === 'metaError') {
     console.log('meta error !!!!!!!!!!!!!!!!!!!!!!!');
-    // probably extract next
     filesProcessed++;
 
     if (filesProcessed === totalNumberOfFiles + 1) {
@@ -411,18 +408,11 @@ function theExtractor(message: ExtractorMessage, dataObject?: any): void {
 
   } else if (message === 'freshStart') {
     // reset things and launch extraction of first screenshot !!!
-
-    // console.log(someMessage);
     finalArray = [];
     fileCounter = 0;
-
     // reset number of files if user re-runs extraction a second time !!!
     totalNumberOfFiles = 0;
-
-    // no need to return anything, walkSync updates `finalArray`
-    // second param is needed for its own recursion
-    walkSync(selectedSourceFolder, []);
-
+    walkSync(selectedSourceFolder, []); // walkSync updates `finalArray`
     // reset files Processed
     filesProcessed = 1;
 
@@ -438,7 +428,8 @@ function theExtractor(message: ExtractorMessage, dataObject?: any): void {
 
   } else if (message === 'updateDirectory') {
     // rescan things and then update the final object
-
+  } else {
+    console.log('what did you do !?!!');
   }
 }
 
@@ -453,21 +444,7 @@ function extractNextScreenshot(): void {
 }
 
 const count = 10;
-// from https://github.com/fluent-ffmpeg/node-fluent-ffmpeg/issues/449#issuecomment-285759269
-const timestamps = [];
-const startPositionPercent = 5;
-const endPositionPercent = 95;
-const addPercent = (endPositionPercent - startPositionPercent) / (count - 1);
-// create an array that says ['5%', '15%', '25%', '35%', '45%', '55%', '65%', '75%', '85%', '95%']
-if (!timestamps.length) {
-  let t = 0;
-  while (t < count) {
-    timestamps.push(`${startPositionPercent + addPercent * t}%`);
-    t = t + 1;
-  }
-}
-// some of the above can be replaced with a simple array
-
+const timestamps = ['5%', '15%', '25%', '35%', '45%', '55%', '65%', '75%', '85%', '95%'];
 let i = 0;
 /**
  * Takes 10 screenshots for a particular file
@@ -498,7 +475,6 @@ function takeScreenshots(file, currentFile) {
 }
 
 let metaDataIndex = 0;
-
 /**
  * Extract the next file's metadata
  */
@@ -577,6 +553,8 @@ function reScanDirectory(inputFolder: string, outputFolder: string): void {
       console.log('last screenshot number is: ' + currentJson.lastScreen);
 
       walkSync(inputFolder, []); // this dumb function updates the `finalArray`
+      console.log('---------final array--------');
+      console.log(finalArray);
       newFileList = finalArray;
       // console.log('new file list:');
       // console.log(newFileList);
