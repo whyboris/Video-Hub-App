@@ -120,8 +120,6 @@ let selectedOutputFolder = ''; // later = ''
 
 let theOriginalOpenFileDialogEvent;
 
-let fileNumberTracker = 0;
-
 // ============================================================
 // Methods that interact with Angular
 // ============================================================
@@ -383,12 +381,18 @@ function walkSync(dir, filelist) {
   return filelist;
 };
 
+type ExtractorMessage = 'screenShotExtracted'
+                      | 'metaExtracted'
+                      | 'screenShotError'
+                      | 'metaError'
+                      | 'freshStart';
+
 /**
  * Master directing screenshot and meta extraction flow
  * @param message what event has finished
  * @param dataObject optional data (any)
  */
-function theExtractor(message: string, dataObject?: any): void {
+function theExtractor(message: ExtractorMessage, dataObject?: any): void {
 
   if (message === 'screenShotExtracted') {
     // store the screenshot number (e.g. 42 from 42-0.jpg)
@@ -407,11 +411,8 @@ function theExtractor(message: string, dataObject?: any): void {
       sendCurrentProgress(filesProcessed, totalNumberOfFiles);
       extractNextScreenshot();
     }
-    // extract meta
 
   } else if (message === 'metaExtracted') {
-    // extract next screenshot
-
     const theMetadata = dataObject;
 
     finalArray[theMetadata.currentFile][4] = theMetadata.duration;  // 4th item is duration
@@ -429,14 +430,21 @@ function theExtractor(message: string, dataObject?: any): void {
     }
 
   } else if (message === 'screenShotError') {
-    // extract next screenshot
     filesProcessed++;
     sendCurrentProgress(filesProcessed, totalNumberOfFiles);
     extractNextScreenshot();
 
   } else if (message === 'metaError') {
     console.log('meta error !!!!!!!!!!!!!!!!!!!!!!!');
-    // extract next ???
+    // probably extract next
+    filesProcessed++;
+
+    if (filesProcessed === totalNumberOfFiles + 1) {
+      sendFinalResultHome();
+    } else {
+      extractNextMetadata();
+    }
+
   } else if (message === 'freshStart') {
     // reset things and launch extraction of first screenshot !!!
 
@@ -466,20 +474,18 @@ function theExtractor(message: string, dataObject?: any): void {
 
   } else if (message === 'updateDirectory') {
     // rescan things and then update the final object
-  }
-  // ETC
 
+  }
 }
 
+let fileNumberIndex = 0;
 /**
  * Extract the next screenshot
  */
 function extractNextScreenshot(): void {
-  const index = fileNumberTracker;
-  // console.log('extracting');
-  // console.log(finalArray[index]);
+  const index = fileNumberIndex;
   takeScreenshots(path.join(selectedSourceFolder, finalArray[index][0], finalArray[index][1]), index);
-  fileNumberTracker++
+  fileNumberIndex++;
 }
 
 const count = 10;
@@ -501,7 +507,7 @@ if (!timestamps.length) {
 let i = 0;
 /**
  * Takes 10 screenshots for a particular file
- * tells theExtractor to scan the next one
+ * calls theExtractor when done
  */
 function takeScreenshots(file, currentFile) {
   ffmpeg(file)
@@ -513,11 +519,9 @@ function takeScreenshots(file, currentFile) {
     }, path.join(selectedOutputFolder, 'boris'))
     .on('end', () => {
       i = i + 1;
-
       if (i < count) {
         takeScreenshots(file, currentFile);
       } else if (i === count) {
-        // reset i and start with the next file here !!!
         i = 0;
         theExtractor('screenShotExtracted', currentFile);
       }
@@ -542,14 +546,11 @@ function extractNextMetadata(): void {
 
 /**
  * Extract the meta data
- * @param filePath
- * @param currentFile
+ * @param filePath -- the full path to the file (including file name)
+ * @param currentFile -- index of current file
  */
 function extractMetadata(filePath: string, currentFile: number): void {
-  // console.log('extracting metadata from ' + filePath);
-  const theFile = filePath;
-
-  ffmpeg.ffprobe(theFile, (err, metadata) => {
+  ffmpeg.ffprobe(filePath, (err, metadata) => {
 
     const theMetadata: any = {
       currentFile: currentFile,
@@ -580,8 +581,8 @@ function extractMetadata(filePath: string, currentFile: number): void {
       theMetadata.duration = duration;
       theMetadata.sizeLabel = sizeLabel;
       theMetadata.width = width;
+      theExtractor('metaExtracted', theMetadata);
     }
-    theExtractor('metaExtracted', theMetadata);
   });
 }
 
