@@ -281,6 +281,7 @@ ipc.on('start-the-import', function (event, someMessage) {
  * Initiate rescan of the directory
  */
 ipc.on('rescan-current-directory', function (event, inputAndOutput) {
+  // theOriginalOpenFileDialogEvent = event;
   console.log('ABOUT TO RESCAN THE DIRECTORY !!!');
   reScanDirectory(inputAndOutput.inputFolder, inputAndOutput.outputFolder);
   // after done, send back the whole object or something
@@ -345,6 +346,8 @@ ipc.on('openThisFile', function (event, fullFilePath) {
  */
 function extractNextScreenshot(): void {
   const index = fileNumberTracker;
+  // console.log('extracting');
+  // console.log(finalArray[index]);
   takeScreenshots(path.join(selectedSourceFolder, finalArray[index][0], finalArray[index][1]), index);
   fileNumberTracker++
 }
@@ -617,5 +620,13 @@ function findTheDiff(oldFileList, newFileList, inputFolder): void {
 
   console.log('the difference is: ');
   console.log(theDiff);
+
+  // // trying to extract the rest:
+  // totalNumberOfFiles = oldFileList.length + theDiff.length - 1;
+  // selectedSourceFolder = inputFolder;
+  // fileNumberTracker = oldFileList.length - 1;
+  // // put theDiff at the end of the original;
+  // Array.prototype.push.apply(oldFileList, theDiff);
+  // extractNextScreenshot();
 
 }
