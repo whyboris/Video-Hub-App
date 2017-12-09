@@ -459,6 +459,12 @@ if (!timestamps.length) {
 let i = 0;
 function takeScreenshots(file, currentFile) {
   ffmpeg(file)
+    .screenshots({
+      count: 1,
+      timemarks: [timestamps[i]],
+      filename: currentFile + `-${i + 1}.jpg`,
+      size: '?x100'       // can be 200px -- should be option when importing later
+    }, path.join(selectedOutputFolder, 'boris'))
     .on('end', () => {
       i = i + 1;
 
@@ -488,12 +494,15 @@ function takeScreenshots(file, currentFile) {
         }
       }
     })
-    .screenshots({
-      count: 1,
-      timemarks: [timestamps[i]],
-      filename: currentFile + `-${i + 1}.jpg`,
-      size: '?x100'       // can be 200px -- should be option when importing later
-    }, path.join(selectedOutputFolder, 'boris'));
+    .on('error', () => {
+      console.log('screenshot error occurred !!!!');
+      console.log(file);
+      console.log(currentFile);
+      console.log('NOT SURE WHAT TO DO');
+      filesProcessed++;
+      sendCurrentProgress(filesProcessed, totalNumberOfFiles);
+      extractNextScreenshot();
+    });
 }
 
 let metaDataIndex = 0;
@@ -519,20 +528,22 @@ function extractMetadata(filePath: string, currentFile: number): void {
   ffmpeg.ffprobe(theFile, (err, metadata) => {
     if (err) {
       console.log(err);
-    }
-
-    // console.log('duration of clip #' + currentFile + ': ');
-    finalArray[currentFile][4] = Math.round(metadata.streams[0].duration); // 4th item is duration
-
-    const origWidth = metadata.streams[0].width;
-    const origHeight = metadata.streams[0].height;
-
-    if (origWidth && origHeight) {
-      finalArray[currentFile][5] = labelVideo(origWidth, origHeight);        // 5th item is the label, e.g. 'HD'
-      finalArray[currentFile][6] = Math.round(100 * origWidth / origHeight); // 6th item is width of screenshot (130) for ex
     } else {
-      finalArray[currentFile][5] = '';
-      finalArray[currentFile][6] = 169;
+
+      // console.log('duration of clip #' + currentFile + ': ');
+      finalArray[currentFile][4] = Math.round(metadata.streams[0].duration); // 4th item is duration
+
+      const origWidth = metadata.streams[0].width;
+      const origHeight = metadata.streams[0].height;
+
+      if (origWidth && origHeight) {
+        finalArray[currentFile][5] = labelVideo(origWidth, origHeight);        // 5th item is the label, e.g. 'HD'
+        finalArray[currentFile][6] = Math.round(100 * origWidth / origHeight); // 6th item is width of screenshot (130) for ex
+      } else {
+        finalArray[currentFile][5] = '';
+        finalArray[currentFile][6] = 169;
+      }
+
     }
 
     // console.log('processed ' + filesProcessed + ' out of ' + totalNumberOfFiles);
