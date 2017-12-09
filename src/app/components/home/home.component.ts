@@ -98,7 +98,6 @@ export class HomeComponent implements OnInit {
     // Progress bar messages
     this.electronService.ipcRenderer.on('processingProgress', (event, a, b) => {
       this.inProgress = true; // handle this variable better later
-      console.log(a + ' out of ' + b);
       this.progressPercent = a / b;
     });
 
@@ -114,7 +113,6 @@ export class HomeComponent implements OnInit {
     this.electronService.ipcRenderer.on('settingsReturning', (event, settingsObject: any) => {
       this.restoreSettingsFromBefore(settingsObject);
       if (settingsObject.appState.selectedOutputFolder && settingsObject.appState.selectedSourceFolder) {
-        console.log(settingsObject.appState);
         this.loadThisJsonFile(settingsObject.appState.selectedOutputFolder + '/images.json');
       }
     });
@@ -240,6 +238,8 @@ export class HomeComponent implements OnInit {
       this.increaseSize();
     } else if (uniqueKey === 'startWizard') {
       this.startWizard();
+    } else if (uniqueKey === 'rescanDirectory') {
+      this.rescanDirectory();
     } else {
       this.settingsButtons[uniqueKey].toggled = !this.settingsButtons[uniqueKey].toggled;
     }
@@ -251,6 +251,16 @@ export class HomeComponent implements OnInit {
   public startWizard(): void {
     this.toggleSettings();
     this.importDone = false;
+  }
+
+  /**
+   * Rescan the current input directory
+   */
+  public rescanDirectory(): void {
+    const sourceAndOutput: any = {};
+    sourceAndOutput.inputFolder = this.appState.selectedSourceFolder;
+    sourceAndOutput.outputFolder = this.appState.selectedOutputFolder;
+    this.electronService.ipcRenderer.send('rescan-current-directory', sourceAndOutput);
   }
 
   /**
@@ -367,7 +377,6 @@ export class HomeComponent implements OnInit {
    * restore settings from saved file
    */
   restoreSettingsFromBefore(settingsObject): void {
-    // console.log(settingsObject);
     if (settingsObject.appState) {
       this.appState = settingsObject.appState;
     }

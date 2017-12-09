@@ -105,6 +105,8 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 // My variables
 // ============================================================
 
+import { cleanUpFileName, labelVideo } from './main-support';
+
 import { FinalObject } from './src/app/components/common/final-object.interface';
 
 let finalArray = [];
@@ -266,12 +268,23 @@ ipc.on('start-the-import', function (event, someMessage) {
   totalNumberOfFiles = finalArray.length;
   console.log('there are a total of: ' + totalNumberOfFiles + ' files');
   if (totalNumberOfFiles > 0) {
+    // console.log(finalArray);
     extractNextScreenshot();
   } else {
     // TODO: handle case when number of screenshots is zero!
     console.error('NO VIDEO FILES IN THIS DIRECTORY!');
   }
 
+})
+
+/**
+ * Initiate rescan of the directory
+ */
+ipc.on('rescan-current-directory', function (event, inputAndOutput) {
+  // theOriginalOpenFileDialogEvent = event;
+  console.log('ABOUT TO RESCAN THE DIRECTORY !!!');
+  reScanDirectory(inputAndOutput.inputFolder, inputAndOutput.outputFolder);
+  // after done, send back the whole object or something
 })
 
 /**
@@ -331,9 +344,10 @@ ipc.on('openThisFile', function (event, fullFilePath) {
 /**
  * Extract the next screenshot
  */
-function extractNextScreenshot() {
+function extractNextScreenshot(): void {
   const index = fileNumberTracker;
-  // extractScreenshot(path.join(selectedSourceFolder, finalArray[index][0], finalArray[index][1]), index); // OLD NEVER USE AGAIN
+  // console.log('extracting');
+  // console.log(finalArray[index]);
   takeScreenshots(path.join(selectedSourceFolder, finalArray[index][0], finalArray[index][1]), index);
   fileNumberTracker++
 }
@@ -350,7 +364,7 @@ function sendCurrentProgress(current: number, total: number): void {
 /**
  * Writes the json file and sends contents back to Angular App
  */
-function sendFinalResultHome() {
+function sendFinalResultHome(): void {
 
   const finalObject: FinalObject = {
     inputDir: selectedSourceFolder,
@@ -403,41 +417,19 @@ function walkSync(dir, filelist) {
   return filelist;
 };
 
-/**
- * Clean up the file name
- * (1) underscores
- * (2) double spaces / tripple spaces
- * (3) remove filename
- * (4) strip periods
- * @param original {string}
- * @return {string}
- */
-function cleanUpFileName(original: string): string {
-  let result = original;
-
-  result = result.split('_').join(' ');               // (1)
-  result = result.split('.').slice(0, -1).join('.');  // (3)
-  result = result.split('.').join(' ');               // (4)
-
-  result = result.split('   ').join(' ');              // (2)
-  result = result.split('  ').join(' ');               // (2)
-
-  return result;
-}
-
 // ============================================================
 // MISC
 // ============================================================
 
 
-// from https://github.com/fluent-ffmpeg/node-fluent-ffmpeg/issues/449#issuecomment-285759269
 
-// create an array that says ['5%', '15%', '25%', '35%', '45%', '55%', '65%', '75%', '85%', '95%']
 const count = 10;
+// from https://github.com/fluent-ffmpeg/node-fluent-ffmpeg/issues/449#issuecomment-285759269
 const timestamps = [];
 const startPositionPercent = 5;
 const endPositionPercent = 95;
 const addPercent = (endPositionPercent - startPositionPercent) / (count - 1);
+// create an array that says ['5%', '15%', '25%', '35%', '45%', '55%', '65%', '75%', '85%', '95%']
 if (!timestamps.length) {
   let t = 0;
   while (t < count) {
@@ -445,11 +437,17 @@ if (!timestamps.length) {
     t = t + 1;
   }
 }
-// all of above can be replaced with a simple array
+// some of the above can be replaced with a simple array
 
 let i = 0;
 function takeScreenshots(file, currentFile) {
   ffmpeg(file)
+    .screenshots({
+      count: 1,
+      timemarks: [timestamps[i]],
+      filename: currentFile + `-${i + 1}.jpg`,
+      size: '?x100'       // can be 200px -- should be option when importing later
+    }, path.join(selectedOutputFolder, 'boris'))
     .on('end', () => {
       i = i + 1;
 
@@ -479,12 +477,15 @@ function takeScreenshots(file, currentFile) {
         }
       }
     })
-    .screenshots({
-      count: 1,
-      timemarks: [timestamps[i]],
-      filename: currentFile + `-${i + 1}.jpg`,
-      size: '?x100'       // can be 200px -- should be option when importing later
-    }, path.join(selectedOutputFolder, 'boris'));
+    .on('error', () => {
+      console.log('screenshot error occurred !!!!');
+      console.log(file);
+      console.log(currentFile);
+      console.log('NOT SURE WHAT TO DO');
+      filesProcessed++;
+      sendCurrentProgress(filesProcessed, totalNumberOfFiles);
+      extractNextScreenshot();
+    });
 }
 
 let metaDataIndex = 0;
@@ -492,7 +493,7 @@ let metaDataIndex = 0;
 /**
  * Extract the next file's metadata
  */
-function extractNextMetadata() {
+function extractNextMetadata(): void {
   const index = metaDataIndex;
   extractMetadata(path.join(selectedSourceFolder, finalArray[index][0], finalArray[index][1]), index);
   metaDataIndex++
@@ -509,21 +510,24 @@ function extractMetadata(filePath: string, currentFile: number): void {
 
   ffmpeg.ffprobe(theFile, (err, metadata) => {
     if (err) {
-      console.log(err);
-    }
-
-    // console.log('duration of clip #' + currentFile + ': ');
-    finalArray[currentFile][4] = Math.round(metadata.streams[0].duration); // 4th item is duration
-
-    const origWidth = metadata.streams[0].width;
-    const origHeight = metadata.streams[0].height;
-
-    if (origWidth && origHeight) {
-      finalArray[currentFile][5] = labelVideo(origWidth, origHeight);        // 5th item is the label, e.g. 'HD'
-      finalArray[currentFile][6] = Math.round(100 * origWidth / origHeight); // 6th item is width of screenshot (130) for ex
+      console.log('ERROR - extracting metadata - ERROR');
+      console.log(currentFile);
     } else {
-      finalArray[currentFile][5] = '';
-      finalArray[currentFile][6] = 169;
+
+      // console.log('duration of clip #' + currentFile + ': ');
+      finalArray[currentFile][4] = Math.round(metadata.streams[0].duration); // 4th item is duration
+
+      const origWidth = metadata.streams[0].width;
+      const origHeight = metadata.streams[0].height;
+
+      if (origWidth && origHeight) {
+        finalArray[currentFile][5] = labelVideo(origWidth, origHeight);        // 5th item is the label, e.g. 'HD'
+        finalArray[currentFile][6] = Math.round(100 * origWidth / origHeight); // 6th item is width of screenshot (130) for ex
+      } else {
+        finalArray[currentFile][5] = '';
+        finalArray[currentFile][6] = 169;
+      }
+
     }
 
     // console.log('processed ' + filesProcessed + ' out of ' + totalNumberOfFiles);
@@ -540,33 +544,38 @@ function extractMetadata(filePath: string, currentFile: number): void {
 }
 
 /**
- * Label the video according to these rules
- * 5th item is size (720, 1080, etc)
- * @param width
- * @param height
- */
-function labelVideo(width: number, height: number): string {
-  let size = '';
-  if        (width === 3840 && height === 2160) {
-    size = '4k'
-  } else if (width === 1920 && height === 1080) {
-    size = '1080';
-  } else if (width === 1280 && height === 720) {
-    size = '720';
-  } else if (width > 3840) {
-    size = '4K+';
-  } else if (width > 1920) {
-    size = '1080+';
-  } else if (width > 720) {
-    size = '720+';
-  }
-  return size;
-}
-
-/**
  * Rescan the directory -- updating files etc -- SUPER COMPLICATED
  */
-function reScanDirectory(sourceFolder: string, fullFilePath: string) {
+function reScanDirectory(inputFolder: string, outputFolder: string): void {
+
+  let oldFileList = [];
+  let newFileList = [];
+
+  console.log('inputFolder: ' + inputFolder);
+  console.log('outputFolder: ' + outputFolder);
+
+  let currentJson: any = {};
+
+  fs.readFile(outputFolder + '/images.json', (err, data) => {
+    if (err) {
+      console.log(err); // maybe better error handling later
+    } else {
+      console.log('images.json file has been read: ----------------------------');
+      currentJson = JSON.parse(data);
+
+      oldFileList = currentJson.images;
+      // console.log('old file list:');
+      // console.log(oldFileList);
+
+      console.log('last screenshot number is: ' + currentJson.lastScreen);
+
+      walkSync(inputFolder, []); // this dumb function updates the `finalArray`
+      newFileList = finalArray;
+      // console.log('new file list:');
+      // console.log(newFileList);
+      findTheDiff(oldFileList, newFileList, inputFolder);
+    }
+  });
 
   // 1 use regular file walking to scan full directory and create main file _WITHOUT SCREENSHOTS_
 
@@ -581,5 +590,43 @@ function reScanDirectory(sourceFolder: string, fullFilePath: string) {
   // 2 parses it as json
   // 3 independently scans sourceFolder
   // 4 tries to reconcile things ...
+
+}
+
+// ONLY FINDS THE NEWLY ADDED FILES
+// later TODO -- find deleted files
+function findTheDiff(oldFileList, newFileList, inputFolder): void {
+
+  const theDiff = [];
+
+  newFileList.forEach((newElement) => {
+    let matchFound = false;
+    oldFileList.forEach((oldElement) => {
+      const pathStripped = newElement[0].replace(inputFolder, '');
+      if (pathStripped === oldElement[0]
+        && newElement[1] === oldElement[1]) {
+        matchFound = true;
+      }
+    })
+
+    if (matchFound) {
+      // reset match and continue to next newElement
+      matchFound = false;
+    } else {
+      theDiff.push(newElement);
+    }
+
+  });
+
+  console.log('the difference is: ');
+  console.log(theDiff);
+
+  // // trying to extract the rest:
+  // totalNumberOfFiles = oldFileList.length + theDiff.length - 1;
+  // selectedSourceFolder = inputFolder;
+  // fileNumberTracker = oldFileList.length - 1;
+  // // put theDiff at the end of the original;
+  // Array.prototype.push.apply(oldFileList, theDiff);
+  // extractNextScreenshot();
 
 }

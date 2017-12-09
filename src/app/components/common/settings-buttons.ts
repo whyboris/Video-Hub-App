@@ -35,8 +35,11 @@ export const SettingsButtonsGroups: string[][] = [
   ],
   [
     'hideTop',
-    'flatIcons',
-    'startWizard'
+    'flatIcons'
+  ],
+  [
+    'startWizard',
+    'rescanDirectory'
   ]
 ];
 
@@ -49,7 +52,8 @@ export const SettingsCategories: string[] = [
   '',
   '',
   '',
-  'Other settings'
+  'Other settings',
+  'Reload / update hub'
 ]
 
 export let SettingsButtons: { [s: string]: SettingsButton } = {
@@ -199,5 +203,12 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
     title: 'Start wizard',
     description: 'Start wizard again'
+  },
+  'rescanDirectory': {
+    hidden: false,
+    toggled: false,
+    iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
+    title: 'Rescan directory',
+    description: 'Rescan input directory and update the current hub'
   }
 }
