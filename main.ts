@@ -345,42 +345,6 @@ function sendFinalResultHome(): void {
   });
 }
 
-/**
- * Recursively walk through the input directory
- * compiling files to process
- * updates the finalArray[]
- */
-function walkSync(dir, filelist) {
-  // console.log('walk started');
-  const files = fs.readdirSync(dir);
-  // console.log(files);
-
-  files.forEach(function (file) {
-    // if the item is a _DIRECTORY_
-    if (fs.statSync(path.join(dir, file)).isDirectory()) {
-      filelist = walkSync(path.join(dir, file), filelist);
-    } else {
-      // if file type is .mp4, .mpg, mpeg, .m4v, or .avi
-      if (file.toLowerCase().indexOf('.mp4') !== -1
-        || file.toLowerCase().indexOf('.avi') !== -1
-        || file.toLowerCase().indexOf('.mpg') !== -1
-        || file.toLowerCase().indexOf('.mpeg') !== -1
-        || file.toLowerCase().indexOf('.mkv') !== -1
-        || file.toLowerCase().indexOf('.m4v') !== -1) {
-          // before adding, remove the redundant prefix: selectedSourceFolder
-          const partialPath = dir.replace(selectedSourceFolder, '');
-
-          const cleanFileName = cleanUpFileName(file);
-
-          finalArray[fileCounter] = [partialPath, file, cleanFileName];
-          fileCounter++;
-      }
-    }
-  });
-
-  return filelist;
-};
-
 type ExtractorMessage = 'screenShotExtracted'
                       | 'metaExtracted'
                       | 'screenShotError'
@@ -673,3 +637,35 @@ function findTheDiff(oldFileList, newFileList, inputFolder): void {
   // extractNextScreenshot();
 
 }
+
+const acceptableFiles = ['mp4', 'mpg', 'mpeg', 'mov', 'm4v', 'avi'];
+/**
+ * Recursively walk through the input directory
+ * compiling files to process
+ * updates the finalArray[]
+ */
+function walkSync(dir, filelist) {
+  // console.log('walk started');
+  const files = fs.readdirSync(dir);
+  // console.log(files);
+
+  files.forEach(function (file) {
+    // if the item is a _DIRECTORY_
+    if (fs.statSync(path.join(dir, file)).isDirectory()) {
+      filelist = walkSync(path.join(dir, file), filelist);
+    } else {
+      const extension = file.split('.').pop();
+      if (acceptableFiles.includes(extension)) {
+        // before adding, remove the redundant prefix: selectedSourceFolder
+        const partialPath = dir.replace(selectedSourceFolder, '');
+
+        const cleanFileName = cleanUpFileName(file);
+
+        finalArray[fileCounter] = [partialPath, file, cleanFileName];
+        fileCounter++;
+      }
+    }
+  });
+
+  return filelist;
+};
