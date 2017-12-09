@@ -5,8 +5,8 @@
 
   <div *ngIf="hoverScrub && hover">
     <div
-      (mouseover)="showThisOne(i)"
       *ngFor="let item of stuff; let i = index"
+      (mouseover)="showThisOne(i)"
       [ngStyle]="{'left': 10 * i + '%' }"
       class="hoverable"
     >

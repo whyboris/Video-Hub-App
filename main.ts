@@ -266,6 +266,7 @@ ipc.on('start-the-import', function (event, someMessage) {
   totalNumberOfFiles = finalArray.length;
   console.log('there are a total of: ' + totalNumberOfFiles + ' files');
   if (totalNumberOfFiles > 0) {
+    // console.log(finalArray);
     extractNextScreenshot();
   } else {
     // TODO: handle case when number of screenshots is zero!
@@ -342,7 +343,6 @@ ipc.on('openThisFile', function (event, fullFilePath) {
  */
 function extractNextScreenshot() {
   const index = fileNumberTracker;
-  // extractScreenshot(path.join(selectedSourceFolder, finalArray[index][0], finalArray[index][1]), index); // OLD NEVER USE AGAIN
   takeScreenshots(path.join(selectedSourceFolder, finalArray[index][0], finalArray[index][1]), index);
   fileNumberTracker++
 }
@@ -527,7 +527,8 @@ function extractMetadata(filePath: string, currentFile: number): void {
 
   ffmpeg.ffprobe(theFile, (err, metadata) => {
     if (err) {
-      console.log(err);
+      console.log('ERROR - extracting metadata - ERROR');
+      console.log(currentFile);
     } else {
 
       // console.log('duration of clip #' + currentFile + ': ');
@@ -588,6 +589,10 @@ function labelVideo(width: number, height: number): string {
  */
 function reScanDirectory(inputFolder: string, outputFolder: string) {
 
+
+  let oldFileList = [];
+  let newFileList = [];
+
   console.log('inputFolder: ' + inputFolder);
   console.log('outputFolder: ' + outputFolder);
 
@@ -597,20 +602,22 @@ function reScanDirectory(inputFolder: string, outputFolder: string) {
     if (err) {
       console.log(err); // maybe better error handling later
     } else {
-      console.log('file read:');
+      console.log('images.json file has been read: ----------------------------');
       currentJson = JSON.parse(data);
-      console.log(currentJson);
-      console.log('last screenshot number:');
-      console.log(currentJson.lastScreen);
+
+      oldFileList = currentJson.images;
+      // console.log('old file list:');
+      // console.log(oldFileList);
+
+      console.log('last screenshot number is: ' + currentJson.lastScreen);
+
+      walkSync(inputFolder, []); // this dumb function updates the `finalArray`
+      newFileList = finalArray;
+      // console.log('new file list:');
+      // console.log(newFileList);
+      findTheDiff(oldFileList, newFileList, inputFolder);
     }
   });
-
-  console.log('finalArray before the re-walk');
-  console.log(finalArray);
-
-  walkSync(inputFolder, []);
-  console.log('finalArray after the re-walk');
-  console.log(finalArray);
 
   // 1 use regular file walking to scan full directory and create main file _WITHOUT SCREENSHOTS_
 
@@ -625,5 +632,32 @@ function reScanDirectory(inputFolder: string, outputFolder: string) {
   // 2 parses it as json
   // 3 independently scans sourceFolder
   // 4 tries to reconcile things ...
+
+}
+
+function findTheDiff(oldFileList, newFileList, inputFolder) {
+
+  newFileList.forEach((newElement) => {
+    let matchFound = false;
+    oldFileList.forEach((oldElement) => {
+      const pathStripped = newElement[0].replace(inputFolder, '');
+      if (pathStripped === oldElement[0]
+        && newElement[1] === oldElement[1]) {
+        matchFound = true;
+      }
+    })
+
+    if (matchFound) {
+      // reset match and continue to next newElement
+      matchFound = false;
+      console.log('.');
+    } else {
+      console.log('new element found !!!!!');
+      console.log(newElement);
+    }
+
+  });
+
+  console.log('the difference is: ');
 
 }
