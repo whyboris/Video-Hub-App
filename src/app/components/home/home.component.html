@@ -330,7 +330,7 @@
 
           <div *ngIf="appState.currentView === 'files' && settingsButtons['showMoreInfo'].toggled">
             <div class="folder" *ngIf="true | folderViewPipe: item[0]">
-              <span class="icon icon-folder"></span><span [innerHtml]="item[0] | folderArrowsPipe"></span>
+              <span class="icon icon-folder-blank"></span><span [innerHtml]="item[0] | folderArrowsPipe"></span>
             </div>
           </div>
 

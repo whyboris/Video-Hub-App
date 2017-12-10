@@ -322,7 +322,6 @@ function sendCurrentProgress(current: number, total: number): void {
   theOriginalOpenFileDialogEvent.sender.send('processingProgress', current, total);
 }
 
-let totalNumberOfFiles = 0;
 /**
  * Writes the json file and sends contents back to Angular App
  */
@@ -331,7 +330,7 @@ function sendFinalResultHome(): void {
   const finalObject: FinalObject = {
     inputDir: selectedSourceFolder,
     outputDir: selectedOutputFolder,
-    lastScreen: totalNumberOfFiles, // note -- this is meant to keep track of the last screenshot number !!!
+    lastScreen: MainCounter.screenShotFileNumber, // REPRESENTS NEXT AVAILABLE NUMBER FOR THE TAKING
     images: finalArray
   };
 
@@ -351,63 +350,40 @@ type ExtractorMessage = 'screenShotExtracted'
                       | 'metaError'
                       | 'freshStart';
 
-let filesProcessed = 1;
 /**
  * Master directing screenshot and meta extraction flow
  * @param message what event has finished
  * @param dataObject optional data (any)
  */
 function theExtractor(message: ExtractorMessage, dataObject?: any): void {
-
   if (message === 'screenShotExtracted') {
     MainCounter.screenShotFileNumber++;
     extractNextMetadata();
 
   } else if (message === 'metaExtracted') {
-
     MainCounter.itemInFinalArray++;
-
-    // console.log('processed ' + filesProcessed + ' out of ' + totalNumberOfFiles);
-    filesProcessed++;
-    sendCurrentProgress(filesProcessed, totalNumberOfFiles);
-
-    if (filesProcessed === totalNumberOfFiles + 1) {
-      sendFinalResultHome();
-    } else {
-      extractNextScreenshot();
-    }
+    areWeDoneYet();
 
   } else if (message === 'screenShotError') {
     MainCounter.itemInFinalArray++;
-
-    filesProcessed++;
-    sendCurrentProgress(filesProcessed, totalNumberOfFiles);
-    extractNextScreenshot();
+    areWeDoneYet();
 
   } else if (message === 'metaError') {
-    console.log('meta error !!!!!!!!!!!!!!!!!!!!!!!');
-    filesProcessed++;
-
-    if (filesProcessed === totalNumberOfFiles + 1) {
-      sendFinalResultHome();
-    } else {
-      extractNextMetadata();
-    }
+    console.log('meta error !!!!!!!!!!!!!!!!!!!!!!! --- THIS SHOULD NOT HAPPEN !!!!!!!!!!!!!!!!');
+    MainCounter.itemInFinalArray++;
+    areWeDoneYet();
 
   } else if (message === 'freshStart') {
     // reset things and launch extraction of first screenshot !!!
     finalArray = [];
     fileCounter = 0;
-    // reset number of files if user re-runs extraction a second time !!!
-    totalNumberOfFiles = 0;
+    MainCounter.totalNumber = 0;
+    MainCounter.itemInFinalArray = 0;
     walkSync(selectedSourceFolder, []); // walkSync updates `finalArray`
-    // reset files Processed
-    filesProcessed = 1;
+    MainCounter.totalNumber = finalArray.length;
+    console.log('there are a total of: ' + MainCounter.totalNumber + ' files to be extracted');
 
-    totalNumberOfFiles = finalArray.length;
-    console.log('there are a total of: ' + totalNumberOfFiles + ' files');
-
-    if (totalNumberOfFiles > 0) {
+    if (MainCounter.totalNumber > 0) {
       extractNextScreenshot();
     } else {
       // TODO: handle case when number of screenshots is zero!
@@ -418,6 +394,18 @@ function theExtractor(message: ExtractorMessage, dataObject?: any): void {
     // rescan things and then update the final object
   } else {
     console.log('what did you do !?!!');
+  }
+}
+
+/**
+ * Check if extraction is done, if so sendResultsHome, otherwise extractNextScreenshot
+ */
+function areWeDoneYet(): void {
+  sendCurrentProgress(MainCounter.itemInFinalArray, MainCounter.totalNumber);
+  if (MainCounter.itemInFinalArray === MainCounter.totalNumber) {
+    sendFinalResultHome();
+  } else {
+    extractNextScreenshot();
   }
 }
 
@@ -581,7 +569,7 @@ function findTheDiff(oldFileList, newFileList, inputFolder): void {
   console.log(theDiff);
 
   // // trying to extract the rest:
-  // totalNumberOfFiles = oldFileList.length + theDiff.length - 1;
+  // MainCounter.totalNumber = oldFileList.length + theDiff.length - 1;
   // selectedSourceFolder = inputFolder;
   // fileNumberTracker = oldFileList.length - 1;
   // // put theDiff at the end of the original;
