@@ -331,7 +331,7 @@ function sendFinalResultHome(): void {
   const finalObject: FinalObject = {
     inputDir: selectedSourceFolder,
     outputDir: selectedOutputFolder,
-    lastScreen: totalNumberOfFiles,
+    lastScreen: totalNumberOfFiles, // note -- this is meant to keep track of the last screenshot number !!!
     images: finalArray
   };
 
@@ -342,6 +342,8 @@ function sendFinalResultHome(): void {
     theOriginalOpenFileDialogEvent.sender.send('finalObjectReturning', JSON.parse(json));
   });
 }
+
+import { MainCounter } from './main-counter';
 
 type ExtractorMessage = 'screenShotExtracted'
                       | 'metaExtracted'
@@ -358,40 +360,26 @@ let filesProcessed = 1;
 function theExtractor(message: ExtractorMessage, dataObject?: any): void {
 
   if (message === 'screenShotExtracted') {
-    // store the screenshot number (e.g. 42 from 42-0.jpg)
-    const currentFile = dataObject;
-    finalArray[currentFile][3] = currentFile;
-
-    filesProcessed++;
-
-    if (filesProcessed === totalNumberOfFiles + 1) {
-
-      // if all files processed, start extracting metadata !!!
-      filesProcessed = 1;
-      extractNextMetadata();
-
-    } else {
-      sendCurrentProgress(filesProcessed, totalNumberOfFiles);
-      extractNextScreenshot();
-    }
+    MainCounter.screenShotFileNumber++;
+    extractNextMetadata();
 
   } else if (message === 'metaExtracted') {
-    const theMetadata = dataObject;
 
-    finalArray[theMetadata.currentFile][4] = theMetadata.duration;  // 4th item is duration
-    finalArray[theMetadata.currentFile][5] = theMetadata.sizeLabel; // 5th item is the label, e.g. 'HD'
-    finalArray[theMetadata.currentFile][6] = theMetadata.width;     // 6th item is width of screenshot (130) for ex
+    MainCounter.itemInFinalArray++;
 
     // console.log('processed ' + filesProcessed + ' out of ' + totalNumberOfFiles);
     filesProcessed++;
+    sendCurrentProgress(filesProcessed, totalNumberOfFiles);
 
     if (filesProcessed === totalNumberOfFiles + 1) {
       sendFinalResultHome();
     } else {
-      extractNextMetadata();
+      extractNextScreenshot();
     }
 
   } else if (message === 'screenShotError') {
+    MainCounter.itemInFinalArray++;
+
     filesProcessed++;
     sendCurrentProgress(filesProcessed, totalNumberOfFiles);
     extractNextScreenshot();
@@ -433,14 +421,14 @@ function theExtractor(message: ExtractorMessage, dataObject?: any): void {
   }
 }
 
-let fileNumberIndex = 0;
 /**
  * Extract the next screenshot
  */
 function extractNextScreenshot(): void {
-  const index = fileNumberIndex;
-  takeScreenshots(path.join(selectedSourceFolder, finalArray[index][0], finalArray[index][1]), index);
-  fileNumberIndex++;
+  const index = MainCounter.itemInFinalArray;
+  takeScreenshots(path.join(selectedSourceFolder,
+                            finalArray[index][0],
+                            finalArray[index][1]));
 }
 
 const count = 10;
@@ -449,79 +437,65 @@ let i = 0;
 /**
  * Takes 10 screenshots for a particular file
  * calls theExtractor when done
+ *  @param file Full path to file including file name
  */
-function takeScreenshots(file, currentFile) {
+function takeScreenshots(file) {
   ffmpeg(file)
     .screenshots({
       count: 1,
       timemarks: [timestamps[i]],
-      filename: currentFile + `-${i + 1}.jpg`,
+      filename: MainCounter.screenShotFileNumber + `-${i + 1}.jpg`,
       size: '?x100'       // can be 200px -- should be option when importing later // TODO !!!
     }, path.join(selectedOutputFolder, 'boris'))
     .on('end', () => {
       i = i + 1;
       if (i < count) {
-        takeScreenshots(file, currentFile);
+        takeScreenshots(file);
       } else if (i === count) {
         i = 0;
-        theExtractor('screenShotExtracted', currentFile);
+        // store the screenshot number (e.g. 42 from 42-0.jpg)
+        finalArray[MainCounter.itemInFinalArray][3] = MainCounter.screenShotFileNumber;
+        theExtractor('screenShotExtracted');
       }
     })
     .on('error', () => {
       console.log('screenshot error occurred in file #' + file);
-      console.log(currentFile);
       theExtractor('screenShotError');
     });
 }
 
-let metaDataIndex = 0;
 /**
  * Extract the next file's metadata
  */
 function extractNextMetadata(): void {
-  const index = metaDataIndex;
-  extractMetadata(path.join(selectedSourceFolder, finalArray[index][0], finalArray[index][1]), index);
-  metaDataIndex++
+  const index = MainCounter.itemInFinalArray;
+  extractMetadata(path.join(selectedSourceFolder,
+                            finalArray[index][0],
+                            finalArray[index][1]));
 }
 
 /**
- * Extract the meta data
+ * Extract the meta data & store it in the final array
  * @param filePath -- the full path to the file (including file name)
  * @param currentFile -- index of current file
  */
-function extractMetadata(filePath: string, currentFile: number): void {
+function extractMetadata(filePath: string): void {
   ffmpeg.ffprobe(filePath, (err, metadata) => {
-
-    const theMetadata: any = {
-      currentFile: currentFile,
-      duration: 0,
-      sizeLabel: '',
-      width: 169
-    };
 
     if (err) {
       console.log('ERROR - extracting metadata - ERROR');
-      console.log(currentFile);
+      console.log(MainCounter.itemInFinalArray);
       theExtractor('metaError');
     } else {
-
-      const duration = Math.round(metadata.streams[0].duration);
-
+      const duration = Math.round(metadata.streams[0].duration) || 0;
       const origWidth = metadata.streams[0].width;
       const origHeight = metadata.streams[0].height;
-
-      let sizeLabel = '';
-      let width = 169;
-
-      if (origWidth && origHeight) {
-        sizeLabel = labelVideo(origWidth, origHeight);
-        width = Math.round(100 * origWidth / origHeight);
-      }
-
-      theMetadata.duration = duration;
-      theMetadata.sizeLabel = sizeLabel;
-      theMetadata.width = width;
-      theExtractor('metaExtracted', theMetadata);
+      const sizeLabel = labelVideo(origWidth, origHeight);
+      const width = Math.round(100 * origWidth / origHeight) || 169;
+      finalArray[MainCounter.itemInFinalArray][4] = duration;  // 4th item is duration
+      finalArray[MainCounter.itemInFinalArray][5] = sizeLabel; // 5th item is the label, e.g. 'HD'
+      finalArray[MainCounter.itemInFinalArray][6] = width;     // 6th item is width of screenshot (130) for ex
+      theExtractor('metaExtracted');
     }
   });
 }

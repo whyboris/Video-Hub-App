@@ -17,6 +17,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
   hover: boolean;
   currentlyShowing = 1;
   looper = true;
+  noError = true;
 
   constructor(
     public sanitizer: DomSanitizer
@@ -30,7 +31,10 @@ export class PreviewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
+    // this.stuff is `undefined` when no screenshot taken -- because of ffmpeg extraction error
+    if (this.stuff === undefined) {
+      this.noError = false;
+    }
     // hack -- populate hardcoded values -- fix later
     const fileNumber = this.stuff;
     this.stuff = [];

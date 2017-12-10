@@ -3,7 +3,7 @@
   [ngStyle]="{ height: imgHeight + 'px'}"
 >
 
-  <ng-container *ngIf="hoverScrub && hover">
+  <ng-container *ngIf="hoverScrub && hover && noError">
     <div
       *ngFor="let item of stuff; let i = index"
       (mouseover)="showThisOne(i)"
@@ -13,15 +13,17 @@
     </div>
   </ng-container>
 
-  <img
-    *ngFor="let item of stuff; let i = index"
-    [ngStyle]="{
-        'right': 'calc(' + (9 - i) + ' * (100% - ' + width + 'px)/9)',
-        'z-index': indexArray[i],
-        'height': imgHeight + 'px'
-      }"
-    [src]="sanitizer.bypassSecurityTrustUrl(folderPath + '/' + stuff[i])"
-    class="screencap"
-  >
+  <ng-container *ngIf="noError">
+    <img
+      *ngFor="let item of stuff; let i = index"
+      [ngStyle]="{
+          'right': 'calc(' + (9 - i) + ' * (100% - ' + width + 'px)/9)',
+          'z-index': indexArray[i],
+          'height': imgHeight + 'px'
+        }"
+      [src]="sanitizer.bypassSecurityTrustUrl(folderPath + '/' + stuff[i])"
+      class="screencap"
+    >
+  </ng-container>
 
 </div>

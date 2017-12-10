@@ -7,7 +7,7 @@
 export function labelVideo(width: number, height: number): string {
   let size = '';
   if (width === 3840 && height === 2160) {
-    size = '4k'
+    size = '4k';
   } else if (width === 1920 && height === 1080) {
     size = '1080';
   } else if (width === 1280 && height === 720) {
