@@ -1,3 +1,5 @@
+@import "variables";
+
 .filesView {
   margin: 5px 40px !important;
   height: auto !important;
@@ -62,8 +64,8 @@
   margin: 16px 0 10px -19px;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 
-  .icon-folder {
-    color: #444444;
+  .icon-folder-blank {
+    color: $gray-70;
     margin-right: 2px;
   }
 }

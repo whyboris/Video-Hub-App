@@ -305,7 +305,7 @@
           <div *ngIf="appState.currentView === 'thumbs'">
 
             <app-gallery-item
-              (click)="openVideo(item[3])"
+              (click)="openVideo(i)"
               [stuff]="item[3]"
               [folderPath]="appState.selectedOutputFolder"
               [imgHeight]="imgHeight"
@@ -318,7 +318,7 @@
           <div *ngIf="appState.currentView === 'filmstrip'">
 
             <app-filmstrip-item
-              (click)="openVideo(item[3])"
+              (click)="openVideo(i)"
               [stuff]="item[3]"
               [folderPath]="appState.selectedOutputFolder"
               [width]="(imgHeight / 100) * item[6] || (imgHeight / 100) * 171"
@@ -330,7 +330,7 @@
 
           <div *ngIf="appState.currentView === 'files' && settingsButtons['showMoreInfo'].toggled">
             <div class="folder" *ngIf="true | folderViewPipe: item[0]">
-              <span class="icon icon-folder"></span><span [innerHtml]="item[0] | folderArrowsPipe"></span>
+              <span class="icon icon-folder-blank"></span><span [innerHtml]="item[0] | folderArrowsPipe"></span>
             </div>
           </div>
 
@@ -354,7 +354,7 @@
             </div>
 
             <div
-              (click)="openVideo(item[3])"
+              (click)="openVideo(i)"
               [ngClass]="{ 'larger-font': settingsButtons['fontSizeLarger'].toggled }"
               class="title"
             >

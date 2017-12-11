@@ -3,7 +3,7 @@
   [ngStyle]="{ height: imgHeight + 'px'}"
 >
 
-  <div *ngIf="hoverScrub && hover">
+  <div *ngIf="hoverScrub && hover && noError">
     <div
       *ngFor="let item of stuff; let i = index"
       (mouseover)="showThisOne(i)"
@@ -14,6 +14,7 @@
   </div>
 
   <img
+    *ngIf="noError"
     [src]="sanitizer.bypassSecurityTrustUrl(folderPath + '/' + stuff[currentlyShowing])"
     [ngStyle]="{ height: imgHeight + 'px'}"
     class="screencap"

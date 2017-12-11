@@ -17,6 +17,7 @@ export class FilmstripComponent implements OnInit {
   indexArray: Array<number> = []; // to set z-index on css
 
   hover = false;
+  noError = true;
 
   constructor(
     public sanitizer: DomSanitizer
@@ -30,6 +31,10 @@ export class FilmstripComponent implements OnInit {
   }
 
   ngOnInit() {
+    // this.stuff is `undefined` when no screenshot taken -- because of ffmpeg extraction error
+    if (this.stuff === undefined) {
+      this.noError = false;
+    }
 
     // hack -- populate hardcoded values -- fix later
     const fileNumber = this.stuff;

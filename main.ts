@@ -255,6 +255,7 @@ ipc.on('start-the-import', function (event, someMessage) {
 ipc.on('rescan-current-directory', function (event, inputAndOutput) {
   // theOriginalOpenFileDialogEvent = event;
   console.log('ABOUT TO RESCAN THE DIRECTORY !!!');
+  theOriginalOpenFileDialogEvent = event;
   reScanDirectory(inputAndOutput.inputFolder, inputAndOutput.outputFolder);
   // after done, send back the whole object or something
 })
@@ -322,7 +323,6 @@ function sendCurrentProgress(current: number, total: number): void {
   theOriginalOpenFileDialogEvent.sender.send('processingProgress', current, total);
 }
 
-let totalNumberOfFiles = 0;
 /**
  * Writes the json file and sends contents back to Angular App
  */
@@ -331,7 +331,7 @@ function sendFinalResultHome(): void {
   const finalObject: FinalObject = {
     inputDir: selectedSourceFolder,
     outputDir: selectedOutputFolder,
-    lastScreen: totalNumberOfFiles,
+    lastScreen: MainCounter.screenShotFileNumber, // REPRESENTS NEXT AVAILABLE NUMBER FOR THE TAKING
     images: finalArray
   };
 
@@ -343,83 +343,48 @@ function sendFinalResultHome(): void {
   });
 }
 
+import { MainCounter } from './main-counter';
+
 type ExtractorMessage = 'screenShotExtracted'
                       | 'metaExtracted'
                       | 'screenShotError'
                       | 'metaError'
                       | 'freshStart';
 
-let filesProcessed = 1;
 /**
  * Master directing screenshot and meta extraction flow
  * @param message what event has finished
  * @param dataObject optional data (any)
  */
 function theExtractor(message: ExtractorMessage, dataObject?: any): void {
-
   if (message === 'screenShotExtracted') {
-    // store the screenshot number (e.g. 42 from 42-0.jpg)
-    const currentFile = dataObject;
-    finalArray[currentFile][3] = currentFile;
-
-    filesProcessed++;
-
-    if (filesProcessed === totalNumberOfFiles + 1) {
-
-      // if all files processed, start extracting metadata !!!
-      filesProcessed = 1;
-      extractNextMetadata();
-
-    } else {
-      sendCurrentProgress(filesProcessed, totalNumberOfFiles);
-      extractNextScreenshot();
-    }
+    MainCounter.screenShotFileNumber++;
+    extractNextMetadata();
 
   } else if (message === 'metaExtracted') {
-    const theMetadata = dataObject;
-
-    finalArray[theMetadata.currentFile][4] = theMetadata.duration;  // 4th item is duration
-    finalArray[theMetadata.currentFile][5] = theMetadata.sizeLabel; // 5th item is the label, e.g. 'HD'
-    finalArray[theMetadata.currentFile][6] = theMetadata.width;     // 6th item is width of screenshot (130) for ex
-
-    // console.log('processed ' + filesProcessed + ' out of ' + totalNumberOfFiles);
-    filesProcessed++;
-
-    if (filesProcessed === totalNumberOfFiles + 1) {
-      sendFinalResultHome();
-    } else {
-      extractNextMetadata();
-    }
+    MainCounter.itemInFinalArray++;
+    areWeDoneYet();
 
   } else if (message === 'screenShotError') {
-    filesProcessed++;
-    sendCurrentProgress(filesProcessed, totalNumberOfFiles);
-    extractNextScreenshot();
+    MainCounter.itemInFinalArray++;
+    areWeDoneYet();
 
   } else if (message === 'metaError') {
-    console.log('meta error !!!!!!!!!!!!!!!!!!!!!!!');
-    filesProcessed++;
-
-    if (filesProcessed === totalNumberOfFiles + 1) {
-      sendFinalResultHome();
-    } else {
-      extractNextMetadata();
-    }
+    console.log('meta error !!!!!!!!!!!!!!!!!!!!!!! --- THIS SHOULD NOT HAPPEN !!!!!!!!!!!!!!!!');
+    MainCounter.itemInFinalArray++;
+    areWeDoneYet();
 
   } else if (message === 'freshStart') {
     // reset things and launch extraction of first screenshot !!!
     finalArray = [];
     fileCounter = 0;
-    // reset number of files if user re-runs extraction a second time !!!
-    totalNumberOfFiles = 0;
+    MainCounter.totalNumber = 0;
+    MainCounter.itemInFinalArray = 0;
     walkSync(selectedSourceFolder, []); // walkSync updates `finalArray`
-    // reset files Processed
-    filesProcessed = 1;
+    MainCounter.totalNumber = finalArray.length;
+    console.log('there are a total of: ' + MainCounter.totalNumber + ' files to be extracted');
 
-    totalNumberOfFiles = finalArray.length;
-    console.log('there are a total of: ' + totalNumberOfFiles + ' files');
-
-    if (totalNumberOfFiles > 0) {
+    if (MainCounter.totalNumber > 0) {
       extractNextScreenshot();
     } else {
       // TODO: handle case when number of screenshots is zero!
@@ -433,14 +398,26 @@ function theExtractor(message: ExtractorMessage, dataObject?: any): void {
   }
 }
 
-let fileNumberIndex = 0;
+/**
+ * Check if extraction is done, if so sendResultsHome, otherwise extractNextScreenshot
+ */
+function areWeDoneYet(): void {
+  sendCurrentProgress(MainCounter.itemInFinalArray, MainCounter.totalNumber);
+  if (MainCounter.itemInFinalArray === MainCounter.totalNumber) {
+    sendFinalResultHome();
+  } else {
+    extractNextScreenshot();
+  }
+}
+
 /**
  * Extract the next screenshot
  */
 function extractNextScreenshot(): void {
-  const index = fileNumberIndex;
-  takeScreenshots(path.join(selectedSourceFolder, finalArray[index][0], finalArray[index][1]), index);
-  fileNumberIndex++;
+  const index = MainCounter.itemInFinalArray;
+  takeScreenshots(path.join(selectedSourceFolder,
+                            finalArray[index][0],
+                            finalArray[index][1]));
 }
 
 const count = 10;
@@ -449,79 +426,65 @@ let i = 0;
 /**
  * Takes 10 screenshots for a particular file
  * calls theExtractor when done
+ *  @param file Full path to file including file name
  */
-function takeScreenshots(file, currentFile) {
+function takeScreenshots(file) {
   ffmpeg(file)
     .screenshots({
       count: 1,
       timemarks: [timestamps[i]],
-      filename: currentFile + `-${i + 1}.jpg`,
+      filename: MainCounter.screenShotFileNumber + `-${i + 1}.jpg`,
       size: '?x100'       // can be 200px -- should be option when importing later // TODO !!!
     }, path.join(selectedOutputFolder, 'boris'))
     .on('end', () => {
       i = i + 1;
       if (i < count) {
-        takeScreenshots(file, currentFile);
+        takeScreenshots(file);
       } else if (i === count) {
         i = 0;
-        theExtractor('screenShotExtracted', currentFile);
+        // store the screenshot number (e.g. 42 from 42-0.jpg)
+        finalArray[MainCounter.itemInFinalArray][3] = MainCounter.screenShotFileNumber;
+        theExtractor('screenShotExtracted');
       }
     })
     .on('error', () => {
       console.log('screenshot error occurred in file #' + file);
-      console.log(currentFile);
       theExtractor('screenShotError');
     });
 }
 
-let metaDataIndex = 0;
 /**
  * Extract the next file's metadata
  */
 function extractNextMetadata(): void {
-  const index = metaDataIndex;
-  extractMetadata(path.join(selectedSourceFolder, finalArray[index][0], finalArray[index][1]), index);
-  metaDataIndex++
+  const index = MainCounter.itemInFinalArray;
+  extractMetadata(path.join(selectedSourceFolder,
+                            finalArray[index][0],
+                            finalArray[index][1]));
 }
 
 /**
- * Extract the meta data
+ * Extract the meta data & store it in the final array
  * @param filePath -- the full path to the file (including file name)
  * @param currentFile -- index of current file
  */
-function extractMetadata(filePath: string, currentFile: number): void {
+function extractMetadata(filePath: string): void {
   ffmpeg.ffprobe(filePath, (err, metadata) => {
-
-    const theMetadata: any = {
-      currentFile: currentFile,
-      duration: 0,
-      sizeLabel: '',
-      width: 169
-    };
 
     if (err) {
       console.log('ERROR - extracting metadata - ERROR');
-      console.log(currentFile);
+      console.log(MainCounter.itemInFinalArray);
       theExtractor('metaError');
     } else {
-
-      const duration = Math.round(metadata.streams[0].duration);
-
+      const duration = Math.round(metadata.streams[0].duration) || 0;
       const origWidth = metadata.streams[0].width;
       const origHeight = metadata.streams[0].height;
-
-      let sizeLabel = '';
-      let width = 169;
-
-      if (origWidth && origHeight) {
-        sizeLabel = labelVideo(origWidth, origHeight);
-        width = Math.round(100 * origWidth / origHeight);
-      }
-
-      theMetadata.duration = duration;
-      theMetadata.sizeLabel = sizeLabel;
-      theMetadata.width = width;
-      theExtractor('metaExtracted', theMetadata);
+      const sizeLabel = labelVideo(origWidth, origHeight);
+      const width = Math.round(100 * origWidth / origHeight) || 169;
+      finalArray[MainCounter.itemInFinalArray][4] = duration;  // 4th item is duration
+      finalArray[MainCounter.itemInFinalArray][5] = sizeLabel; // 5th item is the label, e.g. 'HD'
+      finalArray[MainCounter.itemInFinalArray][6] = width;     // 6th item is width of screenshot (130) for ex
+      theExtractor('metaExtracted');
     }
   });
 }
@@ -537,7 +500,7 @@ function reScanDirectory(inputFolder: string, outputFolder: string): void {
   console.log('inputFolder: ' + inputFolder);
   console.log('outputFolder: ' + outputFolder);
 
-  let currentJson: any = {};
+  let currentJson: FinalObject;
 
   fs.readFile(outputFolder + '/images.json', (err, data) => {
     if (err) {
@@ -547,17 +510,12 @@ function reScanDirectory(inputFolder: string, outputFolder: string): void {
       currentJson = JSON.parse(data);
 
       oldFileList = currentJson.images;
-      // console.log('old file list:');
-      // console.log(oldFileList);
-
-      console.log('last screenshot number is: ' + currentJson.lastScreen);
+      MainCounter.screenShotFileNumber = currentJson.lastScreen;
+      selectedOutputFolder = currentJson.outputDir;
+      selectedSourceFolder = currentJson.inputDir;
 
       walkSync(inputFolder, []); // this dumb function updates the `finalArray`
-      console.log('---------final array--------');
-      console.log(finalArray);
       newFileList = finalArray;
-      // console.log('new file list:');
-      // console.log(newFileList);
       findTheDiff(oldFileList, newFileList, inputFolder);
     }
   });
@@ -606,8 +564,18 @@ function findTheDiff(oldFileList, newFileList, inputFolder): void {
   console.log('the difference is: ');
   console.log(theDiff);
 
+  if (theDiff.length > 0) {
+    MainCounter.itemInFinalArray = oldFileList.length;
+    MainCounter.filesProcessed = oldFileList.length;
+    finalArray = oldFileList.concat(theDiff);
+    MainCounter.totalNumber = finalArray.length;
+    extractNextScreenshot();
+  } else {
+    console.log('nothing new to add !!!');
+  }
+
   // // trying to extract the rest:
-  // totalNumberOfFiles = oldFileList.length + theDiff.length - 1;
+  // MainCounter.totalNumber = oldFileList.length + theDiff.length - 1;
   // selectedSourceFolder = inputFolder;
   // fileNumberTracker = oldFileList.length - 1;
   // // put theDiff at the end of the original;
@@ -637,9 +605,7 @@ function walkSync(dir, filelist) {
         // before adding, remove the redundant prefix: selectedSourceFolder
         const partialPath = dir.replace(selectedSourceFolder, '');
 
-        const cleanFileName = cleanUpFileName(file);
-
-        finalArray[fileCounter] = [partialPath, file, cleanFileName];
+        finalArray[fileCounter] = [partialPath, file, cleanUpFileName(file)];
         fileCounter++;
       }
     }
