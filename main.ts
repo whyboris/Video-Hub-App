@@ -255,6 +255,7 @@ ipc.on('start-the-import', function (event, someMessage) {
 ipc.on('rescan-current-directory', function (event, inputAndOutput) {
   // theOriginalOpenFileDialogEvent = event;
   console.log('ABOUT TO RESCAN THE DIRECTORY !!!');
+  theOriginalOpenFileDialogEvent = event;
   reScanDirectory(inputAndOutput.inputFolder, inputAndOutput.outputFolder);
   // after done, send back the whole object or something
 })
@@ -499,7 +500,7 @@ function reScanDirectory(inputFolder: string, outputFolder: string): void {
   console.log('inputFolder: ' + inputFolder);
   console.log('outputFolder: ' + outputFolder);
 
-  let currentJson: any = {};
+  let currentJson: FinalObject;
 
   fs.readFile(outputFolder + '/images.json', (err, data) => {
     if (err) {
@@ -509,17 +510,12 @@ function reScanDirectory(inputFolder: string, outputFolder: string): void {
       currentJson = JSON.parse(data);
 
       oldFileList = currentJson.images;
-      // console.log('old file list:');
-      // console.log(oldFileList);
-
-      console.log('last screenshot number is: ' + currentJson.lastScreen);
+      MainCounter.screenShotFileNumber = currentJson.lastScreen;
+      selectedOutputFolder = currentJson.outputDir;
+      selectedSourceFolder = currentJson.inputDir;
 
       walkSync(inputFolder, []); // this dumb function updates the `finalArray`
-      console.log('---------final array--------');
-      console.log(finalArray);
       newFileList = finalArray;
-      // console.log('new file list:');
-      // console.log(newFileList);
       findTheDiff(oldFileList, newFileList, inputFolder);
     }
   });
@@ -568,6 +564,16 @@ function findTheDiff(oldFileList, newFileList, inputFolder): void {
   console.log('the difference is: ');
   console.log(theDiff);
 
+  if (theDiff.length > 0) {
+    MainCounter.itemInFinalArray = oldFileList.length;
+    MainCounter.filesProcessed = oldFileList.length;
+    finalArray = oldFileList.concat(theDiff);
+    MainCounter.totalNumber = finalArray.length;
+    extractNextScreenshot();
+  } else {
+    console.log('nothing new to add !!!');
+  }
+
   // // trying to extract the rest:
   // MainCounter.totalNumber = oldFileList.length + theDiff.length - 1;
   // selectedSourceFolder = inputFolder;
@@ -599,9 +605,7 @@ function walkSync(dir, filelist) {
         // before adding, remove the redundant prefix: selectedSourceFolder
         const partialPath = dir.replace(selectedSourceFolder, '');
 
-        const cleanFileName = cleanUpFileName(file);
-
-        finalArray[fileCounter] = [partialPath, file, cleanFileName];
+        finalArray[fileCounter] = [partialPath, file, cleanUpFileName(file)];
         fileCounter++;
       }
     }
