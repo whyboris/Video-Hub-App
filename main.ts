@@ -253,11 +253,8 @@ ipc.on('start-the-import', function (event, someMessage) {
  * Initiate rescan of the directory
  */
 ipc.on('rescan-current-directory', function (event, inputAndOutput) {
-  // theOriginalOpenFileDialogEvent = event;
-  console.log('ABOUT TO RESCAN THE DIRECTORY !!!');
   theOriginalOpenFileDialogEvent = event;
   reScanDirectory(inputAndOutput.inputFolder, inputAndOutput.outputFolder);
-  // after done, send back the whole object or something
 })
 
 /**
@@ -494,55 +491,39 @@ function extractMetadata(filePath: string): void {
  */
 function reScanDirectory(inputFolder: string, outputFolder: string): void {
 
-  let oldFileList = [];
-  let newFileList = [];
-
   console.log('inputFolder: ' + inputFolder);
   console.log('outputFolder: ' + outputFolder);
 
-  let currentJson: FinalObject;
-
   fs.readFile(outputFolder + '/images.json', (err, data) => {
     if (err) {
-      console.log(err); // maybe better error handling later
+      console.log(err); // TODO: better error handling
     } else {
       console.log('images.json file has been read: ----------------------------');
-      currentJson = JSON.parse(data);
+      const currentJson: FinalObject = JSON.parse(data);
 
-      oldFileList = currentJson.images;
+      const oldFileList: any[] = currentJson.images;
       MainCounter.screenShotFileNumber = currentJson.lastScreen;
       selectedOutputFolder = currentJson.outputDir;
       selectedSourceFolder = currentJson.inputDir;
 
-      walkSync(inputFolder, []); // this dumb function updates the `finalArray`
-      newFileList = finalArray;
-      findTheDiff(oldFileList, newFileList, inputFolder);
+      walkSync(inputFolder, []); // this method updates the `finalArray`
+      findTheDiff(oldFileList, inputFolder);
     }
   });
-
-  // 1 use regular file walking to scan full directory and create main file _WITHOUT SCREENSHOTS_
-
-  // 2 open the regular file
-
-  // 3 for each full directory, check if there is corresponding in regular file
-
-    // (a) if there is, copy over and you're done
-    // (b) if there is not, scan the screenshot
-
-  // 1 opens the fullFilePath file
-  // 2 parses it as json
-  // 3 independently scans sourceFolder
-  // 4 tries to reconcile things ...
-
 }
 
-// ONLY FINDS THE NEWLY ADDED FILES
-// later TODO -- find deleted files
-function findTheDiff(oldFileList, newFileList, inputFolder): void {
+
+/**
+ * Figures out what new files there are, adds them to the finalArray, and starts extracting screenshots
+ * @param oldFileList array of video files from the previously saved JSON
+ * @param inputFolder the input folder
+ */
+function findTheDiff(oldFileList, inputFolder): void {
 
   const theDiff = [];
 
-  newFileList.forEach((newElement) => {
+  // finalArray has been updated through walkSync in reScanDirectory();
+  finalArray.forEach((newElement) => {
     let matchFound = false;
     oldFileList.forEach((oldElement) => {
       const pathStripped = newElement[0].replace(inputFolder, '');
@@ -573,16 +554,9 @@ function findTheDiff(oldFileList, newFileList, inputFolder): void {
   } else {
     console.log('nothing new to add !!!');
   }
-
-  // // trying to extract the rest:
-  // MainCounter.totalNumber = oldFileList.length + theDiff.length - 1;
-  // selectedSourceFolder = inputFolder;
-  // fileNumberTracker = oldFileList.length - 1;
-  // // put theDiff at the end of the original;
-  // Array.prototype.push.apply(oldFileList, theDiff);
-  // extractNextScreenshot();
-
 }
+
+// ---------------------- FOLDER WALKER FUNCTION --------------------------------
 
 const acceptableFiles = ['mp4', 'mpg', 'mpeg', 'mov', 'm4v', 'avi'];
 /**
