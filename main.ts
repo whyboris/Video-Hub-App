@@ -506,13 +506,14 @@ function reScanDirectory(inputFolder: string, outputFolder: string): void {
       selectedOutputFolder = currentJson.outputDir;
       selectedSourceFolder = currentJson.inputDir;
 
+      fileCounter = 0; // just in case
       walkSync(inputFolder, []); // this method updates the `finalArray`
       findTheDiff(oldFileList, inputFolder);
     }
   });
 }
 
-
+let elementsToRemove: number[] = []; // array of indexes of files to remove (that have been deleted/renamed)
 /**
  * Figures out what new files there are, adds them to the finalArray, and starts extracting screenshots
  * @param oldFileList array of video files from the previously saved JSON
@@ -520,41 +521,57 @@ function reScanDirectory(inputFolder: string, outputFolder: string): void {
  */
 function findTheDiff(oldFileList, inputFolder): void {
 
-  const theDiff = [];
+  const theDiff = []; // track new elements
+  elementsToRemove = [];
 
+  // Find new/renamed elements
   // finalArray has been updated through walkSync in reScanDirectory();
+  // finalArray reflects what's currently on the HD - contains only file names
   finalArray.forEach((newElement) => {
     let matchFound = false;
     oldFileList.forEach((oldElement) => {
       const pathStripped = newElement[0].replace(inputFolder, '');
-      if (pathStripped === oldElement[0]
-        && newElement[1] === oldElement[1]) {
+      if (pathStripped === oldElement[0] && newElement[1] === oldElement[1]) {
         matchFound = true;
       }
-    })
+    });
 
-    if (matchFound) {
-      // reset match and continue to next newElement
-      matchFound = false;
-    } else {
+    if (!matchFound) {
       theDiff.push(newElement);
     }
-
   });
 
-  console.log('the difference is: ');
-  console.log(theDiff);
+  oldFileList = oldFileList.filter((value, index) => {
+    let matchFound = false;
+
+    finalArray.forEach((newElement) => {
+      const pathStripped = newElement[0].replace(inputFolder, '');
+      if (pathStripped === value[0] && newElement[1] === value[1]) {
+        matchFound = true;
+      }
+    });
+
+    if (matchFound) {
+      return true;
+    } else {
+      return false;
+    }
+  });
+
+  MainCounter.itemInFinalArray = oldFileList.length;
+  MainCounter.filesProcessed = oldFileList.length;
+  finalArray = oldFileList.concat(theDiff);
+  MainCounter.totalNumber = finalArray.length;
 
   if (theDiff.length > 0) {
-    MainCounter.itemInFinalArray = oldFileList.length;
-    MainCounter.filesProcessed = oldFileList.length;
-    finalArray = oldFileList.concat(theDiff);
-    MainCounter.totalNumber = finalArray.length;
     extractNextScreenshot();
   } else {
-    console.log('nothing new to add !!!');
+    sendFinalResultHome();
   }
+
 }
+
+
 
 // ---------------------- FOLDER WALKER FUNCTION --------------------------------
 
