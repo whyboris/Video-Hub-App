@@ -9,4 +9,6 @@ export let AppState = {
   buttonsInView: true,
   menuHidden: false,
   numberToShow: 20,
+
+  imgHeight: 100  // store the state of the preview in settings
 }

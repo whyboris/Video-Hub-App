@@ -443,6 +443,27 @@
     >
       3
     </div>
+    
+    <select (change)="selectScreenshotSize($event.target.value)" class="size-dropdown">
+      <option value="50">50px</option>
+      <option value="75">75px</option>
+      <option value="100" selected="selected">100px</option>
+      <option value="150">150px</option>
+      <option value="200">200px</option>
+      <option value="250">250px</option>
+      <option value="300">300px</option>
+    </select>
+
+    <span class="description">
+      Size of screenshots
+    </span>
+
+    <div
+      [ngClass]="{ 'current-step': appState.selectedOutputFolder !== '' && appState.selectedSourceFolder !== '' }"
+      class="steps"
+    >
+      4
+    </div>
     <button
       [disabled]="appState.selectedOutputFolder === '' || appState.selectedSourceFolder === ''"
       (click)="importFresh()"
