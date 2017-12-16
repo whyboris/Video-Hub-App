@@ -48,6 +48,8 @@ export class HomeComponent implements OnInit {
   currentPlayingFolder = '';
   magicSearchString = '';
 
+  showWizard = true;
+
   importDone = false;
   inProgress = false;
   progressPercent = 0;
@@ -55,6 +57,9 @@ export class HomeComponent implements OnInit {
   appMaximized = false;
 
   imgHeight = 100;
+
+  progressNum1 = 0;
+  progressNum2 = 100;
 
   // temp
   wordFreqArr: any;
@@ -100,7 +105,9 @@ export class HomeComponent implements OnInit {
 
     // Progress bar messages
     this.electronService.ipcRenderer.on('processingProgress', (event, a, b) => {
-      this.inProgress = true; // handle this variable better later
+      this.inProgress = true; // TODO handle this variable better later
+      this.progressNum1 = a;
+      this.progressNum2 = b;
       this.progressPercent = a / b;
     });
 
@@ -109,7 +116,9 @@ export class HomeComponent implements OnInit {
       this.appState.numOfFolders = finalObject.numOfFolders;
       this.appState.selectedOutputFolder = finalObject.outputDir;
       this.appState.selectedSourceFolder = finalObject.inputDir;
+      this.inProgress = false;
       this.importDone = true;
+      this.showWizard = false;
       this.finalArray = finalObject.images;
     });
 
@@ -243,6 +252,8 @@ export class HomeComponent implements OnInit {
    */
   public startWizard(): void {
     this.toggleSettings();
+    this.inProgress = false;
+    this.showWizard = true;
     this.importDone = false;
   }
 
@@ -253,6 +264,9 @@ export class HomeComponent implements OnInit {
     const sourceAndOutput: any = {};
     sourceAndOutput.inputFolder = this.appState.selectedSourceFolder;
     sourceAndOutput.outputFolder = this.appState.selectedOutputFolder;
+    this.progressNum1 = 0;
+    this.toggleSettings();
+    this.importDone = false;
     this.electronService.ipcRenderer.send('rescan-current-directory', sourceAndOutput);
   }
 
