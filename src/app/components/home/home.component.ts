@@ -63,6 +63,8 @@ export class HomeComponent implements OnInit {
 
   screenshotSizeForImport = 100;
 
+  numberToShow = 5; // temporary 5 -- this limits how many thumbs shown
+
   // temp
   wordFreqArr: any;
   currResults: any = { showing: 0, total: 0 };
@@ -122,6 +124,7 @@ export class HomeComponent implements OnInit {
       this.importDone = true;
       this.showWizard = false;
       this.finalArray = finalObject.images;
+      this.numberToShow = 5; // TEMP !!!!!!
     });
 
     // Returning settings
@@ -133,6 +136,49 @@ export class HomeComponent implements OnInit {
     });
 
     this.justStarted();
+  }
+
+  scrollHandler(event) {
+
+    console.log(event);
+    console.log('height: ' + event.srcElement.clientHeight);
+    console.log('width: ' + event.srcElement.clientWidth);
+    console.log('top: ' + event.target.scrollTop);
+    console.log('scroll: ' + event.srcElement.scrollHeight);
+    console.log('img height: ' + this.imgHeight);
+    console.log('img width: ' + Math.round(this.imgHeight * 1.69));
+
+    if (this.appState.currentView === 'thumbs') {
+      // rough estimate
+      const showingHorizontally = Math.floor(event.srcElement.clientWidth / (this.imgHeight * 1.69 + 30));
+      const showingVertically = Math.floor(event.srcElement.clientHeight / (this.imgHeight + 30));
+
+      console.log('showing horiz: ' + showingHorizontally);
+      console.log('showing vert: ' + showingVertically);
+
+      const minToShow = showingHorizontally * showingVertically; // product of how many shown across and how many vertically
+
+      if (event.target.scrollTop + event.srcElement.clientHeight + 400 > event.srcElement.scrollHeight) {
+        console.log('close to bottom');
+        this.numberToShow = this.numberToShow + showingHorizontally;
+
+      } else if (event.target.scrollTop + event.srcElement.clientHeight + 600 < event.srcElement.scrollHeight) {
+        console.log('removing from bottom');
+        this.numberToShow = this.numberToShow - showingHorizontally;
+      }
+
+      if (this.numberToShow < minToShow) {
+        this.numberToShow = minToShow + showingHorizontally;
+      }
+
+    } else if (this.appState.currentView === 'filmstrip') {
+      console.log('FILMSTRIPPPP!');
+      this.numberToShow = 10;
+    } else if (this.appState.currentView === 'files') {
+      console.log('files !!!!');
+      this.numberToShow = 100;
+    }
+
   }
 
   // INTERACT WITH ELECTRON
@@ -396,8 +442,6 @@ export class HomeComponent implements OnInit {
     if (settingsObject.appState) {
       this.appState = settingsObject.appState;
     }
-    console.log('image height');
-    console.log(this.appState.imgHeight);
     this.imgHeight = this.appState.imgHeight;
     this.grabAllSettingsKeys().forEach(element => {
       if (settingsObject.buttonSettings[element]) {
