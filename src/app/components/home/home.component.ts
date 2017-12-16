@@ -252,6 +252,7 @@ export class HomeComponent implements OnInit {
    */
   public startWizard(): void {
     this.toggleSettings();
+    this.inProgress = false;
     this.showWizard = true;
     this.importDone = false;
   }
@@ -263,6 +264,7 @@ export class HomeComponent implements OnInit {
     const sourceAndOutput: any = {};
     sourceAndOutput.inputFolder = this.appState.selectedSourceFolder;
     sourceAndOutput.outputFolder = this.appState.selectedOutputFolder;
+    this.progressNum1 = 0;
     this.toggleSettings();
     this.importDone = false;
     this.electronService.ipcRenderer.send('rescan-current-directory', sourceAndOutput);

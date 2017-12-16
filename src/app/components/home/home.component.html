@@ -368,7 +368,11 @@
 
 <!-- IMPORT MODAL  -->
 
-<div *ngIf="!importDone && progressPercent !== 0" class="progress-modal">
+<div 
+  *ngIf="!importDone && progressPercent !== 0" 
+  class="progress-modal"
+  @myAnimation
+>
   <div class="progress-container">
     <div class="current-progress" [ngStyle]="{width: progressPercent * 100 + '%'}"></div>
   </div>
