@@ -245,7 +245,8 @@ ipc.on('choose-output', function (event, someMessage) {
 /**
  * Start extracting the screenshots into a chosen output folder from a chosen input folder
  */
-ipc.on('start-the-import', function (event, someMessage) {
+ipc.on('start-the-import', function (event, ssSize) {
+  screenShotSize = ssSize;
   theExtractor('freshStart');
 })
 
@@ -328,6 +329,7 @@ function sendFinalResultHome(): void {
   alphabetizeFinalArray();
 
   const finalObject: FinalObject = {
+    ssSize: screenShotSize,
     numOfFolders: countFoldersInFinalArray(),
     inputDir: selectedSourceFolder,
     outputDir: selectedOutputFolder,
@@ -391,8 +393,6 @@ function theExtractor(message: ExtractorMessage, dataObject?: any): void {
       console.error('NO VIDEO FILES IN THIS DIRECTORY!');
     }
 
-  } else if (message === 'updateDirectory') {
-    // rescan things and then update the final object
   } else {
     console.log('what did you do !?!!');
   }
@@ -420,6 +420,7 @@ function extractNextScreenshot(): void {
                             finalArray[index][1]));
 }
 
+let screenShotSize = 100;
 const count = 10;
 const timestamps = ['5%', '15%', '25%', '35%', '45%', '55%', '65%', '75%', '85%', '95%'];
 let i = 0;
@@ -434,7 +435,7 @@ function takeScreenshots(file) {
       count: 1,
       timemarks: [timestamps[i]],
       filename: MainCounter.screenShotFileNumber + `-${i + 1}.jpg`,
-      size: '?x100'       // can be 200px -- should be option when importing later // TODO !!!
+      size: '?x' + screenShotSize
     }, path.join(selectedOutputFolder, 'boris'))
     .on('end', () => {
       i = i + 1;
@@ -508,6 +509,7 @@ function reScanDirectory(inputFolder: string, outputFolder: string): void {
       MainCounter.screenShotFileNumber = currentJson.lastScreen;
       selectedOutputFolder = currentJson.outputDir;
       selectedSourceFolder = currentJson.inputDir;
+      screenShotSize = currentJson.ssSize;
 
       fileCounter = 0; // just in case
       walkSync(inputFolder, []); // this method updates the `finalArray`

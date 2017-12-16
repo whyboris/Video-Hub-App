@@ -61,6 +61,8 @@ export class HomeComponent implements OnInit {
   progressNum1 = 0;
   progressNum2 = 100;
 
+  screenshotSizeForImport = 100;
+
   // temp
   wordFreqArr: any;
   currResults: any = { showing: 0, total: 0 };
@@ -157,7 +159,7 @@ export class HomeComponent implements OnInit {
   }
 
   public importFresh(): void {
-    this.electronService.ipcRenderer.send('start-the-import', 'lol');
+    this.electronService.ipcRenderer.send('start-the-import', this.screenshotSizeForImport);
   }
 
   public initiateMinimize(): void {
@@ -175,6 +177,7 @@ export class HomeComponent implements OnInit {
   }
 
   public initiateClose(): void {
+    this.appState.imgHeight = this.imgHeight || 100;
     this.electronService.ipcRenderer.send('close-window', this.getSettingsForSave());
   }
 
@@ -252,6 +255,8 @@ export class HomeComponent implements OnInit {
    */
   public startWizard(): void {
     this.toggleSettings();
+    this.appState.selectedSourceFolder = '';
+    this.appState.selectedOutputFolder = '';
     this.inProgress = false;
     this.showWizard = true;
     this.importDone = false;
@@ -283,7 +288,7 @@ export class HomeComponent implements OnInit {
    * Increase preview size
    */
   public increaseSize(): void {
-    if (this.imgHeight < 200) {
+    if (this.imgHeight < 300) {
       this.imgHeight = this.imgHeight + 25;
     }
   }
@@ -341,6 +346,10 @@ export class HomeComponent implements OnInit {
     this.appState.menuHidden = !this.appState.menuHidden;
   }
 
+  selectScreenshotSize(numOfPix: number) {
+    this.screenshotSizeForImport = numOfPix;
+  }
+
   // ---- HANDLE EXTRACTING AND RESTORING SETTINGS ON OPEN AND BEFORE CLOSE ------
 
   /**
@@ -387,6 +396,9 @@ export class HomeComponent implements OnInit {
     if (settingsObject.appState) {
       this.appState = settingsObject.appState;
     }
+    console.log('image height');
+    console.log(this.appState.imgHeight);
+    this.imgHeight = this.appState.imgHeight;
     this.grabAllSettingsKeys().forEach(element => {
       if (settingsObject.buttonSettings[element]) {
         this.settingsButtons[element].toggled = settingsObject.buttonSettings[element].toggled;
