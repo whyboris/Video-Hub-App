@@ -3,12 +3,12 @@
 .wizard {
   background: $gray-10;
   height: 100vh;
-  top: 67px; // accounts for draggable region and the .top (height = 45px)
+  overflow-y: scroll;
   padding-top: 30px;
   position: fixed;
+  top: 20px; // accounts for draggable region
   width: 100%;
-  z-index: 100;
-  overflow-y: scroll;
+  z-index: 30;
 
   h1 {
     font-size: 14px;
@@ -86,8 +86,9 @@
   height: 100vh;
   left: 0;
   position: fixed;
-  top: 50px;
+  top: 20px;
   width: 100%;
+  z-index: 100;
 }
 
 @media (max-width: 600px) {

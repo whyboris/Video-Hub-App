@@ -85,7 +85,7 @@
     class="top"
   >
 
-    <div *ngIf="importDone; else progressBar">
+    <div>
       <app-top-component
         class="top-content-position"
         [fileString]="currentPlayingFile"
@@ -94,13 +94,6 @@
         (onFolderWordClicked)="handleFolderWordClicked($event)"
       ></app-top-component>
     </div>
-
-    <ng-template #progressBar>
-      <div *ngIf="progressPercent !== 0" class="progress-container">
-        <div class="current-progress" [ngStyle]="{width: progressPercent * 100 + '%'}"></div>
-      </div>
-    </ng-template>
-
   </header>
 
   <div
@@ -373,12 +366,22 @@
 
 </div> <!-- end of window -->
 
+<!-- IMPORT MODAL  -->
+
+<div *ngIf="!importDone && progressPercent !== 0" class="progress-modal">
+  <div class="progress-container">
+    <div class="current-progress" [ngStyle]="{width: progressPercent * 100 + '%'}"></div>
+  </div>
+  <div class="progress-numbers">
+    {{ progressNum1 }} / {{ progressNum2 }}
+  </div>
+</div>
+
+<div [ngClass]="{ 'disabled-overlay': inProgress }"></div>
+
 <!-- WIZARD -->
 
-<div *ngIf="!importDone" class="wizard">
-
-  <div [ngClass]="{ 'disabled-overlay': inProgress }"></div>
-
+<div *ngIf="showWizard" class="wizard">
   <div class="left-side">
 
     <h2>Open previous hub</h2>

@@ -11,13 +11,27 @@ $sidebar-width: 190px;
   user-select: none;
 }
 
+.progress-modal {
+  background: $gray-10;
+  border-radius: 10px;
+  border: 1px solid $gray-20;
+  box-shadow: 1px 1px 5px rgba(0,0,0,0.2);
+  box-sizing: border-box;
+  padding: 20px;
+  position: fixed;
+  top: calc(50vh - 30px);
+  width: 90vw;
+  left: 5vw;
+  z-index: 101;
+}
+
 .progress-container {
   background: $gray-50;
   border-radius: 3px;
   border: 1px solid $gray-60;
   box-sizing: border-box;
   height: 19px;
-  margin: 15px;
+  width: 100%;
 
   .current-progress {
     background: #66b452;
@@ -25,6 +39,13 @@ $sidebar-width: 190px;
     height: 17px;
     transition: 500ms;
   }
+}
+
+.progress-numbers {
+  font-size: 12px;
+  color: $gray-40;
+  float: right;
+  margin-top: 10px;
 }
 
 // LAYOUT STYLING
@@ -95,7 +116,7 @@ $sidebar-width: 190px;
   height: $top-region;
   position: relative;
   width: 100%;
-  z-index: 400;
+  z-index: 20;
 }
 
 .top-content-position {
