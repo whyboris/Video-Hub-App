@@ -1,8 +1,9 @@
 export interface FinalObject {
-  inputDir: string;   // later may support array of many input directories
-  outputDir: string;  // always just one -- for screenshots and JSON file
-  lastScreen: number; // the largest number for a screenshot (used when adding more screenshots later)
-  images: Array<any>; // see below
+  numOfFolders: number; // number of folders
+  inputDir: string;     // later may support array of many input directories
+  outputDir: string;    // always just one -- for screenshots and JSON file
+  lastScreen: number;   // the largest number for a screenshot (used when adding more screenshots later)
+  images: Array<any>;   // see below
 }
 
 /*

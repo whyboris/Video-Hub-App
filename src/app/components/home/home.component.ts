@@ -103,6 +103,7 @@ export class HomeComponent implements OnInit {
 
     // Final object returns
     this.electronService.ipcRenderer.on('finalObjectReturning', (event, finalObject: FinalObject) => {
+      this.appState.numOfFolders = finalObject.numOfFolders;
       this.appState.selectedOutputFolder = finalObject.outputDir;
       this.appState.selectedSourceFolder = finalObject.inputDir;
       this.importDone = true;

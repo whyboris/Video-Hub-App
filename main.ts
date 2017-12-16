@@ -328,6 +328,7 @@ function sendFinalResultHome(): void {
   alphabetizeFinalArray();
 
   const finalObject: FinalObject = {
+    numOfFolders: countFoldersInFinalArray(),
     inputDir: selectedSourceFolder,
     outputDir: selectedOutputFolder,
     lastScreen: MainCounter.screenShotFileNumber, // REPRESENTS NEXT AVAILABLE NUMBER FOR THE TAKING
@@ -595,6 +596,21 @@ function alphabetizeFinalArray(): void {
       return -1;
     }
   });
+}
+
+/**
+ * Count the number of unique folders in the final array
+ */
+function countFoldersInFinalArray(): number {
+  const finalArrayFolderMap: Map<string, number> = new Map;
+  finalArray.forEach((element) => {
+    if (finalArrayFolderMap.has(element[0])) {
+      // do nothing
+    } else {
+      finalArrayFolderMap.set(element[0], 1);
+    }
+  });
+  return finalArrayFolderMap.size;
 }
 
 // ---------------------- FOLDER WALKER FUNCTION --------------------------------
