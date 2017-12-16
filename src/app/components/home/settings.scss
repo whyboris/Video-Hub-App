@@ -26,27 +26,21 @@ h2 {
 
 .closeSettings {
   cursor: pointer;
+  float: right;
+  margin-right: 3px;
   opacity: 1;
-  position: fixed;
-  right: 29px;
-  top: 270px;
-  transition-delay: 300ms;
+  position: sticky;
+  top: 1px;
   transition-duration: 300ms;
   &:hover {
     color: #990000;
-    transition-delay: 50ms;
     transition-duration: 300ms;
   }
 }
 
-.closeSettingsHidden {
-  opacity: 0;
-  transition: 50ms;
-}
-
 .gearButtonActive {
   color: $gray-60;
-  transform: rotate(-100deg);
+  transform: rotate(100deg);
   transition: 370ms;
 }
 
@@ -86,7 +80,7 @@ h2 {
 .galleryButtonsSettings {
   left: 20px;
   max-width: calc(100% - 30px);
-  opacity: 0;
+  transform: translate(-10px, 0);
   position: relative;
   top: 20px;
   transition: 100ms;
@@ -101,13 +95,6 @@ h2 {
   font-size: 12px;
   left: 27px;
   line-height: 20px;
-}
-
-.searchButtonsSettingsInView,
-.galleryButtonsSettingsInView {
-  transform: translate(-10px, 0);
-  opacity: 1;
-  transition: 700ms;
 }
 
 .buttonDescription {

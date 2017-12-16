@@ -17,14 +17,13 @@
 
   <!-- SETTINGS / OPTIONS MODAL -->
   <div
-    *ngIf="settingsNowShown"
-    [ngClass]="{ allSettingsExpanded: !appState.buttonsInView }"
+    *ngIf="appState.buttonsInView"
     class="settingsModal"
+    @myAnimation
   >
 
     <div
       (click)="toggleSettings()"
-      [ngClass]="{ closeSettingsHidden: appState.buttonsInView }"
       class="closeSettings"
     >
       <span class="icon icon-close"></span>
@@ -40,7 +39,6 @@
       <h2>{{ settingsCategories[i] }}</h2>
 
       <div
-        [ngClass]="{ searchButtonsSettingsInView: !appState.buttonsInView }"
         class="searchButtonsSettings"
       >
 

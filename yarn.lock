@@ -26,6 +26,12 @@
     minimist "^1.2.0"
     rxjs "^5.4.2"
 
+"@angular/animations@4.4.3":
+  version "4.4.3"
+  resolved "https://forbes.jfrog.io/forbes/api/npm/npm-virtual/@angular/animations/-/animations-4.4.3.tgz#396c4a5bfb22847f9e458245ba995f9c130c0cf3"
+  dependencies:
+    tslib "^1.7.1"
+
 "@angular/cli@1.4.3":
   version "1.4.3"
   resolved "https://forbes.jfrog.io/forbes/api/npm/npm-virtual/@angular/cli/-/cli-1.4.3.tgz#8389d4eeadfe34abb1d16e53836416a8f8430fb3"
@@ -228,6 +234,10 @@
   version "0.0.38"
   resolved "https://forbes.jfrog.io/forbes/api/npm/npm-virtual/@schematics/angular/-/angular-0.0.38.tgz#6131569a9fe21fe7bad8abf4a3174ea5a8647bbd"
 
+"@tweenjs/tween.js@^17.1.0":
+  version "17.1.1"
+  resolved "https://forbes.jfrog.io/forbes/api/npm/npm-virtual/@tweenjs/tween.js/-/tween.js-17.1.1.tgz#a735ec3362a8cff7418733853503c2a553ee1a3a"
+
 "@types/core-js@0.9.36":
   version "0.9.36"
   resolved "https://forbes.jfrog.io/forbes/api/npm/npm-virtual/@types/core-js/-/core-js-0.9.36.tgz#d721e7cc0007d10ce66ad263ebf478a4071c53f4"
@@ -342,6 +352,12 @@ alphanum-sort@^1.0.1, alphanum-sort@^1.0.2:
 amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://forbes.jfrog.io/forbes/api/npm/npm-virtual/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
+
+angular2-virtual-scroll@^0.3.1:
+  version "0.3.1"
+  resolved "https://forbes.jfrog.io/forbes/api/npm/npm-virtual/angular2-virtual-scroll/-/angular2-virtual-scroll-0.3.1.tgz#93c79fd7890b8a8608a26a3d08a2d03f830917b2"
+  dependencies:
+    "@tweenjs/tween.js" "^17.1.0"
 
 ansi-html@0.0.7:
   version "0.0.7"

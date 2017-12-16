@@ -133,18 +133,15 @@ $sidebar-width: 190px;
   overflow-y: scroll;
   padding: 5px 5px 50px;
   position: fixed;
-  top: 100vh;
-  transition: 300ms;
+  top: 265px;
   width: calc(100% - 215px);
   z-index: 500;
 
   @include scrollBar;
 
-}
-
-.allSettingsExpanded {
-  transition: 300ms;
-  top: 265px;
+  .defaultSettingsButton {
+    border-radius: 5px !important;
+  }
 }
 
 .sidebar {
