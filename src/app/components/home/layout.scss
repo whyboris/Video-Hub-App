@@ -23,6 +23,7 @@ $sidebar-width: 190px;
     background: #66b452;
     border-radius: 3px;
     height: 17px;
+    transition: 500ms;
   }
 }
 
@@ -113,12 +114,13 @@ $sidebar-width: 190px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.2);
   box-sizing: border-box;
   height: $settings-height;
+  min-width: 500px;
+  overflow: hidden;
   padding: 5px;
   position: absolute;
   transition: 300ms;
   width: 100%;
   z-index: 500;
-  overflow: hidden;
 }
 
 .settingsModal {
@@ -129,21 +131,19 @@ $sidebar-width: 190px;
   box-sizing: border-box;
   height: calc(100vh - 280px);
   left: 200px;
+  min-width: 270px;
   overflow-y: scroll;
   padding: 5px 5px 50px;
   position: fixed;
-  top: 100vh;
-  transition: 300ms;
+  top: 265px;
   width: calc(100% - 215px);
   z-index: 500;
 
   @include scrollBar;
 
-}
-
-.allSettingsExpanded {
-  transition: 300ms;
-  top: 265px;
+  .defaultSettingsButton {
+    border-radius: 5px !important;
+  }
 }
 
 .sidebar {

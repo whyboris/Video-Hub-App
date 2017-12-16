@@ -325,7 +325,10 @@ function sendCurrentProgress(current: number, total: number): void {
  */
 function sendFinalResultHome(): void {
 
+  alphabetizeFinalArray();
+
   const finalObject: FinalObject = {
+    numOfFolders: countFoldersInFinalArray(),
     inputDir: selectedSourceFolder,
     outputDir: selectedOutputFolder,
     lastScreen: MainCounter.screenShotFileNumber, // REPRESENTS NEXT AVAILABLE NUMBER FOR THE TAKING
@@ -571,7 +574,44 @@ function findTheDiff(oldFileList, inputFolder): void {
 
 }
 
+/**
+ * Alphabetizes final array, prioritizing the folder, and then filename
+ */
+function alphabetizeFinalArray(): void {
+  finalArray.sort((x: any, y: any): number => {
+    const folder1: string = x[0].toLowerCase();
+    const folder2: string = y[0].toLowerCase();
+    const file1: string = x[1].toLowerCase();
+    const file2: string = y[1].toLowerCase();
 
+    if (folder1 > folder2) {
+      return 1;
+    } else if (folder1 === folder2 && file1 > file2) {
+      return 1;
+    } else if (folder1 === folder2 && file1 === file2) {
+      return 0;
+    } else if (folder1 === folder2 && file1 < file2) {
+      return -1;
+    } else if (folder1 < folder2) {
+      return -1;
+    }
+  });
+}
+
+/**
+ * Count the number of unique folders in the final array
+ */
+function countFoldersInFinalArray(): number {
+  const finalArrayFolderMap: Map<string, number> = new Map;
+  finalArray.forEach((element) => {
+    if (finalArrayFolderMap.has(element[0])) {
+      // do nothing
+    } else {
+      finalArrayFolderMap.set(element[0], 1);
+    }
+  });
+  return finalArrayFolderMap.size;
+}
 
 // ---------------------- FOLDER WALKER FUNCTION --------------------------------
 

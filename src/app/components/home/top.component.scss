@@ -1,5 +1,4 @@
 @import "variables";
-
 .icon-video,
 .icon-folder {
   font-size: 12px;
@@ -12,6 +11,13 @@
   max-height: 18px;
   min-width: calc(100vw - 100px);
   overflow: hidden;
+  .icon-folder-blank:before {
+    position: absolute;
+    transform: translate(0, 3px);
+  }
+   :nth-child(2) {
+    margin-left: 23px;
+  }
 }
 
 .folder-word {
@@ -20,7 +26,6 @@
   display: inline-block;
   font-size: 12px;
   margin-right: 5px;
-
   &:after {
     content: '\f1a0'; // chevron-right
     font-family: "vh-icon-font";
@@ -34,6 +39,14 @@
   max-height: 20px;
   min-width: calc(100vw - 100px);
   overflow: hidden;
+
+  .icon-video-blank:before {
+    position: absolute;
+    transform: translate(0, 3px);
+  }
+   :nth-child(2) {
+    margin-left: 23px;
+  }
 }
 
 .file-words {

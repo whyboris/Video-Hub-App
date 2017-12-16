@@ -12,6 +12,8 @@ import { AppState } from '../common/app-state';
 import { Filters } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from 'app/components/common/settings-buttons';
 
+import { myAnimation } from '../common/animations';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -25,6 +27,9 @@ import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from 'app/
     './gallery.scss',
     './film-override.scss',
     './wizard.scss'
+  ],
+  animations: [
+    myAnimation
   ]
 })
 export class HomeComponent implements OnInit {
@@ -50,8 +55,6 @@ export class HomeComponent implements OnInit {
   appMaximized = false;
 
   imgHeight = 100;
-
-  settingsNowShown = false;
 
   // temp
   wordFreqArr: any;
@@ -103,6 +106,7 @@ export class HomeComponent implements OnInit {
 
     // Final object returns
     this.electronService.ipcRenderer.on('finalObjectReturning', (event, finalObject: FinalObject) => {
+      this.appState.numOfFolders = finalObject.numOfFolders;
       this.appState.selectedOutputFolder = finalObject.outputDir;
       this.appState.selectedSourceFolder = finalObject.inputDir;
       this.importDone = true;
@@ -196,20 +200,9 @@ export class HomeComponent implements OnInit {
 
   /**
    * Show or hide settings
-   * settingsNowShown used for *ngIf
    */
   toggleSettings(): void {
-    if (this.settingsNowShown === false) {
-      this.settingsNowShown = true;
-      setTimeout(() => {
-        this.appState.buttonsInView = false;
-      }, 10);
-    } else {
-      this.appState.buttonsInView = true;
-      setTimeout(() => {
-        this.settingsNowShown = false;
-      }, 500);
-    }
+    this.appState.buttonsInView = !this.appState.buttonsInView;
   }
 
   /**
