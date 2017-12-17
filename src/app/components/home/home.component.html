@@ -229,7 +229,7 @@
 
       <!-- total found -->
       <div class="filteringTotal">
-        <span>{{ currResults.total }} found</span>
+        <span>Showing {{ numberToShow }} / {{ currResults.total }} found</span>
       </div>
 
       <!-- word cloud -->
@@ -251,7 +251,9 @@
     <div
       [ngClass]="{ 'gallery-container-full-width': settingsButtons['hideSidebar'].toggled}"
       [ngStyle]="{ 'background': settingsButtons['darkMode'].toggled ? '#000000' : '#999999' }"
+      (scroll)="scrollHandler($event)"
       class="gallery-container"
+      #galleryArea
     >
 
 <!-- GALLERY CODE -->
@@ -260,14 +262,6 @@
         [ngClass]="{ filmOverride: appState.currentView !== 'thumbs' }"
         class="gallery"
       >
-
-        <!-- <virtual-scroll
-                [items]="finalArray"
-                [bufferAmount]="5"
-                [childWidth]="100"
-                [childHeight]="100"
-                (update)="viewPortItems = $event"
-              > -->
 
         <div
           class="item"
@@ -289,7 +283,7 @@
                     | fileSearchPipe: filters[3].array : filters[3].bool : false : true : false
                     | fileSearchPipe: filters[4].array : filters[4].bool : true : true : true
                     | wordFrequencyPipe: true
-                    | limitPipe: appState.numberToShow;
+                    | limitPipe: numberToShow;
                     index as i"
         >
 
@@ -355,8 +349,6 @@
           </div>
 
         </div>
-
-        <!-- </virtual-scroll> -->
 
       </div> <!-- end of gallery -->
 

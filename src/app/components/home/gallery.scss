@@ -59,6 +59,7 @@
 
 .folder {
   color: #333333;
+  cursor: pointer;
   font-size: 12px;
   font-weight: bold;
   margin: 16px 0 10px -19px;
@@ -67,6 +68,8 @@
   .icon-folder-blank {
     color: $gray-70;
     margin-right: 2px;
+    position: absolute;
+    transform: translate(-15px, 1px);
   }
 }
 

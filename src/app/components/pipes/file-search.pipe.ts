@@ -22,8 +22,8 @@ export class FileSearchPipe implements PipeTransform {
     fileNotFolder?: boolean,
     exclude?: boolean
   ): any {
-    console.log('fileSearchPipe triggered');
-    console.log(arrOfStrings);
+    // console.log('fileSearchPipe triggered');
+    // console.log(arrOfStrings);
 
     // search through the FILE or FOLDER array !!!
     const fileOrFolder = fileNotFolder ? 1 : 0;
