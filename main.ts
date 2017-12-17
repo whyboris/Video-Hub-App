@@ -208,8 +208,10 @@ ipc.on('choose-input', function (event, someMessage) {
     if (files) {
       console.log('the user has chosen this INPUT directory: ' + files[0]);
       selectedSourceFolder = files[0];
-
-      event.sender.send('inputFolderChosen', selectedSourceFolder);
+      totalNumberOfFiles = 0;
+      walkAndCountSync(selectedSourceFolder, []);
+      console.log(totalNumberOfFiles);
+      event.sender.send('inputFolderChosen', selectedSourceFolder, totalNumberOfFiles);
     }
   })
 })
@@ -646,3 +648,31 @@ function walkSync(dir, filelist) {
 
   return filelist;
 };
+
+
+// ------------- just figure out how many video files are in a directory ------------
+
+let totalNumberOfFiles = 0;
+/**
+ * Used only to update the `totalNumberOfFiles` when user selects input folder
+ */
+function walkAndCountSync(dir, filelist) {
+  // console.log('walk started');
+  const files = fs.readdirSync(dir);
+  // console.log(files);
+
+  files.forEach(function (file) {
+    // if the item is a _DIRECTORY_
+    if (fs.statSync(path.join(dir, file)).isDirectory()) {
+      filelist = walkAndCountSync(path.join(dir, file), filelist);
+    } else {
+      const extension = file.split('.').pop();
+      if (acceptableFiles.includes(extension)) {
+        totalNumberOfFiles++;
+      }
+    }
+  });
+
+  return filelist;
+};
+

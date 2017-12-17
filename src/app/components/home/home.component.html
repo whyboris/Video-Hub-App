@@ -408,6 +408,13 @@
     <span class="path">
       {{ appState.selectedSourceFolder }}
     </span>
+    <span class="path" *ngIf="totalNumberOfFiles !== -1">
+      Found
+      <span class="emphasis-number">
+        {{ totalNumberOfFiles | number }}
+      </span>
+      videos
+    </span>
 
     <div
       [ngClass]="{ 'current-step': appState.selectedSourceFolder !== '' && appState.selectedOutputFolder === '' }"
@@ -446,7 +453,7 @@
       <option value="300">300px</option>
     </select>
 
-    <span class="description">
+    <span class="path">
       Size of screenshots
     </span>
 
@@ -462,6 +469,22 @@
     >
       Start the import
     </button>
+
+    <span class="description" *ngIf="totalNumberOfFiles !== -1">
+      Expected:
+    </span>
+    <span class="path" *ngIf="totalNumberOfFiles !== -1">
+      <span class="emphasis-number">
+        {{ totalImportTime }} 
+      </span>
+      minutes to import
+    </span>
+    <span class="path" *ngIf="totalNumberOfFiles !== -1">
+      <span class="emphasis-number">
+        {{ totalImportSize }} 
+      </span>
+      mb of disk space
+    </span>
 
   </div>
 
