@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, OnInit, HostListener } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
 
 import { setTimeout } from 'timers';
 
@@ -34,6 +34,8 @@ import { myAnimation } from '../common/animations';
 })
 export class HomeComponent implements OnInit {
 
+  @ViewChild('galleryArea') galleryDiv: ElementRef;
+
   settingsButtons = SettingsButtons;
   settingsButtonsGroups = SettingsButtonsGroups;
   settingsCategories = SettingsCategories;
@@ -65,6 +67,8 @@ export class HomeComponent implements OnInit {
 
   numberToShow = 5; // temporary 5 -- this limits how many thumbs shown
 
+  myTimeout = null;
+
   // temp
   wordFreqArr: any;
   currResults: any = { showing: 0, total: 0 };
@@ -76,6 +80,11 @@ export class HomeComponent implements OnInit {
   // handleKeyboardEvent(event: KeyboardEvent) {
   //   console.log(event.key);
   // }
+
+  @HostListener('window:resize', ['$event'])
+  handleResizeEvent(event: any) {
+    this.debounceUpdateMax();
+  }
 
   constructor(
     public cd: ChangeDetectorRef,
@@ -94,6 +103,9 @@ export class HomeComponent implements OnInit {
       this.showLimitService.searchResults.subscribe((value) => {
         this.currResults = value;
         this.cd.detectChanges();
+        setTimeout(() => {
+          this.updateMaxToShow();
+        }, 0);
       });
     }, 100);
 
@@ -138,33 +150,51 @@ export class HomeComponent implements OnInit {
     this.justStarted();
   }
 
-  scrollHandler(event) {
+  /**
+   * Update max to view when scrolling
+   */
+  public scrollHandler(event) {
+    this.debounceUpdateMax();
+  }
 
-    console.log(event);
-    console.log('height: ' + event.srcElement.clientHeight);
-    console.log('width: ' + event.srcElement.clientWidth);
-    console.log('top: ' + event.target.scrollTop);
-    console.log('scroll: ' + event.srcElement.scrollHeight);
-    console.log('img height: ' + this.imgHeight);
-    console.log('img width: ' + Math.round(this.imgHeight * 1.69));
+  /**
+   * Low-tech debounced scroll handler
+   */
+  public debounceUpdateMax() {
+    clearTimeout(this.myTimeout);
+    this.myTimeout = setTimeout(() => {
+      console.log('updating MAX !!!');
+      this.updateMaxToShow();
+    }, 250);
+  }
+
+  /**
+   * Updates the `numberToShow` by computing available area in the `galleryDiv` (aka `galleryArea`)
+   */
+  public updateMaxToShow() {
+
+    const clientHeight = this.galleryDiv.nativeElement.clientHeight;
+    const clientWidth = this.galleryDiv.nativeElement.clientWidth;
+    const scrollTop = this.galleryDiv.nativeElement.scrollTop;
+    const scrollHeight = this.galleryDiv.nativeElement.scrollHeight;
 
     if (this.appState.currentView === 'thumbs') {
       // rough estimate
-      const showingHorizontally = Math.floor(event.srcElement.clientWidth / (this.imgHeight * 1.69 + 30));
-      const showingVertically = Math.floor(event.srcElement.clientHeight / (this.imgHeight + 30));
+      const showingHorizontally = Math.floor(clientWidth / (this.imgHeight * 1.69 + 30));
+      const showingVertically = Math.floor(clientHeight / (this.imgHeight + 30));
 
       console.log('showing horiz: ' + showingHorizontally);
       console.log('showing vert: ' + showingVertically);
 
       const minToShow = showingHorizontally * showingVertically; // product of how many shown across and how many vertically
 
-      if (event.target.scrollTop + event.srcElement.clientHeight + 400 > event.srcElement.scrollHeight) {
+      if (scrollTop + clientHeight + 600 > scrollHeight) {
         console.log('close to bottom');
-        this.numberToShow = this.numberToShow + showingHorizontally;
+        this.numberToShow = this.numberToShow + showingHorizontally * 2;
 
-      } else if (event.target.scrollTop + event.srcElement.clientHeight + 600 < event.srcElement.scrollHeight) {
+      } else if (scrollTop + clientHeight + 1300 < scrollHeight) {
         console.log('removing from bottom');
-        this.numberToShow = this.numberToShow - showingHorizontally;
+        this.numberToShow = this.numberToShow - showingHorizontally * 2;
       }
 
       if (this.numberToShow < minToShow) {
@@ -273,20 +303,25 @@ export class HomeComponent implements OnInit {
       this.settingsButtons['showFilmstrip'].toggled = false;
       this.settingsButtons['showFiles'].toggled = false;
       this.appState.currentView = 'thumbs';
+      this.updateMaxToShow();
     } else if (uniqueKey === 'showFilmstrip') {
       this.settingsButtons['showThumbnails'].toggled = false;
       this.settingsButtons['showFilmstrip'].toggled = true;
       this.settingsButtons['showFiles'].toggled = false;
       this.appState.currentView = 'filmstrip';
+      this.updateMaxToShow();
     } else if (uniqueKey === 'showFiles') {
       this.settingsButtons['showThumbnails'].toggled = false;
       this.settingsButtons['showFilmstrip'].toggled = false;
       this.settingsButtons['showFiles'].toggled = true;
       this.appState.currentView = 'files';
+      this.updateMaxToShow();
     } else if (uniqueKey === 'makeSmaller') {
       this.decreaseSize();
+      this.debounceUpdateMax();
     } else if (uniqueKey === 'makeLarger') {
       this.increaseSize();
+      this.debounceUpdateMax();
     } else if (uniqueKey === 'startWizard') {
       this.startWizard();
     } else if (uniqueKey === 'rescanDirectory') {

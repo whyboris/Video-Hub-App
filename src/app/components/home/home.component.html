@@ -253,6 +253,7 @@
       [ngStyle]="{ 'background': settingsButtons['darkMode'].toggled ? '#000000' : '#999999' }"
       (scroll)="scrollHandler($event)"
       class="gallery-container"
+      #galleryArea
     >
 
 <!-- GALLERY CODE -->
@@ -261,14 +262,6 @@
         [ngClass]="{ filmOverride: appState.currentView !== 'thumbs' }"
         class="gallery"
       >
-
-        <!-- <virtual-scroll
-                [items]="finalArray"
-                [bufferAmount]="5"
-                [childWidth]="100"
-                [childHeight]="100"
-                (update)="viewPortItems = $event"
-              > -->
 
         <div
           class="item"
@@ -356,8 +349,6 @@
           </div>
 
         </div>
-
-        <!-- </virtual-scroll> -->
 
       </div> <!-- end of gallery -->
 

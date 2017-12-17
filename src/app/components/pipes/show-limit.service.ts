@@ -5,6 +5,8 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 @Injectable()
 export class ShowLimitService {
 
+  cachedTotal = 0;
+
   searchResults = new BehaviorSubject({});
 
   constructor() { }
@@ -13,8 +15,12 @@ export class ShowLimitService {
     if (total < showing ) {
       showing = total;
     }
-    console.log('Showing: ' + showing + '/' + total);
-    this.searchResults.next({ showing: showing, total: total });
+
+    if (this.cachedTotal !== total) {
+      this.cachedTotal = total;
+      this.searchResults.next({ showing: showing, total: this.cachedTotal });
+    }
+
   }
 
 }
