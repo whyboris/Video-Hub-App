@@ -69,6 +69,11 @@ export class HomeComponent implements OnInit {
 
   myTimeout = null;
 
+  // temp variables for the wizard during import
+  totalNumberOfFiles = -1;
+  totalImportTime = 0;
+  totalImportSize = 0;
+
   // temp
   wordFreqArr: any;
   currResults: any = { showing: 0, total: 0 };
@@ -108,7 +113,10 @@ export class HomeComponent implements OnInit {
     }, 100);
 
     // Returning Input
-    this.electronService.ipcRenderer.on('inputFolderChosen', (event, filePath) => {
+    this.electronService.ipcRenderer.on('inputFolderChosen', (event, filePath, totalFilesInDir) => {
+      this.totalNumberOfFiles = totalFilesInDir;
+      // TODO better prediction
+      this.totalImportTime = Math.round(totalFilesInDir * 2.25 / 60);
       this.appState.selectedSourceFolder = filePath;
     });
 
@@ -383,6 +391,7 @@ export class HomeComponent implements OnInit {
     this.inProgress = false;
     this.showWizard = true;
     this.importDone = false;
+    this.totalNumberOfFiles = -1;
   }
 
   /**
@@ -469,8 +478,13 @@ export class HomeComponent implements OnInit {
     this.appState.menuHidden = !this.appState.menuHidden;
   }
 
-  selectScreenshotSize(numOfPix: number) {
-    this.screenshotSizeForImport = numOfPix;
+  /**
+   * Called on screenshot size dropdown select
+   */
+  selectScreenshotSize(pxHeightForImport: number) {
+    // TODO better prediction
+    this.totalImportSize = Math.round((pxHeightForImport / 100) * this.totalNumberOfFiles * 36 / 1000);
+    this.screenshotSizeForImport = pxHeightForImport;
   }
 
   // ---- HANDLE EXTRACTING AND RESTORING SETTINGS ON OPEN AND BEFORE CLOSE ------
