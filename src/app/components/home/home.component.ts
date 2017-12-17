@@ -103,9 +103,7 @@ export class HomeComponent implements OnInit {
       this.showLimitService.searchResults.subscribe((value) => {
         this.currResults = value;
         this.cd.detectChanges();
-        setTimeout(() => {
-          this.updateMaxToShow();
-        }, 0);
+        this.debounceUpdateMax(10);
       });
     }, 100);
 
@@ -160,12 +158,14 @@ export class HomeComponent implements OnInit {
   /**
    * Low-tech debounced scroll handler
    */
-  public debounceUpdateMax() {
+  public debounceUpdateMax(msDelay?: number): void {
+    console.log('debouncing');
+    const delay = msDelay !== undefined ? msDelay : 250;
     clearTimeout(this.myTimeout);
     this.myTimeout = setTimeout(() => {
       console.log('updating MAX !!!');
       this.updateMaxToShow();
-    }, 250);
+    }, delay);
   }
 
   /**
@@ -178,6 +178,7 @@ export class HomeComponent implements OnInit {
     const scrollTop = this.galleryDiv.nativeElement.scrollTop;
     const scrollHeight = this.galleryDiv.nativeElement.scrollHeight;
 
+    // TODO -- clean up function
     if (this.appState.currentView === 'thumbs') {
       // rough estimate
       const showingHorizontally = Math.floor(clientWidth / (this.imgHeight * 1.69 + 30));
@@ -202,11 +203,43 @@ export class HomeComponent implements OnInit {
       }
 
     } else if (this.appState.currentView === 'filmstrip') {
-      console.log('FILMSTRIPPPP!');
-      this.numberToShow = 10;
+
+      const showingVertically = Math.floor(clientHeight / (this.imgHeight + 30));
+
+      console.log('showing vert: ' + showingVertically);
+
+      if (scrollTop + clientHeight + 600 > scrollHeight) {
+        console.log('close to bottom');
+        this.numberToShow = this.numberToShow + 3;
+
+      } else if (scrollTop + clientHeight + 1300 < scrollHeight) {
+        console.log('removing from bottom');
+        this.numberToShow = this.numberToShow - 3;
+      }
+
+      if (this.numberToShow < showingVertically) {
+        this.numberToShow = showingVertically + 3;
+      }
+
     } else if (this.appState.currentView === 'files') {
-      console.log('files !!!!');
-      this.numberToShow = 100;
+
+      const showingVertically = Math.floor(clientHeight / 20);
+
+      console.log('showing vert: ' + showingVertically);
+
+      if (scrollTop + clientHeight + 600 > scrollHeight) {
+        console.log('close to bottom');
+        this.numberToShow = this.numberToShow + 50;
+
+      } else if (scrollTop + clientHeight + 2000 < scrollHeight) {
+        console.log('removing from bottom');
+        this.numberToShow = this.numberToShow - 50;
+      }
+
+      if (this.numberToShow < showingVertically) {
+        this.numberToShow = showingVertically + 50;
+      }
+
     }
 
   }
@@ -303,19 +336,28 @@ export class HomeComponent implements OnInit {
       this.settingsButtons['showFilmstrip'].toggled = false;
       this.settingsButtons['showFiles'].toggled = false;
       this.appState.currentView = 'thumbs';
-      this.updateMaxToShow();
+      if (this.numberToShow > 40) {
+        this.numberToShow = 40;
+      }
+      this.debounceUpdateMax(0);
     } else if (uniqueKey === 'showFilmstrip') {
       this.settingsButtons['showThumbnails'].toggled = false;
       this.settingsButtons['showFilmstrip'].toggled = true;
       this.settingsButtons['showFiles'].toggled = false;
       this.appState.currentView = 'filmstrip';
-      this.updateMaxToShow();
+      if (this.numberToShow > 20) {
+        this.numberToShow = 20;
+      }
+      this.debounceUpdateMax(0);
     } else if (uniqueKey === 'showFiles') {
       this.settingsButtons['showThumbnails'].toggled = false;
       this.settingsButtons['showFilmstrip'].toggled = false;
       this.settingsButtons['showFiles'].toggled = true;
       this.appState.currentView = 'files';
-      this.updateMaxToShow();
+      if (this.numberToShow < 80) {
+        this.numberToShow = 80;
+      }
+      this.debounceUpdateMax(0);
     } else if (uniqueKey === 'makeSmaller') {
       this.decreaseSize();
       this.debounceUpdateMax();
