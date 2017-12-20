@@ -15,6 +15,10 @@ Currently runs with:
 - Electron v1.7.6
 - Electron Packager v9.0.1
 
+Works with:
+
+- Node v8.9.1
+
 ## To build for development
 
 - **in a terminal window** -> npm start  

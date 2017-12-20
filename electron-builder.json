@@ -1,0 +1,29 @@
+{
+  "productName": "Video Hub App",
+  "productFilename": "VideoHubAppDemo",
+  "copyright": "Boris Yakubchik",
+  "version": "0.6.3",
+  "directories": {
+    "app": "dist",
+    "output": "app-builds"
+  },
+  "win": {
+    "icon": "dist/favicon",
+    "target": [
+      "portable"
+    ]
+  },
+  "mac": {
+    "icon": "dist/favicon",
+    "asar": false,
+    "target": [
+      "dmg"
+    ]
+  },
+  "linux": {
+    "icon": "dist",
+    "target": [
+      "AppImage"
+    ]
+  }
+}
