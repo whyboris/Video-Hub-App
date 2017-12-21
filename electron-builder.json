@@ -1,16 +1,14 @@
 {
-  "productName": "Video Hub App",
-  "productFilename": "VideoHubAppDemo",
-  "copyright": "Boris Yakubchik",
-  "version": "0.6.3",
+  "productName": "Video-Hub-App",
   "directories": {
     "app": "dist",
     "output": "app-builds"
   },
   "win": {
     "icon": "dist/favicon",
+    "asar": false,
     "target": [
-      "portable"
+      "nsis"
     ]
   },
   "mac": {
