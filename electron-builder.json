@@ -12,11 +12,10 @@
     ]
   },
   "mac": {
+    "category": "public.app-category.video",
+    "target": "dmg",
     "icon": "dist/favicon",
-    "asar": false,
-    "target": [
-      "dmg"
-    ]
+    "asar": false
   },
   "linux": {
     "icon": "dist",
