@@ -1,0 +1,26 @@
+{
+  "productName": "Video-Hub-App",
+  "directories": {
+    "app": "dist",
+    "output": "app-builds"
+  },
+  "win": {
+    "icon": "dist/favicon",
+    "asar": false,
+    "target": [
+      "nsis"
+    ]
+  },
+  "mac": {
+    "category": "public.app-category.video",
+    "target": "dmg",
+    "icon": "dist/favicon",
+    "asar": false
+  },
+  "linux": {
+    "icon": "dist",
+    "target": [
+      "AppImage"
+    ]
+  }
+}
