@@ -23,3 +23,15 @@ export const myAnimation = trigger(
     )
   ]
 );
+
+export const myAnimation2 = trigger(
+  'myAnimation2',
+  [
+    transition(
+      ':enter', [
+        style({ transform: 'translateY(15%)', opacity: 0 }),
+        animate('250ms ease-out', style({ transform: 'translateY(0)', 'opacity': 1 }))
+      ]
+    )
+  ]
+);

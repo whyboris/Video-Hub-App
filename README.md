@@ -1,6 +1,6 @@
 # Introduction
 
-VideoHub is built on top of `angular-electron` 1.9.0
+VideoHub is built on top of `angular-electron` 1.9.0 but has been updated since then.
 
 It was built off
 
@@ -10,24 +10,21 @@ git clone https://github.com/maximegris/angular-electron.git
 
 Currently runs with:
 
-- Angular v4.3.5
-- Angular-CLI v1.4.1
-- Electron v1.7.6
-- Electron Packager v9.0.1
+- Angular v5.1.1
+- Angular-CLI v1.6.1
+- Electron v1.7.8
+- Electron Builder v19.49.0
 
 Works with:
 
-- Node v8.9.1
+- Node v8.9.4
+- npm v5.6.0
 
 ## To build for development
 
-- **in a terminal window** -> npm start  
+`npm start`
 
-Voila! You can use your Angular + Electron app in a local development environment with hot reload !
-
-The application code is managed by `main.ts`. In this sample, the app runs with a simple Electron window and "Developer Tools" is open.  
-The Angular component contains an example of Electron and NodeJS native lib import. See [Use NodeJS Native libraries](#use-nodejs-native-libraries) charpter if you want to import other native libraries in your project.  
-You can desactivate "Developer Tools" by commenting `win.webContents.openDevTools();` in `main.ts`.
+The application code is managed by `main.ts`. You can desactivate "Developer Tools" by commenting `win.webContents.openDevTools();` in `main.ts`.
 
 ## To build for production
 
@@ -68,6 +65,6 @@ Notice that all NodeJS v7 native libs are already added in this sample. Feel fre
 Maybe you want to execute the application in the browser (WITHOUT HOT RELOAD ACTUALLY...) ? You can do it with `npm run start:web`.  
 Note that you can't use Electron or NodeJS native libraries in this case. Please check `providers/electron.service.ts` to watch how conditional import of electron/Native libraries is done.
 
-# Contributors 
+# Author of `angular-electron`
 
 [Maxime GRIS](https://github.com/maximegris)

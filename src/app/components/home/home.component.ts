@@ -12,7 +12,7 @@ import { AppState } from '../common/app-state';
 import { Filters } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from 'app/components/common/settings-buttons';
 
-import { myAnimation } from '../common/animations';
+import { myAnimation, myAnimation2 } from '../common/animations';
 
 @Component({
   selector: 'app-home',
@@ -29,7 +29,8 @@ import { myAnimation } from '../common/animations';
     './wizard.scss'
   ],
   animations: [
-    myAnimation
+    myAnimation,
+    myAnimation2
   ]
 })
 export class HomeComponent implements OnInit {
@@ -77,6 +78,9 @@ export class HomeComponent implements OnInit {
   // temp
   wordFreqArr: any;
   currResults: any = { showing: 0, total: 0 };
+
+  // for scroll
+  galleryHeight = 3000;
 
   public finalArray = [];
 
@@ -197,18 +201,12 @@ export class HomeComponent implements OnInit {
 
       const minToShow = showingHorizontally * showingVertically; // product of how many shown across and how many vertically
 
-      if (scrollTop + clientHeight + 600 > scrollHeight) {
-        console.log('close to bottom');
-        this.numberToShow = this.numberToShow + showingHorizontally * 2;
+      // set the height of gallery to however much it takes to fill the gallery
+      this.galleryHeight = Math.ceil(this.currResults.total / showingHorizontally) *
+        (this.imgHeight + (this.settingsButtons['showMoreInfo'].toggled ? 60 : 30));
 
-      } else if (scrollTop + clientHeight + 1300 < scrollHeight) {
-        console.log('removing from bottom');
-        this.numberToShow = this.numberToShow - showingHorizontally * 2;
-      }
-
-      if (this.numberToShow < minToShow) {
-        this.numberToShow = minToShow + showingHorizontally;
-      }
+      // figure out what % of the way there, and show that many
+      this.numberToShow = Math.ceil((scrollTop + clientHeight) / this.galleryHeight * this.currResults.total) + showingHorizontally;
 
     } else if (this.appState.currentView === 'filmstrip') {
 

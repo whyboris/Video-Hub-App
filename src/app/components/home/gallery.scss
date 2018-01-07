@@ -83,6 +83,7 @@
 
 .gallery {
   display: flex;
+  align-content: flex-start;
   flex-flow: row wrap;
   font-size: 0;
   margin-top: 10px;

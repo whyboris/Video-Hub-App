@@ -46,7 +46,7 @@
     "@ffprobe-installer/ffprobe": "1.0.8",
     "core-js": "2.4.1",
     "enhanced-resolve": "3.3.0",
-    "fluent-ffmpeg": "^2.1.2",
+    "fluent-ffmpeg": "2.1.2",
     "rxjs": "5.4.3",
     "zone.js": "0.8.17"
   },
