@@ -193,11 +193,10 @@ export class HomeComponent implements OnInit {
     const scrollTop = this.galleryDiv.nativeElement.scrollTop;
     const scrollHeight = this.galleryDiv.nativeElement.scrollHeight;
 
-    const textPadding = (this.settingsButtons['showMoreInfo'].toggled ? 60 : 30);
-    const galleryItemHeight = (this.imgHeight + textPadding);
-
     // TODO -- clean up function
     if (this.appState.currentView === 'thumbs') {
+      const textPadding = (this.settingsButtons['showMoreInfo'].toggled ? 60 : 30);
+      const galleryItemHeight = (this.imgHeight + textPadding);
       // rough estimate
       const showingHorizontally = Math.floor(clientWidth / (this.imgHeight * 1.69 + 30));
       const showingVertically = Math.floor(clientHeight / galleryItemHeight);
@@ -214,11 +213,13 @@ export class HomeComponent implements OnInit {
       // this.showRemaining(finalNumber);
 
     } else if (this.appState.currentView === 'filmstrip') {
+      const textPadding = (this.settingsButtons['showMoreInfo'].toggled ? 50 : 30);
+      const galleryItemHeight = (this.imgHeight + textPadding);
       this.galleryHeight = Math.ceil(this.currResults.total * galleryItemHeight);
       const showingVertically = Math.ceil(clientHeight / galleryItemHeight);
       // console.log('showing vert: ' + showingVertically);
       // figure out what % of the way there, and show that many
-      this.numberToShow = Math.ceil((scrollTop + clientHeight) / this.galleryHeight * this.currResults.total) + 1; // + 1 is fudge factor
+      this.numberToShow = Math.ceil((scrollTop + clientHeight) / this.galleryHeight * this.currResults.total);
 
     } else if (this.appState.currentView === 'files') {
       // rough estimate
