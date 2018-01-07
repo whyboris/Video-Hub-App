@@ -222,12 +222,9 @@ export class HomeComponent implements OnInit {
       this.numberToShow = Math.ceil((scrollTop + clientHeight) / this.galleryHeight * this.currResults.total);
 
     } else if (this.appState.currentView === 'files') {
-      // rough estimate
-      this.galleryHeight = Math.ceil(this.currResults.total * 20) + 30; // + 30 is fudge factor
-      // rough estimate
-      const showingVertically = Math.floor(clientHeight / 20);
-      // console.log('showing vert: ' + showingVertically);
-      this.numberToShow = Math.ceil((scrollTop + clientHeight) / this.galleryHeight * this.currResults.total) + 30; // + 1 is fudge factor
+      // Todo -- incorporate when the font size is larger
+      this.galleryHeight = Math.ceil(this.currResults.total * 20); // rough estimate
+      this.numberToShow = Math.ceil((scrollTop + clientHeight) / this.galleryHeight * this.currResults.total) + 10; // + 10 at the bottom
     }
 
   }
