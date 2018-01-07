@@ -21,3 +21,10 @@
   position: absolute;
   transform: translate(-50%, 0);
 }
+
+img:before {
+  content: 'lol u mad?';  /* to prevent broken img icon from showing up */
+  display: block;
+  font-size: 20px;
+  margin-top: 1000px;
+}

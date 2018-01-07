@@ -21,17 +21,9 @@ export class LimitPipe implements PipeTransform {
       this.showLimitService.showResults(finalArray.length, finalArray.length);
       return finalArray;
     } else {
-      console.log('file search pipe working');
-      let shownSoFar = 0;
+      // console.log('LimitPipe working');
       this.showLimitService.showResults(itemLimit, finalArray.length);
-      return finalArray.filter(item => {
-        if (shownSoFar < itemLimit) {
-          shownSoFar++;
-          return true;
-        } else {
-          return false;
-        }
-      });
+      return finalArray.slice(0, itemLimit);
     }
   }
 

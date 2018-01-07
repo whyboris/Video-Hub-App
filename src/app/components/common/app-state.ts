@@ -8,7 +8,6 @@ export let AppState = {
   currentView: 'thumbs',  // can be 'thumbs' | 'filmstrip' | 'files'
   imgHeight: 100,          // gallery/filmstrip height
 
-  buttonsInView: true,
   menuHidden: false,
 
 }

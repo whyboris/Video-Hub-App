@@ -192,6 +192,7 @@ $sidebar-width: 190px;
   box-sizing: border-box;
   left: $sidebar-width;
   overflow-y: scroll;
+  padding-bottom: 150px;
   position: absolute;
   top: $settings-height;
   transition: 300ms;

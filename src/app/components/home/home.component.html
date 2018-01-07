@@ -17,7 +17,7 @@
 
   <!-- SETTINGS / OPTIONS MODAL -->
   <div
-    *ngIf="appState.buttonsInView"
+    *ngIf="buttonsInView"
     class="settingsModal"
     @myAnimation
   >
@@ -136,7 +136,7 @@
       <!-- GEAR BUTTON -->
       <div
         (click)="toggleSettings()"
-        [ngClass]="{ gearButtonActive: appState.buttonsInView }"
+        [ngClass]="{ gearButtonActive: buttonsInView }"
         class="gearButton"
       >
         <span class="icon icon-gear"></span>
@@ -385,7 +385,7 @@
 
 <!-- WIZARD -->
 
-<div *ngIf="showWizard" class="wizard">
+<div *ngIf="showWizard" class="wizard" @myWizardAnimation>
   <div class="left-side">
 
     <h2>Open previous hub</h2>
