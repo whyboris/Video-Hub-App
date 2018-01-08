@@ -295,6 +295,7 @@
 
             <app-gallery-item
               (click)="openVideo(i)"
+              [title]="item[2]"
               [stuff]="item[3]"
               [time]="item[4]"
               [rez]="item[5]"
@@ -328,13 +329,13 @@
             </div>
           </div>
 
-          <div
+          <!-- <div
             *ngIf="settingsButtons['showMoreInfo'].toggled || appState.currentView === 'files'"
             class="metadata"
             @myAnimation2
           >
 
-            <!-- <div
+            <div
               *ngIf="settingsButtons['showMoreInfo'].toggled"
               class="length"
               @myAnimation2
@@ -348,7 +349,7 @@
               @myAnimation2
             >
               {{ item[5] }}
-            </div> -->
+            </div>
 
             <div
               (click)="openVideo(i)"
@@ -359,7 +360,7 @@
               {{ item[2] }}
             </div>
 
-          </div>
+          </div> -->
 
         </div>
 

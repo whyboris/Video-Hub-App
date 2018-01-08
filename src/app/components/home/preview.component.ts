@@ -21,6 +21,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
   @Input() time: string;
   @Input() rez: string;
   @Input() showMeta: boolean;
+  @Input() title: string;
 
   hover: boolean;
   currentlyShowing = 1;
