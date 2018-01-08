@@ -39,6 +39,18 @@ export const myAnimation2 = trigger(
   ]
 );
 
+export const myAnimation9 = trigger(
+  'myAnimation9',
+  [
+    transition(
+      ':enter', [
+        style({ filter: 'blur(5px) brightness(150%)' }),
+        animate('300ms ease-out', style({}))
+      ]
+    )
+  ]
+);
+
 export const myWizardAnimation = trigger(
   'myWizardAnimation',
   [

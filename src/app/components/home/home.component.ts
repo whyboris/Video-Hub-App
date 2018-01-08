@@ -73,6 +73,8 @@ export class HomeComponent implements OnInit {
 
   buttonsInView = false;
 
+  canHidePrevious = 0;
+
   // temp variables for the wizard during import
   totalNumberOfFiles = -1;
   totalImportTime = 0;
@@ -207,6 +209,9 @@ export class HomeComponent implements OnInit {
       // figure out what % of the way there, and show that many
       this.numberToShow = Math.ceil((scrollTop + clientHeight) / this.galleryHeight * this.currResults.total) + showingHorizontally;
 
+      // TODO -- WIP hide stuff above
+      this.canHidePrevious = this.numberToShow - (showingHorizontally * ( showingVertically + 3));
+
       // Try to animate each element rather than all at once
       // SLOWS THINGS DOWN
       // const finalNumber = Math.ceil((scrollTop + clientHeight) / this.galleryHeight * this.currResults.total) + showingHorizontally;
@@ -220,6 +225,9 @@ export class HomeComponent implements OnInit {
       // console.log('showing vert: ' + showingVertically);
       // figure out what % of the way there, and show that many
       this.numberToShow = Math.ceil((scrollTop + clientHeight) / this.galleryHeight * this.currResults.total);
+
+      // TODO -- WIP hide stuff above
+      this.canHidePrevious = this.numberToShow - (showingVertically + 3);
 
     } else if (this.appState.currentView === 'files') {
       // Todo -- incorporate when the font size is larger

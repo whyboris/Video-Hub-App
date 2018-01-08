@@ -296,10 +296,14 @@
             <app-gallery-item
               (click)="openVideo(i)"
               [stuff]="item[3]"
-              [folderPath]="appState.selectedOutputFolder"
+              [time]="item[4]"
+              [rez]="item[5]"
               [imgHeight]="imgHeight"
+              [folderPath]="appState.selectedOutputFolder"
+              [showMeta]="settingsButtons['showMoreInfo'].toggled"
               [hoverScrub]="settingsButtons['hoverScrub'].toggled"
               [randomImage]="settingsButtons['randomImage'].toggled"
+              [showPlaceholder]="i < canHidePrevious"
             ></app-gallery-item>
 
           </div>
@@ -307,6 +311,7 @@
           <div *ngIf="appState.currentView === 'filmstrip'" @myAnimation2>
 
             <app-filmstrip-item
+              [showPlaceholder]="i < canHidePrevious"
               (click)="openVideo(i)"
               [stuff]="item[3]"
               [folderPath]="appState.selectedOutputFolder"
@@ -329,7 +334,7 @@
             @myAnimation2
           >
 
-            <div
+            <!-- <div
               *ngIf="settingsButtons['showMoreInfo'].toggled"
               class="length"
               @myAnimation2
@@ -343,7 +348,7 @@
               @myAnimation2
             >
               {{ item[5] }}
-            </div>
+            </div> -->
 
             <div
               (click)="openVideo(i)"

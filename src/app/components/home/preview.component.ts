@@ -1,10 +1,14 @@
 import { Component, HostListener, Input, OnInit, OnDestroy } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+import { myAnimation9 } from '../common/animations';
 
 @Component({
   selector: 'app-gallery-item',
   templateUrl: './preview.component.html',
-  styleUrls: ['./preview.component.scss']
+  styleUrls: ['./preview.component.scss'],
+  animations: [
+    myAnimation9
+  ]
 })
 export class PreviewComponent implements OnInit, OnDestroy {
 
@@ -13,6 +17,10 @@ export class PreviewComponent implements OnInit, OnDestroy {
   @Input() imgHeight: number;
   @Input() randomImage: boolean;
   @Input() stuff: any;
+  @Input() showPlaceholder: boolean;
+  @Input() time: string;
+  @Input() rez: string;
+  @Input() showMeta: boolean;
 
   hover: boolean;
   currentlyShowing = 1;
