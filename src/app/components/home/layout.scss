@@ -190,10 +190,9 @@ $sidebar-width: 190px;
 
 .gallery-container {
   box-sizing: border-box;
-  height: 100vh;
   left: $sidebar-width;
   overflow-y: scroll;
-  padding-bottom: 100px;
+  padding-bottom: 150px;
   position: absolute;
   top: $settings-height;
   transition: 300ms;

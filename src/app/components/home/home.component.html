@@ -17,7 +17,7 @@
 
   <!-- SETTINGS / OPTIONS MODAL -->
   <div
-    *ngIf="appState.buttonsInView"
+    *ngIf="buttonsInView"
     class="settingsModal"
     @myAnimation
   >
@@ -136,7 +136,7 @@
       <!-- GEAR BUTTON -->
       <div
         (click)="toggleSettings()"
-        [ngClass]="{ gearButtonActive: appState.buttonsInView }"
+        [ngClass]="{ gearButtonActive: buttonsInView }"
         class="gearButton"
       >
         <span class="icon icon-gear"></span>
@@ -250,7 +250,10 @@
 
     <div
       [ngClass]="{ 'gallery-container-full-width': settingsButtons['hideSidebar'].toggled}"
-      [ngStyle]="{ 'background': settingsButtons['darkMode'].toggled ? '#000000' : '#999999' }"
+      [ngStyle]="{
+          'background': settingsButtons['darkMode'].toggled ? '#000000' : '#999999',
+          'height': 'calc(100vh - ' + ((settingsButtons['hideTop'].toggled ? 53 : 98) + (appState.menuHidden ? -32 : 0)) + 'px)'
+        }"
       (scroll)="scrollHandler($event)"
       class="gallery-container"
       #galleryArea
@@ -260,6 +263,7 @@
 
       <div
         [ngClass]="{ filmOverride: appState.currentView !== 'thumbs' }"
+        [ngStyle]="{ 'height': galleryHeight + 'px' }"
         class="gallery"
       >
 
@@ -287,22 +291,28 @@
                     index as i"
         >
 
-          <div *ngIf="appState.currentView === 'thumbs'">
+          <div *ngIf="appState.currentView === 'thumbs'" @myAnimation2>
 
             <app-gallery-item
               (click)="openVideo(i)"
+              [title]="item[2]"
               [stuff]="item[3]"
-              [folderPath]="appState.selectedOutputFolder"
+              [time]="item[4]"
+              [rez]="item[5]"
               [imgHeight]="imgHeight"
+              [folderPath]="appState.selectedOutputFolder"
+              [showMeta]="settingsButtons['showMoreInfo'].toggled"
               [hoverScrub]="settingsButtons['hoverScrub'].toggled"
               [randomImage]="settingsButtons['randomImage'].toggled"
+              [showPlaceholder]="i < canHidePrevious"
             ></app-gallery-item>
 
           </div>
 
-          <div *ngIf="appState.currentView === 'filmstrip'">
+          <div *ngIf="appState.currentView === 'filmstrip'" @myAnimation2>
 
             <app-filmstrip-item
+              [showPlaceholder]="i < canHidePrevious"
               (click)="openVideo(i)"
               [stuff]="item[3]"
               [folderPath]="appState.selectedOutputFolder"
@@ -319,14 +329,16 @@
             </div>
           </div>
 
-          <div
+          <!-- <div
             *ngIf="settingsButtons['showMoreInfo'].toggled || appState.currentView === 'files'"
             class="metadata"
+            @myAnimation2
           >
 
             <div
               *ngIf="settingsButtons['showMoreInfo'].toggled"
               class="length"
+              @myAnimation2
             >
               {{ item[4] | lengthPipe }}
             </div>
@@ -334,6 +346,7 @@
             <div
               *ngIf="settingsButtons['showMoreInfo'].toggled"
               class="size"
+              @myAnimation2
             >
               {{ item[5] }}
             </div>
@@ -342,11 +355,12 @@
               (click)="openVideo(i)"
               [ngClass]="{ 'larger-font': settingsButtons['fontSizeLarger'].toggled }"
               class="title"
+              @myAnimation2
             >
               {{ item[2] }}
             </div>
 
-          </div>
+          </div> -->
 
         </div>
 
@@ -360,8 +374,8 @@
 
 <!-- IMPORT MODAL  -->
 
-<div 
-  *ngIf="!importDone && progressPercent !== 0" 
+<div
+  *ngIf="!importDone && progressPercent !== 0"
   class="progress-modal"
   @myAnimation
 >
@@ -377,7 +391,7 @@
 
 <!-- WIZARD -->
 
-<div *ngIf="showWizard" class="wizard">
+<div *ngIf="showWizard" class="wizard" @myWizardAnimation>
   <div class="left-side">
 
     <h2>Open previous hub</h2>
@@ -442,7 +456,7 @@
     >
       3
     </div>
-    
+
     <select (change)="selectScreenshotSize($event.target.value)" class="size-dropdown">
       <option value="50">50px</option>
       <option value="75">75px</option>
@@ -475,13 +489,13 @@
     </span>
     <span class="path" *ngIf="totalNumberOfFiles !== -1">
       <span class="emphasis-number">
-        {{ totalImportTime }} 
+        {{ totalImportTime }}
       </span>
       minutes to import
     </span>
     <span class="path" *ngIf="totalNumberOfFiles !== -1">
       <span class="emphasis-number">
-        {{ totalImportSize }} 
+        {{ totalImportSize }}
       </span>
       mb of disk space
     </span>

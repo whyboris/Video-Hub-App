@@ -13,6 +13,7 @@ export class FilmstripComponent implements OnInit {
   @Input() imgHeight: number;
   @Input() stuff: any;
   @Input() width: number;
+  @Input() showPlaceholder: boolean;
 
   indexArray: Array<number> = []; // to set z-index on css
 

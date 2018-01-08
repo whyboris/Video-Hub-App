@@ -3,6 +3,12 @@
   [ngStyle]="{ height: imgHeight + 'px'}"
 >
 
+  <ng-container *ngIf="!showPlaceholder">
+
+  <span *ngIf="showMeta" class="time">{{ time | lengthPipe }}</span>
+  <span *ngIf="showMeta" class="rez">{{ rez }}</span>
+  <span *ngIf="showMeta" class="title" [ngStyle]="{ top: (imgHeight + 5) + 'px' }">{{ title }}</span>
+
   <div *ngIf="hoverScrub && hover && noError">
     <div
       *ngFor="let item of stuff; let i = index"
@@ -18,6 +24,9 @@
     [src]="sanitizer.bypassSecurityTrustUrl(folderPath + '/' + stuff[currentlyShowing])"
     [ngStyle]="{ height: imgHeight + 'px'}"
     class="screencap"
+    @myAnimation9
   >
+
+  </ng-container>
 
 </div>

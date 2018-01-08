@@ -12,7 +12,7 @@ import { AppState } from '../common/app-state';
 import { Filters } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from 'app/components/common/settings-buttons';
 
-import { myAnimation } from '../common/animations';
+import { myAnimation, myAnimation2, myWizardAnimation } from '../common/animations';
 
 @Component({
   selector: 'app-home',
@@ -29,7 +29,9 @@ import { myAnimation } from '../common/animations';
     './wizard.scss'
   ],
   animations: [
-    myAnimation
+    myAnimation,
+    myAnimation2,
+    myWizardAnimation
   ]
 })
 export class HomeComponent implements OnInit {
@@ -69,6 +71,10 @@ export class HomeComponent implements OnInit {
 
   myTimeout = null;
 
+  buttonsInView = false;
+
+  canHidePrevious = 0;
+
   // temp variables for the wizard during import
   totalNumberOfFiles = -1;
   totalImportTime = 0;
@@ -77,6 +83,9 @@ export class HomeComponent implements OnInit {
   // temp
   wordFreqArr: any;
   currResults: any = { showing: 0, total: 0 };
+
+  // for scroll
+  galleryHeight = 3000;
 
   public finalArray = [];
 
@@ -188,69 +197,63 @@ export class HomeComponent implements OnInit {
 
     // TODO -- clean up function
     if (this.appState.currentView === 'thumbs') {
+      const textPadding = (this.settingsButtons['showMoreInfo'].toggled ? 60 : 30);
+      const galleryItemHeight = (this.imgHeight + textPadding);
       // rough estimate
       const showingHorizontally = Math.floor(clientWidth / (this.imgHeight * 1.69 + 30));
-      const showingVertically = Math.floor(clientHeight / (this.imgHeight + 30));
+      const showingVertically = Math.floor(clientHeight / galleryItemHeight);
+      // console.log('showing horiz: ' + showingHorizontally);
+      // console.log('showing vert: ' + showingVertically);
+      // set the height of gallery to however much it takes to fill the gallery
+      this.galleryHeight = Math.ceil(this.currResults.total / showingHorizontally) * galleryItemHeight;
+      // figure out what % of the way there, and show that many
+      this.numberToShow = Math.ceil((scrollTop + clientHeight) / this.galleryHeight * this.currResults.total) + showingHorizontally;
 
-      console.log('showing horiz: ' + showingHorizontally);
-      console.log('showing vert: ' + showingVertically);
+      // TODO -- WIP hide stuff above
+      this.canHidePrevious = this.numberToShow - (showingHorizontally * ( showingVertically + 3));
 
-      const minToShow = showingHorizontally * showingVertically; // product of how many shown across and how many vertically
-
-      if (scrollTop + clientHeight + 600 > scrollHeight) {
-        console.log('close to bottom');
-        this.numberToShow = this.numberToShow + showingHorizontally * 2;
-
-      } else if (scrollTop + clientHeight + 1300 < scrollHeight) {
-        console.log('removing from bottom');
-        this.numberToShow = this.numberToShow - showingHorizontally * 2;
-      }
-
-      if (this.numberToShow < minToShow) {
-        this.numberToShow = minToShow + showingHorizontally;
-      }
+      // Try to animate each element rather than all at once
+      // SLOWS THINGS DOWN
+      // const finalNumber = Math.ceil((scrollTop + clientHeight) / this.galleryHeight * this.currResults.total) + showingHorizontally;
+      // this.showRemaining(finalNumber);
 
     } else if (this.appState.currentView === 'filmstrip') {
+      const textPadding = (this.settingsButtons['showMoreInfo'].toggled ? 50 : 30);
+      const galleryItemHeight = (this.imgHeight + textPadding);
+      this.galleryHeight = Math.ceil(this.currResults.total * galleryItemHeight);
+      const showingVertically = Math.ceil(clientHeight / galleryItemHeight);
+      // console.log('showing vert: ' + showingVertically);
+      // figure out what % of the way there, and show that many
+      this.numberToShow = Math.ceil((scrollTop + clientHeight) / this.galleryHeight * this.currResults.total);
 
-      const showingVertically = Math.floor(clientHeight / (this.imgHeight + 30));
-
-      console.log('showing vert: ' + showingVertically);
-
-      if (scrollTop + clientHeight + 600 > scrollHeight) {
-        console.log('close to bottom');
-        this.numberToShow = this.numberToShow + 3;
-
-      } else if (scrollTop + clientHeight + 1300 < scrollHeight) {
-        console.log('removing from bottom');
-        this.numberToShow = this.numberToShow - 3;
-      }
-
-      if (this.numberToShow < showingVertically) {
-        this.numberToShow = showingVertically + 3;
-      }
+      // TODO -- WIP hide stuff above
+      this.canHidePrevious = this.numberToShow - (showingVertically + 3);
 
     } else if (this.appState.currentView === 'files') {
-
-      const showingVertically = Math.floor(clientHeight / 20);
-
-      console.log('showing vert: ' + showingVertically);
-
-      if (scrollTop + clientHeight + 600 > scrollHeight) {
-        console.log('close to bottom');
-        this.numberToShow = this.numberToShow + 50;
-
-      } else if (scrollTop + clientHeight + 2000 < scrollHeight) {
-        console.log('removing from bottom');
-        this.numberToShow = this.numberToShow - 50;
-      }
-
-      if (this.numberToShow < showingVertically) {
-        this.numberToShow = showingVertically + 50;
-      }
-
+      // Todo -- incorporate when the font size is larger
+      this.galleryHeight = Math.ceil(this.currResults.total * 20); // rough estimate
+      this.numberToShow = Math.ceil((scrollTop + clientHeight) / this.galleryHeight * this.currResults.total) + 10; // + 10 at the bottom
     }
 
   }
+
+  // SLOWS THINGS DOWN
+  // public showRemaining(finalNumber) {
+  //   if (finalNumber > this.numberToShow) {
+
+  //     const oldNumber = this.numberToShow;
+
+  //     for (let i = 0; i < (finalNumber - oldNumber); i++) {
+  //       setTimeout(() => {
+  //         this.numberToShow = oldNumber + i;
+  //       }, i * 50);
+  //     }
+
+  //   } else {
+  //     this.numberToShow = finalNumber;
+  //   }
+
+  // }
 
   // INTERACT WITH ELECTRON
 
@@ -331,7 +334,7 @@ export class HomeComponent implements OnInit {
    * Show or hide settings
    */
   toggleSettings(): void {
-    this.appState.buttonsInView = !this.appState.buttonsInView;
+    this.buttonsInView = !this.buttonsInView;
   }
 
   /**

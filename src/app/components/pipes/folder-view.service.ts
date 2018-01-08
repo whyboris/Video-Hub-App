@@ -8,7 +8,7 @@ export class FolderViewService {
   constructor() { }
 
   shouldWeShow(folderString: string): boolean {
-    console.log(folderString);
+    // console.log(folderString);
     if (this.lastValue === folderString) {
       return false;
     } else {

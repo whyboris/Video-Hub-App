@@ -3,6 +3,8 @@
   [ngStyle]="{ height: imgHeight + 'px'}"
 >
 
+  <ng-container *ngIf="!showPlaceholder">
+
   <ng-container *ngIf="hoverScrub && hover && noError">
     <div
       *ngFor="let item of stuff; let i = index"
@@ -24,6 +26,8 @@
       [src]="sanitizer.bypassSecurityTrustUrl(folderPath + '/' + stuff[i])"
       class="screencap"
     >
+  </ng-container>
+
   </ng-container>
 
 </div>
