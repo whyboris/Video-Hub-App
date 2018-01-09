@@ -248,7 +248,7 @@
 
 <!-- THE GALLERY PANE -->
 
-    <div
+    <!-- <div
       [ngClass]="{ 'gallery-container-full-width': settingsButtons['hideSidebar'].toggled}"
       [ngStyle]="{
           'background': settingsButtons['darkMode'].toggled ? '#000000' : '#999999',
@@ -257,15 +257,50 @@
       (scroll)="scrollHandler($event)"
       class="gallery-container"
       #galleryArea
-    >
+    > -->
 
 <!-- GALLERY CODE -->
+
+<!--
 
       <div
         [ngClass]="{ filmOverride: appState.currentView !== 'thumbs' }"
         [ngStyle]="{ 'height': galleryHeight + 'px' }"
         class="gallery"
       >
+
+    -->
+
+        <virtual-scroll
+          #scroll
+          class="gallery-container"
+          [items]="finalArray"
+          [childWidth]="200"
+          [childHeight]="100"
+          [bufferAmount]="0"
+          [ngStyle]="{ 'height': 'calc(100vh - ' + ((settingsButtons['hideTop'].toggled ? 53 : 98) + (appState.menuHidden ? -32 : 0)) + 'px)' }"
+        >
+
+          <app-gallery-item
+            *ngFor="let item of scroll.viewPortItems; index as i"
+            (click)="openVideo(i)"
+            [title]="item[2]"
+            [stuff]="item[3]"
+            [time]="item[4]"
+            [rez]="item[5]"
+            [imgHeight]="imgHeight"
+            [folderPath]="appState.selectedOutputFolder"
+            [showMeta]="settingsButtons['showMoreInfo'].toggled"
+            [hoverScrub]="settingsButtons['hoverScrub'].toggled"
+            [randomImage]="settingsButtons['randomImage'].toggled"
+            [showPlaceholder]="i < canHidePrevious"
+          ></app-gallery-item>
+
+        </virtual-scroll>
+
+
+<!--
+
 
         <div
           class="item"
@@ -329,6 +364,15 @@
             </div>
           </div>
 
+
+        -->
+
+
+
+
+
+
+
           <!-- <div
             *ngIf="settingsButtons['showMoreInfo'].toggled || appState.currentView === 'files'"
             class="metadata"
@@ -362,11 +406,22 @@
 
           </div> -->
 
+
+
+
+      <!--
+
         </div>
 
-      </div> <!-- end of gallery -->
+      -->
 
-    </div> <!-- end of gallery-container -->
+      <!-- </div> -->
+
+      <!-- end of gallery -->
+
+    <!-- </div>  -->
+
+    <!-- end of gallery-container -->
 
   </div> <!-- end of window-content -->
 

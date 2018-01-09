@@ -2,6 +2,8 @@ import { Component, ChangeDetectorRef, OnInit, HostListener, ViewChild, ElementR
 
 import { setTimeout } from 'timers';
 
+import { VirtualScrollComponent } from 'angular2-virtual-scroll';
+
 import { ElectronService } from '../../providers/electron.service';
 import { ShowLimitService } from 'app/components/pipes/show-limit.service';
 import { WordFrequencyService } from 'app/components/pipes/word-frequency.service';
@@ -37,6 +39,9 @@ import { myAnimation, myAnimation2, myWizardAnimation } from '../common/animatio
 export class HomeComponent implements OnInit {
 
   @ViewChild('galleryArea') galleryDiv: ElementRef;
+
+  @ViewChild(VirtualScrollComponent)
+  virtualScroll: VirtualScrollComponent;
 
   settingsButtons = SettingsButtons;
   settingsButtonsGroups = SettingsButtonsGroups;
@@ -85,7 +90,7 @@ export class HomeComponent implements OnInit {
   currResults: any = { showing: 0, total: 0 };
 
   // for scroll
-  galleryHeight = 3000;
+  galleryHeight = 1000;
 
   public finalArray = [];
 
@@ -185,10 +190,17 @@ export class HomeComponent implements OnInit {
     }, delay);
   }
 
+  scrollTo() {
+    this.virtualScroll.scrollInto(this.finalArray[50]);
+  }
+
   /**
    * Updates the `numberToShow` by computing available area in the `galleryDiv` (aka `galleryArea`)
    */
   public updateMaxToShow() {
+
+    return;
+    console.log('does not execute!');
 
     const clientHeight = this.galleryDiv.nativeElement.clientHeight;
     const clientWidth = this.galleryDiv.nativeElement.clientWidth;
@@ -302,6 +314,7 @@ export class HomeComponent implements OnInit {
   }
 
   public openVideo(number): void {
+    this.scrollTo();
     this.currentPlayingFolder = this.finalArray[number][0];
     this.currentPlayingFile = this.finalArray[number][2];
     const fullPath = this.appState.selectedSourceFolder + this.finalArray[number][0] + '/' + this.finalArray[number][1];

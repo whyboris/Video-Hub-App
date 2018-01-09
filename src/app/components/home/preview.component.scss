@@ -4,7 +4,9 @@
   height: 100px;
   overflow: visible;
   position: relative;
-  width: 100%;
+  width: 15%; /* TODO -- FIX UP */
+  display: inline-block;
+  margin: 20px;
 }
 
 .hoverable {
@@ -24,6 +26,7 @@
 }
 
 img:before {
+  /* TODO -- FIX */
   content: 'lol u mad?';  /* to prevent broken img icon from showing up */
   display: block;
   font-size: 20px;
