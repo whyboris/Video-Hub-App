@@ -1,6 +1,7 @@
 <div
   class="filmstrip-container"
   [ngStyle]="{ height: imgHeight + 'px'}"
+  @galleryItemAppear
 >
 
   <ng-container *ngIf="!showPlaceholder">
@@ -24,7 +25,6 @@
     [src]="sanitizer.bypassSecurityTrustUrl(folderPath + '/' + stuff[currentlyShowing])"
     [ngStyle]="{ height: imgHeight + 'px'}"
     class="screencap"
-    @myAnimation9
   >
 
   </ng-container>
