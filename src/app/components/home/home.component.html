@@ -229,7 +229,7 @@
 
       <!-- total found -->
       <div class="filteringTotal">
-        <span>Showing {{ numberToShow }} / {{ currResults.total }} found</span>
+        <span>{{ currResults.total }} found</span>
       </div>
 
       <!-- word cloud -->
@@ -274,15 +274,22 @@
         <virtual-scroll
           #scroll
           class="gallery-container"
-          [items]="finalArray"
+          [items]="finalArray | magicSearchPipe: magicSearchString
+                    | fileSearchPipe: filters[0].array : filters[0].bool : true  : false : false
+                    | fileSearchPipe: filters[1].array : filters[1].bool : false : false : false
+                    | fileSearchPipe: filters[2].array : filters[2].bool : true  : true : false
+                    | fileSearchPipe: filters[3].array : filters[3].bool : false : true : false
+                    | fileSearchPipe: filters[4].array : filters[4].bool : true : true : true
+                    | wordFrequencyPipe: true
+                    | limitPipe"
           [childWidth]="200"
-          [childHeight]="100"
-          [bufferAmount]="0"
+          [childHeight]="145.5"
+          [bufferAmount]="10"
           [ngStyle]="{ 'height': 'calc(100vh - ' + ((settingsButtons['hideTop'].toggled ? 53 : 98) + (appState.menuHidden ? -32 : 0)) + 'px)' }"
         >
 
           <app-gallery-item
-            *ngFor="let item of scroll.viewPortItems; index as i"
+            *ngFor="let item of scroll.viewPortItems"
             (click)="openVideo(i)"
             [title]="item[2]"
             [stuff]="item[3]"

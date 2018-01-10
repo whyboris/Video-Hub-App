@@ -72,8 +72,6 @@ export class HomeComponent implements OnInit {
 
   screenshotSizeForImport = 100;
 
-  numberToShow = 5; // temporary 5 -- this limits how many thumbs shown
-
   myTimeout = null;
 
   buttonsInView = false;
@@ -90,7 +88,7 @@ export class HomeComponent implements OnInit {
   currResults: any = { showing: 0, total: 0 };
 
   // for scroll
-  galleryHeight = 1000;
+  // galleryHeight = 1000;
 
   public finalArray = [];
 
@@ -156,7 +154,6 @@ export class HomeComponent implements OnInit {
       this.importDone = true;
       this.showWizard = false;
       this.finalArray = finalObject.images;
-      this.numberToShow = 5; // TEMP !!!!!!
     });
 
     // Returning settings
@@ -185,87 +182,9 @@ export class HomeComponent implements OnInit {
     const delay = msDelay !== undefined ? msDelay : 250;
     clearTimeout(this.myTimeout);
     this.myTimeout = setTimeout(() => {
-      console.log('updating MAX !!!');
-      this.updateMaxToShow();
+      console.log('DEBOUNCED ACTION !!!');
     }, delay);
   }
-
-  scrollTo() {
-    this.virtualScroll.scrollInto(this.finalArray[50]);
-  }
-
-  /**
-   * Updates the `numberToShow` by computing available area in the `galleryDiv` (aka `galleryArea`)
-   */
-  public updateMaxToShow() {
-
-    return;
-    console.log('does not execute!');
-
-    const clientHeight = this.galleryDiv.nativeElement.clientHeight;
-    const clientWidth = this.galleryDiv.nativeElement.clientWidth;
-    const scrollTop = this.galleryDiv.nativeElement.scrollTop;
-    const scrollHeight = this.galleryDiv.nativeElement.scrollHeight;
-
-    // TODO -- clean up function
-    if (this.appState.currentView === 'thumbs') {
-      const textPadding = (this.settingsButtons['showMoreInfo'].toggled ? 60 : 30);
-      const galleryItemHeight = (this.imgHeight + textPadding);
-      // rough estimate
-      const showingHorizontally = Math.floor(clientWidth / (this.imgHeight * 1.69 + 30));
-      const showingVertically = Math.floor(clientHeight / galleryItemHeight);
-      // console.log('showing horiz: ' + showingHorizontally);
-      // console.log('showing vert: ' + showingVertically);
-      // set the height of gallery to however much it takes to fill the gallery
-      this.galleryHeight = Math.ceil(this.currResults.total / showingHorizontally) * galleryItemHeight;
-      // figure out what % of the way there, and show that many
-      this.numberToShow = Math.ceil((scrollTop + clientHeight) / this.galleryHeight * this.currResults.total) + showingHorizontally;
-
-      // TODO -- WIP hide stuff above
-      this.canHidePrevious = this.numberToShow - (showingHorizontally * ( showingVertically + 3));
-
-      // Try to animate each element rather than all at once
-      // SLOWS THINGS DOWN
-      // const finalNumber = Math.ceil((scrollTop + clientHeight) / this.galleryHeight * this.currResults.total) + showingHorizontally;
-      // this.showRemaining(finalNumber);
-
-    } else if (this.appState.currentView === 'filmstrip') {
-      const textPadding = (this.settingsButtons['showMoreInfo'].toggled ? 50 : 30);
-      const galleryItemHeight = (this.imgHeight + textPadding);
-      this.galleryHeight = Math.ceil(this.currResults.total * galleryItemHeight);
-      const showingVertically = Math.ceil(clientHeight / galleryItemHeight);
-      // console.log('showing vert: ' + showingVertically);
-      // figure out what % of the way there, and show that many
-      this.numberToShow = Math.ceil((scrollTop + clientHeight) / this.galleryHeight * this.currResults.total);
-
-      // TODO -- WIP hide stuff above
-      this.canHidePrevious = this.numberToShow - (showingVertically + 3);
-
-    } else if (this.appState.currentView === 'files') {
-      // Todo -- incorporate when the font size is larger
-      this.galleryHeight = Math.ceil(this.currResults.total * 20); // rough estimate
-      this.numberToShow = Math.ceil((scrollTop + clientHeight) / this.galleryHeight * this.currResults.total) + 10; // + 10 at the bottom
-    }
-
-  }
-
-  // SLOWS THINGS DOWN
-  // public showRemaining(finalNumber) {
-  //   if (finalNumber > this.numberToShow) {
-
-  //     const oldNumber = this.numberToShow;
-
-  //     for (let i = 0; i < (finalNumber - oldNumber); i++) {
-  //       setTimeout(() => {
-  //         this.numberToShow = oldNumber + i;
-  //       }, i * 50);
-  //     }
-
-  //   } else {
-  //     this.numberToShow = finalNumber;
-  //   }
-
-  // }
 
   // INTERACT WITH ELECTRON
 
@@ -314,7 +233,6 @@ export class HomeComponent implements OnInit {
   }
 
   public openVideo(number): void {
-    this.scrollTo();
     this.currentPlayingFolder = this.finalArray[number][0];
     this.currentPlayingFile = this.finalArray[number][2];
     const fullPath = this.appState.selectedSourceFolder + this.finalArray[number][0] + '/' + this.finalArray[number][1];
@@ -360,34 +278,20 @@ export class HomeComponent implements OnInit {
       this.settingsButtons['showFilmstrip'].toggled = false;
       this.settingsButtons['showFiles'].toggled = false;
       this.appState.currentView = 'thumbs';
-      if (this.numberToShow > 40) {
-        this.numberToShow = 40;
-      }
-      this.debounceUpdateMax(0);
     } else if (uniqueKey === 'showFilmstrip') {
       this.settingsButtons['showThumbnails'].toggled = false;
       this.settingsButtons['showFilmstrip'].toggled = true;
       this.settingsButtons['showFiles'].toggled = false;
       this.appState.currentView = 'filmstrip';
-      if (this.numberToShow > 20) {
-        this.numberToShow = 20;
-      }
-      this.debounceUpdateMax(0);
     } else if (uniqueKey === 'showFiles') {
       this.settingsButtons['showThumbnails'].toggled = false;
       this.settingsButtons['showFilmstrip'].toggled = false;
       this.settingsButtons['showFiles'].toggled = true;
       this.appState.currentView = 'files';
-      if (this.numberToShow < 80) {
-        this.numberToShow = 80;
-      }
-      this.debounceUpdateMax(0);
     } else if (uniqueKey === 'makeSmaller') {
       this.decreaseSize();
-      this.debounceUpdateMax();
     } else if (uniqueKey === 'makeLarger') {
       this.increaseSize();
-      this.debounceUpdateMax();
     } else if (uniqueKey === 'startWizard') {
       this.startWizard();
     } else if (uniqueKey === 'rescanDirectory') {
