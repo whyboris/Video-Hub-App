@@ -1,12 +1,15 @@
 .filmstrip-container {
+  position: relative;
+  display: inline-block;
+  margin: 20px 20px 5px;
+  overflow: hidden;
+  width: 200px; /* TODO -- FIX UP */
+}
+
+.video-box {
+  position: relative;
   background: black;
   box-shadow: 2px 2px 7px rgba(0,0,0,0.2);
-  height: 100px;
-  overflow: hidden;
-  position: relative;
-  width: 15%; /* TODO -- FIX UP */
-  display: inline-block;
-  margin: 20px;
 }
 
 .hoverable {
@@ -26,7 +29,6 @@
 }
 
 img:before {
-  /* TODO -- FIX */
   content: 'lol u mad?';  /* to prevent broken img icon from showing up */
   display: block;
   font-size: 10px;
@@ -54,8 +56,17 @@ img:before {
 
 .title {
   position: absolute;
-  z-index: 2;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
   color: #5D5D5D;
-  font-size: 12px;
   cursor: pointer;
+  display: -webkit-box;
+  font-size: 12px;
+  margin: 6px 2px 0px;
+  max-height: 54px;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  width: 100%;
+  word-wrap: break-word;
 }

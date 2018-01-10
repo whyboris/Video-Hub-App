@@ -7,7 +7,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-// DISABLE THIS LATER !!?!?!?!?!!!
 import { VirtualScrollModule } from 'angular2-virtual-scroll';
 
 import { ElectronService } from './providers/electron.service';

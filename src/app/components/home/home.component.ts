@@ -76,8 +76,6 @@ export class HomeComponent implements OnInit {
 
   buttonsInView = false;
 
-  canHidePrevious = 0;
-
   // temp variables for the wizard during import
   totalNumberOfFiles = -1;
   totalImportTime = 0;
