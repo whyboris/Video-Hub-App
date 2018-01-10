@@ -16,16 +16,16 @@ import { ShowLimitService } from 'app/components/pipes/show-limit.service';
 import { WordFrequencyService } from 'app/components/pipes/word-frequency.service';
 
 import { AppComponent } from './app.component';
-import { FilmstripComponent } from 'app/components/home/filmstrip.component';
+import { FilmstripComponent } from 'app/components/home/filmstrip/filmstrip.component';
 import { HomeComponent } from './components/home/home.component';
-import { PreviewComponent } from './components/home/preview.component';
+import { PreviewComponent } from './components/home/thumbnail/preview.component';
 import { TopComponent } from './components/home/top.component';
 
 import { FileSearchPipe } from './components/pipes/file-search.pipe';
 import { FolderArrowsPipe } from 'app/components/pipes/folder-arrows.pipe';
 import { FolderViewPipe } from 'app/components/pipes/folder-view.pipe';
 import { LengthPipe } from './components/pipes/length.pipe';
-import { LimitPipe } from './components/pipes/show-limit.pipe';
+import { CountPipe } from './components/pipes/count.pipe';
 import { MagicSearchPipe } from './components/pipes/magic-search.pipe';
 import { WordFrequencyPipe } from 'app/components/pipes/word-frequency.pipe';
 
@@ -40,7 +40,7 @@ import { AppRoutingModule } from './app-routing.module';
     FolderViewPipe,
     HomeComponent,
     LengthPipe,
-    LimitPipe,
+    CountPipe,
     MagicSearchPipe,
     PreviewComponent,
     TopComponent,

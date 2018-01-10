@@ -3,9 +3,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { ShowLimitService } from './show-limit.service';
 
 @Pipe({
-  name: 'limitPipe'
+  name: 'countPipe'
 })
-export class LimitPipe implements PipeTransform {
+export class CountPipe implements PipeTransform {
 
   constructor(
     public showLimitService: ShowLimitService

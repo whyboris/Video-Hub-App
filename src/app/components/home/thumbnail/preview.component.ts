@@ -1,6 +1,6 @@
 import { Component, HostListener, Input, OnInit, OnDestroy } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { galleryItemAppear } from '../common/animations';
+import { galleryItemAppear } from '../../common/animations';
 
 @Component({
   selector: 'app-gallery-item',

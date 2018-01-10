@@ -2,7 +2,7 @@
   background: black;
   box-shadow: 2px 2px 7px rgba(0,0,0,0.2);
   height: 100px;
-  overflow: visible;
+  overflow: hidden;
   position: relative;
   width: 15%; /* TODO -- FIX UP */
   display: inline-block;
@@ -29,8 +29,10 @@ img:before {
   /* TODO -- FIX */
   content: 'lol u mad?';  /* to prevent broken img icon from showing up */
   display: block;
-  font-size: 20px;
-  margin-top: 1000px;
+  font-size: 10px;
+  margin-top: 500px;
+  color: black;
+  opacity: 0;
 }
 
 .time, .rez {
