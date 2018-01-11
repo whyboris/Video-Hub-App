@@ -1,5 +1,8 @@
 <div
-  [ngStyle]="{ height: (imgHeight + 55) + 'px'}"
+  [ngStyle]="{
+    height: elHeight + 'px',
+    width: elWidth + 'px'
+  }"
   class="filmstrip-container"
   @galleryItemAppear
 >

@@ -85,8 +85,9 @@ export class HomeComponent implements OnInit {
   wordFreqArr: any;
   currResults: any = { showing: 0, total: 0 };
 
-  // for scroll
-  // galleryHeight = 1000;
+  // for text padding below filmstrip or thumbnail element
+  textPaddingHeight: number;
+  previewWidth: number;
 
   public finalArray = [];
 
@@ -276,16 +277,19 @@ export class HomeComponent implements OnInit {
       this.settingsButtons['showFilmstrip'].toggled = false;
       this.settingsButtons['showFiles'].toggled = false;
       this.appState.currentView = 'thumbs';
+      this.computeTextBufferAmount();
     } else if (uniqueKey === 'showFilmstrip') {
       this.settingsButtons['showThumbnails'].toggled = false;
       this.settingsButtons['showFilmstrip'].toggled = true;
       this.settingsButtons['showFiles'].toggled = false;
       this.appState.currentView = 'filmstrip';
+      this.computeTextBufferAmount();
     } else if (uniqueKey === 'showFiles') {
       this.settingsButtons['showThumbnails'].toggled = false;
       this.settingsButtons['showFilmstrip'].toggled = false;
       this.settingsButtons['showFiles'].toggled = true;
       this.appState.currentView = 'files';
+      this.computeTextBufferAmount();
     } else if (uniqueKey === 'makeSmaller') {
       this.decreaseSize();
     } else if (uniqueKey === 'makeLarger') {
@@ -296,6 +300,9 @@ export class HomeComponent implements OnInit {
       this.rescanDirectory();
     } else {
       this.settingsButtons[uniqueKey].toggled = !this.settingsButtons[uniqueKey].toggled;
+      if (uniqueKey === 'showMoreInfo') {
+        this.computeTextBufferAmount();
+      }
     }
   }
 
@@ -332,6 +339,7 @@ export class HomeComponent implements OnInit {
     if (this.imgHeight > 50) {
       this.imgHeight = this.imgHeight - 25;
     }
+    this.computeTextBufferAmount();
   }
 
   /**
@@ -341,6 +349,30 @@ export class HomeComponent implements OnInit {
     if (this.imgHeight < 300) {
       this.imgHeight = this.imgHeight + 25;
     }
+    this.computeTextBufferAmount();
+  }
+
+  /**
+   * Compute the number of pixels needed to add to the preview item
+   * Thumbnails need more space for the text
+   * Filmstrip needs less
+   */
+  public computeTextBufferAmount(): void {
+    if (this.settingsButtons.showThumbnails.toggled) {
+      this.previewWidth = Math.ceil((this.imgHeight / 100) * 174);
+      if (this.settingsButtons.showMoreInfo.toggled) {
+        this.textPaddingHeight = 55;
+      } else {
+        this.textPaddingHeight = 20;
+      }
+    } else if (this.settingsButtons.showFilmstrip.toggled) {
+      if (this.settingsButtons.showMoreInfo.toggled) {
+        this.textPaddingHeight = 0;
+      } else {
+        this.textPaddingHeight = 0;
+      }
+    }
+    console.log('textPaddingHeight = ' + this.textPaddingHeight);
   }
 
   /**
@@ -458,6 +490,7 @@ export class HomeComponent implements OnInit {
         this.settingsButtons[element].hidden = settingsObject.buttonSettings[element].hidden;
       }
     });
+    this.computeTextBufferAmount();
   }
 
 }

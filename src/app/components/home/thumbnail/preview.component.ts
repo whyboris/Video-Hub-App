@@ -12,14 +12,16 @@ import { galleryItemAppear } from '../../common/animations';
 })
 export class PreviewComponent implements OnInit, OnDestroy {
 
+  @Input() elHeight: number;
+  @Input() elWidth: number;
   @Input() folderPath: string;
   @Input() hoverScrub: boolean;
   @Input() imgHeight: number;
   @Input() randomImage: boolean;
-  @Input() stuff: any;
-  @Input() time: string;
   @Input() rez: string;
   @Input() showMeta: boolean;
+  @Input() stuff: any;
+  @Input() time: string;
   @Input() title: string;
 
   hover: boolean;
