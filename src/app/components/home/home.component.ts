@@ -339,7 +339,6 @@ export class HomeComponent implements OnInit {
     if (this.imgHeight > 50) {
       this.imgHeight = this.imgHeight - 25;
     }
-    this.computeTextBufferAmount();
   }
 
   /**
@@ -349,7 +348,6 @@ export class HomeComponent implements OnInit {
     if (this.imgHeight < 300) {
       this.imgHeight = this.imgHeight + 25;
     }
-    this.computeTextBufferAmount();
   }
 
   /**
@@ -367,7 +365,7 @@ export class HomeComponent implements OnInit {
       }
     } else if (this.settingsButtons.showFilmstrip.toggled) {
       if (this.settingsButtons.showMoreInfo.toggled) {
-        this.textPaddingHeight = 0;
+        this.textPaddingHeight = 20;
       } else {
         this.textPaddingHeight = 0;
       }

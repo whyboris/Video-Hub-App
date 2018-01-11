@@ -8,12 +8,15 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class FilmstripComponent implements OnInit {
 
+  @Input() elHeight: number;
   @Input() folderPath: string;
   @Input() hoverScrub: boolean;
+  @Input() imgId: any;
   @Input() imgHeight: number;
-  @Input() stuff: any;
-  @Input() width: number;
+  @Input() imgWidth: number;
   @Input() showPlaceholder: boolean;
+  @Input() title: string;
+  @Input() showMeta: boolean;
 
   indexArray: Array<number> = []; // to set z-index on css
 
@@ -32,17 +35,17 @@ export class FilmstripComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.stuff is `undefined` when no screenshot taken -- because of ffmpeg extraction error
-    if (this.stuff === undefined) {
+    // this.imgId is `undefined` when no screenshot taken -- because of ffmpeg extraction error
+    if (this.imgId === undefined) {
       this.noError = false;
     }
 
     // hack -- populate hardcoded values -- fix later
-    const fileNumber = this.stuff;
-    this.stuff = [];
+    const fileNumber = this.imgId;
+    this.imgId = [];
 
     for (let i = 0; i < 10; i++) {
-      this.stuff[i] = 'boris/' + fileNumber + '-' + (i + 1) + '.jpg';
+      this.imgId[i] = 'boris/' + fileNumber + '-' + (i + 1) + '.jpg';
       this.indexArray[i] = 10 - i;
     }
   }

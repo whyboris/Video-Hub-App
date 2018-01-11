@@ -20,7 +20,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
   @Input() randomImage: boolean;
   @Input() rez: string;
   @Input() showMeta: boolean;
-  @Input() stuff: any;
+  @Input() imgId: any;
   @Input() time: string;
   @Input() title: string;
 
@@ -41,16 +41,16 @@ export class PreviewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // this.stuff is `undefined` when no screenshot taken -- because of ffmpeg extraction error
-    if (this.stuff === undefined) {
+    // this.imgId is `undefined` when no screenshot taken -- because of ffmpeg extraction error
+    if (this.imgId === undefined) {
       this.noError = false;
     }
     // hack -- populate hardcoded values -- fix later
-    const fileNumber = this.stuff;
-    this.stuff = [];
+    const fileNumber = this.imgId;
+    this.imgId = [];
 
     for (let i = 0; i < 10; i++) {
-      this.stuff[i] = 'boris/' + fileNumber + '-' + (i + 1) + '.jpg';
+      this.imgId[i] = 'boris/' + fileNumber + '-' + (i + 1) + '.jpg';
     }
 
     // this.loop(); // disabled -- can have a toggle in gallery that will feed variable as input into this component that will start

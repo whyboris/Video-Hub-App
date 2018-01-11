@@ -17,7 +17,7 @@
 
   <div *ngIf="hoverScrub && hover && noError">
     <div
-      *ngFor="let item of stuff; let i = index"
+      *ngFor="let item of imgId; let i = index"
       (mouseover)="showThisOne(i)"
       [ngStyle]="{'left': 10 * i + '%' }"
       class="hoverable"
@@ -27,7 +27,7 @@
 
   <img
     *ngIf="noError"
-    [src]="sanitizer.bypassSecurityTrustUrl(folderPath + '/' + stuff[currentlyShowing])"
+    [src]="sanitizer.bypassSecurityTrustUrl(folderPath + '/' + imgId[currentlyShowing])"
     [ngStyle]="{ height: imgHeight + 'px' }"
     class="screencap"
   >

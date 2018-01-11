@@ -274,9 +274,12 @@
         <virtual-scroll
           #scroll
           class="gallery-container"
-          [ngStyle]="{ 'height': 'calc(100vh - ' + ((settingsButtons['hideTop'].toggled ? 53 : 98) + (appState.menuHidden ? -32 : 0)) + 'px)' }"
+          [ngStyle]="{
+              'height': 'calc(100vh - ' + ((settingsButtons['hideTop'].toggled ? 53 : 98) + (appState.menuHidden ? -32 : 0)) + 'px)',
+              'background': settingsButtons['darkMode'].toggled ? '#000000' : '#999999'
+            }"
           [bufferAmount]="0"
-          [childHeight]="imgHeight + textPaddingHeight + 24"
+          [childHeight]="imgHeight + textPaddingHeight + 20 + ( appState.currentView === 'thumbs' ? 4 : 0)"
           [items]="finalArray | magicSearchPipe: magicSearchString
                     | fileSearchPipe: filters[0].array : filters[0].bool : true  : false : false
                     | fileSearchPipe: filters[1].array : filters[1].bool : false : false : false
@@ -287,26 +290,45 @@
                     | countPipe"
         >
 
+        <!-- 24 above is 20 pixels for element and 4 for the fudge factor -->
+
         <!-- [childWidth]="200" obove not needed
                 it can only take a number, but if nothing is entered
                 it uses the width of the first child element
                 so I can set 100vw for filmstrip -->
 
-          <app-gallery-item
-            *ngFor="let item of scroll.viewPortItems"
-            (click)="openVideo(i)"
-            [title]="item[2]"
-            [stuff]="item[3]"
-            [time]="item[4]"
-            [rez]="item[5]"
-            [imgHeight]="imgHeight"
-            [elHeight]="imgHeight + textPaddingHeight"
-            [elWidth]="previewWidth"
-            [folderPath]="appState.selectedOutputFolder"
-            [showMeta]="settingsButtons['showMoreInfo'].toggled"
-            [hoverScrub]="settingsButtons['hoverScrub'].toggled"
-            [randomImage]="settingsButtons['randomImage'].toggled"
-          ></app-gallery-item>
+          <ng-container *ngIf="appState.currentView === 'thumbs'; else filmStripView">
+            <app-gallery-item
+              *ngFor="let item of scroll.viewPortItems"
+              (click)="openVideo(i)"
+              [title]="item[2]"
+              [imgId]="item[3]"
+              [time]="item[4]"
+              [rez]="item[5]"
+              [imgHeight]="imgHeight"
+              [elHeight]="imgHeight + textPaddingHeight"
+              [elWidth]="previewWidth"
+              [folderPath]="appState.selectedOutputFolder"
+              [showMeta]="settingsButtons['showMoreInfo'].toggled"
+              [hoverScrub]="settingsButtons['hoverScrub'].toggled"
+              [randomImage]="settingsButtons['randomImage'].toggled"
+            ></app-gallery-item>
+          </ng-container>
+
+          <ng-template #filmStripView>
+            <app-filmstrip-item
+              *ngFor="let item of scroll.viewPortItems"
+              (click)="openVideo(i)"
+              [imgId]="item[3]"
+              [title]="item[2]"
+              [elHeight]="imgHeight + textPaddingHeight"
+              [imgWidth]="(imgHeight / 100) * item[6] || (imgHeight / 100) * 171"
+              [imgHeight]="imgHeight"
+              [folderPath]="appState.selectedOutputFolder"
+              [showMeta]="settingsButtons['showMoreInfo'].toggled"
+              [hoverScrub]="settingsButtons['hoverScrub'].toggled"
+            ></app-filmstrip-item>
+          </ng-template>
 
         </virtual-scroll>
 
