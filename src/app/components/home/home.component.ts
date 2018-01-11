@@ -339,6 +339,7 @@ export class HomeComponent implements OnInit {
     if (this.imgHeight > 50) {
       this.imgHeight = this.imgHeight - 25;
     }
+    this.computePreviewWidth();
   }
 
   /**
@@ -348,6 +349,14 @@ export class HomeComponent implements OnInit {
     if (this.imgHeight < 300) {
       this.imgHeight = this.imgHeight + 25;
     }
+    this.computePreviewWidth();
+  }
+
+  /**
+   * Computes the preview width for thumbnails view
+   */
+  public computePreviewWidth(): void {
+    this.previewWidth = Math.ceil((this.imgHeight / 100) * 174);
   }
 
   /**
@@ -356,8 +365,8 @@ export class HomeComponent implements OnInit {
    * Filmstrip needs less
    */
   public computeTextBufferAmount(): void {
+    this.computePreviewWidth();
     if (this.settingsButtons.showThumbnails.toggled) {
-      this.previewWidth = Math.ceil((this.imgHeight / 100) * 174);
       if (this.settingsButtons.showMoreInfo.toggled) {
         this.textPaddingHeight = 55;
       } else {
