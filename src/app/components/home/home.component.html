@@ -278,6 +278,7 @@
               'height': 'calc(100vh - ' + ((settingsButtons['hideTop'].toggled ? 53 : 98) + (appState.menuHidden ? -32 : 0)) + 'px)',
               'background': settingsButtons['darkMode'].toggled ? '#000000' : '#999999'
             }"
+          [ngClass]="{ 'gallery-container-full-width': settingsButtons['hideSidebar'].toggled}"
           [bufferAmount]="0"
           [childHeight]="imgHeight + textPaddingHeight + 20 + ( appState.currentView === 'thumbs' ? 4 : 0)"
           [items]="finalArray | magicSearchPipe: magicSearchString

@@ -24,7 +24,6 @@ import { myAnimation, myAnimation2, myWizardAnimation } from '../common/animatio
     './settings.scss',
     './buttons.scss',
     './search.scss',
-    './photon/buttons.scss',
     './photon/icons.scss',
     './gallery.scss',
     './film-override.scss',
@@ -167,13 +166,6 @@ export class HomeComponent implements OnInit {
   }
 
   /**
-   * Update max to view when scrolling
-   */
-  public scrollHandler(event) {
-    this.debounceUpdateMax();
-  }
-
-  /**
    * Low-tech debounced scroll handler
    */
   public debounceUpdateMax(msDelay?: number): void {
@@ -181,11 +173,12 @@ export class HomeComponent implements OnInit {
     const delay = msDelay !== undefined ? msDelay : 250;
     clearTimeout(this.myTimeout);
     this.myTimeout = setTimeout(() => {
-      console.log('DEBOUNCED ACTION !!!');
+      console.log('Virtual scroll refreshed');
+      this.virtualScroll.refresh()
     }, delay);
   }
 
-  // INTERACT WITH ELECTRON
+  // ---------------- INTERACT WITH ELECTRON ------------------ //
 
   // Send initial hello message -- used to grab settings
   public justStarted(): void {
@@ -302,6 +295,11 @@ export class HomeComponent implements OnInit {
       this.settingsButtons[uniqueKey].toggled = !this.settingsButtons[uniqueKey].toggled;
       if (uniqueKey === 'showMoreInfo') {
         this.computeTextBufferAmount();
+      }
+      if (uniqueKey === 'hideSidebar') {
+        setTimeout(() => {
+          this.virtualScroll.refresh();
+        }, 300);
       }
     }
   }
