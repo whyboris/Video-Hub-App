@@ -1,0 +1,59 @@
+@import "../variables";
+
+.element-container {
+  margin: 10px 20px;
+  position: relative;
+}
+
+.length,
+.size {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 10px;
+  position: absolute;
+  display: block;
+  z-index: 200;
+  // text-shadow: 0 0 1px black;
+}
+
+.length {
+  right: 0;
+  // transform: translate(-4px, 24.5px);
+}
+
+.size {
+  left: 0;
+  // transform: translate(4px, 24.5px);
+}
+
+.folder {
+  display: inline-block;
+  font-size: 10px;
+}
+
+.folder {
+  color: #333333;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.icon-folder-blank {
+  color: $gray-70;
+  margin-right: 2px;
+  position: absolute;
+  transform: translate(-14px, 1px);
+}
+
+.title {
+  color: #5D5D5D;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 12px;
+  margin: 0 30px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  white-space: nowrap;
+  width: 100%;
+}

@@ -1,0 +1,25 @@
+<div
+  class="element-container"
+  [ngStyle]="{ height: elHeight + 'px'}"
+  @galleryItemAppear
+>
+
+  <div *ngIf="showFolder">
+    <span class="icon icon-folder-blank"></span>
+    <span class="folder" [innerHtml]="folderPath | folderArrowsPipe"></span>
+  </div>
+
+
+  <div class="size">
+    {{ ( rez ? rez : 'HD' ) }}
+  </div>
+
+  <div class="length">
+    {{ time | lengthPipe }}
+  </div>
+
+  <div class="title">
+    {{ title }} filename is very long lololololol
+  </div>
+
+</div>

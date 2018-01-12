@@ -14,7 +14,7 @@ import { AppState } from '../common/app-state';
 import { Filters } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from 'app/components/common/settings-buttons';
 
-import { myAnimation, myAnimation2, myWizardAnimation } from '../common/animations';
+import { myAnimation, myAnimation2, myWizardAnimation, galleryItemAppear } from '../common/animations';
 
 @Component({
   selector: 'app-home',

@@ -5,10 +5,8 @@ import { galleryItemAppear } from '../../common/animations';
 @Component({
   selector: 'app-gallery-item',
   templateUrl: './preview.component.html',
-  styleUrls: ['./preview.component.scss'],
-  animations: [
-    galleryItemAppear
-  ]
+  styleUrls: [ './preview.component.scss' ],
+  animations: [ galleryItemAppear ]
 })
 export class PreviewComponent implements OnInit, OnDestroy {
 

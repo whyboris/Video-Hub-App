@@ -331,6 +331,24 @@
             ></app-filmstrip-item>
           </ng-template>
 
+          <!-- disable above
+            then enable below to show filenames
+            make the childHeight responsive to file view -->
+
+            <!-- <app-file-item
+              *ngFor="let item of scroll.viewPortItems"
+              [folderPath]="item[0]"
+              [title]="item[2]"
+              (click)="openVideo(item[3])"
+              [time]="item[4]"
+              [rez]="item[5]"
+              [elHeight]="30"
+              [showFolder]="true | folderViewPipe: item[0]"
+              [showMeta]="settingsButtons['showMoreInfo'].toggled"
+              [hoverScrub]="settingsButtons['hoverScrub'].toggled"
+            ></app-file-item> -->
+
+
         </virtual-scroll>
 
 
@@ -402,10 +420,6 @@
 
 
 
-
-
-
-
           <!-- <div
             *ngIf="settingsButtons['showMoreInfo'].toggled || appState.currentView === 'files'"
             class="metadata"
@@ -438,8 +452,6 @@
             </div>
 
           </div> -->
-
-
 
 
       <!--

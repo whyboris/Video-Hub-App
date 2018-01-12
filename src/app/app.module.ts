@@ -16,6 +16,7 @@ import { WordFrequencyService } from 'app/components/pipes/word-frequency.servic
 
 import { AppComponent } from './app.component';
 import { FilmstripComponent } from 'app/components/home/filmstrip/filmstrip.component';
+import { FileComponent } from 'app/components/home/file/file.component';
 import { HomeComponent } from './components/home/home.component';
 import { PreviewComponent } from './components/home/thumbnail/preview.component';
 import { TopComponent } from './components/home/top.component';
@@ -33,6 +34,7 @@ import { AppRoutingModule } from './app-routing.module';
 @NgModule({
   declarations: [
     AppComponent,
+    FileComponent,
     FileSearchPipe,
     FilmstripComponent,
     FolderArrowsPipe,

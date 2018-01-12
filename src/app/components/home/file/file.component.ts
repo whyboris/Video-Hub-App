@@ -3,22 +3,26 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { galleryItemAppear } from '../../common/animations';
 
 @Component({
-  selector: 'app-filmstrip-item',
-  templateUrl: './filmstrip.component.html',
-  styleUrls: ['./filmstrip.component.scss'],
+  selector: 'app-file-item',
+  templateUrl: './file.component.html',
+  styleUrls: ['./file.component.scss',
+              '../photon/icons.scss'],
   animations: [galleryItemAppear]
 })
-export class FilmstripComponent implements OnInit {
+export class FileComponent implements OnInit {
 
   @Input() elHeight: number;
+  @Input() elWidth: number;
   @Input() folderPath: string;
   @Input() hoverScrub: boolean;
-  @Input() imgId: any;
   @Input() imgHeight: number;
-  @Input() imgWidth: number;
-  @Input() showPlaceholder: boolean;
-  @Input() title: string;
+  @Input() randomImage: boolean;
+  @Input() rez: string;
   @Input() showMeta: boolean;
+  @Input() imgId: any;
+  @Input() time: string;
+  @Input() title: string;
+  @Input() showFolder: boolean;
 
   indexArray: Array<number> = []; // to set z-index on css
 
