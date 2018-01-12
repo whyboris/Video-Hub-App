@@ -84,6 +84,8 @@ export class HomeComponent implements OnInit {
   wordFreqArr: any;
   currResults: any = { showing: 0, total: 0 };
 
+  fileMap: any; // should be a map from number (imageId) to number (element in finalArray);
+
   // for text padding below filmstrip or thumbnail element
   textPaddingHeight: number;
   previewWidth: number;
@@ -152,6 +154,7 @@ export class HomeComponent implements OnInit {
       this.importDone = true;
       this.showWizard = false;
       this.finalArray = finalObject.images;
+      this.buildFileMap();
     });
 
     // Returning settings
@@ -224,11 +227,13 @@ export class HomeComponent implements OnInit {
     this.electronService.ipcRenderer.send('close-window', this.getSettingsForSave());
   }
 
-  public openVideo(number): void {
+  public openVideo(imageId): void {
+    const number = this.fileMap.get(imageId);
     this.currentPlayingFolder = this.finalArray[number][0];
     this.currentPlayingFile = this.finalArray[number][2];
     const fullPath = this.appState.selectedSourceFolder + this.finalArray[number][0] + '/' + this.finalArray[number][1];
     this.electronService.ipcRenderer.send('openThisFile', fullPath);
+    console.log(fullPath);
   }
 
   // -----------------------------------------------------------------------------------------------
@@ -252,6 +257,20 @@ export class HomeComponent implements OnInit {
 
   // -----------------------------------------------------------------------------------------------
   // Interaction functions
+
+  /**
+   * Create a map
+   * from the imageId (3rd element in each item of finalArray)
+   * to the item location (in finalArray)
+   * They are identical the first time, but will diverge as user rescans video directory
+   */
+  buildFileMap(): void {
+    this.fileMap = new Map;
+    this.finalArray.forEach((element, index) => {
+      this.fileMap.set(element[3], index);
+    });
+    // console.log(this.fileMap);
+  }
 
   /**
    * Show or hide settings
