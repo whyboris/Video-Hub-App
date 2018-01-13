@@ -1,23 +1,42 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { FolderViewService } from './folder-view.service';
-
 @Pipe({
   name: 'folderViewPipe'
 })
 export class FolderViewPipe implements PipeTransform {
 
-  constructor(
-    public folderViewService: FolderViewService
-  ) { }
+  constructor() { }
 
   /**
-   * Return only items that match search string
-   * @param display {boolean}      <--- doesn't matter
-   * @param folderString {string}  <--- the current folder to decide whether to show
+   * Inserts folders os elements for file view
+   * @param finalArray
+   * @param render    whether to insert folders
    */
-  transform(display: boolean, folderString: string): boolean {
-    return this.folderViewService.shouldWeShow(folderString);
+  transform(finalArray: any[], render: boolean): any[] {
+    if (render) {
+      const arrWithFolders = [];
+
+      let previousFolder = '';
+
+      finalArray.forEach((element, index) => {
+        if (previousFolder !== element[0]) {
+          const tempClone = [];
+          tempClone[0] = element[0];
+          tempClone[1] = element[1];
+          tempClone[2] = '*'
+
+          arrWithFolders.push(tempClone);
+          previousFolder = element[0];
+        }
+        arrWithFolders.push(element);
+      });
+
+      console.log('folderViewPipe running');
+
+      return arrWithFolders;
+    } else {
+      return finalArray;
+    }
   }
 
 }

@@ -403,14 +403,22 @@ export class HomeComponent implements OnInit {
    * Add search string to filter array
    * When user presses the `ENTER` key
    * @param value  -- the string to filter
-   * @param origin -- can be `file`, `fileUnion`, `folder`, `folderUnion` -- KEYS for the `filters` Array
+   * @param origin -- number in filter array of the filter to target
    */
   onEnterKey(value: string, origin: number): void {
-    const trimmed = value.trim();
+    let trimmed = value.trim();
+    // removes '/' from folder path if there
+    // happens when user clicks folder path in file view
+    if (trimmed[0] === '/' || trimmed[0] === '\\') {
+      trimmed = trimmed.substr(1);
+    }
     if (trimmed) {
-      this.filters[origin].array.push(trimmed);
-      this.filters[origin].bool = !this.filters[origin].bool;
-      this.filters[origin].string = '';
+      // don't include duplicates
+      if (!this.filters[origin].array.includes(trimmed)) {
+        this.filters[origin].array.push(trimmed);
+        this.filters[origin].bool = !this.filters[origin].bool;
+        this.filters[origin].string = '';
+      }
     }
   }
 
