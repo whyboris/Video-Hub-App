@@ -37,8 +37,6 @@ import { myAnimation, myAnimation2, myWizardAnimation, galleryItemAppear } from 
 })
 export class HomeComponent implements OnInit {
 
-  @ViewChild('galleryArea') galleryDiv: ElementRef;
-
   @ViewChild(VirtualScrollComponent)
   virtualScroll: VirtualScrollComponent;
 
