@@ -1,6 +1,9 @@
 <div class="window">
 
-  <div class="titleBar">
+  <div
+    class="titleBar"
+    [ngClass]="{ 'dark-mode-override': settingsButtons['darkMode'].toggled }"
+  >
     <div class="draggable">
       <img width="10px" height="10px" src="../../../assets/logo.png"> Video Hub
     </div>
@@ -83,17 +86,24 @@
   <header
     *ngIf="!settingsButtons['hideTop'].toggled"
     class="top"
+    [ngStyle]="{
+       'background-image': 'linear-gradient(to bottom, '
+          + (settingsButtons['darkMode'].toggled ? '#555555' : '#e4e4e4') + ' 0%, '
+          + (settingsButtons['darkMode'].toggled ? '#333333' : '#cfcfcf') + ' 100%)',
+       'border-bottom': '1px solid ' + (settingsButtons['darkMode'].toggled ? '#3a3a3a' : '#b3b3b3')
+     }"
+     @topAnimation
   >
 
-    <div>
-      <app-top-component
-        class="top-content-position"
-        [fileString]="currentPlayingFile"
-        [folderString]="currentPlayingFolder"
-        (onFileWordClicked)="handleFileWordClicked($event)"
-        (onFolderWordClicked)="handleFolderWordClicked($event)"
-      ></app-top-component>
-    </div>
+    <app-top-component
+      class="top-content-position"
+      [darkMode]="settingsButtons['darkMode'].toggled"
+      [fileString]="currentPlayingFile"
+      [folderString]="currentPlayingFolder"
+      (onFileWordClicked)="handleFileWordClicked($event)"
+      (onFolderWordClicked)="handleFolderWordClicked($event)"
+    ></app-top-component>
+
   </header>
 
   <div
@@ -106,6 +116,10 @@
 
     <div
       class="allSettings"
+      [ngStyle]="{
+        'background': settingsButtons['darkMode'].toggled ? '#333333' : '#CCCCCC',
+        'border-bottom': settingsButtons['darkMode'].toggled ? '#000000' : '#999999'
+      }"
     >
 
       <!-- ALL THE BUTTONS-->
@@ -248,225 +262,84 @@
 
 <!-- THE GALLERY PANE -->
 
-    <!-- <div
-      [ngClass]="{ 'gallery-container-full-width': settingsButtons['hideSidebar'].toggled}"
-      [ngStyle]="{
-          'background': settingsButtons['darkMode'].toggled ? '#000000' : '#999999',
-          'height': 'calc(100vh - ' + ((settingsButtons['hideTop'].toggled ? 53 : 98) + (appState.menuHidden ? -32 : 0)) + 'px)'
-        }"
-      (scroll)="scrollHandler($event)"
+    <virtual-scroll
+      #scroll
       class="gallery-container"
-      #galleryArea
-    > -->
+      [ngStyle]="{
+          'height': 'calc(100vh - ' + ((settingsButtons['hideTop'].toggled ? 53 : 98)
+                      + (appState.menuHidden ? -32 : 0)) + 'px)',
+          'background': settingsButtons['darkMode'].toggled ? '#000000' : '#999999'
+        }"
+      [ngClass]="{ 'gallery-container-full-width': settingsButtons['hideSidebar'].toggled}"
+      [bufferAmount]="0"
+      [childHeight]="imgHeight + textPaddingHeight + 20
+                      + ( appState.currentView === 'thumbs' ? 4 : 0)
+                      - ( appState.currentView === 'files' ? ( imgHeight + 10 ) : 0)"
+      [items]="finalArray | magicSearchPipe: magicSearchString
+                | fileSearchPipe: filters[0].array : filters[0].bool : true  : false : false
+                | fileSearchPipe: filters[1].array : filters[1].bool : false : false : false
+                | fileSearchPipe: filters[2].array : filters[2].bool : true  : true : false
+                | fileSearchPipe: filters[3].array : filters[3].bool : false : true : false
+                | fileSearchPipe: filters[4].array : filters[4].bool : true : true : true
+                | wordFrequencyPipe: settingsButtons['showFreq'].toggled
+                | countPipe
+                | folderViewPipe: (appState.currentView === 'files')"
+    >
 
-<!-- GALLERY CODE -->
+    <!-- 24 above is 20 pixels for element and 4 for the fudge factor -->
 
-<!--
+    <!-- [childWidth]="200" obove not needed
+            it can only take a number, but if nothing is entered
+            it uses the width of the first child element
+            so I can set 100vw for filmstrip -->
 
-      <div
-        [ngClass]="{ filmOverride: appState.currentView !== 'thumbs' }"
-        [ngStyle]="{ 'height': galleryHeight + 'px' }"
-        class="gallery"
-      >
+      <ng-container *ngIf="appState.currentView === 'thumbs'">
+        <app-gallery-item
+          *ngFor="let item of scroll.viewPortItems"
+          (click)="openVideo(item[3])"
+          [title]="item[2]"
+          [imgId]="item[3]"
+          [time]="item[4]"
+          [rez]="item[5]"
+          [imgHeight]="imgHeight"
+          [elHeight]="imgHeight + textPaddingHeight"
+          [elWidth]="previewWidth"
+          [folderPath]="appState.selectedOutputFolder"
+          [showMeta]="settingsButtons['showMoreInfo'].toggled"
+          [hoverScrub]="settingsButtons['hoverScrub'].toggled"
+          [randomImage]="settingsButtons['randomImage'].toggled"
+        ></app-gallery-item>
+      </ng-container>
 
-    -->
+      <ng-container *ngIf="appState.currentView === 'filmstrip'">
+        <app-filmstrip-item
+          *ngFor="let item of scroll.viewPortItems"
+          (click)="openVideo(item[3])"
+          [imgId]="item[3]"
+          [title]="item[2]"
+          [elHeight]="imgHeight + textPaddingHeight"
+          [imgWidth]="(imgHeight / 100) * item[6] || (imgHeight / 100) * 171"
+          [imgHeight]="imgHeight"
+          [folderPath]="appState.selectedOutputFolder"
+          [showMeta]="settingsButtons['showMoreInfo'].toggled"
+          [hoverScrub]="settingsButtons['hoverScrub'].toggled"
+        ></app-filmstrip-item>
+      </ng-container>
 
-        <virtual-scroll
-          #scroll
-          class="gallery-container"
-          [ngStyle]="{
-              'height': 'calc(100vh - ' + ((settingsButtons['hideTop'].toggled ? 53 : 98)
-                         + (appState.menuHidden ? -32 : 0)) + 'px)',
-              'background': settingsButtons['darkMode'].toggled ? '#000000' : '#999999'
-            }"
-          [ngClass]="{ 'gallery-container-full-width': settingsButtons['hideSidebar'].toggled}"
-          [bufferAmount]="0"
-          [childHeight]="imgHeight + textPaddingHeight + 20
-                         + ( appState.currentView === 'thumbs' ? 4 : 0)
-                         - ( appState.currentView === 'files' ? ( imgHeight + 10 ) : 0)"
-          [items]="finalArray | magicSearchPipe: magicSearchString
-                    | fileSearchPipe: filters[0].array : filters[0].bool : true  : false : false
-                    | fileSearchPipe: filters[1].array : filters[1].bool : false : false : false
-                    | fileSearchPipe: filters[2].array : filters[2].bool : true  : true : false
-                    | fileSearchPipe: filters[3].array : filters[3].bool : false : true : false
-                    | fileSearchPipe: filters[4].array : filters[4].bool : true : true : true
-                    | wordFrequencyPipe: settingsButtons['showFreq'].toggled
-                    | countPipe
-                    | folderViewPipe: (appState.currentView === 'files')"
-        >
+      <ng-container *ngIf="appState.currentView === 'files'">
+        <app-file-item
+          *ngFor="let item of scroll.viewPortItems"
+          [folderPath]="item[0]"
+          [title]="item[2]"
+          (click)="(item[2] === '*') ? handleFolderWordClicked(item[0]) : openVideo(item[3])"
+          [time]="item[4]"
+          [rez]="item[5]"
+          [elHeight]="20"
+          [showMeta]="settingsButtons['showMoreInfo'].toggled"
+        ></app-file-item>
+      </ng-container>
 
-        <!-- 24 above is 20 pixels for element and 4 for the fudge factor -->
-
-        <!-- [childWidth]="200" obove not needed
-                it can only take a number, but if nothing is entered
-                it uses the width of the first child element
-                so I can set 100vw for filmstrip -->
-
-
-          <ng-container *ngIf="appState.currentView === 'thumbs'">
-            <app-gallery-item
-              *ngFor="let item of scroll.viewPortItems"
-              (click)="openVideo(item[3])"
-              [title]="item[2]"
-              [imgId]="item[3]"
-              [time]="item[4]"
-              [rez]="item[5]"
-              [imgHeight]="imgHeight"
-              [elHeight]="imgHeight + textPaddingHeight"
-              [elWidth]="previewWidth"
-              [folderPath]="appState.selectedOutputFolder"
-              [showMeta]="settingsButtons['showMoreInfo'].toggled"
-              [hoverScrub]="settingsButtons['hoverScrub'].toggled"
-              [randomImage]="settingsButtons['randomImage'].toggled"
-            ></app-gallery-item>
-          </ng-container>
-
-          <ng-container *ngIf="appState.currentView === 'filmstrip'">
-            <app-filmstrip-item
-              *ngFor="let item of scroll.viewPortItems"
-              (click)="openVideo(item[3])"
-              [imgId]="item[3]"
-              [title]="item[2]"
-              [elHeight]="imgHeight + textPaddingHeight"
-              [imgWidth]="(imgHeight / 100) * item[6] || (imgHeight / 100) * 171"
-              [imgHeight]="imgHeight"
-              [folderPath]="appState.selectedOutputFolder"
-              [showMeta]="settingsButtons['showMoreInfo'].toggled"
-              [hoverScrub]="settingsButtons['hoverScrub'].toggled"
-            ></app-filmstrip-item>
-          </ng-container>
-
-          <ng-container *ngIf="appState.currentView === 'files'">
-            <app-file-item
-              *ngFor="let item of scroll.viewPortItems"
-              [folderPath]="item[0]"
-              [title]="item[2]"
-              (click)="(item[2] === '*') ? handleFolderWordClicked(item[0]) : openVideo(item[3])"
-              [time]="item[4]"
-              [rez]="item[5]"
-              [elHeight]="20"
-              [showMeta]="settingsButtons['showMoreInfo'].toggled"
-            ></app-file-item>
-          </ng-container>
-
-        </virtual-scroll>
-
-
-<!--
-
-
-        <div
-          class="item"
-          [ngClass]="{
-              fileNamePadding: !settingsButtons['showMoreInfo'].toggled && appState.currentView != 'files',
-              filesView: appState.currentView === 'files',
-              whenFilenamesHidden: appState.currentView === 'filmstrip' && !settingsButtons['showMoreInfo'].toggled
-            }"
-          [ngStyle]="{
-              height: imgHeight + 'px',
-              'min-width': ((imgHeight / 100) * 174) + 'px',
-              'max-width': (appState.currentView === 'thumbs') ? ((imgHeight / 100) * 174) + 'px' : 'calc(100vw - 240px)'
-            }"
-          *ngFor="let item of finalArray
-                    | magicSearchPipe: magicSearchString
-                    | fileSearchPipe: filters[0].array : filters[0].bool : true  : false : false
-                    | fileSearchPipe: filters[1].array : filters[1].bool : false : false : false
-                    | fileSearchPipe: filters[2].array : filters[2].bool : true  : true : false
-                    | fileSearchPipe: filters[3].array : filters[3].bool : false : true : false
-                    | fileSearchPipe: filters[4].array : filters[4].bool : true : true : true
-                    | wordFrequencyPipe: settingsButtons['showFreq'].toggled
-                    | countPipe;
-                    index as i"
-        >
-
-          <div *ngIf="appState.currentView === 'thumbs'" @myAnimation2>
-
-            <app-gallery-item
-              (click)="openVideo(i)"
-              [title]="item[2]"
-              [stuff]="item[3]"
-              [time]="item[4]"
-              [rez]="item[5]"
-              [imgHeight]="imgHeight"
-              [folderPath]="appState.selectedOutputFolder"
-              [showMeta]="settingsButtons['showMoreInfo'].toggled"
-              [hoverScrub]="settingsButtons['hoverScrub'].toggled"
-              [randomImage]="settingsButtons['randomImage'].toggled"
-            ></app-gallery-item>
-
-          </div>
-
-          <div *ngIf="appState.currentView === 'filmstrip'" @myAnimation2>
-
-            <app-filmstrip-item
-              (click)="openVideo(i)"
-              [stuff]="item[3]"
-              [folderPath]="appState.selectedOutputFolder"
-              [width]="(imgHeight / 100) * item[6] || (imgHeight / 100) * 171"
-              [imgHeight]="imgHeight"
-              [hoverScrub]="settingsButtons['hoverScrub'].toggled"
-            ></app-filmstrip-item>
-
-          </div>
-
-          <div *ngIf="appState.currentView === 'files' && settingsButtons['showMoreInfo'].toggled">
-            <div class="folder" *ngIf="true | folderViewPipe: item[0]">
-              <span class="icon icon-folder-blank"></span><span [innerHtml]="item[0] | folderArrowsPipe"></span>
-            </div>
-          </div>
-
-
-        -->
-
-
-
-          <!-- <div
-            *ngIf="settingsButtons['showMoreInfo'].toggled || appState.currentView === 'files'"
-            class="metadata"
-            @myAnimation2
-          >
-
-            <div
-              *ngIf="settingsButtons['showMoreInfo'].toggled"
-              class="length"
-              @myAnimation2
-            >
-              {{ item[4] | lengthPipe }}
-            </div>
-
-            <div
-              *ngIf="settingsButtons['showMoreInfo'].toggled"
-              class="size"
-              @myAnimation2
-            >
-              {{ item[5] }}
-            </div>
-
-            <div
-              (click)="openVideo(i)"
-              [ngClass]="{ 'larger-font': settingsButtons['fontSizeLarger'].toggled }"
-              class="title"
-              @myAnimation2
-            >
-              {{ item[2] }}
-            </div>
-
-          </div> -->
-
-
-      <!--
-
-        </div>
-
-      -->
-
-      <!-- </div> -->
-
-      <!-- end of gallery -->
-
-    <!-- </div>  -->
-
-    <!-- end of gallery-container -->
+    </virtual-scroll>
 
   </div> <!-- end of window-content -->
 

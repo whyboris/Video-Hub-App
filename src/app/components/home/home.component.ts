@@ -14,7 +14,7 @@ import { AppState } from '../common/app-state';
 import { Filters } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from 'app/components/common/settings-buttons';
 
-import { myAnimation, myAnimation2, myWizardAnimation, galleryItemAppear } from '../common/animations';
+import { myAnimation, myAnimation2, myWizardAnimation, galleryItemAppear, topAnimation } from '../common/animations';
 
 @Component({
   selector: 'app-home',
@@ -26,18 +26,16 @@ import { myAnimation, myAnimation2, myWizardAnimation, galleryItemAppear } from 
     './search.scss',
     './photon/icons.scss',
     './gallery.scss',
-    './film-override.scss',
     './wizard.scss'
   ],
   animations: [
     myAnimation,
     myAnimation2,
-    myWizardAnimation
+    myWizardAnimation,
+    topAnimation
   ]
 })
 export class HomeComponent implements OnInit {
-
-  @ViewChild('galleryArea') galleryDiv: ElementRef;
 
   @ViewChild(VirtualScrollComponent)
   virtualScroll: VirtualScrollComponent;
@@ -383,18 +381,20 @@ export class HomeComponent implements OnInit {
    */
   public computeTextBufferAmount(): void {
     this.computePreviewWidth();
-    if (this.settingsButtons.showThumbnails.toggled) {
+    if (this.appState.currentView === 'thumbs') {
       if (this.settingsButtons.showMoreInfo.toggled) {
         this.textPaddingHeight = 55;
       } else {
         this.textPaddingHeight = 20;
       }
-    } else if (this.settingsButtons.showFilmstrip.toggled) {
+    } else if (this.appState.currentView === 'filmstrip') {
       if (this.settingsButtons.showMoreInfo.toggled) {
         this.textPaddingHeight = 20;
       } else {
         this.textPaddingHeight = 0;
       }
+    } else if (this.appState.currentView === 'files') {
+      this.textPaddingHeight = 20;
     }
     console.log('textPaddingHeight = ' + this.textPaddingHeight);
   }

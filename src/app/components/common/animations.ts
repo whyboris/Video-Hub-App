@@ -1,13 +1,4 @@
-import {
-  animate,
-  // animateChild,
-  // query,
-  // stagger,
-  state,
-  style,
-  transition,
-  trigger
-} from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 
 export const myAnimation = trigger(
   'myAnimation',
@@ -22,6 +13,24 @@ export const myAnimation = trigger(
       ':leave', [
         style({ transform: 'translateX(0)', 'opacity': 1 }),
         animate('250ms ease-in', style({ transform: 'translateY(15%)', 'opacity': 0 }))
+      ]
+    )
+  ]
+);
+
+export const topAnimation = trigger(
+  'topAnimation',
+  [
+    transition(
+      ':enter', [
+        style({ height: '0'}),
+        animate('300ms ease-out', style({ height: '45px' }))
+      ]
+    ),
+    transition(
+      ':leave', [
+        style({ height: '45px'}),
+        animate('300ms ease-in', style({ height: '0px' }))
       ]
     )
   ]
@@ -63,12 +72,3 @@ export const myWizardAnimation = trigger(
   ]
 );
 
-// export const parentAnimation = trigger('parentAnimation', [
-//   transition(':enter', [style({ opacity: 0 }), animate('.6s ease')])
-// ]);
-
-// export const childAnimation = trigger('childAnimation', [
-//   transition(':enter', [
-//     query(':enter', stagger('.9s', [animateChild()]))
-//   ])
-// ]);

@@ -4,9 +4,11 @@ import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core
   selector: 'app-top-component',
   templateUrl: './top.component.html',
   styleUrls: ['./top.component.scss',
-              './photon/icons.scss']
+              '../photon/icons.scss']
 })
 export class TopComponent {
+
+  @Input() darkMode: boolean;
 
   // Handle folder input
   private _folder = '';
