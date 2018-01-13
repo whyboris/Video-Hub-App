@@ -127,9 +127,10 @@ $sidebar-width: 190px;
 
 .top {
   height: $top-region;
+  overflow: hidden;
   position: relative;
-  transition: 900ms;
   width: 100%;
+  z-index: 20;
 }
 
 .top-content-position {
