@@ -12,8 +12,8 @@ export class FolderArrowsPipe implements PipeTransform {
   transform(folderPath: string): string {
 
     let htmlString = folderPath;
-    htmlString = htmlString.replace('/', '<span class="icon icon-arrow"></span>');
-    htmlString = htmlString.replace('\\', '<span class="icon icon-arrow"></span>');
+    htmlString = htmlString.replace(/\//g, '<span class="icon icon-arrow"></span>');
+    htmlString = htmlString.replace(/\\/g, '<span class="icon icon-arrow"></span>');
     htmlString = htmlString + '<span class="icon icon-arrow"></span>';
 
     return `${htmlString}`;

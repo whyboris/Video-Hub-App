@@ -8,21 +8,20 @@
 .length,
 .size {
   color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  display: block;
   font-size: 10px;
   position: absolute;
-  display: block;
   z-index: 200;
-  // text-shadow: 0 0 1px black;
+  top: 1px;
 }
 
 .length {
   right: 0;
-  // transform: translate(-4px, 24.5px);
 }
 
 .size {
   left: 0;
-  // transform: translate(4px, 24.5px);
 }
 
 .folder {
@@ -50,10 +49,12 @@
   cursor: pointer;
   display: inline-block;
   font-size: 12px;
-  margin: 0 30px;
   overflow: hidden;
   text-overflow: ellipsis;
   text-align: left;
   white-space: nowrap;
-  width: calc( 100% - 40px );
+
+  // below is now in [ngStyle]
+  // margin: 0 30px;
+  // width: calc( 100% - 65px );
 }

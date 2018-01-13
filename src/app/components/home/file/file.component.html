@@ -12,15 +12,21 @@
   <ng-template #fileNameBlock>
 
     <div class="size" *ngIf="showMeta">
-      {{ ( rez ? rez : 'HD' ) }}
+      {{ rez }}
+    </div>
+
+    <div
+      class="title"
+      [ngStyle]="{
+          width: 'calc(100% - ' + (showMeta ? '65px' : '10px') + ')',
+          margin: showMeta ? '0 30px' : '0 10px'
+        }"
+    >
+      {{ title }}
     </div>
 
     <div class="length" *ngIf="showMeta">
       {{ time | lengthPipe }}
-    </div>
-
-    <div class="title">
-      {{ title }}
     </div>
 
   </ng-template>
