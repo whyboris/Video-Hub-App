@@ -1,0 +1,46 @@
+<div
+  class="meta-container"
+  [ngStyle]="{ height: elHeight + 'px'}"
+  @galleryItemAppear
+>
+
+  <div
+    class="filmstrip-container"
+    [ngStyle]="{ height: imgHeight + 'px'}"
+  >
+
+    <ng-container *ngIf="!showPlaceholder">
+
+    <ng-container *ngIf="hoverScrub && hover && noError">
+      <div
+        *ngFor="let item of imgId; let i = index"
+        (mouseover)="showThisOne(i)"
+        [ngStyle]="{'left': 10 * i + '%' }"
+        class="hoverable"
+      >
+      </div>
+    </ng-container>
+
+    <ng-container *ngIf="noError">
+      <img
+        *ngFor="let item of imgId; let i = index"
+        [ngStyle]="{
+            'right': 'calc(' + (9 - i) + ' * (100% - ' + imgWidth + 'px)/9)',
+            'z-index': indexArray[i],
+            'height': imgHeight + 'px'
+          }"
+        [src]="sanitizer.bypassSecurityTrustUrl(folderPath + '/' + imgId[i])"
+        class="screencap"
+      >
+    </ng-container>
+
+    </ng-container>
+
+  </div>
+
+  <span *ngIf="showMeta" class="title">
+    {{ title }}
+    asetu asonteuh aonteuh aosetu aosenuth aos294894 ausnthao esnuthao esunthao sentua hsenato uh2983792847293 asuethaosuetnaho eusa
+  </span>
+
+</div>

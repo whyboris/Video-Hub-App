@@ -1,26 +1,25 @@
 import { Component, HostListener, Input, OnInit, OnDestroy } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { myAnimation9 } from '../common/animations';
+import { galleryItemAppear } from '../../common/animations';
 
 @Component({
   selector: 'app-gallery-item',
   templateUrl: './preview.component.html',
-  styleUrls: ['./preview.component.scss'],
-  animations: [
-    myAnimation9
-  ]
+  styleUrls: [ './preview.component.scss' ],
+  animations: [ galleryItemAppear ]
 })
 export class PreviewComponent implements OnInit, OnDestroy {
 
+  @Input() elHeight: number;
+  @Input() elWidth: number;
   @Input() folderPath: string;
   @Input() hoverScrub: boolean;
   @Input() imgHeight: number;
   @Input() randomImage: boolean;
-  @Input() stuff: any;
-  @Input() showPlaceholder: boolean;
-  @Input() time: string;
   @Input() rez: string;
   @Input() showMeta: boolean;
+  @Input() imgId: any;
+  @Input() time: string;
   @Input() title: string;
 
   hover: boolean;
@@ -40,16 +39,16 @@ export class PreviewComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    // this.stuff is `undefined` when no screenshot taken -- because of ffmpeg extraction error
-    if (this.stuff === undefined) {
+    // this.imgId is `undefined` when no screenshot taken -- because of ffmpeg extraction error
+    if (this.imgId === undefined) {
       this.noError = false;
     }
     // hack -- populate hardcoded values -- fix later
-    const fileNumber = this.stuff;
-    this.stuff = [];
+    const fileNumber = this.imgId;
+    this.imgId = [];
 
     for (let i = 0; i < 10; i++) {
-      this.stuff[i] = 'boris/' + fileNumber + '-' + (i + 1) + '.jpg';
+      this.imgId[i] = 'boris/' + fileNumber + '-' + (i + 1) + '.jpg';
     }
 
     // this.loop(); // disabled -- can have a toggle in gallery that will feed variable as input into this component that will start

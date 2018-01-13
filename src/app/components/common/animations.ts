@@ -39,12 +39,12 @@ export const myAnimation2 = trigger(
   ]
 );
 
-export const myAnimation9 = trigger(
-  'myAnimation9',
+export const galleryItemAppear = trigger(
+  'galleryItemAppear',
   [
     transition(
       ':enter', [
-        style({ filter: 'blur(5px) brightness(150%)' }),
+        style({ filter: 'opacity(0)' }),
         animate('300ms ease-out', style({}))
       ]
     )

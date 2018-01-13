@@ -1,0 +1,24 @@
+import { Component, Input, HostListener } from '@angular/core';
+
+import { galleryItemAppear } from '../../common/animations';
+
+@Component({
+  selector: 'app-file-item',
+  templateUrl: './file.component.html',
+  styleUrls: ['./file.component.scss',
+              '../photon/icons.scss'],
+  animations: [galleryItemAppear]
+})
+export class FileComponent {
+
+  @Input() elHeight: number;
+  @Input() folderPath: string;
+  @Input() rez: string;
+  @Input() showMeta: boolean;
+  @Input() imgId: any;
+  @Input() time: string;
+  @Input() title: string;
+
+  constructor() { }
+
+}

@@ -1,0 +1,43 @@
+<div
+  [ngStyle]="{
+    height: elHeight + 'px',
+    width: elWidth + 'px'
+  }"
+  class="filmstrip-container"
+  @galleryItemAppear
+>
+
+<div
+  class="video-box"
+  [ngStyle]="{ height: imgHeight + 'px'}"
+>
+
+  <span *ngIf="showMeta" class="time">{{ time | lengthPipe }}</span>
+  <span *ngIf="showMeta" class="rez">{{ rez }}</span>
+
+  <div *ngIf="hoverScrub && hover && noError">
+    <div
+      *ngFor="let item of imgId; let i = index"
+      (mouseover)="showThisOne(i)"
+      [ngStyle]="{'left': 10 * i + '%' }"
+      class="hoverable"
+    >
+    </div>
+  </div>
+
+  <img
+    *ngIf="noError"
+    [src]="sanitizer.bypassSecurityTrustUrl(folderPath + '/' + imgId[currentlyShowing])"
+    [ngStyle]="{ height: imgHeight + 'px' }"
+    class="screencap"
+  >
+
+
+</div>
+
+<span *ngIf="showMeta" class="title" [ngStyle]="{ top: (imgHeight + 5) + 'px' }">
+  {{ title }}
+  asnetuhaosnetuhao seunt aoesnuth aoesuntha oesunthao eustaho eustaoh eusntaoh eusnatohe usanoteh usaontehu asonteuh aosnteuh aosteuh
+</span>
+
+</div>

@@ -14,13 +14,13 @@ export class WordFrequencyPipe implements PipeTransform {
   /**
    * Return only items that match search string
    * @param finalArray
-   * @param smthing    useless item
+   * @param render      whether to calculate the wordFrequency
    */
-  transform(finalArray: any, smthng?: any): any {
+  transform(finalArray: any, render?: boolean): any {
 
-    console.log('Word frequency pipe RUNNING !!!');
+    if (render && finalArray.length > 0) {
 
-    if (finalArray.length > 0) {
+      console.log('Word frequency pipe RUNNING !!!');
 
       this.wordFrequencyService.resetMap();
 

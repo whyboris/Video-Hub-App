@@ -199,7 +199,6 @@ $sidebar-width: 190px;
   width: calc(100vw - #{$sidebar-width});
 
   @include scrollBar;
-
 }
 
 .gallery-container-full-width {

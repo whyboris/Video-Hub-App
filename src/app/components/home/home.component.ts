@@ -2,6 +2,8 @@ import { Component, ChangeDetectorRef, OnInit, HostListener, ViewChild, ElementR
 
 import { setTimeout } from 'timers';
 
+import { VirtualScrollComponent } from 'angular2-virtual-scroll';
+
 import { ElectronService } from '../../providers/electron.service';
 import { ShowLimitService } from 'app/components/pipes/show-limit.service';
 import { WordFrequencyService } from 'app/components/pipes/word-frequency.service';
@@ -12,7 +14,7 @@ import { AppState } from '../common/app-state';
 import { Filters } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from 'app/components/common/settings-buttons';
 
-import { myAnimation, myAnimation2, myWizardAnimation } from '../common/animations';
+import { myAnimation, myAnimation2, myWizardAnimation, galleryItemAppear } from '../common/animations';
 
 @Component({
   selector: 'app-home',
@@ -22,7 +24,6 @@ import { myAnimation, myAnimation2, myWizardAnimation } from '../common/animatio
     './settings.scss',
     './buttons.scss',
     './search.scss',
-    './photon/buttons.scss',
     './photon/icons.scss',
     './gallery.scss',
     './film-override.scss',
@@ -37,6 +38,9 @@ import { myAnimation, myAnimation2, myWizardAnimation } from '../common/animatio
 export class HomeComponent implements OnInit {
 
   @ViewChild('galleryArea') galleryDiv: ElementRef;
+
+  @ViewChild(VirtualScrollComponent)
+  virtualScroll: VirtualScrollComponent;
 
   settingsButtons = SettingsButtons;
   settingsButtonsGroups = SettingsButtonsGroups;
@@ -67,13 +71,9 @@ export class HomeComponent implements OnInit {
 
   screenshotSizeForImport = 100;
 
-  numberToShow = 5; // temporary 5 -- this limits how many thumbs shown
-
   myTimeout = null;
 
   buttonsInView = false;
-
-  canHidePrevious = 0;
 
   // temp variables for the wizard during import
   totalNumberOfFiles = -1;
@@ -84,8 +84,11 @@ export class HomeComponent implements OnInit {
   wordFreqArr: any;
   currResults: any = { showing: 0, total: 0 };
 
-  // for scroll
-  galleryHeight = 3000;
+  fileMap: any; // should be a map from number (imageId) to number (element in finalArray);
+
+  // for text padding below filmstrip or thumbnail element
+  textPaddingHeight: number;
+  previewWidth: number;
 
   public finalArray = [];
 
@@ -151,7 +154,7 @@ export class HomeComponent implements OnInit {
       this.importDone = true;
       this.showWizard = false;
       this.finalArray = finalObject.images;
-      this.numberToShow = 5; // TEMP !!!!!!
+      this.buildFileMap();
     });
 
     // Returning settings
@@ -166,13 +169,6 @@ export class HomeComponent implements OnInit {
   }
 
   /**
-   * Update max to view when scrolling
-   */
-  public scrollHandler(event) {
-    this.debounceUpdateMax();
-  }
-
-  /**
    * Low-tech debounced scroll handler
    */
   public debounceUpdateMax(msDelay?: number): void {
@@ -180,82 +176,12 @@ export class HomeComponent implements OnInit {
     const delay = msDelay !== undefined ? msDelay : 250;
     clearTimeout(this.myTimeout);
     this.myTimeout = setTimeout(() => {
-      console.log('updating MAX !!!');
-      this.updateMaxToShow();
+      console.log('Virtual scroll refreshed');
+      this.virtualScroll.refresh()
     }, delay);
   }
 
-  /**
-   * Updates the `numberToShow` by computing available area in the `galleryDiv` (aka `galleryArea`)
-   */
-  public updateMaxToShow() {
-
-    const clientHeight = this.galleryDiv.nativeElement.clientHeight;
-    const clientWidth = this.galleryDiv.nativeElement.clientWidth;
-    const scrollTop = this.galleryDiv.nativeElement.scrollTop;
-    const scrollHeight = this.galleryDiv.nativeElement.scrollHeight;
-
-    // TODO -- clean up function
-    if (this.appState.currentView === 'thumbs') {
-      const textPadding = (this.settingsButtons['showMoreInfo'].toggled ? 60 : 30);
-      const galleryItemHeight = (this.imgHeight + textPadding);
-      // rough estimate
-      const showingHorizontally = Math.floor(clientWidth / (this.imgHeight * 1.69 + 30));
-      const showingVertically = Math.floor(clientHeight / galleryItemHeight);
-      // console.log('showing horiz: ' + showingHorizontally);
-      // console.log('showing vert: ' + showingVertically);
-      // set the height of gallery to however much it takes to fill the gallery
-      this.galleryHeight = Math.ceil(this.currResults.total / showingHorizontally) * galleryItemHeight;
-      // figure out what % of the way there, and show that many
-      this.numberToShow = Math.ceil((scrollTop + clientHeight) / this.galleryHeight * this.currResults.total) + showingHorizontally;
-
-      // TODO -- WIP hide stuff above
-      this.canHidePrevious = this.numberToShow - (showingHorizontally * ( showingVertically + 3));
-
-      // Try to animate each element rather than all at once
-      // SLOWS THINGS DOWN
-      // const finalNumber = Math.ceil((scrollTop + clientHeight) / this.galleryHeight * this.currResults.total) + showingHorizontally;
-      // this.showRemaining(finalNumber);
-
-    } else if (this.appState.currentView === 'filmstrip') {
-      const textPadding = (this.settingsButtons['showMoreInfo'].toggled ? 50 : 30);
-      const galleryItemHeight = (this.imgHeight + textPadding);
-      this.galleryHeight = Math.ceil(this.currResults.total * galleryItemHeight);
-      const showingVertically = Math.ceil(clientHeight / galleryItemHeight);
-      // console.log('showing vert: ' + showingVertically);
-      // figure out what % of the way there, and show that many
-      this.numberToShow = Math.ceil((scrollTop + clientHeight) / this.galleryHeight * this.currResults.total);
-
-      // TODO -- WIP hide stuff above
-      this.canHidePrevious = this.numberToShow - (showingVertically + 3);
-
-    } else if (this.appState.currentView === 'files') {
-      // Todo -- incorporate when the font size is larger
-      this.galleryHeight = Math.ceil(this.currResults.total * 20); // rough estimate
-      this.numberToShow = Math.ceil((scrollTop + clientHeight) / this.galleryHeight * this.currResults.total) + 10; // + 10 at the bottom
-    }
-
-  }
-
-  // SLOWS THINGS DOWN
-  // public showRemaining(finalNumber) {
-  //   if (finalNumber > this.numberToShow) {
-
-  //     const oldNumber = this.numberToShow;
-
-  //     for (let i = 0; i < (finalNumber - oldNumber); i++) {
-  //       setTimeout(() => {
-  //         this.numberToShow = oldNumber + i;
-  //       }, i * 50);
-  //     }
-
-  //   } else {
-  //     this.numberToShow = finalNumber;
-  //   }
-
-  // }
-
-  // INTERACT WITH ELECTRON
+  // ---------------- INTERACT WITH ELECTRON ------------------ //
 
   // Send initial hello message -- used to grab settings
   public justStarted(): void {
@@ -301,11 +227,13 @@ export class HomeComponent implements OnInit {
     this.electronService.ipcRenderer.send('close-window', this.getSettingsForSave());
   }
 
-  public openVideo(number): void {
+  public openVideo(imageId): void {
+    const number = this.fileMap.get(imageId);
     this.currentPlayingFolder = this.finalArray[number][0];
     this.currentPlayingFile = this.finalArray[number][2];
     const fullPath = this.appState.selectedSourceFolder + this.finalArray[number][0] + '/' + this.finalArray[number][1];
     this.electronService.ipcRenderer.send('openThisFile', fullPath);
+    console.log(fullPath);
   }
 
   // -----------------------------------------------------------------------------------------------
@@ -331,6 +259,20 @@ export class HomeComponent implements OnInit {
   // Interaction functions
 
   /**
+   * Create a map
+   * from the imageId (3rd element in each item of finalArray)
+   * to the item location (in finalArray)
+   * They are identical the first time, but will diverge as user rescans video directory
+   */
+  buildFileMap(): void {
+    this.fileMap = new Map;
+    this.finalArray.forEach((element, index) => {
+      this.fileMap.set(element[3], index);
+    });
+    // console.log(this.fileMap);
+  }
+
+  /**
    * Show or hide settings
    */
   toggleSettings(): void {
@@ -347,40 +289,37 @@ export class HomeComponent implements OnInit {
       this.settingsButtons['showFilmstrip'].toggled = false;
       this.settingsButtons['showFiles'].toggled = false;
       this.appState.currentView = 'thumbs';
-      if (this.numberToShow > 40) {
-        this.numberToShow = 40;
-      }
-      this.debounceUpdateMax(0);
+      this.computeTextBufferAmount();
     } else if (uniqueKey === 'showFilmstrip') {
       this.settingsButtons['showThumbnails'].toggled = false;
       this.settingsButtons['showFilmstrip'].toggled = true;
       this.settingsButtons['showFiles'].toggled = false;
       this.appState.currentView = 'filmstrip';
-      if (this.numberToShow > 20) {
-        this.numberToShow = 20;
-      }
-      this.debounceUpdateMax(0);
+      this.computeTextBufferAmount();
     } else if (uniqueKey === 'showFiles') {
       this.settingsButtons['showThumbnails'].toggled = false;
       this.settingsButtons['showFilmstrip'].toggled = false;
       this.settingsButtons['showFiles'].toggled = true;
       this.appState.currentView = 'files';
-      if (this.numberToShow < 80) {
-        this.numberToShow = 80;
-      }
-      this.debounceUpdateMax(0);
+      this.computeTextBufferAmount();
     } else if (uniqueKey === 'makeSmaller') {
       this.decreaseSize();
-      this.debounceUpdateMax();
     } else if (uniqueKey === 'makeLarger') {
       this.increaseSize();
-      this.debounceUpdateMax();
     } else if (uniqueKey === 'startWizard') {
       this.startWizard();
     } else if (uniqueKey === 'rescanDirectory') {
       this.rescanDirectory();
     } else {
       this.settingsButtons[uniqueKey].toggled = !this.settingsButtons[uniqueKey].toggled;
+      if (uniqueKey === 'showMoreInfo') {
+        this.computeTextBufferAmount();
+      }
+      if (uniqueKey === 'hideSidebar') {
+        setTimeout(() => {
+          this.virtualScroll.refresh();
+        }, 300);
+      }
     }
   }
 
@@ -417,6 +356,7 @@ export class HomeComponent implements OnInit {
     if (this.imgHeight > 50) {
       this.imgHeight = this.imgHeight - 25;
     }
+    this.computePreviewWidth();
   }
 
   /**
@@ -426,20 +366,59 @@ export class HomeComponent implements OnInit {
     if (this.imgHeight < 300) {
       this.imgHeight = this.imgHeight + 25;
     }
+    this.computePreviewWidth();
+  }
+
+  /**
+   * Computes the preview width for thumbnails view
+   */
+  public computePreviewWidth(): void {
+    this.previewWidth = Math.ceil((this.imgHeight / 100) * 174);
+  }
+
+  /**
+   * Compute the number of pixels needed to add to the preview item
+   * Thumbnails need more space for the text
+   * Filmstrip needs less
+   */
+  public computeTextBufferAmount(): void {
+    this.computePreviewWidth();
+    if (this.settingsButtons.showThumbnails.toggled) {
+      if (this.settingsButtons.showMoreInfo.toggled) {
+        this.textPaddingHeight = 55;
+      } else {
+        this.textPaddingHeight = 20;
+      }
+    } else if (this.settingsButtons.showFilmstrip.toggled) {
+      if (this.settingsButtons.showMoreInfo.toggled) {
+        this.textPaddingHeight = 20;
+      } else {
+        this.textPaddingHeight = 0;
+      }
+    }
+    console.log('textPaddingHeight = ' + this.textPaddingHeight);
   }
 
   /**
    * Add search string to filter array
    * When user presses the `ENTER` key
    * @param value  -- the string to filter
-   * @param origin -- can be `file`, `fileUnion`, `folder`, `folderUnion` -- KEYS for the `filters` Array
+   * @param origin -- number in filter array of the filter to target
    */
   onEnterKey(value: string, origin: number): void {
-    const trimmed = value.trim();
+    let trimmed = value.trim();
+    // removes '/' from folder path if there
+    // happens when user clicks folder path in file view
+    if (trimmed[0] === '/' || trimmed[0] === '\\') {
+      trimmed = trimmed.substr(1);
+    }
     if (trimmed) {
-      this.filters[origin].array.push(trimmed);
-      this.filters[origin].bool = !this.filters[origin].bool;
-      this.filters[origin].string = '';
+      // don't include duplicates
+      if (!this.filters[origin].array.includes(trimmed)) {
+        this.filters[origin].array.push(trimmed);
+        this.filters[origin].bool = !this.filters[origin].bool;
+        this.filters[origin].string = '';
+      }
     }
   }
 
@@ -543,6 +522,7 @@ export class HomeComponent implements OnInit {
         this.settingsButtons[element].hidden = settingsObject.buttonSettings[element].hidden;
       }
     });
+    this.computeTextBufferAmount();
   }
 
 }

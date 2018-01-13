@@ -3,9 +3,9 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { ShowLimitService } from './show-limit.service';
 
 @Pipe({
-  name: 'limitPipe'
+  name: 'countPipe'
 })
-export class LimitPipe implements PipeTransform {
+export class CountPipe implements PipeTransform {
 
   constructor(
     public showLimitService: ShowLimitService
@@ -17,14 +17,10 @@ export class LimitPipe implements PipeTransform {
    * @param itemLimit    {number} Maximum number of items to show in results
    */
   transform(finalArray: any, itemLimit?: number): any {
-    if (itemLimit === 0) {
-      this.showLimitService.showResults(finalArray.length, finalArray.length);
-      return finalArray;
-    } else {
-      // console.log('LimitPipe working');
-      this.showLimitService.showResults(itemLimit, finalArray.length);
-      return finalArray.slice(0, itemLimit);
-    }
+
+    this.showLimitService.showResults(finalArray.length, finalArray.length);
+
+    return finalArray;
   }
 
 }

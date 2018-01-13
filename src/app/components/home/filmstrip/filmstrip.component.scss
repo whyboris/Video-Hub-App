@@ -1,3 +1,8 @@
+.meta-container {
+  width: calc(100% - 40px);
+  margin: 20px 20px 5px;
+}
+
 .filmstrip-container {
   background: black;
   height: 100px;
@@ -12,6 +17,7 @@
   position: absolute;
   width: 10%;
   z-index: 100;
+  cursor: pointer;
 }
 
 .screencap {
@@ -22,9 +28,23 @@
   position: absolute;
 }
 
+
 img:before {
   content: 'lol u mad?'; /* to prevent broken img icon from showing up */
   display: block;
   font-size: 20px;
   margin-top: 1000px;
+}
+
+.title {
+  color: #5D5D5D;
+  cursor: pointer;
+  display: block;
+  font-size: 12px;
+  margin: 6px 2px 0px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+  white-space: nowrap;
+  width: 100%;
 }
