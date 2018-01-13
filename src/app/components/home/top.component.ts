@@ -8,6 +8,8 @@ import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core
 })
 export class TopComponent {
 
+  @Input() darkMode: boolean;
+
   // Handle folder input
   private _folder = '';
   @Input() set folderString(folderString: string) {

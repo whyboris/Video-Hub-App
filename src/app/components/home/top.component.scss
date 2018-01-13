@@ -3,15 +3,15 @@
 .icon-folder {
   font-size: 12px;
   margin-right: 5px;
-  color: #444444;
+  // color: #444444;
 }
 
 .folder-container {
-  color: $gray-60;
   max-height: 18px;
   min-width: calc(100vw - 100px);
   overflow: hidden;
   .icon-folder-blank:before {
+    color: $gray-60;
     position: absolute;
     transform: translate(0, 3px);
   }
@@ -26,6 +26,8 @@
   display: inline-block;
   font-size: 12px;
   margin-right: 5px;
+  transition: 300ms;
+  transition-property: color;
   &:after {
     content: '\f1a0'; // chevron-right
     font-family: "vh-icon-font";
@@ -35,12 +37,12 @@
 }
 
 .file-container {
-  color: $gray-60;
   max-height: 20px;
   min-width: calc(100vw - 100px);
   overflow: hidden;
 
   .icon-video-blank:before {
+    color: $gray-60;
     position: absolute;
     transform: translate(0, 3px);
   }
@@ -55,4 +57,21 @@
   display: inline-block;
   font-size: 14px;
   margin-right: 5px;
+  transition: 300ms;
+  transition-property: color;
+}
+
+
+.dark-mode-override {
+  & .folder-word {
+    color: #999999;
+    transition: 300ms;
+    transition-property: color;
+  }
+
+  & .file-words {
+    color: #a7a7a7;
+    transition: 300ms;
+    transition-property: color;
+  }
 }

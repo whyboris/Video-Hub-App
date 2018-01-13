@@ -1,4 +1,7 @@
-<div class="folder-container">
+<div
+  class="folder-container"
+  [ngClass]="{ 'dark-mode-override': darkMode }"
+>
   <span class="icon icon-folder-blank"></span>
   <span
   *ngFor="let item of folderNameArray"
@@ -10,7 +13,10 @@
 
 </div>
 
-<div class="file-container">
+<div
+  class="file-container"
+  [ngClass]="{ 'dark-mode-override': darkMode }"
+>
   <span class="icon icon-video-blank"></span>
   <span
     *ngFor="let item of fileNameArray"

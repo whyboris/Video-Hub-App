@@ -1,6 +1,9 @@
 <div class="window">
 
-  <div class="titleBar">
+  <div
+    class="titleBar"
+    [ngClass]="{ 'dark-mode-override': settingsButtons['darkMode'].toggled }"
+  >
     <div class="draggable">
       <img width="10px" height="10px" src="../../../assets/logo.png"> Video Hub
     </div>
@@ -83,11 +86,18 @@
   <header
     *ngIf="!settingsButtons['hideTop'].toggled"
     class="top"
+    [ngStyle]="{
+       'background-image': 'linear-gradient(to bottom, '
+          + (settingsButtons['darkMode'].toggled ? '#555555' : '#e4e4e4') + ' 0%, '
+          + (settingsButtons['darkMode'].toggled ? '#333333' : '#cfcfcf') + ' 100%)',
+       'border-bottom': '1px solid ' + (settingsButtons['darkMode'].toggled ? '#3a3a3a' : '#b3b3b3')
+     }"
   >
 
     <div>
       <app-top-component
         class="top-content-position"
+        [darkMode]="settingsButtons['darkMode'].toggled"
         [fileString]="currentPlayingFile"
         [folderString]="currentPlayingFolder"
         (onFileWordClicked)="handleFileWordClicked($event)"
@@ -106,6 +116,10 @@
 
     <div
       class="allSettings"
+      [ngStyle]="{
+        'background': settingsButtons['darkMode'].toggled ? '#333333' : '#CCCCCC',
+        'border-bottom': settingsButtons['darkMode'].toggled ? '#000000' : '#999999'
+      }"
     >
 
       <!-- ALL THE BUTTONS-->

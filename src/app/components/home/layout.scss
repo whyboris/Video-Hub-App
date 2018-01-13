@@ -60,6 +60,7 @@ $sidebar-width: 190px;
   border-bottom: 1px solid $gray-60;
   height: 20px;
   position: relative;
+  transition: 300ms;
   width: 100%;
   z-index: 9999;
 
@@ -77,6 +78,7 @@ $sidebar-width: 190px;
   position: absolute;
   text-align: center;
   top: 4px;
+  transition: 300ms;
   width: calc(100vw - 110px);
 }
 
@@ -90,6 +92,22 @@ $sidebar-width: 190px;
     color: #ff6666;
   }
 
+}
+
+.dark-mode-override { // needs to be after titleBar and winBtn and draggable
+  background: #222222;
+
+  & .draggable {
+    color: #888888;
+  }
+
+  & .winBtn {
+    color: #aaaaaa;
+    &:hover {
+      transition: 100ms;
+      color: #ff6666;
+    }
+  }
 }
 
 .closeButton {
@@ -110,13 +128,15 @@ $sidebar-width: 190px;
 .top {
   // background: #F3F3F3;
   // background: $gray-20;
-  background-image: linear-gradient(to bottom, #e4e4e4 0%, #cfcfcf 100%);
-  border-bottom: 1px solid $gray-30;
+  // background-image: linear-gradient(to bottom, #e4e4e4 0%, #cfcfcf 100%); // part of [ngStyle]
+  // border-bottom: 1px solid $gray-30;
   // box-shadow: 0 2px 10px rgba(0,0,0,0.2);
   height: $top-region;
   position: relative;
+  transition: 900ms;
   width: 100%;
   z-index: 20;
+
 }
 
 .top-content-position {
@@ -130,7 +150,7 @@ $sidebar-width: 190px;
 }
 
 .allSettings {
-  background: $gray-20;
+  // background: $gray-20; // part of [ngStyle]
   border-bottom: 1px solid $gray-40;
   box-shadow: 0 2px 10px rgba(0,0,0,0.2);
   box-sizing: border-box;
