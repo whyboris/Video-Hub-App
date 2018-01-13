@@ -11,16 +11,16 @@
 
   <ng-template #fileNameBlock>
 
-    <div class="size">
+    <div class="size" *ngIf="showMeta">
       {{ ( rez ? rez : 'HD' ) }}
     </div>
 
-    <div class="length">
+    <div class="length" *ngIf="showMeta">
       {{ time | lengthPipe }}
     </div>
 
     <div class="title">
-      {{ title }} filename is very long lololololol
+      {{ title }}
     </div>
 
   </ng-template>

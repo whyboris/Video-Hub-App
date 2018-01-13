@@ -383,18 +383,20 @@ export class HomeComponent implements OnInit {
    */
   public computeTextBufferAmount(): void {
     this.computePreviewWidth();
-    if (this.settingsButtons.showThumbnails.toggled) {
+    if (this.appState.currentView === 'thumbs') {
       if (this.settingsButtons.showMoreInfo.toggled) {
         this.textPaddingHeight = 55;
       } else {
         this.textPaddingHeight = 20;
       }
-    } else if (this.settingsButtons.showFilmstrip.toggled) {
+    } else if (this.appState.currentView === 'filmstrip') {
       if (this.settingsButtons.showMoreInfo.toggled) {
         this.textPaddingHeight = 20;
       } else {
         this.textPaddingHeight = 0;
       }
+    } else if (this.appState.currentView === 'files') {
+      this.textPaddingHeight = 20;
     }
     console.log('textPaddingHeight = ' + this.textPaddingHeight);
   }
