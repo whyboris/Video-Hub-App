@@ -14,7 +14,7 @@ import { AppState } from '../common/app-state';
 import { Filters } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from 'app/components/common/settings-buttons';
 
-import { myAnimation, myAnimation2, myWizardAnimation, galleryItemAppear } from '../common/animations';
+import { myAnimation, myAnimation2, myWizardAnimation, galleryItemAppear, topAnimation } from '../common/animations';
 
 @Component({
   selector: 'app-home',
@@ -26,13 +26,13 @@ import { myAnimation, myAnimation2, myWizardAnimation, galleryItemAppear } from 
     './search.scss',
     './photon/icons.scss',
     './gallery.scss',
-    './film-override.scss',
     './wizard.scss'
   ],
   animations: [
     myAnimation,
     myAnimation2,
-    myWizardAnimation
+    myWizardAnimation,
+    topAnimation
   ]
 })
 export class HomeComponent implements OnInit {

@@ -92,18 +92,18 @@
           + (settingsButtons['darkMode'].toggled ? '#333333' : '#cfcfcf') + ' 100%)',
        'border-bottom': '1px solid ' + (settingsButtons['darkMode'].toggled ? '#3a3a3a' : '#b3b3b3')
      }"
+     @topAnimation
   >
 
-    <div>
-      <app-top-component
-        class="top-content-position"
-        [darkMode]="settingsButtons['darkMode'].toggled"
-        [fileString]="currentPlayingFile"
-        [folderString]="currentPlayingFolder"
-        (onFileWordClicked)="handleFileWordClicked($event)"
-        (onFolderWordClicked)="handleFolderWordClicked($event)"
-      ></app-top-component>
-    </div>
+    <app-top-component
+      class="top-content-position"
+      [darkMode]="settingsButtons['darkMode'].toggled"
+      [fileString]="currentPlayingFile"
+      [folderString]="currentPlayingFolder"
+      (onFileWordClicked)="handleFileWordClicked($event)"
+      (onFolderWordClicked)="handleFolderWordClicked($event)"
+    ></app-top-component>
+
   </header>
 
   <div
