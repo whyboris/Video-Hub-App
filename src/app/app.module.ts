@@ -18,7 +18,7 @@ import { FilmstripComponent } from 'app/components/home/filmstrip/filmstrip.comp
 import { FileComponent } from 'app/components/home/file/file.component';
 import { HomeComponent } from './components/home/home.component';
 import { PreviewComponent } from './components/home/thumbnail/preview.component';
-import { TopComponent } from './components/home/top.component';
+import { TopComponent } from './components/home/top/top.component';
 
 import { FileSearchPipe } from './components/pipes/file-search.pipe';
 import { FolderArrowsPipe } from 'app/components/pipes/folder-arrows.pipe';
