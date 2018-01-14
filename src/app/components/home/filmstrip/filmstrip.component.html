@@ -9,7 +9,8 @@
     [ngStyle]="{ height: imgHeight + 'px'}"
   >
 
-    <ng-container *ngIf="!showPlaceholder">
+    <span *ngIf="showMeta" class="time" @metaAppear>{{ time | lengthPipe }}</span>
+    <span *ngIf="showMeta" class="rez" @metaAppear>{{ rez }}</span>
 
     <ng-container *ngIf="hoverScrub && hover && noError">
       <div
@@ -34,11 +35,9 @@
       >
     </ng-container>
 
-    </ng-container>
-
   </div>
 
-  <span *ngIf="showMeta" class="title">
+  <span *ngIf="showMeta" class="title" @textAppear>
     {{ title }}
   </span>
 

@@ -11,7 +11,7 @@
 
   <ng-template #fileNameBlock>
 
-    <div class="size" *ngIf="showMeta">
+    <div class="size" *ngIf="showMeta" @metaAppear>
       {{ rez }}
     </div>
 
@@ -25,7 +25,7 @@
       {{ title }}
     </div>
 
-    <div class="length" *ngIf="showMeta">
+    <div class="length" *ngIf="showMeta" @metaAppear>
       {{ time | lengthPipe }}
     </div>
 

@@ -3,6 +3,8 @@
   display: inline-block;
   margin: 20px 20px 0;
   overflow: hidden;
+  transition: 300ms;
+  transition-property: height;
 }
 
 .video-box {
@@ -38,18 +40,17 @@ img:before {
 
 .time, .rez {
   font-size: 10px;
-  color: rgba(255, 255, 255, 0.5);
+  color: rgba(255, 255, 255, 0.7);
   position: absolute;
   z-index: 2;
+  bottom: 4px;
 }
 
 .time {
-  bottom: 3px;
   right: 4px;
 }
 
 .rez {
-  bottom: 4px;
   left: 3px;
 }
 

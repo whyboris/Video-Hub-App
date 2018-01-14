@@ -14,11 +14,11 @@ $black: #000000;
 
 @mixin scrollBar {
   &::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
     background-color: $gray-15;
   }
   &::-webkit-scrollbar {
-    width: 6px;
+    width: 10px;
     // background-color: #bbbbbb;
   }
   &::-webkit-scrollbar-thumb {
@@ -31,7 +31,7 @@ $black: #000000;
     visibility: hidden;
   }
   &::-webkit-scrollbar {
-    width: 6px;
+    width: 10px;
     visibility: hidden;
   }
   &::-webkit-scrollbar-thumb {

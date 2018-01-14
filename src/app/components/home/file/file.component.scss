@@ -53,6 +53,8 @@
   text-overflow: ellipsis;
   text-align: left;
   white-space: nowrap;
+  transition: 300ms;
+  transition-property: margin width;
 
   // below is now in [ngStyle]
   // margin: 0 30px;

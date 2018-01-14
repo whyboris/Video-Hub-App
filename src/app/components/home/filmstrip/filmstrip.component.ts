@@ -1,12 +1,14 @@
 import { Component, Input, OnInit, HostListener } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { galleryItemAppear } from '../../common/animations';
+import { galleryItemAppear, metaAppear, textAppear } from '../../common/animations';
 
 @Component({
   selector: 'app-filmstrip-item',
   templateUrl: './filmstrip.component.html',
   styleUrls: ['./filmstrip.component.scss'],
-  animations: [galleryItemAppear]
+  animations: [ galleryItemAppear,
+                textAppear,
+                metaAppear ]
 })
 export class FilmstripComponent implements OnInit {
 
@@ -16,9 +18,10 @@ export class FilmstripComponent implements OnInit {
   @Input() imgId: any;
   @Input() imgHeight: number;
   @Input() imgWidth: number;
-  @Input() showPlaceholder: boolean;
   @Input() title: string;
   @Input() showMeta: boolean;
+  @Input() time: string;
+  @Input() rez: string;
 
   indexArray: Array<number> = []; // to set z-index on css
 

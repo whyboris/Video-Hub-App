@@ -1,13 +1,14 @@
 import { Component, Input, HostListener } from '@angular/core';
 
-import { galleryItemAppear } from '../../common/animations';
+import { galleryItemAppear, metaAppear } from '../../common/animations';
 
 @Component({
   selector: 'app-file-item',
   templateUrl: './file.component.html',
   styleUrls: ['./file.component.scss',
               '../photon/icons.scss'],
-  animations: [galleryItemAppear]
+  animations: [ galleryItemAppear,
+                metaAppear ]
 })
 export class FileComponent {
 

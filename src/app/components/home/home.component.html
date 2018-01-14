@@ -270,7 +270,10 @@
                       + (appState.menuHidden ? -32 : 0)) + 'px)',
           'background': settingsButtons['darkMode'].toggled ? '#000000' : '#999999'
         }"
-      [ngClass]="{ 'gallery-container-full-width': settingsButtons['hideSidebar'].toggled}"
+      [ngClass]="{
+          'gallery-container-full-width': settingsButtons['hideSidebar'].toggled,
+          'gallery-dark-scroll': settingsButtons['darkMode'].toggled
+        }"
       [bufferAmount]="0"
       [childHeight]="imgHeight + textPaddingHeight + 20
                       + ( appState.currentView === 'thumbs' ? 4 : 0)
@@ -317,6 +320,8 @@
           (click)="openVideo(item[3])"
           [imgId]="item[3]"
           [title]="item[2]"
+          [time]="item[4]"
+          [rez]="item[5]"
           [elHeight]="imgHeight + textPaddingHeight"
           [imgWidth]="(imgHeight / 100) * item[6] || (imgHeight / 100) * 171"
           [imgHeight]="imgHeight"

@@ -1,12 +1,14 @@
 import { Component, HostListener, Input, OnInit, OnDestroy } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { galleryItemAppear } from '../../common/animations';
+import { galleryItemAppear, metaAppear, textAppear } from '../../common/animations';
 
 @Component({
   selector: 'app-gallery-item',
   templateUrl: './preview.component.html',
   styleUrls: [ './preview.component.scss' ],
-  animations: [ galleryItemAppear ]
+  animations: [ galleryItemAppear,
+                textAppear,
+                metaAppear ]
 })
 export class PreviewComponent implements OnInit, OnDestroy {
 
