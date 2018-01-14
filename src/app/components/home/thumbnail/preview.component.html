@@ -12,8 +12,8 @@
   [ngStyle]="{ height: imgHeight + 'px'}"
 >
 
-  <span *ngIf="showMeta" class="time">{{ time | lengthPipe }}</span>
-  <span *ngIf="showMeta" class="rez">{{ rez }}</span>
+  <span *ngIf="showMeta" class="time" @metaAppear>{{ time | lengthPipe }}</span>
+  <span *ngIf="showMeta" class="rez" @metaAppear>{{ rez }}</span>
 
   <div *ngIf="hoverScrub && hover && noError">
     <div
@@ -35,7 +35,12 @@
 
 </div>
 
-<span *ngIf="showMeta" class="title" [ngStyle]="{ top: (imgHeight + 5) + 'px' }">
+<span
+  *ngIf="showMeta"
+  [ngStyle]="{ top: (imgHeight + 5) + 'px' }"
+  class="title"
+  @textAppear
+>
   {{ title }}
 </span>
 

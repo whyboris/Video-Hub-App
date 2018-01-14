@@ -1,6 +1,8 @@
 .meta-container {
   width: calc(100% - 40px);
   margin: 20px 20px 5px;
+  transition: 300ms;
+  transition-property: height;
 }
 
 .filmstrip-container {
@@ -28,7 +30,6 @@
   position: absolute;
 }
 
-
 img:before {
   content: 'lol u mad?'; /* to prevent broken img icon from showing up */
   display: block;
@@ -47,4 +48,20 @@ img:before {
   text-align: left;
   white-space: nowrap;
   width: 100%;
+}
+
+.time, .rez {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.8);
+  position: absolute;
+  z-index: 100;
+  bottom: 4px;
+}
+
+.time {
+  right: 4px;
+}
+
+.rez {
+  left: 3px;
 }

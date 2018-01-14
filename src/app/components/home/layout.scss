@@ -127,9 +127,10 @@ $sidebar-width: 190px;
 
 .top {
   height: $top-region;
+  overflow: hidden;
   position: relative;
-  transition: 900ms;
   width: 100%;
+  z-index: 20;
 }
 
 .top-content-position {
@@ -212,6 +213,12 @@ $sidebar-width: 190px;
   width: calc(100vw - #{$sidebar-width});
 
   @include scrollBar;
+}
+
+.gallery-dark-scroll {
+  &::-webkit-scrollbar-track {
+    background-color: $gray-70;
+  }
 }
 
 .gallery-container-full-width {

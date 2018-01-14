@@ -22,5 +22,9 @@
     "target": [
       "AppImage"
     ]
+  },
+  "nsis": {
+    "oneClick": false,
+    "perMachine": false
   }
 }
