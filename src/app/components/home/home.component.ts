@@ -288,18 +288,21 @@ export class HomeComponent implements OnInit {
       this.settingsButtons['showFiles'].toggled = false;
       this.appState.currentView = 'thumbs';
       this.computeTextBufferAmount();
+      this.scrollToTop();
     } else if (uniqueKey === 'showFilmstrip') {
       this.settingsButtons['showThumbnails'].toggled = false;
       this.settingsButtons['showFilmstrip'].toggled = true;
       this.settingsButtons['showFiles'].toggled = false;
       this.appState.currentView = 'filmstrip';
       this.computeTextBufferAmount();
+      this.scrollToTop();
     } else if (uniqueKey === 'showFiles') {
       this.settingsButtons['showThumbnails'].toggled = false;
       this.settingsButtons['showFilmstrip'].toggled = false;
       this.settingsButtons['showFiles'].toggled = true;
       this.appState.currentView = 'files';
       this.computeTextBufferAmount();
+      this.scrollToTop();
     } else if (uniqueKey === 'makeSmaller') {
       this.decreaseSize();
     } else if (uniqueKey === 'makeLarger') {
@@ -319,6 +322,13 @@ export class HomeComponent implements OnInit {
         }, 300);
       }
     }
+  }
+
+  /**
+   * scroll to the top of the gallery
+   */
+  public scrollToTop(): void {
+    document.getElementById('scrollDiv').scrollTop = 0;
   }
 
   /**
@@ -420,6 +430,7 @@ export class HomeComponent implements OnInit {
         this.filters[origin].string = '';
       }
     }
+    this.scrollToTop();
   }
 
   /**
