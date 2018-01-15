@@ -16,6 +16,8 @@ import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from 'app/
 
 import { myAnimation, myAnimation2, myWizardAnimation, galleryItemAppear, topAnimation } from '../common/animations';
 
+import { DemoContent } from '../../../assets/demo-content';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -51,6 +53,7 @@ export class HomeComponent implements OnInit {
 
   // DEMO MODE TOGGLE !!!
   demo = false;
+  webDemo = false;
 
   // REORGANIZE / keep
   currentPlayingFile = '';
@@ -194,7 +197,19 @@ export class HomeComponent implements OnInit {
   }
 
   public loadFromFile(): void {
-    this.electronService.ipcRenderer.send('load-the-file', 'lol');
+    if (this.webDemo) {
+      const finalObject = DemoContent;
+      this.appState.numOfFolders = finalObject.numOfFolders;
+      this.appState.selectedOutputFolder = finalObject.outputDir;
+      this.appState.selectedSourceFolder = finalObject.inputDir;
+      this.inProgress = false;
+      this.importDone = true;
+      this.showWizard = false;
+      this.finalArray = this.demo ? finalObject.images.slice(0, 50) : finalObject.images;
+      this.buildFileMap();
+    } else {
+      this.electronService.ipcRenderer.send('load-the-file', 'lol');
+    }
   }
 
   public selectSourceDirectory(): void {
