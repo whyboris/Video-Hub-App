@@ -162,7 +162,7 @@ export class HomeComponent implements OnInit {
     this.electronService.ipcRenderer.on('settingsReturning', (event, settingsObject: any) => {
       this.restoreSettingsFromBefore(settingsObject);
       if (settingsObject.appState.selectedOutputFolder && settingsObject.appState.selectedSourceFolder) {
-        this.loadThisJsonFile(settingsObject.appState.selectedOutputFolder + '/images.json');
+        this.loadThisJsonFile(settingsObject.appState.selectedOutputFolder + '/images.vha');
       }
     });
 

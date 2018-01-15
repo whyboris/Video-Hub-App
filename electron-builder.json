@@ -26,5 +26,10 @@
   "nsis": {
     "oneClick": false,
     "perMachine": false
+  },
+  "fileAssociations": {
+    "ext": "vha",
+    "name": "Video Hub App file",
+    "role": "Editor"
   }
 }
