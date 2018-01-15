@@ -5,7 +5,7 @@
     [ngClass]="{ 'dark-mode-override': settingsButtons['darkMode'].toggled }"
   >
     <div class="draggable">
-      <img width="10px" height="10px" src="../../../assets/logo.png"> Video Hub
+      <img width="10px" height="10px" src="../../../assets/logo.png"> Video Hub {{ demo ? ' demo - limited to 50 video files' : '' }}
     </div>
     <div (click)="initiateMinimize()" class="winBtn minimizeButton">
       <span class="icon icon-minus"></span>

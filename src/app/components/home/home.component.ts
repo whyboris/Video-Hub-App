@@ -49,6 +49,9 @@ export class HomeComponent implements OnInit {
   // App state to save -- so it can be exported and saved when closing the app
   appState = AppState;
 
+  // DEMO MODE TOGGLE !!!
+  demo = false;
+
   // REORGANIZE / keep
   currentPlayingFile = '';
   currentPlayingFolder = '';
@@ -151,7 +154,7 @@ export class HomeComponent implements OnInit {
       this.inProgress = false;
       this.importDone = true;
       this.showWizard = false;
-      this.finalArray = finalObject.images;
+      this.finalArray = this.demo ? finalObject.images.slice(0, 50) : finalObject.images;
       this.buildFileMap();
     });
 
