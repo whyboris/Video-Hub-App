@@ -1,61 +1,115 @@
 export let DemoContent = {
   'ssSize': '300',
-  'numOfFolders': 1,
-  'inputDir': 'C:\\temp\\temp vid - can delete',
-  'outputDir': 'C:\\temp\\win32-output',
-  'lastScreen': 6,
+  'numOfFolders': 3,
+  'inputDir': 'unimportant',
+  'outputDir': 'images',
+  'lastScreen': 10,
   'images': [
     [
-      '',
-      'Anal creampie compilation 2.mp4',
-      'Anal creampie compilation 2',
+      '/DC Comics Animations/Batman',
+      'Batman & Mr. Freeze, SubZero - 1998.avi',
+      'Batman & Mr Freeze, SubZero - 1998',
       0,
-      1471,
+      3995,
       '',
-      133
+      132
     ],
     [
-      '',
-      'Anal creampie compilation.mp4',
-      'Anal creampie compilation',
+      '/DC Comics Animations/Batman',
+      'Batman - Gotham Knight - 2008.mp4',
+      'Batman - Gotham Knight - 2008',
       1,
-      1078,
-      '',
-      133
+      4560,
+      '1080',
+      178
     ],
     [
-      '',
-      'German Latex Girl Anal - Pornhub.com.mp4',
-      'German Latex Girl Anal - Pornhub com',
+      '/DC Comics Animations/Batman',
+      'Batman - The Dark Knight Returns Part 1 - 2012.mp4',
+      'Batman - The Dark Knight Returns Part 1 - 2012',
       2,
-      682,
+      4582,
+      '1080',
+      178
+    ],
+    [
+      '/DC Comics Animations/Batman',
+      'Batman - The Dark Knight Returns Part 2 - 2013.mp4',
+      'Batman - The Dark Knight Returns Part 2 - 2013',
+      3,
+      4549,
+      '1080',
+      178
+    ],
+    [
+      '/DC Comics Animations/Batman',
+      'Batman and Harley Quinn.mp4',
+      'Batman and Harley Quinn',
+      5,
+      4453,
+      '1080',
+      178
+    ],
+    [
+      '/DC Comics Animations/Batman',
+      'Batman Unlimited - Monster Mayhem.mp4',
+      'Batman Unlimited - Monster Mayhem',
+      4,
+      4812,
+      '1080',
+      178
+    ],
+    [
+      '/DC Comics Animations/Batman',
+      'Batman, Chase Me - 2003.avi',
+      'Batman, Chase Me - 2003',
+      6,
+      384,
+      '',
+      132
+    ],
+    [
+      '/DC Comics Animations/Batman',
+      'Batman, Mask of The Phantasm - 1993.avi',
+      'Batman, Mask of The Phantasm - 1993',
+      7,
+      4399,
+      '',
+      173
+    ],
+    [
+      '/DC Comics Animations/Batman',
+      'Batman, Mystery of the Batwoman - 2003.avi',
+      'Batman, Mystery of the Batwoman - 2003',
+      8,
+      4305,
+      '',
+      132
+    ],
+    [
+      '/DC Comics Animations/Batman',
+      'Superman, Batman - Public Enemies - 2009.m4v',
+      'Superman, Batman - Public Enemies - 2009',
+      9,
+      4022,
       '720',
       178
     ],
     [
+      '/DC Comics Animations/Batman Beyond',
+      'Batman Beyond - Return of the Joker - 2000.avi',
+      'Batman Beyond - Return of the Joker - 2000',
+      10,
+      4603,
       '',
-      'Julie Meadows - Precious blonde loves anal sex - Pornhub.com.mp4',
-      'Julie Meadows - Precious blonde loves anal sex - Pornhub com',
-      3,
-      1105,
-      '',
-      133
+      174
     ],
     [
-      '',
-      'Kathy Anderson -Anal Gape & Creampie Compilation.mp4',
-      'Kathy Anderson -Anal Gape & Creampie Compilation',
-      4,
-      709,
-      '720+',
-      133
-    ],
-    [
-      '',
-      'Myah Monroe 2.mp4',
-      'Myah Monroe 2',
-      5,
-      1038,
+      '/DC Comics Animations/Batman Beyond/Batman Beyond (Animated Series)',
+      'Batman Beyond - 01 - Rebirth - Part 1.avi',
+      'Batman Beyond - 01 - Rebirth - Part 1',
+      11,
+      1320,
       '',
       133
     ]

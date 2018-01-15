@@ -86,7 +86,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'Show more info'
   },
   'fontSizeLarger': {
-    hidden: true,
+    hidden: false,
     toggled: false,
     iconName: 'icon-larger',
     title: 'Toggle font size',
@@ -128,7 +128,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'Dark mode'
   },
   'folderUnion': {
-    hidden: false,
+    hidden: true,
     toggled: false,
     iconName: 'icon-folder-plus',
     title: 'Folder union search',
@@ -136,13 +136,13 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'folder': {
     hidden: false,
-    toggled: false,
+    toggled: true,
     iconName: 'icon-folder-minus',
     title: 'Folder search',
     description: 'Search in folders containing each of the search words'
   },
   'fileUnion': {
-    hidden: false,
+    hidden: true,
     toggled: false,
     iconName: 'icon-video-plus',
     title: 'Video union search',
@@ -156,8 +156,8 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'Search for videos containing each of the search words'
   },
   'exclude': {
-    hidden: false,
-    toggled: true,
+    hidden: true,
+    toggled: false,
     iconName: 'icon-video-x',
     title: 'Exclude filter',
     description: 'Exclude any files that contain this string'
