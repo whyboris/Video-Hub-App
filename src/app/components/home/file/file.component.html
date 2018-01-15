@@ -21,6 +21,7 @@
           width: 'calc(100% - ' + (showMeta ? '65px' : '10px') + ')',
           margin: showMeta ? '0 30px' : '0 10px'
         }"
+      [ngClass]="{ 'larger-font': largerFont }"
     >
       {{ title }}
     </div>

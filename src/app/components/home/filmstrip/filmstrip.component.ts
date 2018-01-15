@@ -22,6 +22,7 @@ export class FilmstripComponent implements OnInit {
   @Input() showMeta: boolean;
   @Input() time: string;
   @Input() rez: string;
+  @Input() largerFont: boolean;
 
   indexArray: Array<number> = []; // to set z-index on css
 

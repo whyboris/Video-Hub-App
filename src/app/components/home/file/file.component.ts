@@ -19,6 +19,7 @@ export class FileComponent {
   @Input() imgId: any;
   @Input() time: string;
   @Input() title: string;
+  @Input() largerFont: boolean;
 
   constructor() { }
 

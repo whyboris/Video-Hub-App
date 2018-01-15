@@ -48,6 +48,12 @@ img:before {
   text-align: left;
   white-space: nowrap;
   width: 100%;
+  transition: 300ms;
+  transition-property: font-size;
+}
+
+.larger-font {
+  font-size: 16px;
 }
 
 .time, .rez {

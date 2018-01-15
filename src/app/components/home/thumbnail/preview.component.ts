@@ -23,6 +23,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
   @Input() imgId: any;
   @Input() time: string;
   @Input() title: string;
+  @Input() largerFont: boolean;
 
   hover: boolean;
   currentlyShowing = 1;

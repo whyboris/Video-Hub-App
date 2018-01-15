@@ -69,4 +69,11 @@ img:before {
   text-overflow: ellipsis;
   width: 100%;
   word-wrap: break-word;
+  transition: 300ms;
+  transition-property: font-size;
+}
+
+.larger-font {
+  margin-top: 4px;
+  font-size: 16px;
 }
