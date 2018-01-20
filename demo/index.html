@@ -39,7 +39,7 @@
       a {
         color: black;
       }
-      .taskbar {
+      .win-taskbar {
         position: fixed;
         height: 40px;
         background: #002d4f;
@@ -47,6 +47,22 @@
         bottom: 0;
         width: 100vw;
         left: 0;
+      }
+      .mac-dock {
+        position: fixed;
+        height: 40px;
+        background: white;
+        left: calc(50vw - 125px);
+        bottom: 0;
+      }
+      .mac-tray {
+        position: fixed;
+        height: 20px;
+        width: 100vw;
+        background: #e8eff5;
+        border-bottom: 1px solid #8898a6;
+        top: 0;
+        box-shadow: 0 0 5 rgba(0, 0, 0, 0.3);
       }
       .fake {
         position: absolute;
@@ -96,6 +112,11 @@
 
   <body>
 
+    <div id="mac2" class="mac-tray">
+      <img src="apple.png" class="fake" style="left: 0; height: 20px;">
+      <img src="clock.png" class="fake" style="right: 0">
+    </div>
+
     <div class="about">
       <span classe="heading">Online Demo</span>
       <span class="description">Feature-limited online demo of app. Please
@@ -114,11 +135,34 @@
 
     </div>
 
-    <div class="taskbar">
+    <div id="windows" class="win-taskbar">
       <img src="left.png" class="fake" style="left: 0">
       <img src="right.png" class="fake" style="right: 0">
     </div>
 
+    <div id="mac" class="mac-dock" style="border-top-left-radius: 5px; border-top-right-radius: 5px; background: #5a6a61">
+      <img src="bottom.png" class="fake" style="border-top-left-radius: 5px; border-top-right-radius: 5px">
+    </div>
+
   </body>
+
+    <script>
+
+      var OSName = "Unknown OS";
+      if (navigator.appVersion.indexOf("Win") != -1) OSName = "Windows";
+      if (navigator.appVersion.indexOf("Mac") != -1) OSName = "MacOS";
+      console.log('Your OS: ' + OSName);
+
+      if (OSName === "Windows") {
+        const el = document.getElementById('mac');
+        el.style = "display: none";
+        const el2 = document.getElementById('mac2');
+        el2.style = "display: none";
+      } else if (OSName ==="MacOS") {
+        const el3 = document.getElementById('windows');
+        el3.style = "display: none";
+      }
+
+    </script>
 
 </html>
