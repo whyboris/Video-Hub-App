@@ -105,6 +105,9 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 // My variables
 // ============================================================
 
+// DEMO FLAG !!!
+const demo = false;
+
 import { cleanUpFileName, labelVideo } from './main-support';
 
 import { FinalObject } from './src/app/components/common/final-object.interface';
@@ -261,7 +264,7 @@ ipc.on('rescan-current-directory', function (event, inputAndOutput) {
 })
 
 /**
- * Summon system modal to choose the images.json file
+ * Summon system modal to choose the images.vha file
  * send images object to App
  * send settings object to App
  */
@@ -269,14 +272,19 @@ ipc.on('load-the-file', function (event, somethingElse) {
   // console.log(somethingElse);
 
   dialog.showOpenDialog({
+      title: 'Please select a previously-saved Video Hub file',
+      filters: [{
+        name: 'Video Hub files',
+        extensions: ['vha']
+      }],
       properties: ['openFile']
     }, function (files) {
       if (files) {
         console.log('the user has chosen this previously-saved json file: ' + files[0]);
         // TODO: check if file ends in .json before parsing !!!
-        selectedOutputFolder = files[0].replace('\images.json', '');
+        selectedOutputFolder = files[0].replace('\images.vha', '');
 
-        fs.readFile(selectedOutputFolder + '/images.json', (err, data) => {
+        fs.readFile(selectedOutputFolder + '/images.vha', (err, data) => {
           if (err) {
             throw err; // later maybe only log it ???
           } else {
@@ -341,7 +349,7 @@ function sendFinalResultHome(): void {
 
   const json = JSON.stringify(finalObject);
   // write the file
-  fs.writeFile(selectedOutputFolder + '/images.json', json, 'utf8', () => {
+  fs.writeFile(selectedOutputFolder + '/images.vha', json, 'utf8', () => {
     console.log('file written:');
     theOriginalOpenFileDialogEvent.sender.send('finalObjectReturning', JSON.parse(json));
   });
@@ -500,11 +508,11 @@ function reScanDirectory(inputFolder: string, outputFolder: string): void {
   console.log('inputFolder: ' + inputFolder);
   console.log('outputFolder: ' + outputFolder);
 
-  fs.readFile(outputFolder + '/images.json', (err, data) => {
+  fs.readFile(outputFolder + '/images.vha', (err, data) => {
     if (err) {
       console.log(err); // TODO: better error handling
     } else {
-      console.log('images.json file has been read: ----------------------------');
+      console.log('images.vha file has been read: ----------------------------');
       const currentJson: FinalObject = JSON.parse(data);
 
       const oldFileList: any[] = currentJson.images;

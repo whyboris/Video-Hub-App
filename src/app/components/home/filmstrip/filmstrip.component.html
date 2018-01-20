@@ -37,7 +37,12 @@
 
   </div>
 
-  <span *ngIf="showMeta" class="title" @textAppear>
+  <span
+    *ngIf="showMeta"
+    [ngClass]="{ 'larger-font': largerFont }"
+    class="title"
+    @textAppear
+  >
     {{ title }}
   </span>
 

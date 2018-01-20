@@ -16,6 +16,8 @@ import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from 'app/
 
 import { myAnimation, myAnimation2, myWizardAnimation, galleryItemAppear, topAnimation } from '../common/animations';
 
+import { DemoContent } from '../../../assets/demo-content';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -48,6 +50,10 @@ export class HomeComponent implements OnInit {
 
   // App state to save -- so it can be exported and saved when closing the app
   appState = AppState;
+
+  // DEMO MODE TOGGLE !!!
+  demo = false;
+  webDemo = true;
 
   // REORGANIZE / keep
   currentPlayingFile = '';
@@ -120,6 +126,23 @@ export class HomeComponent implements OnInit {
         this.cd.detectChanges();
         this.debounceUpdateMax(10);
       });
+
+      if (this.webDemo) {
+        const finalObject = DemoContent;
+        // identical to `finalObjectReturning`
+        this.appState.numOfFolders = finalObject.numOfFolders;
+        this.appState.selectedOutputFolder = finalObject.outputDir;
+        this.appState.selectedSourceFolder = finalObject.inputDir;
+        this.inProgress = false;
+        this.importDone = true;
+        this.showWizard = false;
+        this.finalArray = finalObject.images;
+        this.buildFileMap();
+        setTimeout(() => {
+          this.toggleButton('showThumbnails');
+        }, 1000);
+      }
+
     }, 100);
 
     // Returning Input
@@ -151,7 +174,7 @@ export class HomeComponent implements OnInit {
       this.inProgress = false;
       this.importDone = true;
       this.showWizard = false;
-      this.finalArray = finalObject.images;
+      this.finalArray = this.demo ? finalObject.images.slice(0, 50) : finalObject.images;
       this.buildFileMap();
     });
 
@@ -159,7 +182,7 @@ export class HomeComponent implements OnInit {
     this.electronService.ipcRenderer.on('settingsReturning', (event, settingsObject: any) => {
       this.restoreSettingsFromBefore(settingsObject);
       if (settingsObject.appState.selectedOutputFolder && settingsObject.appState.selectedSourceFolder) {
-        this.loadThisJsonFile(settingsObject.appState.selectedOutputFolder + '/images.json');
+        this.loadThisJsonFile(settingsObject.appState.selectedOutputFolder + '/images.vha');
       }
     });
 

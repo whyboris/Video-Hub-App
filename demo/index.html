@@ -1,0 +1,168 @@
+<html>
+
+  <head>
+
+    <title>Video Hub App - Online Demo</title>
+
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+      .about {
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        width: 20%;
+        z-index: 200;
+        background: #ffffbb;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+      }
+      .heading {
+        position: relative;
+        color:black;
+        font-size: 16px;
+        display: block;
+        font-family: "Roboto", Arial, sans-serif;
+      }
+      .description {
+        display: block;
+        position: relative;
+        color: black;
+        margin-top: 10px;
+        font-size: 12px;
+        font-family: sans-serif;
+        font-style: italic;
+      }
+      a {
+        color: black;
+      }
+      .win-taskbar {
+        position: fixed;
+        height: 40px;
+        background: #002d4f;
+        border: 0;
+        bottom: 0;
+        width: 100vw;
+        left: 0;
+      }
+      .mac-dock {
+        position: fixed;
+        height: 40px;
+        background: white;
+        left: calc(50vw - 125px);
+        bottom: 0;
+      }
+      .mac-tray {
+        position: fixed;
+        height: 20px;
+        width: 100vw;
+        background: #e8eff5;
+        border-bottom: 1px solid #8898a6;
+        top: 0;
+        box-shadow: 0 0 5 rgba(0, 0, 0, 0.3);
+      }
+      .fake {
+        position: absolute;
+        bottom: 0;
+      }
+      .videoHub {
+        top: 120px;
+        left: 80px;
+        width: calc(100vw - 160px);
+        height: calc(100vh - 300px);
+        max-width: calc(100vw - 160px);
+        max-height: calc(100vh - 160px);
+        border: 0;
+        position: relative;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        resize: both;
+        min-height: 300px;
+        min-width: 400px;
+        z-index: 1;
+      }
+      .fakeComputer {
+        background-image: url(../dist/desktop.jpg);
+        background-position: 50%;
+        background-size: cover;
+        background-attachment: scroll;
+        height: 100vh;
+      }
+      .resizeHelper {
+        position: absolute;
+        top: calc(100vh - 170px);
+        right: 80px;
+        margin: 0;
+        border: 1px solid black;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+        background: #ffffbb;
+        padding: 10px;
+        color: black;
+        font-family: sans-serif;
+        font-size: 12px;
+        line-height: 16px;
+        border-top-right-radius: 0;
+        z-index: 0;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <div id="mac2" class="mac-tray">
+      <img src="apple.png" class="fake" style="left: 0; height: 20px;">
+      <img src="clock.png" class="fake" style="right: 0">
+    </div>
+
+    <div class="about">
+      <span classe="heading">Online Demo</span>
+      <span class="description">Feature-limited online demo of app. Please
+        <a href="http://videohubapp.com/">download</a> the app to try on your computer to really see how it works.
+      </span>
+    </div>
+
+    <div class="fakeComputer" draggable="true">
+
+      <iframe src="../dist/index.html" class="videoHub">
+      </iframe>
+
+      <div class="resizeHelper">
+        You can resize by dragging this corner!
+      </div>
+
+    </div>
+
+    <div id="windows" class="win-taskbar">
+      <img src="left.png" class="fake" style="left: 0">
+      <img src="right.png" class="fake" style="right: 0">
+    </div>
+
+    <div id="mac" class="mac-dock" style="border-top-left-radius: 5px; border-top-right-radius: 5px; background: #5a6a61">
+      <img src="bottom.png" class="fake" style="border-top-left-radius: 5px; border-top-right-radius: 5px">
+    </div>
+
+  </body>
+
+    <script>
+
+      var OSName = "Unknown OS";
+      if (navigator.appVersion.indexOf("Win") != -1) OSName = "Windows";
+      if (navigator.appVersion.indexOf("Mac") != -1) OSName = "MacOS";
+      console.log('Your OS: ' + OSName);
+
+      if (OSName === "Windows") {
+        const el = document.getElementById('mac');
+        el.style = "display: none";
+        const el2 = document.getElementById('mac2');
+        el2.style = "display: none";
+      } else if (OSName ==="MacOS") {
+        const el3 = document.getElementById('windows');
+        el3.style = "display: none";
+      }
+
+    </script>
+
+</html>

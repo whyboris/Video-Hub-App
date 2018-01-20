@@ -5,7 +5,7 @@
     [ngClass]="{ 'dark-mode-override': settingsButtons['darkMode'].toggled }"
   >
     <div class="draggable">
-      <img width="10px" height="10px" src="../../../assets/logo.png"> Video Hub
+      <img width="10px" height="10px" src="../../../assets/logo.png"> Video Hub {{ demo ? ' demo - limited to 50 video files' : '' }}
     </div>
     <div (click)="initiateMinimize()" class="winBtn minimizeButton">
       <span class="icon icon-minus"></span>
@@ -311,6 +311,7 @@
           [elHeight]="imgHeight + textPaddingHeight"
           [elWidth]="previewWidth"
           [folderPath]="appState.selectedOutputFolder"
+          [largerFont]="settingsButtons['fontSizeLarger'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
           [hoverScrub]="settingsButtons['hoverScrub'].toggled"
           [randomImage]="settingsButtons['randomImage'].toggled"
@@ -329,6 +330,7 @@
           [imgWidth]="(imgHeight / 100) * item[6] || (imgHeight / 100) * 171"
           [imgHeight]="imgHeight"
           [folderPath]="appState.selectedOutputFolder"
+          [largerFont]="settingsButtons['fontSizeLarger'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
           [hoverScrub]="settingsButtons['hoverScrub'].toggled"
         ></app-filmstrip-item>
@@ -343,6 +345,7 @@
           [time]="item[4]"
           [rez]="item[5]"
           [elHeight]="20"
+          [largerFont]="settingsButtons['fontSizeLarger'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
         ></app-file-item>
       </ng-container>
