@@ -208,7 +208,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       const fullPath = ev.dataTransfer.files[0].path;
       ev.preventDefault();
       if (fullPath.slice(-4) === '.vha') {
-        this.electronService.ipcRenderer.send('load-this-json-file', ev.dataTransfer.files[0].path);
+        this.electronService.ipcRenderer.send('load-this-vha-file', ev.dataTransfer.files[0].path);
       }
     }
   }
@@ -241,7 +241,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public loadThisJsonFile(fullPath: string): void {
-    this.electronService.ipcRenderer.send('load-this-json-file', fullPath);
+    this.electronService.ipcRenderer.send('load-this-vha-file', fullPath);
   }
 
   public loadFromFile(): void {

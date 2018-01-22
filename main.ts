@@ -10,6 +10,10 @@ if (serve) {
   });
 }
 
+// BORIS TEMP
+// TODO - clean if doesn't work
+// let userWantedToOpen = null;
+
 function createWindow() {
 
   const electronScreen = screen;
@@ -57,21 +61,16 @@ try {
 
   // UNSURE IF WORKS
   // TODO - clean if doesn't work
-  app.on('will-finish-launching', function () {
-    // UNSURE IF WORKS
-    app.on('open-file', (event, filePath) => {
-      setTimeout(() => {
-        let clickedFile = 'hohohohoh';
-        if (process.argv.length >= 2) {
-          clickedFile = process.argv[1];
-        }
-        theOriginalOpenFileDialogEvent.sender.send('fileOpenWorks', filePath);
-        setTimeout( () => {
-          theOriginalOpenFileDialogEvent.sender.send('fileOpenWorks', clickedFile);
-        }, 5000);
-      }, 2000);
-    });
-  });
+  // app.on('will-finish-launching', function () {
+  //   // UNSURE IF WORKS
+  //   app.on('open-file', (event, filePath) => {
+  //     if (filePath) {
+  //       userWantedToOpen = filePath;
+  //     } else if (process.argv.length >= 2) {
+  //       userWantedToOpen = process.argv[1];
+  //     }
+  //   });
+  // });
 
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
@@ -298,8 +297,8 @@ ipc.on('load-the-file', function (event, somethingElse) {
       properties: ['openFile']
     }, function (files) {
       if (files) {
-        console.log('the user has chosen this previously-saved json file: ' + files[0]);
-        // TODO: check if file ends in .json before parsing !!!
+        console.log('the user has chosen this previously-saved .vha file: ' + files[0]);
+        // TODO: check if file ends in .vha before parsing !!!
         selectedOutputFolder = files[0].replace('\images.vha', '');
 
         fs.readFile(selectedOutputFolder + '/images.vha', (err, data) => {
@@ -315,11 +314,18 @@ ipc.on('load-the-file', function (event, somethingElse) {
 })
 
 /**
- * Import this JSON file
+ * Import this .vha file
  */
-ipc.on('load-this-json-file', function (event, pathToJsonFile) {
-  console.log('the app is auto loading this JSON file: ' + pathToJsonFile);
-  fs.readFile(pathToJsonFile, (err, data) => {
+ipc.on('load-this-vha-file', function (event, pathToVhaFile) {
+  console.log('the app is auto loading this vha file: ' + pathToVhaFile);
+
+  // !!!!!!!!!!!!!!!! TODO !!!!!!!!!!!!!!!!!!
+  // REMOVE IF DOES NOT WORK !!!!!!!!!!!!!!!!
+  // if (userWantedToOpen) {
+  //   pathToVhaFile = userWantedToOpen;
+  // }
+
+  fs.readFile(pathToVhaFile, (err, data) => {
     if (err) {
       throw err; // later maybe only log it ???
     } else {
