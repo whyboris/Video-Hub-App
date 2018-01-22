@@ -1,4 +1,4 @@
-import { Component, ChangeDetectorRef, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit, HostListener, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 
 import { setTimeout } from 'timers';
 
@@ -37,7 +37,7 @@ import { DemoContent } from '../../../assets/demo-content';
     topAnimation
   ]
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, AfterViewInit {
 
   @ViewChild(VirtualScrollComponent)
   virtualScroll: VirtualScrollComponent;
@@ -53,7 +53,7 @@ export class HomeComponent implements OnInit {
 
   // DEMO MODE TOGGLE !!!
   demo = false;
-  webDemo = true;
+  webDemo = false;
 
   // REORGANIZE / keep
   currentPlayingFile = '';
@@ -95,6 +95,9 @@ export class HomeComponent implements OnInit {
   previewWidth: number;
 
   public finalArray = [];
+
+  // temporary
+  tempWorks = '-- WIP';
 
   // Listen for key presses
   // @HostListener('document:keypress', ['$event'])
@@ -145,6 +148,13 @@ export class HomeComponent implements OnInit {
 
     }, 100);
 
+    // App opened by clicking a particular file !!!
+    // UNSURE IF WORKS
+    // TODO - clean if doesn't work
+    this.electronService.ipcRenderer.on('fileOpenWorks', (event, filePath) => {
+      this.tempWorks = filePath;
+    });
+
     // Returning Input
     this.electronService.ipcRenderer.on('inputFolderChosen', (event, filePath, totalFilesInDir) => {
       this.totalNumberOfFiles = totalFilesInDir;
@@ -189,6 +199,20 @@ export class HomeComponent implements OnInit {
     this.justStarted();
   }
 
+  ngAfterViewInit() {
+    // this is required, otherwise when user drops the file, it opens as plaintext
+    document.ondragover = document.ondrop = (ev) => {
+      ev.preventDefault()
+    }
+    document.body.ondrop = (ev) => {
+      const fullPath = ev.dataTransfer.files[0].path;
+      ev.preventDefault();
+      if (fullPath.slice(-4) === '.vha') {
+        this.electronService.ipcRenderer.send('load-this-json-file', ev.dataTransfer.files[0].path);
+      }
+    }
+  }
+
   /**
    * Low-tech debounced scroll handler
    */
@@ -200,6 +224,13 @@ export class HomeComponent implements OnInit {
       console.log('Virtual scroll refreshed');
       this.virtualScroll.refresh()
     }, delay);
+  }
+
+  /**
+   * Handle the `drop` event
+   */
+  public itemDropped(event: Event) {
+    console.log('lololol');
   }
 
   // ---------------- INTERACT WITH ELECTRON ------------------ //

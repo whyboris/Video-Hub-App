@@ -55,6 +55,24 @@ function createWindow() {
 
 try {
 
+  // UNSURE IF WORKS
+  // TODO - clean if doesn't work
+  app.on('will-finish-launching', function () {
+    // UNSURE IF WORKS
+    app.on('open-file', (event, filePath) => {
+      setTimeout(() => {
+        let clickedFile = 'hohohohoh';
+        if (process.argv.length >= 2) {
+          clickedFile = process.argv[1];
+        }
+        theOriginalOpenFileDialogEvent.sender.send('fileOpenWorks', filePath);
+        setTimeout( () => {
+          theOriginalOpenFileDialogEvent.sender.send('fileOpenWorks', clickedFile);
+        }, 5000);
+      }, 2000);
+    });
+  });
+
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
   // Some APIs can only be used after this event occurs.
@@ -147,7 +165,7 @@ ipc.on('close-window', function (event, settingsToSave) {
   // TODO -- catch bug if user closes before selecting the output folder
   fs.writeFile(pathToAppData + '/video-hub-app' + '/settings.json', json, 'utf8', () => {
     console.log('settings file written:');
-    // BrowserWindow.getFocusedWindow().close();
+    BrowserWindow.getFocusedWindow().close();
   });
 
 });
