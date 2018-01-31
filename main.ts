@@ -57,13 +57,14 @@ function createWindow() {
   // win.setMenu(null);
 }
 
-function fileOpeningNow(smthng, smthng2) {
-  console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-  console.log('miracle');
-  console.log(smthng);
-  console.log(smthng2);
+function fileOpeningNow(pathToAppCommaPathToVhaFile: string[], pathToFolder) {
+  dialog.showMessageBox({
+    message: 'hello ' +
+      pathToAppCommaPathToVhaFile[0] + ' ' +
+      pathToAppCommaPathToVhaFile[1] + ' ' +
+      pathToFolder + ' !!! ',
+    buttons: ['OK'] })
 }
-
 
 try {
 
@@ -72,11 +73,20 @@ try {
   // UNSURE IF WORKS
   // TODO - clean if doesn't work
   app.on('will-finish-launching', function () {
+
     // UNSURE IF WORKS
+
     app.on('open-file', (event, filePath) => {
+
+      dialog.showMessageBox({ message: '123', buttons: ['OK'] });
+      // prevent new instance ???
+      event.preventDefault();
+
       if (filePath) {
         userWantedToOpen = filePath;
+        dialog.showMessageBox({ message: '345' + filePath, buttons: ['OK'] });
       } else if (process.argv.length >= 2) {
+        dialog.showMessageBox({ message: '456' + process.argv[1], buttons: ['OK'] });
         userWantedToOpen = process.argv[1];
       }
     });
