@@ -12,7 +12,7 @@ if (serve) {
 
 // BORIS TEMP
 // TODO - clean if doesn't work
-// let userWantedToOpen = null;
+let userWantedToOpen = null;
 
 function createWindow() {
 
@@ -57,20 +57,30 @@ function createWindow() {
   // win.setMenu(null);
 }
 
+function fileOpeningNow(smthng, smthng2) {
+  console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+  console.log('miracle');
+  console.log(smthng);
+  console.log(smthng2);
+}
+
+
 try {
+
+  app.makeSingleInstance(fileOpeningNow);
 
   // UNSURE IF WORKS
   // TODO - clean if doesn't work
-  // app.on('will-finish-launching', function () {
-  //   // UNSURE IF WORKS
-  //   app.on('open-file', (event, filePath) => {
-  //     if (filePath) {
-  //       userWantedToOpen = filePath;
-  //     } else if (process.argv.length >= 2) {
-  //       userWantedToOpen = process.argv[1];
-  //     }
-  //   });
-  // });
+  app.on('will-finish-launching', function () {
+    // UNSURE IF WORKS
+    app.on('open-file', (event, filePath) => {
+      if (filePath) {
+        userWantedToOpen = filePath;
+      } else if (process.argv.length >= 2) {
+        userWantedToOpen = process.argv[1];
+      }
+    });
+  });
 
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
@@ -321,9 +331,9 @@ ipc.on('load-this-vha-file', function (event, pathToVhaFile) {
 
   // !!!!!!!!!!!!!!!! TODO !!!!!!!!!!!!!!!!!!
   // REMOVE IF DOES NOT WORK !!!!!!!!!!!!!!!!
-  // if (userWantedToOpen) {
-  //   pathToVhaFile = userWantedToOpen;
-  // }
+  if (userWantedToOpen) {
+    pathToVhaFile = userWantedToOpen;
+  }
 
   fs.readFile(pathToVhaFile, (err, data) => {
     if (err) {
