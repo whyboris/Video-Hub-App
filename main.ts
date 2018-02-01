@@ -16,18 +16,26 @@ const dialog = require('electron').dialog;
 let userWantedToOpen = null;
 let myWindow = null
 
+
+// For windows -- when loading the app the first time
+if (process.argv[1]) {
+  userWantedToOpen = process.argv[1];
+}
+
+
 // OPEN FILE ON WINDOWS FROM FILE DOUBLE CLICK
 const isSecondInstance = app.makeSingleInstance((commandLine, workingDirectory) => {
 
   // dialog.showMessageBox({
-  //   message: 'hello ' +
-  //   commandLine[0] + ' ' +
-  //   commandLine[1] + ' ' +
+  //   message: 'hello \n' +
+  //   commandLine[0] + ' \n' +
+  //   commandLine[1] + ' \n' +
   //   workingDirectory + ' !!! ',
   //   buttons: ['OK']
-  // })
+  // });
 
   if (commandLine[1]) {
+    userWantedToOpen = commandLine[1];
     openThisDamnFile(commandLine[1]);
   }
 
@@ -42,7 +50,8 @@ const isSecondInstance = app.makeSingleInstance((commandLine, workingDirectory) 
 
 if (isSecondInstance) {
   // quit the second instance
-  app.quit();
+  app.exit();
+  // app.quit();
 }
 
 function createWindow() {
