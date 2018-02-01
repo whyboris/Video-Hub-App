@@ -19,13 +19,13 @@ let myWindow = null
 // WORKS ON WINDOWS !!!!!!!!!!!!!!
 const isSecondInstance = app.makeSingleInstance((commandLine, workingDirectory) => {
 
-  dialog.showMessageBox({
-    message: 'hello ' +
-    commandLine[0] + ' ' +
-    commandLine[1] + ' ' +
-    workingDirectory + ' !!! ',
-    buttons: ['OK']
-  })
+  // dialog.showMessageBox({
+  //   message: 'hello ' +
+  //   commandLine[0] + ' ' +
+  //   commandLine[1] + ' ' +
+  //   workingDirectory + ' !!! ',
+  //   buttons: ['OK']
+  // })
 
   if (commandLine[1]) {
     openThisDamnFile(commandLine[1]);
@@ -98,20 +98,21 @@ try {
 
     app.on('open-file', (event, filePath) => {
 
-      dialog.showMessageBox({ message: '123', buttons: ['OK'] });
+      // dialog.showMessageBox({ message: '123', buttons: ['OK'] });
       // prevent new instance ???
       // event.preventDefault(); // NO NO NO -- breaks inner workings for MAC
 
       if (filePath) {
         userWantedToOpen = filePath;
         // THIS RUNS (ONLY) on MAC !!!
-        dialog.showMessageBox({ message: '345' + filePath, buttons: ['OK'] });
+        // dialog.showMessageBox({ message: '345' + filePath, buttons: ['OK'] });
+        openThisDamnFile(filePath);
 
         /// NEED TO TRIGGER MAC TO OPEN THE ACTUAL FILE IN LIVE APP !!!
 
-      } else if (process.argv.length >= 2) {
-        dialog.showMessageBox({ message: '456' + process.argv[1], buttons: ['OK'] });
-        userWantedToOpen = process.argv[1];
+      // } else if (process.argv.length >= 2) {
+      //   dialog.showMessageBox({ message: '456' + process.argv[1], buttons: ['OK'] });
+      //   userWantedToOpen = process.argv[1];
       }
     });
   });
