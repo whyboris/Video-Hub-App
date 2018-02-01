@@ -106,7 +106,7 @@ try {
         userWantedToOpen = filePath;
         // THIS RUNS (ONLY) on MAC !!!
         // dialog.showMessageBox({ message: '345' + filePath, buttons: ['OK'] });
-        // openThisDamnFile(filePath);
+        openThisDamnFile(filePath);
 
         /// NEED TO TRIGGER MAC TO OPEN THE ACTUAL FILE IN LIVE APP !!!
 
@@ -190,6 +190,7 @@ function openThisDamnFile(pathToVhaFile) {
   // !!!!!!!!!!!!!!!! TODO !!!!!!!!!!!!!!!!!!
   // REMOVE IF DOES NOT WORK !!!!!!!!!!!!!!!!
   if (userWantedToOpen) {
+    dialog.showMessageBox({ message: '345' + userWantedToOpen, buttons: ['OK'] });
     pathToVhaFile = userWantedToOpen;
   }
 
