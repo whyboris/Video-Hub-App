@@ -16,7 +16,7 @@ const dialog = require('electron').dialog;
 let userWantedToOpen = null;
 let myWindow = null
 
-// WORKS ON WINDOWS !!!!!!!!!!!!!!
+// OPEN FILE ON WINDOWS FROM FILE DOUBLE CLICK
 const isSecondInstance = app.makeSingleInstance((commandLine, workingDirectory) => {
 
   // dialog.showMessageBox({
@@ -94,25 +94,16 @@ function createWindow() {
 
 try {
 
+  // OPEN FILE ON MAC FROM FILE DOUBLE CLICK
   app.on('will-finish-launching', function () {
-
     app.on('open-file', (event, filePath) => {
-
-      // dialog.showMessageBox({ message: '123', buttons: ['OK'] });
-      // prevent new instance ???
-      // event.preventDefault(); // NO NO NO -- breaks inner workings for MAC
-
       if (filePath) {
         userWantedToOpen = filePath;
         // THIS RUNS (ONLY) on MAC !!!
         // dialog.showMessageBox({ message: '345' + filePath, buttons: ['OK'] });
-        openThisDamnFile(filePath);
-
-        /// NEED TO TRIGGER MAC TO OPEN THE ACTUAL FILE IN LIVE APP !!!
-
-      // } else if (process.argv.length >= 2) {
-      //   dialog.showMessageBox({ message: '456' + process.argv[1], buttons: ['OK'] });
-      //   userWantedToOpen = process.argv[1];
+        if (isSecondInstance) {
+          openThisDamnFile(filePath);
+        }
       }
     });
   });
