@@ -106,7 +106,7 @@ try {
         userWantedToOpen = filePath;
         // THIS RUNS (ONLY) on MAC !!!
         // dialog.showMessageBox({ message: '345' + filePath, buttons: ['OK'] });
-        openThisDamnFile(filePath);
+        // openThisDamnFile(filePath);
 
         /// NEED TO TRIGGER MAC TO OPEN THE ACTUAL FILE IN LIVE APP !!!
 
