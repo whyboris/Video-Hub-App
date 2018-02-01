@@ -10,9 +10,40 @@ if (serve) {
   });
 }
 
-// BORIS TEMP
-// TODO - clean if doesn't work
+// MY IMPORTANT IMPORT !!!!
+const dialog = require('electron').dialog;
+
 let userWantedToOpen = null;
+let myWindow = null
+
+// WORKS ON WINDOWS !!!!!!!!!!!!!!
+const isSecondInstance = app.makeSingleInstance((commandLine, workingDirectory) => {
+
+  dialog.showMessageBox({
+    message: 'hello ' +
+    commandLine[0] + ' ' +
+    commandLine[1] + ' ' +
+    workingDirectory + ' !!! ',
+    buttons: ['OK']
+  })
+
+  if (commandLine[1]) {
+    openThisDamnFile(commandLine[1]);
+  }
+
+  // Someone tried to run a second instance, we should focus our window.
+  if (myWindow) {
+    if (myWindow.isMinimized()) {
+      myWindow.restore();
+    }
+    myWindow.focus();
+  }
+});
+
+if (isSecondInstance) {
+  // quit the second instance
+  app.quit();
+}
 
 function createWindow() {
 
@@ -34,6 +65,8 @@ function createWindow() {
     frame: false
     // BORIS !!! the above removes the frame from the window completely !!!
   });
+
+  myWindow = win;
 
   // and load the index.html of the app.
   win.loadURL('file://' + __dirname + '/index.html');
@@ -57,34 +90,25 @@ function createWindow() {
   // win.setMenu(null);
 }
 
-function fileOpeningNow(pathToAppCommaPathToVhaFile: string[], pathToFolder) {
-  dialog.showMessageBox({
-    message: 'hello ' +
-      pathToAppCommaPathToVhaFile[0] + ' ' +
-      pathToAppCommaPathToVhaFile[1] + ' ' +
-      pathToFolder + ' !!! ',
-    buttons: ['OK'] })
-}
+
 
 try {
 
-  app.makeSingleInstance(fileOpeningNow);
-
-  // UNSURE IF WORKS
-  // TODO - clean if doesn't work
   app.on('will-finish-launching', function () {
-
-    // UNSURE IF WORKS
 
     app.on('open-file', (event, filePath) => {
 
       dialog.showMessageBox({ message: '123', buttons: ['OK'] });
       // prevent new instance ???
-      event.preventDefault();
+      // event.preventDefault(); // NO NO NO -- breaks inner workings for MAC
 
       if (filePath) {
         userWantedToOpen = filePath;
+        // THIS RUNS (ONLY) on MAC !!!
         dialog.showMessageBox({ message: '345' + filePath, buttons: ['OK'] });
+
+        /// NEED TO TRIGGER MAC TO OPEN THE ACTUAL FILE IN LIVE APP !!!
+
       } else if (process.argv.length >= 2) {
         dialog.showMessageBox({ message: '456' + process.argv[1], buttons: ['OK'] });
         userWantedToOpen = process.argv[1];
@@ -128,7 +152,6 @@ try {
 
 const fs = require('fs');
 
-const dialog = require('electron').dialog;
 const ipc = require('electron').ipcMain;
 const shell = require('electron').shell;
 
@@ -157,6 +180,28 @@ let selectedOutputFolder = ''; // later = ''
 
 let theOriginalOpenFileDialogEvent;
 
+
+// METHOD TO OPEN DOUBLE-CLICKED FILE !!!!!!!!!!!!!
+function openThisDamnFile(pathToVhaFile) {
+
+  console.log('the app is auto loading this vha file: ' + pathToVhaFile);
+
+  // !!!!!!!!!!!!!!!! TODO !!!!!!!!!!!!!!!!!!
+  // REMOVE IF DOES NOT WORK !!!!!!!!!!!!!!!!
+  if (userWantedToOpen) {
+    pathToVhaFile = userWantedToOpen;
+  }
+
+  fs.readFile(pathToVhaFile, (err, data) => {
+    if (err) {
+      throw err; // later maybe only log it ???
+    } else {
+      theOriginalOpenFileDialogEvent.sender.send('finalObjectReturning', JSON.parse(data));
+    }
+  });
+
+}
+
 // ============================================================
 // Methods that interact with Angular
 // ============================================================
@@ -174,7 +219,6 @@ ipc.on('close-window', function (event, settingsToSave) {
   const pathToAppData = app.getPath('appData')
   console.log(pathToAppData);
 
-
   try {
     fs.statSync(pathToAppData + '/video-hub-app');
   } catch (e) {
@@ -186,13 +230,13 @@ ipc.on('close-window', function (event, settingsToSave) {
     console.log('settings file written:');
     BrowserWindow.getFocusedWindow().close();
   });
-
 });
 
 /**
  * Just started -- hello -- send over the settings
  */
 ipc.on('just-started', function (event, someMessage) {
+  theOriginalOpenFileDialogEvent = event;
   const pathToAppData = app.getPath('appData')
   console.log('app just started');
   fs.readFile(pathToAppData + '/video-hub-app' + '/settings.json', (err, data) => {
@@ -203,7 +247,6 @@ ipc.on('just-started', function (event, someMessage) {
     }
   });
 });
-
 
 /**
  * Maximize the window
@@ -254,7 +297,7 @@ ipc.on('choose-input', function (event, someMessage) {
       event.sender.send('inputFolderChosen', selectedSourceFolder, totalNumberOfFiles);
     }
   })
-})
+});
 
 /**
  * Summon system modal to choose OUTPUT directory
@@ -282,7 +325,7 @@ ipc.on('choose-output', function (event, someMessage) {
       event.sender.send('outputFolderChosen', selectedOutputFolder);
     }
   })
-})
+});
 
 /**
  * Start extracting the screenshots into a chosen output folder from a chosen input folder
@@ -290,7 +333,7 @@ ipc.on('choose-output', function (event, someMessage) {
 ipc.on('start-the-import', function (event, ssSize) {
   screenShotSize = ssSize;
   theExtractor('freshStart');
-})
+});
 
 /**
  * Initiate rescan of the directory
@@ -298,7 +341,7 @@ ipc.on('start-the-import', function (event, ssSize) {
 ipc.on('rescan-current-directory', function (event, inputAndOutput) {
   theOriginalOpenFileDialogEvent = event;
   reScanDirectory(inputAndOutput.inputFolder, inputAndOutput.outputFolder);
-})
+});
 
 /**
  * Summon system modal to choose the images.vha file
@@ -330,37 +373,22 @@ ipc.on('load-the-file', function (event, somethingElse) {
         });
       }
     })
-
-})
+});
 
 /**
  * Import this .vha file
  */
 ipc.on('load-this-vha-file', function (event, pathToVhaFile) {
-  console.log('the app is auto loading this vha file: ' + pathToVhaFile);
-
-  // !!!!!!!!!!!!!!!! TODO !!!!!!!!!!!!!!!!!!
-  // REMOVE IF DOES NOT WORK !!!!!!!!!!!!!!!!
-  if (userWantedToOpen) {
-    pathToVhaFile = userWantedToOpen;
-  }
-
-  fs.readFile(pathToVhaFile, (err, data) => {
-    if (err) {
-      throw err; // later maybe only log it ???
-    } else {
-      event.sender.send('finalObjectReturning', JSON.parse(data));
-    }
-  });
-
-})
+  theOriginalOpenFileDialogEvent = event;
+  openThisDamnFile(pathToVhaFile);
+});
 
 /**
  * Open a particular video file clicked inside Angular
  */
 ipc.on('openThisFile', function (event, fullFilePath) {
   shell.openItem(fullFilePath);
-})
+});
 
 // ============================================================
 // Methods to extract screenshots, build file list, etc
