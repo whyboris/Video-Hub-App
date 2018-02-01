@@ -90,18 +90,19 @@ function createWindow() {
   // win.setMenu(null);
 }
 
-
+// variable to detect if it's the first time mac is opening the file
+// or something like that
+let macFirstRun = true;
 
 try {
 
   // OPEN FILE ON MAC FROM FILE DOUBLE CLICK
+  // THIS RUNS (ONLY) on MAC !!!
   app.on('will-finish-launching', function () {
     app.on('open-file', (event, filePath) => {
       if (filePath) {
         userWantedToOpen = filePath;
-        // THIS RUNS (ONLY) on MAC !!!
-        // dialog.showMessageBox({ message: '345' + filePath, buttons: ['OK'] });
-        if (isSecondInstance) {
+        if (!macFirstRun) {
           openThisDamnFile(filePath);
         }
       }
@@ -175,6 +176,8 @@ let theOriginalOpenFileDialogEvent;
 
 // METHOD TO OPEN DOUBLE-CLICKED FILE !!!!!!!!!!!!!
 function openThisDamnFile(pathToVhaFile) {
+
+  macFirstRun = false;
 
   console.log('the app is auto loading this vha file: ' + pathToVhaFile);
 
