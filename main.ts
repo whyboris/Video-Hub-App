@@ -19,7 +19,9 @@ let myWindow = null
 
 // For windows -- when loading the app the first time
 if (process.argv[1]) {
-  userWantedToOpen = process.argv[1];
+  if (!serve) {
+    userWantedToOpen = process.argv[1];
+  }
 }
 
 
