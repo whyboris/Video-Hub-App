@@ -100,9 +100,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   vhaFileHistory: HistoryItem[] = [];
 
-  // temporary
-  tempWorks = '-- WIP';
-
   // Listen for key presses
   // @HostListener('document:keypress', ['$event'])
   // handleKeyboardEvent(event: KeyboardEvent) {
@@ -151,13 +148,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
 
     }, 100);
-
-    // App opened by clicking a particular file !!!
-    // UNSURE IF WORKS
-    // TODO - clean if doesn't work
-    this.electronService.ipcRenderer.on('fileOpenWorks', (event, filePath) => {
-      this.tempWorks = filePath;
-    });
 
     // Returning Input
     this.electronService.ipcRenderer.on('inputFolderChosen', (event, filePath, totalFilesInDir) => {
@@ -362,6 +352,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.loadThisVhaFile(this.vhaFileHistory[index].vhaFilePath);
   }
 
+  /**
+   * Clear out the recently-viewed history
+   */
   clearRecentlyViewedHistory(): void {
     this.vhaFileHistory = [];
   }
