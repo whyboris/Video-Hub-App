@@ -9,6 +9,8 @@ import { ShowLimitService } from 'app/components/pipes/show-limit.service';
 import { WordFrequencyService } from 'app/components/pipes/word-frequency.service';
 
 import { FinalObject } from '../common/final-object.interface';
+import { SettingsObject } from '../common/settings-object.interface';
+import { HistoryItem } from '../common/history-item.interface';
 
 import { AppState } from '../common/app-state';
 import { Filters } from '../common/filters';
@@ -96,6 +98,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   public finalArray = [];
 
+  vhaFileHistory: HistoryItem[] = [];
+
   // temporary
   tempWorks = '-- WIP';
 
@@ -181,6 +185,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.appState.numOfFolders = finalObject.numOfFolders;
       this.appState.selectedOutputFolder = finalObject.outputDir;
       this.appState.selectedSourceFolder = finalObject.inputDir;
+
+      // Update history of opened files
+      this.updateVhaFileHistory(finalObject.outputDir, finalObject.inputDir);
+
       this.inProgress = false;
       this.importDone = true;
       this.showWizard = false;
@@ -189,10 +197,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     // Returning settings
-    this.electronService.ipcRenderer.on('settingsReturning', (event, settingsObject: any) => {
+    this.electronService.ipcRenderer.on('settingsReturning', (event, settingsObject: SettingsObject) => {
+      console.log('settings have returned');
+      console.log(settingsObject);
+      console.log('vha file history:');
+      console.log(settingsObject.vhaFileHistory);
+      this.vhaFileHistory = settingsObject.vhaFileHistory;
+
       this.restoreSettingsFromBefore(settingsObject);
       if (settingsObject.appState.selectedOutputFolder && settingsObject.appState.selectedSourceFolder) {
-        this.loadThisJsonFile(settingsObject.appState.selectedOutputFolder + '/images.vha');
+        this.loadThisVhaFile(settingsObject.appState.selectedOutputFolder + '/images.vha');
       }
     });
 
@@ -240,7 +254,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.electronService.ipcRenderer.send('just-started', 'lol');
   }
 
-  public loadThisJsonFile(fullPath: string): void {
+  public loadThisVhaFile(fullPath: string): void {
     this.electronService.ipcRenderer.send('load-this-vha-file', fullPath);
   }
 
@@ -325,6 +339,34 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
+   * Add this file to the recently opened list
+   * @param file full path to file name
+   */
+  updateVhaFileHistory(pathToVhaFile: string, pathToVideos: string): void {
+    this.vhaFileHistory.push({
+      vhaFilePath: pathToVhaFile + '\\images.vha',
+      videoFolderPath: pathToVideos,
+      name: 'temp name'
+    });
+    console.log('CURRENT HISTORY OF VHA FILES');
+    console.log(this.vhaFileHistory);
+  }
+
+  /**
+   * Handle click from html to open a recently-opened VHA file
+   * @param index - index of the file from `vhaFileHistory`
+   */
+  openFromHistory(index: number): void {
+    console.log('trying to open ' + index);
+    console.log(this.vhaFileHistory[index]);
+    this.loadThisVhaFile(this.vhaFileHistory[index].vhaFilePath);
+  }
+
+  clearRecentlyViewedHistory(): void {
+    this.vhaFileHistory = [];
+  }
+
+  /**
    * Show or hide settings
    */
   toggleSettings(): void {
@@ -363,6 +405,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.increaseSize();
     } else if (uniqueKey === 'startWizard') {
       this.startWizard();
+    } else if (uniqueKey === 'clearHistory') {
+      this.clearRecentlyViewedHistory();
     } else if (uniqueKey === 'rescanDirectory') {
       this.rescanDirectory();
     } else {
@@ -553,7 +597,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // console.log(buttonSettings);
     return {
       buttonSettings: buttonSettings,
-      appState: this.appState
+      appState: this.appState,
+      vhaFileHistory: this.vhaFileHistory
     };
   }
 

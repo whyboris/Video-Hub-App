@@ -13,7 +13,8 @@ export const SettingsButtonsGroups: string[][] = [
     'magic',
   ],
   [
-    'showFreq'
+    'showFreq',
+    'showRecent'
   ],
   [
     'showThumbnails',
@@ -38,6 +39,7 @@ export const SettingsButtonsGroups: string[][] = [
     'flatIcons'
   ],
   [
+    'clearHistory',
     'startWizard',
     'rescanDirectory'
   ]
@@ -176,6 +178,13 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     title: 'Word cloud',
     description: 'Show the nine most frequent words in current file names'
   },
+  'showRecent': {
+    hidden: false,
+    toggled: true,
+    iconName: 'icon-show-filenames',
+    title: 'Show recently opened',
+    description: 'Show the recently opened video hubs'
+  },
   'hideSidebar': {
     hidden: false,
     toggled: false,
@@ -203,6 +212,13 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
     title: 'Start wizard',
     description: 'Start wizard again'
+  },
+  'clearHistory': {
+    hidden: false,
+    toggled: false,
+    iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
+    title: 'Clear history',
+    description: 'Clear recently-opened history'
   },
   'rescanDirectory': {
     hidden: false,

@@ -2,10 +2,14 @@
 
 $transition-length: 300ms;
 
-h2 {
+h2, h3 {
   font-size: 16px;
   color: $gray-60;
   margin: 15px 0 0 10px;
+}
+
+h3 {
+  font-size: 14px;
 }
 
 .gearButton {
