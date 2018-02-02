@@ -1,5 +1,5 @@
 {
-  "productName": "Video-Hub-App",
+  "productName": "Video Hub App",
   "directories": {
     "app": "dist",
     "output": "app-builds"
@@ -25,7 +25,7 @@
   },
   "nsis": {
     "oneClick": false,
-    "perMachine": false
+    "perMachine": true
   },
   "fileAssociations": {
     "ext": "vha",

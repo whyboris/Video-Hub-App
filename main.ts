@@ -10,6 +10,52 @@ if (serve) {
   });
 }
 
+// MY IMPORTANT IMPORT !!!!
+const dialog = require('electron').dialog;
+
+let userWantedToOpen = null;
+let myWindow = null
+
+
+// For windows -- when loading the app the first time
+if (process.argv[1]) {
+  if (!serve) {
+    userWantedToOpen = process.argv[1];
+  }
+}
+
+
+// OPEN FILE ON WINDOWS FROM FILE DOUBLE CLICK
+const isSecondInstance = app.makeSingleInstance((commandLine, workingDirectory) => {
+
+  // dialog.showMessageBox({
+  //   message: 'hello \n' +
+  //   commandLine[0] + ' \n' +
+  //   commandLine[1] + ' \n' +
+  //   workingDirectory + ' !!! ',
+  //   buttons: ['OK']
+  // });
+
+  if (commandLine[1]) {
+    userWantedToOpen = commandLine[1];
+    openThisDamnFile(commandLine[1]);
+  }
+
+  // Someone tried to run a second instance, we should focus our window.
+  if (myWindow) {
+    if (myWindow.isMinimized()) {
+      myWindow.restore();
+    }
+    myWindow.focus();
+  }
+});
+
+if (isSecondInstance) {
+  // quit the second instance
+  app.exit();
+  // app.quit();
+}
+
 function createWindow() {
 
   const electronScreen = screen;
@@ -30,6 +76,8 @@ function createWindow() {
     frame: false
     // BORIS !!! the above removes the frame from the window completely !!!
   });
+
+  myWindow = win;
 
   // and load the index.html of the app.
   win.loadURL('file://' + __dirname + '/index.html');
@@ -53,7 +101,24 @@ function createWindow() {
   // win.setMenu(null);
 }
 
+// variable to detect if it's the first time mac is opening the file
+// or something like that
+let macFirstRun = true;
+
 try {
+
+  // OPEN FILE ON MAC FROM FILE DOUBLE CLICK
+  // THIS RUNS (ONLY) on MAC !!!
+  app.on('will-finish-launching', function () {
+    app.on('open-file', (event, filePath) => {
+      if (filePath) {
+        userWantedToOpen = filePath;
+        if (!macFirstRun) {
+          openThisDamnFile(filePath);
+        }
+      }
+    });
+  });
 
   // This method will be called when Electron has finished
   // initialization and is ready to create browser windows.
@@ -64,9 +129,9 @@ try {
   app.on('window-all-closed', () => {
     // On OS X it is common for applications and their menu bar
     // to stay active until the user quits explicitly with Cmd + Q
-    if (process.platform !== 'darwin') {
-      app.quit();
-    }
+    // if (process.platform !== 'darwin') {
+    app.quit();
+    // }
   });
 
   app.on('activate', () => {
@@ -91,7 +156,6 @@ try {
 
 const fs = require('fs');
 
-const dialog = require('electron').dialog;
 const ipc = require('electron').ipcMain;
 const shell = require('electron').shell;
 
@@ -120,6 +184,31 @@ let selectedOutputFolder = ''; // later = ''
 
 let theOriginalOpenFileDialogEvent;
 
+
+// METHOD TO OPEN DOUBLE-CLICKED FILE !!!!!!!!!!!!!
+function openThisDamnFile(pathToVhaFile) {
+
+  macFirstRun = false;
+
+  console.log('the app is auto loading this vha file: ' + pathToVhaFile);
+
+  // !!!!!!!!!!!!!!!! TODO !!!!!!!!!!!!!!!!!!
+  // REMOVE IF DOES NOT WORK !!!!!!!!!!!!!!!!
+  if (userWantedToOpen) {
+    // dialog.showMessageBox({ message: '345' + userWantedToOpen, buttons: ['OK'] });
+    pathToVhaFile = userWantedToOpen;
+  }
+
+  fs.readFile(pathToVhaFile, (err, data) => {
+    if (err) {
+      throw err; // later maybe only log it ???
+    } else {
+      theOriginalOpenFileDialogEvent.sender.send('finalObjectReturning', JSON.parse(data));
+    }
+  });
+
+}
+
 // ============================================================
 // Methods that interact with Angular
 // ============================================================
@@ -137,7 +226,6 @@ ipc.on('close-window', function (event, settingsToSave) {
   const pathToAppData = app.getPath('appData')
   console.log(pathToAppData);
 
-
   try {
     fs.statSync(pathToAppData + '/video-hub-app');
   } catch (e) {
@@ -147,15 +235,15 @@ ipc.on('close-window', function (event, settingsToSave) {
   // TODO -- catch bug if user closes before selecting the output folder
   fs.writeFile(pathToAppData + '/video-hub-app' + '/settings.json', json, 'utf8', () => {
     console.log('settings file written:');
-    // BrowserWindow.getFocusedWindow().close();
+    BrowserWindow.getFocusedWindow().close();
   });
-
 });
 
 /**
  * Just started -- hello -- send over the settings
  */
 ipc.on('just-started', function (event, someMessage) {
+  theOriginalOpenFileDialogEvent = event;
   const pathToAppData = app.getPath('appData')
   console.log('app just started');
   fs.readFile(pathToAppData + '/video-hub-app' + '/settings.json', (err, data) => {
@@ -166,7 +254,6 @@ ipc.on('just-started', function (event, someMessage) {
     }
   });
 });
-
 
 /**
  * Maximize the window
@@ -217,7 +304,7 @@ ipc.on('choose-input', function (event, someMessage) {
       event.sender.send('inputFolderChosen', selectedSourceFolder, totalNumberOfFiles);
     }
   })
-})
+});
 
 /**
  * Summon system modal to choose OUTPUT directory
@@ -245,7 +332,7 @@ ipc.on('choose-output', function (event, someMessage) {
       event.sender.send('outputFolderChosen', selectedOutputFolder);
     }
   })
-})
+});
 
 /**
  * Start extracting the screenshots into a chosen output folder from a chosen input folder
@@ -253,7 +340,7 @@ ipc.on('choose-output', function (event, someMessage) {
 ipc.on('start-the-import', function (event, ssSize) {
   screenShotSize = ssSize;
   theExtractor('freshStart');
-})
+});
 
 /**
  * Initiate rescan of the directory
@@ -261,7 +348,7 @@ ipc.on('start-the-import', function (event, ssSize) {
 ipc.on('rescan-current-directory', function (event, inputAndOutput) {
   theOriginalOpenFileDialogEvent = event;
   reScanDirectory(inputAndOutput.inputFolder, inputAndOutput.outputFolder);
-})
+});
 
 /**
  * Summon system modal to choose the images.vha file
@@ -280,8 +367,8 @@ ipc.on('load-the-file', function (event, somethingElse) {
       properties: ['openFile']
     }, function (files) {
       if (files) {
-        console.log('the user has chosen this previously-saved json file: ' + files[0]);
-        // TODO: check if file ends in .json before parsing !!!
+        console.log('the user has chosen this previously-saved .vha file: ' + files[0]);
+        // TODO: check if file ends in .vha before parsing !!!
         selectedOutputFolder = files[0].replace('\images.vha', '');
 
         fs.readFile(selectedOutputFolder + '/images.vha', (err, data) => {
@@ -293,30 +380,22 @@ ipc.on('load-the-file', function (event, somethingElse) {
         });
       }
     })
-
-})
+});
 
 /**
- * Import this JSON file
+ * Import this .vha file
  */
-ipc.on('load-this-json-file', function (event, pathToJsonFile) {
-  console.log('the app is auto loading this JSON file: ' + pathToJsonFile);
-  fs.readFile(pathToJsonFile, (err, data) => {
-    if (err) {
-      throw err; // later maybe only log it ???
-    } else {
-      event.sender.send('finalObjectReturning', JSON.parse(data));
-    }
-  });
-
-})
+ipc.on('load-this-vha-file', function (event, pathToVhaFile) {
+  theOriginalOpenFileDialogEvent = event;
+  openThisDamnFile(pathToVhaFile);
+});
 
 /**
  * Open a particular video file clicked inside Angular
  */
 ipc.on('openThisFile', function (event, fullFilePath) {
   shell.openItem(fullFilePath);
-})
+});
 
 // ============================================================
 // Methods to extract screenshots, build file list, etc

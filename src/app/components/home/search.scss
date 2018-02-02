@@ -27,6 +27,7 @@
 
 .filteringTotal {
   color: $gray-30;
+  cursor: default;
   font-size: 12px;
   margin: 15px 0 15px;
   text-align: right;
@@ -95,5 +96,28 @@
   span {
     margin: 0 4px;
     cursor: pointer;
+  }
+}
+
+.recently-opened-label {
+  color: $gray-50;
+  font-style: italic;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.recently-opened {
+  margin-top: 40px;
+  font-size: 10px;
+
+  ul {
+    margin: 0;
+    padding: 0;
+
+    li {
+      list-style: none;
+      margin-top: 5px;
+      cursor: pointer;
+    }
   }
 }

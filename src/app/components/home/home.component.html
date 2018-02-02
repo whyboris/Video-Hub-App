@@ -1,4 +1,4 @@
-<div class="window">
+<div class="window" (drop)="itemDropped($event)">
 
   <div
     class="titleBar"
@@ -228,10 +228,6 @@
         <div
           class="filteredWords"
         >
-          <!-- <span
-            class="icon icon-record"
-            style="color: #fc605b; margin-right: 5px;"
-          ></span> -->
           <span
             *ngIf="magicSearchString !== ''"
             (click)="magicSearchString = ''"
@@ -260,9 +256,22 @@
         </ng-container>
       </div>
 
+      <div
+        *ngIf="settingsButtons['showRecent'].toggled"
+        [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? '#aaaaaa' : '#333333' }"
+        class="recently-opened"
+      >
+        <span class="recently-opened-label">Recently opened hubs:</span>
+        <ul>
+          <li *ngFor="let historyItem of vhaFileHistory; index as i" (click)="openFromHistory(i)" >
+            {{ historyItem.vhaFilePath }}
+          </li>
+        </ul>
+      </div>
+
     </div> <!-- closing the SIDEBAR -->
 
-<!-- THE GALLERY PANE -->
+    <!-- THE GALLERY PANE -->
 
     <virtual-scroll
       #scroll
@@ -383,6 +392,19 @@
     <button (click)="loadFromFile()">
       Load from file
     </button>
+
+    <div class="recently-opened-wizard" *ngIf="vhaFileHistory.length > 0">
+
+      <h3>Recently-opened hubs:</h3>
+
+      <ul>
+        <li *ngFor="let historyItem of vhaFileHistory; index as i" (click)="openFromHistory(i)">
+          {{ historyItem.vhaFilePath }}
+        </li>
+      </ul>
+
+      <span class="clear-history" (click)="clearRecentlyViewedHistory()">clear recent history</span>
+    </div>
 
   </div>
 
