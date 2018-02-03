@@ -3,7 +3,6 @@ export interface FinalObject {
   ssSize: number;       // screen shot size -- so when you reimport it remembers your preference
   numOfFolders: number; // number of folders
   inputDir: string;     // later may support array of many input directories
-  outputDir: string;    // always just one -- for screenshots and JSON file
   lastScreen: number;   // the largest number for a screenshot (used when adding more screenshots later)
   images: Array<any>;   // see below
 }

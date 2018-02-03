@@ -135,9 +135,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       if (this.webDemo) {
         const finalObject = DemoContent;
+        // TODO -- MAYBE ???? UPDATE SINCE THE BELOW HAS BEEN UPDATED
         // identical to `finalObjectReturning`
         this.appState.numOfFolders = finalObject.numOfFolders;
-        this.appState.selectedOutputFolder = finalObject.outputDir;
+        // DEMO CONTENT -- CONFIRM THAT IT WORKS !!!
+        this.appState.selectedOutputFolder = 'images';
         this.appState.selectedSourceFolder = finalObject.inputDir;
         this.inProgress = false;
         this.importDone = true;
@@ -172,7 +174,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     // Final object returns
-    this.electronService.ipcRenderer.on('finalObjectReturning', (event, finalObject: FinalObject, pathToFile: string) => {
+    this.electronService.ipcRenderer.on('finalObjectReturning',
+        (event, finalObject: FinalObject, pathToFile: string, fileName: string) => {
       console.log('LOADING ALL OF THIS:');
       console.log(finalObject);
       console.log('path to file');
@@ -180,7 +183,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.appState.currentVhaFile = pathToFile;
       this.appState.hubName = finalObject.hubName;
       this.appState.numOfFolders = finalObject.numOfFolders;
-      this.appState.selectedOutputFolder = finalObject.outputDir;
+      this.appState.selectedOutputFolder = pathToFile.replace(fileName + '.vha', '');
       this.appState.selectedSourceFolder = finalObject.inputDir;
 
       // Update history of opened files

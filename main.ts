@@ -207,7 +207,9 @@ function openThisDamnFile(pathToVhaFile) {
         buttons: ['OK']
       });
     } else {
-      theOriginalOpenFileDialogEvent.sender.send('finalObjectReturning', JSON.parse(data), pathToVhaFile);
+      theOriginalOpenFileDialogEvent.sender.send(
+        'finalObjectReturning', JSON.parse(data), pathToVhaFile, extractFileName(pathToVhaFile)
+      );
     }
   });
 
@@ -352,7 +354,7 @@ ipc.on('start-the-import', function (event, options) {
  */
 ipc.on('rescan-current-directory', function (event, inputAndVhaFile) {
   theOriginalOpenFileDialogEvent = event;
-  currentOpenVhaFilename = exctractFileName(inputAndVhaFile.pathToVhaFile);
+  currentOpenVhaFilename = extractFileName(inputAndVhaFile.pathToVhaFile);
   reScanDirectory(inputAndVhaFile.inputFolder, inputAndVhaFile.pathToVhaFile);
 });
 
@@ -424,7 +426,6 @@ function sendFinalResultHome(): void {
     ssSize: screenShotSize,
     numOfFolders: countFoldersInFinalArray(),
     inputDir: selectedSourceFolder,
-    outputDir: selectedOutputFolder,
     lastScreen: MainCounter.screenShotFileNumber, // REPRESENTS NEXT AVAILABLE NUMBER FOR THE TAKING
     images: finalArray
   };
@@ -435,7 +436,9 @@ function sendFinalResultHome(): void {
   const pathToTheFile = selectedOutputFolder + '/' + (currentOpenVhaFilename || hubName) + '.vha';
   fs.writeFile(pathToTheFile, json, 'utf8', () => {
     console.log('file written:');
-    theOriginalOpenFileDialogEvent.sender.send('finalObjectReturning', JSON.parse(json), pathToTheFile);
+    theOriginalOpenFileDialogEvent.sender.send(
+      'finalObjectReturning', JSON.parse(json), pathToTheFile, extractFileName(pathToTheFile)
+    );
   });
 }
 
@@ -561,7 +564,7 @@ function extractNextMetadata(): void {
 /**
  * Extract filename from `path/to/the/file.vha` or `path\to\the\file.vha`
  */
-function exctractFileName(filePath: string): string {
+function extractFileName(filePath: string): string {
   let splitPath: string[];
   if (filePath.includes('\\')) {
     splitPath = filePath.split('\\');
@@ -617,7 +620,7 @@ function reScanDirectory(inputFolder: string, pathToVhaFile: string): void {
 
       const oldFileList: any[] = currentJson.images;
       MainCounter.screenShotFileNumber = currentJson.lastScreen;
-      selectedOutputFolder = currentJson.outputDir;
+      selectedOutputFolder = pathToVhaFile.replace(extractFileName(pathToVhaFile) + '.vha', '');
       selectedSourceFolder = currentJson.inputDir;
       screenShotSize = currentJson.ssSize;
 
