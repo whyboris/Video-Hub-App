@@ -179,13 +179,13 @@ import { FinalObject } from './src/app/components/common/final-object.interface'
 let finalArray = [];
 let fileCounter = 0;
 
-let selectedSourceFolder = '';  // later = ''
-let selectedOutputFolder = ''; // later = ''
-
-let hubName = 'untitled'; // in case user doesn't name their hub any name
+let selectedSourceFolder = '';
+let selectedOutputFolder = '';
 
 let theOriginalOpenFileDialogEvent;
 
+let hubName = 'untitled'; // in case user doesn't name their hub any name
+let currentOpenVhaFilename = '';
 
 // METHOD TO OPEN DOUBLE-CLICKED FILE !!!!!!!!!!!!!
 function openThisDamnFile(pathToVhaFile) {
@@ -203,7 +203,7 @@ function openThisDamnFile(pathToVhaFile) {
     if (err) {
       throw err; // later maybe only log it ???
     } else {
-      theOriginalOpenFileDialogEvent.sender.send('finalObjectReturning', JSON.parse(data));
+      theOriginalOpenFileDialogEvent.sender.send('finalObjectReturning', JSON.parse(data), pathToVhaFile);
     }
   });
 
@@ -346,13 +346,27 @@ ipc.on('start-the-import', function (event, options) {
 /**
  * Initiate rescan of the directory
  */
-ipc.on('rescan-current-directory', function (event, inputAndOutput) {
+ipc.on('rescan-current-directory', function (event, inputAndVhaFile) {
   theOriginalOpenFileDialogEvent = event;
-  reScanDirectory(inputAndOutput.inputFolder, inputAndOutput.outputFolder);
+  // TODO -- do this better !!!!
+  // extract the file name from the `path/to/vhafile.vha`
+  let splitPath: string[];
+
+  // Split path into array, whether mac or windows
+  if (inputAndVhaFile.pathToVhaFile.includes('\\')) {
+    splitPath = inputAndVhaFile.pathToVhaFile.split('\\');
+  } else if (inputAndVhaFile.pathToVhaFile.includes('\/')) {
+    splitPath = inputAndVhaFile.pathToVhaFile.split('\/');
+  }
+  // console.log(splitPath);
+  currentOpenVhaFilename = (splitPath[splitPath.length - 1]).slice(0, -4);
+  // console.log(currentOpenVhaFilename);
+
+  reScanDirectory(inputAndVhaFile.inputFolder, inputAndVhaFile.pathToVhaFile);
 });
 
 /**
- * Summon system modal to choose the images.vha file
+ * Summon system modal to choose the *.vha file
  * send images object to App
  * send settings object to App
  */
@@ -374,7 +388,7 @@ ipc.on('system-open-file-through-modal', function (event, somethingElse) {
         userWantedToOpen = files[0];
         openThisDamnFile(files[0]);
       }
-    })
+    });
 });
 
 /**
@@ -426,9 +440,11 @@ function sendFinalResultHome(): void {
 
   const json = JSON.stringify(finalObject);
   // write the file
-  fs.writeFile(selectedOutputFolder + '/images.vha', json, 'utf8', () => {
+  // TODO -- use system path builder, not hardcoded `/`
+  const pathToTheFile = selectedOutputFolder + '/' + (currentOpenVhaFilename || hubName) + '.vha';
+  fs.writeFile(pathToTheFile, json, 'utf8', () => {
     console.log('file written:');
-    theOriginalOpenFileDialogEvent.sender.send('finalObjectReturning', JSON.parse(json));
+    theOriginalOpenFileDialogEvent.sender.send('finalObjectReturning', JSON.parse(json), pathToTheFile);
   });
 }
 
@@ -580,12 +596,12 @@ function extractMetadata(filePath: string): void {
 /**
  * Rescan the directory -- updating files etc -- SUPER COMPLICATED
  */
-function reScanDirectory(inputFolder: string, outputFolder: string): void {
+function reScanDirectory(inputFolder: string, pathToVhaFile: string): void {
 
   console.log('inputFolder: ' + inputFolder);
-  console.log('outputFolder: ' + outputFolder);
+  console.log('vhaFile: ' + pathToVhaFile);
 
-  fs.readFile(outputFolder + '/images.vha', (err, data) => {
+  fs.readFile(pathToVhaFile, (err, data) => {
     if (err) {
       console.log(err); // TODO: better error handling
     } else {
@@ -704,7 +720,7 @@ function countFoldersInFinalArray(): number {
 
 // ---------------------- FOLDER WALKER FUNCTION --------------------------------
 
-const acceptableFiles = ['mp4', 'mpg', 'mpeg', 'mov', 'm4v', 'avi'];
+const acceptableFiles = ['mp4', 'mpg', 'mpeg', 'mov', 'm4v', 'avi', 'flv', 'mkv'];
 /**
  * Recursively walk through the input directory
  * compiling files to process

@@ -7,8 +7,10 @@ export let AppState = {
   selectedOutputFolder: '',
   selectedSourceFolder: '',
 
+  currentVhaFile: '',     // full path to the .vha file
+
   currentView: 'thumbs',  // can be 'thumbs' | 'filmstrip' | 'files'
-  imgHeight: 100,          // gallery/filmstrip height
+  imgHeight: 100,         // gallery/filmstrip height
 
   menuHidden: false,
 

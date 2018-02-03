@@ -172,7 +172,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     // Final object returns
-    this.electronService.ipcRenderer.on('finalObjectReturning', (event, finalObject: FinalObject) => {
+    this.electronService.ipcRenderer.on('finalObjectReturning', (event, finalObject: FinalObject, pathToFile: string) => {
+      console.log('LOADING ALL OF THIS:');
+      console.log(finalObject);
+      console.log('path to file');
+      console.log(pathToFile);
+      this.appState.currentVhaFile = pathToFile;
       this.appState.hubName = finalObject.hubName;
       this.appState.numOfFolders = finalObject.numOfFolders;
       this.appState.selectedOutputFolder = finalObject.outputDir;
@@ -190,15 +195,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // Returning settings
     this.electronService.ipcRenderer.on('settingsReturning', (event, settingsObject: SettingsObject) => {
-      console.log('settings have returned');
-      console.log(settingsObject);
-      console.log('vha file history:');
-      console.log(settingsObject.vhaFileHistory);
       this.vhaFileHistory = (settingsObject.vhaFileHistory || []);
-
       this.restoreSettingsFromBefore(settingsObject);
-      if (settingsObject.appState.selectedOutputFolder && settingsObject.appState.selectedSourceFolder) {
-        this.loadThisVhaFile(settingsObject.appState.selectedOutputFolder + '/images.vha');
+      if (settingsObject.appState.currentVhaFile) {
+        this.loadThisVhaFile(settingsObject.appState.currentVhaFile);
       }
     });
 
@@ -464,13 +464,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Rescan the current input directory
    */
   public rescanDirectory(): void {
-    const sourceAndOutput: any = {};
-    sourceAndOutput.inputFolder = this.appState.selectedSourceFolder;
-    sourceAndOutput.outputFolder = this.appState.selectedOutputFolder;
+    const sourceAndVhaFile: any = {};
+    sourceAndVhaFile.inputFolder = this.appState.selectedSourceFolder;
+    sourceAndVhaFile.pathToVhaFile = this.appState.currentVhaFile;
     this.progressNum1 = 0;
     this.toggleSettings();
     this.importDone = false;
-    this.electronService.ipcRenderer.send('rescan-current-directory', sourceAndOutput);
+    console.log('rescanning');
+    console.log(sourceAndVhaFile);
+    this.electronService.ipcRenderer.send('rescan-current-directory', sourceAndVhaFile);
   }
 
   /**
