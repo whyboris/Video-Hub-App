@@ -182,6 +182,8 @@ let fileCounter = 0;
 let selectedSourceFolder = '';  // later = ''
 let selectedOutputFolder = ''; // later = ''
 
+let hubName = 'untitled'; // in case user doesn't name their hub any name
+
 let theOriginalOpenFileDialogEvent;
 
 
@@ -337,8 +339,9 @@ ipc.on('choose-output', function (event, someMessage) {
 /**
  * Start extracting the screenshots into a chosen output folder from a chosen input folder
  */
-ipc.on('start-the-import', function (event, ssSize) {
-  screenShotSize = ssSize;
+ipc.on('start-the-import', function (event, options) {
+  screenShotSize = options.imgHeight;
+  hubName = options.hubName;
   theExtractor('freshStart');
 });
 
@@ -418,6 +421,7 @@ function sendFinalResultHome(): void {
   alphabetizeFinalArray();
 
   const finalObject: FinalObject = {
+    hubName: hubName,
     ssSize: screenShotSize,
     numOfFolders: countFoldersInFinalArray(),
     inputDir: selectedSourceFolder,

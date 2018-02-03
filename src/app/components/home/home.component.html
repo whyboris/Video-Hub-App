@@ -5,7 +5,10 @@
     [ngClass]="{ 'dark-mode-override': settingsButtons['darkMode'].toggled }"
   >
     <div class="draggable">
-      <img width="10px" height="10px" src="../../../assets/logo.png"> Video Hub {{ demo ? ' demo - limited to 50 video files' : '' }}
+      <img width="10px" height="10px" src="../../../assets/logo.png">
+      Video Hub App
+      {{ demo ? ' demo - limited to 50 video files' : '' }}
+      {{ appState.hubName ? ' - ' + appState.hubName : '' }}
     </div>
     <div (click)="initiateMinimize()" class="winBtn minimizeButton">
       <span class="icon icon-minus"></span>
@@ -31,7 +34,6 @@
     >
       <span class="icon icon-close"></span>
     </div>
-
 
     <ng-container
       *ngFor="let btnGroup of settingsButtonsGroups; index as i"
@@ -263,8 +265,11 @@
       >
         <span class="recently-opened-label">Recently opened hubs:</span>
         <ul>
-          <li *ngFor="let historyItem of vhaFileHistory; index as i" (click)="openFromHistory(i)" >
-            {{ historyItem.vhaFilePath }}
+          <li
+            *ngFor="let historyItem of vhaFileHistory; index as i"
+            (click)="openFromHistory(i)"
+          >
+            {{ historyItem.hubName }}
           </li>
         </ul>
       </div>
@@ -399,7 +404,9 @@
 
       <ul>
         <li *ngFor="let historyItem of vhaFileHistory; index as i" (click)="openFromHistory(i)">
-          {{ historyItem.vhaFilePath }}
+          {{ historyItem.hubName }}
+          <br>
+          <span class="file-path">{{ historyItem.vhaFilePath }}</span>
         </li>
       </ul>
 
@@ -411,6 +418,21 @@
   <div class="right-side">
 
     <h2>Import new hub</h2>
+
+    <div
+      [ngClass]="{ 'current-step': appState.selectedSourceFolder === '' }"
+      class="steps"
+    >
+      0
+    </div>
+    <input
+      [(ngModel)]="futureHubName"
+      (keypress)="validateHubName($event)"
+      class="inputFilter hub-name-input"
+    >
+    <span class="description">
+      Name your hub
+    </span>
 
     <div
       [ngClass]="{ 'current-step': appState.selectedSourceFolder === '' }"
@@ -484,7 +506,7 @@
       4
     </div>
     <button
-      [disabled]="appState.selectedOutputFolder === '' || appState.selectedSourceFolder === ''"
+      [disabled]="appState.selectedOutputFolder === '' || appState.selectedSourceFolder === '' || inProgress === true"
       (click)="importFresh()"
     >
       Start the import

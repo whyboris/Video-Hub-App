@@ -1,4 +1,5 @@
 export interface FinalObject {
+  hubName: string;      // the name of the hub -- for recently-opened
   ssSize: number;       // screen shot size -- so when you reimport it remembers your preference
   numOfFolders: number; // number of folders
   inputDir: string;     // later may support array of many input directories

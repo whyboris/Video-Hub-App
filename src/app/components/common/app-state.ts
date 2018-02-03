@@ -1,5 +1,7 @@
 export let AppState = {
 
+  hubName: '',
+
   numOfFolders: 0,
 
   selectedOutputFolder: '',

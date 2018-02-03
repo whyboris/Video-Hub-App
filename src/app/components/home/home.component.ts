@@ -100,6 +100,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   vhaFileHistory: HistoryItem[] = [];
 
+  futureHubName = '';
+
   // Listen for key presses
   // @HostListener('document:keypress', ['$event'])
   // handleKeyboardEvent(event: KeyboardEvent) {
@@ -164,7 +166,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // Progress bar messages
     this.electronService.ipcRenderer.on('processingProgress', (event, a, b) => {
-      this.inProgress = true; // TODO handle this variable better later
       this.progressNum1 = a;
       this.progressNum2 = b;
       this.progressPercent = a / b;
@@ -172,12 +173,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // Final object returns
     this.electronService.ipcRenderer.on('finalObjectReturning', (event, finalObject: FinalObject) => {
+      this.appState.hubName = finalObject.hubName;
       this.appState.numOfFolders = finalObject.numOfFolders;
       this.appState.selectedOutputFolder = finalObject.outputDir;
       this.appState.selectedSourceFolder = finalObject.inputDir;
 
       // Update history of opened files
-      this.updateVhaFileHistory(finalObject.outputDir, finalObject.inputDir);
+      this.updateVhaFileHistory(finalObject.outputDir, finalObject.inputDir, finalObject.hubName);
 
       this.inProgress = false;
       this.importDone = true;
@@ -237,6 +239,24 @@ export class HomeComponent implements OnInit, AfterViewInit {
     console.log('lololol');
   }
 
+  /**
+   * Only allow characters and numbers for hub name
+   * @param event key press event
+   */
+  public validateHubName(event: any) {
+    const keyCode = event.charCode;
+    if (keyCode === 32) {
+      return true;
+    } else if (48 <= keyCode && keyCode <= 57) {
+      return true;
+    } else if (65 <= keyCode && keyCode <= 90) {
+      return true;
+    } else if (97 <= keyCode && keyCode <= 122) {
+      return true;
+    }
+    return false;
+  }
+
   // ---------------- INTERACT WITH ELECTRON ------------------ //
 
   // Send initial hello message -- used to grab settings
@@ -261,7 +281,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public importFresh(): void {
-    this.electronService.ipcRenderer.send('start-the-import', this.screenshotSizeForImport);
+    this.inProgress = true;
+    const importOptions = {
+      imgHeight: this.screenshotSizeForImport,
+      hubName: this.futureHubName
+    }
+    this.electronService.ipcRenderer.send('start-the-import', importOptions);
   }
 
   public initiateMinimize(): void {
@@ -332,11 +357,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Add this file to the recently opened list
    * @param file full path to file name
    */
-  updateVhaFileHistory(pathToVhaFile: string, pathToVideos: string): void {
+  updateVhaFileHistory(pathToVhaFile: string, pathToVideos: string, hubName: string): void {
     this.vhaFileHistory.push({
       vhaFilePath: pathToVhaFile + '\\images.vha',
       videoFolderPath: pathToVideos,
-      name: 'temp name'
+      hubName: (hubName || 'untitled')
     });
     console.log('CURRENT HISTORY OF VHA FILES');
     console.log(this.vhaFileHistory);
