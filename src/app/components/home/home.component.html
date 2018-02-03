@@ -393,7 +393,7 @@
       Load from file
     </button>
 
-    <div class="recently-opened-wizard" *ngIf="vhaFileHistory.length > 0">
+    <div class="recently-opened-wizard" *ngIf="(vhaFileHistory || {}).length > 0">
 
       <h3>Recently-opened hubs:</h3>
 

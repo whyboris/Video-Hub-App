@@ -192,7 +192,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       console.log(settingsObject);
       console.log('vha file history:');
       console.log(settingsObject.vhaFileHistory);
-      this.vhaFileHistory = settingsObject.vhaFileHistory;
+      this.vhaFileHistory = (settingsObject.vhaFileHistory || []);
 
       this.restoreSettingsFromBefore(settingsObject);
       if (settingsObject.appState.selectedOutputFolder && settingsObject.appState.selectedSourceFolder) {

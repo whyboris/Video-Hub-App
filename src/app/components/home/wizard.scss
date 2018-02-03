@@ -32,8 +32,8 @@
     position: absolute;
     text-align: center;
     transform: translate(-24px, 24px);
-    width: 18px;
     transition: 300ms;
+    width: 18px;
   }
 
   .current-step {
@@ -48,25 +48,27 @@
 
   .clear-history {
     color: $gray-50;
+    cursor: pointer;
     font-style: italic;
     margin: 20px 0 0 20px;
-    cursor: pointer;
   }
 
   .recently-opened-wizard {
-    display: block;
-    margin: 0 0 20px 0;
-    font-size: 12px;
     color: $gray-70;
+    display: block;
+    font-size: 12px;
+    margin: 0 0 20px 0;
 
     ul {
       margin: 15px 0 0 20px;
       padding: 0;
 
       li {
-        margin-top: 12px;
         cursor: pointer;
         list-style: none;
+        margin-top: 12px;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
   }
@@ -82,22 +84,22 @@
   }
 
   .left-side {
-    float: left;
-    width: calc(40vw - 100px);
     box-sizing: border-box;
+    float: left;
     margin: 50px;
     min-height: 250px;
     min-width: 200px;
+    width: calc(40vw - 100px);
   }
 
   .right-side {
+    border-left: 1px solid $gray-20;
+    box-sizing: border-box;
     float: left;
     max-width: 60vw;
-    padding: 50px;
-    box-sizing: border-box;
-    min-width: 300px;
     min-height: calc(100vh - 80px);
-    border-left: 1px solid $gray-20;
+    min-width: 300px;
+    padding: 50px;
   }
 
   .size-dropdown {
@@ -141,10 +143,10 @@
   }
 
   .right-side {
-    margin-left: 20px;
-    margin-bottom: 100px;
     border-left: 0 !important;
     border-top: 1px solid $gray-20;
+    margin-bottom: 100px;
+    margin-left: 20px;
     min-width: calc(100vw - 40px) !important;
     width: calc(100vw - 40px) !important;
 
