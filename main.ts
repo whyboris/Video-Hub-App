@@ -201,7 +201,11 @@ function openThisDamnFile(pathToVhaFile) {
 
   fs.readFile(pathToVhaFile, (err, data) => {
     if (err) {
-      throw err; // later maybe only log it ???
+      dialog.showMessageBox({
+        message: 'No such file found \n' +
+          pathToVhaFile,
+        buttons: ['OK']
+      });
     } else {
       theOriginalOpenFileDialogEvent.sender.send('finalObjectReturning', JSON.parse(data), pathToVhaFile);
     }
@@ -348,20 +352,7 @@ ipc.on('start-the-import', function (event, options) {
  */
 ipc.on('rescan-current-directory', function (event, inputAndVhaFile) {
   theOriginalOpenFileDialogEvent = event;
-  // TODO -- do this better !!!!
-  // extract the file name from the `path/to/vhafile.vha`
-  let splitPath: string[];
-
-  // Split path into array, whether mac or windows
-  if (inputAndVhaFile.pathToVhaFile.includes('\\')) {
-    splitPath = inputAndVhaFile.pathToVhaFile.split('\\');
-  } else if (inputAndVhaFile.pathToVhaFile.includes('\/')) {
-    splitPath = inputAndVhaFile.pathToVhaFile.split('\/');
-  }
-  // console.log(splitPath);
-  currentOpenVhaFilename = (splitPath[splitPath.length - 1]).slice(0, -4);
-  // console.log(currentOpenVhaFilename);
-
+  currentOpenVhaFilename = exctractFileName(inputAndVhaFile.pathToVhaFile);
   reScanDirectory(inputAndVhaFile.inputFolder, inputAndVhaFile.pathToVhaFile);
 });
 
@@ -565,6 +556,22 @@ function extractNextMetadata(): void {
   extractMetadata(path.join(selectedSourceFolder,
                             finalArray[index][0],
                             finalArray[index][1]));
+}
+
+/**
+ * Extract filename from `path/to/the/file.vha` or `path\to\the\file.vha`
+ */
+function exctractFileName(filePath: string): string {
+  let splitPath: string[];
+  if (filePath.includes('\\')) {
+    splitPath = filePath.split('\\');
+  } else if (filePath.includes('\/')) {
+    splitPath = filePath.split('\/');
+  }
+  // grab last element of array and slice off `.vha`
+  currentOpenVhaFilename = (splitPath[splitPath.length - 1]).slice(0, -4);
+
+  return currentOpenVhaFilename;
 }
 
 /**

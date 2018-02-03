@@ -184,7 +184,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.appState.selectedSourceFolder = finalObject.inputDir;
 
       // Update history of opened files
-      this.updateVhaFileHistory(finalObject.outputDir, finalObject.inputDir, finalObject.hubName);
+      this.updateVhaFileHistory(pathToFile, finalObject.inputDir, finalObject.hubName);
 
       this.inProgress = false;
       this.importDone = true;
@@ -358,11 +358,31 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param file full path to file name
    */
   updateVhaFileHistory(pathToVhaFile: string, pathToVideos: string, hubName: string): void {
-    this.vhaFileHistory.push({
-      vhaFilePath: pathToVhaFile + '\\images.vha',
+
+    const newHistoryItem = {
+      vhaFilePath: pathToVhaFile,
       videoFolderPath: pathToVideos,
       hubName: (hubName || 'untitled')
+    }
+
+    let matchFound = false;
+
+    this.vhaFileHistory.forEach((element: any, index: number) => {
+      if (element.vhaFilePath === pathToVhaFile) {
+        matchFound = true;
+        // remove from current position
+        this.vhaFileHistory.splice(index, 1);
+        this.vhaFileHistory.splice(0, 0, newHistoryItem);
+      }
     });
+
+    if (!matchFound) {
+      // TODO -- use slice -- this is reall really dumb!
+      this.vhaFileHistory.reverse();
+      this.vhaFileHistory.push(newHistoryItem);
+      this.vhaFileHistory.reverse();
+    }
+
     console.log('CURRENT HISTORY OF VHA FILES');
     console.log(this.vhaFileHistory);
   }
