@@ -4,7 +4,7 @@ import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core
   selector: 'app-top-component',
   templateUrl: './top.component.html',
   styleUrls: ['./top.component.scss',
-              '../photon/icons.scss']
+              '../fonts/icons.scss']
 })
 export class TopComponent {
 

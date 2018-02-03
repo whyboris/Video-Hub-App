@@ -28,7 +28,7 @@ import { DemoContent } from '../../../assets/demo-content';
     './settings.scss',
     './buttons.scss',
     './search.scss',
-    './photon/icons.scss',
+    './fonts/icons.scss',
     './gallery.scss',
     './wizard.scss'
   ],

@@ -6,7 +6,7 @@ import { galleryItemAppear, metaAppear } from '../../common/animations';
   selector: 'app-file-item',
   templateUrl: './file.component.html',
   styleUrls: ['./file.component.scss',
-              '../photon/icons.scss'],
+              '../fonts/icons.scss'],
   animations: [ galleryItemAppear,
                 metaAppear ]
 })
