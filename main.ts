@@ -192,12 +192,10 @@ function openThisDamnFile(pathToVhaFile) {
 
   macFirstRun = false;
 
-  console.log('the app is auto loading this vha file: ' + pathToVhaFile);
+  console.log('the app is about to open: ' + pathToVhaFile);
 
-  // !!!!!!!!!!!!!!!! TODO !!!!!!!!!!!!!!!!!!
-  // REMOVE IF DOES NOT WORK !!!!!!!!!!!!!!!!
+  // Override if user opening by double-clicking a file
   if (userWantedToOpen) {
-    // dialog.showMessageBox({ message: '345' + userWantedToOpen, buttons: ['OK'] });
     pathToVhaFile = userWantedToOpen;
   }
 
@@ -358,8 +356,8 @@ ipc.on('rescan-current-directory', function (event, inputAndOutput) {
  * send images object to App
  * send settings object to App
  */
-ipc.on('load-the-file', function (event, somethingElse) {
-  // console.log(somethingElse);
+ipc.on('system-open-file-through-modal', function (event, somethingElse) {
+  theOriginalOpenFileDialogEvent = event;
 
   dialog.showOpenDialog({
       title: 'Please select a previously-saved Video Hub file',
@@ -371,16 +369,10 @@ ipc.on('load-the-file', function (event, somethingElse) {
     }, function (files) {
       if (files) {
         console.log('the user has chosen this previously-saved .vha file: ' + files[0]);
-        // TODO: check if file ends in .vha before parsing !!!
-        selectedOutputFolder = files[0].replace('\images.vha', '');
-
-        fs.readFile(selectedOutputFolder + '/images.vha', (err, data) => {
-          if (err) {
-            throw err; // later maybe only log it ???
-          } else {
-            event.sender.send('finalObjectReturning', JSON.parse(data));
-          }
-        });
+        // TODO: maybe ??? check if file ends in .vha before parsing !!
+        // TODO: fix up this stupid pattern of overriding method with variable !!!
+        userWantedToOpen = files[0];
+        openThisDamnFile(files[0]);
       }
     })
 });
@@ -389,6 +381,8 @@ ipc.on('load-the-file', function (event, somethingElse) {
  * Import this .vha file
  */
 ipc.on('load-this-vha-file', function (event, pathToVhaFile) {
+  // TODO -- streamline this variable and openThisDamnFileFunction
+  userWantedToOpen = pathToVhaFile;
   theOriginalOpenFileDialogEvent = event;
   openThisDamnFile(pathToVhaFile);
 });

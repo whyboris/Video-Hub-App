@@ -269,7 +269,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public loadFromFile(): void {
-    this.electronService.ipcRenderer.send('load-the-file', 'lol');
+    this.electronService.ipcRenderer.send('system-open-file-through-modal', 'lol');
   }
 
   public selectSourceDirectory(): void {
