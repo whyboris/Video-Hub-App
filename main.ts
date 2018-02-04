@@ -63,18 +63,18 @@ function createWindow() {
 
   // Create the browser window.
   win = new BrowserWindow({
-    x: 0,
-    y: 0,
-    // width: size.width,
-    // height: size.height,
+    x: 200,
+    y: 200,
+    width: size.width - 400,
+    height: size.height - 400,
     center: true,
-    width: 830,
-    height: 600,
+    // width: 830,
+    // height: 600,
     minWidth: 420,
     minHeight: 250,
     icon: path.join(__dirname, 'assets/icons/png/64x64.png'),
+    // removes the frame from the window completely !!!
     frame: false
-    // BORIS !!! the above removes the frame from the window completely !!!
   });
 
   myWindow = win;
@@ -95,9 +95,7 @@ function createWindow() {
     win = null;
   });
 
-  // BORIS !!!
-  // BEFORE BUILDING !!!
-  // REMOVE ALL file / edit / view / etc
+  // Does not seem to be needed to remove all the Mac taskbar menu items
   // win.setMenu(null);
 }
 
@@ -326,10 +324,10 @@ ipc.on('choose-output', function (event, someMessage) {
       console.log('the user has chosen this OUTPUT directory: ' + files[0]);
       selectedOutputFolder = files[0];
 
-      // create "/boris" inside the output directory it so that there is no `EEXIST` error when extracting.
-      if (!fs.existsSync(selectedOutputFolder + '/boris')) {
-        console.log('boris folder did not exist, creating');
-        fs.mkdirSync(selectedOutputFolder + '/boris');
+      // create "/vha-images" inside the output directory it so that there is no `EEXIST` error when extracting.
+      if (!fs.existsSync(selectedOutputFolder + '/vha-images')) {
+        console.log('vha-images folder did not exist, creating');
+        fs.mkdirSync(selectedOutputFolder + '/vha-images');
       }
 
       // store the reference to the Angular app
@@ -533,7 +531,7 @@ function takeScreenshots(file) {
       timemarks: [timestamps[i]],
       filename: MainCounter.screenShotFileNumber + `-${i + 1}.jpg`,
       size: '?x' + screenShotSize
-    }, path.join(selectedOutputFolder, 'boris'))
+    }, path.join(selectedOutputFolder, 'vha-images'))
     .on('end', () => {
       i = i + 1;
       if (i < count) {
