@@ -730,7 +730,7 @@ function countFoldersInFinalArray(): number {
 
 // ---------------------- FOLDER WALKER FUNCTION --------------------------------
 
-const acceptableFiles = ['mp4', 'mpg', 'mpeg', 'mov', 'm4v', 'avi', 'flv', 'mkv'];
+const acceptableFiles = ['mp4', 'mpg', 'mpeg', 'mov', 'm4v', 'avi', 'flv', 'mkv', 'wmv'];
 /**
  * Recursively walk through the input directory
  * compiling files to process
@@ -742,17 +742,19 @@ function walkSync(dir, filelist) {
   // console.log(files);
 
   files.forEach(function (file) {
-    // if the item is a _DIRECTORY_
-    if (fs.statSync(path.join(dir, file)).isDirectory()) {
-      filelist = walkSync(path.join(dir, file), filelist);
-    } else {
-      const extension = file.split('.').pop();
-      if (acceptableFiles.includes(extension)) {
-        // before adding, remove the redundant prefix: selectedSourceFolder
-        const partialPath = dir.replace(selectedSourceFolder, '');
+    if (!file.startsWith('$') && file !== 'System Volume Information') {
+      // if the item is a _DIRECTORY_
+      if (fs.statSync(path.join(dir, file)).isDirectory()) {
+        filelist = walkSync(path.join(dir, file), filelist);
+      } else {
+        const extension = file.split('.').pop();
+        if (acceptableFiles.includes(extension)) {
+          // before adding, remove the redundant prefix: selectedSourceFolder
+          const partialPath = dir.replace(selectedSourceFolder, '');
 
-        finalArray[fileCounter] = [partialPath, file, cleanUpFileName(file)];
-        fileCounter++;
+          finalArray[fileCounter] = [partialPath, file, cleanUpFileName(file)];
+          fileCounter++;
+        }
       }
     }
   });
@@ -760,10 +762,10 @@ function walkSync(dir, filelist) {
   return filelist;
 };
 
-
 // ------------- just figure out how many video files are in a directory ------------
 
 let totalNumberOfFiles = 0;
+
 /**
  * Used only to update the `totalNumberOfFiles` when user selects input folder
  */
@@ -772,18 +774,19 @@ function walkAndCountSync(dir, filelist) {
   const files = fs.readdirSync(dir);
   // console.log(files);
 
-  files.forEach(function (file) {
-    // if the item is a _DIRECTORY_
-    if (fs.statSync(path.join(dir, file)).isDirectory()) {
-      filelist = walkAndCountSync(path.join(dir, file), filelist);
-    } else {
-      const extension = file.split('.').pop();
-      if (acceptableFiles.includes(extension)) {
-        totalNumberOfFiles++;
+  files.forEach(function (file: string) {
+    if (!file.startsWith('$') && file !== 'System Volume Information') {
+      // if the item is a _DIRECTORY_
+      if (fs.statSync(path.join(dir, file)).isDirectory()) {
+        filelist = walkAndCountSync(path.join(dir, file), filelist);
+      } else {
+        const extension = file.split('.').pop();
+        if (acceptableFiles.includes(extension)) {
+          totalNumberOfFiles++;
+        }
       }
     }
   });
 
   return filelist;
 };
-
