@@ -28,6 +28,13 @@ h3 {
   }
 }
 
+.credits-and-help {
+  cursor: pointer;
+  color: $gray-60;
+  font-size: 12px;
+  margin: 30px 70px;
+}
+
 .closeSettings {
   cursor: pointer;
   float: right;

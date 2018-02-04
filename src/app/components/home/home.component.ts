@@ -326,6 +326,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.fullPathToCurrentFile = fullPath;
   }
 
+  public openOnlineHelp(): void {
+    this.electronService.ipcRenderer.send('pleaseOpenUrl', 'http://www.videohubapp.com');
+  }
+
   // -----------------------------------------------------------------------------------------------
   // handle output from top.component
 

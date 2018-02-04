@@ -408,6 +408,11 @@ ipc.on('openInExplorer', function(event, fullPath: string) {
   shell.showItemInFolder(fullPath);
 });
 
+ipc.on('pleaseOpenUrl', function(event, url: string): void {
+  console.log(url);
+  shell.openExternal(url, { activate: true }, (): void => {});
+});
+
 // ============================================================
 // Methods to extract screenshots, build file list, etc
 // ============================================================
