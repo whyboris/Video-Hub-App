@@ -22,18 +22,23 @@
   }
 
   .steps {
-    background-color: #FFCACA;
+    background-color: #c5c5c5;
     border-radius: 9px;
     box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.07);
     color: $white;
     font-size: 9px;
     height: 18px;
     line-height: 18px;
+    pointer-events: none;
     position: absolute;
     text-align: center;
     transform: translate(-24px, 24px);
     transition: 300ms;
     width: 18px;
+  }
+
+  .fulfilled {
+    background-color: #8ab76c;
   }
 
   .current-step {
@@ -42,8 +47,9 @@
   }
 
   .description {
-    color: $gray-20;
+    color: $gray-50;
     margin-bottom: 10px;
+    pointer-events: none;
   }
 
   .clear-history {
@@ -92,8 +98,29 @@
     }
   }
 
+  .screenshot-preview {
+    align-items: center;
+    background-color: #c7dabb;
+    border: 1px solid $gray-50;
+    display: flex;
+    font-size: 12px;
+    justify-content: center;
+    position: absolute;
+    text-align: center;
+    transition: 300ms;
+    transition-property: width, height;
+    transform: translate(187px, -56px);
+  }
+
   .path {
+    font-style: italic;
     min-height: 20px;
+    margin-left: 26px;
+  }
+
+  .step-description {
+    min-height: 20px;
+    margin-left: 16px;
   }
 
   .emphasis-number {

@@ -421,37 +421,46 @@
     <h2>Import new hub</h2>
 
     <div
-      [ngClass]="{ 'current-step': appState.selectedSourceFolder === '' }"
+      [ngClass]="{
+          'current-step': futureHubName === '',
+          'fulfilled': futureHubName !== ''
+        }"
       class="steps"
     >
-      0
+      1
     </div>
     <input
       [(ngModel)]="futureHubName"
       (keypress)="validateHubName($event)"
       class="inputFilter hub-name-input"
     >
-    <span class="description">
+    <span class="step-description">
       Name your hub
     </span>
 
     <div
-      [ngClass]="{ 'current-step': appState.selectedSourceFolder === '' }"
+      [ngClass]="{
+          'current-step': futureHubName !== '' && appState.selectedSourceFolder === '',
+          'fulfilled': appState.selectedSourceFolder !== ''
+        }"
       class="steps"
     >
-      1
+      2
     </div>
-    <button (click)="selectSourceDirectory()">
+    <button
+      (click)="selectSourceDirectory()"
+      [disabled]="futureHubName === ''"
+    >
       {{ appState.selectedSourceFolder === '' ? 'Select' : 'Change' }} input directory
     </button>
 
-    <span class="description">
+    <span class="step-description">
       Importing from:
     </span>
     <span class="path">
       {{ appState.selectedSourceFolder }}
     </span>
-    <span class="path" *ngIf="totalNumberOfFiles !== -1">
+    <span class="step-description" *ngIf="totalNumberOfFiles !== -1">
       Found
       <span class="emphasis-number">
         {{ totalNumberOfFiles | number }}
@@ -460,10 +469,10 @@
     </span>
 
     <div
-      [ngClass]="{ 'current-step': appState.selectedSourceFolder !== '' && appState.selectedOutputFolder === '' }"
+      [ngClass]="{ 'fulfilled': appState.selectedOutputFolder !== '' }"
       class="steps"
     >
-      2
+      3
     </div>
     <button
       (click)="selectOutputDirectory()"
@@ -472,7 +481,7 @@
       {{ appState.selectedOutputFolder === '' ? 'Select' : 'Change' }} output directory
     </button>
 
-    <span class="description">
+    <span class="step-description">
       Saving screenshots to:
     </span>
     <span class="path">
@@ -480,13 +489,17 @@
     </span>
 
     <div
-      [ngClass]="{ 'current-step': appState.selectedOutputFolder !== '' && appState.selectedSourceFolder !== '' }"
+      [ngClass]="{ 'fulfilled': appState.selectedOutputFolder !== '' && appState.selectedSourceFolder !== '' }"
       class="steps"
     >
-      3
+      4
     </div>
 
-    <select (change)="selectScreenshotSize($event.target.value)" class="size-dropdown">
+    <select
+      (change)="selectScreenshotSize($event.target.value)"
+      [disabled]="appState.selectedOutputFolder === '' || appState.selectedSourceFolder === ''"
+      class="size-dropdown"
+    >
       <option value="50">50px</option>
       <option value="75">75px</option>
       <option value="100" selected="selected">100px</option>
@@ -496,15 +509,31 @@
       <option value="300">300px</option>
     </select>
 
-    <span class="path">
+    <span class="step-description">
       Size of screenshots
     </span>
+
+    <div
+      *ngIf="appState.selectedOutputFolder !== ''"
+      class="screenshot-preview"
+      [ngStyle]="{
+          width: ((screenshotSizeForImport / 100) * 171) + 'px',
+          height: screenshotSizeForImport + 'px'
+        }"
+      @galleryItemAppear
+    >
+      imported
+      <br>
+      screenshot
+      <br>
+      size
+    </div>
 
     <div
       [ngClass]="{ 'current-step': appState.selectedOutputFolder !== '' && appState.selectedSourceFolder !== '' }"
       class="steps"
     >
-      4
+      5
     </div>
     <button
       [disabled]="appState.selectedOutputFolder === '' || appState.selectedSourceFolder === '' || inProgress === true"
@@ -516,13 +545,13 @@
     <span class="description" *ngIf="totalNumberOfFiles !== -1">
       Expected:
     </span>
-    <span class="path" *ngIf="totalNumberOfFiles !== -1">
+    <span class="step-description" *ngIf="totalNumberOfFiles !== -1">
       <span class="emphasis-number">
         {{ totalImportTime }}
       </span>
       minutes to import
     </span>
-    <span class="path" *ngIf="totalNumberOfFiles !== -1">
+    <span class="step-description" *ngIf="totalNumberOfFiles !== -1">
       <span class="emphasis-number">
         {{ totalImportSize }}
       </span>

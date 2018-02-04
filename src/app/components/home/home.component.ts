@@ -37,7 +37,8 @@ import { DemoContent } from '../../../assets/demo-content';
     myAnimation2,
     myWizardAnimation,
     topAnimation,
-    historyItemRemove
+    historyItemRemove,
+    galleryItemAppear
   ]
 })
 export class HomeComponent implements OnInit, AfterViewInit {
@@ -160,6 +161,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       // TODO better prediction
       this.totalImportTime = Math.round(totalFilesInDir * 2.25 / 60);
       this.appState.selectedSourceFolder = filePath;
+      this.appState.selectedOutputFolder = filePath;
     });
 
     // Returning Output
@@ -288,7 +290,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.inProgress = true;
     const importOptions = {
       imgHeight: this.screenshotSizeForImport,
-      hubName: this.futureHubName
+      hubName: (this.futureHubName || 'untitled')
     }
     this.electronService.ipcRenderer.send('start-the-import', importOptions);
   }
