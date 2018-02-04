@@ -1,8 +1,9 @@
 <div
-  class="folder-container"
+  *ngIf="_file !== ''"
   [ngClass]="{ 'dark-mode-override': darkMode }"
+  class="folder-container"
 >
-  <span class="icon icon-folder-blank"></span>
+  <span class="icon icon-folder-blank" (click)="openInExplorer()"></span>
   <span
   *ngFor="let item of folderNameArray"
     (click)="folderWordClicked(item)"
@@ -14,10 +15,11 @@
 </div>
 
 <div
-  class="file-container"
+  *ngIf="_file !== ''"
   [ngClass]="{ 'dark-mode-override': darkMode }"
+  class="file-container"
 >
-  <span class="icon icon-video-blank"></span>
+  <span class="icon icon-video-blank" (click)="openInExplorer()"></span>
   <span
     *ngFor="let item of fileNameArray"
     (click)="fileWordClicked(item)"

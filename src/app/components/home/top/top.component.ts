@@ -30,19 +30,24 @@ export class TopComponent {
 
   @Output() onFileWordClicked = new EventEmitter<string>();
   @Output() onFolderWordClicked = new EventEmitter<string>();
+  @Output() onOpenInExplorer = new EventEmitter<boolean>();
 
   public folderNameArray: Array<string>;
   public fileNameArray: Array<string>;
 
-  public folderWordClicked(item) {
+  public folderWordClicked(item): void {
     this.onFolderWordClicked.emit(item.trim());
   }
 
-  public fileWordClicked(item) {
+  public fileWordClicked(item): void {
     // Strip away any of: {}()[].,
     const regex = /{|}|\(|\)|\[|\]|\.|\,/g;
     item = item.replace(regex, '');
     this.onFileWordClicked.emit(item.trim());
+  }
+
+  public openInExplorer(): void {
+    this.onOpenInExplorer.emit(true);
   }
 
 }

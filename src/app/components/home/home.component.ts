@@ -104,6 +104,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   futureHubName = '';
 
+  fullPathToCurrentFile = '';
+
   // Listen for key presses
   // @HostListener('document:keypress', ['$event'])
   // handleKeyboardEvent(event: KeyboardEvent) {
@@ -321,6 +323,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const fullPath = this.appState.selectedSourceFolder + this.finalArray[number][0] + '/' + this.finalArray[number][1];
     this.electronService.ipcRenderer.send('openThisFile', fullPath);
     console.log(fullPath);
+    this.fullPathToCurrentFile = fullPath;
   }
 
   // -----------------------------------------------------------------------------------------------
@@ -340,6 +343,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   handleFolderWordClicked(filter: string): void {
     this.onEnterKey(filter, 1); // 1st item is the `folder` filter
+  }
+
+  openInExplorer(): void {
+    console.log('should open explorer');
+    this.electronService.ipcRenderer.send('openInExplorer', this.fullPathToCurrentFile);
   }
 
   // -----------------------------------------------------------------------------------------------

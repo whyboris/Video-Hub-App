@@ -399,6 +399,15 @@ ipc.on('openThisFile', function (event, fullFilePath) {
   shell.openItem(fullFilePath);
 });
 
+/**
+ * Open the explorer to the relevant file
+ */
+ipc.on('openInExplorer', function(event, fullPath: string) {
+  console.log('trying to open in explorer');
+  console.log(fullPath);
+  shell.showItemInFolder(fullPath);
+});
+
 // ============================================================
 // Methods to extract screenshots, build file list, etc
 // ============================================================
