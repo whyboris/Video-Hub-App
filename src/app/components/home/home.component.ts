@@ -16,7 +16,7 @@ import { AppState } from '../common/app-state';
 import { Filters } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from 'app/components/common/settings-buttons';
 
-import { myAnimation, myAnimation2, myWizardAnimation, galleryItemAppear, topAnimation } from '../common/animations';
+import { myAnimation, myAnimation2, myWizardAnimation, galleryItemAppear, topAnimation, historyItemRemove } from '../common/animations';
 
 import { DemoContent } from '../../../assets/demo-content';
 
@@ -28,7 +28,7 @@ import { DemoContent } from '../../../assets/demo-content';
     './settings.scss',
     './buttons.scss',
     './search.scss',
-    './photon/icons.scss',
+    './fonts/icons.scss',
     './gallery.scss',
     './wizard.scss'
   ],
@@ -36,7 +36,9 @@ import { DemoContent } from '../../../assets/demo-content';
     myAnimation,
     myAnimation2,
     myWizardAnimation,
-    topAnimation
+    topAnimation,
+    historyItemRemove,
+    galleryItemAppear
   ]
 })
 export class HomeComponent implements OnInit, AfterViewInit {
@@ -100,6 +102,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   vhaFileHistory: HistoryItem[] = [];
 
+  futureHubName = '';
+
   // Listen for key presses
   // @HostListener('document:keypress', ['$event'])
   // handleKeyboardEvent(event: KeyboardEvent) {
@@ -133,9 +137,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       if (this.webDemo) {
         const finalObject = DemoContent;
+        // TODO -- MAYBE ???? UPDATE SINCE THE BELOW HAS BEEN UPDATED
         // identical to `finalObjectReturning`
         this.appState.numOfFolders = finalObject.numOfFolders;
-        this.appState.selectedOutputFolder = finalObject.outputDir;
+        // DEMO CONTENT -- CONFIRM THAT IT WORKS !!!
+        this.appState.selectedOutputFolder = 'images';
         this.appState.selectedSourceFolder = finalObject.inputDir;
         this.inProgress = false;
         this.importDone = true;
@@ -155,6 +161,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       // TODO better prediction
       this.totalImportTime = Math.round(totalFilesInDir * 2.25 / 60);
       this.appState.selectedSourceFolder = filePath;
+      this.appState.selectedOutputFolder = filePath;
     });
 
     // Returning Output
@@ -164,20 +171,26 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // Progress bar messages
     this.electronService.ipcRenderer.on('processingProgress', (event, a, b) => {
-      this.inProgress = true; // TODO handle this variable better later
       this.progressNum1 = a;
       this.progressNum2 = b;
       this.progressPercent = a / b;
     });
 
     // Final object returns
-    this.electronService.ipcRenderer.on('finalObjectReturning', (event, finalObject: FinalObject) => {
+    this.electronService.ipcRenderer.on('finalObjectReturning',
+        (event, finalObject: FinalObject, pathToFile: string, fileName: string) => {
+      console.log('LOADING ALL OF THIS:');
+      console.log(finalObject);
+      console.log('path to file');
+      console.log(pathToFile);
+      this.appState.currentVhaFile = pathToFile;
+      this.appState.hubName = finalObject.hubName;
       this.appState.numOfFolders = finalObject.numOfFolders;
-      this.appState.selectedOutputFolder = finalObject.outputDir;
+      this.appState.selectedOutputFolder = pathToFile.replace(fileName + '.vha', '');
       this.appState.selectedSourceFolder = finalObject.inputDir;
 
       // Update history of opened files
-      this.updateVhaFileHistory(finalObject.outputDir, finalObject.inputDir);
+      this.updateVhaFileHistory(pathToFile, finalObject.inputDir, finalObject.hubName);
 
       this.inProgress = false;
       this.importDone = true;
@@ -188,15 +201,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // Returning settings
     this.electronService.ipcRenderer.on('settingsReturning', (event, settingsObject: SettingsObject) => {
-      console.log('settings have returned');
-      console.log(settingsObject);
-      console.log('vha file history:');
-      console.log(settingsObject.vhaFileHistory);
-      this.vhaFileHistory = settingsObject.vhaFileHistory;
-
+      this.vhaFileHistory = (settingsObject.vhaFileHistory || []);
       this.restoreSettingsFromBefore(settingsObject);
-      if (settingsObject.appState.selectedOutputFolder && settingsObject.appState.selectedSourceFolder) {
-        this.loadThisVhaFile(settingsObject.appState.selectedOutputFolder + '/images.vha');
+      if (settingsObject.appState.currentVhaFile) {
+        this.loadThisVhaFile(settingsObject.appState.currentVhaFile);
       }
     });
 
@@ -237,6 +245,24 @@ export class HomeComponent implements OnInit, AfterViewInit {
     console.log('lololol');
   }
 
+  /**
+   * Only allow characters and numbers for hub name
+   * @param event key press event
+   */
+  public validateHubName(event: any) {
+    const keyCode = event.charCode;
+    if (keyCode === 32) {
+      return true;
+    } else if (48 <= keyCode && keyCode <= 57) {
+      return true;
+    } else if (65 <= keyCode && keyCode <= 90) {
+      return true;
+    } else if (97 <= keyCode && keyCode <= 122) {
+      return true;
+    }
+    return false;
+  }
+
   // ---------------- INTERACT WITH ELECTRON ------------------ //
 
   // Send initial hello message -- used to grab settings
@@ -249,7 +275,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public loadFromFile(): void {
-    this.electronService.ipcRenderer.send('load-the-file', 'lol');
+    this.electronService.ipcRenderer.send('system-open-file-through-modal', 'lol');
   }
 
   public selectSourceDirectory(): void {
@@ -261,7 +287,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public importFresh(): void {
-    this.electronService.ipcRenderer.send('start-the-import', this.screenshotSizeForImport);
+    this.inProgress = true;
+    const importOptions = {
+      imgHeight: this.screenshotSizeForImport,
+      hubName: (this.futureHubName || 'untitled')
+    }
+    this.electronService.ipcRenderer.send('start-the-import', importOptions);
   }
 
   public initiateMinimize(): void {
@@ -332,12 +363,32 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Add this file to the recently opened list
    * @param file full path to file name
    */
-  updateVhaFileHistory(pathToVhaFile: string, pathToVideos: string): void {
-    this.vhaFileHistory.push({
-      vhaFilePath: pathToVhaFile + '\\images.vha',
+  updateVhaFileHistory(pathToVhaFile: string, pathToVideos: string, hubName: string): void {
+
+    const newHistoryItem = {
+      vhaFilePath: pathToVhaFile,
       videoFolderPath: pathToVideos,
-      name: 'temp name'
+      hubName: (hubName || 'untitled')
+    }
+
+    let matchFound = false;
+
+    this.vhaFileHistory.forEach((element: any, index: number) => {
+      if (element.vhaFilePath === pathToVhaFile) {
+        matchFound = true;
+        // remove from current position
+        this.vhaFileHistory.splice(index, 1);
+        this.vhaFileHistory.splice(0, 0, newHistoryItem);
+      }
     });
+
+    if (!matchFound) {
+      // TODO -- use slice -- this is reall really dumb!
+      this.vhaFileHistory.reverse();
+      this.vhaFileHistory.push(newHistoryItem);
+      this.vhaFileHistory.reverse();
+    }
+
     console.log('CURRENT HISTORY OF VHA FILES');
     console.log(this.vhaFileHistory);
   }
@@ -350,6 +401,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
     console.log('trying to open ' + index);
     console.log(this.vhaFileHistory[index]);
     this.loadThisVhaFile(this.vhaFileHistory[index].vhaFilePath);
+  }
+
+  /**
+   * Handle click from html to open a recently-opened VHA file
+   * @param index - index of the file from `vhaFileHistory`
+   */
+  removeFromHistory(event: Event, index: number): void {
+    event.stopPropagation();
+    console.log('trying to remove ' + index);
+    console.log(this.vhaFileHistory[index]);
+    this.vhaFileHistory.splice(index, 1);
   }
 
   /**
@@ -439,13 +501,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Rescan the current input directory
    */
   public rescanDirectory(): void {
-    const sourceAndOutput: any = {};
-    sourceAndOutput.inputFolder = this.appState.selectedSourceFolder;
-    sourceAndOutput.outputFolder = this.appState.selectedOutputFolder;
+    const sourceAndVhaFile: any = {};
+    sourceAndVhaFile.inputFolder = this.appState.selectedSourceFolder;
+    sourceAndVhaFile.pathToVhaFile = this.appState.currentVhaFile;
     this.progressNum1 = 0;
     this.toggleSettings();
     this.importDone = false;
-    this.electronService.ipcRenderer.send('rescan-current-directory', sourceAndOutput);
+    console.log('rescanning');
+    console.log(sourceAndVhaFile);
+    this.electronService.ipcRenderer.send('rescan-current-directory', sourceAndVhaFile);
   }
 
   /**

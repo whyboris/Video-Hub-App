@@ -22,18 +22,23 @@
   }
 
   .steps {
-    background-color: #FFCACA;
+    background-color: #c5c5c5;
     border-radius: 9px;
     box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.07);
     color: $white;
     font-size: 9px;
     height: 18px;
     line-height: 18px;
+    pointer-events: none;
     position: absolute;
     text-align: center;
     transform: translate(-24px, 24px);
-    width: 18px;
     transition: 300ms;
+    width: 18px;
+  }
+
+  .fulfilled {
+    background-color: #8ab76c;
   }
 
   .current-step {
@@ -42,37 +47,80 @@
   }
 
   .description {
-    color: $gray-20;
+    color: $gray-50;
     margin-bottom: 10px;
+    pointer-events: none;
   }
 
   .clear-history {
     color: $gray-50;
+    cursor: pointer;
     font-style: italic;
     margin: 20px 0 0 20px;
-    cursor: pointer;
   }
 
   .recently-opened-wizard {
-    display: block;
-    margin: 0 0 20px 0;
-    font-size: 12px;
     color: $gray-70;
+    display: block;
+    font-size: 12px;
+    margin: 0 0 20px 0;
 
     ul {
       margin: 15px 0 0 20px;
       padding: 0;
 
       li {
-        margin-top: 12px;
         cursor: pointer;
         list-style: none;
+        margin-bottom: 12px;
+        word-wrap: break-word;
+
+        .clear-history-item {
+          position: absolute;
+          transform: translate(-25px, 0);
+          transition: 300ms;
+          transition-property: color;
+
+          &:hover {
+            color: red;
+          }
+
+          &:before {
+            font-size: 12px;
+          }
+        }
+
+        span {
+          padding-left: 10px;
+          font-style: italic;
+        }
       }
     }
   }
 
+  .screenshot-preview {
+    align-items: center;
+    background-color: #c7dabb;
+    border: 1px solid $gray-50;
+    display: flex;
+    font-size: 12px;
+    justify-content: center;
+    position: absolute;
+    text-align: center;
+    transition: 300ms;
+    transition-property: width, height;
+    transform: translate(187px, -56px);
+  }
+
   .path {
+    font-style: italic;
     min-height: 20px;
+    margin-left: 26px;
+  }
+
+  .step-description {
+    min-height: 20px;
+    margin-left: 16px;
   }
 
   .emphasis-number {
@@ -82,22 +130,22 @@
   }
 
   .left-side {
-    float: left;
-    width: calc(40vw - 100px);
     box-sizing: border-box;
+    float: left;
     margin: 50px;
     min-height: 250px;
     min-width: 200px;
+    width: calc(40vw - 100px);
   }
 
   .right-side {
+    border-left: 1px solid $gray-20;
+    box-sizing: border-box;
     float: left;
     max-width: 60vw;
-    padding: 50px;
-    box-sizing: border-box;
-    min-width: 300px;
     min-height: calc(100vh - 80px);
-    border-left: 1px solid $gray-20;
+    min-width: 300px;
+    padding: 50px;
   }
 
   .size-dropdown {
@@ -129,6 +177,12 @@
   z-index: 100;
 }
 
+.hub-name-input {
+  margin-top: 16px;
+  padding-left: 5px;
+  margin-left: 15px;
+}
+
 @media (max-width: 640px) {
 
   .wizard {
@@ -141,10 +195,10 @@
   }
 
   .right-side {
-    margin-left: 20px;
-    margin-bottom: 100px;
     border-left: 0 !important;
     border-top: 1px solid $gray-20;
+    margin-bottom: 100px;
+    margin-left: 20px;
     min-width: calc(100vw - 40px) !important;
     width: calc(100vw - 40px) !important;
 

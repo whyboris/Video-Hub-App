@@ -179,31 +179,37 @@ import { FinalObject } from './src/app/components/common/final-object.interface'
 let finalArray = [];
 let fileCounter = 0;
 
-let selectedSourceFolder = '';  // later = ''
-let selectedOutputFolder = ''; // later = ''
+let selectedSourceFolder = '';
+let selectedOutputFolder = '';
 
 let theOriginalOpenFileDialogEvent;
 
+let hubName = 'untitled'; // in case user doesn't name their hub any name
+let currentOpenVhaFilename = '';
 
 // METHOD TO OPEN DOUBLE-CLICKED FILE !!!!!!!!!!!!!
 function openThisDamnFile(pathToVhaFile) {
 
   macFirstRun = false;
 
-  console.log('the app is auto loading this vha file: ' + pathToVhaFile);
+  console.log('the app is about to open: ' + pathToVhaFile);
 
-  // !!!!!!!!!!!!!!!! TODO !!!!!!!!!!!!!!!!!!
-  // REMOVE IF DOES NOT WORK !!!!!!!!!!!!!!!!
+  // Override if user opening by double-clicking a file
   if (userWantedToOpen) {
-    // dialog.showMessageBox({ message: '345' + userWantedToOpen, buttons: ['OK'] });
     pathToVhaFile = userWantedToOpen;
   }
 
   fs.readFile(pathToVhaFile, (err, data) => {
     if (err) {
-      throw err; // later maybe only log it ???
+      dialog.showMessageBox({
+        message: 'No such file found \n' +
+          pathToVhaFile,
+        buttons: ['OK']
+      });
     } else {
-      theOriginalOpenFileDialogEvent.sender.send('finalObjectReturning', JSON.parse(data));
+      theOriginalOpenFileDialogEvent.sender.send(
+        'finalObjectReturning', JSON.parse(data), pathToVhaFile, extractFileName(pathToVhaFile)
+      );
     }
   });
 
@@ -337,26 +343,28 @@ ipc.on('choose-output', function (event, someMessage) {
 /**
  * Start extracting the screenshots into a chosen output folder from a chosen input folder
  */
-ipc.on('start-the-import', function (event, ssSize) {
-  screenShotSize = ssSize;
+ipc.on('start-the-import', function (event, options) {
+  screenShotSize = options.imgHeight;
+  hubName = options.hubName;
   theExtractor('freshStart');
 });
 
 /**
  * Initiate rescan of the directory
  */
-ipc.on('rescan-current-directory', function (event, inputAndOutput) {
+ipc.on('rescan-current-directory', function (event, inputAndVhaFile) {
   theOriginalOpenFileDialogEvent = event;
-  reScanDirectory(inputAndOutput.inputFolder, inputAndOutput.outputFolder);
+  currentOpenVhaFilename = extractFileName(inputAndVhaFile.pathToVhaFile);
+  reScanDirectory(inputAndVhaFile.inputFolder, inputAndVhaFile.pathToVhaFile);
 });
 
 /**
- * Summon system modal to choose the images.vha file
+ * Summon system modal to choose the *.vha file
  * send images object to App
  * send settings object to App
  */
-ipc.on('load-the-file', function (event, somethingElse) {
-  // console.log(somethingElse);
+ipc.on('system-open-file-through-modal', function (event, somethingElse) {
+  theOriginalOpenFileDialogEvent = event;
 
   dialog.showOpenDialog({
       title: 'Please select a previously-saved Video Hub file',
@@ -368,24 +376,20 @@ ipc.on('load-the-file', function (event, somethingElse) {
     }, function (files) {
       if (files) {
         console.log('the user has chosen this previously-saved .vha file: ' + files[0]);
-        // TODO: check if file ends in .vha before parsing !!!
-        selectedOutputFolder = files[0].replace('\images.vha', '');
-
-        fs.readFile(selectedOutputFolder + '/images.vha', (err, data) => {
-          if (err) {
-            throw err; // later maybe only log it ???
-          } else {
-            event.sender.send('finalObjectReturning', JSON.parse(data));
-          }
-        });
+        // TODO: maybe ??? check if file ends in .vha before parsing !!
+        // TODO: fix up this stupid pattern of overriding method with variable !!!
+        userWantedToOpen = files[0];
+        openThisDamnFile(files[0]);
       }
-    })
+    });
 });
 
 /**
  * Import this .vha file
  */
 ipc.on('load-this-vha-file', function (event, pathToVhaFile) {
+  // TODO -- streamline this variable and openThisDamnFileFunction
+  userWantedToOpen = pathToVhaFile;
   theOriginalOpenFileDialogEvent = event;
   openThisDamnFile(pathToVhaFile);
 });
@@ -418,19 +422,23 @@ function sendFinalResultHome(): void {
   alphabetizeFinalArray();
 
   const finalObject: FinalObject = {
+    hubName: hubName,
     ssSize: screenShotSize,
     numOfFolders: countFoldersInFinalArray(),
     inputDir: selectedSourceFolder,
-    outputDir: selectedOutputFolder,
     lastScreen: MainCounter.screenShotFileNumber, // REPRESENTS NEXT AVAILABLE NUMBER FOR THE TAKING
     images: finalArray
   };
 
   const json = JSON.stringify(finalObject);
   // write the file
-  fs.writeFile(selectedOutputFolder + '/images.vha', json, 'utf8', () => {
+  // TODO -- use system path builder, not hardcoded `/`
+  const pathToTheFile = selectedOutputFolder + '/' + (currentOpenVhaFilename || hubName) + '.vha';
+  fs.writeFile(pathToTheFile, json, 'utf8', () => {
     console.log('file written:');
-    theOriginalOpenFileDialogEvent.sender.send('finalObjectReturning', JSON.parse(json));
+    theOriginalOpenFileDialogEvent.sender.send(
+      'finalObjectReturning', JSON.parse(json), pathToTheFile, extractFileName(pathToTheFile)
+    );
   });
 }
 
@@ -554,6 +562,22 @@ function extractNextMetadata(): void {
 }
 
 /**
+ * Extract filename from `path/to/the/file.vha` or `path\to\the\file.vha`
+ */
+function extractFileName(filePath: string): string {
+  let splitPath: string[];
+  if (filePath.includes('\\')) {
+    splitPath = filePath.split('\\');
+  } else if (filePath.includes('\/')) {
+    splitPath = filePath.split('\/');
+  }
+  // grab last element of array and slice off `.vha`
+  currentOpenVhaFilename = (splitPath[splitPath.length - 1]).slice(0, -4);
+
+  return currentOpenVhaFilename;
+}
+
+/**
  * Extract the meta data & store it in the final array
  * @param filePath -- the full path to the file (including file name)
  * @param currentFile -- index of current file
@@ -582,12 +606,12 @@ function extractMetadata(filePath: string): void {
 /**
  * Rescan the directory -- updating files etc -- SUPER COMPLICATED
  */
-function reScanDirectory(inputFolder: string, outputFolder: string): void {
+function reScanDirectory(inputFolder: string, pathToVhaFile: string): void {
 
   console.log('inputFolder: ' + inputFolder);
-  console.log('outputFolder: ' + outputFolder);
+  console.log('vhaFile: ' + pathToVhaFile);
 
-  fs.readFile(outputFolder + '/images.vha', (err, data) => {
+  fs.readFile(pathToVhaFile, (err, data) => {
     if (err) {
       console.log(err); // TODO: better error handling
     } else {
@@ -596,7 +620,7 @@ function reScanDirectory(inputFolder: string, outputFolder: string): void {
 
       const oldFileList: any[] = currentJson.images;
       MainCounter.screenShotFileNumber = currentJson.lastScreen;
-      selectedOutputFolder = currentJson.outputDir;
+      selectedOutputFolder = pathToVhaFile.replace(extractFileName(pathToVhaFile) + '.vha', '');
       selectedSourceFolder = currentJson.inputDir;
       screenShotSize = currentJson.ssSize;
 
@@ -706,7 +730,7 @@ function countFoldersInFinalArray(): number {
 
 // ---------------------- FOLDER WALKER FUNCTION --------------------------------
 
-const acceptableFiles = ['mp4', 'mpg', 'mpeg', 'mov', 'm4v', 'avi'];
+const acceptableFiles = ['mp4', 'mpg', 'mpeg', 'mov', 'm4v', 'avi', 'flv', 'mkv'];
 /**
  * Recursively walk through the input directory
  * compiling files to process

@@ -2,7 +2,6 @@ export let DemoContent = {
   'ssSize': '300',
   'numOfFolders': 3,
   'inputDir': 'unimportant',
-  'outputDir': 'images',
   'lastScreen': 10,
   'images': [
     [
