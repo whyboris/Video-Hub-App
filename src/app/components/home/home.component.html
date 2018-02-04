@@ -398,12 +398,13 @@
       Load from file
     </button>
 
-    <div class="recently-opened-wizard" *ngIf="(vhaFileHistory || {}).length > 0">
+    <div class="recently-opened-wizard" *ngIf="(vhaFileHistory || {}).length > 0" @historyItemRemove>
 
       <h3>Recently-opened hubs:</h3>
 
       <ul>
-        <li *ngFor="let historyItem of vhaFileHistory; index as i" (click)="openFromHistory(i)">
+        <li *ngFor="let historyItem of vhaFileHistory; index as i" (click)="openFromHistory(i)" @historyItemRemove>
+          <span class="icon icon-close clear-history-item" (click)="removeFromHistory($event, i)"></span>
           {{ historyItem.hubName }}
           <br>
           <span class="file-path">{{ historyItem.vhaFilePath }}</span>

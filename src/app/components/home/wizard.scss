@@ -66,9 +66,23 @@
       li {
         cursor: pointer;
         list-style: none;
-        margin-top: 12px;
-        overflow: hidden;
-        text-overflow: ellipsis;
+        margin-bottom: 12px;
+        word-wrap: break-word;
+
+        .clear-history-item {
+          position: absolute;
+          transform: translate(-25px, 0);
+          transition: 300ms;
+          transition-property: color;
+
+          &:hover {
+            color: red;
+          }
+
+          &:before {
+            font-size: 12px;
+          }
+        }
 
         span {
           padding-left: 10px;

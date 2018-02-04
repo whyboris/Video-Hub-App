@@ -16,7 +16,7 @@ import { AppState } from '../common/app-state';
 import { Filters } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from 'app/components/common/settings-buttons';
 
-import { myAnimation, myAnimation2, myWizardAnimation, galleryItemAppear, topAnimation } from '../common/animations';
+import { myAnimation, myAnimation2, myWizardAnimation, galleryItemAppear, topAnimation, historyItemRemove } from '../common/animations';
 
 import { DemoContent } from '../../../assets/demo-content';
 
@@ -36,7 +36,8 @@ import { DemoContent } from '../../../assets/demo-content';
     myAnimation,
     myAnimation2,
     myWizardAnimation,
-    topAnimation
+    topAnimation,
+    historyItemRemove
   ]
 })
 export class HomeComponent implements OnInit, AfterViewInit {
@@ -398,6 +399,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
     console.log('trying to open ' + index);
     console.log(this.vhaFileHistory[index]);
     this.loadThisVhaFile(this.vhaFileHistory[index].vhaFilePath);
+  }
+
+  /**
+   * Handle click from html to open a recently-opened VHA file
+   * @param index - index of the file from `vhaFileHistory`
+   */
+  removeFromHistory(event: Event, index: number): void {
+    event.stopPropagation();
+    console.log('trying to remove ' + index);
+    console.log(this.vhaFileHistory[index]);
+    this.vhaFileHistory.splice(index, 1);
   }
 
   /**

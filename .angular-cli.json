@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "project": {
-    "name": "video-hub-app",
+    "name": "Video Hub App",
     "ejected": true
   },
   "apps": [
