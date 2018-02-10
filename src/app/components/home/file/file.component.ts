@@ -13,13 +13,14 @@ import { galleryItemAppear, metaAppear } from '../../common/animations';
 export class FileComponent {
 
   @Input() elHeight: number;
+  @Input() fileSize: number;
   @Input() folderPath: string;
+  @Input() imgId: any;
+  @Input() largerFont: boolean;
   @Input() rez: string;
   @Input() showMeta: boolean;
-  @Input() imgId: any;
   @Input() time: string;
   @Input() title: string;
-  @Input() largerFont: boolean;
 
   constructor() { }
 

@@ -14,16 +14,17 @@ export class PreviewComponent implements OnInit, OnDestroy {
 
   @Input() elHeight: number;
   @Input() elWidth: number;
+  @Input() fileSize: number;
   @Input() folderPath: string;
   @Input() hoverScrub: boolean;
   @Input() imgHeight: number;
+  @Input() imgId: any;
+  @Input() largerFont: boolean;
   @Input() randomImage: boolean;
   @Input() rez: string;
   @Input() showMeta: boolean;
-  @Input() imgId: any;
   @Input() time: string;
   @Input() title: string;
-  @Input() largerFont: boolean;
 
   hover: boolean;
   currentlyShowing = 1;

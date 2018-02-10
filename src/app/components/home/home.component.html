@@ -205,7 +205,11 @@
               <ng-container
                 *ngFor="let string of filter.array; index as i"
               >
-                <span class="conjunction" *ngIf="i > 0">
+                <span
+                  *ngIf="i > 0"
+                  [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? '#CCCCCC' : 'black' }"
+                  class="conjunction"
+                >
                   {{ filter.conjunction }}
                 </span>
                 <span
@@ -228,6 +232,7 @@
         <input
           (keydown.escape)="magicSearchString = ''"
           [(ngModel)]="magicSearchString"
+          (ngModelChange)="magicSearchChanged($event)"
           [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
           type="text"
           class="inputFilter"
@@ -305,11 +310,12 @@
       [items]="finalArray | magicSearchPipe: magicSearchString
                 | fileSearchPipe: filters[0].array : filters[0].bool : true  : false : false
                 | fileSearchPipe: filters[1].array : filters[1].bool : false : false : false
-                | fileSearchPipe: filters[2].array : filters[2].bool : true  : true : false
-                | fileSearchPipe: filters[3].array : filters[3].bool : false : true : false
-                | fileSearchPipe: filters[4].array : filters[4].bool : true : true : true
+                | fileSearchPipe: filters[2].array : filters[2].bool : true  : true  : false
+                | fileSearchPipe: filters[3].array : filters[3].bool : false : true  : false
+                | fileSearchPipe: filters[4].array : filters[4].bool : true  : true  : true
                 | wordFrequencyPipe: settingsButtons['showFreq'].toggled
                 | countPipe
+                | randomizePipe: shuffleTheViewNow
                 | folderViewPipe: (appState.currentView === 'files')"
     >
 
@@ -328,6 +334,7 @@
           [imgId]="item[3]"
           [time]="item[4]"
           [rez]="item[5]"
+          [fileSize]="item[7]"
           [imgHeight]="imgHeight"
           [elHeight]="imgHeight + textPaddingHeight"
           [elWidth]="previewWidth"
@@ -347,6 +354,7 @@
           [title]="item[2]"
           [time]="item[4]"
           [rez]="item[5]"
+          [fileSize]="item[7]"
           [elHeight]="imgHeight + textPaddingHeight"
           [imgWidth]="(imgHeight / 100) * item[6] || (imgHeight / 100) * 171"
           [imgHeight]="imgHeight"
@@ -365,6 +373,7 @@
           (click)="(item[2] === '*') ? handleFolderWordClicked(item[0]) : openVideo(item[3])"
           [time]="item[4]"
           [rez]="item[5]"
+          [fileSize]="item[7]"
           [elHeight]="20"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
@@ -397,6 +406,11 @@
 <!-- WIZARD -->
 
 <div *ngIf="showWizard" class="wizard" @myWizardAnimation>
+
+  <div *ngIf="canCloseWizard" (click)="hideWizard()" class="closeWizard">
+    <span class="icon icon-close"></span>
+  </div>
+
   <div class="left-side">
 
     <h2>Open previous hub</h2>

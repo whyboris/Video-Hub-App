@@ -12,8 +12,8 @@
   display: block;
   font-size: 10px;
   position: absolute;
-  z-index: 200;
   top: 1px;
+  z-index: 200;
 }
 
 .length {
@@ -50,15 +50,21 @@
   display: inline-block;
   font-size: 12px;
   overflow: hidden;
-  text-overflow: ellipsis;
   text-align: left;
-  white-space: nowrap;
-  transition: 300ms;
+  text-overflow: ellipsis;
   transition-property: margin width;
+  transition: 300ms;
+  white-space: nowrap;
 
   // below is now in [ngStyle]
   // margin: 0 30px;
   // width: calc( 100% - 65px );
+}
+
+.fileSize {
+  display: inline-block;
+  font-size: 10px;
+  opacity: 0.8;
 }
 
 .larger-font {

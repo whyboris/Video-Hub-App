@@ -13,16 +13,17 @@ import { galleryItemAppear, metaAppear, textAppear } from '../../common/animatio
 export class FilmstripComponent implements OnInit {
 
   @Input() elHeight: number;
+  @Input() fileSize: number;
   @Input() folderPath: string;
   @Input() hoverScrub: boolean;
-  @Input() imgId: any;
   @Input() imgHeight: number;
+  @Input() imgId: any;
   @Input() imgWidth: number;
-  @Input() title: string;
+  @Input() largerFont: boolean;
+  @Input() rez: string;
   @Input() showMeta: boolean;
   @Input() time: string;
-  @Input() rez: string;
-  @Input() largerFont: boolean;
+  @Input() title: string;
 
   indexArray: Array<number> = []; // to set z-index on css
 

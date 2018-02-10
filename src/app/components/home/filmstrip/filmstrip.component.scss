@@ -1,8 +1,8 @@
 .meta-container {
-  width: calc(100% - 40px);
   margin: 20px 20px 5px;
-  transition: 300ms;
   transition-property: height;
+  transition: 300ms;
+  width: calc(100% - 40px);
 }
 
 .filmstrip-container {
@@ -44,12 +44,18 @@ img:before {
   font-size: 12px;
   margin: 6px 2px 0px;
   overflow: hidden;
-  text-overflow: ellipsis;
   text-align: left;
+  text-overflow: ellipsis;
+  transition-property: font-size;
+  transition: 300ms;
   white-space: nowrap;
   width: 100%;
-  transition: 300ms;
-  transition-property: font-size;
+}
+
+.fileSize {
+  display: inline-block;
+  font-size: 10px;
+  opacity: 0.8;
 }
 
 .larger-font {
@@ -57,11 +63,11 @@ img:before {
 }
 
 .time, .rez {
-  font-size: 10px;
+  bottom: 4px;
   color: rgba(255, 255, 255, 0.8);
+  font-size: 10px;
   position: absolute;
   z-index: 100;
-  bottom: 4px;
 }
 
 .time {

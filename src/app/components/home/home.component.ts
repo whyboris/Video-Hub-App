@@ -69,6 +69,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   importDone = false;
   inProgress = false;
   progressPercent = 0;
+  canCloseWizard = false;
 
   appMaximized = false;
 
@@ -105,6 +106,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   futureHubName = '';
 
   fullPathToCurrentFile = '';
+
+  shuffleTheViewNow = 0; // dummy number to force re-shuffle current view
 
   // Listen for key presses
   // @HostListener('document:keypress', ['$event'])
@@ -147,6 +150,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.appState.selectedSourceFolder = finalObject.inputDir;
         this.inProgress = false;
         this.importDone = true;
+        this.canCloseWizard = true;
         this.showWizard = false;
         this.finalArray = finalObject.images;
         this.buildFileMap();
@@ -196,6 +200,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       this.inProgress = false;
       this.importDone = true;
+      this.canCloseWizard = true;
       this.showWizard = false;
       this.finalArray = this.demo ? finalObject.images.slice(0, 50) : finalObject.images;
       this.buildFileMap();
@@ -440,6 +445,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.buttonsInView = !this.buttonsInView;
   }
 
+  hideWizard(): void {
+    this.showWizard = false;
+  }
+
   /**
    * Perform appropriate action when a button is clicked
    * @param   uniqueKey   the uniqueKey string of the button
@@ -476,6 +485,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.clearRecentlyViewedHistory();
     } else if (uniqueKey === 'rescanDirectory') {
       this.rescanDirectory();
+    } else if (uniqueKey === 'shuffleGalleryNow') {
+      this.shuffleTheViewNow++;
+    } else if (uniqueKey === 'randomizeGallery') {
+      if (this.settingsButtons['randomizeGallery'].toggled === true) {
+        this.shuffleTheViewNow = 0;
+      }
+      this.settingsButtons['randomizeGallery'].toggled = !this.settingsButtons['randomizeGallery'].toggled;
     } else {
       this.settingsButtons[uniqueKey].toggled = !this.settingsButtons[uniqueKey].toggled;
       if (uniqueKey === 'showMoreInfo') {
@@ -486,6 +502,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.virtualScroll.refresh();
         }, 300);
       }
+    }
+  }
+
+  /**
+   * Complex logic to see if we should shuffle things!
+   */
+  public shouldWeShuffle(): void {
+    if (this.settingsButtons['randomizeGallery'].toggled === true) {
+      this.shuffleTheViewNow++;
+    } else {
+      this.shuffleTheViewNow = 0;
     }
   }
 
@@ -576,6 +603,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     console.log('textPaddingHeight = ' + this.textPaddingHeight);
   }
 
+  magicSearchChanged(event): void {
+    this.shouldWeShuffle();
+  }
+
   /**
    * Add search string to filter array
    * When user presses the `ENTER` key
@@ -598,6 +629,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     }
     this.scrollToTop();
+    this.shouldWeShuffle();
   }
 
   /**
@@ -610,6 +642,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.filters[origin].array.pop();
       this.filters[origin].bool = !this.filters[origin].bool;
     }
+    this.shouldWeShuffle();
   }
 
   /**
@@ -621,6 +654,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   removeThisFilter(item: number, origin: number): void {
     this.filters[origin].array.splice(item, 1);
     this.filters[origin].bool = !this.filters[origin].bool;
+    this.shouldWeShuffle();
   }
 
   /**

@@ -32,7 +32,9 @@ export const SettingsButtonsGroups: string[][] = [
     'showMoreInfo',
     'fontSizeLarger',
     'hoverScrub',
-    'randomImage'
+    'randomImage',
+    'randomizeGallery',
+    'shuffleGalleryNow'
   ],
   [
     'hideTop',
@@ -107,6 +109,20 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-random',
     title: 'Show random screenshot',
     description: 'Show random screenshot in the preview'
+  },
+  'randomizeGallery': {
+    hidden: false,
+    toggled: false,
+    iconName: 'icon-random',
+    title: 'Randomize gallery order',
+    description: 'Randomizes the video file order in view'
+  },
+  'shuffleGalleryNow': {
+    hidden: false,
+    toggled: false,
+    iconName: 'icon-random',
+    title: 'Shuffle current results',
+    description: 'Shuffles the results in current view'
   },
   'makeSmaller': {
     hidden: false,

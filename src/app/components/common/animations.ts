@@ -83,7 +83,7 @@ export const myWizardAnimation = trigger('myWizardAnimation',
     transition(
       ':leave', [
         style({ transform: 'translateY(0)', opacity: 1 }),
-        animate('250ms 900ms ease-in', style({ transform: 'translateY(50px)', opacity: 0 }))
+        animate('250ms 50ms ease-in', style({ transform: 'translateY(50px)', opacity: 0 }))
       ]
     )
   ]

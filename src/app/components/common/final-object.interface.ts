@@ -20,6 +20,7 @@ Each item in the images array is formatted thus:
 4    'number: duration' <-- duration of film as number
 5    'string: depicting size', <-- e.g. `720`, `1080`, `SD`, `HD`
 6    'number: width of screenshot', <-- e.g 124 etc
+7    'number: fileSize in megabytes rounded to nearest MB'
   ]
 
 */
