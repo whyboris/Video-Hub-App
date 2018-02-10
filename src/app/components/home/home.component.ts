@@ -486,17 +486,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } else if (uniqueKey === 'rescanDirectory') {
       this.rescanDirectory();
     } else if (uniqueKey === 'shuffleGalleryNow') {
-      this.shouldWeShuffle(true);
+      this.shuffleTheViewNow++;
     } else if (uniqueKey === 'randomizeGallery') {
-      // super complicated -- must debug!!!
-      if (this.settingsButtons[uniqueKey].toggled === true) {
+      if (this.settingsButtons['randomizeGallery'].toggled === true) {
         this.shuffleTheViewNow = 0;
-      } else {
-        if (this.shuffleTheViewNow === 0) {
-          this.shouldWeShuffle(true);
-        }
       }
-      this.settingsButtons[uniqueKey].toggled = !this.settingsButtons[uniqueKey].toggled;
+      this.settingsButtons['randomizeGallery'].toggled = !this.settingsButtons['randomizeGallery'].toggled;
     } else {
       this.settingsButtons[uniqueKey].toggled = !this.settingsButtons[uniqueKey].toggled;
       if (uniqueKey === 'showMoreInfo') {
@@ -512,18 +507,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   /**
    * Complex logic to see if we should shuffle things!
-   * @param yes - if true, shuffle right away!
    */
-  public shouldWeShuffle(yes?: boolean): void {
-    console.log('1' + yes);
-    if (yes) {
+  public shouldWeShuffle(): void {
+    if (this.settingsButtons['randomizeGallery'].toggled === true) {
       this.shuffleTheViewNow++;
     } else {
-      if (this.settingsButtons['randomizeGallery'].toggled === true) {
-        this.shuffleTheViewNow++;
-      } else {
-        this.shuffleTheViewNow = 0;
-      }
+      this.shuffleTheViewNow = 0;
     }
   }
 
