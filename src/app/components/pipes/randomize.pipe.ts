@@ -6,34 +6,31 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class RandomizePipe implements PipeTransform {
 
   /**
-   * Return the same array randomized
+   * Return the same array randomized on next search
    * @param galleryArray
    * @param doIt
    */
-  transform(galleryArray: any[], doIt: boolean): any[] {
-
-    console.log(doIt);
-
-    if (doIt) {
+  transform(galleryArray: any[], doIt: number): any[] {
+    if (doIt > 0) {
       let currentIndex = galleryArray.length;
       let temporaryValue;
       let randomIndex;
 
+      const newArray = [...galleryArray];
+
       // While there remain elements to shuffle...
       while (0 !== currentIndex) {
-
         // Pick a remaining element...
         randomIndex = Math.floor(Math.random() * currentIndex);
         currentIndex -= 1;
 
         // And swap it with the current element.
-        temporaryValue = galleryArray[currentIndex];
-        galleryArray[currentIndex] = galleryArray[randomIndex];
-        galleryArray[randomIndex] = temporaryValue;
+        temporaryValue = newArray[currentIndex];
+        newArray[currentIndex] = newArray[randomIndex];
+        newArray[randomIndex] = temporaryValue;
       }
-      const lol = galleryArray;
-      console.log('hi!!!');
-      return lol;
+      console.log('SHUFFLING');
+      return newArray;
     } else {
       return galleryArray;
     }

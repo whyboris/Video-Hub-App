@@ -31,7 +31,7 @@ export class FolderViewPipe implements PipeTransform {
         arrWithFolders.push(element);
       });
 
-      console.log('folderViewPipe running');
+      // console.log('folderViewPipe running');
 
       return arrWithFolders;
     } else {

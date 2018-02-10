@@ -107,6 +107,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   fullPathToCurrentFile = '';
 
+  shuffleTheViewNow = 0; // dummy number to force re-shuffle current view
+
   // Listen for key presses
   // @HostListener('document:keypress', ['$event'])
   // handleKeyboardEvent(event: KeyboardEvent) {
@@ -483,6 +485,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.clearRecentlyViewedHistory();
     } else if (uniqueKey === 'rescanDirectory') {
       this.rescanDirectory();
+    } else if (uniqueKey === 'shuffleGalleryNow') {
+      this.shouldWeShuffle(true);
+    } else if (uniqueKey === 'randomizeGallery') {
+      // super complicated -- must debug!!!
+      if (this.settingsButtons[uniqueKey].toggled === true) {
+        this.shuffleTheViewNow = 0;
+      } else {
+        if (this.shuffleTheViewNow === 0) {
+          this.shouldWeShuffle(true);
+        }
+      }
+      this.settingsButtons[uniqueKey].toggled = !this.settingsButtons[uniqueKey].toggled;
     } else {
       this.settingsButtons[uniqueKey].toggled = !this.settingsButtons[uniqueKey].toggled;
       if (uniqueKey === 'showMoreInfo') {
@@ -492,6 +506,23 @@ export class HomeComponent implements OnInit, AfterViewInit {
         setTimeout(() => {
           this.virtualScroll.refresh();
         }, 300);
+      }
+    }
+  }
+
+  /**
+   * Complex logic to see if we should shuffle things!
+   * @param yes - if true, shuffle right away!
+   */
+  public shouldWeShuffle(yes?: boolean): void {
+    console.log('1' + yes);
+    if (yes) {
+      this.shuffleTheViewNow++;
+    } else {
+      if (this.settingsButtons['randomizeGallery'].toggled === true) {
+        this.shuffleTheViewNow++;
+      } else {
+        this.shuffleTheViewNow = 0;
       }
     }
   }
@@ -583,6 +614,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     console.log('textPaddingHeight = ' + this.textPaddingHeight);
   }
 
+  magicSearchChanged(event): void {
+    this.shouldWeShuffle();
+  }
+
   /**
    * Add search string to filter array
    * When user presses the `ENTER` key
@@ -605,6 +640,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     }
     this.scrollToTop();
+    this.shouldWeShuffle();
   }
 
   /**
@@ -617,6 +653,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.filters[origin].array.pop();
       this.filters[origin].bool = !this.filters[origin].bool;
     }
+    this.shouldWeShuffle();
   }
 
   /**
@@ -628,6 +665,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   removeThisFilter(item: number, origin: number): void {
     this.filters[origin].array.splice(item, 1);
     this.filters[origin].bool = !this.filters[origin].bool;
+    this.shouldWeShuffle();
   }
 
   /**
