@@ -610,6 +610,15 @@ function extractMetadata(filePath: string): void {
       finalArray[MainCounter.itemInFinalArray][4] = duration;  // 4th item is duration
       finalArray[MainCounter.itemInFinalArray][5] = sizeLabel; // 5th item is the label, e.g. 'HD'
       finalArray[MainCounter.itemInFinalArray][6] = width;     // 6th item is width of screenshot (130) for ex
+
+      // extract the file size
+      const stats = fs.statSync(filePath);
+      const fileSizeInBytes = stats.size;
+      // Convert the file size to megabytes
+      const fileSizeInMegabytes = Math.round(fileSizeInBytes / 1000000.0);
+
+      finalArray[MainCounter.itemInFinalArray][7] = fileSizeInMegabytes;
+
       theExtractor('metaExtracted');
     }
   });

@@ -24,6 +24,9 @@
       [ngClass]="{ 'larger-font': largerFont }"
     >
       {{ title }}
+      <div class="fileSize" *ngIf="showMeta" @metaAppear>
+        {{ fileSize | fileSizePipe }}
+      </div>
     </div>
 
     <div class="length" *ngIf="showMeta" @metaAppear>

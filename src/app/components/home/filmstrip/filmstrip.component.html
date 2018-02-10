@@ -44,6 +44,9 @@
     @textAppear
   >
     {{ title }}
+    <div class="fileSize" *ngIf="showMeta">
+      {{ fileSize | fileSizePipe }}
+    </div>
   </span>
 
 </div>

@@ -14,17 +14,18 @@ import { ShowLimitService } from 'app/components/pipes/show-limit.service';
 import { WordFrequencyService } from 'app/components/pipes/word-frequency.service';
 
 import { AppComponent } from './app.component';
-import { FilmstripComponent } from 'app/components/home/filmstrip/filmstrip.component';
 import { FileComponent } from 'app/components/home/file/file.component';
+import { FilmstripComponent } from 'app/components/home/filmstrip/filmstrip.component';
 import { HomeComponent } from './components/home/home.component';
 import { PreviewComponent } from './components/home/thumbnail/preview.component';
 import { TopComponent } from './components/home/top/top.component';
 
+import { CountPipe } from './components/pipes/count.pipe';
 import { FileSearchPipe } from './components/pipes/file-search.pipe';
+import { FileSizePipe } from './components/pipes/file-size.pipe';
 import { FolderArrowsPipe } from 'app/components/pipes/folder-arrows.pipe';
 import { FolderViewPipe } from 'app/components/pipes/folder-view.pipe';
 import { LengthPipe } from './components/pipes/length.pipe';
-import { CountPipe } from './components/pipes/count.pipe';
 import { MagicSearchPipe } from './components/pipes/magic-search.pipe';
 import { WordFrequencyPipe } from 'app/components/pipes/word-frequency.pipe';
 
@@ -33,25 +34,26 @@ import { AppRoutingModule } from './app-routing.module';
 @NgModule({
   declarations: [
     AppComponent,
+    CountPipe,
     FileComponent,
     FileSearchPipe,
+    FileSizePipe,
     FilmstripComponent,
     FolderArrowsPipe,
     FolderViewPipe,
     HomeComponent,
     LengthPipe,
-    CountPipe,
     MagicSearchPipe,
     PreviewComponent,
     TopComponent,
     WordFrequencyPipe
   ],
   imports: [
+    AppRoutingModule,
     BrowserAnimationsModule,
     BrowserModule,
     FormsModule,
     HttpModule,
-    AppRoutingModule,
     VirtualScrollModule
   ],
   providers: [
