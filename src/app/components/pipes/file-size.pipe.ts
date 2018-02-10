@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class FileSizePipe implements PipeTransform {
 
   /**
-   * Return only items that match search string
+   * Return size of file formatted as XXXmb
    * @param numOfMb
    */
   transform(numOfMb: number): string {

@@ -27,6 +27,7 @@ import { FolderArrowsPipe } from 'app/components/pipes/folder-arrows.pipe';
 import { FolderViewPipe } from 'app/components/pipes/folder-view.pipe';
 import { LengthPipe } from './components/pipes/length.pipe';
 import { MagicSearchPipe } from './components/pipes/magic-search.pipe';
+import { RandomizePipe } from './components/pipes/randomize.pipe';
 import { WordFrequencyPipe } from 'app/components/pipes/word-frequency.pipe';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -45,6 +46,7 @@ import { AppRoutingModule } from './app-routing.module';
     LengthPipe,
     MagicSearchPipe,
     PreviewComponent,
+    RandomizePipe,
     TopComponent,
     WordFrequencyPipe
   ],

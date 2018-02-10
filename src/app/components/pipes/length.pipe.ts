@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class LengthPipe implements PipeTransform {
 
   /**
-   * Return only items that match search string
+   * Return length of video file formatted as X:XX:XX
    * @param numOfSec
    */
   transform(numOfSec: number, arg: any): string {

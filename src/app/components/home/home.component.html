@@ -205,7 +205,11 @@
               <ng-container
                 *ngFor="let string of filter.array; index as i"
               >
-                <span class="conjunction" *ngIf="i > 0">
+                <span
+                  *ngIf="i > 0"
+                  [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? '#CCCCCC' : 'black' }"
+                  class="conjunction"
+                >
                   {{ filter.conjunction }}
                 </span>
                 <span
@@ -310,6 +314,7 @@
                 | fileSearchPipe: filters[4].array : filters[4].bool : true : true : true
                 | wordFrequencyPipe: settingsButtons['showFreq'].toggled
                 | countPipe
+                | randomizePipe: settingsButtons['randomizeGallery'].toggled
                 | folderViewPipe: (appState.currentView === 'files')"
     >
 
