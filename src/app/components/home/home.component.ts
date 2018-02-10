@@ -69,6 +69,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   importDone = false;
   inProgress = false;
   progressPercent = 0;
+  canCloseWizard = false;
 
   appMaximized = false;
 
@@ -147,6 +148,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.appState.selectedSourceFolder = finalObject.inputDir;
         this.inProgress = false;
         this.importDone = true;
+        this.canCloseWizard = true;
         this.showWizard = false;
         this.finalArray = finalObject.images;
         this.buildFileMap();
@@ -196,6 +198,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       this.inProgress = false;
       this.importDone = true;
+      this.canCloseWizard = true;
       this.showWizard = false;
       this.finalArray = this.demo ? finalObject.images.slice(0, 50) : finalObject.images;
       this.buildFileMap();
@@ -438,6 +441,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   toggleSettings(): void {
     this.buttonsInView = !this.buttonsInView;
+  }
+
+  hideWizard(): void {
+    this.showWizard = false;
   }
 
   /**

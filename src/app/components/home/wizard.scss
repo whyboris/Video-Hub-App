@@ -18,7 +18,20 @@
   span {
     display: block;
     font-size: 12px;
-    color: $gray-60;
+  }
+
+  .closeWizard {
+    cursor: pointer;
+    float: right;
+    position: sticky;
+    right: 15px;
+    top: 0;
+    transition-duration: 300ms;
+
+    &:hover {
+      color: #990000;
+      transition-duration: 300ms;
+    }
   }
 
   .steps {
@@ -113,12 +126,14 @@
   }
 
   .path {
+    color: $gray-60;
     font-style: italic;
     min-height: 20px;
     margin-left: 26px;
   }
 
   .step-description {
+    color: $gray-60;
     min-height: 20px;
     margin-left: 16px;
   }

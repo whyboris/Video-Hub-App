@@ -302,6 +302,8 @@ ipc.on('choose-input', function (event, someMessage) {
     if (files) {
       console.log('the user has chosen this INPUT directory: ' + files[0]);
       selectedSourceFolder = files[0];
+      console.log('the user has chosen this OUTPUT directory: ' + files[0]);
+      selectedOutputFolder = files[0];
       totalNumberOfFiles = 0;
       walkAndCountSync(selectedSourceFolder, []);
       console.log(totalNumberOfFiles);

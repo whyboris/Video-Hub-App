@@ -400,6 +400,11 @@
 <!-- WIZARD -->
 
 <div *ngIf="showWizard" class="wizard" @myWizardAnimation>
+
+  <div *ngIf="canCloseWizard" (click)="hideWizard()" class="closeWizard">
+    <span class="icon icon-close"></span>
+  </div>
+
   <div class="left-side">
 
     <h2>Open previous hub</h2>
