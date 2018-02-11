@@ -126,10 +126,16 @@
   }
 
   .path {
-    color: $gray-60;
-    font-style: italic;
+    color: black;
     min-height: 20px;
     margin-left: 26px;
+  }
+
+  .recent {
+    color: $gray-50;
+    font-style: normal !important;
+    margin-left: 0;
+    padding-top: 5px;
   }
 
   .step-description {

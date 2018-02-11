@@ -428,7 +428,7 @@
           <span class="icon icon-close clear-history-item" (click)="removeFromHistory($event, i)"></span>
           {{ historyItem.hubName }}
           <br>
-          <span class="file-path">{{ historyItem.vhaFilePath }}</span>
+          <span class="path recent" [innerHtml]="historyItem.vhaFilePath | folderArrowsPipe : false"></span>
         </li>
       </ul>
 
@@ -478,8 +478,7 @@
     <span class="step-description">
       Importing from:
     </span>
-    <span class="path">
-      {{ appState.selectedSourceFolder }}
+    <span class="path" [innerHtml]="appState.selectedSourceFolder | folderArrowsPipe : false">
     </span>
     <span class="step-description" *ngIf="totalNumberOfFiles !== -1">
       Found
@@ -505,8 +504,7 @@
     <span class="step-description">
       Saving screenshots to:
     </span>
-    <span class="path">
-      {{ appState.selectedOutputFolder }}
+    <span class="path" [innerHtml]="appState.selectedOutputFolder | folderArrowsPipe : false">
     </span>
 
     <div

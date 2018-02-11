@@ -183,6 +183,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.progressNum1 = a;
       this.progressNum2 = b;
       this.progressPercent = a / b;
+      this.appState.hubName = 'loading - ' + Math.round(a * 100 / b) + '%'
     });
 
     // Final object returns

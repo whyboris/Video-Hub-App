@@ -6,7 +6,7 @@
 
   <div *ngIf="title === '*'; else fileNameBlock">
     <span class="icon icon-folder-blank"></span>
-    <span class="folder" [innerHtml]="folderPath | folderArrowsPipe"></span>
+    <span class="folder" [innerHtml]="folderPath | folderArrowsPipe : true"></span>
   </div>
 
   <ng-template #fileNameBlock>
