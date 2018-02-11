@@ -47,6 +47,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   virtualScroll: VirtualScrollComponent;
 
   settingsButtons = SettingsButtons;
+  defaultSettingsButtons = {};
   settingsButtonsGroups = SettingsButtonsGroups;
   settingsCategories = SettingsCategories;
 
@@ -129,6 +130,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
 
+    this.cloneDefaultButtonSetting();
+
     setTimeout(() => {
       this.wordFrequencyService.finalMapBehaviorSubject.subscribe((value) => {
         this.wordFreqArr = value;
@@ -180,6 +183,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.progressNum1 = a;
       this.progressNum2 = b;
       this.progressPercent = a / b;
+      this.appState.hubName = 'loading - ' + Math.round(a * 100 / b) + '%'
     });
 
     // Final object returns
@@ -483,6 +487,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.startWizard();
     } else if (uniqueKey === 'clearHistory') {
       this.clearRecentlyViewedHistory();
+    } else if (uniqueKey === 'resetSettings') {
+      this.resetSettingsToDefault();
     } else if (uniqueKey === 'rescanDirectory') {
       this.rescanDirectory();
     } else if (uniqueKey === 'shuffleGalleryNow') {
@@ -719,6 +725,20 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // console.log(objectKeys);
     return(objectKeys);
+  }
+
+  /**
+   * Restore settings to their default values
+   */
+  resetSettingsToDefault(): void {
+    this.settingsButtons = JSON.parse(JSON.stringify(this.defaultSettingsButtons));
+  }
+
+  /**
+   * Clone default settings in case user wants to reset them later
+   */
+  cloneDefaultButtonSetting(): void {
+    this.defaultSettingsButtons = JSON.parse(JSON.stringify(this.settingsButtons));
   }
 
   /**

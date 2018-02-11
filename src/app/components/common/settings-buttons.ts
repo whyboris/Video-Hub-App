@@ -34,16 +34,18 @@ export const SettingsButtonsGroups: string[][] = [
     'hoverScrub',
     'randomImage',
     'randomizeGallery',
-    'shuffleGalleryNow'
+    'shuffleGalleryNow',
+    'showFolderInFileView'
   ],
   [
     'hideTop',
     'flatIcons'
   ],
   [
+    'resetSettings',
     'clearHistory',
-    'startWizard',
-    'rescanDirectory'
+    'rescanDirectory',
+    'startWizard'
   ]
 ];
 
@@ -90,7 +92,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'Show more info'
   },
   'fontSizeLarger': {
-    hidden: false,
+    hidden: true,
     toggled: false,
     iconName: 'icon-larger',
     title: 'Toggle font size',
@@ -104,14 +106,14 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'Scrolling over preview shows different screenshots'
   },
   'randomImage': {
-    hidden: false,
+    hidden: true,
     toggled: true,
     iconName: 'icon-random',
     title: 'Show random screenshot',
     description: 'Show random screenshot in the preview'
   },
   'randomizeGallery': {
-    hidden: false,
+    hidden: true,
     toggled: false,
     iconName: 'icon-random',
     title: 'Randomize gallery order',
@@ -123,6 +125,13 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-random',
     title: 'Shuffle current results',
     description: 'Shuffles the results in current view'
+  },
+  'showFolderInFileView': {
+    hidden: true,
+    toggled: true,
+    iconName: 'icon-folder-blank',
+    title: 'Show folder in file view',
+    description: 'Shows folder location when in file view'
   },
   'makeSmaller': {
     hidden: false,
@@ -235,6 +244,13 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
     title: 'Clear history',
     description: 'Clear recently-opened history'
+  },
+  'resetSettings': {
+    hidden: false,
+    toggled: false,
+    iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
+    title: 'Reset settings',
+    description: 'Resets settings to their default values'
   },
   'rescanDirectory': {
     hidden: false,

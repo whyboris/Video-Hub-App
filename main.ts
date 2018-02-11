@@ -541,6 +541,9 @@ let i = 0;
  *  @param file Full path to file including file name
  */
 function takeScreenshots(file) {
+  // TODO REFACTOR !!!
+  // finalArray[MainCounter.itemInFinalArray][3] = MainCounter.screenShotFileNumber;
+  // theExtractor('screenShotExtracted');
   ffmpeg(file)
     .screenshots({
       count: 1,
@@ -742,9 +745,7 @@ function alphabetizeFinalArray(): void {
 function countFoldersInFinalArray(): number {
   const finalArrayFolderMap: Map<string, number> = new Map;
   finalArray.forEach((element) => {
-    if (finalArrayFolderMap.has(element[0])) {
-      // do nothing
-    } else {
+    if (!finalArrayFolderMap.has(element[0])) {
       finalArrayFolderMap.set(element[0], 1);
     }
   });
