@@ -316,7 +316,7 @@
                 | wordFrequencyPipe: settingsButtons['showFreq'].toggled
                 | countPipe
                 | randomizePipe: shuffleTheViewNow
-                | folderViewPipe: (appState.currentView === 'files')"
+                | folderViewPipe: (appState.currentView === 'files' && settingsButtons['showFolderInFileView'].toggled)"
     >
 
     <!-- 24 above is 20 pixels for element and 4 for the fudge factor -->
