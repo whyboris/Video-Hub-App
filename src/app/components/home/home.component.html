@@ -21,6 +21,10 @@
     </div>
   </div>
 
+  <div *ngIf="importStage === 2" class="screenShotProgressPercent">
+    Extracting screenshot {{ progressNum1 }} / {{ progressNum2 }}
+  </div>
+
   <!-- SETTINGS / OPTIONS MODAL -->
   <div
     *ngIf="buttonsInView"

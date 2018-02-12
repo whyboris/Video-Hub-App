@@ -182,6 +182,8 @@ let selectedOutputFolder = '';
 
 let theOriginalOpenFileDialogEvent;
 
+let stillNeedToExtractImages = false;
+
 let hubName = 'untitled'; // in case user doesn't name their hub any name
 let currentOpenVhaFilename = '';
 
@@ -231,13 +233,13 @@ ipc.on('close-window', function (event, settingsToSave) {
   console.log(pathToAppData);
 
   try {
-    fs.statSync(pathToAppData + '/video-hub-app');
+    fs.statSync(path.join(pathToAppData, 'video-hub-app'));
   } catch (e) {
-    fs.mkdirSync(pathToAppData + '/video-hub-app');
+    fs.mkdirSync(path.join(pathToAppData, 'video-hub-app'));
   }
 
   // TODO -- catch bug if user closes before selecting the output folder
-  fs.writeFile(pathToAppData + '/video-hub-app' + '/settings.json', json, 'utf8', () => {
+  fs.writeFile(path.join(pathToAppData, 'video-hub-app', 'settings.json'), json, 'utf8', () => {
     console.log('settings file written:');
     BrowserWindow.getFocusedWindow().close();
   });
@@ -250,7 +252,7 @@ ipc.on('just-started', function (event, someMessage) {
   theOriginalOpenFileDialogEvent = event;
   const pathToAppData = app.getPath('appData')
   console.log('app just started');
-  fs.readFile(pathToAppData + '/video-hub-app' + '/settings.json', (err, data) => {
+  fs.readFile(path.join(pathToAppData, 'video-hub-app', 'settings.json'), (err, data) => {
     if (err) {
       console.log(err); // maybe better error handling later
     } else {
@@ -327,9 +329,9 @@ ipc.on('choose-output', function (event, someMessage) {
       selectedOutputFolder = files[0];
 
       // create "/vha-images" inside the output directory it so that there is no `EEXIST` error when extracting.
-      if (!fs.existsSync(selectedOutputFolder + '/vha-images')) {
+      if (!fs.existsSync(path.join(selectedOutputFolder, 'vha-images'))) {
         console.log('vha-images folder did not exist, creating');
-        fs.mkdirSync(selectedOutputFolder + '/vha-images');
+        fs.mkdirSync(path.join(selectedOutputFolder, 'vha-images'));
       }
 
       // store the reference to the Angular app
@@ -422,10 +424,11 @@ ipc.on('pleaseOpenUrl', function(event, url: string): void {
 /**
  * Sends progress to Angular App
  * @param current number
- * @param total unmber
+ * @param total number
+ * @param stage number
  */
-function sendCurrentProgress(current: number, total: number): void {
-  theOriginalOpenFileDialogEvent.sender.send('processingProgress', current, total);
+function sendCurrentProgress(current: number, total: number, stage: number): void {
+  theOriginalOpenFileDialogEvent.sender.send('processingProgress', current, total, stage);
 }
 
 /**
@@ -446,21 +449,26 @@ function sendFinalResultHome(): void {
 
   const json = JSON.stringify(finalObject);
   // write the file
-  // TODO -- use system path builder, not hardcoded `/`
-  const pathToTheFile = selectedOutputFolder + '/' + (currentOpenVhaFilename || hubName) + '.vha';
+  // TODO -- hubName never used -- error because previous file loaded !!! ???
+  const pathToTheFile = path.join(selectedOutputFolder, (currentOpenVhaFilename || hubName) + '.vha');
   fs.writeFile(pathToTheFile, json, 'utf8', () => {
     console.log('file written:');
     theOriginalOpenFileDialogEvent.sender.send(
       'finalObjectReturning', JSON.parse(json), pathToTheFile, extractFileName(pathToTheFile)
     );
+
+    if (stillNeedToExtractImages) {
+      startExtractingAllScreenshots();
+    }
+
   });
+
 }
 
 import { MainCounter } from './main-counter';
 
 type ExtractorMessage = 'screenShotExtracted'
                       | 'metaExtracted'
-                      | 'screenShotError'
                       | 'metaError'
                       | 'freshStart';
 
@@ -478,16 +486,18 @@ function theExtractor(message: ExtractorMessage, dataObject?: any): void {
     MainCounter.itemInFinalArray++;
     areWeDoneYet();
 
-  } else if (message === 'screenShotError') {
-    MainCounter.itemInFinalArray++;
-    areWeDoneYet();
-
   } else if (message === 'metaError') {
     console.log('meta error !!!!!!!!!!!!!!!!!!!!!!! --- THIS SHOULD NOT HAPPEN !!!!!!!!!!!!!!!!');
     MainCounter.itemInFinalArray++;
     areWeDoneYet();
 
   } else if (message === 'freshStart') {
+
+    totalNumberToExtract = 0;
+    currentScreenshotExtracting = 0;
+
+    stillNeedToExtractImages = true;
+
     // reset things and launch extraction of first screenshot !!!
     finalArray = [];
     fileCounter = 0;
@@ -513,7 +523,11 @@ function theExtractor(message: ExtractorMessage, dataObject?: any): void {
  * Check if extraction is done, if so sendResultsHome, otherwise extractNextScreenshot
  */
 function areWeDoneYet(): void {
-  sendCurrentProgress(MainCounter.itemInFinalArray, MainCounter.totalNumber);
+  if (MainCounter.itemInFinalArray < MainCounter.totalNumber) {
+    sendCurrentProgress(MainCounter.itemInFinalArray, MainCounter.totalNumber, 1);
+  } else {
+    sendCurrentProgress(0, MainCounter.totalNumber, 2);
+  }
   if (MainCounter.itemInFinalArray === MainCounter.totalNumber) {
     sendFinalResultHome();
   } else {
@@ -525,47 +539,71 @@ function areWeDoneYet(): void {
  * Extract the next screenshot
  */
 function extractNextScreenshot(): void {
-  const index = MainCounter.itemInFinalArray;
-  takeScreenshots(path.join(selectedSourceFolder,
-                            finalArray[index][0],
-                            finalArray[index][1]));
+  finalArray[MainCounter.itemInFinalArray][3] = MainCounter.screenShotFileNumber;
+  theExtractor('screenShotExtracted');
 }
 
 let screenShotSize = 100;
 const count = 10;
 const timestamps = ['5%', '15%', '25%', '35%', '45%', '55%', '65%', '75%', '85%', '95%'];
 let i = 0;
+
 /**
- * Takes 10 screenshots for a particular file
- * calls theExtractor when done
- *  @param file Full path to file including file name
+ * Take 10 screenshots of a particular file save as particular fileNumber
+ * @param pathToFile
+ * @param fileNumber
  */
-function takeScreenshots(file) {
-  // TODO REFACTOR !!!
-  // finalArray[MainCounter.itemInFinalArray][3] = MainCounter.screenShotFileNumber;
-  // theExtractor('screenShotExtracted');
-  ffmpeg(file)
+function takeTenScreenshots(pathToFile: string, fileNumber: number) {
+  ffmpeg(pathToFile)
     .screenshots({
       count: 1,
       timemarks: [timestamps[i]],
-      filename: MainCounter.screenShotFileNumber + `-${i + 1}.jpg`,
+      filename: fileNumber + `-${i + 1}.jpg`,
       size: '?x' + screenShotSize
     }, path.join(selectedOutputFolder, 'vha-images'))
     .on('end', () => {
       i = i + 1;
       if (i < count) {
-        takeScreenshots(file);
+        takeTenScreenshots(pathToFile, fileNumber);
       } else if (i === count) {
         i = 0;
-        // store the screenshot number (e.g. 42 from 42-0.jpg)
-        finalArray[MainCounter.itemInFinalArray][3] = MainCounter.screenShotFileNumber;
-        theExtractor('screenShotExtracted');
+        getNextTen();
       }
     })
     .on('error', () => {
-      console.log('screenshot error occurred in file #' + file);
-      theExtractor('screenShotError');
+      console.log('screenshot error occurred in file #' + pathToFile);
+      getNextTen();
     });
+}
+
+let totalNumberToExtract = 0;
+let currentScreenshotExtracting = 0;
+
+/**
+ * Start extracting screenshots now that metadata has been retreived and sent over to the app
+ */
+function startExtractingAllScreenshots() {
+  totalNumberToExtract = finalArray.length;
+  getNextTen();
+}
+
+/**
+ * Extract the next 10 screenshots
+ */
+function getNextTen() {
+  if (currentScreenshotExtracting < totalNumberToExtract) {
+    sendCurrentProgress(currentScreenshotExtracting, totalNumberToExtract, 2);
+
+    const fileNumber = finalArray[currentScreenshotExtracting][3];
+    const filePath = (path.join(selectedSourceFolder,
+                                finalArray[currentScreenshotExtracting][0],
+                                finalArray[currentScreenshotExtracting][1]));
+    takeTenScreenshots(filePath, fileNumber);
+  } else {
+    // send the last one when done !!!
+    sendCurrentProgress(currentScreenshotExtracting, totalNumberToExtract, 2);
+  }
+  currentScreenshotExtracting++;
 }
 
 /**
@@ -582,16 +620,7 @@ function extractNextMetadata(): void {
  * Extract filename from `path/to/the/file.vha` or `path\to\the\file.vha`
  */
 function extractFileName(filePath: string): string {
-  let splitPath: string[];
-  if (filePath.includes('\\')) {
-    splitPath = filePath.split('\\');
-  } else if (filePath.includes('\/')) {
-    splitPath = filePath.split('\/');
-  }
-  // grab last element of array and slice off `.vha`
-  currentOpenVhaFilename = (splitPath[splitPath.length - 1]).slice(0, -4);
-
-  return currentOpenVhaFilename;
+  return path.parse(filePath).name;
 }
 
 /**
@@ -708,6 +737,7 @@ function findTheDiff(oldFileList, inputFolder): void {
   MainCounter.totalNumber = finalArray.length;
 
   if (theDiff.length > 0) {
+    // TODO -- FIX THIS UP REAL GOOD !!!!!!!!
     extractNextScreenshot();
   } else {
     sendFinalResultHome();

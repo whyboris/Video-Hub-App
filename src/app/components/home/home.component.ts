@@ -110,6 +110,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   shuffleTheViewNow = 0; // dummy number to force re-shuffle current view
 
+  allScreenShotsExtracted = true;
+
+  hubNameToRemember = '';
+  importStage = 0;
+
   // Listen for key presses
   // @HostListener('document:keypress', ['$event'])
   // handleKeyboardEvent(event: KeyboardEvent) {
@@ -168,9 +173,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.electronService.ipcRenderer.on('inputFolderChosen', (event, filePath, totalFilesInDir) => {
       this.totalNumberOfFiles = totalFilesInDir;
       // TODO better prediction
-      this.totalImportTime = Math.round(totalFilesInDir * 2.25 / 60);
-      this.appState.selectedSourceFolder = filePath;
-      this.appState.selectedOutputFolder = filePath;
+
+      if (totalFilesInDir > 0) {
+        this.totalImportTime = Math.round(totalFilesInDir * 2.25 / 60);
+        this.appState.selectedSourceFolder = filePath;
+        this.appState.selectedOutputFolder = filePath;
+      }
     });
 
     // Returning Output
@@ -179,21 +187,25 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     // Progress bar messages
-    this.electronService.ipcRenderer.on('processingProgress', (event, a, b) => {
+    // for META EXTRACTION
+    this.electronService.ipcRenderer.on('processingProgress', (event, a: number, b: number, stage: number) => {
+      this.importStage = stage;
       this.progressNum1 = a;
       this.progressNum2 = b;
       this.progressPercent = a / b;
-      this.appState.hubName = 'loading - ' + Math.round(a * 100 / b) + '%'
+      this.appState.hubName = 'loading - ' + Math.round(a * 100 / b) + '%';
+      if (a === b) {
+        this.importStage = 0;
+        this.appState.hubName = this.hubNameToRemember;
+        this.allScreenShotsExtracted = true;
+      }
     });
 
     // Final object returns
     this.electronService.ipcRenderer.on('finalObjectReturning',
         (event, finalObject: FinalObject, pathToFile: string, fileName: string) => {
-      console.log('LOADING ALL OF THIS:');
-      console.log(finalObject);
-      console.log('path to file');
-      console.log(pathToFile);
       this.appState.currentVhaFile = pathToFile;
+      this.hubNameToRemember = finalObject.hubName;
       this.appState.hubName = finalObject.hubName;
       this.appState.numOfFolders = finalObject.numOfFolders;
       this.appState.selectedOutputFolder = pathToFile.replace(fileName + '.vha', '');
@@ -298,6 +310,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public importFresh(): void {
+    this.allScreenShotsExtracted = false;
     this.inProgress = true;
     const importOptions = {
       imgHeight: this.screenshotSizeForImport,

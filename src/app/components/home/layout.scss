@@ -226,3 +226,12 @@ $sidebar-width: 190px;
   transition: 300ms;
   width: 100vw;
 }
+
+.screenShotProgressPercent {
+  border: 1px solid red;
+  font-size: 12px;
+  position: fixed;
+  right: 10px;
+  top: 36px;
+  z-index: 9999;
+}
