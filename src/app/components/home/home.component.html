@@ -22,6 +22,7 @@
   </div>
 
   <div *ngIf="importStage === 2" class="screenShotProgressPercent">
+    <span class="cancelImport" (click)="cancelCurrentImport()">cancel</span>
     Extracting screenshot {{ progressNum1 }} / {{ progressNum2 }}
   </div>
 
@@ -466,7 +467,7 @@
     <div
       [ngClass]="{
           'current-step': futureHubName !== '' && appState.selectedSourceFolder === '',
-          'fulfilled': appState.selectedSourceFolder !== ''
+          'fulfilled': wizard.selectedSourceFolder !== ''
         }"
       class="steps"
     >
@@ -476,43 +477,43 @@
       (click)="selectSourceDirectory()"
       [disabled]="futureHubName === ''"
     >
-      {{ appState.selectedSourceFolder === '' ? 'Select' : 'Change' }} input directory
+      {{ wizard.selectedSourceFolder === '' ? 'Select' : 'Change' }} input directory
     </button>
 
     <span class="step-description">
       Importing from:
     </span>
-    <span class="path" [innerHtml]="appState.selectedSourceFolder | folderArrowsPipe : false">
+    <span class="path" [innerHtml]="wizard.selectedSourceFolder | folderArrowsPipe : false">
     </span>
-    <span class="step-description" *ngIf="totalNumberOfFiles !== -1">
+    <span class="step-description" *ngIf="wizard.totalNumberOfFiles !== -1">
       Found
       <span class="emphasis-number">
-        {{ totalNumberOfFiles | number }}
+        {{ wizard.totalNumberOfFiles | number }}
       </span>
       videos
     </span>
 
     <div
-      [ngClass]="{ 'fulfilled': appState.selectedOutputFolder !== '' }"
+      [ngClass]="{ 'fulfilled': wizard.selectedOutputFolder !== '' }"
       class="steps"
     >
       3
     </div>
     <button
       (click)="selectOutputDirectory()"
-      [disabled]="appState.selectedSourceFolder === ''"
+      [disabled]="wizard.selectedSourceFolder === ''"
     >
-      {{ appState.selectedOutputFolder === '' ? 'Select' : 'Change' }} output directory
+      {{ wizard.selectedOutputFolder === '' ? 'Select' : 'Change' }} output directory
     </button>
 
     <span class="step-description">
       Saving screenshots to:
     </span>
-    <span class="path" [innerHtml]="appState.selectedOutputFolder | folderArrowsPipe : false">
+    <span class="path" [innerHtml]="wizard.selectedOutputFolder | folderArrowsPipe : false">
     </span>
 
     <div
-      [ngClass]="{ 'fulfilled': appState.selectedOutputFolder !== '' && appState.selectedSourceFolder !== '' }"
+      [ngClass]="{ 'fulfilled': wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder !== '' }"
       class="steps"
     >
       4
@@ -520,7 +521,7 @@
 
     <select
       (change)="selectScreenshotSize($event.target.value)"
-      [disabled]="appState.selectedOutputFolder === '' || appState.selectedSourceFolder === ''"
+      [disabled]="wizard.selectedOutputFolder === '' || wizard.selectedSourceFolder === ''"
       class="size-dropdown"
     >
       <option value="50">50px</option>
@@ -537,7 +538,7 @@
     </span>
 
     <div
-      *ngIf="appState.selectedOutputFolder !== ''"
+      *ngIf="wizard.selectedOutputFolder !== ''"
       class="screenshot-preview"
       [ngStyle]="{
           width: ((screenshotSizeForImport / 100) * 171) + 'px',
@@ -553,30 +554,30 @@
     </div>
 
     <div
-      [ngClass]="{ 'current-step': appState.selectedOutputFolder !== '' && appState.selectedSourceFolder !== '' }"
+      [ngClass]="{ 'current-step': wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder !== '' }"
       class="steps"
     >
       5
     </div>
     <button
-      [disabled]="appState.selectedOutputFolder === '' || appState.selectedSourceFolder === '' || inProgress === true"
+      [disabled]="wizard.selectedOutputFolder === '' || wizard.selectedSourceFolder === '' || inProgress === true"
       (click)="importFresh()"
     >
       Start the import
     </button>
 
-    <span class="description" *ngIf="totalNumberOfFiles !== -1">
+    <span class="description" *ngIf="wizard.totalNumberOfFiles !== -1">
       Expected:
     </span>
-    <span class="step-description" *ngIf="totalNumberOfFiles !== -1">
+    <span class="step-description" *ngIf="wizard.totalNumberOfFiles !== -1">
       <span class="emphasis-number">
-        {{ totalImportTime }}
+        {{ wizard.totalImportTime }}
       </span>
       minutes to import
     </span>
-    <span class="step-description" *ngIf="totalNumberOfFiles !== -1">
+    <span class="step-description" *ngIf="wizard.totalNumberOfFiles !== -1">
       <span class="emphasis-number">
-        {{ totalImportSize }}
+        {{ wizard.totalImportSize }}
       </span>
       mb of disk space
     </span>

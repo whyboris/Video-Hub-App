@@ -15,6 +15,7 @@ import { HistoryItem } from '../common/history-item.interface';
 import { AppState } from '../common/app-state';
 import { Filters } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from 'app/components/common/settings-buttons';
+import { WizardOptions } from '../common/wizard-options.interface';
 
 import { myAnimation, myAnimation2, myWizardAnimation, galleryItemAppear, topAnimation, historyItemRemove } from '../common/animations';
 
@@ -85,11 +86,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   buttonsInView = false;
 
-  // temp variables for the wizard during import
-  totalNumberOfFiles = -1;
-  totalImportTime = 0;
-  totalImportSize = 0;
-
   // temp
   wordFreqArr: any;
   currResults: any = { showing: 0, total: 0 };
@@ -114,6 +110,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   hubNameToRemember = '';
   importStage = 0;
+
+  // temp variables for the wizard during import
+  wizard: WizardOptions = {
+    totalNumberOfFiles: -1,
+    totalImportTime: 0,
+    totalImportSize: 0,
+    selectedSourceFolder: '',
+    selectedOutputFolder: ''
+  };
 
   // Listen for key presses
   // @HostListener('document:keypress', ['$event'])
@@ -171,19 +176,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // Returning Input
     this.electronService.ipcRenderer.on('inputFolderChosen', (event, filePath, totalFilesInDir) => {
-      this.totalNumberOfFiles = totalFilesInDir;
+      this.wizard.totalNumberOfFiles = totalFilesInDir;
       // TODO better prediction
 
       if (totalFilesInDir > 0) {
-        this.totalImportTime = Math.round(totalFilesInDir * 2.25 / 60);
-        this.appState.selectedSourceFolder = filePath;
-        this.appState.selectedOutputFolder = filePath;
+        this.wizard.totalImportTime = Math.round(totalFilesInDir * 2.25 / 60);
+        this.wizard.selectedSourceFolder = filePath;
+        this.wizard.selectedOutputFolder = filePath;
       }
     });
 
     // Returning Output
     this.electronService.ipcRenderer.on('outputFolderChosen', (event, filePath) => {
-      this.appState.selectedOutputFolder = filePath;
+      this.wizard.selectedOutputFolder = filePath;
     });
 
     // Progress bar messages
@@ -199,6 +204,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.appState.hubName = this.hubNameToRemember;
         this.allScreenShotsExtracted = true;
       }
+    });
+
+    this.electronService.ipcRenderer.on('importInterrupted', (event) => {
+      console.log('YOU HAVE STOPPED THE IMPORT PROGRESS !!!!');
     });
 
     // Final object returns
@@ -310,13 +319,21 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public importFresh(): void {
+    this.appState.selectedSourceFolder = this.wizard.selectedSourceFolder;
+    this.appState.selectedOutputFolder = this.wizard.selectedOutputFolder;
+    this.wizard.totalNumberOfFiles = -1;
     this.allScreenShotsExtracted = false;
+    this.importDone = false;
     this.inProgress = true;
     const importOptions = {
       imgHeight: this.screenshotSizeForImport,
       hubName: (this.futureHubName || 'untitled')
     }
     this.electronService.ipcRenderer.send('start-the-import', importOptions);
+  }
+
+  public cancelCurrentImport(): void {
+    this.electronService.ipcRenderer.send('cancel-current-import');
   }
 
   public initiateMinimize(): void {
@@ -547,12 +564,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   public startWizard(): void {
     this.toggleSettings();
-    this.appState.selectedSourceFolder = '';
-    this.appState.selectedOutputFolder = '';
-    this.inProgress = false;
     this.showWizard = true;
-    this.importDone = false;
-    this.totalNumberOfFiles = -1;
   }
 
   /**
@@ -696,7 +708,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   selectScreenshotSize(pxHeightForImport: number) {
     // TODO better prediction
-    this.totalImportSize = Math.round((pxHeightForImport / 100) * this.totalNumberOfFiles * 36 / 1000);
+    this.wizard.totalImportSize = Math.round((pxHeightForImport / 100) * this.wizard.totalNumberOfFiles * 36 / 1000);
     this.screenshotSizeForImport = pxHeightForImport;
   }
 

@@ -209,6 +209,8 @@ let stillNeedToExtractImages = false;
 let hubName = 'untitled'; // in case user doesn't name their hub any name
 let currentOpenVhaFilename = '';
 
+let cancelCurrentImport = false;
+
 // METHOD TO OPEN DOUBLE-CLICKED FILE !!!!!!!!!!!!!
 function openThisDamnFile(pathToVhaFile) {
 
@@ -439,6 +441,10 @@ ipc.on('pleaseOpenUrl', function(event, url: string): void {
   shell.openExternal(url, { activate: true }, (): void => {});
 });
 
+ipc.on('cancel-current-import', function(event): void {
+  cancelCurrentImport = true;
+});
+
 // ============================================================
 // Methods to extract screenshots, build file list, etc
 // ============================================================
@@ -526,6 +532,8 @@ function theExtractor(message: ExtractorMessage, dataObject?: any): void {
 
     extractionMode = 'firstScan';
 
+    cancelCurrentImport = false;
+
     totalNumberToExtract = 0;
     currentScreenshotExtracting = 0;
 
@@ -536,6 +544,7 @@ function theExtractor(message: ExtractorMessage, dataObject?: any): void {
     fileCounter = 0;
     MainCounter.totalNumber = 0;
     MainCounter.itemInFinalArray = 0;
+    MainCounter.screenShotFileNumber = 0;
     walkSync(selectedSourceFolder, []); // walkSync updates `finalArray`
     MainCounter.totalNumber = finalArray.length;
     console.log('there are a total of: ' + MainCounter.totalNumber + ' files to be extracted');
@@ -588,34 +597,40 @@ let i = 0;
  * @param firstScan -- true if it's the first time, false if it's a rescan
  */
 function takeTenScreenshots(pathToFile: string, fileNumber: number, firstScan: boolean) {
-  ffmpeg(pathToFile)
-    .screenshots({
-      count: 1,
-      timemarks: [timestamps[i]],
-      filename: fileNumber + `-${i + 1}.jpg`,
-      size: '?x' + screenShotSize
-    }, path.join(selectedOutputFolder, 'vha-images'))
-    .on('end', () => {
-      i = i + 1;
-      if (i < count) {
-        takeTenScreenshots(pathToFile, fileNumber, firstScan);
-      } else if (i === count) {
-        i = 0;
+  if (!cancelCurrentImport) {
+    ffmpeg(pathToFile)
+      .screenshots({
+        count: 1,
+        timemarks: [timestamps[i]],
+        filename: fileNumber + `-${i + 1}.jpg`,
+        size: '?x' + screenShotSize
+      }, path.join(selectedOutputFolder, 'vha-images'))
+      .on('end', () => {
+        i = i + 1;
+        if (i < count) {
+          takeTenScreenshots(pathToFile, fileNumber, firstScan);
+        } else if (i === count) {
+          i = 0;
+          if (firstScan) {
+            getNextTen();
+          } else {
+            continueReScanning();
+          }
+        }
+      })
+      .on('error', () => {
+        console.log('screenshot error occurred in file #' + pathToFile);
         if (firstScan) {
           getNextTen();
         } else {
           continueReScanning();
         }
-      }
-    })
-    .on('error', () => {
-      console.log('screenshot error occurred in file #' + pathToFile);
-      if (firstScan) {
-        getNextTen();
-      } else {
-        continueReScanning();
-      }
-    });
+      });
+  } else {
+    // TODO -- NEED TO RESET EVERYTHING HERE MAYBE !?!?!?!!!!
+    sendCurrentProgress(1, 1, 2);
+    angularApp.sender.send('importInterrupted');
+  }
 }
 
 let totalNumberToExtract = 0;
@@ -719,6 +734,7 @@ function reScanDirectory(inputFolder: string, pathToVhaFile: string): void {
       const currentJson: FinalObject = JSON.parse(data);
 
       extractionMode = 'reScan';
+      cancelCurrentImport = false;
       rescanningIndex = 0;
       indexesOfThoseToExtract = [];
 
@@ -812,7 +828,6 @@ let indexesOfThoseToExtract = [];
 function newRescanExtractor() {
 
   finalArray.forEach((element, index) => {
-    // ----------- >= ------------ !!!??!!! TODO -- check !!!!
     if (element[3] >= lastScreenshotFileNumber) {
       indexesOfThoseToExtract.push(index);
     }
