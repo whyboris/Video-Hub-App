@@ -120,6 +120,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     selectedOutputFolder: ''
   };
 
+  extractionPercent = 1;
+
   // Listen for key presses
   // @HostListener('document:keypress', ['$event'])
   // handleKeyboardEvent(event: KeyboardEvent) {
@@ -199,7 +201,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.progressNum2 = b;
       this.progressPercent = a / b;
       this.appState.hubName = 'loading - ' + Math.round(a * 100 / b) + '%';
+      console.log(a + ' ' + b + ' ' + stage);
+      if (this.importStage === 2) {
+        this.extractionPercent = Math.round(100 * a / b);
+      }
       if (a === b) {
+        this.extractionPercent = 1;
         this.importStage = 0;
         this.appState.hubName = this.hubNameToRemember;
         this.allScreenShotsExtracted = true;

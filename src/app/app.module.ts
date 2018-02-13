@@ -14,6 +14,7 @@ import { ShowLimitService } from 'app/components/pipes/show-limit.service';
 import { WordFrequencyService } from 'app/components/pipes/word-frequency.service';
 
 import { AppComponent } from './app.component';
+import { DonutComponent } from './components/donut/donut.component';
 import { FileComponent } from 'app/components/home/file/file.component';
 import { FilmstripComponent } from 'app/components/home/filmstrip/filmstrip.component';
 import { HomeComponent } from './components/home/home.component';
@@ -36,6 +37,7 @@ import { AppRoutingModule } from './app-routing.module';
   declarations: [
     AppComponent,
     CountPipe,
+    DonutComponent,
     FileComponent,
     FileSearchPipe,
     FileSizePipe,

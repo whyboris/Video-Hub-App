@@ -21,10 +21,15 @@
     </div>
   </div>
 
-  <div *ngIf="importStage === 2" class="screenShotProgressPercent">
+  <div *ngIf="importStage === 2" class="cancelProgress">
     <span class="cancelImport" (click)="cancelCurrentImport()">cancel</span>
-    Extracting screenshot {{ progressNum1 }} / {{ progressNum2 }}
   </div>
+
+  <app-donut
+    *ngIf="importStage === 2"
+    class="screenShotProgressPercent"
+    [score]="extractionPercent"
+  ></app-donut>
 
   <!-- SETTINGS / OPTIONS MODAL -->
   <div
