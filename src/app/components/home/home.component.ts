@@ -15,6 +15,7 @@ import { HistoryItem } from '../common/history-item.interface';
 import { AppState } from '../common/app-state';
 import { Filters } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from 'app/components/common/settings-buttons';
+import { WizardOptions } from '../common/wizard-options.interface';
 
 import { myAnimation, myAnimation2, myWizardAnimation, galleryItemAppear, topAnimation, historyItemRemove } from '../common/animations';
 
@@ -85,11 +86,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   buttonsInView = false;
 
-  // temp variables for the wizard during import
-  totalNumberOfFiles = -1;
-  totalImportTime = 0;
-  totalImportSize = 0;
-
   // temp
   wordFreqArr: any;
   currResults: any = { showing: 0, total: 0 };
@@ -110,6 +106,22 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   shuffleTheViewNow = 0; // dummy number to force re-shuffle current view
 
+  allScreenShotsExtracted = true;
+
+  hubNameToRemember = '';
+  importStage = 0;
+
+  // temp variables for the wizard during import
+  wizard: WizardOptions = {
+    totalNumberOfFiles: -1,
+    totalImportTime: 0,
+    totalImportSize: 0,
+    selectedSourceFolder: '',
+    selectedOutputFolder: ''
+  };
+
+  extractionPercent = 1;
+
   // Listen for key presses
   // @HostListener('document:keypress', ['$event'])
   // handleKeyboardEvent(event: KeyboardEvent) {
@@ -129,6 +141,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
+
+    // To test the progress bar
+    // setInterval(() => {
+    //   this.extractionPercent = this.extractionPercent + 8;
+    //   if (this.extractionPercent > 99) {
+    //     this.extractionPercent = 1;
+    //   }
+    // }, 2000);
 
     this.cloneDefaultButtonSetting();
 
@@ -166,34 +186,49 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // Returning Input
     this.electronService.ipcRenderer.on('inputFolderChosen', (event, filePath, totalFilesInDir) => {
-      this.totalNumberOfFiles = totalFilesInDir;
+      this.wizard.totalNumberOfFiles = totalFilesInDir;
       // TODO better prediction
-      this.totalImportTime = Math.round(totalFilesInDir * 2.25 / 60);
-      this.appState.selectedSourceFolder = filePath;
-      this.appState.selectedOutputFolder = filePath;
+
+      if (totalFilesInDir > 0) {
+        this.wizard.totalImportTime = Math.round(totalFilesInDir * 2.25 / 60);
+        this.wizard.selectedSourceFolder = filePath;
+        this.wizard.selectedOutputFolder = filePath;
+      }
     });
 
     // Returning Output
     this.electronService.ipcRenderer.on('outputFolderChosen', (event, filePath) => {
-      this.appState.selectedOutputFolder = filePath;
+      this.wizard.selectedOutputFolder = filePath;
     });
 
     // Progress bar messages
-    this.electronService.ipcRenderer.on('processingProgress', (event, a, b) => {
+    // for META EXTRACTION
+    this.electronService.ipcRenderer.on('processingProgress', (event, a: number, b: number, stage: number) => {
+      this.importStage = stage;
       this.progressNum1 = a;
       this.progressNum2 = b;
       this.progressPercent = a / b;
-      this.appState.hubName = 'loading - ' + Math.round(a * 100 / b) + '%'
+      this.appState.hubName = 'loading - ' + Math.round(a * 100 / b) + '%';
+      if (this.importStage === 2) {
+        this.extractionPercent = Math.round(100 * a / b);
+      }
+      if (a === b) {
+        this.extractionPercent = 1;
+        this.importStage = 0;
+        this.appState.hubName = this.hubNameToRemember;
+        this.allScreenShotsExtracted = true;
+      }
+    });
+
+    this.electronService.ipcRenderer.on('importInterrupted', (event) => {
+      console.log('YOU HAVE STOPPED THE IMPORT PROGRESS !!!!');
     });
 
     // Final object returns
     this.electronService.ipcRenderer.on('finalObjectReturning',
         (event, finalObject: FinalObject, pathToFile: string, fileName: string) => {
-      console.log('LOADING ALL OF THIS:');
-      console.log(finalObject);
-      console.log('path to file');
-      console.log(pathToFile);
       this.appState.currentVhaFile = pathToFile;
+      this.hubNameToRemember = finalObject.hubName;
       this.appState.hubName = finalObject.hubName;
       this.appState.numOfFolders = finalObject.numOfFolders;
       this.appState.selectedOutputFolder = pathToFile.replace(fileName + '.vha', '');
@@ -298,12 +333,21 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public importFresh(): void {
+    this.appState.selectedSourceFolder = this.wizard.selectedSourceFolder;
+    this.appState.selectedOutputFolder = this.wizard.selectedOutputFolder;
+    this.wizard.totalNumberOfFiles = -1;
+    this.allScreenShotsExtracted = false;
+    this.importDone = false;
     this.inProgress = true;
     const importOptions = {
       imgHeight: this.screenshotSizeForImport,
       hubName: (this.futureHubName || 'untitled')
     }
     this.electronService.ipcRenderer.send('start-the-import', importOptions);
+  }
+
+  public cancelCurrentImport(): void {
+    this.electronService.ipcRenderer.send('cancel-current-import');
   }
 
   public initiateMinimize(): void {
@@ -534,12 +578,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   public startWizard(): void {
     this.toggleSettings();
-    this.appState.selectedSourceFolder = '';
-    this.appState.selectedOutputFolder = '';
-    this.inProgress = false;
     this.showWizard = true;
-    this.importDone = false;
-    this.totalNumberOfFiles = -1;
   }
 
   /**
@@ -683,7 +722,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   selectScreenshotSize(pxHeightForImport: number) {
     // TODO better prediction
-    this.totalImportSize = Math.round((pxHeightForImport / 100) * this.totalNumberOfFiles * 36 / 1000);
+    this.wizard.totalImportSize = Math.round((pxHeightForImport / 100) * this.wizard.totalNumberOfFiles * 36 / 1000);
     this.screenshotSizeForImport = pxHeightForImport;
   }
 

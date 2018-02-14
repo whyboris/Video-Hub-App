@@ -1,0 +1,67 @@
+$progress-color: #729aff;
+
+$donut-height: 4em;
+$donut-width: 4em;
+$donut-border-width: 0.5em;
+
+.progress-circle {
+  border-radius: 50%;
+  font-size: 8px;
+  height: $donut-height;
+  line-height: 4em;
+  padding: 0;
+  position: relative;
+  width: $donut-width;
+
+  span {
+    display: block;
+    font-size: 9px;
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    z-index: 2;
+  }
+}
+
+.left-half-clipper {
+  border-radius: 50%;
+  clip: rect(0, 4em, 4em, 2em); /* clips the whole left half*/
+  height: $donut-height;
+  position: absolute; /* needed for clipping */
+  width: $donut-width;
+}
+
+/* when p>50, don't clip left half */
+.progress-circle.over50 .left-half-clipper {
+  clip: rect(auto, auto, auto, auto);
+}
+
+.value-bar {
+  /* This is an overlayed square, that is made round with the border radius,
+  then it is cut to display only the left half, then rotated clockwise
+  to escape the outer clipping path. */
+  border-radius: 50%;
+  border: $donut-border-width solid $progress-color; /* The border is 0.35 but making it larger removes visual artifacts */
+  box-sizing: border-box;
+  clip: rect(0, 2em, 4em, 0);
+  height: $donut-height;
+  position: absolute; /* needed for clipping */
+  transition: 300ms;
+  transition-property: transform;
+  width: $donut-width;
+}
+
+/* Progress bar filling the whole right half for values above 50% */
+.progress-circle.over50 .first50-bar {
+  /* Progress bar for the first 50%, filling the whole right half */
+  border-radius: 50%;
+  border: $donut-border-width solid $progress-color;
+  clip: rect(0, 4em, 4em, 2em);
+  height: 3em;
+  position: absolute; /* needed for clipping */
+  width: 3em;
+}
+
+.progress-circle:not(.over50) .first50-bar{
+  display: none;
+}

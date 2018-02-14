@@ -226,3 +226,21 @@ $sidebar-width: 190px;
   transition: 300ms;
   width: 100vw;
 }
+
+.screenShotProgressPercent {
+  // border: 1px solid red;
+  font-size: 12px;
+  position: fixed;
+  right: 4px;
+  top: 26px;
+  z-index: 9999;
+}
+
+.cancelProgress {
+  font-size: 10px;
+  position: fixed;
+  top: 36px;
+  right: 42px;
+  z-index: 9999;
+  cursor: pointer;
+}
