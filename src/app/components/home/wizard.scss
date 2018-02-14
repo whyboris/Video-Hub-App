@@ -9,6 +9,7 @@
   top: 20px; // accounts for draggable region
   width: 100%;
   z-index: 30;
+  height: calc(100vh - 50px);
 
   h1 {
     font-size: 14px;
@@ -32,6 +33,26 @@
       color: #990000;
       transition-duration: 300ms;
     }
+  }
+
+  .left-side {
+    box-sizing: border-box;
+    float: left;
+    margin: 50px;
+    min-height: 250px;
+    min-width: 200px;
+    width: calc(40vw - 100px);
+  }
+
+  .right-side {
+    border-left: 1px solid $gray-20;
+    // box-sizing: border-box;
+    float: left;
+    // max-width: 60vw;
+    width: calc(50vw - 100px);
+    min-height: calc(100vh - 180px);
+    min-width: 300px;
+    padding: 50px;
   }
 
   .steps {
@@ -150,25 +171,6 @@
     font-weight: bold;
   }
 
-  .left-side {
-    box-sizing: border-box;
-    float: left;
-    margin: 50px;
-    min-height: 250px;
-    min-width: 200px;
-    width: calc(40vw - 100px);
-  }
-
-  .right-side {
-    border-left: 1px solid $gray-20;
-    box-sizing: border-box;
-    float: left;
-    max-width: 60vw;
-    min-height: calc(100vh - 80px);
-    min-width: 300px;
-    padding: 50px;
-  }
-
   .size-dropdown {
     margin: 24px 14px 14px;
   }
@@ -204,10 +206,12 @@
   margin-left: 15px;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 760px) {
 
   .wizard {
     margin: 0;
+
+    @include scrollBarShown;
   }
 
   .left-side {
@@ -220,8 +224,9 @@
     border-top: 1px solid $gray-20;
     margin-bottom: 100px;
     margin-left: 20px;
-    min-width: calc(100vw - 40px) !important;
-    width: calc(100vw - 40px) !important;
+    min-width: calc(100vw - 130px) !important;
+    width: calc(100vw - 130px) !important;
+    min-height: initial !important;
 
     & > * {
       transform: translate(-20px, 0);

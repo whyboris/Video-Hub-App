@@ -68,19 +68,19 @@ function createWindow() {
 
   if (size.width < 1281) {
     xPos = 100;
-    yPos = 100;
+    yPos = 50;
     appWidth = size.width - 200;
-    appHeight = size.height - 200;
+    appHeight = size.height - 100;
   } else if (size.width < 1921) {
     xPos = 200;
-    yPos = 200;
+    yPos = 150;
     appWidth = size.width - 400;
-    appHeight = size.height - 400;
+    appHeight = size.height - 300;
   } else {
     xPos = 400;
-    yPos = 400;
+    yPos = 300;
     appWidth = size.width - 800;
-    appHeight = size.height - 800;
+    appHeight = size.height - 600;
   }
 
   // Create the browser window.
