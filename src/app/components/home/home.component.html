@@ -29,6 +29,7 @@
     *ngIf="importStage === 2"
     class="screenShotProgressPercent"
     [score]="extractionPercent"
+    [darkMode]="settingsButtons['darkMode'].toggled"
   ></app-donut>
 
   <!-- SETTINGS / OPTIONS MODAL -->

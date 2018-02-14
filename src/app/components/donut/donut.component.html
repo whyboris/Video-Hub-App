@@ -1,10 +1,10 @@
 <div class="donut">
 
-  <div class="progress-circle p{{ score }}" [ngClass]="{ over50: score > 50 }">
-    <span>{{ score }}%</span>
+  <div class="progress-circle" [ngClass]="{ over50: score > 50 }">
+    <span [ngStyle]="{ color: darkMode ? 'white' : 'black' }">{{ score }}%</span>
     <div class="left-half-clipper">
       <div class="first50-bar"></div>
-      <div class="value-bar"></div>
+      <div class="value-bar" [ngStyle]="{ transform: 'rotate(' + (360 * score / 100) + 'deg)' }"></div>
     </div>
   </div>
 

@@ -1,14 +1,14 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-donut',
   templateUrl: './donut.component.html',
-  styleUrls: ['./donut.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrls: ['./donut.component.scss']
 })
 export class DonutComponent {
 
   @Input() score: number;
+  @Input() darkMode: boolean;
 
   constructor() { }
 

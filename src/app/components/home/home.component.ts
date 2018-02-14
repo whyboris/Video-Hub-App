@@ -142,6 +142,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
 
+    // To test the progress bar
+    // setInterval(() => {
+    //   this.extractionPercent = this.extractionPercent + 8;
+    //   if (this.extractionPercent > 99) {
+    //     this.extractionPercent = 1;
+    //   }
+    // }, 2000);
+
     this.cloneDefaultButtonSetting();
 
     setTimeout(() => {
@@ -201,7 +209,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.progressNum2 = b;
       this.progressPercent = a / b;
       this.appState.hubName = 'loading - ' + Math.round(a * 100 / b) + '%';
-      console.log(a + ' ' + b + ' ' + stage);
       if (this.importStage === 2) {
         this.extractionPercent = Math.round(100 * a / b);
       }
