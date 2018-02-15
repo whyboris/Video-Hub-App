@@ -248,6 +248,7 @@
       <ng-container *ngIf="settingsButtons['magic'].toggled">
         <span class="icon input-icon {{ settingsButtons['magic'].iconName }}"></span>
         <input
+          #magicSearch
           (keydown.escape)="magicSearchString = ''"
           [(ngModel)]="magicSearchString"
           (ngModelChange)="magicSearchChanged($event)"

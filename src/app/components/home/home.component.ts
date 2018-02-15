@@ -49,6 +49,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   @ViewChild('searchRef') searchRef: ElementRef;
 
+  @ViewChild('magicSearch') magicSearch: ElementRef;
+
   settingsButtons = SettingsButtons;
   defaultSettingsButtons = {};
   settingsButtonsGroups = SettingsButtonsGroups;
@@ -155,6 +157,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.toggleButton('showFilmstrip');
       } else if (event.key === '3') {
         this.toggleButton('showFiles');
+      } else if (event.key === 'h') {
+        this.toggleButton('hideTop');
+        this.toggleButton('hideSidebar');
+        this.toggleSettingsMenu();
+        this.toggleButton('showMoreInfo');
+      } else if (event.key === 'a') {
+        this.toggleButton('hideSidebar');
+      } else if (event.key === 'q') {
+        this.magicSearch.nativeElement.focus();
       }
     } else if (event.key === 'Escape' && this.showWizard === true && this.canCloseWizard === true) {
       this.showWizard = false;
