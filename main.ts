@@ -1,4 +1,5 @@
 import { app, BrowserWindow, screen } from 'electron';
+require ('hazardous');
 import * as path from 'path';
 
 let win, serve;
