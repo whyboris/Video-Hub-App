@@ -1,4 +1,4 @@
-<div class="window" (drop)="itemDropped($event)">
+<div class="window">
 
   <div
     class="titleBar"
@@ -97,7 +97,12 @@
     <div class="horizontalDivider"></div>
 
     <div class="credits-and-help" (click)="openOnlineHelp()">
-      Click here for help, documentation, and FAQ
+      Click here for help, documentation, FAQ, or to report a bug
+    </div>
+
+    <div class="app-version">
+      <span>v1.0.0 DEMO</span>
+      <img width="30px" height="30px" src="../../../assets/logo.png">
     </div>
 
   </div> <!-- END OF SETTINGS MODAL -->
@@ -188,6 +193,7 @@
       [ngClass]="{ 'sidebar-hidden': settingsButtons['hideSidebar'].toggled }"
       [ngStyle]="{ 'background': settingsButtons['darkMode'].toggled ? '#444444' : '#d8d8d8' }"
       class="sidebar"
+      #searchRef
     >
 
       <div class="filteringTotal">
@@ -201,6 +207,7 @@
 
           <span class="icon input-icon {{ settingsButtons[filter.uniqueKey].iconName }}"></span>
           <input
+            id="{{filter.uniqueKey}}"
             (keyup.enter)="onEnterKey(filter.string, j)"
             (keydown.backspace)="onBackspace(filter.string, j)"
             (keydown.escape)="filter.string = ''"
@@ -241,6 +248,7 @@
       <ng-container *ngIf="settingsButtons['magic'].toggled">
         <span class="icon input-icon {{ settingsButtons['magic'].iconName }}"></span>
         <input
+          #magicSearch
           (keydown.escape)="magicSearchString = ''"
           [(ngModel)]="magicSearchString"
           (ngModelChange)="magicSearchChanged($event)"

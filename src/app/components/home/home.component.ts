@@ -47,6 +47,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild(VirtualScrollComponent)
   virtualScroll: VirtualScrollComponent;
 
+  @ViewChild('searchRef') searchRef: ElementRef;
+
+  @ViewChild('magicSearch') magicSearch: ElementRef;
+
   settingsButtons = SettingsButtons;
   defaultSettingsButtons = {};
   settingsButtonsGroups = SettingsButtonsGroups;
@@ -123,10 +127,52 @@ export class HomeComponent implements OnInit, AfterViewInit {
   extractionPercent = 1;
 
   // Listen for key presses
-  // @HostListener('document:keypress', ['$event'])
-  // handleKeyboardEvent(event: KeyboardEvent) {
-  //   console.log(event.key);
-  // }
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (event.ctrlKey === true) {
+      if (event.key === 's') {
+        this.shuffleTheViewNow++;
+      } else if (event.key === 'o') {
+        this.toggleSettings();
+      } else if (event.key === 'f') {
+        // focus on the search !!!
+        // console.log(this.searchRef);
+        if (this.searchRef.nativeElement.children.file) {
+          this.searchRef.nativeElement.children.file.focus();
+        }
+      } else if (event.key === 'n') {
+        this.startWizard();
+        this.toggleSettings();
+      } else if (event.key === 'd') {
+        this.toggleButton('darkMode');
+      } else if (event.key === 'z') {
+        this.toggleButton('makeSmaller');
+      } else if (event.key === 'x') {
+        this.toggleButton('makeLarger');
+      } else if (event.key === 't') {
+        this.toggleButton('showMoreInfo');
+      } else if (event.key === '1') {
+        this.toggleButton('showThumbnails');
+      } else if (event.key === '2') {
+        this.toggleButton('showFilmstrip');
+      } else if (event.key === '3') {
+        this.toggleButton('showFiles');
+      } else if (event.key === 'h') {
+        this.toggleButton('hideTop');
+        this.toggleButton('hideSidebar');
+        this.toggleSettingsMenu();
+        this.toggleButton('showMoreInfo');
+      } else if (event.key === 'a') {
+        this.toggleButton('hideSidebar');
+      } else if (event.key === 'q') {
+        this.magicSearch.nativeElement.focus();
+      }
+    } else if (event.key === 'Escape' && this.showWizard === true && this.canCloseWizard === true) {
+      this.showWizard = false;
+    } else if (event.key === 'Escape' && this.buttonsInView) {
+      this.buttonsInView = false;
+    }
+  }
 
   @HostListener('window:resize', ['$event'])
   handleResizeEvent(event: any) {
@@ -263,10 +309,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       ev.preventDefault()
     }
     document.body.ondrop = (ev) => {
-      const fullPath = ev.dataTransfer.files[0].path;
-      ev.preventDefault();
-      if (fullPath.slice(-4) === '.vha') {
-        this.electronService.ipcRenderer.send('load-this-vha-file', ev.dataTransfer.files[0].path);
+      if (ev.dataTransfer.files.length > 0) {
+        const fullPath = ev.dataTransfer.files[0].path;
+        ev.preventDefault();
+        if (fullPath.slice(-4) === '.vha') {
+          this.electronService.ipcRenderer.send('load-this-vha-file', ev.dataTransfer.files[0].path);
+        }
       }
     }
   }
@@ -282,13 +330,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       console.log('Virtual scroll refreshed');
       this.virtualScroll.refresh()
     }, delay);
-  }
-
-  /**
-   * Handle the `drop` event
-   */
-  public itemDropped(event: Event) {
-    console.log('lololol');
   }
 
   /**

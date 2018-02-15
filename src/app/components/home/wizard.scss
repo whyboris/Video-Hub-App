@@ -147,6 +147,7 @@
   }
 
   .path {
+    pointer-events: none;
     color: black;
     min-height: 20px;
     margin-left: 26px;
@@ -160,6 +161,7 @@
   }
 
   .step-description {
+    pointer-events: none;
     color: $gray-60;
     min-height: 20px;
     margin-left: 16px;
@@ -172,6 +174,9 @@
   }
 
   .size-dropdown {
+    &:not([disabled]) {
+      cursor: pointer;
+    }
     margin: 24px 14px 14px;
   }
 
@@ -224,8 +229,8 @@
     border-top: 1px solid $gray-20;
     margin-bottom: 100px;
     margin-left: 20px;
-    min-width: calc(100vw - 130px) !important;
-    width: calc(100vw - 130px) !important;
+    min-width: calc(100vw - 150px) !important;
+    width: calc(100vw - 150px) !important;
     min-height: initial !important;
 
     & > * {
