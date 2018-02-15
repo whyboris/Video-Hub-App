@@ -19,7 +19,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-checkmark:before { content: "\f18c"; } // checkmark was `\f194` but now the same as maximize
+.icon-checkmark:before { content: "\f1a5"; } // checkmark was `\f194` but now the same as power
 .icon-chevron-down-mini:before { content: "\f1a1"; }
 .icon-chevron-left:before { content: "\f1a4"; }
 .icon-chevron-right:before { content: "\f1a0"; }
@@ -39,6 +39,7 @@
 .icon-maximize:before { content: "\f18c"; }
 .icon-minus:before { content: "\f191"; }
 .icon-plus:before { content: "\f192"; }
+.icon-power:before { content: "\f1a5"; }
 .icon-random:before { content: "\f1a3"; }
 .icon-show-filenames:before { content: "\f198"; }
 .icon-show-filmstrip:before { content: "\f183"; }

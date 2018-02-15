@@ -35,6 +35,20 @@ h3 {
   margin: 30px 70px;
 }
 
+.app-version {
+  position: relative;
+  text-align: right;
+
+  img {
+    transform: translate(-30px, -20px);
+  }
+
+  span {
+    font-size: 12px;
+    color: $gray-40;
+  }
+}
+
 .closeSettings {
   cursor: pointer;
   float: right;
