@@ -263,10 +263,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       ev.preventDefault()
     }
     document.body.ondrop = (ev) => {
-      const fullPath = ev.dataTransfer.files[0].path;
-      ev.preventDefault();
-      if (fullPath.slice(-4) === '.vha') {
-        this.electronService.ipcRenderer.send('load-this-vha-file', ev.dataTransfer.files[0].path);
+      if (ev.dataTransfer.files.length > 0) {
+        const fullPath = ev.dataTransfer.files[0].path;
+        ev.preventDefault();
+        if (fullPath.slice(-4) === '.vha') {
+          this.electronService.ipcRenderer.send('load-this-vha-file', ev.dataTransfer.files[0].path);
+        }
       }
     }
   }
@@ -282,13 +284,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       console.log('Virtual scroll refreshed');
       this.virtualScroll.refresh()
     }, delay);
-  }
-
-  /**
-   * Handle the `drop` event
-   */
-  public itemDropped(event: Event) {
-    console.log('lololol');
   }
 
   /**
