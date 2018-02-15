@@ -47,6 +47,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild(VirtualScrollComponent)
   virtualScroll: VirtualScrollComponent;
 
+  @ViewChild('searchRef') searchRef: ElementRef;
+
   settingsButtons = SettingsButtons;
   defaultSettingsButtons = {};
   settingsButtonsGroups = SettingsButtonsGroups;
@@ -123,10 +125,43 @@ export class HomeComponent implements OnInit, AfterViewInit {
   extractionPercent = 1;
 
   // Listen for key presses
-  // @HostListener('document:keypress', ['$event'])
-  // handleKeyboardEvent(event: KeyboardEvent) {
-  //   console.log(event.key);
-  // }
+  @HostListener('document:keydown', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    if (event.ctrlKey === true) {
+      if (event.key === 's') {
+        this.shuffleTheViewNow++;
+      } else if (event.key === 'o') {
+        this.toggleSettings();
+      } else if (event.key === 'f') {
+        // focus on the search !!!
+        // console.log(this.searchRef);
+        if (this.searchRef.nativeElement.children.file) {
+          this.searchRef.nativeElement.children.file.focus();
+        }
+      } else if (event.key === 'n') {
+        this.startWizard();
+        this.toggleSettings();
+      } else if (event.key === 'd') {
+        this.toggleButton('darkMode');
+      } else if (event.key === 'z') {
+        this.toggleButton('makeSmaller');
+      } else if (event.key === 'x') {
+        this.toggleButton('makeLarger');
+      } else if (event.key === 't') {
+        this.toggleButton('showMoreInfo');
+      } else if (event.key === '1') {
+        this.toggleButton('showThumbnails');
+      } else if (event.key === '2') {
+        this.toggleButton('showFilmstrip');
+      } else if (event.key === '3') {
+        this.toggleButton('showFiles');
+      }
+    } else if (event.key === 'Escape' && this.showWizard === true && this.canCloseWizard === true) {
+      this.showWizard = false;
+    } else if (event.key === 'Escape' && this.buttonsInView) {
+      this.buttonsInView = false;
+    }
+  }
 
   @HostListener('window:resize', ['$event'])
   handleResizeEvent(event: any) {
