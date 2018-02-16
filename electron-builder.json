@@ -6,7 +6,11 @@
   },
   "win": {
     "icon": "dist/favicon",
-    "asar": false,
+    "asar": true,
+    "asarUnpack": [
+      "../node_modules/@ffmpeg-installer",
+      "../node_modules/@ffprobe-installer"
+    ],
     "target": [
       "nsis"
     ]
@@ -15,7 +19,11 @@
     "category": "public.app-category.video",
     "target": "dmg",
     "icon": "dist/favicon",
-    "asar": false
+    "asar": true,
+    "asarUnpack": [
+      "../node_modules/@ffmpeg-installer",
+      "../node_modules/@ffprobe-installer"
+    ]
   },
   "linux": {
     "icon": "dist",
