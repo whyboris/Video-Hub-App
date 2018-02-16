@@ -18,7 +18,7 @@
     "start": "npm-run-all --parallel webpack:watch electron:serve",
     "webpack:watch": "webpack --watch",
     "start:web": "webpack-dev-server --content-base . --port 4200 --inline",
-    "build:electron:main": "tsc main.ts --outDir dist && copyfiles package.json dist && cd dist && npm install --prod && cd ..",
+    "build:electron:main": "tsc main.ts --outDir dist && npm run uglify && copyfiles package.json dist && cd dist && npm install --prod && cd ..",
     "build": "webpack --display-error-details && npm run build:electron:main",
     "build:prod": "cross-env NODE_ENV=production npm run build",
     "electron:serve": "npm run build:electron:main && electron ./dist --serve",
@@ -27,7 +27,8 @@
     "electron:prod": "npm run build:prod && electron ./dist",
     "electron:linux": "npm run build:prod && npx electron-builder build --linux",
     "electron:windows": "npm run build:prod && npx electron-builder build --windows",
-    "electron:mac": "npm run build:prod && npx electron-builder build --mac"
+    "electron:mac": "mkdir dist && cp src/assets/icons.icns dist/favicon.icns && npm run build:prod && npx electron-builder build --mac",
+    "uglify": "uglifyjs --compress --mangle -- dist/main.js > dist/main2.js && rm dist/main.js && mv dist/main2.js dist/main.js"
   },
   "dependencies": {
     "@angular/animations": "5.1.1",
@@ -88,6 +89,7 @@
     "ts-node": "3.3.0",
     "tslint": "5.7.0",
     "typescript": "2.4.2",
+    "uglify-js": "3.3.11",
     "uglifyjs-webpack-plugin": "1.0.0",
     "url-loader": "0.6.2",
     "webpack": "3.8.1",
