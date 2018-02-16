@@ -730,7 +730,7 @@ function reScanDirectory(inputFolder: string, pathToVhaFile: string): void {
     if (err) {
       console.log(err); // TODO: better error handling
     } else {
-      console.log('images.vha file has been read: ----------------------------');
+      console.log('Rescanning directory: the .vha file has been read: ----------------------------');
       const currentJson: FinalObject = JSON.parse(data);
 
       extractionMode = 'reScan';
@@ -745,10 +745,19 @@ function reScanDirectory(inputFolder: string, pathToVhaFile: string): void {
       selectedOutputFolder = pathToVhaFile.replace(extractFileName(pathToVhaFile) + '.vha', '');
       selectedSourceFolder = currentJson.inputDir;
       screenShotSize = currentJson.ssSize;
+      hubName = currentJson.hubName;
 
       fileCounter = 0; // just in case
-      walkSync(inputFolder, []); // this method updates the `finalArray`
-      findTheDiff(oldFileList, inputFolder);
+
+      if (fs.existsSync(inputFolder)) {
+        walkSync(inputFolder, []); // this method updates the `finalArray`
+        findTheDiff(oldFileList, inputFolder);
+      } else {
+        dialog.showMessageBox({
+          message: 'Directory ' + inputFolder + ' does not exist',
+          buttons: ['OK']
+        });
+      }
     }
   });
 }
