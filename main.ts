@@ -1,5 +1,4 @@
 import { app, BrowserWindow, screen } from 'electron';
-require ('hazardous');
 import * as path from 'path';
 
 let win, serve;
@@ -180,8 +179,8 @@ const fs = require('fs');
 const ipc = require('electron').ipcMain;
 const shell = require('electron').shell;
 
-const ffprobePath = require('@ffprobe-installer/ffprobe').path;
-const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
+const ffprobePath = require('@ffprobe-installer/ffprobe').path.replace('app.asar', 'app.asar.unpacked');
+const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path.replace('app.asar', 'app.asar.unpacked');
 const ffmpeg = require('fluent-ffmpeg');
 ffmpeg.setFfprobePath(ffprobePath);
 ffmpeg.setFfmpegPath(ffmpegPath);
