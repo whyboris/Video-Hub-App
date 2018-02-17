@@ -65,6 +65,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   demo = true;
   webDemo = false;
   versionNumber = '1.0.0';
+  macVersion = true;
 
   // REORGANIZE / keep
   currentPlayingFile = '';

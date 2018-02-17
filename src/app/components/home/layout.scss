@@ -74,12 +74,11 @@ $sidebar-width: 190px;
   -webkit-app-region: drag;
   color: #444444;
   font-size: 12px;
-  left: 50px;
   position: absolute;
   text-align: center;
   top: 4px;
   transition: 300ms;
-  width: calc(100vw - 110px);
+  width: calc(100vw - 80px);
 }
 
 .winBtn {
@@ -92,6 +91,73 @@ $sidebar-width: 190px;
     color: #ff6666;
   }
 
+  &.closeButton {
+    right: 7px;
+    top: 2px;
+  }
+
+  &.maximizeButton {
+    right: 26px;
+    top: 2px;
+  }
+
+  &.minimizeButton {
+    right: 46px;
+    top: 2px;
+  }
+}
+
+.macBtn {
+  cursor: pointer;
+  position: fixed;
+  transition: 100ms;
+
+  height: 13px;
+  width: 13px;
+  padding: 0 0 0 3px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  top: 3.5px;
+
+  &.closeButton {
+    background: #fe6058;
+    color: #c34944;
+    left: 7px;
+
+    & .icon {
+      transform: translate(0.5px, -3px) !important;
+    }
+  }
+
+  &.maximizeButton {
+    background: #29ca42;
+    color: #1c882c;
+    left: 48px;
+  }
+
+  &.minimizeButton {
+    background: #fec02f;
+    color: #c18e20;
+    left: 27px;
+
+    & .icon {
+      transform: translate(0, -3px) !important;
+    }
+  }
+
+  &:hover {
+    transition: 100ms;
+    color: #000000;
+  }
+
+  & .icon {
+    position: absolute;
+    transform: translate(1px, -3px);
+
+    &:before {
+      font-size: 12px;
+    }
+  }
 }
 
 .dark-mode-override { // needs to be after titleBar and winBtn and draggable
@@ -108,21 +174,6 @@ $sidebar-width: 190px;
       color: #ff6666;
     }
   }
-}
-
-.closeButton {
-  right: 7px;
-  top: 2px;
-}
-
-.maximizeButton {
-  right: 26px;
-  top: 2px;
-}
-
-.minimizeButton {
-  right: 46px;
-  top: 2px;
 }
 
 .top {
