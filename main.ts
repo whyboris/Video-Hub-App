@@ -191,7 +191,7 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 // My variables
 // ============================================================
 
-import { cleanUpFileName, labelVideo } from './main-support';
+import { cleanUpFileName, labelVideo, acceptableFiles } from './main-support';
 
 import { FinalObject } from './src/app/components/common/final-object.interface';
 
@@ -246,14 +246,8 @@ function openThisDamnFile(pathToVhaFile) {
  * Close the window
  */
 ipc.on('close-window', function (event, settingsToSave) {
-  console.log('window closed by user');
-  console.log(settingsToSave);
-  console.log('closing temporarily disabled');
-
   const json = JSON.stringify(settingsToSave);
-
   const pathToAppData = app.getPath('appData')
-  console.log(pathToAppData);
 
   try {
     fs.statSync(path.join(pathToAppData, 'video-hub-app'));
@@ -263,7 +257,6 @@ ipc.on('close-window', function (event, settingsToSave) {
 
   // TODO -- catch bug if user closes before selecting the output folder
   fs.writeFile(path.join(pathToAppData, 'video-hub-app', 'settings.json'), json, 'utf8', () => {
-    console.log('settings file written:');
     BrowserWindow.getFocusedWindow().close();
   });
 });
@@ -274,10 +267,10 @@ ipc.on('close-window', function (event, settingsToSave) {
 ipc.on('just-started', function (event, someMessage) {
   angularApp = event;
   const pathToAppData = app.getPath('appData')
-  console.log('app just started');
   fs.readFile(path.join(pathToAppData, 'video-hub-app', 'settings.json'), (err, data) => {
     if (err) {
-      console.log(err); // maybe better error handling later
+      // TODO -- better error handling
+      // console.log(err);
     } else {
       event.sender.send('settingsReturning', JSON.parse(data));
     }
@@ -288,7 +281,6 @@ ipc.on('just-started', function (event, someMessage) {
  * Maximize the window
  */
 ipc.on('maximize-window', function (event, someMessage) {
-  console.log('window maximized by user');
   if (BrowserWindow.getFocusedWindow()) {
     BrowserWindow.getFocusedWindow().maximize();
   }
@@ -298,7 +290,6 @@ ipc.on('maximize-window', function (event, someMessage) {
  * Un-Maximize the window
  */
 ipc.on('un-maximize-window', function (event, someMessage) {
-  console.log('window maximized by user');
   if (BrowserWindow.getFocusedWindow()) {
     BrowserWindow.getFocusedWindow().unmaximize();
   }
@@ -308,7 +299,6 @@ ipc.on('un-maximize-window', function (event, someMessage) {
  * Minimize the window
  */
 ipc.on('minimize-window', function (event, someMessage) {
-  console.log('window minimized by user');
   if (BrowserWindow.getFocusedWindow()) {
     BrowserWindow.getFocusedWindow().minimize();
   }
@@ -325,13 +315,13 @@ ipc.on('choose-input', function (event, someMessage) {
     properties: ['openDirectory']
   }, function (files) {
     if (files) {
-      console.log('the user has chosen this INPUT directory: ' + files[0]);
+      // console.log('the user has chosen this INPUT directory: ' + files[0]);
       selectedSourceFolder = files[0];
-      console.log('the user has chosen this OUTPUT directory: ' + files[0]);
+      // console.log('the user has chosen this OUTPUT directory: ' + files[0]);
       selectedOutputFolder = files[0];
       totalNumberOfFiles = 0;
       walkAndCountSync(selectedSourceFolder, []);
-      console.log(totalNumberOfFiles);
+      // console.log(totalNumberOfFiles);
       event.sender.send('inputFolderChosen', selectedSourceFolder, totalNumberOfFiles);
     }
   })
@@ -348,12 +338,12 @@ ipc.on('choose-output', function (event, someMessage) {
     properties: ['openDirectory']
   }, function (files) {
     if (files) {
-      console.log('the user has chosen this OUTPUT directory: ' + files[0]);
+      // console.log('the user has chosen this OUTPUT directory: ' + files[0]);
       selectedOutputFolder = files[0];
 
       // create "/vha-images" inside the output directory it so that there is no `EEXIST` error when extracting.
       if (!fs.existsSync(path.join(selectedOutputFolder, 'vha-images'))) {
-        console.log('vha-images folder did not exist, creating');
+        // console.log('vha-images folder did not exist, creating');
         fs.mkdirSync(path.join(selectedOutputFolder, 'vha-images'));
       }
 
@@ -400,7 +390,7 @@ ipc.on('system-open-file-through-modal', function (event, somethingElse) {
       properties: ['openFile']
     }, function (files) {
       if (files) {
-        console.log('the user has chosen this previously-saved .vha file: ' + files[0]);
+        // console.log('the user has chosen this previously-saved .vha file: ' + files[0]);
         // TODO: maybe ??? check if file ends in .vha before parsing !!
         // TODO: fix up this stupid pattern of overriding method with variable !!!
         userWantedToOpen = files[0];
@@ -430,16 +420,19 @@ ipc.on('openThisFile', function (event, fullFilePath) {
  * Open the explorer to the relevant file
  */
 ipc.on('openInExplorer', function(event, fullPath: string) {
-  console.log('trying to open in explorer');
-  console.log(fullPath);
   shell.showItemInFolder(fullPath);
 });
 
+/**
+ * Open a URL in system's default browser
+ */
 ipc.on('pleaseOpenUrl', function(event, url: string): void {
-  console.log(url);
   shell.openExternal(url, { activate: true }, (): void => {});
 });
 
+/**
+ * Interrupt current import process
+ */
 ipc.on('cancel-current-import', function(event): void {
   cancelCurrentImport = true;
 });
@@ -484,7 +477,7 @@ function sendFinalResultHome(): void {
   // TODO -- hubName never used -- error because previous file loaded !!! ???
   const pathToTheFile = path.join(selectedOutputFolder, (currentOpenVhaFilename || hubName) + '.vha');
   fs.writeFile(pathToTheFile, json, 'utf8', () => {
-    console.log('file written:');
+    // console.log('file written:');
     angularApp.sender.send(
       'finalObjectReturning', JSON.parse(json), pathToTheFile, extractFileName(pathToTheFile)
     );
@@ -523,7 +516,7 @@ function theExtractor(message: ExtractorMessage, dataObject?: any): void {
     areWeDoneYet();
 
   } else if (message === 'metaError') {
-    console.log('meta error !!!!!!!!!!!!!!!!!!!!!!! --- THIS SHOULD NOT HAPPEN !!!!!!!!!!!!!!!!');
+    // this code block never happened I think
     MainCounter.itemInFinalArray++;
     areWeDoneYet();
 
@@ -549,17 +542,16 @@ function theExtractor(message: ExtractorMessage, dataObject?: any): void {
       finalArray = finalArray.slice(0, 50);
     }
     MainCounter.totalNumber = finalArray.length;
-    console.log('there are a total of: ' + MainCounter.totalNumber + ' files to be extracted');
+    // console.log('there are a total of: ' + MainCounter.totalNumber + ' files to be extracted');
 
     if (MainCounter.totalNumber > 0) {
       extractNextScreenshot();
     } else {
-      // TODO: handle case when number of screenshots is zero!
-      console.error('NO VIDEO FILES IN THIS DIRECTORY!');
+      // this code block never happened I think
     }
 
   } else {
-    console.log('what did you do !?!!');
+    // this code block never happened I think
   }
 }
 
@@ -621,7 +613,7 @@ function takeTenScreenshots(pathToFile: string, fileNumber: number, firstScan: b
         }
       })
       .on('error', () => {
-        console.log('screenshot error occurred in file #' + pathToFile);
+        // console.log('screenshot error occurred in file #' + pathToFile);
         if (firstScan) {
           getNextTen();
         } else {
@@ -691,8 +683,8 @@ function extractMetadata(filePath: string): void {
   ffmpeg.ffprobe(filePath, (err, metadata) => {
 
     if (err) {
-      console.log('ERROR - extracting metadata - ERROR');
-      console.log(MainCounter.itemInFinalArray);
+      // console.log('ERROR - extracting metadata - ERROR');
+      // console.log(MainCounter.itemInFinalArray);
       theExtractor('metaError');
     } else {
       const duration = Math.round(metadata.streams[0].duration) || 0;
@@ -725,14 +717,16 @@ let lastScreenshotFileNumber = 0; // only used for fancy new re-scanning functio
  */
 function reScanDirectory(inputFolder: string, pathToVhaFile: string): void {
 
-  console.log('inputFolder: ' + inputFolder);
-  console.log('vhaFile: ' + pathToVhaFile);
+  // console.log('inputFolder: ' + inputFolder);
+  // console.log('vhaFile: ' + pathToVhaFile);
 
   fs.readFile(pathToVhaFile, (err, data) => {
     if (err) {
-      console.log(err); // TODO: better error handling
+      // TODO -- better error handling
+      // console.log(err);
     } else {
-      console.log('Rescanning directory: the .vha file has been read: ----------------------------');
+      // console.log('Rescanning directory');
+      // console.log('the .vha file has been read!');
       const currentJson: FinalObject = JSON.parse(data);
 
       extractionMode = 'reScan';
@@ -797,7 +791,7 @@ function findTheDiff(oldFileList, inputFolder): void {
     }
   });
 
-  console.log(theDiff);
+  // console.log(theDiff);
 
   // remove from FinalArray all files that are no longer in the video folder
   oldFileList = oldFileList.filter((value, index) => {
@@ -847,7 +841,7 @@ function newRescanExtractor() {
     }
   });
 
-  console.log(indexesOfThoseToExtract);
+  // console.log(indexesOfThoseToExtract);
 
   rescanningIndex = indexesOfThoseToExtract.length;
   continueReScanning();
@@ -855,10 +849,8 @@ function newRescanExtractor() {
 }
 
 function continueReScanning() {
-
   const lol = indexesOfThoseToExtract[rescanningIndex - 1];
 
-  // check if > 0 or >= 0 !!??!!!
   if (rescanningIndex > 0) {
     sendCurrentProgress(indexesOfThoseToExtract.length - rescanningIndex, indexesOfThoseToExtract.length, 2);
     const fileNumber = finalArray[lol][3];
@@ -867,15 +859,12 @@ function continueReScanning() {
       finalArray[lol][1]));
     takeTenScreenshots(filePath, fileNumber, false);
   } else {
-    // you're done !?!!!
+    // you're done !!!
     sendCurrentProgress(1, 1, 2);
   }
 
   rescanningIndex--;
-
 }
-
-
 
 /**
  * Alphabetizes final array, prioritizing the folder, and then filename
@@ -916,16 +905,13 @@ function countFoldersInFinalArray(): number {
 
 // ---------------------- FOLDER WALKER FUNCTION --------------------------------
 
-const acceptableFiles = ['mp4', 'mpg', 'mpeg', 'mov', 'm4v', 'avi', 'flv', 'mkv', 'wmv'];
 /**
  * Recursively walk through the input directory
  * compiling files to process
  * updates the finalArray[]
  */
 function walkSync(dir, filelist) {
-  // console.log('walk started');
   const files = fs.readdirSync(dir);
-  // console.log(files);
 
   files.forEach(function (file) {
     if (!file.startsWith('$') && file !== 'System Volume Information') {
@@ -934,7 +920,7 @@ function walkSync(dir, filelist) {
         filelist = walkSync(path.join(dir, file), filelist);
       } else {
         const extension = file.split('.').pop();
-        if (acceptableFiles.includes(extension)) {
+        if (acceptableFiles.includes(extension.toLowerCase())) {
           // before adding, remove the redundant prefix: selectedSourceFolder
           const partialPath = dir.replace(selectedSourceFolder, '');
 
@@ -956,9 +942,7 @@ let totalNumberOfFiles = 0;
  * Used only to update the `totalNumberOfFiles` when user selects input folder
  */
 function walkAndCountSync(dir, filelist) {
-  // console.log('walk started');
   const files = fs.readdirSync(dir);
-  // console.log(files);
 
   files.forEach(function (file: string) {
     if (!file.startsWith('$') && file !== 'System Volume Information') {
@@ -967,7 +951,7 @@ function walkAndCountSync(dir, filelist) {
         filelist = walkAndCountSync(path.join(dir, file), filelist);
       } else {
         const extension = file.split('.').pop();
-        if (acceptableFiles.includes(extension)) {
+        if (acceptableFiles.includes(extension.toLowerCase())) {
           totalNumberOfFiles++;
         }
       }
