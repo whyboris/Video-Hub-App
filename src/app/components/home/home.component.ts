@@ -106,14 +106,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   vhaFileHistory: HistoryItem[] = [];
 
-  futureHubName = '';
-
   fullPathToCurrentFile = '';
 
   shuffleTheViewNow = 0; // dummy number to force re-shuffle current view
 
   allScreenShotsExtracted = true;
 
+  futureHubName = '';
   hubNameToRemember = '';
   importStage = 0;
 
@@ -131,7 +130,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // Listen for key presses
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
-    if (event.ctrlKey === true) {
+    // .metaKey is for mac `command` button
+    if (event.ctrlKey === true || event.metaKey) {
       if (event.key === 's') {
         this.shuffleTheViewNow++;
       } else if (event.key === 'o') {
@@ -640,6 +640,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Start the wizard again
    */
   public startWizard(): void {
+    this.futureHubName = '';
+    this.wizard = {
+      totalNumberOfFiles: -1,
+      totalImportTime: 0,
+      totalImportSize: 0,
+      selectedSourceFolder: '',
+      selectedOutputFolder: ''
+    };
     this.toggleSettings();
     this.showWizard = true;
   }

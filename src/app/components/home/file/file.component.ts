@@ -21,6 +21,7 @@ export class FileComponent {
   @Input() showMeta: boolean;
   @Input() time: string;
   @Input() title: string;
+  @Input() darkMode: boolean;
 
   constructor() { }
 

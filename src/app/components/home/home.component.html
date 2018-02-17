@@ -417,6 +417,7 @@
           [elHeight]="20"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
+          [darkMode]="settingsButtons['darkMode'].toggled"
         ></app-file-item>
       </ng-container>
 
@@ -501,7 +502,7 @@
 
     <div
       [ngClass]="{
-          'current-step': futureHubName !== '' && appState.selectedSourceFolder === '',
+          'current-step': futureHubName !== '' && wizard.selectedSourceFolder === '',
           'fulfilled': wizard.selectedSourceFolder !== ''
         }"
       class="steps"
