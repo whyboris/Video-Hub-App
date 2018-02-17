@@ -62,7 +62,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   appState = AppState;
 
   // DEMO MODE TOGGLE !!!
-  demo = false;
+  demo = true;
   webDemo = false;
 
   // REORGANIZE / keep
