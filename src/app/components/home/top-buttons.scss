@@ -1,0 +1,101 @@
+@import "variables";
+
+.winBtn {
+  color: #333333;
+  cursor: pointer;
+  position: fixed;
+  transition: 100ms;
+
+  &.closeButton {
+    right: 7px;
+    top: 2px;
+  }
+
+  &.maximizeButton {
+    right: 26px;
+    top: 2px;
+  }
+
+  &.minimizeButton {
+    right: 46px;
+    top: 2px;
+  }
+
+  &:hover {
+    transition: 100ms;
+    color: #ff6666;
+  }
+}
+
+.macBtn {
+  border-radius: 50%;
+  box-sizing: border-box;
+  cursor: pointer;
+  height: 13px;
+  padding: 0 0 0 3px;
+  position: fixed;
+  top: 3.5px;
+  transition: 400ms;
+  width: 13px;
+
+  &.closeButton {
+    background: #fe6058;
+    color: #fe6058;
+    left: 7px;
+
+    & .icon {
+      transform: translate(0.5px, -3px) !important;
+    }
+  }
+
+  &.maximizeButton {
+    background: #29ca42;
+    color: #29ca42;
+    left: 47px;
+
+    & .icon {
+      transform: translate(0.5px, -3px) !important;
+    }
+  }
+
+  &.minimizeButton {
+    background: #fec02f;
+    color: #fec02f;
+    left: 27px;
+
+    & .icon {
+      transform: translate(0, -3px) !important;
+    }
+  }
+
+  &:hover {
+    transition: 200ms;
+    color: #000000;
+  }
+
+  & .icon {
+    position: absolute;
+    transform: translate(1px, -3px);
+
+    &:before {
+      font-size: 12px;
+    }
+  }
+}
+
+.dark-mode-override { // needs to be after titleBar and winBtn and draggable
+  background: #222222;
+
+  & .draggable {
+    color: #888888;
+  }
+
+  & .winBtn {
+    color: #aaaaaa;
+
+    &:hover {
+      transition: 200ms;
+      color: #ff6666;
+    }
+  }
+}

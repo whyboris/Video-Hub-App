@@ -26,6 +26,7 @@ import { DemoContent } from '../../../assets/demo-content';
   templateUrl: './home.component.html',
   styleUrls: [
     './layout.scss',
+    './top-buttons.scss',
     './settings.scss',
     './buttons.scss',
     './search.scss',
