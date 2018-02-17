@@ -6,7 +6,7 @@ export let Filters = [
     string: '',
     array: [], // contains search strings
     bool: true,
-    placeholder: 'Folder union',
+    placeholder: 'folder union',
     conjunction: 'or',
     color: '#FFD672'
   }, {
@@ -14,7 +14,7 @@ export let Filters = [
     string: '',
     array: [],
     bool: true,
-    placeholder: 'Folder contains',
+    placeholder: 'folder contains',
     conjunction: 'and',
     color: '#ffe5a5'
   }, {
@@ -22,7 +22,7 @@ export let Filters = [
     string: '',
     array: [],
     bool: true,
-    placeholder: 'File union',
+    placeholder: 'file union',
     conjunction: 'or',
     color: '#6e96ff'
   }, {
@@ -30,7 +30,7 @@ export let Filters = [
     string: '',
     array: [],
     bool: true,
-    placeholder: 'File contains',
+    placeholder: 'file contains',
     conjunction: 'and',
     color: '#b1c6fd'
   }, {
@@ -38,7 +38,7 @@ export let Filters = [
     string: '',
     array: [],
     bool: true,
-    placeholder: 'File does not contain',
+    placeholder: 'file does not contain',
     conjunction: 'or',
     color: '#FF8888'
   }

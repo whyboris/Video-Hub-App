@@ -64,6 +64,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // DEMO MODE TOGGLE !!!
   demo = true;
   webDemo = false;
+  versionNumber = '1.0.0';
 
   // REORGANIZE / keep
   currentPlayingFile = '';
@@ -133,8 +134,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (event.key === 's') {
         this.shuffleTheViewNow++;
       } else if (event.key === 'o') {
-        this.toggleSettings();
+        if (this.showWizard === false) {
+          this.toggleSettings();
+        }
       } else if (event.key === 'f') {
+        this.showSidebar();
         // focus on the search !!!
         // console.log(this.searchRef);
         if (this.searchRef.nativeElement.children.file) {
@@ -142,7 +146,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         }
       } else if (event.key === 'n') {
         this.startWizard();
-        this.toggleSettings();
+        this.buttonsInView = false;
       } else if (event.key === 'd') {
         this.toggleButton('darkMode');
       } else if (event.key === 'z') {
@@ -432,6 +436,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param filter
    */
   handleFileWordClicked(filter: string): void {
+    this.showSidebar();
+    if (!this.settingsButtons['file'].toggled) {
+      this.settingsButtons['file'].toggled = true;
+    }
     this.onEnterKey(filter, 3); // 3rd item is the `file` filter
   }
 
@@ -440,12 +448,25 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param filter
    */
   handleFolderWordClicked(filter: string): void {
+    this.showSidebar();
+    if (!this.settingsButtons['folder'].toggled) {
+      this.settingsButtons['folder'].toggled = true;
+    }
     this.onEnterKey(filter, 1); // 1st item is the `folder` filter
   }
 
   openInExplorer(): void {
     console.log('should open explorer');
     this.electronService.ipcRenderer.send('openInExplorer', this.fullPathToCurrentFile);
+  }
+
+  /**
+   * Show sidebar if it's closed
+   */
+  showSidebar(): void {
+    if (this.settingsButtons['hideSidebar'].toggled) {
+      this.toggleButton('hideSidebar');
+    }
   }
 
   // -----------------------------------------------------------------------------------------------
