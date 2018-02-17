@@ -1,5 +1,5 @@
 {
-  "productName": "Video Hub App Demo",
+  "productName": "Video Hub App",
   "directories": {
     "app": "dist",
     "output": "app-builds"
