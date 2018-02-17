@@ -504,7 +504,7 @@
       <span class="emphasis-number">
         {{ wizard.totalNumberOfFiles | number }}
       </span>
-      videos
+      videos {{ wizard.totalNumberOfFiles > 50 && demo ? 'demo version limited to 50 video files' : '' }}
     </span>
 
     <div

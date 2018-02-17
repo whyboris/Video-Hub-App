@@ -16,6 +16,8 @@ const dialog = require('electron').dialog;
 let userWantedToOpen = null;
 let myWindow = null
 
+// DEMO VARIABLE !!!
+const demo = true;
 
 // For windows -- when loading the app the first time
 if (process.argv[1]) {
@@ -188,9 +190,6 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 // ============================================================
 // My variables
 // ============================================================
-
-// DEMO FLAG !!!
-const demo = false;
 
 import { cleanUpFileName, labelVideo } from './main-support';
 
@@ -546,6 +545,9 @@ function theExtractor(message: ExtractorMessage, dataObject?: any): void {
     MainCounter.itemInFinalArray = 0;
     MainCounter.screenShotFileNumber = 0;
     walkSync(selectedSourceFolder, []); // walkSync updates `finalArray`
+    if (demo) {
+      finalArray = finalArray.slice(0, 50);
+    }
     MainCounter.totalNumber = finalArray.length;
     console.log('there are a total of: ' + MainCounter.totalNumber + ' files to be extracted');
 
@@ -751,6 +753,9 @@ function reScanDirectory(inputFolder: string, pathToVhaFile: string): void {
 
       if (fs.existsSync(inputFolder)) {
         walkSync(inputFolder, []); // this method updates the `finalArray`
+        if (demo) {
+          finalArray = finalArray.slice(0, 50);
+        }
         findTheDiff(oldFileList, inputFolder);
       } else {
         dialog.showMessageBox({
