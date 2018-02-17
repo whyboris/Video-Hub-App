@@ -4,19 +4,40 @@
     class="titleBar"
     [ngClass]="{ 'dark-mode-override': settingsButtons['darkMode'].toggled }"
   >
-    <div class="draggable">
+    <div class="draggable" [ngStyle]="{ left: macVersion ? '70px' : '5px'}">
       <img width="10px" height="10px" src="../../../assets/logo.png">
       Video Hub App
       {{ demo ? ' demo - limited to 50 video files' : '' }}
       {{ appState.hubName ? ' - ' + appState.hubName : '' }}
     </div>
-    <div (click)="initiateMinimize()" class="winBtn minimizeButton">
+    <div
+      (click)="initiateMinimize()"
+      [ngClass]="{
+          'winBtn': !macVersion,
+          'macBtn': macVersion
+        }"
+      class="minimizeButton"
+    >
       <span class="icon icon-minus"></span>
     </div>
-    <div (click)="initiateMaximize()" class="winBtn maximizeButton">
+    <div
+      (click)="initiateMaximize()"
+      [ngClass]="{
+          'winBtn': !macVersion,
+          'macBtn': macVersion
+        }"
+      class="maximizeButton"
+    >
       <span class="icon icon-maximize"></span>
     </div>
-    <div (click)="initiateClose()" class="winBtn closeButton">
+    <div
+      (click)="initiateClose()"
+      [ngClass]="{
+          'winBtn': !macVersion,
+          'macBtn': macVersion
+        }"
+      class="closeButton"
+    >
       <span class="icon icon-close"></span>
     </div>
   </div>
