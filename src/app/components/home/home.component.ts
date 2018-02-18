@@ -72,9 +72,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   appState = AppState;
 
   // DEMO MODE TOGGLE !!!
-  demo = true;
+  demo = false;
   webDemo = false;
-  versionNumber = '1.0.0';
+  versionNumber = '0.9.9';
   macVersion = false;
 
   // REORGANIZE / keep
@@ -153,12 +153,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.toggleSettings();
         }
       } else if (event.key === 'f') {
-        this.showSidebar();
-        // focus on the search !!!
-        // console.log(this.searchRef);
-        if (this.searchRef.nativeElement.children.file) {
-          this.searchRef.nativeElement.children.file.focus();
+        if(this.settingsButtons['file'].toggled === false) {
+          // this.toggleButton('file');
+          this.settingsButtons['file'].toggled = true;
         }
+        this.showSidebar();
+        setTimeout(() => {
+          if (this.searchRef.nativeElement.children.file) {
+            // focus on the search !!!
+            this.searchRef.nativeElement.children.file.focus();
+          }
+        }, 1);
       } else if (event.key === 'n') {
         this.startWizard();
         this.buttonsInView = false;
@@ -317,10 +322,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     // Returning settings
-    this.electronService.ipcRenderer.on('settingsReturning', (event, settingsObject: SettingsObject) => {
+    this.electronService.ipcRenderer.on('settingsReturning', (event, settingsObject: SettingsObject, userWantedToOpen) => {
       this.vhaFileHistory = (settingsObject.vhaFileHistory || []);
       this.restoreSettingsFromBefore(settingsObject);
-      if (settingsObject.appState.currentVhaFile) {
+      if (userWantedToOpen) {
+        this.loadThisVhaFile(userWantedToOpen);
+      } else if (settingsObject.appState.currentVhaFile) {
         this.loadThisVhaFile(settingsObject.appState.currentVhaFile);
       } else {
         this.showWizard = true;

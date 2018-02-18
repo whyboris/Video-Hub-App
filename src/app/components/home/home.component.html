@@ -235,7 +235,7 @@
     >
 
       <div class="filteringTotal">
-        {{ appState.numOfFolders | number }} folders<br>
+        {{ appState.numOfFolders | number }} folder{{ appState.numOfFolders === 1 ? '' : 's' }}<br>
         {{ finalArray.length | number }} videos
       </div>
 

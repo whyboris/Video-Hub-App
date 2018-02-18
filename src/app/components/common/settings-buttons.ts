@@ -68,56 +68,56 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     toggled: true,
     iconName: 'icon-show-thumbnails',
     title: 'Show thumbnails',
-    description: 'Show thumbnails view',
+    description: 'Switches to the thumbnails view',
   },
   'showFilmstrip': {
     hidden: false,
     toggled: false,
     iconName: 'icon-show-filmstrip',
     title: 'Show filmstrip',
-    description: 'Show filmstrip view'
+    description: 'Switches to the filmstrip view'
   },
   'showFiles': {
     hidden: false,
     toggled: false,
     iconName: 'icon-show-filenames',
     title: 'Show files',
-    description: 'Show files view',
+    description: 'Switches to the files view',
   },
   'showMoreInfo': {
     hidden: false,
     toggled: true,
     iconName: 'icon-tag',
     title: 'Show more info',
-    description: 'Show more info'
+    description: 'Toggles showing file name, resolution, and video length'
   },
   'fontSizeLarger': {
     hidden: true,
     toggled: false,
     iconName: 'icon-larger',
     title: 'Toggle font size',
-    description: 'Make the font larger or smaller'
+    description: 'Toggles the font between larger and smaller'
   },
   'hoverScrub': {
     hidden: true,
     toggled: true,
     iconName: 'icon-toggle-scrub',
     title: 'Toggle hover animations',
-    description: 'Scrolling over preview shows different screenshots'
+    description: 'Toggles whether hovering the mouse over thumbnails or filmstrip shows video preview screenshots'
   },
   'randomImage': {
     hidden: true,
     toggled: false,
     iconName: 'icon-random',
     title: 'Show random screenshot',
-    description: 'Show random screenshot in the preview'
+    description: 'Toggles whether a random screenshot from each video is shown every time you search or scroll'
   },
   'randomizeGallery': {
     hidden: true,
     toggled: false,
     iconName: 'icon-random',
     title: 'Randomize gallery order',
-    description: 'Randomizes the order of video files every search'
+    description: 'Randomizes the order of video files after every search'
   },
   'shuffleGalleryNow': {
     hidden: false,
@@ -131,84 +131,86 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     toggled: true,
     iconName: 'icon-folder-blank',
     title: 'Show folders in file view',
-    description: 'Shows folder locations when in file view'
+    description: 'Shows folder locations in the file view'
   },
   'makeSmaller': {
     hidden: false,
     toggled: false,
     iconName: 'icon-minus',
     title: 'Decrease preview size',
-    description: 'Decrease preview size'
+    description: 'Decreases thumbnail and filmstrip preview sizes'
   },
   'makeLarger': {
     hidden: false,
     toggled: false,
     iconName: 'icon-plus',
     title: 'Increase preview size',
-    description: 'Increase preview size'
+    description: 'Increases thumbnail and filmstrip preview sizes'
   },
   'darkMode': {
     hidden: false,
     toggled: false,
     iconName: 'icon-darken',
     title: 'Dark mode',
-    description: 'Dark mode'
+    description: 'Toggles between dark and light mode'
   },
   'folderUnion': {
     hidden: true,
     toggled: false,
     iconName: 'icon-folder-plus',
     title: 'Folder union search',
-    description: 'Search in all folders containing any of the search words'
+    description: 'Toggles the search for all folders containing any of the search words'
   },
   'folder': {
     hidden: false,
     toggled: true,
     iconName: 'icon-folder-minus',
     title: 'Folder search',
-    description: 'Search in folders containing each of the search words'
+    description: 'Toggles the search for folders containing each of the search words'
   },
   'fileUnion': {
     hidden: true,
     toggled: false,
     iconName: 'icon-video-plus',
     title: 'Video union search',
-    description: 'Search for videos containing any of the search words'
+    description: 'Toggles the search for videos containing any of the search words'
   },
   'file': {
     hidden: false,
     toggled: true,
     iconName: 'icon-video-minus',
     title: 'Video search',
-    description: 'Search for videos containing each of the search words'
+    description: 'Toggles the search for videos containing each of the search words'
   },
   'exclude': {
     hidden: true,
     toggled: false,
     iconName: 'icon-video-x',
     title: 'Exclude filter',
-    description: 'Exclude any files that contain this string'
+    description: 'Toggles the search filter to exclude any files that contain the filter word'
   },
   'magic': {
     hidden: false,
     toggled: true,
     iconName: 'icon-looking-glass',
     title: 'Magic search',
-    description: 'Live search showing all files that contain the search term and every file inside a folder that contains the search term in its name'
+    description: 'Toggle the magic search which updates the results as you type. ' +
+      'Magic search displays all files that contain the search term ' +
+      'and every file inside any folder that contains the search term in its name'
   },
   'showFreq': {
     hidden: false,
     toggled: true,
     iconName: 'icon-cloud',
     title: 'Word cloud',
-    description: 'Show the nine most frequent words in current file names'
+    description: 'Toggles the word cloud which shows up to nine of the most frequent words in currently shown files'
   },
   'showRecent': {
     hidden: false,
     toggled: true,
     iconName: 'icon-show-filenames',
     title: 'Show recently opened hubs',
-    description: 'Show the recently opened video hubs'
+    description: 'Toggles the recently-opened video hub history'
   },
   'hideSidebar': {
     hidden: false,
@@ -222,14 +224,14 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     toggled: false,
     iconName: 'icon-chevron-up',
     title: 'Hide top',
-    description: 'Hide the top bar'
+    description: 'Hides the top bar'
   },
   'flatIcons': {
     hidden: false,
     toggled: false,
     iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
     title: 'Flat icons',
-    description: 'Flat icon style'
+    description: 'Toggles between flat and traditional button styles'
   },
   'startWizard': {
     hidden: false,
@@ -243,20 +245,22 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     toggled: false,
     iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
     title: 'Clear history',
-    description: 'Clear recently-opened history'
+    description: 'Clears the recently-opened history'
   },
   'resetSettings': {
     hidden: false,
     toggled: false,
     iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
     title: 'Reset settings',
-    description: 'Resets settings to their default values'
+    description: 'Resets settings and buttons to their default values'
   },
   'rescanDirectory': {
     hidden: false,
     toggled: false,
     iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
     title: 'Rescan directory',
-    description: 'Rescan input directory and update the current hub'
+    description: 'Rescans the video folder for any file changes ' +
+      '(addition, renaming, deletion of videos) ' +
+      'and updates the current hub'
   }
 }

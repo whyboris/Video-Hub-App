@@ -137,10 +137,10 @@ h3 {
 
 .buttonDescriptionText {
   color: $gray-50;
-  cursor: initial;
   display: block;
   font-size: 12px;
   left: 60px;
+  pointer-events: none;
   position: absolute;
   top: 3px;
 }

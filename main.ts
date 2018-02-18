@@ -275,7 +275,7 @@ ipc.on('just-started', function (event, someMessage) {
     if (err) {
       event.sender.send('noSettingsPresent');
     } else {
-      event.sender.send('settingsReturning', JSON.parse(data));
+      event.sender.send('settingsReturning', JSON.parse(data), userWantedToOpen);
     }
   });
 });
