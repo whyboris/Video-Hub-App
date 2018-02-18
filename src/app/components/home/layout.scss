@@ -11,6 +11,14 @@ $sidebar-width: 190px;
   user-select: none;
 }
 
+.reduceFlicker {
+  background: #eeeeee;
+  height: 100vh;
+  position: fixed;
+  width: 100vw;
+  z-index: 99999;
+}
+
 .progress-modal {
   background: $gray-10;
   border-radius: 10px;

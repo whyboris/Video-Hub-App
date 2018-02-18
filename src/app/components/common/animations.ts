@@ -78,12 +78,31 @@ export const textAppear = trigger('textAppear', [
   )]
 );
 
-export const myWizardAnimation = trigger('myWizardAnimation',
-  [
+export const myWizardAnimation = trigger('myWizardAnimation', [
     transition(
       ':leave', [
-        style({ transform: 'translateY(0)', opacity: 1 }),
-        animate('250ms 50ms ease-in', style({ transform: 'translateY(50px)', opacity: 0 }))
+        style({ opacity: 1 }),
+        animate('250ms 10ms ease-in', style({ opacity: 0 }))
+      ]
+    )
+  ]
+);
+
+export const slowFadeIn = trigger('slowFadeIn', [
+    transition(
+      ':enter', [
+        style({ opacity: 0 }),
+        animate('250ms 10ms ease-in', style({ opacity: 1 }))
+      ]
+    )
+  ]
+);
+
+export const slowFadeOut = trigger('slowFadeOut', [
+    transition(
+      ':leave', [
+        style({ opacity: 1 }),
+        animate('500ms 100ms ease-in', style({ opacity: 0 }))
       ]
     )
   ]

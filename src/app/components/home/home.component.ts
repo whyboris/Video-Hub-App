@@ -17,7 +17,16 @@ import { Filters } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from 'app/components/common/settings-buttons';
 import { WizardOptions } from '../common/wizard-options.interface';
 
-import { myAnimation, myAnimation2, myWizardAnimation, galleryItemAppear, topAnimation, historyItemRemove } from '../common/animations';
+import {
+  galleryItemAppear,
+  historyItemRemove,
+  myAnimation,
+  myAnimation2,
+  myWizardAnimation,
+  slowFadeIn,
+  slowFadeOut,
+  topAnimation
+} from '../common/animations';
 
 import { DemoContent } from '../../../assets/demo-content';
 
@@ -39,6 +48,8 @@ import { DemoContent } from '../../../assets/demo-content';
     myAnimation2,
     myWizardAnimation,
     topAnimation,
+    slowFadeIn,
+    slowFadeOut,
     historyItemRemove,
     galleryItemAppear
   ]
@@ -73,7 +84,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   currentPlayingFolder = '';
   magicSearchString = '';
 
-  showWizard = true;
+  showWizard = false; // set to true if `noSettingsPresent` message comes
 
   importDone = false;
   inProgress = false;
@@ -127,6 +138,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   };
 
   extractionPercent = 1;
+
+  flickerReduceOverlay = true;
 
   // Listen for key presses
   @HostListener('document:keydown', ['$event'])
@@ -304,6 +317,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (settingsObject.appState.currentVhaFile) {
         this.loadThisVhaFile(settingsObject.appState.currentVhaFile);
       }
+      this.flickerReduceOverlay = false;
+    });
+
+    this.electronService.ipcRenderer.on('noSettingsPresent', (event) => {
+      this.showWizard = true;
+      this.flickerReduceOverlay = false;
     });
 
     this.justStarted();
@@ -358,7 +377,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   // ---------------- INTERACT WITH ELECTRON ------------------ //
 
-  // Send initial hello message -- used to grab settings
+  /**
+   * Send initial `hello` message
+   * triggers function that grabs settings and sends them back with `settingsReturning`
+   */
   public justStarted(): void {
     this.electronService.ipcRenderer.send('just-started', 'lol');
   }
