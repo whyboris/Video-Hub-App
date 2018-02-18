@@ -4,7 +4,8 @@
   color: #333333;
   cursor: pointer;
   position: fixed;
-  transition: 100ms;
+  transition-property: color;
+  transition: 600ms;
 
   &.closeButton {
     right: 7px;
@@ -22,8 +23,9 @@
   }
 
   &:hover {
-    transition: 100ms;
     color: #ff6666;
+    transition-property: color;
+    transition: 200ms;
   }
 }
 

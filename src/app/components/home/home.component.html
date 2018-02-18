@@ -63,7 +63,7 @@
   <div
     *ngIf="buttonsInView"
     class="settingsModal"
-    @myAnimation
+    @modalAnimation
   >
 
     <div
@@ -438,7 +438,7 @@
 <div
   *ngIf="!importDone && progressPercent !== 0"
   class="progress-modal"
-  @myAnimation
+  @modalAnimation
 >
   <div class="progress-container">
     <div class="current-progress" [ngStyle]="{width: progressPercent * 100 + '%'}"></div>
@@ -543,7 +543,7 @@
     </div>
     <button
       (click)="selectOutputDirectory()"
-      [disabled]="wizard.selectedSourceFolder === ''"
+      [disabled]="wizard.selectedSourceFolder === '' || futureHubName === ''"
     >
       {{ wizard.selectedOutputFolder === '' ? 'Select' : 'Change' }} output directory
     </button>
@@ -563,7 +563,7 @@
 
     <select
       (change)="selectScreenshotSize($event.target.value)"
-      [disabled]="wizard.selectedOutputFolder === '' || wizard.selectedSourceFolder === ''"
+      [disabled]="wizard.selectedOutputFolder === '' || wizard.selectedSourceFolder === '' || futureHubName === ''"
       class="size-dropdown"
     >
       <option value="50">50px</option>
@@ -602,7 +602,10 @@
       5
     </div>
     <button
-      [disabled]="wizard.selectedOutputFolder === '' || wizard.selectedSourceFolder === '' || inProgress === true"
+      [disabled]="wizard.selectedOutputFolder === ''
+               || wizard.selectedSourceFolder === ''
+               || inProgress === true
+               || futureHubName === ''"
       (click)="importFresh()"
     >
       Start the import

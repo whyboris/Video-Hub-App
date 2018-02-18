@@ -20,8 +20,7 @@ import { WizardOptions } from '../common/wizard-options.interface';
 import {
   galleryItemAppear,
   historyItemRemove,
-  myAnimation,
-  myAnimation2,
+  modalAnimation,
   myWizardAnimation,
   slowFadeIn,
   slowFadeOut,
@@ -44,8 +43,7 @@ import { DemoContent } from '../../../assets/demo-content';
     './wizard.scss'
   ],
   animations: [
-    myAnimation,
-    myAnimation2,
+    modalAnimation,
     myWizardAnimation,
     topAnimation,
     slowFadeIn,
@@ -77,7 +75,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   demo = true;
   webDemo = false;
   versionNumber = '1.0.0';
-  macVersion = true;
+  macVersion = false;
 
   // REORGANIZE / keep
   currentPlayingFile = '';

@@ -1,16 +1,16 @@
 import { animate, state, style, transition, trigger } from '@angular/animations';
 
-export const myAnimation = trigger('myAnimation', [
+export const modalAnimation = trigger('modalAnimation', [
   transition(
     ':enter', [
-      style({ transform: 'translateY(50px)', opacity: 0 }),
+      style({ transform: 'translateY(10px)', opacity: 0 }),
       animate('250ms ease-in', style({ transform: 'translateY(0)', opacity: 1 }))
     ]
   ),
   transition(
     ':leave', [
       style({ transform: 'translateX(0)', 'opacity': 1 }),
-      animate('250ms ease-out', style({ transform: 'translateY(50px)', opacity: 0 }))
+      animate('250ms ease-out', style({ transform: 'translateY(10px)', opacity: 0 }))
     ]
   )]
 );
@@ -26,15 +26,6 @@ export const topAnimation = trigger('topAnimation', [
     ':leave', [
       style({ height: '45px'}),
       animate('300ms ease-in', style({ height: '0px' }))
-    ]
-  )]
-);
-
-export const myAnimation2 = trigger('myAnimation2', [
-  transition(
-    ':enter', [
-      style({ transform: 'translateY(15%)', opacity: 0 }),
-      animate('250ms ease-out', style({ transform: 'translateY(0)', opacity: 1 }))
     ]
   )]
 );
@@ -79,33 +70,30 @@ export const textAppear = trigger('textAppear', [
 );
 
 export const myWizardAnimation = trigger('myWizardAnimation', [
-    transition(
-      ':leave', [
-        style({ opacity: 1 }),
-        animate('250ms 10ms ease-in', style({ opacity: 0 }))
-      ]
-    )
-  ]
+  transition(
+    ':leave', [
+      style({ opacity: 1 }),
+      animate('250ms 10ms ease-in', style({ opacity: 0 }))
+    ]
+  )]
 );
 
 export const slowFadeIn = trigger('slowFadeIn', [
-    transition(
-      ':enter', [
-        style({ opacity: 0 }),
-        animate('250ms 10ms ease-in', style({ opacity: 1 }))
-      ]
-    )
-  ]
+  transition(
+    ':enter', [
+      style({ opacity: 0 }),
+      animate('250ms 10ms ease-in', style({ opacity: 1 }))
+    ]
+  )]
 );
 
 export const slowFadeOut = trigger('slowFadeOut', [
-    transition(
-      ':leave', [
-        style({ opacity: 1 }),
-        animate('500ms 100ms ease-in', style({ opacity: 0 }))
-      ]
-    )
-  ]
+  transition(
+    ':leave', [
+      style({ opacity: 1 }),
+      animate('500ms 100ms ease-in', style({ opacity: 0 }))
+    ]
+  )]
 );
 
 export const historyItemRemove = trigger('historyItemRemove', [
