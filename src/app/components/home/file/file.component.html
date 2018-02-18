@@ -6,12 +6,21 @@
 
   <div *ngIf="title === '*'; else fileNameBlock">
     <span class="icon icon-folder-blank"></span>
-    <span class="folder" [innerHtml]="folderPath | folderArrowsPipe : true"></span>
+    <span
+      [innerHtml]="folderPath | folderArrowsPipe : true"
+      [ngStyle]="{ color: darkMode ? '#999999' : '#333333' }"
+      class="folder"
+    ></span>
   </div>
 
   <ng-template #fileNameBlock>
 
-    <div class="size" *ngIf="showMeta" @metaAppear>
+    <div
+      *ngIf="showMeta"
+      [ngStyle]="{ color: darkMode ? '#555555' : '#BBBBBB' }"
+      class="size"
+      @metaAppear
+    >
       {{ rez }}
     </div>
 
@@ -19,17 +28,28 @@
       class="title"
       [ngStyle]="{
           width: 'calc(100% - ' + (showMeta ? '65px' : '10px') + ')',
-          margin: showMeta ? '0 30px' : '0 10px'
+          margin: showMeta ? '0 30px' : '0 10px',
+          color: darkMode ? '#777777' : '#444444'
         }"
       [ngClass]="{ 'larger-font': largerFont }"
     >
       {{ title }}
-      <div class="fileSize" *ngIf="showMeta" @metaAppear>
+      <div
+        *ngIf="showMeta"
+        [ngStyle]="{ color: darkMode ? '#555555' : '#666666' }"
+        class="fileSize"
+        @metaAppear
+      >
         {{ fileSize | fileSizePipe }}
       </div>
     </div>
 
-    <div class="length" *ngIf="showMeta" @metaAppear>
+    <div
+      *ngIf="showMeta"
+      [ngStyle]="{ color: darkMode ? '#555555' : '#BBBBBB' }"
+      class="length"
+      @metaAppear
+    >
       {{ time | lengthPipe }}
     </div>
 

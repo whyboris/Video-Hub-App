@@ -11,6 +11,14 @@ $sidebar-width: 190px;
   user-select: none;
 }
 
+.reduceFlicker {
+  background: #eeeeee;
+  height: 100vh;
+  position: fixed;
+  width: 100vw;
+  z-index: 99999;
+}
+
 .progress-modal {
   background: $gray-10;
   border-radius: 10px;
@@ -79,101 +87,6 @@ $sidebar-width: 190px;
   top: 4px;
   transition: 300ms;
   width: calc(100vw - 80px);
-}
-
-.winBtn {
-  color: #333333;
-  cursor: pointer;
-  position: fixed;
-  transition: 100ms;
-  &:hover {
-    transition: 100ms;
-    color: #ff6666;
-  }
-
-  &.closeButton {
-    right: 7px;
-    top: 2px;
-  }
-
-  &.maximizeButton {
-    right: 26px;
-    top: 2px;
-  }
-
-  &.minimizeButton {
-    right: 46px;
-    top: 2px;
-  }
-}
-
-.macBtn {
-  cursor: pointer;
-  position: fixed;
-  transition: 100ms;
-
-  height: 13px;
-  width: 13px;
-  padding: 0 0 0 3px;
-  box-sizing: border-box;
-  border-radius: 50%;
-  top: 3.5px;
-
-  &.closeButton {
-    background: #fe6058;
-    color: #c34944;
-    left: 7px;
-
-    & .icon {
-      transform: translate(0.5px, -3px) !important;
-    }
-  }
-
-  &.maximizeButton {
-    background: #29ca42;
-    color: #1c882c;
-    left: 48px;
-  }
-
-  &.minimizeButton {
-    background: #fec02f;
-    color: #c18e20;
-    left: 27px;
-
-    & .icon {
-      transform: translate(0, -3px) !important;
-    }
-  }
-
-  &:hover {
-    transition: 100ms;
-    color: #000000;
-  }
-
-  & .icon {
-    position: absolute;
-    transform: translate(1px, -3px);
-
-    &:before {
-      font-size: 12px;
-    }
-  }
-}
-
-.dark-mode-override { // needs to be after titleBar and winBtn and draggable
-  background: #222222;
-
-  & .draggable {
-    color: #888888;
-  }
-
-  & .winBtn {
-    color: #aaaaaa;
-    &:hover {
-      transition: 100ms;
-      color: #ff6666;
-    }
-  }
 }
 
 .top {

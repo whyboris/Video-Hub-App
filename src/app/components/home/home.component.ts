@@ -17,7 +17,15 @@ import { Filters } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from 'app/components/common/settings-buttons';
 import { WizardOptions } from '../common/wizard-options.interface';
 
-import { myAnimation, myAnimation2, myWizardAnimation, galleryItemAppear, topAnimation, historyItemRemove } from '../common/animations';
+import {
+  galleryItemAppear,
+  historyItemRemove,
+  modalAnimation,
+  myWizardAnimation,
+  slowFadeIn,
+  slowFadeOut,
+  topAnimation
+} from '../common/animations';
 
 import { DemoContent } from '../../../assets/demo-content';
 
@@ -26,6 +34,7 @@ import { DemoContent } from '../../../assets/demo-content';
   templateUrl: './home.component.html',
   styleUrls: [
     './layout.scss',
+    './top-buttons.scss',
     './settings.scss',
     './buttons.scss',
     './search.scss',
@@ -34,10 +43,11 @@ import { DemoContent } from '../../../assets/demo-content';
     './wizard.scss'
   ],
   animations: [
-    myAnimation,
-    myAnimation2,
+    modalAnimation,
     myWizardAnimation,
     topAnimation,
+    slowFadeIn,
+    slowFadeOut,
     historyItemRemove,
     galleryItemAppear
   ]
@@ -65,14 +75,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
   demo = true;
   webDemo = false;
   versionNumber = '1.0.0';
-  macVersion = true;
+  macVersion = false;
 
   // REORGANIZE / keep
   currentPlayingFile = '';
   currentPlayingFolder = '';
   magicSearchString = '';
 
-  showWizard = true;
+  showWizard = false; // set to true if `noSettingsPresent` message comes
 
   importDone = false;
   inProgress = false;
@@ -106,14 +116,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   vhaFileHistory: HistoryItem[] = [];
 
-  futureHubName = '';
-
   fullPathToCurrentFile = '';
 
   shuffleTheViewNow = 0; // dummy number to force re-shuffle current view
 
   allScreenShotsExtracted = true;
 
+  futureHubName = '';
   hubNameToRemember = '';
   importStage = 0;
 
@@ -128,10 +137,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   extractionPercent = 1;
 
+  flickerReduceOverlay = true;
+
   // Listen for key presses
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
-    if (event.ctrlKey === true) {
+    // .metaKey is for mac `command` button
+    if (event.ctrlKey === true || event.metaKey) {
       if (event.key === 's') {
         this.shuffleTheViewNow++;
       } else if (event.key === 'o') {
@@ -294,6 +306,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.showWizard = false;
       this.finalArray = this.demo ? finalObject.images.slice(0, 50) : finalObject.images;
       this.buildFileMap();
+      this.flickerReduceOverlay = false;
     });
 
     // Returning settings
@@ -302,7 +315,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.restoreSettingsFromBefore(settingsObject);
       if (settingsObject.appState.currentVhaFile) {
         this.loadThisVhaFile(settingsObject.appState.currentVhaFile);
+      } else {
+        this.showWizard = true;
+        this.flickerReduceOverlay = false;
       }
+    });
+
+    this.electronService.ipcRenderer.on('noSettingsPresent', (event) => {
+      // Correlated with the first time ever starting the app !!!
+      this.showWizard = true;
+      this.flickerReduceOverlay = false;
     });
 
     this.justStarted();
@@ -357,7 +379,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   // ---------------- INTERACT WITH ELECTRON ------------------ //
 
-  // Send initial hello message -- used to grab settings
+  /**
+   * Send initial `hello` message
+   * triggers function that grabs settings and sends them back with `settingsReturning`
+   */
   public justStarted(): void {
     this.electronService.ipcRenderer.send('just-started', 'lol');
   }
@@ -640,6 +665,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Start the wizard again
    */
   public startWizard(): void {
+    this.futureHubName = '';
+    this.wizard = {
+      totalNumberOfFiles: -1,
+      totalImportTime: 0,
+      totalImportSize: 0,
+      selectedSourceFolder: '',
+      selectedOutputFolder: ''
+    };
     this.toggleSettings();
     this.showWizard = true;
   }

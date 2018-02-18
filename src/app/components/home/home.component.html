@@ -42,6 +42,12 @@
     </div>
   </div>
 
+  <div
+    *ngIf="flickerReduceOverlay !== false"
+    class="reduceFlicker"
+    @slowFadeOut
+  ></div>
+
   <div *ngIf="importStage === 2" class="cancelProgress">
     <span class="cancelImport" (click)="cancelCurrentImport()">cancel</span>
   </div>
@@ -57,7 +63,7 @@
   <div
     *ngIf="buttonsInView"
     class="settingsModal"
-    @myAnimation
+    @modalAnimation
   >
 
     <div
@@ -417,6 +423,7 @@
           [elHeight]="20"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
+          [darkMode]="settingsButtons['darkMode'].toggled"
         ></app-file-item>
       </ng-container>
 
@@ -431,7 +438,7 @@
 <div
   *ngIf="!importDone && progressPercent !== 0"
   class="progress-modal"
-  @myAnimation
+  @modalAnimation
 >
   <div class="progress-container">
     <div class="current-progress" [ngStyle]="{width: progressPercent * 100 + '%'}"></div>
@@ -451,7 +458,7 @@
     <span class="icon icon-close"></span>
   </div>
 
-  <div class="left-side">
+  <div class="left-side" @slowFadeIn>
 
     <h2>Open previous hub</h2>
 
@@ -477,7 +484,7 @@
 
   </div>
 
-  <div class="right-side">
+  <div class="right-side" @slowFadeIn>
 
     <h2>Import new hub</h2>
 
@@ -501,7 +508,7 @@
 
     <div
       [ngClass]="{
-          'current-step': futureHubName !== '' && appState.selectedSourceFolder === '',
+          'current-step': futureHubName !== '' && wizard.selectedSourceFolder === '',
           'fulfilled': wizard.selectedSourceFolder !== ''
         }"
       class="steps"
@@ -536,7 +543,7 @@
     </div>
     <button
       (click)="selectOutputDirectory()"
-      [disabled]="wizard.selectedSourceFolder === ''"
+      [disabled]="wizard.selectedSourceFolder === '' || futureHubName === ''"
     >
       {{ wizard.selectedOutputFolder === '' ? 'Select' : 'Change' }} output directory
     </button>
@@ -556,7 +563,7 @@
 
     <select
       (change)="selectScreenshotSize($event.target.value)"
-      [disabled]="wizard.selectedOutputFolder === '' || wizard.selectedSourceFolder === ''"
+      [disabled]="wizard.selectedOutputFolder === '' || wizard.selectedSourceFolder === '' || futureHubName === ''"
       class="size-dropdown"
     >
       <option value="50">50px</option>
@@ -595,7 +602,10 @@
       5
     </div>
     <button
-      [disabled]="wizard.selectedOutputFolder === '' || wizard.selectedSourceFolder === '' || inProgress === true"
+      [disabled]="wizard.selectedOutputFolder === ''
+               || wizard.selectedSourceFolder === ''
+               || inProgress === true
+               || futureHubName === ''"
       (click)="importFresh()"
     >
       Start the import

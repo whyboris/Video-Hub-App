@@ -11,6 +11,31 @@
   z-index: 30;
   height: calc(100vh - 50px);
 
+  button {
+    background: #DDDDDD;
+    border-radius: 10px;
+    border: 1px solid #a7a7a7;
+    margin: 15px;
+    max-height: 50px;
+    max-width: 300px;
+    padding: 10px;
+    transition-property: background-color, box-shadow, color;
+    transition: 300ms;
+
+    &:enabled {
+      box-shadow: 1px 2px 4px rgba(0,0,0,0.5);
+    }
+
+    &:hover {
+      background: #EEEEEE;
+    }
+
+    &:disabled {
+      cursor: initial;
+      pointer-events: none;
+    }
+  }
+
   h1 {
     font-size: 14px;
     color: $gray-60;
@@ -178,18 +203,6 @@
       cursor: pointer;
     }
     margin: 24px 14px 14px;
-  }
-
-  button {
-    margin: 15px;
-    max-height: 50px;
-    max-width: 300px;
-    padding: 10px;
-
-    &:disabled {
-      cursor: initial;
-      pointer-events: none;
-    }
   }
 
   @include scrollBarHidden;
