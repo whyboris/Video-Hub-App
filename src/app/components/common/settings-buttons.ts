@@ -99,7 +99,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'Make the font larger or smaller'
   },
   'hoverScrub': {
-    hidden: false,
+    hidden: true,
     toggled: true,
     iconName: 'icon-toggle-scrub',
     title: 'Toggle hover animations',
@@ -107,7 +107,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'randomImage': {
     hidden: true,
-    toggled: true,
+    toggled: false,
     iconName: 'icon-random',
     title: 'Show random screenshot',
     description: 'Show random screenshot in the preview'
@@ -117,7 +117,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     toggled: false,
     iconName: 'icon-random',
     title: 'Randomize gallery order',
-    description: 'Randomizes the video file order in view'
+    description: 'Randomizes the order of video files every search'
   },
   'shuffleGalleryNow': {
     hidden: false,

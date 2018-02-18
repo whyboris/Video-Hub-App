@@ -308,6 +308,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.showWizard = false;
       this.finalArray = this.demo ? finalObject.images.slice(0, 50) : finalObject.images;
       this.buildFileMap();
+      this.flickerReduceOverlay = false;
     });
 
     // Returning settings
@@ -316,11 +317,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.restoreSettingsFromBefore(settingsObject);
       if (settingsObject.appState.currentVhaFile) {
         this.loadThisVhaFile(settingsObject.appState.currentVhaFile);
+      } else {
+        this.showWizard = true;
+        this.flickerReduceOverlay = false;
       }
-      this.flickerReduceOverlay = false;
     });
 
     this.electronService.ipcRenderer.on('noSettingsPresent', (event) => {
+      // Correlated with the first time ever starting the app !!!
       this.showWizard = true;
       this.flickerReduceOverlay = false;
     });

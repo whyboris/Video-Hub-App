@@ -210,9 +210,13 @@ let currentOpenVhaFilename = '';
 
 let cancelCurrentImport = false;
 
-// METHOD TO OPEN DOUBLE-CLICKED FILE !!!!!!!!!!!!!
-function openThisDamnFile(pathToVhaFile) {
+/**
+ * Load the .vha file and send it to app
+ * @param pathToVhaFile full path to the .vha file
+ */
+function openThisDamnFile(pathToVhaFile: string) {
 
+  // TODO ### !!! figure out how to open file when double click first time
   macFirstRun = false;
 
   console.log('the app is about to open: ' + pathToVhaFile);
@@ -235,19 +239,19 @@ function openThisDamnFile(pathToVhaFile) {
       );
     }
   });
-
 }
 
 // ============================================================
 // Methods that interact with Angular
 // ============================================================
 
+const pathToAppData = app.getPath('appData');
+
 /**
  * Close the window
  */
 ipc.on('close-window', function (event, settingsToSave) {
   const json = JSON.stringify(settingsToSave);
-  const pathToAppData = app.getPath('appData')
 
   try {
     fs.statSync(path.join(pathToAppData, 'video-hub-app'));
@@ -266,11 +270,10 @@ ipc.on('close-window', function (event, settingsToSave) {
  */
 ipc.on('just-started', function (event, someMessage) {
   angularApp = event;
-  const pathToAppData = app.getPath('appData')
+
   fs.readFile(path.join(pathToAppData, 'video-hub-app', 'settings.json'), (err, data) => {
     if (err) {
-      // TODO -- better error handling
-      // console.log(err);
+      event.sender.send('noSettingsPresent');
     } else {
       event.sender.send('settingsReturning', JSON.parse(data));
     }
