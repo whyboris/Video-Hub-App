@@ -4,12 +4,20 @@
     class="titleBar"
     [ngClass]="{ 'dark-mode-override': settingsButtons['darkMode'].toggled }"
   >
-    <div class="draggable" [ngStyle]="{ left: macVersion ? '70px' : '5px'}">
-      <img width="10px" height="10px" src="../../../assets/logo.png">
-      Video Hub App
-      <b>{{ demo ? ' demo - limited to 50 video files ' : '' }}</b>
-      {{ importStage !== 0 ? ' - ' + progressString + ' - ' : ' - ' }}
-      {{ appState.hubName }}
+    <div
+      class="draggable"
+      [ngStyle]="{
+          left: macVersion ? '65px' : '5px',
+          'text-align': macVersion ? 'center' : 'left'
+        }"
+    >
+      <img width="16px" height="16px" class="top-logo" src="../../../assets/logo.png">
+      <span class="heading-title">
+        Video Hub App
+        <b>{{ demo ? ' demo - limited to 50 video files ' : '' }}</b>
+        {{ importStage !== 0 ? ' - ' + progressString + ' - ' : ' - ' }}
+        {{ appState.hubName }}
+      </span>
     </div>
     <div
       (click)="initiateMinimize()"

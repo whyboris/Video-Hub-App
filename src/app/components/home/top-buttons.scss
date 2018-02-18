@@ -1,5 +1,14 @@
 @import "variables";
 
+.top-logo {
+  margin: -2px 8px 0 4px;
+}
+
+.heading-title {
+  display: inline-block;
+  transform: translate(0, -3px);
+}
+
 .winBtn {
   color: #333333;
   cursor: pointer;
