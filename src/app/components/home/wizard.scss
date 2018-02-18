@@ -16,6 +16,7 @@
     border-radius: 10px;
     border: 1px solid #a7a7a7;
     margin: 15px;
+    min-width: 190px;
     max-height: 50px;
     max-width: 300px;
     padding: 10px;
@@ -168,7 +169,7 @@
     text-align: center;
     transition: 300ms;
     transition-property: width, height;
-    transform: translate(187px, -56px);
+    transform: translate(230px, -56px);
   }
 
   .path {
