@@ -78,6 +78,7 @@
     <div
       (click)="toggleSettings()"
       class="closeSettings"
+      title="Close settings"
     >
       <span class="icon icon-close"></span>
     </div>
@@ -215,6 +216,7 @@
         (click)="toggleSettings()"
         [ngClass]="{ gearButtonActive: buttonsInView }"
         class="gearButton"
+        title="Settings"
       >
         <span class="icon icon-gear"></span>
       </div>
@@ -279,6 +281,7 @@
 
         </ng-container>
       </ng-container>
+      <!-- end of regular search inputs -->
 
       <!-- magic search -->
       <ng-container *ngIf="settingsButtons['magic'].toggled">
@@ -307,6 +310,7 @@
           </span>
         </div>
       </ng-container>
+      <!-- end of magic search -->
 
       <!-- total found -->
       <div class="filteringTotal">
@@ -465,7 +469,7 @@
 
 <div *ngIf="showWizard" class="wizard" @myWizardAnimation>
 
-  <div *ngIf="canCloseWizard" (click)="hideWizard()" class="closeWizard">
+  <div *ngIf="canCloseWizard" (click)="hideWizard()" class="closeWizard" title="Close wizard">
     <span class="icon icon-close"></span>
   </div>
 
@@ -473,7 +477,7 @@
 
     <h2>Open previous hub</h2>
 
-    <button (click)="loadFromFile()">
+    <button (click)="loadFromFile()" title="Open a previously-saved Video Hub">
       Load from file
     </button>
 
@@ -483,7 +487,11 @@
 
       <ul>
         <li *ngFor="let historyItem of vhaFileHistory; index as i" (click)="openFromHistory(i)" @historyItemRemove>
-          <span class="icon icon-close clear-history-item" (click)="removeFromHistory($event, i)"></span>
+          <span
+            (click)="removeFromHistory($event, i)"
+            class="icon icon-close clear-history-item"
+            title="Remove this item from recent history"
+          ></span>
           {{ historyItem.hubName }}
           <br>
           <span class="path recent" [innerHtml]="historyItem.vhaFilePath | folderArrowsPipe : false"></span>
@@ -529,8 +537,9 @@
     <button
       (click)="selectSourceDirectory()"
       [disabled]="futureHubName === ''"
+      title="Please select the folder with your video files"
     >
-      {{ wizard.selectedSourceFolder === '' ? 'Select' : 'Change' }} input directory
+      {{ wizard.selectedSourceFolder === '' ? 'Select' : 'Change' }} video directory
     </button>
 
     <span class="step-description">
@@ -555,12 +564,13 @@
     <button
       (click)="selectOutputDirectory()"
       [disabled]="wizard.selectedSourceFolder === '' || futureHubName === ''"
+      title="Please select the folder where your Video Hub will be stored"
     >
-      {{ wizard.selectedOutputFolder === '' ? 'Select' : 'Change' }} output directory
+      {{ wizard.selectedOutputFolder === '' ? 'Select' : 'Change' }} hub directory
     </button>
 
     <span class="step-description">
-      Saving screenshots to:
+      Saving the video hub and screenshots to:
     </span>
     <span class="path" [innerHtml]="wizard.selectedOutputFolder | folderArrowsPipe : false">
     </span>
@@ -616,10 +626,11 @@
       [disabled]="wizard.selectedOutputFolder === ''
                || wizard.selectedSourceFolder === ''
                || inProgress === true
-               || futureHubName === ''"
+               || futureHubName === ''
+               || wizard.totalNumberOfFiles === 0"
       (click)="importFresh()"
     >
-      Start the import
+      Create the Video Hub
     </button>
 
     <span class="description" *ngIf="wizard.totalNumberOfFiles !== -1">

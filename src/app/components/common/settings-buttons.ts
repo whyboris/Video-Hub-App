@@ -130,8 +130,8 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     hidden: true,
     toggled: true,
     iconName: 'icon-folder-blank',
-    title: 'Show folder in file view',
-    description: 'Shows folder location when in file view'
+    title: 'Show folders in file view',
+    description: 'Shows folder locations when in file view'
   },
   'makeSmaller': {
     hidden: false,
@@ -194,7 +194,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     toggled: true,
     iconName: 'icon-looking-glass',
     title: 'Magic search',
-    description: 'Live search showing all files and files inside folders that contain search words'
+    description: 'Live search showing all files that contain the search term and every file inside a folder that contains the search term in its name'
   },
   'showFreq': {
     hidden: false,
@@ -207,7 +207,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     hidden: false,
     toggled: true,
     iconName: 'icon-show-filenames',
-    title: 'Show recently opened',
+    title: 'Show recently opened hubs',
     description: 'Show the recently opened video hubs'
   },
   'hideSidebar': {
@@ -236,7 +236,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     toggled: false,
     iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
     title: 'Start wizard',
-    description: 'Start wizard again'
+    description: 'Starts wizard again'
   },
   'clearHistory': {
     hidden: false,
