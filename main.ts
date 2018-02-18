@@ -341,37 +341,51 @@ ipc.on('choose-output', function (event, someMessage) {
     properties: ['openDirectory']
   }, function (files) {
     if (files) {
-      // console.log('the user has chosen this OUTPUT directory: ' + files[0]);
       selectedOutputFolder = files[0];
-
-      // create "/vha-images" inside the output directory it so that there is no `EEXIST` error when extracting.
-      if (!fs.existsSync(path.join(selectedOutputFolder, 'vha-images'))) {
-        // console.log('vha-images folder did not exist, creating');
-        fs.mkdirSync(path.join(selectedOutputFolder, 'vha-images'));
-      }
-
-      // store the reference to the Angular app
-      angularApp = event;
-
       event.sender.send('outputFolderChosen', selectedOutputFolder);
     }
   })
 });
 
+let hubFolderNameForSaving = ''; // will be something like `vha-hubName`
+
 /**
  * Start extracting the screenshots into a chosen output folder from a chosen input folder
  */
 ipc.on('start-the-import', function (event, options) {
-  screenShotSize = options.imgHeight;
-  hubName = options.hubName;
-  theExtractor('freshStart');
+
+  // make sure no hub name under the same name exists
+  if (fs.existsSync(path.join(selectedOutputFolder, options.hubName + '.vha'))) {
+
+    dialog.showMessageBox({
+      message: 'Hub already exists with this name. \n' +
+        'Please change the hub name above',
+      buttons: ['OK']
+    });
+
+    event.sender.send('pleaseFixHubName');
+
+  } else {
+
+    // create the folder `vha-hubName` inside the output directory
+    if (!fs.existsSync(path.join(selectedOutputFolder, 'vha-' + options.hubName))) {
+      console.log('vha-hubName folder did not exist, creating');
+      fs.mkdirSync(path.join(selectedOutputFolder, 'vha-' + options.hubName));
+    }
+
+    hubFolderNameForSaving = 'vha-' + options.hubName;
+
+    screenShotSize = options.imgHeight;
+    hubName = options.hubName;
+    theExtractor('freshStart');
+  }
+
 });
 
 /**
  * Initiate rescan of the directory
  */
 ipc.on('rescan-current-directory', function (event, inputAndVhaFile) {
-  angularApp = event;
   currentOpenVhaFilename = extractFileName(inputAndVhaFile.pathToVhaFile);
   reScanDirectory(inputAndVhaFile.inputFolder, inputAndVhaFile.pathToVhaFile);
 });
@@ -382,8 +396,6 @@ ipc.on('rescan-current-directory', function (event, inputAndVhaFile) {
  * send settings object to App
  */
 ipc.on('system-open-file-through-modal', function (event, somethingElse) {
-  angularApp = event;
-
   dialog.showOpenDialog({
       title: 'Please select a previously-saved Video Hub file',
       filters: [{
@@ -408,7 +420,6 @@ ipc.on('system-open-file-through-modal', function (event, somethingElse) {
 ipc.on('load-this-vha-file', function (event, pathToVhaFile) {
   // TODO -- streamline this variable and openThisDamnFileFunction
   userWantedToOpen = pathToVhaFile;
-  angularApp = event;
   openThisDamnFile(pathToVhaFile);
 });
 
@@ -601,7 +612,7 @@ function takeTenScreenshots(pathToFile: string, fileNumber: number, firstScan: b
         timemarks: [timestamps[i]],
         filename: fileNumber + `-${i + 1}.jpg`,
         size: '?x' + screenShotSize
-      }, path.join(selectedOutputFolder, 'vha-images'))
+      }, path.join(selectedOutputFolder, hubFolderNameForSaving))
       .on('end', () => {
         i = i + 1;
         if (i < count) {

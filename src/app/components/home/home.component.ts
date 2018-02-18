@@ -139,6 +139,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   flickerReduceOverlay = true;
 
+  progressString = '';
+
   // Listen for key presses
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -264,6 +266,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.wizard.selectedOutputFolder = filePath;
     });
 
+    // Happens if a file with the same hub name already exists in the directory
+    this.electronService.ipcRenderer.on('pleaseFixHubName', (event) => {
+      this.inProgress = false;
+    });
+
     // Progress bar messages
     // for META EXTRACTION
     this.electronService.ipcRenderer.on('processingProgress', (event, a: number, b: number, stage: number) => {
@@ -271,7 +278,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.progressNum1 = a;
       this.progressNum2 = b;
       this.progressPercent = a / b;
-      this.appState.hubName = 'loading - ' + Math.round(a * 100 / b) + '%';
+      this.progressString = 'loading - ' + Math.round(a * 100 / b) + '%';
       if (this.importStage === 2) {
         this.extractionPercent = Math.round(100 * a / b);
       }

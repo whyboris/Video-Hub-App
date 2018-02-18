@@ -16,6 +16,7 @@ export class FilmstripComponent implements OnInit {
   @Input() fileSize: number;
   @Input() folderPath: string;
   @Input() hoverScrub: boolean;
+  @Input() hubName: string;
   @Input() imgHeight: number;
   @Input() imgId: any;
   @Input() imgWidth: number;
@@ -52,7 +53,7 @@ export class FilmstripComponent implements OnInit {
     this.imgId = [];
 
     for (let i = 0; i < 10; i++) {
-      this.imgId[i] = 'vha-images/' + fileNumber + '-' + (i + 1) + '.jpg';
+      this.imgId[i] = 'vha-' + this.hubName + '/' + fileNumber + '-' + (i + 1) + '.jpg';
       this.indexArray[i] = 10 - i;
     }
   }
