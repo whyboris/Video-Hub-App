@@ -7,8 +7,9 @@
     <div class="draggable" [ngStyle]="{ left: macVersion ? '70px' : '5px'}">
       <img width="10px" height="10px" src="../../../assets/logo.png">
       Video Hub App
-      {{ demo ? ' demo - limited to 50 video files' : '' }}
-      {{ appState.hubName ? ' - ' + appState.hubName : '' }}
+      <b>{{ demo ? ' demo - limited to 50 video files ' : '' }}</b>
+      {{ importStage !== 0 ? ' - ' + progressString + ' - ' : ' - ' }}
+      {{ appState.hubName }}
     </div>
     <div
       (click)="initiateMinimize()"
@@ -384,6 +385,7 @@
           [imgHeight]="imgHeight"
           [elHeight]="imgHeight + textPaddingHeight"
           [elWidth]="previewWidth"
+          [hubName]="appState.hubName"
           [folderPath]="appState.selectedOutputFolder"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
@@ -404,6 +406,7 @@
           [elHeight]="imgHeight + textPaddingHeight"
           [imgWidth]="(imgHeight / 100) * item[6] || (imgHeight / 100) * 171"
           [imgHeight]="imgHeight"
+          [hubName]="appState.hubName"
           [folderPath]="appState.selectedOutputFolder"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
