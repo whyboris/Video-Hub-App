@@ -153,8 +153,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.toggleSettings();
         }
       } else if (event.key === 'f') {
-        if(this.settingsButtons['file'].toggled === false) {
-          // this.toggleButton('file');
+        if (this.settingsButtons['file'].toggled === false) {
           this.settingsButtons['file'].toggled = true;
         }
         this.showSidebar();
@@ -189,7 +188,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
       } else if (event.key === 'a') {
         this.toggleButton('hideSidebar');
       } else if (event.key === 'q') {
-        this.magicSearch.nativeElement.focus();
+        if (!this.settingsButtons['magic'].toggled) {
+          this.settingsButtons['magic'].toggled = true;
+        }
+        this.showSidebar();
+        setTimeout(() => {
+          this.magicSearch.nativeElement.focus();
+        }, 1);
       }
     } else if (event.key === 'Escape' && this.showWizard === true && this.canCloseWizard === true) {
       this.showWizard = false;
@@ -335,8 +340,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     });
 
-    this.electronService.ipcRenderer.on('noSettingsPresent', (event) => {
+    this.electronService.ipcRenderer.on('pleaseOpenWizard', (event) => {
       // Correlated with the first time ever starting the app !!!
+      // Can happen when no settings present
+      // Can happen when trying to open a .vha file that no longer exists
       this.showWizard = true;
       this.flickerReduceOverlay = false;
     });

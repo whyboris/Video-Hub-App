@@ -12,6 +12,7 @@ import { galleryItemAppear, metaAppear, textAppear } from '../../common/animatio
 })
 export class PreviewComponent implements OnInit, OnDestroy {
 
+  @Input() darkMode: boolean;
   @Input() elHeight: number;
   @Input() elWidth: number;
   @Input() fileSize: number;

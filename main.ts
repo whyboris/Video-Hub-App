@@ -16,8 +16,13 @@ const dialog = require('electron').dialog;
 let userWantedToOpen = null;
 let myWindow = null
 
+// ========================================================================================
+// ****************************************************************************************
 // DEMO VARIABLE !!!
-const demo = true;
+const demo = false;
+// DEMO VARIABLE !!!
+// ****************************************************************************************
+// ========================================================================================
 
 // For windows -- when loading the app the first time
 if (process.argv[1]) {
@@ -63,27 +68,32 @@ function createWindow() {
   const electronScreen = screen;
   const size = electronScreen.getPrimaryDisplay().workAreaSize;
 
-  let xPos: number;
-  let yPos: number;
-  let appWidth: number;
-  let appHeight: number;
+  const xPos = 0;
+  const yPos = 0;
+  const appWidth = size.width;
+  const appHeight = size.height;
 
-  if (size.width < 1281) {
-    xPos = 100;
-    yPos = 30;
-    appWidth = size.width - 200;
-    appHeight = size.height - 60;
-  } else if (size.width < 1921) {
-    xPos = 200;
-    yPos = 100;
-    appWidth = size.width - 400;
-    appHeight = size.height - 200;
-  } else {
-    xPos = 400;
-    yPos = 200;
-    appWidth = size.width - 800;
-    appHeight = size.height - 400;
-  }
+  // let xPos: number;
+  // let yPos: number;
+  // let appWidth: number;
+  // let appHeight: number;
+
+  // if (size.width < 1281) {
+  //   xPos = 100;
+  //   yPos = 30;
+  //   appWidth = size.width - 200;
+  //   appHeight = size.height - 60;
+  // } else if (size.width < 1921) {
+  //   xPos = 200;
+  //   yPos = 100;
+  //   appWidth = size.width - 400;
+  //   appHeight = size.height - 200;
+  // } else {
+  //   xPos = 400;
+  //   yPos = 200;
+  //   appWidth = size.width - 800;
+  //   appHeight = size.height - 400;
+  // }
 
   // Create the browser window.
   win = new BrowserWindow({
@@ -233,6 +243,7 @@ function openThisDamnFile(pathToVhaFile: string) {
           pathToVhaFile,
         buttons: ['OK']
       });
+      angularApp.sender.send('pleaseOpenWizard');
     } else {
       angularApp.sender.send(
         'finalObjectReturning', JSON.parse(data), pathToVhaFile, extractFileName(pathToVhaFile)
@@ -273,7 +284,7 @@ ipc.on('just-started', function (event, someMessage) {
 
   fs.readFile(path.join(pathToAppData, 'video-hub-app', 'settings.json'), (err, data) => {
     if (err) {
-      event.sender.send('noSettingsPresent');
+      event.sender.send('pleaseOpenWizard');
     } else {
       event.sender.send('settingsReturning', JSON.parse(data), userWantedToOpen);
     }
