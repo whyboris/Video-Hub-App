@@ -12,6 +12,7 @@ import { galleryItemAppear, metaAppear, textAppear } from '../../common/animatio
 })
 export class FilmstripComponent implements OnInit {
 
+  @Input() darkMode: boolean;
   @Input() elHeight: number;
   @Input() fileSize: number;
   @Input() folderPath: string;

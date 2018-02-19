@@ -1,8 +1,8 @@
 <div
   [ngStyle]="{
-    height: elHeight + 'px',
-    width: elWidth + 'px'
-  }"
+      height: elHeight + 'px',
+      width: elWidth + 'px'
+    }"
   class="filmstrip-container"
   @galleryItemAppear
 >
@@ -32,12 +32,12 @@
     class="screencap"
   >
 
-
 </div>
 
 <span
   *ngIf="showMeta"
   [ngClass]="{ 'larger-font': largerFont }"
+  [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
   class="title"
   @textAppear
 >

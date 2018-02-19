@@ -153,7 +153,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.toggleSettings();
         }
       } else if (event.key === 'f') {
-        if(this.settingsButtons['file'].toggled === false) {
+        if (this.settingsButtons['file'].toggled === false) {
           // this.toggleButton('file');
           this.settingsButtons['file'].toggled = true;
         }
@@ -335,8 +335,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     });
 
-    this.electronService.ipcRenderer.on('noSettingsPresent', (event) => {
+    this.electronService.ipcRenderer.on('pleaseOpenWizard', (event) => {
       // Correlated with the first time ever starting the app !!!
+      // Can happen when no settings present
+      // Can happen when trying to open a .vha file that no longer exists
       this.showWizard = true;
       this.flickerReduceOverlay = false;
     });

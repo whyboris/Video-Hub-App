@@ -238,7 +238,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     toggled: false,
     iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
     title: 'Start wizard',
-    description: 'Starts wizard again'
+    description: 'Starts wizard again: create a new video hub or open recent'
   },
   'clearHistory': {
     hidden: false,
