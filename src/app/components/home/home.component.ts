@@ -154,7 +154,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
         }
       } else if (event.key === 'f') {
         if (this.settingsButtons['file'].toggled === false) {
-          // this.toggleButton('file');
           this.settingsButtons['file'].toggled = true;
         }
         this.showSidebar();
@@ -189,7 +188,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
       } else if (event.key === 'a') {
         this.toggleButton('hideSidebar');
       } else if (event.key === 'q') {
-        this.magicSearch.nativeElement.focus();
+        if (!this.settingsButtons['magic'].toggled) {
+          this.settingsButtons['magic'].toggled = true;
+        }
+        this.showSidebar();
+        setTimeout(() => {
+          this.magicSearch.nativeElement.focus();
+        }, 1);
       }
     } else if (event.key === 'Escape' && this.showWizard === true && this.canCloseWizard === true) {
       this.showWizard = false;
