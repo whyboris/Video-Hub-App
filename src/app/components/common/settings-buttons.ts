@@ -11,6 +11,7 @@ export const SettingsButtonsGroups: string[][] = [
     'file',
     'exclude',
     'magic',
+    'resolutionFilter',
   ],
   [
     'showFreq',
@@ -197,6 +198,13 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'Toggle the magic search which updates the results as you type. ' +
       'Magic search displays all files that contain the search term ' +
       'and every file inside any folder that contains the search term in its name'
+  },
+  'resolutionFilter': {
+    hidden: false,
+    toggled: true,
+    iconName: 'icon-show-filenames',
+    title: 'Resolution filter',
+    description: 'Toggles the resolution filter'
   },
   'showFreq': {
     hidden: false,

@@ -19,6 +19,7 @@ import { FileComponent } from 'app/components/home/file/file.component';
 import { FilmstripComponent } from 'app/components/home/filmstrip/filmstrip.component';
 import { HomeComponent } from './components/home/home.component';
 import { PreviewComponent } from './components/home/thumbnail/preview.component';
+import { ResolutionFilterService } from './components/pipes/resolution-filter.service';
 import { TopComponent } from './components/home/top/top.component';
 
 import { CountPipe } from './components/pipes/count.pipe';
@@ -29,6 +30,7 @@ import { FolderViewPipe } from 'app/components/pipes/folder-view.pipe';
 import { LengthPipe } from './components/pipes/length.pipe';
 import { MagicSearchPipe } from './components/pipes/magic-search.pipe';
 import { RandomizePipe } from './components/pipes/randomize.pipe';
+import { ResolutionFilterPipe } from './components/pipes/resolution-filter.pipe';
 import { WordFrequencyPipe } from 'app/components/pipes/word-frequency.pipe';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -49,6 +51,7 @@ import { AppRoutingModule } from './app-routing.module';
     MagicSearchPipe,
     PreviewComponent,
     RandomizePipe,
+    ResolutionFilterPipe,
     TopComponent,
     WordFrequencyPipe
   ],
@@ -62,6 +65,7 @@ import { AppRoutingModule } from './app-routing.module';
   ],
   providers: [
     ElectronService,
+    ResolutionFilterService,
     ShowLimitService,
     WordFrequencyService
   ],

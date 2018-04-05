@@ -312,6 +312,32 @@
       </ng-container>
       <!-- end of magic search -->
 
+      <!-- resolution filter & frequency histogram -->
+      <div *ngIf="settingsButtons['resolutionFilter'].toggled" class="resolutionFilterContainer">
+        <div class="frequencyGraphContainer">
+          <ng-container *ngFor="let resolution of resolutionFreqArr; index as i">
+            <div class="frequency-bar" [ngStyle]="{ height: resolution + '%', left: i * 35 + 'px' }">
+              <!-- <span style="display: block; transform: translate(0, -14px)">
+                {{ resolution }}
+              </span> -->
+            </div>
+          </ng-container>
+        </div>
+
+        <div class="frequencySliders">
+          <input 
+            class="inputMin" value="0" min="0" step="1" type="range" 
+            max="{{ freqMinEnd }}" 
+            [ngStyle]="{ width: freqMinEnd * 40 + 'px' }"
+            #freqMin (change)="minChanged(freqMin.value)">
+          <input 
+            class="inputMax" value="4" max="4" step="1" type="range"
+            min="{{ freqMaxStart }}" 
+            [ngStyle]="{ width: ((4 - freqMaxStart) * 40) === 0 ? '11px' : ((4 - freqMaxStart) * 40) + 'px' }"
+            #freqMax (change)="maxChanged(freqMax.value)">
+        </div>
+      </div>
+
       <!-- total found -->
       <div class="filteringTotal">
         <span>{{ currResults.total }} found</span>
@@ -373,6 +399,7 @@
                 | fileSearchPipe: filters[3].array : filters[3].bool : false : true  : false
                 | fileSearchPipe: filters[4].array : filters[4].bool : true  : true  : true
                 | wordFrequencyPipe: settingsButtons['showFreq'].toggled
+                | resolutionFilterPipe: settingsButtons['resolutionFilter'].toggled
                 | countPipe
                 | randomizePipe: shuffleTheViewNow
                 | folderViewPipe: (appState.currentView === 'files' && settingsButtons['showFolderInFileView'].toggled)"

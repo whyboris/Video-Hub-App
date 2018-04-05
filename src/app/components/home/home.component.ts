@@ -4,8 +4,9 @@ import { setTimeout } from 'timers';
 
 import { VirtualScrollComponent } from 'angular2-virtual-scroll';
 
-import { ElectronService } from '../../providers/electron.service';
+import { ElectronService } from 'app/providers/electron.service';
 import { ShowLimitService } from 'app/components/pipes/show-limit.service';
+import { ResolutionFilterService } from 'app/components/pipes/resolution-filter.service';
 import { WordFrequencyService } from 'app/components/pipes/word-frequency.service';
 
 import { FinalObject } from '../common/final-object.interface';
@@ -14,7 +15,7 @@ import { HistoryItem } from '../common/history-item.interface';
 
 import { AppState } from '../common/app-state';
 import { Filters } from '../common/filters';
-import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from 'app/components/common/settings-buttons';
+import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from '../common/settings-buttons';
 import { WizardOptions } from '../common/wizard-options.interface';
 
 import {
@@ -40,7 +41,8 @@ import { DemoContent } from '../../../assets/demo-content';
     './search.scss',
     './fonts/icons.scss',
     './gallery.scss',
-    './wizard.scss'
+    './wizard.scss',
+    './resolution.scss'
   ],
   animations: [
     modalAnimation,
@@ -105,6 +107,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // temp
   wordFreqArr: any;
   currResults: any = { showing: 0, total: 0 };
+
+  // stuff to do with frequency
+  resolutionFreqArr: any;
+  freqMinEnd: number = 3;
+  freqMaxStart: number = 1;
 
   fileMap: any; // should be a map from number (imageId) to number (element in finalArray);
 
@@ -212,6 +219,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     public cd: ChangeDetectorRef,
     public showLimitService: ShowLimitService,
     public wordFrequencyService: WordFrequencyService,
+    public resolutionFilterService: ResolutionFilterService,
     public electronService: ElectronService
   ) { }
 
@@ -230,6 +238,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.wordFrequencyService.finalMapBehaviorSubject.subscribe((value) => {
         this.wordFreqArr = value;
+        // this.cd.detectChanges();
+      });
+      this.resolutionFilterService.finalResolutionMapBehaviorSubject.subscribe((value) => {
+        this.resolutionFreqArr = value;
         // this.cd.detectChanges();
       });
       this.showLimitService.searchResults.subscribe((value) => {
@@ -912,6 +924,22 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     });
     this.computeTextBufferAmount();
+  }
+
+  /**
+   * Range slider for frequency selection
+   */
+  minChanged(event: any): void {
+    // console.log(event);
+    this.freqMaxStart = parseInt(event) + 1;
+  }
+
+  /**
+   * Range slider for frequency selection
+   */
+  maxChanged(event: any): void {
+    // console.log(event);
+    this.freqMinEnd = parseInt(event) - 1;
   }
 
 }

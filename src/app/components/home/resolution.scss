@@ -1,0 +1,56 @@
+@import "variables";
+
+$frequency-bar: #729aff;
+
+.frequencyGraphContainer {
+  height: 20px;
+  margin-left: 15px;
+  position: relative;
+  border: 1px solid black;
+}
+
+.frequency-bar {
+  // border: 1px solid black;
+  background-color: $frequency-bar;
+  bottom: 0;
+  display: inline-block;
+  font-size: 10px;
+  margin: 2px;
+  position: absolute;
+  text-align: center;
+  width: 20px;
+}
+
+.frequencySliders {
+  position: relative;
+  width: 100%;
+}
+
+.inputMin,
+.inputMax {
+  position: absolute;
+  // -webkit-appearance: none !important;
+
+  // &::-webkit-slider-runnable-track {
+  //   z-index: -1;
+  // }
+
+  // &::-webkit-slider-thumb {
+  //   -webkit-appearance: none !important;
+  //   // appearance: none;
+  //   width: 16px;
+  //   height: 16px;
+  //   border-radius: 50%;
+  //   background: #4CAF50;
+  //   cursor: pointer;
+  // }
+}
+
+.inputMin {
+  border: 1px solid black;
+}
+
+.inputMax {
+  right: 0;
+  transform: translate(0, 1px);
+}
