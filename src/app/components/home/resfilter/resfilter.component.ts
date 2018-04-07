@@ -32,11 +32,31 @@ export class ResFilter implements OnDestroy {
       // console.log(event);
       if (this.draggingLeft === true) {
         console.log('left');
-        this.currentX = event.clientX - 5;
+        const suggested = this.updateNumber(event.clientX);
+        if (suggested < this.currentX2) {
+          this.currentX = suggested;
+        }
       } else if (this.draggingRight === true) {
         console.log('right');
-        this.currentX2 = event.clientX - 5;
+        const suggested = this.updateNumber(event.clientX);
+        if (suggested > this.currentX) {
+          this.currentX2 = suggested;
+        }
       }
+    }
+  }
+
+  updateNumber(current: number): number {
+    if (current < 20) {
+      return 0;
+    } else if (current < 60) {
+      return 45;
+    } else if (current < 100) {
+      return 80;
+    } else if (current < 140) {
+      return 115;
+    } else {
+      return 160;
     }
   }
 

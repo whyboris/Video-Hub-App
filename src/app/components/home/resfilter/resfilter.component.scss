@@ -1,19 +1,7 @@
-  
-.rangeSelector {
-  border: 1px solid black;
-  position: absolute;
-  right: 0;
-  top: 0;
-  transition: 100ms;
-  transition-property: width;
-  min-height: 8px;
-  background: green;
-}
-
 .frequencySliders {
+  min-height: 55px;
   position: relative;
   width: 100%;
-  min-height: 20px;
 }
 
 .backGray {
@@ -28,6 +16,9 @@
   border: 1px solid #8b8b8b;
   min-height: 5px;
   position: absolute;
+  top: 25px;
+  transition-property: width;
+  transition: 200ms;
 }
 
 .leftSide {
