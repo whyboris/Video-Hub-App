@@ -168,6 +168,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.buttonsInView = false;
       } else if (event.key === 'd') {
         this.toggleButton('darkMode');
+      } else if (event.key === 'q') {
+        event.preventDefault();
+        event.stopPropagation();
+        this.initiateClose();
       } else if (event.key === 'z') {
         this.toggleButton('makeSmaller');
       } else if (event.key === 'x') {
