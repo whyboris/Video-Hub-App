@@ -763,7 +763,9 @@ function reScanDirectory(inputFolder: string, pathToVhaFile: string): void {
       MainCounter.screenShotFileNumber = currentJson.lastScreen;
 
       lastScreenshotFileNumber = currentJson.lastScreen;
-      selectedOutputFolder = pathToVhaFile.replace(extractFileName(pathToVhaFile) + '.vha', '');
+      const currentFileName = extractFileName(pathToVhaFile);
+      selectedOutputFolder = pathToVhaFile.replace(currentFileName + '.vha', '');
+      hubFolderNameForSaving = 'vha-' + currentFileName;
       selectedSourceFolder = currentJson.inputDir;
       screenShotSize = currentJson.ssSize;
       hubName = currentJson.hubName;
