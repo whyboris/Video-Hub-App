@@ -1,0 +1,17 @@
+<div class="frequencySliders" (mouseup)="mouseIsUp($event)">
+
+  <div class="backGray"></div>
+
+  <div class="leftSide" [ngStyle]="{ width: currentX + 'px' }">
+    <div class="leftDrag" (mousedown)="leftSideClick($event)">
+      
+    </div>
+  </div>
+
+  <div class="rightSide" [ngStyle]="{ width: currentX2 + 'px' }">
+    <div class="rightDrag" (mousedown)="rightSideClick($event)">
+
+    </div>
+  </div>
+
+</div>

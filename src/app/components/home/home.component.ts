@@ -112,6 +112,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   resolutionFreqArr: any;
   freqMinEnd: number = 3;
   freqMaxStart: number = 1;
+  resolutionNames: string[] = ['SD','720','1080','4K'];
 
   fileMap: any; // should be a map from number (imageId) to number (element in finalArray);
 

@@ -19,6 +19,7 @@ import { FileComponent } from 'app/components/home/file/file.component';
 import { FilmstripComponent } from 'app/components/home/filmstrip/filmstrip.component';
 import { HomeComponent } from './components/home/home.component';
 import { PreviewComponent } from './components/home/thumbnail/preview.component';
+import { ResFilter } from './components/home/resfilter/resfilter.component';
 import { ResolutionFilterService } from './components/pipes/resolution-filter.service';
 import { TopComponent } from './components/home/top/top.component';
 
@@ -51,6 +52,7 @@ import { AppRoutingModule } from './app-routing.module';
     MagicSearchPipe,
     PreviewComponent,
     RandomizePipe,
+    ResFilter,
     ResolutionFilterPipe,
     TopComponent,
     WordFrequencyPipe

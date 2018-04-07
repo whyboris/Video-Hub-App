@@ -18,7 +18,7 @@ export class ResolutionFilterService {
     this.frequencyMap.set('SD', 0);
     this.frequencyMap.set('720', 0);
     this.frequencyMap.set('1080', 0);
-    this.frequencyMap.set('4K', 1);
+    this.frequencyMap.set('4K', 1); // TEMP WIP TODO change back to 0 !!!
   }
 
   /**
@@ -77,7 +77,10 @@ export class ResolutionFilterService {
     const scalar = 100 / largestFrequency;
 
     this.frequencyMap.forEach((value, key) => {
-      const finalValue = Math.round(value * scalar);
+      let finalValue = Math.round(value * scalar);
+      if (finalValue !== 0 && finalValue < 10) {
+        finalValue = 10; // makes sure the bar is at least visible -- 10 => 2px
+      }
       this.frequencyMap.set(key, finalValue);
     });
 

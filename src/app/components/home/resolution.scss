@@ -2,11 +2,21 @@
 
 $frequency-bar: #729aff;
 
+.resolutionName {
+  color: $gray-50;
+  display: inline-block;
+  font-size: 10px;
+  text-align: center;
+  transform: translate(-2px, 21px);
+  width: 30px;
+}
+
 .frequencyGraphContainer {
   height: 20px;
-  margin-left: 15px;
+  margin-left: 13px;
   position: relative;
-  border: 1px solid black;
+  // border: 1px solid black;
+  transform: translateY(2px); // TEMP
 }
 
 .frequency-bar {
@@ -24,33 +34,4 @@ $frequency-bar: #729aff;
 .frequencySliders {
   position: relative;
   width: 100%;
-}
-
-.inputMin,
-.inputMax {
-  position: absolute;
-  // -webkit-appearance: none !important;
-
-  // &::-webkit-slider-runnable-track {
-  //   z-index: -1;
-  // }
-
-  // &::-webkit-slider-thumb {
-  //   -webkit-appearance: none !important;
-  //   // appearance: none;
-  //   width: 16px;
-  //   height: 16px;
-  //   border-radius: 50%;
-  //   background: #4CAF50;
-  //   cursor: pointer;
-  // }
-}
-
-.inputMin {
-  border: 1px solid black;
-}
-
-.inputMax {
-  right: 0;
-  transform: translate(0, 1px);
 }

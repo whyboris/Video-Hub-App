@@ -321,21 +321,12 @@
                 {{ resolution }}
               </span> -->
             </div>
+            <div class="resolutionName">{{ resolutionNames[i] }}</div>
           </ng-container>
         </div>
 
-        <div class="frequencySliders">
-          <input 
-            class="inputMin" value="0" min="0" step="1" type="range" 
-            max="{{ freqMinEnd }}" 
-            [ngStyle]="{ width: freqMinEnd * 40 + 'px' }"
-            #freqMin (change)="minChanged(freqMin.value)">
-          <input 
-            class="inputMax" value="4" max="4" step="1" type="range"
-            min="{{ freqMaxStart }}" 
-            [ngStyle]="{ width: ((4 - freqMaxStart) * 40) === 0 ? '11px' : ((4 - freqMaxStart) * 40) + 'px' }"
-            #freqMax (change)="maxChanged(freqMax.value)">
-        </div>
+        <app-res-filter [darkMode]="settingsButtons['darkMode'].toggled"></app-res-filter>
+
       </div>
 
       <!-- total found -->
