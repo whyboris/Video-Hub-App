@@ -110,8 +110,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   // stuff to do with frequency
   resolutionFreqArr: any;
-  freqMinEnd: number = 3;
-  freqMaxStart: number = 1;
+  freqLeftBound: number = 0;
+  freqRightBound: number = 4;
   resolutionNames: string[] = ['SD','720','1080','4K'];
 
   fileMap: any; // should be a map from number (imageId) to number (element in finalArray);
@@ -932,7 +932,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   minChanged(event: any): void {
     // console.log(event);
-    this.freqMaxStart = parseInt(event) + 1;
+    this.freqRightBound = parseInt(event) + 1;
   }
 
   /**
@@ -940,7 +940,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   maxChanged(event: any): void {
     // console.log(event);
-    this.freqMinEnd = parseInt(event) - 1;
+    this.freqLeftBound = parseInt(event) - 1;
+  }
+
+  newResFilterSelected(selection: number[]): void {
+    this.freqLeftBound = selection[0];
+    this.freqRightBound = selection[1];
+    console.log(selection);
   }
 
 }

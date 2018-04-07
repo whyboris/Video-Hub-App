@@ -33,7 +33,6 @@
   z-index: 2;
 }
 
-
 .leftDrag,
 .rightDrag {
   background: white;
@@ -45,4 +44,23 @@
   right: 0;
   transform: translate(1px, -6px);
   width: 7px;
+  transition: transform 200ms;
+
+  &:before {
+    border-radius: 14px;
+    bottom: -10px;
+    content: '';
+    left: -10px;
+    position: absolute;
+    right: -10px;
+    top: -10px;
+  }
+
+  &:hover {
+    cursor: ew-resize;
+  }
+}
+
+.isDragging {
+  transform: translate(1px, -6px) scale(1.2);
 }

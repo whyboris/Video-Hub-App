@@ -2,15 +2,21 @@
 
   <div class="backGray"></div>
 
-  <div class="leftSide" [ngStyle]="{ width: currentX + 'px' }">
-    <div class="leftDrag" (mousedown)="leftSideClick($event)">
-      
+  <div class="leftSide" [ngStyle]="{ width: currentXleft + 'px' }">
+    <div 
+      (mousedown)="leftSideClick($event)" 
+      [ngClass]="{ isDragging: draggingLeft }"
+      class="leftDrag" 
+    >
     </div>
   </div>
 
-  <div class="rightSide" [ngStyle]="{ width: currentX2 + 'px' }">
-    <div class="rightDrag" (mousedown)="rightSideClick($event)">
-
+  <div class="rightSide" [ngStyle]="{ width: currentXright + 'px' }">
+    <div
+      (mousedown)="rightSideClick($event)"
+      [ngClass]="{ isDragging: draggingRight }"
+      class="rightDrag"
+    >
     </div>
   </div>
 

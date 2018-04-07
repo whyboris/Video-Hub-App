@@ -316,16 +316,25 @@
       <div *ngIf="settingsButtons['resolutionFilter'].toggled" class="resolutionFilterContainer">
         <div class="frequencyGraphContainer">
           <ng-container *ngFor="let resolution of resolutionFreqArr; index as i">
-            <div class="frequency-bar" [ngStyle]="{ height: resolution + '%', left: i * 35 + 'px' }">
-              <!-- <span style="display: block; transform: translate(0, -14px)">
-                {{ resolution }}
-              </span> -->
+            <div 
+              [ngClass]="{ resDisabled: (i < freqLeftBound) || (i >= freqRightBound) }"
+              [ngStyle]="{ height: resolution + '%', left: i * 35 + 'px' }"
+              class="frequency-bar" 
+            >
             </div>
-            <div class="resolutionName">{{ resolutionNames[i] }}</div>
+            <div 
+              [ngClass]="{ resDisabled: (i < freqLeftBound) || (i >= freqRightBound) }"
+              class="resolutionName"
+            >
+              {{ resolutionNames[i] }}
+            </div>
           </ng-container>
         </div>
 
-        <app-res-filter [darkMode]="settingsButtons['darkMode'].toggled"></app-res-filter>
+        <app-res-filter 
+          [darkMode]="settingsButtons['darkMode'].toggled"
+          (newResFilterSelected)="newResFilterSelected($event)"
+        ></app-res-filter>
 
       </div>
 

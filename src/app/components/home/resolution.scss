@@ -9,6 +9,7 @@ $frequency-bar: #729aff;
   text-align: center;
   transform: translate(-2px, 21px);
   width: 30px;
+  transition: opacity 400ms;
 }
 
 .frequencyGraphContainer {
@@ -29,9 +30,14 @@ $frequency-bar: #729aff;
   position: absolute;
   text-align: center;
   width: 20px;
+  transition: opacity 400ms;
 }
 
 .frequencySliders {
   position: relative;
   width: 100%;
+}
+
+.resDisabled {
+  opacity: 0.5;
 }
