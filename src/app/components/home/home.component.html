@@ -133,6 +133,32 @@
 
     <div class="horizontalDivider"></div>
 
+    <h2>Change the app zoom level</h2>
+
+    <div style="margin: 20px">
+      <button
+        (click)="decreaseZoomLevel()"
+        class="defaultSettingsButton"
+      >
+        <span class="icon icon-minus"></span>
+      </button>
+      <button 
+        (click)="resetZoomLevel()"
+        class="defaultSettingsButton" 
+        style="max-width: initial; padding: 0 5px; margin: 0 10px"
+        >
+          <span>reset</span>
+      </button>
+      <button
+        (click)="increaseZoomLevel()"
+        class="defaultSettingsButton"
+      >
+        <span class="icon icon-plus"></span>
+      </button>
+    </div>
+
+    <div class="horizontalDivider"></div>
+
     <div class="credits-and-help" (click)="openOnlineHelp()">
       Click here for help, documentation, FAQ, or to report a bug
     </div>

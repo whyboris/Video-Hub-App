@@ -14,4 +14,6 @@ export let AppState = {
 
   menuHidden: false,
 
+  currentZoomLevel: 1
+
 }
