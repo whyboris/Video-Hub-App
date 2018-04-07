@@ -74,7 +74,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // DEMO MODE TOGGLE !!!
   demo = false;
   webDemo = false;
-  versionNumber = '0.9.9';
+  versionNumber = '1.1.0';
   macVersion = false;
 
   // REORGANIZE / keep
@@ -334,6 +334,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.electronService.ipcRenderer.on('settingsReturning', (event, settingsObject: SettingsObject, userWantedToOpen) => {
       this.vhaFileHistory = (settingsObject.vhaFileHistory || []);
       this.restoreSettingsFromBefore(settingsObject);
+      if (this.appState.currentZoomLevel !== 1) {
+        this.electronService.webFrame.setZoomFactor(this.appState.currentZoomLevel);
+      }
       if (userWantedToOpen) {
         this.loadThisVhaFile(userWantedToOpen);
       } else if (settingsObject.appState.currentVhaFile) {
@@ -477,6 +480,27 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   public openOnlineHelp(): void {
     this.electronService.ipcRenderer.send('pleaseOpenUrl', 'http://www.videohubapp.com');
+  }
+
+  public increaseZoomLevel(): void {
+    if (this.appState.currentZoomLevel < 2.5) {
+      this.appState.currentZoomLevel = this.appState.currentZoomLevel + 0.1;
+      this.electronService.webFrame.setZoomFactor(this.appState.currentZoomLevel);
+    }
+  }
+  
+  public decreaseZoomLevel(): void {
+    if (this.appState.currentZoomLevel > 0.6) {
+      this.appState.currentZoomLevel = this.appState.currentZoomLevel - 0.1;
+      this.electronService.webFrame.setZoomFactor(this.appState.currentZoomLevel);
+    }
+  }
+
+  public resetZoomLevel(): void {
+    if (this.appState.currentZoomLevel !== 1) {
+      this.appState.currentZoomLevel = 1;
+      this.electronService.webFrame.setZoomFactor(this.appState.currentZoomLevel);
+    }
   }
 
   // -----------------------------------------------------------------------------------------------
@@ -907,6 +931,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   restoreSettingsFromBefore(settingsObject): void {
     if (settingsObject.appState) {
       this.appState = settingsObject.appState;
+      if (!settingsObject.appState.currentZoomLevel) {  // catch error <-- old VHA apps didn't have `currentZoomLevel`
+        this.appState.currentZoomLevel = 1;
+      }
     }
     this.imgHeight = this.appState.imgHeight;
     this.grabAllSettingsKeys().forEach(element => {
