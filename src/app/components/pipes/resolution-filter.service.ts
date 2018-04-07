@@ -18,7 +18,7 @@ export class ResolutionFilterService {
     this.frequencyMap.set('SD', 0);
     this.frequencyMap.set('720', 0);
     this.frequencyMap.set('1080', 0);
-    this.frequencyMap.set('4K', 1); // TEMP WIP TODO change back to 0 !!!
+    this.frequencyMap.set('4K', 0);
   }
 
   /**

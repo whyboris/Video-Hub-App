@@ -928,21 +928,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Range slider for frequency selection
+   * Update the min and max resolution for the resolution filter
+   * @param selection 
    */
-  minChanged(event: any): void {
-    // console.log(event);
-    this.freqRightBound = parseInt(event) + 1;
-  }
-
-  /**
-   * Range slider for frequency selection
-   */
-  maxChanged(event: any): void {
-    // console.log(event);
-    this.freqLeftBound = parseInt(event) - 1;
-  }
-
   newResFilterSelected(selection: number[]): void {
     this.freqLeftBound = selection[0];
     this.freqRightBound = selection[1];

@@ -9,14 +9,27 @@ export class ResolutionFilterPipe implements PipeTransform {
 
   constructor(
     public resolutionFilterService: ResolutionFilterService
-  ) { }
+  ) {
+    this.resolutionMap.set('', 0.5);
+    this.resolutionMap.set('720', 1.5);
+    this.resolutionMap.set('720+', 1.5);
+    this.resolutionMap.set('1080', 2.5);
+    this.resolutionMap.set('1080+', 2.5);
+    this.resolutionMap.set('4K', 3.5);
+    this.resolutionMap.set('4K+', 3.5);
+    // console.log(this.resolutionMap);
+  }
+
+  resolutionMap: Map<string, number> = new Map();
 
   /**
-   * Return only items that match search string
-   * @param finalArray
-   * @param render      whether to calculate the wordFrequency
+   * Filter and show only videos that are within the resolution bounds
+   * @param finalArray 
+   * @param render 
+   * @param leftBound 
+   * @param rightBound 
    */
-  transform(finalArray: any, render?: boolean): any {
+  transform(finalArray: any, render?: boolean, leftBound?: number, rightBound?: number): any {
 
     if (render && finalArray.length > 0) {
 
@@ -29,6 +42,17 @@ export class ResolutionFilterPipe implements PipeTransform {
       });
 
       this.resolutionFilterService.computeFrequencyArray();
+
+      // now actually filter stuff out
+
+      return finalArray.filter((element) => {
+        const currentResValue: number = this.resolutionMap.get(element[5]);
+        if ( currentResValue > leftBound && currentResValue < rightBound) {
+          return true;
+        } else {
+          return false;
+        }
+      });
     }
 
     return finalArray;

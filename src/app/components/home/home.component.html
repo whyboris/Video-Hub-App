@@ -399,7 +399,7 @@
                 | fileSearchPipe: filters[3].array : filters[3].bool : false : true  : false
                 | fileSearchPipe: filters[4].array : filters[4].bool : true  : true  : true
                 | wordFrequencyPipe: settingsButtons['showFreq'].toggled
-                | resolutionFilterPipe: settingsButtons['resolutionFilter'].toggled
+                | resolutionFilterPipe: settingsButtons['resolutionFilter'].toggled : freqLeftBound : freqRightBound
                 | countPipe
                 | randomizePipe: shuffleTheViewNow
                 | folderViewPipe: (appState.currentView === 'files' && settingsButtons['showFolderInFileView'].toggled)"
