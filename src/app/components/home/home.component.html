@@ -104,10 +104,10 @@
             (click)="toggleButton(buttonKey)"
             [ngClass]="{
                 buttonOpacityLower:           settingsButtons[buttonKey].hidden,
-                defaultSettingsButton:        settingsButtons['flatIcons'].toggled === false,
-                defaultSettingsButtonToggled: settingsButtons['flatIcons'].toggled === false && settingsButtons[buttonKey].toggled,
-                flatSettingsButton:           settingsButtons['flatIcons'].toggled === true,
-                flatSettingsButtonToggled:    settingsButtons['flatIcons'].toggled === true && settingsButtons[buttonKey].toggled
+                defaultSettingsButton:        !settingsButtons['flatIcons'].toggled,
+                defaultSettingsButtonToggled: !settingsButtons['flatIcons'].toggled && settingsButtons[buttonKey].toggled,
+                flatSettingsButton:           settingsButtons['flatIcons'].toggled,
+                flatSettingsButtonToggled:    settingsButtons['flatIcons'].toggled && settingsButtons[buttonKey].toggled
               }"
             title="{{ settingsButtons[buttonKey].title }}"
           >
@@ -138,20 +138,29 @@
     <div style="margin: 20px">
       <button
         (click)="decreaseZoomLevel()"
-        class="defaultSettingsButton"
+        [ngClass]="{
+          defaultSettingsButton: !settingsButtons['flatIcons'].toggled,
+          flatSettingsButton:    settingsButtons['flatIcons'].toggled
+        }"
       >
         <span class="icon icon-minus"></span>
       </button>
-      <button 
+      <button
         (click)="resetZoomLevel()"
-        class="defaultSettingsButton" 
+        [ngClass]="{
+          defaultSettingsButton: !settingsButtons['flatIcons'].toggled,
+          flatSettingsButton:    settingsButtons['flatIcons'].toggled
+        }"
         style="max-width: initial; padding: 0 5px; margin: 0 10px"
         >
           <span>reset</span>
       </button>
       <button
         (click)="increaseZoomLevel()"
-        class="defaultSettingsButton"
+        [ngClass]="{
+          defaultSettingsButton: !settingsButtons['flatIcons'].toggled,
+          flatSettingsButton:    settingsButtons['flatIcons'].toggled
+        }"
       >
         <span class="icon icon-plus"></span>
       </button>
@@ -221,12 +230,22 @@
               *ngIf="!settingsButtons[buttonKey].hidden && settingsButtons[buttonKey].iconName !== 'icon-checkmark'"
               (click)="toggleButton(buttonKey)"
               [ngClass]="{
-                  defaultSettingsButton:             settingsButtons['flatIcons'].toggled === false,
-                  defaultSettingsButtonToggled:      settingsButtons['flatIcons'].toggled === false && settingsButtons[buttonKey].toggled,
-                  defaultSettingsButtonDark:         settingsButtons['flatIcons'].toggled === false && settingsButtons['darkMode'].toggled,
-                  defaultSettingsButtonDarkToggled:  settingsButtons['flatIcons'].toggled === false && settingsButtons['darkMode'].toggled && settingsButtons[buttonKey].toggled,
-                  flatSettingsButton:                settingsButtons['flatIcons'].toggled === true,
-                  flatSettingsButtonToggled:         settingsButtons['flatIcons'].toggled === true && settingsButtons[buttonKey].toggled
+                  defaultSettingsButton:             !settingsButtons['flatIcons'].toggled,
+
+                  defaultSettingsButtonToggled:      !settingsButtons['flatIcons'].toggled
+                                                  && settingsButtons[buttonKey].toggled,
+
+                  defaultSettingsButtonDark:         !settingsButtons['flatIcons'].toggled
+                                                  && settingsButtons['darkMode'].toggled,
+
+                  defaultSettingsButtonDarkToggled:  !settingsButtons['flatIcons'].toggled
+                                                  && settingsButtons['darkMode'].toggled
+                                                  && settingsButtons[buttonKey].toggled,
+
+                  flatSettingsButton:                settingsButtons['flatIcons'].toggled,
+
+                  flatSettingsButtonToggled:         settingsButtons['flatIcons'].toggled
+                                                  && settingsButtons[buttonKey].toggled
                 }"
               title="{{ settingsButtons[buttonKey].title }}"
             >
@@ -653,7 +672,7 @@
     <button
       [disabled]="wizard.selectedOutputFolder === ''
                || wizard.selectedSourceFolder === ''
-               || inProgress === true
+               || inProgress
                || futureHubName === ''
                || wizard.totalNumberOfFiles === 0"
       (click)="importFresh()"
