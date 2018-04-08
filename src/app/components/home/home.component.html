@@ -58,7 +58,12 @@
   ></div>
 
   <div *ngIf="importStage === 2" class="cancelProgress" @donutAppear>
-    <span class="cancelImport" (click)="cancelCurrentImport()">cancel</span>
+    <span 
+      (click)="cancelCurrentImport()"
+      [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
+    >
+      cancel
+    </span>
   </div>
 
   <app-donut
