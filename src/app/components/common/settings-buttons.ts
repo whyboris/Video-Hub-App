@@ -202,7 +202,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'resolutionFilter': {
     hidden: false,
     toggled: true,
-    iconName: 'icon-show-filenames',
+    iconName: 'icon-res-filter',
     title: 'Resolution filter',
     description: 'Toggles the resolution filter'
   },
