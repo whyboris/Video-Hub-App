@@ -33,7 +33,7 @@ export class ResolutionFilterPipe implements PipeTransform {
 
     if (render && finalArray.length > 0) {
 
-      console.log('RESOLUTION FILTER RUNNING !!!');
+      // console.log('RESOLUTION FILTER RUNNING !!!');
 
       this.resolutionFilterService.resetMap();
 

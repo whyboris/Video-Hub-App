@@ -109,7 +109,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   currResults: any = { showing: 0, total: 0 };
 
   // stuff to do with frequency
-  resolutionFreqArr: any;
+  resolutionFreqArr: number[];
   freqLeftBound: number = 0;
   freqRightBound: number = 4;
   resolutionNames: string[] = ['SD','720','1080','4K'];
@@ -384,11 +384,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Low-tech debounced scroll handler
    */
   public debounceUpdateMax(msDelay?: number): void {
-    console.log('debouncing');
+    // console.log('debouncing');
     const delay = msDelay !== undefined ? msDelay : 250;
     clearTimeout(this.myTimeout);
     this.myTimeout = setTimeout(() => {
-      console.log('Virtual scroll refreshed');
+      // console.log('Virtual scroll refreshed');
       this.virtualScroll.refresh()
     }, delay);
   }
@@ -576,8 +576,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.vhaFileHistory.reverse();
     }
 
-    console.log('CURRENT HISTORY OF VHA FILES');
-    console.log(this.vhaFileHistory);
+    // console.log('CURRENT HISTORY OF VHA FILES');
+    // console.log(this.vhaFileHistory);
   }
 
   /**
@@ -585,8 +585,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param index - index of the file from `vhaFileHistory`
    */
   openFromHistory(index: number): void {
-    console.log('trying to open ' + index);
-    console.log(this.vhaFileHistory[index]);
+    // console.log('trying to open ' + index);
+    // console.log(this.vhaFileHistory[index]);
     this.loadThisVhaFile(this.vhaFileHistory[index].vhaFilePath);
   }
 
@@ -596,8 +596,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   removeFromHistory(event: Event, index: number): void {
     event.stopPropagation();
-    console.log('trying to remove ' + index);
-    console.log(this.vhaFileHistory[index]);
+    // console.log('trying to remove ' + index);
+    // console.log(this.vhaFileHistory[index]);
     this.vhaFileHistory.splice(index, 1);
   }
 
@@ -775,7 +775,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } else if (this.appState.currentView === 'files') {
       this.textPaddingHeight = 20;
     }
-    console.log('textPaddingHeight = ' + this.textPaddingHeight);
+    // console.log('textPaddingHeight = ' + this.textPaddingHeight);
   }
 
   magicSearchChanged(event): void {
@@ -934,7 +934,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   newResFilterSelected(selection: number[]): void {
     this.freqLeftBound = selection[0];
     this.freqRightBound = selection[1];
-    console.log(selection);
+    // console.log(selection);
   }
 
 }

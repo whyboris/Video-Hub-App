@@ -69,10 +69,10 @@ export class ResolutionFilterService {
    */
   public computeFrequencyArray(): void {
 
-    console.log(this.frequencyMap);
+    // console.log(this.frequencyMap);
 
     const largestFrequency: number = this.getMostFrequent();
-    console.log(largestFrequency);
+    // console.log(largestFrequency);
 
     const scalar = 100 / largestFrequency;
 
@@ -84,16 +84,16 @@ export class ResolutionFilterService {
       this.frequencyMap.set(key, finalValue);
     });
 
-    console.log(this.frequencyMap);
+    // console.log(this.frequencyMap);
 
-    const finalResult = [
+    const finalResult: number[] = [
       this.frequencyMap.get('SD'),
       this.frequencyMap.get('720'),
       this.frequencyMap.get('1080'),
       this.frequencyMap.get('4K'),
     ]; // array of objects
 
-    console.log(finalResult);
+    // console.log(finalResult);
     this.finalResolutionMapBehaviorSubject.next(finalResult);
   }
 
