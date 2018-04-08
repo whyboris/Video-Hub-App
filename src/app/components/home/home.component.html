@@ -57,7 +57,7 @@
     @slowFadeOut
   ></div>
 
-  <div *ngIf="importStage === 2" class="cancelProgress">
+  <div *ngIf="importStage === 2" class="cancelProgress" @donutAppear>
     <span class="cancelImport" (click)="cancelCurrentImport()">cancel</span>
   </div>
 
@@ -66,6 +66,7 @@
     class="screenShotProgressPercent"
     [score]="extractionPercent"
     [darkMode]="settingsButtons['darkMode'].toggled"
+    @donutAppear
   ></app-donut>
 
   <!-- SETTINGS / OPTIONS MODAL -->

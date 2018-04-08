@@ -91,7 +91,7 @@ export class ResolutionFilterService {
       this.frequencyMap.get('720'),
       this.frequencyMap.get('1080'),
       this.frequencyMap.get('4K'),
-    ]; // array of objects
+    ];
 
     // console.log(finalResult);
     this.finalResolutionMapBehaviorSubject.next(finalResult);

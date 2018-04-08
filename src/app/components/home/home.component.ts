@@ -19,6 +19,7 @@ import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from '../c
 import { WizardOptions } from '../common/wizard-options.interface';
 
 import {
+  donutAppear,
   galleryItemAppear,
   historyItemRemove,
   modalAnimation,
@@ -45,13 +46,14 @@ import { DemoContent } from '../../../assets/demo-content';
     './resolution.scss'
   ],
   animations: [
+    donutAppear,
+    galleryItemAppear,
+    historyItemRemove,
     modalAnimation,
     myWizardAnimation,
-    topAnimation,
     slowFadeIn,
     slowFadeOut,
-    historyItemRemove,
-    galleryItemAppear
+    topAnimation
   ]
 })
 export class HomeComponent implements OnInit, AfterViewInit {
@@ -225,6 +227,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
+  
+    // To test the progress bar
+    // setInterval(() => {
+    //   this.importStage = this.importStage === 2 ? 1 : 2;
+    // }, 3000);
 
     // To test the progress bar
     // setInterval(() => {
