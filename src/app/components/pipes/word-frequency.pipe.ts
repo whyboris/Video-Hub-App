@@ -20,7 +20,7 @@ export class WordFrequencyPipe implements PipeTransform {
 
     if (render && finalArray.length > 0) {
 
-      console.log('Word frequency pipe RUNNING !!!');
+      // console.log('Word frequency pipe RUNNING !!!');
 
       this.wordFrequencyService.resetMap();
 

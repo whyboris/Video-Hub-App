@@ -1,0 +1,39 @@
+@import "variables";
+
+$frequency-bar: #729aff;
+
+.resolutionName {
+  color: $gray-50;
+  display: inline-block;
+  font-size: 10px;
+  text-align: center;
+  transform: translate(-4px, 25px);
+  transition: opacity 400ms;
+  width: 30px;
+}
+
+.frequencyGraphContainer {
+  height: 20px;
+  position: relative;
+  transform: translate(15px, 15px);
+}
+
+.frequency-bar {
+  background-color: $frequency-bar;
+  bottom: 0;
+  display: inline-block;
+  font-size: 10px;
+  position: absolute;
+  text-align: center;
+  transition: opacity 400ms;
+  width: 20px;
+}
+
+.frequencySliders {
+  position: relative;
+  width: 100%;
+}
+
+.resDisabled {
+  opacity: 0.5;
+}

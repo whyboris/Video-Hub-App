@@ -4,8 +4,9 @@ import { setTimeout } from 'timers';
 
 import { VirtualScrollComponent } from 'angular2-virtual-scroll';
 
-import { ElectronService } from '../../providers/electron.service';
+import { ElectronService } from 'app/providers/electron.service';
 import { ShowLimitService } from 'app/components/pipes/show-limit.service';
+import { ResolutionFilterService } from 'app/components/pipes/resolution-filter.service';
 import { WordFrequencyService } from 'app/components/pipes/word-frequency.service';
 
 import { FinalObject } from '../common/final-object.interface';
@@ -14,10 +15,11 @@ import { HistoryItem } from '../common/history-item.interface';
 
 import { AppState } from '../common/app-state';
 import { Filters } from '../common/filters';
-import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from 'app/components/common/settings-buttons';
+import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from '../common/settings-buttons';
 import { WizardOptions } from '../common/wizard-options.interface';
 
 import {
+  donutAppear,
   galleryItemAppear,
   historyItemRemove,
   modalAnimation,
@@ -40,16 +42,18 @@ import { DemoContent } from '../../../assets/demo-content';
     './search.scss',
     './fonts/icons.scss',
     './gallery.scss',
-    './wizard.scss'
+    './wizard.scss',
+    './resolution.scss'
   ],
   animations: [
+    donutAppear,
+    galleryItemAppear,
+    historyItemRemove,
     modalAnimation,
     myWizardAnimation,
-    topAnimation,
     slowFadeIn,
     slowFadeOut,
-    historyItemRemove,
-    galleryItemAppear
+    topAnimation
   ]
 })
 export class HomeComponent implements OnInit, AfterViewInit {
@@ -105,6 +109,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // temp
   wordFreqArr: any;
   currResults: any = { showing: 0, total: 0 };
+
+  // stuff to do with frequency
+  resolutionFreqArr: number[];
+  freqLeftBound: number = 0;
+  freqRightBound: number = 4;
+  resolutionNames: string[] = ['SD','720','1080','4K'];
 
   fileMap: any; // should be a map from number (imageId) to number (element in finalArray);
 
@@ -216,10 +226,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
     public cd: ChangeDetectorRef,
     public showLimitService: ShowLimitService,
     public wordFrequencyService: WordFrequencyService,
+    public resolutionFilterService: ResolutionFilterService,
     public electronService: ElectronService
   ) { }
 
   ngOnInit() {
+  
+    // To test the progress bar
+    // setInterval(() => {
+    //   this.importStage = this.importStage === 2 ? 1 : 2;
+    // }, 3000);
 
     // To test the progress bar
     // setInterval(() => {
@@ -234,6 +250,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.wordFrequencyService.finalMapBehaviorSubject.subscribe((value) => {
         this.wordFreqArr = value;
+        // this.cd.detectChanges();
+      });
+      this.resolutionFilterService.finalResolutionMapBehaviorSubject.subscribe((value) => {
+        this.resolutionFreqArr = value;
         // this.cd.detectChanges();
       });
       this.showLimitService.searchResults.subscribe((value) => {
@@ -378,11 +398,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Low-tech debounced scroll handler
    */
   public debounceUpdateMax(msDelay?: number): void {
-    console.log('debouncing');
+    // console.log('debouncing');
     const delay = msDelay !== undefined ? msDelay : 250;
     clearTimeout(this.myTimeout);
     this.myTimeout = setTimeout(() => {
-      console.log('Virtual scroll refreshed');
+      // console.log('Virtual scroll refreshed');
       this.virtualScroll.refresh()
     }, delay);
   }
@@ -591,8 +611,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.vhaFileHistory.reverse();
     }
 
-    console.log('CURRENT HISTORY OF VHA FILES');
-    console.log(this.vhaFileHistory);
+    // console.log('CURRENT HISTORY OF VHA FILES');
+    // console.log(this.vhaFileHistory);
   }
 
   /**
@@ -600,8 +620,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param index - index of the file from `vhaFileHistory`
    */
   openFromHistory(index: number): void {
-    console.log('trying to open ' + index);
-    console.log(this.vhaFileHistory[index]);
+    // console.log('trying to open ' + index);
+    // console.log(this.vhaFileHistory[index]);
     this.loadThisVhaFile(this.vhaFileHistory[index].vhaFilePath);
   }
 
@@ -611,8 +631,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   removeFromHistory(event: Event, index: number): void {
     event.stopPropagation();
-    console.log('trying to remove ' + index);
-    console.log(this.vhaFileHistory[index]);
+    // console.log('trying to remove ' + index);
+    // console.log(this.vhaFileHistory[index]);
     this.vhaFileHistory.splice(index, 1);
   }
 
@@ -790,7 +810,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } else if (this.appState.currentView === 'files') {
       this.textPaddingHeight = 20;
     }
-    console.log('textPaddingHeight = ' + this.textPaddingHeight);
+    // console.log('textPaddingHeight = ' + this.textPaddingHeight);
   }
 
   magicSearchChanged(event): void {
@@ -943,6 +963,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     });
     this.computeTextBufferAmount();
+  }
+
+  /**
+   * Update the min and max resolution for the resolution filter
+   * @param selection 
+   */
+  newResFilterSelected(selection: number[]): void {
+    this.freqLeftBound = selection[0];
+    this.freqRightBound = selection[1];
+    // console.log(selection);
   }
 
 }

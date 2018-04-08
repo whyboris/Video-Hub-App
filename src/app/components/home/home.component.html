@@ -57,7 +57,7 @@
     @slowFadeOut
   ></div>
 
-  <div *ngIf="importStage === 2" class="cancelProgress">
+  <div *ngIf="importStage === 2" class="cancelProgress" @donutAppear>
     <span class="cancelImport" (click)="cancelCurrentImport()">cancel</span>
   </div>
 
@@ -66,6 +66,7 @@
     class="screenShotProgressPercent"
     [score]="extractionPercent"
     [darkMode]="settingsButtons['darkMode'].toggled"
+    @donutAppear
   ></app-donut>
 
   <!-- SETTINGS / OPTIONS MODAL -->
@@ -357,6 +358,32 @@
       </ng-container>
       <!-- end of magic search -->
 
+      <!-- resolution filter & frequency histogram -->
+      <div *ngIf="settingsButtons['resolutionFilter'].toggled" class="resolutionFilterContainer">
+        <div class="frequencyGraphContainer">
+          <ng-container *ngFor="let resolution of resolutionFreqArr; index as i">
+            <div 
+              [ngClass]="{ resDisabled: (i < freqLeftBound) || (i >= freqRightBound) }"
+              [ngStyle]="{ height: resolution + '%', left: i * 35 + 'px' }"
+              class="frequency-bar" 
+            >
+            </div>
+            <div 
+              [ngClass]="{ resDisabled: (i < freqLeftBound) || (i >= freqRightBound) }"
+              class="resolutionName"
+            >
+              {{ resolutionNames[i] }}
+            </div>
+          </ng-container>
+        </div>
+
+        <app-res-filter 
+          [darkMode]="settingsButtons['darkMode'].toggled"
+          (newResFilterSelected)="newResFilterSelected($event)"
+        ></app-res-filter>
+
+      </div>
+
       <!-- total found -->
       <div class="filteringTotal">
         <span>{{ currResults.total }} found</span>
@@ -417,6 +444,7 @@
                 | fileSearchPipe: filters[2].array : filters[2].bool : true  : true  : false
                 | fileSearchPipe: filters[3].array : filters[3].bool : false : true  : false
                 | fileSearchPipe: filters[4].array : filters[4].bool : true  : true  : true
+                | resolutionFilterPipe: settingsButtons['resolutionFilter'].toggled : freqLeftBound : freqRightBound
                 | wordFrequencyPipe: settingsButtons['showFreq'].toggled
                 | countPipe
                 | randomizePipe: shuffleTheViewNow

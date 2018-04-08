@@ -1,0 +1,37 @@
+<div class="frequencySliders" (mouseup)="mouseIsUp()">
+
+  <div class="backGray" [ngClass]="{ darkMode: darkMode }"></div>
+
+  <div 
+    class="leftSide" 
+    [ngStyle]="{ width: currentXleft + 'px' }"
+    [ngClass]="{ darkMode: darkMode }"
+  >
+    <div 
+      (mousedown)="leftSideClick($event)" 
+      [ngClass]="{ 
+        isDragging: draggingLeft,
+        draggerDarkMode: darkMode
+       }"
+      class="dragger"
+    >
+    </div>
+  </div>
+
+  <div
+    class="rightSide"
+    [ngStyle]="{ width: currentXright + 'px' }"
+    [ngClass]="{ darkMode: darkMode }"
+  >
+    <div
+      (mousedown)="rightSideClick($event)"
+      [ngClass]="{ 
+        isDragging: draggingRight,
+        draggerDarkMode: darkMode
+      }"
+      class="dragger"
+    >
+    </div>
+  </div>
+
+</div>

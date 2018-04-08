@@ -54,6 +54,21 @@ export const metaAppear = trigger('metaAppear', [
   )]
 );
 
+export const donutAppear = trigger('donutAppear', [
+  transition(
+    ':enter', [
+      style({ opacity: 0, transform: 'translateX(40px)' }),
+      animate('250ms cubic-bezier(.2,1.05,.79,1.26)', style({ opacity: 1, transform: 'translateX(0)' }))
+    ]
+  ),
+  transition(
+    ':leave', [
+      style({ opacity: 1, transform: 'translateX(0)' }),
+      animate('250ms ease-in', style({ opacity: 0, transform: 'translateX(40px)' }))
+    ]
+  )]
+);
+
 export const textAppear = trigger('textAppear', [
   transition(
     ':enter', [
