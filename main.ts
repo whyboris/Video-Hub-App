@@ -736,6 +736,7 @@ function extractMetadata(filePath: string): void {
 
 
 let lastScreenshotFileNumber = 0; // only used for fancy new re-scanning functionality
+let folderToDeleteFrom = ''; // super dangerous -- only happens on `reScanDirectory`
 
 /**
  * Rescan the directory -- updating files etc -- SUPER COMPLICATED
@@ -766,6 +767,9 @@ function reScanDirectory(inputFolder: string, pathToVhaFile: string): void {
       const currentFileName = extractFileName(pathToVhaFile);
       selectedOutputFolder = pathToVhaFile.replace(currentFileName + '.vha', '');
       hubFolderNameForSaving = 'vha-' + currentFileName;
+      folderToDeleteFrom = path.join(selectedOutputFolder, hubFolderNameForSaving);
+      console.log('path to delete images from:');
+      console.log(folderToDeleteFrom);
       selectedSourceFolder = currentJson.inputDir;
       screenShotSize = currentJson.ssSize;
       hubName = currentJson.hubName;
@@ -788,8 +792,6 @@ function reScanDirectory(inputFolder: string, pathToVhaFile: string): void {
   });
 }
 
-let elementsToRemove: number[] = []; // array of indexes of files to remove (that have been deleted/renamed)
-
 /**
  * Figures out what new files there are, adds them to the finalArray, and starts extracting screenshots
  * @param oldFileList array of video files from the previously saved JSON
@@ -798,7 +800,6 @@ let elementsToRemove: number[] = []; // array of indexes of files to remove (tha
 function findTheDiff(oldFileList, inputFolder): void {
 
   const theDiff = []; // track new elements
-  elementsToRemove = [];
 
   // Find new/renamed elements
   // Adds all the new elements to `theDiff`
@@ -834,6 +835,7 @@ function findTheDiff(oldFileList, inputFolder): void {
     if (matchFound) {
       return true;
     } else {
+      superDangerousDelete(value[3]);
       return false;
     }
   });
@@ -851,6 +853,29 @@ function findTheDiff(oldFileList, inputFolder): void {
     sendFinalResultHome();
   }
 
+}
+
+
+/**
+ * Super dangerously delete 10 images from images folder given the base number
+ * Deletes 10 images with given base
+ * uses `folderToDeleteFrom` variable !!!
+ * @param numberOfImage 
+ */
+function superDangerousDelete(numberOfImage: number): void {
+  // console.log('index given: ' + numberOfImage);
+  const filePath = path.join(folderToDeleteFrom, numberOfImage.toString());
+
+  for (let i = 1; i < 11; i++) {
+    const currentFile: string = filePath + '-' + i.toString() + '.jpg';
+    if (fs.existsSync(currentFile)) {
+      fs.unlinkSync(currentFile, (err) => { 
+        // console.log(err);
+        // Don't even sweat it dawg!
+      });
+      // console.log('deleted ' + currentFile);
+    }
+  }
 }
 
 
