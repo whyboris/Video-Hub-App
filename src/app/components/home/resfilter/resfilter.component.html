@@ -1,4 +1,9 @@
-<div class="frequencySliders" (mouseup)="mouseIsUp()">
+<div
+  (mouseleave)="mouseLeft()"
+  (mousemove)="mouseIsMoving($event)"
+  (mouseup)="mouseIsUp()"
+  class="frequencySliders"
+>
 
   <div class="backGray" [ngClass]="{ darkMode: darkMode }"></div>
 
