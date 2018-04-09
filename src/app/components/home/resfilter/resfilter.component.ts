@@ -23,15 +23,24 @@ export class ResFilter implements OnDestroy {
   leftBound: number = 0;
   rightBound: number = 4;
 
+  pxLocation: number[] = [0, 45, 80, 115, 160]; // pixel locations for divs that users drag
+
   constructor() { }
 
-  @HostListener('mouseleave') onMouseLeave() {
+  /**
+   * Mouse left the res filter div
+   */
+  mouseLeft() {
     if (this.dragging) {
       this.mouseIsUp();
     }
   }
 
-  @HostListener('document:mousemove', ['$event']) onMouseMove(event) {
+  /**
+   * Track the mouse movement while it's inside the res filter div
+   * @param event 
+   */
+  mouseIsMoving(event) {
     if (this.dragging === true) {
       if (this.draggingLeft === true) {
         const suggested = this.updateNumber(event.clientX);
@@ -53,15 +62,15 @@ export class ResFilter implements OnDestroy {
    */
   updateNumber(current: number): number {
     if (current < 30) {
-      return 0;
+      return this.pxLocation[0];
     } else if (current < 70) {
-      return 45;
+      return this.pxLocation[1];
     } else if (current < 105) {
-      return 80;
+      return this.pxLocation[2];
     } else if (current < 142) {
-      return 115;
+      return this.pxLocation[3];
     } else {
-      return 160;
+      return this.pxLocation[4];
     }
   }
 
@@ -70,13 +79,13 @@ export class ResFilter implements OnDestroy {
    * @param value 
    */
   convertToIndex(value: number): number {
-    if (value === 0) {
+    if (value === this.pxLocation[0]) {
       return 0;
-    } else if (value === 45) {
+    } else if (value === this.pxLocation[1]) {
       return 1;
-    } else if (value === 80) {
+    } else if (value === this.pxLocation[2]) {
       return 2;
-    } else if (value === 115) {
+    } else if (value === this.pxLocation[3]) {
       return 3;
     } else {
       return 4;
