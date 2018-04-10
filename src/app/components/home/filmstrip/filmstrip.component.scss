@@ -23,10 +23,11 @@
 }
 
 .screencap {
-  border: 3px solid black;
   box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.4);
   box-sizing: border-box;
   height: 100px;
+  outline-offset: -3px;
+  outline: 3px solid black;
   position: absolute;
 }
 

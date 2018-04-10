@@ -43,7 +43,8 @@ import { DemoContent } from '../../../assets/demo-content';
     './fonts/icons.scss',
     './gallery.scss',
     './wizard.scss',
-    './resolution.scss'
+    './resolution.scss',
+    './rightclick.scss'
   ],
   animations: [
     donutAppear,
@@ -115,6 +116,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
   freqLeftBound: number = 0;
   freqRightBound: number = 4;
   resolutionNames: string[] = ['SD','720','1080','4K'];
+
+  rightClickShowing: boolean = false;
+  itemToRename: any; // strongly type this -- it's an element from finalArray !!!
+  renamingWIP: string; // ngModel for renaming file
+  renamingExtension: string;
 
   fileMap: any; // should be a map from number (imageId) to number (element in finalArray);
 
@@ -973,6 +979,25 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.freqLeftBound = selection[0];
     this.freqRightBound = selection[1];
     // console.log(selection);
+  }
+
+  rightMouseClicked(item): void {
+    console.log(item);
+    // prepare file name without extension:
+
+    // console.log(item[1]);
+    const extension = item[1].split('.').pop();
+    const fileName = item[1].substr(0, item[1].lastIndexOf('.'));
+    console.log(extension);
+    console.log(fileName);
+
+    item[1] = fileName;
+    this.renamingExtension = extension;
+
+    
+    this.itemToRename = item;
+    this.rightClickShowing = !this.rightClickShowing;
+    this.renamingWIP = item[1];
   }
 
 }

@@ -1,0 +1,66 @@
+@import "variables";
+
+.rightClickMenu {
+  background: $gray-30;
+  border-radius: 10px;
+  border: 1px solid $gray-50;
+  box-shadow: 0 3px 7px 3px rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+  height: 260px;
+  left: 10%;
+  padding: 20px;
+  position: fixed;
+  top: 100px;
+  width: 80%;
+  z-index: 30;
+}
+
+.rightClickDark {
+  background: $gray-90;
+}
+
+.rename {
+  color: $gray-50;
+  font-size: 12px;
+  left: 42px;
+  position: absolute;
+  top: 173px;
+}
+
+.renameFile {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid $gray-40;
+  box-sizing: border-box;
+  font-size: 16px;
+  left: 40px;
+  outline: none;
+  padding-bottom: 0;
+  padding: 6px 6px 6px 2px;
+  position: absolute;
+  top: 190px;
+  width: 90%;
+}
+
+.extension-hack {
+  font-size: 16px;
+  left: 42px;
+  top: 195px;
+  position: absolute;
+  pointer-events: none;
+
+  & .hidden {
+    opacity: 0;
+  }
+
+  & .extension {
+    display: inline-block;
+    font-size: 12px;
+    opacity: 0.5;
+    transform: translate(-3px, 1.5px);
+  }
+}
+
+.darkModeOn {
+  color: white;
+}
