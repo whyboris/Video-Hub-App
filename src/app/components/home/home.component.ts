@@ -122,6 +122,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   renamingWIP: string; // ngModel for renaming file
   renamingExtension: string;
 
+  findMostSimilar: string; // for finding similar files to this one
+
+  tempLevBool: boolean = false; // to toggle the levenshtein pipe
+
   fileMap: any; // should be a map from number (imageId) to number (element in finalArray);
 
   // for text padding below filmstrip or thumbnail element
@@ -981,9 +985,39 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // console.log(selection);
   }
 
-  rightMouseClicked(item): void {
-    console.log(item);
+  clearLev(): void {
+    this.tempLevBool = false;
+  }
+
+  currentRightClickedItem: any;
+  renamingNow: boolean = false;
+
+  rightClickPosition: any = { x: 0, y: 0 };
+
+  showSimilar(): void {
+    this.rightClickShowing = false;
+    this.findMostSimilar = this.currentRightClickedItem[2];
+    console.log(this.findMostSimilar);
+    this.tempLevBool = true;
+  }
+
+  rightMouseClicked(event: MouseEvent, item): void {
+    const winWidth: number = window.innerWidth;
+    const clientX: number = event.clientX;
+    const howFarFromRight: number = winWidth - clientX;
+
+    this.rightClickPosition.x = (howFarFromRight < 100) ? clientX - 120 + (howFarFromRight) : clientX;
+    this.rightClickPosition.y = event.clientY;
+  
+    this.currentRightClickedItem = item;
+    this.rightClickShowing = true;
+  }
+
+  renameFile(): void {
+    this.rightClickShowing = false;
     // prepare file name without extension:
+
+    const item = this.currentRightClickedItem;
 
     // console.log(item[1]);
     const extension = item[1].split('.').pop();
@@ -992,11 +1026,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     console.log(fileName);
 
     item[1] = fileName;
-    this.renamingExtension = extension;
+    this.renamingExtension = extension;  
 
-    
     this.itemToRename = item;
-    this.rightClickShowing = !this.rightClickShowing;
+    this.renamingNow = !this.renamingNow;
     this.renamingWIP = item[1];
   }
 

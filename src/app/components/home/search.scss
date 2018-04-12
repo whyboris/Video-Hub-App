@@ -37,7 +37,7 @@
   color: $gray-50;
   font-size: 12px;
   position: absolute;
-  transform: translate(3px, 14px);
+  transform: translate(3px, 11px);
 }
 
 .inputFilter {
@@ -122,4 +122,19 @@
       cursor: pointer;
     }
   }
+}
+
+
+.levDistance {
+  .searchWord {
+    background: #aaffaa;
+  }
+}
+
+.levSpan {
+  color: #B3B3B3;
+  cursor: default;
+  font-size: 12px;
+  margin: 15px 0 15px;
+  text-align: left;
 }

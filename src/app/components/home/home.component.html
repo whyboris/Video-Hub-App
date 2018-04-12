@@ -74,6 +74,61 @@
     @donutAppear
   ></app-donut>
 
+  <!-- RIGHT CLICK MODAL -->
+  <div
+    *ngIf="rightClickShowing"
+    [ngStyle]="{ 
+        top: rightClickPosition.y + 'px', 
+        left: rightClickPosition.x + 'px' 
+      }"
+    class="rightClickMenu"
+  >
+    <ul>
+      <li (click)="renameFile()">Rename file</li>
+      <li (click)="showSimilar()">Show similar</li>
+    </ul>
+  </div>
+
+  <!-- RENAMING MODAL -->
+  <div 
+    *ngIf="renamingNow" 
+    [ngClass]="{ renameDark: settingsButtons['darkMode'].toggled  }" 
+    class="renameMenu" 
+    @modalAnimation
+  >
+  
+    <app-filmstrip-item 
+      [darkMode]="settingsButtons['darkMode'].toggled"
+      [elHeight]="150"
+      [fileSize]="itemToRename[7]"
+      [folderPath]="appState.selectedOutputFolder"
+      [hoverScrub]="true"
+      [hubName]="appState.hubName"
+      [imgHeight]="100"
+      [imgId]="itemToRename[3]"
+      [imgWidth]="(imgHeight / 100) * itemToRename[6] || (imgHeight / 100) * 171"
+      [largerFont]="true"
+      [rez]="itemToRename[5]"
+      [showMeta]="true"
+      [time]="itemToRename[4]"
+      [title]="itemToRename[1]"
+    ></app-filmstrip-item>
+  
+    <span class="rename">rename to:</span>
+
+    <input 
+      [(ngModel)]="renamingWIP"
+      [ngClass]="{ darkModeOn: settingsButtons['darkMode'].toggled }" 
+      class="renameFile" 
+      type="text" 
+    >
+    <span class="extension-hack" [ngClass]="{ darkModeOn: settingsButtons['darkMode'].toggled }" >
+      <span class="hidden">{{ renamingWIP }}</span>
+      <span class="extension" *ngIf="renamingWIP.length > 0">.{{ renamingExtension }}</span>
+    </span>
+
+</div>
+
   <!-- SETTINGS / OPTIONS MODAL -->
   <div
     *ngIf="buttonsInView"
@@ -389,6 +444,16 @@
 
       </div>
 
+      <!-- Lev Distance -->
+      <div class="levDistance" *ngIf="tempLevBool">
+        <span class="levSpan">
+          Showing similar to:
+        </span>
+        <span class="searchWord" (click)="clearLev()">
+          {{ findMostSimilar }}
+        </span>
+      </div>
+
       <!-- total found -->
       <div class="filteringTotal">
         <span>{{ currResults.total }} found</span>
@@ -451,6 +516,7 @@
                 | fileSearchPipe: filters[3].array : filters[3].bool : false : true  : false
                 | fileSearchPipe: filters[4].array : filters[4].bool : true  : true  : true
                 | resolutionFilterPipe: settingsButtons['resolutionFilter'].toggled : freqLeftBound : freqRightBound
+                | levenshteinPipe: tempLevBool : findMostSimilar
                 | wordFrequencyPipe: settingsButtons['showFreq'].toggled
                 | countPipe
                 | randomizePipe: shuffleTheViewNow
@@ -468,7 +534,7 @@
         <app-gallery-item
           *ngFor="let item of scroll.viewPortItems"
           (click)="openVideo(item[3])"
-          (contextmenu)="rightMouseClicked(item)"
+          (contextmenu)="rightMouseClicked($event, item)"
           [title]="item[2]"
           [imgId]="item[3]"
           [time]="item[4]"
@@ -525,45 +591,6 @@
       </ng-container>
 
     </virtual-scroll>
-
-    <div 
-      *ngIf="rightClickShowing" 
-      [ngClass]="{ rightClickDark: settingsButtons['darkMode'].toggled  }" 
-      class="rightClickMenu" 
-      @modalAnimation
-    >
-      
-        <app-filmstrip-item 
-          [darkMode]="settingsButtons['darkMode'].toggled"
-          [elHeight]="150"
-          [fileSize]="itemToRename[7]"
-          [folderPath]="appState.selectedOutputFolder"
-          [hoverScrub]="true"
-          [hubName]="appState.hubName"
-          [imgHeight]="100"
-          [imgId]="itemToRename[3]"
-          [imgWidth]="(imgHeight / 100) * itemToRename[6] || (imgHeight / 100) * 171"
-          [largerFont]="true"
-          [rez]="itemToRename[5]"
-          [showMeta]="true"
-          [time]="itemToRename[4]"
-          [title]="itemToRename[1]"
-        ></app-filmstrip-item>
-      
-        <span class="rename">rename to:</span>
-
-        <input 
-          [(ngModel)]="renamingWIP"
-          [ngClass]="{ darkModeOn: settingsButtons['darkMode'].toggled }" 
-          class="renameFile" 
-          type="text" 
-        >
-        <span class="extension-hack" [ngClass]="{ darkModeOn: settingsButtons['darkMode'].toggled }" >
-          <span class="hidden">{{ renamingWIP }}</span>
-          <span class="extension" *ngIf="renamingWIP.length > 0">.{{ renamingExtension }}</span>
-        </span>
-    
-    </div>
 
   </div> <!-- end of window-content -->
 

@@ -6,16 +6,47 @@
   border: 1px solid $gray-50;
   box-shadow: 0 3px 7px 3px rgba(0, 0, 0, 0.3);
   box-sizing: border-box;
+  font-size: 12px;
+  position: absolute;
+  z-index: 30; 
+
+  ul {
+    margin: 0;
+    padding: 10px;
+
+    li {
+      cursor: pointer;
+      list-style-type: none;
+      padding: 6px;
+      transition: 100ms;
+      transition-property: transform text-shadow;
+
+      &:hover {
+        transition: 100ms;
+        transition-property: transform text-shadow;
+        transform: translate(0, -1px);
+        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+      }
+    }
+  }
+}
+
+.renameMenu {
+  background: $gray-30;
+  border-radius: 10px;
+  border: 1px solid $gray-50;
+  box-shadow: 0 3px 7px 3px rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
   height: 260px;
   left: 10%;
   padding: 20px;
   position: fixed;
-  top: 100px;
+  top: 138px;
   width: 80%;
   z-index: 30;
 }
 
-.rightClickDark {
+.renameDark {
   background: $gray-90;
 }
 
