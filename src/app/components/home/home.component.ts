@@ -24,6 +24,8 @@ import {
   historyItemRemove,
   modalAnimation,
   myWizardAnimation,
+  overlayAppear,
+  rightClickAnimation,
   slowFadeIn,
   slowFadeOut,
   topAnimation
@@ -52,6 +54,8 @@ import { DemoContent } from '../../../assets/demo-content';
     historyItemRemove,
     modalAnimation,
     myWizardAnimation,
+    overlayAppear,
+    rightClickAnimation,
     slowFadeIn,
     slowFadeOut,
     topAnimation
@@ -224,6 +228,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.showWizard = false;
     } else if (event.key === 'Escape' && this.buttonsInView) {
       this.buttonsInView = false;
+    } else if (event.key === 'Escape' && (this.rightClickShowing || this.renamingNow)) {
+      this.rightClickShowing = false;
+      this.renamingNow = false;
     }
   }
 
@@ -1031,6 +1038,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.itemToRename = item;
     this.renamingNow = !this.renamingNow;
     this.renamingWIP = item[1];
+  }
+
+  clickAway() {
+    this.rightClickShowing = false;
+    this.renamingNow = false;
   }
 
 }

@@ -1,5 +1,14 @@
 @import "variables";
 
+.clickAwayOverlay {
+  background-color: rgba(0, 0, 0, 0.1);
+  cursor: initial;
+  height: 100vh;
+  position: fixed;
+  width: 100vw;
+  z-index: 29;
+}
+
 .rightClickMenu {
   background: $gray-30;
   border-radius: 10px;
@@ -9,6 +18,7 @@
   font-size: 12px;
   position: absolute;
   z-index: 30; 
+  overflow: hidden;
 
   ul {
     margin: 0;

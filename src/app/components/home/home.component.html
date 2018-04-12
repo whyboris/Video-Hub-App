@@ -74,6 +74,16 @@
     @donutAppear
   ></app-donut>
 
+  <!-- OVERLAY to cancel out right click modal and renaming modal on click -->
+  <div 
+    (click)="clickAway()"
+    (contextmenu)="clickAway()"
+    *ngIf="rightClickShowing || renamingNow"
+    class="clickAwayOverlay"
+    @overlayAppear
+  >
+  </div>
+
   <!-- RIGHT CLICK MODAL -->
   <div
     *ngIf="rightClickShowing"
@@ -82,6 +92,7 @@
         left: rightClickPosition.x + 'px' 
       }"
     class="rightClickMenu"
+    @rightClickAnimation
   >
     <ul>
       <li (click)="renameFile()">Rename file</li>
