@@ -70,6 +70,7 @@ import { AppRoutingModule } from './app-routing.module';
   ],
   providers: [
     ElectronService,
+    FileSearchPipe,
     LevenshteinService,
     ResolutionFilterService,
     ShowLimitService,
