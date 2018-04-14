@@ -128,7 +128,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   findMostSimilar: string; // for finding similar files to this one
 
-  tempLevBool: boolean = false; // to toggle the levenshtein pipe
+  showSimilar: boolean = false; // to toggle the similarity pipe
 
   fileMap: any; // should be a map from number (imageId) to number (element in finalArray);
 
@@ -1000,7 +1000,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   clearLev(): void {
-    this.tempLevBool = false;
+    this.showSimilar = false;
   }
 
   currentRightClickedItem: any;
@@ -1008,10 +1008,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   rightClickPosition: any = { x: 0, y: 0 };
 
-  showSimilar(): void {
+  showSimilarNow(): void {
     this.findMostSimilar = this.currentRightClickedItem[2];
     console.log(this.findMostSimilar);
-    this.tempLevBool = true;
+    this.showSimilar = true;
   }
 
   rightMouseClicked(event: MouseEvent, item): void {

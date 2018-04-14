@@ -18,7 +18,7 @@ import { AppComponent } from './app.component';
 import { DonutComponent } from './components/donut/donut.component';
 import { FileComponent } from 'app/components/home/file/file.component';
 import { FilmstripComponent } from 'app/components/home/filmstrip/filmstrip.component';
-import { LevenshteinService } from './components/pipes/levenshtein.service';
+import { SimilarityService } from './components/pipes/similarity.service';
 import { PreviewComponent } from './components/home/thumbnail/preview.component';
 import { ResFilter } from './components/home/resfilter/resfilter.component';
 import { ResolutionFilterService } from './components/pipes/resolution-filter.service';
@@ -30,7 +30,7 @@ import { FileSizePipe } from './components/pipes/file-size.pipe';
 import { FolderArrowsPipe } from 'app/components/pipes/folder-arrows.pipe';
 import { FolderViewPipe } from 'app/components/pipes/folder-view.pipe';
 import { LengthPipe } from './components/pipes/length.pipe';
-import { LevenshteinPipe } from './components/pipes/levenshtein.pipe';
+import { SimilarityPipe } from './components/pipes/similarity.pipe';
 import { MagicSearchPipe } from './components/pipes/magic-search.pipe';
 import { RandomizePipe } from './components/pipes/randomize.pipe';
 import { ResolutionFilterPipe } from './components/pipes/resolution-filter.pipe';
@@ -51,7 +51,7 @@ import { AppRoutingModule } from './app-routing.module';
     FolderViewPipe,
     HomeComponent,
     LengthPipe,
-    LevenshteinPipe,
+    SimilarityPipe,
     MagicSearchPipe,
     PreviewComponent,
     RandomizePipe,
@@ -71,7 +71,7 @@ import { AppRoutingModule } from './app-routing.module';
   providers: [
     ElectronService,
     FileSearchPipe,
-    LevenshteinService,
+    SimilarityService,
     ResolutionFilterService,
     ShowLimitService,
     WordFrequencyService

@@ -102,7 +102,7 @@
   >
     <ul>
       <li (click)="renameFile()">Rename file</li>
-      <li (click)="showSimilar()">Show similar</li>
+      <li (click)="showSimilarNow()">Show similar</li>
     </ul>
   </div>
 
@@ -475,9 +475,9 @@
       </div>
 
       <!-- Lev Distance -->
-      <div class="levDistance" *ngIf="tempLevBool">
+      <div class="levDistance" *ngIf="showSimilar">
         <span class="levSpan">
-          Showing similar to:
+          and similar to:
         </span>
         <span class="searchWord" (click)="clearLev()">
           {{ findMostSimilar }}
@@ -546,7 +546,7 @@
                 | fileSearchPipe: filters[3].array : filters[3].bool : false : true  : false
                 | fileSearchPipe: filters[4].array : filters[4].bool : true  : true  : true
                 | resolutionFilterPipe: settingsButtons['resolutionFilter'].toggled : freqLeftBound : freqRightBound
-                | levenshteinPipe: tempLevBool : findMostSimilar
+                | similarityPipe: showSimilar : findMostSimilar
                 | wordFrequencyPipe: settingsButtons['showFreq'].toggled
                 | countPipe
                 | randomizePipe: shuffleTheViewNow
