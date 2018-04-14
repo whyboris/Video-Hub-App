@@ -462,6 +462,46 @@ ipc.on('cancel-current-import', function(event): void {
   cancelCurrentImport = true;
 });
 
+ipc.on('try-to-rename-this-file', function(event, sourceFolder: string, relPath: string, file: string, renameTo: string): void {
+  console.log('renaming file:');
+
+  const original: string = path.join(sourceFolder, relPath, file);
+  const newName: string = path.join(sourceFolder, relPath, renameTo);
+
+  console.log(original);
+  console.log(newName);
+
+  let success: boolean = true;
+  let errMsg: string;
+
+  // check if already exists first
+  if (fs.existsSync(newName)) {
+    console.log('some file already EXISTS WITH THAT NAME !!!');
+    success = false;
+    errMsg = "A file existst with this filename";
+  } else {
+    try {
+      fs.renameSync(original, newName);
+    } catch (err) {
+      success = false;
+      console.log(err);
+      if (err.code === 'ENOENT') {
+        // console.log('NO ENTITY');
+        // console.log(err.path);
+        const pathObj = path.parse(err.path);
+        // console.log(pathObj);
+        // console.log(pathObj.base);
+        // console.log(pathObj.dir);
+        errMsg = "Original file could not be found";        
+      } else {
+        errMsg = "Some error occurred";
+      }
+    }
+  }
+
+  angularApp.sender.send('renameFileResponse', success, errMsg);
+});
+
 // ============================================================
 // Methods to extract screenshots, build file list, etc
 // ============================================================

@@ -63,15 +63,15 @@ import { DemoContent } from '../../../assets/demo-content';
 })
 export class HomeComponent implements OnInit, AfterViewInit {
 
+  @ViewChild('magicSearch') magicSearch: ElementRef;
+  @ViewChild('renameFileInput') renameFileInput: ElementRef;
+  @ViewChild('searchRef') searchRef: ElementRef;
+
   @ViewChild(VirtualScrollComponent)
   virtualScroll: VirtualScrollComponent;
 
-  @ViewChild('searchRef') searchRef: ElementRef;
-
-  @ViewChild('magicSearch') magicSearch: ElementRef;
-
-  settingsButtons = SettingsButtons;
   defaultSettingsButtons = {};
+  settingsButtons = SettingsButtons;
   settingsButtonsGroups = SettingsButtonsGroups;
   settingsCategories = SettingsCategories;
 
@@ -317,6 +317,21 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.wizard.selectedSourceFolder = filePath;
         this.wizard.selectedOutputFolder = filePath;
       }
+    });
+
+    // Rename file response
+    this.electronService.ipcRenderer.on('renameFileResponse', (event, success: boolean, errMsg?: string) => {
+      
+      this.renameBtnEnabled = true;
+      console.log('RENAME MSG BACK');
+      
+      if (success) {
+        this.closeRename();
+      } else {
+        console.log(errMsg);
+        this.renameErrMsg = errMsg;
+      }
+
     });
 
     // Returning Output
@@ -1008,6 +1023,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   rightClickPosition: any = { x: 0, y: 0 };
 
+  renameBtnEnabled: boolean = true;
+  renameErrMsg: string = '';
+
   showSimilarNow(): void {
     this.findMostSimilar = this.currentRightClickedItem[2];
     console.log(this.findMostSimilar);
@@ -1028,25 +1046,49 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   renameFile(): void {
     // prepare file name without extension:
-
+    this.renameErrMsg = '';
     const item = this.currentRightClickedItem;
 
-    // console.log(item[1]);
     // .slice() creates a copy
     const extension = item[1].slice().split('.').pop();
     const fileName = item[1].slice().substr(0, item[1].lastIndexOf('.'));
     console.log(extension);
     console.log(fileName);
-
+    
     this.renamingWIP = fileName;
-    this.renamingExtension = extension;  
+    this.renamingExtension = extension;
 
     this.itemToRename = item;
     this.renamingNow = true;
+    setTimeout(() => {
+      this.renameFileInput.nativeElement.focus();
+    }, 0);
   }
 
   closeRename() {
     this.renamingNow = false;
+  }
+
+  attemptToRename() {
+    this.renameBtnEnabled = false;
+
+    const sourceFolder = this.appState.selectedSourceFolder;
+    const relativeFilePath = this.currentRightClickedItem[0];
+    const originalFile = this.currentRightClickedItem[1];
+    const newFileName = this.renamingWIP + '.' + this.renamingExtension;
+    // check if different first !!!
+    if (originalFile === newFileName || newFileName.length === 0 ) {
+      console.log('lol - same file name bro!');
+    } else {
+      // try renaming
+      this.electronService.ipcRenderer.send(
+        'try-to-rename-this-file',
+        sourceFolder,
+        relativeFilePath,
+        originalFile,
+        newFileName
+      );
+    }
   }
 
 }

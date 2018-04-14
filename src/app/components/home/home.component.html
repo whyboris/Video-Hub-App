@@ -145,17 +145,33 @@
     <span class="renameTo">to:</span>
 
     <input 
+      (keyup.enter)="attemptToRename()"
       [(ngModel)]="renamingWIP"
       [ngClass]="{ darkModeOn: settingsButtons['darkMode'].toggled }" 
-      class="renameFile" 
-      type="text" 
+      class="renameFile"
+      type="text"
+      #renameFileInput
     >
     <span class="extension-hack" [ngClass]="{ darkModeOn: settingsButtons['darkMode'].toggled }" >
       <span class="hidden">{{ renamingWIP }}</span>
       <span class="extension" *ngIf="renamingWIP.length > 0">.{{ renamingExtension }}</span>
     </span>
 
-    <button class="wizardButton btnRename">RENAME</button>
+    <span *ngIf="renameErrMsg !== ''" class="renameErrMsg" @donutAppear>
+      {{ renameErrMsg }}
+    </span>
+
+    <button
+      [disabled]="
+        renamingWIP.length === 0
+        || !renameBtnEnabled
+        || (renamingWIP + '.' + renamingExtension) === currentRightClickedItem[1] 
+      "
+      class="wizardButton btnRename" 
+      (click)="attemptToRename()"
+    >
+      RENAME
+    </button>
 
 </div>
 

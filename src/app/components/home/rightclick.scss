@@ -35,7 +35,7 @@
       &:hover {
         transition: 100ms;
         transition-property: transform text-shadow;
-        transform: translate(0, -1px);
+        // transform: translate(0, -1px);
         text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
       }
     }
