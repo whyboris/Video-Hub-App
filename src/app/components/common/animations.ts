@@ -17,17 +17,20 @@ export const modalAnimation = trigger('modalAnimation', [
 
 export const rightClickAnimation = trigger('rightClickAnimation', [
   transition(
-    ':enter', [
-      style({ height: 0 }),
-      animate('150ms cubic-bezier(0,1.11,1,1.15)', style({ height: 70 }))
-    ]
-  ),
-  transition(
     ':leave', [
       style({ transform: 'translateX(0)', 'opacity': 1 }),
       animate('250ms cubic-bezier(0,.7,.67,1)', style({ transform: 'translateY(10px)', opacity: 0 }))
     ]
   )]
+);
+
+export const rightClickContentAnimation = trigger('rightClickContentAnimation', [
+  transition(
+    ':enter', [
+      style({ 'margin-bottom': -60 }),
+      animate('150ms cubic-bezier(0,1.11,1,1.15)', style({ 'margin-bottom': 0 }))
+    ]
+  )
 );
 
 export const topAnimation = trigger('topAnimation', [
