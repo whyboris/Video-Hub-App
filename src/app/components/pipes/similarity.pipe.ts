@@ -32,9 +32,7 @@ export class SimilarityPipe implements PipeTransform {
       const indexes: number[] = this.similarityService.getIndexesBySimilarity();
 
       return indexes.map((index: number) => {
-        if (index) {
-          return finalArray[index];
-        }
+        return finalArray[index];
       })
 
     }

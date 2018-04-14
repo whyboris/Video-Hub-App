@@ -8,7 +8,7 @@ export class SimilarityService {
   // map from index of element in array to num of elements in common with chosen file
   similarityMap: Map<number, number> = new Map();
 
-  fileNameElements: string[];
+  fileNameElements: string[]; // array of words in the original file name
 
   constructor() { }
 
@@ -16,17 +16,17 @@ export class SimilarityService {
    * Reset the map to empty and set the new filename to compare to
    */
   public restartWith(filename: string) {
-
-    // lowercase everything, remove `the`, and fix double space if occurs due to `the` removal
-    const cleanedFileName = filename.toLowerCase().replace(/the/g, '').replace(/  /g, ' ');
+    // lowercase everything, remove `the`, ` - `, and trim space if `the` was the first word
+    const cleanedFileName = filename.toLowerCase().replace(/the /g, ' ').replace(/ - /g, ' ').trim();
     this.fileNameElements = cleanedFileName.split(' ');
-    console.log(this.fileNameElements);
-
     this.similarityMap = new Map();
   }
 
+  /**
+   * Return how many words this filename has in common with original file (`fileNameElements`)
+   * @param filename filename to compare to `fileNameElements`
+   */
   public numInCommon(filename: string): number {
-
     const fileElements: string[] = filename.toLowerCase().split(' ');
     let numSimilar = 0;
 
@@ -53,7 +53,7 @@ export class SimilarityService {
    * remove it from the map,
    * and return its index
    */
-  private getMostCommon() {
+  private getMostCommon(): number {
     let currNumSimilar: number = 0;
     let currBestMatch: number = 0;
 
@@ -77,6 +77,7 @@ export class SimilarityService {
   /**
    * Return in order from largest to fewest number of elements in common
    * must have 2 or more similar words to be returned
+   * maximum of 25 returned
    */
   public getIndexesBySimilarity(): number[] {
 
@@ -87,12 +88,16 @@ export class SimilarityService {
     while (stillSimilarFound) {
       const currMostCommon = this.getMostCommon();
       
-      if (currMostCommon) {
+      if (currMostCommon !== null) {
         finalResult[tempIndex] = currMostCommon;
         tempIndex++;
       } else {
         stillSimilarFound = false;
-      }   
+      }
+
+      if (tempIndex > 24) { // HARD CODED 25 limit
+        stillSimilarFound = false; // end the while loop
+      }
     }
 
     return finalResult;
