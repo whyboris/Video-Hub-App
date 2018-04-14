@@ -488,7 +488,7 @@ ipc.on('try-to-rename-this-file', function(event, sourceFolder: string, relPath:
       if (err.code === 'ENOENT') {
         // console.log('NO ENTITY');
         // console.log(err.path);
-        const pathObj = path.parse(err.path);
+        // const pathObj = path.parse(err.path);
         // console.log(pathObj);
         // console.log(pathObj.base);
         // console.log(pathObj.dir);

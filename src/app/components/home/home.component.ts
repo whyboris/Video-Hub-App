@@ -335,18 +335,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     // Rename file response
-    this.electronService.ipcRenderer.on('renameFileResponse', (event, success: boolean, errMsg?: string) => {
-      
-      this.renameBtnEnabled = true;
-      console.log('RENAME MSG BACK');
-      
+    this.electronService.ipcRenderer.on('renameFileResponse', (event, success: boolean, errMsg?: string) => {      
+      this.nodeRenamingFile = false;
+
       if (success) {
+        // UPDATE THE FINAL ARRAY !!!
+        this.replaceOriginalFileName();
         this.closeRename();
       } else {
-        console.log(errMsg);
         this.renameErrMsg = errMsg;
       }
-
     });
 
     // Returning Output
@@ -1033,14 +1031,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.showSimilar = false;
   }
 
-  currentRightClickedItem: any;
+  currentRightClickedItem: any; // element from FinalArray
   renamingNow: boolean = false;
 
   clickedOnFile: boolean; // whether right-clicked on file or gallery background
 
   rightClickPosition: any = { x: 0, y: 0 };
 
-  renameBtnEnabled: boolean = true;
+  nodeRenamingFile: boolean = false;
   renameErrMsg: string = '';
 
   showSimilarNow(): void {
@@ -1070,41 +1068,56 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.rightClickShowing = true;
   }
 
-  renameFile(): void {
+  /**
+   * Opens rename file modal, prepares all the name and extension
+   */
+  openRenameFileModal(): void {
     // prepare file name without extension:
     this.renameErrMsg = '';
     const item = this.currentRightClickedItem;
 
     // .slice() creates a copy
-    const extension = item[1].slice().split('.').pop();
     const fileName = item[1].slice().substr(0, item[1].lastIndexOf('.'));
-    console.log(extension);
-    console.log(fileName);
+    const extension = item[1].slice().split('.').pop();
     
     this.renamingWIP = fileName;
     this.renamingExtension = extension;
 
     this.itemToRename = item;
     this.renamingNow = true;
+
     setTimeout(() => {
       this.renameFileInput.nativeElement.focus();
     }, 0);
   }
 
+  /**
+   * Close the rename dialog
+   */
   closeRename() {
     this.renamingNow = false;
   }
 
+  /**
+   * Attempt to rename file
+   * check for simple errors locally
+   * ask Node to perform rename after
+   */
   attemptToRename() {
-    this.renameBtnEnabled = false;
+    this.nodeRenamingFile = true;
+    this.renameErrMsg = '';
 
     const sourceFolder = this.appState.selectedSourceFolder;
     const relativeFilePath = this.currentRightClickedItem[0];
     const originalFile = this.currentRightClickedItem[1];
     const newFileName = this.renamingWIP + '.' + this.renamingExtension;
     // check if different first !!!
-    if (originalFile === newFileName || newFileName.length === 0 ) {
-      console.log('lol - same file name bro!');
+    if (originalFile === newFileName) {
+      this.renameErrMsg = 'new file name must be different';
+      this.nodeRenamingFile = false;
+    } else if (this.renamingWIP.length === 0 ) {
+      this.renameErrMsg = 'new file name may not be empty';
+      this.nodeRenamingFile = false;
     } else {
       // try renaming
       this.electronService.ipcRenderer.send(
@@ -1114,6 +1127,22 @@ export class HomeComponent implements OnInit, AfterViewInit {
         originalFile,
         newFileName
       );
+    }
+  }
+
+  /**
+   * Searches through the `finalArray` and updates the file name and display name
+   */
+  replaceOriginalFileName(): void {
+    const oldFileName = this.currentRightClickedItem[1];
+
+    for (let i = 0; i < this.finalArray.length; i++) {
+      if (this.finalArray[i][1] === oldFileName) {
+        console.log('found it!!!');
+        this.finalArray[i][1] = this.renamingWIP + '.' + this.renamingExtension;
+        this.finalArray[i][2] = this.renamingWIP;
+        break;
+      }
     }
   }
 

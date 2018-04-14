@@ -101,7 +101,7 @@
     @rightClickAnimation
   >
     <ul *ngIf="clickedOnFile; else galleryOptions" @rightClickContentAnimation>
-      <li (click)="renameFile()">Rename file</li>
+      <li (click)="openRenameFileModal()">Rename file</li>
       <li (click)="showSimilarNow()">Show similar</li>
     </ul>
     <ng-template #galleryOptions>
@@ -153,7 +153,8 @@
     <input 
       (keyup.enter)="attemptToRename()"
       [(ngModel)]="renamingWIP"
-      [ngClass]="{ darkModeOn: settingsButtons['darkMode'].toggled }" 
+      [ngClass]="{ darkModeOn: settingsButtons['darkMode'].toggled }"
+      [disabled]="nodeRenamingFile"
       class="renameFile"
       type="text"
       #renameFileInput
@@ -169,9 +170,9 @@
 
     <button
       [disabled]="
-              renamingWIP.length === 0
-          || !renameBtnEnabled
-          || (renamingWIP + '.' + renamingExtension) === currentRightClickedItem[1] 
+            (renamingWIP + '.' + renamingExtension) === currentRightClickedItem[1] 
+          || nodeRenamingFile
+          || renamingWIP.length === 0
         "
       class="wizardButton btnRename" 
       (click)="attemptToRename()"
