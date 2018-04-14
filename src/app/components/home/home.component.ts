@@ -234,9 +234,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
 
-  @HostListener('window:resize', ['$event'])
-  handleResizeEvent(event: any) {
+  @HostListener('window:resize')
+  handleResizeEvent() {
     this.debounceUpdateMax();
+  }
+
+  @HostListener('window:click')
+  handleWindowClick() {
+    if (this.rightClickShowing) {
+      this.rightClickShowing = false;
+    }
   }
 
   constructor(
@@ -1002,7 +1009,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   rightClickPosition: any = { x: 0, y: 0 };
 
   showSimilar(): void {
-    this.rightClickShowing = false;
     this.findMostSimilar = this.currentRightClickedItem[2];
     console.log(this.findMostSimilar);
     this.tempLevBool = true;
@@ -1013,7 +1019,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const clientX: number = event.clientX;
     const howFarFromRight: number = winWidth - clientX;
 
-    this.rightClickPosition.x = (howFarFromRight < 100) ? clientX - 120 + (howFarFromRight) : clientX;
+    this.rightClickPosition.x = (howFarFromRight < 120) ? clientX - 120 + (howFarFromRight) : clientX;
     this.rightClickPosition.y = event.clientY;
   
     this.currentRightClickedItem = item;
@@ -1021,27 +1027,25 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   renameFile(): void {
-    this.rightClickShowing = false;
     // prepare file name without extension:
 
     const item = this.currentRightClickedItem;
 
     // console.log(item[1]);
-    const extension = item[1].split('.').pop();
-    const fileName = item[1].substr(0, item[1].lastIndexOf('.'));
+    // .slice() creates a copy
+    const extension = item[1].slice().split('.').pop();
+    const fileName = item[1].slice().substr(0, item[1].lastIndexOf('.'));
     console.log(extension);
     console.log(fileName);
 
-    item[1] = fileName;
+    this.renamingWIP = fileName;
     this.renamingExtension = extension;  
 
     this.itemToRename = item;
-    this.renamingNow = !this.renamingNow;
-    this.renamingWIP = item[1];
+    this.renamingNow = true;
   }
 
-  clickAway() {
-    this.rightClickShowing = false;
+  closeRename() {
     this.renamingNow = false;
   }
 

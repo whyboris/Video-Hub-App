@@ -74,12 +74,18 @@
     @donutAppear
   ></app-donut>
 
-  <!-- OVERLAY to cancel out right click modal and renaming modal on click -->
-  <div 
-    (click)="clickAway()"
-    (contextmenu)="clickAway()"
-    *ngIf="rightClickShowing || renamingNow"
+  <!-- OVERLAY to cancel out right click modal -->
+  <div
+    *ngIf="rightClickShowing"
     class="clickAwayOverlay"
+    @overlayAppear
+  >
+  </div>
+
+  <!-- OVERLAY to cancel out rename modal -->
+  <div
+    *ngIf="renamingNow"
+    class="clickAwayOverlay disableMouseClicks"
     @overlayAppear
   >
   </div>
@@ -107,7 +113,17 @@
     class="renameMenu" 
     @modalAnimation
   >
+
+  <div
+    (click)="closeRename()"
+    class="closeSettings closeRename"
+    title="cancel rename"
+  >
+    <span class="icon icon-close"></span>
+  </div>
   
+    <span class="renameHeading">Rename</span>
+
     <app-filmstrip-item 
       [darkMode]="settingsButtons['darkMode'].toggled"
       [elHeight]="150"
@@ -125,7 +141,8 @@
       [title]="itemToRename[1]"
     ></app-filmstrip-item>
   
-    <span class="rename">rename to:</span>
+    <span class="renameFrom">from:</span>
+    <span class="renameTo">to:</span>
 
     <input 
       [(ngModel)]="renamingWIP"
@@ -137,6 +154,8 @@
       <span class="hidden">{{ renamingWIP }}</span>
       <span class="extension" *ngIf="renamingWIP.length > 0">.{{ renamingExtension }}</span>
     </span>
+
+    <button class="wizardButton btnRename">RENAME</button>
 
 </div>
 
@@ -636,7 +655,7 @@
 
     <h2>Open previous hub</h2>
 
-    <button (click)="loadFromFile()" title="Open a previously-saved Video Hub">
+    <button class="wizardButton" (click)="loadFromFile()" title="Open a previously-saved Video Hub">
       Load from file
     </button>
 
@@ -694,6 +713,7 @@
       2
     </div>
     <button
+      class="wizardButton"
       (click)="selectSourceDirectory()"
       [disabled]="futureHubName === ''"
       title="Please select the folder with your video files"
@@ -721,6 +741,7 @@
       3
     </div>
     <button
+      class="wizardButton"
       (click)="selectOutputDirectory()"
       [disabled]="wizard.selectedSourceFolder === '' || futureHubName === ''"
       title="Please select the folder where your Video Hub will be stored"
@@ -782,6 +803,7 @@
       5
     </div>
     <button
+      class="wizardButton"
       [disabled]="wizard.selectedOutputFolder === ''
                || wizard.selectedSourceFolder === ''
                || inProgress
