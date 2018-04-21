@@ -695,7 +695,8 @@
             class="icon icon-close clear-history-item"
             title="Remove this item from recent history"
           ></span>
-          {{ historyItem.hubName }}
+          <img class="history-icon" src="../../../assets/logo.png">
+          <span class="history-name">{{ historyItem.hubName }}</span>
           <br>
           <span class="path recent" [innerHtml]="historyItem.vhaFilePath | folderArrowsPipe : false"></span>
         </li>
