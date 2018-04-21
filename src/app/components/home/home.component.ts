@@ -825,7 +825,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     console.log('rescanning');
     console.log(sourceAndVhaFile);
     // this.electronService.ipcRenderer.send('rescan-current-directory', sourceAndVhaFile);
-    this.electronService.ipcRenderer.send('rescan-current-directory-NEW', this.finalArray);
+    this.electronService.ipcRenderer.send('rescan-current-directory', this.finalArray);
   }
 
   /**
