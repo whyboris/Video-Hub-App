@@ -1,5 +1,8 @@
-export let DemoContent = {
-  'ssSize': '300',
+import { FinalObject } from "app/components/common/final-object.interface";
+
+export let DemoContent: FinalObject = {
+  'hubName': 'Cartoons',
+  'ssSize': 300,
   'numOfFolders': 3,
   'inputDir': 'unimportant',
   'lastScreen': 10,
@@ -11,7 +14,8 @@ export let DemoContent = {
       0,
       3995,
       '',
-      132
+      132,
+      100
     ],
     [
       '/DC Comics Animations/Batman',
@@ -20,7 +24,8 @@ export let DemoContent = {
       1,
       4560,
       '1080',
-      178
+      178,
+      100
     ],
     [
       '/DC Comics Animations/Batman',
@@ -29,7 +34,8 @@ export let DemoContent = {
       2,
       4582,
       '1080',
-      178
+      178,
+      100
     ],
     [
       '/DC Comics Animations/Batman',
@@ -38,7 +44,8 @@ export let DemoContent = {
       3,
       4549,
       '1080',
-      178
+      178,
+      100
     ],
     [
       '/DC Comics Animations/Batman',
@@ -47,7 +54,8 @@ export let DemoContent = {
       5,
       4453,
       '1080',
-      178
+      178,
+      100
     ],
     [
       '/DC Comics Animations/Batman',
@@ -56,7 +64,8 @@ export let DemoContent = {
       4,
       4812,
       '1080',
-      178
+      178,
+      100
     ],
     [
       '/DC Comics Animations/Batman',
@@ -65,7 +74,8 @@ export let DemoContent = {
       6,
       384,
       '',
-      132
+      132,
+      100
     ],
     [
       '/DC Comics Animations/Batman',
@@ -74,7 +84,8 @@ export let DemoContent = {
       7,
       4399,
       '',
-      173
+      173,
+      100
     ],
     [
       '/DC Comics Animations/Batman',
@@ -83,7 +94,8 @@ export let DemoContent = {
       8,
       4305,
       '',
-      132
+      132,
+      100
     ],
     [
       '/DC Comics Animations/Batman',
@@ -92,7 +104,8 @@ export let DemoContent = {
       9,
       4022,
       '720',
-      178
+      178,
+      100
     ],
     [
       '/DC Comics Animations/Batman Beyond',
@@ -101,7 +114,8 @@ export let DemoContent = {
       10,
       4603,
       '',
-      174
+      174,
+      100
     ],
     [
       '/DC Comics Animations/Batman Beyond/Batman Beyond (Animated Series)',
@@ -110,7 +124,8 @@ export let DemoContent = {
       11,
       1320,
       '',
-      133
+      133,
+      100
     ]
   ]
 }

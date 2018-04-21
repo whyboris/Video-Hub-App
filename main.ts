@@ -1,6 +1,14 @@
 import { app, BrowserWindow, screen } from 'electron';
 import * as path from 'path';
 
+// ========================================================================================
+// ****************************************************************************************
+// DEMO VARIABLE !!!
+const demo = false;
+// DEMO VARIABLE !!!
+// ****************************************************************************************
+// ========================================================================================
+
 let win, serve;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
@@ -16,21 +24,12 @@ const dialog = require('electron').dialog;
 let userWantedToOpen = null;
 let myWindow = null
 
-// ========================================================================================
-// ****************************************************************************************
-// DEMO VARIABLE !!!
-const demo = false;
-// DEMO VARIABLE !!!
-// ****************************************************************************************
-// ========================================================================================
-
 // For windows -- when loading the app the first time
 if (process.argv[1]) {
   if (!serve) {
     userWantedToOpen = process.argv[1];
   }
 }
-
 
 // OPEN FILE ON WINDOWS FROM FILE DOUBLE CLICK
 const isSecondInstance = app.makeSingleInstance((commandLine, workingDirectory) => {
@@ -179,9 +178,6 @@ try {
   // throw e;
 }
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
-
 // ============================================================
 // My imports
 // ============================================================
@@ -201,24 +197,49 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 // My variables
 // ============================================================
 
-import { cleanUpFileName, labelVideo, acceptableFiles } from './main-support';
+import {
+  alphabetizeFinalArray,
+  countFoldersInFinalArray,
+  everyIndex,
+  extractFileName,
+  finalArrayWithoutDeleted,
+  findAllNewFiles,
+  getVideoPathsAndNames,
+  labelVideo,
+  numberOfVidsIn,
+  onlyNewIndexes,
+  superDangerousDelete,
+  takeTenScreenshots,
+  writeVhaFileDangerously
+} from './main-support';
 
-import { FinalObject } from './src/app/components/common/final-object.interface';
-
-let finalArray = [];
-let fileCounter = 0;
-
-let selectedSourceFolder = '';
-let selectedOutputFolder = '';
+import { FinalObject, ImageElement } from './src/app/components/common/final-object.interface';
+import { ImportSettingsObject } from './src/app/components/common/import.interface';
 
 let angularApp; // set as 'event' -- used to send messages back to Angular App
 
-let stillNeedToExtractImages = false;
+let finalArray: ImageElement[] = [];
 
+let selectedSourceFolder = '';
+let selectedOutputFolder = '';
 let hubName = 'untitled'; // in case user doesn't name their hub any name
-let currentOpenVhaFilename = '';
 
+let stillNeedToExtractImages = false;
 let cancelCurrentImport = false;
+
+let currentlyOpenVhaFile: string; // OFFICAL DECREE IN NODE WHICH FILE IS CURRENTLY OPEN !!!
+
+let firstScan: boolean = true;
+let lastSavedFinalObject: FinalObject; // hack for saving the `vha` file again later
+let lastScreenFromLastOpenFile: number = 0;
+let hubFolderNameForSaving = ''; // will be something like `vha-hubName`
+
+let findAllIndexesAbove: number = 0;
+
+let screenShotSize = 100;
+
+// the new thing that is incremented to indicate file # (for finalArray[3])
+let newLastScreenCounterNEW: number = 0; 
 
 /**
  * Load the .vha file and send it to app
@@ -229,12 +250,12 @@ function openThisDamnFile(pathToVhaFile: string) {
   // TODO ### !!! figure out how to open file when double click first time
   macFirstRun = false;
 
-  console.log('the app is about to open: ' + pathToVhaFile);
-
   // Override if user opening by double-clicking a file
   if (userWantedToOpen) {
     pathToVhaFile = userWantedToOpen;
   }
+
+  console.log('the app is about to open: ' + pathToVhaFile);
 
   fs.readFile(pathToVhaFile, (err, data) => {
     if (err) {
@@ -245,12 +266,29 @@ function openThisDamnFile(pathToVhaFile: string) {
       });
       angularApp.sender.send('pleaseOpenWizard');
     } else {
+      currentlyOpenVhaFile = pathToVhaFile;
+      lastSavedFinalObject = JSON.parse(data);
+      setGlobalsFromVhaFileNEW(lastSavedFinalObject); // sets source folder ETC
+
+      // path to folder where the VHA file is
+      selectedOutputFolder = path.parse(pathToVhaFile).dir;
+
+      console.log(selectedSourceFolder + ' yo!');
+      console.log(selectedOutputFolder + 'y\'all!');
       angularApp.sender.send(
         'finalObjectReturning', JSON.parse(data), pathToVhaFile, extractFileName(pathToVhaFile)
       );
     }
   });
 }
+
+function setGlobalsFromVhaFileNEW(vhaFileContents: FinalObject) {
+  hubName = vhaFileContents.hubName,
+  screenShotSize = vhaFileContents.ssSize;
+  selectedSourceFolder = vhaFileContents.inputDir;
+  lastScreenFromLastOpenFile = vhaFileContents.lastScreen;
+}
+
 
 // ============================================================
 // Methods that interact with Angular
@@ -261,7 +299,8 @@ const pathToAppData = app.getPath('appData');
 /**
  * Close the window
  */
-ipc.on('close-window', function (event, settingsToSave) {
+ipc.on('close-window', function (event, settingsToSave, finalArrayToSave) {
+
   const json = JSON.stringify(settingsToSave);
 
   try {
@@ -270,9 +309,18 @@ ipc.on('close-window', function (event, settingsToSave) {
     fs.mkdirSync(path.join(pathToAppData, 'video-hub-app'));
   }
 
-  // TODO -- catch bug if user closes before selecting the output folder
+  // TODO -- catch bug if user closes before selecting the output folder ?!??
   fs.writeFile(path.join(pathToAppData, 'video-hub-app', 'settings.json'), json, 'utf8', () => {
-    BrowserWindow.getFocusedWindow().close();
+    if (finalArrayToSave !== null) {
+      lastSavedFinalObject.images = finalArrayToSave;
+      writeVhaFileDangerously(lastSavedFinalObject, currentlyOpenVhaFile, () => {
+        // file writing done !!!
+        console.log('.vha file written before closing !!!');
+        BrowserWindow.getFocusedWindow().close();
+      });
+    } else {
+      BrowserWindow.getFocusedWindow().close();
+    }
   });
 });
 
@@ -329,14 +377,8 @@ ipc.on('choose-input', function (event, someMessage) {
     properties: ['openDirectory']
   }, function (files) {
     if (files) {
-      // console.log('the user has chosen this INPUT directory: ' + files[0]);
-      selectedSourceFolder = files[0];
-      // console.log('the user has chosen this OUTPUT directory: ' + files[0]);
-      selectedOutputFolder = files[0];
-      totalNumberOfFiles = 0;
-      walkAndCountSync(selectedSourceFolder, []);
-      // console.log(totalNumberOfFiles);
-      event.sender.send('inputFolderChosen', selectedSourceFolder, totalNumberOfFiles);
+      const inputDirPath: string = files[0];
+      event.sender.send('inputFolderChosen', inputDirPath, numberOfVidsIn(inputDirPath));
     }
   })
 });
@@ -352,21 +394,21 @@ ipc.on('choose-output', function (event, someMessage) {
     properties: ['openDirectory']
   }, function (files) {
     if (files) {
-      selectedOutputFolder = files[0];
-      event.sender.send('outputFolderChosen', selectedOutputFolder);
+      const outputDirPath = files[0];
+      event.sender.send('outputFolderChosen', outputDirPath);
     }
   })
 });
 
-let hubFolderNameForSaving = ''; // will be something like `vha-hubName`
-
 /**
  * Start extracting the screenshots into a chosen output folder from a chosen input folder
  */
-ipc.on('start-the-import', function (event, options) {
+ipc.on('start-the-import', function (event, options: ImportSettingsObject) {
+
+  const outDir: string = options.exportFolderPath;
 
   // make sure no hub name under the same name exists
-  if (fs.existsSync(path.join(selectedOutputFolder, options.hubName + '.vha'))) {
+  if (fs.existsSync(path.join(outDir, options.hubName + '.vha'))) {
 
     dialog.showMessageBox({
       message: 'Hub already exists with this name. \n' +
@@ -379,26 +421,30 @@ ipc.on('start-the-import', function (event, options) {
   } else {
 
     // create the folder `vha-hubName` inside the output directory
-    if (!fs.existsSync(path.join(selectedOutputFolder, 'vha-' + options.hubName))) {
+    if (!fs.existsSync(path.join(outDir, 'vha-' + options.hubName))) {
       console.log('vha-hubName folder did not exist, creating');
-      fs.mkdirSync(path.join(selectedOutputFolder, 'vha-' + options.hubName));
+      fs.mkdirSync(path.join(outDir, 'vha-' + options.hubName));
     }
 
     hubFolderNameForSaving = 'vha-' + options.hubName;
 
+    selectedOutputFolder = options.exportFolderPath;
+    selectedSourceFolder = options.videoDirPath;
     screenShotSize = options.imgHeight;
     hubName = options.hubName;
-    theExtractor('freshStart');
+
+    brandNewExtraction();
   }
 
 });
 
 /**
- * Initiate rescan of the directory
+ * Initiate rescan of the directory NEW
+ * now receives the finalArray from `home.component`
+ * because the user may have renamed files from within the app!
  */
-ipc.on('rescan-current-directory', function (event, inputAndVhaFile) {
-  currentOpenVhaFilename = extractFileName(inputAndVhaFile.pathToVhaFile);
-  reScanDirectory(inputAndVhaFile.inputFolder, inputAndVhaFile.pathToVhaFile);
+ipc.on('rescan-current-directory-NEW', function (event, currentAngularFinalArray: ImageElement[]) {
+  reScanDirectoryNEW(currentAngularFinalArray);
 });
 
 /**
@@ -428,10 +474,22 @@ ipc.on('system-open-file-through-modal', function (event, somethingElse) {
 /**
  * Import this .vha file
  */
-ipc.on('load-this-vha-file', function (event, pathToVhaFile) {
-  // TODO -- streamline this variable and openThisDamnFileFunction
-  userWantedToOpen = pathToVhaFile;
-  openThisDamnFile(pathToVhaFile);
+ipc.on('load-this-vha-file', function (event, pathToVhaFile, finalArrayToSave: ImageElement[]) {
+
+  if (finalArrayToSave !== null) {
+    lastSavedFinalObject.images = finalArrayToSave;
+    writeVhaFileDangerously(lastSavedFinalObject, currentlyOpenVhaFile, () => {
+      // file writing done !!!
+      console.log('.vha file written !!!');
+      userWantedToOpen = pathToVhaFile;
+    openThisDamnFile(pathToVhaFile);
+    });
+  } else {
+    // TODO -- streamline this variable and openThisDamnFileFunction
+    userWantedToOpen = pathToVhaFile;
+    openThisDamnFile(pathToVhaFile);
+  }
+
 });
 
 /**
@@ -486,12 +544,8 @@ ipc.on('try-to-rename-this-file', function(event, sourceFolder: string, relPath:
       success = false;
       console.log(err);
       if (err.code === 'ENOENT') {
-        // console.log('NO ENTITY');
-        // console.log(err.path);
         // const pathObj = path.parse(err.path);
         // console.log(pathObj);
-        // console.log(pathObj.base);
-        // console.log(pathObj.dir);
         errMsg = "Original file could not be found";        
       } else {
         errMsg = "Some error occurred";
@@ -516,250 +570,204 @@ function sendCurrentProgress(current: number, total: number, stage: number): voi
   angularApp.sender.send('processingProgress', current, total, stage);
 }
 
-type ExtractionMode = 'firstScan' | 'reScan';
-
-let extractionMode: ExtractionMode = 'firstScan';
-
 /**
  * Writes the json file and sends contents back to Angular App
- * Note: this happens before screenshots start getting extracted !!!
+ * Starts the process to extract all the images
  */
 function sendFinalResultHome(): void {
 
-  alphabetizeFinalArray();
+  finalArray = alphabetizeFinalArray(finalArray);
 
   const finalObject: FinalObject = {
     hubName: hubName,
     ssSize: screenShotSize,
-    numOfFolders: countFoldersInFinalArray(),
+    numOfFolders: countFoldersInFinalArray(finalArray),
     inputDir: selectedSourceFolder,
-    lastScreen: MainCounter.screenShotFileNumber, // REPRESENTS NEXT AVAILABLE NUMBER FOR THE TAKING
+    lastScreen: lastScreenFromLastOpenFile, // FIX THIS UP !!! #######
     images: finalArray
   };
 
+  lastSavedFinalObject = finalObject;
+
+  console.log('about to SEND THIS HOME:');
+  console.log(lastSavedFinalObject);
+  console.log('check `lastScreen` above !!!! should be not wrong !!!:');
+
   const json = JSON.stringify(finalObject);
-  // write the file
-  // TODO -- hubName never used -- error because previous file loaded !!! ???
-  const pathToTheFile = path.join(selectedOutputFolder, (currentOpenVhaFilename || hubName) + '.vha');
-  fs.writeFile(pathToTheFile, json, 'utf8', () => {
-    // console.log('file written:');
+
+  // TODO -- BUG HERE EVER !!!?!!!???!!?????
+  const pathToTheFile = path.join(selectedOutputFolder, hubName + '.vha');
+
+  writeVhaFileDangerously(finalObject, pathToTheFile, () => {
+
+    currentlyOpenVhaFile = pathToTheFile;
+
+    // when done, perform this !!!
     angularApp.sender.send(
       'finalObjectReturning', JSON.parse(json), pathToTheFile, extractFileName(pathToTheFile)
     );
 
     if (stillNeedToExtractImages) {
-      if (extractionMode === 'firstScan') {
-        startExtractingAllScreenshots();
-      } else {
-        newRescanExtractor();
-      }
+      const screenshotOutputFolder: string = path.join(selectedOutputFolder, hubFolderNameForSaving);
+
+      // *** SUPER DANGEROUS USES `newLastScreenCounterNEW` ####
+      const indexesToScan: number[] = firstScan ? 
+                                          everyIndex(finalArray) 
+                                        : onlyNewIndexes(finalArray, findAllIndexesAbove); // #####
+
+      console.log('indexes to scan');
+      console.log(indexesToScan);
+
+      extractAllScreenshotsNEW(finalArray, selectedSourceFolder, screenshotOutputFolder, screenShotSize, indexesToScan);
     }
 
   });
-
 }
 
-import { MainCounter } from './main-counter';
+// BRAND NEW EXTRACTION METHOD !!!
+function brandNewExtraction() {
 
-type ExtractorMessage = 'screenShotExtracted'
-                      | 'metaExtracted'
-                      | 'metaError'
-                      | 'freshStart';
+  firstScan = true;
+  
+  // RESET EVERY GLOBAL VARIABLE
+  cancelCurrentImport = false;
+  finalArray = [];
+  stillNeedToExtractImages = true;
 
-/**
- * Master directing screenshot and meta extraction flow
- * @param message what event has finished
- * @param dataObject optional data (any)
- */
-function theExtractor(message: ExtractorMessage, dataObject?: any): void {
-  if (message === 'screenShotExtracted') {
-    MainCounter.screenShotFileNumber++;
-    extractNextMetadata();
+  newLastScreenCounterNEW = 0;
+  
+  // generate the final array
+  finalArray = getVideoPathsAndNames(selectedSourceFolder); // full `finalArray` with empty metadata
 
-  } else if (message === 'metaExtracted') {
-    MainCounter.itemInFinalArray++;
-    areWeDoneYet();
-
-  } else if (message === 'metaError') {
-    // this code block never happened I think
-    MainCounter.itemInFinalArray++;
-    areWeDoneYet();
-
-  } else if (message === 'freshStart') {
-
-    extractionMode = 'firstScan';
-
-    cancelCurrentImport = false;
-
-    totalNumberToExtract = 0;
-    currentScreenshotExtracting = 0;
-
-    stillNeedToExtractImages = true;
-
-    // reset things and launch extraction of first screenshot !!!
-    finalArray = [];
-    fileCounter = 0;
-    MainCounter.totalNumber = 0;
-    MainCounter.itemInFinalArray = 0;
-    MainCounter.screenShotFileNumber = 0;
-    walkSync(selectedSourceFolder, []); // walkSync updates `finalArray`
-    if (demo) {
-      finalArray = finalArray.slice(0, 50);
-    }
-    MainCounter.totalNumber = finalArray.length;
-    // console.log('there are a total of: ' + MainCounter.totalNumber + ' files to be extracted');
-
-    if (MainCounter.totalNumber > 0) {
-      extractNextScreenshot();
-    } else {
-      // this code block never happened I think
-    }
-
-  } else {
-    // this code block never happened I think
+  if (demo) {
+    finalArray = finalArray.slice(0, 50);
   }
-}
 
-/**
- * Check if extraction is done, if so sendResultsHome, otherwise extractNextScreenshot
- */
-function areWeDoneYet(): void {
-  if (MainCounter.itemInFinalArray < MainCounter.totalNumber) {
-    sendCurrentProgress(MainCounter.itemInFinalArray, MainCounter.totalNumber, 1);
-  } else {
-    sendCurrentProgress(0, MainCounter.totalNumber, 2);
-  }
-  if (MainCounter.itemInFinalArray === MainCounter.totalNumber) {
+  lastScreenFromLastOpenFile = finalArray.length;
+
+  // PART 1 -- extract all metadata
+  extractAllMetadataNEW(selectedSourceFolder, 0, () => {
+    // call back when done
+    console.log('DONE EXTRACTING !!!');
+    console.log(finalArray);
     sendFinalResultHome();
-  } else {
-    extractNextScreenshot();
-  }
+  });
+
+
 }
 
-/**
- * Extract the next screenshot
- */
-function extractNextScreenshot(): void {
-  finalArray[MainCounter.itemInFinalArray][3] = MainCounter.screenShotFileNumber;
-  theExtractor('screenShotExtracted');
-}
-
-let screenShotSize = 100;
-const count = 10;
-const timestamps = ['5%', '15%', '25%', '35%', '45%', '55%', '65%', '75%', '85%', '95%'];
-let i = 0;
-
-/**
- * Take 10 screenshots of a particular file save as particular fileNumber
- * @param pathToFile
- * @param fileNumber
- * @param firstScan -- true if it's the first time, false if it's a rescan
- */
-function takeTenScreenshots(pathToFile: string, fileNumber: number, firstScan: boolean) {
-  if (!cancelCurrentImport) {
-    ffmpeg(pathToFile)
-      .screenshots({
-        count: 1,
-        timemarks: [timestamps[i]],
-        filename: fileNumber + `-${i + 1}.jpg`,
-        size: '?x' + screenShotSize
-      }, path.join(selectedOutputFolder, hubFolderNameForSaving))
-      .on('end', () => {
-        i = i + 1;
-        if (i < count) {
-          takeTenScreenshots(pathToFile, fileNumber, firstScan);
-        } else if (i === count) {
-          i = 0;
-          if (firstScan) {
-            getNextTen();
-          } else {
-            continueReScanning();
-          }
-        }
-      })
-      .on('error', () => {
-        // console.log('screenshot error occurred in file #' + pathToFile);
-        if (firstScan) {
-          getNextTen();
-        } else {
-          continueReScanning();
-        }
-      });
-  } else {
-    // TODO -- NEED TO RESET EVERYTHING HERE MAYBE !?!?!?!!!!
-    sendCurrentProgress(1, 1, 2);
-    angularApp.sender.send('importInterrupted');
-  }
-}
-
-let totalNumberToExtract = 0;
-let currentScreenshotExtracting = 0;
+// DANGEROUSLY DEPENDS ON `cancelCurrentImport` -- can't move to another file
 
 /**
  * Start extracting screenshots now that metadata has been retreived and sent over to the app
+ * @param theFinalArray     -- finalArray of ImageElements
+ * @param videoFolderPath   -- path to base folder where videos are
+ * @param screenshotFolder  -- path to folder where .jpg files will be saved
+ * @param screenshotSize    -- number in px how large each screenshot should be
+ * @param elementsToScan    -- array of indexes of elements in finalArray for which to extract screenshots 
  */
-function startExtractingAllScreenshots() {
-  totalNumberToExtract = finalArray.length;
-  getNextTen();
-}
+function extractAllScreenshotsNEW(
+  theFinalArray: ImageElement[],
+  videoFolderPath: string, 
+  screenshotFolder: string, 
+  screenshotSize: number, 
+  elementsToScan: number[]
+): void {
+  // final array already saved at this point - nothing to update inside it
+  // just walk through whatever is needed and extract screenshots
+  // from every file inside the array
+  const itemTotal = elementsToScan.length;
+  let iterator = -1; // gets incremented to 0 on first call
 
-/**
- * Extract the next 10 screenshots
- */
-function getNextTen() {
-  if (currentScreenshotExtracting < totalNumberToExtract) {
-    sendCurrentProgress(currentScreenshotExtracting, totalNumberToExtract, 2);
+  const extractTenCallback = (): void => {
+    iterator++;
+    
+    if ((iterator < itemTotal) && !cancelCurrentImport) {
 
-    const fileNumber = finalArray[currentScreenshotExtracting][3];
-    const filePath = (path.join(selectedSourceFolder,
-                                finalArray[currentScreenshotExtracting][0],
-                                finalArray[currentScreenshotExtracting][1]));
-    takeTenScreenshots(filePath, fileNumber, true);
-  } else {
-    // send the last one when done !!!
-    sendCurrentProgress(currentScreenshotExtracting, totalNumberToExtract, 2);
+      sendCurrentProgress(iterator, itemTotal, 2);
+
+      const currentElement = elementsToScan[iterator];
+
+      const pathToVideo: string = (path.join(videoFolderPath,
+                                             theFinalArray[currentElement][0],
+                                             theFinalArray[currentElement][1]));
+
+      const jpgFileNum: number = theFinalArray[currentElement][3]; 
+
+      takeTenScreenshots(
+        pathToVideo,
+        jpgFileNum,
+        screenshotSize,
+        screenshotFolder,
+        extractTenCallback
+      );
+    } else {
+      sendCurrentProgress(1, 1, 2); // indicates 100%
+    }
   }
-  currentScreenshotExtracting++;
-}
 
-/**
- * Extract the next file's metadata
- */
-function extractNextMetadata(): void {
-  const index = MainCounter.itemInFinalArray;
-  extractMetadata(path.join(selectedSourceFolder,
-                            finalArray[index][0],
-                            finalArray[index][1]));
-}
-
-/**
- * Extract filename from `path/to/the/file.vha` or `path\to\the\file.vha`
- */
-function extractFileName(filePath: string): string {
-  return path.parse(filePath).name;
+  extractTenCallback();
 }
 
 /**
  * Extract the meta data & store it in the final array
- * @param filePath -- the full path to the file (including file name)
- * @param currentFile -- index of current file
+ * @param videoFolderPath -- the full path to the base folder for video files
+ * @param startIndex      -- the starting point in finalArray from where to extract metadata
+ *                           (should be 0 when first scan, should be index of first element when rescan)
+ * @param doneExtractingAllMetadata -- callback when done with all metadata extraction
  */
-function extractMetadata(filePath: string): void {
-  ffmpeg.ffprobe(filePath, (err, metadata) => {
+function extractAllMetadataNEW(
+    videoFolderPath: string, 
+    startIndex: number,
+    doneExtractingAllMetadata: any
+  ): void {
 
+  const itemTotal = finalArray.length;
+  let iterator = startIndex - 1; // since iterator gets incremented upon first call below
+
+  const extractMetaDataCallback = (): void => {
+    iterator++;
+    
+    if (iterator < itemTotal) {
+      // send current progress to the first progress bar !?!! somehow
+      const filePathNEW = (path.join(videoFolderPath,
+                                     finalArray[iterator][0],
+                                     finalArray[iterator][1]));
+      extractMetadataForThisONEFileNEW(filePathNEW, iterator, extractMetaDataCallback);
+    } else {
+      // something else !!?!?!??!!!!  
+      doneExtractingAllMetadata();
+    }
+  }
+
+  extractMetaDataCallback();
+}
+
+/**
+ * Updates the finalArray with the metadata about one particualar requested file
+ * Updates newLastScreenCounterNEW global variable !!!
+ * @param filePath      path to the file
+ * @param indexInArray  index in array to update
+ */
+function extractMetadataForThisONEFileNEW(
+  filePath: string, 
+  indexInArray: number, 
+  extractMetaCallback: any
+): void {
+  ffmpeg.ffprobe(filePath, (err, metadata) => {
     if (err) {
-      // console.log('ERROR - extracting metadata - ERROR');
-      // console.log(MainCounter.itemInFinalArray);
-      theExtractor('metaError');
+      extractMetaCallback();
     } else {
       const duration = Math.round(metadata.streams[0].duration) || 0;
       const origWidth = metadata.streams[0].width;
       const origHeight = metadata.streams[0].height;
       const sizeLabel = labelVideo(origWidth, origHeight);
       const width = Math.round(100 * origWidth / origHeight) || 169;
-      finalArray[MainCounter.itemInFinalArray][4] = duration;  // 4th item is duration
-      finalArray[MainCounter.itemInFinalArray][5] = sizeLabel; // 5th item is the label, e.g. 'HD'
-      finalArray[MainCounter.itemInFinalArray][6] = width;     // 6th item is width of screenshot (130) for ex
+      finalArray[indexInArray][3] = newLastScreenCounterNEW;    // 3rd item is the FILE NUMBER !!! IMPORTANT !!!
+      newLastScreenCounterNEW++;
+      finalArray[indexInArray][4] = duration;  // 4th item is duration
+      finalArray[indexInArray][5] = sizeLabel; // 5th item is the label, e.g. 'HD'
+      finalArray[indexInArray][6] = width;     // 6th item is width of screenshot (130) for ex
 
       // extract the file size
       const stats = fs.statSync(filePath);
@@ -767,288 +775,106 @@ function extractMetadata(filePath: string): void {
       // Convert the file size to megabytes
       const fileSizeInMegabytes = Math.round(fileSizeInBytes / 1000000.0);
 
-      finalArray[MainCounter.itemInFinalArray][7] = fileSizeInMegabytes;
-
-      theExtractor('metaExtracted');
+      finalArray[indexInArray][7] = fileSizeInMegabytes;
+      extractMetaCallback();
     }
   });
 }
 
 
-let lastScreenshotFileNumber = 0; // only used for fancy new re-scanning functionality
-let folderToDeleteFrom = ''; // super dangerous -- only happens on `reScanDirectory`
-
 /**
- * Rescan the directory -- updating files etc -- SUPER COMPLICATED
+ * Begins rescan procedure compared to what the app has currently
+ * 
+ * @param angularFinalArray 
  */
-function reScanDirectory(inputFolder: string, pathToVhaFile: string): void {
+function reScanDirectoryNEW(angularFinalArray: ImageElement[]) {
+  firstScan = false;
+  hubFolderNameForSaving = 'vha-' + hubName; // maybe not needed -- check it
 
-  // console.log('inputFolder: ' + inputFolder);
-  // console.log('vhaFile: ' + pathToVhaFile);
+  const inputFolder = selectedSourceFolder; // DOUBLE CHECK THIS !!!!!!!!!!!!!!!!!!!!!!! global variable danger
+  console.log(angularFinalArray);
 
-  fs.readFile(pathToVhaFile, (err, data) => {
-    if (err) {
-      // TODO -- better error handling
-      // console.log(err);
-    } else {
-      // console.log('Rescanning directory');
-      // console.log('the .vha file has been read!');
-      const currentJson: FinalObject = JSON.parse(data);
-
-      extractionMode = 'reScan';
-      cancelCurrentImport = false;
-      rescanningIndex = 0;
-      indexesOfThoseToExtract = [];
-
-      const oldFileList: any[] = currentJson.images;
-      MainCounter.screenShotFileNumber = currentJson.lastScreen;
-
-      lastScreenshotFileNumber = currentJson.lastScreen;
-      const currentFileName = extractFileName(pathToVhaFile);
-      selectedOutputFolder = pathToVhaFile.replace(currentFileName + '.vha', '');
-      hubFolderNameForSaving = 'vha-' + currentFileName;
-      folderToDeleteFrom = path.join(selectedOutputFolder, hubFolderNameForSaving);
-      console.log('path to delete images from:');
-      console.log(folderToDeleteFrom);
-      selectedSourceFolder = currentJson.inputDir;
-      screenShotSize = currentJson.ssSize;
-      hubName = currentJson.hubName;
-
-      fileCounter = 0; // just in case
-
-      if (fs.existsSync(inputFolder)) {
-        walkSync(inputFolder, []); // this method updates the `finalArray`
-        if (demo) {
-          finalArray = finalArray.slice(0, 50);
-        }
-        findTheDiff(oldFileList, inputFolder);
-      } else {
-        dialog.showMessageBox({
-          message: 'Directory ' + inputFolder + ' does not exist',
-          buttons: ['OK']
-        });
-      }
+  // rescan the source directory
+  if (fs.existsSync(inputFolder)) {
+    finalArray = getVideoPathsAndNames(inputFolder); // this method updates the `finalArray`
+    if (demo) {
+      finalArray = finalArray.slice(0, 50);
     }
-  });
-}
-
-/**
- * Figures out what new files there are, adds them to the finalArray, and starts extracting screenshots
- * @param oldFileList array of video files from the previously saved JSON
- * @param inputFolder the input folder
- */
-function findTheDiff(oldFileList, inputFolder): void {
-
-  const theDiff = []; // track new elements
-
-  // Find new/renamed elements
-  // Adds all the new elements to `theDiff`
-  // finalArray has been updated through walkSync in reScanDirectory();
-  // finalArray reflects what's currently on the HD - contains only file names
-  finalArray.forEach((newElement) => {
-    let matchFound = false;
-    oldFileList.forEach((oldElement) => {
-      const pathStripped = newElement[0].replace(inputFolder, '');
-      if (pathStripped === oldElement[0] && newElement[1] === oldElement[1]) {
-        matchFound = true;
-      }
+    findTheDiff(angularFinalArray, finalArray, inputFolder);
+  } else {
+    dialog.showMessageBox({
+      message: 'Directory ' + inputFolder + ' does not exist',
+      buttons: ['OK']
     });
+  }
+}
 
-    if (!matchFound) {
-      theDiff.push(newElement);
-    }
-  });
+/**
+ * Figures out what new files there are, 
+ * adds them to the finalArray, 
+ * and starts extracting metadata (which will then send file home and start extracting images)
+ * @param angularFinalArray -- array of ImageElements from Angular - most current view
+ * @param hdFinalArray  -- array of ImageElements from current hard drive scan
+ * @param inputFolder   -- the input folder
+ */
+function findTheDiff(
+  angularFinalArray: ImageElement[],
+  hdFinalArray: ImageElement[],
+  inputFolder: string
+): void {
 
-  // console.log(theDiff);
+  // SUPER DANGEROUS FIX:
+  newLastScreenCounterNEW = lastSavedFinalObject.lastScreen;
+
+  // Generate ImageElement[] of all the new elements to be added
+  const theDiff: ImageElement[] = 
+    findAllNewFiles(angularFinalArray, hdFinalArray, inputFolder, lastSavedFinalObject.lastScreen);
+
+  console.log('the diff:');
+  console.log(theDiff);
+
+  // TODO -- check below !!!
+
+  findAllIndexesAbove = lastScreenFromLastOpenFile;
+
+  lastScreenFromLastOpenFile = lastScreenFromLastOpenFile + theDiff.length; // update last screen!!!
 
   // remove from FinalArray all files that are no longer in the video folder
-  oldFileList = oldFileList.filter((value, index) => {
-    let matchFound = false;
 
-    finalArray.forEach((newElement) => {
-      const pathStripped = newElement[0].replace(inputFolder, '');
-      if (pathStripped === value[0] && newElement[1] === value[1]) {
-        matchFound = true;
-      }
+  // location where images are stored
+  const folderToDeleteFrom = path.join(selectedOutputFolder, hubFolderNameForSaving);
+
+  const angularArrayCleanedOfDeletedItems: ImageElement[] = 
+    finalArrayWithoutDeleted(angularFinalArray, hdFinalArray, inputFolder, folderToDeleteFrom);
+
+  // If there are new ifles OR if any files have been deleted !!!
+  if (theDiff.length > 0 || angularArrayCleanedOfDeletedItems.length === angularFinalArray.length) {
+
+    // update the ACTUAL FINAL ARRY -- for NODE TO SAVE !!!!! ### REFACTOR !!!
+    finalArray = angularArrayCleanedOfDeletedItems.concat(theDiff);
+    // final array now has new elements appended at the end !!!
+  
+    console.log('find all indexes above:');
+    console.log(findAllIndexesAbove);
+    console.log('last screen before:');
+    console.log(lastScreenFromLastOpenFile);
+    
+    // TODO -- FIX THIS UP REAL GOOD !!!!!!!!
+  
+    stillNeedToExtractImages = true;
+
+    const startingPointForMetaScan = angularFinalArray.length;
+
+    console.log('the diff is ' + theDiff.length + ' elements long!');
+    
+    extractAllMetadataNEW(selectedSourceFolder, startingPointForMetaScan, () => {
+      console.log('extracted all metadata now !!!');
+      console.log(finalArray);
+      sendFinalResultHome();
     });
 
-    if (matchFound) {
-      return true;
-    } else {
-      superDangerousDelete(value[3]);
-      return false;
-    }
-  });
-
-  MainCounter.itemInFinalArray = oldFileList.length;
-  MainCounter.filesProcessed = oldFileList.length;
-  finalArray = oldFileList.concat(theDiff);
-  MainCounter.totalNumber = finalArray.length;
-
-  if (theDiff.length > 0) {
-    // TODO -- FIX THIS UP REAL GOOD !!!!!!!!
-    stillNeedToExtractImages = true;
-    extractNextScreenshot();
-  } else {
-    sendFinalResultHome();
   }
 
 }
 
 
-/**
- * Super dangerously delete 10 images from images folder given the base number
- * Deletes 10 images with given base
- * uses `folderToDeleteFrom` variable !!!
- * @param numberOfImage 
- */
-function superDangerousDelete(numberOfImage: number): void {
-  // console.log('index given: ' + numberOfImage);
-  const filePath = path.join(folderToDeleteFrom, numberOfImage.toString());
-
-  for (let i = 1; i < 11; i++) {
-    const currentFile: string = filePath + '-' + i.toString() + '.jpg';
-    if (fs.existsSync(currentFile)) {
-      fs.unlinkSync(currentFile, (err) => { 
-        // console.log(err);
-        // Don't even sweat it dawg!
-      });
-      // console.log('deleted ' + currentFile);
-    }
-  }
-}
-
-
-let rescanningIndex = 0;
-let indexesOfThoseToExtract = [];
-
-/**
- * Compile an array of indexes of finalArray from which to extract images
- */
-function newRescanExtractor() {
-
-  finalArray.forEach((element, index) => {
-    if (element[3] >= lastScreenshotFileNumber) {
-      indexesOfThoseToExtract.push(index);
-    }
-  });
-
-  // console.log(indexesOfThoseToExtract);
-
-  rescanningIndex = indexesOfThoseToExtract.length;
-  continueReScanning();
-
-}
-
-function continueReScanning() {
-  const lol = indexesOfThoseToExtract[rescanningIndex - 1];
-
-  if (rescanningIndex > 0) {
-    sendCurrentProgress(indexesOfThoseToExtract.length - rescanningIndex, indexesOfThoseToExtract.length, 2);
-    const fileNumber = finalArray[lol][3];
-    const filePath = (path.join(selectedSourceFolder,
-      finalArray[lol][0],
-      finalArray[lol][1]));
-    takeTenScreenshots(filePath, fileNumber, false);
-  } else {
-    // you're done !!!
-    sendCurrentProgress(1, 1, 2);
-  }
-
-  rescanningIndex--;
-}
-
-/**
- * Alphabetizes final array, prioritizing the folder, and then filename
- */
-function alphabetizeFinalArray(): void {
-  finalArray.sort((x: any, y: any): number => {
-    const folder1: string = x[0].toLowerCase();
-    const folder2: string = y[0].toLowerCase();
-    const file1: string = x[1].toLowerCase();
-    const file2: string = y[1].toLowerCase();
-
-    if (folder1 > folder2) {
-      return 1;
-    } else if (folder1 === folder2 && file1 > file2) {
-      return 1;
-    } else if (folder1 === folder2 && file1 === file2) {
-      return 0;
-    } else if (folder1 === folder2 && file1 < file2) {
-      return -1;
-    } else if (folder1 < folder2) {
-      return -1;
-    }
-  });
-}
-
-/**
- * Count the number of unique folders in the final array
- */
-function countFoldersInFinalArray(): number {
-  const finalArrayFolderMap: Map<string, number> = new Map;
-  finalArray.forEach((element) => {
-    if (!finalArrayFolderMap.has(element[0])) {
-      finalArrayFolderMap.set(element[0], 1);
-    }
-  });
-  return finalArrayFolderMap.size;
-}
-
-// ---------------------- FOLDER WALKER FUNCTION --------------------------------
-
-/**
- * Recursively walk through the input directory
- * compiling files to process
- * updates the finalArray[]
- */
-function walkSync(dir, filelist) {
-  const files = fs.readdirSync(dir);
-
-  files.forEach(function (file) {
-    if (!file.startsWith('$') && file !== 'System Volume Information') {
-      // if the item is a _DIRECTORY_
-      if (fs.statSync(path.join(dir, file)).isDirectory()) {
-        filelist = walkSync(path.join(dir, file), filelist);
-      } else {
-        const extension = file.split('.').pop();
-        if (acceptableFiles.includes(extension.toLowerCase())) {
-          // before adding, remove the redundant prefix: selectedSourceFolder
-          const partialPath = dir.replace(selectedSourceFolder, '');
-
-          finalArray[fileCounter] = [partialPath, file, cleanUpFileName(file)];
-          fileCounter++;
-        }
-      }
-    }
-  });
-
-  return filelist;
-};
-
-// ------------- just figure out how many video files are in a directory ------------
-
-let totalNumberOfFiles = 0;
-
-/**
- * Used only to update the `totalNumberOfFiles` when user selects input folder
- */
-function walkAndCountSync(dir, filelist) {
-  const files = fs.readdirSync(dir);
-
-  files.forEach(function (file: string) {
-    if (!file.startsWith('$') && file !== 'System Volume Information') {
-      // if the item is a _DIRECTORY_
-      if (fs.statSync(path.join(dir, file)).isDirectory()) {
-        filelist = walkAndCountSync(path.join(dir, file), filelist);
-      } else {
-        const extension = file.split('.').pop();
-        if (acceptableFiles.includes(extension.toLowerCase())) {
-          totalNumberOfFiles++;
-        }
-      }
-    }
-  });
-
-  return filelist;
-};

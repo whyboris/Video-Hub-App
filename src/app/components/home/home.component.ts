@@ -9,13 +9,15 @@ import { ShowLimitService } from 'app/components/pipes/show-limit.service';
 import { ResolutionFilterService } from 'app/components/pipes/resolution-filter.service';
 import { WordFrequencyService } from 'app/components/pipes/word-frequency.service';
 
-import { FinalObject } from '../common/final-object.interface';
+import { FinalObject, ImageElement } from '../common/final-object.interface';
 import { SettingsObject } from '../common/settings-object.interface';
 import { HistoryItem } from '../common/history-item.interface';
 
 import { AppState } from '../common/app-state';
 import { Filters } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from '../common/settings-buttons';
+
+import { ImportSettingsObject } from '../common/import.interface';
 import { WizardOptions } from '../common/wizard-options.interface';
 
 import {
@@ -141,15 +143,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
   textPaddingHeight: number;
   previewWidth: number;
 
-  public finalArray = [];
+  public finalArray: ImageElement[] = [];
+
+  finalArrayNeedsSaving: boolean = false; // if ever a file was renamed, re-save the .vha file
 
   vhaFileHistory: HistoryItem[] = [];
 
   fullPathToCurrentFile = '';
 
   shuffleTheViewNow = 0; // dummy number to force re-shuffle current view
-
-  allScreenShotsExtracted = true;
 
   futureHubName = '';
   hubNameToRemember = '';
@@ -359,6 +361,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // Progress bar messages
     // for META EXTRACTION
+    // stage = 0 hides progress bar
+    // stage = 2 shows progress bar
     this.electronService.ipcRenderer.on('processingProgress', (event, a: number, b: number, stage: number) => {
       this.importStage = stage;
       this.progressNum1 = a;
@@ -371,18 +375,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (a === b) {
         this.extractionPercent = 1;
         this.importStage = 0;
-        this.appState.hubName = this.hubNameToRemember;
-        this.allScreenShotsExtracted = true;
+        this.appState.hubName = this.hubNameToRemember; // could this cause bugs ??? TODO: investigate!
       }
-    });
-
-    this.electronService.ipcRenderer.on('importInterrupted', (event) => {
-      console.log('YOU HAVE STOPPED THE IMPORT PROGRESS !!!!');
     });
 
     // Final object returns
     this.electronService.ipcRenderer.on('finalObjectReturning',
         (event, finalObject: FinalObject, pathToFile: string, fileName: string) => {
+      this.finalArrayNeedsSaving = false;
       this.appState.currentVhaFile = pathToFile;
       this.hubNameToRemember = finalObject.hubName;
       this.appState.hubName = finalObject.hubName;
@@ -488,7 +488,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public loadThisVhaFile(fullPath: string): void {
-    this.electronService.ipcRenderer.send('load-this-vha-file', fullPath);
+    this.electronService.ipcRenderer.send('load-this-vha-file', fullPath, this.saveVhaIfNeeded());
   }
 
   public loadFromFile(): void {
@@ -507,10 +507,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.appState.selectedSourceFolder = this.wizard.selectedSourceFolder;
     this.appState.selectedOutputFolder = this.wizard.selectedOutputFolder;
     this.wizard.totalNumberOfFiles = -1;
-    this.allScreenShotsExtracted = false;
     this.importDone = false;
     this.inProgress = true;
-    const importOptions = {
+    const importOptions: ImportSettingsObject = {
+      videoDirPath: this.wizard.selectedSourceFolder,
+      exportFolderPath: this.wizard.selectedOutputFolder,
       imgHeight: this.screenshotSizeForImport,
       hubName: (this.futureHubName || 'untitled')
     }
@@ -518,6 +519,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public cancelCurrentImport(): void {
+    this.importStage = 0;
     this.electronService.ipcRenderer.send('cancel-current-import');
   }
 
@@ -537,7 +539,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   public initiateClose(): void {
     this.appState.imgHeight = this.imgHeight || 100;
-    this.electronService.ipcRenderer.send('close-window', this.getSettingsForSave());
+    this.electronService.ipcRenderer.send('close-window', this.getSettingsForSave(), this.saveVhaIfNeeded());
+  }
+
+  /**
+   * Returns the finalArray if needed, otherwise returns `null`
+   * completely depends on global variable `finalArrayNeedsSaving`
+   */
+  public saveVhaIfNeeded(): any {
+    if (this.finalArrayNeedsSaving) {
+      return this.finalArray;
+    } else {
+      return null;
+    }
   }
 
   public openVideo(imageId): void {
@@ -627,7 +641,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   buildFileMap(): void {
     this.fileMap = new Map;
-    this.finalArray.forEach((element, index) => {
+    (this.finalArray || []).forEach((element, index) => {
       this.fileMap.set(element[3], index);
     });
     // console.log(this.fileMap);
@@ -647,7 +661,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     let matchFound = false;
 
-    this.vhaFileHistory.forEach((element: any, index: number) => {
+    (this.vhaFileHistory || []).forEach((element: any, index: number) => {
       if (element.vhaFilePath === pathToVhaFile) {
         matchFound = true;
         // remove from current position
@@ -810,7 +824,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.importDone = false;
     console.log('rescanning');
     console.log(sourceAndVhaFile);
-    this.electronService.ipcRenderer.send('rescan-current-directory', sourceAndVhaFile);
+    // this.electronService.ipcRenderer.send('rescan-current-directory', sourceAndVhaFile);
+    this.electronService.ipcRenderer.send('rescan-current-directory-NEW', this.finalArray);
   }
 
   /**
@@ -1144,6 +1159,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
         break;
       }
     }
+
+    this.finalArrayNeedsSaving = true;
   }
 
   /**

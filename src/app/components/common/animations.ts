@@ -30,7 +30,7 @@ export const rightClickContentAnimation = trigger('rightClickContentAnimation', 
       style({ 'margin-bottom': -60 }),
       animate('150ms cubic-bezier(0,1.11,1,1.15)', style({ 'margin-bottom': 0 }))
     ]
-  )
+  )]
 );
 
 export const topAnimation = trigger('topAnimation', [
