@@ -3,6 +3,7 @@ import * as path from 'path';
 const fs = require('fs');
 
 import { FinalObject, ImageElement } from "./src/app/components/common/final-object.interface";
+import { acceptableFiles } from "./main-filenames";
 
 /**
  * Label the video according to these rules
@@ -78,83 +79,33 @@ export function extractFileName(filePath: string): string {
  * Write the final object into `vha` file
  * @param finalObject   -- finalObject
  * @param pathToFile    -- the path with name of `vha` file to write to disk
- * @param callBackFunc  -- function to execute when done writing the file
+ * @param done          -- function to execute when done writing the file
  */
-export function writeVhaFileDangerously(finalObject: FinalObject, pathToTheFile: string, callBackFunc): void {
+export function writeVhaFileDangerously(finalObject: FinalObject, pathToTheFile: string, done): void {
   const json = JSON.stringify(finalObject);
   // write the file
-  fs.writeFile(pathToTheFile, json, 'utf8', callBackFunc);
+  fs.writeFile(pathToTheFile, json, 'utf8', done);
+  // CATCH ERRORS !?!!?!!
 }
 
 /**
- * Clean up the file name
- * (1) underscores
- * (2) double spaces / tripple spaces
- * (3) remove filename
- * (4) strip periods
+ * Clean up the displayed file name
+ * (1) remove extension
+ * (2) replace underscores with spaces
+ * (3) replace periods with spaces
+ * (4) tripple & double spaces become single spaces
  * @param original {string}
  * @return {string}
  */
 function cleanUpFileName(original: string): string {
-  let result = original;
-
-  result = result.split('_').join(' ');                // (1)
-  result = result.split('.').slice(0, -1).join('.');   // (3)
-  result = result.split('.').join(' ');                // (4)
-
-  result = result.split('   ').join(' ');              // (2)
-  result = result.split('  ').join(' ');               // (2)
-
-  return result;
+  let cleaned = original;
+  cleaned = cleaned.split('.').slice(0, -1).join('.');   // (1)
+  cleaned = cleaned.split('_').join(' ');                // (2)
+  cleaned = cleaned.split('.').join(' ');                // (3)
+  cleaned = cleaned.split('   ').join(' ');              // (4)
+  cleaned = cleaned.split('  ').join(' ');               // (4)
+  return cleaned;
 }
-
-const acceptableFiles = [
-  '264',
-  '265',
-  '3g2',
-  '3gp',
-  'avi',
-  'divx',
-  'flv',
-  'h264',
-  'h265',
-  'hevc',
-  'm4a',
-  'm4v',
-  'm4v',
-  'mkv',
-  'mov',
-  'mp2',
-  'mp4',
-  'mpe',
-  'mpeg',
-  'mpg',
-  'ogg',
-  'rm',
-  'vob',
-  'webm',
-  'wmv'
-];
-
-/*
-// If ever I want a dynamic extraction
-const count = 10;
-// from https://github.com/fluent-ffmpeg/node-fluent-ffmpeg/issues/449#issuecomment-285759269
-const timestamps = [];
-const startPositionPercent = 5;
-const endPositionPercent = 95;
-const addPercent = (endPositionPercent - startPositionPercent) / (count - 1);
-// create an array that says ['5%', '15%', '25%', '35%', '45%', '55%', '65%', '75%', '85%', '95%']
-if (!timestamps.length) {
-  let t = 0;
-  while (t < count) {
-    timestamps.push(`${startPositionPercent + addPercent * t}%`);
-    t = t + 1;
-  }
-}
-// some of the above can be replaced with a simple array
-*/
-
 
 /**
  * Check if path is to a file system reserved object or folder
@@ -171,7 +122,7 @@ function fileSystemReserved(thingy: string): boolean {
 export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] {
 
   const finalArray: ImageElement[] = [];
-  let fileCounter: number = 0;
+  let elementIndex: number = 0;
 
   // Recursively walk through a directory compiling ImageElements
   const walkSync = (dir, filelist) => {
@@ -188,8 +139,8 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
             // before adding, remove the redundant prefix: sourceFolderPath
             const partialPath = dir.replace(sourceFolderPath, '');
             // fil finalArray with 3 correct and 5 dummy pieces of data
-            finalArray[fileCounter] = [partialPath, file, cleanUpFileName(file), 0, 0, '', 0, 0];
-            fileCounter++;
+            finalArray[elementIndex] = [partialPath, file, cleanUpFileName(file), elementIndex, 0, '', 0, 0];
+            elementIndex++;
           }
         }
       }
@@ -254,14 +205,14 @@ ffmpeg.setFfmpegPath(ffmpegPath);
  * @param fileNumber   -- used to number the jpg file, eg 3 => 3-0.jpg, 3-1.jpg, 3-2.jpg, etc
  * @param screensize   -- resolution in pixels (defaul is 100)
  * @param saveLocation -- folder where to save jpg files
- * @param doneCallback
+ * @param done         -- callback when done
  */
 export function takeTenScreenshots(
   pathToVideo: string, 
   fileNumber: number, 
   screenSize: number,
   saveLocation: string,
-  doneCallback: any
+  done: any
 ) {
 
   let current: number = 0;
@@ -281,11 +232,11 @@ export function takeTenScreenshots(
         if (current < totalCount) {
           extractOneFile();
         } else if (current === totalCount) {
-          doneCallback();
+          done();
         }
       })
       .on('error', () => {
-        doneCallback();
+        done();
       });
   }
 
@@ -329,7 +280,6 @@ export function everyIndex(fullArray: ImageElement[]): number[] {
   for (let i = 0; i < total; i++) {
     indexes.push(i);
   }
-  console.log(indexes);
 
   return indexes;
 }
@@ -348,12 +298,8 @@ export function onlyNewIndexes(fullArray: ImageElement[], minIndex: number) {
     }
   });
 
-  console.log(indexes);
-
   return indexes;
 }
-
-
 
 
 /**
@@ -369,9 +315,8 @@ export function findAllNewFiles(
   lastScreen: number
 ): ImageElement[] {
 
-  let tempLastScreenCounter: number = lastScreen;
-
   const theDiff: ImageElement[] = [];
+  let jpgFileNumber: number = lastScreen;
 
   hdFinalArray.forEach((newElement) => {
     let matchFound = false;
@@ -383,8 +328,8 @@ export function findAllNewFiles(
     });
 
     if (!matchFound) { // means new element !!!
-      tempLastScreenCounter++;
-      newElement[3] = tempLastScreenCounter;  // FILL IN THE INDEX !!! correctly !!! ### ERROR !?!?!!
+      jpgFileNumber++;
+      newElement[3] = jpgFileNumber;  // FILL IN THE INDEX !!! correctly !!!
       theDiff.push(newElement);
     }
   });
@@ -393,10 +338,9 @@ export function findAllNewFiles(
 }
 
 
-
 /**
- * Clean up finalImages coming from Angular, removing all those absent from Hard Drive
- * Also deletes all the images related to the video files that are no longer present
+ * Clean up ImageElement[] coming from Angular, removing all elements for videos no longer on the Hard Drive
+ * Also deletes all the .jpg images related to the video files that are no longer present
  * @param angularFinalArray  -- ImageElement[] representing what is currently in Angular
  * @param hdFinalArray -- ImageElement[] representing what is currently on the Hard Drive
  * @param inputFolder -- folder where the videos are located
@@ -426,6 +370,93 @@ export function finalArrayWithoutDeleted(
     }
   });
 
-
   return cleanedArray;
+}
+
+// --------------------------------------------------------------------------------------------
+// -- EXTRACT METADATA --
+// --------------------------------------------------------------------------------------------
+
+/**
+ * Extract the meta data & store it in the final array
+ * @param theFinalArray   -- ImageElement[] with dummy meta
+ * @param videoFolderPath -- the full path to the base folder for video files
+ * @param startIndex      -- the starting point in finalArray from where to extract metadata
+ *                           (should be 0 when first scan, should be index of first element when rescan)
+ * @param done            -- callback when done with all metadata extraction
+ */
+export function extractAllMetadata(
+  theFinalArray: ImageElement[],
+  videoFolderPath: string, 
+  startIndex: number,
+  done: any
+): void {
+
+  const itemTotal = theFinalArray.length;
+  let iterator = startIndex;
+
+  let elementsWithMetadata: ImageElement[] = [];
+
+  if (startIndex !== 0) { // if not a fresh scan
+    elementsWithMetadata = theFinalArray.slice(0, startIndex); // keep those elements that have metadata
+  }
+
+  const extractMetaDataCallback = (element: ImageElement | null): void => {
+
+    if (element !== null) {
+      iterator++;
+      elementsWithMetadata.push(element);
+    }
+    
+    if (iterator < itemTotal) {
+      // send current progress to the first progress bar !?!! somehow
+      const filePathNEW = (path.join(videoFolderPath,
+                                    theFinalArray[iterator][0],
+                                    theFinalArray[iterator][1]));
+
+      extractMetadataForThisONEFile(filePathNEW, theFinalArray[iterator], extractMetaDataCallback);
+
+    } else {
+
+      done(elementsWithMetadata);
+
+    }
+  }
+
+  extractMetaDataCallback(null);
+}
+
+/**
+ * Updates the finalArray with the metadata about one particualar requested file
+ * Updates newLastScreenCounterNEW global variable !!!
+ * @param filePath      path to the file
+ * @param imageElement  index in array to update
+ */
+function extractMetadataForThisONEFile(
+  filePath: string, 
+  imageElement: ImageElement, 
+  extractMetaCallback: any
+): void {
+  ffmpeg.ffprobe(filePath, (err, metadata) => {
+    if (err) {
+      extractMetaCallback(imageElement);
+    } else {
+      const duration = Math.round(metadata.streams[0].duration) || 0;
+      const origWidth = metadata.streams[0].width;
+      const origHeight = metadata.streams[0].height;
+      const sizeLabel = labelVideo(origWidth, origHeight);
+      const width = Math.round(100 * origWidth / origHeight) || 169;
+      imageElement[4] = duration;  // 4th item is duration
+      imageElement[5] = sizeLabel; // 5th item is the label, e.g. 'HD'
+      imageElement[6] = width;     // 6th item is width of screenshot in px (e.g. 150);
+
+      // extract the file size
+      const stats = fs.statSync(filePath);
+      const fileSizeInBytes = stats.size;
+      const fileSizeInMegabytes = Math.round(fileSizeInBytes / 1000000.0);
+      imageElement[7] = fileSizeInMegabytes;  // 7th item is size in megabytes
+
+      extractMetaCallback(imageElement);
+    }
+  });
 }
