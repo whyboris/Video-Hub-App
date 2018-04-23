@@ -381,24 +381,28 @@ export function finalArrayWithoutDeleted(
  * Extract the meta data & store it in the final array
  * @param theFinalArray   -- ImageElement[] with dummy meta
  * @param videoFolderPath -- the full path to the base folder for video files
- * @param startIndex      -- the starting point in finalArray from where to extract metadata
+ * @param metaStartIndex  -- the starting point in finalArray from where to extract metadata
  *                           (should be 0 when first scan, should be index of first element when rescan)
+ * @param jpgRescanStartIndex -- passed on to `sendFinalResultHome`
+ * @param lastJpgNumber   -- the last jpg number
  * @param done            -- callback when done with all metadata extraction
  */
 export function extractAllMetadata(
   theFinalArray: ImageElement[],
   videoFolderPath: string, 
-  startIndex: number,
+  metaStartIndex: number,
+  jpgRescanStartIndex: number,
+  lastJpgNumber: number,
   done: any
 ): void {
 
   const itemTotal = theFinalArray.length;
-  let iterator = startIndex;
+  let iterator = metaStartIndex;
 
   let elementsWithMetadata: ImageElement[] = [];
 
-  if (startIndex !== 0) { // if not a fresh scan
-    elementsWithMetadata = theFinalArray.slice(0, startIndex); // keep those elements that have metadata
+  if (metaStartIndex !== 0) { // if not a fresh scan
+    elementsWithMetadata = theFinalArray.slice(0, metaStartIndex); // keep those elements that have metadata
   }
 
   const extractMetaDataCallback = (element: ImageElement | null): void => {
@@ -418,7 +422,7 @@ export function extractAllMetadata(
 
     } else {
 
-      done(elementsWithMetadata);
+      done(elementsWithMetadata, lastJpgNumber, jpgRescanStartIndex);
 
     }
   }
@@ -459,4 +463,57 @@ function extractMetadataForThisONEFile(
       extractMetaCallback(imageElement);
     }
   });
+}
+
+
+/**
+ * Figures out what new files there are, 
+ * adds them to the finalArray,
+ * figures out what files no longer exist,
+ * removes them from finalArray,
+ * deletes .jpg files from HD,
+ * and calls `extractAllMetadata`
+ * (which will then send file home and start extracting images)
+ * @param angularFinalArray  -- array of ImageElements from Angular - most current view
+ * @param hdFinalArray       -- array of ImageElements from current hard drive scan
+ * @param inputFolder        -- the input folder (where videos are)
+ * @param lastJpgNumber      -- gets saved as `lastScreen` in `vha` file
+ * @param folderToDeleteFrom -- path to folder where `.jpg` files are
+ * @param extractMetadataCallback -- function for extractAllMetadata to call when done
+ */
+export function updateFinalArrayWithHD(
+  angularFinalArray: ImageElement[],
+  hdFinalArray: ImageElement[],
+  inputFolder: string,
+  lastJpgNumber: number,
+  folderToDeleteFrom: string,
+  extractMetadataCallback
+): void {
+
+  // Generate ImageElement[] of all the new elements to be added
+  const onlyNewElements: ImageElement[] = 
+    findAllNewFiles(angularFinalArray, hdFinalArray, inputFolder, lastJpgNumber);
+
+  // remove from FinalArray all files that are no longer in the video folder
+  const allDeletedRemoved: ImageElement[] = 
+    finalArrayWithoutDeleted(angularFinalArray, hdFinalArray, inputFolder, folderToDeleteFrom);
+
+  // If there are new ifles OR if any files have been deleted !!!
+  if (onlyNewElements.length > 0 || allDeletedRemoved.length < angularFinalArray.length) {
+
+    const metaRescanStartIndex = allDeletedRemoved.length;
+    const finalArrayUpdated = allDeletedRemoved.concat(onlyNewElements);
+    const lastJpgNumberUpdated = lastJpgNumber + onlyNewElements.length; // update last screen!!!
+    
+    extractAllMetadata(
+      finalArrayUpdated, 
+      inputFolder, 
+      metaRescanStartIndex, 
+      lastJpgNumber,
+      lastJpgNumberUpdated, 
+      extractMetadataCallback // actually = sendFinalResultHome
+    );
+
+  }
+
 }
