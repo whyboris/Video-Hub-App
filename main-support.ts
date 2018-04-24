@@ -2,8 +2,8 @@ import * as path from 'path';
 
 const fs = require('fs');
 
-import { FinalObject, ImageElement } from "./src/app/components/common/final-object.interface";
-import { acceptableFiles } from "./main-filenames";
+import { FinalObject, ImageElement } from './src/app/components/common/final-object.interface';
+import { acceptableFiles } from './main-filenames';
 
 /**
  * Label the video according to these rules

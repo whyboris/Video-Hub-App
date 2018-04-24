@@ -215,16 +215,11 @@ import {
 import { FinalObject, ImageElement } from './src/app/components/common/final-object.interface';
 import { ImportSettingsObject } from './src/app/components/common/import.interface';
 
+import { globals } from './main-globals';
+
 let angularApp; // set as 'event' -- used to send messages back to Angular App
 
-let cancelCurrentImport = false;
-let currentlyOpenVhaFile: string; // OFFICAL DECREE IN NODE WHICH FILE IS CURRENTLY OPEN !!!
-let hubName = 'untitled'; // in case user doesn't name their hub any name
 let lastSavedFinalObject: FinalObject; // hack for saving the `vha` file again later
-let screenShotSize = 100;
-let selectedOutputFolder = '';
-let selectedSourceFolder = '';
-let lastScreenFromLastOpenFile: number = 0; // for `finalArray[3]`
 
 /**
  * Load the .vha file and send it to app
@@ -251,30 +246,31 @@ function openThisDamnFile(pathToVhaFile: string) {
       });
       angularApp.sender.send('pleaseOpenWizard');
     } else {
-      currentlyOpenVhaFile = pathToVhaFile;
+      globals.currentlyOpenVhaFile = pathToVhaFile;
       lastSavedFinalObject = JSON.parse(data);
       setGlobalsFromVhaFile(lastSavedFinalObject); // sets source folder ETC
 
       // path to folder where the VHA file is
-      selectedOutputFolder = path.parse(pathToVhaFile).dir;
+      globals.selectedOutputFolder = path.parse(pathToVhaFile).dir;
 
-      console.log(selectedSourceFolder + ' - videos location');
-      console.log(selectedOutputFolder + ' - output location');
+      console.log(globals.selectedSourceFolder + ' - videos location');
+      console.log(globals.selectedOutputFolder + ' - output location');
+
       angularApp.sender.send(
-        'finalObjectReturning', 
-        JSON.parse(data), 
-        pathToVhaFile, 
-        selectedOutputFolder + path.sep   // app needs the trailing slash (at least for now)
+        'finalObjectReturning',
+        JSON.parse(data),
+        pathToVhaFile,
+        globals.selectedOutputFolder + path.sep   // app needs the trailing slash (at least for now)
       );
     }
   });
 }
 
 function setGlobalsFromVhaFile(vhaFileContents: FinalObject) {
-  hubName = vhaFileContents.hubName,
-  lastScreenFromLastOpenFile = vhaFileContents.lastScreen;
-  screenShotSize = vhaFileContents.ssSize;
-  selectedSourceFolder = vhaFileContents.inputDir;
+  globals.hubName = vhaFileContents.hubName,
+  globals.lastScreenFromLastOpenFile = vhaFileContents.lastScreen;
+  globals.screenShotSize = vhaFileContents.ssSize;
+  globals.selectedSourceFolder = vhaFileContents.inputDir;
 }
 
 // ============================================================
@@ -315,13 +311,6 @@ ipc.on('openInExplorer', function(event, fullPath: string) {
  */
 ipc.on('pleaseOpenUrl', function(event, url: string): void {
   shell.openExternal(url, { activate: true }, (): void => {});
-});
-
-/**
- * Interrupt current import process
- */
-ipc.on('cancel-current-import', function(event): void {
-  cancelCurrentImport = true;
 });
 
 /**
@@ -387,7 +376,8 @@ ipc.on('choose-output', function (event, someMessage) {
  * because the user may have renamed files from within the app!
  */
 ipc.on('rescan-current-directory', function (event, currentAngularFinalArray: ImageElement[]) {
-  const currentVideoFolder = selectedSourceFolder; // DOUBLE CHECK THIS !!!!!! global variable danger
+  const currentVideoFolder = globals.selectedSourceFolder;
+  globals.cancelCurrentImport = false;
   reScanDirectory(currentAngularFinalArray, currentVideoFolder);
 });
 
@@ -410,7 +400,7 @@ ipc.on('close-window', function (event, settingsToSave, finalArrayToSave) {
   fs.writeFile(path.join(pathToAppData, 'video-hub-app', 'settings.json'), json, 'utf8', () => {
     if (finalArrayToSave !== null) {
       lastSavedFinalObject.images = finalArrayToSave;
-      writeVhaFileDangerously(lastSavedFinalObject, currentlyOpenVhaFile, () => {
+      writeVhaFileDangerously(lastSavedFinalObject, globals.currentlyOpenVhaFile, () => {
         // file writing done !!!
         console.log('.vha file written before closing !!!');
         BrowserWindow.getFocusedWindow().close();
@@ -419,6 +409,13 @@ ipc.on('close-window', function (event, settingsToSave, finalArrayToSave) {
       BrowserWindow.getFocusedWindow().close();
     }
   });
+});
+
+/**
+ * Interrupt current import process
+ */
+ipc.on('cancel-current-import', function(event): void {
+  globals.cancelCurrentImport = true;
 });
 
 /**
@@ -447,24 +444,23 @@ ipc.on('start-the-import', function (event, options: ImportSettingsObject) {
       fs.mkdirSync(path.join(outDir, 'vha-' + options.hubName));
     }
 
-    hubName = options.hubName;                         // GLOBAL DANGER !!!
-    screenShotSize = options.imgHeight;                // GLOBAL DANGER !!!
-    selectedOutputFolder = options.exportFolderPath;   // GLOBAL DANGER !!!
-    selectedSourceFolder = options.videoDirPath;       // GLOBAL DANGER !!!
+    globals.hubName = options.hubName;
+    globals.screenShotSize = options.imgHeight;
+    globals.selectedOutputFolder = options.exportFolderPath;
+    globals.selectedSourceFolder = options.videoDirPath;
+    globals.cancelCurrentImport = false;
 
-    cancelCurrentImport = false;                       // GLOBAL DANGER !!!
-    
     // generate ImageElement[] with filenames and paths & empty metadata
-    let videoFilesWithPaths: ImageElement[] = getVideoPathsAndNames(selectedSourceFolder);
-  
+    let videoFilesWithPaths: ImageElement[] = getVideoPathsAndNames(globals.selectedSourceFolder);
+
     if (demo) {
       videoFilesWithPaths = videoFilesWithPaths.slice(0, 50);
     }
-  
+
     extractAllMetadata(
-      videoFilesWithPaths, 
-      selectedSourceFolder, 
-      0, 
+      videoFilesWithPaths,
+      globals.selectedSourceFolder,
+      0,
       0,                          // indicates it's the first time scanning
       videoFilesWithPaths.length, // indicate the `lastScreen` in `finalObject` in `vha` file
       sendFinalResultHome         // callback for when metdata is done extracting
@@ -476,7 +472,7 @@ ipc.on('start-the-import', function (event, options: ImportSettingsObject) {
 
 /**
  * Begins rescan procedure compared to what the app has currently
- * 
+ *
  * @param angularFinalArray  ImageElment[] from Angular (might have renamed files)
  */
 function reScanDirectory(angularFinalArray: ImageElement[], currentVideoFolder: string) {
@@ -484,18 +480,18 @@ function reScanDirectory(angularFinalArray: ImageElement[], currentVideoFolder: 
   // rescan the source directory
   if (fs.existsSync(currentVideoFolder)) {
     let videosOnHD: ImageElement[] = getVideoPathsAndNames(currentVideoFolder); // this method updates the `finalArray`
-    
+
     if (demo) {
       videosOnHD = videosOnHD.slice(0, 50);
     }
-    
-    const folderToDeleteFrom = path.join(selectedOutputFolder, 'vha-' + hubName);
-    
+
+    const folderToDeleteFrom = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
+
     updateFinalArrayWithHD(
-      angularFinalArray, 
-      videosOnHD, 
+      angularFinalArray,
+      videosOnHD,
       currentVideoFolder,
-      lastScreenFromLastOpenFile,   // WARNING -- GLOBAL !!!!
+      globals.lastScreenFromLastOpenFile,
       folderToDeleteFrom,
       sendFinalResultHome           // callback for when `extractAllMetadata` is called
     );
@@ -539,7 +535,7 @@ ipc.on('load-this-vha-file', function (event, pathToVhaFile, finalArrayToSave: I
 
   if (finalArrayToSave !== null) {
     lastSavedFinalObject.images = finalArrayToSave;
-    writeVhaFileDangerously(lastSavedFinalObject, currentlyOpenVhaFile, () => {
+    writeVhaFileDangerously(lastSavedFinalObject, globals.currentlyOpenVhaFile, () => {
       // file writing done !!!
       console.log('.vha file written !!!');
       userWantedToOpen = pathToVhaFile;
@@ -579,7 +575,7 @@ ipc.on('try-to-rename-this-file', function(event, sourceFolder: string, relPath:
       if (err.code === 'ENOENT') {
         // const pathObj = path.parse(err.path);
         // console.log(pathObj);
-        errMsg = "Original file could not be found";        
+        errMsg = "Original file could not be found";
       } else {
         errMsg = "Some error occurred";
       }
@@ -611,7 +607,7 @@ function sendCurrentProgress(current: number, total: number, stage: number): voi
  * @param jpgStartIndex -- if this is a re-scan, scan all above this number
  */
 function sendFinalResultHome(
-  theFinalArray: ImageElement[], 
+  theFinalArray: ImageElement[],
   lastJpgNumber: number,
   jpgStartIndex: number
 ): void {
@@ -619,49 +615,50 @@ function sendFinalResultHome(
   const myFinalArray: ImageElement[] = alphabetizeFinalArray(theFinalArray);
 
   const finalObject: FinalObject = {
-    hubName: hubName,
-    inputDir: selectedSourceFolder,
+    hubName: globals.hubName,
+    inputDir: globals.selectedSourceFolder,
     numOfFolders: countFoldersInFinalArray(myFinalArray),
-    ssSize: screenShotSize,
+    ssSize: globals.screenShotSize,
     lastScreen: lastJpgNumber,
     images: myFinalArray,
   };
 
-  lastSavedFinalObject = finalObject;   // GLOBAL DANGER !!!
+  lastSavedFinalObject = finalObject;
 
   const json = JSON.stringify(finalObject);
 
-  const pathToTheFile = path.join(selectedOutputFolder, hubName + '.vha');
+  const pathToTheFile = path.join(globals.selectedOutputFolder, globals.hubName + '.vha');
 
   writeVhaFileDangerously(finalObject, pathToTheFile, () => {
 
-    currentlyOpenVhaFile = pathToTheFile; // GLOBAL DANGER !!!
+    globals.currentlyOpenVhaFile = pathToTheFile;
 
     angularApp.sender.send(
-      'finalObjectReturning', 
-      finalObject, 
-      pathToTheFile, 
-      selectedOutputFolder + path.sep // app needs the trailing slash (at least for now)
+      'finalObjectReturning',
+      finalObject,
+      pathToTheFile,
+      globals.selectedOutputFolder + path.sep // app needs the trailing slash (at least for now)
     );
 
-    const screenshotOutputFolder: string = path.join(selectedOutputFolder, 'vha-' + hubName);   // WARNING RELIES ON `hubName`
+    const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
 
-    const indexesToScan: number[] = jpgStartIndex === 0 ? 
-                                        everyIndex(myFinalArray) 
+    const indexesToScan: number[] = jpgStartIndex === 0 ?
+                                        everyIndex(myFinalArray)
                                       : onlyNewIndexes(myFinalArray, jpgStartIndex);
 
     extractAllScreenshots(
-      myFinalArray, 
-      selectedSourceFolder, 
-      screenshotOutputFolder, 
-      screenShotSize, 
+      myFinalArray,
+      globals.selectedSourceFolder,
+      screenshotOutputFolder,
+      globals.screenShotSize,
       indexesToScan
     );
 
   });
 }
 
-// DANGEROUSLY DEPENDS ON `cancelCurrentImport` -- can't move to another file
+// DANGEROUSLY DEPENDS ON a global variable `globals.cancelCurrentImport`
+// that can get toggled while scanning all screenshots
 
 /**
  * Start extracting screenshots now that metadata has been retreived and sent over to the app
@@ -669,13 +666,13 @@ function sendFinalResultHome(
  * @param videoFolderPath   -- path to base folder where videos are
  * @param screenshotFolder  -- path to folder where .jpg files will be saved
  * @param screenshotSize    -- number in px how large each screenshot should be
- * @param elementsToScan    -- array of indexes of elements in finalArray for which to extract screenshots 
+ * @param elementsToScan    -- array of indexes of elements in finalArray for which to extract screenshots
  */
 function extractAllScreenshots(
   theFinalArray: ImageElement[],
-  videoFolderPath: string, 
-  screenshotFolder: string, 
-  screenshotSize: number, 
+  videoFolderPath: string,
+  screenshotFolder: string,
+  screenshotSize: number,
   elementsToScan: number[]
 ): void {
 
@@ -686,8 +683,8 @@ function extractAllScreenshots(
 
   const extractTenCallback = (): void => {
     iterator++;
-    
-    if ((iterator < itemTotal) && !cancelCurrentImport) { // can't move to main-support because of `cancelCurrentImport`
+
+    if ((iterator < itemTotal) && !globals.cancelCurrentImport) {
 
       sendCurrentProgress(iterator, itemTotal, 2);
 
@@ -697,7 +694,7 @@ function extractAllScreenshots(
                                              theFinalArray[currentElement][0],
                                              theFinalArray[currentElement][1]));
 
-      const jpgFileNum: number = theFinalArray[currentElement][3]; 
+      const jpgFileNum: number = theFinalArray[currentElement][3];
 
       takeTenScreenshots(
         pathToVideo,
