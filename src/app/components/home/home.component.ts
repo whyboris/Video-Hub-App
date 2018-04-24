@@ -87,11 +87,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // App state to save -- so it can be exported and saved when closing the app
   appState = AppState;
 
-  // DEMO MODE TOGGLE !!!
+  // ========================================================================================
+  // ***************************** BUILD TOGGLE *********************************************
+  // ========================================================================================
   demo = false;
   webDemo = false;
-  versionNumber = '1.1.0';
+  versionNumber = '1.2.0';
   macVersion = false;
+  // ========================================================================================
 
   // REORGANIZE / keep
   currentPlayingFile = '';
