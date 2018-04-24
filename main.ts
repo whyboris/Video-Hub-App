@@ -201,7 +201,6 @@ import {
   alphabetizeFinalArray,
   countFoldersInFinalArray,
   everyIndex,
-  extractFileName,
   extractAllMetadata,
   finalArrayWithoutDeleted,
   findAllNewFiles,
@@ -220,7 +219,6 @@ let angularApp; // set as 'event' -- used to send messages back to Angular App
 
 let cancelCurrentImport = false;
 let currentlyOpenVhaFile: string; // OFFICAL DECREE IN NODE WHICH FILE IS CURRENTLY OPEN !!!
-let firstScan: boolean = true;
 let hubName = 'untitled'; // in case user doesn't name their hub any name
 let lastSavedFinalObject: FinalObject; // hack for saving the `vha` file again later
 let screenShotSize = 100;
@@ -263,7 +261,10 @@ function openThisDamnFile(pathToVhaFile: string) {
       console.log(selectedSourceFolder + ' - videos location');
       console.log(selectedOutputFolder + ' - output location');
       angularApp.sender.send(
-        'finalObjectReturning', JSON.parse(data), pathToVhaFile, extractFileName(pathToVhaFile)
+        'finalObjectReturning', 
+        JSON.parse(data), 
+        pathToVhaFile, 
+        selectedOutputFolder + path.sep   // app needs the trailing slash (at least for now)
       );
     }
   });
@@ -280,38 +281,8 @@ function setGlobalsFromVhaFile(vhaFileContents: FinalObject) {
 // Methods that interact with Angular
 // ============================================================
 
-const pathToAppData = app.getPath('appData');
-
 /**
- * Close the window
- */
-ipc.on('close-window', function (event, settingsToSave, finalArrayToSave) {
-
-  const json = JSON.stringify(settingsToSave);
-
-  try {
-    fs.statSync(path.join(pathToAppData, 'video-hub-app'));
-  } catch (e) {
-    fs.mkdirSync(path.join(pathToAppData, 'video-hub-app'));
-  }
-
-  // TODO -- catch bug if user closes before selecting the output folder ?!??
-  fs.writeFile(path.join(pathToAppData, 'video-hub-app', 'settings.json'), json, 'utf8', () => {
-    if (finalArrayToSave !== null) {
-      lastSavedFinalObject.images = finalArrayToSave;
-      writeVhaFileDangerously(lastSavedFinalObject, currentlyOpenVhaFile, () => {
-        // file writing done !!!
-        console.log('.vha file written before closing !!!');
-        BrowserWindow.getFocusedWindow().close();
-      });
-    } else {
-      BrowserWindow.getFocusedWindow().close();
-    }
-  });
-});
-
-/**
- * Just started -- hello -- send over the settings
+ * Just started -- hello -- send over the settings or open wizard
  */
 ipc.on('just-started', function (event, someMessage) {
   angularApp = event;
@@ -323,6 +294,34 @@ ipc.on('just-started', function (event, someMessage) {
       event.sender.send('settingsReturning', JSON.parse(data), userWantedToOpen);
     }
   });
+});
+
+/**
+ * Open a particular video file clicked inside Angular
+ */
+ipc.on('openThisFile', function (event, fullFilePath) {
+  shell.openItem(fullFilePath);
+});
+
+/**
+ * Open the explorer to the relevant file
+ */
+ipc.on('openInExplorer', function(event, fullPath: string) {
+  shell.showItemInFolder(fullPath);
+});
+
+/**
+ * Open a URL in system's default browser
+ */
+ipc.on('pleaseOpenUrl', function(event, url: string): void {
+  shell.openExternal(url, { activate: true }, (): void => {});
+});
+
+/**
+ * Interrupt current import process
+ */
+ipc.on('cancel-current-import', function(event): void {
+  cancelCurrentImport = true;
 });
 
 /**
@@ -369,7 +368,7 @@ ipc.on('choose-input', function (event, someMessage) {
 
 /**
  * Summon system modal to choose OUTPUT directory
- * where the final json and all screenshots will be saved
+ * where the final .vha file, vha-folder, and all screenshots will be saved
  */
 ipc.on('choose-output', function (event, someMessage) {
   dialog.showOpenDialog({
@@ -380,6 +379,46 @@ ipc.on('choose-output', function (event, someMessage) {
       event.sender.send('outputFolderChosen', outputDirPath);
     }
   })
+});
+
+/**
+ * Initiate rescan of the directory NEW
+ * now receives the finalArray from `home.component`
+ * because the user may have renamed files from within the app!
+ */
+ipc.on('rescan-current-directory', function (event, currentAngularFinalArray: ImageElement[]) {
+  const currentVideoFolder = selectedSourceFolder; // DOUBLE CHECK THIS !!!!!! global variable danger
+  reScanDirectory(currentAngularFinalArray, currentVideoFolder);
+});
+
+const pathToAppData = app.getPath('appData');
+
+/**
+ * Close the window
+ */
+ipc.on('close-window', function (event, settingsToSave, finalArrayToSave) {
+
+  const json = JSON.stringify(settingsToSave);
+
+  try {
+    fs.statSync(path.join(pathToAppData, 'video-hub-app'));
+  } catch (e) {
+    fs.mkdirSync(path.join(pathToAppData, 'video-hub-app'));
+  }
+
+  // TODO -- catch bug if user closes before selecting the output folder ?!??
+  fs.writeFile(path.join(pathToAppData, 'video-hub-app', 'settings.json'), json, 'utf8', () => {
+    if (finalArrayToSave !== null) {
+      lastSavedFinalObject.images = finalArrayToSave;
+      writeVhaFileDangerously(lastSavedFinalObject, currentlyOpenVhaFile, () => {
+        // file writing done !!!
+        console.log('.vha file written before closing !!!');
+        BrowserWindow.getFocusedWindow().close();
+      });
+    } else {
+      BrowserWindow.getFocusedWindow().close();
+    }
+  });
 });
 
 /**
@@ -408,53 +447,31 @@ ipc.on('start-the-import', function (event, options: ImportSettingsObject) {
       fs.mkdirSync(path.join(outDir, 'vha-' + options.hubName));
     }
 
-    selectedOutputFolder = options.exportFolderPath;
-    selectedSourceFolder = options.videoDirPath;
-    screenShotSize = options.imgHeight;
-    hubName = options.hubName;
+    hubName = options.hubName;                         // GLOBAL DANGER !!!
+    screenShotSize = options.imgHeight;                // GLOBAL DANGER !!!
+    selectedOutputFolder = options.exportFolderPath;   // GLOBAL DANGER !!!
+    selectedSourceFolder = options.videoDirPath;       // GLOBAL DANGER !!!
 
-    importNewHub();
-  }
-
-});
-
-/**
- * Start importing new hub
- * Resets variables
- * Builds finalArray based on files
- * Calls `extractAllMetadata` to extract metadata
- */
-function importNewHub() {
-  // RESET EVERY GLOBAL VARIABLE
-  cancelCurrentImport = false;
-  firstScan = true;
+    cancelCurrentImport = false;                       // GLOBAL DANGER !!!
+    
+    // generate ImageElement[] with filenames and paths & empty metadata
+    let videoFilesWithPaths: ImageElement[] = getVideoPathsAndNames(selectedSourceFolder);
   
-  // generate ImageElement[] with filenames and paths & empty metadata
-  let videoFilesWithPaths: ImageElement[] = getVideoPathsAndNames(selectedSourceFolder);
+    if (demo) {
+      videoFilesWithPaths = videoFilesWithPaths.slice(0, 50);
+    }
+  
+    extractAllMetadata(
+      videoFilesWithPaths, 
+      selectedSourceFolder, 
+      0, 
+      0,                          // indicates it's the first time scanning
+      videoFilesWithPaths.length, // indicate the `lastScreen` in `finalObject` in `vha` file
+      sendFinalResultHome         // callback for when metdata is done extracting
+    );
 
-  if (demo) {
-    videoFilesWithPaths = videoFilesWithPaths.slice(0, 50);
   }
 
-  extractAllMetadata(
-    videoFilesWithPaths, 
-    selectedSourceFolder, 
-    0, 
-    0, // doesn't matter -- gets ignored if `firstScan` === true
-    videoFilesWithPaths.length, // indicate the `lastScreen` in `finalObject` in `vha` file
-    sendFinalResultHome
-  );
-
-}
-
-/**
- * Initiate rescan of the directory NEW
- * now receives the finalArray from `home.component`
- * because the user may have renamed files from within the app!
- */
-ipc.on('rescan-current-directory', function (event, currentAngularFinalArray: ImageElement[]) {
-  const currentVideoFolder = selectedSourceFolder; // DOUBLE CHECK THIS !!!!!! global variable danger
-  reScanDirectory(currentAngularFinalArray, currentVideoFolder);
 });
 
 /**
@@ -463,7 +480,6 @@ ipc.on('rescan-current-directory', function (event, currentAngularFinalArray: Im
  * @param angularFinalArray  ImageElment[] from Angular (might have renamed files)
  */
 function reScanDirectory(angularFinalArray: ImageElement[], currentVideoFolder: string) {
-  firstScan = false;                                            // can't factor out because toggles `firstScan`
 
   // rescan the source directory
   if (fs.existsSync(currentVideoFolder)) {
@@ -479,9 +495,9 @@ function reScanDirectory(angularFinalArray: ImageElement[], currentVideoFolder: 
       angularFinalArray, 
       videosOnHD, 
       currentVideoFolder,
-      lastScreenFromLastOpenFile, // WARNING -- GLOBAL !!!! ?!!!?!!!!
+      lastScreenFromLastOpenFile,   // WARNING -- GLOBAL !!!!
       folderToDeleteFrom,
-      sendFinalResultHome // callback for when `extractAllMetadata` is called
+      sendFinalResultHome           // callback for when `extractAllMetadata` is called
     );
 
   } else {
@@ -537,34 +553,6 @@ ipc.on('load-this-vha-file', function (event, pathToVhaFile, finalArrayToSave: I
 
 });
 
-/**
- * Open a particular video file clicked inside Angular
- */
-ipc.on('openThisFile', function (event, fullFilePath) {
-  shell.openItem(fullFilePath);
-});
-
-/**
- * Open the explorer to the relevant file
- */
-ipc.on('openInExplorer', function(event, fullPath: string) {
-  shell.showItemInFolder(fullPath);
-});
-
-/**
- * Open a URL in system's default browser
- */
-ipc.on('pleaseOpenUrl', function(event, url: string): void {
-  shell.openExternal(url, { activate: true }, (): void => {});
-});
-
-/**
- * Interrupt current import process
- */
-ipc.on('cancel-current-import', function(event): void {
-  cancelCurrentImport = true;
-});
-
 ipc.on('try-to-rename-this-file', function(event, sourceFolder: string, relPath: string, file: string, renameTo: string): void {
   console.log('renaming file:');
 
@@ -616,7 +604,7 @@ function sendCurrentProgress(current: number, total: number, stage: number): voi
 }
 
 /**
- * Writes the json file and sends contents back to Angular App
+ * Writes the vha file and sends contents back to Angular App
  * Starts the process to extract all the images
  * @param theFinalArray -- `finalArray` with all the metadata filled in
  * @param lastJpgNumber -- the last jpg number
@@ -639,7 +627,7 @@ function sendFinalResultHome(
     images: myFinalArray,
   };
 
-  lastSavedFinalObject = finalObject;
+  lastSavedFinalObject = finalObject;   // GLOBAL DANGER !!!
 
   const json = JSON.stringify(finalObject);
 
@@ -647,16 +635,18 @@ function sendFinalResultHome(
 
   writeVhaFileDangerously(finalObject, pathToTheFile, () => {
 
-    currentlyOpenVhaFile = pathToTheFile;
+    currentlyOpenVhaFile = pathToTheFile; // GLOBAL DANGER !!!
 
-    // when done, perform this !!!
     angularApp.sender.send(
-      'finalObjectReturning', JSON.parse(json), pathToTheFile, extractFileName(pathToTheFile)
+      'finalObjectReturning', 
+      finalObject, 
+      pathToTheFile, 
+      selectedOutputFolder + path.sep // app needs the trailing slash (at least for now)
     );
 
     const screenshotOutputFolder: string = path.join(selectedOutputFolder, 'vha-' + hubName);   // WARNING RELIES ON `hubName`
 
-    const indexesToScan: number[] = firstScan ? 
+    const indexesToScan: number[] = jpgStartIndex === 0 ? 
                                         everyIndex(myFinalArray) 
                                       : onlyNewIndexes(myFinalArray, jpgStartIndex);
 

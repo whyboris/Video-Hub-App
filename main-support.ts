@@ -68,14 +68,6 @@ export function countFoldersInFinalArray(imagesArray: ImageElement[]): number {
 }
 
 /**
- * Extract filename from `path/to/the/file.vha` or `path\to\the\file.vha`
- * In this example would return`file`
- */
-export function extractFileName(filePath: string): string {
-  return path.parse(filePath).name;
-}
-
-/**
  * Write the final object into `vha` file
  * @param finalObject   -- finalObject
  * @param pathToFile    -- the path with name of `vha` file to write to disk

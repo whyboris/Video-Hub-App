@@ -381,13 +381,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // Final object returns
     this.electronService.ipcRenderer.on('finalObjectReturning',
-        (event, finalObject: FinalObject, pathToFile: string, fileName: string) => {
+        (event, finalObject: FinalObject, pathToFile: string, outputFolderWithTrailingSlash: string) => {
       this.finalArrayNeedsSaving = false;
       this.appState.currentVhaFile = pathToFile;
       this.hubNameToRemember = finalObject.hubName;
       this.appState.hubName = finalObject.hubName;
       this.appState.numOfFolders = finalObject.numOfFolders;
-      this.appState.selectedOutputFolder = pathToFile.replace(fileName + '.vha', '');
+      this.appState.selectedOutputFolder = outputFolderWithTrailingSlash;
       this.appState.selectedSourceFolder = finalObject.inputDir;
 
       // Update history of opened files
