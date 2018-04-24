@@ -1,0 +1,159 @@
+@import "variables";
+
+.clickAwayOverlay {
+  background-color: rgba(0, 0, 0, 0.1);
+  cursor: initial;
+  height: 100vh;
+  pointer-events: none;
+  position: fixed;
+  width: 100vw;
+  z-index: 29;
+}
+
+.rightClickMenu {
+  background: $gray-30;
+  border-radius: 10px;
+  border: 1px solid $gray-50;
+  box-shadow: 0 3px 7px 3px rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+  font-size: 12px;
+  position: absolute;
+  z-index: 30; 
+  overflow: hidden;
+
+  ul {
+    margin: 0;
+    padding: 10px;
+
+    li {
+      cursor: pointer;
+      list-style-type: none;
+      padding: 6px;
+      transition: 100ms;
+      transition-property: transform text-shadow;
+
+      &:hover {
+        transition: 100ms;
+        transition-property: transform text-shadow;
+        // transform: translate(0, -1px);
+        text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+      }
+    }
+  }
+}
+
+.renameMenu {
+  background: $gray-30;
+  border-radius: 10px;
+  border: 1px solid $gray-50;
+  box-shadow: 0 3px 7px 3px rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+  height: 275px;
+  left: 10%;
+  padding: 20px;
+  position: fixed;
+  top: 138px;
+  width: 80%;
+  z-index: 30;
+}
+
+.renameDark {
+  background: $gray-90;
+}
+
+.renameHeading {
+  color: $gray-50;
+  font-size: 16px;
+  left: 40px;
+  position: absolute;
+  top: 16px;
+}
+
+.renameFrom,
+.renameTo {
+  color: $gray-50;
+  display: block;
+  font-size: 12px;
+  left: 0px;
+  position: absolute;
+  text-align: right;
+  width: 38px;
+}
+
+.renameFrom {
+  top: 149px;
+}
+
+.renameTo {
+  top: 180px;
+}
+
+.renameFile {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid $gray-40;
+  box-sizing: border-box;
+  font-size: 16px;
+  left: 40px;
+  outline: none;
+  padding-bottom: 0;
+  padding: 6px 6px 6px 2px;
+  position: absolute;
+  top: 170px;
+  width: 90%;
+}
+
+.renameErrMsg {
+  color: red;
+  font-size: 14px;
+  position: absolute;
+  right: 157px;
+  text-align: right;
+  top: 227px;
+}
+
+.btnRename {
+  border-radius: 5px;
+  margin: 0;
+  min-width: 100px;
+  position: absolute;
+  right: 40px;
+  top: 216px;
+}
+
+.extension-hack {
+  font-size: 16px;
+  left: 43px;
+  pointer-events: none;
+  position: absolute;
+  top: 175px;
+
+  & .hidden {
+    opacity: 0;
+  }
+
+  & .extension {
+    display: inline-block;
+    font-size: 12px;
+    opacity: 0.5;
+    transform: translate(-3px, 1.5px);
+  }
+}
+
+.darkModeOn {
+  color: white;
+}
+
+.disableMouseClicks {
+  pointer-events: auto;
+}
+
+.closeRename {
+  position: absolute;
+  top: 11px;
+  right: 19px;
+}
+
+.closeRenameDark {
+  color: white;
+}

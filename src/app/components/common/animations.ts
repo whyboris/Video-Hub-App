@@ -15,6 +15,24 @@ export const modalAnimation = trigger('modalAnimation', [
   )]
 );
 
+export const rightClickAnimation = trigger('rightClickAnimation', [
+  transition(
+    ':leave', [
+      style({ transform: 'translateX(0)', 'opacity': 1 }),
+      animate('250ms cubic-bezier(0,.7,.67,1)', style({ transform: 'translateY(10px)', opacity: 0 }))
+    ]
+  )]
+);
+
+export const rightClickContentAnimation = trigger('rightClickContentAnimation', [
+  transition(
+    ':enter', [
+      style({ 'margin-bottom': -60 }),
+      animate('150ms cubic-bezier(0,1.11,1,1.15)', style({ 'margin-bottom': 0 }))
+    ]
+  )]
+);
+
 export const topAnimation = trigger('topAnimation', [
   transition(
     ':enter', [
@@ -44,6 +62,21 @@ export const metaAppear = trigger('metaAppear', [
     ':enter', [
       style({ opacity: 0 }),
       animate('100ms ease-in', style({ opacity: 1 }))
+    ]
+  ),
+  transition(
+    ':leave', [
+      style({ opacity: 1 }),
+      animate('100ms ease-out', style({ opacity: 0 }))
+    ]
+  )]
+);
+
+export const overlayAppear = trigger('overlayAppear', [
+  transition(
+    ':enter', [
+      style({ opacity: 0 }),
+      animate('1000ms ease-in', style({ opacity: 1 }))
     ]
   ),
   transition(

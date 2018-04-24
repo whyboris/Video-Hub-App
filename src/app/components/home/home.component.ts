@@ -9,13 +9,15 @@ import { ShowLimitService } from 'app/components/pipes/show-limit.service';
 import { ResolutionFilterService } from 'app/components/pipes/resolution-filter.service';
 import { WordFrequencyService } from 'app/components/pipes/word-frequency.service';
 
-import { FinalObject } from '../common/final-object.interface';
+import { FinalObject, ImageElement } from '../common/final-object.interface';
 import { SettingsObject } from '../common/settings-object.interface';
 import { HistoryItem } from '../common/history-item.interface';
 
 import { AppState } from '../common/app-state';
 import { Filters } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from '../common/settings-buttons';
+
+import { ImportSettingsObject } from '../common/import.interface';
 import { WizardOptions } from '../common/wizard-options.interface';
 
 import {
@@ -24,6 +26,9 @@ import {
   historyItemRemove,
   modalAnimation,
   myWizardAnimation,
+  overlayAppear,
+  rightClickAnimation,
+  rightClickContentAnimation,
   slowFadeIn,
   slowFadeOut,
   topAnimation
@@ -43,7 +48,8 @@ import { DemoContent } from '../../../assets/demo-content';
     './fonts/icons.scss',
     './gallery.scss',
     './wizard.scss',
-    './resolution.scss'
+    './resolution.scss',
+    './rightclick.scss'
   ],
   animations: [
     donutAppear,
@@ -51,6 +57,9 @@ import { DemoContent } from '../../../assets/demo-content';
     historyItemRemove,
     modalAnimation,
     myWizardAnimation,
+    overlayAppear,
+    rightClickAnimation,
+    rightClickContentAnimation,
     slowFadeIn,
     slowFadeOut,
     topAnimation
@@ -58,15 +67,18 @@ import { DemoContent } from '../../../assets/demo-content';
 })
 export class HomeComponent implements OnInit, AfterViewInit {
 
+  @ViewChild('magicSearch') magicSearch: ElementRef;
+  @ViewChild('renameFileInput') renameFileInput: ElementRef;
+  @ViewChild('searchRef') searchRef: ElementRef;
+
+  // used to grab the `scrollable-content` element - background of gallery for right-click
+  galleryBackgroundRef: any;
+
   @ViewChild(VirtualScrollComponent)
   virtualScroll: VirtualScrollComponent;
 
-  @ViewChild('searchRef') searchRef: ElementRef;
-
-  @ViewChild('magicSearch') magicSearch: ElementRef;
-
-  settingsButtons = SettingsButtons;
   defaultSettingsButtons = {};
+  settingsButtons = SettingsButtons;
   settingsButtonsGroups = SettingsButtonsGroups;
   settingsCategories = SettingsCategories;
 
@@ -75,11 +87,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // App state to save -- so it can be exported and saved when closing the app
   appState = AppState;
 
-  // DEMO MODE TOGGLE !!!
+  // ========================================================================================
+  // ***************************** BUILD TOGGLE *********************************************
+  // ========================================================================================
   demo = false;
   webDemo = false;
-  versionNumber = '1.1.0';
+  versionNumber = '1.2.0';
   macVersion = false;
+  // ========================================================================================
 
   // REORGANIZE / keep
   currentPlayingFile = '';
@@ -88,8 +103,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   showWizard = false; // set to true if `noSettingsPresent` message comes
 
-  importDone = false;
-  inProgress = false;
   progressPercent = 0;
   canCloseWizard = false;
 
@@ -116,21 +129,30 @@ export class HomeComponent implements OnInit, AfterViewInit {
   freqRightBound: number = 4;
   resolutionNames: string[] = ['SD','720','1080','4K'];
 
+  rightClickShowing: boolean = false;
+  itemToRename: any; // strongly type this -- it's an element from finalArray !!!
+  renamingWIP: string; // ngModel for renaming file
+  renamingExtension: string;
+
+  findMostSimilar: string; // for finding similar files to this one
+
+  showSimilar: boolean = false; // to toggle the similarity pipe
+
   fileMap: any; // should be a map from number (imageId) to number (element in finalArray);
 
   // for text padding below filmstrip or thumbnail element
   textPaddingHeight: number;
   previewWidth: number;
 
-  public finalArray = [];
+  public finalArray: ImageElement[] = [];
+
+  finalArrayNeedsSaving: boolean = false; // if ever a file was renamed, re-save the .vha file
 
   vhaFileHistory: HistoryItem[] = [];
 
   fullPathToCurrentFile = '';
 
   shuffleTheViewNow = 0; // dummy number to force re-shuffle current view
-
-  allScreenShotsExtracted = true;
 
   futureHubName = '';
   hubNameToRemember = '';
@@ -214,12 +236,22 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.showWizard = false;
     } else if (event.key === 'Escape' && this.buttonsInView) {
       this.buttonsInView = false;
+    } else if (event.key === 'Escape' && (this.rightClickShowing || this.renamingNow)) {
+      this.rightClickShowing = false;
+      this.renamingNow = false;
     }
   }
 
-  @HostListener('window:resize', ['$event'])
-  handleResizeEvent(event: any) {
+  @HostListener('window:resize')
+  handleResizeEvent() {
     this.debounceUpdateMax();
+  }
+
+  @HostListener('window:click')
+  handleWindowClick() {
+    if (this.rightClickShowing) {
+      this.rightClickShowing = false;
+    }
   }
 
   constructor(
@@ -227,11 +259,21 @@ export class HomeComponent implements OnInit, AfterViewInit {
     public showLimitService: ShowLimitService,
     public wordFrequencyService: WordFrequencyService,
     public resolutionFilterService: ResolutionFilterService,
-    public electronService: ElectronService
+    public electronService: ElectronService,
+    private elementRef: ElementRef
   ) { }
 
   ngOnInit() {
-  
+
+    // enable right-clicking of the gallery
+    setTimeout(() => {
+      // `.scrollable-content` is css on an element generated by Virtual Scroll
+      this.galleryBackgroundRef = this.elementRef.nativeElement.querySelector('.scrollable-content');
+      this.galleryBackgroundRef.addEventListener('contextmenu', (event) => {
+        this.rightMouseClicked(event, null);
+      });
+    }, 1000);
+
     // To test the progress bar
     // setInterval(() => {
     //   this.importStage = this.importStage === 2 ? 1 : 2;
@@ -270,8 +312,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
         // DEMO CONTENT -- CONFIRM THAT IT WORKS !!!
         this.appState.selectedOutputFolder = 'images';
         this.appState.selectedSourceFolder = finalObject.inputDir;
-        this.inProgress = false;
-        this.importDone = true;
         this.canCloseWizard = true;
         this.showWizard = false;
         this.finalArray = finalObject.images;
@@ -295,6 +335,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     });
 
+    // Rename file response
+    this.electronService.ipcRenderer.on('renameFileResponse', (event, success: boolean, errMsg?: string) => {
+      this.nodeRenamingFile = false;
+
+      if (success) {
+        // UPDATE THE FINAL ARRAY !!!
+        this.replaceOriginalFileName();
+        this.closeRename();
+      } else {
+        this.renameErrMsg = errMsg;
+      }
+    });
+
     // Returning Output
     this.electronService.ipcRenderer.on('outputFolderChosen', (event, filePath) => {
       this.wizard.selectedOutputFolder = filePath;
@@ -302,11 +355,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // Happens if a file with the same hub name already exists in the directory
     this.electronService.ipcRenderer.on('pleaseFixHubName', (event) => {
-      this.inProgress = false;
+      this.importStage = 0;
     });
 
     // Progress bar messages
     // for META EXTRACTION
+    // stage = 0 hides progress bar
+    // stage = 1 shows meta progress
+    // stage = 2 shows jpg progress
     this.electronService.ipcRenderer.on('processingProgress', (event, a: number, b: number, stage: number) => {
       this.importStage = stage;
       this.progressNum1 = a;
@@ -319,30 +375,24 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (a === b) {
         this.extractionPercent = 1;
         this.importStage = 0;
-        this.appState.hubName = this.hubNameToRemember;
-        this.allScreenShotsExtracted = true;
+        this.appState.hubName = this.hubNameToRemember; // could this cause bugs ??? TODO: investigate!
       }
-    });
-
-    this.electronService.ipcRenderer.on('importInterrupted', (event) => {
-      console.log('YOU HAVE STOPPED THE IMPORT PROGRESS !!!!');
     });
 
     // Final object returns
     this.electronService.ipcRenderer.on('finalObjectReturning',
-        (event, finalObject: FinalObject, pathToFile: string, fileName: string) => {
+        (event, finalObject: FinalObject, pathToFile: string, outputFolderWithTrailingSlash: string) => {
+      this.finalArrayNeedsSaving = false;
       this.appState.currentVhaFile = pathToFile;
       this.hubNameToRemember = finalObject.hubName;
       this.appState.hubName = finalObject.hubName;
       this.appState.numOfFolders = finalObject.numOfFolders;
-      this.appState.selectedOutputFolder = pathToFile.replace(fileName + '.vha', '');
+      this.appState.selectedOutputFolder = outputFolderWithTrailingSlash;
       this.appState.selectedSourceFolder = finalObject.inputDir;
 
       // Update history of opened files
       this.updateVhaFileHistory(pathToFile, finalObject.inputDir, finalObject.hubName);
 
-      this.inProgress = false;
-      this.importDone = true;
       this.canCloseWizard = true;
       this.showWizard = false;
       this.finalArray = this.demo ? finalObject.images.slice(0, 50) : finalObject.images;
@@ -388,7 +438,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
         const fullPath = ev.dataTransfer.files[0].path;
         ev.preventDefault();
         if (fullPath.slice(-4) === '.vha') {
-          this.electronService.ipcRenderer.send('load-this-vha-file', ev.dataTransfer.files[0].path);
+          this.electronService.ipcRenderer.send(
+            'load-this-vha-file', ev.dataTransfer.files[0].path, this.saveVhaIfNeeded()
+          );
         }
       }
     }
@@ -436,7 +488,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public loadThisVhaFile(fullPath: string): void {
-    this.electronService.ipcRenderer.send('load-this-vha-file', fullPath);
+    this.electronService.ipcRenderer.send('load-this-vha-file', fullPath, this.saveVhaIfNeeded());
   }
 
   public loadFromFile(): void {
@@ -454,11 +506,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public importFresh(): void {
     this.appState.selectedSourceFolder = this.wizard.selectedSourceFolder;
     this.appState.selectedOutputFolder = this.wizard.selectedOutputFolder;
-    this.wizard.totalNumberOfFiles = -1;
-    this.allScreenShotsExtracted = false;
-    this.importDone = false;
-    this.inProgress = true;
-    const importOptions = {
+    this.importStage = 1;
+    const importOptions: ImportSettingsObject = {
+      videoDirPath: this.wizard.selectedSourceFolder,
+      exportFolderPath: this.wizard.selectedOutputFolder,
       imgHeight: this.screenshotSizeForImport,
       hubName: (this.futureHubName || 'untitled')
     }
@@ -466,6 +517,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public cancelCurrentImport(): void {
+    this.importStage = 0;
     this.electronService.ipcRenderer.send('cancel-current-import');
   }
 
@@ -485,7 +537,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   public initiateClose(): void {
     this.appState.imgHeight = this.imgHeight || 100;
-    this.electronService.ipcRenderer.send('close-window', this.getSettingsForSave());
+    this.electronService.ipcRenderer.send('close-window', this.getSettingsForSave(), this.saveVhaIfNeeded());
+  }
+
+  /**
+   * Returns the finalArray if needed, otherwise returns `null`
+   * completely depends on global variable `finalArrayNeedsSaving`
+   */
+  public saveVhaIfNeeded(): any {
+    if (this.finalArrayNeedsSaving) {
+      return this.finalArray;
+    } else {
+      return null;
+    }
   }
 
   public openVideo(imageId): void {
@@ -508,7 +572,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.electronService.webFrame.setZoomFactor(this.appState.currentZoomLevel);
     }
   }
-  
+
   public decreaseZoomLevel(): void {
     if (this.appState.currentZoomLevel > 0.6) {
       this.appState.currentZoomLevel = this.appState.currentZoomLevel - 0.1;
@@ -575,7 +639,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   buildFileMap(): void {
     this.fileMap = new Map;
-    this.finalArray.forEach((element, index) => {
+    (this.finalArray || []).forEach((element, index) => {
       this.fileMap.set(element[3], index);
     });
     // console.log(this.fileMap);
@@ -595,7 +659,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     let matchFound = false;
 
-    this.vhaFileHistory.forEach((element: any, index: number) => {
+    (this.vhaFileHistory || []).forEach((element: any, index: number) => {
       if (element.vhaFilePath === pathToVhaFile) {
         matchFound = true;
         // remove from current position
@@ -750,15 +814,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Rescan the current input directory
    */
   public rescanDirectory(): void {
-    const sourceAndVhaFile: any = {};
-    sourceAndVhaFile.inputFolder = this.appState.selectedSourceFolder;
-    sourceAndVhaFile.pathToVhaFile = this.appState.currentVhaFile;
     this.progressNum1 = 0;
+    this.importStage = 1;
     this.toggleSettings();
-    this.importDone = false;
     console.log('rescanning');
-    console.log(sourceAndVhaFile);
-    this.electronService.ipcRenderer.send('rescan-current-directory', sourceAndVhaFile);
+    this.electronService.ipcRenderer.send('rescan-current-directory', this.finalArray);
   }
 
   /**
@@ -967,12 +1027,139 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   /**
    * Update the min and max resolution for the resolution filter
-   * @param selection 
+   * @param selection
    */
   newResFilterSelected(selection: number[]): void {
     this.freqLeftBound = selection[0];
     this.freqRightBound = selection[1];
     // console.log(selection);
+  }
+
+  clearLev(): void {
+    this.showSimilar = false;
+  }
+
+  currentRightClickedItem: any; // element from FinalArray
+  renamingNow: boolean = false;
+
+  clickedOnFile: boolean; // whether right-clicked on file or gallery background
+
+  rightClickPosition: any = { x: 0, y: 0 };
+
+  nodeRenamingFile: boolean = false;
+  renameErrMsg: string = '';
+
+  showSimilarNow(): void {
+    this.findMostSimilar = this.currentRightClickedItem[2];
+    console.log(this.findMostSimilar);
+    this.showSimilar = true;
+  }
+
+  rightMouseClicked(event: MouseEvent, item): void {
+
+    event.stopPropagation(); // so that the gallery background event listener (`scrollable-content`) doesn't fire
+
+    if (item === null) {
+      this.clickedOnFile = false;
+    } else {
+      this.clickedOnFile = true;
+    }
+
+    const winWidth: number = window.innerWidth;
+    const clientX: number = event.clientX;
+    const howFarFromRight: number = winWidth - clientX;
+
+    this.rightClickPosition.x = (howFarFromRight < 120) ? clientX - 120 + (howFarFromRight) : clientX;
+    this.rightClickPosition.y = event.clientY;
+
+    this.currentRightClickedItem = item;
+    this.rightClickShowing = true;
+  }
+
+  /**
+   * Opens rename file modal, prepares all the name and extension
+   */
+  openRenameFileModal(): void {
+    // prepare file name without extension:
+    this.renameErrMsg = '';
+    const item = this.currentRightClickedItem;
+
+    // .slice() creates a copy
+    const fileName = item[1].slice().substr(0, item[1].lastIndexOf('.'));
+    const extension = item[1].slice().split('.').pop();
+
+    this.renamingWIP = fileName;
+    this.renamingExtension = extension;
+
+    this.itemToRename = item;
+    this.renamingNow = true;
+
+    setTimeout(() => {
+      this.renameFileInput.nativeElement.focus();
+    }, 0);
+  }
+
+  /**
+   * Close the rename dialog
+   */
+  closeRename() {
+    this.renamingNow = false;
+  }
+
+  /**
+   * Attempt to rename file
+   * check for simple errors locally
+   * ask Node to perform rename after
+   */
+  attemptToRename() {
+    this.nodeRenamingFile = true;
+    this.renameErrMsg = '';
+
+    const sourceFolder = this.appState.selectedSourceFolder;
+    const relativeFilePath = this.currentRightClickedItem[0];
+    const originalFile = this.currentRightClickedItem[1];
+    const newFileName = this.renamingWIP + '.' + this.renamingExtension;
+    // check if different first !!!
+    if (originalFile === newFileName) {
+      this.renameErrMsg = 'new file name must be different';
+      this.nodeRenamingFile = false;
+    } else if (this.renamingWIP.length === 0 ) {
+      this.renameErrMsg = 'new file name may not be empty';
+      this.nodeRenamingFile = false;
+    } else {
+      // try renaming
+      this.electronService.ipcRenderer.send(
+        'try-to-rename-this-file',
+        sourceFolder,
+        relativeFilePath,
+        originalFile,
+        newFileName
+      );
+    }
+  }
+
+  /**
+   * Searches through the `finalArray` and updates the file name and display name
+   */
+  replaceOriginalFileName(): void {
+    const oldFileName = this.currentRightClickedItem[1];
+
+    for (let i = 0; i < this.finalArray.length; i++) {
+      if (this.finalArray[i][1] === oldFileName) {
+        this.finalArray[i][1] = this.renamingWIP + '.' + this.renamingExtension;
+        this.finalArray[i][2] = this.renamingWIP;
+        break;
+      }
+    }
+
+    this.finalArrayNeedsSaving = true;
+  }
+
+  /**
+   * For ternary in `home.component` template when right-clicking on folder instead of file
+   */
+  doNothing(): void {
+    // do nothing
   }
 
 }

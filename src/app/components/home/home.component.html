@@ -58,7 +58,7 @@
   ></div>
 
   <div *ngIf="importStage === 2" class="cancelProgress" @donutAppear>
-    <span 
+    <span
       (click)="cancelCurrentImport()"
       [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
     >
@@ -73,6 +73,114 @@
     [darkMode]="settingsButtons['darkMode'].toggled"
     @donutAppear
   ></app-donut>
+
+  <!-- OVERLAY to cancel out right click modal -->
+  <div
+    *ngIf="rightClickShowing"
+    class="clickAwayOverlay"
+    @overlayAppear
+  >
+  </div>
+
+  <!-- OVERLAY to cancel out rename modal -->
+  <div
+    *ngIf="renamingNow"
+    class="clickAwayOverlay disableMouseClicks"
+    @overlayAppear
+  >
+  </div>
+
+  <!-- RIGHT CLICK MODAL -->
+  <div
+    *ngIf="rightClickShowing"
+    [ngStyle]="{
+        top: rightClickPosition.y + 'px',
+        left: rightClickPosition.x + 'px'
+      }"
+    class="rightClickMenu"
+    @rightClickAnimation
+  >
+    <ul *ngIf="clickedOnFile; else galleryOptions" @rightClickContentAnimation>
+      <li (click)="openRenameFileModal()">Rename file</li>
+      <li (click)="showSimilarNow()">Show similar</li>
+    </ul>
+    <ng-template #galleryOptions>
+      <ul @rightClickContentAnimation>
+        <li (click)="toggleButton('shuffleGalleryNow')">Shuffle results</li>
+      </ul>
+    </ng-template>
+  </div>
+
+  <!-- RENAMING MODAL -->
+  <div
+    *ngIf="renamingNow"
+    [ngClass]="{ renameDark: settingsButtons['darkMode'].toggled }"
+    class="renameMenu"
+    @modalAnimation
+  >
+
+  <div
+    (click)="closeRename()"
+    [ngClass]="{ closeRenameDark: settingsButtons['darkMode'].toggled }"
+    class="closeSettings closeRename"
+    title="cancel rename"
+  >
+    <span class="icon icon-close"></span>
+  </div>
+
+    <span class="renameHeading">Rename</span>
+
+    <app-filmstrip-item
+      [darkMode]="settingsButtons['darkMode'].toggled"
+      [elHeight]="150"
+      [fileSize]="itemToRename[7]"
+      [folderPath]="appState.selectedOutputFolder"
+      [hoverScrub]="true"
+      [hubName]="appState.hubName"
+      [imgHeight]="100"
+      [imgId]="itemToRename[3]"
+      [imgWidth]="(imgHeight / 100) * itemToRename[6] || (imgHeight / 100) * 171"
+      [largerFont]="true"
+      [rez]="itemToRename[5]"
+      [showMeta]="true"
+      [time]="itemToRename[4]"
+      [title]="itemToRename[1]"
+    ></app-filmstrip-item>
+
+    <span class="renameFrom">from:</span>
+    <span class="renameTo">to:</span>
+
+    <input
+      (keyup.enter)="attemptToRename()"
+      [(ngModel)]="renamingWIP"
+      [ngClass]="{ darkModeOn: settingsButtons['darkMode'].toggled }"
+      [disabled]="nodeRenamingFile"
+      class="renameFile"
+      type="text"
+      #renameFileInput
+    >
+    <span class="extension-hack" [ngClass]="{ darkModeOn: settingsButtons['darkMode'].toggled }" >
+      <span class="hidden">{{ renamingWIP }}</span>
+      <span class="extension" *ngIf="renamingWIP.length > 0">.{{ renamingExtension }}</span>
+    </span>
+
+    <span *ngIf="renameErrMsg !== ''" class="renameErrMsg" @donutAppear>
+      {{ renameErrMsg }}
+    </span>
+
+    <button
+      [disabled]="
+            (renamingWIP + '.' + renamingExtension) === currentRightClickedItem[1]
+          || nodeRenamingFile
+          || renamingWIP.length === 0
+        "
+      class="wizardButton btnRename"
+      (click)="attemptToRename()"
+    >
+      RENAME
+    </button>
+
+</div>
 
   <!-- SETTINGS / OPTIONS MODAL -->
   <div
@@ -367,13 +475,13 @@
       <div *ngIf="settingsButtons['resolutionFilter'].toggled" class="resolutionFilterContainer">
         <div class="frequencyGraphContainer">
           <ng-container *ngFor="let resolution of resolutionFreqArr; index as i">
-            <div 
+            <div
               [ngClass]="{ resDisabled: (i < freqLeftBound) || (i >= freqRightBound) }"
               [ngStyle]="{ height: resolution + '%', left: i * 35 + 'px' }"
-              class="frequency-bar" 
+              class="frequency-bar"
             >
             </div>
-            <div 
+            <div
               [ngClass]="{ resDisabled: (i < freqLeftBound) || (i >= freqRightBound) }"
               class="resolutionName"
             >
@@ -382,11 +490,21 @@
           </ng-container>
         </div>
 
-        <app-res-filter 
+        <app-res-filter
           [darkMode]="settingsButtons['darkMode'].toggled"
           (newResFilterSelected)="newResFilterSelected($event)"
         ></app-res-filter>
 
+      </div>
+
+      <!-- Lev Distance -->
+      <div class="levDistance" *ngIf="showSimilar">
+        <span class="levSpan">
+          and similar to:
+        </span>
+        <span class="searchWord" (click)="clearLev()">
+          {{ findMostSimilar }}
+        </span>
       </div>
 
       <!-- total found -->
@@ -443,13 +561,15 @@
       [childHeight]="imgHeight + textPaddingHeight + 20
                       + ( appState.currentView === 'thumbs' ? 4 : 0)
                       - ( appState.currentView === 'files' ? ( imgHeight + 10 ) : 0)"
-      [items]="finalArray | magicSearchPipe: magicSearchString
+      [items]="finalArray
+                | magicSearchPipe: magicSearchString
                 | fileSearchPipe: filters[0].array : filters[0].bool : true  : false : false
                 | fileSearchPipe: filters[1].array : filters[1].bool : false : false : false
                 | fileSearchPipe: filters[2].array : filters[2].bool : true  : true  : false
                 | fileSearchPipe: filters[3].array : filters[3].bool : false : true  : false
                 | fileSearchPipe: filters[4].array : filters[4].bool : true  : true  : true
                 | resolutionFilterPipe: settingsButtons['resolutionFilter'].toggled : freqLeftBound : freqRightBound
+                | similarityPipe: showSimilar : findMostSimilar
                 | wordFrequencyPipe: settingsButtons['showFreq'].toggled
                 | countPipe
                 | randomizePipe: shuffleTheViewNow
@@ -467,6 +587,7 @@
         <app-gallery-item
           *ngFor="let item of scroll.viewPortItems"
           (click)="openVideo(item[3])"
+          (contextmenu)="rightMouseClicked($event, item)"
           [title]="item[2]"
           [imgId]="item[3]"
           [time]="item[4]"
@@ -489,6 +610,7 @@
         <app-filmstrip-item
           *ngFor="let item of scroll.viewPortItems"
           (click)="openVideo(item[3])"
+          (contextmenu)="rightMouseClicked($event, item)"
           [imgId]="item[3]"
           [title]="item[2]"
           [time]="item[4]"
@@ -512,6 +634,7 @@
           [folderPath]="item[0]"
           [title]="item[2]"
           (click)="(item[2] === '*') ? handleFolderWordClicked(item[0]) : openVideo(item[3])"
+          (contextmenu)="(item[2] === '*') ? doNothing() : rightMouseClicked($event, item)"
           [time]="item[4]"
           [rez]="item[5]"
           [fileSize]="item[7]"
@@ -531,7 +654,7 @@
 <!-- IMPORT MODAL  -->
 
 <div
-  *ngIf="!importDone && progressPercent !== 0"
+  *ngIf="importStage === 1"
   class="progress-modal"
   @modalAnimation
 >
@@ -543,7 +666,7 @@
   </div>
 </div>
 
-<div [ngClass]="{ 'disabled-overlay': inProgress }"></div>
+<div [ngClass]="{ 'disabled-overlay': importStage === 1 }"></div>
 
 <!-- WIZARD -->
 
@@ -557,7 +680,7 @@
 
     <h2>Open previous hub</h2>
 
-    <button (click)="loadFromFile()" title="Open a previously-saved Video Hub">
+    <button class="wizardButton" (click)="loadFromFile()" title="Open a previously-saved Video Hub">
       Load from file
     </button>
 
@@ -572,7 +695,8 @@
             class="icon icon-close clear-history-item"
             title="Remove this item from recent history"
           ></span>
-          {{ historyItem.hubName }}
+          <img class="history-icon" src="../../../assets/logo.png">
+          <span class="history-name">{{ historyItem.hubName }}</span>
           <br>
           <span class="path recent" [innerHtml]="historyItem.vhaFilePath | folderArrowsPipe : false"></span>
         </li>
@@ -615,6 +739,7 @@
       2
     </div>
     <button
+      class="wizardButton"
       (click)="selectSourceDirectory()"
       [disabled]="futureHubName === ''"
       title="Please select the folder with your video files"
@@ -642,6 +767,7 @@
       3
     </div>
     <button
+      class="wizardButton"
       (click)="selectOutputDirectory()"
       [disabled]="wizard.selectedSourceFolder === '' || futureHubName === ''"
       title="Please select the folder where your Video Hub will be stored"
@@ -703,9 +829,10 @@
       5
     </div>
     <button
+      class="wizardButton"
       [disabled]="wizard.selectedOutputFolder === ''
                || wizard.selectedSourceFolder === ''
-               || inProgress
+               || importStage !== 0
                || futureHubName === ''
                || wizard.totalNumberOfFiles === 0"
       (click)="importFresh()"

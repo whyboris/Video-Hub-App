@@ -136,10 +136,13 @@ h3 {
 }
 
 .buttonDescriptionText {
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
   color: $black;
-  display: block;
+  display: -webkit-box;
   font-size: 12px;
   left: 60px;
+  overflow: hidden;
   pointer-events: none;
   position: absolute;
   top: 3px;

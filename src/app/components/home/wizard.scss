@@ -1,5 +1,37 @@
 @import "variables";
 
+.wizardButton {
+  background: #DDDDDD;
+  border-radius: 10px;
+  border: 1px solid #a7a7a7;
+  margin: 15px;
+  min-width: 190px;
+  max-height: 50px;
+  max-width: 300px;
+  padding: 10px;
+  transition-property: background-color, box-shadow, color;
+  transition: 300ms;
+
+  &:enabled {
+    box-shadow: 1px 2px 4px rgba(0,0,0,0.5);
+  }
+
+  &:hover {
+    background: #EEEEEE;
+  }
+
+  &:disabled {
+    cursor: initial;
+    pointer-events: none;
+  }
+
+  &:active {
+    transition: 100ms;
+    transform: translateY(1px);
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.5);
+  }
+}
+
 .wizard {
   background: $gray-10;
   height: 100vh;
@@ -11,31 +43,6 @@
   z-index: 30;
   height: calc(100vh - 50px);
 
-  button {
-    background: #DDDDDD;
-    border-radius: 10px;
-    border: 1px solid #a7a7a7;
-    margin: 15px;
-    min-width: 190px;
-    max-height: 50px;
-    max-width: 300px;
-    padding: 10px;
-    transition-property: background-color, box-shadow, color;
-    transition: 300ms;
-
-    &:enabled {
-      box-shadow: 1px 2px 4px rgba(0,0,0,0.5);
-    }
-
-    &:hover {
-      background: #EEEEEE;
-    }
-
-    &:disabled {
-      cursor: initial;
-      pointer-events: none;
-    }
-  }
 
   h1 {
     font-size: 14px;
@@ -135,11 +142,28 @@
         margin-bottom: 12px;
         word-wrap: break-word;
 
+        .history-name {
+          display: inline-block !important;
+          font-size: 14px !important;
+          transform: translate(-9px, -5px);
+          transition-property: text-shadow;
+          transition: 300ms;
+        }
+
+        &:hover {
+          .history-name {
+            color: #ff7777;
+            text-shadow: 0px 0px 3px rgba(255, 255, 255, 0.5);
+            transition-property: text-shadow;
+            transition: 300ms;
+          }
+        }
+
         .clear-history-item {
           position: absolute;
-          transform: translate(-25px, 0);
-          transition: 300ms;
+          transform: translate(-32px, 3px);
           transition-property: color;
+          transition: 300ms;
 
           &:hover {
             color: red;
@@ -223,6 +247,10 @@
   margin-top: 16px;
   padding-left: 5px;
   margin-left: 15px;
+}
+
+.history-icon {
+  width: 18px;
 }
 
 @media (max-width: 760px) {
