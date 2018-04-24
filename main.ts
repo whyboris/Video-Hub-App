@@ -496,6 +496,7 @@ function reScanDirectory(angularFinalArray: ImageElement[], currentVideoFolder: 
     );
 
   } else {
+    sendCurrentProgress(1, 1, 0);
     dialog.showMessageBox({
       message: 'Directory ' + currentVideoFolder + ' does not exist',
       buttons: ['OK']
