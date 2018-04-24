@@ -58,7 +58,7 @@
   ></div>
 
   <div *ngIf="importStage === 2" class="cancelProgress" @donutAppear>
-    <span 
+    <span
       (click)="cancelCurrentImport()"
       [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
     >
@@ -93,9 +93,9 @@
   <!-- RIGHT CLICK MODAL -->
   <div
     *ngIf="rightClickShowing"
-    [ngStyle]="{ 
-        top: rightClickPosition.y + 'px', 
-        left: rightClickPosition.x + 'px' 
+    [ngStyle]="{
+        top: rightClickPosition.y + 'px',
+        left: rightClickPosition.x + 'px'
       }"
     class="rightClickMenu"
     @rightClickAnimation
@@ -112,25 +112,25 @@
   </div>
 
   <!-- RENAMING MODAL -->
-  <div 
-    *ngIf="renamingNow" 
-    [ngClass]="{ renameDark: settingsButtons['darkMode'].toggled }" 
-    class="renameMenu" 
+  <div
+    *ngIf="renamingNow"
+    [ngClass]="{ renameDark: settingsButtons['darkMode'].toggled }"
+    class="renameMenu"
     @modalAnimation
   >
 
   <div
     (click)="closeRename()"
-    [ngClass]="{ closeRenameDark: settingsButtons['darkMode'].toggled }" 
+    [ngClass]="{ closeRenameDark: settingsButtons['darkMode'].toggled }"
     class="closeSettings closeRename"
     title="cancel rename"
   >
     <span class="icon icon-close"></span>
   </div>
-  
+
     <span class="renameHeading">Rename</span>
 
-    <app-filmstrip-item 
+    <app-filmstrip-item
       [darkMode]="settingsButtons['darkMode'].toggled"
       [elHeight]="150"
       [fileSize]="itemToRename[7]"
@@ -146,11 +146,11 @@
       [time]="itemToRename[4]"
       [title]="itemToRename[1]"
     ></app-filmstrip-item>
-  
+
     <span class="renameFrom">from:</span>
     <span class="renameTo">to:</span>
 
-    <input 
+    <input
       (keyup.enter)="attemptToRename()"
       [(ngModel)]="renamingWIP"
       [ngClass]="{ darkModeOn: settingsButtons['darkMode'].toggled }"
@@ -170,11 +170,11 @@
 
     <button
       [disabled]="
-            (renamingWIP + '.' + renamingExtension) === currentRightClickedItem[1] 
+            (renamingWIP + '.' + renamingExtension) === currentRightClickedItem[1]
           || nodeRenamingFile
           || renamingWIP.length === 0
         "
-      class="wizardButton btnRename" 
+      class="wizardButton btnRename"
       (click)="attemptToRename()"
     >
       RENAME
@@ -475,13 +475,13 @@
       <div *ngIf="settingsButtons['resolutionFilter'].toggled" class="resolutionFilterContainer">
         <div class="frequencyGraphContainer">
           <ng-container *ngFor="let resolution of resolutionFreqArr; index as i">
-            <div 
+            <div
               [ngClass]="{ resDisabled: (i < freqLeftBound) || (i >= freqRightBound) }"
               [ngStyle]="{ height: resolution + '%', left: i * 35 + 'px' }"
-              class="frequency-bar" 
+              class="frequency-bar"
             >
             </div>
-            <div 
+            <div
               [ngClass]="{ resDisabled: (i < freqLeftBound) || (i >= freqRightBound) }"
               class="resolutionName"
             >
@@ -490,7 +490,7 @@
           </ng-container>
         </div>
 
-        <app-res-filter 
+        <app-res-filter
           [darkMode]="settingsButtons['darkMode'].toggled"
           (newResFilterSelected)="newResFilterSelected($event)"
         ></app-res-filter>
@@ -561,7 +561,7 @@
       [childHeight]="imgHeight + textPaddingHeight + 20
                       + ( appState.currentView === 'thumbs' ? 4 : 0)
                       - ( appState.currentView === 'files' ? ( imgHeight + 10 ) : 0)"
-      [items]="finalArray 
+      [items]="finalArray
                 | magicSearchPipe: magicSearchString
                 | fileSearchPipe: filters[0].array : filters[0].bool : true  : false : false
                 | fileSearchPipe: filters[1].array : filters[1].bool : false : false : false
@@ -654,7 +654,7 @@
 <!-- IMPORT MODAL  -->
 
 <div
-  *ngIf="!importDone && progressPercent !== 0"
+  *ngIf="importStage === 1"
   class="progress-modal"
   @modalAnimation
 >
@@ -666,7 +666,7 @@
   </div>
 </div>
 
-<div [ngClass]="{ 'disabled-overlay': inProgress }"></div>
+<div [ngClass]="{ 'disabled-overlay': importStage === 1 }"></div>
 
 <!-- WIZARD -->
 
@@ -832,7 +832,7 @@
       class="wizardButton"
       [disabled]="wizard.selectedOutputFolder === ''
                || wizard.selectedSourceFolder === ''
-               || inProgress
+               || importStage !== 0
                || futureHubName === ''
                || wizard.totalNumberOfFiles === 0"
       (click)="importFresh()"

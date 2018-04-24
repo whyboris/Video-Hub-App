@@ -207,6 +207,7 @@ import {
   getVideoPathsAndNames,
   numberOfVidsIn,
   onlyNewIndexes,
+  sendCurrentProgress,
   takeTenScreenshots,
   updateFinalArrayWithHD,
   writeVhaFileDangerously
@@ -216,8 +217,6 @@ import { FinalObject, ImageElement } from './src/app/components/common/final-obj
 import { ImportSettingsObject } from './src/app/components/common/import.interface';
 
 import { globals } from './main-globals';
-
-let angularApp; // set as 'event' -- used to send messages back to Angular App
 
 let lastSavedFinalObject: FinalObject; // hack for saving the `vha` file again later
 
@@ -244,7 +243,7 @@ function openThisDamnFile(pathToVhaFile: string) {
           pathToVhaFile,
         buttons: ['OK']
       });
-      angularApp.sender.send('pleaseOpenWizard');
+      globals.angularApp.sender.send('pleaseOpenWizard');
     } else {
       globals.currentlyOpenVhaFile = pathToVhaFile;
       lastSavedFinalObject = JSON.parse(data);
@@ -256,7 +255,7 @@ function openThisDamnFile(pathToVhaFile: string) {
       console.log(globals.selectedSourceFolder + ' - videos location');
       console.log(globals.selectedOutputFolder + ' - output location');
 
-      angularApp.sender.send(
+      globals.angularApp.sender.send(
         'finalObjectReturning',
         JSON.parse(data),
         pathToVhaFile,
@@ -281,7 +280,7 @@ function setGlobalsFromVhaFile(vhaFileContents: FinalObject) {
  * Just started -- hello -- send over the settings or open wizard
  */
 ipc.on('just-started', function (event, someMessage) {
-  angularApp = event;
+  globals.angularApp = event;
 
   fs.readFile(path.join(pathToAppData, 'video-hub-app', 'settings.json'), (err, data) => {
     if (err) {
@@ -582,22 +581,12 @@ ipc.on('try-to-rename-this-file', function(event, sourceFolder: string, relPath:
     }
   }
 
-  angularApp.sender.send('renameFileResponse', success, errMsg);
+  globals.angularApp.sender.send('renameFileResponse', success, errMsg);
 });
 
 // ============================================================
 // Methods to extract screenshots, build file list, etc
 // ============================================================
-
-/**
- * Sends progress to Angular App
- * @param current number
- * @param total number
- * @param stage number
- */
-function sendCurrentProgress(current: number, total: number, stage: number): void {
-  angularApp.sender.send('processingProgress', current, total, stage);
-}
 
 /**
  * Writes the vha file and sends contents back to Angular App
@@ -633,7 +622,7 @@ function sendFinalResultHome(
 
     globals.currentlyOpenVhaFile = pathToTheFile;
 
-    angularApp.sender.send(
+    globals.angularApp.sender.send(
       'finalObjectReturning',
       finalObject,
       pathToTheFile,

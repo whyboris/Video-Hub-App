@@ -5,6 +5,8 @@ const fs = require('fs');
 import { FinalObject, ImageElement } from './src/app/components/common/final-object.interface';
 import { acceptableFiles } from './main-filenames';
 
+import { globals } from './main-globals';
+
 /**
  * Label the video according to these rules
  * 5th item is size (720, 1080, etc)
@@ -30,7 +32,7 @@ export function labelVideo(width: number, height: number): string {
 }
 
 /**
- * Alphabetizes an array of `ImageElement` 
+ * Alphabetizes an array of `ImageElement`
  * prioritizing the folder, and then filename
  */
 export function alphabetizeFinalArray(imagesArray: ImageElement[]): ImageElement[] {
@@ -109,7 +111,7 @@ function fileSystemReserved(thingy: string): boolean {
 
 /**
  * walk the path and return array of `ImageElements`
- * @param sourceFolderPath 
+ * @param sourceFolderPath
  */
 export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] {
 
@@ -119,7 +121,7 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
   // Recursively walk through a directory compiling ImageElements
   const walkSync = (dir, filelist) => {
     const files = fs.readdirSync(dir);
-    
+
     files.forEach(function (file) {
       if (!fileSystemReserved(file)) {
         // if the item is a _DIRECTORY_
@@ -137,7 +139,7 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
         }
       }
     });
-    
+
     return filelist;
   };
 
@@ -152,13 +154,13 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
  * @param folderPath path to folder to scan
  */
 export function numberOfVidsIn(folderPath: string): number {
-  
+
   let totalNumberOfFiles = 0;
 
   // increases `totalNumberOfFiles` for every file found
   const walkAndCountSync = (dir, filelist) => {
     const files = fs.readdirSync(dir);
-    
+
     files.forEach(function (file: string) {
       if (!fileSystemReserved(file)) {
         // if the item is a _DIRECTORY_
@@ -172,7 +174,7 @@ export function numberOfVidsIn(folderPath: string): number {
         }
       }
     });
-    
+
     return filelist;
   };
 
@@ -200,8 +202,8 @@ ffmpeg.setFfmpegPath(ffmpegPath);
  * @param done         -- callback when done
  */
 export function takeTenScreenshots(
-  pathToVideo: string, 
-  fileNumber: number, 
+  pathToVideo: string,
+  fileNumber: number,
   screenSize: number,
   saveLocation: string,
   done: any
@@ -241,7 +243,7 @@ export function takeTenScreenshots(
  * Super dangerously delete 10 images from images folder given the base number
  * Deletes 10 images with given base
  * uses `folderToDeleteFrom` variable !!!
- * @param numberOfImage 
+ * @param numberOfImage
  */
 export function superDangerousDelete(imageLocation: string, numberOfImage: number): void {
   // console.log('index given: ' + numberOfImage);
@@ -250,7 +252,7 @@ export function superDangerousDelete(imageLocation: string, numberOfImage: numbe
   for (let i = 1; i < 11; i++) {
     const currentFile: string = filePath + '-' + i.toString() + '.jpg';
     if (fs.existsSync(currentFile)) {
-      fs.unlinkSync(currentFile, (err) => { 
+      fs.unlinkSync(currentFile, (err) => {
         // console.log(err);
         // Don't even sweat it dawg!
       });
@@ -301,8 +303,8 @@ export function onlyNewIndexes(fullArray: ImageElement[], minIndex: number) {
  * @param inputFolder  -- location where all the videos are
  */
 export function findAllNewFiles(
-  angularFinalArray: ImageElement[], 
-  hdFinalArray: ImageElement[], 
+  angularFinalArray: ImageElement[],
+  hdFinalArray: ImageElement[],
   inputFolder: string,
   lastScreen: number
 ): ImageElement[] {
@@ -339,7 +341,7 @@ export function findAllNewFiles(
  * @param folderWhereImagesAre -- folder where the images are located (for deletion)
  */
 export function finalArrayWithoutDeleted(
-  angularFinalArray: ImageElement[], 
+  angularFinalArray: ImageElement[],
   hdFinalArray: ImageElement[],
   inputFolder: string,
   folderWhereImagesAre: string
@@ -356,7 +358,7 @@ export function finalArrayWithoutDeleted(
 
     if (matchFound) {
       return true;
-    } else {    
+    } else {
       superDangerousDelete(folderWhereImagesAre, value[3]);
       return false;
     }
@@ -381,7 +383,7 @@ export function finalArrayWithoutDeleted(
  */
 export function extractAllMetadata(
   theFinalArray: ImageElement[],
-  videoFolderPath: string, 
+  videoFolderPath: string,
   metaStartIndex: number,
   jpgRescanStartIndex: number,
   lastJpgNumber: number,
@@ -403,9 +405,11 @@ export function extractAllMetadata(
       iterator++;
       elementsWithMetadata.push(element);
     }
-    
+
     if (iterator < itemTotal) {
-      // send current progress to the first progress bar !?!! somehow
+
+      sendCurrentProgress(iterator, itemTotal, 1);
+
       const filePathNEW = (path.join(videoFolderPath,
                                     theFinalArray[iterator][0],
                                     theFinalArray[iterator][1]));
@@ -429,8 +433,8 @@ export function extractAllMetadata(
  * @param imageElement  index in array to update
  */
 function extractMetadataForThisONEFile(
-  filePath: string, 
-  imageElement: ImageElement, 
+  filePath: string,
+  imageElement: ImageElement,
   extractMetaCallback: any
 ): void {
   ffmpeg.ffprobe(filePath, (err, metadata) => {
@@ -459,7 +463,7 @@ function extractMetadataForThisONEFile(
 
 
 /**
- * Figures out what new files there are, 
+ * Figures out what new files there are,
  * adds them to the finalArray,
  * figures out what files no longer exist,
  * removes them from finalArray,
@@ -483,11 +487,11 @@ export function updateFinalArrayWithHD(
 ): void {
 
   // Generate ImageElement[] of all the new elements to be added
-  const onlyNewElements: ImageElement[] = 
+  const onlyNewElements: ImageElement[] =
     findAllNewFiles(angularFinalArray, hdFinalArray, inputFolder, lastJpgNumber);
 
   // remove from FinalArray all files that are no longer in the video folder
-  const allDeletedRemoved: ImageElement[] = 
+  const allDeletedRemoved: ImageElement[] =
     finalArrayWithoutDeleted(angularFinalArray, hdFinalArray, inputFolder, folderToDeleteFrom);
 
   // If there are new ifles OR if any files have been deleted !!!
@@ -496,16 +500,29 @@ export function updateFinalArrayWithHD(
     const metaRescanStartIndex = allDeletedRemoved.length;
     const finalArrayUpdated = allDeletedRemoved.concat(onlyNewElements);
     const lastJpgNumberUpdated = lastJpgNumber + onlyNewElements.length; // update last screen!!!
-    
+
     extractAllMetadata(
-      finalArrayUpdated, 
-      inputFolder, 
-      metaRescanStartIndex, 
+      finalArrayUpdated,
+      inputFolder,
+      metaRescanStartIndex,
       lastJpgNumber,
-      lastJpgNumberUpdated, 
+      lastJpgNumberUpdated,
       extractMetadataCallback // actually = sendFinalResultHome
     );
 
+  } else {
+    sendCurrentProgress(1, 1, 0); // indicates 100%
   }
 
+}
+
+
+/**
+ * Sends progress to Angular App
+ * @param current number
+ * @param total number
+ * @param stage number -- 0 = done, 1 = meta, 2 = jpg
+ */
+export function sendCurrentProgress(current: number, total: number, stage: number): void {
+  globals.angularApp.sender.send('processingProgress', current, total, stage);
 }
