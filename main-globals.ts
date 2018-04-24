@@ -3,7 +3,7 @@ export const globals: Globals = {
   cancelCurrentImport: false,
   currentlyOpenVhaFile: '',       // OFFICAL DECREE IN NODE WHICH FILE IS CURRENTLY OPEN !!!
   hubName: 'untitled',            // in case user doesn't name their hub any name
-  lastScreenFromLastOpenFile: 0,  // for `finalArray[3]`
+  lastJpgNumber: 0,               // for `finalArray[3]`
   screenShotSize: 100,
   selectedOutputFolder: '',
   selectedSourceFolder: ''
@@ -14,7 +14,7 @@ interface Globals {
   cancelCurrentImport: boolean;
   currentlyOpenVhaFile: string;
   hubName: string;
-  lastScreenFromLastOpenFile: number;
+  lastJpgNumber: number;
   screenShotSize: number;
   selectedOutputFolder: string;
   selectedSourceFolder: string;

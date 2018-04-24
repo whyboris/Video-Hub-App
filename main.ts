@@ -267,7 +267,7 @@ function openThisDamnFile(pathToVhaFile: string) {
 
 function setGlobalsFromVhaFile(vhaFileContents: FinalObject) {
   globals.hubName = vhaFileContents.hubName,
-  globals.lastScreenFromLastOpenFile = vhaFileContents.lastScreen;
+  globals.lastJpgNumber = vhaFileContents.lastScreen;
   globals.screenShotSize = vhaFileContents.ssSize;
   globals.selectedSourceFolder = vhaFileContents.inputDir;
 }
@@ -478,7 +478,7 @@ function reScanDirectory(angularFinalArray: ImageElement[], currentVideoFolder: 
 
   // rescan the source directory
   if (fs.existsSync(currentVideoFolder)) {
-    let videosOnHD: ImageElement[] = getVideoPathsAndNames(currentVideoFolder); // this method updates the `finalArray`
+    let videosOnHD: ImageElement[] = getVideoPathsAndNames(currentVideoFolder);
 
     if (demo) {
       videosOnHD = videosOnHD.slice(0, 50);
@@ -490,7 +490,7 @@ function reScanDirectory(angularFinalArray: ImageElement[], currentVideoFolder: 
       angularFinalArray,
       videosOnHD,
       currentVideoFolder,
-      globals.lastScreenFromLastOpenFile,
+      globals.lastJpgNumber,
       folderToDeleteFrom,
       sendFinalResultHome           // callback for when `extractAllMetadata` is called
     );
@@ -519,7 +519,7 @@ ipc.on('system-open-file-through-modal', function (event, somethingElse) {
     }, function (files) {
       if (files) {
         // console.log('the user has chosen this previously-saved .vha file: ' + files[0]);
-        // TODO: maybe ??? check if file ends in .vha before parsing !!
+        // TODO: maybe check if file ends in .vha before parsing !?!!
         // TODO: fix up this stupid pattern of overriding method with variable !!!
         userWantedToOpen = files[0];
         openThisDamnFile(files[0]);
