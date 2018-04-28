@@ -182,9 +182,17 @@
 
 </div>
 
+  <div *ngIf="buttonsInView" class="settingsModal">
+    <app-tags-component [finalArray]="finalArray"></app-tags-component>
+  </div>
+
   <!-- SETTINGS / OPTIONS MODAL -->
+
+
+  <!-- bring back into div below -->
+  <!-- *ngIf="buttonsInView" -->
   <div
-    *ngIf="buttonsInView"
+    *ngIf="false"
     class="settingsModal"
     @modalAnimation
   >

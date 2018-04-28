@@ -1,0 +1,16 @@
+<div style="width: 250px; display: inline-block">
+    <ul>
+      <li *ngFor="let item of displayItems">
+        {{ item.word }} - {{ item.freq }}
+      </li>
+    </ul>
+</div>
+
+<div style="width: 250px; display: inline-block">
+    <ul>
+      <li *ngFor="let item of twoWordCombos">
+        {{ item.word }} - {{ item.freq }}
+      </li>
+    </ul>
+</div>
+
