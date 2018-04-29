@@ -182,20 +182,28 @@
 
 </div>
 
-  <div *ngIf="buttonsInView" class="settingsModal">
+  <div
+    *ngIf="settingsButtons['showTags'].toggled"
+    class="settingsModal"
+    @modalAnimation
+  >
+    <div
+      (click)="toggleButton('showTags')"
+      class="closeSettings"
+      title="Close settings"
+    >
+      <span class="icon icon-close"></span>
+    </div>
     <app-tags-component
       [hubName]="appState.hubName"
       [finalArray]="finalArray"
+      (tagClicked)="tagClicked($event)"
     ></app-tags-component>
   </div>
 
   <!-- SETTINGS / OPTIONS MODAL -->
-
-
-  <!-- bring back into div below -->
-  <!-- *ngIf="buttonsInView" -->
   <div
-    *ngIf="false"
+    *ngIf="buttonsInView"
     class="settingsModal"
     @modalAnimation
   >

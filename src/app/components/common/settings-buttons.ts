@@ -15,6 +15,7 @@ export const SettingsButtonsGroups: string[][] = [
   ],
   [
     'showFreq',
+    'showTags',
     'showRecent'
   ],
   [
@@ -84,6 +85,13 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-show-filenames',
     title: 'Show files',
     description: 'Switches to the files view',
+  },
+  'showTags': {
+    hidden: false,
+    toggled: false,
+    iconName: 'icon-tag',
+    title: 'Show tags',
+    description: 'Toggles showing auto-generated tags'
   },
   'showMoreInfo': {
     hidden: false,

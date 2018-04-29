@@ -209,7 +209,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       } else if (event.key === 'x') {
         this.toggleButton('makeLarger');
       } else if (event.key === 't') {
-        this.toggleButton('showMoreInfo');
+        this.toggleButton('showTags');
       } else if (event.key === '1') {
         this.toggleButton('showThumbnails');
       } else if (event.key === '2') {
@@ -239,6 +239,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } else if (event.key === 'Escape' && (this.rightClickShowing || this.renamingNow)) {
       this.rightClickShowing = false;
       this.renamingNow = false;
+    } else if (event.key === 'Escape' && this.settingsButtons['showTags'].toggled) {
+      this.toggleButton('showTags');
     }
   }
 
@@ -716,6 +718,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   hideWizard(): void {
     this.showWizard = false;
+  }
+
+  tagClicked(event: any): void {
+    this.filters[3].array = []; // clear search array
+    this.handleFileWordClicked(event);
   }
 
   /**

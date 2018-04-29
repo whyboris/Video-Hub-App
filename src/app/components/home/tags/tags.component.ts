@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 import { TagsService, WordAndFreq } from './tags.service';
 
@@ -14,6 +14,8 @@ export class TagsComponent {
   @Input() finalArray: ImageElement[];
   @Input() hubName: string; // if hubName changes, tagsService will recalculate, otherwise it will show cached
 
+  @Output() tagClicked = new EventEmitter<string>();
+
   oneWordTags: WordAndFreq[];
   twoWordTags: WordAndFreq[];
 
@@ -27,6 +29,13 @@ export class TagsComponent {
 
     this.oneWordTags = this.tagsService.getOneWordTags();
     this.twoWordTags = this.tagsService.getTwoWordTags();
+  }
+
+  /**
+   * Emit string to home component to search for this string
+   */
+  public tagWasClicked(tag: string): void {
+    this.tagClicked.emit(tag);
   }
 
 }
