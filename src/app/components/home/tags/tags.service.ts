@@ -20,25 +20,46 @@ export class TagsService {
   oneWordMinInstances: number = 2; // runs after 2-word-instances created
   twoWordMinInstances: number = 2; // items show up if 3 or more exist
 
+  cachedHub: string;
+
   constructor() { }
 
   /**
    * Go through the whole process of generating the 1-word and 2-word arrays
    * @param finalArray - ImageElement[] of all files from app
    */
-  public generateAllTags(finalArray: ImageElement[]): void {
+  public generateAllTags(finalArray: ImageElement[], hubName): void {
 
-    this.storeFinalArrayInMemory(finalArray);
+    if (this.cachedHub !== hubName) {
 
-    this.cleanOneWordFreqMap(); // only to have items Math.max(oneWordMinInstances, twoWordMinInstances)
+      this.resetState();
 
-    this.oneWordFreqMap.forEach((val: number, key: string) => {
-      this.findTwoWords(key);
-    });
+      this.cachedHub = hubName;
 
-    this.cleanTwoWordMap();
+      this.storeFinalArrayInMemory(finalArray);
 
-    this.cleanOneWordMapUsingTwoWordMap(); // updates `tempFinalFinal`
+      this.cleanOneWordFreqMap(); // only to have items Math.max(oneWordMinInstances, twoWordMinInstances)
+
+      this.oneWordFreqMap.forEach((val: number, key: string) => {
+        this.findTwoWords(key);
+      });
+
+      this.cleanTwoWordMap();
+
+      this.cleanOneWordMapUsingTwoWordMap();
+
+    }
+
+  }
+
+  /**
+   * Reset all variables so we can recalculate things for the new hub
+   */
+  private resetState(): void {
+    this.oneWordFreqMap = new Map();
+    this.potentialTwoWordMap = new Map();
+    this.twoWordFreqMap = new Map();
+    this.onlyFileNames = [];
   }
 
   /**
@@ -46,7 +67,7 @@ export class TagsService {
    * Calls method that populates the `wordMap`
    * @param finalArray - the whole initial ImageElement[]
    */
-  public storeFinalArrayInMemory(finalArray: ImageElement[]): void {
+  private storeFinalArrayInMemory(finalArray: ImageElement[]): void {
     // Strip out: {}()[] as well as 'for', 'her', 'the', 'and', '-', & ','
     const regex = /{|}|\(|\)|\[|\]|for|her|the|and|,|-/gi;
 
@@ -64,7 +85,7 @@ export class TagsService {
    * Strip out all parantheses, brackets, and a few other words
    * @param filename
    */
-  public addString(filename: string): void {
+  private addString(filename: string): void {
     const wordArray = filename.split(' ');
     wordArray.forEach(word => {
       if (word.length >= this.minWordLength) {
@@ -88,7 +109,7 @@ export class TagsService {
   /**
    * Remove all elements with 3 or fewer occurences
    */
-  public cleanOneWordFreqMap(): void {
+  private cleanOneWordFreqMap(): void {
     this.oneWordFreqMap.forEach((value, key) => {
       if (value <= Math.max(this.twoWordMinInstances, this.oneWordMinInstances)) {
         this.oneWordFreqMap.delete(key);
@@ -101,7 +122,7 @@ export class TagsService {
    * If on the list, add the two-word string to `potentialTwoWordMap`
    * @param singleWord
    */
-  public findTwoWords(singleWord: string): void {
+  private findTwoWords(singleWord: string): void {
 
     const filesContainingTheSingleWord: string[] = [];
 
@@ -135,7 +156,7 @@ export class TagsService {
    * Create the `twoWordFreqMap` by using the `potentialTwoWordMap` word map
    * Recount actual occurrences
    */
-  public cleanTwoWordMap(): void {
+  private cleanTwoWordMap(): void {
 
     this.potentialTwoWordMap.forEach((val: number, key: string) => {
 
@@ -165,7 +186,7 @@ export class TagsService {
   /**
    * clean up the one word map to not include anything that is in the list of two-word tags
    */
-  public cleanOneWordMapUsingTwoWordMap(): void {
+  private cleanOneWordMapUsingTwoWordMap(): void {
 
     const allWordsFromTwoWordArray: string[] = [];
 
@@ -189,7 +210,7 @@ export class TagsService {
    * @param someMap
    * @param minCutoff -- minimum number of elements a tag must have before it is returned
    */
-  public convertMapToWordAndFreqArray(someMap: Map<string, number>, minCutoff: number): WordAndFreq[] {
+  private convertMapToWordAndFreqArray(someMap: Map<string, number>, minCutoff: number): WordAndFreq[] {
     const returnArray: WordAndFreq[] = [];
 
     someMap.forEach((val: number, key: string) => {

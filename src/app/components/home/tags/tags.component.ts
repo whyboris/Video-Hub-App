@@ -12,6 +12,7 @@ import { ImageElement } from 'app/components/common/final-object.interface';
 export class TagsComponent {
 
   @Input() finalArray: ImageElement[];
+  @Input() hubName: string; // if hubName changes, tagsService will recalculate, otherwise it will show cached
 
   oneWordTags: WordAndFreq[];
   twoWordTags: WordAndFreq[];
@@ -22,7 +23,7 @@ export class TagsComponent {
 
   ngOnInit(): void {
 
-    this.tagsService.generateAllTags(this.finalArray);
+    this.tagsService.generateAllTags(this.finalArray, this.hubName);
 
     this.oneWordTags = this.tagsService.getOneWordTags();
     this.twoWordTags = this.tagsService.getTwoWordTags();
