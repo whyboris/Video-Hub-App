@@ -1,5 +1,5 @@
 <ul class="column">
-  <li *ngFor="let item of oneWordTags">
+  <li *ngFor="let item of oneWordTags | tagFilterPipe: currentFiltering: dummyBool">
     <span
       (click)="tagWasClicked(item.word)"
       class="clickable"
@@ -14,7 +14,7 @@
 </ul>
 
 <ul class="column">
-  <li *ngFor="let item of twoWordTags" class="capitalize">
+  <li *ngFor="let item of twoWordTags | tagFilterPipe: currentFiltering: dummyBool" class="capitalize">
     <span
       (click)="tagWasClicked(item.word)"
       class="clickable"
@@ -27,3 +27,23 @@
     </span>
   </li>
 </ul>
+
+<div class="edit-bar" *ngIf="showEdit" @slowFadeIn>
+
+  <button class="wizardButton">Edit</button>
+
+  <input #filterInput type="text" class="inputFilter moved" [(ngModel)]="currentFiltering">
+
+  <span class="numFound filterThis">
+    Filter list
+  </span>
+
+  <input #addInput type="text" class="inputFilter" [(ngModel)]="currentAdding" (keyup.enter)="addThisTag()">
+
+  <span class="numFound">
+    {{ currentAdding | tagMatchPipe }}
+  </span>
+
+  <button class="wizardButton addButton" (click)="addThisTag()">Add</button>
+
+</div>

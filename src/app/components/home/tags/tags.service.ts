@@ -258,4 +258,15 @@ export class TagsService {
     return wordAndFreq;
   }
 
+  /**
+   * Decide how many files contain current query
+   * used only by the tag-match.pipe
+   * @param query
+   */
+  public findMatches(query: string): number {
+    return this.onlyFileNames.filter((element) => {
+      return element.includes(query);
+    }).length;
+  }
+
 }

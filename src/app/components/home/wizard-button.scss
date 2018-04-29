@@ -1,0 +1,34 @@
+
+
+.wizardButton {
+  background: #DDDDDD;
+  border-radius: 10px;
+  border: 1px solid #a7a7a7;
+  margin: 15px;
+  min-width: 190px;
+  max-height: 50px;
+  max-width: 300px;
+  outline: none;
+  padding: 10px;
+  transition-property: background-color, box-shadow, color;
+  transition: 300ms;
+
+  &:enabled {
+    box-shadow: 1px 2px 4px rgba(0,0,0,0.5);
+  }
+
+  &:hover {
+    background: #EEEEEE;
+  }
+
+  &:disabled {
+    cursor: initial;
+    pointer-events: none;
+  }
+
+  &:active {
+    transition: 100ms;
+    transform: translateY(1px);
+    box-shadow: 0px 0px 0px rgba(0, 0, 0, 0.5);
+  }
+}

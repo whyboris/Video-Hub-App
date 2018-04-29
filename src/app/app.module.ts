@@ -38,6 +38,8 @@ import { MagicSearchPipe } from './components/pipes/magic-search.pipe';
 import { RandomizePipe } from './components/pipes/randomize.pipe';
 import { ResolutionFilterPipe } from './components/pipes/resolution-filter.pipe';
 import { SimilarityPipe } from './components/pipes/similarity.pipe';
+import { TagFilterPipe } from './components/home/tags/tag-filter.pipe';
+import { TagMatchPipe } from './components/home/tags/tag-match.pipe';
 import { WordFrequencyPipe } from 'app/components/pipes/word-frequency.pipe';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -62,6 +64,8 @@ import { AppRoutingModule } from './app-routing.module';
     RandomizePipe,
     ResFilter,
     ResolutionFilterPipe,
+    TagFilterPipe,
+    TagMatchPipe,
     TagsComponent,
     TopComponent,
     WordFrequencyPipe

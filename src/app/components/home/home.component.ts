@@ -45,8 +45,10 @@ import { DemoContent } from '../../../assets/demo-content';
     './settings.scss',
     './buttons.scss',
     './search.scss',
+    './search-input.scss',
     './fonts/icons.scss',
     './gallery.scss',
+    './wizard-button.scss',
     './wizard.scss',
     './resolution.scss',
     './rightclick.scss'

@@ -40,25 +40,6 @@
   transform: translate(3px, 11px);
 }
 
-.inputFilter {
-  border: 0;
-  border-bottom: 1px solid $gray-40;
-  background: transparent;
-  box-sizing: border-box;
-  font-size: 15px;
-  outline: none;
-  padding: 6px 6px 6px 20px;
-  padding-bottom: 0;
-  margin: 5px 0 10px;
-  width: 100%;
-  // border-radius: 5px;
-  // border: 1px solid #666666;
-
-  &::placeholder {
-    color: $gray-40;
-  }
-}
-
 .searchWord {
   border-radius: 6px;
   // border: 1px solid $gray-40;

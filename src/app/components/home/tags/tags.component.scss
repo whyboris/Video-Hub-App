@@ -7,6 +7,7 @@
 
 ul {
   list-style-type: none;
+  margin-bottom: 100px;
 
   li {
     margin-bottom: 10px;
@@ -45,4 +46,55 @@ ul {
   text-transform: capitalize;
   transform: translate(-24px, -2px);
   width: 20px;
+}
+
+.edit-bar {
+  background: $gray-15;
+  // border: 1px solid red;
+  bottom: 15px;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 15px;
+  position: fixed;
+  width: calc(100% - 235px);
+}
+
+// inherits styles from 'search-input.scss'
+.inputFilter {
+  bottom: 23px;
+  padding-left: 5px;
+  position: absolute;
+  right: 109px;
+  width: 150px;
+}
+
+// inherits styles from 'wizard-button.scss'
+.wizardButton {
+  display: inline-block;
+  min-width: auto;
+  padding: 5px 10px;
+  width: auto;
+}
+
+.addButton {
+  position: absolute;
+  right: 20px;
+}
+
+.numFound {
+  bottom: 15px;
+  color: $gray-50;
+  font-size: 12px;
+  left: calc(100% - 253px);
+  position: absolute;
+}
+
+.filterThis {
+  left: auto;
+  right: 450px;
+}
+
+.moved {
+  right: 400px;
+  width: 100px
 }
