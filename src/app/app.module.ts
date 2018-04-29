@@ -9,6 +9,7 @@ import { HttpModule } from '@angular/http';
 
 import { VirtualScrollModule } from 'angular2-virtual-scroll';
 
+import { AlphabetPrefixService } from './components/pipes/alphabet-prefix.service';
 import { ElectronService } from './providers/electron.service';
 import { HomeComponent } from './components/home/home.component';
 import { ResolutionFilterService } from './components/pipes/resolution-filter.service';
@@ -26,6 +27,7 @@ import { SimilarityService } from './components/pipes/similarity.service';
 import { TagsComponent } from './components/home/tags/tags.component';
 import { TopComponent } from './components/home/top/top.component';
 
+import { AlphabetPrefixPipe } from './components/pipes/alphabet-prefix.pipe';
 import { CountPipe } from './components/pipes/count.pipe';
 import { FileSearchPipe } from './components/pipes/file-search.pipe';
 import { FileSizePipe } from './components/pipes/file-size.pipe';
@@ -42,6 +44,7 @@ import { AppRoutingModule } from './app-routing.module';
 
 @NgModule({
   declarations: [
+    AlphabetPrefixPipe,
     AppComponent,
     CountPipe,
     DonutComponent,
@@ -72,6 +75,7 @@ import { AppRoutingModule } from './app-routing.module';
     VirtualScrollModule
   ],
   providers: [
+    AlphabetPrefixService,
     ElectronService,
     FileSearchPipe,
     ResolutionFilterService,

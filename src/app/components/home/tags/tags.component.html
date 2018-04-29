@@ -4,6 +4,7 @@
       (click)="tagWasClicked(item.word)"
       class="clickable"
     >
+      <span class="prefix">{{ item.word | alphabetPrefixPipe }}</span>
       {{ item.word }}
       <span class="frequency">
         {{ item.freq }}
@@ -18,6 +19,7 @@
       (click)="tagWasClicked(item.word)"
       class="clickable"
     >
+      <span class="prefix">{{ item.word | alphabetPrefixPipe }}</span>
       {{ item.word }}
       <span class="frequency">
         {{ item.freq }}
