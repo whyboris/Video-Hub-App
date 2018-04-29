@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { TagsService } from './tags.service';
+import { TagsService, WordAndFreq } from './tags.service';
 
 import { ImageElement } from 'app/components/common/final-object.interface';
 
@@ -13,9 +13,8 @@ export class TagsComponent {
 
   @Input() finalArray: ImageElement[];
 
-  displayItems: any;
-
-  twoWordCombos: any;
+  oneWordTags: WordAndFreq[];
+  twoWordTags: WordAndFreq[];
 
   constructor(
     public tagsService: TagsService
@@ -23,26 +22,10 @@ export class TagsComponent {
 
   ngOnInit(): void {
 
-    console.log('tags component loaded');
-    // console.log(this.finalArray);
+    this.tagsService.generateAllTags(this.finalArray);
 
-    this.tagsService.resetMap();
-    this.finalArray.forEach((element) =>{
-      this.tagsService.addString(element[2]);
-    });
-
-    this.tagsService.cleanMap();
-
-    this.displayItems = this.tagsService.computeOneWordTags();
-
-    this.tagsService.storeFinalArrayInMemory(this.finalArray);
-
-    this.tagsService.computeTwoWordTags();
-
-    this.twoWordCombos = this.tagsService.getTwoWordCombos();
-
-    this.displayItems = this.tagsService.cleanOneWordMapUsingTwoWordMap();
-
+    this.oneWordTags = this.tagsService.getOneWordTags();
+    this.twoWordTags = this.tagsService.getTwoWordCombos();
   }
 
 }
