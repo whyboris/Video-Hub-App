@@ -1,3 +1,37 @@
-div {
-  border: 1px solid red;
+@import '../variables';
+
+.column {
+  width: 200px;
+  float: left;
+}
+
+ul {
+  list-style-type: none;
+
+  li {
+    margin-bottom: 10px;
+  }
+}
+
+.clickable {
+  cursor: pointer;
+  transition-property: color;
+  transition: 100ms;
+
+  &:hover {
+    color: red;
+    transition-property: color;
+    transition: 100ms;
+  }
+}
+
+.frequency {
+  color: $gray-60;
+  display: inline-block;
+  font-size: 10px;
+  transform: translate(3px, -2px);
+}
+
+.capitalize {
+  text-transform: capitalize;
 }

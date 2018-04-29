@@ -25,7 +25,7 @@ export class TagsComponent {
     this.tagsService.generateAllTags(this.finalArray);
 
     this.oneWordTags = this.tagsService.getOneWordTags();
-    this.twoWordTags = this.tagsService.getTwoWordCombos();
+    this.twoWordTags = this.tagsService.getTwoWordTags();
   }
 
 }

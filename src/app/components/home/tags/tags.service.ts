@@ -10,22 +10,15 @@ export interface WordAndFreq {
 @Injectable()
 export class TagsService {
 
-  actualTwoWordMap: Map<string, number> = new Map();
+  oneWordFreqMap: Map<string, number> = new Map();
   potentialTwoWordMap: Map<string, number> = new Map();
-  wordMap: Map<string, number> = new Map(); // frequency map of all the words in file names
+  twoWordFreqMap: Map<string, number> = new Map();
 
-  finalArrayCleaned: string[] = [];         // array with just clean file names toLowerCase
-  finalTwoWordAray: WordAndFreq[] = [];
+  onlyFileNames: string[] = [];         // array with just clean file names toLowerCase
 
-  oneWordAndFreq: WordAndFreq[] = [];       // all one-word tags
-
-  oneWordMinInstances: number = 3; // NOT YET IMPLEMENTED -- do after 2-word-instances created !!!
-
-  twoWordMinInstances: number = 3; // minimum number of elements before tag not reported
-
-  minWordLength: number = 3; // minimum word length to be considered a potential tag
-
-  tempFinalFinal: WordAndFreq[];
+  minWordLength: number = 3; // minimum, inclusive 3 => 3 letters or more for a word to be considered
+  oneWordMinInstances: number = 2; // runs after 2-word-instances created
+  twoWordMinInstances: number = 2; // items show up if 3 or more exist
 
   constructor() { }
 
@@ -37,10 +30,10 @@ export class TagsService {
 
     this.storeFinalArrayInMemory(finalArray);
 
-    this.cleanMap(); // also creates `oneWordAndFreq`
+    this.cleanOneWordFreqMap(); // only to have items Math.max(oneWordMinInstances, twoWordMinInstances)
 
-    this.oneWordAndFreq.forEach((element) => {
-      this.findTwoWords(element.word);
+    this.oneWordFreqMap.forEach((val: number, key: string) => {
+      this.findTwoWords(key);
     });
 
     this.cleanTwoWordMap();
@@ -49,14 +42,19 @@ export class TagsService {
   }
 
   /**
-   * Generate `finalArrayCleaned` which is string[] of just file names in lower case
+   * Generate `onlyFileNames` which is string[] of just file names in lower case
    * Calls method that populates the `wordMap`
    * @param finalArray - the whole initial ImageElement[]
    */
   public storeFinalArrayInMemory(finalArray: ImageElement[]): void {
+    // Strip out: {}()[] as well as 'for', 'her', 'the', 'and', '-', & ','
+    const regex = /{|}|\(|\)|\[|\]|for|her|the|and|,|-/gi;
+
     finalArray.forEach((element) => {
-      this.finalArrayCleaned.push(element[2].toLowerCase());
-      this.addString(element[2].toLowerCase());
+      const cleanedFileName: string = element[2].toLowerCase().replace(regex, '');
+
+      this.onlyFileNames.push(cleanedFileName);
+      this.addString(cleanedFileName);
     });
   }
 
@@ -67,12 +65,9 @@ export class TagsService {
    * @param filename
    */
   public addString(filename: string): void {
-    // Strip out: {}()[] as well as 'for', 'her', 'the', 'and', & ','
-    const regex = /{|}|\(|\)|\[|\]|for|her|the|and|,/gi;
-    filename = filename.replace(regex, '');
     const wordArray = filename.split(' ');
     wordArray.forEach(word => {
-      if (!(word.length <= this.minWordLength)) {
+      if (word.length >= this.minWordLength) {
         this.addWord(word);
       }
     });
@@ -83,40 +78,34 @@ export class TagsService {
    * @param word
    */
   private addWord(word: string): void {
-    if (this.wordMap.has(word)) {
-      this.wordMap.set(word, this.wordMap.get(word) + 1);
+    if (this.oneWordFreqMap.has(word)) {
+      this.oneWordFreqMap.set(word, this.oneWordFreqMap.get(word) + 1);
     } else {
-      this.wordMap.set(word, 1);
+      this.oneWordFreqMap.set(word, 1);
     }
   }
 
   /**
    * Remove all elements with 3 or fewer occurences
-   * Creates the `oneWordAndFreq` WordAndFreq[]
    */
-  public cleanMap(): void {
-    this.wordMap.forEach((value, key) => {
-      if (value <= this.twoWordMinInstances) {
-        this.wordMap.delete(key);
-      } else {
-        this.oneWordAndFreq.push({
-          word: key,
-          freq: value
-        });
+  public cleanOneWordFreqMap(): void {
+    this.oneWordFreqMap.forEach((value, key) => {
+      if (value <= Math.max(this.twoWordMinInstances, this.oneWordMinInstances)) {
+        this.oneWordFreqMap.delete(key);
       }
     });
   }
 
   /**
    * Given a single word from tag list, look up following word
-   * If on the list, add two word to `potentialTwoWordMap`
+   * If on the list, add the two-word string to `potentialTwoWordMap`
    * @param singleWord
    */
   public findTwoWords(singleWord: string): void {
 
     const filesContainingTheSingleWord: string[] = [];
 
-    this.finalArrayCleaned.forEach((fileName) => {
+    this.onlyFileNames.forEach((fileName) => {
       if (fileName.includes(singleWord)) {
         filesContainingTheSingleWord.push(fileName);
       }
@@ -124,89 +113,110 @@ export class TagsService {
 
     filesContainingTheSingleWord.forEach((fileName) => {
 
-      const words = fileName.split(' ');
+      const filenameWordArray: string[] = fileName.split(' ');
 
-      const numberIndex = words.findIndex((word) => word === singleWord);
-      const nextWord = words[numberIndex + 1];
+      const numberIndex: number = filenameWordArray.indexOf(singleWord);
+      const nextWord: string = filenameWordArray[numberIndex + 1];
 
-      if (this.wordMap.has(nextWord)) {
+      if (this.oneWordFreqMap.has(nextWord)) {
         const twoWordPair = singleWord + ' ' + nextWord;
-        // console.log(twoWordPair);
+
         let currentOccurrences = this.potentialTwoWordMap.get(twoWordPair) || 0;
         currentOccurrences++;
 
         this.potentialTwoWordMap.set(twoWordPair, currentOccurrences);
-        // at this point the map contains a lot of incorrect elements like `fox legalporno`
       }
 
     });
+
   }
 
-
+  /**
+   * Create the `twoWordFreqMap` by using the `potentialTwoWordMap` word map
+   * Recount actual occurrences
+   */
   public cleanTwoWordMap(): void {
 
-    this.potentialTwoWordMap.forEach((val: number, key: string, map: any) => {
+    this.potentialTwoWordMap.forEach((val: number, key: string) => {
 
-      let newCounter: number = 0;
+      if (val > 3) { // set a variable here instead!
+        let newCounter: number = 0;
 
-      for (let i = 0; i < this.finalArrayCleaned.length; i++) {
-        if (this.finalArrayCleaned[i].includes(key)) {
-          newCounter++;
-          this.actualTwoWordMap.set(key, newCounter);
+        for (let i = 0; i < this.onlyFileNames.length; i++) {
+          if (this.onlyFileNames[i].includes(key)) {
+            newCounter++;
+            this.twoWordFreqMap.set(key, newCounter);
+          }
         }
       }
     });
 
-    this.actualTwoWordMap.forEach((val: number, key: string, map: any) => {
+    this.twoWordFreqMap.forEach((val: number, key: string) => {
 
-      if (val <= this.twoWordMinInstances) { // not responsive?
-        this.actualTwoWordMap.delete(key);
-      } else {
-        this.finalTwoWordAray.push({
-          word: key,
-          freq: val
-        });
+      if (val <= this.twoWordMinInstances) {
+        this.twoWordFreqMap.delete(key);
       }
 
     });
 
   }
 
+
+  /**
+   * clean up the one word map to not include anything that is in the list of two-word tags
+   */
   public cleanOneWordMapUsingTwoWordMap(): void {
-
-    console.log("cleaning one word map");
-
-    const finalCleanedLOL: WordAndFreq[] = [];
 
     const allWordsFromTwoWordArray: string[] = [];
 
-    this.finalTwoWordAray.forEach((element) => {
-      const twoWordArray: string[] = element.word.split(' ');
-      twoWordArray.forEach((word: string) => {
+    // fill in `allWordsFromTwoWordArray` based on what is currently in the `twoWordsFreqMap`
+    this.twoWordFreqMap.forEach((val: number, key: string) => {
+      const twoWords: string[] = key.split(' ');
+      twoWords.forEach((word: string) => {
         allWordsFromTwoWordArray.push(word);
       });
     });
 
-    // console.log(allWordsFromTwoWordArray);
+    this.oneWordFreqMap.forEach((val: number, key: string) => {
+      if (allWordsFromTwoWordArray.includes(key)) {
+        this.oneWordFreqMap.delete(key);
+      }
+    });
+  }
 
-    this.oneWordAndFreq.forEach((element) => {
-      if (!allWordsFromTwoWordArray.includes(element.word)) {
-        finalCleanedLOL.push(element);
+  /**
+   * Convert a Map<string, number> to WordAndFreq[] containing objects { word: string, freq: number }
+   * @param someMap
+   * @param minCutoff -- minimum number of elements a tag must have before it is returned
+   */
+  public convertMapToWordAndFreqArray(someMap: Map<string, number>, minCutoff: number): WordAndFreq[] {
+    const returnArray: WordAndFreq[] = [];
+
+    someMap.forEach((val: number, key: string) => {
+      if (val >= minCutoff) {
+        returnArray.push({
+          word: key,
+          freq: val
+        });
       }
     });
 
-    this.tempFinalFinal = finalCleanedLOL;
+    return returnArray;
   }
 
-
-  public getTwoWordCombos(): WordAndFreq[] {
-    return this.alphabetizeResults(this.finalTwoWordAray);
-  }
-
+  /**
+   * Return alphabetized the one-word tags with their frequencies
+   */
   public getOneWordTags(): WordAndFreq[] {
-    return this.alphabetizeResults(this.tempFinalFinal);
+    return this.alphabetizeResults(this.convertMapToWordAndFreqArray(this.oneWordFreqMap, 5));
   }
 
+  /**
+   * Return alphabetized the two-word tags with their freqeuencies
+   */
+  public getTwoWordTags(): WordAndFreq[] {
+    return this.alphabetizeResults(this.convertMapToWordAndFreqArray(this.twoWordFreqMap, 3));
+  }
 
   /**
    * Alphabetize any WordAndFreq[]

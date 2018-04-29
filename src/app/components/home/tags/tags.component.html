@@ -1,16 +1,21 @@
-<div style="width: 250px; display: inline-block">
-    <ul>
-      <li *ngFor="let item of oneWordTags">
-        {{ item.word }} - {{ item.freq }}
-      </li>
-    </ul>
-</div>
+<ul class="column">
+  <li *ngFor="let item of oneWordTags">
+    <span class="clickable">
+      {{ item.word }}
+      <span class="frequency">
+        {{ item.freq }}
+      </span>
+    </span>
+  </li>
+</ul>
 
-<div style="width: 250px; display: inline-block">
-    <ul>
-      <li *ngFor="let item of twoWordTags">
-        {{ item.word }} - {{ item.freq }}
-      </li>
-    </ul>
-</div>
-
+<ul class="column">
+  <li *ngFor="let item of twoWordTags" class="capitalize">
+    <span class="clickable">
+      {{ item.word }}
+      <span class="frequency">
+        {{ item.freq }}
+      </span>
+    </span>
+  </li>
+</ul>
