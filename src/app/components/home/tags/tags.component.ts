@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 
 import { TagsService, WordAndFreq } from './tags.service';
+import { TagsSaveService } from './tags-save.service';
 
 import { ImageElement } from 'app/components/common/final-object.interface';
 
@@ -31,10 +32,9 @@ export class TagsComponent implements OnDestroy {
   currentAdding: string = '';
   currentFiltering: string = '';
 
-  dummyBool: boolean = false;
-
   constructor(
-    public tagsService: TagsService
+    public tagsService: TagsService,
+    public tagsSaveService: TagsSaveService
   ) {}
 
   ngOnInit(): void {
@@ -61,20 +61,17 @@ export class TagsComponent implements OnDestroy {
   }
 
   public addThisTag(): any {
-    const matchesFound: number = this.tagsService.findMatches(this.currentAdding);
-    if (matchesFound > 0) {
-      const itemToAdd: WordAndFreq = {
-        word: this.currentAdding,
-        freq: matchesFound
-      };
+    if (this.tagsService.canWeAdd(this.currentAdding)) {
+      console.log('added!');
       if (this.currentAdding.includes(' ')) {
-        this.twoWordTags.push(itemToAdd);
+        this.twoWordTags = this.tagsService.getTwoWordTags();
       } else {
-        this.oneWordTags.push(itemToAdd);
+        this.oneWordTags = this.tagsService.getOneWordTags();
       }
+    } else {
+      console.log('error!');
     }
     this.currentAdding = '';
-    this.dummyBool = !this.dummyBool;
   }
 
   ngOnDestroy(): void {

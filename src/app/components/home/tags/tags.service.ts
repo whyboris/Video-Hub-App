@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+import { TagsSaveService } from './tags-save.service';
+
 import { ImageElement } from 'app/components/common/final-object.interface';
 
 export interface WordAndFreq {
@@ -22,7 +24,9 @@ export class TagsService {
 
   cachedHub: string;
 
-  constructor() { }
+  constructor(
+    public tagsSaveService: TagsSaveService
+  ) { }
 
   /**
    * Go through the whole process of generating the 1-word and 2-word arrays
@@ -47,6 +51,13 @@ export class TagsService {
       this.cleanTwoWordMap();
 
       this.cleanOneWordMapUsingTwoWordMap();
+
+      this.trimMap(this.oneWordFreqMap, 5);
+      this.trimMap(this.twoWordFreqMap, 3);
+
+      this.loadAddTags();
+
+      this.loadRemoveTags();
 
     }
 
@@ -210,16 +221,14 @@ export class TagsService {
    * @param someMap
    * @param minCutoff -- minimum number of elements a tag must have before it is returned
    */
-  private convertMapToWordAndFreqArray(someMap: Map<string, number>, minCutoff: number): WordAndFreq[] {
+  private convertMapToWordAndFreqArray(someMap: Map<string, number>): WordAndFreq[] {
     const returnArray: WordAndFreq[] = [];
 
     someMap.forEach((val: number, key: string) => {
-      if (val >= minCutoff) {
-        returnArray.push({
-          word: key,
-          freq: val
-        });
-      }
+      returnArray.push({
+        word: key,
+        freq: val
+      });
     });
 
     return returnArray;
@@ -229,14 +238,27 @@ export class TagsService {
    * Return alphabetized the one-word tags with their frequencies
    */
   public getOneWordTags(): WordAndFreq[] {
-    return this.alphabetizeResults(this.convertMapToWordAndFreqArray(this.oneWordFreqMap, 5));
+    return this.alphabetizeResults(this.convertMapToWordAndFreqArray(this.oneWordFreqMap));
   }
 
   /**
    * Return alphabetized the two-word tags with their freqeuencies
    */
   public getTwoWordTags(): WordAndFreq[] {
-    return this.alphabetizeResults(this.convertMapToWordAndFreqArray(this.twoWordFreqMap, 3));
+    return this.alphabetizeResults(this.convertMapToWordAndFreqArray(this.twoWordFreqMap));
+  }
+
+  /**
+   * Trim a given map to only have elements with `minCutoff` instances
+   * @param givenMap
+   * @param minCutoff
+   */
+  private trimMap(givenMap: Map<string, number>, minCutoff: number): void {
+    givenMap.forEach((val: number, key: string) => {
+      if (val < minCutoff) {
+        givenMap.delete(key);
+      }
+    });
   }
 
   /**
@@ -260,7 +282,7 @@ export class TagsService {
 
   /**
    * Decide how many files contain current query
-   * used only by the tag-match.pipe
+   * used by tag-match.pipe and tags.component
    * @param query
    */
   public findMatches(query: string): number {
@@ -268,5 +290,63 @@ export class TagsService {
       return element.includes(query);
     }).length;
   }
+
+  /**
+   * Attempt to add tag to the list
+   * @param tag
+   */
+  public canWeAdd(tag: string): boolean {
+    if (tag.includes(' ')) {
+      if (this.twoWordFreqMap.has(tag)) {
+        return false;
+      } else {
+        this.twoWordFreqMap.set(tag, this.findMatches(tag));
+        return true;
+      }
+    } else {
+      if (this.oneWordFreqMap.has(tag)) {
+        return false;
+      } else {
+        this.oneWordFreqMap.set(tag, this.findMatches(tag));
+        return true;
+      }
+    }
+  }
+
+  /**
+   * Add to the map all tags present in the `addTags` array
+   * from the `tagsSaveService`
+   */
+  private loadAddTags(): void {
+    const allAddTags = this.tagsSaveService.getAddTags();
+
+    allAddTags.forEach((tag) => {
+      if (tag.includes(' ')) {
+        this.twoWordFreqMap.set(tag, this.findMatches(tag));
+      } else {
+        this.oneWordFreqMap.set(tag, this.findMatches(tag));
+      }
+    });
+
+  }
+
+  /**
+   * Remove from map any tags present in the `removeTags` array
+   * from the `tagsSaveService`
+   */
+  private loadRemoveTags(): void {
+    const allRemoveTags = this.tagsSaveService.getRemoveTags();
+
+    allRemoveTags.forEach((tag) => {
+      if (tag.includes(' ')) {
+        this.twoWordFreqMap.delete(tag);
+      } else {
+        this.oneWordFreqMap.delete(tag);
+      }
+    });
+
+  }
+
+
 
 }

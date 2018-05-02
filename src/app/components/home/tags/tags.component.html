@@ -14,7 +14,7 @@
 </ul>
 
 <ul class="column">
-  <li *ngFor="let item of twoWordTags | tagFilterPipe: currentFiltering: dummyBool" class="capitalize">
+  <li *ngFor="let item of twoWordTags | tagFilterPipe: currentFiltering" class="capitalize">
     <span
       (click)="tagWasClicked(item.word)"
       class="clickable"

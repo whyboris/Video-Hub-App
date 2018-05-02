@@ -14,6 +14,7 @@ import { ElectronService } from './providers/electron.service';
 import { HomeComponent } from './components/home/home.component';
 import { ResolutionFilterService } from './components/pipes/resolution-filter.service';
 import { ShowLimitService } from 'app/components/pipes/show-limit.service';
+import { TagsSaveService } from './components/home/tags/tags-save.service';
 import { TagsService } from './components/home/tags/tags.service';
 import { WordFrequencyService } from 'app/components/pipes/word-frequency.service';
 
@@ -85,6 +86,7 @@ import { AppRoutingModule } from './app-routing.module';
     ResolutionFilterService,
     ShowLimitService,
     SimilarityService,
+    TagsSaveService,
     TagsService,
     WordFrequencyService
   ],
