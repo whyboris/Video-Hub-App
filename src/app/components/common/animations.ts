@@ -117,6 +117,21 @@ export const textAppear = trigger('textAppear', [
   )]
 );
 
+export const tagDeleteButton = trigger('tagDeleteButton', [
+  transition(
+    ':enter', [
+      style({ opacity: 0, transform: 'translate(0, 1px)' }),
+      animate('300ms ease-in', style({ opacity: 1, transform: 'translate(12px, 1px)' }))
+    ]
+  ),
+  transition(
+    ':leave', [
+      style({ opacity: 1, transform: 'translate(12px, 1px)' }),
+      animate('300ms ease-out', style({ opacity: 0, transform: 'translate(0, 1px)' }))
+    ]
+  )]
+);
+
 export const myWizardAnimation = trigger('myWizardAnimation', [
   transition(
     ':leave', [

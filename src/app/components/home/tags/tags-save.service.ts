@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class TagsSaveService {
 
-  addTags: string[] = ['abc', 'abc xyz'];
-  removeTags: string[] = ['lol', 'lol abc'];
+  addTags: string[] = [];
+  removeTags: string[] = [];
 
   /**
    * Add an `add` tag
@@ -12,15 +12,17 @@ export class TagsSaveService {
    */
   public addAddTag(tag: string): void {
 
-    for (let i = 0; i < this.removeTags.length; i++) {
-      if (tag === this.removeTags[i]) {
-        this.removeTags.splice(i, 1);
-        console.log('removing: ' + tag);
-        break;
-      }
+    const index = this.removeTags.indexOf(tag);
+    if (index > -1) {
+      console.log('removing from removeTags:' + this.removeTags[index]);
+      this.removeTags.splice(index, 1);
     }
 
-    this.addTags.push(tag);
+    if (this.addTags.indexOf(tag) > -1) {
+      this.addTags.push(tag);
+    }
+
+    console.log('add tags now:');
     console.log(this.addTags);
   }
 

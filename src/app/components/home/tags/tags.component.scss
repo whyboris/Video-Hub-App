@@ -17,12 +17,13 @@ ul {
 .clickable {
   cursor: pointer;
   transition-property: color;
-  transition: 100ms;
+  transition: 200ms;
+  transition-delay: 50ms;
 
   &:hover {
-    color: red;
+    color: #729aff;
     transition-property: color;
-    transition: 100ms;
+    transition: 30ms;
   }
 }
 
@@ -97,4 +98,27 @@ ul {
 .moved {
   right: 400px;
   width: 100px
+}
+
+.editModeActive {
+  background: #ff7777;
+  border: 1px solid #885555;
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0) !important;
+  transform: translateY(1px);
+
+  &:hover {
+    background: #ff9999;
+  }
+}
+
+.icon-close {
+  position: absolute;
+  transform: translate(12px, 1px);
+}
+
+.strikethrough {
+  &:hover {
+    color: #ff7777;
+    text-decoration: line-through !important;
+  }
 }

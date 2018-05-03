@@ -348,5 +348,17 @@ export class TagsService {
   }
 
 
+  /**
+   * Remove a tag from the map
+   * @param tag
+   */
+  public removeTag(tag: string): void {
+    if (tag.includes(' ')) {
+      this.twoWordFreqMap.delete(tag);
+    } else {
+      this.oneWordFreqMap.delete(tag);
+    }
+  }
+
 
 }

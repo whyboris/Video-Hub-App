@@ -1032,6 +1032,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     });
     this.computeTextBufferAmount();
+    this.settingsButtons['showTags'].toggled = false; // never show tags on load (they don't load right anyway)
   }
 
   /**

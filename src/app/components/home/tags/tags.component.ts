@@ -5,15 +5,16 @@ import { TagsSaveService } from './tags-save.service';
 
 import { ImageElement } from 'app/components/common/final-object.interface';
 
-import { slowFadeIn } from 'app/components/common/animations';
+import { slowFadeIn, tagDeleteButton } from 'app/components/common/animations';
 
 @Component({
   selector: 'app-tags-component',
   templateUrl: 'tags.component.html',
   styleUrls: ['../search-input.scss',
+              '../fonts/icons.scss',
               '../wizard-button.scss',
               'tags.component.scss'],
-  animations: [slowFadeIn]
+  animations: [slowFadeIn, tagDeleteButton]
 })
 export class TagsComponent implements OnDestroy {
 
@@ -26,6 +27,8 @@ export class TagsComponent implements OnDestroy {
 
   oneWordTags: WordAndFreq[];
   twoWordTags: WordAndFreq[];
+
+  editMode: boolean = false;
 
   showEdit: boolean = false;
 
@@ -57,12 +60,26 @@ export class TagsComponent implements OnDestroy {
    * Emit string to home component to search for this string
    */
   public tagWasClicked(tag: string): void {
-    this.tagClicked.emit(tag);
+    if (this.editMode) {
+      console.log(tag + ' deleted!');
+      this.tagsService.removeTag(tag);
+      this.tagsSaveService.addRemoveTag(tag);
+
+      if (tag.includes(' ')) {
+        this.twoWordTags = this.tagsService.getTwoWordTags();
+      } else {
+        this.oneWordTags = this.tagsService.getOneWordTags();
+      }
+    } else {
+      this.tagClicked.emit(tag);
+    }
   }
 
   public addThisTag(): any {
     if (this.tagsService.canWeAdd(this.currentAdding)) {
-      console.log('added!');
+      console.log(this.currentAdding + ' added!');
+      this.tagsSaveService.addAddTag(this.currentAdding);
+
       if (this.currentAdding.includes(' ')) {
         this.twoWordTags = this.tagsService.getTwoWordTags();
       } else {
@@ -72,6 +89,10 @@ export class TagsComponent implements OnDestroy {
       console.log('error!');
     }
     this.currentAdding = '';
+  }
+
+  public startEditMode(): any {
+    this.editMode = !this.editMode;
   }
 
   ngOnDestroy(): void {
