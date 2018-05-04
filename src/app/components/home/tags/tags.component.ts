@@ -5,7 +5,7 @@ import { TagsSaveService } from './tags-save.service';
 
 import { ImageElement } from 'app/components/common/final-object.interface';
 
-import { slowFadeIn, tagDeleteButton } from 'app/components/common/animations';
+import { slowFadeIn, tagDeleteButton, donutAppear } from 'app/components/common/animations';
 
 @Component({
   selector: 'app-tags-component',
@@ -14,7 +14,7 @@ import { slowFadeIn, tagDeleteButton } from 'app/components/common/animations';
               '../fonts/icons.scss',
               '../wizard-button.scss',
               'tags.component.scss'],
-  animations: [slowFadeIn, tagDeleteButton]
+  animations: [slowFadeIn, tagDeleteButton, donutAppear]
 })
 export class TagsComponent implements OnDestroy {
 
@@ -34,6 +34,9 @@ export class TagsComponent implements OnDestroy {
 
   currentAdding: string = '';
   currentFiltering: string = '';
+
+  statusMessage: string = '';
+  showingStatusMessage: boolean = false;
 
   constructor(
     public tagsService: TagsService,
@@ -61,7 +64,7 @@ export class TagsComponent implements OnDestroy {
    */
   public tagWasClicked(tag: string): void {
     if (this.editMode) {
-      console.log(tag + ' deleted!');
+
       this.tagsService.removeTag(tag);
       this.tagsSaveService.addRemoveTag(tag);
 
@@ -76,23 +79,38 @@ export class TagsComponent implements OnDestroy {
   }
 
   public addThisTag(): any {
-    if (this.tagsService.canWeAdd(this.currentAdding)) {
-      console.log(this.currentAdding + ' added!');
-      this.tagsSaveService.addAddTag(this.currentAdding);
+    const tagToAdd: string = this.currentAdding.trim();
+
+    if (tagToAdd === '') {
+      this.currentAdding = '';
+
+    } else if (this.tagsService.canWeAdd(tagToAdd)) {
+      this.tagsSaveService.addAddTag(tagToAdd);
 
       if (this.currentAdding.includes(' ')) {
         this.twoWordTags = this.tagsService.getTwoWordTags();
       } else {
         this.oneWordTags = this.tagsService.getOneWordTags();
       }
+
+      this.showStatusMessage('added successfully');
+      this.currentAdding = '';
+
     } else {
-      console.log('error!');
+      this.showStatusMessage('tag already exists')
     }
-    this.currentAdding = '';
   }
 
-  public startEditMode(): any {
+  public startEditMode(): void {
     this.editMode = !this.editMode;
+  }
+
+  public showStatusMessage(message: string): void {
+    this.statusMessage = message;
+    this.showingStatusMessage = true;
+    setTimeout(() => {
+      this.showingStatusMessage = false;
+    }, 1500);
   }
 
   ngOnDestroy(): void {

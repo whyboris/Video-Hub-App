@@ -3,6 +3,7 @@
 .column {
   width: 200px;
   float: left;
+  user-select: none;
 }
 
 ul {
@@ -29,6 +30,7 @@ ul {
 
 .frequency {
   color: $gray-50;
+  cursor: default;
   display: inline-block;
   font-size: 10px;
   transform: translate(3px, -2px);
@@ -40,6 +42,7 @@ ul {
 
 .prefix {
   color: $gray-30;
+  cursor: default;
   display: block;
   font-size: 20px;
   position: absolute;
@@ -50,23 +53,41 @@ ul {
 }
 
 .edit-bar {
+  display: flex;
+  align-items: baseline;
   background: $gray-15;
-  // border: 1px solid red;
   bottom: 15px;
   box-sizing: border-box;
   margin: 0;
   padding: 15px;
   position: fixed;
   width: calc(100% - 235px);
+  justify-content: space-between;
+}
+
+.col1 {
+  width: 70px;
+}
+
+.col2 {
+  width: 100px;
+}
+
+.col3 {
+  width: 200px;
 }
 
 // inherits styles from 'search-input.scss'
 .inputFilter {
   bottom: 23px;
   padding-left: 5px;
-  position: absolute;
-  right: 109px;
-  width: 150px;
+  max-width: 150px;
+  text-align: center;
+}
+
+.inputAdd {
+  text-align: left;
+  width: 140px;
 }
 
 // inherits styles from 'wizard-button.scss'
@@ -75,9 +96,11 @@ ul {
   min-width: auto;
   padding: 5px 10px;
   width: auto;
+  margin: 5px;
 }
 
 .addButton {
+  bottom: 18px;
   position: absolute;
   right: 20px;
 }
@@ -85,19 +108,15 @@ ul {
 .numFound {
   bottom: 15px;
   color: $gray-50;
+  display: block;
   font-size: 12px;
-  left: calc(100% - 253px);
-  position: absolute;
+  line-height: 0;
+  text-align: center;
 }
 
-.filterThis {
-  left: auto;
-  right: 450px;
-}
-
-.moved {
-  right: 400px;
-  width: 100px
+.alignLeft {
+  text-align: left;
+  margin-left: 5px;
 }
 
 .editModeActive {
@@ -120,5 +139,21 @@ ul {
   &:hover {
     color: #ff7777;
     text-decoration: line-through !important;
+  }
+}
+
+.add-error {
+  color: #729aff;
+}
+
+@media (max-width: 550px) {
+  .col3 {
+    display: none;
+  }
+}
+
+@media (max-width: 650px) {
+  .col1 {
+    display: none;
   }
 }

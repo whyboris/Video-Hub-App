@@ -13,16 +13,15 @@ export class TagsSaveService {
   public addAddTag(tag: string): void {
 
     const index = this.removeTags.indexOf(tag);
+
     if (index > -1) {
-      console.log('removing from removeTags:' + this.removeTags[index]);
       this.removeTags.splice(index, 1);
     }
 
-    if (this.addTags.indexOf(tag) > -1) {
+    if (this.addTags.indexOf(tag) === -1) {
       this.addTags.push(tag);
     }
 
-    console.log('add tags now:');
     console.log(this.addTags);
   }
 
@@ -32,15 +31,16 @@ export class TagsSaveService {
    */
   public addRemoveTag(tag: string): void {
 
-    for (let i = 0; i < this.addTags.length; i++) {
-      if (tag === this.addTags[i]) {
-        this.addTags.splice(i, 1);
-        console.log('removing: ' + tag);
-        break;
-      }
+    const index = this.addTags.indexOf(tag);
+
+    if (index > -1) {
+      this.addTags.splice(index, 1);
     }
 
-    this.removeTags.push(tag);
+    if (this.removeTags.indexOf(tag) === -1) {
+      this.removeTags.push(tag);
+    }
+
     console.log(this.removeTags);
   }
 

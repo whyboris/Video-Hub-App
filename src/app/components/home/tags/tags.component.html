@@ -1,5 +1,5 @@
 <ul class="column">
-  <li *ngFor="let item of oneWordTags | tagFilterPipe: currentFiltering: dummyBool">
+  <li *ngFor="let item of oneWordTags | tagFilterPipe: currentFiltering">
     <span class="prefix">
       {{ item.word | alphabetPrefixPipe }}
     </span>
@@ -44,28 +44,65 @@
   </li>
 </ul>
 
-<div class="edit-bar" *ngIf="showEdit" @slowFadeIn>
+<div
+  *ngIf="showEdit"
+  class="edit-bar"
+  @slowFadeIn
+>
 
+<div class="col1">
   <button
     class="wizardButton"
     [ngClass]="{ editModeActive: editMode }"
     (click)="startEditMode()"
   >
-    edit
+    delete
   </button>
+</div>
 
-  <input #filterInput type="text" class="inputFilter moved" [(ngModel)]="currentFiltering">
-
-  <span class="numFound filterThis">
-    Filter list
-  </span>
-
-  <input #addInput type="text" class="inputFilter" [(ngModel)]="currentAdding" (keyup.enter)="addThisTag()">
+<div class="col2">
+  <input
+    #filterInput
+    [(ngModel)]="currentFiltering"
+    class="inputFilter"
+    type="text"
+  >
 
   <span class="numFound">
+    Filter list
+  </span>
+</div>
+
+<div class="col3">
+  <input
+    #addInput
+    (keyup.enter)="addThisTag()"
+    [(ngModel)]="currentAdding"
+    class="inputFilter inputAdd"
+    type="text"
+  >
+
+  <span
+    *ngIf="!showingStatusMessage"
+    class="numFound alignLeft"
+    @donutAppear
+  >
     {{ currentAdding | tagMatchPipe }}
   </span>
+  <span
+    *ngIf="showingStatusMessage"
+    class="numFound add-error alignLeft"
+    @donutAppear
+  >
+    {{ statusMessage }}
+  </span>
 
-  <button class="wizardButton addButton" (click)="addThisTag()">Add</button>
+  <button
+    (click)="addThisTag()"
+    class="wizardButton addButton"
+  >
+    Add
+  </button>
+</div>
 
 </div>
