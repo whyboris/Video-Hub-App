@@ -103,6 +103,8 @@
     <ul *ngIf="clickedOnFile; else galleryOptions" @rightClickContentAnimation>
       <li (click)="openRenameFileModal()">Rename file</li>
       <li (click)="showSimilarNow()">Show similar</li>
+      <li (click)="showOnlyThisFolderNow()">View folder</li>
+      <li (click)="openContainingFolderNow()">Open folder</li>
     </ul>
     <ng-template #galleryOptions>
       <ul @rightClickContentAnimation>

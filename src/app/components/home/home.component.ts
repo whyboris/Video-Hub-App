@@ -35,6 +35,7 @@ import {
 } from '../common/animations';
 
 import { DemoContent } from '../../../assets/demo-content';
+import { runInThisContext } from 'vm';
 
 @Component({
   selector: 'app-home',
@@ -1059,10 +1060,33 @@ export class HomeComponent implements OnInit, AfterViewInit {
   nodeRenamingFile: boolean = false;
   renameErrMsg: string = '';
 
+  /**
+   * Handle right-click and `Show similar`
+   */
   showSimilarNow(): void {
     this.findMostSimilar = this.currentRightClickedItem[2];
     console.log(this.findMostSimilar);
     this.showSimilar = true;
+  }
+
+  /**
+   * handle right-click and `Open folder`
+   * Code similar to `openVideo()`
+   */
+  openContainingFolderNow(): void {
+    this.fullPathToCurrentFile = this.appState.selectedSourceFolder +
+                                 this.currentRightClickedItem[0] +
+                                 '/' +
+                                 this.currentRightClickedItem[1];
+
+    this.openInExplorer();
+  }
+
+  /**
+   * Handle right-click on file and `view folder`
+   */
+  showOnlyThisFolderNow(): void {
+    this.handleFolderWordClicked(this.currentRightClickedItem[0]);
   }
 
   rightMouseClicked(event: MouseEvent, item): void {
@@ -1079,8 +1103,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const clientX: number = event.clientX;
     const howFarFromRight: number = winWidth - clientX;
 
+    // handle top-offset if clicking close to the bottom
+    const winHeight: number = window.innerHeight;
+    const clientY: number = event.clientY;
+    const howFarFromBottom: number = winHeight - clientY;
+
     this.rightClickPosition.x = (howFarFromRight < 120) ? clientX - 120 + (howFarFromRight) : clientX;
-    this.rightClickPosition.y = event.clientY;
+    this.rightClickPosition.y = (howFarFromBottom < 140) ? clientY - 140 + (howFarFromBottom) : clientY;
 
     this.currentRightClickedItem = item;
     this.rightClickShowing = true;
