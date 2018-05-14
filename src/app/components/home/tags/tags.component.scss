@@ -1,0 +1,159 @@
+@import '../variables';
+
+.column {
+  width: 200px;
+  float: left;
+  user-select: none;
+}
+
+ul {
+  list-style-type: none;
+  margin-bottom: 100px;
+
+  li {
+    margin-bottom: 10px;
+  }
+}
+
+.clickable {
+  cursor: pointer;
+  transition-property: color;
+  transition: 200ms;
+  transition-delay: 50ms;
+
+  &:hover {
+    color: #729aff;
+    transition-property: color;
+    transition: 30ms;
+  }
+}
+
+.frequency {
+  color: $gray-50;
+  cursor: default;
+  display: inline-block;
+  font-size: 10px;
+  transform: translate(3px, -2px);
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+
+.prefix {
+  color: $gray-30;
+  cursor: default;
+  display: block;
+  font-size: 20px;
+  position: absolute;
+  text-align: center;
+  text-transform: capitalize;
+  transform: translate(-24px, -2px);
+  width: 20px;
+}
+
+.edit-bar {
+  display: flex;
+  align-items: baseline;
+  background: $gray-15;
+  bottom: 15px;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 15px;
+  position: fixed;
+  width: calc(100% - 235px);
+  justify-content: space-between;
+}
+
+.col1 {
+  width: 70px;
+}
+
+.col2 {
+  width: 100px;
+}
+
+.col3 {
+  width: 200px;
+}
+
+// inherits styles from 'search-input.scss'
+.inputFilter {
+  bottom: 23px;
+  padding-left: 5px;
+  max-width: 150px;
+  text-align: center;
+}
+
+.inputAdd {
+  text-align: left;
+  width: 140px;
+}
+
+// inherits styles from 'wizard-button.scss'
+.wizardButton {
+  display: inline-block;
+  min-width: auto;
+  padding: 5px 10px;
+  width: auto;
+  margin: 5px;
+}
+
+.addButton {
+  bottom: 18px;
+  position: absolute;
+  right: 20px;
+}
+
+.numFound {
+  bottom: 15px;
+  color: $gray-50;
+  display: block;
+  font-size: 12px;
+  line-height: 0;
+  text-align: center;
+}
+
+.alignLeft {
+  text-align: left;
+  margin-left: 5px;
+}
+
+.editModeActive {
+  background: #ff7777;
+  border: 1px solid #885555;
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0) !important;
+  transform: translateY(1px);
+
+  &:hover {
+    background: #ff9999;
+  }
+}
+
+.icon-close {
+  position: absolute;
+  transform: translate(12px, 1px);
+}
+
+.strikethrough {
+  &:hover {
+    color: #ff7777;
+    text-decoration: line-through !important;
+  }
+}
+
+.add-error {
+  color: #729aff;
+}
+
+@media (max-width: 550px) {
+  .col3 {
+    display: none;
+  }
+}
+
+@media (max-width: 650px) {
+  .col1 {
+    display: none;
+  }
+}

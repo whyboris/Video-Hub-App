@@ -213,6 +213,7 @@ import {
 
 import { FinalObject, ImageElement } from './src/app/components/common/final-object.interface';
 import { ImportSettingsObject } from './src/app/components/common/import.interface';
+import { SavableProperties } from './src/app/components/common/savable-properties.interface';
 
 import { globals } from './main-globals';
 
@@ -383,7 +384,7 @@ const pathToAppData = app.getPath('appData');
 /**
  * Close the window
  */
-ipc.on('close-window', function (event, settingsToSave, finalArrayToSave) {
+ipc.on('close-window', function (event, settingsToSave, savableProperties: SavableProperties) {
 
   const json = JSON.stringify(settingsToSave);
 
@@ -395,8 +396,10 @@ ipc.on('close-window', function (event, settingsToSave, finalArrayToSave) {
 
   // TODO -- catch bug if user closes before selecting the output folder ?!??
   fs.writeFile(path.join(pathToAppData, 'video-hub-app', 'settings.json'), json, 'utf8', () => {
-    if (finalArrayToSave !== null) {
-      lastSavedFinalObject.images = finalArrayToSave;
+    if (savableProperties !== null) {
+      lastSavedFinalObject.addTags = savableProperties.addTags;
+      lastSavedFinalObject.removeTags = savableProperties.removeTags;
+      lastSavedFinalObject.images = savableProperties.images;
       writeVhaFileDangerously(lastSavedFinalObject, globals.currentlyOpenVhaFile, () => {
         // file writing done !!!
         console.log('.vha file written before closing !!!');
@@ -529,10 +532,12 @@ ipc.on('system-open-file-through-modal', function (event, somethingElse) {
 /**
  * Import this .vha file
  */
-ipc.on('load-this-vha-file', function (event, pathToVhaFile, finalArrayToSave: ImageElement[]) {
+ipc.on('load-this-vha-file', function (event, pathToVhaFile: string, savableProperties: SavableProperties) {
 
-  if (finalArrayToSave !== null) {
-    lastSavedFinalObject.images = finalArrayToSave;
+  if (savableProperties !== null) {
+    lastSavedFinalObject.addTags = savableProperties.addTags;
+    lastSavedFinalObject.removeTags = savableProperties.removeTags;
+    lastSavedFinalObject.images = savableProperties.images;
     writeVhaFileDangerously(lastSavedFinalObject, globals.currentlyOpenVhaFile, () => {
       // file writing done !!!
       console.log('.vha file written !!!');

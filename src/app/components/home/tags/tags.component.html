@@ -1,0 +1,108 @@
+<ul class="column">
+  <li *ngFor="let item of oneWordTags | tagFilterPipe: currentFiltering">
+    <span class="prefix">
+      {{ item.word | alphabetPrefixPipe }}
+    </span>
+    <span
+      (click)="tagWasClicked(item.word)"
+      [ngClass]="{ strikethrough: editMode }"
+      class="clickable"
+    >
+      {{ item.word }}
+    </span>
+    <span class="frequency">
+      {{ item.freq }}
+    </span>
+    <span
+      *ngIf="editMode"
+      class="icon icon-close"
+      @tagDeleteButton
+    ></span>
+  </li>
+</ul>
+
+<ul class="column">
+  <li *ngFor="let item of twoWordTags | tagFilterPipe: currentFiltering" class="capitalize">
+    <span class="prefix">
+      {{ item.word | alphabetPrefixPipe }}
+    </span>
+    <span
+      (click)="tagWasClicked(item.word)"
+      [ngClass]="{ strikethrough: editMode }"
+      class="clickable"
+    >
+      {{ item.word }}
+    </span>
+    <span class="frequency">
+      {{ item.freq }}
+    </span>
+    <span
+      *ngIf="editMode"
+      class="icon icon-close"
+      @tagDeleteButton
+    ></span>
+  </li>
+</ul>
+
+<div
+  *ngIf="showEdit"
+  class="edit-bar"
+  @slowFadeIn
+>
+
+<div class="col1">
+  <button
+    class="wizardButton"
+    [ngClass]="{ editModeActive: editMode }"
+    (click)="startEditMode()"
+  >
+    delete
+  </button>
+</div>
+
+<div class="col2">
+  <input
+    #filterInput
+    [(ngModel)]="currentFiltering"
+    class="inputFilter"
+    type="text"
+  >
+
+  <span class="numFound">
+    Filter list
+  </span>
+</div>
+
+<div class="col3">
+  <input
+    #addInput
+    (keyup.enter)="addThisTag()"
+    [(ngModel)]="currentAdding"
+    class="inputFilter inputAdd"
+    type="text"
+  >
+
+  <span
+    *ngIf="!showingStatusMessage"
+    class="numFound alignLeft"
+    @donutAppear
+  >
+    {{ currentAdding | tagMatchPipe }}
+  </span>
+  <span
+    *ngIf="showingStatusMessage"
+    class="numFound add-error alignLeft"
+    @donutAppear
+  >
+    {{ statusMessage }}
+  </span>
+
+  <button
+    (click)="addThisTag()"
+    class="wizardButton addButton"
+  >
+    Add
+  </button>
+</div>
+
+</div>

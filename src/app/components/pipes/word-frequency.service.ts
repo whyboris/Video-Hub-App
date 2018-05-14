@@ -2,6 +2,12 @@ import { Injectable } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
+interface WordFreqAndHeight {
+  word: string;
+  freq: number;
+  height?: number;
+}
+
 @Injectable()
 export class WordFrequencyService {
 
@@ -88,7 +94,7 @@ export class WordFrequencyService {
    * calls `.next` on BehaviorSubject
    */
   public computeFrequencyArray(): void {
-    const finalResult = []; // array of objects
+    const finalResult: WordFreqAndHeight[] = []; // array of objects
     for (let i = 0; i < 9; i++) {
       if (this.wordMap.size > 0) {
         finalResult[i] = this.getMostFrequent();

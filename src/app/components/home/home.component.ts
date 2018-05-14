@@ -5,20 +5,21 @@ import { setTimeout } from 'timers';
 import { VirtualScrollComponent } from 'angular2-virtual-scroll';
 
 import { ElectronService } from 'app/providers/electron.service';
-import { ShowLimitService } from 'app/components/pipes/show-limit.service';
 import { ResolutionFilterService } from 'app/components/pipes/resolution-filter.service';
+import { ShowLimitService } from 'app/components/pipes/show-limit.service';
+import { TagsSaveService } from './tags/tags-save.service';
 import { WordFrequencyService } from 'app/components/pipes/word-frequency.service';
 
 import { FinalObject, ImageElement } from '../common/final-object.interface';
-import { SettingsObject } from '../common/settings-object.interface';
 import { HistoryItem } from '../common/history-item.interface';
+import { ImportSettingsObject } from '../common/import.interface';
+import { SavableProperties } from '../common/savable-properties.interface';
+import { SettingsObject } from '../common/settings-object.interface';
+import { WizardOptions } from '../common/wizard-options.interface';
 
 import { AppState } from '../common/app-state';
 import { Filters } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from '../common/settings-buttons';
-
-import { ImportSettingsObject } from '../common/import.interface';
-import { WizardOptions } from '../common/wizard-options.interface';
 
 import {
   donutAppear,
@@ -45,8 +46,10 @@ import { DemoContent } from '../../../assets/demo-content';
     './settings.scss',
     './buttons.scss',
     './search.scss',
+    './search-input.scss',
     './fonts/icons.scss',
     './gallery.scss',
+    './wizard-button.scss',
     './wizard.scss',
     './resolution.scss',
     './rightclick.scss'
@@ -209,7 +212,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       } else if (event.key === 'x') {
         this.toggleButton('makeLarger');
       } else if (event.key === 't') {
-        this.toggleButton('showMoreInfo');
+        this.toggleButton('showTags');
       } else if (event.key === '1') {
         this.toggleButton('showThumbnails');
       } else if (event.key === '2') {
@@ -239,6 +242,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } else if (event.key === 'Escape' && (this.rightClickShowing || this.renamingNow)) {
       this.rightClickShowing = false;
       this.renamingNow = false;
+    } else if (event.key === 'Escape' && this.settingsButtons['showTags'].toggled) {
+      this.toggleButton('showTags');
     }
   }
 
@@ -256,10 +261,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   constructor(
     public cd: ChangeDetectorRef,
-    public showLimitService: ShowLimitService,
-    public wordFrequencyService: WordFrequencyService,
-    public resolutionFilterService: ResolutionFilterService,
     public electronService: ElectronService,
+    public resolutionFilterService: ResolutionFilterService,
+    public showLimitService: ShowLimitService,
+    public tagsSaveService: TagsSaveService,
+    public wordFrequencyService: WordFrequencyService,
     private elementRef: ElementRef
   ) { }
 
@@ -392,6 +398,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       // Update history of opened files
       this.updateVhaFileHistory(pathToFile, finalObject.inputDir, finalObject.hubName);
+
+      this.setTags(finalObject.addTags, finalObject.removeTags);
 
       this.canCloseWizard = true;
       this.showWizard = false;
@@ -544,9 +552,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Returns the finalArray if needed, otherwise returns `null`
    * completely depends on global variable `finalArrayNeedsSaving`
    */
-  public saveVhaIfNeeded(): any {
-    if (this.finalArrayNeedsSaving) {
-      return this.finalArray;
+  public saveVhaIfNeeded(): SavableProperties {
+    if (this.finalArrayNeedsSaving || this.tagsSaveService.needToSave()) {
+      const propsToReturn: SavableProperties = {
+        addTags: this.tagsSaveService.getAddTags(),
+        removeTags: this.tagsSaveService.getRemoveTags(),
+        images: this.finalArray
+      };
+      return propsToReturn;
     } else {
       return null;
     }
@@ -716,6 +729,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   hideWizard(): void {
     this.showWizard = false;
+  }
+
+  tagClicked(event: string): void {
+    this.filters[3].array = []; // clear search array
+    this.handleFileWordClicked(event);
+    this.toggleButton('showTags'); // close the modal
   }
 
   /**
@@ -1023,6 +1042,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     });
     this.computeTextBufferAmount();
+    this.settingsButtons['showTags'].toggled = false; // never show tags on load (they don't load right anyway)
   }
 
   /**
@@ -1049,10 +1069,33 @@ export class HomeComponent implements OnInit, AfterViewInit {
   nodeRenamingFile: boolean = false;
   renameErrMsg: string = '';
 
+  /**
+   * Handle right-click and `Show similar`
+   */
   showSimilarNow(): void {
     this.findMostSimilar = this.currentRightClickedItem[2];
     console.log(this.findMostSimilar);
     this.showSimilar = true;
+  }
+
+  /**
+   * handle right-click and `Open folder`
+   * Code similar to `openVideo()`
+   */
+  openContainingFolderNow(): void {
+    this.fullPathToCurrentFile = this.appState.selectedSourceFolder +
+                                 this.currentRightClickedItem[0] +
+                                 '/' +
+                                 this.currentRightClickedItem[1];
+
+    this.openInExplorer();
+  }
+
+  /**
+   * Handle right-click on file and `view folder`
+   */
+  showOnlyThisFolderNow(): void {
+    this.handleFolderWordClicked(this.currentRightClickedItem[0]);
   }
 
   rightMouseClicked(event: MouseEvent, item): void {
@@ -1069,8 +1112,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const clientX: number = event.clientX;
     const howFarFromRight: number = winWidth - clientX;
 
+    // handle top-offset if clicking close to the bottom
+    const winHeight: number = window.innerHeight;
+    const clientY: number = event.clientY;
+    const howFarFromBottom: number = winHeight - clientY;
+
     this.rightClickPosition.x = (howFarFromRight < 120) ? clientX - 120 + (howFarFromRight) : clientX;
-    this.rightClickPosition.y = event.clientY;
+    this.rightClickPosition.y = (howFarFromBottom < 140) ? clientY - 140 + (howFarFromBottom) : clientY;
 
     this.currentRightClickedItem = item;
     this.rightClickShowing = true;
@@ -1160,6 +1208,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   doNothing(): void {
     // do nothing
+  }
+
+  /**
+   * Add and remove tags from the TagsSaveService
+   * triggered on vha file load
+   * @param addTags
+   * @param removeTags
+   */
+  setTags(addTags: string[], removeTags: string[]): void {
+    this.tagsSaveService.restoreSavedTags(
+      addTags ? addTags : [],
+      removeTags ? removeTags : []
+    );
   }
 
 }

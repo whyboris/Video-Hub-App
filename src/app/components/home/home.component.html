@@ -103,6 +103,8 @@
     <ul *ngIf="clickedOnFile; else galleryOptions" @rightClickContentAnimation>
       <li (click)="openRenameFileModal()">Rename file</li>
       <li (click)="showSimilarNow()">Show similar</li>
+      <li (click)="showOnlyThisFolderNow()">View folder</li>
+      <li (click)="openContainingFolderNow()">Open folder</li>
     </ul>
     <ng-template #galleryOptions>
       <ul @rightClickContentAnimation>
@@ -181,6 +183,25 @@
     </button>
 
 </div>
+
+  <div
+    *ngIf="settingsButtons['showTags'].toggled"
+    class="settingsModal"
+    @modalAnimation
+  >
+    <div
+      (click)="toggleButton('showTags')"
+      class="closeSettings"
+      title="Close settings"
+    >
+      <span class="icon icon-close"></span>
+    </div>
+    <app-tags-component
+      [hubName]="appState.hubName"
+      [finalArray]="finalArray"
+      (tagClicked)="tagClicked($event)"
+    ></app-tags-component>
+  </div>
 
   <!-- SETTINGS / OPTIONS MODAL -->
   <div
