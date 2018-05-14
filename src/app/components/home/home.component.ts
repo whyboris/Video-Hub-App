@@ -731,7 +731,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.showWizard = false;
   }
 
-  tagClicked(event: any): void {
+  tagClicked(event: string): void {
     this.filters[3].array = []; // clear search array
     this.handleFileWordClicked(event);
     this.toggleButton('showTags'); // close the modal
@@ -1217,8 +1217,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param removeTags
    */
   setTags(addTags: string[], removeTags: string[]): void {
-    this.tagsSaveService.setAddTags(addTags ? addTags : []);
-    this.tagsSaveService.setRemoveTags(removeTags ? removeTags : []);
+    this.tagsSaveService.restoreSavedTags(
+      addTags ? addTags : [],
+      removeTags ? removeTags : []
+    );
   }
 
 }

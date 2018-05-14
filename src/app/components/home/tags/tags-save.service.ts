@@ -70,23 +70,14 @@ export class TagsSaveService {
   }
 
   /**
-   * Load `add` tags from .vha file
+   * Load `addTags` and `removeTags` from the .vha file
    * @param savedAddTags
-   */
-  public setAddTags(savedAddTags: string[]): void {
-    this.addTags = savedAddTags;
-    console.log(savedAddTags);
-    this.needToSaveTags = false;
-  }
-
-  /**
-   * Load `remove` tags from .vha file
    * @param savedRemoveTags
    */
-  public setRemoveTags(savedRemoveTags: string[]): void {
+  public restoreSavedTags(savedAddTags: string[], savedRemoveTags: string[]): void {
+    this.addTags = savedAddTags;
     this.removeTags = savedRemoveTags;
-    console.log(savedRemoveTags);
-    this.needToSaveTags = false // redundant since `setAddTags` is also called
+    this.needToSaveTags = false;
   }
 
 }
