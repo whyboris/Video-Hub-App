@@ -6,11 +6,21 @@ export class TagsSaveService {
   addTags: string[] = [];
   removeTags: string[] = [];
 
+  needToSaveTags: boolean = false;
+
+  /**
+   * Return `true` if tags have been updated
+   */
+  public needToSave(): boolean {
+    return this.needToSaveTags;
+  }
+
   /**
    * Add an `add` tag
    * @param tag
    */
   public addAddTag(tag: string): void {
+    this.needToSaveTags = true;
 
     const index = this.removeTags.indexOf(tag);
 
@@ -30,6 +40,7 @@ export class TagsSaveService {
    * @param tag
    */
   public addRemoveTag(tag: string): void {
+    this.needToSaveTags = true;
 
     const index = this.addTags.indexOf(tag);
 
@@ -64,6 +75,8 @@ export class TagsSaveService {
    */
   public setAddTags(savedAddTags: string[]): void {
     this.addTags = savedAddTags;
+    console.log(savedAddTags);
+    this.needToSaveTags = false;
   }
 
   /**
@@ -72,6 +85,8 @@ export class TagsSaveService {
    */
   public setRemoveTags(savedRemoveTags: string[]): void {
     this.removeTags = savedRemoveTags;
+    console.log(savedRemoveTags);
+    this.needToSaveTags = false // redundant since `setAddTags` is also called
   }
 
 }

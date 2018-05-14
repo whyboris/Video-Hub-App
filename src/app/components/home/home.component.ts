@@ -5,20 +5,21 @@ import { setTimeout } from 'timers';
 import { VirtualScrollComponent } from 'angular2-virtual-scroll';
 
 import { ElectronService } from 'app/providers/electron.service';
-import { ShowLimitService } from 'app/components/pipes/show-limit.service';
 import { ResolutionFilterService } from 'app/components/pipes/resolution-filter.service';
+import { ShowLimitService } from 'app/components/pipes/show-limit.service';
+import { TagsSaveService } from './tags/tags-save.service';
 import { WordFrequencyService } from 'app/components/pipes/word-frequency.service';
 
 import { FinalObject, ImageElement } from '../common/final-object.interface';
-import { SettingsObject } from '../common/settings-object.interface';
 import { HistoryItem } from '../common/history-item.interface';
+import { ImportSettingsObject } from '../common/import.interface';
+import { SavableProperties } from '../common/savable-properties.interface';
+import { SettingsObject } from '../common/settings-object.interface';
+import { WizardOptions } from '../common/wizard-options.interface';
 
 import { AppState } from '../common/app-state';
 import { Filters } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from '../common/settings-buttons';
-
-import { ImportSettingsObject } from '../common/import.interface';
-import { WizardOptions } from '../common/wizard-options.interface';
 
 import {
   donutAppear,
@@ -35,7 +36,6 @@ import {
 } from '../common/animations';
 
 import { DemoContent } from '../../../assets/demo-content';
-import { runInThisContext } from 'vm';
 
 @Component({
   selector: 'app-home',
@@ -261,10 +261,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   constructor(
     public cd: ChangeDetectorRef,
-    public showLimitService: ShowLimitService,
-    public wordFrequencyService: WordFrequencyService,
-    public resolutionFilterService: ResolutionFilterService,
     public electronService: ElectronService,
+    public resolutionFilterService: ResolutionFilterService,
+    public showLimitService: ShowLimitService,
+    public tagsSaveService: TagsSaveService,
+    public wordFrequencyService: WordFrequencyService,
     private elementRef: ElementRef
   ) { }
 
@@ -397,6 +398,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       // Update history of opened files
       this.updateVhaFileHistory(pathToFile, finalObject.inputDir, finalObject.hubName);
+
+      this.setTags(finalObject.addTags, finalObject.removeTags);
 
       this.canCloseWizard = true;
       this.showWizard = false;
@@ -549,9 +552,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Returns the finalArray if needed, otherwise returns `null`
    * completely depends on global variable `finalArrayNeedsSaving`
    */
-  public saveVhaIfNeeded(): any {
-    if (this.finalArrayNeedsSaving) {
-      return this.finalArray;
+  public saveVhaIfNeeded(): SavableProperties {
+    if (this.finalArrayNeedsSaving || this.tagsSaveService.needToSave()) {
+      const propsToReturn: SavableProperties = {
+        addTags: this.tagsSaveService.getAddTags(),
+        removeTags: this.tagsSaveService.getRemoveTags(),
+        images: this.finalArray
+      };
+      return propsToReturn;
     } else {
       return null;
     }
@@ -726,6 +734,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   tagClicked(event: any): void {
     this.filters[3].array = []; // clear search array
     this.handleFileWordClicked(event);
+    this.toggleButton('showTags'); // close the modal
   }
 
   /**
@@ -1199,6 +1208,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   doNothing(): void {
     // do nothing
+  }
+
+  /**
+   * Add and remove tags from the TagsSaveService
+   * triggered on vha file load
+   * @param addTags
+   * @param removeTags
+   */
+  setTags(addTags: string[], removeTags: string[]): void {
+    this.tagsSaveService.setAddTags(addTags ? addTags : []);
+    this.tagsSaveService.setRemoveTags(removeTags ? removeTags : []);
   }
 
 }
