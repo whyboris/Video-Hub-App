@@ -1,48 +1,50 @@
-<ul class="column">
-  <li *ngFor="let item of oneWordTags | tagFilterPipe: currentFiltering">
-    <span class="prefix">
-      {{ item.word | alphabetPrefixPipe }}
-    </span>
-    <span
-      (click)="tagWasClicked(item.word)"
-      [ngClass]="{ strikethrough: editMode }"
-      class="clickable"
-    >
-      {{ item.word }}
-    </span>
-    <span class="frequency">
-      {{ item.freq }}
-    </span>
-    <span
-      *ngIf="editMode"
-      class="icon icon-close"
-      @tagDeleteButton
-    ></span>
-  </li>
-</ul>
+<div class="columns-container">
+  <ul class="column">
+    <li *ngFor="let item of oneWordTags | tagFilterPipe: currentFiltering">
+      <span class="prefix">
+        {{ item.word | alphabetPrefixPipe }}
+      </span>
+      <span
+        (click)="tagWasClicked(item.word)"
+        [ngClass]="{ strikethrough: editMode }"
+        class="clickable"
+      >
+        {{ item.word }}
+      </span>
+      <span class="frequency">
+        {{ item.freq }}
+      </span>
+      <span
+        *ngIf="editMode"
+        class="icon icon-close"
+        @tagDeleteButton
+      ></span>
+    </li>
+  </ul>
 
-<ul class="column">
-  <li *ngFor="let item of twoWordTags | tagFilterPipe: currentFiltering" class="capitalize">
-    <span class="prefix">
-      {{ item.word | alphabetPrefixPipe }}
-    </span>
-    <span
-      (click)="tagWasClicked(item.word)"
-      [ngClass]="{ strikethrough: editMode }"
-      class="clickable"
-    >
-      {{ item.word }}
-    </span>
-    <span class="frequency">
-      {{ item.freq }}
-    </span>
-    <span
-      *ngIf="editMode"
-      class="icon icon-close"
-      @tagDeleteButton
-    ></span>
-  </li>
-</ul>
+  <ul class="column">
+    <li *ngFor="let item of twoWordTags | tagFilterPipe: currentFiltering" class="capitalize">
+      <span class="prefix">
+        {{ item.word | alphabetPrefixPipe }}
+      </span>
+      <span
+        (click)="tagWasClicked(item.word)"
+        [ngClass]="{ strikethrough: editMode }"
+        class="clickable"
+      >
+        {{ item.word }}
+      </span>
+      <span class="frequency">
+        {{ item.freq }}
+      </span>
+      <span
+        *ngIf="editMode"
+        class="icon icon-close"
+        @tagDeleteButton
+      ></span>
+    </li>
+  </ul>
+</div>
 
 <div
   *ngIf="showEdit"

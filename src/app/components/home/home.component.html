@@ -161,7 +161,8 @@
       type="text"
       #renameFileInput
     >
-    <span class="extension-hack" [ngClass]="{ darkModeOn: settingsButtons['darkMode'].toggled }" >
+    <!-- in the mac the font sizes are not aligned properly and the extension shows up overlapping -->
+    <span *ngIf="!macVersion" class="extension-hack" [ngClass]="{ darkModeOn: settingsButtons['darkMode'].toggled }" >
       <span class="hidden">{{ renamingWIP }}</span>
       <span class="extension" *ngIf="renamingWIP.length > 0">.{{ renamingExtension }}</span>
     </span>

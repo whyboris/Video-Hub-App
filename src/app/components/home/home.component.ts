@@ -95,7 +95,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // ========================================================================================
   demo = false;
   webDemo = false;
-  versionNumber = '1.2.0';
+  versionNumber = '1.3.0';
   macVersion = false;
   // ========================================================================================
 
