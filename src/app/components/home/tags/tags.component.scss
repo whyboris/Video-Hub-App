@@ -1,9 +1,19 @@
 @import '../variables';
 
+.columns-container {
+  margin-top: 20px;
+  position: absolute;
+  position: relative;
+  width: calc(100% - 10px);
+}
+
 .column {
-  width: 200px;
+  box-sizing: border-box;
   float: left;
+  margin-top: 0;
+  padding-left: 40px;
   user-select: none;
+  width: 50%;
 }
 
 ul {
