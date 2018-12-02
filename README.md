@@ -6,6 +6,8 @@
 
 This software is available for $3.50 through [https://videohubapp.com/](https://videohubapp.com/download.html); $3.50 of every sale goes to the [_cost-effective_](https://www.givewell.org/charities/top-charities) charity [Against Malaria Foundation](https://www.againstmalaria.com/).
 
+![Video Hub App](https://videohubapp.com/images/4.jpg)
+
 ## About
 
 *Video Hub App* was created by [Boris Yakubchik](https://videohubapp.com/about.html). It uses _Angular_ and _Electron_.
