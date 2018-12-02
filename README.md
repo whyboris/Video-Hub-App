@@ -4,7 +4,8 @@
 
 ## Download now
 
-This software is available for $3.50 through [https://videohubapp.com/](https://videohubapp.com/download.html)
+This software is available for $3.50 through [videohubapp.com](https://videohubapp.com/download.html)
+
 $3.50 of every sale goes to the [_cost-effective_](https://www.givewell.org/charities/top-charities) charity [Against Malaria Foundation](https://www.againstmalaria.com/).
 
 ![Video Hub App](https://videohubapp.com/images/4.jpg)
