@@ -4,7 +4,8 @@
 
 ## Download now
 
-This software is available for $3.50 through [https://videohubapp.com/](https://videohubapp.com/download.html); $3.50 of every sale goes to the [_cost-effective_](https://www.givewell.org/charities/top-charities) charity [Against Malaria Foundation](https://www.againstmalaria.com/).
+This software is available for $3.50 through [https://videohubapp.com/](https://videohubapp.com/download.html)
+$3.50 of every sale goes to the [_cost-effective_](https://www.givewell.org/charities/top-charities) charity [Against Malaria Foundation](https://www.againstmalaria.com/).
 
 ![Video Hub App](https://videohubapp.com/images/4.jpg)
 
@@ -14,7 +15,7 @@ This software is available for $3.50 through [https://videohubapp.com/](https://
 
 ## License
 
-This software was built on top of [`angular-electron`](https://github.com/angular/angular) 1.9.0 by [Maxime GRIS](https://github.com/maximegris) and has been updated since then. It carries an _MIT_ license (see the _LICENSE_ file). While the license is permissive, I ask that you do not distribute free copies of this software unles you have significantly changed it.
+This software was built on top of [`angular-electron`](https://github.com/angular/angular) 1.9.0 by [Maxime GRIS](https://github.com/maximegris) and has been updated since then. It carries an _MIT_ license (see the _LICENSE_ file). While the license is permissive, I ask that you do not distribute free copies of this software unless you have significantly changed it.
 
 ## Contributing
 
