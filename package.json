@@ -11,7 +11,7 @@
     "video"
   ],
   "main": "main.js",
-  "private": true,
+  "license": "MIT",
   "scripts": {
     "ng": "ng",
     "lint": "ng lint",
@@ -54,8 +54,6 @@
     "@angular/compiler-cli": "5.1.1",
     "@angular/language-service": "5.1.1",
     "@types/core-js": "0.9.36",
-    "@types/jasmine": "2.5.54",
-    "@types/jasminewd2": "2.0.2",
     "@types/node": "7.0.7",
     "autoprefixer": "7.1.4",
     "circular-dependency-plugin": "3.0.0",
@@ -95,6 +93,5 @@
     "webpack": "3.8.1",
     "webpack-concat-plugin": "1.4.0",
     "webpack-dev-server": "2.9.3"
-  },
-  "license": "SEE LICENSE IN LICENSE.md"
+  }
 }
