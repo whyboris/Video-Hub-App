@@ -4,11 +4,11 @@ import { setTimeout } from 'timers';
 
 import { VirtualScrollComponent } from 'angular2-virtual-scroll';
 
-import { ElectronService } from 'app/providers/electron.service';
-import { ResolutionFilterService } from 'app/components/pipes/resolution-filter.service';
-import { ShowLimitService } from 'app/components/pipes/show-limit.service';
+import { ElectronService } from '../../providers/electron.service';
+import { ResolutionFilterService } from '../../components/pipes/resolution-filter.service';
+import { ShowLimitService } from '../../components/pipes/show-limit.service';
 import { TagsSaveService } from './tags/tags-save.service';
-import { WordFrequencyService } from 'app/components/pipes/word-frequency.service';
+import { WordFrequencyService } from '../../components/pipes/word-frequency.service';
 
 import { FinalObject, ImageElement } from '../common/final-object.interface';
 import { HistoryItem } from '../common/history-item.interface';

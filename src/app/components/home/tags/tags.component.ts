@@ -3,9 +3,9 @@ import { Component, EventEmitter, Input, Output, OnDestroy, ViewChild, ElementRe
 import { TagsService, WordAndFreq } from './tags.service';
 import { TagsSaveService } from './tags-save.service';
 
-import { ImageElement } from 'app/components/common/final-object.interface';
+import { ImageElement } from '../../../components/common/final-object.interface';
 
-import { slowFadeIn, tagDeleteButton, donutAppear } from 'app/components/common/animations';
+import { slowFadeIn, tagDeleteButton, donutAppear } from '../../../components/common/animations';
 
 @Component({
   selector: 'app-tags-component',

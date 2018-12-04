@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class ResolutionFilterService {
@@ -48,7 +48,7 @@ export class ResolutionFilterService {
   }
 
   /**
-   * Get number of videos with the most frequent resolution 
+   * Get number of videos with the most frequent resolution
    */
   private getMostFrequent(): number {
     let largestFreq = 0;

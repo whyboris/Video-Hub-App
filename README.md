@@ -26,14 +26,12 @@ I would love to see the improvements you make to this app and am happy to accept
 
 A list of upcoming features is [listed on the official website](https://videohubapp.com/future.html).
 
-Before starting work on those features, I intend to upgrade to _Angular 7_ and _Electron 4_.
-
 ## Current versions
 
-- Angular v5.1.1
-- Angular-CLI v1.6.1
-- Electron v1.7.8
-- Electron Builder v19.49.0
+- Angular v7.1.1
+- Angular-CLI v7.1.1
+- Electron v4.0.0-beta.8
+- Electron Builder v20.38.2
 
 Works with:
 

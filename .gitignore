@@ -5,6 +5,14 @@
 /tmp
 /out-tsc
 /app-builds
+main.js
+main-filenames.js
+main-support.js
+main-globals.js
+postinstall.js
+postinstall-web.js
+src/**/*.js
+*.js.map
 
 # dependencies
 /node_modules

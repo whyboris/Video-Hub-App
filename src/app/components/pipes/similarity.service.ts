@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
 export class SimilarityService {
@@ -87,7 +87,7 @@ export class SimilarityService {
 
     while (stillSimilarFound) {
       const currMostCommon = this.getMostCommon();
-      
+
       if (currMostCommon !== null) {
         finalResult[tempIndex] = currMostCommon;
         tempIndex++;
