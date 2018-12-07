@@ -229,6 +229,7 @@ ffmpeg.setFfmpegPath(ffmpegPath);
  * at particular file size
  * save as particular fileNumber
  * @param pathToVideo  -- full path to the video file
+ * @param fileHash     -- hash of the video file
  * @param screensize   -- resolution in pixels (defaul is 100)
  * @param saveLocation -- folder where to save jpg files
  * @param done         -- callback when done
@@ -240,6 +241,11 @@ export function takeTenScreenshots(
   saveLocation: string,
   done: any
 ) {
+
+  if (fs.existsSync(saveLocation + '/' + fileHash + '.jpg')) {
+    //console.log("thumbnails for " + fileHash + " already exist");
+    done();
+  }
 
   let current: number = 0;
   const totalCount = 10;
