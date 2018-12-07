@@ -29,7 +29,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
   @Input() title: string;
 
   hover: boolean;
-  currentlyShowing = 1;
+  currentlyShowing = 0;
   looper = true;
   noError = true;
 
@@ -50,18 +50,15 @@ export class PreviewComponent implements OnInit, OnDestroy {
       this.noError = false;
     }
     // hack -- populate hardcoded values -- fix later
-    const fileNumber = this.imgId;
-    this.imgId = [];
+    const fileHash = this.imgId;
 
-    for (let i = 0; i < 10; i++) {
-      this.imgId[i] = 'vha-' + this.hubName + '/' + fileNumber + '-' + (i + 1) + '.jpg';
-    }
+    this.imgId = 'vha-' + this.hubName + '/' + fileHash + '.jpg';
 
     // this.loop(); // disabled -- can have a toggle in gallery that will feed variable as input into this component that will start
     if (this.randomImage) {
       this.showRandom();
     } else {
-      this.showThisOne(1);
+      this.showThisOne(0);
     }
   }
 

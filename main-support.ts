@@ -1,11 +1,44 @@
 import * as path from 'path';
+import mergeImg = require('merge-img');
 
 const fs = require('fs');
+const hasher = require('crypto').createHash;
 
 import { FinalObject, ImageElement } from './src/app/components/common/final-object.interface';
 import { acceptableFiles } from './main-filenames';
 
 import { globals } from './main-globals';
+
+/**
+ * Hash a given file using a constant time hash inspired by imohash
+ * https://github.com/kalafut/imohash
+ * Basically md5(16k from start + 16k from middle + 16k from end + file size)
+ * @param file  -- file path to hash
+ */
+export function hashFile(file: string): string {
+  const sampleSize = 16 * 1024;
+  const sampleThreshold = 128 * 1024;
+  const stats = fs.statSync(file);
+  const fileSize = stats.size;
+
+  let data: Buffer;
+  if (fileSize < sampleThreshold) {
+    data = fs.readFileSync(file); // too small, just read the whole file
+  } else {
+    data = Buffer.alloc(sampleSize * 3);
+    let fd = fs.openSync(file, 'r');
+    fs.readSync(fd, data, 0, sampleSize, 0);                                  // read beginning of file
+    fs.readSync(fd, data, sampleSize, sampleSize, fileSize / 2);              // read middle of file
+    fs.readSync(fd, data, sampleSize * 2, sampleSize, fileSize - sampleSize); // read end of file
+  }
+
+
+  // append the file size to the data
+  let buf = Buffer.concat([data, Buffer.from(fileSize.toString())])
+  // make the magic happen!
+  let hash = hasher('md5').update(buf.toString('hex')).digest('hex');
+  return hash;
+}
 
 /**
  * Label the video according to these rules
@@ -133,7 +166,7 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
             // before adding, remove the redundant prefix: sourceFolderPath
             const partialPath = dir.replace(sourceFolderPath, '');
             // fil finalArray with 3 correct and 5 dummy pieces of data
-            finalArray[elementIndex] = [partialPath, file, cleanUpFileName(file), elementIndex, 0, '', 0, 0];
+            finalArray[elementIndex] = [partialPath, file, cleanUpFileName(file), '', 0, '', 0, 0];
             elementIndex++;
           }
         }
@@ -196,14 +229,13 @@ ffmpeg.setFfmpegPath(ffmpegPath);
  * at particular file size
  * save as particular fileNumber
  * @param pathToVideo  -- full path to the video file
- * @param fileNumber   -- used to number the jpg file, eg 3 => 3-0.jpg, 3-1.jpg, 3-2.jpg, etc
  * @param screensize   -- resolution in pixels (defaul is 100)
  * @param saveLocation -- folder where to save jpg files
  * @param done         -- callback when done
  */
 export function takeTenScreenshots(
   pathToVideo: string,
-  fileNumber: number,
+  fileHash: string,
   screenSize: number,
   saveLocation: string,
   done: any
@@ -212,13 +244,15 @@ export function takeTenScreenshots(
   let current: number = 0;
   const totalCount = 10;
   const timestamps = ['5%', '15%', '25%', '35%', '45%', '55%', '65%', '75%', '85%', '95%'];
+  let files: string[] = [];
 
   const extractOneFile = () => {
+    files.push(saveLocation + '/' + fileHash + `-${current + 1}.jpg`);
     ffmpeg(pathToVideo)
       .screenshots({
         count: 1,
         timemarks: [timestamps[current]],
-        filename: fileNumber + `-${current + 1}.jpg`,
+        filename: fileHash + `-${current + 1}.jpg`,
         size: '?x' + screenSize
       }, saveLocation)
       .on('end', () => {
@@ -226,6 +260,13 @@ export function takeTenScreenshots(
         if (current < totalCount) {
           extractOneFile();
         } else if (current === totalCount) {
+          mergeImg(files, {direction: true})
+            .then((img) => {
+              // Save image as file
+              img.write(saveLocation + '/' + fileHash + '.jpg', () => {
+                somewhatLessDangerouslyDelete(files);
+              });
+            });
           done();
         }
       })
@@ -235,6 +276,16 @@ export function takeTenScreenshots(
   }
 
   extractOneFile();
+}
+
+export function somewhatLessDangerouslyDelete(files: string[]) {
+  for (let file of files) {
+    if (fs.existsSync(file)) {
+      fs.unlinkSync(file, (err) => {
+        // phff it's fine
+    });
+    }
+  }
 }
 
 // ------------------------ SUPER DANGEROUSLY DELETE
@@ -278,23 +329,6 @@ export function everyIndex(fullArray: ImageElement[]): number[] {
   return indexes;
 }
 
-/**
- * Figure out indexes in finalArray of elements whose screenshot needs to be taken
- * We know that when finalArray[n][3] > lastScreenshot
- */
-export function onlyNewIndexes(fullArray: ImageElement[], minIndex: number) {
-  const indexes: number[] = [];
-  const total: number = fullArray.length;
-
-  fullArray.forEach((element, index) => {
-    if (element[3] > minIndex) {
-      indexes.push(index);
-    }
-  });
-
-  return indexes;
-}
-
 
 /**
  * Find all the new files added to the source directory and return array of them
@@ -306,11 +340,9 @@ export function findAllNewFiles(
   angularFinalArray: ImageElement[],
   hdFinalArray: ImageElement[],
   inputFolder: string,
-  lastScreen: number
 ): ImageElement[] {
 
   const theDiff: ImageElement[] = [];
-  let jpgFileNumber: number = lastScreen;
 
   hdFinalArray.forEach((newElement) => {
     let matchFound = false;
@@ -322,8 +354,6 @@ export function findAllNewFiles(
     });
 
     if (!matchFound) { // means new element !!!
-      jpgFileNumber++;
-      newElement[3] = jpgFileNumber;  // FILL IN THE INDEX !!! correctly !!!
       theDiff.push(newElement);
     }
   });
@@ -359,7 +389,7 @@ export function finalArrayWithoutDeleted(
     if (matchFound) {
       return true;
     } else {
-      superDangerousDelete(folderWhereImagesAre, value[3]);
+      //superDangerousDelete(folderWhereImagesAre, value[3]);
       return false;
     }
   });
@@ -377,16 +407,12 @@ export function finalArrayWithoutDeleted(
  * @param videoFolderPath -- the full path to the base folder for video files
  * @param metaStartIndex  -- the starting point in finalArray from where to extract metadata
  *                           (should be 0 when first scan, should be index of first element when rescan)
- * @param jpgRescanStartIndex -- passed on to `sendFinalResultHome`
- * @param lastJpgNumber   -- the last jpg number
  * @param done            -- callback when done with all metadata extraction
  */
 export function extractAllMetadata(
   theFinalArray: ImageElement[],
   videoFolderPath: string,
   metaStartIndex: number,
-  jpgRescanStartIndex: number,
-  lastJpgNumber: number,
   done: any
 ): void {
 
@@ -418,7 +444,7 @@ export function extractAllMetadata(
 
     } else {
 
-      done(elementsWithMetadata, lastJpgNumber, jpgRescanStartIndex);
+      done(elementsWithMetadata);
 
     }
   }
@@ -446,6 +472,7 @@ function extractMetadataForThisONEFile(
       const origHeight = metadata.streams[0].height;
       const sizeLabel = labelVideo(origWidth, origHeight);
       const width = Math.round(100 * origWidth / origHeight) || 169;
+      imageElement[3] = hashFile(filePath);
       imageElement[4] = duration;  // 4th item is duration
       imageElement[5] = sizeLabel; // 5th item is the label, e.g. 'HD'
       imageElement[6] = width;     // 6th item is width of screenshot in px (e.g. 150);
@@ -473,7 +500,6 @@ function extractMetadataForThisONEFile(
  * @param angularFinalArray  -- array of ImageElements from Angular - most current view
  * @param hdFinalArray       -- array of ImageElements from current hard drive scan
  * @param inputFolder        -- the input folder (where videos are)
- * @param lastJpgNumber      -- gets saved as `lastScreen` in `vha` file
  * @param folderToDeleteFrom -- path to folder where `.jpg` files are
  * @param extractMetadataCallback -- function for extractAllMetadata to call when done
  */
@@ -481,14 +507,13 @@ export function updateFinalArrayWithHD(
   angularFinalArray: ImageElement[],
   hdFinalArray: ImageElement[],
   inputFolder: string,
-  lastJpgNumber: number,
   folderToDeleteFrom: string,
   extractMetadataCallback
 ): void {
 
   // Generate ImageElement[] of all the new elements to be added
   const onlyNewElements: ImageElement[] =
-    findAllNewFiles(angularFinalArray, hdFinalArray, inputFolder, lastJpgNumber);
+    findAllNewFiles(angularFinalArray, hdFinalArray, inputFolder);
 
   // remove from FinalArray all files that are no longer in the video folder
   const allDeletedRemoved: ImageElement[] =
@@ -499,14 +524,11 @@ export function updateFinalArrayWithHD(
 
     const metaRescanStartIndex = allDeletedRemoved.length;
     const finalArrayUpdated = allDeletedRemoved.concat(onlyNewElements);
-    const lastJpgNumberUpdated = lastJpgNumber + onlyNewElements.length; // update last screen!!!
 
     extractAllMetadata(
       finalArrayUpdated,
       inputFolder,
       metaRescanStartIndex,
-      lastJpgNumber,
-      lastJpgNumberUpdated,
       extractMetadataCallback // actually = sendFinalResultHome
     );
 

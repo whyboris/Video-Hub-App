@@ -50,11 +50,10 @@ export class FilmstripComponent implements OnInit {
     }
 
     // hack -- populate hardcoded values -- fix later
-    const fileNumber = this.imgId;
-    this.imgId = [];
+    const fileHash = this.imgId;
+    this.imgId = 'vha-' + this.hubName + '/' + fileHash + '.jpg';
 
     for (let i = 0; i < 10; i++) {
-      this.imgId[i] = 'vha-' + this.hubName + '/' + fileNumber + '-' + (i + 1) + '.jpg';
       this.indexArray[i] = 10 - i;
     }
   }
