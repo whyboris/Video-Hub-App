@@ -302,6 +302,28 @@ export function superDangerousDelete(imageLocation: string, numberOfImage: numbe
 
 // GENERATE INDEXES FOR ARRAY
 
+export function hasAllThumbs(fileHash: string, screenshotFolder: string) : boolean {
+  // Check in reverse order for efficiency
+  return fs.existsSync(screenshotFolder + '/' + fileHash + '-first.jpg')
+         && fs.existsSync(screenshotFolder + '/' + fileHash + '.mp4')
+         && fs.existsSync(screenshotFolder + '/' + fileHash + '.jpg');
+}
+
+/**
+ * Generate indexes for any files missing thumbnails
+ */
+export function missingThumbsIndex(fullArray: ImageElement[], screenshotFolder: string): number[] {
+  const indexes: number[] = [];
+  const total: number = fullArray.length;
+  for (let i = 0; i < total; i++) {
+    if (!hasAllThumbs(fullArray[i][3], screenshotFolder)) {
+      indexes.push(i);
+    }
+  }
+
+  return indexes;
+}
+
 /**
  * Generate indexes for each element in finalArray, e.g.
  * [0, 1, 2, 3, ..., n] where n = finalArray.length

@@ -207,6 +207,7 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 import {
   alphabetizeFinalArray,
   countFoldersInFinalArray,
+  missingThumbsIndex,
   everyIndex,
   extractAllMetadata,
   finalArrayWithoutDeleted,
@@ -261,6 +262,19 @@ function openThisDamnFile(pathToVhaFile: string) {
 
       console.log(globals.selectedSourceFolder + ' - videos location');
       console.log(globals.selectedOutputFolder + ' - output location');
+
+      // resume extracting any missing thumbnails
+      const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
+
+      const indexesToScan: number[] = missingThumbsIndex(lastSavedFinalObject.images, screenshotOutputFolder);
+
+      extractAllScreenshots(
+        lastSavedFinalObject.images,
+        globals.selectedSourceFolder,
+        screenshotOutputFolder,
+        globals.screenShotSize,
+        indexesToScan
+      );
 
       globals.angularApp.sender.send(
         'finalObjectReturning',
@@ -634,7 +648,7 @@ function sendFinalResultHome(
 
     const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
 
-    const indexesToScan: number[] = everyIndex(myFinalArray);
+    const indexesToScan: number[] = missingThumbsIndex(myFinalArray, screenshotOutputFolder);
 
     extractAllScreenshots(
       myFinalArray,
