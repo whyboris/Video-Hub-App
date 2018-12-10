@@ -10,33 +10,14 @@ import { acceptableFiles } from './main-filenames';
 import { globals } from './main-globals';
 
 /**
- * Hash a given file using a constant time hash inspired by imohash
- * https://github.com/kalafut/imohash
- * Basically md5(16k from start + 16k from middle + 16k from end + file size)
- * @param file  -- file path to hash
+ * Hash a given file using it's file name and size
+ * md5(file.name + file.size)
+ * @param fileName  -- file name to hash
+ * @param fileSize  -- file size to hash
  */
-export function hashFile(file: string): string {
-  const sampleSize = 16 * 1024;
-  const sampleThreshold = 128 * 1024;
-  const stats = fs.statSync(file);
-  const fileSize = stats.size;
-
-  let data: Buffer;
-  if (fileSize < sampleThreshold) {
-    data = fs.readFileSync(file); // too small, just read the whole file
-  } else {
-    data = Buffer.alloc(sampleSize * 3);
-    let fd = fs.openSync(file, 'r');
-    fs.readSync(fd, data, 0, sampleSize, 0);                                  // read beginning of file
-    fs.readSync(fd, data, sampleSize, sampleSize, fileSize / 2);              // read middle of file
-    fs.readSync(fd, data, sampleSize * 2, sampleSize, fileSize - sampleSize); // read end of file
-  }
-
-
-  // append the file size to the data
-  let buf = Buffer.concat([data, Buffer.from(fileSize.toString())])
+export function hashFile(fileName: string, fileSize: number): string {
   // make the magic happen!
-  let hash = hasher('md5').update(buf.toString('hex')).digest('hex');
+  let hash = hasher('md5').update(fileName + fileSize).digest('hex');
   return hash;
 }
 
@@ -478,16 +459,12 @@ function extractMetadataForThisONEFile(
       const origHeight = metadata.streams[0].height;
       const sizeLabel = labelVideo(origWidth, origHeight);
       const width = Math.round(100 * origWidth / origHeight) || 169;
-      imageElement[3] = hashFile(filePath);
+      const fileSize = metadata.format.size;
+      imageElement[3] = hashFile(imageElement[1], fileSize);
       imageElement[4] = duration;  // 4th item is duration
       imageElement[5] = sizeLabel; // 5th item is the label, e.g. 'HD'
       imageElement[6] = width;     // 6th item is width of screenshot in px (e.g. 150);
-
-      // extract the file size
-      const stats = fs.statSync(filePath);
-      const fileSizeInBytes = stats.size;
-      const fileSizeInMegabytes = Math.round(fileSizeInBytes / 1000000.0);
-      imageElement[7] = fileSizeInMegabytes;  // 7th item is size in megabytes
+      imageElement[7] = fileSize;  // 7th item is file size
 
       extractMetaCallback(imageElement);
     }
