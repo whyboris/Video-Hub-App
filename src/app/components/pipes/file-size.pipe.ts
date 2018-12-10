@@ -7,7 +7,7 @@ export class FileSizePipe implements PipeTransform {
 
   /**
    * Return size of file formatted as XXX{mb,gb}
-   * @param size in bytes
+   * @param sizeInBytes -- file size in bytes
    */
   transform(sizeInBytes: number): string {
     if (sizeInBytes) {

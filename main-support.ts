@@ -17,7 +17,7 @@ import { globals } from './main-globals';
  */
 export function hashFile(fileName: string, fileSize: number): string {
   // make the magic happen!
-  let hash = hasher('md5').update(fileName + fileSize).digest('hex');
+  let hash = hasher('md5').update(fileName + fileSize.toString()).digest('hex');
   return hash;
 }
 
