@@ -30,7 +30,12 @@
     "electron:windows": "npm run build:prod && electron-builder build --windows",
     "electron:mac": "npm run build:prod && electron-builder build --mac"
   },
-  "dependencies": {},
+  "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "1.0.16",
+    "@ffprobe-installer/ffprobe": "1.0.9",
+    "angular2-virtual-scroll": "0.3.1",
+    "fluent-ffmpeg": "2.1.2"
+  },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.11.2",
     "@angular/animations": "7.1.2",
@@ -43,16 +48,12 @@
     "@angular/platform-browser": "7.1.2",
     "@angular/platform-browser-dynamic": "7.1.2",
     "@angular/router": "7.1.2",
-    "@ffmpeg-installer/ffmpeg": "1.0.16",
-    "@ffprobe-installer/ffprobe": "1.0.9",
     "@types/node": "10.12.12",
-    "angular2-virtual-scroll": "0.3.1",
     "codelyzer": "4.5.0",
     "core-js": "2.6.0",
     "electron": "3.0.11",
     "electron-builder": "20.36.2",
     "electron-reload": "1.4.0",
-    "fluent-ffmpeg": "2.1.2",
     "npm-run-all": "4.1.5",
     "rxjs": "6.3.3",
     "ts-node": "7.0.1",

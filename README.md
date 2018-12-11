@@ -30,13 +30,13 @@ A list of upcoming features is [listed on the official website](https://videohub
 
 - Angular v7.1.2
 - Angular-CLI v7.1.2
-- Electron v4.0.0-beta.8
-- Electron Builder v20.38.2
+- Electron v3.0.11
+- Electron Builder v20.36.2
 
 Works with:
 
-- Node v10.0.4
-- npm v6.0.0
+- Node v10.14.1
+- npm v6.4.1
 
 Note: the first time you run `npm install` the `node postinstall` command might take 5+ minutes.
 
