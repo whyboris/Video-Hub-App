@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'app-top-component',
@@ -21,7 +21,7 @@ export class TopComponent {
   get folderString(): string { return this._folder; }
 
   // Handle file input
-  private _file = '';
+  public _file = '';
   @Input() set fileString(fileString: string) {
     this._file = (fileString && fileString.trim()) || '';
     this.fileNameArray = this._file.split(' ');

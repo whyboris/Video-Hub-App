@@ -1,7 +1,5 @@
 import { Component, ChangeDetectorRef, OnInit, HostListener, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 
-import { setTimeout } from 'timers';
-
 import { VirtualScrollComponent } from 'angular2-virtual-scroll';
 
 import { ElectronService } from '../../providers/electron.service';
@@ -130,7 +128,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   resolutionFreqArr: number[];
   freqLeftBound: number = 0;
   freqRightBound: number = 4;
-  resolutionNames: string[] = ['SD','720','1080','4K'];
+  resolutionNames: string[] = ['SD', '720', '1080', '4K'];
 
   rightClickShowing: boolean = false;
   itemToRename: any; // strongly type this -- it's an element from finalArray !!!
