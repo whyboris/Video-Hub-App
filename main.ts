@@ -21,53 +21,42 @@ const dialog = require('electron').dialog;
 let userWantedToOpen = null;
 let myWindow = null
 
-// TODO -- re-include the below code
+// TODO -- maybe clean up the `userWantedToOpen` with whatever pattern recommended by Electron
+// For windows -- when loading the app the first time
+if (process.argv[1]) {
+  if (!serve) {
+    userWantedToOpen = process.argv[1];
+  }
+}
 
-// // For windows -- when loading the app the first time
-// if (process.argv[1]) {
-//   if (!serve) {
-//     userWantedToOpen = process.argv[1];
-//   }
-// }
+// OPEN FILE ON WINDOWS FROM FILE DOUBLE CLICK
+const gotTheLock = app.requestSingleInstanceLock()
 
-// // OPEN FILE ON WINDOWS FROM FILE DOUBLE CLICK
-// app.requestSingleInstanceLock()
-// const isSecondInstance = app.on('second-instance', (a, b, c) => {
+if (!gotTheLock) {
+  app.quit()
+} else {
 
-//   console.log("FIXS THIS NOW!!!");
-//   console.log(a);
-//   console.log(b);
-//   console.log(c);
-//   // TODO -- this should come as an argument, a, b, or c
-//   const commandLine = []
+  app.on('second-instance', (event, argv: string[], workingDirectory) => {
 
-//   // dialog.showMessageBox({
-//   //   message: 'hello \n' +
-//   //   commandLine[0] + ' \n' +
-//   //   commandLine[1] + ' \n' +
-//   //   workingDirectory + ' !!! ',
-//   //   buttons: ['OK']
-//   // });
+    // dialog.showMessageBox({
+    //   message: 'second-instance: \n' + argv[0] + ' \n' + argv[1],
+    //   buttons: ['OK']
+    // });
 
-//   if (commandLine[1]) {
-//     userWantedToOpen = commandLine[1];
-//     openThisDamnFile(commandLine[1]);
-//   }
+    if (argv[1]) {
+      userWantedToOpen = argv[1];
+      openThisDamnFile(argv[1]);
+    }
 
-//   // Someone tried to run a second instance, we should focus our window.
-//   if (myWindow) {
-//     if (myWindow.isMinimized()) {
-//       myWindow.restore();
-//     }
-//     myWindow.focus();
-//   }
-// });
-
-// if (isSecondInstance) {
-//   // quit the second instance
-//   app.exit();
-//   // app.quit();
-// }
+    // Someone tried to run a second instance, we should focus our window.
+    if (myWindow) {
+      if (myWindow.isMinimized()) {
+        myWindow.restore();
+      }
+      myWindow.focus();
+    }
+  });
+}
 
 function createWindow() {
 
@@ -132,6 +121,7 @@ function createWindow() {
       electron: require(`${__dirname}/node_modules/electron`)
     });
     win.loadURL('http://localhost:4200');
+    win.webContents.openDevTools();
   } else {
     win.loadURL(url.format({
       pathname: path.join(__dirname, 'dist/index.html'),
@@ -139,8 +129,6 @@ function createWindow() {
       slashes: true
     }));
   }
-
-  win.webContents.openDevTools();
 
   // Emitted when the window is closed.
   win.on('closed', () => {
@@ -331,8 +319,8 @@ ipc.on('openInExplorer', function(event, fullPath: string) {
 /**
  * Open a URL in system's default browser
  */
-ipc.on('pleaseOpenUrl', function(event, url: string): void {
-  shell.openExternal(url, { activate: true }, (): void => {});
+ipc.on('pleaseOpenUrl', function(event, urlToOpen: string): void {
+  shell.openExternal(urlToOpen, { activate: true }, (): void => {});
 });
 
 /**
@@ -592,7 +580,7 @@ ipc.on('try-to-rename-this-file', function(event, sourceFolder: string, relPath:
   if (fs.existsSync(newName)) {
     console.log('some file already EXISTS WITH THAT NAME !!!');
     success = false;
-    errMsg = "A file existst with this filename";
+    errMsg = 'A file existst with this filename';
   } else {
     try {
       fs.renameSync(original, newName);
@@ -602,9 +590,9 @@ ipc.on('try-to-rename-this-file', function(event, sourceFolder: string, relPath:
       if (err.code === 'ENOENT') {
         // const pathObj = path.parse(err.path);
         // console.log(pathObj);
-        errMsg = "Original file could not be found";
+        errMsg = 'Original file could not be found';
       } else {
-        errMsg = "Some error occurred";
+        errMsg = 'Some error occurred';
       }
     }
   }
