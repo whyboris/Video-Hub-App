@@ -246,17 +246,23 @@ function openThisDamnFile(pathToVhaFile: string) {
     } else {
       globals.currentlyOpenVhaFile = pathToVhaFile;
       lastSavedFinalObject = JSON.parse(data);
-      setGlobalsFromVhaFile(lastSavedFinalObject); // sets source folder ETC
 
       // path to folder where the VHA file is
       globals.selectedOutputFolder = path.parse(pathToVhaFile).dir;
+
+      // use relative paths
+      if (lastSavedFinalObject.inputDir === "") {
+        lastSavedFinalObject.inputDir = globals.selectedOutputFolder;
+      }
+
+      setGlobalsFromVhaFile(lastSavedFinalObject); // sets source folder ETC
 
       console.log(globals.selectedSourceFolder + ' - videos location');
       console.log(globals.selectedOutputFolder + ' - output location');
 
       globals.angularApp.sender.send(
         'finalObjectReturning',
-        JSON.parse(data),
+        lastSavedFinalObject,
         pathToVhaFile,
         globals.selectedOutputFolder + path.sep   // app needs the trailing slash (at least for now)
       );
