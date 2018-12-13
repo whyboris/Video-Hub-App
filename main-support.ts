@@ -1,5 +1,4 @@
 import * as path from 'path';
-import mergeImg = require('merge-img');
 
 const fs = require('fs');
 const hasher = require('crypto').createHash;
@@ -205,6 +204,8 @@ const ffmpeg = require('fluent-ffmpeg');
 ffmpeg.setFfprobePath(ffprobePath);
 ffmpeg.setFfmpegPath(ffmpegPath);
 
+const spawn = require('child_process').spawn;
+
 /**
  * Take 10 screenshots of a particular file
  * at particular file size
@@ -218,6 +219,7 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 export function takeTenScreenshots(
   pathToVideo: string,
   fileHash: string,
+  duration: number,
   screenSize: number,
   saveLocation: string,
   done: any
@@ -228,51 +230,20 @@ export function takeTenScreenshots(
     done();
   }
 
-  let current: number = 0;
-  const totalCount = 10;
-  const timestamps = ['5%', '15%', '25%', '35%', '45%', '55%', '65%', '75%', '85%', '95%'];
-  let files: string[] = [];
+  const totalCount = 11;
+  const step: number = duration / totalCount;
 
-  const extractOneFile = () => {
-    files.push(saveLocation + '/' + fileHash + `-${current + 1}.jpg`);
-    ffmpeg(pathToVideo)
-      .screenshots({
-        count: 1,
-        timemarks: [timestamps[current]],
-        filename: fileHash + `-${current + 1}.jpg`,
-        size: '?x' + screenSize
-      }, saveLocation)
-      .on('end', () => {
-        current++;
-        if (current < totalCount) {
-          extractOneFile();
-        } else if (current === totalCount) {
-          mergeImg(files, {direction: true})
-            .then((img) => {
-              // Save image as file
-              img.write(saveLocation + '/' + fileHash + '.jpg', () => {
-                somewhatLessDangerouslyDelete(files);
-              });
-            });
-          done();
-        }
-      })
-      .on('error', () => {
-        done();
-      });
-  }
-
-  extractOneFile();
-}
-
-export function somewhatLessDangerouslyDelete(files: string[]) {
-  for (let file of files) {
-    if (fs.existsSync(file)) {
-      fs.unlinkSync(file, (err) => {
-        // phff it's fine
-    });
-    }
-  }
+  var args = [
+  '-ss', step,
+  '-i', pathToVideo,
+  '-frames', 1,
+  '-vf', 'select=not(mod(n\\,' + step + ')),scale=300:-2,tile=1x10',
+  saveLocation + '/' + fileHash + '.jpg',
+  ];
+  const ffmpeg = spawn(ffmpegPath, args);
+  ffmpeg.on('exit', () => {
+    done();
+  });
 }
 
 // ------------------------ SUPER DANGEROUSLY DELETE

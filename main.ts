@@ -700,9 +700,12 @@ function extractAllScreenshots(
 
       const fileHash: string = theFinalArray[currentElement][3];
 
+      const duration: number = theFinalArray[currentElement][4];
+
       takeTenScreenshots(
         pathToVideo,
         fileHash,
+        duration,
         screenshotSize,
         screenshotFolder,
         extractTenCallback
