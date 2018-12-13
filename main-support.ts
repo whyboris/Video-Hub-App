@@ -237,7 +237,7 @@ export function takeTenScreenshots(
   '-ss', step,
   '-i', pathToVideo,
   '-frames', 1,
-  '-vf', 'select=not(mod(n\\,' + step + ')),scale=300:-2,tile=1x10',
+  '-vf', 'select=not(mod(n\\,' + step + ')),scale='+ screenSize +':-2,tile=1x10',
   saveLocation + '/' + fileHash + '.jpg',
   ];
   const ffmpeg = spawn(ffmpegPath, args);
