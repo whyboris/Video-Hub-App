@@ -29,7 +29,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
   @Input() title: string;
 
   hover: boolean;
-  currentlyShowing = 0;
+  currentlyShowing = 1;
   looper = true;
   noError = true;
 
@@ -58,7 +58,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
     if (this.randomImage) {
       this.showRandom();
     } else {
-      this.showThisOne(0);
+      this.showThisOne(1);
     }
   }
 
