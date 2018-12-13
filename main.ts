@@ -263,18 +263,19 @@ function openThisDamnFile(pathToVhaFile: string) {
       console.log(globals.selectedSourceFolder + ' - videos location');
       console.log(globals.selectedOutputFolder + ' - output location');
 
-      // resume extracting any missing thumbnails
-      const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
-
-      const indexesToScan: number[] = missingThumbsIndex(lastSavedFinalObject.images, screenshotOutputFolder);
-
-      extractAllScreenshots(
-        lastSavedFinalObject.images,
-        globals.selectedSourceFolder,
-        screenshotOutputFolder,
-        globals.screenShotSize,
-        indexesToScan
-      );
+      // TODO: Make this a setting toggle :)
+      // // resume extracting any missing thumbnails
+      // const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
+      //
+      // const indexesToScan: number[] = missingThumbsIndex(lastSavedFinalObject.images, screenshotOutputFolder);
+      //
+      // extractAllScreenshots(
+      //   lastSavedFinalObject.images,
+      //   globals.selectedSourceFolder,
+      //   screenshotOutputFolder,
+      //   globals.screenShotSize,
+      //   indexesToScan
+      // );
 
       globals.angularApp.sender.send(
         'finalObjectReturning',
