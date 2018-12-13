@@ -18,7 +18,7 @@ index   type      description                   more info
   2     string    file name cleaned
                   of dots, underscores,
                   and file extension       <--- for searching
-  3     string    imohash of the file      <--- used for detecting changed files and as a screenshot
+  3     string    hash of the file         <--- used for detecting changed files and as a screenshot
                                                 identifier
   4     number    duration                 <-- duration of film as number
   5     string    depicting size           <-- e.g. `720`, `1080`, `SD`, `HD`
