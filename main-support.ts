@@ -230,17 +230,28 @@ export function takeTenScreenshots(
     done();
   }
 
+  let current: number = 1;
   const totalCount = 11;
   const step: number = duration / totalCount;
+  var args = [];
+  let concat = "";
 
-  var args = [
-  '-ss', step,
-  '-i', pathToVideo,
-  '-frames', 1,
-  '-vf', 'select=not(mod(n\\,' + step + ')),scale='+ screenSize +':-2,tile=1x10',
-  saveLocation + '/' + fileHash + '.jpg',
-  ];
+  // make the magic filter
+  while (current < totalCount) {
+    let time = current * step;
+    args.push('-ss', time, '-i', pathToVideo);
+    concat += "[" + (current - 1) + ":v]";
+    current++;
+  }
+  args.push('-frames', 1, '-filter_complex', concat + "vstack=inputs=" + (totalCount - 1), saveLocation + '/' + fileHash + '.jpg');
+
   const ffmpeg = spawn(ffmpegPath, args);
+  ffmpeg.stdout.on('data', function (data) {
+    console.log(data);
+  });
+  ffmpeg.stderr.on('data', function (data) {
+    console.log('grep stderr: ' + data);
+  });
   ffmpeg.on('exit', () => {
     done();
   });
