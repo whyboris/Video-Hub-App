@@ -1,4 +1,4 @@
-import { FinalObject } from "app/components/common/final-object.interface";
+import { FinalObject } from "../app/components/common/final-object.interface";
 
 export let DemoContent: FinalObject = {
   'hubName': 'Cartoons',

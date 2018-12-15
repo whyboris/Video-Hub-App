@@ -27,7 +27,7 @@
 
   <img
     *ngIf="noError"
-    [src]="sanitizer.bypassSecurityTrustUrl(folderPath + '/' + imgId[currentlyShowing])"
+    [src]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + imgId[currentlyShowing])"
     [ngStyle]="{ height: imgHeight + 'px' }"
     class="screencap"
   >

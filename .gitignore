@@ -2,9 +2,16 @@
 
 # compiled output
 /dist
+/release
 /tmp
 /out-tsc
 /app-builds
+main.js
+main-filenames.js
+main-support.js
+main-globals.js
+src/**/*.js
+*.js.map
 
 # dependencies
 /node_modules

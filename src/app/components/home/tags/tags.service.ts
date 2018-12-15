@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { TagsSaveService } from './tags-save.service';
 
-import { ImageElement } from 'app/components/common/final-object.interface';
+import { ImageElement } from '../../../components/common/final-object.interface';
 
 export interface WordAndFreq {
   word: string;

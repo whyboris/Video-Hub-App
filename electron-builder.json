@@ -1,9 +1,24 @@
 {
   "productName": "Video Hub App",
   "directories": {
-    "app": "dist",
-    "output": "app-builds"
+    "output": "release/"
   },
+  "files": [
+    "**/*",
+    "!**/*.ts",
+    "!*.code-workspace",
+    "!LICENSE.md",
+    "!package.json",
+    "!package-lock.json",
+    "!src/",
+    "!e2e/",
+    "!hooks/",
+    "!angular.json",
+    "!_config.yml",
+    "!karma.conf.js",
+    "!tsconfig.json",
+    "!tslint.json"
+  ],
   "win": {
     "icon": "dist/favicon",
     "asar": true,
@@ -18,7 +33,7 @@
   "mac": {
     "category": "public.app-category.video",
     "target": "dmg",
-    "icon": "dist/favicon",
+    "icon": "src/assets/icons.icns",
     "asar": true,
     "asarUnpack": [
       "../node_modules/@ffmpeg-installer",
@@ -26,7 +41,7 @@
     ]
   },
   "linux": {
-    "icon": "dist",
+    "icon": "src/assets/icons.icns",
     "target": [
       "AppImage"
     ]

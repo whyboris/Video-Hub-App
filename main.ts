@@ -1,5 +1,6 @@
 import { app, BrowserWindow, screen } from 'electron';
 import * as path from 'path';
+import * as url from 'url';
 
 // ========================================================================================
 // ***************************** BUILD TOGGLE *********************************************
@@ -7,14 +8,12 @@ import * as path from 'path';
 const demo = false;
 // ========================================================================================
 
+
+process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
+
 let win, serve;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
-
-if (serve) {
-  require('electron-reload')(__dirname, {
-  });
-}
 
 // MY IMPORTANT IMPORT !!!!
 const dialog = require('electron').dialog;
@@ -22,6 +21,7 @@ const dialog = require('electron').dialog;
 let userWantedToOpen = null;
 let myWindow = null
 
+// TODO -- maybe clean up the `userWantedToOpen` with whatever pattern recommended by Electron
 // For windows -- when loading the app the first time
 if (process.argv[1]) {
   if (!serve) {
@@ -30,34 +30,32 @@ if (process.argv[1]) {
 }
 
 // OPEN FILE ON WINDOWS FROM FILE DOUBLE CLICK
-const isSecondInstance = app.makeSingleInstance((commandLine, workingDirectory) => {
+const gotTheLock = app.requestSingleInstanceLock()
 
-  // dialog.showMessageBox({
-  //   message: 'hello \n' +
-  //   commandLine[0] + ' \n' +
-  //   commandLine[1] + ' \n' +
-  //   workingDirectory + ' !!! ',
-  //   buttons: ['OK']
-  // });
+if (!gotTheLock) {
+  app.quit()
+} else {
 
-  if (commandLine[1]) {
-    userWantedToOpen = commandLine[1];
-    openThisDamnFile(commandLine[1]);
-  }
+  app.on('second-instance', (event, argv: string[], workingDirectory) => {
 
-  // Someone tried to run a second instance, we should focus our window.
-  if (myWindow) {
-    if (myWindow.isMinimized()) {
-      myWindow.restore();
+    // dialog.showMessageBox({
+    //   message: 'second-instance: \n' + argv[0] + ' \n' + argv[1],
+    //   buttons: ['OK']
+    // });
+
+    if (argv[1]) {
+      userWantedToOpen = argv[1];
+      openThisDamnFile(argv[1]);
     }
-    myWindow.focus();
-  }
-});
 
-if (isSecondInstance) {
-  // quit the second instance
-  app.exit();
-  // app.quit();
+    // Someone tried to run a second instance, we should focus our window.
+    if (myWindow) {
+      if (myWindow.isMinimized()) {
+        myWindow.restore();
+      }
+      myWindow.focus();
+    }
+  });
 }
 
 function createWindow() {
@@ -94,6 +92,10 @@ function createWindow() {
 
   // Create the browser window.
   win = new BrowserWindow({
+    // allow files from hard disk to show up
+    webPreferences: {
+      webSecurity: false
+    },
     x: xPos,
     y: yPos,
     width: appWidth,
@@ -103,19 +105,26 @@ function createWindow() {
     // height: 600,
     minWidth: 420,
     minHeight: 250,
-    icon: path.join(__dirname, 'assets/icons/png/64x64.png'),
+    icon: path.join(__dirname, 'src/assets/icons/png/64x64.png'),
     // removes the frame from the window completely !!!
     frame: false
   });
 
   myWindow = win;
 
-  // and load the index.html of the app.
-  win.loadURL('file://' + __dirname + '/index.html');
-
   // Open the DevTools.
   if (serve) {
+    require('electron-reload')(__dirname, {
+      electron: require(`${__dirname}/node_modules/electron`)
+    });
+    win.loadURL('http://localhost:4200');
     win.webContents.openDevTools();
+  } else {
+    win.loadURL(url.format({
+      pathname: path.join(__dirname, 'dist/index.html'),
+      protocol: 'file:',
+      slashes: true
+    }));
   }
 
   // Emitted when the window is closed.
@@ -307,8 +316,8 @@ ipc.on('openInExplorer', function(event, fullPath: string) {
 /**
  * Open a URL in system's default browser
  */
-ipc.on('pleaseOpenUrl', function(event, url: string): void {
-  shell.openExternal(url, { activate: true }, (): void => {});
+ipc.on('pleaseOpenUrl', function(event, urlToOpen: string): void {
+  shell.openExternal(urlToOpen, { activate: true }, (): void => {});
 });
 
 /**
@@ -568,7 +577,7 @@ ipc.on('try-to-rename-this-file', function(event, sourceFolder: string, relPath:
   if (fs.existsSync(newName)) {
     console.log('some file already EXISTS WITH THAT NAME !!!');
     success = false;
-    errMsg = "A file existst with this filename";
+    errMsg = 'A file existst with this filename';
   } else {
     try {
       fs.renameSync(original, newName);
@@ -578,9 +587,9 @@ ipc.on('try-to-rename-this-file', function(event, sourceFolder: string, relPath:
       if (err.code === 'ENOENT') {
         // const pathObj = path.parse(err.path);
         // console.log(pathObj);
-        errMsg = "Original file could not be found";
+        errMsg = 'Original file could not be found';
       } else {
-        errMsg = "Some error occurred";
+        errMsg = 'Some error occurred';
       }
     }
   }

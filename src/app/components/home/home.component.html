@@ -11,7 +11,7 @@
           'text-align': macVersion ? 'center' : 'left'
         }"
     >
-      <img width="16px" height="16px" class="top-logo" src="../../../assets/logo.png">
+      <img width="16px" height="16px" class="top-logo" src="./assets/logo.png">
       <span class="heading-title">
         Video Hub App
         <b>{{ demo ? ' demo - limited to 50 video files ' : '' }}</b>
@@ -310,7 +310,7 @@
 
     <div class="app-version">
       <span>v{{ versionNumber }} {{ demo ? ' DEMO - limited to 50 video files' : '' }}</span>
-      <img width="30px" height="30px" src="../../../assets/logo.png">
+      <img width="30px" height="30px" src="./assets/logo.png">
     </div>
 
   </div> <!-- END OF SETTINGS MODAL -->
@@ -717,7 +717,7 @@
             class="icon icon-close clear-history-item"
             title="Remove this item from recent history"
           ></span>
-          <img class="history-icon" src="../../../assets/logo.png">
+          <img class="history-icon" src="./assets/logo.png">
           <span class="history-name">{{ historyItem.hubName }}</span>
           <br>
           <span class="path recent" [innerHtml]="historyItem.vhaFilePath | folderArrowsPipe : false"></span>
