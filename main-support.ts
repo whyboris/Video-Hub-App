@@ -89,6 +89,11 @@ export function countFoldersInFinalArray(imagesArray: ImageElement[]): number {
  * @param done          -- function to execute when done writing the file
  */
 export function writeVhaFileDangerously(finalObject: FinalObject, pathToTheFile: string, done): void {
+  // check for relative paths
+  if (finalObject.inputDir === path.parse(pathToTheFile).dir) {
+    finalObject.inputDir = "";
+  }
+
   const json = JSON.stringify(finalObject);
   // write the file
   fs.writeFile(pathToTheFile, json, 'utf8', done);
