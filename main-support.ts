@@ -231,33 +231,36 @@ export function takeTenScreenshots(
 ) {
 
   if (fs.existsSync(saveLocation + '/' + fileHash + '.jpg')) {
-    //console.log("thumbnails for " + fileHash + " already exist");
+    // console.log("thumbnails for " + fileHash + " already exist");
     done();
   }
 
   let current: number = 1;
   const totalCount = 11;
   const step: number = duration / totalCount;
-  var args = [];
-  let concat = "";
+  const args = [];
+  let concat = '';
 
   // make the magic filter
   while (current < totalCount) {
-    let time = current * step;
+    const time = current * step;
     args.push('-ss', time, '-i', pathToVideo);
-    concat += "[" + (current - 1) + ":v]";
+    concat += '[' + (current - 1) + ':v]';
     current++;
   }
-  args.push('-frames', 1, '-filter_complex', concat + "vstack=inputs=" + (totalCount - 1), saveLocation + '/' + fileHash + '.jpg');
+  args.push('-frames', 1,
+    '-filter_complex', concat + 'vstack=inputs=' + (totalCount - 1),
+    saveLocation + '/' + fileHash + '.jpg'
+  );
 
-  const ffmpeg = spawn(ffmpegPath, args);
-  ffmpeg.stdout.on('data', function (data) {
-    console.log(data);
-  });
-  ffmpeg.stderr.on('data', function (data) {
-    console.log('grep stderr: ' + data);
-  });
-  ffmpeg.on('exit', () => {
+  const ffmpeg_process = spawn(ffmpegPath, args);
+  // ffmpeg_process.stdout.on('data', function (data) {
+  //   console.log(data);
+  // });
+  // ffmpeg_process.stderr.on('data', function (data) {
+  //   console.log('grep stderr: ' + data);
+  // });
+  ffmpeg_process.on('exit', () => {
     done();
   });
 }
