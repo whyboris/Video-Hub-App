@@ -6,12 +6,12 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class FileSizePipe implements PipeTransform {
 
   /**
-   * Return size of file formatted as XXXmb
-   * @param numOfMb
+   * Return size of file formatted as XXX{mb,gb}
+   * @param sizeInBytes -- file size in bytes
    */
-  transform(numOfMb: number): string {
-    if (numOfMb) {
-      const rounded = Math.round(numOfMb);
+  transform(sizeInBytes: number): string {
+    if (sizeInBytes) {
+      const rounded = Math.round(sizeInBytes / 1000000.00);
       return '(' + (rounded > 999 ? Math.round(rounded / 100) / 10 + 'gb' : rounded + 'mb') + ')';
     } else {
       return '';

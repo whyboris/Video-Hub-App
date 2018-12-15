@@ -207,13 +207,13 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 import {
   alphabetizeFinalArray,
   countFoldersInFinalArray,
+  missingThumbsIndex,
   everyIndex,
   extractAllMetadata,
   finalArrayWithoutDeleted,
   findAllNewFiles,
   getVideoPathsAndNames,
   numberOfVidsIn,
-  onlyNewIndexes,
   sendCurrentProgress,
   takeTenScreenshots,
   updateFinalArrayWithHD,
@@ -263,6 +263,20 @@ function openThisDamnFile(pathToVhaFile: string) {
       console.log(globals.selectedSourceFolder + ' - videos location');
       console.log(globals.selectedOutputFolder + ' - output location');
 
+      // TODO: Make this a setting toggle :)
+      // // resume extracting any missing thumbnails
+      // const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
+      //
+      // const indexesToScan: number[] = missingThumbsIndex(lastSavedFinalObject.images, screenshotOutputFolder);
+      //
+      // extractAllScreenshots(
+      //   lastSavedFinalObject.images,
+      //   globals.selectedSourceFolder,
+      //   screenshotOutputFolder,
+      //   globals.screenShotSize,
+      //   indexesToScan
+      // );
+
       globals.angularApp.sender.send(
         'finalObjectReturning',
         JSON.parse(data),
@@ -275,7 +289,6 @@ function openThisDamnFile(pathToVhaFile: string) {
 
 function setGlobalsFromVhaFile(vhaFileContents: FinalObject) {
   globals.hubName = vhaFileContents.hubName,
-  globals.lastJpgNumber = vhaFileContents.lastScreen;
   globals.screenShotSize = vhaFileContents.ssSize;
   globals.selectedSourceFolder = vhaFileContents.inputDir;
 }
@@ -470,8 +483,6 @@ ipc.on('start-the-import', function (event, options: ImportSettingsObject) {
       videoFilesWithPaths,
       globals.selectedSourceFolder,
       0,
-      0,                          // indicates it's the first time scanning
-      videoFilesWithPaths.length, // indicate the `lastScreen` in `finalObject` in `vha` file
       sendFinalResultHome         // callback for when metdata is done extracting
     );
 
@@ -500,7 +511,6 @@ function reScanDirectory(angularFinalArray: ImageElement[], currentVideoFolder: 
       angularFinalArray,
       videosOnHD,
       currentVideoFolder,
-      globals.lastJpgNumber,
       folderToDeleteFrom,
       sendFinalResultHome           // callback for when `extractAllMetadata` is called
     );
@@ -605,13 +615,9 @@ ipc.on('try-to-rename-this-file', function(event, sourceFolder: string, relPath:
  * Writes the vha file and sends contents back to Angular App
  * Starts the process to extract all the images
  * @param theFinalArray -- `finalArray` with all the metadata filled in
- * @param lastJpgNumber -- the last jpg number
- * @param jpgStartIndex -- if this is a re-scan, scan all above this number
  */
 function sendFinalResultHome(
-  theFinalArray: ImageElement[],
-  lastJpgNumber: number,
-  jpgStartIndex: number
+  theFinalArray: ImageElement[]
 ): void {
 
   const myFinalArray: ImageElement[] = alphabetizeFinalArray(theFinalArray);
@@ -621,7 +627,6 @@ function sendFinalResultHome(
     inputDir: globals.selectedSourceFolder,
     numOfFolders: countFoldersInFinalArray(myFinalArray),
     ssSize: globals.screenShotSize,
-    lastScreen: lastJpgNumber,
     images: myFinalArray,
   };
 
@@ -644,9 +649,7 @@ function sendFinalResultHome(
 
     const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
 
-    const indexesToScan: number[] = jpgStartIndex === 0 ?
-                                        everyIndex(myFinalArray)
-                                      : onlyNewIndexes(myFinalArray, jpgStartIndex);
+    const indexesToScan: number[] = missingThumbsIndex(myFinalArray, screenshotOutputFolder);
 
     extractAllScreenshots(
       myFinalArray,
@@ -696,11 +699,14 @@ function extractAllScreenshots(
                                              theFinalArray[currentElement][0],
                                              theFinalArray[currentElement][1]));
 
-      const jpgFileNum: number = theFinalArray[currentElement][3];
+      const fileHash: string = theFinalArray[currentElement][3];
+
+      const duration: number = theFinalArray[currentElement][4];
 
       takeTenScreenshots(
         pathToVideo,
-        jpgFileNum,
+        fileHash,
+        duration,
         screenshotSize,
         screenshotFolder,
         extractTenCallback

@@ -9,7 +9,7 @@
 
 <div
   class="video-box"
-  [ngStyle]="{ height: imgHeight + 'px'}"
+  [ngStyle]="{ height: imgHeight + 'px' }"
 >
 
   <span *ngIf="showMeta" class="time" @metaAppear>{{ time | lengthPipe }}</span>
@@ -17,7 +17,7 @@
 
   <div *ngIf="hoverScrub && hover && noError">
     <div
-      *ngFor="let item of imgId; let i = index"
+      *ngFor="let item of [0,1,2,3,4,5,6,7,8,9]; let i = index"
       (mouseover)="showThisOne(i)"
       [ngStyle]="{'left': 10 * i + '%' }"
       class="hoverable"
@@ -27,8 +27,8 @@
 
   <img
     *ngIf="noError"
-    [src]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + imgId[currentlyShowing])"
-    [ngStyle]="{ height: imgHeight + 'px' }"
+    [src]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + imgId)"
+    [ngStyle]="{ 'height': imgHeight * 10 + 'px', 'margin-top': -currentlyShowing * imgHeight + 'px' }"
     class="screencap"
   >
 

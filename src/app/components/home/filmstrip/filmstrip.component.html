@@ -1,7 +1,6 @@
 <div
   class="meta-container"
   [ngStyle]="{ height: elHeight + 'px'}"
-  @galleryItemAppear
 >
 
   <div
@@ -9,12 +8,12 @@
     [ngStyle]="{ height: imgHeight + 'px'}"
   >
 
-    <span *ngIf="showMeta" class="time" @metaAppear>{{ time | lengthPipe }}</span>
-    <span *ngIf="showMeta" class="rez" @metaAppear>{{ rez }}</span>
+    <span *ngIf="showMeta" class="time" >{{ time | lengthPipe }}</span>
+    <span *ngIf="showMeta" class="rez" >{{ rez }}</span>
 
     <ng-container *ngIf="hoverScrub && hover && noError">
       <div
-        *ngFor="let item of imgId; let i = index"
+        *ngFor="let item of indexArray; let i = index"
         (mouseover)="showThisOne(i)"
         [ngStyle]="{'left': 10 * i + '%' }"
         class="hoverable"
@@ -24,13 +23,14 @@
 
     <ng-container *ngIf="noError">
       <img
-        *ngFor="let item of imgId; let i = index"
+        *ngFor="let item of indexArray; let i = index"
         [ngStyle]="{
             'right': 'calc(' + (9 - i) + ' * (100% - ' + imgWidth + 'px)/9)',
             'z-index': indexArray[i],
-            'height': imgHeight + 'px'
+            'height': imgHeight * 10 + 'px',
+            'margin-top': -i * imgHeight + 'px'
           }"
-        [src]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + imgId[i])"
+        [src]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + imgId)"
         class="screencap"
       >
     </ng-container>
@@ -42,7 +42,6 @@
     [ngClass]="{ 'larger-font': largerFont }"
     [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
     class="title"
-    @textAppear
   >
     {{ title }}
     <div class="fileSize" *ngIf="showMeta">

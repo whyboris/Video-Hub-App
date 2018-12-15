@@ -1,11 +1,24 @@
 import * as path from 'path';
 
 const fs = require('fs');
+const hasher = require('crypto').createHash;
 
 import { FinalObject, ImageElement } from './src/app/components/common/final-object.interface';
 import { acceptableFiles } from './main-filenames';
 
 import { globals } from './main-globals';
+
+/**
+ * Hash a given file using it's file name and size
+ * md5(file.name + file.size)
+ * @param fileName  -- file name to hash
+ * @param fileSize  -- file size to hash
+ */
+export function hashFile(fileName: string, fileSize: number): string {
+  // make the magic happen!
+  const hash = hasher('md5').update(fileName + fileSize.toString()).digest('hex');
+  return hash;
+}
 
 /**
  * Label the video according to these rules
@@ -133,7 +146,7 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
             // before adding, remove the redundant prefix: sourceFolderPath
             const partialPath = dir.replace(sourceFolderPath, '');
             // fil finalArray with 3 correct and 5 dummy pieces of data
-            finalArray[elementIndex] = [partialPath, file, cleanUpFileName(file), elementIndex, 0, '', 0, 0];
+            finalArray[elementIndex] = [partialPath, file, cleanUpFileName(file), '', 0, '', 0, 0];
             elementIndex++;
           }
         }
@@ -191,50 +204,57 @@ const ffmpeg = require('fluent-ffmpeg');
 ffmpeg.setFfprobePath(ffprobePath);
 ffmpeg.setFfmpegPath(ffmpegPath);
 
+const spawn = require('child_process').spawn;
+
 /**
  * Take 10 screenshots of a particular file
  * at particular file size
  * save as particular fileNumber
  * @param pathToVideo  -- full path to the video file
- * @param fileNumber   -- used to number the jpg file, eg 3 => 3-0.jpg, 3-1.jpg, 3-2.jpg, etc
+ * @param fileHash     -- hash of the video file
  * @param screensize   -- resolution in pixels (defaul is 100)
  * @param saveLocation -- folder where to save jpg files
  * @param done         -- callback when done
  */
 export function takeTenScreenshots(
   pathToVideo: string,
-  fileNumber: number,
+  fileHash: string,
+  duration: number,
   screenSize: number,
   saveLocation: string,
   done: any
 ) {
 
-  let current: number = 0;
-  const totalCount = 10;
-  const timestamps = ['5%', '15%', '25%', '35%', '45%', '55%', '65%', '75%', '85%', '95%'];
-
-  const extractOneFile = () => {
-    ffmpeg(pathToVideo)
-      .screenshots({
-        count: 1,
-        timemarks: [timestamps[current]],
-        filename: fileNumber + `-${current + 1}.jpg`,
-        size: '?x' + screenSize
-      }, saveLocation)
-      .on('end', () => {
-        current++;
-        if (current < totalCount) {
-          extractOneFile();
-        } else if (current === totalCount) {
-          done();
-        }
-      })
-      .on('error', () => {
-        done();
-      });
+  if (fs.existsSync(saveLocation + '/' + fileHash + '.jpg')) {
+    //console.log("thumbnails for " + fileHash + " already exist");
+    done();
   }
 
-  extractOneFile();
+  let current: number = 1;
+  const totalCount = 11;
+  const step: number = duration / totalCount;
+  var args = [];
+  let concat = "";
+
+  // make the magic filter
+  while (current < totalCount) {
+    let time = current * step;
+    args.push('-ss', time, '-i', pathToVideo);
+    concat += "[" + (current - 1) + ":v]";
+    current++;
+  }
+  args.push('-frames', 1, '-filter_complex', concat + "vstack=inputs=" + (totalCount - 1), saveLocation + '/' + fileHash + '.jpg');
+
+  const ffmpeg = spawn(ffmpegPath, args);
+  ffmpeg.stdout.on('data', function (data) {
+    console.log(data);
+  });
+  ffmpeg.stderr.on('data', function (data) {
+    console.log('grep stderr: ' + data);
+  });
+  ffmpeg.on('exit', () => {
+    done();
+  });
 }
 
 // ------------------------ SUPER DANGEROUSLY DELETE
@@ -264,6 +284,28 @@ export function superDangerousDelete(imageLocation: string, numberOfImage: numbe
 
 // GENERATE INDEXES FOR ARRAY
 
+export function hasAllThumbs(fileHash: string, screenshotFolder: string) : boolean {
+  // Check in reverse order for efficiency
+  return fs.existsSync(screenshotFolder + '/' + fileHash + '-first.jpg')
+         && fs.existsSync(screenshotFolder + '/' + fileHash + '.mp4')
+         && fs.existsSync(screenshotFolder + '/' + fileHash + '.jpg');
+}
+
+/**
+ * Generate indexes for any files missing thumbnails
+ */
+export function missingThumbsIndex(fullArray: ImageElement[], screenshotFolder: string): number[] {
+  const indexes: number[] = [];
+  const total: number = fullArray.length;
+  for (let i = 0; i < total; i++) {
+    if (!hasAllThumbs(fullArray[i][3], screenshotFolder)) {
+      indexes.push(i);
+    }
+  }
+
+  return indexes;
+}
+
 /**
  * Generate indexes for each element in finalArray, e.g.
  * [0, 1, 2, 3, ..., n] where n = finalArray.length
@@ -274,23 +316,6 @@ export function everyIndex(fullArray: ImageElement[]): number[] {
   for (let i = 0; i < total; i++) {
     indexes.push(i);
   }
-
-  return indexes;
-}
-
-/**
- * Figure out indexes in finalArray of elements whose screenshot needs to be taken
- * We know that when finalArray[n][3] > lastScreenshot
- */
-export function onlyNewIndexes(fullArray: ImageElement[], minIndex: number) {
-  const indexes: number[] = [];
-  const total: number = fullArray.length;
-
-  fullArray.forEach((element, index) => {
-    if (element[3] > minIndex) {
-      indexes.push(index);
-    }
-  });
 
   return indexes;
 }
@@ -306,11 +331,9 @@ export function findAllNewFiles(
   angularFinalArray: ImageElement[],
   hdFinalArray: ImageElement[],
   inputFolder: string,
-  lastScreen: number
 ): ImageElement[] {
 
   const theDiff: ImageElement[] = [];
-  let jpgFileNumber: number = lastScreen;
 
   hdFinalArray.forEach((newElement) => {
     let matchFound = false;
@@ -322,8 +345,6 @@ export function findAllNewFiles(
     });
 
     if (!matchFound) { // means new element !!!
-      jpgFileNumber++;
-      newElement[3] = jpgFileNumber;  // FILL IN THE INDEX !!! correctly !!!
       theDiff.push(newElement);
     }
   });
@@ -359,7 +380,7 @@ export function finalArrayWithoutDeleted(
     if (matchFound) {
       return true;
     } else {
-      superDangerousDelete(folderWhereImagesAre, value[3]);
+      //superDangerousDelete(folderWhereImagesAre, value[3]);
       return false;
     }
   });
@@ -377,16 +398,12 @@ export function finalArrayWithoutDeleted(
  * @param videoFolderPath -- the full path to the base folder for video files
  * @param metaStartIndex  -- the starting point in finalArray from where to extract metadata
  *                           (should be 0 when first scan, should be index of first element when rescan)
- * @param jpgRescanStartIndex -- passed on to `sendFinalResultHome`
- * @param lastJpgNumber   -- the last jpg number
  * @param done            -- callback when done with all metadata extraction
  */
 export function extractAllMetadata(
   theFinalArray: ImageElement[],
   videoFolderPath: string,
   metaStartIndex: number,
-  jpgRescanStartIndex: number,
-  lastJpgNumber: number,
   done: any
 ): void {
 
@@ -418,7 +435,7 @@ export function extractAllMetadata(
 
     } else {
 
-      done(elementsWithMetadata, lastJpgNumber, jpgRescanStartIndex);
+      done(elementsWithMetadata);
 
     }
   }
@@ -441,20 +458,17 @@ function extractMetadataForThisONEFile(
     if (err) {
       extractMetaCallback(imageElement);
     } else {
-      const duration = Math.round(metadata.streams[0].duration) || 0;
+      const duration = Math.round(metadata.format.duration) || 0;
       const origWidth = metadata.streams[0].width;
       const origHeight = metadata.streams[0].height;
       const sizeLabel = labelVideo(origWidth, origHeight);
       const width = Math.round(100 * origWidth / origHeight) || 169;
+      const fileSize = metadata.format.size;
+      imageElement[3] = hashFile(imageElement[1], fileSize);
       imageElement[4] = duration;  // 4th item is duration
       imageElement[5] = sizeLabel; // 5th item is the label, e.g. 'HD'
       imageElement[6] = width;     // 6th item is width of screenshot in px (e.g. 150);
-
-      // extract the file size
-      const stats = fs.statSync(filePath);
-      const fileSizeInBytes = stats.size;
-      const fileSizeInMegabytes = Math.round(fileSizeInBytes / 1000000.0);
-      imageElement[7] = fileSizeInMegabytes;  // 7th item is size in megabytes
+      imageElement[7] = fileSize;  // 7th item is file size
 
       extractMetaCallback(imageElement);
     }
@@ -473,7 +487,6 @@ function extractMetadataForThisONEFile(
  * @param angularFinalArray  -- array of ImageElements from Angular - most current view
  * @param hdFinalArray       -- array of ImageElements from current hard drive scan
  * @param inputFolder        -- the input folder (where videos are)
- * @param lastJpgNumber      -- gets saved as `lastScreen` in `vha` file
  * @param folderToDeleteFrom -- path to folder where `.jpg` files are
  * @param extractMetadataCallback -- function for extractAllMetadata to call when done
  */
@@ -481,14 +494,13 @@ export function updateFinalArrayWithHD(
   angularFinalArray: ImageElement[],
   hdFinalArray: ImageElement[],
   inputFolder: string,
-  lastJpgNumber: number,
   folderToDeleteFrom: string,
   extractMetadataCallback
 ): void {
 
   // Generate ImageElement[] of all the new elements to be added
   const onlyNewElements: ImageElement[] =
-    findAllNewFiles(angularFinalArray, hdFinalArray, inputFolder, lastJpgNumber);
+    findAllNewFiles(angularFinalArray, hdFinalArray, inputFolder);
 
   // remove from FinalArray all files that are no longer in the video folder
   const allDeletedRemoved: ImageElement[] =
@@ -499,14 +511,11 @@ export function updateFinalArrayWithHD(
 
     const metaRescanStartIndex = allDeletedRemoved.length;
     const finalArrayUpdated = allDeletedRemoved.concat(onlyNewElements);
-    const lastJpgNumberUpdated = lastJpgNumber + onlyNewElements.length; // update last screen!!!
 
     extractAllMetadata(
       finalArrayUpdated,
       inputFolder,
       metaRescanStartIndex,
-      lastJpgNumber,
-      lastJpgNumberUpdated,
       extractMetadataCallback // actually = sendFinalResultHome
     );
 
