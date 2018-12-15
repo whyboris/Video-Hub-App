@@ -112,9 +112,6 @@ function createWindow() {
 
   myWindow = win;
 
-  // and load the index.html of the app.
-  win.loadURL('file://' + __dirname + '/index.html');
-
   // Open the DevTools.
   if (serve) {
     require('electron-reload')(__dirname, {

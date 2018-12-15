@@ -30,7 +30,7 @@
             'z-index': indexArray[i],
             'height': imgHeight + 'px'
           }"
-        [src]="sanitizer.bypassSecurityTrustUrl(folderPath + '/' + imgId[i])"
+        [src]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + imgId[i])"
         class="screencap"
       >
     </ng-container>
