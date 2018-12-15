@@ -458,7 +458,7 @@ function extractMetadataForThisONEFile(
     if (err) {
       extractMetaCallback(imageElement);
     } else {
-      const duration = Math.round(metadata.streams[0].duration) || 0;
+      const duration = Math.round(metadata.format.duration) || 0;
       const origWidth = metadata.streams[0].width;
       const origHeight = metadata.streams[0].height;
       const sizeLabel = labelVideo(origWidth, origHeight);
