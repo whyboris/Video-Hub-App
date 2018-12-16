@@ -174,6 +174,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   progressString = '';
 
+  // RENAMING FUNCTIONALITY
+
+  currentRightClickedItem: any; // element from FinalArray
+  renamingNow: boolean = false;
+
+  clickedOnFile: boolean; // whether right-clicked on file or gallery background
+
+  rightClickPosition: any = { x: 0, y: 0 };
+
+  nodeRenamingFile: boolean = false;
+  renameErrMsg: string = '';
+
   // Listen for key presses
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -437,8 +449,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     // this is required, otherwise when user drops the file, it opens as plaintext
     document.ondragover = document.ondrop = (ev) => {
-      ev.preventDefault()
-    }
+      ev.preventDefault();
+    };
     document.body.ondrop = (ev) => {
       if (ev.dataTransfer.files.length > 0) {
         const fullPath = ev.dataTransfer.files[0].path;
@@ -449,7 +461,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           );
         }
       }
-    }
+    };
   }
 
   /**
@@ -461,7 +473,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     clearTimeout(this.myTimeout);
     this.myTimeout = setTimeout(() => {
       // console.log('Virtual scroll refreshed');
-      this.virtualScroll.refresh()
+      this.virtualScroll.refresh();
     }, delay);
   }
 
@@ -518,7 +530,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       exportFolderPath: this.wizard.selectedOutputFolder,
       imgHeight: this.screenshotSizeForImport,
       hubName: (this.futureHubName || 'untitled')
-    }
+    };
     this.electronService.ipcRenderer.send('start-the-import', importOptions);
   }
 
@@ -666,7 +678,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       vhaFilePath: pathToVhaFile,
       videoFolderPath: pathToVideos,
       hubName: (hubName || 'untitled')
-    }
+    };
 
     let matchFound = false;
 
@@ -1001,7 +1013,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.settingsButtonsGroups.forEach(element => {
       element.forEach(key => {
         objectKeys.push(key);
-      })
+      });
     });
 
     // console.log(objectKeys);
@@ -1056,16 +1068,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   clearLev(): void {
     this.showSimilar = false;
   }
-
-  currentRightClickedItem: any; // element from FinalArray
-  renamingNow: boolean = false;
-
-  clickedOnFile: boolean; // whether right-clicked on file or gallery background
-
-  rightClickPosition: any = { x: 0, y: 0 };
-
-  nodeRenamingFile: boolean = false;
-  renameErrMsg: string = '';
 
   /**
    * Handle right-click and `Show similar`

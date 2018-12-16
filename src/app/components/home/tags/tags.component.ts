@@ -97,7 +97,7 @@ export class TagsComponent implements OnDestroy {
       this.currentAdding = '';
 
     } else {
-      this.showStatusMessage('tag already exists')
+      this.showStatusMessage('tag already exists');
     }
   }
 

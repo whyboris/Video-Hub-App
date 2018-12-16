@@ -21,7 +21,7 @@ import { DonutComponent } from './components/donut/donut.component';
 import { FileComponent } from './components/home/file/file.component';
 import { FilmstripComponent } from './components/home/filmstrip/filmstrip.component';
 import { PreviewComponent } from './components/home/thumbnail/preview.component';
-import { ResFilter } from './components/home/resfilter/resfilter.component';
+import { ResFilterComponent } from './components/home/resfilter/resfilter.component';
 import { SimilarityService } from './components/pipes/similarity.service';
 import { TagsComponent } from './components/home/tags/tags.component';
 import { TopComponent } from './components/home/top/top.component';
@@ -61,7 +61,7 @@ import { AppRoutingModule } from './app-routing.module';
     MagicSearchPipe,
     PreviewComponent,
     RandomizePipe,
-    ResFilter,
+    ResFilterComponent,
     ResolutionFilterPipe,
     TagFilterPipe,
     TagMatchPipe,
