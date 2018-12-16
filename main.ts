@@ -213,6 +213,7 @@ import {
   numberOfVidsIn,
   sendCurrentProgress,
   takeTenScreenshots,
+  takeTenClips,
   updateFinalArrayWithHD,
   writeVhaFileDangerously
 } from './main-support';

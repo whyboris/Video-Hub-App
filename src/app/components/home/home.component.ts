@@ -237,6 +237,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.toggleButton('showFilmstrip');
       } else if (event.key === '3') {
         this.toggleButton('showFiles');
+      } else if (event.key === '4') {
+        this.toggleButton('showClips');
       } else if (event.key === 'h') {
         this.toggleButton('hideTop');
         this.toggleButton('hideSidebar');
@@ -774,6 +776,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.settingsButtons['showThumbnails'].toggled = true;
       this.settingsButtons['showFilmstrip'].toggled = false;
       this.settingsButtons['showFiles'].toggled = false;
+      this.settingsButtons['showClips'].toggled = false;
       this.appState.currentView = 'thumbs';
       this.computeTextBufferAmount();
       this.scrollToTop();
@@ -781,6 +784,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.settingsButtons['showThumbnails'].toggled = false;
       this.settingsButtons['showFilmstrip'].toggled = true;
       this.settingsButtons['showFiles'].toggled = false;
+      this.settingsButtons['showClips'].toggled = false;
       this.appState.currentView = 'filmstrip';
       this.computeTextBufferAmount();
       this.scrollToTop();
@@ -788,7 +792,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.settingsButtons['showThumbnails'].toggled = false;
       this.settingsButtons['showFilmstrip'].toggled = false;
       this.settingsButtons['showFiles'].toggled = true;
+      this.settingsButtons['showClips'].toggled = false;
       this.appState.currentView = 'files';
+      this.computeTextBufferAmount();
+      this.scrollToTop();
+    } else if (uniqueKey === 'showClips') {
+      this.settingsButtons['showThumbnails'].toggled = false;
+      this.settingsButtons['showFilmstrip'].toggled = false;
+      this.settingsButtons['showFiles'].toggled = false;
+      this.settingsButtons['showClips'].toggled = true;
+      this.appState.currentView = 'clips';
       this.computeTextBufferAmount();
       this.scrollToTop();
     } else if (uniqueKey === 'makeSmaller') {
@@ -916,6 +929,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     } else if (this.appState.currentView === 'files') {
       this.textPaddingHeight = 20;
+    } else if (this.appState.currentView === 'clips') {
+      if (this.settingsButtons.showMoreInfo.toggled) {
+        this.textPaddingHeight = 55;
+      } else {
+        this.textPaddingHeight = 20;
+      }
     }
     // console.log('textPaddingHeight = ' + this.textPaddingHeight);
   }

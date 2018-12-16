@@ -233,8 +233,14 @@ export function takeTenScreenshots(
 ) {
 
   if (fs.existsSync(saveLocation + '/' + fileHash + '.jpg')) {
-    // console.log("thumbnails for " + fileHash + " already exist");
-    done();
+    //console.log("thumbnails for " + fileHash + " already exist");
+    takeTenClips(pathToVideo,
+                 fileHash,
+                 duration,
+                 screenSize,
+                 saveLocation,
+                 done);
+    return;
   }
 
   let current: number = 1;
@@ -263,6 +269,87 @@ export function takeTenScreenshots(
   //   console.log('grep stderr: ' + data);
   // });
   ffmpeg_process.on('exit', () => {
+    takeTenClips(pathToVideo,
+                 fileHash,
+                 duration,
+                 screenSize,
+                 saveLocation,
+                 done);
+  });
+}
+
+/**
+ * Take 10 screenshots of a particular file
+ * at particular file size
+ * save as particular fileNumber
+ * @param pathToVideo  -- full path to the video file
+ * @param fileHash     -- hash of the video file
+ * @param screensize   -- resolution in pixels (defaul is 100)
+ * @param saveLocation -- folder where to save jpg files
+ * @param done         -- callback when done
+ */
+export function takeTenClips(
+  pathToVideo: string,
+  fileHash: string,
+  duration: number,
+  screenSize: number,
+  saveLocation: string,
+  done: any
+) {
+
+  if (fs.existsSync(saveLocation + '/' + fileHash + '.mp4')) {
+    //console.log("thumbnails for " + fileHash + " already exist");
+    extractFirstFrame(saveLocation, fileHash, done);
+    return;
+  }
+
+  let current: number = 1;
+  const totalCount = 10;
+  const step: number = duration / totalCount;
+  var args = [];
+  let concat = "";
+
+  // make the magic filter
+  while (current < totalCount) {
+    let time = current * step;
+    let duration = 1; // TODO: Make this customisable
+    args.push('-ss', time, '-t', duration, '-i', pathToVideo);
+    concat += "[" + (current - 1) + "]";
+    current++;
+  }
+  concat += "concat=n=" + (totalCount - 1) + ":v=1:a=1";
+  args.push('-filter_complex', concat, saveLocation + '/' + fileHash + '.mp4');
+  // phfff glad that's over
+
+  // now make it all worth it!
+  const ffmpeg = spawn(ffmpegPath, args);
+  ffmpeg.stdout.on('data', function (data) {
+    console.log(data);
+  });
+  ffmpeg.stderr.on('data', function (data) {
+    console.log('grep stderr: ' + data);
+  });
+  ffmpeg.on('exit', () => {
+    extractFirstFrame(saveLocation, fileHash, done);
+  });
+}
+
+export function extractFirstFrame(saveLocation: string, fileHash: string, done: any) {
+  if (fs.existsSync(saveLocation + '/' + fileHash + '-first.jpg')) {
+    done();
+    return;
+  }
+
+  var args = [
+  '-ss', 0,
+  '-i', saveLocation + '/' + fileHash + '.mp4',
+  '-frames', 1,
+  '-f', 'image2',
+  saveLocation + '/' + fileHash + '-first.jpg',
+  ];
+  console.log("extracting clip frame 1");
+  const ffmpeg = spawn(ffmpegPath, args);
+  ffmpeg.on('exit', () => {
     done();
   });
 }

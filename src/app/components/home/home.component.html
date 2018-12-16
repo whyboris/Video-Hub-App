@@ -681,6 +681,29 @@
         ></app-file-item>
       </ng-container>
 
+      <ng-container *ngIf="appState.currentView === 'clips'">
+        <app-clip-item
+          *ngFor="let item of scroll.viewPortItems"
+          (click)="openVideo(item[3])"
+          (contextmenu)="rightMouseClicked($event, item)"
+          [title]="item[2]"
+          [imgId]="item[3]"
+          [time]="item[4]"
+          [rez]="item[5]"
+          [fileSize]="item[7]"
+          [imgHeight]="imgHeight"
+          [elHeight]="imgHeight + textPaddingHeight"
+          [elWidth]="previewWidth"
+          [hubName]="appState.hubName"
+          [folderPath]="appState.selectedOutputFolder"
+          [largerFont]="settingsButtons['fontSizeLarger'].toggled"
+          [showMeta]="settingsButtons['showMoreInfo'].toggled"
+          [hoverScrub]="settingsButtons['hoverScrub'].toggled"
+          [randomImage]="settingsButtons['randomImage'].toggled"
+          [darkMode]="settingsButtons['darkMode'].toggled"
+        ></app-clip-item>
+      </ng-container>
+
     </virtual-scroll>
 
   </div> <!-- end of window-content -->
