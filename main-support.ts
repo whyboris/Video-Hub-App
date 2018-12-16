@@ -91,7 +91,7 @@ export function countFoldersInFinalArray(imagesArray: ImageElement[]): number {
 export function writeVhaFileDangerously(finalObject: FinalObject, pathToTheFile: string, done): void {
   // check for relative paths
   if (finalObject.inputDir === path.parse(pathToTheFile).dir) {
-    finalObject.inputDir = "";
+    finalObject.inputDir = '';
   }
 
   const json = JSON.stringify(finalObject);
@@ -134,7 +134,7 @@ function fileSystemReserved(thingy: string): boolean {
 export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] {
 
   const finalArray: ImageElement[] = [];
-  let elementIndex: number = 0;
+  let elementIndex = 0;
 
   // Recursively walk through a directory compiling ImageElements
   const walkSync = (dir, filelist) => {
@@ -233,7 +233,7 @@ export function takeTenScreenshots(
 ) {
 
   if (fs.existsSync(saveLocation + '/' + fileHash + '.jpg')) {
-    //console.log("thumbnails for " + fileHash + " already exist");
+    // console.log("thumbnails for " + fileHash + " already exist");
     takeTenClips(pathToVideo,
                  fileHash,
                  duration,
@@ -243,7 +243,7 @@ export function takeTenScreenshots(
     return;
   }
 
-  let current: number = 1;
+  let current = 1;
   const totalCount = 11;
   const step: number = duration / totalCount;
   const args = [];
@@ -298,38 +298,38 @@ export function takeTenClips(
 ) {
 
   if (fs.existsSync(saveLocation + '/' + fileHash + '.mp4')) {
-    //console.log("thumbnails for " + fileHash + " already exist");
+    // console.log("thumbnails for " + fileHash + " already exist");
     extractFirstFrame(saveLocation, fileHash, done);
     return;
   }
 
-  let current: number = 1;
+  let current = 1;
   const totalCount = 10;
   const step: number = duration / totalCount;
-  var args = [];
-  let concat = "";
+  const args = [];
+  let concat = '';
 
   // make the magic filter
   while (current < totalCount) {
-    let time = current * step;
-    let duration = 1; // TODO: Make this customisable
-    args.push('-ss', time, '-t', duration, '-i', pathToVideo);
-    concat += "[" + (current - 1) + "]";
+    const time = current * step;
+    const preview_duration = 1; // TODO: Make this customisable
+    args.push('-ss', time, '-t', preview_duration, '-i', pathToVideo);
+    concat += '[' + (current - 1) + ']';
     current++;
   }
-  concat += "concat=n=" + (totalCount - 1) + ":v=1:a=1";
+  concat += 'concat=n=' + (totalCount - 1) + ':v=1:a=1';
   args.push('-filter_complex', concat, saveLocation + '/' + fileHash + '.mp4');
   // phfff glad that's over
 
   // now make it all worth it!
-  const ffmpeg = spawn(ffmpegPath, args);
-  ffmpeg.stdout.on('data', function (data) {
+  const ffmpeg_process = spawn(ffmpegPath, args);
+  ffmpeg_process.stdout.on('data', function (data) {
     console.log(data);
   });
-  ffmpeg.stderr.on('data', function (data) {
+  ffmpeg_process.stderr.on('data', function (data) {
     console.log('grep stderr: ' + data);
   });
-  ffmpeg.on('exit', () => {
+  ffmpeg_process.on('exit', () => {
     extractFirstFrame(saveLocation, fileHash, done);
   });
 }
@@ -340,16 +340,16 @@ export function extractFirstFrame(saveLocation: string, fileHash: string, done: 
     return;
   }
 
-  var args = [
+  const args = [
   '-ss', 0,
   '-i', saveLocation + '/' + fileHash + '.mp4',
   '-frames', 1,
   '-f', 'image2',
   saveLocation + '/' + fileHash + '-first.jpg',
   ];
-  console.log("extracting clip frame 1");
-  const ffmpeg = spawn(ffmpegPath, args);
-  ffmpeg.on('exit', () => {
+  console.log('extracting clip frame 1');
+  const ffmpeg_process = spawn(ffmpegPath, args);
+  ffmpeg_process.on('exit', () => {
     done();
   });
 }
@@ -381,7 +381,7 @@ export function superDangerousDelete(imageLocation: string, numberOfImage: numbe
 
 // GENERATE INDEXES FOR ARRAY
 
-export function hasAllThumbs(fileHash: string, screenshotFolder: string) : boolean {
+export function hasAllThumbs(fileHash: string, screenshotFolder: string): boolean {
   // Check in reverse order for efficiency
   return fs.existsSync(screenshotFolder + '/' + fileHash + '-first.jpg')
          && fs.existsSync(screenshotFolder + '/' + fileHash + '.mp4')
@@ -477,7 +477,7 @@ export function finalArrayWithoutDeleted(
     if (matchFound) {
       return true;
     } else {
-      //superDangerousDelete(folderWhereImagesAre, value[3]);
+      // superDangerousDelete(folderWhereImagesAre, value[3]);
       return false;
     }
   });
