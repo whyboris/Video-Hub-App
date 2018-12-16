@@ -62,5 +62,20 @@ export const Russian = {
     shuffleGalleryNowHint: 'Перемешать текущие результаты',
     startWizardDescription: 'Снова запускает мастер: создайте новый видеоцентр или откройте недавний',
     startWizardHint: 'Мастер запуска',
+  },
+  SIDEBAR: {
+    and: 'и',
+    exclude: 'файл не содержит',
+    file: 'файл содержит',
+    fileUnion: 'объединение файлов',
+    folder: 'папка содержит',
+    folderUnion: 'объединение папок',
+    found: 'найдено',
+    magic: 'папка или файл содержит',
+    or: 'или',
+    recentlyOpened: 'Недавно открытые хабы:',
+    totalFolders: 'папка',
+    totalFoldersPlural: 'папки',
+    videos: 'видео',
   }
 };

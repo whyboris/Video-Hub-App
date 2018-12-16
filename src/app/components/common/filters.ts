@@ -6,40 +6,40 @@ export let Filters = [
     string: '',
     array: [], // contains search strings
     bool: true,
-    placeholder: 'folder union',
-    conjunction: 'or',
+    placeholder: 'SIDEBAR.folderUnion',
+    conjunction: 'SIDEBAR.or',
     color: '#FFD672'
   }, {
     uniqueKey: 'folder',
     string: '',
     array: [],
     bool: true,
-    placeholder: 'folder contains',
-    conjunction: 'and',
+    placeholder: 'SIDEBAR.folder',
+    conjunction: 'SIDEBAR.and',
     color: '#ffe5a5'
   }, {
     uniqueKey: 'fileUnion',
     string: '',
     array: [],
     bool: true,
-    placeholder: 'file union',
-    conjunction: 'or',
+    placeholder: 'SIDEBAR.fileUnion',
+    conjunction: 'SIDEBAR.or',
     color: '#6e96ff'
   }, {
     uniqueKey: 'file',
     string: '',
     array: [],
     bool: true,
-    placeholder: 'file contains',
-    conjunction: 'and',
+    placeholder: 'SIDEBAR.file',
+    conjunction: 'SIDEBAR.and',
     color: '#b1c6fd'
   }, {
     uniqueKey: 'exclude',
     string: '',
     array: [],
     bool: true,
-    placeholder: 'file does not contain',
-    conjunction: 'or',
+    placeholder: 'SIDEBAR.exclude',
+    conjunction: 'SIDEBAR.or',
     color: '#FF8888'
   }
 ];

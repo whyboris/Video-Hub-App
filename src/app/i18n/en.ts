@@ -62,5 +62,20 @@ export const English = {
     shuffleGalleryNowHint: 'Shuffle current results',
     startWizardDescription: 'Starts wizard again: create a new video hub or open recent',
     startWizardHint: 'Start wizard',
+  },
+  SIDEBAR: {
+    and: 'and',
+    exclude: 'file does not contain',
+    file: 'file contains',
+    fileUnion: 'file union',
+    folder: 'folder contains',
+    folderUnion: 'folder union',
+    found: 'found',
+    magic: 'folder or file contains',
+    or: 'or',
+    recentlyOpened: 'Recently opened hubs:',
+    totalFolders: 'folder',
+    totalFoldersPlural: 'folders',
+    videos: 'videos',
   }
 };
