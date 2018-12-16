@@ -245,7 +245,7 @@
                 flatSettingsButton:           settingsButtons['flatIcons'].toggled,
                 flatSettingsButtonToggled:    settingsButtons['flatIcons'].toggled && settingsButtons[buttonKey].toggled
               }"
-            title="{{ settingsButtons[buttonKey].title }}"
+            title="{{ settingsButtons[buttonKey].title | translate }}"
           >
             <span class="icon {{ settingsButtons[buttonKey].iconName }}"></span>
           </button>
@@ -254,12 +254,13 @@
             *ngIf="settingsButtons[buttonKey].iconName !== 'icon-checkmark'"
             (click)="toggleHideButton(buttonKey)"
             class="eyeIconContainer icon {{ settingsButtons[buttonKey].hidden ? 'eye-closed' : 'eye-open' }}"
+            title="show / hide icon in the settings bar"
           ></span>
 
           <span
             class="buttonDescriptionText"
           >
-            {{ settingsButtons[buttonKey].description }}
+            {{ settingsButtons[buttonKey].description | translate }}
           </span>
 
         </div>
@@ -300,6 +301,18 @@
       >
         <span class="icon icon-plus"></span>
       </button>
+    </div>
+
+
+    <div class="horizontalDivider"></div>
+
+    <h2>Change language</h2>
+
+    <div style="margin: 20px">
+      <select (change)="changeLanguage($event.target.value)">
+        <option value="en">English</option>
+        <option value="ru">Russian</option>
+      </select>
     </div>
 
     <div class="horizontalDivider"></div>
@@ -383,7 +396,7 @@
                   flatSettingsButtonToggled:         settingsButtons['flatIcons'].toggled
                                                   && settingsButtons[buttonKey].toggled
                 }"
-              title="{{ settingsButtons[buttonKey].title }}"
+              title="{{ settingsButtons[buttonKey].title | translate }}"
             >
               <span class="icon {{ settingsButtons[buttonKey].iconName }}"></span>
             </button><!--

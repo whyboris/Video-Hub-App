@@ -1,5 +1,6 @@
 import { Component, ChangeDetectorRef, OnInit, HostListener, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 
+import { TranslateService } from '@ngx-translate/core';
 import { VirtualScrollComponent } from 'angular2-virtual-scroll';
 
 import { ElectronService } from '../../providers/electron.service';
@@ -18,6 +19,9 @@ import { WizardOptions } from '../common/wizard-options.interface';
 import { AppState } from '../common/app-state';
 import { Filters } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from '../common/settings-buttons';
+
+import { English } from '../../i18n/en';
+import { Russian } from '../../i18n/ru';
 
 import {
   donutAppear,
@@ -275,11 +279,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
     public resolutionFilterService: ResolutionFilterService,
     public showLimitService: ShowLimitService,
     public tagsSaveService: TagsSaveService,
+    public translate: TranslateService,
     public wordFrequencyService: WordFrequencyService,
     private elementRef: ElementRef
   ) { }
 
   ngOnInit() {
+
+    this.translate.setDefaultLang('en');
+    this.translate.use('en');
+    this.translate.setTranslation('en', English );
 
     // enable right-clicking of the gallery
     setTimeout(() => {
@@ -1221,6 +1230,22 @@ export class HomeComponent implements OnInit, AfterViewInit {
       addTags ? addTags : [],
       removeTags ? removeTags : []
     );
+  }
+
+  /**
+   * Change the language via ngx-translate
+   * @param language
+   */
+  changeLanguage(language: string) {
+    // TODO -- store chosen language into settings
+    console.log(language);
+    if (language === 'en') {
+      this.translate.use('en');
+      this.translate.setTranslation('en', English );
+    } else {
+      this.translate.use('ru');
+      this.translate.setTranslation('ru', Russian );
+    }
   }
 
 }

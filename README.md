@@ -46,8 +46,10 @@ This software would not be possible without the tremendous work by other people:
 
  - [Angular](https://github.com/angular/angular)
  - [Electron](https://github.com/electron/electron)
+ - [FFmpeg](https://www.ffmpeg.org/)
  - [angular-electron](https://github.com/maximegris/angular-electron)
  - [angular2-virtual-scroll](https://www.npmjs.com/package/angular2-virtual-scroll)
- - [fluent-ffmpeg](https://github.com/fluent-ffmpeg/node-fluent-ffmpeg)
  - [@ffmpeg-installer/ffmpeg](https://www.npmjs.com/package/@ffmpeg-installer/ffmpeg)
  - [@ffprobe-installer/ffprobe](https://www.npmjs.com/package/@ffprobe-installer/ffprobe)
+ - [ngx-translate](https://github.com/ngx-translate/core)
+ - [fluent-ffmpeg](https://github.com/fluent-ffmpeg/node-fluent-ffmpeg) _(no longer used)_

@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import { TranslateModule } from '@ngx-translate/core';
 import { VirtualScrollModule } from 'angular2-virtual-scroll';
 
 import { AlphabetPrefixService } from './components/pipes/alphabet-prefix.service';
@@ -57,12 +58,12 @@ import { AppRoutingModule } from './app-routing.module';
     FolderViewPipe,
     HomeComponent,
     LengthPipe,
-    SimilarityPipe,
     MagicSearchPipe,
     PreviewComponent,
     RandomizePipe,
     ResFilterComponent,
     ResolutionFilterPipe,
+    SimilarityPipe,
     TagFilterPipe,
     TagMatchPipe,
     TagsComponent,
@@ -74,6 +75,7 @@ import { AppRoutingModule } from './app-routing.module';
     BrowserAnimationsModule,
     BrowserModule,
     FormsModule,
+    TranslateModule.forRoot(),
     VirtualScrollModule
   ],
   providers: [
