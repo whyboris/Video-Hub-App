@@ -101,14 +101,14 @@
     @rightClickAnimation
   >
     <ul *ngIf="clickedOnFile; else galleryOptions" @rightClickContentAnimation>
-      <li (click)="openRenameFileModal()">Rename file</li>
-      <li (click)="showSimilarNow()">Show similar</li>
-      <li (click)="showOnlyThisFolderNow()">View folder</li>
-      <li (click)="openContainingFolderNow()">Open folder</li>
+      <li (click)="openRenameFileModal()">{{ 'RIGHTCLICK.renameFile' | translate }}</li>
+      <li (click)="showSimilarNow()">{{ 'RIGHTCLICK.showSimilar' | translate }}</li>
+      <li (click)="showOnlyThisFolderNow()">{{ 'RIGHTCLICK.viewFolder' | translate }}</li>
+      <li (click)="openContainingFolderNow()">{{ 'RIGHTCLICK.openFolder' | translate }}</li>
     </ul>
     <ng-template #galleryOptions>
       <ul @rightClickContentAnimation>
-        <li (click)="toggleButton('shuffleGalleryNow')">Shuffle results</li>
+        <li (click)="toggleButton('shuffleGalleryNow')">{{ 'RIGHTCLICK.shuffle' | translate }}</li>
       </ul>
     </ng-template>
   </div>
@@ -130,7 +130,7 @@
     <span class="icon icon-close"></span>
   </div>
 
-    <span class="renameHeading">Rename</span>
+    <span class="renameHeading">{{ 'RIGHTCLICK.renameTitle' | translate }}</span>
 
     <app-filmstrip-item
       [darkMode]="settingsButtons['darkMode'].toggled"
@@ -180,7 +180,7 @@
       class="wizardButton btnRename"
       (click)="attemptToRename()"
     >
-      RENAME
+      {{ 'RIGHTCLICK.renameButton' | translate }}
     </button>
 
 </div>
@@ -193,7 +193,7 @@
     <div
       (click)="toggleButton('showTags')"
       class="closeSettings"
-      title="Close settings"
+      title="{{ 'SETTINGS.closeSettings' | translate }}"
     >
       <span class="icon icon-close"></span>
     </div>
@@ -214,7 +214,7 @@
     <div
       (click)="toggleSettings()"
       class="closeSettings"
-      title="Close settings"
+      title="{{ 'SETTINGS.closeSettings' | translate }}"
     >
       <span class="icon icon-close"></span>
     </div>
@@ -225,7 +225,7 @@
 
       <div *ngIf="i !== 0 && settingsCategories[i] !== ''" class="horizontalDivider">
       </div>
-      <h2>{{ settingsCategories[i] }}</h2>
+      <h2>{{ settingsCategories[i] | translate }}</h2>
 
       <div
         class="searchButtonsSettings"
@@ -270,7 +270,7 @@
 
     <div class="horizontalDivider"></div>
 
-    <h2>Change the app zoom level</h2>
+    <h2>{{ 'SETTINGS.changeAppZoom' | translate }}</h2>
 
     <div style="margin: 20px">
       <button
@@ -306,7 +306,7 @@
 
     <div class="horizontalDivider"></div>
 
-    <h2>Change language</h2>
+    <h2>{{ 'SETTINGS.changeLanguage' | translate }}</h2>
 
     <div style="margin: 20px">
       <select (change)="changeLanguage($event.target.value)">
@@ -318,7 +318,7 @@
     <div class="horizontalDivider"></div>
 
     <div class="credits-and-help" (click)="openOnlineHelp()">
-      Click here for help, documentation, FAQ, or to report a bug
+      {{ 'SETTINGS.FAQ' | translate }}
     </div>
 
     <div class="app-version">
@@ -430,8 +430,7 @@
 
       <div class="filteringTotal">
         {{ appState.numOfFolders | number }}
-        {{ (appState.numOfFolders === 1 ? 'SIDEBAR.totalFolders' : 'SIDEBAR.totalFoldersPlural') | translate }}
-        <br>
+        {{ (appState.numOfFolders === 1 ? 'SIDEBAR.totalFolders' : 'SIDEBAR.totalFoldersPlural') | translate }}<br>
         {{ finalArray.length | number }} {{ 'SIDEBAR.videos' | translate }}
       </div>
 
@@ -566,7 +565,7 @@
         [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? '#aaaaaa' : '#333333' }"
         class="recently-opened"
       >
-        <span class="recently-opened-label">{{ 'SIDEBAR.recentlyOpened' }}</span>
+        <span class="recently-opened-label">{{ 'SIDEBAR.recentlyOpened' | translate }}</span>
         <ul>
           <li
             *ngFor="let historyItem of vhaFileHistory; index as i"
@@ -715,15 +714,15 @@
 
   <div class="left-side" @slowFadeIn>
 
-    <h2>Open previous hub</h2>
+    <h2>{{ 'WIZARD.openPrevious' | translate }}</h2>
 
     <button class="wizardButton" (click)="loadFromFile()" title="Open a previously-saved Video Hub">
-      Load from file
+      {{ 'WIZARD.loadFromFile' | translate }}
     </button>
 
     <div class="recently-opened-wizard" *ngIf="(vhaFileHistory || {}).length > 0" @historyItemRemove>
 
-      <h3>Recently-opened hubs:</h3>
+      <h3>{{ 'WIZARD.recentlyOpened' | translate }}</h3>
 
       <ul>
         <li *ngFor="let historyItem of vhaFileHistory; index as i" (click)="openFromHistory(i)" @historyItemRemove>
@@ -739,14 +738,14 @@
         </li>
       </ul>
 
-      <span class="clear-history" (click)="clearRecentlyViewedHistory()">clear recent history</span>
+      <span class="clear-history" (click)="clearRecentlyViewedHistory()">{{ 'WIZARD.clearRecent' | translate }}</span>
     </div>
 
   </div>
 
   <div class="right-side" @slowFadeIn>
 
-    <h2>Import new hub</h2>
+    <h2>{{ 'WIZARD.importNew' | translate }}</h2>
 
     <div
       [ngClass]="{
@@ -763,7 +762,7 @@
       class="inputFilter hub-name-input"
     >
     <span class="step-description">
-      Name your hub
+      {{ 'WIZARD.nameYourHub' | translate }}
     </span>
 
     <div
@@ -781,20 +780,22 @@
       [disabled]="futureHubName === ''"
       title="Please select the folder with your video files"
     >
-      {{ wizard.selectedSourceFolder === '' ? 'Select' : 'Change' }} video directory
+      {{ (wizard.selectedSourceFolder === '' ? 'WIZARD.select' : 'WIZARD.change') | translate }}
+      {{ 'WIZARD.videoDirectory' | translate }}
     </button>
 
     <span class="step-description">
-      Importing from:
+      {{ 'WIZARD.importingFrom' | translate }}
     </span>
     <span class="path" [innerHtml]="wizard.selectedSourceFolder | folderArrowsPipe : false">
     </span>
     <span class="step-description" *ngIf="wizard.totalNumberOfFiles !== -1">
-      Found
+      {{ 'WIZARD.found' | translate }}
       <span class="emphasis-number">
         {{ wizard.totalNumberOfFiles | number }}
       </span>
-      videos {{ wizard.totalNumberOfFiles > 50 && demo ? 'demo version limited to 50 video files' : '' }}
+      {{ 'WIZARD.videos' | translate }}
+      {{ (wizard.totalNumberOfFiles > 50 && demo ? 'WIZARD.demoVersion' : '') | translate }}
     </span>
 
     <div
@@ -809,11 +810,12 @@
       [disabled]="wizard.selectedSourceFolder === '' || futureHubName === ''"
       title="Please select the folder where your Video Hub will be stored"
     >
-      {{ wizard.selectedOutputFolder === '' ? 'Select' : 'Change' }} hub directory
+      {{ (wizard.selectedOutputFolder === '' ? 'WIZARD.select' : 'WIZARD.change') | translate }}
+      {{ 'WIZARD.hubDirectory' | translate }}
     </button>
 
     <span class="step-description">
-      Saving the video hub and screenshots to:
+      {{ 'WIZARD.savingTo' | translate }}
     </span>
     <span class="path" [innerHtml]="wizard.selectedOutputFolder | folderArrowsPipe : false">
     </span>
@@ -840,7 +842,7 @@
     </select>
 
     <span class="step-description">
-      Size of screenshots
+      {{ 'WIZARD.sizeOfScreenshots' | translate }}
     </span>
 
     <div
@@ -852,11 +854,11 @@
         }"
       @galleryItemAppear
     >
-      imported
+      {{ 'WIZARD.imported' | translate }}
       <br>
-      screenshot
+      {{ 'WIZARD.screenshot' | translate }}
       <br>
-      size
+      {{ 'WIZARD.size' | translate }}
     </div>
 
     <div
@@ -874,23 +876,23 @@
                || wizard.totalNumberOfFiles === 0"
       (click)="importFresh()"
     >
-      Create the Video Hub
+      {{ 'WIZARD.createVideoHub' | translate }}
     </button>
 
     <span class="description" *ngIf="wizard.totalNumberOfFiles !== -1">
-      Expected:
+      {{ 'WIZARD.expected' | translate }}
     </span>
     <span class="step-description" *ngIf="wizard.totalNumberOfFiles !== -1">
       <span class="emphasis-number">
         {{ wizard.totalImportTime }}
       </span>
-      minutes to import
+      {{ 'WIZARD.timeToImport' | translate }}
     </span>
     <span class="step-description" *ngIf="wizard.totalNumberOfFiles !== -1">
       <span class="emphasis-number">
         {{ wizard.totalImportSize }}
       </span>
-      mb of disk space
+      {{ 'WIZARD.sizeToImport' | translate }}
     </span>
 
   </div>

@@ -53,15 +53,15 @@ export const SettingsButtonsGroups: string[][] = [
 
 // correspond to each group above
 export const SettingsCategories: string[] = [
-  'Search & filter settings',
+  'SETTINGS.searchAndFilter',
   '',
   '',
-  'Gallery & view settings',
+  'SETTINGS.galleryAndView',
   '',
   '',
   '',
-  'Other settings',
-  'Reload / update hub'
+  'SETTINGS.otherSettings',
+  'SETTINGS.reloadUpdate'
 ];
 
 export let SettingsButtons: { [s: string]: SettingsButton } = {
