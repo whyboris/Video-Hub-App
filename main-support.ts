@@ -142,19 +142,21 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
 
     files.forEach(function (file) {
       if (!fileSystemReserved(file.name)) {
-        // if the item is a _DIRECTORY_
-        if (file.isDirectory()) {
-          filelist = walkSync(path.join(dir, file.name), filelist);
-        } else {
-          const extension = file.name.split('.').pop();
-          if (acceptableFiles.includes(extension.toLowerCase())) {
-            // before adding, remove the redundant prefix: sourceFolderPath
-            const partialPath = dir.replace(sourceFolderPath, '');
-            // fil finalArray with 3 correct and 5 dummy pieces of data
-            finalArray[elementIndex] = [partialPath, file.name, cleanUpFileName(file.name), '', 0, '', 0, 0];
-            elementIndex++;
+        try {
+          // if the item is a _DIRECTORY_
+          if (file.isDirectory()) {
+            filelist = walkSync(path.join(dir, file.name), filelist);
+          } else {
+            const extension = file.name.split('.').pop();
+            if (acceptableFiles.includes(extension.toLowerCase())) {
+              // before adding, remove the redundant prefix: sourceFolderPath
+              const partialPath = dir.replace(sourceFolderPath, '');
+              // fil finalArray with 3 correct and 5 dummy pieces of data
+              finalArray[elementIndex] = [partialPath, file.name, cleanUpFileName(file.name), '', 0, '', 0, 0];
+              elementIndex++;
+            }
           }
-        }
+        } catch (err) {}
       }
     });
 
@@ -181,15 +183,17 @@ export function numberOfVidsIn(folderPath: string): number {
 
     files.forEach(function (file) {
       if (!fileSystemReserved(file.name)) {
-        // if the item is a _DIRECTORY_
-        if (file.isDirectory()) {
-          filelist = walkAndCountSync(path.join(dir, file.name), filelist);
-        } else {
-          const extension = file.name.split('.').pop();
-          if (acceptableFiles.includes(extension.toLowerCase())) {
-            totalNumberOfFiles++;
+        try {
+          // if the item is a _DIRECTORY_
+          if (file.isDirectory()) {
+            filelist = walkAndCountSync(path.join(dir, file.name), filelist);
+          } else {
+            const extension = file.name.split('.').pop();
+            if (acceptableFiles.includes(extension.toLowerCase())) {
+              totalNumberOfFiles++;
+            }
           }
-        }
+        } catch (err) {}
       }
     });
 
