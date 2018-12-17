@@ -314,7 +314,7 @@ export function takeTenClips(
     const time = current * step;
     const preview_duration = 1; // TODO: Make this customisable
     args.push('-ss', time, '-t', preview_duration, '-i', pathToVideo);
-    concat += '[' + (current - 1) + ']';
+    concat += '[' + (current - 1) + ':v]' + '[' + (current - 1) + ':a]';
     current++;
   }
   concat += 'concat=n=' + (totalCount - 1) + ':v=1:a=1';
