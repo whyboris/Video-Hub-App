@@ -149,8 +149,8 @@
       [title]="itemToRename[1]"
     ></app-filmstrip-item>
 
-    <span class="renameFrom">from:</span>
-    <span class="renameTo">to:</span>
+    <span class="renameFrom">{{ 'RIGHTCLICK.renameFrom' | translate }}</span>
+    <span class="renameTo">{{ 'RIGHTCLICK.renameTo' | translate }}</span>
 
     <input
       (keyup.enter)="attemptToRename()"
@@ -168,7 +168,7 @@
     </span>
 
     <span *ngIf="renameErrMsg !== ''" class="renameErrMsg" @donutAppear>
-      {{ renameErrMsg }}
+      {{ renameErrMsg | translate }}
     </span>
 
     <button
@@ -290,7 +290,7 @@
         }"
         style="max-width: initial; padding: 0 5px; margin: 0 10px"
         >
-          <span>reset</span>
+          <span>{{ 'SETTINGS.reset' | translate }}</span>
       </button>
       <button
         (click)="increaseZoomLevel()"
