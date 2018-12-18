@@ -90,7 +90,7 @@ export const Russian = {
   },
   RIGHTTCLICK: {
     openFolder: 'Открыть папку',
-    renameButton: 'RENAME',
+    renameButton: 'Переименовать',
     renameFile: 'Переименовать файл',
     renameTitle: 'Переименовать',
     showSimilar: 'Показать похожие',
@@ -100,7 +100,7 @@ export const Russian = {
   WIZARD: {
     change: 'Изменить',
     clearRecent: 'очистить недавнюю историю',
-    createVideoHub: 'Создайте Video Hub',
+    createVideoHub: 'Создайте видео хаб',
     demoVersion: 'демо-версия ограничена 50 видеофайлами',
     expected: 'Ожидается:',
     found: 'найдено',

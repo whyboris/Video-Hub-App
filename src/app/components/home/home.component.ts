@@ -289,10 +289,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
-
     this.translate.setDefaultLang('en');
-    this.translate.use('en');
-    this.translate.setTranslation('en', English );
 
     // enable right-clicking of the gallery
     setTimeout(() => {
