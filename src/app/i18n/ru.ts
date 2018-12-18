@@ -129,5 +129,10 @@ export const Russian = {
     timeToImport: 'минуты для импорта',
     videoDirectory: 'каталог видео',
     videos: 'видео',
+  },
+  TAGS: {
+    add: 'добавлять',
+    delete: 'удалять',
+    filterList: 'Список фильтров',
   }
 };

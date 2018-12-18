@@ -129,5 +129,10 @@ export const English = {
     timeToImport: 'minutes to import',
     videoDirectory: 'video directory',
     videos: 'videos',
+  },
+  TAGS: {
+    add: 'Add',
+    delete: 'delete',
+    filterList: 'Filter list',
   }
 };
