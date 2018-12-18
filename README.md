@@ -52,4 +52,4 @@ This software would not be possible without the tremendous work by other people:
  - [@ffmpeg-installer/ffmpeg](https://www.npmjs.com/package/@ffmpeg-installer/ffmpeg)
  - [@ffprobe-installer/ffprobe](https://www.npmjs.com/package/@ffprobe-installer/ffprobe)
  - [ngx-translate](https://github.com/ngx-translate/core)
- - [fluent-ffmpeg](https://github.com/fluent-ffmpeg/node-fluent-ffmpeg) _(no longer used)_
+ - [fluent-ffmpeg](https://github.com/fluent-ffmpeg/node-fluent-ffmpeg)

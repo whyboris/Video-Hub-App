@@ -1,5 +1,8 @@
+export type PossibleLanguage = 'en' | 'ru';
+
 export interface SettingsObject {
-  buttonSettings: any;
   appState: any;
+  buttonSettings: any;
+  language: PossibleLanguage;
   vhaFileHistory: any;
 }

@@ -13,7 +13,7 @@ import { FinalObject, ImageElement } from '../common/final-object.interface';
 import { HistoryItem } from '../common/history-item.interface';
 import { ImportSettingsObject } from '../common/import.interface';
 import { SavableProperties } from '../common/savable-properties.interface';
-import { SettingsObject } from '../common/settings-object.interface';
+import { SettingsObject, PossibleLanguage } from '../common/settings-object.interface';
 import { WizardOptions } from '../common/wizard-options.interface';
 
 import { AppState } from '../common/app-state';
@@ -189,6 +189,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   nodeRenamingFile: boolean = false;
   renameErrMsg: string = '';
+
+  // WIP
+
+  currentLanguage: PossibleLanguage;
 
   // Listen for key presses
   @HostListener('document:keydown', ['$event'])
@@ -1007,9 +1011,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // console.log(buttonSettings);
     return {
-      buttonSettings: buttonSettings,
       appState: this.appState,
-      vhaFileHistory: this.vhaFileHistory
+      buttonSettings: buttonSettings,
+      language: this.currentLanguage,
+      vhaFileHistory: this.vhaFileHistory,
     };
   }
 
@@ -1046,7 +1051,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   /**
    * restore settings from saved file
    */
-  restoreSettingsFromBefore(settingsObject): void {
+  restoreSettingsFromBefore(settingsObject: SettingsObject): void {
     if (settingsObject.appState) {
       this.appState = settingsObject.appState;
       if (!settingsObject.appState.currentZoomLevel) {  // catch error <-- old VHA apps didn't have `currentZoomLevel`
@@ -1060,6 +1065,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.settingsButtons[element].hidden = settingsObject.buttonSettings[element].hidden;
       }
     });
+    if (settingsObject.language) {
+      this.changeLanguage(settingsObject.language);
+    }
     this.computeTextBufferAmount();
     this.settingsButtons['showTags'].toggled = false; // never show tags on load (they don't load right anyway)
   }
@@ -1236,9 +1244,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Change the language via ngx-translate
    * @param language
    */
-  changeLanguage(language: string) {
-    // TODO -- store chosen language into settings
-    console.log(language);
+  changeLanguage(language: PossibleLanguage) {
+    this.currentLanguage = language;
     if (language === 'en') {
       this.translate.use('en');
       this.translate.setTranslation('en', English );

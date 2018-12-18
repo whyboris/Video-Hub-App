@@ -310,8 +310,8 @@
 
     <div style="margin: 20px">
       <select (change)="changeLanguage($event.target.value)">
-        <option value="en">English</option>
-        <option value="ru">Russian</option>
+        <option value="en" [selected]="currentLanguage == 'en'">English</option>
+        <option value="ru" [selected]="currentLanguage == 'ru'">Russian</option>
       </select>
     </div>
 
