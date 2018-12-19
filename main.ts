@@ -271,7 +271,7 @@ function openThisDamnFile(pathToVhaFile: string) {
         const result = dialog.showMessageBox({
           message: 'Video folder not found:',
           detail: lastSavedFinalObject.inputDir,
-          buttons: ['Select Root Folder', 'Cancel']
+          buttons: ['Select Root Folder', 'Continue Anyway', 'Cancel']
         });
         if (result === 0) {
           // select the new root folder
@@ -289,7 +289,7 @@ function openThisDamnFile(pathToVhaFile: string) {
             globals.angularApp.sender.send('pleaseOpenWizard');
             return;
           }
-        } else {
+        } else if (result === 2) {
           // show the wizard instead
           lastSavedFinalObject = null;
           globals.angularApp.sender.send('pleaseOpenWizard');
