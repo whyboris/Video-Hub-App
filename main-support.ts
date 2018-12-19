@@ -205,11 +205,13 @@ export function numberOfVidsIn(folderPath: string): number {
 
 const ffprobePath = require('@ffprobe-installer/ffprobe').path.replace('app.asar', 'app.asar.unpacked');
 const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path.replace('app.asar', 'app.asar.unpacked');
-const ffmpeg = require('fluent-ffmpeg');
-ffmpeg.setFfprobePath(ffprobePath);
-ffmpeg.setFfmpegPath(ffmpegPath);
 
+// sends data back as a stream as process runs
+// requires an array of args
 const spawn = require('child_process').spawn;
+// sends all data back once the process exits in a buffer
+// also spawns a shell (can pass a single cmd string)
+const exec = require('child_process').exec;
 
 /**
  * Take 10 screenshots of a particular file
@@ -462,10 +464,12 @@ function extractMetadataForThisONEFile(
   imageElement: ImageElement,
   extractMetaCallback: any
 ): void {
-  ffmpeg.ffprobe(filePath, (err, metadata) => {
+  const ffprobeCommand = '"' + ffprobePath + '" -of json -show_streams -show_format "' + filePath + '"';
+  exec(ffprobeCommand, (err, data, stderr) => {
     if (err) {
       extractMetaCallback(imageElement);
     } else {
+      const metadata = JSON.parse(data);
       const duration = Math.round(metadata.format.duration) || 0;
       const origWidth = metadata.streams[0].width;
       const origHeight = metadata.streams[0].height;
