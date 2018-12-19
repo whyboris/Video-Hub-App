@@ -605,12 +605,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Add filter to FILE search when word in file is clicked
    * @param filter
    */
-  handleFileWordClicked(filter: string): void {
+  handleFileWordClicked(filter: string, event?): void {
     this.showSidebar();
-    if (!this.settingsButtons['file'].toggled) {
-      this.settingsButtons['file'].toggled = true;
+    if (event && event.shiftKey) { // Shift click to exclude
+      if (!this.settingsButtons['exclude'].toggled) {
+        this.settingsButtons['exclude'].toggled = true;
+      }
+      this.onEnterKey(filter, 4); // 4th item is the `file` exlcude filter
+    } else {
+      if (!this.settingsButtons['file'].toggled) {
+        this.settingsButtons['file'].toggled = true;
+      }
+      this.onEnterKey(filter, 3); // 3rd item is the `file` filter
     }
-    this.onEnterKey(filter, 3); // 3rd item is the `file` filter
   }
 
   /**
