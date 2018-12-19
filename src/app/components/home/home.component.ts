@@ -385,8 +385,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // Final object returns
     this.electronService.ipcRenderer.on('finalObjectReturning',
-        (event, finalObject: FinalObject, pathToFile: string, outputFolderWithTrailingSlash: string) => {
-      this.finalArrayNeedsSaving = false;
+        (event, finalObject: FinalObject, pathToFile: string, outputFolderWithTrailingSlash: string, changedRootFolder = false) => {
+      this.finalArrayNeedsSaving = changedRootFolder;
       this.appState.currentVhaFile = pathToFile;
       this.hubNameToRemember = finalObject.hubName;
       this.appState.hubName = finalObject.hubName;
