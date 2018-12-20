@@ -1,7 +1,7 @@
 import { Component, ChangeDetectorRef, OnInit, HostListener, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 
 import { TranslateService } from '@ngx-translate/core';
-import { VirtualScrollComponent } from 'angular2-virtual-scroll';
+import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
 
 import { ElectronService } from '../../providers/electron.service';
 import { ResolutionFilterService } from '../../components/pipes/resolution-filter.service';
@@ -79,8 +79,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // used to grab the `scrollable-content` element - background of gallery for right-click
   galleryBackgroundRef: any;
 
-  @ViewChild(VirtualScrollComponent)
-  virtualScroll: VirtualScrollComponent;
+  @ViewChild(VirtualScrollerComponent)
+  virtualScroller: VirtualScrollerComponent;
 
   defaultSettingsButtons = {};
   settingsButtons = SettingsButtons;
@@ -486,7 +486,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     clearTimeout(this.myTimeout);
     this.myTimeout = setTimeout(() => {
       // console.log('Virtual scroll refreshed');
-      this.virtualScroll.refresh();
+      this.virtualScroller.refresh()
     }, delay);
   }
 
@@ -830,7 +830,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
       if (uniqueKey === 'hideSidebar') {
         setTimeout(() => {
-          this.virtualScroll.refresh();
+          this.virtualScroller.refresh();
         }, 300);
       }
     }

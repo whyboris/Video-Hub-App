@@ -6,7 +6,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { TranslateModule } from '@ngx-translate/core';
-import { VirtualScrollModule } from 'angular2-virtual-scroll';
+import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 
 import { AlphabetPrefixService } from './components/pipes/alphabet-prefix.service';
 import { ElectronService } from './providers/electron.service';
@@ -78,7 +78,7 @@ import { AppRoutingModule } from './app-routing.module';
     BrowserModule,
     FormsModule,
     TranslateModule.forRoot(),
-    VirtualScrollModule
+    VirtualScrollerModule
   ],
   providers: [
     AlphabetPrefixService,
