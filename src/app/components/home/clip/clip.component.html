@@ -31,7 +31,7 @@
     [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + poster)"
     [ngStyle]="{ 'height': imgHeight + 'px' }"
     class="screencap"
-    onmouseover="this.play().catch((err) => {this.load(); this.play()})"
+    onmouseover="this.play().catch((err) => {this.load()})"
     onmouseout="this.pause()"
     loop
   ></video>
