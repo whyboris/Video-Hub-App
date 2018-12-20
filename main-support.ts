@@ -135,6 +135,8 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
 
   const finalArray: ImageElement[] = [];
   let elementIndex = 0;
+  // ignore folders beginning with { '.', '_', 'vha-' }
+  const ignoreRegex = /^(\.|_|vha-).*/g;
 
   // Recursively walk through a directory compiling ImageElements
   const walkSync = (dir, filelist) => {
@@ -266,12 +268,12 @@ export function takeTenScreenshots(
   );
 
   const ffmpeg_process = spawn(ffmpegPath, args);
-  ffmpeg_process.stdout.on('data', function (data) {
-    console.log(data);
-  });
-  ffmpeg_process.stderr.on('data', function (data) {
-    console.log('grep stderr: ' + data);
-  });
+  // ffmpeg_process.stdout.on('data', function (data) {
+  //   console.log(data);
+  // });
+  // ffmpeg_process.stderr.on('data', function (data) {
+  //   console.log('grep stderr: ' + data);
+  // });
   ffmpeg_process.on('exit', () => {
     takeTenClips(pathToVideo,
                  fileHash,
@@ -353,41 +355,34 @@ export function extractFirstFrame(saveLocation: string, fileHash: string, done: 
   ];
   console.log('extracting clip frame 1');
   const ffmpeg_process = spawn(ffmpegPath, args);
-  ffmpeg_process.stdout.on('data', function (data) {
-    console.log(data);
-  });
-  ffmpeg_process.stderr.on('data', function (data) {
-    console.log('grep stderr: ' + data);
-  });
+  // ffmpeg_process.stdout.on('data', function (data) {
+  //   console.log(data);
+  // });
+  // ffmpeg_process.stderr.on('data', function (data) {
+  //   console.log('grep stderr: ' + data);
+  // });
   ffmpeg_process.on('exit', () => {
     done();
   });
 }
 
-// ------------------------ SUPER DANGEROUSLY DELETE
+export function deleteThumbnails(imageLocation: string, hash: string) {
+  // console.log('deleting ' + hash);
+  const filePath = path.join(imageLocation, hash);
+  const files = [ filePath + '.jpg',
+                  filePath + '.mp4',
+                  filePath + '-first.jpg' ];
 
-/**
- * Super dangerously delete 10 images from images folder given the base number
- * Deletes 10 images with given base
- * uses `folderToDeleteFrom` variable !!!
- * @param numberOfImage
- */
-export function superDangerousDelete(imageLocation: string, numberOfImage: number): void {
-  // console.log('index given: ' + numberOfImage);
-  const filePath = path.join(imageLocation, numberOfImage.toString());
-
-  for (let i = 1; i < 11; i++) {
-    const currentFile: string = filePath + '-' + i.toString() + '.jpg';
-    if (fs.existsSync(currentFile)) {
-      fs.unlinkSync(currentFile, (err) => {
+  files.forEach((file) => {
+    if (fs.existsSync(file)) {
+      fs.unlinkSync(file, (err) => {
         // console.log(err);
         // Don't even sweat it dawg!
       });
-      // console.log('deleted ' + currentFile);
+      // console.log('deleted ' + file);
     }
-  }
+  });
 }
-
 
 // GENERATE INDEXES FOR ARRAY
 
@@ -487,7 +482,7 @@ export function finalArrayWithoutDeleted(
     if (matchFound) {
       return true;
     } else {
-      // superDangerousDelete(folderWhereImagesAre, value[3]);
+      deleteThumbnails(folderWhereImagesAre, value[3]);
       return false;
     }
   });
