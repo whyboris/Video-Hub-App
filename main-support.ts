@@ -266,12 +266,12 @@ export function takeTenScreenshots(
   );
 
   const ffmpeg_process = spawn(ffmpegPath, args);
-  // ffmpeg_process.stdout.on('data', function (data) {
-  //   console.log(data);
-  // });
-  // ffmpeg_process.stderr.on('data', function (data) {
-  //   console.log('grep stderr: ' + data);
-  // });
+  ffmpeg_process.stdout.on('data', function (data) {
+    console.log(data);
+  });
+  ffmpeg_process.stderr.on('data', function (data) {
+    console.log('grep stderr: ' + data);
+  });
   ffmpeg_process.on('exit', () => {
     takeTenClips(pathToVideo,
                  fileHash,
@@ -353,6 +353,12 @@ export function extractFirstFrame(saveLocation: string, fileHash: string, done: 
   ];
   console.log('extracting clip frame 1');
   const ffmpeg_process = spawn(ffmpegPath, args);
+  ffmpeg_process.stdout.on('data', function (data) {
+    console.log(data);
+  });
+  ffmpeg_process.stderr.on('data', function (data) {
+    console.log('grep stderr: ' + data);
+  });
   ffmpeg_process.on('exit', () => {
     done();
   });
