@@ -553,7 +553,7 @@
         <ng-container *ngFor="let word of wordFreqArr; index as i">
           <span
             [ngStyle]="{'font-size': word.height + 'px' }"
-            (click)="handleFileWordClicked(word.word)"
+            (click)="handleFileWordClicked(word.word, $event)"
           >
             {{ word.word }}
           </span>
