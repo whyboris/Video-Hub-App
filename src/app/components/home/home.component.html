@@ -125,7 +125,7 @@
     (click)="closeRename()"
     [ngClass]="{ closeRenameDark: settingsButtons['darkMode'].toggled }"
     class="closeSettings closeRename"
-    title="cancel rename"
+    title="{{ 'RIGHTCLICK.cancelRename' | translate }}"
   >
     <span class="icon icon-close"></span>
   </div>
@@ -410,7 +410,7 @@
         (click)="toggleSettings()"
         [ngClass]="{ gearButtonActive: buttonsInView }"
         class="gearButton"
-        title="Settings"
+        title="{{ 'SETTINGS.settings' | translate }}"
       >
         <span class="icon icon-gear"></span>
       </div>
@@ -708,7 +708,7 @@
 
 <div *ngIf="showWizard" class="wizard" @myWizardAnimation>
 
-  <div *ngIf="canCloseWizard" (click)="hideWizard()" class="closeWizard" title="Close wizard">
+  <div *ngIf="canCloseWizard" (click)="hideWizard()" class="closeWizard" title="{{ 'WIZARD.closeButton' | translate }}">
     <span class="icon icon-close"></span>
   </div>
 
@@ -716,7 +716,7 @@
 
     <h2>{{ 'WIZARD.openPrevious' | translate }}</h2>
 
-    <button class="wizardButton" (click)="loadFromFile()" title="Open a previously-saved Video Hub">
+    <button class="wizardButton" (click)="loadFromFile()" title="{{ 'WIZARD.openPreviouslySaved' | translate }}">
       {{ 'WIZARD.loadFromFile' | translate }}
     </button>
 
@@ -729,7 +729,7 @@
           <span
             (click)="removeFromHistory($event, i)"
             class="icon icon-close clear-history-item"
-            title="Remove this item from recent history"
+            title="{{ 'WIZARD.removeFromHistory' | translate }}"
           ></span>
           <img class="history-icon" src="./assets/logo.png">
           <span class="history-name">{{ historyItem.hubName }}</span>
