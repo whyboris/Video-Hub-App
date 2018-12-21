@@ -244,8 +244,8 @@ function openThisDamnFile(pathToVhaFile: string) {
   fs.readFile(pathToVhaFile, (err, data) => {
     if (err) {
       dialog.showMessageBox({
-        message: 'No such file found \n' +
-          pathToVhaFile,
+        message: 'No such file found:',
+        detail: pathToVhaFile,
         buttons: ['OK']
       });
       globals.angularApp.sender.send('pleaseOpenWizard');
@@ -259,6 +259,39 @@ function openThisDamnFile(pathToVhaFile: string) {
       // use relative paths
       if (lastSavedFinalObject.inputDir === '') {
         lastSavedFinalObject.inputDir = globals.selectedOutputFolder;
+      }
+
+      let changedRootFolder = false;
+      // check root folder exists
+      if (!fs.existsSync(lastSavedFinalObject.inputDir)) {
+        // see if the user wants to change the root folder
+        const result = dialog.showMessageBox({
+          message: 'Video folder not found:',
+          detail: lastSavedFinalObject.inputDir,
+          buttons: ['Select Root Folder', 'Continue Anyway', 'Cancel']
+        });
+        if (result === 0) {
+          // select the new root folder
+          const files = dialog.showOpenDialog({
+            properties: ['openDirectory']
+          });
+          if (files) {
+            // update the root folder
+            const inputDirPath: string = files[0];
+            lastSavedFinalObject.inputDir = inputDirPath;
+            changedRootFolder = true;
+          } else {
+            // show the wizard instead
+            lastSavedFinalObject = null;
+            globals.angularApp.sender.send('pleaseOpenWizard');
+            return;
+          }
+        } else if (result === 2) {
+          // show the wizard instead
+          lastSavedFinalObject = null;
+          globals.angularApp.sender.send('pleaseOpenWizard');
+          return;
+        }
       }
 
       setGlobalsFromVhaFile(lastSavedFinalObject); // sets source folder ETC
@@ -284,7 +317,8 @@ function openThisDamnFile(pathToVhaFile: string) {
         'finalObjectReturning',
         lastSavedFinalObject,
         pathToVhaFile,
-        globals.selectedOutputFolder + path.sep   // app needs the trailing slash (at least for now)
+        globals.selectedOutputFolder + path.sep,   // app needs the trailing slash (at least for now)
+        changedRootFolder
       );
     }
   });
