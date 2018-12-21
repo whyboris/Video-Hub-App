@@ -138,20 +138,20 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
 
   // Recursively walk through a directory compiling ImageElements
   const walkSync = (dir, filelist) => {
-    const files = fs.readdirSync(dir);
+    const files = fs.readdirSync(dir, {encoding: 'utf8', withFileTypes: true});
 
     files.forEach(function (file) {
-      if (!fileSystemReserved(file)) {
+      if (!fileSystemReserved(file.name)) {
         // if the item is a _DIRECTORY_
-        if (fs.statSync(path.join(dir, file)).isDirectory()) {
-          filelist = walkSync(path.join(dir, file), filelist);
+        if (file.isDirectory()) {
+          filelist = walkSync(path.join(dir, file.name), filelist);
         } else {
-          const extension = file.split('.').pop();
+          const extension = file.name.split('.').pop();
           if (acceptableFiles.includes(extension.toLowerCase())) {
             // before adding, remove the redundant prefix: sourceFolderPath
             const partialPath = dir.replace(sourceFolderPath, '');
             // fil finalArray with 3 correct and 5 dummy pieces of data
-            finalArray[elementIndex] = [partialPath, file, cleanUpFileName(file), '', 0, '', 0, 0];
+            finalArray[elementIndex] = [partialPath, file.name, cleanUpFileName(file.name), '', 0, '', 0, 0];
             elementIndex++;
           }
         }
@@ -177,15 +177,15 @@ export function numberOfVidsIn(folderPath: string): number {
 
   // increases `totalNumberOfFiles` for every file found
   const walkAndCountSync = (dir, filelist) => {
-    const files = fs.readdirSync(dir);
+    const files = fs.readdirSync(dir, {encoding: 'utf8', withFileTypes: true});
 
-    files.forEach(function (file: string) {
-      if (!fileSystemReserved(file)) {
+    files.forEach(function (file) {
+      if (!fileSystemReserved(file.name)) {
         // if the item is a _DIRECTORY_
-        if (fs.statSync(path.join(dir, file)).isDirectory()) {
-          filelist = walkAndCountSync(path.join(dir, file), filelist);
+        if (file.isDirectory()) {
+          filelist = walkAndCountSync(path.join(dir, file.name), filelist);
         } else {
-          const extension = file.split('.').pop();
+          const extension = file.name.split('.').pop();
           if (acceptableFiles.includes(extension.toLowerCase())) {
             totalNumberOfFiles++;
           }
