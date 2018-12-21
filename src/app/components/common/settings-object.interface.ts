@@ -1,5 +1,8 @@
+export type SupportedLanguage = 'en' | 'ru';
+
 export interface SettingsObject {
-  buttonSettings: any;
   appState: any;
+  buttonSettings: any;
+  language: SupportedLanguage;
   vhaFileHistory: any;
 }

@@ -5,7 +5,7 @@ import { Component, HostListener, Input, OnDestroy, Output, EventEmitter } from 
   templateUrl: './resfilter.component.html',
   styleUrls: [ './resfilter.component.scss' ]
 })
-export class ResFilter implements OnDestroy {
+export class ResFilterComponent implements OnDestroy {
 
   @Input() darkMode: boolean;
 
@@ -38,7 +38,7 @@ export class ResFilter implements OnDestroy {
 
   /**
    * Track the mouse movement while it's inside the res filter div
-   * @param event 
+   * @param event
    */
   mouseIsMoving(event) {
     if (this.dragging === true) {
@@ -58,7 +58,7 @@ export class ResFilter implements OnDestroy {
 
   /**
    * Return appropriate breakpoint (to be used as px for width of div)
-   * @param current 
+   * @param current
    */
   updateNumber(current: number): number {
     if (current < 30) {
@@ -76,7 +76,7 @@ export class ResFilter implements OnDestroy {
 
   /**
    * Return breakpoint based on px width of div
-   * @param value 
+   * @param value
    */
   convertToIndex(value: number): number {
     if (value === this.pxLocation[0]) {
@@ -94,22 +94,22 @@ export class ResFilter implements OnDestroy {
 
   /**
    * User clicked (and is dragging) right dragger
-   * @param event 
+   * @param event
    */
   rightSideClick(event: any): void {
     this.dragging = true;
     this.draggingRight = true;
   }
-  
+
   /**
    * User clicked (and is dragging) left dragger
-   * @param event 
+   * @param event
    */
   leftSideClick(event: any): void {
     this.dragging = true;
     this.draggingLeft = true;
   }
-  
+
   /**
    * User stopped dragging
    */

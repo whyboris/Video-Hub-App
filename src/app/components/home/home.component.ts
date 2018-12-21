@@ -1,5 +1,6 @@
 import { Component, ChangeDetectorRef, OnInit, HostListener, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 
+import { TranslateService } from '@ngx-translate/core';
 import { VirtualScrollComponent } from 'angular2-virtual-scroll';
 
 import { ElectronService } from '../../providers/electron.service';
@@ -12,12 +13,15 @@ import { FinalObject, ImageElement } from '../common/final-object.interface';
 import { HistoryItem } from '../common/history-item.interface';
 import { ImportSettingsObject } from '../common/import.interface';
 import { SavableProperties } from '../common/savable-properties.interface';
-import { SettingsObject } from '../common/settings-object.interface';
+import { SettingsObject, SupportedLanguage } from '../common/settings-object.interface';
 import { WizardOptions } from '../common/wizard-options.interface';
 
 import { AppState } from '../common/app-state';
 import { Filters } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from '../common/settings-buttons';
+
+import { English } from '../../i18n/en';
+import { Russian } from '../../i18n/ru';
 
 import {
   donutAppear,
@@ -174,6 +178,22 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   progressString = '';
 
+  // RENAMING FUNCTIONALITY
+
+  currentRightClickedItem: any; // element from FinalArray
+  renamingNow: boolean = false;
+
+  clickedOnFile: boolean; // whether right-clicked on file or gallery background
+
+  rightClickPosition: any = { x: 0, y: 0 };
+
+  nodeRenamingFile: boolean = false;
+  renameErrMsg: string = '';
+
+  // WIP
+
+  currentLanguage: SupportedLanguage;
+
   // Listen for key presses
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -263,11 +283,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
     public resolutionFilterService: ResolutionFilterService,
     public showLimitService: ShowLimitService,
     public tagsSaveService: TagsSaveService,
+    public translate: TranslateService,
     public wordFrequencyService: WordFrequencyService,
     private elementRef: ElementRef
   ) { }
 
   ngOnInit() {
+    this.translate.setDefaultLang('en');
+    this.changeLanguage('en');
 
     // enable right-clicking of the gallery
     setTimeout(() => {
@@ -437,8 +460,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ngAfterViewInit() {
     // this is required, otherwise when user drops the file, it opens as plaintext
     document.ondragover = document.ondrop = (ev) => {
-      ev.preventDefault()
-    }
+      ev.preventDefault();
+    };
     document.body.ondrop = (ev) => {
       if (ev.dataTransfer.files.length > 0) {
         const fullPath = ev.dataTransfer.files[0].path;
@@ -449,7 +472,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           );
         }
       }
-    }
+    };
   }
 
   /**
@@ -461,7 +484,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     clearTimeout(this.myTimeout);
     this.myTimeout = setTimeout(() => {
       // console.log('Virtual scroll refreshed');
-      this.virtualScroll.refresh()
+      this.virtualScroll.refresh();
     }, delay);
   }
 
@@ -518,7 +541,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       exportFolderPath: this.wizard.selectedOutputFolder,
       imgHeight: this.screenshotSizeForImport,
       hubName: (this.futureHubName || 'untitled')
-    }
+    };
     this.electronService.ipcRenderer.send('start-the-import', importOptions);
   }
 
@@ -666,7 +689,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       vhaFilePath: pathToVhaFile,
       videoFolderPath: pathToVideos,
       hubName: (hubName || 'untitled')
-    }
+    };
 
     let matchFound = false;
 
@@ -986,9 +1009,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // console.log(buttonSettings);
     return {
-      buttonSettings: buttonSettings,
       appState: this.appState,
-      vhaFileHistory: this.vhaFileHistory
+      buttonSettings: buttonSettings,
+      language: this.currentLanguage,
+      vhaFileHistory: this.vhaFileHistory,
     };
   }
 
@@ -1001,7 +1025,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.settingsButtonsGroups.forEach(element => {
       element.forEach(key => {
         objectKeys.push(key);
-      })
+      });
     });
 
     // console.log(objectKeys);
@@ -1025,7 +1049,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   /**
    * restore settings from saved file
    */
-  restoreSettingsFromBefore(settingsObject): void {
+  restoreSettingsFromBefore(settingsObject: SettingsObject): void {
     if (settingsObject.appState) {
       this.appState = settingsObject.appState;
       if (!settingsObject.appState.currentZoomLevel) {  // catch error <-- old VHA apps didn't have `currentZoomLevel`
@@ -1039,6 +1063,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.settingsButtons[element].hidden = settingsObject.buttonSettings[element].hidden;
       }
     });
+    if (settingsObject.language) {
+      this.changeLanguage(settingsObject.language);
+    }
     this.computeTextBufferAmount();
     this.settingsButtons['showTags'].toggled = false; // never show tags on load (they don't load right anyway)
   }
@@ -1056,16 +1083,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   clearLev(): void {
     this.showSimilar = false;
   }
-
-  currentRightClickedItem: any; // element from FinalArray
-  renamingNow: boolean = false;
-
-  clickedOnFile: boolean; // whether right-clicked on file or gallery background
-
-  rightClickPosition: any = { x: 0, y: 0 };
-
-  nodeRenamingFile: boolean = false;
-  renameErrMsg: string = '';
 
   /**
    * Handle right-click and `Show similar`
@@ -1167,10 +1184,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const newFileName = this.renamingWIP + '.' + this.renamingExtension;
     // check if different first !!!
     if (originalFile === newFileName) {
-      this.renameErrMsg = 'new file name must be different';
+      this.renameErrMsg = 'RIGHTCLICK.errorMustBeDifferent';
       this.nodeRenamingFile = false;
     } else if (this.renamingWIP.length === 0 ) {
-      this.renameErrMsg = 'new file name may not be empty';
+      this.renameErrMsg = 'RIGHTCLICK.errorMustNotBeEmpty';
       this.nodeRenamingFile = false;
     } else {
       // try renaming
@@ -1219,6 +1236,21 @@ export class HomeComponent implements OnInit, AfterViewInit {
       addTags ? addTags : [],
       removeTags ? removeTags : []
     );
+  }
+
+  /**
+   * Change the language via ngx-translate
+   * @param language
+   */
+  changeLanguage(language: SupportedLanguage) {
+    this.currentLanguage = language;
+    if (language === 'en') {
+      this.translate.use('en');
+      this.translate.setTranslation('en', English );
+    } else {
+      this.translate.use('ru');
+      this.translate.setTranslation('ru', Russian );
+    }
   }
 
 }

@@ -53,230 +53,226 @@ export const SettingsButtonsGroups: string[][] = [
 
 // correspond to each group above
 export const SettingsCategories: string[] = [
-  'Search & filter settings',
+  'SETTINGS.searchAndFilter',
   '',
   '',
-  'Gallery & view settings',
+  'SETTINGS.galleryAndView',
   '',
   '',
   '',
-  'Other settings',
-  'Reload / update hub'
-]
+  'SETTINGS.otherSettings',
+  'SETTINGS.reloadUpdate'
+];
 
 export let SettingsButtons: { [s: string]: SettingsButton } = {
   'showThumbnails': {
     hidden: false,
     toggled: true,
     iconName: 'icon-show-thumbnails',
-    title: 'Show thumbnails',
-    description: 'Switches to the thumbnails view',
+    title: 'BUTTONS.showThumbnailsHint',
+    description: 'BUTTONS.showThumbnailsDescription',
   },
   'showFilmstrip': {
     hidden: false,
     toggled: false,
     iconName: 'icon-show-filmstrip',
-    title: 'Show filmstrip',
-    description: 'Switches to the filmstrip view'
+    title: 'BUTTONS.showFilmstripHint',
+    description: 'BUTTONS.showFilmstripDescription',
   },
   'showFiles': {
     hidden: false,
     toggled: false,
     iconName: 'icon-show-filenames',
-    title: 'Show files',
-    description: 'Switches to the files view',
+    title: 'BUTTONS.showFilesHint',
+    description: 'BUTTONS.showFilesDescription',
   },
   'showTags': {
     hidden: false,
     toggled: false,
     iconName: 'icon-tag',
-    title: 'Show tags',
-    description: 'Toggles showing auto-generated tags'
+    title: 'BUTTONS.showTagsHint',
+    description: 'BUTTONS.showTagsDescription',
   },
   'showMoreInfo': {
     hidden: false,
     toggled: true,
     iconName: 'icon-tag',
-    title: 'Show more info',
-    description: 'Toggles showing file name, resolution, and video length'
+    title: 'BUTTONS.showMoreInfoHint',
+    description: 'BUTTONS.showMoreInfoDescription',
   },
   'fontSizeLarger': {
     hidden: true,
     toggled: false,
     iconName: 'icon-larger',
-    title: 'Toggle font size',
-    description: 'Toggles the font between larger and smaller'
+    title: 'BUTTONS.fontSizeLargerHint',
+    description: 'BUTTONS.fontSizeLargerDescription',
   },
   'hoverScrub': {
     hidden: true,
     toggled: true,
     iconName: 'icon-toggle-scrub',
-    title: 'Toggle hover animations',
-    description: 'Toggles whether hovering the mouse over thumbnails or filmstrip shows video preview screenshots'
+    title: 'BUTTONS.hoverScrubHint',
+    description: 'BUTTONS.hoverScrubDescription',
   },
   'randomImage': {
     hidden: true,
     toggled: false,
     iconName: 'icon-random',
-    title: 'Show random screenshot',
-    description: 'Toggles whether a random screenshot from each video is shown every time you search or scroll'
+    title: 'BUTTONS.randomImageHint',
+    description: 'BUTTONS.randomImageDescription',
   },
   'randomizeGallery': {
     hidden: true,
     toggled: false,
     iconName: 'icon-random',
-    title: 'Randomize gallery order',
-    description: 'Randomizes the order of video files after every search'
+    title: 'BUTTONS.randomizeGalleryHint',
+    description: 'BUTTONS.randomizeGalleryDescription',
   },
   'shuffleGalleryNow': {
     hidden: false,
     toggled: false,
     iconName: 'icon-random',
-    title: 'Shuffle current results',
-    description: 'Shuffles the results in current view'
+    title: 'BUTTONS.shuffleGalleryNowHint',
+    description: 'BUTTONS.shuffleGalleryNowDescription',
   },
   'showFolderInFileView': {
     hidden: true,
     toggled: true,
     iconName: 'icon-folder-blank',
-    title: 'Show folders in file view',
-    description: 'Shows folder locations in the file view'
+    title: 'BUTTONS.showFolderInFileViewHint',
+    description: 'BUTTONS.showFolderInFileViewDescription',
   },
   'makeSmaller': {
     hidden: false,
     toggled: false,
     iconName: 'icon-minus',
-    title: 'Decrease preview size',
-    description: 'Decreases thumbnail and filmstrip preview sizes'
+    title: 'BUTTONS.makeSmallerHint',
+    description: 'BUTTONS.makeSmallerDescription',
   },
   'makeLarger': {
     hidden: false,
     toggled: false,
     iconName: 'icon-plus',
-    title: 'Increase preview size',
-    description: 'Increases thumbnail and filmstrip preview sizes'
+    title: 'BUTTONS.makeLargerHint',
+    description: 'BUTTONS.makeLargerDescription',
   },
   'darkMode': {
     hidden: false,
     toggled: false,
     iconName: 'icon-darken',
-    title: 'Dark mode',
-    description: 'Toggles between dark and light mode'
+    title: 'BUTTONS.darkModeHint',
+    description: 'BUTTONS.darkModeDescription',
   },
   'folderUnion': {
     hidden: true,
     toggled: false,
     iconName: 'icon-folder-plus',
-    title: 'Folder union search',
-    description: 'Toggles the search for all folders containing any of the search words'
+    title: 'BUTTONS.folderUnionHint',
+    description: 'BUTTONS.folderUnionDescription',
   },
   'folder': {
     hidden: false,
     toggled: true,
     iconName: 'icon-folder-minus',
-    title: 'Folder search',
-    description: 'Toggles the search for folders containing each of the search words'
+    title: 'BUTTONS.folderHint',
+    description: 'BUTTONS.folderDescription',
   },
   'fileUnion': {
     hidden: true,
     toggled: false,
     iconName: 'icon-video-plus',
-    title: 'Video union search',
-    description: 'Toggles the search for videos containing any of the search words'
+    title: 'BUTTONS.fileUnionHint',
+    description: 'BUTTONS.fileUnionDescription',
   },
   'file': {
     hidden: false,
     toggled: true,
     iconName: 'icon-video-minus',
-    title: 'Video search',
-    description: 'Toggles the search for videos containing each of the search words'
+    title: 'BUTTONS.fileHint',
+    description: 'BUTTONS.fileDescription',
   },
   'exclude': {
     hidden: true,
     toggled: false,
     iconName: 'icon-video-x',
-    title: 'Exclude filter',
-    description: 'Toggles the search filter to exclude any files that contain the filter word'
+    title: 'BUTTONS.excludeHint',
+    description: 'BUTTONS.excludeDescription',
   },
   'magic': {
     hidden: false,
     toggled: true,
     iconName: 'icon-looking-glass',
-    title: 'Magic search',
-    description: 'Toggle the magic search which updates the results as you type. ' +
-      'Magic search displays all files that contain the search term ' +
-      'and every file inside any folder that contains the search term in its name'
+    title: 'BUTTONS.magicHint',
+    description: 'BUTTONS.magicDescription',
   },
   'resolutionFilter': {
     hidden: false,
     toggled: true,
     iconName: 'icon-res-filter',
-    title: 'Resolution filter',
-    description: 'Toggles the resolution filter'
+    title: 'BUTTONS.resolutionFilterHint',
+    description: 'BUTTONS.resolutionFilterDescription',
   },
   'showFreq': {
     hidden: false,
     toggled: true,
     iconName: 'icon-cloud',
-    title: 'Word cloud',
-    description: 'Toggles the word cloud which shows up to nine of the most frequent words in currently shown files'
+    title: 'BUTTONS.showFreqHint',
+    description: 'BUTTONS.showFreqDescription',
   },
   'showRecent': {
     hidden: false,
     toggled: true,
     iconName: 'icon-show-filenames',
-    title: 'Show recently opened hubs',
-    description: 'Toggles the recently-opened video hub history'
+    title: 'BUTTONS.showRecentHint',
+    description: 'BUTTONS.showRecentDescription',
   },
   'hideSidebar': {
     hidden: false,
     toggled: false,
     iconName: 'icon-chevron-left',
-    title: 'Hide sidebar',
-    description: 'Hides the search filter sidebar'
+    title: 'BUTTONS.hideSidebarHint',
+    description: 'BUTTONS.hideSidebarDescription',
   },
   'hideTop': {
     hidden: false,
     toggled: false,
     iconName: 'icon-chevron-up',
-    title: 'Hide top',
-    description: 'Hides the top bar'
+    title: 'BUTTONS.hideTopHint',
+    description: 'BUTTONS.hideTopDescription',
   },
   'flatIcons': {
     hidden: false,
     toggled: false,
     iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
-    title: 'Flat icons',
-    description: 'Toggles between flat and traditional button styles'
+    title: 'BUTTONS.flatIconsHint',
+    description: 'BUTTONS.flatIconsDescription',
   },
   'startWizard': {
     hidden: false,
     toggled: false,
     iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
-    title: 'Start wizard',
-    description: 'Starts wizard again: create a new video hub or open recent'
+    title: 'BUTTONS.startWizardHint',
+    description: 'BUTTONS.startWizardDescription',
   },
   'clearHistory': {
     hidden: false,
     toggled: false,
     iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
-    title: 'Clear history',
-    description: 'Clears the recently-opened history'
+    title: 'BUTTONS.clearHistoryHint',
+    description: 'BUTTONS.clearHistoryDescription',
   },
   'resetSettings': {
     hidden: false,
     toggled: false,
     iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
-    title: 'Reset settings',
-    description: 'Resets settings and buttons to their default values'
+    title: 'BUTTONS.resetSettingsHint',
+    description: 'BUTTONS.resetSettingsDescription',
   },
   'rescanDirectory': {
     hidden: false,
     toggled: false,
     iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
-    title: 'Rescan directory',
-    description: 'Rescans the video folder for any file changes ' +
-      '(addition, renaming, deletion of videos) ' +
-      'and updates the current hub'
+    title: 'BUTTONS.rescanDirectoryHint',
+    description: 'BUTTONS.rescanDirectoryDescription',
   }
-}
+};

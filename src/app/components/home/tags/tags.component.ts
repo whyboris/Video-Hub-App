@@ -93,11 +93,11 @@ export class TagsComponent implements OnDestroy {
         this.oneWordTags = this.tagsService.getOneWordTags();
       }
 
-      this.showStatusMessage('added successfully');
+      this.showStatusMessage('TAG.addSuccess');
       this.currentAdding = '';
 
     } else {
-      this.showStatusMessage('tag already exists')
+      this.showStatusMessage('TAG.alreadyExists');
     }
   }
 

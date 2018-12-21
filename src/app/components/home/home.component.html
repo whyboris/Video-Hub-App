@@ -101,14 +101,14 @@
     @rightClickAnimation
   >
     <ul *ngIf="clickedOnFile; else galleryOptions" @rightClickContentAnimation>
-      <li (click)="openRenameFileModal()">Rename file</li>
-      <li (click)="showSimilarNow()">Show similar</li>
-      <li (click)="showOnlyThisFolderNow()">View folder</li>
-      <li (click)="openContainingFolderNow()">Open folder</li>
+      <li (click)="openRenameFileModal()">{{ 'RIGHTCLICK.renameFile' | translate }}</li>
+      <li (click)="showSimilarNow()">{{ 'RIGHTCLICK.showSimilar' | translate }}</li>
+      <li (click)="showOnlyThisFolderNow()">{{ 'RIGHTCLICK.viewFolder' | translate }}</li>
+      <li (click)="openContainingFolderNow()">{{ 'RIGHTCLICK.openFolder' | translate }}</li>
     </ul>
     <ng-template #galleryOptions>
       <ul @rightClickContentAnimation>
-        <li (click)="toggleButton('shuffleGalleryNow')">Shuffle results</li>
+        <li (click)="toggleButton('shuffleGalleryNow')">{{ 'RIGHTCLICK.shuffle' | translate }}</li>
       </ul>
     </ng-template>
   </div>
@@ -125,12 +125,12 @@
     (click)="closeRename()"
     [ngClass]="{ closeRenameDark: settingsButtons['darkMode'].toggled }"
     class="closeSettings closeRename"
-    title="cancel rename"
+    title="{{ 'RIGHTCLICK.cancelRename' | translate }}"
   >
     <span class="icon icon-close"></span>
   </div>
 
-    <span class="renameHeading">Rename</span>
+    <span class="renameHeading">{{ 'RIGHTCLICK.renameTitle' | translate }}</span>
 
     <app-filmstrip-item
       [darkMode]="settingsButtons['darkMode'].toggled"
@@ -149,8 +149,8 @@
       [title]="itemToRename[1]"
     ></app-filmstrip-item>
 
-    <span class="renameFrom">from:</span>
-    <span class="renameTo">to:</span>
+    <span class="renameFrom">{{ 'RIGHTCLICK.renameFrom' | translate }}</span>
+    <span class="renameTo">{{ 'RIGHTCLICK.renameTo' | translate }}</span>
 
     <input
       (keyup.enter)="attemptToRename()"
@@ -168,7 +168,7 @@
     </span>
 
     <span *ngIf="renameErrMsg !== ''" class="renameErrMsg" @donutAppear>
-      {{ renameErrMsg }}
+      {{ renameErrMsg | translate }}
     </span>
 
     <button
@@ -180,7 +180,7 @@
       class="wizardButton btnRename"
       (click)="attemptToRename()"
     >
-      RENAME
+      {{ 'RIGHTCLICK.renameButton' | translate }}
     </button>
 
 </div>
@@ -193,7 +193,7 @@
     <div
       (click)="toggleButton('showTags')"
       class="closeSettings"
-      title="Close settings"
+      title="{{ 'SETTINGS.closeSettings' | translate }}"
     >
       <span class="icon icon-close"></span>
     </div>
@@ -214,7 +214,7 @@
     <div
       (click)="toggleSettings()"
       class="closeSettings"
-      title="Close settings"
+      title="{{ 'SETTINGS.closeSettings' | translate }}"
     >
       <span class="icon icon-close"></span>
     </div>
@@ -225,7 +225,7 @@
 
       <div *ngIf="i !== 0 && settingsCategories[i] !== ''" class="horizontalDivider">
       </div>
-      <h2>{{ settingsCategories[i] }}</h2>
+      <h2>{{ settingsCategories[i] | translate }}</h2>
 
       <div
         class="searchButtonsSettings"
@@ -245,7 +245,7 @@
                 flatSettingsButton:           settingsButtons['flatIcons'].toggled,
                 flatSettingsButtonToggled:    settingsButtons['flatIcons'].toggled && settingsButtons[buttonKey].toggled
               }"
-            title="{{ settingsButtons[buttonKey].title }}"
+            title="{{ settingsButtons[buttonKey].title | translate }}"
           >
             <span class="icon {{ settingsButtons[buttonKey].iconName }}"></span>
           </button>
@@ -254,12 +254,13 @@
             *ngIf="settingsButtons[buttonKey].iconName !== 'icon-checkmark'"
             (click)="toggleHideButton(buttonKey)"
             class="eyeIconContainer icon {{ settingsButtons[buttonKey].hidden ? 'eye-closed' : 'eye-open' }}"
+            title="{{ 'SETTINGS.showHideText' | translate }}"
           ></span>
 
           <span
             class="buttonDescriptionText"
           >
-            {{ settingsButtons[buttonKey].description }}
+            {{ settingsButtons[buttonKey].description | translate }}
           </span>
 
         </div>
@@ -269,7 +270,7 @@
 
     <div class="horizontalDivider"></div>
 
-    <h2>Change the app zoom level</h2>
+    <h2>{{ 'SETTINGS.changeAppZoom' | translate }}</h2>
 
     <div style="margin: 20px">
       <button
@@ -289,7 +290,7 @@
         }"
         style="max-width: initial; padding: 0 5px; margin: 0 10px"
         >
-          <span>reset</span>
+          <span>{{ 'SETTINGS.reset' | translate }}</span>
       </button>
       <button
         (click)="increaseZoomLevel()"
@@ -302,10 +303,22 @@
       </button>
     </div>
 
+
+    <div class="horizontalDivider"></div>
+
+    <h2>{{ 'SETTINGS.changeLanguage' | translate }}</h2>
+
+    <div style="margin: 20px">
+      <select (change)="changeLanguage($event.target.value)">
+        <option value="en" [selected]="currentLanguage == 'en'">English</option>
+        <option value="ru" [selected]="currentLanguage == 'ru'">Russian</option>
+      </select>
+    </div>
+
     <div class="horizontalDivider"></div>
 
     <div class="credits-and-help" (click)="openOnlineHelp()">
-      Click here for help, documentation, FAQ, or to report a bug
+      {{ 'SETTINGS.FAQ' | translate }}
     </div>
 
     <div class="app-version">
@@ -383,7 +396,7 @@
                   flatSettingsButtonToggled:         settingsButtons['flatIcons'].toggled
                                                   && settingsButtons[buttonKey].toggled
                 }"
-              title="{{ settingsButtons[buttonKey].title }}"
+              title="{{ settingsButtons[buttonKey].title | translate }}"
             >
               <span class="icon {{ settingsButtons[buttonKey].iconName }}"></span>
             </button><!--
@@ -397,7 +410,7 @@
         (click)="toggleSettings()"
         [ngClass]="{ gearButtonActive: buttonsInView }"
         class="gearButton"
-        title="Settings"
+        title="{{ 'SETTINGS.settings' | translate }}"
       >
         <span class="icon icon-gear"></span>
       </div>
@@ -416,8 +429,9 @@
     >
 
       <div class="filteringTotal">
-        {{ appState.numOfFolders | number }} folder{{ appState.numOfFolders === 1 ? '' : 's' }}<br>
-        {{ finalArray.length | number }} videos
+        {{ appState.numOfFolders | number }}
+        {{ (appState.numOfFolders === 1 ? 'SIDEBAR.totalFolders' : 'SIDEBAR.totalFoldersPlural') | translate }}<br>
+        {{ finalArray.length | number }} {{ 'SIDEBAR.videos' | translate }}
       </div>
 
       <!-- SEARCH BOXES -->
@@ -426,14 +440,14 @@
 
           <span class="icon input-icon {{ settingsButtons[filter.uniqueKey].iconName }}"></span>
           <input
-            id="{{filter.uniqueKey}}"
+            id="{{ filter.uniqueKey }}"
             (keyup.enter)="onEnterKey(filter.string, j)"
             (keydown.backspace)="onBackspace(filter.string, j)"
             (keydown.escape)="filter.string = ''"
             [(ngModel)]="filter.string"
             [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
             class="inputFilter"
-            placeholder="{{ filter.placeholder }}"
+            placeholder="{{ filter.placeholder | translate }}"
             type="text"
           >
 
@@ -447,7 +461,7 @@
                   [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? '#CCCCCC' : 'black' }"
                   class="conjunction"
                 >
-                  {{ filter.conjunction }}
+                  {{ filter.conjunction | translate }}
                 </span>
                 <span
                   (click)="removeThisFilter(i, j)"
@@ -475,7 +489,7 @@
           [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
           type="text"
           class="inputFilter"
-          placeholder="folder or file contains"
+          placeholder="{{ 'SIDEBAR.magic' | translate }}"
         >
 
         <div
@@ -531,7 +545,7 @@
 
       <!-- total found -->
       <div class="filteringTotal">
-        <span>{{ currResults.total }} found</span>
+        <span>{{ currResults.total }} {{ 'SIDEBAR.found' | translate }}</span>
       </div>
 
       <!-- word cloud -->
@@ -551,7 +565,7 @@
         [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? '#aaaaaa' : '#333333' }"
         class="recently-opened"
       >
-        <span class="recently-opened-label">Recently opened hubs:</span>
+        <span class="recently-opened-label">{{ 'SIDEBAR.recentlyOpened' | translate }}</span>
         <ul>
           <li
             *ngFor="let historyItem of vhaFileHistory; index as i"
@@ -694,28 +708,28 @@
 
 <div *ngIf="showWizard" class="wizard" @myWizardAnimation>
 
-  <div *ngIf="canCloseWizard" (click)="hideWizard()" class="closeWizard" title="Close wizard">
+  <div *ngIf="canCloseWizard" (click)="hideWizard()" class="closeWizard" title="{{ 'WIZARD.closeButton' | translate }}">
     <span class="icon icon-close"></span>
   </div>
 
   <div class="left-side" @slowFadeIn>
 
-    <h2>Open previous hub</h2>
+    <h2>{{ 'WIZARD.openPrevious' | translate }}</h2>
 
-    <button class="wizardButton" (click)="loadFromFile()" title="Open a previously-saved Video Hub">
-      Load from file
+    <button class="wizardButton" (click)="loadFromFile()" title="{{ 'WIZARD.openPreviouslySaved' | translate }}">
+      {{ 'WIZARD.loadFromFile' | translate }}
     </button>
 
     <div class="recently-opened-wizard" *ngIf="(vhaFileHistory || {}).length > 0" @historyItemRemove>
 
-      <h3>Recently-opened hubs:</h3>
+      <h3>{{ 'WIZARD.recentlyOpened' | translate }}</h3>
 
       <ul>
         <li *ngFor="let historyItem of vhaFileHistory; index as i" (click)="openFromHistory(i)" @historyItemRemove>
           <span
             (click)="removeFromHistory($event, i)"
             class="icon icon-close clear-history-item"
-            title="Remove this item from recent history"
+            title="{{ 'WIZARD.removeFromHistory' | translate }}"
           ></span>
           <img class="history-icon" src="./assets/logo.png">
           <span class="history-name">{{ historyItem.hubName }}</span>
@@ -724,14 +738,14 @@
         </li>
       </ul>
 
-      <span class="clear-history" (click)="clearRecentlyViewedHistory()">clear recent history</span>
+      <span class="clear-history" (click)="clearRecentlyViewedHistory()">{{ 'WIZARD.clearRecent' | translate }}</span>
     </div>
 
   </div>
 
   <div class="right-side" @slowFadeIn>
 
-    <h2>Import new hub</h2>
+    <h2>{{ 'WIZARD.importNew' | translate }}</h2>
 
     <div
       [ngClass]="{
@@ -748,7 +762,7 @@
       class="inputFilter hub-name-input"
     >
     <span class="step-description">
-      Name your hub
+      {{ 'WIZARD.nameYourHub' | translate }}
     </span>
 
     <div
@@ -764,22 +778,24 @@
       class="wizardButton"
       (click)="selectSourceDirectory()"
       [disabled]="futureHubName === ''"
-      title="Please select the folder with your video files"
+      title="{{ 'WIZARD.selectFolderWithVideo' | translate }}"
     >
-      {{ wizard.selectedSourceFolder === '' ? 'Select' : 'Change' }} video directory
+      {{ (wizard.selectedSourceFolder === '' ? 'WIZARD.select' : 'WIZARD.change') | translate }}
+      {{ 'WIZARD.videoDirectory' | translate }}
     </button>
 
     <span class="step-description">
-      Importing from:
+      {{ 'WIZARD.importingFrom' | translate }}
     </span>
     <span class="path" [innerHtml]="wizard.selectedSourceFolder | folderArrowsPipe : false">
     </span>
     <span class="step-description" *ngIf="wizard.totalNumberOfFiles !== -1">
-      Found
+      {{ 'WIZARD.found' | translate }}
       <span class="emphasis-number">
         {{ wizard.totalNumberOfFiles | number }}
       </span>
-      videos {{ wizard.totalNumberOfFiles > 50 && demo ? 'demo version limited to 50 video files' : '' }}
+      {{ 'WIZARD.videos' | translate }}
+      {{ (wizard.totalNumberOfFiles > 50 && demo ? 'WIZARD.demoVersion' : '') | translate }}
     </span>
 
     <div
@@ -792,13 +808,14 @@
       class="wizardButton"
       (click)="selectOutputDirectory()"
       [disabled]="wizard.selectedSourceFolder === '' || futureHubName === ''"
-      title="Please select the folder where your Video Hub will be stored"
+      title="{{ 'WIZARD.selectWhereFilesStored' | translate }}"
     >
-      {{ wizard.selectedOutputFolder === '' ? 'Select' : 'Change' }} hub directory
+      {{ (wizard.selectedOutputFolder === '' ? 'WIZARD.select' : 'WIZARD.change') | translate }}
+      {{ 'WIZARD.hubDirectory' | translate }}
     </button>
 
     <span class="step-description">
-      Saving the video hub and screenshots to:
+      {{ 'WIZARD.savingTo' | translate }}
     </span>
     <span class="path" [innerHtml]="wizard.selectedOutputFolder | folderArrowsPipe : false">
     </span>
@@ -825,7 +842,7 @@
     </select>
 
     <span class="step-description">
-      Size of screenshots
+      {{ 'WIZARD.sizeOfScreenshots' | translate }}
     </span>
 
     <div
@@ -837,11 +854,11 @@
         }"
       @galleryItemAppear
     >
-      imported
+      {{ 'WIZARD.imported' | translate }}
       <br>
-      screenshot
+      {{ 'WIZARD.screenshot' | translate }}
       <br>
-      size
+      {{ 'WIZARD.size' | translate }}
     </div>
 
     <div
@@ -859,23 +876,23 @@
                || wizard.totalNumberOfFiles === 0"
       (click)="importFresh()"
     >
-      Create the Video Hub
+      {{ 'WIZARD.createVideoHub' | translate }}
     </button>
 
     <span class="description" *ngIf="wizard.totalNumberOfFiles !== -1">
-      Expected:
+      {{ 'WIZARD.expected' | translate }}
     </span>
     <span class="step-description" *ngIf="wizard.totalNumberOfFiles !== -1">
       <span class="emphasis-number">
         {{ wizard.totalImportTime }}
       </span>
-      minutes to import
+      {{ 'WIZARD.timeToImport' | translate }}
     </span>
     <span class="step-description" *ngIf="wizard.totalNumberOfFiles !== -1">
       <span class="emphasis-number">
         {{ wizard.totalImportSize }}
       </span>
-      mb of disk space
+      {{ 'WIZARD.sizeToImport' | translate }}
     </span>
 
   </div>
