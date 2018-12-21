@@ -58,7 +58,7 @@
     [ngClass]="{ editModeActive: editMode }"
     (click)="startEditMode()"
   >
-    delete
+    {{ 'TAGS.delete' | translate }}
   </button>
 </div>
 
@@ -71,7 +71,7 @@
   >
 
   <span class="numFound">
-    Filter list
+    {{ 'TAGS.filterList' | translate }}
   </span>
 </div>
 
@@ -103,7 +103,7 @@
     (click)="addThisTag()"
     class="wizardButton addButton"
   >
-    Add
+    {{ 'TAGS.add' | translate }}
   </button>
 </div>
 

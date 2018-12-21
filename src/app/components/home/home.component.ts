@@ -289,8 +289,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
-
     this.translate.setDefaultLang('en');
+    this.changeLanguage('en');
 
     // enable right-clicking of the gallery
     setTimeout(() => {
@@ -1184,10 +1184,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const newFileName = this.renamingWIP + '.' + this.renamingExtension;
     // check if different first !!!
     if (originalFile === newFileName) {
-      this.renameErrMsg = 'new file name must be different';
+      this.renameErrMsg = 'RIGHTCLICK.errorMustBeDifferent';
       this.nodeRenamingFile = false;
     } else if (this.renamingWIP.length === 0 ) {
-      this.renameErrMsg = 'new file name may not be empty';
+      this.renameErrMsg = 'RIGHTCLICK.errorMustNotBeEmpty';
       this.nodeRenamingFile = false;
     } else {
       // try renaming

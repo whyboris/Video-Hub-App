@@ -86,14 +86,22 @@ export const Russian = {
     galleryAndView: 'Галерея и настройки просмотра',
     otherSettings: 'Другие настройки',
     reloadUpdate: 'Обновить / обновить концентратор',
+    reset: 'сброс',
     searchAndFilter: 'Настройки поиска и фильтра',
     showHideText: 'показать / скрыть значок в панели настроек',
   },
-  RIGHTTCLICK: {
+  RIGHTCLICK: {
+    errorFileNameExists: 'Файл существует с этим именем',
+    errorFileNotFound: 'Исходный файл не найден',
+    errorMustBeDifferent: 'новое имя файла должно быть другим',
+    errorMustNotBeEmpty: 'новое имя файла не может быть пустым',
+    errorSomeError: 'Произошла какая- то ошибка',
     openFolder: 'Открыть папку',
     renameButton: 'Переименовать',
     renameFile: 'Переименовать файл',
+    renameFrom: 'от:',
     renameTitle: 'Переименовать',
+    renameTo: 'в:',
     showSimilar: 'Показать похожие',
     shuffle: 'Перемешать результаты',
     viewFolder: 'Просмотреть папку',
@@ -124,5 +132,10 @@ export const Russian = {
     timeToImport: 'минуты для импорта',
     videoDirectory: 'каталог видео',
     videos: 'видео',
+  },
+  TAGS: {
+    add: 'добавлять',
+    delete: 'удалять',
+    filterList: 'Список фильтров',
   }
 };

@@ -86,14 +86,22 @@ export const English = {
     galleryAndView: 'Gallery & view settings',
     otherSettings: 'Other settings',
     reloadUpdate: 'Reload / update hub',
+    reset: 'reset',
     searchAndFilter: 'Search & filter settings',
     showHideText: 'show / hide icon in the settings bar',
   },
   RIGHTCLICK: {
+    errorFileNameExists: 'A file existst with this filename',
+    errorFileNotFound: 'Original file could not be found',
+    errorMustBeDifferent: 'new file name must be different',
+    errorMustNotBeEmpty: 'new file name may not be empty',
+    errorSomeError: 'Some error occurred',
     openFolder: 'Open folder',
     renameButton: 'RENAME',
     renameFile: 'Rename file',
+    renameFrom: 'from:',
     renameTitle: 'Rename',
+    renameTo: 'to:',
     showSimilar: 'Show similar',
     shuffle: 'Shuffle results',
     viewFolder: 'View folder',
@@ -124,5 +132,10 @@ export const English = {
     timeToImport: 'minutes to import',
     videoDirectory: 'video directory',
     videos: 'videos',
+  },
+  TAGS: {
+    add: 'Add',
+    delete: 'delete',
+    filterList: 'Filter list',
   }
 };

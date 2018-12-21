@@ -19,7 +19,7 @@ serve = args.some(val => val === '--serve');
 const dialog = require('electron').dialog;
 
 let userWantedToOpen = null;
-let myWindow = null
+let myWindow = null;
 
 // TODO -- maybe clean up the `userWantedToOpen` with whatever pattern recommended by Electron
 // For windows -- when loading the app the first time
@@ -30,10 +30,10 @@ if (process.argv[1]) {
 }
 
 // OPEN FILE ON WINDOWS FROM FILE DOUBLE CLICK
-const gotTheLock = app.requestSingleInstanceLock()
+const gotTheLock = app.requestSingleInstanceLock();
 
 if (!gotTheLock) {
-  app.quit()
+  app.quit();
 } else {
 
   app.on('second-instance', (event, argv: string[], workingDirectory) => {
@@ -260,7 +260,7 @@ function openThisDamnFile(pathToVhaFile: string) {
       globals.selectedOutputFolder = path.parse(pathToVhaFile).dir;
 
       // use relative paths
-      if (lastSavedFinalObject.inputDir === "") {
+      if (lastSavedFinalObject.inputDir === '') {
         lastSavedFinalObject.inputDir = globals.selectedOutputFolder;
       }
 
@@ -378,7 +378,7 @@ ipc.on('choose-input', function (event, someMessage) {
       const inputDirPath: string = files[0];
       event.sender.send('inputFolderChosen', inputDirPath, numberOfVidsIn(inputDirPath));
     }
-  })
+  });
 });
 
 /**
@@ -393,7 +393,7 @@ ipc.on('choose-output', function (event, someMessage) {
       const outputDirPath = files[0];
       event.sender.send('outputFolderChosen', outputDirPath);
     }
-  })
+  });
 });
 
 /**
@@ -593,7 +593,7 @@ ipc.on('try-to-rename-this-file', function(event, sourceFolder: string, relPath:
   if (fs.existsSync(newName)) {
     console.log('some file already EXISTS WITH THAT NAME !!!');
     success = false;
-    errMsg = 'A file existst with this filename';
+    errMsg = 'RIGHCLICK.errorFileNameExists';
   } else {
     try {
       fs.renameSync(original, newName);
@@ -603,9 +603,9 @@ ipc.on('try-to-rename-this-file', function(event, sourceFolder: string, relPath:
       if (err.code === 'ENOENT') {
         // const pathObj = path.parse(err.path);
         // console.log(pathObj);
-        errMsg = 'Original file could not be found';
+        errMsg = 'RIGHTCLICK.errorFileNotFound';
       } else {
-        errMsg = 'Some error occurred';
+        errMsg = 'RIGHTCLICK.errorSomeError';
       }
     }
   }
@@ -720,7 +720,7 @@ function extractAllScreenshots(
     } else {
       sendCurrentProgress(1, 1, 2); // indicates 100%
     }
-  }
+  };
 
   extractTenCallback();
 }
