@@ -87,6 +87,7 @@ export const English = {
     otherSettings: 'Other settings',
     reloadUpdate: 'Reload / update hub',
     searchAndFilter: 'Search & filter settings',
+    showHideText: 'show / hide icon in the settings bar',
   },
   RIGHTCLICK: {
     openFolder: 'Open folder',
@@ -115,6 +116,8 @@ export const English = {
     savingTo: 'Saving the video hub and screenshots to:',
     screenshot: 'screenshot',
     select: 'Select',
+    selectFolderWithVideo: 'Please select the folder with your video files',
+    selectWhereFilesStored: 'Please select the folder where your Video Hub will be stored',
     size: 'size',
     sizeOfScreenshots: 'Size of screenshots',
     sizeToImport: 'mb of disk space',

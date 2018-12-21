@@ -13,7 +13,7 @@ import { FinalObject, ImageElement } from '../common/final-object.interface';
 import { HistoryItem } from '../common/history-item.interface';
 import { ImportSettingsObject } from '../common/import.interface';
 import { SavableProperties } from '../common/savable-properties.interface';
-import { SettingsObject, PossibleLanguage } from '../common/settings-object.interface';
+import { SettingsObject, SupportedLanguage } from '../common/settings-object.interface';
 import { WizardOptions } from '../common/wizard-options.interface';
 
 import { AppState } from '../common/app-state';
@@ -192,7 +192,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   // WIP
 
-  currentLanguage: PossibleLanguage;
+  currentLanguage: SupportedLanguage;
 
   // Listen for key presses
   @HostListener('document:keydown', ['$event'])
@@ -291,8 +291,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ngOnInit() {
 
     this.translate.setDefaultLang('en');
-    this.translate.use('en');
-    this.translate.setTranslation('en', English );
 
     // enable right-clicking of the gallery
     setTimeout(() => {
@@ -1244,7 +1242,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Change the language via ngx-translate
    * @param language
    */
-  changeLanguage(language: PossibleLanguage) {
+  changeLanguage(language: SupportedLanguage) {
     this.currentLanguage = language;
     if (language === 'en') {
       this.translate.use('en');

@@ -254,7 +254,7 @@
             *ngIf="settingsButtons[buttonKey].iconName !== 'icon-checkmark'"
             (click)="toggleHideButton(buttonKey)"
             class="eyeIconContainer icon {{ settingsButtons[buttonKey].hidden ? 'eye-closed' : 'eye-open' }}"
-            title="show / hide icon in the settings bar"
+            title="{{ 'SETTINGS.showHideText' | translate }}"
           ></span>
 
           <span
@@ -778,7 +778,7 @@
       class="wizardButton"
       (click)="selectSourceDirectory()"
       [disabled]="futureHubName === ''"
-      title="Please select the folder with your video files"
+      title="{{ 'WIZARD.selectFolderWithVideo' | translate }}"
     >
       {{ (wizard.selectedSourceFolder === '' ? 'WIZARD.select' : 'WIZARD.change') | translate }}
       {{ 'WIZARD.videoDirectory' | translate }}
@@ -808,7 +808,7 @@
       class="wizardButton"
       (click)="selectOutputDirectory()"
       [disabled]="wizard.selectedSourceFolder === '' || futureHubName === ''"
-      title="Please select the folder where your Video Hub will be stored"
+      title="{{ 'WIZARD.selectWhereFilesStored' | translate }}"
     >
       {{ (wizard.selectedOutputFolder === '' ? 'WIZARD.select' : 'WIZARD.change') | translate }}
       {{ 'WIZARD.hubDirectory' | translate }}
