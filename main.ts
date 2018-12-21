@@ -196,9 +196,6 @@ const shell = require('electron').shell;
 
 const ffprobePath = require('@ffprobe-installer/ffprobe').path.replace('app.asar', 'app.asar.unpacked');
 const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path.replace('app.asar', 'app.asar.unpacked');
-const ffmpeg = require('fluent-ffmpeg');
-ffmpeg.setFfprobePath(ffprobePath);
-ffmpeg.setFfmpegPath(ffmpegPath);
 
 // ============================================================
 // My variables
