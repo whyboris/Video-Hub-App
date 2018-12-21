@@ -135,6 +135,8 @@ export const Russian = {
   },
   TAGS: {
     add: 'добавлять',
+    addSuccess: 'успешно добавлено',
+    alreadyExists: 'тег уже существует',
     delete: 'удалять',
     filterList: 'Список фильтров',
   }

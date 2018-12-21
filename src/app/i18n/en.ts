@@ -135,6 +135,8 @@ export const English = {
   },
   TAGS: {
     add: 'Add',
+    addSuccess: 'added successfully',
+    alreadyExists: 'tag already exists',
     delete: 'delete',
     filterList: 'Filter list',
   }
