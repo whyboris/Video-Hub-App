@@ -7,6 +7,10 @@
     "name": "Boris Yakubchik",
     "email": "yboris@yahoo.com"
   },
+  "contributors": [{
+    "name": "Cal Martin",
+    "url": "https://github.com/cal2195"
+  }],
   "keywords": [
     "video"
   ],
@@ -34,7 +38,7 @@
     "@ffmpeg-installer/ffmpeg": "1.0.17",
     "@ffprobe-installer/ffprobe": "1.0.9",
     "@ngx-translate/core": "11.0.1",
-    "ngx-virtual-scroller": "1.0.16",
+    "ngx-virtual-scroller": "1.0.16"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.11.3",

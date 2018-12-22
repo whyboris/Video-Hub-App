@@ -540,7 +540,7 @@ export function extractAllMetadata(
       done(elementsWithMetadata);
 
     }
-  }
+  };
 
   extractMetaDataCallback(null);
 }
