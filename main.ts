@@ -213,6 +213,7 @@ import {
   numberOfVidsIn,
   sendCurrentProgress,
   takeTenScreenshots,
+  takeTenClips,
   updateFinalArrayWithHD,
   writeVhaFileDangerously
 } from './main-support';
@@ -617,7 +618,7 @@ ipc.on('try-to-rename-this-file', function(event, sourceFolder: string, relPath:
   console.log(original);
   console.log(newName);
 
-  let success: boolean = true;
+  let success = true;
   let errMsg: string;
 
   // check if already exists first

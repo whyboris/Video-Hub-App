@@ -91,7 +91,7 @@ export function countFoldersInFinalArray(imagesArray: ImageElement[]): number {
 export function writeVhaFileDangerously(finalObject: FinalObject, pathToTheFile: string, done): void {
   // check for relative paths
   if (finalObject.inputDir === path.parse(pathToTheFile).dir) {
-    finalObject.inputDir = "";
+    finalObject.inputDir = '';
   }
 
   const json = JSON.stringify(finalObject);
@@ -134,7 +134,9 @@ function fileSystemReserved(thingy: string): boolean {
 export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] {
 
   const finalArray: ImageElement[] = [];
-  let elementIndex: number = 0;
+  let elementIndex = 0;
+  // ignore folders beginning with { '.', '_', 'vha-' }
+  const ignoreRegex = /^(\.|_|vha-).*/g;
 
   // Recursively walk through a directory compiling ImageElements
   const walkSync = (dir, filelist) => {
@@ -142,19 +144,21 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
 
     files.forEach(function (file) {
       if (!fileSystemReserved(file.name)) {
-        // if the item is a _DIRECTORY_
-        if (file.isDirectory()) {
-          filelist = walkSync(path.join(dir, file.name), filelist);
-        } else {
-          const extension = file.name.split('.').pop();
-          if (acceptableFiles.includes(extension.toLowerCase())) {
-            // before adding, remove the redundant prefix: sourceFolderPath
-            const partialPath = dir.replace(sourceFolderPath, '');
-            // fil finalArray with 3 correct and 5 dummy pieces of data
-            finalArray[elementIndex] = [partialPath, file.name, cleanUpFileName(file.name), '', 0, '', 0, 0];
-            elementIndex++;
+        try {
+          // if the item is a _DIRECTORY_
+          if (file.isDirectory()) {
+            filelist = walkSync(path.join(dir, file.name), filelist);
+          } else {
+            const extension = file.name.split('.').pop();
+            if (acceptableFiles.includes(extension.toLowerCase())) {
+              // before adding, remove the redundant prefix: sourceFolderPath
+              const partialPath = dir.replace(sourceFolderPath, '');
+              // fil finalArray with 3 correct and 5 dummy pieces of data
+              finalArray[elementIndex] = [partialPath, file.name, cleanUpFileName(file.name), '', 0, '', 0, 0];
+              elementIndex++;
+            }
           }
-        }
+        } catch (err) {}
       }
     });
 
@@ -181,15 +185,17 @@ export function numberOfVidsIn(folderPath: string): number {
 
     files.forEach(function (file) {
       if (!fileSystemReserved(file.name)) {
-        // if the item is a _DIRECTORY_
-        if (file.isDirectory()) {
-          filelist = walkAndCountSync(path.join(dir, file.name), filelist);
-        } else {
-          const extension = file.name.split('.').pop();
-          if (acceptableFiles.includes(extension.toLowerCase())) {
-            totalNumberOfFiles++;
+        try {
+          // if the item is a _DIRECTORY_
+          if (file.isDirectory()) {
+            filelist = walkAndCountSync(path.join(dir, file.name), filelist);
+          } else {
+            const extension = file.name.split('.').pop();
+            if (acceptableFiles.includes(extension.toLowerCase())) {
+              totalNumberOfFiles++;
+            }
           }
-        }
+        } catch (err) {}
       }
     });
 
@@ -234,10 +240,16 @@ export function takeTenScreenshots(
 
   if (fs.existsSync(saveLocation + '/' + fileHash + '.jpg')) {
     // console.log("thumbnails for " + fileHash + " already exist");
-    done();
+    takeTenClips(pathToVideo,
+                 fileHash,
+                 duration,
+                 screenSize,
+                 saveLocation,
+                 done);
+    return;
   }
 
-  let current: number = 1;
+  let current = 1;
   const totalCount = 11;
   const step: number = duration / totalCount;
   const args = [];
@@ -263,38 +275,118 @@ export function takeTenScreenshots(
   //   console.log('grep stderr: ' + data);
   // });
   ffmpeg_process.on('exit', () => {
+    takeTenClips(pathToVideo,
+                 fileHash,
+                 duration,
+                 screenSize,
+                 saveLocation,
+                 done);
+  });
+}
+
+/**
+ * Take 10 screenshots of a particular file
+ * at particular file size
+ * save as particular fileNumber
+ * @param pathToVideo  -- full path to the video file
+ * @param fileHash     -- hash of the video file
+ * @param screensize   -- resolution in pixels (defaul is 100)
+ * @param saveLocation -- folder where to save jpg files
+ * @param done         -- callback when done
+ */
+export function takeTenClips(
+  pathToVideo: string,
+  fileHash: string,
+  duration: number,
+  screenSize: number,
+  saveLocation: string,
+  done: any
+) {
+
+  if (fs.existsSync(saveLocation + '/' + fileHash + '.mp4')) {
+    // console.log("thumbnails for " + fileHash + " already exist");
+    extractFirstFrame(saveLocation, fileHash, done);
+    return;
+  }
+
+  let current = 1;
+  const totalCount = 10;
+  const step: number = duration / totalCount;
+  const args = [];
+  let concat = '';
+
+  // make the magic filter
+  while (current < totalCount) {
+    const time = current * step;
+    const preview_duration = 1; // TODO: Make this customisable
+    args.push('-ss', time, '-t', preview_duration, '-i', pathToVideo);
+    concat += '[' + (current - 1) + ':v]' + '[' + (current - 1) + ':a]';
+    current++;
+  }
+  concat += 'concat=n=' + (totalCount - 1) + ':v=1:a=1';
+  args.push('-filter_complex', concat, saveLocation + '/' + fileHash + '.mp4');
+  // phfff glad that's over
+
+  // now make it all worth it!
+  const ffmpeg_process = spawn(ffmpegPath, args);
+  ffmpeg_process.stdout.on('data', function (data) {
+    console.log(data);
+  });
+  ffmpeg_process.stderr.on('data', function (data) {
+    console.log('grep stderr: ' + data);
+  });
+  ffmpeg_process.on('exit', () => {
+    extractFirstFrame(saveLocation, fileHash, done);
+  });
+}
+
+export function extractFirstFrame(saveLocation: string, fileHash: string, done: any) {
+  if (fs.existsSync(saveLocation + '/' + fileHash + '-first.jpg')) {
+    done();
+    return;
+  }
+
+  const args = [
+  '-ss', 0,
+  '-i', saveLocation + '/' + fileHash + '.mp4',
+  '-frames', 1,
+  '-f', 'image2',
+  saveLocation + '/' + fileHash + '-first.jpg',
+  ];
+  console.log('extracting clip frame 1');
+  const ffmpeg_process = spawn(ffmpegPath, args);
+  // ffmpeg_process.stdout.on('data', function (data) {
+  //   console.log(data);
+  // });
+  // ffmpeg_process.stderr.on('data', function (data) {
+  //   console.log('grep stderr: ' + data);
+  // });
+  ffmpeg_process.on('exit', () => {
     done();
   });
 }
 
-// ------------------------ SUPER DANGEROUSLY DELETE
+export function deleteThumbnails(imageLocation: string, hash: string) {
+  // console.log('deleting ' + hash);
+  const filePath = path.join(imageLocation, hash);
+  const files = [ filePath + '.jpg',
+                  filePath + '.mp4',
+                  filePath + '-first.jpg' ];
 
-/**
- * Super dangerously delete 10 images from images folder given the base number
- * Deletes 10 images with given base
- * uses `folderToDeleteFrom` variable !!!
- * @param numberOfImage
- */
-export function superDangerousDelete(imageLocation: string, numberOfImage: number): void {
-  // console.log('index given: ' + numberOfImage);
-  const filePath = path.join(imageLocation, numberOfImage.toString());
-
-  for (let i = 1; i < 11; i++) {
-    const currentFile: string = filePath + '-' + i.toString() + '.jpg';
-    if (fs.existsSync(currentFile)) {
-      fs.unlinkSync(currentFile, (err) => {
+  files.forEach((file) => {
+    if (fs.existsSync(file)) {
+      fs.unlinkSync(file, (err) => {
         // console.log(err);
         // Don't even sweat it dawg!
       });
-      // console.log('deleted ' + currentFile);
+      // console.log('deleted ' + file);
     }
-  }
+  });
 }
-
 
 // GENERATE INDEXES FOR ARRAY
 
-export function hasAllThumbs(fileHash: string, screenshotFolder: string) : boolean {
+export function hasAllThumbs(fileHash: string, screenshotFolder: string): boolean {
   // Check in reverse order for efficiency
   return fs.existsSync(screenshotFolder + '/' + fileHash + '-first.jpg')
          && fs.existsSync(screenshotFolder + '/' + fileHash + '.mp4')
@@ -390,7 +482,7 @@ export function finalArrayWithoutDeleted(
     if (matchFound) {
       return true;
     } else {
-      //superDangerousDelete(folderWhereImagesAre, value[3]);
+      deleteThumbnails(folderWhereImagesAre, value[3]);
       return false;
     }
   });

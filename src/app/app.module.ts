@@ -6,7 +6,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { TranslateModule } from '@ngx-translate/core';
-import { VirtualScrollModule } from 'angular2-virtual-scroll';
+import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 
 import { AlphabetPrefixService } from './components/pipes/alphabet-prefix.service';
 import { ElectronService } from './providers/electron.service';
@@ -23,6 +23,7 @@ import { FileComponent } from './components/home/file/file.component';
 import { FilmstripComponent } from './components/home/filmstrip/filmstrip.component';
 import { PreviewComponent } from './components/home/thumbnail/preview.component';
 import { ResFilterComponent } from './components/home/resfilter/resfilter.component';
+import { ClipComponent } from './components/home/clip/clip.component';
 import { SimilarityService } from './components/pipes/similarity.service';
 import { TagsComponent } from './components/home/tags/tags.component';
 import { TopComponent } from './components/home/top/top.component';
@@ -60,6 +61,7 @@ import { AppRoutingModule } from './app-routing.module';
     LengthPipe,
     MagicSearchPipe,
     PreviewComponent,
+    ClipComponent,
     RandomizePipe,
     ResFilterComponent,
     ResolutionFilterPipe,
@@ -76,7 +78,7 @@ import { AppRoutingModule } from './app-routing.module';
     BrowserModule,
     FormsModule,
     TranslateModule.forRoot(),
-    VirtualScrollModule
+    VirtualScrollerModule
   ],
   providers: [
     AlphabetPrefixService,

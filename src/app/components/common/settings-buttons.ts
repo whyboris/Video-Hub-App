@@ -22,6 +22,7 @@ export const SettingsButtonsGroups: string[][] = [
     'showThumbnails',
     'showFilmstrip',
     'showFiles',
+    'showClips',
   ],
   [
     'makeSmaller',
@@ -85,6 +86,13 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-show-filenames',
     title: 'BUTTONS.showFilesHint',
     description: 'BUTTONS.showFilesDescription',
+  },
+  'showClips': {
+    hidden: false,
+    toggled: true,
+    iconName: 'icon-show-thumbnails',
+    title: 'Show clips',
+    description: 'Switches to the clips view',
   },
   'showTags': {
     hidden: false,
