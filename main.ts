@@ -194,9 +194,6 @@ const fs = require('fs');
 const ipc = require('electron').ipcMain;
 const shell = require('electron').shell;
 
-const ffprobePath = require('@ffprobe-installer/ffprobe').path.replace('app.asar', 'app.asar.unpacked');
-const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path.replace('app.asar', 'app.asar.unpacked');
-
 // ============================================================
 // My variables
 // ============================================================
@@ -204,16 +201,12 @@ const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path.replace('app.asar', 
 import {
   alphabetizeFinalArray,
   countFoldersInFinalArray,
-  missingThumbsIndex,
-  everyIndex,
   extractAllMetadata,
-  finalArrayWithoutDeleted,
-  findAllNewFiles,
   getVideoPathsAndNames,
+  missingThumbsIndex,
   numberOfVidsIn,
   sendCurrentProgress,
   takeTenScreenshots,
-  takeTenClips,
   updateFinalArrayWithHD,
   writeVhaFileDangerously
 } from './main-support';

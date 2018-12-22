@@ -28,17 +28,10 @@ A list of upcoming features is [listed on the official website](https://videohub
 
 ## Current versions
 
-- Angular v7.1.2
-- Angular-CLI v7.1.2
-- Electron v3.0.11
+- Angular v7.1.3
+- Angular-CLI v7.1.3
+- Electron v4.0.0 (internally uses Node v10.11.0 and Chrome 69)
 - Electron Builder v20.36.2
-
-Works with:
-
-- Node v10.14.1
-- npm v6.4.1
-
-Note: the first time you run `npm install` the `node postinstall` command might take 5+ minutes.
 
 ## Thank you
 
@@ -52,4 +45,5 @@ This software would not be possible without the tremendous work by other people:
  - [@ffmpeg-installer/ffmpeg](https://www.npmjs.com/package/@ffmpeg-installer/ffmpeg)
  - [@ffprobe-installer/ffprobe](https://www.npmjs.com/package/@ffprobe-installer/ffprobe)
  - [ngx-translate](https://github.com/ngx-translate/core)
- - [fluent-ffmpeg](https://github.com/fluent-ffmpeg/node-fluent-ffmpeg)
+
+Since becoming open source, this software was made better with the awesome contrubutions by [cal2195](https://github.com/cal2195)
