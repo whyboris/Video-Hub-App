@@ -313,14 +313,18 @@ ipc.on('just-started', function (event, someMessage) {
       event.sender.send('pleaseOpenWizard');
     } else {
 
+      const savedSettings = JSON.parse(data);
+
       // Restore last windows size and position or full screen if not available
-      if (JSON.parse(data).windowSizeAndPosition) {
-        win.setBounds(JSON.parse(data).windowSizeAndPosition);
+      if (savedSettings.windowSizeAndPosition
+        && savedSettings.windowSizeAndPosition.x < screenWidth - 200
+        && savedSettings.windowSizeAndPosition.y < screenHeight - 200) {
+          win.setBounds(savedSettings.windowSizeAndPosition);
       } else {
         win.setBounds({ x: 0, y: 0, width: screenWidth, height: screenHeight });
       }
 
-      event.sender.send('settingsReturning', JSON.parse(data), userWantedToOpen);
+      event.sender.send('settingsReturning', savedSettings, userWantedToOpen);
     }
   });
 });
