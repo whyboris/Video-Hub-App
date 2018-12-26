@@ -609,7 +609,9 @@
                 | wordFrequencyPipe: settingsButtons['showFreq'].toggled
                 | countPipe
                 | randomizePipe: shuffleTheViewNow
-                | folderViewPipe: (appState.currentView === 'files' && settingsButtons['showFolderInFileView'].toggled)"
+                | folderViewPipe: settingsButtons['showFoldersOnly'].toggled
+                                  || (appState.currentView === 'files' && settingsButtons['showFolderInFileView'].toggled)
+                                  : settingsButtons['showFoldersOnly'].toggled"
     >
 
     <!-- 24 above is 20 pixels for element and 4 for the fudge factor -->
@@ -669,8 +671,8 @@
           *ngFor="let item of scroll.viewPortItems"
           [folderPath]="item[0]"
           [title]="item[2]"
-          (click)="(item[2] === '*') ? handleFolderWordClicked(item[0]) : openVideo(item[3])"
-          (contextmenu)="(item[2] === '*') ? doNothing() : rightMouseClicked($event, item)"
+          (click)="(item[2] === '***') ? handleFolderWordClicked(item[0]) : openVideo(item[3])"
+          (contextmenu)="(item[2] === '***') ? doNothing() : rightMouseClicked($event, item)"
           [time]="item[4]"
           [rez]="item[5]"
           [fileSize]="item[7]"

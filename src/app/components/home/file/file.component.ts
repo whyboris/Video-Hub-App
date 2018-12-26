@@ -1,4 +1,4 @@
-import { Component, Input, HostListener } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { galleryItemAppear, metaAppear } from '../../common/animations';
 

@@ -10,9 +10,10 @@ export class FolderViewPipe implements PipeTransform {
   /**
    * Inserts folders os elements for file view
    * @param finalArray
-   * @param render    whether to insert folders
+   * @param render      whether to insert folders
+   * @param folderOnly  whether to ONLY show folders
    */
-  transform(finalArray: any[], render: boolean): any[] {
+  transform(finalArray: any[], render: boolean, folderOnly: boolean): any[] {
     if (render) {
       const arrWithFolders = [];
 
@@ -23,12 +24,14 @@ export class FolderViewPipe implements PipeTransform {
           const tempClone = [];
           tempClone[0] = element[0];
           tempClone[1] = element[1];
-          tempClone[2] = '*'
+          tempClone[2] = '***';
 
           arrWithFolders.push(tempClone);
           previousFolder = element[0];
         }
-        arrWithFolders.push(element);
+        if (!folderOnly) {
+          arrWithFolders.push(element);
+        }
       });
 
       // console.log('folderViewPipe running');
