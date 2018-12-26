@@ -1,4 +1,4 @@
-import { ImageElement } from "./final-object.interface";
+import { ImageElement } from './final-object.interface';
 
 export interface SavableProperties {
   addTags: string[];      // tags to add

@@ -1,7 +1,7 @@
 export interface SettingsButton {
-  hidden: boolean,
-  toggled: boolean,
-  iconName: string,
-  title: string,
-  description: string
+  description: string;
+  hidden: boolean;
+  iconName: string;
+  title: string;
+  toggled: boolean;
 }
