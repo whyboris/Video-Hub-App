@@ -336,7 +336,7 @@ ipc.on('just-started', function (event, someMessage) {
 
   fs.readFile(path.join(pathToAppData, 'video-hub-app', 'settings.json'), (err, data) => {
     if (err) {
-      event.sender.send('pleaseOpenWizard');
+      event.sender.send('pleaseOpenWizard', true); // firstRun = true!
     } else {
       event.sender.send('settingsReturning', JSON.parse(data), userWantedToOpen);
     }
