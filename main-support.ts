@@ -263,7 +263,7 @@ export function takeTenScreenshots(
     current++;
   }
   args.push('-frames', 1,
-    '-filter_complex', concat + 'vstack=inputs=' + (totalCount - 1),
+    '-filter_complex', concat + 'hstack=inputs=' + (totalCount - 1),
     saveLocation + '/' + fileHash + '.jpg'
   );
 

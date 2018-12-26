@@ -4,37 +4,17 @@
 >
 
   <div
+    #filmstripHolder
+    (mousemove)="mouseIsMoving($event)"
     class="filmstrip-container"
-    [ngStyle]="{ height: imgHeight + 'px'}"
+    [ngStyle]="{
+        height: imgHeight + 'px',
+        background: 'url(' + 'file://' + folderPath + '/' + imgId + ')',
+        'background-position-x': '-' + filmXoffset + 'px'
+      }"
   >
-
     <span *ngIf="showMeta" class="time" >{{ time | lengthPipe }}</span>
     <span *ngIf="showMeta" class="rez" >{{ rez }}</span>
-
-    <ng-container *ngIf="hoverScrub && hover && noError">
-      <div
-        *ngFor="let item of indexArray; let i = index"
-        (mouseover)="showThisOne(i)"
-        [ngStyle]="{'left': 10 * i + '%' }"
-        class="hoverable"
-      >
-      </div>
-    </ng-container>
-
-    <ng-container *ngIf="noError">
-      <img
-        *ngFor="let item of indexArray; let i = index"
-        [ngStyle]="{
-            'right': 'calc(' + (9 - i) + ' * (100% - ' + imgWidth + 'px)/9)',
-            'z-index': indexArray[i],
-            'height': imgHeight * 10 + 'px',
-            'margin-top': -i * imgHeight + 'px'
-          }"
-        [src]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + imgId)"
-        class="screencap"
-      >
-    </ng-container>
-
   </div>
 
   <span

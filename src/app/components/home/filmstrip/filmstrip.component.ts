@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, HostListener } from '@angular/core';
+import { Component, Input, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { galleryItemAppear, metaAppear, textAppear } from '../../common/animations';
 
@@ -11,6 +11,8 @@ import { galleryItemAppear, metaAppear, textAppear } from '../../common/animatio
                 metaAppear ]
 })
 export class FilmstripComponent implements OnInit {
+
+  @ViewChild('filmstripHolder') filmstripHolder: ElementRef;
 
   @Input() darkMode: boolean;
   @Input() elHeight: number;
@@ -27,7 +29,7 @@ export class FilmstripComponent implements OnInit {
   @Input() time: string;
   @Input() title: string;
 
-  indexArray: Array<number> = []; // to set z-index on css
+  filmXoffset: number = 0;
 
   hover = false;
   noError = true;
@@ -52,17 +54,12 @@ export class FilmstripComponent implements OnInit {
     // hack -- populate hardcoded values -- fix later
     const fileHash = this.imgId;
     this.imgId = 'vha-' + this.hubName + '/' + fileHash + '.jpg';
-
-    for (let i = 0; i < 10; i++) {
-      this.indexArray[i] = 10 - i;
-    }
   }
 
-  showThisOne(screen: number): void {
-    this.indexArray.forEach((element, index) => {
-      const distance = Math.abs(index - screen);
-      this.indexArray[index] = 10 - distance;
-    });
-  }
+  mouseIsMoving($event) {
+    const cursorX = $event.layerX;
+    const containerWidth = this.filmstripHolder.nativeElement.getBoundingClientRect().width;
 
+    this.filmXoffset = (containerWidth / 10) * Math.floor(cursorX / (containerWidth / 10));
+  }
 }
