@@ -2,6 +2,28 @@
 
 $transition-length: 300ms;
 
+.metaGroupButton {
+  background-color: #c0c0c0;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border: 1px solid gray;
+  margin: 10px 10px -1px;
+  padding: 8px;
+  position: relative;
+}
+
+.metaGroupDivider {
+  border-bottom: 1px solid gray;
+  position: relative;
+  z-index: 1;
+}
+
+.metaGroupSelected {
+  background-color: #d8d8d8;
+  border-bottom: 1px solid #d8d8d8;
+  z-index: 10;
+}
+
 h2, h3 {
   font-size: 16px;
   color: $gray-60;
@@ -98,11 +120,6 @@ h3 {
   z-index: 2;
 }
 
-.horizontalDivider {
-  margin: 20px 10px 0px;
-  border-bottom: 1px solid $gray-40;
-}
-
 .searchButtonsSettings,
 .galleryButtonsSettings {
   left: 20px;
@@ -185,4 +202,46 @@ h3 {
   text-align: center;
   transform: translate(-17px, 45px);
   width: 50px;
+}
+
+.shortcutMenu {
+  margin: 15px;
+  font-size: 12px;
+}
+
+.languageDropDown {
+  border-radius: 5px;
+  padding: 6px;
+}
+
+.key {
+  background: #EEEEEE;
+  border-radius: 3px;
+  border: 1px solid #888888;
+  color: black;
+  display: inline-block;
+  font-style: normal;
+  margin-right: 6px;
+  padding: 3px 5px 3px 5px;
+  text-align: center;
+  width: 16px;
+}
+
+.modifierKey {
+  line-height: 20px;
+  margin-right: initial;
+  margin: 0 4px;
+  padding: 3px 10px;
+  width: initial;
+}
+
+.listElement {
+  line-height: 20px;
+  list-style: none;
+  margin: 0 0 16px 0;
+  padding: 0;
+}
+
+.without-numbers {
+  padding-inline-start: 34px;
 }

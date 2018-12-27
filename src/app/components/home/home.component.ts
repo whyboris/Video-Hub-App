@@ -18,7 +18,7 @@ import { WizardOptions } from '../common/wizard-options.interface';
 
 import { AppState } from '../common/app-state';
 import { Filters } from '../common/filters';
-import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from '../common/settings-buttons';
+import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, SettingsMetaGroup } from '../common/settings-buttons';
 
 import { English } from '../../i18n/en';
 import { Russian } from '../../i18n/ru';
@@ -85,7 +85,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   defaultSettingsButtons = {};
   settingsButtons = SettingsButtons;
   settingsButtonsGroups = SettingsButtonsGroups;
-  settingsCategories = SettingsCategories;
+  settingsMetaGroup = SettingsMetaGroup;
+  settingsMetaGroupLabels = SettingsMetaGroupLabels;
+  settingToShow = 0;
 
   filters = Filters;
 
@@ -857,6 +859,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
         }, 300);
       }
     }
+  }
+
+  public showSettingsGroup(group: number): void {
+    this.settingToShow = group;
   }
 
   /**
