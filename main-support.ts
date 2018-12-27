@@ -260,7 +260,7 @@ export function takeTenScreenshots(
   while (current < totalCount) {
     const time = current * step;
     args.push('-ss', time, '-i', pathToVideo);
-    concat += '[' + (current - 1) + ':v]scale=' + screenSize + ':-2[' + (current - 1) + ']';
+    concat += '[' + (current - 1) + ':v]scale=' + screenSize + ':-2[' + (current - 1) + '];';
     stack += '[' + (current - 1) + ']';
     current++;
   }

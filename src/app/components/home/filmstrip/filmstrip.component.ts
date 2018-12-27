@@ -51,7 +51,6 @@ export class FilmstripComponent implements OnInit {
       this.noError = false;
     }
 
-    // hack -- populate hardcoded values -- fix later
     const fileHash = this.imgId;
     this.imgId = 'vha-' + this.hubName + '/' + fileHash + '.jpg';
   }
@@ -60,6 +59,6 @@ export class FilmstripComponent implements OnInit {
     const cursorX = $event.layerX;
     const containerWidth = this.filmstripHolder.nativeElement.getBoundingClientRect().width;
 
-    this.filmXoffset = (containerWidth / 10) * Math.floor(cursorX / (containerWidth / 10));
+    this.filmXoffset = (this.imgWidth) * Math.floor(cursorX / (containerWidth / 10));
   }
 }

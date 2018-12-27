@@ -10,7 +10,8 @@
     [ngStyle]="{
         height: imgHeight + 'px',
         background: 'url(' + 'file://' + folderPath + '/' + imgId + ')',
-        'background-position-x': '-' + filmXoffset + 'px'
+        'background-position-x': '-' + filmXoffset + 'px',
+        'background-size': 'auto ' + imgHeight + 'px'
       }"
   >
     <span *ngIf="showMeta" class="time" >{{ time | lengthPipe }}</span>
