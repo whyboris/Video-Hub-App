@@ -42,6 +42,8 @@ export const Russian = {
     resetSettingsHint: 'Сброс настроек',
     resolutionFilterDescription: 'Переключает фильтр разрешения',
     resolutionFilterHint: 'Фильтр разрешения',
+    showClipsDescription: 'Переключение в режим просмотра клипов',
+    showClipsHint: 'Показать клипы',
     showFilesDescription: 'Переключается на просмотр файлов',
     showFilesHint: 'Показать файлы',
     showFilmstripDescription: 'Переключение в режим просмотра киноленты',

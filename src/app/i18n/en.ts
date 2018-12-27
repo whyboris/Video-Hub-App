@@ -42,6 +42,8 @@ export const English = {
     resetSettingsHint: 'Reset settings',
     resolutionFilterDescription: 'Toggles the resolution filter',
     resolutionFilterHint: 'Resolution filter',
+    showClipsDescription: 'Switches to the clips view',
+    showClipsHint: 'Show clips',
     showFilesDescription: 'Switches to the files view',
     showFilesHint: 'Show files',
     showFilmstripDescription: 'Switches to the filmstrip view',

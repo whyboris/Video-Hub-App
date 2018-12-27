@@ -116,10 +116,10 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'showClips': {
     hidden: false,
-    toggled: true,
-    iconName: 'icon-show-thumbnails',
-    title: 'Show clips',
-    description: 'Switches to the clips view',
+    toggled: false,
+    iconName: 'icon-video-blank',
+    title: 'BUTTONS.showClipsHint',
+    description: 'BUTTONS.showClipsDescription',
   },
   'showTags': {
     hidden: false,

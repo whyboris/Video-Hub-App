@@ -7,11 +7,12 @@
 
 .filmstrip-container {
   background: black;
+  cursor: pointer;
   height: 100px;
+  outline: 3px solid black;
   overflow-y: hidden;
   position: relative;
   width: 100%;
-  outline: 3px solid black;
 }
 
 .title {
