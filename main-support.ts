@@ -254,16 +254,18 @@ export function takeTenScreenshots(
   const step: number = duration / totalCount;
   const args = [];
   let concat = '';
+  let stack = '';
 
   // make the magic filter
   while (current < totalCount) {
     const time = current * step;
     args.push('-ss', time, '-i', pathToVideo);
-    concat += '[' + (current - 1) + ':v]';
+    concat += '[' + (current - 1) + ':v]scale=' + screenSize + ':-2[' + (current - 1) + ']';
+    stack += '[' + (current - 1) + ']';
     current++;
   }
   args.push('-frames', 1,
-    '-filter_complex', concat + 'hstack=inputs=' + (totalCount - 1),
+    '-filter_complex', concat + stack + 'hstack=inputs=' + (totalCount - 1),
     saveLocation + '/' + fileHash + '.jpg'
   );
 
@@ -323,8 +325,8 @@ export function takeTenClips(
     concat += '[' + (current - 1) + ':v]' + '[' + (current - 1) + ':a]';
     current++;
   }
-  concat += 'concat=n=' + (totalCount - 1) + ':v=1:a=1';
-  args.push('-filter_complex', concat, saveLocation + '/' + fileHash + '.mp4');
+  concat += 'concat=n=' + (totalCount - 1) + ':v=1:a=1[v][a];[v]scale=' + screenSize + ':-2[v2]';
+  args.push('-filter_complex', concat, '-map', '[v2]', '-map', '[a]', saveLocation + '/' + fileHash + '.mp4');
   // phfff glad that's over
 
   // now make it all worth it!
