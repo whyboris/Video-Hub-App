@@ -319,7 +319,7 @@
       <h2>{{ 'SETTINGS.changeLanguage' | translate }}</h2>
 
       <div style="margin: 20px">
-        <select (change)="changeLanguage($event.target.value)">
+        <select (change)="changeLanguage($event.target.value)" class="languageDropDown">
           <option value="en" [selected]="currentLanguage == 'en'">English</option>
           <option value="ru" [selected]="currentLanguage == 'ru'">Russian</option>
         </select>
@@ -339,26 +339,26 @@
     <!-- TODO -- TRANSLATE !!! -->
     <div *ngIf="settingToShow == 4" class="shortcutMenu">
 
-      <span>Hold <em class="key modifierKey">Ctrl</em>
+      <span>{{ 'SHORTCUTS.hold' | translate }}<em class="key modifierKey">Ctrl</em>
         <ng-container *ngIf="macVersion">
-          (or <em class="key modifierKey">Command</em>)
+          {{ 'SHORTCUTS.or' | translate }} <em class="key modifierKey">Command</em>
         </ng-container>
-        and press:</span>
+        {{ 'SHORTCUTS.andPress' | translate }}:</span>
       <ul class="without-numbers">
-        <li class="listElement"><em class="key">1</em> - Show thumbnails view</li>
-        <li class="listElement"><em class="key">2</em> - Show filmstrip view</li>
-        <li class="listElement"><em class="key">3</em> - Show file view</li>
-        <li class="listElement"><em class="key">f</em> - Focus on file search inptut</li>
-        <li class="listElement"><em class="key">q</em> - Focus on the Magic search</li>
-        <li class="listElement"><em class="key">z</em> - Make thumbnails smaller</li>
-        <li class="listElement"><em class="key">x</em> - Make thumbnails larger</li>
-        <li class="listElement"><em class="key">s</em> - Shuffle current results</li>
-        <li class="listElement"><em class="key">o</em> - Toggle settings</li>
-        <li class="listElement"><em class="key">d</em> - Toggle dark / light mode</li>
-        <li class="listElement"><em class="key">t</em> - Toggle viewing file name, resolution, and length</li>
-        <li class="listElement"><em class="key">a</em> - Toggle the search side-bar</li>
-        <li class="listElement"><em class="key">h</em> - Toggle minimal mode (hiding all panels)</li>
-        <li class="listElement"><em class="key">n</em> - Toggle the wizard view</li>
+        <li class="listElement"><em class="key">1</em> - {{ 'SHORTCUTS.showThumb' | translate }}</li>
+        <li class="listElement"><em class="key">2</em> - {{ 'SHORTCUTS.showFilm' | translate }}</li>
+        <li class="listElement"><em class="key">3</em> - {{ 'SHORTCUTS.showFile' | translate }}</li>
+        <li class="listElement"><em class="key">f</em> - {{ 'SHORTCUTS.focusOnFile' | translate }}</li>
+        <li class="listElement"><em class="key">q</em> - {{ 'SHORTCUTS.focusOnMagic' | translate }}</li>
+        <li class="listElement"><em class="key">z</em> - {{ 'SHORTCUTS.makeSmaller' | translate }}</li>
+        <li class="listElement"><em class="key">x</em> - {{ 'SHORTCUTS.makeLarger' | translate }}</li>
+        <li class="listElement"><em class="key">s</em> - {{ 'SHORTCUTS.shuffle' | translate }}</li>
+        <li class="listElement"><em class="key">o</em> - {{ 'SHORTCUTS.toggleSettings' | translate }}</li>
+        <li class="listElement"><em class="key">d</em> - {{ 'SHORTCUTS.toggleDarkMode' | translate }}</li>
+        <li class="listElement"><em class="key">t</em> - {{ 'SHORTCUTS.toggleViewMeta' | translate }}</li>
+        <li class="listElement"><em class="key">a</em> - {{ 'SHORTCUTS.toggleSearchBar' | translate }}</li>
+        <li class="listElement"><em class="key">h</em> - {{ 'SHORTCUTS.toggleMinimalMode' | translate }}</li>
+        <li class="listElement"><em class="key">n</em> - {{ 'SHORTCUTS.toggleWizard' | translate }}</li>
       </ul>
 
     </div>
