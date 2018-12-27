@@ -192,6 +192,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   // WIP
 
+  isFirstRunEver = false;
+
   currentLanguage: SupportedLanguage;
 
   // Listen for key presses
@@ -399,6 +401,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.progressPercent = a / b;
       this.progressString = 'loading - ' + Math.round(a * 100 / b) + '%';
       if (this.importStage === 2) {
+        if (this.isFirstRunEver) {
+          this.toggleButton('showThumbnails');
+          console.log('SHOULD FIX THE FIRST RUN BUG!!!');
+          this.isFirstRunEver = false;
+        }
         this.extractionPercent = Math.round(100 * a / b);
       }
       if (a === b) {
@@ -448,10 +455,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     });
 
-    this.electronService.ipcRenderer.on('pleaseOpenWizard', (event) => {
+    this.electronService.ipcRenderer.on('pleaseOpenWizard', (event, firstRun) => {
       // Correlated with the first time ever starting the app !!!
       // Can happen when no settings present
       // Can happen when trying to open a .vha file that no longer exists
+      if (firstRun) {
+        this.firstRunLogic();
+      }
       this.showWizard = true;
       this.flickerReduceOverlay = false;
     });
@@ -486,7 +496,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     clearTimeout(this.myTimeout);
     this.myTimeout = setTimeout(() => {
       // console.log('Virtual scroll refreshed');
-      this.virtualScroller.refresh()
+      this.virtualScroller.refresh();
     }, delay);
   }
 
@@ -1281,7 +1291,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Change the language via ngx-translate
    * @param language
    */
-  changeLanguage(language: SupportedLanguage) {
+  changeLanguage(language: SupportedLanguage): void {
     this.currentLanguage = language;
     if (language === 'en') {
       this.translate.use('en');
@@ -1290,6 +1300,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.translate.use('ru');
       this.translate.setTranslation('ru', Russian );
     }
+  }
+
+  /**
+   * Run when user starts the app for the first time
+   * Gets triggered when the settings.json is missing from the app folder
+   */
+  firstRunLogic(): void {
+    console.log('WELCOME TO VIDEO HUB APP!');
+    console.log('this is the first time you are running this app');
+    this.isFirstRunEver = true;
   }
 
 }
