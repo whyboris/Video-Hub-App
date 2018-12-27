@@ -224,6 +224,7 @@
     <button (click)="showSettingsGroup(1)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 1 }">View settings</button>
     <button (click)="showSettingsGroup(2)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 2 }">Main settings</button>
     <button (click)="showSettingsGroup(3)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 3 }">Misc settings</button>
+    <button (click)="showSettingsGroup(4)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 4 }">Shortcuts</button>
     <div class="metaGroupDivider"></div>
 
     <div [id]=i *ngFor="let group of settingsMetaGroup; index as i">
@@ -332,6 +333,33 @@
         <span>v{{ versionNumber }} {{ demo ? ' DEMO - limited to 50 video files' : '' }}</span>
         <img width="30px" height="30px" src="./assets/logo.png">
       </div>
+
+    </div>
+
+    <!-- TODO -- TRANSLATE !!! -->
+    <div *ngIf="settingToShow == 4" class="shortcutMenu">
+
+      <span>Hold <em class="key modifierKey">Ctrl</em>
+        <ng-container *ngIf="macVersion">
+          (or <em class="key modifierKey">Command</em>)
+        </ng-container>
+        and press:</span>
+      <ul class="without-numbers">
+        <li class="listElement"><em class="key">1</em> - Show thumbnails view</li>
+        <li class="listElement"><em class="key">2</em> - Show filmstrip view</li>
+        <li class="listElement"><em class="key">3</em> - Show file view</li>
+        <li class="listElement"><em class="key">f</em> - Focus on file search inptut</li>
+        <li class="listElement"><em class="key">q</em> - Focus on the Magic search</li>
+        <li class="listElement"><em class="key">z</em> - Make thumbnails smaller</li>
+        <li class="listElement"><em class="key">x</em> - Make thumbnails larger</li>
+        <li class="listElement"><em class="key">s</em> - Shuffle current results</li>
+        <li class="listElement"><em class="key">o</em> - Toggle settings</li>
+        <li class="listElement"><em class="key">d</em> - Toggle dark / light mode</li>
+        <li class="listElement"><em class="key">t</em> - Toggle viewing file name, resolution, and length</li>
+        <li class="listElement"><em class="key">a</em> - Toggle the search side-bar</li>
+        <li class="listElement"><em class="key">h</em> - Toggle minimal mode (hiding all panels)</li>
+        <li class="listElement"><em class="key">n</em> - Toggle the wizard view</li>
+      </ul>
 
     </div>
 

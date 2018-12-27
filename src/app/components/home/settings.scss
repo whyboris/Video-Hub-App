@@ -203,3 +203,40 @@ h3 {
   transform: translate(-17px, 45px);
   width: 50px;
 }
+
+.shortcutMenu {
+  margin: 15px;
+  font-size: 12px;
+}
+
+.key {
+  background: #EEEEEE;
+  border-radius: 3px;
+  border: 1px solid #888888;
+  color: black;
+  display: inline-block;
+  font-style: normal;
+  margin-right: 6px;
+  padding: 3px 5px 3px 5px;
+  text-align: center;
+  width: 16px;
+}
+
+.modifierKey {
+  line-height: 20px;
+  margin-right: initial;
+  margin: 0 4px;
+  padding: 3px 10px;
+  width: initial;
+}
+
+.listElement {
+  margin: 0 0 16px 0;
+  padding: 0;
+  line-height: 20px;
+  list-style: none;
+}
+
+.without-numbers {
+  padding-inline-start: 38px;
+}
