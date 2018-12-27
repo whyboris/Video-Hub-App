@@ -677,6 +677,7 @@
           [rez]="item[5]"
           [fileSize]="item[7]"
           [imgHeight]="imgHeight"
+          [imgWidth]="(imgHeight / 100) * item[6] || (imgHeight / 100) * 171"
           [elHeight]="imgHeight + textPaddingHeight"
           [elWidth]="previewWidth"
           [hubName]="appState.hubName"

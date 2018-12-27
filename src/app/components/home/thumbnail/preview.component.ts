@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit, OnDestroy } from '@angular/core';
+import { Component, HostListener, Input, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { galleryItemAppear, metaAppear, textAppear } from '../../common/animations';
 
@@ -12,6 +12,8 @@ import { galleryItemAppear, metaAppear, textAppear } from '../../common/animatio
 })
 export class PreviewComponent implements OnInit, OnDestroy {
 
+  @ViewChild('filmstripHolder') filmstripHolder: ElementRef;
+
   @Input() darkMode: boolean;
   @Input() elHeight: number;
   @Input() elWidth: number;
@@ -20,6 +22,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
   @Input() hoverScrub: boolean;
   @Input() hubName: string;
   @Input() imgHeight: number;
+  @Input() imgWidth: number;
   @Input() imgId: any;
   @Input() largerFont: boolean;
   @Input() randomImage: boolean;
@@ -32,6 +35,8 @@ export class PreviewComponent implements OnInit, OnDestroy {
   currentlyShowing = 1;
   looper = true;
   noError = true;
+
+  filmXoffset: number = 0;
 
   constructor(
     public sanitizer: DomSanitizer
@@ -49,7 +54,6 @@ export class PreviewComponent implements OnInit, OnDestroy {
     if (this.imgId === undefined) {
       this.noError = false;
     }
-    // hack -- populate hardcoded values -- fix later
     const fileHash = this.imgId;
 
     this.imgId = 'vha-' + this.hubName + '/' + fileHash + '.jpg';
@@ -83,6 +87,13 @@ export class PreviewComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.looper = false;
+  }
+
+  mouseIsMoving($event) {
+    const cursorX = $event.layerX;
+    const containerWidth = this.filmstripHolder.nativeElement.getBoundingClientRect().width;
+
+    this.filmXoffset = (this.imgWidth) * Math.floor(cursorX / (containerWidth / 10));
   }
 
 }
