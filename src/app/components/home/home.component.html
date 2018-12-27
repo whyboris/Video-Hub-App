@@ -219,12 +219,21 @@
       <span class="icon icon-close"></span>
     </div>
 
-    <!-- TODO - TRANSLATE !!! -->
-    <button (click)="showSettingsGroup(0)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 0 }">Filter settings</button>
-    <button (click)="showSettingsGroup(1)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 1 }">View settings</button>
-    <button (click)="showSettingsGroup(2)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 2 }">Main settings</button>
-    <button (click)="showSettingsGroup(3)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 3 }">Misc settings</button>
-    <button (click)="showSettingsGroup(4)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 4 }">Shortcuts</button>
+    <button (click)="showSettingsGroup(0)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 0 }">
+      {{ 'SETTINGS.tabFilter' | translate }}
+    </button>
+    <button (click)="showSettingsGroup(1)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 1 }">
+      {{ 'SETTINGS.tabView' | translate }}
+    </button>
+    <button (click)="showSettingsGroup(2)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 2 }">
+      {{ 'SETTINGS.tabMain' | translate }}
+    </button>
+    <button (click)="showSettingsGroup(3)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 3 }">
+      {{ 'SETTINGS.tabMisc' | translate }}
+    </button>
+    <button (click)="showSettingsGroup(4)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 4 }">
+      {{ 'SETTINGS.tabShortcuts' | translate }}
+    </button>
     <div class="metaGroupDivider"></div>
 
     <div [id]=i *ngFor="let group of settingsMetaGroup; index as i">
@@ -336,7 +345,6 @@
 
     </div>
 
-    <!-- TODO -- TRANSLATE !!! -->
     <div *ngIf="settingToShow == 4" class="shortcutMenu">
 
       <span>{{ 'SHORTCUTS.hold' | translate }}<em class="key modifierKey">Ctrl</em>

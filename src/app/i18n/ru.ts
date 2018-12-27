@@ -90,6 +90,11 @@ export const Russian = {
     searchAndFilter: 'Настройки поиска и фильтра',
     settings: 'настройки',
     showHideText: 'показать / скрыть значок в панели настроек',
+    tabFilter: 'Настройки фильтра',
+    tabMain: 'Основные настройки',
+    tabMisc: 'Разные настройки',
+    tabShortcuts: 'Ярлыки',
+    tabView: 'Просмотр настроек',
   },
   RIGHTCLICK: {
     cancelRename: 'отменить переименовать',
