@@ -2,6 +2,7 @@
 	"recommendations": [
 		"angular.ng-template",
 		"coenraads.bracket-pair-colorizer",
+		"editorconfig.editorconfig",
 		"eg2.tslint"
 	]
 }

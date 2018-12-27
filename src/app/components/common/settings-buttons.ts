@@ -22,6 +22,7 @@ export const SettingsButtonsGroups: string[][] = [
     'showThumbnails',
     'showFilmstrip',
     'showFiles',
+    'showFoldersOnly',
     'showClips',
   ],
   [
@@ -52,17 +53,36 @@ export const SettingsButtonsGroups: string[][] = [
   ]
 ];
 
+export const SettingsMetaGroup: any = [
+  [
+    ...SettingsButtonsGroups[0],
+    'break',
+    ...SettingsButtonsGroups[1],
+    'break',
+    ...SettingsButtonsGroups[2],
+  ],
+  [
+    ...SettingsButtonsGroups[3],
+    'break',
+    ...SettingsButtonsGroups[4],
+    'break',
+    ...SettingsButtonsGroups[5],
+    'break',
+    ...SettingsButtonsGroups[6],
+    'break',
+    ...SettingsButtonsGroups[7],
+  ],
+  [
+    ...SettingsButtonsGroups[8],
+  ],
+];
+
 // correspond to each group above
-export const SettingsCategories: string[] = [
+export const SettingsMetaGroupLabels: string[] = [
   'SETTINGS.searchAndFilter',
-  '',
-  '',
   'SETTINGS.galleryAndView',
-  '',
-  '',
-  '',
   'SETTINGS.otherSettings',
-  'SETTINGS.reloadUpdate'
+  'SETTINGS.reloadUpdate' // CURRENTLY UNUSED
 ];
 
 export let SettingsButtons: { [s: string]: SettingsButton } = {
@@ -86,6 +106,13 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-show-filenames',
     title: 'BUTTONS.showFilesHint',
     description: 'BUTTONS.showFilesDescription',
+  },
+  'showFoldersOnly': {
+    hidden: false,
+    toggled: false,
+    iconName: 'icon-folder-blank',
+    title: 'BUTTONS.showFoldersOnlyHint',
+    description: 'BUTTONS.showFoldersOnlyDescription',
   },
   'showClips': {
     hidden: false,

@@ -18,7 +18,7 @@ import { WizardOptions } from '../common/wizard-options.interface';
 
 import { AppState } from '../common/app-state';
 import { Filters } from '../common/filters';
-import { SettingsButtons, SettingsButtonsGroups, SettingsCategories } from '../common/settings-buttons';
+import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, SettingsMetaGroup } from '../common/settings-buttons';
 
 import { English } from '../../i18n/en';
 import { Russian } from '../../i18n/ru';
@@ -85,7 +85,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   defaultSettingsButtons = {};
   settingsButtons = SettingsButtons;
   settingsButtonsGroups = SettingsButtonsGroups;
-  settingsCategories = SettingsCategories;
+  settingsMetaGroup = SettingsMetaGroup;
+  settingsMetaGroupLabels = SettingsMetaGroupLabels;
+  settingToShow = 0;
 
   filters = Filters;
 
@@ -191,6 +193,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   renameErrMsg: string = '';
 
   // WIP
+
+  isFirstRunEver = false;
 
   currentLanguage: SupportedLanguage;
 
@@ -399,6 +403,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.progressPercent = a / b;
       this.progressString = 'loading - ' + Math.round(a * 100 / b) + '%';
       if (this.importStage === 2) {
+        if (this.isFirstRunEver) {
+          this.toggleButton('showThumbnails');
+          console.log('SHOULD FIX THE FIRST RUN BUG!!!');
+          this.isFirstRunEver = false;
+        }
         this.extractionPercent = Math.round(100 * a / b);
       }
       if (a === b) {
@@ -448,10 +457,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     });
 
-    this.electronService.ipcRenderer.on('pleaseOpenWizard', (event) => {
+    this.electronService.ipcRenderer.on('pleaseOpenWizard', (event, firstRun) => {
       // Correlated with the first time ever starting the app !!!
       // Can happen when no settings present
       // Can happen when trying to open a .vha file that no longer exists
+      if (firstRun) {
+        this.firstRunLogic();
+      }
       this.showWizard = true;
       this.flickerReduceOverlay = false;
     });
@@ -486,7 +498,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     clearTimeout(this.myTimeout);
     this.myTimeout = setTimeout(() => {
       // console.log('Virtual scroll refreshed');
-      this.virtualScroller.refresh()
+      this.virtualScroller.refresh();
     }, delay);
   }
 
@@ -650,6 +662,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param filter
    */
   handleFolderWordClicked(filter: string): void {
+    if (this.settingsButtons['showFoldersOnly']) {
+      this.toggleButton('showFiles'); // needed when we're in folder view
+    }
     this.showSidebar();
     if (!this.settingsButtons['folder'].toggled) {
       this.settingsButtons['folder'].toggled = true;
@@ -768,38 +783,48 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
+   * Toggles all views buttons off
+   * A helper function for `toggleBotton`
+   */
+  toggleAllViewsButtonsOff(): void {
+    this.settingsButtons['showClips'].toggled = false;
+    this.settingsButtons['showFiles'].toggled = false;
+    this.settingsButtons['showFilmstrip'].toggled = false;
+    this.settingsButtons['showFoldersOnly'].toggled = false;
+    this.settingsButtons['showThumbnails'].toggled = false;
+  }
+
+  /**
    * Perform appropriate action when a button is clicked
    * @param   uniqueKey   the uniqueKey string of the button
    */
   toggleButton(uniqueKey: string): void {
     if (uniqueKey === 'showThumbnails') {
+      this.toggleAllViewsButtonsOff();
       this.settingsButtons['showThumbnails'].toggled = true;
-      this.settingsButtons['showFilmstrip'].toggled = false;
-      this.settingsButtons['showFiles'].toggled = false;
-      this.settingsButtons['showClips'].toggled = false;
       this.appState.currentView = 'thumbs';
       this.computeTextBufferAmount();
       this.scrollToTop();
     } else if (uniqueKey === 'showFilmstrip') {
-      this.settingsButtons['showThumbnails'].toggled = false;
+      this.toggleAllViewsButtonsOff();
       this.settingsButtons['showFilmstrip'].toggled = true;
-      this.settingsButtons['showFiles'].toggled = false;
-      this.settingsButtons['showClips'].toggled = false;
       this.appState.currentView = 'filmstrip';
       this.computeTextBufferAmount();
       this.scrollToTop();
     } else if (uniqueKey === 'showFiles') {
-      this.settingsButtons['showThumbnails'].toggled = false;
-      this.settingsButtons['showFilmstrip'].toggled = false;
+      this.toggleAllViewsButtonsOff();
       this.settingsButtons['showFiles'].toggled = true;
-      this.settingsButtons['showClips'].toggled = false;
+      this.appState.currentView = 'files';
+      this.computeTextBufferAmount();
+      this.scrollToTop();
+    } else if (uniqueKey === 'showFoldersOnly') {
+      this.toggleAllViewsButtonsOff();
+      this.settingsButtons['showFoldersOnly'].toggled = true;
       this.appState.currentView = 'files';
       this.computeTextBufferAmount();
       this.scrollToTop();
     } else if (uniqueKey === 'showClips') {
-      this.settingsButtons['showThumbnails'].toggled = false;
-      this.settingsButtons['showFilmstrip'].toggled = false;
-      this.settingsButtons['showFiles'].toggled = false;
+      this.toggleAllViewsButtonsOff();
       this.settingsButtons['showClips'].toggled = true;
       this.appState.currentView = 'clips';
       this.computeTextBufferAmount();
@@ -834,6 +859,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
         }, 300);
       }
     }
+  }
+
+  public showSettingsGroup(group: number): void {
+    this.settingToShow = group;
   }
 
   /**
@@ -1268,7 +1297,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Change the language via ngx-translate
    * @param language
    */
-  changeLanguage(language: SupportedLanguage) {
+  changeLanguage(language: SupportedLanguage): void {
     this.currentLanguage = language;
     if (language === 'en') {
       this.translate.use('en');
@@ -1277,6 +1306,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.translate.use('ru');
       this.translate.setTranslation('ru', Russian );
     }
+  }
+
+  /**
+   * Run when user starts the app for the first time
+   * Gets triggered when the settings.json is missing from the app folder
+   */
+  firstRunLogic(): void {
+    console.log('WELCOME TO VIDEO HUB APP!');
+    console.log('this is the first time you are running this app');
+    this.isFirstRunEver = true;
   }
 
 }

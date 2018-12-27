@@ -58,56 +58,29 @@ if (!gotTheLock) {
   });
 }
 
+let screenWidth;
+let screenHeight;
+
 function createWindow() {
+  const desktopSize = screen.getPrimaryDisplay().workAreaSize;
 
-  const electronScreen = screen;
-  const size = electronScreen.getPrimaryDisplay().workAreaSize;
-
-  const xPos = 0;
-  const yPos = 0;
-  const appWidth = size.width;
-  const appHeight = size.height;
-
-  // let xPos: number;
-  // let yPos: number;
-  // let appWidth: number;
-  // let appHeight: number;
-
-  // if (size.width < 1281) {
-  //   xPos = 100;
-  //   yPos = 30;
-  //   appWidth = size.width - 200;
-  //   appHeight = size.height - 60;
-  // } else if (size.width < 1921) {
-  //   xPos = 200;
-  //   yPos = 100;
-  //   appWidth = size.width - 400;
-  //   appHeight = size.height - 200;
-  // } else {
-  //   xPos = 400;
-  //   yPos = 200;
-  //   appWidth = size.width - 800;
-  //   appHeight = size.height - 400;
-  // }
+  screenWidth = desktopSize.width;
+  screenHeight = desktopSize.height;
 
   // Create the browser window.
   win = new BrowserWindow({
-    // allow files from hard disk to show up
     webPreferences: {
-      webSecurity: false
+      webSecurity: false  // allow files from hard disk to show up
     },
-    x: xPos,
-    y: yPos,
-    width: appWidth,
-    height: appHeight,
+    x: screenWidth / 2 - 210,
+    y: screenHeight / 2 - 125,
+    width: 420,
+    height: 250,
     center: true,
-    // width: 830,
-    // height: 600,
     minWidth: 420,
     minHeight: 250,
     icon: path.join(__dirname, 'src/assets/icons/png/64x64.png'),
-    // removes the frame from the window completely !!!
-    frame: false
+    frame: false  // removes the frame from the window completely
   });
 
   myWindow = win;
@@ -214,6 +187,7 @@ import {
 import { FinalObject, ImageElement } from './src/app/components/common/final-object.interface';
 import { ImportSettingsObject } from './src/app/components/common/import.interface';
 import { SavableProperties } from './src/app/components/common/savable-properties.interface';
+import { SettingsObject } from './src/app/components/common/settings-object.interface';
 
 import { globals } from './main-globals';
 
@@ -336,9 +310,21 @@ ipc.on('just-started', function (event, someMessage) {
 
   fs.readFile(path.join(pathToAppData, 'video-hub-app', 'settings.json'), (err, data) => {
     if (err) {
-      event.sender.send('pleaseOpenWizard');
+      event.sender.send('pleaseOpenWizard', true); // firstRun = true!
     } else {
-      event.sender.send('settingsReturning', JSON.parse(data), userWantedToOpen);
+
+      const savedSettings = JSON.parse(data);
+
+      // Restore last windows size and position or full screen if not available
+      if (savedSettings.windowSizeAndPosition
+        && savedSettings.windowSizeAndPosition.x < screenWidth - 200
+        && savedSettings.windowSizeAndPosition.y < screenHeight - 200) {
+          win.setBounds(savedSettings.windowSizeAndPosition);
+      } else {
+        win.setBounds({ x: 0, y: 0, width: screenWidth, height: screenHeight });
+      }
+
+      event.sender.send('settingsReturning', savedSettings, userWantedToOpen);
     }
   });
 });
@@ -437,7 +423,10 @@ const pathToAppData = app.getPath('appData');
 /**
  * Close the window
  */
-ipc.on('close-window', function (event, settingsToSave, savableProperties: SavableProperties) {
+ipc.on('close-window', function (event, settingsToSave: SettingsObject, savableProperties: SavableProperties) {
+
+  // save window size and position
+  settingsToSave.windowSizeAndPosition = win.getBounds();
 
   const json = JSON.stringify(settingsToSave);
 
