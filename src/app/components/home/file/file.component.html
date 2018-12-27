@@ -4,7 +4,7 @@
   @galleryItemAppear
 >
 
-  <div *ngIf="title === '*'; else fileNameBlock">
+  <div *ngIf="title === '***'; else fileNameBlock">
     <span class="icon icon-folder-blank"></span>
     <span
       [innerHtml]="folderPath | folderArrowsPipe : true"

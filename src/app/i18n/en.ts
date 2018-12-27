@@ -48,6 +48,8 @@ export const English = {
     showFilmstripHint: 'Show filmstrip',
     showFolderInFileViewDescription: 'Shows folder locations in the file view',
     showFolderInFileViewHint: 'Show folders in file view',
+    showFoldersOnlyDescription: 'Switches to the folders-only view',
+    showFoldersOnlyHint: 'Show folders only',
     showFreqDescription: 'Toggles the word cloud which shows up to nine of the most frequent words in currently shown files',
     showFreqHint: 'Word cloud',
     showMoreInfoDescription: 'Toggles showing file name, resolution, and video length',

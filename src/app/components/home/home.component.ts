@@ -650,6 +650,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param filter
    */
   handleFolderWordClicked(filter: string): void {
+    if (this.settingsButtons['showFoldersOnly']) {
+      this.toggleButton('showFiles'); // needed when we're in folder view
+    }
     this.showSidebar();
     if (!this.settingsButtons['folder'].toggled) {
       this.settingsButtons['folder'].toggled = true;
@@ -768,38 +771,48 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
+   * Toggles all views buttons off
+   * A helper function for `toggleBotton`
+   */
+  toggleAllViewsButtonsOff(): void {
+    this.settingsButtons['showClips'].toggled = false;
+    this.settingsButtons['showFiles'].toggled = false;
+    this.settingsButtons['showFilmstrip'].toggled = false;
+    this.settingsButtons['showFoldersOnly'].toggled = false;
+    this.settingsButtons['showThumbnails'].toggled = false;
+  }
+
+  /**
    * Perform appropriate action when a button is clicked
    * @param   uniqueKey   the uniqueKey string of the button
    */
   toggleButton(uniqueKey: string): void {
     if (uniqueKey === 'showThumbnails') {
+      this.toggleAllViewsButtonsOff();
       this.settingsButtons['showThumbnails'].toggled = true;
-      this.settingsButtons['showFilmstrip'].toggled = false;
-      this.settingsButtons['showFiles'].toggled = false;
-      this.settingsButtons['showClips'].toggled = false;
       this.appState.currentView = 'thumbs';
       this.computeTextBufferAmount();
       this.scrollToTop();
     } else if (uniqueKey === 'showFilmstrip') {
-      this.settingsButtons['showThumbnails'].toggled = false;
+      this.toggleAllViewsButtonsOff();
       this.settingsButtons['showFilmstrip'].toggled = true;
-      this.settingsButtons['showFiles'].toggled = false;
-      this.settingsButtons['showClips'].toggled = false;
       this.appState.currentView = 'filmstrip';
       this.computeTextBufferAmount();
       this.scrollToTop();
     } else if (uniqueKey === 'showFiles') {
-      this.settingsButtons['showThumbnails'].toggled = false;
-      this.settingsButtons['showFilmstrip'].toggled = false;
+      this.toggleAllViewsButtonsOff();
       this.settingsButtons['showFiles'].toggled = true;
-      this.settingsButtons['showClips'].toggled = false;
+      this.appState.currentView = 'files';
+      this.computeTextBufferAmount();
+      this.scrollToTop();
+    } else if (uniqueKey === 'showFoldersOnly') {
+      this.toggleAllViewsButtonsOff();
+      this.settingsButtons['showFoldersOnly'].toggled = true;
       this.appState.currentView = 'files';
       this.computeTextBufferAmount();
       this.scrollToTop();
     } else if (uniqueKey === 'showClips') {
-      this.settingsButtons['showThumbnails'].toggled = false;
-      this.settingsButtons['showFilmstrip'].toggled = false;
-      this.settingsButtons['showFiles'].toggled = false;
+      this.toggleAllViewsButtonsOff();
       this.settingsButtons['showClips'].toggled = true;
       this.appState.currentView = 'clips';
       this.computeTextBufferAmount();

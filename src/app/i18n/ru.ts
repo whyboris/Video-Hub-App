@@ -48,6 +48,8 @@ export const Russian = {
     showFilmstripHint: 'Показать киноленту',
     showFolderInFileViewDescription: 'Показывает расположение папок в представлении файла',
     showFolderInFileViewHint: 'Показать папки в представлении файла',
+    showFoldersOnlyDescription: 'Переключение на просмотр только по папкам',
+    showFoldersOnlyHint: 'Показывать только папки',
     showFreqDescription: 'Переключает облако слов, которое отображает до девяти наиболее часто встречающихся слов в отображаемых файлах',
     showFreqHint: 'Облако слов',
     showMoreInfoDescription: 'Переключает отображение имени файла, разрешения и длины видео',
