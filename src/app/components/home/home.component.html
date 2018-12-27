@@ -219,111 +219,120 @@
       <span class="icon icon-close"></span>
     </div>
 
-    <ng-container
-      *ngFor="let btnGroup of settingsButtonsGroups; index as i"
-    >
+    <!-- TODO - TRANSLATE !!! -->
+    <button (click)="showSettingsGroup(0)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 0 }">Filter settings</button>
+    <button (click)="showSettingsGroup(1)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 1 }">View settings</button>
+    <button (click)="showSettingsGroup(2)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 2 }">Main settings</button>
+    <button (click)="showSettingsGroup(3)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 3 }">Misc settings</button>
+    <div class="metaGroupDivider"></div>
 
-      <div *ngIf="i !== 0 && settingsCategories[i] !== ''" class="horizontalDivider">
-      </div>
-      <h2>{{ settingsCategories[i] | translate }}</h2>
+    <div [id]=i *ngFor="let group of settingsMetaGroup; index as i">
+      <div *ngIf="settingToShow == i">
 
-      <div
-        class="searchButtonsSettings"
-      >
+        <h2>{{ settingsMetaGroupLabels[i] | translate }}</h2>
 
-        <div
-          *ngFor="let buttonKey of btnGroup"
-          [ngClass]="{ buttonOpacityLower: settingsButtons[buttonKey].hidden }"
-          class="buttonDescription"
-        >
-          <button
-            (click)="toggleButton(buttonKey)"
-            [ngClass]="{
-                buttonOpacityLower:           settingsButtons[buttonKey].hidden,
-                defaultSettingsButton:        !settingsButtons['flatIcons'].toggled,
-                defaultSettingsButtonToggled: !settingsButtons['flatIcons'].toggled && settingsButtons[buttonKey].toggled,
-                flatSettingsButton:           settingsButtons['flatIcons'].toggled,
-                flatSettingsButtonToggled:    settingsButtons['flatIcons'].toggled && settingsButtons[buttonKey].toggled
-              }"
-            title="{{ settingsButtons[buttonKey].title | translate }}"
-          >
-            <span class="icon {{ settingsButtons[buttonKey].iconName }}"></span>
-          </button>
+        <div *ngFor="let buttonKey of group">
+          <div *ngIf="buttonKey !== 'break'; else insertBreak">
+            <div
+              class="searchButtonsSettings"
+            >
 
-          <span
-            *ngIf="settingsButtons[buttonKey].iconName !== 'icon-checkmark'"
-            (click)="toggleHideButton(buttonKey)"
-            class="eyeIconContainer icon {{ settingsButtons[buttonKey].hidden ? 'eye-closed' : 'eye-open' }}"
-            title="{{ 'SETTINGS.showHideText' | translate }}"
-          ></span>
+              <div
+                [ngClass]="{ buttonOpacityLower: settingsButtons[buttonKey].hidden }"
+                class="buttonDescription"
+              >
+                <button
+                  (click)="toggleButton(buttonKey)"
+                  [ngClass]="{
+                      buttonOpacityLower:           settingsButtons[buttonKey].hidden,
+                      defaultSettingsButton:        !settingsButtons['flatIcons'].toggled,
+                      defaultSettingsButtonToggled: !settingsButtons['flatIcons'].toggled && settingsButtons[buttonKey].toggled,
+                      flatSettingsButton:           settingsButtons['flatIcons'].toggled,
+                      flatSettingsButtonToggled:    settingsButtons['flatIcons'].toggled && settingsButtons[buttonKey].toggled
+                    }"
+                  title="{{ settingsButtons[buttonKey].title | translate }}"
+                >
+                  <span class="icon {{ settingsButtons[buttonKey].iconName }}"></span>
+                </button>
 
-          <span
-            class="buttonDescriptionText"
-          >
-            {{ settingsButtons[buttonKey].description | translate }}
-          </span>
+                <span
+                  *ngIf="settingsButtons[buttonKey].iconName !== 'icon-checkmark'"
+                  (click)="toggleHideButton(buttonKey)"
+                  class="eyeIconContainer icon {{ settingsButtons[buttonKey].hidden ? 'eye-closed' : 'eye-open' }}"
+                  title="{{ 'SETTINGS.showHideText' | translate }}"
+                ></span>
 
+                <span
+                  class="buttonDescriptionText"
+                >
+                  {{ settingsButtons[buttonKey].description | translate }}
+                </span>
+
+              </div>
+
+            </div>
+          </div>
+
+          <ng-template #insertBreak>
+            <br>
+          </ng-template>
         </div>
       </div>
+    </div>
 
-    </ng-container>
+    <div *ngIf="settingToShow == 3">
 
-    <div class="horizontalDivider"></div>
+      <h2>{{ 'SETTINGS.changeAppZoom' | translate }}</h2>
 
-    <h2>{{ 'SETTINGS.changeAppZoom' | translate }}</h2>
-
-    <div style="margin: 20px">
-      <button
-        (click)="decreaseZoomLevel()"
-        [ngClass]="{
-          defaultSettingsButton: !settingsButtons['flatIcons'].toggled,
-          flatSettingsButton:    settingsButtons['flatIcons'].toggled
-        }"
-      >
-        <span class="icon icon-minus"></span>
-      </button>
-      <button
-        (click)="resetZoomLevel()"
-        [ngClass]="{
-          defaultSettingsButton: !settingsButtons['flatIcons'].toggled,
-          flatSettingsButton:    settingsButtons['flatIcons'].toggled
-        }"
-        style="max-width: initial; padding: 0 5px; margin: 0 10px"
+      <div style="margin: 20px">
+        <button
+          (click)="decreaseZoomLevel()"
+          [ngClass]="{
+            defaultSettingsButton: !settingsButtons['flatIcons'].toggled,
+            flatSettingsButton:    settingsButtons['flatIcons'].toggled
+          }"
         >
-          <span>{{ 'SETTINGS.reset' | translate }}</span>
-      </button>
-      <button
-        (click)="increaseZoomLevel()"
-        [ngClass]="{
-          defaultSettingsButton: !settingsButtons['flatIcons'].toggled,
-          flatSettingsButton:    settingsButtons['flatIcons'].toggled
-        }"
-      >
-        <span class="icon icon-plus"></span>
-      </button>
-    </div>
+          <span class="icon icon-minus"></span>
+        </button>
+        <button
+          (click)="resetZoomLevel()"
+          [ngClass]="{
+            defaultSettingsButton: !settingsButtons['flatIcons'].toggled,
+            flatSettingsButton:    settingsButtons['flatIcons'].toggled
+          }"
+          style="max-width: initial; padding: 0 5px; margin: 0 10px"
+          >
+            <span>{{ 'SETTINGS.reset' | translate }}</span>
+        </button>
+        <button
+          (click)="increaseZoomLevel()"
+          [ngClass]="{
+            defaultSettingsButton: !settingsButtons['flatIcons'].toggled,
+            flatSettingsButton:    settingsButtons['flatIcons'].toggled
+          }"
+        >
+          <span class="icon icon-plus"></span>
+        </button>
+      </div>
 
+      <h2>{{ 'SETTINGS.changeLanguage' | translate }}</h2>
 
-    <div class="horizontalDivider"></div>
+      <div style="margin: 20px">
+        <select (change)="changeLanguage($event.target.value)">
+          <option value="en" [selected]="currentLanguage == 'en'">English</option>
+          <option value="ru" [selected]="currentLanguage == 'ru'">Russian</option>
+        </select>
+      </div>
 
-    <h2>{{ 'SETTINGS.changeLanguage' | translate }}</h2>
+      <div class="credits-and-help" (click)="openOnlineHelp()">
+        {{ 'SETTINGS.FAQ' | translate }}
+      </div>
 
-    <div style="margin: 20px">
-      <select (change)="changeLanguage($event.target.value)">
-        <option value="en" [selected]="currentLanguage == 'en'">English</option>
-        <option value="ru" [selected]="currentLanguage == 'ru'">Russian</option>
-      </select>
-    </div>
+      <div class="app-version">
+        <span>v{{ versionNumber }} {{ demo ? ' DEMO - limited to 50 video files' : '' }}</span>
+        <img width="30px" height="30px" src="./assets/logo.png">
+      </div>
 
-    <div class="horizontalDivider"></div>
-
-    <div class="credits-and-help" (click)="openOnlineHelp()">
-      {{ 'SETTINGS.FAQ' | translate }}
-    </div>
-
-    <div class="app-version">
-      <span>v{{ versionNumber }} {{ demo ? ' DEMO - limited to 50 video files' : '' }}</span>
-      <img width="30px" height="30px" src="./assets/logo.png">
     </div>
 
   </div> <!-- END OF SETTINGS MODAL -->

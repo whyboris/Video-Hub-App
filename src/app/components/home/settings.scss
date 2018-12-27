@@ -2,6 +2,28 @@
 
 $transition-length: 300ms;
 
+.metaGroupButton {
+  background-color: #c0c0c0;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+  border: 1px solid gray;
+  margin: 10px 10px -1px;
+  padding: 8px;
+  position: relative;
+}
+
+.metaGroupDivider {
+  border-bottom: 1px solid gray;
+  position: relative;
+  z-index: 1;
+}
+
+.metaGroupSelected {
+  background-color: #d8d8d8;
+  border-bottom: 1px solid #d8d8d8;
+  z-index: 10;
+}
+
 h2, h3 {
   font-size: 16px;
   color: $gray-60;
@@ -96,11 +118,6 @@ h3 {
   position: absolute;
   top: 4px;
   z-index: 2;
-}
-
-.horizontalDivider {
-  margin: 20px 10px 0px;
-  border-bottom: 1px solid $gray-40;
 }
 
 .searchButtonsSettings,
