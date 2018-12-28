@@ -716,12 +716,12 @@ function extractAllScreenshots(
       const currentElement = elementsToScan[iterator];
 
       const pathToVideo: string = (path.join(videoFolderPath,
-                                             theFinalArray[currentElement][0],
-                                             theFinalArray[currentElement][1]));
+                                             theFinalArray[currentElement].partialPath,
+                                             theFinalArray[currentElement].fileName));
 
-      const fileHash: string = theFinalArray[currentElement][3];
+      const fileHash: string = theFinalArray[currentElement].hash;
 
-      const duration: number = theFinalArray[currentElement][4];
+      const duration: number = theFinalArray[currentElement].duration;
 
       takeTenScreenshots(
         pathToVideo,

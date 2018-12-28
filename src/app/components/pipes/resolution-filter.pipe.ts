@@ -38,7 +38,7 @@ export class ResolutionFilterPipe implements PipeTransform {
       this.resolutionFilterService.resetMap();
 
       finalArray.forEach(element => {
-        this.resolutionFilterService.addString(element[5]);
+        this.resolutionFilterService.addString(element.resolution);
       });
 
       this.resolutionFilterService.computeFrequencyArray();
@@ -46,7 +46,7 @@ export class ResolutionFilterPipe implements PipeTransform {
       // now actually filter stuff out
 
       return finalArray.filter((element) => {
-        const currentResValue: number = this.resolutionMap.get(element[5]);
+        const currentResValue: number = this.resolutionMap.get(element.resolution);
         if ( currentResValue > leftBound && currentResValue < rightBound) {
           return true;
         } else {

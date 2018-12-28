@@ -135,17 +135,17 @@
     <app-filmstrip-item
       [darkMode]="settingsButtons['darkMode'].toggled"
       [elHeight]="150"
-      [fileSize]="itemToRename[7]"
+      [fileSize]="itemToRename.fileSize"
       [folderPath]="appState.selectedOutputFolder"
       [hoverScrub]="true"
       [hubName]="appState.hubName"
       [imgHeight]="100"
-      [imgId]="itemToRename[3]"
+      [imgId]="itemToRename.hash"
       [largerFont]="true"
-      [rez]="itemToRename[5]"
+      [rez]="itemToRename.resolution"
       [showMeta]="true"
-      [time]="itemToRename[4]"
-      [title]="itemToRename[1]"
+      [time]="itemToRename.duration"
+      [title]="itemToRename.fileName"
     ></app-filmstrip-item>
 
     <span class="renameFrom">{{ 'RIGHTCLICK.renameFrom' | translate }}</span>
@@ -172,7 +172,7 @@
 
     <button
       [disabled]="
-            (renamingWIP + '.' + renamingExtension) === currentRightClickedItem[1]
+            (renamingWIP + '.' + renamingExtension) === currentRightClickedItem.fileName
           || nodeRenamingFile
           || renamingWIP.length === 0
         "
@@ -668,13 +668,13 @@
       <ng-container *ngIf="appState.currentView === 'thumbs'">
         <app-gallery-item
           *ngFor="let item of scroll.viewPortItems"
-          (click)="openVideo(item[3])"
+          (click)="openVideo(item.hash)"
           (contextmenu)="rightMouseClicked($event, item)"
-          [title]="item[2]"
-          [imgId]="item[3]"
-          [time]="item[4]"
-          [rez]="item[5]"
-          [fileSize]="item[7]"
+          [title]="item.cleanName"
+          [imgId]="item.hash"
+          [time]="item.duration"
+          [rez]="item.resolution"
+          [fileSize]="item.fileSize"
           [imgHeight]="imgHeight"
           [elHeight]="imgHeight + textPaddingHeight"
           [elWidth]="previewWidth"
@@ -691,13 +691,13 @@
       <ng-container *ngIf="appState.currentView === 'filmstrip'">
         <app-filmstrip-item
           *ngFor="let item of scroll.viewPortItems"
-          (click)="openVideo(item[3])"
+          (click)="openVideo(item.hash)"
           (contextmenu)="rightMouseClicked($event, item)"
-          [imgId]="item[3]"
-          [title]="item[2]"
-          [time]="item[4]"
-          [rez]="item[5]"
-          [fileSize]="item[7]"
+          [imgId]="item.hash"
+          [title]="item.cleanName"
+          [time]="item.duration"
+          [rez]="item.resolution"
+          [fileSize]="item.fileSize"
           [elHeight]="imgHeight + textPaddingHeight"
           [imgHeight]="imgHeight"
           [hubName]="appState.hubName"
@@ -712,13 +712,13 @@
       <ng-container *ngIf="appState.currentView === 'files'">
         <app-file-item
           *ngFor="let item of scroll.viewPortItems"
-          [folderPath]="item[0]"
-          [title]="item[2]"
-          (click)="(item[2] === '***') ? handleFolderWordClicked(item[0]) : openVideo(item[3])"
-          (contextmenu)="(item[2] === '***') ? doNothing() : rightMouseClicked($event, item)"
-          [time]="item[4]"
-          [rez]="item[5]"
-          [fileSize]="item[7]"
+          [folderPath]="item.partialPath"
+          [title]="item.cleanName"
+          (click)="(item.cleanName === '***') ? handleFolderWordClicked(item.partialPath) : openVideo(item.hash)"
+          (contextmenu)="(item.cleanName === '***') ? doNothing() : rightMouseClicked($event, item)"
+          [time]="item.duration"
+          [rez]="item.resolution"
+          [fileSize]="item.fileSize"
           [elHeight]="20"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
@@ -729,13 +729,13 @@
       <ng-container *ngIf="appState.currentView === 'clips'">
         <app-clip-item
           *ngFor="let item of scroll.viewPortItems"
-          (click)="openVideo(item[3])"
+          (click)="openVideo(item.hash)"
           (contextmenu)="rightMouseClicked($event, item)"
-          [title]="item[2]"
-          [imgId]="item[3]"
-          [time]="item[4]"
-          [rez]="item[5]"
-          [fileSize]="item[7]"
+          [title]="item.cleanName"
+          [imgId]="item.hash"
+          [time]="item.duration"
+          [rez]="item.resolution"
+          [fileSize]="item.fileSize"
           [imgHeight]="imgHeight"
           [elHeight]="imgHeight + textPaddingHeight"
           [elWidth]="previewWidth"

@@ -50,10 +50,10 @@ export function labelVideo(width: number, height: number): string {
  */
 export function alphabetizeFinalArray(imagesArray: ImageElement[]): ImageElement[] {
   return imagesArray.sort((x: ImageElement, y: ImageElement): number => {
-    const folder1: string = x[0].toLowerCase();
-    const folder2: string = y[0].toLowerCase();
-    const file1: string = x[1].toLowerCase();
-    const file2: string = y[1].toLowerCase();
+    const folder1: string = x.partialPath.toLowerCase();
+    const folder2: string = y.partialPath.toLowerCase();
+    const file1: string = x.fileName.toLowerCase();
+    const file2: string = y.fileName.toLowerCase();
 
     if (folder1 > folder2) {
       return 1;
@@ -75,8 +75,8 @@ export function alphabetizeFinalArray(imagesArray: ImageElement[]): ImageElement
 export function countFoldersInFinalArray(imagesArray: ImageElement[]): number {
   const finalArrayFolderMap: Map<string, number> = new Map;
   imagesArray.forEach((element: ImageElement) => {
-    if (!finalArrayFolderMap.has(element[0])) {
-      finalArrayFolderMap.set(element[0], 1);
+    if (!finalArrayFolderMap.has(element.partialPath)) {
+      finalArrayFolderMap.set(element.partialPath, 1);
     }
   });
   return finalArrayFolderMap.size;
@@ -154,7 +154,15 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
               // before adding, remove the redundant prefix: sourceFolderPath
               const partialPath = dir.replace(sourceFolderPath, '');
               // fil finalArray with 3 correct and 5 dummy pieces of data
-              finalArray[elementIndex] = [partialPath, file.name, cleanUpFileName(file.name), '', 0, '', 0, 0];
+              finalArray[elementIndex] = {
+                partialPath: partialPath,
+                fileName: file.name, 
+                cleanName: cleanUpFileName(file.name), 
+                hash: '',
+                duration: 0,
+                resolution: '',
+                fileSize: 0
+              };
               elementIndex++;
             }
           }
@@ -410,7 +418,7 @@ export function missingThumbsIndex(fullArray: ImageElement[], screenshotFolder: 
   const indexes: number[] = [];
   const total: number = fullArray.length;
   for (let i = 0; i < total; i++) {
-    if (!hasAllThumbs(fullArray[i][3], screenshotFolder)) {
+    if (!hasAllThumbs(fullArray[i].hash, screenshotFolder)) {
       indexes.push(i);
     }
   }
@@ -450,8 +458,8 @@ export function findAllNewFiles(
   hdFinalArray.forEach((newElement) => {
     let matchFound = false;
     angularFinalArray.forEach((oldElement) => {
-      const pathStripped = newElement[0].replace(inputFolder, '');
-      if (pathStripped === oldElement[0] && newElement[1] === oldElement[1]) {
+      const pathStripped = newElement.partialPath.replace(inputFolder, '');
+      if (pathStripped === oldElement.partialPath && newElement.fileName === oldElement.fileName) {
         matchFound = true;
       }
     });
@@ -483,8 +491,8 @@ export function finalArrayWithoutDeleted(
     let matchFound = false;
 
     hdFinalArray.forEach((newElement) => {
-      const pathStripped = newElement[0].replace(inputFolder, '');
-      if (pathStripped === value[0] && newElement[1] === value[1]) {
+      const pathStripped = newElement.partialPath.replace(inputFolder, '');
+      if (pathStripped === value.partialPath && newElement.fileName === value.fileName) {
         matchFound = true;
       }
     });
@@ -492,7 +500,7 @@ export function finalArrayWithoutDeleted(
     if (matchFound) {
       return true;
     } else {
-      deleteThumbnails(folderWhereImagesAre, value[3]);
+      deleteThumbnails(folderWhereImagesAre, value.hash);
       return false;
     }
   });
@@ -540,8 +548,8 @@ export function extractAllMetadata(
       sendCurrentProgress(iterator, itemTotal, 1);
 
       const filePathNEW = (path.join(videoFolderPath,
-                                    theFinalArray[iterator][0],
-                                    theFinalArray[iterator][1]));
+                                    theFinalArray[iterator].partialPath,
+                                    theFinalArray[iterator].fileName));
 
       extractMetadataForThisONEFile(filePathNEW, theFinalArray[iterator], extractMetaDataCallback);
 
@@ -577,11 +585,10 @@ function extractMetadataForThisONEFile(
       const origHeight = metadata.streams[0].height;
       const sizeLabel = labelVideo(origWidth, origHeight);
       const fileSize = metadata.format.size;
-      imageElement[3] = hashFile(imageElement[1], fileSize);
-      imageElement[4] = duration;  // 4th item is duration
-      imageElement[5] = sizeLabel; // 5th item is the label, e.g. 'HD'
-      imageElement[6] = 0;         // 6th item WILL BE DEPRECATED AND REMOVED !!!
-      imageElement[7] = fileSize;  // 7th item is file size
+      imageElement.hash = hashFile(imageElement.fileName, fileSize);
+      imageElement.duration = duration;
+      imageElement.resolution = sizeLabel;
+      imageElement.fileSize = fileSize;
 
       extractMetaCallback(imageElement);
     }

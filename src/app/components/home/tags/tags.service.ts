@@ -83,7 +83,7 @@ export class TagsService {
     const regex = /{|}|\(|\)|\[|\]|for|her|the|and|,|-/gi;
 
     finalArray.forEach((element) => {
-      const cleanedFileName: string = element[2].toLowerCase().replace(regex, '');
+      const cleanedFileName: string = element.cleanName.toLowerCase().replace(regex, '');
 
       this.onlyFileNames.push(cleanedFileName);
       this.addString(cleanedFileName);
