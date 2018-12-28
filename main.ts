@@ -167,6 +167,8 @@ const fs = require('fs');
 const ipc = require('electron').ipcMain;
 const shell = require('electron').shell;
 
+const JSZip = require('jszip');
+
 // ============================================================
 // My variables
 // ============================================================
@@ -209,7 +211,7 @@ function openThisDamnFile(pathToVhaFile: string) {
 
   console.log('the app is about to open: ' + pathToVhaFile);
 
-  fs.readFile(pathToVhaFile, (err, data) => {
+  fs.readFile(pathToVhaFile, (err, zippedData) => {
     if (err) {
       dialog.showMessageBox({
         message: 'No such file found:',
@@ -218,76 +220,80 @@ function openThisDamnFile(pathToVhaFile: string) {
       });
       globals.angularApp.sender.send('pleaseOpenWizard');
     } else {
-      globals.currentlyOpenVhaFile = pathToVhaFile;
-      lastSavedFinalObject = JSON.parse(data);
+      JSZip.loadAsync(zippedData).then(function (zip) {
+        zip.file('vha.json').async('string').then((data) => {
+          globals.currentlyOpenVhaFile = pathToVhaFile;
+          lastSavedFinalObject = JSON.parse(data);
 
-      // path to folder where the VHA file is
-      globals.selectedOutputFolder = path.parse(pathToVhaFile).dir;
+          // path to folder where the VHA file is
+          globals.selectedOutputFolder = path.parse(pathToVhaFile).dir;
 
-      // use relative paths
-      if (lastSavedFinalObject.inputDir === '') {
-        lastSavedFinalObject.inputDir = globals.selectedOutputFolder;
-      }
-
-      let changedRootFolder = false;
-      // check root folder exists
-      if (!fs.existsSync(lastSavedFinalObject.inputDir)) {
-        // see if the user wants to change the root folder
-        const result = dialog.showMessageBox({
-          message: 'Video folder not found:',
-          detail: lastSavedFinalObject.inputDir,
-          buttons: ['Select Root Folder', 'Continue Anyway', 'Cancel']
-        });
-        if (result === 0) {
-          // select the new root folder
-          const files = dialog.showOpenDialog({
-            properties: ['openDirectory']
-          });
-          if (files) {
-            // update the root folder
-            const inputDirPath: string = files[0];
-            lastSavedFinalObject.inputDir = inputDirPath;
-            changedRootFolder = true;
-          } else {
-            // show the wizard instead
-            lastSavedFinalObject = null;
-            globals.angularApp.sender.send('pleaseOpenWizard');
-            return;
+          // use relative paths
+          if (lastSavedFinalObject.inputDir === '') {
+            lastSavedFinalObject.inputDir = globals.selectedOutputFolder;
           }
-        } else if (result === 2) {
-          // show the wizard instead
-          lastSavedFinalObject = null;
-          globals.angularApp.sender.send('pleaseOpenWizard');
-          return;
-        }
-      }
 
-      setGlobalsFromVhaFile(lastSavedFinalObject); // sets source folder ETC
+          let changedRootFolder = false;
+          // check root folder exists
+          if (!fs.existsSync(lastSavedFinalObject.inputDir)) {
+            // see if the user wants to change the root folder
+            const result = dialog.showMessageBox({
+              message: 'Video folder not found:',
+              detail: lastSavedFinalObject.inputDir,
+              buttons: ['Select Root Folder', 'Continue Anyway', 'Cancel']
+            });
+            if (result === 0) {
+              // select the new root folder
+              const files = dialog.showOpenDialog({
+                properties: ['openDirectory']
+              });
+              if (files) {
+                // update the root folder
+                const inputDirPath: string = files[0];
+                lastSavedFinalObject.inputDir = inputDirPath;
+                changedRootFolder = true;
+              } else {
+                // show the wizard instead
+                lastSavedFinalObject = null;
+                globals.angularApp.sender.send('pleaseOpenWizard');
+                return;
+              }
+            } else if (result === 2) {
+              // show the wizard instead
+              lastSavedFinalObject = null;
+              globals.angularApp.sender.send('pleaseOpenWizard');
+              return;
+            }
+          }
 
-      console.log(globals.selectedSourceFolder + ' - videos location');
-      console.log(globals.selectedOutputFolder + ' - output location');
+          setGlobalsFromVhaFile(lastSavedFinalObject); // sets source folder ETC
 
-      // TODO: Make this a setting toggle :)
-      // // resume extracting any missing thumbnails
-      // const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
-      //
-      // const indexesToScan: number[] = missingThumbsIndex(lastSavedFinalObject.images, screenshotOutputFolder);
-      //
-      // extractAllScreenshots(
-      //   lastSavedFinalObject.images,
-      //   globals.selectedSourceFolder,
-      //   screenshotOutputFolder,
-      //   globals.screenShotSize,
-      //   indexesToScan
-      // );
+          console.log(globals.selectedSourceFolder + ' - videos location');
+          console.log(globals.selectedOutputFolder + ' - output location');
 
-      globals.angularApp.sender.send(
-        'finalObjectReturning',
-        lastSavedFinalObject,
-        pathToVhaFile,
-        globals.selectedOutputFolder + path.sep,   // app needs the trailing slash (at least for now)
-        changedRootFolder
-      );
+          // TODO: Make this a setting toggle :)
+          // // resume extracting any missing thumbnails
+          // const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
+          //
+          // const indexesToScan: number[] = missingThumbsIndex(lastSavedFinalObject.images, screenshotOutputFolder);
+          //
+          // extractAllScreenshots(
+          //   lastSavedFinalObject.images,
+          //   globals.selectedSourceFolder,
+          //   screenshotOutputFolder,
+          //   globals.screenShotSize,
+          //   indexesToScan
+          // );
+
+          globals.angularApp.sender.send(
+            'finalObjectReturning',
+            lastSavedFinalObject,
+            pathToVhaFile,
+            globals.selectedOutputFolder + path.sep,   // app needs the trailing slash (at least for now)
+            changedRootFolder
+          );
+        });
+      });
     }
   });
 }

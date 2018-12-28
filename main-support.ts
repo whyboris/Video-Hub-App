@@ -2,6 +2,7 @@ import * as path from 'path';
 
 const fs = require('fs');
 const hasher = require('crypto').createHash;
+const JSZip = require('jszip');
 
 import { FinalObject, ImageElement } from './src/app/components/common/final-object.interface';
 import { acceptableFiles } from './main-filenames';
@@ -82,6 +83,7 @@ export function countFoldersInFinalArray(imagesArray: ImageElement[]): number {
   return finalArrayFolderMap.size;
 }
 
+
 /**
  * Write the final object into `vha` file
  * @param finalObject   -- finalObject
@@ -95,9 +97,18 @@ export function writeVhaFileDangerously(finalObject: FinalObject, pathToTheFile:
   }
 
   const json = JSON.stringify(finalObject);
+
   // write the file
-  fs.writeFile(pathToTheFile, json, 'utf8', done);
-  // CATCH ERRORS !?!!?!!
+  const zip = new JSZip();
+  zip.file('vha.json', json);
+  zip.generateNodeStream({type: 'nodebuffer', streamFiles: true})
+     .pipe(fs.createWriteStream(pathToTheFile))
+     .on('finish', function () {
+          // JSZip generates a readable stream with a "end" event,
+          // but is piped here in a writable stream which emits a "finish" event.
+          console.log(pathToTheFile + ' written!');
+          done();
+     });
 }
 
 /**
