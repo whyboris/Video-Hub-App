@@ -20,6 +20,7 @@ export class PreviewComponent implements OnInit {
   @Input() fileSize: number;
   @Input() folderPath: string;
   @Input() hoverScrub: boolean;
+  @Input() returnToFirstScreenshot: boolean;
   @Input() hubName: string;
   @Input() imgHeight: number;
   @Input() imgId: any; // the filename of screenshot strip without `.jpg`
@@ -45,9 +46,9 @@ export class PreviewComponent implements OnInit {
     }
   }
   @HostListener('mouseleave') onMouseLeave() {
-    if (this.hoverScrub) {
+    if (this.hoverScrub && this.returnToFirstScreenshot) {
       this.hover = false;
-      this.filmXoffset = 0;
+      this.percentOffset = 0;
     }
   }
 
