@@ -2,7 +2,7 @@
 
 // export let DemoContent: FinalObject = {
 //   'hubName': 'Cartoons',
-//   'ssSize': 300,
+//   'screenshotHeight': 300,
 //   'numOfFolders': 3,
 //   'inputDir': 'unimportant',
 //   'images': [

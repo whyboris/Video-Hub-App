@@ -9,18 +9,6 @@ import { acceptableFiles } from './main-filenames';
 import { globals } from './main-globals';
 
 /**
- * Hash a given file using it's file name and size
- * md5(file.name + file.size)
- * @param fileName  -- file name to hash
- * @param fileSize  -- file size to hash
- */
-export function hashFile(fileName: string, fileSize: number): string {
-  // make the magic happen!
-  const hash = hasher('md5').update(fileName + fileSize.toString()).digest('hex');
-  return hash;
-}
-
-/**
  * Label the video according to these rules
  * 5th item is size (720, 1080, etc)
  * @param width
@@ -156,8 +144,8 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
               // fil finalArray with 3 correct and 5 dummy pieces of data
               finalArray[elementIndex] = {
                 partialPath: partialPath,
-                fileName: file.name, 
-                cleanName: cleanUpFileName(file.name), 
+                fileName: file.name,
+                cleanName: cleanUpFileName(file.name),
                 hash: '',
                 duration: 0,
                 resolution: '',
@@ -590,17 +578,28 @@ function extractMetadataForThisONEFile(
       const origWidth = metadata.streams[0].width;
       const origHeight = metadata.streams[0].height;
       const sizeLabel = labelVideo(origWidth, origHeight);
-      const fileSize = metadata.format.size;
+      const fileSize: string = metadata.format.size; // looks like a number, but actually a string!
       imageElement.hash = hashFile(imageElement.fileName, fileSize);
       imageElement.duration = duration;
       imageElement.resolution = sizeLabel;
-      imageElement.fileSize = fileSize;
+      imageElement.fileSize = parseInt(fileSize, 10);
 
       extractMetaCallback(imageElement);
     }
   });
 }
 
+/**
+ * Hash a given file using it's file name and size
+ * md5(file.name + file.size)
+ * @param fileName  -- file name to hash
+ * @param fileSize  -- file size to hash
+ */
+export function hashFile(fileName: string, fileSize: string): string {
+  // make the magic happen!
+  const hash = hasher('md5').update(fileName + fileSize).digest('hex');
+  return hash;
+}
 
 /**
  * Figures out what new files there are,
