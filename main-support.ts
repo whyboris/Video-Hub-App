@@ -249,16 +249,16 @@ export function takeTenScreenshots(
     return;
   }
 
-  let current = 1;
-  const totalCount = 11;
-  const step: number = duration / totalCount;
+  let current = 0;
+  const totalCount = 10;
+  const step: number = duration / (totalCount + 1);
   const args = [];
-  let concat = '';
-  let stack = '';
+  let allFramesFiltered = '';
+  let outputFrames = '';
 
   // Hardcode ~16:9 ratio
-  const ssWidth = Math.ceil(screenshotHeight * 16 / 9);
-  const ratioString = ssWidth + ':' + screenshotHeight;
+  const ssWidth: number = Math.ceil(screenshotHeight * 16 / 9);
+  const ratioString: string = ssWidth + ':' + screenshotHeight;
 
   // sweet thanks to StackExchange!
   // https://superuser.com/questions/547296/resizing-videos-with-ffmpeg-avconv-to-fit-into-static-sized-player
@@ -266,14 +266,14 @@ export function takeTenScreenshots(
 
   // make the magic filter
   while (current < totalCount) {
-    const time = current * step;
+    const time = (current + 1) * step; // +1 so we don't pick the 0th frame
     args.push('-ss', time, '-i', pathToVideo);
-    concat += '[' + (current - 1) + ':v]' + fancyScaleFilter + '[' + (current - 1) + '];';
-    stack += '[' + (current - 1) + ']';
+    allFramesFiltered += '[' + current + ':v]' + fancyScaleFilter + '[' + current + '];';
+    outputFrames += '[' + current + ']';
     current++;
   }
   args.push('-frames', 1,
-    '-filter_complex', concat + stack + 'hstack=inputs=' + (totalCount - 1),
+    '-filter_complex', allFramesFiltered + outputFrames + 'hstack=inputs=' + totalCount,
     saveLocation + '/' + fileHash + '.jpg'
   );
 
