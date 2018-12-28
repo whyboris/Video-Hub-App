@@ -252,9 +252,11 @@ export function takeTenScreenshots(
   let allFramesFiltered = '';
   let outputFrames = '';
 
-  // Hardcode ~16:9 ratio
-  const ssWidth: number = Math.ceil(screenshotHeight * 16 / 9);
+  // Hardcode a specific ~16:9 ratio
+  const ssWidth: number = Math.ceil(screenshotHeight * 1.78);
+  // const ssPadWidth: number = ssWidth + 2;
   const ratioString: string = ssWidth + ':' + screenshotHeight;
+  // const ratioPadString: string = ssPadWidth + ':' + screenshotHeight;
 
   // sweet thanks to StackExchange!
   // https://superuser.com/questions/547296/resizing-videos-with-ffmpeg-avconv-to-fit-into-static-sized-player
@@ -365,7 +367,7 @@ export function extractFirstFrame(saveLocation: string, fileHash: string, done: 
   '-f', 'image2',
   saveLocation + '/' + fileHash + '-first.jpg',
   ];
-  console.log('extracting clip frame 1');
+  // console.log('extracting clip frame 1');
   const ffmpeg_process = spawn(ffmpegPath, args);
   // ffmpeg_process.stdout.on('data', function (data) {
   //   console.log(data);

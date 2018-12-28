@@ -30,7 +30,7 @@ export class PreviewComponent implements OnInit {
   @Input() time: string;
   @Input() title: string;
 
-  filmXoffset: number = 0;
+  percentOffset: number = 0;
   firstFilePath = '';
   fullFilePath = '';
   hover: boolean;
@@ -61,7 +61,9 @@ export class PreviewComponent implements OnInit {
       const cursorX = $event.layerX;
       const containerWidth = this.filmstripHolder.nativeElement.getBoundingClientRect().width;
 
-      this.filmXoffset = (this.imgHeight * 1.78) * Math.floor(cursorX / (containerWidth / 10));
+      // 10 is the number of screenshots
+      // 9 is 1 less than that ;)
+      this.percentOffset = (100 / 9) * Math.floor(cursorX / (containerWidth / 10));
     }
   }
 
