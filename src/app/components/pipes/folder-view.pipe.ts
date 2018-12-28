@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
+import { ImageElement } from '../common/final-object.interface';
 
 @Pipe({
   name: 'folderViewPipe'
@@ -20,14 +21,19 @@ export class FolderViewPipe implements PipeTransform {
       let previousFolder = '';
 
       finalArray.forEach((element, index) => {
-        if (previousFolder !== element[0]) {
-          const tempClone = [];
-          tempClone[0] = element[0];
-          tempClone[1] = element[1];
-          tempClone[2] = '***';
+        if (previousFolder !== element.partialPath) {
+          const tempClone: ImageElement = {
+            partialPath: element.partialPath,
+            fileName: element.fileName,
+            cleanName: '***',
+            hash: '',
+            duration: 0,
+            resolution: '',
+            fileSize: 0
+          };
 
           arrWithFolders.push(tempClone);
-          previousFolder = element[0];
+          previousFolder = element.partialPath;
         }
         if (!folderOnly) {
           arrWithFolders.push(element);

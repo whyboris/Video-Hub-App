@@ -25,7 +25,7 @@ export class WordFrequencyPipe implements PipeTransform {
       this.wordFrequencyService.resetMap();
 
       finalArray.forEach(element => {
-        this.wordFrequencyService.addString(element[2]);
+        this.wordFrequencyService.addString(element.cleanName);
       });
 
       this.wordFrequencyService.cleanMap();

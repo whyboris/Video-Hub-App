@@ -25,8 +25,7 @@ export class FileSearchPipe implements PipeTransform {
     // console.log('fileSearchPipe triggered');
     // console.log(arrOfStrings);
 
-    // search through the FILE or FOLDER array !!!
-    const fileOrFolder = fileNotFolder ? 1 : 0;
+    
 
 
     if (arrOfStrings.length === 0) {
@@ -38,7 +37,9 @@ export class FileSearchPipe implements PipeTransform {
         let matchFound = 0;
 
         arrOfStrings.forEach(element => {
-          if (item[fileOrFolder].toLowerCase().indexOf(element.toLowerCase()) !== -1) {
+          // search through the FILE or FOLDER array !!!
+          const fileOrFolder = fileNotFolder ? item.fileName : item.partialPath;
+          if (fileOrFolder.toLowerCase().indexOf(element.toLowerCase()) !== -1) {
             matchFound++;
           }
         });
