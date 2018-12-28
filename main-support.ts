@@ -222,7 +222,7 @@ const exec = require('child_process').exec;
 /**
  * Take 10 screenshots of a particular file
  * at particular file size
- * save as particular fileNumber
+ * save as particular fileHash
  * @param pathToVideo  -- full path to the video file
  * @param fileHash     -- hash of the video file
  * @param screenshotHeight   -- height of screenshot in pixels (defaul is 100)
@@ -339,17 +339,23 @@ export function takeTenClips(
 
   // now make it all worth it!
   const ffmpeg_process = spawn(ffmpegPath, args);
-  ffmpeg_process.stdout.on('data', function (data) {
-    console.log(data);
-  });
-  ffmpeg_process.stderr.on('data', function (data) {
-    console.log('grep stderr: ' + data);
-  });
+  // ffmpeg_process.stdout.on('data', function (data) {
+  //   console.log(data);
+  // });
+  // ffmpeg_process.stderr.on('data', function (data) {
+  //   console.log('grep stderr: ' + data);
+  // });
   ffmpeg_process.on('exit', () => {
     extractFirstFrame(saveLocation, fileHash, done);
   });
 }
 
+/**
+ * Extract the first frame from the preview clip
+ * @param saveLocation
+ * @param fileHash
+ * @param done
+ */
 export function extractFirstFrame(saveLocation: string, fileHash: string, done: any) {
   if (fs.existsSync(saveLocation + '/' + fileHash + '-first.jpg')) {
     done();
