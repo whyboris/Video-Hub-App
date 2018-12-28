@@ -93,7 +93,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
     const cursorX = $event.layerX;
     const containerWidth = this.filmstripHolder.nativeElement.getBoundingClientRect().width;
 
-    this.filmXoffset = (this.imgWidth) * Math.floor(cursorX / (containerWidth / 10));
+    this.filmXoffset = (this.imgHeight * 1.78) * Math.floor(cursorX / (containerWidth / 10));
   }
 
 }

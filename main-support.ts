@@ -225,7 +225,7 @@ const exec = require('child_process').exec;
  * save as particular fileNumber
  * @param pathToVideo  -- full path to the video file
  * @param fileHash     -- hash of the video file
- * @param screensize   -- resolution in pixels (defaul is 100)
+ * @param screenshotHeight   -- height of screenshot in pixels (defaul is 100)
  * @param saveLocation -- folder where to save jpg files
  * @param done         -- callback when done
  */
@@ -233,7 +233,7 @@ export function takeTenScreenshots(
   pathToVideo: string,
   fileHash: string,
   duration: number,
-  screenSize: number,
+  screenshotHeight: number,
   saveLocation: string,
   done: any
 ) {
@@ -243,7 +243,7 @@ export function takeTenScreenshots(
     takeTenClips(pathToVideo,
                  fileHash,
                  duration,
-                 screenSize,
+                 screenshotHeight,
                  saveLocation,
                  done);
     return;
@@ -256,11 +256,19 @@ export function takeTenScreenshots(
   let concat = '';
   let stack = '';
 
+  // Hardcode ~16:9 ratio
+  const ssWidth = Math.ceil(screenshotHeight * 16 / 9);
+  const ratioString = ssWidth + ':' + screenshotHeight;
+
+  // sweet thanks to StackExchange!
+  // https://superuser.com/questions/547296/resizing-videos-with-ffmpeg-avconv-to-fit-into-static-sized-player
+  const fancyScaleFilter = 'scale=' + ratioString + ':force_original_aspect_ratio=decrease,pad=' + ratioString + ':(ow-iw)/2:(oh-ih)/2';
+
   // make the magic filter
   while (current < totalCount) {
     const time = current * step;
     args.push('-ss', time, '-i', pathToVideo);
-    concat += '[' + (current - 1) + ':v]scale=' + screenSize + ':-2[' + (current - 1) + '];';
+    concat += '[' + (current - 1) + ':v]' + fancyScaleFilter + '[' + (current - 1) + '];';
     stack += '[' + (current - 1) + ']';
     current++;
   }
@@ -280,7 +288,7 @@ export function takeTenScreenshots(
     takeTenClips(pathToVideo,
                  fileHash,
                  duration,
-                 screenSize,
+                 screenshotHeight,
                  saveLocation,
                  done);
   });
@@ -292,7 +300,7 @@ export function takeTenScreenshots(
  * save as particular fileNumber
  * @param pathToVideo  -- full path to the video file
  * @param fileHash     -- hash of the video file
- * @param screensize   -- resolution in pixels (defaul is 100)
+ * @param screenshotHeight   -- resolution in pixels (defaul is 100)
  * @param saveLocation -- folder where to save jpg files
  * @param done         -- callback when done
  */
@@ -300,7 +308,7 @@ export function takeTenClips(
   pathToVideo: string,
   fileHash: string,
   duration: number,
-  screenSize: number,
+  screenshotHeight: number,
   saveLocation: string,
   done: any
 ) {
@@ -325,7 +333,7 @@ export function takeTenClips(
     concat += '[' + (current - 1) + ':v]' + '[' + (current - 1) + ':a]';
     current++;
   }
-  concat += 'concat=n=' + (totalCount - 1) + ':v=1:a=1[v][a];[v]scale=' + screenSize + ':-2[v2]';
+  concat += 'concat=n=' + (totalCount - 1) + ':v=1:a=1[v][a];[v]scale=' + screenshotHeight + ':-2[v2]';
   args.push('-filter_complex', concat, '-map', '[v2]', '-map', '[a]', saveLocation + '/' + fileHash + '.mp4');
   // phfff glad that's over
 

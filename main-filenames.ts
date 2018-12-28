@@ -19,6 +19,7 @@ export const acceptableFiles = [
   'mpe',
   'mpeg',
   'mpg',
+  'mxf',
   'ogg',
   'rm',
   'vob',

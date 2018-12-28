@@ -13,7 +13,7 @@
     (mousemove)="mouseIsMoving($event)"
     [ngStyle]="{
         height: imgHeight + 'px',
-        background: 'url(' + 'file://' + folderPath + '/' + imgId + ')',
+        'background-image': 'url(' + 'file://' + folderPath + '/' + imgId + ')',
         'background-position-x': '-' + filmXoffset + 'px',
         'background-size': 'auto ' + imgHeight + 'px'
       }"
