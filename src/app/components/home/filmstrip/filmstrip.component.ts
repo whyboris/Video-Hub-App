@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { galleryItemAppear, metaAppear, textAppear } from '../../common/animations';
 
@@ -22,43 +22,29 @@ export class FilmstripComponent implements OnInit {
   @Input() hubName: string;
   @Input() imgHeight: number;
   @Input() imgId: any;
-  @Input() imgWidth: number;
   @Input() largerFont: boolean;
   @Input() rez: string;
   @Input() showMeta: boolean;
   @Input() time: string;
   @Input() title: string;
 
+  fullFilePath: string = '';
   filmXoffset: number = 0;
-
-  hover = false;
-  noError = true;
 
   constructor(
     public sanitizer: DomSanitizer
   ) { }
 
-  @HostListener('mouseenter') onMouseEnter() {
-    this.hover = true;
-  }
-  @HostListener('mouseleave') onMouseLeave() {
-    this.hover = false;
-  }
-
   ngOnInit() {
-    // this.imgId is `undefined` when no screenshot taken -- because of ffmpeg extraction error
-    if (this.imgId === undefined) {
-      this.noError = false;
-    }
-
-    const fileHash = this.imgId;
-    this.imgId = 'vha-' + this.hubName + '/' + fileHash + '.jpg';
+    this.fullFilePath =  'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/' + this.imgId + '.jpg';
   }
 
   mouseIsMoving($event) {
-    const cursorX = $event.layerX;
-    const containerWidth = this.filmstripHolder.nativeElement.getBoundingClientRect().width;
+    if (this.hoverScrub) {
+      const cursorX = $event.layerX;
+      const containerWidth = this.filmstripHolder.nativeElement.getBoundingClientRect().width;
 
-    this.filmXoffset = (this.imgHeight * 1.78) * Math.floor(cursorX / (containerWidth / 10));
+      this.filmXoffset = (this.imgHeight * 1.78) * Math.floor(cursorX / (containerWidth / 10));
+    }
   }
 }

@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit, OnDestroy, ElementRef, ViewChild } from '@angular/core';
+import { Component, HostListener, Input, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { galleryItemAppear, metaAppear, textAppear } from '../../common/animations';
 
@@ -10,7 +10,7 @@ import { galleryItemAppear, metaAppear, textAppear } from '../../common/animatio
                 textAppear,
                 metaAppear ]
 })
-export class PreviewComponent implements OnInit, OnDestroy {
+export class PreviewComponent implements OnInit {
 
   @ViewChild('filmstripHolder') filmstripHolder: ElementRef;
 
@@ -22,78 +22,47 @@ export class PreviewComponent implements OnInit, OnDestroy {
   @Input() hoverScrub: boolean;
   @Input() hubName: string;
   @Input() imgHeight: number;
-  @Input() imgWidth: number;
-  @Input() imgId: any;
+  @Input() imgId: any; // the filename of screenshot strip without `.jpg`
   @Input() largerFont: boolean;
-  @Input() randomImage: boolean;
+  @Input() randomImage: boolean; // all code related to this currently removed
   @Input() rez: string;
   @Input() showMeta: boolean;
   @Input() time: string;
   @Input() title: string;
 
-  hover: boolean;
-  currentlyShowing = 1;
-  looper = true;
-  noError = true;
-
   filmXoffset: number = 0;
+  firstFilePath = '';
+  fullFilePath = '';
+  hover: boolean;
 
   constructor(
     public sanitizer: DomSanitizer
   ) { }
 
   @HostListener('mouseenter') onMouseEnter() {
-    this.hover = true;
+    if (this.hoverScrub) {
+      this.hover = true;
+    }
   }
   @HostListener('mouseleave') onMouseLeave() {
-    this.hover = false;
+    if (this.hoverScrub) {
+      this.hover = false;
+      this.filmXoffset = 0;
+    }
   }
 
   ngOnInit() {
-    // this.imgId is `undefined` when no screenshot taken -- because of ffmpeg extraction error
-    if (this.imgId === undefined) {
-      this.noError = false;
-    }
-    const fileHash = this.imgId;
-
-    this.imgId = 'vha-' + this.hubName + '/' + fileHash + '.jpg';
-
-    // this.loop(); // disabled -- can have a toggle in gallery that will feed variable as input into this component that will start
-    if (this.randomImage) {
-      this.showRandom();
-    } else {
-      this.showThisOne(1);
-    }
-  }
-
-
-  loop(): void {
-    const rand = Math.round(Math.random() * (6000 - 500)) + 1500;
-    setTimeout(() => {
-      this.showRandom();
-      if (this.looper) {
-        this.loop();
-      }
-    }, rand);
-  }
-
-  showRandom(): void {
-    this.showThisOne(Math.floor(Math.random() * 9) + 1 );
-  }
-
-  showThisOne(screen: number): void {
-    this.currentlyShowing = screen;
-  }
-
-  ngOnDestroy() {
-    this.looper = false;
+    this.firstFilePath = 'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/' + this.imgId + '-first.jpg';
+    this.fullFilePath =  'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/' + this.imgId + '.jpg';
   }
 
   mouseIsMoving($event) {
-    const cursorX = $event.layerX;
-    const containerWidth = this.filmstripHolder.nativeElement.getBoundingClientRect().width;
+    if (this.hoverScrub) {
+      const cursorX = $event.layerX;
+      const containerWidth = this.filmstripHolder.nativeElement.getBoundingClientRect().width;
 
-    this.filmXoffset = (this.imgHeight * 1.78) * Math.floor(cursorX / (containerWidth / 10));
+      this.filmXoffset = (this.imgHeight * 1.78) * Math.floor(cursorX / (containerWidth / 10));
+    }
   }
 
 }

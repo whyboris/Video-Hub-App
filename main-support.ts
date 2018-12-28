@@ -576,12 +576,11 @@ function extractMetadataForThisONEFile(
       const origWidth = metadata.streams[0].width;
       const origHeight = metadata.streams[0].height;
       const sizeLabel = labelVideo(origWidth, origHeight);
-      const width = Math.round(100 * origWidth / origHeight) || 169;
       const fileSize = metadata.format.size;
       imageElement[3] = hashFile(imageElement[1], fileSize);
       imageElement[4] = duration;  // 4th item is duration
       imageElement[5] = sizeLabel; // 5th item is the label, e.g. 'HD'
-      imageElement[6] = width;     // 6th item is width of screenshot in px (e.g. 150);
+      imageElement[6] = 0;         // 6th item WILL BE DEPRECATED AND REMOVED !!!
       imageElement[7] = fileSize;  // 7th item is file size
 
       extractMetaCallback(imageElement);
