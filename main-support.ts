@@ -329,7 +329,7 @@ export function takeTenClips(
     concat += '[' + (current - 1) + ':v]' + '[' + (current - 1) + ':a]';
     current++;
   }
-  concat += 'concat=n=' + (totalCount - 1) + ':v=1:a=1[v][a];[v]scale=' + screenshotHeight + ':-2[v2]';
+  concat += 'concat=n=' + (totalCount - 1) + ':v=1:a=1[v][a];[v]scale=-2:' + screenshotHeight + '[v2]';
   args.push('-filter_complex', concat, '-map', '[v2]', '-map', '[a]', saveLocation + '/' + fileHash + '.mp4');
   // phfff glad that's over
 
