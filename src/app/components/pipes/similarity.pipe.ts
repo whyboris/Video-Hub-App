@@ -26,7 +26,7 @@ export class SimilarityPipe implements PipeTransform {
       this.similarityService.restartWith(file);
 
       finalArray.forEach((element, index) => {
-        this.similarityService.processThisWord(index, element[2]);
+        this.similarityService.processThisWord(index, element.cleanName);
       });
 
       const indexes: number[] = this.similarityService.getIndexesBySimilarity();

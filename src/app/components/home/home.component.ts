@@ -37,7 +37,7 @@ import {
   topAnimation
 } from '../common/animations';
 
-import { DemoContent } from '../../../assets/demo-content';
+// import { DemoContent } from '../../../assets/demo-content';
 
 @Component({
   selector: 'app-home',
@@ -337,22 +337,22 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.debounceUpdateMax(10);
       });
 
-      if (this.webDemo) {
-        const finalObject = DemoContent;
-        // TODO -- MAYBE ???? UPDATE SINCE THE BELOW HAS BEEN UPDATED
-        // identical to `finalObjectReturning`
-        this.appState.numOfFolders = finalObject.numOfFolders;
-        // DEMO CONTENT -- CONFIRM THAT IT WORKS !!!
-        this.appState.selectedOutputFolder = 'images';
-        this.appState.selectedSourceFolder = finalObject.inputDir;
-        this.canCloseWizard = true;
-        this.showWizard = false;
-        this.finalArray = finalObject.images;
-        this.buildFileMap();
-        setTimeout(() => {
-          this.toggleButton('showThumbnails');
-        }, 1000);
-      }
+      // if (this.webDemo) {
+      //   const finalObject = DemoContent;
+      //   // TODO -- MAYBE ???? UPDATE SINCE THE BELOW HAS BEEN UPDATED
+      //   // identical to `finalObjectReturning`
+      //   this.appState.numOfFolders = finalObject.numOfFolders;
+      //   // DEMO CONTENT -- CONFIRM THAT IT WORKS !!!
+      //   this.appState.selectedOutputFolder = 'images';
+      //   this.appState.selectedSourceFolder = finalObject.inputDir;
+      //   this.canCloseWizard = true;
+      //   this.showWizard = false;
+      //   this.finalArray = finalObject.images;
+      //   this.buildFileMap();
+      //   setTimeout(() => {
+      //     this.toggleButton('showThumbnails');
+      //   }, 1000);
+      // }
 
     }, 100);
 
@@ -602,9 +602,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   public openVideo(imageId): void {
     const number = this.fileMap.get(imageId);
-    this.currentPlayingFolder = this.finalArray[number][0];
-    this.currentPlayingFile = this.finalArray[number][2];
-    const fullPath = this.appState.selectedSourceFolder + this.finalArray[number][0] + '/' + this.finalArray[number][1];
+    this.currentPlayingFolder = this.finalArray[number].partialPath;
+    this.currentPlayingFile = this.finalArray[number].cleanName;
+    const fullPath = this.appState.selectedSourceFolder + this.finalArray[number].partialPath + '/' + this.finalArray[number].fileName;
     this.electronService.ipcRenderer.send('openThisFile', fullPath);
     console.log(fullPath);
     this.fullPathToCurrentFile = fullPath;
@@ -698,7 +698,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   buildFileMap(): void {
     this.fileMap = new Map;
     (this.finalArray || []).forEach((element, index) => {
-      this.fileMap.set(element[3], index);
+      this.fileMap.set(element.hash, index);
     });
     // console.log(this.fileMap);
   }
@@ -1143,7 +1143,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Handle right-click and `Show similar`
    */
   showSimilarNow(): void {
-    this.findMostSimilar = this.currentRightClickedItem[2];
+    this.findMostSimilar = this.currentRightClickedItem.cleanName;
     console.log(this.findMostSimilar);
     this.showSimilar = true;
   }
@@ -1154,9 +1154,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   openContainingFolderNow(): void {
     this.fullPathToCurrentFile = this.appState.selectedSourceFolder +
-                                 this.currentRightClickedItem[0] +
+                                 this.currentRightClickedItem.partialPath +
                                  '/' +
-                                 this.currentRightClickedItem[1];
+                                 this.currentRightClickedItem.fileName;
 
     this.openInExplorer();
   }
@@ -1165,7 +1165,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Handle right-click on file and `view folder`
    */
   showOnlyThisFolderNow(): void {
-    this.handleFolderWordClicked(this.currentRightClickedItem[0]);
+    this.handleFolderWordClicked(this.currentRightClickedItem.partialPath);
   }
 
   rightMouseClicked(event: MouseEvent, item): void {
@@ -1203,8 +1203,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const item = this.currentRightClickedItem;
 
     // .slice() creates a copy
-    const fileName = item[1].slice().substr(0, item[1].lastIndexOf('.'));
-    const extension = item[1].slice().split('.').pop();
+    const fileName = item.fileName.slice().substr(0, item.fileName.lastIndexOf('.'));
+    const extension = item.fileName.slice().split('.').pop();
 
     this.renamingWIP = fileName;
     this.renamingExtension = extension;
@@ -1234,8 +1234,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.renameErrMsg = '';
 
     const sourceFolder = this.appState.selectedSourceFolder;
-    const relativeFilePath = this.currentRightClickedItem[0];
-    const originalFile = this.currentRightClickedItem[1];
+    const relativeFilePath = this.currentRightClickedItem.partialPath;
+    const originalFile = this.currentRightClickedItem.fileName;
     const newFileName = this.renamingWIP + '.' + this.renamingExtension;
     // check if different first !!!
     if (originalFile === newFileName) {
@@ -1260,12 +1260,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Searches through the `finalArray` and updates the file name and display name
    */
   replaceOriginalFileName(): void {
-    const oldFileName = this.currentRightClickedItem[1];
+    const oldFileName = this.currentRightClickedItem.fileName;
 
     for (let i = 0; i < this.finalArray.length; i++) {
-      if (this.finalArray[i][1] === oldFileName) {
-        this.finalArray[i][1] = this.renamingWIP + '.' + this.renamingExtension;
-        this.finalArray[i][2] = this.renamingWIP;
+      if (this.finalArray[i].fileName === oldFileName) {
+        this.finalArray[i].fileName = this.renamingWIP + '.' + this.renamingExtension;
+        this.finalArray[i].cleanName = this.renamingWIP;
         break;
       }
     }
