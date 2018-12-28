@@ -5,7 +5,7 @@
 
   <div
     #filmstripHolder
-    (mousemove)="mouseIsMoving($event)"
+    (mousemove)="updateFilmXoffset($event)"
     class="filmstrip-container"
     [ngStyle]="{
         height: imgHeight + 'px',

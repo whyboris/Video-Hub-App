@@ -39,12 +39,15 @@ export class FilmstripComponent implements OnInit {
     this.fullFilePath =  'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/' + this.imgId + '.jpg';
   }
 
-  mouseIsMoving($event) {
+  updateFilmXoffset($event) {
     if (this.hoverScrub) {
-      const cursorX = $event.layerX;
+      const imgWidth = this.imgHeight * 1.78; // 1.78 is the hardcoded aspect ratio
       const containerWidth = this.filmstripHolder.nativeElement.getBoundingClientRect().width;
+      const howManyScreensOutsideCutoff = 11 - Math.floor(containerWidth / imgWidth);
+      // 11 is just 1 more than number of screenshots (currently hardcoded as 10)
 
-      this.filmXoffset = (this.imgHeight * 1.78) * Math.floor(cursorX / (containerWidth / 10));
+      const cursorX = $event.layerX; // cursor's X position inside the filmstrip element
+      this.filmXoffset = imgWidth * Math.floor(cursorX / (containerWidth / howManyScreensOutsideCutoff));
     }
   }
 }
