@@ -934,7 +934,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Computes the preview width for thumbnails view
    */
   public computePreviewWidth(): void {
-    this.previewWidth = Math.ceil((this.imgHeight / 100) * 174);
+    this.previewWidth = Math.ceil((this.imgHeight / 100) * 178);
   }
 
   /**

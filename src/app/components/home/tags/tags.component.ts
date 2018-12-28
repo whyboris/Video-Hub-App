@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnDestroy, ViewChild, ElementRef, OnInit } from '@angular/core';
 
 import { TagsService, WordAndFreq } from './tags.service';
 import { TagsSaveService } from './tags-save.service';
@@ -16,7 +16,7 @@ import { slowFadeIn, tagDeleteButton, donutAppear } from '../../../components/co
               'tags.component.scss'],
   animations: [slowFadeIn, tagDeleteButton, donutAppear]
 })
-export class TagsComponent implements OnDestroy {
+export class TagsComponent implements OnInit, OnDestroy {
 
   @Input() finalArray: ImageElement[];
   @Input() hubName: string; // if hubName changes, tagsService will recalculate, otherwise it will show cached

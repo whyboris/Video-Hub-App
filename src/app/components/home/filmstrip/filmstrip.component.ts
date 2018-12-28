@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, HostListener } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { galleryItemAppear, metaAppear, textAppear } from '../../common/animations';
 
@@ -12,6 +12,8 @@ import { galleryItemAppear, metaAppear, textAppear } from '../../common/animatio
 })
 export class FilmstripComponent implements OnInit {
 
+  @ViewChild('filmstripHolder') filmstripHolder: ElementRef;
+
   @Input() darkMode: boolean;
   @Input() elHeight: number;
   @Input() fileSize: number;
@@ -20,49 +22,32 @@ export class FilmstripComponent implements OnInit {
   @Input() hubName: string;
   @Input() imgHeight: number;
   @Input() imgId: any;
-  @Input() imgWidth: number;
   @Input() largerFont: boolean;
   @Input() rez: string;
   @Input() showMeta: boolean;
   @Input() time: string;
   @Input() title: string;
 
-  indexArray: Array<number> = []; // to set z-index on css
-
-  hover = false;
-  noError = true;
+  fullFilePath: string = '';
+  filmXoffset: number = 0;
 
   constructor(
     public sanitizer: DomSanitizer
   ) { }
 
-  @HostListener('mouseenter') onMouseEnter() {
-    this.hover = true;
-  }
-  @HostListener('mouseleave') onMouseLeave() {
-    this.hover = false;
-  }
-
   ngOnInit() {
-    // this.imgId is `undefined` when no screenshot taken -- because of ffmpeg extraction error
-    if (this.imgId === undefined) {
-      this.noError = false;
-    }
-
-    // hack -- populate hardcoded values -- fix later
-    const fileHash = this.imgId;
-    this.imgId = 'vha-' + this.hubName + '/' + fileHash + '.jpg';
-
-    for (let i = 0; i < 10; i++) {
-      this.indexArray[i] = 10 - i;
-    }
+    this.fullFilePath =  'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/' + this.imgId + '.jpg';
   }
 
-  showThisOne(screen: number): void {
-    this.indexArray.forEach((element, index) => {
-      const distance = Math.abs(index - screen);
-      this.indexArray[index] = 10 - distance;
-    });
-  }
+  updateFilmXoffset($event) {
+    if (this.hoverScrub) {
+      const imgWidth = this.imgHeight * 1.78; // 1.78 is the hardcoded aspect ratio
+      const containerWidth = this.filmstripHolder.nativeElement.getBoundingClientRect().width;
+      const howManyScreensOutsideCutoff = 11 - Math.floor(containerWidth / imgWidth);
+      // 11 is just 1 more than number of screenshots (currently hardcoded as 10)
 
+      const cursorX = $event.layerX; // cursor's X position inside the filmstrip element
+      this.filmXoffset = imgWidth * Math.floor(cursorX / (containerWidth / howManyScreensOutsideCutoff));
+    }
+  }
 }

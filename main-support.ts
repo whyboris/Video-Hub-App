@@ -225,7 +225,7 @@ const exec = require('child_process').exec;
  * save as particular fileNumber
  * @param pathToVideo  -- full path to the video file
  * @param fileHash     -- hash of the video file
- * @param screensize   -- resolution in pixels (defaul is 100)
+ * @param screenshotHeight   -- height of screenshot in pixels (defaul is 100)
  * @param saveLocation -- folder where to save jpg files
  * @param done         -- callback when done
  */
@@ -233,7 +233,7 @@ export function takeTenScreenshots(
   pathToVideo: string,
   fileHash: string,
   duration: number,
-  screenSize: number,
+  screenshotHeight: number,
   saveLocation: string,
   done: any
 ) {
@@ -243,27 +243,37 @@ export function takeTenScreenshots(
     takeTenClips(pathToVideo,
                  fileHash,
                  duration,
-                 screenSize,
+                 screenshotHeight,
                  saveLocation,
                  done);
     return;
   }
 
-  let current = 1;
-  const totalCount = 11;
-  const step: number = duration / totalCount;
+  let current = 0;
+  const totalCount = 10;
+  const step: number = duration / (totalCount + 1);
   const args = [];
-  let concat = '';
+  let allFramesFiltered = '';
+  let outputFrames = '';
+
+  // Hardcode ~16:9 ratio
+  const ssWidth: number = Math.ceil(screenshotHeight * 16 / 9);
+  const ratioString: string = ssWidth + ':' + screenshotHeight;
+
+  // sweet thanks to StackExchange!
+  // https://superuser.com/questions/547296/resizing-videos-with-ffmpeg-avconv-to-fit-into-static-sized-player
+  const fancyScaleFilter = 'scale=' + ratioString + ':force_original_aspect_ratio=decrease,pad=' + ratioString + ':(ow-iw)/2:(oh-ih)/2';
 
   // make the magic filter
   while (current < totalCount) {
-    const time = current * step;
+    const time = (current + 1) * step; // +1 so we don't pick the 0th frame
     args.push('-ss', time, '-i', pathToVideo);
-    concat += '[' + (current - 1) + ':v]';
+    allFramesFiltered += '[' + current + ':v]' + fancyScaleFilter + '[' + current + '];';
+    outputFrames += '[' + current + ']';
     current++;
   }
   args.push('-frames', 1,
-    '-filter_complex', concat + 'vstack=inputs=' + (totalCount - 1),
+    '-filter_complex', allFramesFiltered + outputFrames + 'hstack=inputs=' + totalCount,
     saveLocation + '/' + fileHash + '.jpg'
   );
 
@@ -278,7 +288,7 @@ export function takeTenScreenshots(
     takeTenClips(pathToVideo,
                  fileHash,
                  duration,
-                 screenSize,
+                 screenshotHeight,
                  saveLocation,
                  done);
   });
@@ -290,7 +300,7 @@ export function takeTenScreenshots(
  * save as particular fileNumber
  * @param pathToVideo  -- full path to the video file
  * @param fileHash     -- hash of the video file
- * @param screensize   -- resolution in pixels (defaul is 100)
+ * @param screenshotHeight   -- resolution in pixels (defaul is 100)
  * @param saveLocation -- folder where to save jpg files
  * @param done         -- callback when done
  */
@@ -298,7 +308,7 @@ export function takeTenClips(
   pathToVideo: string,
   fileHash: string,
   duration: number,
-  screenSize: number,
+  screenshotHeight: number,
   saveLocation: string,
   done: any
 ) {
@@ -323,8 +333,8 @@ export function takeTenClips(
     concat += '[' + (current - 1) + ':v]' + '[' + (current - 1) + ':a]';
     current++;
   }
-  concat += 'concat=n=' + (totalCount - 1) + ':v=1:a=1';
-  args.push('-filter_complex', concat, saveLocation + '/' + fileHash + '.mp4');
+  concat += 'concat=n=' + (totalCount - 1) + ':v=1:a=1[v][a];[v]scale=' + screenshotHeight + ':-2[v2]';
+  args.push('-filter_complex', concat, '-map', '[v2]', '-map', '[a]', saveLocation + '/' + fileHash + '.mp4');
   // phfff glad that's over
 
   // now make it all worth it!
@@ -566,12 +576,11 @@ function extractMetadataForThisONEFile(
       const origWidth = metadata.streams[0].width;
       const origHeight = metadata.streams[0].height;
       const sizeLabel = labelVideo(origWidth, origHeight);
-      const width = Math.round(100 * origWidth / origHeight) || 169;
       const fileSize = metadata.format.size;
       imageElement[3] = hashFile(imageElement[1], fileSize);
       imageElement[4] = duration;  // 4th item is duration
       imageElement[5] = sizeLabel; // 5th item is the label, e.g. 'HD'
-      imageElement[6] = width;     // 6th item is width of screenshot in px (e.g. 150);
+      imageElement[6] = 0;         // 6th item WILL BE DEPRECATED AND REMOVED !!!
       imageElement[7] = fileSize;  // 7th item is file size
 
       extractMetaCallback(imageElement);

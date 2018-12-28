@@ -6,36 +6,14 @@
 }
 
 .filmstrip-container {
-  background: black;
+  background-color: black;
+  background-repeat: no-repeat;
+  cursor: pointer;
   height: 100px;
+  outline: 3px solid black;
   overflow-y: hidden;
   position: relative;
   width: 100%;
-  outline: 3px solid black;
-}
-
-.hoverable {
-  border: 0;
-  height: 100%;
-  position: absolute;
-  width: 10%;
-  z-index: 100;
-  cursor: pointer;
-}
-
-.screencap {
-  box-shadow: 0px 0px 10px 5px rgba(0, 0, 0, 0.4);
-  box-sizing: border-box;
-  height: 100px;
-  outline: 3px solid black;
-  position: absolute;
-}
-
-img:before {
-  content: 'lol u mad?'; /* to prevent broken img icon from showing up */
-  display: block;
-  font-size: 20px;
-  margin-top: 1000px;
 }
 
 .title {
