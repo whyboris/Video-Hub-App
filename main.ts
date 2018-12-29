@@ -294,7 +294,7 @@ function openThisDamnFile(pathToVhaFile: string) {
 
 function setGlobalsFromVhaFile(vhaFileContents: FinalObject) {
   globals.hubName = vhaFileContents.hubName,
-  globals.screenShotSize = vhaFileContents.ssSize;
+  globals.screenShotSize = vhaFileContents.screenshotHeight;
   globals.selectedSourceFolder = vhaFileContents.inputDir;
 }
 
@@ -646,7 +646,7 @@ function sendFinalResultHome(
     hubName: globals.hubName,
     inputDir: globals.selectedSourceFolder,
     numOfFolders: countFoldersInFinalArray(myFinalArray),
-    ssSize: globals.screenShotSize,
+    screenshotHeight: globals.screenShotSize,
     images: myFinalArray,
   };
 

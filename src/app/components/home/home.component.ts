@@ -120,7 +120,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   progressNum1 = 0;
   progressNum2 = 100;
 
-  screenshotSizeForImport = 100;
+  screenshotSizeForImport = 200; // default to 200px
 
   myTimeout = null;
 

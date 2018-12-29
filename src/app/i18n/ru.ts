@@ -42,6 +42,9 @@ export const Russian = {
     resetSettingsHint: 'Сброс настроек',
     resolutionFilterDescription: 'Переключает фильтр разрешения',
     resolutionFilterHint: 'Фильтр разрешения',
+    // tslint:disable-next-line:max-line-length
+    returnToFirstScreenshotDescription: 'Опция переключения, чтобы вернуться к первому скриншоту, когда курсор оставляет предварительный просмотр',
+    returnToFirstScreenshotHint: 'Переключить обратно на первый эскиз',
     showClipsDescription: 'Переключение в режим просмотра клипов',
     showClipsHint: 'Показать клипы',
     showFilesDescription: 'Переключается на просмотр файлов',

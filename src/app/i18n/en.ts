@@ -42,6 +42,8 @@ export const English = {
     resetSettingsHint: 'Reset settings',
     resolutionFilterDescription: 'Toggles the resolution filter',
     resolutionFilterHint: 'Resolution filter',
+    returnToFirstScreenshotDescription: 'Toggle option to return to first screenshot when your cursor leaves a thumbnail preview',
+    returnToFirstScreenshotHint: 'Toggle return to first thumbnail',
     showClipsDescription: 'Switches to the clips view',
     showClipsHint: 'Show clips',
     showFilesDescription: 'Switches to the files view',

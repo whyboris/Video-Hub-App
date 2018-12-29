@@ -9,18 +9,6 @@ import { acceptableFiles } from './main-filenames';
 import { globals } from './main-globals';
 
 /**
- * Hash a given file using it's file name and size
- * md5(file.name + file.size)
- * @param fileName  -- file name to hash
- * @param fileSize  -- file size to hash
- */
-export function hashFile(fileName: string, fileSize: number): string {
-  // make the magic happen!
-  const hash = hasher('md5').update(fileName + fileSize.toString()).digest('hex');
-  return hash;
-}
-
-/**
  * Label the video according to these rules
  * 5th item is size (720, 1080, etc)
  * @param width
@@ -156,8 +144,8 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
               // fil finalArray with 3 correct and 5 dummy pieces of data
               finalArray[elementIndex] = {
                 partialPath: partialPath,
-                fileName: file.name, 
-                cleanName: cleanUpFileName(file.name), 
+                fileName: file.name,
+                cleanName: cleanUpFileName(file.name),
                 hash: '',
                 duration: 0,
                 resolution: '',
@@ -230,7 +218,7 @@ const exec = require('child_process').exec;
 /**
  * Take 10 screenshots of a particular file
  * at particular file size
- * save as particular fileNumber
+ * save as particular fileHash
  * @param pathToVideo  -- full path to the video file
  * @param fileHash     -- hash of the video file
  * @param screenshotHeight   -- height of screenshot in pixels (defaul is 100)
@@ -264,9 +252,11 @@ export function takeTenScreenshots(
   let allFramesFiltered = '';
   let outputFrames = '';
 
-  // Hardcode ~16:9 ratio
-  const ssWidth: number = Math.ceil(screenshotHeight * 16 / 9);
+  // Hardcode a specific ~16:9 ratio
+  const ssWidth: number = Math.ceil(screenshotHeight * 1.78);
+  // const ssPadWidth: number = ssWidth + 2;
   const ratioString: string = ssWidth + ':' + screenshotHeight;
+  // const ratioPadString: string = ssPadWidth + ':' + screenshotHeight;
 
   // sweet thanks to StackExchange!
   // https://superuser.com/questions/547296/resizing-videos-with-ffmpeg-avconv-to-fit-into-static-sized-player
@@ -341,23 +331,29 @@ export function takeTenClips(
     concat += '[' + (current - 1) + ':v]' + '[' + (current - 1) + ':a]';
     current++;
   }
-  concat += 'concat=n=' + (totalCount - 1) + ':v=1:a=1[v][a];[v]scale=' + screenshotHeight + ':-2[v2]';
+  concat += 'concat=n=' + (totalCount - 1) + ':v=1:a=1[v][a];[v]scale=-2:' + screenshotHeight + '[v2]';
   args.push('-filter_complex', concat, '-map', '[v2]', '-map', '[a]', saveLocation + '/' + fileHash + '.mp4');
   // phfff glad that's over
 
   // now make it all worth it!
   const ffmpeg_process = spawn(ffmpegPath, args);
-  ffmpeg_process.stdout.on('data', function (data) {
-    console.log(data);
-  });
-  ffmpeg_process.stderr.on('data', function (data) {
-    console.log('grep stderr: ' + data);
-  });
+  // ffmpeg_process.stdout.on('data', function (data) {
+  //   console.log(data);
+  // });
+  // ffmpeg_process.stderr.on('data', function (data) {
+  //   console.log('grep stderr: ' + data);
+  // });
   ffmpeg_process.on('exit', () => {
     extractFirstFrame(saveLocation, fileHash, done);
   });
 }
 
+/**
+ * Extract the first frame from the preview clip
+ * @param saveLocation
+ * @param fileHash
+ * @param done
+ */
 export function extractFirstFrame(saveLocation: string, fileHash: string, done: any) {
   if (fs.existsSync(saveLocation + '/' + fileHash + '-first.jpg')) {
     done();
@@ -371,7 +367,7 @@ export function extractFirstFrame(saveLocation: string, fileHash: string, done: 
   '-f', 'image2',
   saveLocation + '/' + fileHash + '-first.jpg',
   ];
-  console.log('extracting clip frame 1');
+  // console.log('extracting clip frame 1');
   const ffmpeg_process = spawn(ffmpegPath, args);
   // ffmpeg_process.stdout.on('data', function (data) {
   //   console.log(data);
@@ -584,17 +580,28 @@ function extractMetadataForThisONEFile(
       const origWidth = metadata.streams[0].width;
       const origHeight = metadata.streams[0].height;
       const sizeLabel = labelVideo(origWidth, origHeight);
-      const fileSize = metadata.format.size;
+      const fileSize: string = metadata.format.size; // looks like a number, but actually a string!
       imageElement.hash = hashFile(imageElement.fileName, fileSize);
       imageElement.duration = duration;
       imageElement.resolution = sizeLabel;
-      imageElement.fileSize = fileSize;
+      imageElement.fileSize = parseInt(fileSize, 10);
 
       extractMetaCallback(imageElement);
     }
   });
 }
 
+/**
+ * Hash a given file using it's file name and size
+ * md5(file.name + file.size)
+ * @param fileName  -- file name to hash
+ * @param fileSize  -- file size to hash
+ */
+export function hashFile(fileName: string, fileSize: string): string {
+  // make the magic happen!
+  const hash = hasher('md5').update(fileName + fileSize).digest('hex');
+  return hash;
+}
 
 /**
  * Figures out what new files there are,
