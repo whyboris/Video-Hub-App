@@ -94,6 +94,7 @@ export const Russian = {
     searchAndFilter: 'Настройки поиска и фильтра',
     settings: 'настройки',
     showHideText: 'показать / скрыть значок в панели настроек',
+    statistics: 'Статистика',
     tabFilter: 'Настройки фильтра',
     tabMain: 'Основные настройки',
     tabMisc: 'Разные настройки',

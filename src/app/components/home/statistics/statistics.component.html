@@ -1,0 +1,69 @@
+<div class="statistics">
+
+  <h2 class="heading">Statistics for the current hub:</h2>
+
+  <table>
+    <tr>
+      <td colSpan=2 class="spanBoth">General</td>
+    </tr>
+    <tr>
+      <td>number of files</td>
+      <td class="rightCol">{{ totalFiles }}</td>
+    </tr>
+
+    <tr>
+      <td>number of folders</td>
+      <td class="rightCol">{{ numFolders }}</td>
+    </tr>
+
+    <tr>
+      <td colSpan=2 class="spanBoth">Video lengths</td>
+    </tr>
+
+    <tr>
+      <td>shortest</td>
+      <td class="rightCol">{{ shortest | lengthPipe }}</td>
+    </tr>
+
+    <tr>
+      <td>longest</td>
+      <td class="rightCol">{{ longest | lengthPipe }}</td>
+    </tr>
+
+    <tr>
+      <td>total</td>
+      <td class="rightCol">{{ totalLength | lengthPipe }}</td>
+    </tr>
+
+    <tr>
+      <td>average</td>
+      <td class="rightCol">{{ avgLength | lengthPipe }}</td>
+    </tr>
+
+    <tr>
+      <td colSpan=2 class="spanBoth">File sizes</td>
+    </tr>
+
+    <tr>
+      <td>smallest</td>
+      <td class="rightCol">{{ smallest | fileSizePipe : true }}</td>
+    </tr>
+
+    <tr>
+      <td>largest</td>
+      <td class="rightCol">{{ largest | fileSizePipe : true }}</td>
+    </tr>
+
+    <tr>
+      <td>total</td>
+      <td class="rightCol">{{ totalSize | fileSizePipe : true }}</td>
+    </tr>
+
+    <tr>
+      <td>average</td>
+      <td class="rightCol">{{ avgSize | fileSizePipe : true }}</td>
+    </tr>
+
+  </table>
+
+</div>

@@ -233,6 +233,9 @@
     <button (click)="showSettingsGroup(4)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 4 }">
       {{ 'SETTINGS.tabShortcuts' | translate }}
     </button>
+    <button (click)="showSettingsGroup(5)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 5 }">
+      {{ 'SETTINGS.statistics' | translate }}
+    </button>
     <div class="metaGroupDivider"></div>
 
     <div [id]=i *ngFor="let group of settingsMetaGroup; index as i">
@@ -367,6 +370,12 @@
         <li class="listElement"><em class="key">h</em> - {{ 'SHORTCUTS.toggleMinimalMode' | translate }}</li>
         <li class="listElement"><em class="key">n</em> - {{ 'SHORTCUTS.toggleWizard' | translate }}</li>
       </ul>
+
+    </div>
+
+    <div *ngIf="settingToShow == 5" class="shortcutMenu">
+
+      <app-statistics [finalArray]="finalArray" [numFolders]="appState.numOfFolders"></app-statistics>
 
     </div>
 

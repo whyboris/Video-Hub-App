@@ -94,6 +94,7 @@ export const English = {
     searchAndFilter: 'Search & filter settings',
     settings: 'Settings',
     showHideText: 'show / hide icon in the settings bar',
+    statistics: 'Statistics',
     tabFilter: 'Filter settings',
     tabMain: 'Main settings',
     tabMisc: 'Misc settings',
