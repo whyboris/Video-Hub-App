@@ -1,0 +1,69 @@
+<div class="statistics">
+
+  <h2 class="heading">{{ 'STATISTICS.heading' | translate }}</h2>
+
+  <table>
+    <tr>
+      <td colSpan=2 class="spanBoth">{{ 'STATISTICS.general' | translate }}</td>
+    </tr>
+    <tr>
+      <td>{{ 'STATISTICS.numOfFiles' | translate }}</td>
+      <td class="rightCol">{{ totalFiles }}</td>
+    </tr>
+
+    <tr>
+      <td>{{ 'STATISTICS.numOfFolders' | translate }}</td>
+      <td class="rightCol">{{ numFolders }}</td>
+    </tr>
+
+    <tr>
+      <td colSpan=2 class="spanBoth">{{ 'STATISTICS.videoLengths' | translate }}</td>
+    </tr>
+
+    <tr>
+      <td>{{ 'STATISTICS.shortest' | translate }}</td>
+      <td class="rightCol">{{ shortest | lengthPipe }}</td>
+    </tr>
+
+    <tr>
+      <td>{{ 'STATISTICS.longest' | translate }}</td>
+      <td class="rightCol">{{ longest | lengthPipe }}</td>
+    </tr>
+
+    <tr>
+      <td>{{ 'STATISTICS.total' | translate }}</td>
+      <td class="rightCol">{{ totalLength | lengthPipe }}</td>
+    </tr>
+
+    <tr>
+      <td>{{ 'STATISTICS.average' | translate }}</td>
+      <td class="rightCol">{{ avgLength | lengthPipe }}</td>
+    </tr>
+
+    <tr>
+      <td colSpan=2 class="spanBoth">{{ 'STATISTICS.fileSizes' | translate }}</td>
+    </tr>
+
+    <tr>
+      <td>{{ 'STATISTICS.smallest' | translate }}</td>
+      <td class="rightCol">{{ smallest | fileSizePipe : true }}</td>
+    </tr>
+
+    <tr>
+      <td>{{ 'STATISTICS.largest' | translate }}</td>
+      <td class="rightCol">{{ largest | fileSizePipe : true }}</td>
+    </tr>
+
+    <tr>
+      <td>{{ 'STATISTICS.total' | translate }}</td>
+      <td class="rightCol">{{ totalSize | fileSizePipe : true }}</td>
+    </tr>
+
+    <tr>
+      <td>{{ 'STATISTICS.average' | translate }}</td>
+      <td class="rightCol">{{ avgSize | fileSizePipe : true }}</td>
+    </tr>
+
+  </table>
+
+</div>
