@@ -4,7 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
 
 import { ElectronService } from '../../providers/electron.service';
-import { ResolutionFilterService } from '../../components/pipes/resolution-filter.service';
+import { ResolutionFilterService, ResolutionString } from '../../components/pipes/resolution-filter.service';
 import { ShowLimitService } from '../../components/pipes/show-limit.service';
 import { TagsSaveService } from './tags/tags-save.service';
 import { WordFrequencyService } from '../../components/pipes/word-frequency.service';
@@ -134,7 +134,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   resolutionFreqArr: number[];
   freqLeftBound: number = 0;
   freqRightBound: number = 4;
-  resolutionNames: string[] = ['SD', '720', '1080', '4K'];
+  resolutionNames: ResolutionString[] = ['SD', '720', '1080', '4K'];
 
   rightClickShowing: boolean = false;
   itemToRename: any; // strongly type this -- it's an element from finalArray !!!
@@ -1132,7 +1132,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   newResFilterSelected(selection: number[]): void {
     this.freqLeftBound = selection[0];
     this.freqRightBound = selection[1];
-    // console.log(selection);
   }
 
   clearLev(): void {

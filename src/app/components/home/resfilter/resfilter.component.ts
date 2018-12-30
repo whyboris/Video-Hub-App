@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-res-filter',
