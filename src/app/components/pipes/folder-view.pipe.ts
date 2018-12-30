@@ -23,13 +23,14 @@ export class FolderViewPipe implements PipeTransform {
       finalArray.forEach((element, index) => {
         if (previousFolder !== element.partialPath) {
           const tempClone: ImageElement = {
-            partialPath: element.partialPath,
-            fileName: element.fileName,
             cleanName: '***',
-            hash: '',
             duration: 0,
+            fileName: element.fileName,
+            fileSize: 0,
+            hash: '',
+            numOfScreenshots: 10, // temp hardcoded
+            partialPath: element.partialPath,
             resolution: '',
-            fileSize: 0
           };
 
           arrWithFolders.push(tempClone);

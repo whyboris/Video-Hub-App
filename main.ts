@@ -278,7 +278,6 @@ function openThisDamnFile(pathToVhaFile: string) {
       //   globals.selectedSourceFolder,
       //   screenshotOutputFolder,
       //   globals.screenShotHeight,
-      //   globals.numberOfScreenshots,
       //   indexesToScan
       // );
 
@@ -504,6 +503,7 @@ ipc.on('start-the-import', function (event, options: ImportSettingsObject) {
     extractAllMetadata(
       videoFilesWithPaths,
       globals.selectedSourceFolder,
+      globals.numberOfScreenshots,
       0,
       sendFinalResultHome         // callback for when metdata is done extracting
     );
@@ -533,6 +533,7 @@ function reScanDirectory(angularFinalArray: ImageElement[], currentVideoFolder: 
       angularFinalArray,
       videosOnHD,
       currentVideoFolder,
+      globals.numberOfScreenshots,
       folderToDeleteFrom,
       sendFinalResultHome           // callback for when `extractAllMetadata` is called
     );
@@ -648,6 +649,7 @@ function sendFinalResultHome(
     hubName: globals.hubName,
     inputDir: globals.selectedSourceFolder,
     numOfFolders: countFoldersInFinalArray(myFinalArray),
+    numberOfScreenshots: globals.numberOfScreenshots,
     screenshotHeight: globals.screenShotHeight,
     images: myFinalArray,
   };
@@ -676,7 +678,6 @@ function sendFinalResultHome(
       globals.selectedSourceFolder,
       screenshotOutputFolder,
       globals.screenShotHeight,
-      globals.numberOfScreenshots,
       indexesToScan
     );
 
@@ -699,7 +700,6 @@ function extractAllScreenshots(
   videoFolderPath: string,
   screenshotFolder: string,
   screenshotHeight: number,
-  numberOfScreenshots: number,
   elementsToScan: number[]
 ): void {
 
@@ -725,12 +725,14 @@ function extractAllScreenshots(
 
       const duration: number = theFinalArray[currentElement].duration;
 
+      const numOfScreenshots = theFinalArray[currentElement].numOfScreenshots;
+
       generateScreenshotStrip(
         pathToVideo,
         fileHash,
         duration,
         screenshotHeight,
-        numberOfScreenshots,
+        numOfScreenshots,
         screenshotFolder,
         extractTenCallback
       );
