@@ -911,7 +911,7 @@
     <select
       (change)="selectScreenshotSize($event.target.value)"
       [disabled]="wizard.selectedOutputFolder === '' || wizard.selectedSourceFolder === '' || futureHubName === ''"
-      class="size-dropdown"
+      class="size-dropdown languageDropDown"
     >
       <option value="100">100px</option>
       <option value="150">150px</option>
@@ -941,6 +941,21 @@
       <br>
       {{ 'WIZARD.size' | translate }}
     </div>
+
+    <select
+      (change)="selectNumOfScreenshots($event.target.value)"
+      [disabled]="wizard.selectedOutputFolder === '' || wizard.selectedSourceFolder === '' || futureHubName === ''"
+      class="size-dropdown languageDropDown"
+    >
+      <option value="5">5</option>
+      <option value="10" selected="selected">10</option>
+      <option value="15">15</option>
+      <option value="20">20</option>
+    </select>
+
+    <span class="step-description">
+      {{ 'WIZARD.numOfScreenshots' | translate }}
+    </span>
 
     <div
       [ngClass]="{ 'current-step': wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder !== '' }"

@@ -148,6 +148,7 @@ export const English = {
     importingFrom: 'Importing from:',
     loadFromFile: 'Load from file',
     nameYourHub: 'Name your hub',
+    numOfScreenshots: 'Number of screenshots per video',
     openPrevious: 'Open previous hub',
     openPreviouslySaved: 'Open a previously-saved Video Hub',
     recentlyOpened: 'Recently-opened hubs:',

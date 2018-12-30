@@ -194,6 +194,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   // WIP
 
+  numOfScreenshots = 10; // hardcoded for now. Only used for import - TODO - refactor?
+
   isFirstRunEver = false;
 
   currentLanguage: SupportedLanguage;
@@ -554,7 +556,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       exportFolderPath: this.wizard.selectedOutputFolder,
       hubName: (this.futureHubName || 'untitled'),
       imgHeight: this.screenshotSizeForImport,
-      numberOfScreenshots: 5, // FIX HARDCODED !!! ###
+      numberOfScreenshots: this.numOfScreenshots,
       videoDirPath: this.wizard.selectedSourceFolder
     };
     this.electronService.ipcRenderer.send('start-the-import', importOptions);
@@ -896,6 +898,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       selectedSourceFolder: '',
       selectedOutputFolder: ''
     };
+    this.numOfScreenshots = 10; // default
+    this.screenshotSizeForImport = 200; // default
     this.toggleSettings();
     this.showWizard = true;
   }
@@ -1040,11 +1044,21 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   /**
    * Called on screenshot size dropdown select
+   * @param pxHeightForImport - string of number of pixels for the height of each screenshot
    */
-  selectScreenshotSize(pxHeightForImport: number) {
+  selectScreenshotSize(pxHeightForImport: string) {
     // TODO better prediction
-    this.wizard.totalImportSize = Math.round((pxHeightForImport / 100) * this.wizard.totalNumberOfFiles * 36 / 1000);
-    this.screenshotSizeForImport = pxHeightForImport;
+    const height = parseInt(pxHeightForImport, 10);
+    this.wizard.totalImportSize = Math.round((height / 100) * this.wizard.totalNumberOfFiles * 36 / 1000);
+    this.screenshotSizeForImport = height;
+  }
+
+  /**
+   * Called on screenshot size dropdown select
+   * @param numOfScreenshots - string of number of screenshots per video
+   */
+  selectNumOfScreenshots(numOfScreenshots: string) {
+    this.numOfScreenshots = parseInt(numOfScreenshots, 10);
   }
 
   // ---- HANDLE EXTRACTING AND RESTORING SETTINGS ON OPEN AND BEFORE CLOSE ------
