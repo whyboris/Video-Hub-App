@@ -76,7 +76,7 @@ export function countFoldersInFinalArray(imagesArray: ImageElement[]): number {
  * @param pathToFile    -- the path with name of `vha` file to write to disk
  * @param done          -- function to execute when done writing the file
  */
-export function writeVhaFileDangerously(finalObject: FinalObject, pathToTheFile: string, done): void {
+export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: string, done): void {
   // check for relative paths
   if (finalObject.inputDir === path.parse(pathToTheFile).dir) {
     finalObject.inputDir = '';
@@ -225,11 +225,12 @@ const exec = require('child_process').exec;
  * @param saveLocation -- folder where to save jpg files
  * @param done         -- callback when done
  */
-export function takeTenScreenshots(
+export function generateScreenshotStrip(
   pathToVideo: string,
   fileHash: string,
   duration: number,
   screenshotHeight: number,
+  numberOfScreenshots: number,
   saveLocation: string,
   done: any
 ) {
@@ -246,7 +247,7 @@ export function takeTenScreenshots(
   }
 
   let current = 0;
-  const totalCount = 10;
+  const totalCount = numberOfScreenshots;
   const step: number = duration / (totalCount + 1);
   const args = [];
   let allFramesFiltered = '';
@@ -580,7 +581,7 @@ function extractMetadataForThisONEFile(
       const origWidth = metadata.streams[0].width;
       const origHeight = metadata.streams[0].height;
       const sizeLabel = labelVideo(origWidth, origHeight);
-      const fileSize: string = metadata.format.size; // looks like a number, but actually a string!
+      const fileSize: string = metadata.format.size; // ffprobe returns a string of a number!
       imageElement.hash = hashFile(imageElement.fileName, fileSize);
       imageElement.duration = duration;
       imageElement.resolution = sizeLabel;

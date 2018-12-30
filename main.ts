@@ -179,9 +179,9 @@ import {
   missingThumbsIndex,
   numberOfVidsIn,
   sendCurrentProgress,
-  takeTenScreenshots,
+  generateScreenshotStrip,
   updateFinalArrayWithHD,
-  writeVhaFileDangerously
+  writeVhaFileToDisk
 } from './main-support';
 
 import { FinalObject, ImageElement } from './src/app/components/common/final-object.interface';
@@ -277,7 +277,8 @@ function openThisDamnFile(pathToVhaFile: string) {
       //   lastSavedFinalObject.images,
       //   globals.selectedSourceFolder,
       //   screenshotOutputFolder,
-      //   globals.screenShotSize,
+      //   globals.screenShotHeight,
+      //   globals.numberOfScreenshots,
       //   indexesToScan
       // );
 
@@ -294,7 +295,7 @@ function openThisDamnFile(pathToVhaFile: string) {
 
 function setGlobalsFromVhaFile(vhaFileContents: FinalObject) {
   globals.hubName = vhaFileContents.hubName,
-  globals.screenShotSize = vhaFileContents.screenshotHeight;
+  globals.screenShotHeight = vhaFileContents.screenshotHeight;
   globals.selectedSourceFolder = vhaFileContents.inputDir;
 }
 
@@ -442,7 +443,7 @@ ipc.on('close-window', function (event, settingsToSave: SettingsObject, savableP
       lastSavedFinalObject.addTags = savableProperties.addTags;
       lastSavedFinalObject.removeTags = savableProperties.removeTags;
       lastSavedFinalObject.images = savableProperties.images;
-      writeVhaFileDangerously(lastSavedFinalObject, globals.currentlyOpenVhaFile, () => {
+      writeVhaFileToDisk(lastSavedFinalObject, globals.currentlyOpenVhaFile, () => {
         // file writing done !!!
         console.log('.vha file written before closing !!!');
         BrowserWindow.getFocusedWindow().close();
@@ -486,11 +487,12 @@ ipc.on('start-the-import', function (event, options: ImportSettingsObject) {
       fs.mkdirSync(path.join(outDir, 'vha-' + options.hubName));
     }
 
+    globals.cancelCurrentImport = false;
     globals.hubName = options.hubName;
-    globals.screenShotSize = options.imgHeight;
+    globals.numberOfScreenshots = options.numberOfScreenshots;
+    globals.screenShotHeight = options.imgHeight;
     globals.selectedOutputFolder = options.exportFolderPath;
     globals.selectedSourceFolder = options.videoDirPath;
-    globals.cancelCurrentImport = false;
 
     // generate ImageElement[] with filenames and paths & empty metadata
     let videoFilesWithPaths: ImageElement[] = getVideoPathsAndNames(globals.selectedSourceFolder);
@@ -577,7 +579,7 @@ ipc.on('load-this-vha-file', function (event, pathToVhaFile: string, savableProp
     lastSavedFinalObject.addTags = savableProperties.addTags;
     lastSavedFinalObject.removeTags = savableProperties.removeTags;
     lastSavedFinalObject.images = savableProperties.images;
-    writeVhaFileDangerously(lastSavedFinalObject, globals.currentlyOpenVhaFile, () => {
+    writeVhaFileToDisk(lastSavedFinalObject, globals.currentlyOpenVhaFile, () => {
       // file writing done !!!
       console.log('.vha file written !!!');
       userWantedToOpen = pathToVhaFile;
@@ -646,17 +648,15 @@ function sendFinalResultHome(
     hubName: globals.hubName,
     inputDir: globals.selectedSourceFolder,
     numOfFolders: countFoldersInFinalArray(myFinalArray),
-    screenshotHeight: globals.screenShotSize,
+    screenshotHeight: globals.screenShotHeight,
     images: myFinalArray,
   };
 
   lastSavedFinalObject = finalObject;
 
-  const json = JSON.stringify(finalObject);
-
   const pathToTheFile = path.join(globals.selectedOutputFolder, globals.hubName + '.vha');
 
-  writeVhaFileDangerously(finalObject, pathToTheFile, () => {
+  writeVhaFileToDisk(finalObject, pathToTheFile, () => {
 
     globals.currentlyOpenVhaFile = pathToTheFile;
 
@@ -675,7 +675,8 @@ function sendFinalResultHome(
       myFinalArray,
       globals.selectedSourceFolder,
       screenshotOutputFolder,
-      globals.screenShotSize,
+      globals.screenShotHeight,
+      globals.numberOfScreenshots,
       indexesToScan
     );
 
@@ -690,14 +691,15 @@ function sendFinalResultHome(
  * @param theFinalArray     -- finalArray of ImageElements
  * @param videoFolderPath   -- path to base folder where videos are
  * @param screenshotFolder  -- path to folder where .jpg files will be saved
- * @param screenshotSize    -- number in px how large each screenshot should be
+ * @param screenshotHeight    -- number in px how large each screenshot should be
  * @param elementsToScan    -- array of indexes of elements in finalArray for which to extract screenshots
  */
 function extractAllScreenshots(
   theFinalArray: ImageElement[],
   videoFolderPath: string,
   screenshotFolder: string,
-  screenshotSize: number,
+  screenshotHeight: number,
+  numberOfScreenshots: number,
   elementsToScan: number[]
 ): void {
 
@@ -723,11 +725,12 @@ function extractAllScreenshots(
 
       const duration: number = theFinalArray[currentElement].duration;
 
-      takeTenScreenshots(
+      generateScreenshotStrip(
         pathToVideo,
         fileHash,
         duration,
-        screenshotSize,
+        screenshotHeight,
+        numberOfScreenshots,
         screenshotFolder,
         extractTenCallback
       );

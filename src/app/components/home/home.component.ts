@@ -551,10 +551,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.appState.selectedOutputFolder = this.wizard.selectedOutputFolder;
     this.importStage = 1;
     const importOptions: ImportSettingsObject = {
-      videoDirPath: this.wizard.selectedSourceFolder,
       exportFolderPath: this.wizard.selectedOutputFolder,
+      hubName: (this.futureHubName || 'untitled'),
       imgHeight: this.screenshotSizeForImport,
-      hubName: (this.futureHubName || 'untitled')
+      numberOfScreenshots: 5, // FIX HARDCODED !!! ###
+      videoDirPath: this.wizard.selectedSourceFolder
     };
     this.electronService.ipcRenderer.send('start-the-import', importOptions);
   }
