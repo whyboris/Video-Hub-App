@@ -4,6 +4,8 @@ const fs = require('fs');
 const hasher = require('crypto').createHash;
 
 import { FinalObject, ImageElement } from './src/app/components/common/final-object.interface';
+import { ResolutionString } from './src/app/components/pipes/resolution-filter.service';
+
 import { acceptableFiles } from './main-filenames';
 
 import { globals } from './main-globals';
@@ -15,7 +17,7 @@ import { globals } from './main-globals';
  * @param height
  */
 export function labelVideo(width: number, height: number): string {
-  let size = '';
+  let size: ResolutionString = '';
   if (width === 3840 && height === 2160) {
     size = '4K';
   } else if (width === 1920 && height === 1080) {

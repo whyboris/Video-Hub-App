@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
 
+export type ResolutionString = '' | 'SD' | '720' | '720+' | '1080' | '1080+' | '4K' | '4K+';
+
 @Injectable()
 export class ResolutionFilterService {
 
@@ -25,16 +27,16 @@ export class ResolutionFilterService {
    * Add each resolution to the map
    * @param resolution
    */
-  public addString(resolution: string): void {
+  public addString(resolution: ResolutionString): void {
     let result: string;
     if (resolution === '') {
-      result = 'SD'
+      result = 'SD';
     } else if (resolution === '720' || resolution === '720+') {
-      result = '720'
+      result = '720';
     } else if (resolution === '1080' || resolution === '1080+') {
-      result = '1080'
+      result = '1080';
     } else if (resolution === '4K' || resolution === '4K+') {
-      result = '4K'
+      result = '4K';
     }
     this.addResolution(result);
   }
