@@ -20,12 +20,13 @@ export class PreviewComponent implements OnInit {
   @Input() fileSize: number;
   @Input() folderPath: string;
   @Input() hoverScrub: boolean;
-  @Input() returnToFirstScreenshot: boolean;
   @Input() hubName: string;
   @Input() imgHeight: number;
   @Input() imgId: any; // the filename of screenshot strip without `.jpg`
   @Input() largerFont: boolean;
+  @Input() numOfScreenshots: number;
   @Input() randomImage: boolean; // all code related to this currently removed
+  @Input() returnToFirstScreenshot: boolean;
   @Input() rez: string;
   @Input() showMeta: boolean;
   @Input() time: string;
@@ -62,9 +63,7 @@ export class PreviewComponent implements OnInit {
       const cursorX = $event.layerX;
       const containerWidth = this.filmstripHolder.nativeElement.getBoundingClientRect().width;
 
-      // 10 is the number of screenshots
-      // 9 is 1 less than that ;)
-      this.percentOffset = (100 / 9) * Math.floor(cursorX / (containerWidth / 10));
+      this.percentOffset = (100 / (this.numOfScreenshots - 1)) * Math.floor(cursorX / (containerWidth / this.numOfScreenshots));
     }
   }
 

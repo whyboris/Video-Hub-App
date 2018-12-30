@@ -222,11 +222,13 @@ const exec = require('child_process').exec;
  * Take 10 screenshots of a particular file
  * at particular file size
  * save as particular fileHash
- * @param pathToVideo  -- full path to the video file
- * @param fileHash     -- hash of the video file
- * @param screenshotHeight   -- height of screenshot in pixels (defaul is 100)
- * @param saveLocation -- folder where to save jpg files
- * @param done         -- callback when done
+ * @param pathToVideo          -- full path to the video file
+ * @param fileHash             -- hash of the video file
+ * @param duration             -- duration of clip
+ * @param screenshotHeight     -- height of screenshot in pixels (defaul is 100)
+ * @param numberOfScreenshots  -- number of screenshots to extract
+ * @param saveLocation         -- folder where to save jpg files
+ * @param done                 -- callback when done
  */
 export function generateScreenshotStrip(
   pathToVideo: string,

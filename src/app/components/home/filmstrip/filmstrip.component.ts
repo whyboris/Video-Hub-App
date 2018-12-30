@@ -23,6 +23,7 @@ export class FilmstripComponent implements OnInit {
   @Input() imgHeight: number;
   @Input() imgId: any;
   @Input() largerFont: boolean;
+  @Input() numOfScreenshots: number;
   @Input() rez: string;
   @Input() showMeta: boolean;
   @Input() time: string;
@@ -43,8 +44,7 @@ export class FilmstripComponent implements OnInit {
     if (this.hoverScrub) {
       const imgWidth = this.imgHeight * 1.78; // 1.78 is the hardcoded aspect ratio
       const containerWidth = this.filmstripHolder.nativeElement.getBoundingClientRect().width;
-      const howManyScreensOutsideCutoff = 11 - Math.floor(containerWidth / imgWidth);
-      // 11 is just 1 more than number of screenshots (currently hardcoded as 10)
+      const howManyScreensOutsideCutoff = (this.numOfScreenshots + 1) - Math.floor(containerWidth / imgWidth);
 
       const cursorX = $event.layerX; // cursor's X position inside the filmstrip element
       this.filmXoffset = imgWidth * Math.floor(cursorX / (containerWidth / howManyScreensOutsideCutoff));

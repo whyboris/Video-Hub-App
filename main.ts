@@ -721,10 +721,8 @@ function extractAllScreenshots(
                                              theFinalArray[currentElement].partialPath,
                                              theFinalArray[currentElement].fileName));
 
-      const fileHash: string = theFinalArray[currentElement].hash;
-
       const duration: number = theFinalArray[currentElement].duration;
-
+      const fileHash: string = theFinalArray[currentElement].hash;
       const numOfScreenshots = theFinalArray[currentElement].numOfScreenshots;
 
       generateScreenshotStrip(

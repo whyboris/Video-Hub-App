@@ -142,6 +142,7 @@
       [imgHeight]="100"
       [imgId]="itemToRename.hash"
       [largerFont]="true"
+      [numOfScreenshots]="itemToRename.numOfScreenshots"
       [rez]="itemToRename.resolution"
       [showMeta]="true"
       [time]="itemToRename.duration"
@@ -152,13 +153,13 @@
     <span class="renameTo">{{ 'RIGHTCLICK.renameTo' | translate }}</span>
 
     <input
+      #renameFileInput
       (keyup.enter)="attemptToRename()"
       [(ngModel)]="renamingWIP"
       [ngClass]="{ darkModeOn: settingsButtons['darkMode'].toggled }"
       [disabled]="nodeRenamingFile"
       class="renameFile"
       type="text"
-      #renameFileInput
     >
     <!-- in the mac the font sizes are not aligned properly and the extension shows up overlapping -->
     <span *ngIf="!macVersion" class="extension-hack" [ngClass]="{ darkModeOn: settingsButtons['darkMode'].toggled }" >
@@ -679,22 +680,23 @@
           *ngFor="let item of scroll.viewPortItems"
           (click)="openVideo(item.hash)"
           (contextmenu)="rightMouseClicked($event, item)"
-          [title]="item.cleanName"
-          [imgId]="item.hash"
-          [time]="item.duration"
-          [rez]="item.resolution"
-          [fileSize]="item.fileSize"
-          [imgHeight]="imgHeight"
           [elHeight]="imgHeight + textPaddingHeight"
           [elWidth]="previewWidth"
-          [hubName]="appState.hubName"
+          [fileSize]="item.fileSize"
           [folderPath]="appState.selectedOutputFolder"
-          [largerFont]="settingsButtons['fontSizeLarger'].toggled"
-          [showMeta]="settingsButtons['showMoreInfo'].toggled"
-          [hoverScrub]="settingsButtons['hoverScrub'].toggled"
-          [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
-          [randomImage]="settingsButtons['randomImage'].toggled"
+          [hubName]="appState.hubName"
+          [imgHeight]="imgHeight"
+          [imgId]="item.hash"
+          [numOfScreenshots]="item.numOfScreenshots"
+          [rez]="item.resolution"
+          [time]="item.duration"
+          [title]="item.cleanName"
           [darkMode]="settingsButtons['darkMode'].toggled"
+          [hoverScrub]="settingsButtons['hoverScrub'].toggled"
+          [largerFont]="settingsButtons['fontSizeLarger'].toggled"
+          [randomImage]="settingsButtons['randomImage'].toggled"
+          [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
+          [showMeta]="settingsButtons['showMoreInfo'].toggled"
         ></app-gallery-item>
       </ng-container>
 
@@ -703,19 +705,20 @@
           *ngFor="let item of scroll.viewPortItems"
           (click)="openVideo(item.hash)"
           (contextmenu)="rightMouseClicked($event, item)"
-          [imgId]="item.hash"
-          [title]="item.cleanName"
-          [time]="item.duration"
-          [rez]="item.resolution"
-          [fileSize]="item.fileSize"
           [elHeight]="imgHeight + textPaddingHeight"
-          [imgHeight]="imgHeight"
-          [hubName]="appState.hubName"
+          [fileSize]="item.fileSize"
           [folderPath]="appState.selectedOutputFolder"
+          [hubName]="appState.hubName"
+          [imgHeight]="imgHeight"
+          [imgId]="item.hash"
+          [numOfScreenshots]="item.numOfScreenshots"
+          [rez]="item.resolution"
+          [time]="item.duration"
+          [title]="item.cleanName"
+          [darkMode]="settingsButtons['darkMode'].toggled"
+          [hoverScrub]="settingsButtons['hoverScrub'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
-          [hoverScrub]="settingsButtons['hoverScrub'].toggled"
-          [darkMode]="settingsButtons['darkMode'].toggled"
         ></app-filmstrip-item>
       </ng-container>
 
