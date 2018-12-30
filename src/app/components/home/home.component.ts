@@ -1132,7 +1132,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   newResFilterSelected(selection: number[]): void {
     this.freqLeftBound = selection[0];
     this.freqRightBound = selection[1];
-    // console.log(selection);
   }
 
   clearLev(): void {
