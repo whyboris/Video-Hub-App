@@ -16,7 +16,7 @@ import { globals } from './main-globals';
  * @param width
  * @param height
  */
-export function labelVideo(width: number, height: number): string {
+export function labelVideo(width: number, height: number): ResolutionString {
   let size: ResolutionString = '';
   if (width === 3840 && height === 2160) {
     size = '4K';
@@ -78,7 +78,7 @@ export function countFoldersInFinalArray(imagesArray: ImageElement[]): number {
  * @param pathToFile    -- the path with name of `vha` file to write to disk
  * @param done          -- function to execute when done writing the file
  */
-export function writeVhaFileDangerously(finalObject: FinalObject, pathToTheFile: string, done): void {
+export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: string, done): void {
   // check for relative paths
   if (finalObject.inputDir === path.parse(pathToTheFile).dir) {
     finalObject.inputDir = '';
@@ -145,13 +145,14 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
               const partialPath = dir.replace(sourceFolderPath, '');
               // fil finalArray with 3 correct and 5 dummy pieces of data
               finalArray[elementIndex] = {
-                partialPath: partialPath,
-                fileName: file.name,
                 cleanName: cleanUpFileName(file.name),
-                hash: '',
                 duration: 0,
+                fileName: file.name,
+                fileSize: 0,
+                hash: '',
+                numOfScreenshots: 10, // hardcoded default
+                partialPath: partialPath,
                 resolution: '',
-                fileSize: 0
               };
               elementIndex++;
             }
@@ -221,17 +222,20 @@ const exec = require('child_process').exec;
  * Take 10 screenshots of a particular file
  * at particular file size
  * save as particular fileHash
- * @param pathToVideo  -- full path to the video file
- * @param fileHash     -- hash of the video file
- * @param screenshotHeight   -- height of screenshot in pixels (defaul is 100)
- * @param saveLocation -- folder where to save jpg files
- * @param done         -- callback when done
+ * @param pathToVideo          -- full path to the video file
+ * @param fileHash             -- hash of the video file
+ * @param duration             -- duration of clip
+ * @param screenshotHeight     -- height of screenshot in pixels (defaul is 100)
+ * @param numberOfScreenshots  -- number of screenshots to extract
+ * @param saveLocation         -- folder where to save jpg files
+ * @param done                 -- callback when done
  */
-export function takeTenScreenshots(
+export function generateScreenshotStrip(
   pathToVideo: string,
   fileHash: string,
   duration: number,
   screenshotHeight: number,
+  numberOfScreenshots: number,
   saveLocation: string,
   done: any
 ) {
@@ -248,7 +252,7 @@ export function takeTenScreenshots(
   }
 
   let current = 0;
-  const totalCount = 10;
+  const totalCount = numberOfScreenshots;
   const step: number = duration / (totalCount + 1);
   const args = [];
   let allFramesFiltered = '';
@@ -514,6 +518,7 @@ export function finalArrayWithoutDeleted(
  * Extract the meta data & store it in the final array
  * @param theFinalArray   -- ImageElement[] with dummy meta
  * @param videoFolderPath -- the full path to the base folder for video files
+ * @param numberOfScreenshots -- number of screenshots to extract
  * @param metaStartIndex  -- the starting point in finalArray from where to extract metadata
  *                           (should be 0 when first scan, should be index of first element when rescan)
  * @param done            -- callback when done with all metadata extraction
@@ -521,6 +526,7 @@ export function finalArrayWithoutDeleted(
 export function extractAllMetadata(
   theFinalArray: ImageElement[],
   videoFolderPath: string,
+  numberOfScreenshots: number,
   metaStartIndex: number,
   done: any
 ): void {
@@ -549,7 +555,7 @@ export function extractAllMetadata(
                                     theFinalArray[iterator].partialPath,
                                     theFinalArray[iterator].fileName));
 
-      extractMetadataForThisONEFile(filePathNEW, theFinalArray[iterator], extractMetaDataCallback);
+      extractMetadataForThisONEFile(filePathNEW, numberOfScreenshots, theFinalArray[iterator], extractMetaDataCallback);
 
     } else {
 
@@ -564,11 +570,13 @@ export function extractAllMetadata(
 /**
  * Updates the finalArray with the metadata about one particualar requested file
  * Updates newLastScreenCounterNEW global variable !!!
- * @param filePath      path to the file
- * @param imageElement  index in array to update
+ * @param filePath              path to the file
+ * @param numberOfScreenshots   number of screenshots to extract
+ * @param imageElement          index in array to update
  */
 function extractMetadataForThisONEFile(
   filePath: string,
+  numberOfScreenshots: number,
   imageElement: ImageElement,
   extractMetaCallback: any
 ): void {
@@ -582,11 +590,12 @@ function extractMetadataForThisONEFile(
       const origWidth = metadata.streams[0].width;
       const origHeight = metadata.streams[0].height;
       const sizeLabel = labelVideo(origWidth, origHeight);
-      const fileSize: string = metadata.format.size; // looks like a number, but actually a string!
+      const fileSize: string = metadata.format.size; // ffprobe returns a string of a number!
       imageElement.hash = hashFile(imageElement.fileName, fileSize);
       imageElement.duration = duration;
-      imageElement.resolution = sizeLabel;
       imageElement.fileSize = parseInt(fileSize, 10);
+      imageElement.numOfScreenshots = numberOfScreenshots;
+      imageElement.resolution = sizeLabel;
 
       extractMetaCallback(imageElement);
     }
@@ -613,16 +622,18 @@ export function hashFile(fileName: string, fileSize: string): string {
  * deletes .jpg files from HD,
  * and calls `extractAllMetadata`
  * (which will then send file home and start extracting images)
- * @param angularFinalArray  -- array of ImageElements from Angular - most current view
- * @param hdFinalArray       -- array of ImageElements from current hard drive scan
- * @param inputFolder        -- the input folder (where videos are)
- * @param folderToDeleteFrom -- path to folder where `.jpg` files are
+ * @param angularFinalArray       -- array of ImageElements from Angular - most current view
+ * @param hdFinalArray            -- array of ImageElements from current hard drive scan
+ * @param inputFolder             -- the input folder (where videos are)
+ * @param numberOfScreenshots     -- the number of screenshots per video
+ * @param folderToDeleteFrom      -- path to folder where `.jpg` files are
  * @param extractMetadataCallback -- function for extractAllMetadata to call when done
  */
 export function updateFinalArrayWithHD(
   angularFinalArray: ImageElement[],
   hdFinalArray: ImageElement[],
   inputFolder: string,
+  numberOfScreenshots: number,
   folderToDeleteFrom: string,
   extractMetadataCallback
 ): void {
@@ -644,6 +655,7 @@ export function updateFinalArrayWithHD(
     extractAllMetadata(
       finalArrayUpdated,
       inputFolder,
+      numberOfScreenshots,
       metaRescanStartIndex,
       extractMetadataCallback // actually = sendFinalResultHome
     );

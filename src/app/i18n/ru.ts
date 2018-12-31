@@ -149,6 +149,7 @@ export const Russian = {
     importingFrom: 'Импорт из:',
     loadFromFile: 'Загрузить из файла',
     nameYourHub: 'Назови свой хаб',
+    numOfScreenshots: 'Количество скриншотов на видео',
     openPrevious: 'Открыть предыдущий хаб',
     openPreviouslySaved: 'Откройте ранее сохраненный видео хаб',
     recentlyOpened: 'Недавно открытые хабы:',
