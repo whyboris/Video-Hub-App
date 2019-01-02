@@ -30,7 +30,7 @@ export class WordFrequencyPipe implements PipeTransform {
 
       this.wordFrequencyService.cleanMap();
 
-      this.wordFrequencyService.computeFrequencyArray();
+      this.wordFrequencyService.computeFrequencyArray(finalArray.length);
     }
 
     return finalArray;
