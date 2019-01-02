@@ -49,6 +49,8 @@ export const SettingsButtonsGroups: string[][] = [
   [
     'resetSettings',
     'clearHistory',
+    'importNewFiles',
+    'verifyThumbnails',
     'rescanDirectory',
     'startWizard'
   ]
@@ -310,6 +312,21 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
     title: 'BUTTONS.resetSettingsHint',
     description: 'BUTTONS.resetSettingsDescription',
+  },
+  // TODO: Make these able to add to the button bar!
+  'importNewFiles': {
+    hidden: false,
+    toggled: false,
+    iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
+    title: 'BUTTONS.importNewFilesHint',
+    description: 'BUTTONS.importNewFilesDescription',
+  },
+  'verifyThumbnails': {
+    hidden: false,
+    toggled: false,
+    iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
+    title: 'BUTTONS.verifyThumbnailsHint',
+    description: 'BUTTONS.verifyThumbnailsDescription',
   },
   'rescanDirectory': {
     hidden: false,

@@ -35,9 +35,14 @@ export const Russian = {
     randomImageHint: 'Показать случайный скриншот',
     randomizeGalleryDescription: 'Рандомизирует порядок видеофайлов после каждого поиска',
     randomizeGalleryHint: 'Рандомизировать порядок галереи',
+    // TODO: Translate these
+    importNewFilesDescription: 'Quickly scan for new files only and import them',
+    importNewFilesHint: 'Import new files',
+    verifyThumbnailsDescription: 'Verify all files have thumbnails',
+    verifyThumbnailsHint: 'Verify thumbnails',
     // tslint:disable-next-line:max-line-length
     rescanDirectoryDescription: 'Повторно сканирует папку видео для любых изменений файла (добавление, переименование, удаление видео) и обновляет текущий хаб',
-    rescanDirectoryHint: 'Rescan directory',
+    rescanDirectoryHint: 'Rescan directory', // <---- :)
     resetSettingsDescription: 'Сбрасывает настройки и кнопки к значениям по умолчанию',
     resetSettingsHint: 'Сброс настроек',
     resolutionFilterDescription: 'Переключает фильтр разрешения',
