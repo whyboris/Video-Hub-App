@@ -387,7 +387,7 @@ ipc.on('choose-input', function (event, someMessage) {
   }, function (files) {
     if (files) {
       const inputDirPath: string = files[0];
-      event.sender.send('inputFolderChosen', inputDirPath, numberOfVidsIn(inputDirPath));
+      event.sender.send('inputFolderChosen', inputDirPath, getVideoPathsAndNames(inputDirPath));
     }
   });
 });
@@ -463,7 +463,7 @@ ipc.on('cancel-current-import', function(event): void {
 /**
  * Start extracting the screenshots into a chosen output folder from a chosen input folder
  */
-ipc.on('start-the-import', function (event, options: ImportSettingsObject) {
+ipc.on('start-the-import', function (event, options: ImportSettingsObject, videoFilesWithPaths: ImageElement[]) {
 
   const outDir: string = options.exportFolderPath;
 
@@ -492,9 +492,6 @@ ipc.on('start-the-import', function (event, options: ImportSettingsObject) {
     globals.screenShotHeight = options.imgHeight;
     globals.selectedOutputFolder = options.exportFolderPath;
     globals.selectedSourceFolder = options.videoDirPath;
-
-    // generate ImageElement[] with filenames and paths & empty metadata
-    let videoFilesWithPaths: ImageElement[] = getVideoPathsAndNames(globals.selectedSourceFolder);
 
     if (demo) {
       videoFilesWithPaths = videoFilesWithPaths.slice(0, 50);
