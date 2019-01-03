@@ -69,12 +69,12 @@ export class WordFrequencyService {
    * remove it from the map,
    * and return it with its frequency as an object
    */
-  private getMostFrequent() {
+  private getMostFrequent(total: number) {
     let currLargestFreq = 0;
     let currLargestWord = '';
 
     this.wordMap.forEach((value, key) => {
-      if (value > currLargestFreq) {
+      if (value > currLargestFreq && value < total) {
         currLargestFreq = value;
         currLargestWord = key;
       }
@@ -85,24 +85,25 @@ export class WordFrequencyService {
     return {
       word: currLargestWord,
       freq: currLargestFreq
-    }
+    };
   }
 
   /**
    * Computes the array 9 objects long with most frequent words
    * Creates `height` property, scaled between 8 and 22 proportionally
    * calls `.next` on BehaviorSubject
-   */
-  public computeFrequencyArray(): void {
+   * @param total: total number of files displayed
+   **/
+  public computeFrequencyArray(total: number): void {
     const finalResult: WordFreqAndHeight[] = []; // array of objects
     for (let i = 0; i < 9; i++) {
       if (this.wordMap.size > 0) {
-        finalResult[i] = this.getMostFrequent();
+        finalResult[i] = this.getMostFrequent(total);
       } else {
         finalResult[i] = {
           word: null,
           freq: null
-        }
+        };
       }
     }
 
