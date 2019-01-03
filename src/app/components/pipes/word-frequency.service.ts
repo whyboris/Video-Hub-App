@@ -31,7 +31,7 @@ export class WordFrequencyService {
    */
   public addString(filename: string): void {
     // Strip out: {}()[] as well as 'for', 'her', 'the', 'and', & ','
-    const regex = /{|}|\(|\)|\[|\]|for|her|the|and|,/gi;
+    const regex = /{|}|\(|\)|\[|\]|\b(for|her|the|and)\b|,/gi;
     filename = filename.replace(regex, '');
     const wordArray = filename.split(' ');
     wordArray.forEach(word => {

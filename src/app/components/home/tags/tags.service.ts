@@ -80,7 +80,7 @@ export class TagsService {
    */
   private storeFinalArrayInMemory(finalArray: ImageElement[]): void {
     // Strip out: {}()[] as well as 'for', 'her', 'the', 'and', '-', & ','
-    const regex = /{|}|\(|\)|\[|\]|for|her|the|and|,|-/gi;
+    const regex = /{|}|\(|\)|\[|\]|\b(for|her|the|and)\b|,|-/gi;
 
     finalArray.forEach((element) => {
       const cleanedFileName: string = element.cleanName.toLowerCase().replace(regex, '');
