@@ -913,13 +913,12 @@
       [disabled]="wizard.selectedOutputFolder === '' || wizard.selectedSourceFolder === '' || futureHubName === ''"
       class="size-dropdown languageDropDown"
     >
-      <option value="100">100px</option>
-      <option value="150">150px</option>
-      <option value="200" selected="selected">200px</option>
-      <option value="250">250px</option>
-      <option value="300">300px</option>
-      <option value="350">350px</option>
-      <option value="400">400px</option>
+      <option value="72">72p</option>
+      <option value="144">144p</option>
+      <option value="216">216p</option>
+      <option value="288" selected="selected">288p</option>
+      <option value="360">360p</option>
+      <option value="432">432p</option>
     </select>
 
     <span class="step-description">
@@ -930,7 +929,7 @@
       *ngIf="wizard.selectedOutputFolder !== ''"
       class="screenshot-preview"
       [ngStyle]="{
-          width: ((screenshotSizeForImport / 100) * 178) + 'px',
+          width: ((screenshotSizeForImport) * (16 / 9)) + 'px',
           height: screenshotSizeForImport + 'px'
         }"
       @galleryItemAppear

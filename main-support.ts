@@ -221,8 +221,8 @@ export function generateScreenshotStrip(
   let allFramesFiltered = '';
   let outputFrames = '';
 
-  // Hardcode a specific ~16:9 ratio
-  const ssWidth: number = Math.ceil(screenshotHeight * 1.78);
+  // Hardcode a specific 16:9 ratio
+  const ssWidth: number = screenshotHeight * (16 / 9);
   // const ssPadWidth: number = ssWidth + 2;
   const ratioString: string = ssWidth + ':' + screenshotHeight;
   // const ratioPadString: string = ssPadWidth + ':' + screenshotHeight;
