@@ -169,43 +169,6 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
   return finalArray;
 }
 
-
-/**
- * Figure out and return the number of video files in a directory
- * @param folderPath path to folder to scan
- */
-export function numberOfVidsIn(folderPath: string): number {
-
-  let totalNumberOfFiles = 0;
-
-  // increases `totalNumberOfFiles` for every file found
-  const walkAndCountSync = (dir, filelist) => {
-    const files = fs.readdirSync(dir, {encoding: 'utf8', withFileTypes: true});
-
-    files.forEach(function (file) {
-      if (!fileSystemReserved(file.name)) {
-        try {
-          // if the item is a _DIRECTORY_
-          if (file.isDirectory()) {
-            filelist = walkAndCountSync(path.join(dir, file.name), filelist);
-          } else {
-            const extension = file.name.split('.').pop();
-            if (acceptableFiles.includes(extension.toLowerCase())) {
-              totalNumberOfFiles++;
-            }
-          }
-        } catch (err) {}
-      }
-    });
-
-    return filelist;
-  };
-
-  walkAndCountSync(folderPath, []);
-
-  return totalNumberOfFiles;
-}
-
 // -------------- SCAN IMAGES AND SAVE THEM !!! -----------------
 
 const ffprobePath = require('@ffprobe-installer/ffprobe').path.replace('app.asar', 'app.asar.unpacked');
