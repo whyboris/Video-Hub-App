@@ -123,7 +123,7 @@ export const English = {
   },
   RIGHTCLICK: {
     cancelRename: 'cancel rename',
-    errorFileNameExists: 'A file existst with this filename',
+    errorFileNameExists: 'A file exists with this filename',
     errorFileNotFound: 'Original file could not be found',
     errorMustBeDifferent: 'new file name must be different',
     errorMustNotBeEmpty: 'new file name may not be empty',
