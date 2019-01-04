@@ -24,6 +24,8 @@ export const Russian = {
     hideTopHint: 'Скрыть верх',
     hoverScrubDescription: 'Переключает ли указатель мыши на миниатюры или диафильм показывает скриншоты предварительного просмотра видео',
     hoverScrubHint: 'Переключить анимацию при наведении',
+    importNewFilesDescription: 'Быстро сканировать только новые файлы и импортировать их',
+    importNewFilesHint: 'Импортировать новые файлы',
     // tslint:disable-next-line:max-line-length
     magicDescription: 'Переключить магический поиск, который обновляет результаты по мере ввода. Magic search отображает все файлы, которые содержат поисковый термин, и каждый файл в любой папке, которая содержит поисковый термин в своем названии ',
     magicHint: 'Волшебный поиск',
@@ -35,14 +37,9 @@ export const Russian = {
     randomImageHint: 'Показать случайный скриншот',
     randomizeGalleryDescription: 'Рандомизирует порядок видеофайлов после каждого поиска',
     randomizeGalleryHint: 'Рандомизировать порядок галереи',
-    // TODO: Translate these
-    importNewFilesDescription: 'Quickly scan for new files only and import them',
-    importNewFilesHint: 'Import new files',
-    verifyThumbnailsDescription: 'Verify all files have thumbnails',
-    verifyThumbnailsHint: 'Verify thumbnails',
     // tslint:disable-next-line:max-line-length
     rescanDirectoryDescription: 'Повторно сканирует папку видео для любых изменений файла (добавление, переименование, удаление видео) и обновляет текущий хаб',
-    rescanDirectoryHint: 'Rescan directory', // <---- :)
+    rescanDirectoryHint: 'Пересканировать каталог',
     resetSettingsDescription: 'Сбрасывает настройки и кнопки к значениям по умолчанию',
     resetSettingsHint: 'Сброс настроек',
     resolutionFilterDescription: 'Переключает фильтр разрешения',
@@ -74,6 +71,8 @@ export const Russian = {
     shuffleGalleryNowHint: 'Перемешать текущие результаты',
     startWizardDescription: 'Снова запускает мастер: создайте новый видеоцентр или откройте недавний',
     startWizardHint: 'Мастер запуска',
+    verifyThumbnailsDescription: 'Убедить что все файлы имеют миниатюры',
+    verifyThumbnailsHint: 'Verify thumbnails',
   },
   SIDEBAR: {
     and: 'и',
