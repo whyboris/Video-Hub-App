@@ -4,7 +4,6 @@
   background-color: rgba(0, 0, 0, 0.1);
   cursor: initial;
   height: 100vh;
-  pointer-events: none;
   position: fixed;
   width: 100vw;
   z-index: 29;
@@ -18,7 +17,7 @@
   box-sizing: border-box;
   font-size: 12px;
   position: absolute;
-  z-index: 30; 
+  z-index: 30;
   overflow: hidden;
 
   ul {

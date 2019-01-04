@@ -193,6 +193,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   nodeRenamingFile: boolean = false;
   renameErrMsg: string = '';
 
+  // Thumbnail Sheet Display
+  sheetDisplay: boolean = false;
+  itemToDisplay: ImageElement;
+
   // WIP
 
   numOfScreenshots = 10; // hardcoded for now. Only used for import - TODO - refactor?
@@ -266,9 +270,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.showWizard = false;
     } else if (event.key === 'Escape' && this.buttonsInView) {
       this.buttonsInView = false;
-    } else if (event.key === 'Escape' && (this.rightClickShowing || this.renamingNow)) {
+    } else if (event.key === 'Escape' && (this.rightClickShowing || this.renamingNow || this.sheetDisplay)) {
       this.rightClickShowing = false;
       this.renamingNow = false;
+      this.sheetDisplay = false;
     } else if (event.key === 'Escape' && this.settingsButtons['showTags'].toggled) {
       this.toggleButton('showTags');
     }
@@ -602,6 +607,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
       return propsToReturn;
     } else {
       return null;
+    }
+  }
+
+  public handleClick(event: MouseEvent, item: ImageElement) {
+    // ctrl/cmd + click for thumbnail sheet
+    if (event.ctrlKey === true || event.metaKey) {
+      this.openThumbnailSheet(item);
+    } else {
+      this.openVideo(item.hash);
     }
   }
 
@@ -1238,6 +1252,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
+   * Opens the thumbnail sheet for the selected video
+   */
+  openThumbnailSheet(item: ImageElement): void {
+    this.itemToDisplay = item;
+    this.sheetDisplay = true;
+  }
+
+  /**
    * Opens rename file modal, prepares all the name and extension
    */
   openRenameFileModal(): void {
@@ -1258,6 +1280,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.renameFileInput.nativeElement.focus();
     }, 0);
+  }
+
+  /**
+   * Close the thumbnail sheet
+   */
+  closeSheetDisplay() {
+    this.sheetDisplay = false;
   }
 
   /**

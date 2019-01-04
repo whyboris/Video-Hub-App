@@ -7,10 +7,12 @@
     "name": "Boris Yakubchik",
     "email": "yboris@yahoo.com"
   },
-  "contributors": [{
-    "name": "Cal Martin",
-    "url": "https://github.com/cal2195"
-  }],
+  "contributors": [
+    {
+      "name": "Cal Martin",
+      "url": "https://github.com/cal2195"
+    }
+  ],
   "keywords": [
     "video"
   ],
