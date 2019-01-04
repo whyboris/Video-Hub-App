@@ -11,7 +11,7 @@ export class FileSearchPipe implements PipeTransform {
    * @param arrOfStrings    {string}  the search string array
    * @param useless         {boolean} that is flipped just to trigger pipe to work
    * @param union           {boolean} whether it's a union or intersection
-   * @param fileNotFolder   {boolean} whether searching through files or folders
+   * @param searchType      {number} type of search (0: folder, 1: file, 2: tag)
    * @param exclude         {boolean} whether excluding results that contain the word
    */
   transform(
@@ -19,14 +19,11 @@ export class FileSearchPipe implements PipeTransform {
     arrOfStrings?: string[],
     useless?: boolean,
     union?: boolean,
-    fileNotFolder?: boolean,
+    searchType?: number,
     exclude?: boolean
   ): any {
     // console.log('fileSearchPipe triggered');
     // console.log(arrOfStrings);
-
-    
-
 
     if (arrOfStrings.length === 0) {
       return finalArray;
@@ -38,8 +35,15 @@ export class FileSearchPipe implements PipeTransform {
 
         arrOfStrings.forEach(element => {
           // search through the FILE or FOLDER array !!!
-          const fileOrFolder = fileNotFolder ? item.fileName : item.partialPath;
-          if (fileOrFolder.toLowerCase().indexOf(element.toLowerCase()) !== -1) {
+          let searchString = '';
+          if (searchType === 0) {
+            searchString = item.partialPath;
+          } else if (searchType === 1) {
+            searchString = item.fileName;
+          } else if (searchType === 2) {
+            searchString = item.cleanName;
+          }
+          if (searchString.toLowerCase().indexOf(element.toLowerCase()) !== -1) {
             matchFound++;
           }
         });
