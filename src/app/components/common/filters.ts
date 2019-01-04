@@ -41,5 +41,29 @@ export let Filters = [
     placeholder: 'SIDEBAR.exclude',
     conjunction: 'SIDEBAR.or',
     color: '#FF8888'
+  }, {
+    uniqueKey: 'tagUnion',
+    string: '',
+    array: [],
+    bool: true,
+    placeholder: 'SIDEBAR.tagUnion',
+    conjunction: 'SIDEBAR.or',
+    color: '#6e96ff'
+  }, {
+    uniqueKey: 'tagIntersection',
+    string: '',
+    array: [],
+    bool: true,
+    placeholder: 'SIDEBAR.tagIntersection',
+    conjunction: 'SIDEBAR.and',
+    color: '#b1c6fd'
+  }, {
+    uniqueKey: 'tagExclusion',
+    string: '',
+    array: [],
+    bool: true,
+    placeholder: 'SIDEBAR.tagExclusion',
+    conjunction: 'SIDEBAR.or',
+    color: '#FF8888'
   }
 ];
