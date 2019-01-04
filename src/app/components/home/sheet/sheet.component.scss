@@ -1,0 +1,80 @@
+@import "../variables";
+
+.sheet-modal {
+  background: $gray-30;
+  border-radius: 10px;
+  border: 1px solid $gray-50;
+  box-shadow: 0 3px 7px 3px rgba(0, 0, 0, 0.3);
+  box-sizing: border-box;
+  left: 10vw;
+  padding: 2%;
+  position: fixed;
+  overflow-y: scroll;
+  top: 10%;
+  height: 80vh;
+  width: 80vw;
+  z-index: 30;
+}
+
+.filmstrip-container {
+  display: inline-block;
+  overflow: hidden;
+  position: relative;
+  transition-property: height;
+  transition: 300ms;
+  padding: 9px;
+}
+
+.video-box {
+  background-color: black;
+  background-size: cover;
+  box-shadow: 2px 2px 7px rgba(0,0,0,0.2);
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+}
+
+.time, .rez {
+  bottom: 4px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 10px;
+  position: absolute;
+  z-index: 2;
+}
+
+.time {
+  right: 4px;
+}
+
+.rez {
+  left: 3px;
+}
+
+.title {
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  cursor: pointer;
+  display: -webkit-box;
+  font-size: 12px;
+  margin: 6px 2px 0px;
+  max-height: 54px;
+  overflow: hidden;
+  position: absolute;
+  text-align: left;
+  text-overflow: ellipsis;
+  transition-property: font-size;
+  transition: 300ms;
+  width: 100%;
+  word-wrap: break-word;
+}
+
+.fileSize {
+  display: inline-block;
+  font-size: 10px;
+  opacity: 0.8;
+}
+
+.larger-font {
+  font-size: 16px;
+  margin-top: 4px;
+}

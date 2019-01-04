@@ -1,0 +1,29 @@
+<div
+  class="sheet-modal"
+>
+  <ng-container
+  *ngFor="let dummy of ' '.repeat(numOfScreenshots).split(''); index as i"
+  >
+    <div
+      [ngStyle]="{
+          height: 'calc((72vw / ' + thumbnailsToDisplay + ') * (9 / 16))',
+          width: 'calc(72vw / ' + thumbnailsToDisplay + ')',
+          padding: 'calc(2% / ' + thumbnailsToDisplay + ')'
+        }"
+      class="filmstrip-container"
+      @galleryItemAppear
+    >
+      <div
+        #filmstripHolder
+        class="video-box"
+        [ngStyle]="{
+            height: '100%',
+            'background-image': 'url(' + fullFilePath + ')',
+            'background-position-x': (percentOffset * i) + '%'
+          }"
+      >
+      <span *ngIf="showMeta" class="time" @metaAppear>{{ (time / numOfScreenshots) * (i+1) | lengthPipe }}</span>
+      </div>
+    </div>
+  </ng-container>
+</div>

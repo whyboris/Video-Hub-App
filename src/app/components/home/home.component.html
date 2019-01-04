@@ -90,6 +90,14 @@
   >
   </div>
 
+  <!-- OVERLAY to cancel out sheet display modal -->
+  <div
+    *ngIf="sheetDisplay"
+    class="clickAwayOverlay"
+    @overlayAppear
+  >
+  </div>
+
   <!-- RIGHT CLICK MODAL -->
   <div
     *ngIf="rightClickShowing"
@@ -112,6 +120,29 @@
       </ul>
     </ng-template>
   </div>
+
+  <!-- Thumbnail Sheet Display -->
+  <app-thumbnail-sheet
+    *ngIf="sheetDisplay"
+    [elHeight]="imgHeight"
+    [elWidth]="previewWidth"
+    [fileSize]="itemToDisplay.fileSize"
+    [folderPath]="appState.selectedOutputFolder"
+    [hubName]="appState.hubName"
+    [imgHeight]="imgHeight"
+    [imgId]="itemToDisplay.hash"
+    [numOfScreenshots]="itemToDisplay.numOfScreenshots"
+    [rez]="itemToDisplay.resolution"
+    [time]="itemToDisplay.duration"
+    [title]="itemToDisplay.cleanName"
+    [darkMode]="settingsButtons['darkMode'].toggled"
+    [hoverScrub]="settingsButtons['hoverScrub'].toggled"
+    [largerFont]="settingsButtons['fontSizeLarger'].toggled"
+    [randomImage]="settingsButtons['randomImage'].toggled"
+    [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
+    [showMeta]="settingsButtons['showMoreInfo'].toggled"
+  >
+  </app-thumbnail-sheet>
 
   <!-- RENAMING MODAL -->
   <div
@@ -678,7 +709,7 @@
       <ng-container *ngIf="appState.currentView === 'thumbs'">
         <app-gallery-item
           *ngFor="let item of scroll.viewPortItems"
-          (click)="openVideo(item.hash)"
+          (click)="handleClick($event, item)"
           (contextmenu)="rightMouseClicked($event, item)"
           [elHeight]="imgHeight + textPaddingHeight"
           [elWidth]="previewWidth"
@@ -703,7 +734,7 @@
       <ng-container *ngIf="appState.currentView === 'filmstrip'">
         <app-filmstrip-item
           *ngFor="let item of scroll.viewPortItems"
-          (click)="openVideo(item.hash)"
+          (click)="handleClick($event, item)"
           (contextmenu)="rightMouseClicked($event, item)"
           [elHeight]="imgHeight + textPaddingHeight"
           [fileSize]="item.fileSize"
@@ -742,7 +773,7 @@
       <ng-container *ngIf="appState.currentView === 'clips'">
         <app-clip-item
           *ngFor="let item of scroll.viewPortItems"
-          (click)="openVideo(item.hash)"
+          (click)="handleClick($event, item)"
           (contextmenu)="rightMouseClicked($event, item)"
           [title]="item.cleanName"
           [imgId]="item.hash"
