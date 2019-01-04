@@ -168,6 +168,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // temp variables for the wizard during import
   wizard: WizardOptions = {
     totalNumberOfFiles: -1,
+    listOfFiles: [],
     totalImportTime: 0,
     totalImportSize: 0,
     selectedSourceFolder: '',
@@ -359,12 +360,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }, 100);
 
     // Returning Input
-    this.electronService.ipcRenderer.on('inputFolderChosen', (event, filePath, totalFilesInDir) => {
-      this.wizard.totalNumberOfFiles = totalFilesInDir;
+    this.electronService.ipcRenderer.on('inputFolderChosen', (event, filePath, listOfFiles) => {
+      this.wizard.totalNumberOfFiles = listOfFiles.length;
+      this.wizard.listOfFiles = listOfFiles;
       // TODO better prediction
 
-      if (totalFilesInDir > 0) {
-        this.wizard.totalImportTime = Math.round(totalFilesInDir * 2.25 / 60);
+      if (listOfFiles.length > 0) {
+        this.wizard.totalImportTime = Math.round(listOfFiles.length * 2.25 / 60);
         this.wizard.selectedSourceFolder = filePath;
         this.wizard.selectedOutputFolder = filePath;
       }
@@ -559,7 +561,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       numberOfScreenshots: this.numOfScreenshots,
       videoDirPath: this.wizard.selectedSourceFolder
     };
-    this.electronService.ipcRenderer.send('start-the-import', importOptions);
+    this.electronService.ipcRenderer.send('start-the-import', importOptions, this.wizard.listOfFiles);
   }
 
   public cancelCurrentImport(): void {
@@ -893,6 +895,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.futureHubName = '';
     this.wizard = {
       totalNumberOfFiles: -1,
+      listOfFiles: [],
       totalImportTime: 0,
       totalImportSize: 0,
       selectedSourceFolder: '',
