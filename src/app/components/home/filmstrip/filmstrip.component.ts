@@ -42,7 +42,7 @@ export class FilmstripComponent implements OnInit {
 
   updateFilmXoffset($event) {
     if (this.hoverScrub) {
-      const imgWidth = this.imgHeight * 1.78; // 1.78 is the hardcoded aspect ratio
+      const imgWidth = this.imgHeight * (16 / 9); // hardcoded aspect ratio
       const containerWidth = this.filmstripHolder.nativeElement.getBoundingClientRect().width;
       const howManyScreensOutsideCutoff = (this.numOfScreenshots + 1) - Math.floor(containerWidth / imgWidth);
 
