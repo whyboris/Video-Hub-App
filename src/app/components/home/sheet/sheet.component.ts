@@ -46,4 +46,20 @@ export class SheetComponent implements OnInit {
     this.fullFilePath =  'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/' + this.imgId + '.jpg';
     this.percentOffset = (100 / (this.numOfScreenshots - 1));
   }
+
+  decreaseZoomLevel() {
+    if (this.thumbnailsToDisplay > 1) {
+      this.thumbnailsToDisplay++;
+    }
+  }
+
+  resetZoomLevel() {
+    this.thumbnailsToDisplay = 4;
+  }
+
+  increaseZoomLevel() {
+    if (this.thumbnailsToDisplay < 10) {
+      this.thumbnailsToDisplay--;
+    }
+  }
 }

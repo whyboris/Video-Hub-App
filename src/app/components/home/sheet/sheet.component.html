@@ -9,6 +9,26 @@
     <div class="meta-info" >Size: {{ fileSize | fileSizePipe : true }}</div>
     <div class="meta-info" >Resolution: {{ rez }}</div>
   </div>
+
+  <div style="margin: 20px">
+    <button
+      (click)="decreaseZoomLevel()"
+    >
+      <span class="icon icon-minus">zoom out</span>
+    </button>
+    <button
+      (click)="resetZoomLevel()"
+      style="max-width: initial; padding: 0 5px; margin: 0 10px"
+      >
+        <span>{{ 'SETTINGS.reset' | translate }}</span>
+    </button>
+    <button
+      (click)="increaseZoomLevel()"
+    >
+      <span class="icon icon-plus">zoom in</span>
+    </button>
+  </div>
+
   <ng-container
   *ngFor="let dummy of ' '.repeat(numOfScreenshots).split(''); index as i"
   >
