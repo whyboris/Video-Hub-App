@@ -24,6 +24,8 @@ export const English = {
     hideTopHint: 'Hide top',
     hoverScrubDescription: 'Toggles whether hovering the mouse over thumbnails or filmstrip shows video preview screenshots',
     hoverScrubHint: 'Toggle hover animations',
+    importNewFilesDescription: 'Quickly scan for new files only and import them',
+    importNewFilesHint: 'Import new files',
     // tslint:disable-next-line:max-line-length
     magicDescription: 'Toggle the magic search which updates the results as you type. Magic search displays all files that contain the search term and every file inside any folder that contains the search term in its name',
     magicHint: 'Magic search',
@@ -35,10 +37,6 @@ export const English = {
     randomImageHint: 'Show random screenshot',
     randomizeGalleryDescription: 'Randomizes the order of video files after every search',
     randomizeGalleryHint: 'Randomize gallery order',
-    importNewFilesDescription: 'Quickly scan for new files only and import them',
-    importNewFilesHint: 'Import new files',
-    verifyThumbnailsDescription: 'Verify all files have thumbnails',
-    verifyThumbnailsHint: 'Verify thumbnails',
     // tslint:disable-next-line:max-line-length
     rescanDirectoryDescription: 'Rescan the video folder for any file changes (addition, renaming, deletion of videos) and update the current hub',
     rescanDirectoryHint: 'Rescan directory',
@@ -72,6 +70,8 @@ export const English = {
     shuffleGalleryNowHint: 'Shuffle current results',
     startWizardDescription: 'Starts wizard again: create a new video hub or open recent',
     startWizardHint: 'Start wizard',
+    verifyThumbnailsDescription: 'Verify all files have thumbnails',
+    verifyThumbnailsHint: 'Verify thumbnails',
   },
   SIDEBAR: {
     and: 'and',
@@ -123,7 +123,7 @@ export const English = {
   },
   RIGHTCLICK: {
     cancelRename: 'cancel rename',
-    errorFileNameExists: 'A file existst with this filename',
+    errorFileNameExists: 'A file exists with this filename',
     errorFileNotFound: 'Original file could not be found',
     errorMustBeDifferent: 'new file name must be different',
     errorMustNotBeEmpty: 'new file name may not be empty',
