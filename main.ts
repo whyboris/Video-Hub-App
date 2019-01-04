@@ -177,7 +177,6 @@ import {
   extractAllMetadata,
   getVideoPathsAndNames,
   missingThumbsIndex,
-  numberOfVidsIn,
   sendCurrentProgress,
   generateScreenshotStrip,
   updateFinalArrayWithHD,
