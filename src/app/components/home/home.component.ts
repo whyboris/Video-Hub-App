@@ -1282,6 +1282,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
+   * Close the thumbnail sheet
+   */
+  closeSheetDisplay() {
+    this.sheetDisplay = false;
+  }
+
+  /**
    * Close the rename dialog
    */
   closeRename() {
