@@ -35,8 +35,12 @@ export const English = {
     randomImageHint: 'Show random screenshot',
     randomizeGalleryDescription: 'Randomizes the order of video files after every search',
     randomizeGalleryHint: 'Randomize gallery order',
+    importNewFilesDescription: 'Quickly scan for new files only and import them',
+    importNewFilesHint: 'Import new files',
+    verifyThumbnailsDescription: 'Verify all files have thumbnails',
+    verifyThumbnailsHint: 'Verify thumbnails',
     // tslint:disable-next-line:max-line-length
-    rescanDirectoryDescription: 'Rescans the video folder for any file changes (addition, renaming, deletion of videos) and updates the current hub',
+    rescanDirectoryDescription: 'Rescan the video folder for any file changes (addition, renaming, deletion of videos) and update the current hub',
     rescanDirectoryHint: 'Rescan directory',
     resetSettingsDescription: 'Resets settings and buttons to their default values',
     resetSettingsHint: 'Reset settings',

@@ -844,6 +844,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.clearRecentlyViewedHistory();
     } else if (uniqueKey === 'resetSettings') {
       this.resetSettingsToDefault();
+    } else if (uniqueKey === 'importNewFiles') {
+      this.importNewFiles();
+    } else if (uniqueKey === 'verifyThumbnails') {
+      this.verifyThumbnails();
     } else if (uniqueKey === 'rescanDirectory') {
       this.rescanDirectory();
     } else if (uniqueKey === 'shuffleGalleryNow') {
@@ -905,6 +909,28 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.screenshotSizeForImport = 200; // default
     this.toggleSettings();
     this.showWizard = true;
+  }
+
+  /**
+   * Scan for new files and import them
+   */
+  public importNewFiles(): void {
+    this.progressNum1 = 0;
+    this.importStage = 1;
+    this.toggleSettings();
+    console.log('scanning for new files');
+    this.electronService.ipcRenderer.send('import-new-files', this.finalArray);
+  }
+
+  /**
+   * Verify all files have thumbnails
+   */
+  public verifyThumbnails(): void {
+    this.progressNum1 = 0;
+    this.importStage = 2;
+    this.toggleSettings();
+    console.log('verifying thumbnails');
+    this.electronService.ipcRenderer.send('verify-thumbnails', this.finalArray);
   }
 
   /**

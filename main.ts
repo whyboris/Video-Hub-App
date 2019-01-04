@@ -181,7 +181,8 @@ import {
   sendCurrentProgress,
   generateScreenshotStrip,
   updateFinalArrayWithHD,
-  writeVhaFileToDisk
+  writeVhaFileToDisk,
+  findAndImportNewFiles
 } from './main-support';
 
 import { FinalObject, ImageElement } from './src/app/components/common/final-object.interface';
@@ -408,6 +409,26 @@ ipc.on('choose-output', function (event, someMessage) {
 });
 
 /**
+ * Initiate scanning for new files and importing them
+ * now receives the finalArray from `home.component`
+ * because the user may have renamed files from within the app!
+ */
+ipc.on('import-new-files', function (event, currentAngularFinalArray: ImageElement[]) {
+  const currentVideoFolder = globals.selectedSourceFolder;
+  globals.cancelCurrentImport = false;
+  scanForNewFiles(currentAngularFinalArray, currentVideoFolder);
+});
+
+/**
+ * Initiate verifying all files have thumbnails
+ */
+ipc.on('verify-thumbnails', function (event) {
+  const currentVideoFolder = globals.selectedSourceFolder;
+  globals.cancelCurrentImport = false;
+  verifyThumbnails();
+});
+
+/**
  * Initiate rescan of the directory NEW
  * now receives the finalArray from `home.component`
  * because the user may have renamed files from within the app!
@@ -508,6 +529,56 @@ ipc.on('start-the-import', function (event, options: ImportSettingsObject, video
   }
 
 });
+
+/**
+ * Begin scanning for new files and importing them
+ *
+ * @param angularFinalArray  ImageElment[] from Angular (might have renamed files)
+ */
+function scanForNewFiles(angularFinalArray: ImageElement[], currentVideoFolder: string) {
+
+  // rescan the source directory
+  if (fs.existsSync(currentVideoFolder)) {
+    let videosOnHD: ImageElement[] = getVideoPathsAndNames(currentVideoFolder);
+
+    if (demo) {
+      videosOnHD = videosOnHD.slice(0, 50);
+    }
+
+    findAndImportNewFiles(
+      angularFinalArray,
+      videosOnHD,
+      currentVideoFolder,
+      globals.numberOfScreenshots,
+      sendFinalResultHome           // callback for when `extractAllMetadata` is called
+    );
+
+  } else {
+    sendCurrentProgress(1, 1, 0);
+    dialog.showMessageBox({
+      message: 'Directory ' + currentVideoFolder + ' does not exist',
+      buttons: ['OK']
+    });
+  }
+}
+
+/**
+ * Scan for missing thumbnails and generate them
+ */
+function verifyThumbnails() {
+  // resume extracting any missing thumbnails
+  const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
+
+  const indexesToScan: number[] = missingThumbsIndex(lastSavedFinalObject.images, screenshotOutputFolder);
+
+  extractAllScreenshots(
+    lastSavedFinalObject.images,
+    globals.selectedSourceFolder,
+    screenshotOutputFolder,
+    globals.screenShotHeight,
+    indexesToScan
+  );
+}
 
 /**
  * Begins rescan procedure compared to what the app has currently

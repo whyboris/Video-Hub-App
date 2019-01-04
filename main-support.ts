@@ -614,6 +614,50 @@ export function hashFile(fileName: string, fileSize: string): string {
   return hash;
 }
 
+
+/**
+ * Figures out what new files there are,
+ * adds them to the finalArray,
+ * and calls `extractAllMetadata`
+ * (which will then send file home and start extracting images)
+ * @param angularFinalArray       -- array of ImageElements from Angular - most current view
+ * @param hdFinalArray            -- array of ImageElements from current hard drive scan
+ * @param inputFolder             -- the input folder (where videos are)
+ * @param numberOfScreenshots     -- the number of screenshots per video
+ * @param extractMetadataCallback -- function for extractAllMetadata to call when done
+ */
+export function findAndImportNewFiles(
+  angularFinalArray: ImageElement[],
+  hdFinalArray: ImageElement[],
+  inputFolder: string,
+  numberOfScreenshots: number,
+  extractMetadataCallback
+): void {
+
+  // Generate ImageElement[] of all the new elements to be added
+  const onlyNewElements: ImageElement[] =
+    findAllNewFiles(angularFinalArray, hdFinalArray, inputFolder);
+
+  // If there are new files
+  if (onlyNewElements.length > 0) {
+
+    const metaRescanStartIndex = angularFinalArray.length;
+    const finalArrayUpdated = angularFinalArray.concat(onlyNewElements);
+
+    extractAllMetadata(
+      finalArrayUpdated,
+      inputFolder,
+      numberOfScreenshots,
+      metaRescanStartIndex,
+      extractMetadataCallback // actually = sendFinalResultHome
+    );
+
+  } else {
+    sendCurrentProgress(1, 1, 0); // indicates 100%
+  }
+
+}
+
 /**
  * Figures out what new files there are,
  * adds them to the finalArray,
@@ -646,7 +690,7 @@ export function updateFinalArrayWithHD(
   const allDeletedRemoved: ImageElement[] =
     finalArrayWithoutDeleted(angularFinalArray, hdFinalArray, inputFolder, folderToDeleteFrom);
 
-  // If there are new ifles OR if any files have been deleted !!!
+  // If there are new files OR if any files have been deleted !!!
   if (onlyNewElements.length > 0 || allDeletedRemoved.length < angularFinalArray.length) {
 
     const metaRescanStartIndex = allDeletedRemoved.length;
