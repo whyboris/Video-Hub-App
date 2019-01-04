@@ -611,7 +611,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public handleClick(event: MouseEvent, item: ImageElement) {
-    if (event.metaKey) {
+    // ctrl/cmd + click for thumbnail sheet
+    if (event.ctrlKey === true || event.metaKey) {
       this.openThumbnailSheet(item);
     } else {
       this.openVideo(item.hash);
