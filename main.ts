@@ -18,7 +18,7 @@ serve = args.some(val => val === '--serve');
 // MY IMPORTANT IMPORT !!!!
 const dialog = require('electron').dialog;
 
-let userWantedToOpen = null;
+let userWantedToOpen: string = null;
 let myWindow = null;
 
 // TODO -- maybe clean up the `userWantedToOpen` with whatever pattern recommended by Electron
@@ -121,7 +121,7 @@ try {
   // OPEN FILE ON MAC FROM FILE DOUBLE CLICK
   // THIS RUNS (ONLY) on MAC !!!
   app.on('will-finish-launching', function () {
-    app.on('open-file', (event, filePath) => {
+    app.on('open-file', (event, filePath: string) => {
       if (filePath) {
         userWantedToOpen = filePath;
         if (!macFirstRun) {
@@ -310,6 +310,7 @@ ipc.on('just-started', function (event, someMessage) {
 
   fs.readFile(path.join(pathToAppData, 'video-hub-app', 'settings.json'), (err, data) => {
     if (err) {
+      win.setBounds({ x: 0, y: 0, width: screenWidth, height: screenHeight });
       event.sender.send('pleaseOpenWizard', true); // firstRun = true!
     } else {
 
@@ -324,7 +325,10 @@ ipc.on('just-started', function (event, someMessage) {
         win.setBounds({ x: 0, y: 0, width: screenWidth, height: screenHeight });
       }
 
-      event.sender.send('settingsReturning', savedSettings, userWantedToOpen);
+      // Reference: https://github.com/electron/electron/blob/master/docs/api/locales.md
+      const locale: string = app.getLocale();
+
+      event.sender.send('settingsReturning', savedSettings, userWantedToOpen, locale);
     }
   });
 });

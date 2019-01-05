@@ -13,10 +13,10 @@ import { FinalObject, ImageElement } from '../common/final-object.interface';
 import { HistoryItem } from '../common/history-item.interface';
 import { ImportSettingsObject } from '../common/import.interface';
 import { SavableProperties } from '../common/savable-properties.interface';
-import { SettingsObject, SupportedLanguage } from '../common/settings-object.interface';
+import { SettingsObject } from '../common/settings-object.interface';
 import { WizardOptions } from '../common/wizard-options.interface';
 
-import { AppState } from '../common/app-state';
+import { AppState, SupportedLanguage } from '../common/app-state';
 import { Filters } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, SettingsMetaGroup } from '../common/settings-buttons';
 
@@ -202,8 +202,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   numOfScreenshots = 10; // hardcoded for now. Only used for import - TODO - refactor?
 
   isFirstRunEver = false;
-
-  currentLanguage: SupportedLanguage;
 
   // Listen for key presses
   @HostListener('document:keydown', ['$event'])
@@ -427,8 +425,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     // Final object returns
-    this.electronService.ipcRenderer.on('finalObjectReturning',
-        (event, finalObject: FinalObject, pathToFile: string, outputFolderWithTrailingSlash: string, changedRootFolder = false) => {
+    this.electronService.ipcRenderer.on('finalObjectReturning', (
+      event,
+      finalObject: FinalObject,
+      pathToFile: string,
+      outputFolderWithTrailingSlash: string,
+      changedRootFolder = false
+    ) => {
       this.finalArrayNeedsSaving = changedRootFolder;
       this.appState.currentVhaFile = pathToFile;
       this.hubNameToRemember = finalObject.hubName;
@@ -450,9 +453,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     // Returning settings
-    this.electronService.ipcRenderer.on('settingsReturning', (event, settingsObject: SettingsObject, userWantedToOpen) => {
+    this.electronService.ipcRenderer.on('settingsReturning', (
+      event,
+      settingsObject: SettingsObject,
+      userWantedToOpen: string,
+      locale: string
+    ) => {
       this.vhaFileHistory = (settingsObject.vhaFileHistory || []);
       this.restoreSettingsFromBefore(settingsObject);
+      this.setOrRestoreLanguage(settingsObject.appState.language, locale);
       if (this.appState.currentZoomLevel !== 1) {
         this.electronService.webFrame.setZoomFactor(this.appState.currentZoomLevel);
       }
@@ -1124,7 +1133,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     return {
       appState: this.appState,
       buttonSettings: buttonSettings,
-      language: this.currentLanguage,
       vhaFileHistory: this.vhaFileHistory,
     };
   }
@@ -1176,11 +1184,22 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.settingsButtons[element].hidden = settingsObject.buttonSettings[element].hidden;
       }
     });
-    if (settingsObject.language) {
-      this.changeLanguage(settingsObject.language);
-    }
     this.computeTextBufferAmount();
     this.settingsButtons['showTags'].toggled = false; // never show tags on load (they don't load right anyway)
+  }
+
+  /**
+   * Restore the language from settings or try to set it from the user's locale
+   * @param storedSetting the `language` attribute in AppState
+   * @param locale the string that comes from `app.getLocale()`
+   * List of locales is here: https://github.com/electron/electron/blob/master/docs/api/locales.md
+   */
+  setOrRestoreLanguage(chosenLanguage: SupportedLanguage, locale: string): void {
+    if (chosenLanguage) {
+      this.changeLanguage(chosenLanguage);
+    } else {
+      this.changeLanguage(<any>locale.substring(0, 2));
+    }
   }
 
   /**
@@ -1367,16 +1386,21 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   /**
    * Change the language via ngx-translate
+   * `en` is the default
    * @param language
    */
   changeLanguage(language: SupportedLanguage): void {
-    this.currentLanguage = language;
-    if (language === 'en') {
-      this.translate.use('en');
-      this.translate.setTranslation('en', English );
-    } else {
-      this.translate.use('ru');
-      this.translate.setTranslation('ru', Russian );
+    switch (language) {
+      case 'ru':
+        this.translate.use('ru');
+        this.translate.setTranslation('ru', Russian );
+        this.appState.language = 'ru';
+        break;
+      default:
+        this.translate.use('en');
+        this.translate.setTranslation('en', English );
+        this.appState.language = 'en';
+        break;
     }
   }
 
