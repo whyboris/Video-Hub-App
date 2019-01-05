@@ -510,6 +510,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   /**
    * Low-tech debounced scroll handler
+   * @param msDelay - number of milliseconds to debounce; if absent sets to 250ms
    */
   public debounceUpdateMax(msDelay?: number): void {
     // console.log('debouncing');
@@ -820,6 +821,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.settingsButtons['showFiles'].toggled = false;
     this.settingsButtons['showFilmstrip'].toggled = false;
     this.settingsButtons['showFoldersOnly'].toggled = false;
+    this.settingsButtons['showFullView'].toggled = false;
     this.settingsButtons['showThumbnails'].toggled = false;
   }
 
@@ -856,6 +858,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.toggleAllViewsButtonsOff();
       this.settingsButtons['showClips'].toggled = true;
       this.appState.currentView = 'clips';
+      this.computeTextBufferAmount();
+      this.scrollToTop();
+    } else if (uniqueKey === 'showFullView') {
+      this.toggleAllViewsButtonsOff();
+      this.settingsButtons['showFullView'].toggled = true;
+      this.appState.currentView = 'fullView';
       this.computeTextBufferAmount();
       this.scrollToTop();
     } else if (uniqueKey === 'makeSmaller') {
@@ -992,7 +1000,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Computes the preview width for thumbnails view
    */
   public computePreviewWidth(): void {
-    this.previewWidth = this.imgHeight * (16 / 9);
+    if (this.appState.currentView === 'fullView') {
+      // this.previewWidth = this.imgHeight * (16 / 9) * 3;
+    } else {
+      this.previewWidth = this.imgHeight * (16 / 9);
+    }
   }
 
   /**

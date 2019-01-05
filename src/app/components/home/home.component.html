@@ -755,6 +755,27 @@
         ></app-filmstrip-item>
       </ng-container>
 
+      <ng-container *ngIf="appState.currentView === 'fullView'">
+        <app-full-item
+          *ngFor="let item of scroll.viewPortItems"
+          (click)="handleClick($event, item)"
+          (contextmenu)="rightMouseClicked($event, item)"
+          [elHeight]="imgHeight + textPaddingHeight"
+          [fileSize]="item.fileSize"
+          [folderPath]="appState.selectedOutputFolder"
+          [hubName]="appState.hubName"
+          [imgHeight]="imgHeight"
+          [imgId]="item.hash"
+          [numOfScreenshots]="item.numOfScreenshots"
+          [rez]="item.resolution"
+          [time]="item.duration"
+          [title]="item.cleanName"
+          [darkMode]="settingsButtons['darkMode'].toggled"
+          [largerFont]="settingsButtons['fontSizeLarger'].toggled"
+          [showMeta]="settingsButtons['showMoreInfo'].toggled"
+        ></app-full-item>
+      </ng-container>
+
       <ng-container *ngIf="appState.currentView === 'files'">
         <app-file-item
           *ngFor="let item of scroll.viewPortItems"

@@ -53,6 +53,8 @@ export const English = {
     showFilesHint: 'Show files',
     showFilmstripDescription: 'Switches to the filmstrip view',
     showFilmstripHint: 'Show filmstrip',
+    showFullViewDescription: 'Switches to the all screenshots view', // TRANSLATE
+    showFullViewHint: 'Show full view', // TRANSLATE
     showFolderInFileViewDescription: 'Shows folder locations in the file view',
     showFolderInFileViewHint: 'Show folders in file view',
     showFoldersOnlyDescription: 'Switches to the folders-only view',

@@ -1,0 +1,36 @@
+<div
+  #metaContainer
+  class="meta-container"
+  [ngStyle]="{
+    height: rowOffsets.length * imgHeight + 30 + 'px',
+    width: computedWidth + 'px'
+  }"
+  >
+  <!-- the 30 px added above is the padding for the text  -->
+
+  <div
+    *ngFor="let row of rowOffsets; index as idx"
+    #filmstripHolder
+    class="filmstrip-container"
+    [ngStyle]="{
+        height: imgHeight + 'px',
+        'background-image': 'url(' + fullFilePath + ')',
+        'background-position-x': '-' + (row * imgHeight * 16 / 9) + 'px',
+        'background-size': 'auto ' + imgHeight + 'px'
+      }"
+  >
+  </div>
+
+  <span
+    *ngIf="showMeta"
+    [ngClass]="{ 'larger-font': largerFont }"
+    [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
+    class="title"
+  >
+    {{ title }}
+    <div class="fileSize" *ngIf="showMeta">
+      {{ fileSize | fileSizePipe }}
+    </div>
+  </span>
+
+</div>
