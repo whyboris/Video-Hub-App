@@ -14,9 +14,10 @@ export class WordFrequencyPipe implements PipeTransform {
   /**
    * Return only items that match search string
    * @param finalArray
-   * @param render      whether to calculate the wordFrequency
+   * @param render       whether to calculate the wordFrequency
+   * @param numberOfTags number of tags to generate for the word cloud
    */
-  transform(finalArray: any, render?: boolean): any {
+  transform(finalArray: any, render: boolean, numberOfTags: number): any {
 
     if (render && finalArray.length > 0) {
 
@@ -30,7 +31,7 @@ export class WordFrequencyPipe implements PipeTransform {
 
       this.wordFrequencyService.cleanMap();
 
-      this.wordFrequencyService.computeFrequencyArray(finalArray.length);
+      this.wordFrequencyService.computeFrequencyArray(finalArray.length, numberOfTags);
     }
 
     return finalArray;

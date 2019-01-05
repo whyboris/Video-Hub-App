@@ -7,6 +7,8 @@ export const French = {
     darkModeHint: 'Mode sombre',
     excludeDescription: 'Bascule le filtre de recherche pour exclure tous les fichiers contenant le mot filtre',
     excludeHint: 'Filtre d\'exclusion',
+    extendedWordCloudDescription: 'Afficher / masquer plus de mots-clés en nuage',
+    extendedWordCloudHint: 'Activé Cloud Word étendu',
     fileDescription: 'Bascule la recherche de vidéos contenant chacun des mots de recherche',
     fileHint: 'Recherche vidéo',
     fileUnionDescription: 'Bascule la recherche de vidéos contenant l\'un des mots de recherche',

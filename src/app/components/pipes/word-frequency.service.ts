@@ -89,14 +89,14 @@ export class WordFrequencyService {
   }
 
   /**
-   * Computes the array 9 objects long with most frequent words
+   * Computes the array `numberOfTags` objects long with most frequent words
    * Creates `height` property, scaled between 8 and 22 proportionally
    * calls `.next` on BehaviorSubject
    * @param total: total number of files displayed
    **/
-  public computeFrequencyArray(total: number): void {
+  public computeFrequencyArray(total: number, numberOfTags: number): void {
     const finalResult: WordFreqAndHeight[] = []; // array of objects
-    for (let i = 0; i < 9; i++) {
+    for (let i = 0; i < numberOfTags; i++) {
       if (this.wordMap.size > 0) {
         finalResult[i] = this.getMostFrequent(total);
       } else {

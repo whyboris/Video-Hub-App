@@ -9,6 +9,8 @@ export const Russian = {
     darkModeHint: 'Темный режим',
     excludeDescription: 'Переключает фильтр поиска, чтобы исключить любые файлы, содержащие слово фильтра',
     excludeHint: 'Исключить фильтр',
+    extendedWordCloudDescription: 'Переключатели, показывающие больше тэгов облака слов',
+    extendedWordCloudHint: 'Включено расширенное облако слов',
     fileDescription: 'Переключает поиск видео, содержащих каждое из поисковых слов',
     fileHint: 'Поиск видео',
     fileUnionDescription: 'Переключает поиск видео, содержащих любое из поисковых слов',
