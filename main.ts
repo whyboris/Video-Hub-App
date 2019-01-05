@@ -803,7 +803,7 @@ function extractAllScreenshots(
         extractTenCallback
       );
     } else {
-      sendCurrentProgress(1, 1, 2); // indicates 100%
+      sendCurrentProgress(1, 1, 0); // indicates 100%
     }
   };
 
