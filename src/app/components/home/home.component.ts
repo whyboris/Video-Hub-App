@@ -1101,7 +1101,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param numOfScreenshots - string of number of screenshots per video
    */
   selectNumOfScreenshots(numOfScreenshots: string) {
-    this.numOfScreenshots = parseInt(numOfScreenshots, 10);
+    this.numOfScreenshots = parseFloat(numOfScreenshots);
   }
 
   // ---- HANDLE EXTRACTING AND RESTORING SETTINGS ON OPEN AND BEFORE CLOSE ------

@@ -945,12 +945,12 @@
       [disabled]="wizard.selectedOutputFolder === '' || wizard.selectedSourceFolder === '' || futureHubName === ''"
       class="size-dropdown languageDropDown"
     >
-      <option value="72">72p</option>
-      <option value="144">144p</option>
-      <option value="216">216p</option>
-      <option value="288" selected="selected">288p</option>
-      <option value="360">360p</option>
-      <option value="432">432p</option>
+      <option value="72">72px</option>
+      <option value="144">144px</option>
+      <option value="216">216px</option>
+      <option value="288" selected="selected">288px</option>
+      <option value="360">360px</option>
+      <option value="432">432px</option>
     </select>
 
     <span class="step-description">
@@ -978,10 +978,14 @@
       [disabled]="wizard.selectedOutputFolder === '' || wizard.selectedSourceFolder === '' || futureHubName === ''"
       class="size-dropdown languageDropDown"
     >
-      <option value="5">5</option>
-      <option value="10" selected="selected">10</option>
-      <option value="15">15</option>
-      <option value="20">20</option>
+      <option value="5">5 {{ 'WIZARD.total' | translate }}</option>
+      <option value="10" selected="selected">10 {{ 'WIZARD.total' | translate }}</option>
+      <option value="15">15 {{ 'WIZARD.total' | translate }}</option>
+      <option value="20">20 {{ 'WIZARD.total' | translate }}</option>
+      <option value="0.1">1 {{ 'WIZARD.every' | translate }} 10 {{ 'WIZARD.minutes' | translate }}</option>
+      <option value="0.2">1 {{ 'WIZARD.every' | translate }} 5 {{ 'WIZARD.minutes' | translate }}</option>
+      <option value="0.3333">1 {{ 'WIZARD.every' | translate }} 3 {{ 'WIZARD.minutes' | translate }}</option>
+      <option value="1">1 {{ 'WIZARD.every' | translate }} {{ 'WIZARD.minute' | translate }}</option>
     </select>
 
     <span class="step-description">

@@ -557,7 +557,7 @@ function extractMetadataForThisONEFile(
       imageElement.hash = hashFile(imageElement.fileName, fileSize);
       imageElement.duration = duration;
       imageElement.fileSize = parseInt(fileSize, 10);
-      imageElement.numOfScreenshots = numberOfScreenshots;
+      imageElement.numOfScreenshots = computeNumberOfScreenshots(numberOfScreenshots, duration);
       imageElement.resolution = sizeLabel;
 
       extractMetaCallback(imageElement);
@@ -566,12 +566,30 @@ function extractMetadataForThisONEFile(
 }
 
 /**
+ * Compute the number of screenshots to extract
+ * @param numberOfScreenshots
+ * @param duration - number of seconds in a video
+ * Note:  duration < 1 indicates the rate of screenshots per minute,
+ * e.g.   duration = 0.25 means 0.25 screenshots per minute, or 1 screenshot every 4 minutes
+ *        duration = 10 means 10 screenshots per video
+ */
+function computeNumberOfScreenshots(numberOfScreenshots: number, duration: number): number {
+  let total: number;
+  if (numberOfScreenshots <= 1) {
+    total = Math.ceil(duration / 60 * numberOfScreenshots);
+  } else {
+    total = numberOfScreenshots;
+  }
+  return total === 0 ? 1 : total;
+}
+
+/**
  * Hash a given file using it's file name and size
  * md5(file.name + file.size)
  * @param fileName  -- file name to hash
  * @param fileSize  -- file size to hash
  */
-export function hashFile(fileName: string, fileSize: string): string {
+function hashFile(fileName: string, fileSize: string): string {
   // make the magic happen!
   const hash = hasher('md5').update(fileName + fileSize).digest('hex');
   return hash;
