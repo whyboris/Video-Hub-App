@@ -549,7 +549,11 @@ function extractMetadataForThisONEFile(
       extractMetaCallback(imageElement);
     } else {
       const metadata = JSON.parse(data);
-      const duration = Math.round(metadata.format.duration) || 0;
+
+      const streamDuration = metadata.streams[0].duration || Number.MAX_SAFE_INTEGER;
+      const metaDuration = metadata.format.duration || Number.MAX_SAFE_INTEGER;
+
+      const duration = Math.round(Math.min(streamDuration, metaDuration)) || 0;
       const origWidth = metadata.streams[0].width;
       const origHeight = metadata.streams[0].height;
       const sizeLabel = labelVideo(origWidth, origHeight);
