@@ -549,7 +549,10 @@ function extractMetadataForThisONEFile(
       extractMetaCallback(imageElement);
     } else {
       const metadata = JSON.parse(data);
-      const duration = Math.round(metadata.format.duration) || 0;
+
+      const fileDuration = metadata.streams[0].duration || metadata.format.duration;
+
+      const duration = Math.round(fileDuration) || 0;
       const origWidth = metadata.streams[0].width;
       const origHeight = metadata.streams[0].height;
       const sizeLabel = labelVideo(origWidth, origHeight);
