@@ -21,6 +21,7 @@ import { Filters } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, SettingsMetaGroup } from '../common/settings-buttons';
 
 import { English } from '../../i18n/en';
+import { French } from '../../i18n/fr';
 import { Russian } from '../../i18n/ru';
 
 import {
@@ -1395,6 +1396,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.translate.use('ru');
         this.translate.setTranslation('ru', Russian );
         this.appState.language = 'ru';
+        break;
+      case 'fr':
+        this.translate.use('fr');
+        this.translate.setTranslation('fr', French );
+        this.appState.language = 'fr';
         break;
       default:
         this.translate.use('en');

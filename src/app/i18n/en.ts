@@ -1,3 +1,4 @@
+/* tslint:disable */
 export const English = {
   BUTTONS: {
     autoplayClipsDescription: 'Toggle option to autoplay video preview clips',
@@ -28,7 +29,6 @@ export const English = {
     hoverScrubHint: 'Toggle hover animations',
     importNewFilesDescription: 'Quickly scan for new files only and import them',
     importNewFilesHint: 'Import new files',
-    // tslint:disable-next-line:max-line-length
     magicDescription: 'Toggle the magic search which updates the results as you type. Magic search displays all files that contain the search term and every file inside any folder that contains the search term in its name',
     magicHint: 'Magic search',
     makeLargerDescription: 'Increases thumbnail and filmstrip preview sizes',
@@ -39,7 +39,6 @@ export const English = {
     randomImageHint: 'Show random screenshot',
     randomizeGalleryDescription: 'Randomizes the order of video files after every search',
     randomizeGalleryHint: 'Randomize gallery order',
-    // tslint:disable-next-line:max-line-length
     rescanDirectoryDescription: 'Rescan the video folder for any file changes (addition, renaming, deletion of videos) and update the current hub',
     rescanDirectoryHint: 'Rescan directory',
     resetSettingsDescription: 'Resets settings and buttons to their default values',
