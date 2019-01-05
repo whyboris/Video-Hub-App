@@ -1,5 +1,7 @@
 export const Russian = {
   BUTTONS: {
+    autoplayClipsDescription: 'Переключить опцию для автоматического воспроизведения клипов предварительного просмотра видео',
+    autoplayClipsHint: 'Переключить клипы автозапуска',
     clearHistoryDescription: 'Очищает недавно открытую историю',
     clearHistoryHint: 'Очистить историю',
     darkModeDescription: 'Переключение между темным и светлым режимом',

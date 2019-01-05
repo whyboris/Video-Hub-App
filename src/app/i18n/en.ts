@@ -1,5 +1,7 @@
 export const English = {
   BUTTONS: {
+    autoplayClipsDescription: 'Toggle option to autoplay video preview clips',
+    autoplayClipsHint: 'Toggle autoplay clips',
     clearHistoryDescription: 'Clears the recently-opened history',
     clearHistoryHint: 'Clear history',
     darkModeDescription: 'Toggles between dark and light mode',
