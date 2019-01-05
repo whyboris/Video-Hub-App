@@ -364,8 +364,8 @@
 
       <div style="margin: 20px">
         <select (change)="changeLanguage($event.target.value)" class="languageDropDown">
-          <option value="en" [selected]="currentLanguage == 'en'">English</option>
-          <option value="ru" [selected]="currentLanguage == 'ru'">Russian</option>
+          <option value="en" [selected]="appState.language == 'en'">English</option>
+          <option value="ru" [selected]="appState.language == 'ru'">Russian</option>
         </select>
       </div>
 
