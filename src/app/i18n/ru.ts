@@ -1,3 +1,4 @@
+/* tslint:disable */
 export const Russian = {
   BUTTONS: {
     clearHistoryDescription: 'Очищает недавно открытую историю',
@@ -26,7 +27,6 @@ export const Russian = {
     hoverScrubHint: 'Переключить анимацию при наведении',
     importNewFilesDescription: 'Быстро сканировать только новые файлы и импортировать их',
     importNewFilesHint: 'Импортировать новые файлы',
-    // tslint:disable-next-line:max-line-length
     magicDescription: 'Переключить магический поиск, который обновляет результаты по мере ввода. Magic search отображает все файлы, которые содержат поисковый термин, и каждый файл в любой папке, которая содержит поисковый термин в своем названии ',
     magicHint: 'Волшебный поиск',
     makeLargerDescription: 'Увеличивает размеры предварительного просмотра миниатюр и диафильмов',
@@ -37,14 +37,12 @@ export const Russian = {
     randomImageHint: 'Показать случайный скриншот',
     randomizeGalleryDescription: 'Рандомизирует порядок видеофайлов после каждого поиска',
     randomizeGalleryHint: 'Рандомизировать порядок галереи',
-    // tslint:disable-next-line:max-line-length
     rescanDirectoryDescription: 'Повторно сканирует папку видео для любых изменений файла (добавление, переименование, удаление видео) и обновляет текущий хаб',
     rescanDirectoryHint: 'Пересканировать каталог',
     resetSettingsDescription: 'Сбрасывает настройки и кнопки к значениям по умолчанию',
     resetSettingsHint: 'Сброс настроек',
     resolutionFilterDescription: 'Переключает фильтр разрешения',
     resolutionFilterHint: 'Фильтр разрешения',
-    // tslint:disable-next-line:max-line-length
     returnToFirstScreenshotDescription: 'Опция переключения, чтобы вернуться к первому скриншоту, когда курсор оставляет предварительный просмотр',
     returnToFirstScreenshotHint: 'Переключить обратно на первый эскиз',
     showClipsDescription: 'Переключение в режим просмотра клипов',

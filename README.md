@@ -20,7 +20,9 @@ This software was built on top of [`angular-electron`](https://github.com/maxime
 
 ## Contributing
 
-I would love to see the improvements you make to this app and am happy to accept pull requests. Reach out if you'd like to coordinate / collaborate.
+I would love to see the improvements you make to this app and am happy to accept pull requests. You can reach out if you'd like to coordinate / collaborate, or just jump to [issues](https://github.com/whyboris/Video-Hub-App/issues) to see what's already getting worked on and to add new suggestions!
+
+Please add a translation if you know another language. It's a process that will take you 5-10 minutes, just [follow the instrutions](https://github.com/whyboris/Video-Hub-App/tree/master/src/app/i18n)!
 
 ## Upcoming features
 

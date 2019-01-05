@@ -1,4 +1,4 @@
-export type SupportedLanguage = 'en' | 'ru';
+export type SupportedLanguage = 'en' | 'ru' | 'fr';
 // Please conform the supported languages exactly to the first two characters from here:
 // https://github.com/electron/electron/blob/master/docs/api/locales.md
 

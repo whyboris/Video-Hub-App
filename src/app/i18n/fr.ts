@@ -1,4 +1,5 @@
-export const English = {
+/* tslint:disable */
+export const French = {
   BUTTONS: {
     clearHistoryDescription: 'Efface l\'histoire récemment ouverte',
     clearHistoryHint: 'Histoire claire',
@@ -26,7 +27,6 @@ export const English = {
     hoverScrubHint: 'Basculer les animations en survol',
     importNewFilesDescription: 'Analyser rapidement les nouveaux fichiers uniquement et les importer',
     importNewFilesHint: 'Importer de nouveaux fichiers',
-    // tslint:disable-next-line:max-line-length
     magicDescription: 'Basculez la recherche magique qui met à jour les résultats au fur et à mesure que vous tapez. La recherche magique affiche tous les fichiers contenant le terme recherché et tous les fichiers contenus dans un dossier contenant le terme recherché dans son nom.',
     magicHint: 'Recherche magique',
     makeLargerDescription: 'Augmente la taille des aperçus des vignettes et des pellicules',
@@ -37,7 +37,6 @@ export const English = {
     randomImageHint: 'Afficher une capture d\'écran aléatoire',
     randomizeGalleryDescription: 'Randomise l\'ordre des fichiers vidéo après chaque recherche',
     randomizeGalleryHint: 'Randomiser la galerie',
-    // tslint:disable-next-line:max-line-length
     rescanDirectoryDescription: 'Réanalyser le dossier vidéo pour détecter toute modification de fichier (ajout, changement de nom, suppression de vidéos) et mettre à jour le concentrateur actuel',
     rescanDirectoryHint: 'Réanalyser le répertoire',
     resetSettingsDescription: 'Réinitialise les paramètres et les boutons à leurs valeurs par défaut',
