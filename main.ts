@@ -307,6 +307,7 @@ function setGlobalsFromVhaFile(vhaFileContents: FinalObject) {
  */
 ipc.on('just-started', function (event, someMessage) {
   globals.angularApp = event;
+  globals.winRef = win;
 
   fs.readFile(path.join(pathToAppData, 'video-hub-app', 'settings.json'), (err, data) => {
     if (err) {

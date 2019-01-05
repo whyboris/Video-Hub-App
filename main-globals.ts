@@ -6,7 +6,8 @@ export const globals: Globals = {
   numberOfScreenshots: 10,
   screenShotHeight: 200,
   selectedOutputFolder: '',
-  selectedSourceFolder: ''
+  selectedSourceFolder: '',
+  winRef: null
 };
 
 interface Globals {
@@ -18,4 +19,5 @@ interface Globals {
   screenShotHeight: number;
   selectedOutputFolder: string;
   selectedSourceFolder: string;
+  winRef: any;
 }

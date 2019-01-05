@@ -682,4 +682,9 @@ export function updateFinalArrayWithHD(
  */
 export function sendCurrentProgress(current: number, total: number, stage: number): void {
   globals.angularApp.sender.send('processingProgress', current, total, stage);
+  if (stage !== 0) {
+    globals.winRef.setProgressBar(current / total);
+  } else {
+    globals.winRef.setProgressBar(-1);
+  }
 }
