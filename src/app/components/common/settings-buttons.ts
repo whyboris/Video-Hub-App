@@ -37,6 +37,7 @@ export const SettingsButtonsGroups: string[][] = [
     'fontSizeLarger',
     'hoverScrub',
     'returnToFirstScreenshot',
+    'autoplayClips',
     'randomImage',
     'randomizeGallery',
     'shuffleGalleryNow',
@@ -158,6 +159,13 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-toggle-scrub',
     title: 'BUTTONS.returnToFirstScreenshotHint',
     description: 'BUTTONS.returnToFirstScreenshotDescription',
+  },
+  'autoplayClips': {
+    hidden: true,
+    toggled: false,
+    iconName: 'icon-toggle-scrub',
+    title: 'BUTTONS.autoplayClipsHint',
+    description: 'BUTTONS.autoplayClipsDescription',
   },
   'randomImage': {
     hidden: true,

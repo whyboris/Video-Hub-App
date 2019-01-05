@@ -16,7 +16,7 @@
   <span *ngIf="showMeta" class="rez" @metaAppear>{{ rez }}</span>
 
   <video
-    *ngIf="noError"
+    *ngIf="noError && !autoplay"
     [src]="'file://' + folderPath + '/' + imgId"
     [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + poster)"
     [ngStyle]="{ 'height': imgHeight + 'px' }"
@@ -24,6 +24,19 @@
     onmouseover="this.play().catch((err) => {this.load()})"
     onmouseout="this.pause()"
     loop
+  ></video>
+
+  <video
+    *ngIf="noError && autoplay"
+    [src]="'file://' + folderPath + '/' + imgId"
+    [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + poster)"
+    [ngStyle]="{ 'height': imgHeight + 'px' }"
+    class="screencap"
+    onmouseover="this.muted = false;"
+    onmouseout="this.muted = true;"
+    onloadstart="this.muted = true;"
+    loop
+    autoplay
   ></video>
 
 </div>

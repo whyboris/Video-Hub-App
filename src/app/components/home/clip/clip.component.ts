@@ -28,6 +28,7 @@ export class ClipComponent implements OnInit {
   @Input() showMeta: boolean;
   @Input() time: string;
   @Input() title: string;
+  @Input() autoplay: boolean;
 
   hover: boolean;
   noError = true;
