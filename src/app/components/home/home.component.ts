@@ -76,7 +76,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild('magicSearch') magicSearch: ElementRef;
   @ViewChild('renameFileInput') renameFileInput: ElementRef;
   @ViewChild('searchRef') searchRef: ElementRef;
-  @ViewChild('appWidthMeasurement') appWidthMeasurement: ElementRef;
 
   // used to grab the `scrollable-content` element - background of gallery for right-click
   galleryBackgroundRef: any;
