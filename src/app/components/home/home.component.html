@@ -1,6 +1,7 @@
 <div class="window">
 
   <div
+    #appWidthMeasurement
     class="titleBar"
     [ngClass]="{ 'dark-mode-override': settingsButtons['darkMode'].toggled }"
   >
@@ -765,6 +766,7 @@
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
           [imgHeight]="imgHeight"
+          [galleryWidth]="galleryWidth"
           [imgId]="item.hash"
           [numOfScreenshots]="item.numOfScreenshots"
           [rez]="item.resolution"

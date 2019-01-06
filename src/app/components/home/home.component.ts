@@ -76,6 +76,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild('magicSearch') magicSearch: ElementRef;
   @ViewChild('renameFileInput') renameFileInput: ElementRef;
   @ViewChild('searchRef') searchRef: ElementRef;
+  @ViewChild('appWidthMeasurement') appWidthMeasurement: ElementRef;
 
   // used to grab the `scrollable-content` element - background of gallery for right-click
   galleryBackgroundRef: any;
@@ -203,6 +204,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   numOfScreenshots = 10; // hardcoded for now. Only used for import - TODO - refactor?
 
   isFirstRunEver = false;
+
+  galleryWidth: number;
 
   // Listen for key presses
   @HostListener('document:keydown', ['$event'])
@@ -491,6 +494,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    this.updateGalleryWidthMeasurement(); // so that fullView knows its size
     // this is required, otherwise when user drops the file, it opens as plaintext
     document.ondragover = document.ondrop = (ev) => {
       ev.preventDefault();
@@ -519,6 +523,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.myTimeout = setTimeout(() => {
       // console.log('Virtual scroll refreshed');
       this.virtualScroller.refresh();
+      if (this.appState.currentView === 'fullView') {
+        this.updateGalleryWidthMeasurement();
+      }
     }, delay);
   }
 
@@ -713,6 +720,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   showSidebar(): void {
     if (this.settingsButtons['hideSidebar'].toggled) {
       this.toggleButton('hideSidebar');
+      this.updateGalleryWidthMeasurement();
     }
   }
 
@@ -897,6 +905,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (uniqueKey === 'hideSidebar') {
         setTimeout(() => {
           this.virtualScroller.refresh();
+          this.updateGalleryWidthMeasurement();
         }, 300);
       }
     }
@@ -1005,6 +1014,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } else {
       this.previewWidth = this.imgHeight * (16 / 9);
     }
+  }
+
+  /**
+   * Compute and update the galleryWidth
+   */
+  public updateGalleryWidthMeasurement(): void {
+    this.galleryWidth = document.getElementById('scrollDiv').getBoundingClientRect().width;
   }
 
   /**

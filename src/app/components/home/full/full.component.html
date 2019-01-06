@@ -1,8 +1,7 @@
 <div
-  #metaContainer
   class="meta-container"
   [ngStyle]="{
-    height: rowOffsets.length * imgHeight + 30 + 'px',
+    height: rowOffsets.length * _imgHeight + 30 + 'px',
     width: computedWidth + 'px'
   }"
   >
@@ -10,13 +9,12 @@
 
   <div
     *ngFor="let row of rowOffsets; index as idx"
-    #filmstripHolder
     class="filmstrip-container"
     [ngStyle]="{
-        height: imgHeight + 'px',
+        height: _imgHeight + 'px',
         'background-image': 'url(' + fullFilePath + ')',
-        'background-position-x': '-' + (row * imgHeight * 16 / 9) + 'px',
-        'background-size': 'auto ' + imgHeight + 'px'
+        'background-position-x': '-' + (row * _imgHeight * 16 / 9) + 'px',
+        'background-size': 'auto ' + _imgHeight + 'px'
       }"
   >
   </div>
