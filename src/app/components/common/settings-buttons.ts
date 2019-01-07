@@ -15,6 +15,7 @@ export const SettingsButtonsGroups: string[][] = [
   ],
   [
     'showFreq',
+    'extendedWordCloud',
     'showTags',
     'showRecent'
   ],
@@ -271,6 +272,13 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-cloud',
     title: 'BUTTONS.showFreqHint',
     description: 'BUTTONS.showFreqDescription',
+  },
+  'extendedWordCloud': {
+    hidden: false,
+    toggled: false,
+    iconName: 'icon-cloud',
+    title: 'BUTTONS.extendedWordCloudHint',
+    description: 'BUTTONS.extendedWordCloudDescription',
   },
   'showRecent': {
     hidden: false,

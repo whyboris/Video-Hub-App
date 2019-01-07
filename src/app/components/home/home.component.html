@@ -693,7 +693,7 @@
                 | fileSearchPipe: filters[4].array : filters[4].bool : true  : true  : true
                 | resolutionFilterPipe: settingsButtons['resolutionFilter'].toggled : freqLeftBound : freqRightBound
                 | similarityPipe: showSimilar : findMostSimilar
-                | wordFrequencyPipe: settingsButtons['showFreq'].toggled
+                | wordFrequencyPipe: settingsButtons['showFreq'].toggled : (settingsButtons['extendedWordCloud'].toggled ? 100 : 9)
                 | countPipe
                 | randomizePipe: shuffleTheViewNow
                 | folderViewPipe: settingsButtons['showFoldersOnly'].toggled
