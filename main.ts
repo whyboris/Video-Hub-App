@@ -513,6 +513,9 @@ ipc.on('start-the-import', function (event, options: ImportSettingsObject, video
     if (!fs.existsSync(path.join(outDir, 'vha-' + options.hubName))) {
       console.log('vha-hubName folder did not exist, creating');
       fs.mkdirSync(path.join(outDir, 'vha-' + options.hubName));
+      fs.mkdirSync(path.join(outDir, 'vha-' + options.hubName + '/filmstrips'));
+      fs.mkdirSync(path.join(outDir, 'vha-' + options.hubName + '/thumbnails'));
+      fs.mkdirSync(path.join(outDir, 'vha-' + options.hubName + '/clips'));
     }
 
     globals.cancelCurrentImport = false;

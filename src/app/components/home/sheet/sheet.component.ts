@@ -43,7 +43,7 @@ export class SheetComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.fullFilePath =  'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/' + this.imgId + '.jpg';
+    this.fullFilePath =  'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/filmstrips/' + this.imgId + '.jpg';
     this.percentOffset = (100 / (this.numOfScreenshots - 1));
   }
 
