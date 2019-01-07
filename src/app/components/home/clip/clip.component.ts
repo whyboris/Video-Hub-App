@@ -45,7 +45,7 @@ export class ClipComponent implements OnInit {
     // hack -- populate hardcoded values -- fix later
     const fileHash = this.imgId;
 
-    this.imgId = 'vha-' + this.hubName + '/' + fileHash + '.mp4';
-    this.poster = 'vha-' + this.hubName + '/' + fileHash + '-first.jpg';
+    this.imgId = 'vha-' + this.hubName + '/clips/' + fileHash + '.mp4';
+    this.poster = 'vha-' + this.hubName + '/thumbnails/' + fileHash + '.jpg';
   }
 }
