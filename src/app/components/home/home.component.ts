@@ -143,7 +143,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   freqRightBound: number = 4;
   resolutionNames: ResolutionString[] = ['SD', '720', '1080', '4K'];
 
-  // stoff to do with star filter
+  // stuff to do with star filter
   starRatingFreqArr: number[];
   starLeftBound: number = 0;
   starRightBound: number = 5;
@@ -151,6 +151,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   forceStarFilterUpdate: boolean = true;
 
   // other
+  lengthLeftBound: number = 0;
+  lengthRightBound: number = Infinity;
+
   rightClickShowing: boolean = false;
   itemToRename: any; // strongly type this -- it's an element from finalArray !!!
   renamingWIP: string; // ngModel for renaming file
@@ -224,6 +227,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   isFirstRunEver = false;
 
   galleryWidth: number;
+  longest: number = 0;
 
   // Listen for key presses
   @HostListener('document:keydown', ['$event'])
@@ -480,6 +484,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       console.log(this.finalArray);
       this.buildFileMap();
       this.flickerReduceOverlay = false;
+      this.finalArray.forEach((element: ImageElement): void => {
+        this.longest = Math.max(element.duration, this.longest);
+      });
     });
 
     // Returning settings
@@ -1287,6 +1294,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
   newStarFilterSelected(selection: number[]): void {
     this.starLeftBound = selection[0];
     this.starRightBound = selection[1];
+  }
+
+  /*
+   * Update the min and max resolution for the resolution filter
+   * @param selection
+   */
+  newLengthFilterSelected(selection: number[]): void {
+    this.lengthLeftBound = selection[0];
+    this.lengthRightBound = selection[1];
   }
 
   clearLev(): void {

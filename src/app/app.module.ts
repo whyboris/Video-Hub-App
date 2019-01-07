@@ -45,6 +45,7 @@ import { FileSizePipe } from './components/pipes/file-size.pipe';
 import { FolderArrowsPipe } from './components/pipes/folder-arrows.pipe';
 import { FolderViewPipe } from './components/pipes/folder-view.pipe';
 import { LengthPipe } from './components/pipes/length.pipe';
+import { LengthFilterPipe } from './components/pipes/length-filter.pipe';
 import { MagicSearchPipe } from './components/pipes/magic-search.pipe';
 import { ManualTagSortPipe } from './components/pipes/manual-tags-sort.pipe';
 import { ResolutionFilterPipe } from './components/pipes/resolution-filter.pipe';
@@ -74,6 +75,7 @@ import { WrapperPipe } from './components/pipes/wrapper.pipe';
     FullViewComponent,
     HomeComponent,
     LengthPipe,
+    LengthFilterPipe,
     MagicSearchPipe,
     ManualTagSortPipe,
     PreviewComponent,
