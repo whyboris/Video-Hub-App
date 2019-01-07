@@ -54,6 +54,7 @@ import { StarFilterPipe } from './components/pipes/star-filter.pipe';
 import { TagFilterPipe } from './components/home/tags/tag-filter.pipe';
 import { TagMatchPipe } from './components/home/tags/tag-match.pipe';
 import { WordFrequencyPipe } from './components/pipes/word-frequency.pipe';
+import { WrapperPipe } from './components/pipes/wrapper.pipe';
 
 @NgModule({
   declarations: [
@@ -89,6 +90,7 @@ import { WordFrequencyPipe } from './components/pipes/word-frequency.pipe';
     TopComponent,
     ViewTagsComponent,
     WordFrequencyPipe
+    WrapperPipe
   ],
   imports: [
     AppRoutingModule,

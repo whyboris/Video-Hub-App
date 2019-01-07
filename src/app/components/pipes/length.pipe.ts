@@ -9,8 +9,8 @@ export class LengthPipe implements PipeTransform {
    * Return length of video file formatted as X:XX:XX
    * @param numOfSec
    */
-  transform(numOfSec: number, arg: any): string {
-    if (numOfSec === undefined || numOfSec === 0) {
+  transform(numOfSec: number): string {
+    if (numOfSec === undefined) {
       return '';
     } else {
       const hh = (Math.floor(numOfSec / 3600)).toString();

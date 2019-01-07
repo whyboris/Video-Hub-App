@@ -7,14 +7,14 @@
 
   <div class="backGray" [ngClass]="{ darkMode: darkMode }"></div>
 
-  <div 
-    class="leftSide" 
+  <div
+    class="leftSide"
     [ngStyle]="{ width: currentXleft + 'px' }"
     [ngClass]="{ darkMode: darkMode }"
   >
-    <div 
-      (mousedown)="leftSideClick($event)" 
-      [ngClass]="{ 
+    <div
+      (mousedown)="leftSideClick($event)"
+      [ngClass]="{
         isDragging: draggingLeft,
         draggerDarkMode: darkMode
        }"
@@ -30,7 +30,7 @@
   >
     <div
       (mousedown)="rightSideClick($event)"
-      [ngClass]="{ 
+      [ngClass]="{
         isDragging: draggingRight,
         draggerDarkMode: darkMode
       }"
@@ -38,5 +38,24 @@
     >
     </div>
   </div>
-
+  <span
+    *ngIf="showLabels"
+    class="leftLabel"
+    [ngStyle]="{
+      left: ((currentXleft > 35) ? currentXleft - 35 : 0) + 'px'
+    }"
+    >
+    {{ convertToIndex(currentXleft) | wrapperPipe : labelFormatPipe }}
+  </span>
+  <span
+    *ngIf="showLabels"
+    class="rightLabel"
+    [ngStyle]="{
+      right: 160 - ((currentXright < 125) ? currentXright + 35 : 160) + 'px'
+    }"
+  >
+    {{ convertToIndex(currentXright) | wrapperPipe : labelFormatPipe }}
+  </span>
+  <span *ngIf="showLabels" class="minLabel">{{ minimumValue | wrapperPipe : labelFormatPipe }}</span>
+  <span *ngIf="showLabels" class="maxLabel">{{ maximumValue | wrapperPipe : labelFormatPipe }}</span>
 </div>
