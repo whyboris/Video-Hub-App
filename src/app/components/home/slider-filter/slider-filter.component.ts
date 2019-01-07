@@ -1,31 +1,42 @@
-import { Component, Input, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import { setPreviousOrParentTNode } from '@angular/core/src/render3/state';
 
 @Component({
-  selector: 'app-res-filter',
-  templateUrl: './resfilter.component.html',
-  styleUrls: [ './resfilter.component.scss' ]
+  selector: 'app-slider-filter',
+  templateUrl: './slider-filter.component.html',
+  styleUrls: [ './slider-filter.component.scss' ]
 })
-export class ResFilterComponent implements OnDestroy {
+export class SliderFilterComponent implements OnInit, OnDestroy {
 
   @Input() darkMode: boolean;
+  @Input() minimumValue: number;
+  @Input() maximumValue: number;
+  @Input() steps: number;
 
-  @Output() newResFilterSelected = new EventEmitter<number[]>();
+  @Output() newSliderFilterSelected = new EventEmitter<number[]>();
 
+  step: number;
   hover: boolean = false;
 
   dragging: boolean = false;
   draggingLeft: boolean = false;
   draggingRight: boolean = false;
 
+  width: number = 160;
+
   currentXleft: number = 0;
-  currentXright: number = 160;
+  currentXright: number = this.width;
 
-  leftBound: number = 0;
-  rightBound: number = 4;
-
-  pxLocation: number[] = [0, 45, 80, 115, 160]; // pixel locations for divs that users drag
+  leftBound: number;
+  rightBound: number;
 
   constructor() { }
+
+  ngOnInit() {
+    this.step = (this.maximumValue - this.minimumValue) / this.steps;
+    this.leftBound = this.minimumValue;
+    this.rightBound = this.maximumValue;
+  }
 
   /**
    * Mouse left the res filter div
@@ -61,17 +72,7 @@ export class ResFilterComponent implements OnDestroy {
    * @param current
    */
   updateNumber(current: number): number {
-    if (current < 30) {
-      return this.pxLocation[0];
-    } else if (current < 70) {
-      return this.pxLocation[1];
-    } else if (current < 105) {
-      return this.pxLocation[2];
-    } else if (current < 142) {
-      return this.pxLocation[3];
-    } else {
-      return this.pxLocation[4];
-    }
+    return (this.width / this.steps) * Math.round((current / this.width) * this.steps);
   }
 
   /**
@@ -79,17 +80,7 @@ export class ResFilterComponent implements OnDestroy {
    * @param value
    */
   convertToIndex(value: number): number {
-    if (value === this.pxLocation[0]) {
-      return 0;
-    } else if (value === this.pxLocation[1]) {
-      return 1;
-    } else if (value === this.pxLocation[2]) {
-      return 2;
-    } else if (value === this.pxLocation[3]) {
-      return 3;
-    } else {
-      return 4;
-    }
+    return (value / this.width) * (this.maximumValue - this. minimumValue) + this.minimumValue;
   }
 
   /**
@@ -119,12 +110,12 @@ export class ResFilterComponent implements OnDestroy {
     this.draggingLeft = false;
     this.leftBound = this.convertToIndex(this.currentXleft);
     this.rightBound = this.convertToIndex(this.currentXright);
-    this.newResFilterSelected.emit([this.leftBound, this.rightBound]);
+    this.newSliderFilterSelected.emit([this.leftBound, this.rightBound]);
   }
 
   ngOnDestroy() {
     console.log('destroyed!');
-    this.newResFilterSelected.emit([0, 4]);
+    this.newSliderFilterSelected.emit([this.minimumValue, this.maximumValue]);
   }
 
 }
