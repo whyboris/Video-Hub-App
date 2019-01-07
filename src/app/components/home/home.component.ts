@@ -121,7 +121,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   progressNum1 = 0;
   progressNum2 = 100;
 
-  screenshotSizeForImport = 200; // default to 200px
+  screenshotSizeForImport = 288; // default to 288px
 
   myTimeout = null;
 
@@ -930,7 +930,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       selectedOutputFolder: ''
     };
     this.numOfScreenshots = 10; // default
-    this.screenshotSizeForImport = 200; // default
+    this.screenshotSizeForImport = 288; // default
     this.toggleSettings();
     this.showWizard = true;
   }

@@ -4,7 +4,7 @@ export const globals: Globals = {
   currentlyOpenVhaFile: '',       // OFFICAL DECREE IN NODE WHICH FILE IS CURRENTLY OPEN !!!
   hubName: 'untitled',            // in case user doesn't name their hub any name
   numberOfScreenshots: 10,
-  screenShotHeight: 200,
+  screenShotHeight: 288,
   selectedOutputFolder: '',
   selectedSourceFolder: '',
   winRef: null
