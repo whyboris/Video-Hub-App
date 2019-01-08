@@ -44,10 +44,15 @@ export class FilmstripComponent implements OnInit {
     if (this.hoverScrub) {
       const imgWidth = this.imgHeight * (16 / 9); // hardcoded aspect ratio
       const containerWidth = this.filmstripHolder.nativeElement.getBoundingClientRect().width;
-      const howManyScreensOutsideCutoff = (this.numOfScreenshots + 1) - Math.floor(containerWidth / imgWidth);
+      const visibleScreens = Math.floor(containerWidth / imgWidth);
+      const howManyScreensOutsideCutoff = this.numOfScreenshots - visibleScreens;
 
       const cursorX = $event.layerX; // cursor's X position inside the filmstrip element
-      this.filmXoffset = imgWidth * Math.floor(cursorX / (containerWidth / howManyScreensOutsideCutoff));
+      this.filmXoffset = imgWidth * Math.floor(cursorX / (containerWidth / (howManyScreensOutsideCutoff + 1)));
+      if (this.filmXoffset > imgWidth * (howManyScreensOutsideCutoff - 1)) {
+        const overlap = containerWidth - imgWidth * visibleScreens;
+        this.filmXoffset = imgWidth * (howManyScreensOutsideCutoff) - overlap;
+      }
     }
   }
 }
