@@ -37,7 +37,7 @@ export class FilmstripComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.fullFilePath =  'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/filmstrips/' + this.imgId + '.jpg';
+    this.fullFilePath =  encodeURI('file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/filmstrips/' + this.imgId + '.jpg');
   }
 
   updateFilmXoffset($event) {
