@@ -126,7 +126,9 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
   const finalArray: ImageElement[] = [];
   let elementIndex = 0;
   // ignore folders beginning with { '.', '_', 'vha-' }
-  const ignoreRegex = /^(\.|_|vha-).*/g;
+  const folderIgnoreRegex = /^(\.|_|vha-).*/g;
+  // ignore files beginning with { '.', '_' }
+  const fileIgnoreRegex = /^(\.|_).*/g;
 
   // Recursively walk through a directory compiling ImageElements
   const walkSync = (dir, filelist) => {
@@ -136,11 +138,11 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
       if (!fileSystemReserved(file.name)) {
         try {
           // if the item is a _DIRECTORY_
-          if (file.isDirectory() && !file.name.match(ignoreRegex)) {
+          if (file.isDirectory() && !file.name.match(folderIgnoreRegex)) {
             filelist = walkSync(path.join(dir, file.name), filelist);
           } else {
             const extension = file.name.split('.').pop();
-            if (acceptableFiles.includes(extension.toLowerCase())) {
+            if (acceptableFiles.includes(extension.toLowerCase()) && !file.name.match(fileIgnoreRegex)) {
               // before adding, remove the redundant prefix: sourceFolderPath
               const partialPath = dir.replace(sourceFolderPath, '');
               // fil finalArray with 3 correct and 5 dummy pieces of data
