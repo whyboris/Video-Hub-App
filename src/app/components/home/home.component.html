@@ -442,7 +442,6 @@
   <div
     class="window-content"
     [ngStyle]="{
-      transition: '300ms',
       transform: appState.menuHidden ? 'translate(0, -32px)' : 'translate(0, 0)'
     }"
   >
@@ -758,6 +757,28 @@
         ></app-filmstrip-item>
       </ng-container>
 
+      <ng-container *ngIf="appState.currentView === 'fullView'">
+        <app-full-item
+          *ngFor="let item of scroll.viewPortItems"
+          (click)="handleClick($event, item)"
+          (contextmenu)="rightMouseClicked($event, item)"
+          [elHeight]="imgHeight + textPaddingHeight"
+          [fileSize]="item.fileSize"
+          [folderPath]="appState.selectedOutputFolder"
+          [hubName]="appState.hubName"
+          [imgHeight]="imgHeight"
+          [galleryWidth]="galleryWidth"
+          [imgId]="item.hash"
+          [numOfScreenshots]="item.numOfScreenshots"
+          [rez]="item.resolution"
+          [time]="item.duration"
+          [title]="item.cleanName"
+          [darkMode]="settingsButtons['darkMode'].toggled"
+          [largerFont]="settingsButtons['fontSizeLarger'].toggled"
+          [showMeta]="settingsButtons['showMoreInfo'].toggled"
+        ></app-full-item>
+      </ng-container>
+
       <ng-container *ngIf="appState.currentView === 'files'">
         <app-file-item
           *ngFor="let item of scroll.viewPortItems"
@@ -813,7 +834,7 @@
   @modalAnimation
 >
   <div class="progress-container">
-    <div class="current-progress" [ngStyle]="{width: progressPercent * 100 + '%'}"></div>
+    <div class="current-progress" [ngStyle]="{ width: progressPercent * 100 + '%' }"></div>
   </div>
   <div class="progress-numbers">
     {{ progressNum1 }} / {{ progressNum2 }}

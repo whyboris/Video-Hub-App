@@ -22,10 +22,11 @@ import { ClipComponent } from './components/home/clip/clip.component';
 import { DonutComponent } from './components/donut/donut.component';
 import { FileComponent } from './components/home/file/file.component';
 import { FilmstripComponent } from './components/home/filmstrip/filmstrip.component';
+import { FullViewComponent } from './components/home/full/full.component';
 import { PreviewComponent } from './components/home/thumbnail/preview.component';
 import { SheetComponent } from './components/home/sheet/sheet.component';
-import { SliderFilterComponent } from './components/home/slider-filter/slider-filter.component';
 import { SimilarityService } from './components/pipes/similarity.service';
+import { SliderFilterComponent } from './components/home/slider-filter/slider-filter.component';
 import { StatisticsComponent } from './components/home/statistics/statistics.component';
 import { TagsComponent } from './components/home/tags/tags.component';
 import { TopComponent } from './components/home/top/top.component';
@@ -60,15 +61,16 @@ import { AppRoutingModule } from './app-routing.module';
     FilmstripComponent,
     FolderArrowsPipe,
     FolderViewPipe,
+    FullViewComponent,
     HomeComponent,
     LengthPipe,
     MagicSearchPipe,
     PreviewComponent,
-    SheetComponent,
-    SliderFilterComponent,
     RandomizePipe,
     ResolutionFilterPipe,
+    SheetComponent,
     SimilarityPipe,
+    SliderFilterComponent,
     StatisticsComponent,
     TagFilterPipe,
     TagMatchPipe,

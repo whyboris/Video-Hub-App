@@ -204,6 +204,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   isFirstRunEver = false;
 
+  galleryWidth: number;
+
   // Listen for key presses
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -491,6 +493,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    this.updateGalleryWidthMeasurement(); // so that fullView knows its size
     // this is required, otherwise when user drops the file, it opens as plaintext
     document.ondragover = document.ondrop = (ev) => {
       ev.preventDefault();
@@ -510,6 +513,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   /**
    * Low-tech debounced scroll handler
+   * @param msDelay - number of milliseconds to debounce; if absent sets to 250ms
    */
   public debounceUpdateMax(msDelay?: number): void {
     // console.log('debouncing');
@@ -518,6 +522,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.myTimeout = setTimeout(() => {
       // console.log('Virtual scroll refreshed');
       this.virtualScroller.refresh();
+      if (this.appState.currentView === 'fullView') {
+        this.updateGalleryWidthMeasurement();
+      }
     }, delay);
   }
 
@@ -712,6 +719,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   showSidebar(): void {
     if (this.settingsButtons['hideSidebar'].toggled) {
       this.toggleButton('hideSidebar');
+      this.updateGalleryWidthMeasurement();
     }
   }
 
@@ -820,6 +828,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.settingsButtons['showFiles'].toggled = false;
     this.settingsButtons['showFilmstrip'].toggled = false;
     this.settingsButtons['showFoldersOnly'].toggled = false;
+    this.settingsButtons['showFullView'].toggled = false;
     this.settingsButtons['showThumbnails'].toggled = false;
   }
 
@@ -858,10 +867,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.appState.currentView = 'clips';
       this.computeTextBufferAmount();
       this.scrollToTop();
+    } else if (uniqueKey === 'showFullView') {
+      this.toggleAllViewsButtonsOff();
+      this.settingsButtons['showFullView'].toggled = true;
+      this.appState.currentView = 'fullView';
+      this.computeTextBufferAmount();
+      this.scrollToTop();
     } else if (uniqueKey === 'makeSmaller') {
       this.decreaseSize();
+      this.updateGalleryWidthMeasurement();
     } else if (uniqueKey === 'makeLarger') {
       this.increaseSize();
+      this.updateGalleryWidthMeasurement();
     } else if (uniqueKey === 'startWizard') {
       this.startWizard();
     } else if (uniqueKey === 'clearHistory') {
@@ -889,6 +906,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (uniqueKey === 'hideSidebar') {
         setTimeout(() => {
           this.virtualScroller.refresh();
+          this.updateGalleryWidthMeasurement();
         }, 300);
       }
     }
@@ -992,7 +1010,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Computes the preview width for thumbnails view
    */
   public computePreviewWidth(): void {
-    this.previewWidth = this.imgHeight * (16 / 9);
+    if (this.appState.currentView === 'clips' || this.appState.currentView === 'thumbs') {
+      this.previewWidth = this.imgHeight * (16 / 9);
+    }
+  }
+
+  /**
+   * Compute and update the galleryWidth
+   */
+  public updateGalleryWidthMeasurement(): void {
+    this.galleryWidth = document.getElementById('scrollDiv').getBoundingClientRect().width;
   }
 
   /**
