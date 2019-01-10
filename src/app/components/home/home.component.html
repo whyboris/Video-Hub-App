@@ -799,6 +799,31 @@
         ></app-clip-item>
       </ng-container>
 
+      <ng-container *ngIf="appState.currentView === 'details'">
+        <app-gallery-item
+          *ngFor="let item of scroll.viewPortItems"
+          (click)="handleClick($event, item)"
+          (contextmenu)="rightMouseClicked($event, item)"
+          [elHeight]="imgHeight + textPaddingHeight"
+          [elWidth]="previewWidth"
+          [fileSize]="item.fileSize"
+          [folderPath]="appState.selectedOutputFolder"
+          [hubName]="appState.hubName"
+          [imgHeight]="imgHeight"
+          [imgId]="item.hash"
+          [numOfScreenshots]="item.numOfScreenshots"
+          [rez]="item.resolution"
+          [time]="item.duration"
+          [title]="item.cleanName"
+          [darkMode]="settingsButtons['darkMode'].toggled"
+          [hoverScrub]="settingsButtons['hoverScrub'].toggled"
+          [largerFont]="settingsButtons['fontSizeLarger'].toggled"
+          [randomImage]="settingsButtons['randomImage'].toggled"
+          [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
+          [showMeta]="settingsButtons['showMoreInfo'].toggled"
+        ></app-gallery-item>
+      </ng-container>
+
     </virtual-scroller>
 
   </div> <!-- end of window-content -->

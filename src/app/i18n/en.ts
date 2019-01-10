@@ -51,6 +51,8 @@ export const English = {
     returnToFirstScreenshotHint: 'Toggle return to first thumbnail',
     showClipsDescription: 'Switches to the clips view',
     showClipsHint: 'Show clips',
+    showDetailsDescription: 'Switches to the details view',
+    showDetailsHint: 'Show details',
     showFilesDescription: 'Switches to the files view',
     showFilesHint: 'Show files',
     showFilmstripDescription: 'Switches to the filmstrip view',
