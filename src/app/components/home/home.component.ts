@@ -875,8 +875,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.scrollToTop();
     } else if (uniqueKey === 'makeSmaller') {
       this.decreaseSize();
+      this.updateGalleryWidthMeasurement();
     } else if (uniqueKey === 'makeLarger') {
       this.increaseSize();
+      this.updateGalleryWidthMeasurement();
     } else if (uniqueKey === 'startWizard') {
       this.startWizard();
     } else if (uniqueKey === 'clearHistory') {

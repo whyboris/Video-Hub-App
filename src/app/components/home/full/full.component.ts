@@ -49,13 +49,13 @@ export class FullViewComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.fullFilePath =  'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/' + this.imgId + '.jpg';
+    this.fullFilePath = encodeURI('file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/filmstrips/' + this.imgId + '.jpg');
     this.render();
   }
 
   render(): void {
     const imgWidth = this._imgHeight * 16 / 9;
-    const imagesPerRow = Math.floor(this._metaWidth / imgWidth);
+    const imagesPerRow = Math.floor(this._metaWidth / imgWidth) || 1; // never let this be zero
     this.computedWidth = imgWidth * imagesPerRow;
     const numOfRows = Math.ceil(this.numOfScreenshots / imagesPerRow);
     this.rowOffsets = [];
