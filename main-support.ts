@@ -559,7 +559,7 @@ function extractMetadataForThisONEFile(
       const origHeight = metadata.streams[0].height;
       const sizeLabel = labelVideo(origWidth, origHeight);
       const fileSize: string = metadata.format.size; // ffprobe returns a string of a number!
-      imageElement.hash = hashFile(imageElement.fileName, fileSize);
+      imageElement.hash = hashFile(filePath);
       imageElement.duration = duration;
       imageElement.fileSize = parseInt(fileSize, 10);
       imageElement.numOfScreenshots = computeNumberOfScreenshots(numberOfScreenshots, duration);
@@ -594,10 +594,30 @@ function computeNumberOfScreenshots(numberOfScreenshots: number, duration: numbe
  * @param fileName  -- file name to hash
  * @param fileSize  -- file size to hash
  */
-function hashFile(fileName: string, fileSize: string): string {
+function hashFile(file: string): string {
+  const sampleSize = 16 * 1024;
+  const sampleThreshold = 128 * 1024;
+  const stats = fs.statSync(file);
+  const fileSize = stats.size;
+
+  let data: Buffer;
+  if (fileSize < sampleThreshold) {
+    data = fs.readFileSync(file); // too small, just read the whole file
+  } else {
+    data = Buffer.alloc(sampleSize * 3);
+    const fd = fs.openSync(file, 'r');
+    fs.readSync(fd, data, 0, sampleSize, 0);                                  // read beginning of file
+    fs.readSync(fd, data, sampleSize, sampleSize, fileSize / 2);              // read middle of file
+    fs.readSync(fd, data, sampleSize * 2, sampleSize, fileSize - sampleSize); // read end of file
+  }
+
+
+  // append the file size to the data
+  const buf = Buffer.concat([data, Buffer.from(fileSize.toString())])
   // make the magic happen!
-  const hash = hasher('md5').update(fileName + fileSize).digest('hex');
+  const hash = hasher('md5').update(buf.toString('hex')).digest('hex');
   return hash;
+
 }
 
 
