@@ -600,7 +600,7 @@
           <ng-container *ngFor="let resolution of resolutionFreqArr; index as i">
             <div
               [ngClass]="{ resDisabled: (i < freqLeftBound) || (i >= freqRightBound) }"
-              [ngStyle]="{ height: resolution + '%', left: i * 35 + 'px' }"
+              [ngStyle]="{ height: resolution + '%' }"
               class="frequency-bar"
             >
             </div>
@@ -613,10 +613,13 @@
           </ng-container>
         </div>
 
-        <app-res-filter
+        <app-slider-filter
           [darkMode]="settingsButtons['darkMode'].toggled"
-          (newResFilterSelected)="newResFilterSelected($event)"
-        ></app-res-filter>
+          [maximumValue]="4"
+          [minimumValue]="0"
+          [steps]="4"
+          (newSliderFilterSelected)="newResFilterSelected($event)"
+        ></app-slider-filter>
 
       </div>
 
@@ -693,7 +696,7 @@
                 | fileSearchPipe: filters[4].array : filters[4].bool : true  : true  : true
                 | resolutionFilterPipe: settingsButtons['resolutionFilter'].toggled : freqLeftBound : freqRightBound
                 | similarityPipe: showSimilar : findMostSimilar
-                | wordFrequencyPipe: settingsButtons['showFreq'].toggled
+                | wordFrequencyPipe: settingsButtons['showFreq'].toggled : (settingsButtons['extendedWordCloud'].toggled ? 100 : 9)
                 | countPipe
                 | randomizePipe: shuffleTheViewNow
                 | folderViewPipe: settingsButtons['showFoldersOnly'].toggled

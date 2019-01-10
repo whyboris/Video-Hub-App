@@ -126,7 +126,9 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
   const finalArray: ImageElement[] = [];
   let elementIndex = 0;
   // ignore folders beginning with { '.', '_', 'vha-' }
-  const ignoreRegex = /^(\.|_|vha-).*/g;
+  const folderIgnoreRegex = /^(\.|_|vha-).*/g;
+  // ignore files beginning with { '.', '_' }
+  const fileIgnoreRegex = /^(\.|_).*/g;
 
   // Recursively walk through a directory compiling ImageElements
   const walkSync = (dir, filelist) => {
@@ -136,11 +138,11 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
       if (!fileSystemReserved(file.name)) {
         try {
           // if the item is a _DIRECTORY_
-          if (file.isDirectory() && !file.name.match(ignoreRegex)) {
+          if (file.isDirectory() && !file.name.match(folderIgnoreRegex)) {
             filelist = walkSync(path.join(dir, file.name), filelist);
           } else {
             const extension = file.name.split('.').pop();
-            if (acceptableFiles.includes(extension.toLowerCase())) {
+            if (acceptableFiles.includes(extension.toLowerCase()) && !file.name.match(fileIgnoreRegex)) {
               // before adding, remove the redundant prefix: sourceFolderPath
               const partialPath = dir.replace(sourceFolderPath, '');
               // fil finalArray with 3 correct and 5 dummy pieces of data
@@ -203,7 +205,7 @@ export function generateScreenshotStrip(
   done: any
 ) {
 
-  if (fs.existsSync(saveLocation + '/' + fileHash + '.jpg')) {
+  if (fs.existsSync(saveLocation + '/filmstrips/' + fileHash + '.jpg')) {
     // console.log("thumbnails for " + fileHash + " already exist");
     takeTenClips(pathToVideo,
                  fileHash,
@@ -241,7 +243,7 @@ export function generateScreenshotStrip(
   }
   args.push('-frames', 1,
     '-filter_complex', allFramesFiltered + outputFrames + 'hstack=inputs=' + totalCount,
-    saveLocation + '/' + fileHash + '.jpg'
+    saveLocation + '/filmstrips/' + fileHash + '.jpg'
   );
 
   const ffmpeg_process = spawn(ffmpegPath, args);
@@ -280,7 +282,7 @@ export function takeTenClips(
   done: any
 ) {
 
-  if (fs.existsSync(saveLocation + '/' + fileHash + '.mp4')) {
+  if (fs.existsSync(saveLocation + '/clips/' + fileHash + '.mp4')) {
     // console.log("thumbnails for " + fileHash + " already exist");
     extractFirstFrame(saveLocation, fileHash, done);
     return;
@@ -301,7 +303,7 @@ export function takeTenClips(
     current++;
   }
   concat += 'concat=n=' + (totalCount - 1) + ':v=1:a=1[v][a];[v]scale=-2:' + screenshotHeight + '[v2]';
-  args.push('-filter_complex', concat, '-map', '[v2]', '-map', '[a]', saveLocation + '/' + fileHash + '.mp4');
+  args.push('-filter_complex', concat, '-map', '[v2]', '-map', '[a]', saveLocation + '/clips/' + fileHash + '.mp4');
   // phfff glad that's over
 
   // now make it all worth it!
@@ -324,17 +326,17 @@ export function takeTenClips(
  * @param done
  */
 export function extractFirstFrame(saveLocation: string, fileHash: string, done: any) {
-  if (fs.existsSync(saveLocation + '/' + fileHash + '-first.jpg')) {
+  if (fs.existsSync(saveLocation + '/thumbnails/' + fileHash + '.jpg')) {
     done();
     return;
   }
 
   const args = [
   '-ss', 0,
-  '-i', saveLocation + '/' + fileHash + '.mp4',
+  '-i', saveLocation + '/clips/' + fileHash + '.mp4',
   '-frames', 1,
   '-f', 'image2',
-  saveLocation + '/' + fileHash + '-first.jpg',
+  saveLocation + '/thumbnails/' + fileHash + '.jpg',
   ];
   // console.log('extracting clip frame 1');
   const ffmpeg_process = spawn(ffmpegPath, args);
@@ -352,9 +354,9 @@ export function extractFirstFrame(saveLocation: string, fileHash: string, done: 
 export function deleteThumbnails(imageLocation: string, hash: string) {
   // console.log('deleting ' + hash);
   const filePath = path.join(imageLocation, hash);
-  const files = [ filePath + '.jpg',
-                  filePath + '.mp4',
-                  filePath + '-first.jpg' ];
+  const files = [ 'filmstrips/' + filePath + '.jpg',
+                  'clips/' + filePath + '.mp4',
+                  'thumbnails/' + filePath + '.jpg' ];
 
   files.forEach((file) => {
     if (fs.existsSync(file)) {
@@ -371,9 +373,9 @@ export function deleteThumbnails(imageLocation: string, hash: string) {
 
 export function hasAllThumbs(fileHash: string, screenshotFolder: string): boolean {
   // Check in reverse order for efficiency
-  return fs.existsSync(screenshotFolder + '/' + fileHash + '-first.jpg')
-         && fs.existsSync(screenshotFolder + '/' + fileHash + '.mp4')
-         && fs.existsSync(screenshotFolder + '/' + fileHash + '.jpg');
+  return fs.existsSync(screenshotFolder + '/thumbnails/' + fileHash + '.jpg')
+         && fs.existsSync(screenshotFolder + '/clips/' + fileHash + '.mp4')
+         && fs.existsSync(screenshotFolder + '/filmstrips/' + fileHash + '.jpg');
 }
 
 /**
@@ -557,7 +559,7 @@ function extractMetadataForThisONEFile(
       const origHeight = metadata.streams[0].height;
       const sizeLabel = labelVideo(origWidth, origHeight);
       const fileSize: string = metadata.format.size; // ffprobe returns a string of a number!
-      imageElement.hash = hashFile(imageElement.fileName, fileSize);
+      imageElement.hash = hashFile(filePath);
       imageElement.duration = duration;
       imageElement.fileSize = parseInt(fileSize, 10);
       imageElement.numOfScreenshots = computeNumberOfScreenshots(numberOfScreenshots, duration);
@@ -592,10 +594,30 @@ function computeNumberOfScreenshots(numberOfScreenshots: number, duration: numbe
  * @param fileName  -- file name to hash
  * @param fileSize  -- file size to hash
  */
-function hashFile(fileName: string, fileSize: string): string {
+function hashFile(file: string): string {
+  const sampleSize = 16 * 1024;
+  const sampleThreshold = 128 * 1024;
+  const stats = fs.statSync(file);
+  const fileSize = stats.size;
+
+  let data: Buffer;
+  if (fileSize < sampleThreshold) {
+    data = fs.readFileSync(file); // too small, just read the whole file
+  } else {
+    data = Buffer.alloc(sampleSize * 3);
+    const fd = fs.openSync(file, 'r');
+    fs.readSync(fd, data, 0, sampleSize, 0);                                  // read beginning of file
+    fs.readSync(fd, data, sampleSize, sampleSize, fileSize / 2);              // read middle of file
+    fs.readSync(fd, data, sampleSize * 2, sampleSize, fileSize - sampleSize); // read end of file
+  }
+
+
+  // append the file size to the data
+  const buf = Buffer.concat([data, Buffer.from(fileSize.toString())])
   // make the magic happen!
-  const hash = hasher('md5').update(fileName + fileSize).digest('hex');
+  const hash = hasher('md5').update(buf.toString('hex')).digest('hex');
   return hash;
+
 }
 
 

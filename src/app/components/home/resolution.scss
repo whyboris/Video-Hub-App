@@ -7,15 +7,15 @@ $frequency-bar: #729aff;
   display: inline-block;
   font-size: 10px;
   text-align: center;
-  transform: translate(-4px, 25px);
+  transform: translate(-18px, 25px);
   transition: opacity 400ms;
-  width: 30px;
+  width: 16px;
 }
 
 .frequencyGraphContainer {
   height: 20px;
   position: relative;
-  transform: translate(15px, 15px);
+  transform: translate(13px, 15px);
 }
 
 .frequency-bar {
@@ -23,7 +23,7 @@ $frequency-bar: #729aff;
   bottom: 0;
   display: inline-block;
   font-size: 10px;
-  position: absolute;
+  position: relative;
   text-align: center;
   transition: opacity 400ms;
   width: 20px;

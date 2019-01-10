@@ -21,4 +21,4 @@ while read -r en && read -r tr <&3; do
 done < to_translate.txt 3< translated.txt
 export FIND="English"
 export REPLACE=$NEW_LANG_NAME
-node -e "fs=require('fs');fs.readFile(process.env.FNAME,'utf8',(err,data)=>{if(err!=null)throw err;fs.writeFile(process.env.FNAME,data.replace('\\''+process.env.FIND+'\\'','\\''+process.env.REPLACE.split('\\'').join('\\\\\\'')+'\\''),'utf8',e=>{if(e!=null)throw e;});});"
+node -e "fs=require('fs');fs.readFile(process.env.FNAME,'utf8',(err,data)=>{if(err!=null)throw err;fs.writeFile(process.env.FNAME,data.replace(process.env.FIND,process.env.REPLACE.split('\\'').join('\\\\\\'')),'utf8',e=>{if(e!=null)throw e;});});"

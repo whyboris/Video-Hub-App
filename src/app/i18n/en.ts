@@ -9,6 +9,8 @@ export const English = {
     darkModeHint: 'Dark mode',
     excludeDescription: 'Toggles the search filter to exclude any files that contain the filter word',
     excludeHint: 'Exclude filter',
+    extendedWordCloudDescription: 'Toggles showing more word cloud tags',
+    extendedWordCloudHint: 'Enabled Extended Word Cloud',
     fileDescription: 'Toggles the search for videos containing each of the search words',
     fileHint: 'Video search',
     fileUnionDescription: 'Toggles the search for videos containing any of the search words',
