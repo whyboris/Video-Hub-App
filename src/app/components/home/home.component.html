@@ -442,7 +442,6 @@
   <div
     class="window-content"
     [ngStyle]="{
-      transition: '300ms',
       transform: appState.menuHidden ? 'translate(0, -32px)' : 'translate(0, 0)'
     }"
   >
@@ -835,7 +834,7 @@
   @modalAnimation
 >
   <div class="progress-container">
-    <div class="current-progress" [ngStyle]="{width: progressPercent * 100 + '%'}"></div>
+    <div class="current-progress" [ngStyle]="{ width: progressPercent * 100 + '%' }"></div>
   </div>
   <div class="progress-numbers">
     {{ progressNum1 }} / {{ progressNum2 }}

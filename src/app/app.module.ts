@@ -69,7 +69,6 @@ import { AppRoutingModule } from './app-routing.module';
     RandomizePipe,
     ResolutionFilterPipe,
     SheetComponent,
-    SheetComponent,
     SimilarityPipe,
     SliderFilterComponent,
     StatisticsComponent,
