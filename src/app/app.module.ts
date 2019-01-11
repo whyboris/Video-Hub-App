@@ -19,6 +19,7 @@ import { WordFrequencyService } from './components/pipes/word-frequency.service'
 
 import { AppComponent } from './app.component';
 import { ClipComponent } from './components/home/clip/clip.component';
+import { DetailsComponent } from './components/home/details/details.component';
 import { DonutComponent } from './components/donut/donut.component';
 import { FileComponent } from './components/home/file/file.component';
 import { FilmstripComponent } from './components/home/filmstrip/filmstrip.component';
@@ -54,6 +55,7 @@ import { AppRoutingModule } from './app-routing.module';
     AppComponent,
     ClipComponent,
     CountPipe,
+    DetailsComponent,
     DonutComponent,
     FileComponent,
     FileSearchPipe,

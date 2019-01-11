@@ -1,0 +1,46 @@
+<div
+  [ngStyle]="{ height: elHeight + 'px' }"
+  class="filmstrip-container"
+  @galleryItemAppear
+>
+
+  <div
+    #filmstripHolder
+    class="video-box"
+    (mousemove)="mouseIsMoving($event)"
+    (mouseenter)="mouseEnter($event)"
+    (mouseleave)="mouseLeave($event)"
+    (click)="mouseClick($event)"
+    [ngStyle]="{
+        height: imgHeight + 'px',
+        width: elWidth + 'px',
+        'max-width': elWidth + 'px',
+        'background-image': 'url(' + (hover ? fullFilePath : firstFilePath) + ')',
+        'background-position-x': percentOffset + '%'
+      }"
+  >
+  </div>
+
+  <div
+    class="meta"
+    [ngStyle]="{ height: imgHeight + 'px' }"
+  >
+    <span
+      [ngClass]="{ 'larger-font': largerFont }"
+      [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
+      class="title"
+    >
+      {{ title }}
+    </span>
+    <span class="fileSize">
+      {{ time | lengthPipe }}
+    </span>
+    <span class="fileSize">
+      {{ fileSize | fileSizePipe : true }}
+    </span>
+    <span class="fileSize">
+      {{ rez }}
+    </span>
+  </div>
+
+</div>

@@ -2,7 +2,7 @@
 // https://github.com/electron/electron/blob/master/docs/api/locales.md
 export type SupportedLanguage = 'en' | 'ru' | 'fr';
 
-export type SupportedView = 'thumbs' | 'filmstrip' | 'files' | 'clips' | 'fullView';
+export type SupportedView = 'thumbs' | 'filmstrip' | 'files' | 'clips' | 'fullView' | 'details';
 
 export let AppState: AppStateInterface = {
   currentVhaFile: '',     // full path to the .vha file

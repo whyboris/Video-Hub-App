@@ -146,7 +146,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   showSimilar: boolean = false; // to toggle the similarity pipe
 
-  fileMap: any; // should be a map from number (imageId) to number (element in finalArray);
+  fileMap: any; // should be a map from hash (imageId) to number (element in finalArray);
 
   // for text padding below filmstrip or thumbnail element
   textPaddingHeight: number;
@@ -636,6 +636,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Open the video with user's default media player
+   * @param imageId unique ID of the video
+   */
   public openVideo(imageId): void {
     const number = this.fileMap.get(imageId);
     this.currentPlayingFolder = this.finalArray[number].partialPath;
@@ -647,7 +651,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public openOnlineHelp(): void {
-    this.electronService.ipcRenderer.send('pleaseOpenUrl', 'http://www.videohubapp.com');
+    this.electronService.ipcRenderer.send('pleaseOpenUrl', 'https://www.videohubapp.com');
   }
 
   public increaseZoomLevel(): void {
@@ -825,6 +829,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   toggleAllViewsButtonsOff(): void {
     this.settingsButtons['showClips'].toggled = false;
+    this.settingsButtons['showDetails'].toggled = false;
     this.settingsButtons['showFiles'].toggled = false;
     this.settingsButtons['showFilmstrip'].toggled = false;
     this.settingsButtons['showFoldersOnly'].toggled = false;
@@ -871,6 +876,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.toggleAllViewsButtonsOff();
       this.settingsButtons['showFullView'].toggled = true;
       this.appState.currentView = 'fullView';
+      this.computeTextBufferAmount();
+      this.scrollToTop();
+    } else if (uniqueKey === 'showDetails') {
+      this.toggleAllViewsButtonsOff();
+      this.settingsButtons['showDetails'].toggled = true;
+      this.appState.currentView = 'details';
       this.computeTextBufferAmount();
       this.scrollToTop();
     } else if (uniqueKey === 'makeSmaller') {
