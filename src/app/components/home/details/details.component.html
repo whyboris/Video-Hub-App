@@ -1,8 +1,5 @@
 <div
-  [ngStyle]="{
-      height: elHeight + 'px',
-      width: elWidth + 'px'
-    }"
+  [ngStyle]="{ height: elHeight + 'px' }"
   class="filmstrip-container"
   @galleryItemAppear
 >
@@ -11,26 +8,39 @@
     #filmstripHolder
     class="video-box"
     (mousemove)="mouseIsMoving($event)"
+    (mouseenter)="mouseEnter($event)"
+    (mouseleave)="mouseLeave($event)"
+    (click)="mouseClick($event)"
     [ngStyle]="{
         height: imgHeight + 'px',
+        width: elWidth + 'px',
+        'max-width': elWidth + 'px',
         'background-image': 'url(' + (hover ? fullFilePath : firstFilePath) + ')',
         'background-position-x': percentOffset + '%'
       }"
   >
-    <span *ngIf="showMeta" class="time">{{ time | lengthPipe }}</span>
-    <span *ngIf="showMeta" class="rez">{{ rez }}</span>
   </div>
 
-  <span
-    *ngIf="showMeta"
-    [ngClass]="{ 'larger-font': largerFont }"
-    [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
-    class="title"
+  <div
+    class="meta"
+    [ngStyle]="{ height: imgHeight + 'px' }"
   >
-    {{ title }}
-    <div class="fileSize" *ngIf="showMeta">
-      {{ showMeta ? ( fileSize | fileSizePipe ) : '' }}
-    </div>
-  </span>
+    <span
+      [ngClass]="{ 'larger-font': largerFont }"
+      [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
+      class="title"
+    >
+      {{ title }}
+    </span>
+    <span class="fileSize">
+      {{ time | lengthPipe }}
+    </span>
+    <span class="fileSize">
+      {{ fileSize | fileSizePipe : true }}
+    </span>
+    <span class="fileSize">
+      {{ rez }}
+    </span>
+  </div>
 
 </div>

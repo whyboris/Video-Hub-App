@@ -146,7 +146,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   showSimilar: boolean = false; // to toggle the similarity pipe
 
-  fileMap: any; // should be a map from number (imageId) to number (element in finalArray);
+  fileMap: any; // should be a map from hash (imageId) to number (element in finalArray);
 
   // for text padding below filmstrip or thumbnail element
   textPaddingHeight: number;
@@ -203,6 +203,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   numOfScreenshots = 10; // hardcoded for now. Only used for import - TODO - refactor?
 
   isFirstRunEver = false;
+
+  galleryWidth: number;
 
   // Listen for key presses
   @HostListener('document:keydown', ['$event'])
@@ -491,6 +493,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
+    this.updateGalleryWidthMeasurement(); // so that fullView knows its size
     // this is required, otherwise when user drops the file, it opens as plaintext
     document.ondragover = document.ondrop = (ev) => {
       ev.preventDefault();
@@ -510,6 +513,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   /**
    * Low-tech debounced scroll handler
+   * @param msDelay - number of milliseconds to debounce; if absent sets to 250ms
    */
   public debounceUpdateMax(msDelay?: number): void {
     // console.log('debouncing');
@@ -518,6 +522,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.myTimeout = setTimeout(() => {
       // console.log('Virtual scroll refreshed');
       this.virtualScroller.refresh();
+      if (this.appState.currentView === 'fullView') {
+        this.updateGalleryWidthMeasurement();
+      }
     }, delay);
   }
 
@@ -629,6 +636,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Open the video with user's default media player
+   * @param imageId unique ID of the video
+   */
   public openVideo(imageId): void {
     const number = this.fileMap.get(imageId);
     this.currentPlayingFolder = this.finalArray[number].partialPath;
@@ -640,7 +651,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public openOnlineHelp(): void {
-    this.electronService.ipcRenderer.send('pleaseOpenUrl', 'http://www.videohubapp.com');
+    this.electronService.ipcRenderer.send('pleaseOpenUrl', 'https://www.videohubapp.com');
   }
 
   public increaseZoomLevel(): void {
@@ -712,6 +723,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   showSidebar(): void {
     if (this.settingsButtons['hideSidebar'].toggled) {
       this.toggleButton('hideSidebar');
+      this.updateGalleryWidthMeasurement();
     }
   }
 
@@ -817,9 +829,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   toggleAllViewsButtonsOff(): void {
     this.settingsButtons['showClips'].toggled = false;
+    this.settingsButtons['showDetails'].toggled = false;
     this.settingsButtons['showFiles'].toggled = false;
     this.settingsButtons['showFilmstrip'].toggled = false;
     this.settingsButtons['showFoldersOnly'].toggled = false;
+    this.settingsButtons['showFullView'].toggled = false;
     this.settingsButtons['showThumbnails'].toggled = false;
   }
 
@@ -858,10 +872,24 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.appState.currentView = 'clips';
       this.computeTextBufferAmount();
       this.scrollToTop();
+    } else if (uniqueKey === 'showFullView') {
+      this.toggleAllViewsButtonsOff();
+      this.settingsButtons['showFullView'].toggled = true;
+      this.appState.currentView = 'fullView';
+      this.computeTextBufferAmount();
+      this.scrollToTop();
+    } else if (uniqueKey === 'showDetails') {
+      this.toggleAllViewsButtonsOff();
+      this.settingsButtons['showDetails'].toggled = true;
+      this.appState.currentView = 'details';
+      this.computeTextBufferAmount();
+      this.scrollToTop();
     } else if (uniqueKey === 'makeSmaller') {
       this.decreaseSize();
+      this.updateGalleryWidthMeasurement();
     } else if (uniqueKey === 'makeLarger') {
       this.increaseSize();
+      this.updateGalleryWidthMeasurement();
     } else if (uniqueKey === 'startWizard') {
       this.startWizard();
     } else if (uniqueKey === 'clearHistory') {
@@ -889,6 +917,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (uniqueKey === 'hideSidebar') {
         setTimeout(() => {
           this.virtualScroller.refresh();
+          this.updateGalleryWidthMeasurement();
         }, 300);
       }
     }
@@ -992,7 +1021,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Computes the preview width for thumbnails view
    */
   public computePreviewWidth(): void {
-    this.previewWidth = this.imgHeight * (16 / 9);
+    if (this.appState.currentView === 'clips' || this.appState.currentView === 'thumbs') {
+      this.previewWidth = this.imgHeight * (16 / 9);
+    }
+  }
+
+  /**
+   * Compute and update the galleryWidth
+   */
+  public updateGalleryWidthMeasurement(): void {
+    this.galleryWidth = document.getElementById('scrollDiv').getBoundingClientRect().width;
   }
 
   /**

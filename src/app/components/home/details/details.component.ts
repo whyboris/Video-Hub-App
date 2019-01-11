@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ElementRef, ViewChild, Output, EventEmitter } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { galleryItemAppear } from '../../common/animations';
 
@@ -11,6 +11,8 @@ import { galleryItemAppear } from '../../common/animations';
 export class DetailsComponent implements OnInit {
 
   @ViewChild('filmstripHolder') filmstripHolder: ElementRef;
+
+  @Output() openFileRequest = new EventEmitter<string>();
 
   @Input() darkMode: boolean;
   @Input() elHeight: number;
@@ -39,16 +41,21 @@ export class DetailsComponent implements OnInit {
     public sanitizer: DomSanitizer
   ) { }
 
-  @HostListener('mouseenter') onMouseEnter() {
+  mouseEnter() {
     if (this.hoverScrub) {
       this.hover = true;
     }
   }
-  @HostListener('mouseleave') onMouseLeave() {
+
+  mouseLeave() {
     if (this.hoverScrub && this.returnToFirstScreenshot) {
       this.hover = false;
       this.percentOffset = 0;
     }
+  }
+
+  mouseClick() {
+    this.openFileRequest.emit(this.imgId);
   }
 
   ngOnInit() {

@@ -105,6 +105,8 @@ $sidebar-width: 190px;
 
 .window-content {
   position: relative;
+  transition-property: transform;
+  transition: 300ms;
 }
 
 .allSettings {
