@@ -37,6 +37,8 @@ export class DetailsComponent implements OnInit {
   fullFilePath = '';
   hover: boolean;
 
+  tempTags: string[] = ['one', 'two', 'three'];
+
   constructor(
     public sanitizer: DomSanitizer
   ) { }
@@ -70,6 +72,12 @@ export class DetailsComponent implements OnInit {
 
       this.percentOffset = (100 / (this.numOfScreenshots - 1)) * Math.floor(cursorX / (containerWidth / this.numOfScreenshots));
     }
+  }
+
+  addThisTag(tag: string) {
+    console.log('received:');
+    console.log(tag);
+    this.tempTags.push(tag);
   }
 
 }

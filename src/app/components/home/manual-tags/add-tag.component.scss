@@ -1,0 +1,19 @@
+@import './../variables';
+
+// TODO -- keep DRY -- this is taken from `inputFilter`
+.inputFilter {
+  border: 0;
+  border-bottom: 1px solid $gray-80;
+  background: transparent;
+  box-sizing: border-box;
+  font-size: 15px;
+  outline: none;
+  padding: 6px;
+  padding-bottom: 0;
+  margin: 5px 0 10px;
+  width: 140px;
+
+  &::placeholder {
+    color: $gray-80;
+  }
+}

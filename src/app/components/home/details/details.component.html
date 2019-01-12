@@ -41,6 +41,8 @@
     <span class="fileSize">
       {{ rez }}
     </span>
+    <app-add-tag-component (tag)="addThisTag($event)"></app-add-tag-component>
+    <app-view-tags-component [tags]="tempTags"></app-view-tags-component>
   </div>
 
 </div>

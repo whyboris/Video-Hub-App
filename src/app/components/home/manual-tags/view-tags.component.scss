@@ -1,0 +1,11 @@
+.tag {
+  // copied from `searchWord` class -- TODO - keep DRY
+  border-radius: 6px;
+  box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.3);
+  background-color: #f1ceb8;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 10px;
+  margin: 6px 6px 0 0;
+  padding: 2px 4px 2px 4px;
+}
