@@ -2,6 +2,8 @@ import { Component, Input, OnInit, ElementRef, ViewChild, Output, EventEmitter }
 import { DomSanitizer } from '@angular/platform-browser';
 import { galleryItemAppear } from '../../common/animations';
 
+import { ManualTags } from '../manual-tags/manual-tags.service';
+
 @Component({
   selector: 'app-details-item',
   templateUrl: './details.component.html',
@@ -40,6 +42,7 @@ export class DetailsComponent implements OnInit {
   tempTags: string[] = ['one', 'two', 'three'];
 
   constructor(
+    public tagService: ManualTags,
     public sanitizer: DomSanitizer
   ) { }
 
@@ -61,8 +64,8 @@ export class DetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.firstFilePath = encodeURI('file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/thumbnails/' + this.imgId + '.jpg');
-    this.fullFilePath =  encodeURI('file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/filmstrips/' + this.imgId + '.jpg');
+    this.firstFilePath = 'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/thumbnails/' + this.imgId + '.jpg';
+    this.fullFilePath =  'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/filmstrips/' + this.imgId + '.jpg';
   }
 
   mouseIsMoving($event) {
@@ -75,9 +78,14 @@ export class DetailsComponent implements OnInit {
   }
 
   addThisTag(tag: string) {
-    console.log('received:');
-    console.log(tag);
-    this.tempTags.push(tag);
+    if (this.tempTags.includes(tag)) {
+      console.log('ALREADY ON THE LIST!');
+    } else {
+      this.tempTags.push(tag);
+      // also notify the service!
+      this.tagService.addTag(tag);
+    }
+
   }
 
 }

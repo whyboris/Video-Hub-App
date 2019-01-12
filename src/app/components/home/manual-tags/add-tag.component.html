@@ -1,7 +1,15 @@
-<input
-  #myval
-  class="inputFilter"
-  (keyup.enter)="emitTag(myval.value)"
-  type="text"
-  placeholder="Add tag"
->
+<div class="intputContainer">
+  <input
+    #tagInputField
+    class="inputFilter"
+    (keyup.enter)="emitTag(currentText)"
+    [(ngModel)]="currentText"
+    (ngModelChange)="checkTypeahead($event)"
+    (keydown.Tab)="tabPressed($event)"
+    type="text"
+    placeholder="Add tag"
+  >
+  <span class="typeahead" *ngIf="typeAhead.length > 0">
+    {{ typeAhead }}
+  </span>
+</div>
