@@ -1,3 +1,5 @@
+@import "../variables";
+
 .tagContainer {
   margin-top: 50px;
 }
@@ -10,7 +12,7 @@
   .tag {
     // copied from `searchWord` class -- TODO - keep DRY
     background-color: #f1ceb8;
-    border-radius: 6px;
+    border-radius: 4px;
     box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.3);
     cursor: pointer;
     display: inline-block;
@@ -19,12 +21,21 @@
     margin: 0;
     padding: 2px 4px;
     position: relative;
+    z-index: 3;
+  }
+
+  .coverTheX {
+    background: $gray-40;
+    height: 22px;
+    position: absolute;
+    transform: translate(-6px, 0);
+    width: 12px;
     z-index: 2;
   }
 
   .removeTag {
     background-color: #d1ae98;
-    border-radius: 6px;
+    border-radius: 4px;
     color: red;
     cursor: not-allowed;
     display: inline-block;
@@ -38,13 +49,13 @@
     transition-delay: 0.25s;
     transition-duration: 0.25s;
     transition-property: transform;
-    width: 20px;
+    width: 16px;
     z-index: 1;
   }
 
   &:hover {
     .removeTag {
-      transform: translate(14px, 0);
+      transform: translate(12px, 0);
       transition-delay: 0.5s;
       transition-duration: 0.25s;
       transition-property: transform;

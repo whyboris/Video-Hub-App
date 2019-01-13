@@ -84,7 +84,7 @@ export class DetailsComponent implements OnInit {
   }
 
   addThisTag(tag: string) {
-    if (this.tags.includes(tag)) {
+    if (this.tags && this.tags.includes(tag)) {
       console.log('TAG ALREADY ADDED!');
     } else {
       this.tagService.addTag(tag);

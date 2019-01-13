@@ -60,9 +60,11 @@ export class ManualTags {
    */
   populateManualTags(allFiles: ImageElement[]): void {
     allFiles.forEach((element: ImageElement): void => {
-      element.tags.forEach((tag: string): void => {
-        this.addTag(tag);
-      });
+      if (element.tags) {
+        element.tags.forEach((tag: string): void => {
+          this.addTag(tag);
+        });
+      }
     });
 
     console.log('done populating manual tags:');
