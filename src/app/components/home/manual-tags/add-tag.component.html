@@ -3,6 +3,7 @@
     #tagInputField
     class="inputFilter"
     (keyup.enter)="emitTag(currentText)"
+    (keyup.esc)="escape()"
     [(ngModel)]="currentText"
     (ngModelChange)="checkTypeahead($event)"
     (keydown.Tab)="tabPressed($event)"

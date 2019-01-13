@@ -29,6 +29,7 @@ export class DetailsComponent implements OnInit {
   @Input() folderPath: string;
   @Input() hoverScrub: boolean;
   @Input() hubName: string;
+  @Input() tags: string[];
   @Input() imgHeight: number;
   @Input() imgId: any; // the filename of screenshot strip without `.jpg`
   @Input() largerFont: boolean;
@@ -44,8 +45,6 @@ export class DetailsComponent implements OnInit {
   firstFilePath = '';
   fullFilePath = '';
   hover: boolean;
-
-  tempTags: string[] = ['one', 'two', 'three'];
 
   constructor(
     public tagService: ManualTags,
@@ -84,14 +83,12 @@ export class DetailsComponent implements OnInit {
   }
 
   addThisTag(tag: string) {
-    if (this.tempTags.includes(tag)) {
-      console.log('ALREADY ON THE LIST!');
+
+    if (this.tags.includes(tag)) {
+      console.log('TAG ALREADY ADDED!');
     } else {
-      this.tempTags.push(tag);
-      // also notify the service!
       this.tagService.addTag(tag);
 
-      // TODO: fix -- only emit if service returns succes !!!
       this.addTagToFinalArray.emit({
         id: this.imgId,
         tag: tag

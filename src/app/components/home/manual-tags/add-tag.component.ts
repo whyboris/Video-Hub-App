@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { ManualTags } from './manual-tags.service';
 
 @Component({
@@ -33,6 +33,14 @@ export class AddTagComponent {
       this.emitTag(this.typeAhead);
       $event.preventDefault();
     }
+  }
+
+  /**
+   * User pressed the `esc` key
+   */
+  escape(): void {
+    this.currentText = '';
+    this.typeAhead = '';
   }
 
 }

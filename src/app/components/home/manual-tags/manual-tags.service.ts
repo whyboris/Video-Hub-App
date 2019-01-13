@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 
+import { ImageElement } from '../../common/final-object.interface';
+
 @Injectable()
 export class ManualTags {
 
@@ -8,9 +10,11 @@ export class ManualTags {
 
   constructor() { }
 
+  /**
+   * Update the tagsList & tagsMap with the tag
+   * @param tag - tag to be added
+   */
   addTag(tag: string): void {
-    console.log('tag service:');
-
     if (this.tagsMap.get(tag)) {
       const count = this.tagsMap.get(tag);
       this.tagsMap.set(tag, count + 1);
@@ -18,8 +22,6 @@ export class ManualTags {
       this.tagsMap.set(tag, 1);
       this.tagsList.push(tag);
     }
-
-    console.log(this.tagsMap);
   }
 
   /**
@@ -41,6 +43,22 @@ export class ManualTags {
     }
 
     return mostLikely;
+  }
+
+  /**
+   * Generate the tagsList and tagsMap the first time a hub is opened
+   * @param allFiles - ImageElement array
+   */
+  populateManualTags(allFiles: ImageElement[]): void {
+    allFiles.forEach((element: ImageElement): void => {
+      element.tags.forEach((tag: string): void => {
+        this.addTag(tag);
+      });
+    });
+
+    console.log('done populating manual tags:');
+    console.log(this.tagsList);
+    console.log(this.tagsMap);
   }
 
 }
