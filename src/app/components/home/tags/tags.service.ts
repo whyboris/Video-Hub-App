@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { TagsSaveService } from './tags-save.service';
+import { AutoTagsSaveService } from './tags-save.service';
 
 import { ImageElement } from '../../../components/common/final-object.interface';
 
@@ -10,7 +10,7 @@ export interface WordAndFreq {
 }
 
 @Injectable()
-export class TagsService {
+export class AutoTagsService {
 
   oneWordFreqMap: Map<string, number> = new Map();
   potentialTwoWordMap: Map<string, number> = new Map();
@@ -25,7 +25,7 @@ export class TagsService {
   cachedHub: string;
 
   constructor(
-    public tagsSaveService: TagsSaveService
+    public tagsSaveService: AutoTagsSaveService
   ) { }
 
   /**

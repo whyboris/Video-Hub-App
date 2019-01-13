@@ -6,7 +6,7 @@ import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
 import { ElectronService } from '../../providers/electron.service';
 import { ResolutionFilterService, ResolutionString } from '../../components/pipes/resolution-filter.service';
 import { ShowLimitService } from '../../components/pipes/show-limit.service';
-import { TagsSaveService } from './tags/tags-save.service';
+import { AutoTagsSaveService } from './tags/tags-save.service';
 import { WordFrequencyService } from '../../components/pipes/word-frequency.service';
 
 import { FinalObject, ImageElement } from '../common/final-object.interface';
@@ -37,6 +37,7 @@ import {
   slowFadeOut,
   topAnimation
 } from '../common/animations';
+import { TagEmission } from './details/details.component';
 
 // import { DemoContent } from '../../../assets/demo-content';
 
@@ -146,7 +147,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   showSimilar: boolean = false; // to toggle the similarity pipe
 
-  fileMap: any; // should be a map from hash (imageId) to number (element in finalArray);
+  fileMap: Map<string, number>; // should be a map from hash (imageId) to number (element in finalArray);
 
   // for text padding below filmstrip or thumbnail element
   textPaddingHeight: number;
@@ -297,7 +298,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     public electronService: ElectronService,
     public resolutionFilterService: ResolutionFilterService,
     public showLimitService: ShowLimitService,
-    public tagsSaveService: TagsSaveService,
+    public tagsSaveService: AutoTagsSaveService,
     public translate: TranslateService,
     public wordFrequencyService: WordFrequencyService,
     private elementRef: ElementRef
@@ -641,10 +642,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param imageId unique ID of the video
    */
   public openVideo(imageId): void {
-    const number = this.fileMap.get(imageId);
-    this.currentPlayingFolder = this.finalArray[number].partialPath;
-    this.currentPlayingFile = this.finalArray[number].cleanName;
-    const fullPath = this.appState.selectedSourceFolder + this.finalArray[number].partialPath + '/' + this.finalArray[number].fileName;
+    const position: number = this.fileMap.get(imageId);
+    this.currentPlayingFolder = this.finalArray[position].partialPath;
+    this.currentPlayingFile = this.finalArray[position].cleanName;
+    const fullPath = this.appState.selectedSourceFolder + this.finalArray[position].partialPath + '/' + this.finalArray[position].fileName;
     this.electronService.ipcRenderer.send('openThisFile', fullPath);
     console.log(fullPath);
     this.fullPathToCurrentFile = fullPath;
@@ -1388,6 +1389,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   /**
    * Searches through the `finalArray` and updates the file name and display name
+   * TODO -- BUG?!?? -- check if this errors out when hub has two files with duplicate file names !!!
    */
   replaceOriginalFileName(): void {
     const oldFileName = this.currentRightClickedItem.fileName;
@@ -1411,7 +1413,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Add and remove tags from the TagsSaveService
+   * Add and remove tags from the AutoTagsSaveService
    * triggered on vha file load
    * @param addTags
    * @param removeTags
@@ -1457,5 +1459,26 @@ export class HomeComponent implements OnInit, AfterViewInit {
     console.log('this is the first time you are running this app');
     this.isFirstRunEver = true;
   }
+
+  /**
+   * Add tag to a particular file
+   * @param id - unique ID of the file (hash)
+   */
+  addTagToFile(emission: TagEmission): void {
+    // console.log(emission);
+
+    const position: number = this.fileMap.get(emission.id);
+
+    if (this.finalArray[position].tags) {
+      this.finalArray[position].tags.push(emission.tag);
+    } else {
+      this.finalArray[position].tags = [emission.tag];
+    }
+
+    // console.log(this.finalArray);
+
+    this.finalArrayNeedsSaving = true;
+  }
+
 
 }

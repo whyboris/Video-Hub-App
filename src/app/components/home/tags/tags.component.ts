@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output, OnDestroy, ViewChild, ElementRef, OnInit } from '@angular/core';
 
-import { TagsService, WordAndFreq } from './tags.service';
-import { TagsSaveService } from './tags-save.service';
+import { AutoTagsService, WordAndFreq } from './tags.service';
+import { AutoTagsSaveService } from './tags-save.service';
 
 import { ImageElement } from '../../../components/common/final-object.interface';
 
@@ -39,8 +39,8 @@ export class TagsComponent implements OnInit, OnDestroy {
   showingStatusMessage: boolean = false;
 
   constructor(
-    public tagsService: TagsService,
-    public tagsSaveService: TagsSaveService
+    public tagsService: AutoTagsService,
+    public tagsSaveService: AutoTagsSaveService
   ) {}
 
   ngOnInit(): void {

@@ -4,6 +4,11 @@ import { galleryItemAppear } from '../../common/animations';
 
 import { ManualTags } from '../manual-tags/manual-tags.service';
 
+export interface TagEmission {
+  id: string;
+  tag: string;
+}
+
 @Component({
   selector: 'app-details-item',
   templateUrl: './details.component.html',
@@ -15,6 +20,7 @@ export class DetailsComponent implements OnInit {
   @ViewChild('filmstripHolder') filmstripHolder: ElementRef;
 
   @Output() openFileRequest = new EventEmitter<string>();
+  @Output() addTagToFinalArray = new EventEmitter<TagEmission>();
 
   @Input() darkMode: boolean;
   @Input() elHeight: number;
@@ -84,6 +90,12 @@ export class DetailsComponent implements OnInit {
       this.tempTags.push(tag);
       // also notify the service!
       this.tagService.addTag(tag);
+
+      // TODO: fix -- only emit if service returns succes !!!
+      this.addTagToFinalArray.emit({
+        id: this.imgId,
+        tag: tag
+      });
     }
 
   }

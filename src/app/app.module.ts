@@ -16,8 +16,8 @@ import { HomeComponent } from './components/home/home.component';
 import { ManualTags } from './components/home/manual-tags/manual-tags.service';
 import { ResolutionFilterService } from './components/pipes/resolution-filter.service';
 import { ShowLimitService } from './components/pipes/show-limit.service';
-import { TagsSaveService } from './components/home/tags/tags-save.service';
-import { TagsService } from './components/home/tags/tags.service';
+import { AutoTagsSaveService } from './components/home/tags/tags-save.service';
+import { AutoTagsService } from './components/home/tags/tags.service';
 import { WordFrequencyService } from './components/pipes/word-frequency.service';
 
 import { AddTagComponent } from './components/home/manual-tags/add-tag.component';
@@ -101,8 +101,8 @@ import { WordFrequencyPipe } from './components/pipes/word-frequency.pipe';
     ResolutionFilterService,
     ShowLimitService,
     SimilarityService,
-    TagsSaveService,
-    TagsService,
+    AutoTagsSaveService,
+    AutoTagsService,
     WordFrequencyService
   ],
   bootstrap: [AppComponent]

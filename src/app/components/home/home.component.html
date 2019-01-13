@@ -825,6 +825,7 @@
           *ngFor="let item of scroll.viewPortItems"
           (contextmenu)="rightMouseClicked($event, item)"
           (openFileRequest)="openVideo($event)"
+          (addTagToFinalArray)="addTagToFile($event)"
           [elHeight]="imgHeight + textPaddingHeight"
           [elWidth]="previewWidth"
           [fileSize]="item.fileSize"
