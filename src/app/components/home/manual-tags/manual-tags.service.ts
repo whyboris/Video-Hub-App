@@ -24,6 +24,15 @@ export class ManualTags {
     }
   }
 
+  removeTag(tag: string): void {
+    const count = this.tagsMap.get(tag);
+    this.tagsMap.set(tag, count - 1);
+
+    if (count === 1) {
+      this.tagsList.splice(this.tagsList.indexOf(tag), 1);
+    }
+  }
+
   /**
    * Get the most likely tag
    * TODO -- curently it gets the FIRST match; later get the MOST COMMON (confer with tagsMap)

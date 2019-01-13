@@ -1,3 +1,15 @@
 <div class="tagContainer">
-  <span class="tag" *ngFor="let tag of tags; index as i">{{ tag }}</span>
+  <span
+    class="tag"
+    *ngFor="let tag of tags; index as i"
+  >
+    {{ tag }}
+    <div
+      *ngIf="allowRemoval"
+      class="removeTag"
+      (click)="removeTag(tag)"
+    >
+      x
+    </div>
+  </span>
 </div>

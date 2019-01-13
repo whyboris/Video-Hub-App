@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ManualTags } from './manual-tags.service';
 
 @Component({
@@ -9,9 +9,17 @@ import { ManualTags } from './manual-tags.service';
 export class ViewTagsComponent {
 
   @Input() tags: string[];
+  @Input() allowRemoval: boolean;
+
+  @Output() removeTagEmit = new EventEmitter<string>();
 
   constructor(
     public tagService: ManualTags
   ) { }
+
+  removeTag(tag: string): void {
+    console.log('remove tag clicked');
+    this.removeTagEmit.emit(tag);
+  }
 
 }

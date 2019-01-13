@@ -3,10 +3,12 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { galleryItemAppear } from '../../common/animations';
 
 import { ManualTags } from '../manual-tags/manual-tags.service';
+import { add } from '@tweenjs/tween.js';
 
 export interface TagEmission {
   id: string;
   tag: string;
+  type: 'add' | 'remove';
 }
 
 @Component({
@@ -20,7 +22,7 @@ export class DetailsComponent implements OnInit {
   @ViewChild('filmstripHolder') filmstripHolder: ElementRef;
 
   @Output() openFileRequest = new EventEmitter<string>();
-  @Output() addTagToFinalArray = new EventEmitter<TagEmission>();
+  @Output() editFinalArrayTag = new EventEmitter<TagEmission>();
 
   @Input() darkMode: boolean;
   @Input() elHeight: number;
@@ -83,18 +85,27 @@ export class DetailsComponent implements OnInit {
   }
 
   addThisTag(tag: string) {
-
     if (this.tags.includes(tag)) {
       console.log('TAG ALREADY ADDED!');
     } else {
       this.tagService.addTag(tag);
 
-      this.addTagToFinalArray.emit({
+      this.editFinalArrayTag.emit({
         id: this.imgId,
-        tag: tag
+        tag: tag,
+        type: 'add'
       });
     }
+  }
 
+  removeThisTag(tag: string) {
+    this.tagService.removeTag(tag);
+
+    this.editFinalArrayTag.emit({
+      id: this.imgId,
+      tag: tag,
+      type: 'remove'
+    });
   }
 
 }

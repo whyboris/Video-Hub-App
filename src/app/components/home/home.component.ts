@@ -1465,17 +1465,22 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   /**
    * Add tag to a particular file
-   * @param id - unique ID of the file (hash)
+   * @param emission - the type, tag, and uniqe ID of the file (hash)
    */
-  addTagToFile(emission: TagEmission): void {
+  editFinalArrayTag(emission: TagEmission): void {
     // console.log(emission);
 
     const position: number = this.fileMap.get(emission.id);
 
-    if (this.finalArray[position].tags) {
-      this.finalArray[position].tags.push(emission.tag);
+    if (emission.type === 'add') {
+      if (this.finalArray[position].tags) {
+        this.finalArray[position].tags.push(emission.tag);
+      } else {
+        this.finalArray[position].tags = [emission.tag];
+      }
     } else {
-      this.finalArray[position].tags = [emission.tag];
+      console.log('removing tag!');
+      this.finalArray[position].tags.splice(this.finalArray[position].tags.indexOf(emission.tag), 1);
     }
 
     // console.log(this.finalArray);
