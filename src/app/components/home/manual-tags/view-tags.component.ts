@@ -4,7 +4,8 @@ import { ManualTags } from './manual-tags.service';
 @Component({
   selector: 'app-view-tags-component',
   templateUrl: 'view-tags.component.html',
-  styleUrls: ['view-tags.component.scss']
+  styleUrls: ['view-tags.component.scss',
+              '../fonts/icons.scss']
 })
 export class ViewTagsComponent {
 

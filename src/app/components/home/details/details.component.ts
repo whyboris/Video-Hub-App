@@ -3,7 +3,6 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { galleryItemAppear } from '../../common/animations';
 
 import { ManualTags } from '../manual-tags/manual-tags.service';
-import { add } from '@tweenjs/tween.js';
 
 export interface TagEmission {
   id: string;

@@ -1,20 +1,53 @@
-.tag {
-  // copied from `searchWord` class -- TODO - keep DRY
-  border-radius: 6px;
-  box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.3);
-  background-color: #f1ceb8;
-  cursor: pointer;
-  display: inline-block;
-  font-size: 10px;
-  margin: 6px 6px 0 0;
-  padding: 2px 4px 2px 4px;
-}
-
 .tagContainer {
   margin-top: 50px;
 }
 
-.removeTag {
+.singleTag {
   display: inline-block;
-  cursor: not-allowed;
+  margin-right: 20px;
+  position: relative;
+
+  .tag {
+    // copied from `searchWord` class -- TODO - keep DRY
+    background-color: #f1ceb8;
+    border-radius: 6px;
+    box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.3);
+    cursor: pointer;
+    display: inline-block;
+    font-size: 10px;
+    height: 12px;
+    margin: 0;
+    padding: 2px 4px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .removeTag {
+    background-color: #d1ae98;
+    border-radius: 6px;
+    color: red;
+    cursor: not-allowed;
+    display: inline-block;
+    height: 16px;
+    padding-right: 3px;
+    position: absolute;
+    right: 0;
+    text-align: right;
+    top: 3px;
+    transform: translate(0, 0);
+    transition-delay: 0.25s;
+    transition-duration: 0.25s;
+    transition-property: transform;
+    width: 20px;
+    z-index: 1;
+  }
+
+  &:hover {
+    .removeTag {
+      transform: translate(14px, 0);
+      transition-delay: 0.5s;
+      transition-duration: 0.25s;
+      transition-property: transform;
+    }
+  }
 }
