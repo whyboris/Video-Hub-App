@@ -5,7 +5,7 @@ import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
 
 import { AutoTagsSaveService } from './tags/tags-save.service';
 import { ElectronService } from '../../providers/electron.service';
-import { ManualTags } from './manual-tags/manual-tags.service';
+import { ManualTagsService } from './manual-tags/manual-tags.service';
 import { ResolutionFilterService, ResolutionString } from '../../components/pipes/resolution-filter.service';
 import { ShowLimitService } from '../../components/pipes/show-limit.service';
 import { WordFrequencyService } from '../../components/pipes/word-frequency.service';
@@ -297,7 +297,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   constructor(
     public cd: ChangeDetectorRef,
     public electronService: ElectronService,
-    public manualTagsService: ManualTags,
+    public manualTagsService: ManualTagsService,
     public resolutionFilterService: ResolutionFilterService,
     public showLimitService: ShowLimitService,
     public tagsSaveService: AutoTagsSaveService,
@@ -450,7 +450,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.updateVhaFileHistory(pathToFile, finalObject.inputDir, finalObject.hubName);
 
       this.setTags(finalObject.addTags, finalObject.removeTags);
-      this.manualTagsService.populateManualTags(finalObject.images);
+      this.manualTagsService.populateManualTagsService(finalObject.images);
 
       this.canCloseWizard = true;
       this.showWizard = false;

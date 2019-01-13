@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { ImageElement } from '../../common/final-object.interface';
 
 @Injectable()
-export class ManualTags {
+export class ManualTagsService {
 
   tagsMap: Map<string, number> = new Map();
   tagsList: string[] = [];
@@ -58,7 +58,7 @@ export class ManualTags {
    * Generate the tagsList and tagsMap the first time a hub is opened
    * @param allFiles - ImageElement array
    */
-  populateManualTags(allFiles: ImageElement[]): void {
+  populateManualTagsService(allFiles: ImageElement[]): void {
     allFiles.forEach((element: ImageElement): void => {
       if (element.tags) {
         element.tags.forEach((tag: string): void => {

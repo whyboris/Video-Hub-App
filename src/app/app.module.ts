@@ -13,7 +13,7 @@ import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 import { AlphabetPrefixService } from './components/pipes/alphabet-prefix.service';
 import { ElectronService } from './providers/electron.service';
 import { HomeComponent } from './components/home/home.component';
-import { ManualTags } from './components/home/manual-tags/manual-tags.service';
+import { ManualTagsService } from './components/home/manual-tags/manual-tags.service';
 import { ResolutionFilterService } from './components/pipes/resolution-filter.service';
 import { ShowLimitService } from './components/pipes/show-limit.service';
 import { AutoTagsSaveService } from './components/home/tags/tags-save.service';
@@ -97,7 +97,7 @@ import { WordFrequencyPipe } from './components/pipes/word-frequency.pipe';
     AlphabetPrefixService,
     ElectronService,
     FileSearchPipe,
-    ManualTags,
+    ManualTagsService,
     ResolutionFilterService,
     ShowLimitService,
     SimilarityService,

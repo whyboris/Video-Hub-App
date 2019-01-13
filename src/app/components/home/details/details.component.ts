@@ -2,7 +2,7 @@ import { Component, Input, OnInit, ElementRef, ViewChild, Output, EventEmitter }
 import { DomSanitizer } from '@angular/platform-browser';
 import { galleryItemAppear } from '../../common/animations';
 
-import { ManualTags } from '../manual-tags/manual-tags.service';
+import { ManualTagsService } from '../manual-tags/manual-tags.service';
 
 export interface TagEmission {
   id: string;
@@ -48,7 +48,7 @@ export class DetailsComponent implements OnInit {
   hover: boolean;
 
   constructor(
-    public tagService: ManualTags,
+    public tagService: ManualTagsService,
     public sanitizer: DomSanitizer
   ) { }
 
