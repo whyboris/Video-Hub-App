@@ -155,6 +155,7 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
                 numOfScreenshots: 10, // hardcoded default
                 partialPath: partialPath,
                 resolution: '',
+                stars: 0
               };
               elementIndex++;
             }
@@ -613,7 +614,7 @@ function hashFile(file: string): string {
 
 
   // append the file size to the data
-  const buf = Buffer.concat([data, Buffer.from(fileSize.toString())])
+  const buf = Buffer.concat([data, Buffer.from(fileSize.toString())]);
   // make the magic happen!
   const hash = hasher('md5').update(buf.toString('hex')).digest('hex');
   return hash;

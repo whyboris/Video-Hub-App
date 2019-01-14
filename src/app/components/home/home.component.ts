@@ -8,6 +8,7 @@ import { ElectronService } from '../../providers/electron.service';
 import { ManualTagsService } from './manual-tags/manual-tags.service';
 import { ResolutionFilterService, ResolutionString } from '../../components/pipes/resolution-filter.service';
 import { ShowLimitService } from '../../components/pipes/show-limit.service';
+import { StarFilterService } from '../pipes/star-filter.service';
 import { WordFrequencyService } from '../../components/pipes/word-frequency.service';
 
 import { FinalObject, ImageElement } from '../common/final-object.interface';
@@ -15,7 +16,7 @@ import { HistoryItem } from '../common/history-item.interface';
 import { ImportSettingsObject } from '../common/import.interface';
 import { SavableProperties } from '../common/savable-properties.interface';
 import { SettingsObject } from '../common/settings-object.interface';
-import { TagEmission } from './details/details.component';
+import { TagEmission, StarEmission } from './details/details.component';
 import { WizardOptions } from '../common/wizard-options.interface';
 
 import { AppState, SupportedLanguage } from '../common/app-state';
@@ -139,6 +140,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
   freqRightBound: number = 4;
   resolutionNames: ResolutionString[] = ['SD', '720', '1080', '4K'];
 
+  // stoff to do with star filter
+  starRatingFreqArr: number[];
+  starLeftBound: number = 0;
+  starRightBound: number = 5;
+  starRatingNames: string[] = ['N/A', '1', '2', '3'];
+  forceStarFilterUpdate: boolean = true;
+
+  // other
   rightClickShowing: boolean = false;
   itemToRename: any; // strongly type this -- it's an element from finalArray !!!
   renamingWIP: string; // ngModel for renaming file
@@ -299,6 +308,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     public electronService: ElectronService,
     public manualTagsService: ManualTagsService,
     public resolutionFilterService: ResolutionFilterService,
+    public starFilterService: StarFilterService,
     public showLimitService: ShowLimitService,
     public tagsSaveService: AutoTagsSaveService,
     public translate: TranslateService,
@@ -341,6 +351,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       });
       this.resolutionFilterService.finalResolutionMapBehaviorSubject.subscribe((value) => {
         this.resolutionFreqArr = value;
+        // this.cd.detectChanges();
+      });
+      this.starFilterService.finalStarMapBehaviorSubject.subscribe((value) => {
+        this.starRatingFreqArr = value;
         // this.cd.detectChanges();
       });
       this.showLimitService.searchResults.subscribe((value) => {
@@ -1254,6 +1268,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.freqRightBound = selection[1];
   }
 
+  /**
+   * Update the min and max star rating for the star filter
+   * @param selection
+   */
+  newStarFilterSelected(selection: number[]): void {
+    this.starLeftBound = selection[0];
+    this.starRightBound = selection[1];
+  }
+
   clearLev(): void {
     this.showSimilar = false;
   }
@@ -1483,9 +1506,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.finalArray[position].tags.splice(this.finalArray[position].tags.indexOf(emission.tag), 1);
     }
 
-    // console.log(this.finalArray);
+    this.finalArrayNeedsSaving = true;
+  }
+
+
+  editFinalArrayStars(emission: StarEmission): void {
+
+    const position: number = this.fileMap.get(emission.id);
+
+    this.finalArray[position].stars = <any>emission.stars;
 
     this.finalArrayNeedsSaving = true;
+
+    this.forceStarFilterUpdate = !this.forceStarFilterUpdate;
   }
 
 

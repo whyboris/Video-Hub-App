@@ -42,6 +42,10 @@
       {{ rez }}
     </span>
 
+    <button (click)="setStarRating(1)">1</button>
+    <button (click)="setStarRating(2)">2</button>
+    <button (click)="setStarRating(3)">3</button>
+
     <app-add-tag-component
       (tag)="addThisTag($event)"
     ></app-add-tag-component>

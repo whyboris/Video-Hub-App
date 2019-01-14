@@ -10,6 +10,11 @@ export interface TagEmission {
   type: 'add' | 'remove';
 }
 
+export interface StarEmission {
+  id: string;
+  stars: number;
+}
+
 @Component({
   selector: 'app-details-item',
   templateUrl: './details.component.html',
@@ -21,6 +26,7 @@ export class DetailsComponent implements OnInit {
   @ViewChild('filmstripHolder') filmstripHolder: ElementRef;
 
   @Output() openFileRequest = new EventEmitter<string>();
+  @Output() editFinalArrayStars = new EventEmitter<StarEmission>();
   @Output() editFinalArrayTag = new EventEmitter<TagEmission>();
 
   @Input() darkMode: boolean;
@@ -41,6 +47,7 @@ export class DetailsComponent implements OnInit {
   @Input() showMeta: boolean;
   @Input() time: string;
   @Input() title: string;
+  @Input() star: number; // star rating
 
   percentOffset: number = 0;
   firstFilePath = '';
@@ -104,6 +111,14 @@ export class DetailsComponent implements OnInit {
       id: this.imgId,
       tag: tag,
       type: 'remove'
+    });
+  }
+
+  setStarRating(rating: number): void {
+    console.log(rating);
+    this.editFinalArrayStars.emit({
+      id: this.imgId,
+      stars: rating
     });
   }
 
