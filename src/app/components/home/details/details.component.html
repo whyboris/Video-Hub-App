@@ -42,9 +42,12 @@
       {{ rez }}
     </span>
 
-    <button (click)="setStarRating(1)">1</button>
-    <button (click)="setStarRating(2)">2</button>
-    <button (click)="setStarRating(3)">3</button>
+    <span class="fileSize">
+      Star rating:
+    </span>
+    <button class="star-rating" [ngClass]="{ 'star-lit': starRatingHack > 1 }" (click)="setStarRating(1.5)"></button>
+    <button class="star-rating" [ngClass]="{ 'star-lit': starRatingHack > 2 }" (click)="setStarRating(2.5)"></button>
+    <button class="star-rating" [ngClass]="{ 'star-lit': starRatingHack > 3 }" (click)="setStarRating(3.5)"></button>
 
     <app-add-tag-component
       (tag)="addThisTag($event)"

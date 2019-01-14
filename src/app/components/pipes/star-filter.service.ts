@@ -15,10 +15,10 @@ export class StarFilterService {
    */
   public resetMap() {
     this.frequencyMap = new Map();
-    this.frequencyMap.set(0, 0);
-    this.frequencyMap.set(1, 0);
-    this.frequencyMap.set(2, 0);
-    this.frequencyMap.set(3, 0);
+    this.frequencyMap.set(0.5, 0);
+    this.frequencyMap.set(1.5, 0);
+    this.frequencyMap.set(2.5, 0);
+    this.frequencyMap.set(3.5, 0);
   }
 
   /**
@@ -83,10 +83,10 @@ export class StarFilterService {
     // console.log(this.frequencyMap);
 
     const finalResult: number[] = [
-      this.frequencyMap.get(0),
-      this.frequencyMap.get(1),
-      this.frequencyMap.get(2),
-      this.frequencyMap.get(3)
+      this.frequencyMap.get(0.5),
+      this.frequencyMap.get(1.5),
+      this.frequencyMap.get(2.5),
+      this.frequencyMap.get(3.5)
     ];
 
     // console.log(finalResult);

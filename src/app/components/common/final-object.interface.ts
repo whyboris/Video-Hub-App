@@ -1,6 +1,6 @@
 import { ResolutionString } from '../pipes/resolution-filter.service';
 
-export type StarRating = 0 | 1 | 2 | 3;
+export type StarRating = 0.5 | 1.5 | 2.5 | 3.5;
 
 export interface FinalObject {
   addTags?: string[];           // tags to add

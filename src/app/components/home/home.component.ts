@@ -1511,13 +1511,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
 
   editFinalArrayStars(emission: StarEmission): void {
-
     const position: number = this.fileMap.get(emission.id);
-
-    this.finalArray[position].stars = <any>emission.stars;
-
+    this.finalArray[position].stars = emission.stars;
     this.finalArrayNeedsSaving = true;
-
     this.forceStarFilterUpdate = !this.forceStarFilterUpdate;
   }
 

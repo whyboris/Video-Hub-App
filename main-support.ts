@@ -155,7 +155,7 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
                 numOfScreenshots: 10, // hardcoded default
                 partialPath: partialPath,
                 resolution: '',
-                stars: 0
+                stars: 0.5
               };
               elementIndex++;
             }

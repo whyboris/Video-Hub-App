@@ -3,6 +3,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { galleryItemAppear } from '../../common/animations';
 
 import { ManualTagsService } from '../manual-tags/manual-tags.service';
+import { StarRating } from '../../common/final-object.interface';
 
 export interface TagEmission {
   id: string;
@@ -12,7 +13,7 @@ export interface TagEmission {
 
 export interface StarEmission {
   id: string;
-  stars: number;
+  stars: StarRating;
 }
 
 @Component({
@@ -25,9 +26,9 @@ export class DetailsComponent implements OnInit {
 
   @ViewChild('filmstripHolder') filmstripHolder: ElementRef;
 
-  @Output() openFileRequest = new EventEmitter<string>();
   @Output() editFinalArrayStars = new EventEmitter<StarEmission>();
   @Output() editFinalArrayTag = new EventEmitter<TagEmission>();
+  @Output() openFileRequest = new EventEmitter<string>();
 
   @Input() darkMode: boolean;
   @Input() elHeight: number;
@@ -47,17 +48,20 @@ export class DetailsComponent implements OnInit {
   @Input() showMeta: boolean;
   @Input() time: string;
   @Input() title: string;
-  @Input() star: number; // star rating
+  @Input() star: StarRating;
 
   percentOffset: number = 0;
   firstFilePath = '';
   fullFilePath = '';
   hover: boolean;
+  starRatingHack: StarRating;
 
   constructor(
     public tagService: ManualTagsService,
     public sanitizer: DomSanitizer
-  ) { }
+  ) {
+    this.starRatingHack = this.star;
+  }
 
   mouseEnter() {
     if (this.hoverScrub) {
@@ -114,8 +118,11 @@ export class DetailsComponent implements OnInit {
     });
   }
 
-  setStarRating(rating: number): void {
-    console.log(rating);
+  setStarRating(rating: StarRating): void {
+    if (this.starRatingHack === rating) {
+      rating = 0.5; // reset to "N/A" (not rated)
+    }
+    this.starRatingHack = rating; // hack for getting star opacity updated instantly
     this.editFinalArrayStars.emit({
       id: this.imgId,
       stars: rating
