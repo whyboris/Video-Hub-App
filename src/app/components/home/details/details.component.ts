@@ -2,6 +2,14 @@ import { Component, Input, OnInit, ElementRef, ViewChild, Output, EventEmitter }
 import { DomSanitizer } from '@angular/platform-browser';
 import { galleryItemAppear } from '../../common/animations';
 
+import { ManualTagsService } from '../manual-tags/manual-tags.service';
+
+export interface TagEmission {
+  id: string;
+  tag: string;
+  type: 'add' | 'remove';
+}
+
 @Component({
   selector: 'app-details-item',
   templateUrl: './details.component.html',
@@ -13,6 +21,7 @@ export class DetailsComponent implements OnInit {
   @ViewChild('filmstripHolder') filmstripHolder: ElementRef;
 
   @Output() openFileRequest = new EventEmitter<string>();
+  @Output() editFinalArrayTag = new EventEmitter<TagEmission>();
 
   @Input() darkMode: boolean;
   @Input() elHeight: number;
@@ -21,6 +30,7 @@ export class DetailsComponent implements OnInit {
   @Input() folderPath: string;
   @Input() hoverScrub: boolean;
   @Input() hubName: string;
+  @Input() tags: string[];
   @Input() imgHeight: number;
   @Input() imgId: any; // the filename of screenshot strip without `.jpg`
   @Input() largerFont: boolean;
@@ -38,6 +48,7 @@ export class DetailsComponent implements OnInit {
   hover: boolean;
 
   constructor(
+    public tagService: ManualTagsService,
     public sanitizer: DomSanitizer
   ) { }
 
@@ -59,8 +70,8 @@ export class DetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.firstFilePath = encodeURI('file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/thumbnails/' + this.imgId + '.jpg');
-    this.fullFilePath =  encodeURI('file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/filmstrips/' + this.imgId + '.jpg');
+    this.firstFilePath = 'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/thumbnails/' + this.imgId + '.jpg';
+    this.fullFilePath =  'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/filmstrips/' + this.imgId + '.jpg';
   }
 
   mouseIsMoving($event) {
@@ -70,6 +81,30 @@ export class DetailsComponent implements OnInit {
 
       this.percentOffset = (100 / (this.numOfScreenshots - 1)) * Math.floor(cursorX / (containerWidth / this.numOfScreenshots));
     }
+  }
+
+  addThisTag(tag: string) {
+    if (this.tags && this.tags.includes(tag)) {
+      console.log('TAG ALREADY ADDED!');
+    } else {
+      this.tagService.addTag(tag);
+
+      this.editFinalArrayTag.emit({
+        id: this.imgId,
+        tag: tag,
+        type: 'add'
+      });
+    }
+  }
+
+  removeThisTag(tag: string) {
+    this.tagService.removeTag(tag);
+
+    this.editFinalArrayTag.emit({
+      id: this.imgId,
+      tag: tag,
+      type: 'remove'
+    });
   }
 
 }

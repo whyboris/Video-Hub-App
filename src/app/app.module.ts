@@ -5,18 +5,22 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
+import { AppRoutingModule } from './app-routing.module';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 
 import { AlphabetPrefixService } from './components/pipes/alphabet-prefix.service';
 import { ElectronService } from './providers/electron.service';
 import { HomeComponent } from './components/home/home.component';
+import { ManualTagsService } from './components/home/manual-tags/manual-tags.service';
 import { ResolutionFilterService } from './components/pipes/resolution-filter.service';
 import { ShowLimitService } from './components/pipes/show-limit.service';
-import { TagsSaveService } from './components/home/tags/tags-save.service';
-import { TagsService } from './components/home/tags/tags.service';
+import { AutoTagsSaveService } from './components/home/tags/tags-save.service';
+import { AutoTagsService } from './components/home/tags/tags.service';
 import { WordFrequencyService } from './components/pipes/word-frequency.service';
 
+import { AddTagComponent } from './components/home/manual-tags/add-tag.component';
 import { AppComponent } from './app.component';
 import { ClipComponent } from './components/home/clip/clip.component';
 import { DetailsComponent } from './components/home/details/details.component';
@@ -31,6 +35,7 @@ import { SliderFilterComponent } from './components/home/slider-filter/slider-fi
 import { StatisticsComponent } from './components/home/statistics/statistics.component';
 import { TagsComponent } from './components/home/tags/tags.component';
 import { TopComponent } from './components/home/top/top.component';
+import { ViewTagsComponent } from './components/home/manual-tags/view-tags.component';
 
 import { AlphabetPrefixPipe } from './components/pipes/alphabet-prefix.pipe';
 import { CountPipe } from './components/pipes/count.pipe';
@@ -47,10 +52,9 @@ import { TagFilterPipe } from './components/home/tags/tag-filter.pipe';
 import { TagMatchPipe } from './components/home/tags/tag-match.pipe';
 import { WordFrequencyPipe } from './components/pipes/word-frequency.pipe';
 
-import { AppRoutingModule } from './app-routing.module';
-
 @NgModule({
   declarations: [
+    AddTagComponent,
     AlphabetPrefixPipe,
     AppComponent,
     ClipComponent,
@@ -78,6 +82,7 @@ import { AppRoutingModule } from './app-routing.module';
     TagMatchPipe,
     TagsComponent,
     TopComponent,
+    ViewTagsComponent,
     WordFrequencyPipe
   ],
   imports: [
@@ -92,11 +97,12 @@ import { AppRoutingModule } from './app-routing.module';
     AlphabetPrefixService,
     ElectronService,
     FileSearchPipe,
+    ManualTagsService,
     ResolutionFilterService,
     ShowLimitService,
     SimilarityService,
-    TagsSaveService,
-    TagsService,
+    AutoTagsSaveService,
+    AutoTagsService,
     WordFrequencyService
   ],
   bootstrap: [AppComponent]

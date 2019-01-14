@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 @Injectable()
-export class TagsSaveService {
+export class AutoTagsSaveService {
 
   addTags: string[] = [];
   removeTags: string[] = [];

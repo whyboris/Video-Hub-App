@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { TagsService } from './tags.service';
+import { AutoTagsService } from './tags.service';
 
 @Pipe({
   name: 'tagMatchPipe'
@@ -8,7 +8,7 @@ import { TagsService } from './tags.service';
 export class TagMatchPipe implements PipeTransform {
 
   constructor(
-    public tagsService: TagsService
+    public tagsService: AutoTagsService
   ) { }
 
   /**
