@@ -11,13 +11,14 @@ import { TranslateModule } from '@ngx-translate/core';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 
 import { AlphabetPrefixService } from './components/pipes/alphabet-prefix.service';
+import { AutoTagsSaveService } from './components/home/tags/tags-save.service';
+import { AutoTagsService } from './components/home/tags/tags.service';
 import { ElectronService } from './providers/electron.service';
 import { HomeComponent } from './components/home/home.component';
 import { ManualTagsService } from './components/home/manual-tags/manual-tags.service';
 import { ResolutionFilterService } from './components/pipes/resolution-filter.service';
 import { ShowLimitService } from './components/pipes/show-limit.service';
-import { AutoTagsSaveService } from './components/home/tags/tags-save.service';
-import { AutoTagsService } from './components/home/tags/tags.service';
+import { StarFilterService } from './components/pipes/star-filter.service';
 import { WordFrequencyService } from './components/pipes/word-frequency.service';
 
 import { AddTagComponent } from './components/home/manual-tags/add-tag.component';
@@ -48,6 +49,7 @@ import { MagicSearchPipe } from './components/pipes/magic-search.pipe';
 import { RandomizePipe } from './components/pipes/randomize.pipe';
 import { ResolutionFilterPipe } from './components/pipes/resolution-filter.pipe';
 import { SimilarityPipe } from './components/pipes/similarity.pipe';
+import { StarFilterPipe } from './components/pipes/star-filter.pipe';
 import { TagFilterPipe } from './components/home/tags/tag-filter.pipe';
 import { TagMatchPipe } from './components/home/tags/tag-match.pipe';
 import { WordFrequencyPipe } from './components/pipes/word-frequency.pipe';
@@ -77,6 +79,7 @@ import { WordFrequencyPipe } from './components/pipes/word-frequency.pipe';
     SheetComponent,
     SimilarityPipe,
     SliderFilterComponent,
+    StarFilterPipe,
     StatisticsComponent,
     TagFilterPipe,
     TagMatchPipe,
@@ -95,14 +98,15 @@ import { WordFrequencyPipe } from './components/pipes/word-frequency.pipe';
   ],
   providers: [
     AlphabetPrefixService,
+    AutoTagsSaveService,
+    AutoTagsService,
     ElectronService,
     FileSearchPipe,
     ManualTagsService,
     ResolutionFilterService,
     ShowLimitService,
     SimilarityService,
-    AutoTagsSaveService,
-    AutoTagsService,
+    StarFilterService,
     WordFrequencyService
   ],
   bootstrap: [AppComponent]

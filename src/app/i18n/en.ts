@@ -57,14 +57,14 @@ export const English = {
     showFilesHint: 'Show files',
     showFilmstripDescription: 'Switches to the filmstrip view',
     showFilmstripHint: 'Show filmstrip',
-    showFullViewDescription: 'Switches to the all screenshots view', // TRANSLATE
-    showFullViewHint: 'Show full view', // TRANSLATE
     showFolderInFileViewDescription: 'Shows folder locations in the file view',
     showFolderInFileViewHint: 'Show folders in file view',
     showFoldersOnlyDescription: 'Switches to the folders-only view',
     showFoldersOnlyHint: 'Show folders only',
     showFreqDescription: 'Toggles the word cloud which shows up to nine of the most frequent words in currently shown files',
     showFreqHint: 'Word cloud',
+    showFullViewDescription: 'Switches to the all screenshots view', // TRANSLATE
+    showFullViewHint: 'Show full view', // TRANSLATE
     showMoreInfoDescription: 'Toggles showing file name, resolution, and video length',
     showMoreInfoHint: 'Show more info',
     showRecentDescription: 'Toggles the recently-opened video hub history',
@@ -75,6 +75,8 @@ export const English = {
     showThumbnailsHint: 'Show thumbnails',
     shuffleGalleryNowDescription: 'Shuffles the results in current view',
     shuffleGalleryNowHint: 'Shuffle current results',
+    starFilterDescription: 'Toggles the star filter', // TRANSLATE
+    starFilterHint: 'Star filter', // TRANSLATE
     startWizardDescription: 'Starts wizard again: create a new video hub or open recent',
     startWizardHint: 'Start wizard',
     verifyThumbnailsDescription: 'Verify all files have thumbnails',

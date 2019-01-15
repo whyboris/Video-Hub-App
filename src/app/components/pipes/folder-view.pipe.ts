@@ -31,6 +31,7 @@ export class FolderViewPipe implements PipeTransform {
             numOfScreenshots: 10, // temp hardcoded
             partialPath: element.partialPath,
             resolution: '',
+            stars: 0.5
           };
 
           arrWithFolders.push(tempClone);

@@ -12,6 +12,7 @@ export const SettingsButtonsGroups: string[][] = [
     'exclude',
     'magic',
     'resolutionFilter',
+    'starFilter'
   ],
   [
     'showFreq',
@@ -281,6 +282,13 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-res-filter',
     title: 'BUTTONS.resolutionFilterHint',
     description: 'BUTTONS.resolutionFilterDescription',
+  },
+  'starFilter': {
+    hidden: false,
+    toggled: true,
+    iconName: 'icon-res-filter',
+    title: 'BUTTONS.starFilterHint',
+    description: 'BUTTONS.starFilterDescription',
   },
   'showFreq': {
     hidden: false,

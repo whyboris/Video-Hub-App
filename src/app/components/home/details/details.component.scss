@@ -51,3 +51,19 @@
   font-size: 16px;
   margin-top: 4px;
 }
+
+.star-rating {
+  background-color: transparent;
+  background-image: url("./../../../../assets/logo.png");
+  background-size: 20px 20px;
+  border: 0;
+  cursor: pointer;
+  height: 20px;
+  margin: 3px;
+  opacity: 0.3;
+  width: 20px;
+}
+
+.star-lit {
+  opacity: 1;
+}

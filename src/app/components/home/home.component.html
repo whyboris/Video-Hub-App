@@ -622,6 +622,35 @@
 
       </div>
 
+      <!-- star filter & frequency histogram -->
+      <div *ngIf="settingsButtons['starFilter'].toggled" class="resolutionFilterContainer">
+        <div class="frequencyGraphContainer">
+          <ng-container *ngFor="let resolution of starRatingFreqArr; index as i">
+            <div
+              [ngClass]="{ resDisabled: (i < starLeftBound) || (i >= starRightBound) }"
+              [ngStyle]="{ height: resolution + '%' }"
+              class="frequency-bar"
+            >
+            </div>
+            <div
+              [ngClass]="{ resDisabled: (i < starLeftBound) || (i >= starRightBound) }"
+              class="resolutionName"
+            >
+              {{ starRatingNames[i] }}
+            </div>
+          </ng-container>
+        </div>
+
+        <app-slider-filter
+          [darkMode]="settingsButtons['darkMode'].toggled"
+          [maximumValue]="4"
+          [minimumValue]="0"
+          [steps]="4"
+          (newSliderFilterSelected)="newStarFilterSelected($event)"
+        ></app-slider-filter>
+
+      </div>
+
       <!-- Lev Distance -->
       <div class="levDistance" *ngIf="showSimilar">
         <span class="levSpan">
@@ -694,6 +723,7 @@
                 | fileSearchPipe: filters[3].array : filters[3].bool : false : true  : false
                 | fileSearchPipe: filters[4].array : filters[4].bool : true  : true  : true
                 | resolutionFilterPipe: settingsButtons['resolutionFilter'].toggled : freqLeftBound : freqRightBound
+                | starFilterPipe: settingsButtons['starFilter'].toggled : starLeftBound : starRightBound : forceStarFilterUpdate
                 | similarityPipe: showSimilar : findMostSimilar
                 | wordFrequencyPipe: settingsButtons['showFreq'].toggled : (settingsButtons['extendedWordCloud'].toggled ? 100 : 9)
                 | countPipe
@@ -826,6 +856,7 @@
           (contextmenu)="rightMouseClicked($event, item)"
           (openFileRequest)="openVideo($event)"
           (editFinalArrayTag)="editFinalArrayTag($event)"
+          (editFinalArrayStars)="editFinalArrayStars($event)"
           [elHeight]="imgHeight + textPaddingHeight"
           [elWidth]="previewWidth"
           [tags]="item.tags"
@@ -836,6 +867,7 @@
           [imgId]="item.hash"
           [numOfScreenshots]="item.numOfScreenshots"
           [rez]="item.resolution"
+          [star]="item.stars"
           [time]="item.duration"
           [title]="item.cleanName"
           [darkMode]="settingsButtons['darkMode'].toggled"

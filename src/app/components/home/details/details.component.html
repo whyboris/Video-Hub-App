@@ -42,6 +42,13 @@
       {{ rez }}
     </span>
 
+    <span class="fileSize">
+      Star rating:
+    </span>
+    <button class="star-rating" [ngClass]="{ 'star-lit': starRatingHack > 1 }" (click)="setStarRating(1.5)"></button>
+    <button class="star-rating" [ngClass]="{ 'star-lit': starRatingHack > 2 }" (click)="setStarRating(2.5)"></button>
+    <button class="star-rating" [ngClass]="{ 'star-lit': starRatingHack > 3 }" (click)="setStarRating(3.5)"></button>
+
     <app-add-tag-component
       (tag)="addThisTag($event)"
     ></app-add-tag-component>
