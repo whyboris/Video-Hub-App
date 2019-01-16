@@ -210,3 +210,20 @@ $sidebar-width: 190px;
   z-index: 9999;
   cursor: pointer;
 }
+
+.manual-tag-tray {
+  background: $gray-10;
+  padding: 20px;
+  border-top: 1px solid $gray-50;
+  bottom: 0;
+  height: 100px;
+  left: 0;
+  position: fixed;
+  width: 100vw;
+}
+
+.manual-tag-tray-label {
+  display: block;
+  font-size: 12px;
+  margin-bottom: 10px;
+}

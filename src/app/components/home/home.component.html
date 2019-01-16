@@ -888,6 +888,13 @@
 
 </div> <!-- end of window -->
 
+<div class="manual-tag-tray" *ngIf="settingsButtons['showTagTray'].toggled" @modalAnimation>
+  <span class="manual-tag-tray-label">
+    {{ 'TAGS.presentTags' | translate }}:
+  </span>
+  <app-view-tags-component [tags]="manualTagsService.tagsList"></app-view-tags-component>
+</div>
+
 <!-- IMPORT MODAL  -->
 
 <div

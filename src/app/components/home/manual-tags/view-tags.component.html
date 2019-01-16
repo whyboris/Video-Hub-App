@@ -1,21 +1,19 @@
-<div class="tagContainer">
-  <div
-    *ngFor="let tag of tags; index as i"
-    class="singleTag"
+<div
+  *ngFor="let tag of tags; index as i"
+  class="singleTag"
+>
+  <span *ngIf="allowRemoval" class="coverTheX">
+    &ensp;
+  </span>
+  <span
+    class="tag"
   >
-    <span class="coverTheX">
-      &ensp;
-    </span>
-    <span
-      class="tag"
-    >
-      {{ tag }}
-    </span>
-    <span
-      *ngIf="allowRemoval"
-      class="icon icon-close removeTag"
-      (click)="removeTag(tag)"
-    >
-    </span>
-  </div>
+    {{ tag }}
+  </span>
+  <span
+    *ngIf="allowRemoval"
+    class="icon icon-close removeTag"
+    (click)="removeTag(tag)"
+  >
+  </span>
 </div>
