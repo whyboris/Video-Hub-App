@@ -83,6 +83,8 @@ export const English = {
     tagExclusionHint: 'Tag exclude filter',
     tagIntersectionDescription: 'Toggles the search for videos containing each of the search tags',
     tagIntersectionHint: 'Tag search',
+    tagTrayDescription: 'Show the tray with all the manual tags', // TRANSLATE
+    tagTrayHint: 'Show tag tray', // TRANSLATE
     tagUnionDescription: 'Toggles the search for videos containing any of the search tags',
     tagUnionHint: 'Tag union search',
     verifyThumbnailsDescription: 'Verify all files have thumbnails',
@@ -197,6 +199,7 @@ export const English = {
     alreadyExists: 'tag already exists',
     delete: 'delete',
     filterList: 'Filter list',
+    presentTags: 'Tags in this hub', // TRANSLATE
   },
   SHORTCUTS: {
     andPress: 'and press',

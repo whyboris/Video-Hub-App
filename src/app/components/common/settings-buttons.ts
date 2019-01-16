@@ -38,6 +38,7 @@ export const SettingsButtonsGroups: string[][] = [
   ],
   [
     'darkMode',
+    'showTagTray',
   ],
   [
     'showMoreInfo',
@@ -236,6 +237,13 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-darken',
     title: 'BUTTONS.darkModeHint',
     description: 'BUTTONS.darkModeDescription',
+  },
+  'showTagTray': {
+    hidden: false,
+    toggled: false,
+    iconName: 'icon-tag',
+    title: 'BUTTONS.tagTrayHint',
+    description: 'BUTTONS.tagTrayDescription',
   },
   'folderUnion': {
     hidden: true,
