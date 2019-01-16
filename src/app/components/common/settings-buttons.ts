@@ -10,6 +10,9 @@ export const SettingsButtonsGroups: string[][] = [
     'fileUnion',
     'file',
     'exclude',
+    'tagUnion',
+    'tagIntersection',
+    'tagExclusion',
     'magic',
     'resolutionFilter',
     'starFilter'
@@ -268,6 +271,27 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-video-x',
     title: 'BUTTONS.excludeHint',
     description: 'BUTTONS.excludeDescription',
+  },
+  'tagUnion': {
+    hidden: true,
+    toggled: false,
+    iconName: 'icon-video-plus',
+    title: 'BUTTONS.tagUnionHint',
+    description: 'BUTTONS.tagUnionDescription',
+  },
+  'tagIntersection': {
+    hidden: false,
+    toggled: true,
+    iconName: 'icon-video-minus',
+    title: 'BUTTONS.tagIntersectionHint',
+    description: 'BUTTONS.tagIntersectionDescription',
+  },
+  'tagExclusion': {
+    hidden: true,
+    toggled: false,
+    iconName: 'icon-video-x',
+    title: 'BUTTONS.tagExclusionHint',
+    description: 'BUTTONS.tagExclusionDescription',
   },
   'magic': {
     hidden: false,

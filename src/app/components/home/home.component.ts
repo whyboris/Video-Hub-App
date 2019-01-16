@@ -703,15 +703,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
   handleFileWordClicked(filter: string, event?): void {
     this.showSidebar();
     if (event && event.shiftKey) { // Shift click to exclude
-      if (!this.settingsButtons['exclude'].toggled) {
-        this.settingsButtons['exclude'].toggled = true;
+      if (!this.settingsButtons['tagExclusion'].toggled) {
+        this.settingsButtons['tagExclusion'].toggled = true;
       }
-      this.onEnterKey(filter, 4); // 4th item is the `file` exlcude filter
+      this.onEnterKey(filter, 7); // 7th item is the `tag` exlcude filter
     } else {
-      if (!this.settingsButtons['file'].toggled) {
-        this.settingsButtons['file'].toggled = true;
+      if (!this.settingsButtons['tagIntersection'].toggled) {
+        this.settingsButtons['tagIntersection'].toggled = true;
       }
-      this.onEnterKey(filter, 3); // 3rd item is the `file` filter
+      this.onEnterKey(filter, 6); // 6th item is the `tag` filter
     }
   }
 
