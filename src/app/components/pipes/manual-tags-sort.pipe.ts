@@ -13,22 +13,25 @@ export class ManualTagSortPipe implements PipeTransform {
 
   /**
    * Return all the tags by frequency or in alphabetical order
-   * @param someTag
+   * @param allTags
+   * @param filterString    - remove all tags that do not contain this string
    * @param sortByFrequency - if false, will sort alphabetically
    * @param forceUpdateHack - boolean that is toggled manually to force updating the list
    */
-  transform(someTag: string[], sortByFrequency: boolean, forceUpdateHack: boolean): string[] {
+  transform(allTags: string[], filterString: string, sortByFrequency: boolean, forceUpdateHack: boolean): string[] {
 
-    console.log('pipe Running!');
+    if (filterString !== '') {
+      allTags = allTags.filter(tag => tag.includes(filterString));
+    }
 
     let sortedTags: string[];
 
     if (sortByFrequency) {
-      sortedTags = someTag.sort((a, b): any => {
+      sortedTags = allTags.sort((a, b): any => {
         return this.manualTagService.tagsMap.get(a) < this.manualTagService.tagsMap.get(b);
       });
     } else {
-      sortedTags = someTag.sort();
+      sortedTags = allTags.sort();
     }
 
     return sortedTags;

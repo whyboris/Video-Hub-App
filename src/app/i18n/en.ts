@@ -203,6 +203,7 @@ export const English = {
     delete: 'delete',
     filterList: 'Filter list',
     presentTags: 'Tags in this hub', // TRANSLATE
+    filterTags: 'Filter tags', // TRANSLATE
     starRating: 'Star rating', // TRANSLATE
   },
   SHORTCUTS: {

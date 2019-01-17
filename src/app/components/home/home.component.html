@@ -892,8 +892,17 @@
   <span class="manual-tag-tray-label">
     {{ 'TAGS.presentTags' | translate }}:
   </span>
+  <input
+    (keyup.esc)="manualTagFilterString = ''"
+    [(ngModel)]="manualTagFilterString"
+    class="manual-tag-tray-filter"
+    placeholder="{{ 'TAGS.filterTags' | translate }}"
+  >
   <app-view-tags-component
-    [tags]="manualTagsService.tagsList | manualTagSortPipe : settingsButtons['tagFrequencySort'].toggled : manualTagsService.pipeToggleHack"
+    [tags]="manualTagsService.tagsList | manualTagSortPipe
+      : manualTagFilterString
+      : settingsButtons['tagFrequencySort'].toggled
+      : manualTagsService.pipeToggleHack"
   ></app-view-tags-component>
 </div>
 
