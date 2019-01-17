@@ -892,7 +892,25 @@
   <span class="manual-tag-tray-label">
     {{ 'TAGS.presentTags' | translate }}:
   </span>
-  <app-view-tags-component [tags]="manualTagsService.tagsList"></app-view-tags-component>
+  <button
+    (click)="manualTagShowFrequency = !manualTagShowFrequency"
+    class="showFrequency"
+  >
+    {{ 'TAGS.showFrequency' | translate }}
+  </button>
+  <input
+    (keyup.esc)="manualTagFilterString = ''"
+    [(ngModel)]="manualTagFilterString"
+    class="manual-tag-tray-filter"
+    placeholder="{{ 'TAGS.filterTags' | translate }}"
+  >
+  <app-view-tags-component
+    [displayFrequency]="manualTagShowFrequency"
+    [tags]="manualTagsService.tagsList | manualTagSortPipe
+      : manualTagFilterString
+      : settingsButtons['tagFrequencySort'].toggled
+      : manualTagsService.pipeToggleHack"
+  ></app-view-tags-component>
 </div>
 
 <!-- IMPORT MODAL  -->

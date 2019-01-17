@@ -227,3 +227,31 @@ $sidebar-width: 190px;
   font-size: 12px;
   margin-bottom: 10px;
 }
+
+.showFrequency {
+  border-radius: 3px;
+  border: 1px solid red;
+  left: calc(50vw - 50px);
+  position: absolute;
+  top: 10px;
+}
+
+// TODO -- keep DRY -- this is taken from `inputFilter`
+.manual-tag-tray-filter {
+  background: transparent;
+  border-color: $gray-80;
+  border-width: 0 0 1px;
+  box-sizing: border-box;
+  font-size: 15px;
+  outline: none;
+  padding-bottom: 0;
+  padding: 6px;
+  position: absolute;
+  right: 50px;
+  top: 10px;
+  width: 140px;
+
+  &::placeholder {
+    color: $gray-80;
+  }
+}

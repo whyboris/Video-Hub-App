@@ -7,6 +7,7 @@ export class ManualTagsService {
 
   tagsMap: Map<string, number> = new Map();
   tagsList: string[] = [];
+  pipeToggleHack: boolean = false;
 
   constructor() { }
 
@@ -22,6 +23,7 @@ export class ManualTagsService {
       this.tagsMap.set(tag, 1);
       this.tagsList.push(tag);
     }
+    this.forceTagSortPipeUpdate();
   }
 
   removeTag(tag: string): void {
@@ -31,6 +33,7 @@ export class ManualTagsService {
     if (count === 1) {
       this.tagsList.splice(this.tagsList.indexOf(tag), 1);
     }
+    this.forceTagSortPipeUpdate();
   }
 
   /**
@@ -39,7 +42,6 @@ export class ManualTagsService {
    * @param text
    */
   getTypeahead(text: string): string {
-
     let mostLikely = '';
 
     if (text) {
@@ -70,6 +72,10 @@ export class ManualTagsService {
     console.log('done populating manual tags:');
     console.log(this.tagsList);
     console.log(this.tagsMap);
+  }
+
+  forceTagSortPipeUpdate(): void {
+    this.pipeToggleHack = !this.pipeToggleHack;
   }
 
 }

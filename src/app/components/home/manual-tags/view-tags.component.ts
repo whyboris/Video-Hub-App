@@ -11,6 +11,7 @@ export class ViewTagsComponent {
 
   @Input() tags: string[];
   @Input() allowRemoval: boolean;
+  @Input() displayFrequency: boolean;
 
   @Output() removeTagEmit = new EventEmitter<string>();
 

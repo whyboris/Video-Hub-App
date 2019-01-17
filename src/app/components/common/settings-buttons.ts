@@ -39,6 +39,7 @@ export const SettingsButtonsGroups: string[][] = [
   [
     'darkMode',
     'showTagTray',
+    'tagFrequencySort'
   ],
   [
     'showMoreInfo',
@@ -244,6 +245,13 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-tag',
     title: 'BUTTONS.tagTrayHint',
     description: 'BUTTONS.tagTrayDescription',
+  },
+  'tagFrequencySort': {
+    hidden: false,
+    toggled: false,
+    iconName: 'icon-tag',
+    title: 'BUTTONS.tagFrequencySortHint',
+    description: 'BUTTONS.tagFrequencySortDescription',
   },
   'folderUnion': {
     hidden: true,
