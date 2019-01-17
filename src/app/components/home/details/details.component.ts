@@ -59,9 +59,7 @@ export class DetailsComponent implements OnInit {
   constructor(
     public tagService: ManualTagsService,
     public sanitizer: DomSanitizer
-  ) {
-    this.starRatingHack = this.star;
-  }
+  ) { }
 
   mouseEnter() {
     if (this.hoverScrub) {
@@ -83,6 +81,7 @@ export class DetailsComponent implements OnInit {
   ngOnInit() {
     this.firstFilePath = 'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/thumbnails/' + this.imgId + '.jpg';
     this.fullFilePath =  'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/filmstrips/' + this.imgId + '.jpg';
+    this.starRatingHack = this.star;
   }
 
   mouseIsMoving($event) {

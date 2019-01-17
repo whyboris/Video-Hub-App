@@ -8,7 +8,7 @@
     (ngModelChange)="checkTypeahead($event)"
     (keydown.Tab)="tabPressed($event)"
     type="text"
-    placeholder="Add tag"
+    placeholder="{{ 'TAGS.addTag' | translate }}"
   >
   <span class="typeahead" *ngIf="typeAhead.length > 0">
     {{ typeAhead }}

@@ -81,6 +81,8 @@ export const English = {
     startWizardHint: 'Start wizard',
     tagExclusionDescription: 'Toggles the search filter to exclude any files that contain the filter tags',
     tagExclusionHint: 'Tag exclude filter',
+    tagFrequencySortDescription: 'Sort manual tags by frequency, otherwise alphabetically', // TRANSLATE
+    tagFrequencySortHint: 'Sort tags by frequency', // TRANSLATE
     tagIntersectionDescription: 'Toggles the search for videos containing each of the search tags',
     tagIntersectionHint: 'Tag search',
     tagTrayDescription: 'Show the tray with all the manual tags', // TRANSLATE
@@ -196,10 +198,12 @@ export const English = {
   TAGS: {
     add: 'Add',
     addSuccess: 'added successfully',
+    addTag: 'Add tag', // TRANSLATE
     alreadyExists: 'tag already exists',
     delete: 'delete',
     filterList: 'Filter list',
     presentTags: 'Tags in this hub', // TRANSLATE
+    starRating: 'Star rating', // TRANSLATE
   },
   SHORTCUTS: {
     andPress: 'and press',
