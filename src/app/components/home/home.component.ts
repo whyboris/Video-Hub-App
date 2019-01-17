@@ -212,6 +212,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // WIP
 
   manualTagFilterString: string = '';
+  manualTagShowFrequency: boolean = true;
 
   numOfScreenshots = 10; // hardcoded for now. Only used for import - TODO - refactor?
 

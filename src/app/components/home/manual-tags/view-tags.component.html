@@ -10,6 +10,14 @@
   >
     {{ tag }}
   </span>
+
+  <span
+    *ngIf="displayFrequency"
+    class="tag frequency"
+  >
+    {{ tagService.tagsMap.get(tag) }}
+  </span>
+
   <span
     *ngIf="allowRemoval"
     class="icon icon-close removeTag"

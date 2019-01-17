@@ -202,8 +202,9 @@ export const English = {
     alreadyExists: 'tag already exists',
     delete: 'delete',
     filterList: 'Filter list',
-    presentTags: 'Tags in this hub', // TRANSLATE
     filterTags: 'Filter tags', // TRANSLATE
+    presentTags: 'Tags in this hub', // TRANSLATE
+    showFrequency: 'Show Frequency', // TRANSLATE
     starRating: 'Star rating', // TRANSLATE
   },
   SHORTCUTS: {

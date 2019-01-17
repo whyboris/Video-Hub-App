@@ -57,4 +57,11 @@
       transition-property: transform;
     }
   }
+
+  .frequency {
+    background-color: #d1ae98;
+    transform: translate(-5px, 0);
+    z-index: 1;
+    padding-left: 10px;
+  }
 }
