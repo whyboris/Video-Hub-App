@@ -654,11 +654,25 @@
       <!-- Lev Distance -->
       <div class="levDistance" *ngIf="showSimilar">
         <span class="levSpan">
-          and similar to:
+          {{ 'SIDEBAR.similarTo' | translate }}
         </span>
         <span class="searchWord" (click)="clearLev()">
           {{ findMostSimilar }}
         </span>
+      </div>
+
+      <div class='sortFilter'>
+        <select
+          (change)="selectFilterOrder($event.target.value)"
+          class="size-dropdown languageDropDown sortDropdown"
+        >
+          <option value="default">{{ 'SIDEBAR.sortDefault' | translate }}</option>
+          <option value="random">{{ 'SIDEBAR.sortRandom' | translate }}</option>
+          <option value="sizeAsc">{{ 'SIDEBAR.sortSizeAsc' | translate }}</option>
+          <option value="sizeDesc">{{ 'SIDEBAR.sortSizeDesc' | translate }}</option>
+          <option value="timeAsc">{{ 'SIDEBAR.sortTimeAsc' | translate }}</option>
+          <option value="timeDesc">{{ 'SIDEBAR.sortTimeDesc' | translate }}</option>
+        </select>
       </div>
 
       <!-- total found -->
@@ -731,6 +745,7 @@
                 | wordFrequencyPipe: settingsButtons['showFreq'].toggled : (settingsButtons['extendedWordCloud'].toggled ? 100 : 9)
                 | countPipe
                 | randomizePipe: shuffleTheViewNow
+                | sortingPipe: sortType
                 | folderViewPipe: settingsButtons['showFoldersOnly'].toggled
                                   || (appState.currentView === 'files' && settingsButtons['showFolderInFileView'].toggled)
                                   : settingsButtons['showFoldersOnly'].toggled"

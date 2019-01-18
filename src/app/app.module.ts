@@ -50,6 +50,7 @@ import { ManualTagSortPipe } from './components/pipes/manual-tags-sort.pipe';
 import { RandomizePipe } from './components/pipes/randomize.pipe';
 import { ResolutionFilterPipe } from './components/pipes/resolution-filter.pipe';
 import { SimilarityPipe } from './components/pipes/similarity.pipe';
+import { SortingPipe } from './components/pipes/sorting.pipe';
 import { StarFilterPipe } from './components/pipes/star-filter.pipe';
 import { TagFilterPipe } from './components/home/tags/tag-filter.pipe';
 import { TagMatchPipe } from './components/home/tags/tag-match.pipe';
@@ -81,6 +82,7 @@ import { WordFrequencyPipe } from './components/pipes/word-frequency.pipe';
     SheetComponent,
     SimilarityPipe,
     SliderFilterComponent,
+    SortingPipe,
     StarFilterPipe,
     StatisticsComponent,
     TagFilterPipe,

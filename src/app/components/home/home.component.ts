@@ -16,6 +16,7 @@ import { HistoryItem } from '../common/history-item.interface';
 import { ImportSettingsObject } from '../common/import.interface';
 import { SavableProperties } from '../common/savable-properties.interface';
 import { SettingsObject } from '../common/settings-object.interface';
+import { SortType } from '../pipes/sorting.pipe';
 import { TagEmission, StarEmission } from './details/details.component';
 import { WizardOptions } from '../common/wizard-options.interface';
 
@@ -210,6 +211,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   itemToDisplay: ImageElement;
 
   // WIP
+
+  sortType: SortType = 'default';
 
   manualTagFilterString: string = '';
   manualTagShowFrequency: boolean = true;
@@ -1518,6 +1521,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.finalArray[position].stars = emission.stars;
     this.finalArrayNeedsSaving = true;
     this.forceStarFilterUpdate = !this.forceStarFilterUpdate;
+  }
+
+  selectFilterOrder(type: SortType): void {
+    console.log(type);
+    this.sortType = type;
   }
 
 
