@@ -1,4 +1,6 @@
 export const globals: Globals = {
+  version: '2.0.0a',
+  vhaFileVersion: 2,
   angularApp: null,               // reference used to send messages back to Angular App
   cancelCurrentImport: false,
   currentlyOpenVhaFile: '',       // OFFICAL DECREE IN NODE WHICH FILE IS CURRENTLY OPEN !!!
@@ -11,6 +13,8 @@ export const globals: Globals = {
 };
 
 interface Globals {
+  version: string;
+  vhaFileVersion: number;
   angularApp: any;
   cancelCurrentImport: boolean;
   currentlyOpenVhaFile: string;

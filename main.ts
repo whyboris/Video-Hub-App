@@ -226,6 +226,7 @@ function openThisDamnFile(pathToVhaFile: string) {
     } else {
       globals.currentlyOpenVhaFile = pathToVhaFile;
       lastSavedFinalObject = JSON.parse(data);
+      console.log('opened vha file version: ' + lastSavedFinalObject.version);
 
       // path to folder where the VHA file is
       globals.selectedOutputFolder = path.parse(pathToVhaFile).dir;
@@ -729,6 +730,7 @@ function sendFinalResultHome(
   const myFinalArray: ImageElement[] = insertTemporaryFields(alphabetizeFinalArray(theFinalArray));
 
   const finalObject: FinalObject = {
+    version: globals.vhaFileVersion,
     hubName: globals.hubName,
     inputDir: globals.selectedSourceFolder,
     numOfFolders: countFoldersInFinalArray(myFinalArray),

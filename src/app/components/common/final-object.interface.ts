@@ -3,6 +3,7 @@ import { ResolutionString } from '../pipes/resolution-filter.service';
 export type StarRating = 0.5 | 1.5 | 2.5 | 3.5;
 
 export interface FinalObject {
+  version: number;              // version of this vha file
   addTags?: string[];           // tags to add
   hubName: string;              // the name of the hub -- for recently-opened
   images: ImageElement[];       // see below
