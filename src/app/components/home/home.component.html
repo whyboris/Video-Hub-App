@@ -290,7 +290,7 @@
                     }"
                   title="{{ settingsButtons[buttonKey].title | translate }}"
                 >
-                  <span class="icon {{ settingsButtons[buttonKey].iconName }}"></span>
+                  <app-icon [icon]="settingsButtons[buttonKey].iconName"></app-icon>
                 </button>
 
                 <span
@@ -477,7 +477,7 @@
                 }"
               title="{{ settingsButtons[buttonKey].title | translate }}"
             >
-              <span class="icon {{ settingsButtons[buttonKey].iconName }}"></span>
+              <app-icon class="icon" [icon]="settingsButtons[buttonKey].iconName"></app-icon>
             </button><!--
         --></ng-container><!--
         --><!--
@@ -491,7 +491,7 @@
         class="gearButton"
         title="{{ 'SETTINGS.settings' | translate }}"
       >
-        <span class="icon icon-gear"></span>
+        <app-icon [icon]="'icon-gear'"></app-icon>
       </div>
 
     </div>
@@ -606,22 +606,23 @@
         </div>
 
         <app-slider-filter
+          (newSliderFilterSelected)="newResFilterSelected($event)"
           [darkMode]="settingsButtons['darkMode'].toggled"
           [maximumValue]="4"
           [minimumValue]="0"
           [steps]="4"
-          (newSliderFilterSelected)="newResFilterSelected($event)"
         ></app-slider-filter>
 
         <app-slider-filter
+          (newSliderFilterSelected)="newLengthFilterSelected($event)"
           [darkMode]="settingsButtons['darkMode'].toggled"
+          [labelFormatPipe]="'lengthPipe'"
           [maximumValue]="longest"
           [minimumValue]="0"
-          [steps]="50"
           [showLabels]="true"
-          [labelFormatPipe]="'lengthPipe'"
-          (newSliderFilterSelected)="newLengthFilterSelected($event)"
+          [steps]="50"
         ></app-slider-filter>
+
       </div>
 
       <!-- star filter & frequency histogram -->

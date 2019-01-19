@@ -57,11 +57,9 @@ button {
   transition-property: color, transform, background-color, margin, opacity;
 
   & .icon {
-    &:before {
-      color: $gray-70;
-      transform: translate(-1px, -1px);
-      transition: $button-toggle-length;
-    }
+    fill: $gray-70;
+    transform: translate(-1px, -1px);
+    transition: $button-toggle-length;
   }
 
   &:first-child {
@@ -88,11 +86,9 @@ button {
     margin-bottom: 1px;
 
     & .icon {
-      &:before {
-        color: $white;
-        transform: translate(0px, 0px);
-        transition: $button-toggle-length;
-      }
+      fill: $white;
+      transform: translate(0px, 0px);
+      transition: $button-toggle-length;
     }
   }
 
@@ -117,12 +113,10 @@ button {
   }
 
   & .icon {
-    &:before {
-      color: $white;
-      transform: translate(0px, 0px);
-      transition: $button-toggle-length;
-      text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.3);
-    }
+    fill: $white;
+    transform: translate(0px, 0px);
+    transition: $button-toggle-length;
+    text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.3);
   }
 
   span {
@@ -141,9 +135,7 @@ button {
   }
 
   & .icon {
-    &:before {
-      color: #929292;
-    }
+    fill: #929292;
   }
 }
 
@@ -155,8 +147,6 @@ button {
   border-left: 1px solid #000000;
 
   & .icon {
-    &:before {
-      color: white;
-    }
+    fill: white;
   }
 }

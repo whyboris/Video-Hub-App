@@ -36,17 +36,19 @@ h3 {
 
 .gearButton {
   cursor: pointer;
-  color: $gray-40;
+  fill: $gray-40;
   font-size: 14px;
+  height: 15px;
   position: absolute;
   right: 10px;
   top: 8px;
   transition: 370ms;
+  width: 15px;
 
   &:hover {
+    fill: $gray-50;
     text-shadow: 0 0 7px rgba(255, 255, 255, 0.5);
     transition: 370ms;
-    color: $gray-50;
   }
 }
 

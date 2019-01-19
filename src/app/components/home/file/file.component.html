@@ -3,7 +3,7 @@
 >
 
   <div *ngIf="video.cleanName === '***'; else fileNameBlock">
-    <span class="icon icon-folder-blank"></span>
+    <app-icon [icon]="'icon-folder-blank'" class="icon-folder-lol"></app-icon>
     <span
       [innerHtml]="video.partialPath | folderArrowsPipe : true"
       [ngStyle]="{ color: darkMode ? '#999999' : '#333333' }"
