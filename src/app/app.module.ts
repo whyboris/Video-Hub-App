@@ -45,6 +45,7 @@ import { FileSizePipe } from './components/pipes/file-size.pipe';
 import { FolderArrowsPipe } from './components/pipes/folder-arrows.pipe';
 import { FolderViewPipe } from './components/pipes/folder-view.pipe';
 import { LengthPipe } from './components/pipes/length.pipe';
+import { LengthFilterPipe } from './components/pipes/length-filter.pipe';
 import { MagicSearchPipe } from './components/pipes/magic-search.pipe';
 import { ManualTagSortPipe } from './components/pipes/manual-tags-sort.pipe';
 import { ResolutionFilterPipe } from './components/pipes/resolution-filter.pipe';
@@ -54,6 +55,7 @@ import { StarFilterPipe } from './components/pipes/star-filter.pipe';
 import { TagFilterPipe } from './components/home/tags/tag-filter.pipe';
 import { TagMatchPipe } from './components/home/tags/tag-match.pipe';
 import { WordFrequencyPipe } from './components/pipes/word-frequency.pipe';
+import { WrapperPipe } from './components/pipes/wrapper.pipe';
 
 @NgModule({
   declarations: [
@@ -73,6 +75,7 @@ import { WordFrequencyPipe } from './components/pipes/word-frequency.pipe';
     FullViewComponent,
     HomeComponent,
     LengthPipe,
+    LengthFilterPipe,
     MagicSearchPipe,
     ManualTagSortPipe,
     PreviewComponent,
@@ -88,7 +91,8 @@ import { WordFrequencyPipe } from './components/pipes/word-frequency.pipe';
     TagsComponent,
     TopComponent,
     ViewTagsComponent,
-    WordFrequencyPipe
+    WordFrequencyPipe,
+    WrapperPipe
   ],
   imports: [
     AppRoutingModule,

@@ -1,5 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
-import { setPreviousOrParentTNode } from '@angular/core/src/render3/state';
+import { Component, Input, OnInit, OnDestroy, Output, EventEmitter, Pipe } from '@angular/core';
 
 @Component({
   selector: 'app-slider-filter',
@@ -12,6 +11,8 @@ export class SliderFilterComponent implements OnInit, OnDestroy {
   @Input() minimumValue: number;
   @Input() maximumValue: number;
   @Input() steps: number;
+  @Input() showLabels?: boolean = false;
+  @Input() labelFormatPipe?: string;
 
   @Output() newSliderFilterSelected = new EventEmitter<number[]>();
 
