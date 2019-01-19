@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { SimilarityService } from './similarity.service';
 
-import { FileSearchPipe } from './file-search.pipe';
+import { ImageElement } from '../common/final-object.interface';
 
 @Pipe({
   name: 'similarityPipe'
@@ -19,7 +19,7 @@ export class SimilarityPipe implements PipeTransform {
    * @param render      whether to use the pipe or not
    * @param file        for what file to find similar files
    */
-  transform(finalArray: any, render: boolean, file: string): any {
+  transform(finalArray: ImageElement[], render: boolean, file: string): any {
 
     if (render && finalArray.length > 0) {
 

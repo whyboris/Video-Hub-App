@@ -32,7 +32,7 @@ export class FullViewComponent implements OnInit {
   @Input() hubName: string;
   @Input() imgId: any;
   @Input() largerFont: boolean;
-  @Input() numOfScreenshots: number;
+  @Input() screens: number;
   @Input() rez: string;
   @Input() showMeta: boolean;
   @Input() time: string;
@@ -57,7 +57,7 @@ export class FullViewComponent implements OnInit {
     const imgWidth = this._imgHeight * 16 / 9;
     const imagesPerRow = Math.floor(this._metaWidth / imgWidth) || 1; // never let this be zero
     this.computedWidth = imgWidth * imagesPerRow;
-    const numOfRows = Math.ceil(this.numOfScreenshots / imagesPerRow);
+    const numOfRows = Math.ceil(this.screens / imagesPerRow);
     this.rowOffsets = [];
     for (let i = 0; i < numOfRows; i++) {
       this.rowOffsets.push(i * Math.floor(this._metaWidth / imgWidth));

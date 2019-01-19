@@ -21,7 +21,7 @@ export interface ImageElement {
   hash: string;                  // used for detecting changed files and as a screenshot identifier
   height: number;                // height of the video
   index: number;                 // for the `default` sort order
-  numOfScreenshots: number;      // number of screenshots for this file
+  screens: number;               // number of screenshots for this file
   partialPath: string;           // for opening the file, just prepend the `inputDir`
   resBucket: number;             // the resolution category the video falls into (for faster sorting)
   resolution: ResolutionString;  // e.g. `720`, `1080`, `SD`, `HD`

@@ -1,4 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
+
 import { ImageElement } from '../common/final-object.interface';
 
 @Pipe({
@@ -14,7 +15,7 @@ export class FolderViewPipe implements PipeTransform {
    * @param render      whether to insert folders
    * @param folderOnly  whether to ONLY show folders
    */
-  transform(finalArray: any[], render: boolean, folderOnly: boolean): any[] {
+  transform(finalArray: ImageElement[], render: boolean, folderOnly: boolean): any[] {
     if (render) {
       const arrWithFolders = [];
 
@@ -30,7 +31,7 @@ export class FolderViewPipe implements PipeTransform {
             hash: '',
             height: 0,
             index: 0,
-            numOfScreenshots: 10, // temp hardcoded
+            screens: 10, // temp hardcoded
             partialPath: element.partialPath,
             resBucket: 0,
             resolution: '',

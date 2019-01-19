@@ -186,7 +186,7 @@ export const English = {
     minute: 'minute',
     minutes: 'minutes',
     nameYourHub: 'Name your hub',
-    numOfScreenshots: 'Number of screenshots',
+    screens: 'Number of screenshots',
     openPrevious: 'Open previous hub',
     openPreviouslySaved: 'Open a previously-saved Video Hub',
     recentlyOpened: 'Recently-opened hubs:',

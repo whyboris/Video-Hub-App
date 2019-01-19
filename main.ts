@@ -805,14 +805,14 @@ function extractAllScreenshots(
 
       const duration: number = theFinalArray[currentElement].duration;
       const fileHash: string = theFinalArray[currentElement].hash;
-      const numOfScreenshots = theFinalArray[currentElement].numOfScreenshots;
+      const screens = theFinalArray[currentElement].screens;
 
       generateScreenshotStrip(
         pathToVideo,
         fileHash,
         duration,
         screenshotHeight,
-        numOfScreenshots,
+        screens,
         screenshotFolder,
         extractTenCallback
       );

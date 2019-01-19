@@ -30,7 +30,7 @@
   </div>
 
   <ng-container
-  *ngFor="let dummy of ' '.repeat(numOfScreenshots).split(''); index as i"
+  *ngFor="let dummy of ' '.repeat(screens).split(''); index as i"
   >
     <div
       [ngStyle]="{
@@ -50,7 +50,7 @@
             'background-position-x': (percentOffset * i) + '%'
           }"
       >
-      <span *ngIf="showMeta" class="time" @metaAppear>{{ (time / numOfScreenshots) * (i+1) | lengthPipe }}</span>
+      <span *ngIf="showMeta" class="time" @metaAppear>{{ (time / screens) * (i+1) | lengthPipe }}</span>
       </div>
     </div>
   </ng-container>

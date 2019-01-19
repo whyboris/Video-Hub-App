@@ -30,16 +30,16 @@
       [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
       class="title"
     >
-      {{ title }}
+      {{ video.cleanName }}
     </span>
     <span class="fileSize">
-      {{ time | lengthPipe }}
+      {{ video.duration | lengthPipe }}
     </span>
     <span class="fileSize">
-      {{ fileSize | fileSizePipe : true }}
+      {{ video.fileSize | fileSizePipe : true }}
     </span>
-    <span class="fileSize">
-      {{ rez }}
+    <span class="fileSize" *ngIf="video.width">
+      {{ video.width }} x {{ video.height }}
     </span>
 
     <span class="fileSize">

@@ -2,6 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { StarFilterService } from './star-filter.service';
 
+import { ImageElement } from '../common/final-object.interface';
+
 @Pipe({
   name: 'starFilterPipe'
 })
@@ -19,7 +21,7 @@ export class StarFilterPipe implements PipeTransform {
    * @param rightBound
    * @param forceUpdate -- dummy variable to trick the pure pipe into updating
    */
-  transform(finalArray: any, render?: boolean, leftBound?: number, rightBound?: number, forceUpdate?: boolean): any {
+  transform(finalArray: ImageElement[], render?: boolean, leftBound?: number, rightBound?: number, forceUpdate?: boolean): any {
 
     if (render && finalArray.length > 0) {
 

@@ -26,7 +26,7 @@ export class SheetComponent implements OnInit {
   @Input() imgHeight: number;
   @Input() imgId: any; // the filename of screenshot strip without `.jpg`
   @Input() largerFont: boolean;
-  @Input() numOfScreenshots: number;
+  @Input() screens: number;
   @Input() randomImage: boolean; // all code related to this currently removed
   @Input() returnToFirstScreenshot: boolean;
   @Input() rez: string;
@@ -44,7 +44,7 @@ export class SheetComponent implements OnInit {
 
   ngOnInit() {
     this.fullFilePath =  'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/filmstrips/' + this.imgId + '.jpg';
-    this.percentOffset = (100 / (this.numOfScreenshots - 1));
+    this.percentOffset = (100 / (this.screens - 1));
   }
 
   decreaseZoomLevel() {

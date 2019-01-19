@@ -191,7 +191,7 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
                 hash: '',
                 height: 0,
                 index: 0,
-                numOfScreenshots: 10, // hardcoded default
+                screens: 10, // hardcoded default
                 partialPath: partialPath,
                 resBucket: 0,
                 resolution: '',
@@ -606,7 +606,7 @@ function extractMetadataForThisONEFile(
       imageElement.hash = hashFile(filePath);
       imageElement.height = origHeight;
       imageElement.width = origWidth;
-      imageElement.numOfScreenshots = computeNumberOfScreenshots(numberOfScreenshots, duration);
+      imageElement.screens = computeNumberOfScreenshots(numberOfScreenshots, duration);
 
       extractMetaCallback(imageElement);
     }

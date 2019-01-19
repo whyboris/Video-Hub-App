@@ -217,7 +217,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   manualTagFilterString: string = '';
   manualTagShowFrequency: boolean = true;
 
-  numOfScreenshots = 10; // hardcoded for now. Only used for import - TODO - refactor?
+  screens = 10; // hardcoded for now. Only used for import - TODO - refactor?
 
   isFirstRunEver = false;
 
@@ -605,7 +605,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       exportFolderPath: this.wizard.selectedOutputFolder,
       hubName: (this.futureHubName || 'untitled'),
       imgHeight: this.screenshotSizeForImport,
-      numberOfScreenshots: this.numOfScreenshots,
+      numberOfScreenshots: this.screens,
       videoDirPath: this.wizard.selectedSourceFolder
     };
     this.electronService.ipcRenderer.send('start-the-import', importOptions, this.wizard.listOfFiles);
@@ -986,7 +986,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       selectedSourceFolder: '',
       selectedOutputFolder: ''
     };
-    this.numOfScreenshots = 10; // default
+    this.screens = 10; // default
     this.screenshotSizeForImport = 288; // default
     this.toggleSettings();
     this.showWizard = true;
@@ -1174,10 +1174,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   /**
    * Called on screenshot size dropdown select
-   * @param numOfScreenshots - string of number of screenshots per video
+   * @param screens - string of number of screenshots per video
    */
-  selectNumOfScreenshots(numOfScreenshots: string) {
-    this.numOfScreenshots = parseFloat(numOfScreenshots);
+  selectNumOfScreens(screens: string) {
+    this.screens = parseFloat(screens);
   }
 
   // ---- HANDLE EXTRACTING AND RESTORING SETTINGS ON OPEN AND BEFORE CLOSE ------
