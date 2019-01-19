@@ -1,5 +1,8 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+
+import { ImageElement } from '../../common/final-object.interface';
+
 import { galleryItemAppear, metaAppear, textAppear } from '../../common/animations';
 
 @Component({
@@ -25,18 +28,14 @@ export class FullViewComponent implements OnInit {
     this.render();
   }
 
+  @Input() video: ImageElement;
+
   @Input() darkMode: boolean;
   @Input() elHeight: number;
-  @Input() fileSize: number;
   @Input() folderPath: string;
   @Input() hubName: string;
-  @Input() imgId: any;
   @Input() largerFont: boolean;
-  @Input() screens: number;
-  @Input() rez: string;
   @Input() showMeta: boolean;
-  @Input() time: string;
-  @Input() title: string;
 
   _imgHeight: number;
   _metaWidth: number;
@@ -49,7 +48,7 @@ export class FullViewComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.fullFilePath = encodeURI('file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/filmstrips/' + this.imgId + '.jpg');
+    this.fullFilePath = 'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/filmstrips/' + this.video.hash + '.jpg';
     this.render();
   }
 
@@ -57,7 +56,10 @@ export class FullViewComponent implements OnInit {
     const imgWidth = this._imgHeight * 16 / 9;
     const imagesPerRow = Math.floor(this._metaWidth / imgWidth) || 1; // never let this be zero
     this.computedWidth = imgWidth * imagesPerRow;
-    const numOfRows = Math.ceil(this.screens / imagesPerRow);
+    console.log(this.video);
+    // !!! WARNING !!! ### !!! ??? WHY IS `video` undefined sometimes in this view?
+    // TODO -- investigate why `video` is sometimes undefined!
+    const numOfRows = Math.ceil((<any>(this.video || {screens: 0}).screens) / imagesPerRow);
     this.rowOffsets = [];
     for (let i = 0; i < numOfRows; i++) {
       this.rowOffsets.push(i * Math.floor(this._metaWidth / imgWidth));

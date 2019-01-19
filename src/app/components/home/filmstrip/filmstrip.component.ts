@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { galleryItemAppear, metaAppear, textAppear } from '../../common/animations';
+import { ImageElement } from '../../common/final-object.interface';
 
 @Component({
   selector: 'app-filmstrip-item',
@@ -14,20 +15,16 @@ export class FilmstripComponent implements OnInit {
 
   @ViewChild('filmstripHolder') filmstripHolder: ElementRef;
 
+  @Input() video: ImageElement;
+
   @Input() darkMode: boolean;
   @Input() elHeight: number;
-  @Input() fileSize: number;
   @Input() folderPath: string;
   @Input() hoverScrub: boolean;
   @Input() hubName: string;
   @Input() imgHeight: number;
-  @Input() imgId: any;
   @Input() largerFont: boolean;
-  @Input() screens: number;
-  @Input() rez: string;
   @Input() showMeta: boolean;
-  @Input() time: string;
-  @Input() title: string;
 
   fullFilePath: string = '';
   filmXoffset: number = 0;
@@ -37,14 +34,14 @@ export class FilmstripComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.fullFilePath =  encodeURI('file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/filmstrips/' + this.imgId + '.jpg');
+    this.fullFilePath =  'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/filmstrips/' + this.video.hash + '.jpg';
   }
 
   updateFilmXoffset($event) {
     if (this.hoverScrub) {
       const imgWidth = this.imgHeight * (16 / 9); // hardcoded aspect ratio
       const containerWidth = this.filmstripHolder.nativeElement.getBoundingClientRect().width;
-      const howManyScreensOutsideCutoff = (this.screens + 1) - Math.floor(containerWidth / imgWidth);
+      const howManyScreensOutsideCutoff = (this.video.screens + 1) - Math.floor(containerWidth / imgWidth);
 
       const cursorX = $event.layerX; // cursor's X position inside the filmstrip element
       this.filmXoffset = imgWidth * Math.floor(cursorX / (containerWidth / howManyScreensOutsideCutoff));

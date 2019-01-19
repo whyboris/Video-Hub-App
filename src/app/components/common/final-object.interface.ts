@@ -27,6 +27,8 @@ export interface ImageElement {
   // OPTIONAL
   tags?: string[];               // tags associated with this particular file
   // Stripped out and not saved in the VHA file
+  durationDisplay: string;       // displayed duration in X:XX:XX format
+  fileSizeDisplay: string;       // displayed as XXXmb or X.Xgb
   index: number;                 // for the `default` sort order
   resBucket: number;             // the resolution category the video falls into (for faster sorting)
   resolution: ResolutionString;  // e.g. `720`, `1080`, `SD`, `HD`

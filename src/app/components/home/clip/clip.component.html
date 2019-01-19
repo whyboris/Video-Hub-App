@@ -12,12 +12,12 @@
   [ngStyle]="{ height: imgHeight + 'px' }"
 >
 
-  <span *ngIf="showMeta" class="time" @metaAppear>{{ time | lengthPipe }}</span>
-  <span *ngIf="showMeta" class="rez" @metaAppear>{{ rez }}</span>
+  <span *ngIf="showMeta" class="time" @metaAppear>{{ video.durationDisplay }}</span>
+  <span *ngIf="showMeta" class="rez" @metaAppear>{{ video.resolution }}</span>
 
   <video
     *ngIf="noError && !autoplay"
-    [src]="'file://' + folderPath + '/' + imgId"
+    [src]="'file://' + folderPath + '/' + pathToVideo"
     [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + poster)"
     [ngStyle]="{ 'height': imgHeight + 'px' }"
     class="screencap"
@@ -28,7 +28,7 @@
 
   <video
     *ngIf="noError && autoplay"
-    [src]="'file://' + folderPath + '/' + imgId"
+    [src]="'file://' + folderPath + '/' + pathToVideo"
     [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + poster)"
     [ngStyle]="{ 'height': imgHeight + 'px' }"
     class="screencap"
@@ -48,9 +48,9 @@
   class="title"
   @textAppear
 >
-  {{ title }}
+  {{ video.cleanName }}
   <div class="fileSize" *ngIf="showMeta">
-    {{ showMeta ? ( fileSize | fileSizePipe ) : '' }}
+    {{ showMeta ? '(' + video.fileSizeDisplay + ')' : '' }}
   </div>
 </span>
 

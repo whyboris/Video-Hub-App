@@ -17,8 +17,8 @@
         'background-position-x': percentOffset + '%'
       }"
   >
-    <span *ngIf="showMeta" class="time" @metaAppear>{{ time | lengthPipe }}</span>
-    <span *ngIf="showMeta" class="rez" @metaAppear>{{ rez }}</span>
+    <span *ngIf="showMeta" class="time" @metaAppear>{{ video.durationDisplay }}</span>
+    <span *ngIf="showMeta" class="rez" @metaAppear>{{ video.resolution }}</span>
   </div>
 
   <span
@@ -28,9 +28,9 @@
     class="title"
     @textAppear
   >
-    {{ title }}
+    {{ video.cleanName }}
     <div class="fileSize" *ngIf="showMeta">
-      {{ showMeta ? ( fileSize | fileSizePipe ) : '' }}
+      {{ showMeta ? '(' + video.fileSizeDisplay + ')' : '' }}
     </div>
   </span>
 

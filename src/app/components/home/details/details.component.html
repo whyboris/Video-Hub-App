@@ -33,10 +33,10 @@
       {{ video.cleanName }}
     </span>
     <span class="fileSize">
-      {{ video.duration | lengthPipe }}
+      {{ video.durationDisplay }}
     </span>
     <span class="fileSize">
-      {{ video.fileSize | fileSizePipe : true }}
+      {{ video.fileSizeDisplay }}
     </span>
     <span class="fileSize" *ngIf="video.width">
       {{ video.width }} x {{ video.height }}

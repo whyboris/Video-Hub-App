@@ -4,10 +4,11 @@
   <div
     class="sheet-info"
   >
-    <div class="meta-info" >Title: {{ title }}</div>
-    <div class="meta-info" >Duration: {{ time | lengthPipe }}</div>
-    <div class="meta-info" >Size: {{ fileSize | fileSizePipe : true }}</div>
-    <div class="meta-info" >Resolution: {{ rez }}</div>
+    <!-- TODO - TRANSLATE & UPDATE CSS -->
+    <div class="meta-info"><small>Title:</small> {{ video.cleanName }}</div>
+    <div class="meta-info"><small>Duration:</small> {{ video.durationDisplay }}</div>
+    <div class="meta-info"><small>Size:</small> {{ video.fileSizeDisplay }}</div>
+    <div class="meta-info"><small>Resolution:</small> {{ video.width }} x {{ video.height }}</div>
   </div>
 
   <div style="margin: 20px">
@@ -30,7 +31,7 @@
   </div>
 
   <ng-container
-  *ngFor="let dummy of ' '.repeat(screens).split(''); index as i"
+  *ngFor="let dummy of ' '.repeat(video.screens).split(''); index as i"
   >
     <div
       [ngStyle]="{
@@ -50,7 +51,7 @@
             'background-position-x': (percentOffset * i) + '%'
           }"
       >
-      <span *ngIf="showMeta" class="time" @metaAppear>{{ (time / screens) * (i+1) | lengthPipe }}</span>
+      <span *ngIf="showMeta" class="time" @metaAppear>{{ (video.duration / video.screens) * (i+1) | lengthPipe }}</span>
       </div>
     </div>
   </ng-container>
