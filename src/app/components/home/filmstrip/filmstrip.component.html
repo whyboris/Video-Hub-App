@@ -14,8 +14,8 @@
         'background-size': 'auto ' + imgHeight + 'px'
       }"
   >
-    <span *ngIf="showMeta" class="time" >{{ time | lengthPipe }}</span>
-    <span *ngIf="showMeta" class="rez" >{{ rez }}</span>
+    <span *ngIf="showMeta" class="time" >{{ video.duration | lengthPipe }}</span>
+    <span *ngIf="showMeta" class="rez" >{{ video.resolution }}</span>
   </div>
 
   <span
@@ -24,9 +24,9 @@
     [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
     class="title"
   >
-    {{ title }}
+    {{ video.cleanName }}
     <div class="fileSize" *ngIf="showMeta">
-      {{ fileSize | fileSizePipe }}
+      {{ video.fileSize | fileSizePipe }}
     </div>
   </span>
 

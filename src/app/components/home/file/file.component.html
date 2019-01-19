@@ -1,13 +1,12 @@
 <div
   class="element-container"
-  [ngStyle]="{ height: elHeight + 'px'}"
   @galleryItemAppear
 >
 
-  <div *ngIf="title === '***'; else fileNameBlock">
+  <div *ngIf="video.cleanName === '***'; else fileNameBlock">
     <span class="icon icon-folder-blank"></span>
     <span
-      [innerHtml]="folderPath | folderArrowsPipe : true"
+      [innerHtml]="video.partialPath | folderArrowsPipe : true"
       [ngStyle]="{ color: darkMode ? '#999999' : '#333333' }"
       class="folder"
     ></span>
@@ -21,7 +20,7 @@
       class="size"
       @metaAppear
     >
-      {{ rez }}
+      {{ video.resolution }}
     </div>
 
     <div
@@ -33,14 +32,14 @@
         }"
       [ngClass]="{ 'larger-font': largerFont }"
     >
-      {{ title }}
+      {{ video.cleanName }}
       <div
         *ngIf="showMeta"
         [ngStyle]="{ color: darkMode ? '#555555' : '#666666' }"
         class="fileSize"
         @metaAppear
       >
-        {{ fileSize | fileSizePipe }}
+        {{ video.fileSize | fileSizePipe }}
       </div>
     </div>
 
@@ -50,7 +49,7 @@
       class="length"
       @metaAppear
     >
-      {{ time | lengthPipe }}
+      {{ video.time | lengthPipe }}
     </div>
 
   </ng-template>

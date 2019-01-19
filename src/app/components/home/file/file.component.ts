@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 import { galleryItemAppear, metaAppear } from '../../common/animations';
+import { ImageElement } from '../../common/final-object.interface';
 
 @Component({
   selector: 'app-file-item',
@@ -12,16 +13,12 @@ import { galleryItemAppear, metaAppear } from '../../common/animations';
 })
 export class FileComponent {
 
-  @Input() elHeight: number;
-  @Input() fileSize: number;
-  @Input() folderPath: string;
+  @Input() video: ImageElement;
+
+  @Input() darkMode: boolean;
   @Input() imgId: any;
   @Input() largerFont: boolean;
-  @Input() rez: string;
   @Input() showMeta: boolean;
-  @Input() time: string;
-  @Input() title: string;
-  @Input() darkMode: boolean;
 
   constructor() { }
 

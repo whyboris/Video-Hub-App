@@ -167,18 +167,13 @@
     <app-filmstrip-item
       [darkMode]="settingsButtons['darkMode'].toggled"
       [elHeight]="150"
-      [fileSize]="itemToRename.fileSize"
       [folderPath]="appState.selectedOutputFolder"
       [hoverScrub]="true"
       [hubName]="appState.hubName"
       [imgHeight]="100"
-      [imgId]="itemToRename.hash"
       [largerFont]="true"
-      [screens]="itemToRename.screens"
-      [rez]="itemToRename.resolution"
       [showMeta]="true"
-      [time]="itemToRename.duration"
-      [title]="itemToRename.fileName"
+      [video]="itemToRename"
     ></app-filmstrip-item>
 
     <span class="renameFrom">{{ 'RIGHTCLICK.renameFrom' | translate }}</span>
@@ -762,17 +757,15 @@
           *ngFor="let item of scroll.viewPortItems"
           (click)="handleClick($event, item)"
           (contextmenu)="rightMouseClicked($event, item)"
+
           [elHeight]="imgHeight + textPaddingHeight"
           [elWidth]="previewWidth"
-          [fileSize]="item.fileSize"
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
           [imgHeight]="imgHeight"
-          [imgId]="item.hash"
-          [screens]="item.screens"
-          [rez]="item.resolution"
-          [time]="item.duration"
-          [title]="item.cleanName"
+
+          [video]="item"
+
           [darkMode]="settingsButtons['darkMode'].toggled"
           [hoverScrub]="settingsButtons['hoverScrub'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
@@ -787,16 +780,14 @@
           *ngFor="let item of scroll.viewPortItems"
           (click)="handleClick($event, item)"
           (contextmenu)="rightMouseClicked($event, item)"
+
+          [video]="item"
+
           [elHeight]="imgHeight + textPaddingHeight"
-          [fileSize]="item.fileSize"
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
           [imgHeight]="imgHeight"
-          [imgId]="item.hash"
-          [screens]="item.screens"
-          [rez]="item.resolution"
-          [time]="item.duration"
-          [title]="item.cleanName"
+
           [darkMode]="settingsButtons['darkMode'].toggled"
           [hoverScrub]="settingsButtons['hoverScrub'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
@@ -809,17 +800,15 @@
           *ngFor="let item of scroll.viewPortItems"
           (click)="handleClick($event, item)"
           (contextmenu)="rightMouseClicked($event, item)"
+
+          [video]="item"
+
           [elHeight]="imgHeight + textPaddingHeight"
-          [fileSize]="item.fileSize"
           [folderPath]="appState.selectedOutputFolder"
+          [galleryWidth]="galleryWidth"
           [hubName]="appState.hubName"
           [imgHeight]="imgHeight"
-          [galleryWidth]="galleryWidth"
-          [imgId]="item.hash"
-          [screens]="item.screens"
-          [rez]="item.resolution"
-          [time]="item.duration"
-          [title]="item.cleanName"
+
           [darkMode]="settingsButtons['darkMode'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
@@ -829,14 +818,11 @@
       <ng-container *ngIf="appState.currentView === 'files'">
         <app-file-item
           *ngFor="let item of scroll.viewPortItems"
-          [folderPath]="item.partialPath"
-          [title]="item.cleanName"
-          (click)="(item.cleanName === '***') ? handleFolderWordClicked(item.partialPath) : openVideo(item.hash)"
           (contextmenu)="(item.cleanName === '***') ? doNothing() : rightMouseClicked($event, item)"
-          [time]="item.duration"
-          [rez]="item.resolution"
-          [fileSize]="item.fileSize"
-          [elHeight]="20"
+          (click)="(item.cleanName === '***') ? handleFolderWordClicked(item.partialPath) : openVideo(item.hash)"
+
+          [video]="item"
+
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
           [darkMode]="settingsButtons['darkMode'].toggled"
@@ -846,24 +832,22 @@
       <ng-container *ngIf="appState.currentView === 'clips'">
         <app-clip-item
           *ngFor="let item of scroll.viewPortItems"
+
           (click)="handleClick($event, item)"
           (contextmenu)="rightMouseClicked($event, item)"
-          [title]="item.cleanName"
-          [imgId]="item.hash"
-          [time]="item.duration"
-          [rez]="item.resolution"
-          [fileSize]="item.fileSize"
-          [imgHeight]="imgHeight"
+
+          [video]="item"
+
           [elHeight]="imgHeight + textPaddingHeight"
           [elWidth]="previewWidth"
-          [hubName]="appState.hubName"
           [folderPath]="appState.selectedOutputFolder"
+          [hubName]="appState.hubName"
+          [imgHeight]="imgHeight"
+
+          [autoplay]="settingsButtons['autoplayClips'].toggled"
+          [darkMode]="settingsButtons['darkMode'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
-          [hoverScrub]="settingsButtons['hoverScrub'].toggled"
-          [randomImage]="settingsButtons['randomImage'].toggled"
-          [darkMode]="settingsButtons['darkMode'].toggled"
-          [autoplay]="settingsButtons['autoplayClips'].toggled"
         ></app-clip-item>
       </ng-container>
 
@@ -874,15 +858,19 @@
           (openFileRequest)="openVideo($event)"
           (editFinalArrayTag)="editFinalArrayTag($event)"
           (editFinalArrayStars)="editFinalArrayStars($event)"
+
           [video]="item"
+
           [elHeight]="imgHeight + textPaddingHeight"
           [elWidth]="previewWidth"
-          [tags]="item.tags"
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
           [imgHeight]="imgHeight"
+
+          [tags]="item.tags"
           [imgId]="item.hash"
           [star]="item.stars"
+
           [darkMode]="settingsButtons['darkMode'].toggled"
           [hoverScrub]="settingsButtons['hoverScrub'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"

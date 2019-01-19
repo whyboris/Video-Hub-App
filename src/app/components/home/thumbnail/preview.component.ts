@@ -1,6 +1,7 @@
 import { Component, HostListener, Input, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { galleryItemAppear, metaAppear, textAppear } from '../../common/animations';
+import { ImageElement } from '../../common/final-object.interface';
 
 @Component({
   selector: 'app-gallery-item',
@@ -14,23 +15,19 @@ export class PreviewComponent implements OnInit {
 
   @ViewChild('filmstripHolder') filmstripHolder: ElementRef;
 
+  @Input() video: ImageElement;
+
   @Input() darkMode: boolean;
   @Input() elHeight: number;
   @Input() elWidth: number;
-  @Input() fileSize: number;
   @Input() folderPath: string;
   @Input() hoverScrub: boolean;
   @Input() hubName: string;
   @Input() imgHeight: number;
-  @Input() imgId: any; // the filename of screenshot strip without `.jpg`
   @Input() largerFont: boolean;
-  @Input() screens: number;
   @Input() randomImage: boolean; // all code related to this currently removed
   @Input() returnToFirstScreenshot: boolean;
-  @Input() rez: string;
   @Input() showMeta: boolean;
-  @Input() time: string;
-  @Input() title: string;
 
   percentOffset: number = 0;
   firstFilePath = '';
@@ -54,8 +51,8 @@ export class PreviewComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.firstFilePath = encodeURI('file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/thumbnails/' + this.imgId + '.jpg');
-    this.fullFilePath =  encodeURI('file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/filmstrips/' + this.imgId + '.jpg');
+    this.firstFilePath = 'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/thumbnails/' + this.video.hash + '.jpg';
+    this.fullFilePath =  'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/filmstrips/' + this.video.hash + '.jpg';
   }
 
   mouseIsMoving($event) {
@@ -63,7 +60,7 @@ export class PreviewComponent implements OnInit {
       const cursorX = $event.layerX;
       const containerWidth = this.filmstripHolder.nativeElement.getBoundingClientRect().width;
 
-      this.percentOffset = (100 / (this.screens - 1)) * Math.floor(cursorX / (containerWidth / this.screens));
+      this.percentOffset = (100 / (this.video.screens - 1)) * Math.floor(cursorX / (containerWidth / this.video.screens));
     }
   }
 
