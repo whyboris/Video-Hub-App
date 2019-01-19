@@ -28,6 +28,8 @@ import { English } from '../../i18n/en';
 import { French } from '../../i18n/fr';
 import { Russian } from '../../i18n/ru';
 
+import { globals } from '../../../../main-globals';
+
 import {
   donutAppear,
   galleryItemAppear,
@@ -104,7 +106,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // ========================================================================================
   demo = false;
   webDemo = false;
-  versionNumber = '1.3.0';
+  versionNumber = globals.version;
   macVersion = false;
   // ========================================================================================
 
