@@ -2,11 +2,10 @@
 
 .hidingSettingsMenu {
   cursor: pointer;
-  left: 13px;
+  left: 8px;
   position: absolute;
-  top: 34px;
+  top: 36px;
   transition: 100ms;
-  transform-origin: 4px 8px;
   z-index: 20;
 
   &:hover {
@@ -15,13 +14,19 @@
   }
 }
 
+.mini-chevron {
+  width: 15px;
+  display: block;
+}
+
 .flipped {
-  transition: 100ms;
+  transform-origin: 7.5px 7.5px;
   transform: rotate(180deg);
+  transition: 100ms;
 
   &:hover {
-    transition: 100ms;
     transform: rotate(180deg) scale(1.5);
+    transition: 100ms;
   }
 }
 
@@ -34,10 +39,10 @@
 }
 
 .input-icon {
-  color: $gray-50;
-  font-size: 12px;
+  fill: $gray-50;
   position: absolute;
   transform: translate(3px, 11px);
+  width: 15px;
 }
 
 .searchWord {

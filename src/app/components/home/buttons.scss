@@ -7,6 +7,17 @@ button {
   outline: none;
 }
 
+.close-modal-icon {
+  display: inline-block;
+  transition-duration: 150ms;
+  transition-property: fill;
+  width: 15px;
+
+  &:hover {
+    fill: #ff6666;
+  }
+}
+
 .flatSettingsButton {
   background: transparent;
   border: none;

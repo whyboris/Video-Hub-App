@@ -19,35 +19,37 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-checkmark:before { content: "\f1a5"; } // checkmark was `\f194` but now the same as power
-.icon-chevron-down-mini:before { content: "\f1a1"; }
-.icon-chevron-left:before { content: "\f1a4"; }
+// Last remaining used one
 .icon-chevron-right:before { content: "\f1a0"; }
-.icon-chevron-up:before { content: "\f195"; }
-.icon-close:before { content: "\f188"; }
-.icon-cloud:before { content: "\f189"; }
-.icon-darken:before { content: "\f17e"; }
-.icon-eye-closed:before { content: "\f17b"; }
-.icon-eye-open:before { content: "\f17f"; }
-.icon-folder-blank:before { content: "\f18a"; }
-.icon-folder-minus:before { content: "\f199"; }
-.icon-folder-plus:before { content: "\f19a"; }
-.icon-folder-x:before { content: "\f19b"; }
-.icon-gear:before { content: "\f197"; }
-.icon-larger:before { content: "T"; } // used to be "\f1a2"
-.icon-looking-glass:before { content: "\f18b"; }
-.icon-maximize:before { content: "\f18c"; }
-.icon-minus:before { content: "\f191"; }
-.icon-plus:before { content: "\f192"; }
-.icon-power:before { content: "\f1a5"; }
-.icon-random:before { content: "\f1a3"; }
-.icon-res-filter:before { content: "\f1a6"; }
-.icon-show-filenames:before { content: "\f198"; }
-.icon-show-filmstrip:before { content: "\f183"; }
-.icon-show-thumbnails:before { content: "\f193"; }
-.icon-tag:before { content: "\f185"; }
-.icon-toggle-scrub:before { content: "\f18e"; }
-.icon-video-blank:before { content: "\f19c"; }
-.icon-video-minus:before { content: "\f19d"; }
-.icon-video-plus:before { content: "\f19e"; }
-.icon-video-x:before { content: "\f19f"; }
+
+// .icon-checkmark:before { content: "\f1a5"; } // checkmark was `\f194` but now the same as power
+// .icon-chevron-down-mini:before { content: "\f1a1"; }
+// .icon-chevron-left:before { content: "\f1a4"; }
+// .icon-chevron-up:before { content: "\f195"; }
+// .icon-close:before { content: "\f188"; }
+// .icon-cloud:before { content: "\f189"; }
+// .icon-darken:before { content: "\f17e"; }
+// .icon-eye-closed:before { content: "\f17b"; }
+// .icon-eye-open:before { content: "\f17f"; }
+// .icon-folder-blank:before { content: "\f18a"; }
+// .icon-folder-minus:before { content: "\f199"; }
+// .icon-folder-plus:before { content: "\f19a"; }
+// .icon-folder-x:before { content: "\f19b"; }
+// .icon-gear:before { content: "\f197"; }
+// .icon-larger:before { content: "T"; } // used to be "\f1a2"
+// .icon-looking-glass:before { content: "\f18b"; }
+// .icon-maximize:before { content: "\f18c"; }
+// .icon-minus:before { content: "\f191"; }
+// .icon-plus:before { content: "\f192"; }
+// .icon-power:before { content: "\f1a5"; }
+// .icon-random:before { content: "\f1a3"; }
+// .icon-res-filter:before { content: "\f1a6"; }
+// .icon-show-filenames:before { content: "\f198"; }
+// .icon-show-filmstrip:before { content: "\f183"; }
+// .icon-show-thumbnails:before { content: "\f193"; }
+// .icon-tag:before { content: "\f185"; }
+// .icon-toggle-scrub:before { content: "\f18e"; }
+// .icon-video-blank:before { content: "\f19c"; }
+// .icon-video-minus:before { content: "\f19d"; }
+// .icon-video-plus:before { content: "\f19e"; }
+// .icon-video-x:before { content: "\f19f"; }

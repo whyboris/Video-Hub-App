@@ -157,7 +157,7 @@
     class="closeSettings closeRename"
     title="{{ 'RIGHTCLICK.cancelRename' | translate }}"
   >
-    <span class="icon icon-close"></span>
+    <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
   </div>
 
     <span class="renameHeading">{{ 'RIGHTCLICK.renameTitle' | translate }}</span>
@@ -220,7 +220,7 @@
       class="closeSettings"
       title="{{ 'SETTINGS.closeSettings' | translate }}"
     >
-      <span class="icon icon-close"></span>
+      <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
     </div>
     <app-tags-component
       [hubName]="appState.hubName"
@@ -241,7 +241,7 @@
       class="closeSettings"
       title="{{ 'SETTINGS.closeSettings' | translate }}"
     >
-      <span class="icon icon-close"></span>
+      <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
     </div>
 
     <button (click)="showSettingsGroup(0)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 0 }">
@@ -330,7 +330,7 @@
             flatSettingsButton:    settingsButtons['flatIcons'].toggled
           }"
         >
-          <span class="icon icon-minus"></span>
+          <app-icon [icon]="'icon-minus'"></app-icon>
         </button>
         <button
           (click)="resetZoomLevel()"
@@ -349,7 +349,7 @@
             flatSettingsButton:    settingsButtons['flatIcons'].toggled
           }"
         >
-          <span class="icon icon-plus"></span>
+          <app-icon [icon]="'icon-plus'"></app-icon>
         </button>
       </div>
 
@@ -497,7 +497,7 @@
     </div>
 
     <div (click)="toggleSettingsMenu()" [ngClass]="{ flipped: !appState.menuHidden }" class="hidingSettingsMenu">
-      <span class="icon icon-chevron-down-mini"></span>
+      <app-icon class="mini-chevron" [icon]="'icon-chevron-down-mini'"></app-icon>
     </div>
 
     <div
@@ -517,7 +517,7 @@
       <ng-container *ngFor="let filter of filters; index as j">
         <ng-container *ngIf="settingsButtons[filter.uniqueKey].toggled">
 
-          <span class="icon input-icon {{ settingsButtons[filter.uniqueKey].iconName }}"></span>
+          <app-icon class="input-icon" [icon]="settingsButtons[filter.uniqueKey].iconName"></app-icon>
           <input
             id="{{ filter.uniqueKey }}"
             (keyup.enter)="onEnterKey(filter.string, j)"
@@ -559,7 +559,7 @@
 
       <!-- magic search -->
       <ng-container *ngIf="settingsButtons['magic'].toggled">
-        <span class="icon input-icon {{ settingsButtons['magic'].iconName }}"></span>
+        <app-icon class="input-icon" [icon]="settingsButtons['magic'].iconName"></app-icon>
         <input
           #magicSearch
           (keydown.escape)="magicSearchString = ''"
@@ -942,7 +942,7 @@
 <div *ngIf="showWizard" class="wizard" @myWizardAnimation>
 
   <div *ngIf="canCloseWizard" (click)="hideWizard()" class="closeWizard" title="{{ 'WIZARD.closeButton' | translate }}">
-    <span class="icon icon-close"></span>
+    <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
   </div>
 
   <div class="left-side" @slowFadeIn>
