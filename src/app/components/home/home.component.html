@@ -744,8 +744,7 @@
                 | similarityPipe: showSimilar : findMostSimilar
                 | wordFrequencyPipe: settingsButtons['showFreq'].toggled : (settingsButtons['extendedWordCloud'].toggled ? 100 : 9)
                 | countPipe
-                | randomizePipe: shuffleTheViewNow
-                | sortingPipe: sortType
+                | sortingPipe: sortType : shuffleTheViewNow
                 | folderViewPipe: settingsButtons['showFoldersOnly'].toggled
                                   || (appState.currentView === 'files' && settingsButtons['showFolderInFileView'].toggled)
                                   : settingsButtons['showFoldersOnly'].toggled"

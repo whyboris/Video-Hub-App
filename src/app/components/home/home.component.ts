@@ -1526,6 +1526,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   selectFilterOrder(type: SortType): void {
     console.log(type);
     this.sortType = type;
+    // this.shuffleTheViewNow++;
   }
 
 

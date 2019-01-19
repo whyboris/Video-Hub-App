@@ -11,9 +11,13 @@ export class SortingPipe implements PipeTransform {
   /**
    * Return the same array randomized on next search
    * @param galleryArray
-   * @param doIt
+   * @param sortingType - sorting method
+   * @param forceSortUpdateHack - hack to force the sorting update
    */
-  transform(galleryArray: ImageElement[], sortingType: SortType): ImageElement[] {
+  transform(galleryArray: ImageElement[], sortingType: SortType, forceSortUpdateHack: number): ImageElement[] {
+
+    console.log('SORTING RUNNING');
+
     if (sortingType === 'random') {
       let currentIndex = galleryArray.length;
       let temporaryValue;
@@ -32,19 +36,30 @@ export class SortingPipe implements PipeTransform {
         newArray[currentIndex] = newArray[randomIndex];
         newArray[randomIndex] = temporaryValue;
       }
-      console.log('SHUFFLING');
+      console.log('VIEW SHUFFLED');
       return newArray;
     } else if (sortingType === 'sizeAsc') {
-      return galleryArray.sort((x: ImageElement, y: ImageElement): any => {
-        console.log(x.fileSize - y.fileSize);
+      const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
         return x.fileSize - y.fileSize;
       });
+      return sorted.slice(0); // SEND BACK A CLONE - else the vied does not update
     } else if (sortingType === 'sizeDesc') {
-      return galleryArray.sort((x: ImageElement, y: ImageElement): any => {
-        console.log(y.fileSize - x.fileSize);
+      const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
         return y.fileSize - x.fileSize;
       });
+      return sorted.slice(0);
+    } else if (sortingType === 'timeAsc') {
+      const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
+        return x.duration - y.duration;
+      });
+      return sorted.slice(0);
+    } else if (sortingType === 'timeDesc') {
+      const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
+        return y.duration - x.duration;
+      });
+      return sorted.slice(0);
     } else {
+      console.log('default');
       return galleryArray;
     }
 
