@@ -12,8 +12,10 @@
   overflow-y: scroll;
   top: 10%;
   height: 80vh;
-  width: 80vw;
+  width: calc(80vw + 10px);
   z-index: 30;
+
+  @include scrollBar;
 }
 
 .filmstrip-container {

@@ -26,15 +26,17 @@ export class FolderViewPipe implements PipeTransform {
           const tempClone: ImageElement = {
             cleanName: '***',
             duration: 0,
+            durationDisplay: '',
             fileName: element.fileName,
             fileSize: 0,
+            fileSizeDisplay: '',
             hash: '',
             height: 0,
             index: 0,
-            screens: 10, // temp hardcoded
             partialPath: element.partialPath,
             resBucket: 0,
             resolution: '',
+            screens: 10, // temp hardcoded
             stars: 0.5,
             width: 0,
           };

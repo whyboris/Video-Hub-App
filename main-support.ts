@@ -85,8 +85,10 @@ export function insertTemporaryFields(imagesArray: ImageElement[]): ImageElement
 
     // set resolution string & bucket
     const resolution: ResolutionMeta = labelVideo(element.width, element.height);
-    element.resolution = resolution.label;
+    element.durationDisplay = getDurationDisplay(element.duration);
+    element.fileSizeDisplay = getFileSizeDisplay(element.fileSize);
     element.resBucket = resolution.bucket;
+    element.resolution = resolution.label;
 
     // set index for default sorting
     element.index = counter;
@@ -94,6 +96,40 @@ export function insertTemporaryFields(imagesArray: ImageElement[]): ImageElement
   });
 
   return imagesArray;
+}
+
+/**
+ * Generate the file size formatted as XXXmb or X.Xgb
+ * @param fileSize
+ */
+function getFileSizeDisplay(sizeInBytes: number): string {
+  if (sizeInBytes) {
+    const rounded = Math.round(sizeInBytes / 1000000);
+    // tslint:disable-next-line:max-line-length
+    return (rounded > 999 ? Math.round(rounded / 100) / 10 + 'gb' : rounded + 'mb');
+  } else {
+    return '';
+  }
+}
+
+/**
+ * Generate duration formatted as X:XX:XX
+ * @param numOfSec
+ */
+function getDurationDisplay(numOfSec: number): string {
+
+  if (numOfSec === undefined || numOfSec === 0) {
+    return '';
+  } else {
+    const hh = (Math.floor(numOfSec / 3600)).toString();
+    const mm = (Math.floor(numOfSec / 60) % 60).toString();
+    const ss = (Math.floor(numOfSec) % 60).toString();
+
+    return (hh !== '0' ? hh + ':' : '')
+         + (mm.length !== 2 ? '0' + mm : mm)
+         + ':'
+         + (ss.length !== 2 ? '0' : '') + ss;
+  }
 }
 
 /**
@@ -135,6 +171,8 @@ export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: stri
  */
 function stripOutTemporaryFields(imagesArray: ImageElement[]): ImageElement[] {
   imagesArray.forEach((element) => {
+    delete(element.durationDisplay);
+    delete(element.fileSizeDisplay);
     delete(element.index);
     delete(element.resBucket);
     delete(element.resolution);
@@ -201,15 +239,17 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
               finalArray[elementIndex] = {
                 cleanName: cleanUpFileName(file.name),
                 duration: 0,
+                durationDisplay: '',
                 fileName: file.name,
                 fileSize: 0,
+                fileSizeDisplay: '',
                 hash: '',
                 height: 0,
                 index: 0,
-                screens: 10, // hardcoded default
                 partialPath: partialPath,
                 resBucket: 0,
                 resolution: '',
+                screens: 10, // hardcoded default
                 stars: 0.5,
                 width: 0,
               };

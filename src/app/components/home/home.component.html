@@ -125,17 +125,15 @@
   <!-- Thumbnail Sheet Display -->
   <app-thumbnail-sheet
     *ngIf="sheetDisplay"
+
     [elHeight]="imgHeight"
     [elWidth]="previewWidth"
-    [fileSize]="itemToDisplay.fileSize"
     [folderPath]="appState.selectedOutputFolder"
     [hubName]="appState.hubName"
     [imgHeight]="imgHeight"
-    [imgId]="itemToDisplay.hash"
-    [screens]="itemToDisplay.screens"
-    [rez]="itemToDisplay.resolution"
-    [time]="itemToDisplay.duration"
-    [title]="itemToDisplay.cleanName"
+
+    [video]="itemToDisplay"
+
     [darkMode]="settingsButtons['darkMode'].toggled"
     [hoverScrub]="settingsButtons['hoverScrub'].toggled"
     [largerFont]="settingsButtons['fontSizeLarger'].toggled"

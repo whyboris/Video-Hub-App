@@ -1,6 +1,5 @@
 <div
   class="element-container"
-  @galleryItemAppear
 >
 
   <div *ngIf="video.cleanName === '***'; else fileNameBlock">
@@ -39,7 +38,7 @@
         class="fileSize"
         @metaAppear
       >
-        {{ video.fileSize | fileSizePipe }}
+        ({{ video.fileSizeDisplay }})
       </div>
     </div>
 
@@ -49,7 +48,7 @@
       class="length"
       @metaAppear
     >
-      {{ video.time | lengthPipe }}
+      {{ video.duration | lengthPipe }}
     </div>
 
   </ng-template>

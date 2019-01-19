@@ -50,7 +50,7 @@
 >
   {{ video.cleanName }}
   <div class="fileSize" *ngIf="showMeta">
-    {{ showMeta ? ( video.fileSize | fileSizePipe ) : '' }}
+    {{ showMeta ? '(' + video.fileSizeDisplay + ')' : '' }}
   </div>
 </span>
 
