@@ -10,11 +10,14 @@ button {
 .flatSettingsButton {
   background: transparent;
   border: none;
-  color: $gray-50;
-  margin-right: 4px;
+  fill: $gray-50;
+  margin-right: 8px;
   margin-top: 2px;
   transition: $button-toggle-length;
   transition-property: color;
+
+  min-width: 15px;
+  padding: 0;
 
   &:hover {
     text-shadow: 0 0 3px $white;
@@ -22,18 +25,18 @@ button {
   }
 
   &:active {
-    color: #b5cbff;
+    fill: #b5cbff;
     transition: $button-toggle-length;
   }
 
   &:last-child {
-    margin-right: 8px;
+    margin-right: 12px;
   }
 
 }
 
 .flatSettingsButtonToggled {
-  color: #729aff;
+  fill: #729aff;
   transition: $button-toggle-length;
 }
 
@@ -51,7 +54,7 @@ button {
   max-width: 21px;
   min-height: 21px;
   min-width: 21px;
-  padding: 0;
+  padding: 2px;
   text-align: center;
   transition: $button-toggle-length;
   transition-property: color, transform, background-color, margin, opacity;
