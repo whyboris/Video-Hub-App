@@ -13,10 +13,10 @@ export class FolderArrowsPipe implements PipeTransform {
   transform(folderPath: string, trailing: boolean): string {
 
     let htmlString = folderPath;
-    htmlString = htmlString.replace(/\//g, '<span class="icon icon-arrow"></span>');
-    htmlString = htmlString.replace(/\\/g, '<span class="icon icon-arrow"></span>');
+    htmlString = htmlString.replace(/\//g, '<app-icon [icon]="\'icon-arrow\'"></app-icon>');
+    htmlString = htmlString.replace(/\\/g, '<app-icon [icon]="\'icon-arrow\'"></app-icon>');
     if (trailing) {
-      htmlString = htmlString + '<span class="icon icon-arrow"></span>';
+      htmlString = htmlString + '<app-icon [icon]="\'icon-arrow\'"></app-icon>';
     }
 
     return `${htmlString}`;

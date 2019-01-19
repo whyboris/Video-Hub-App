@@ -27,7 +27,7 @@
         }"
       class="minimizeButton"
     >
-      <span class="icon icon-minus"></span>
+      <app-icon class="window-button" [icon]="'icon-minus'"></app-icon>
     </div>
     <div
       (click)="initiateMaximize()"
@@ -37,7 +37,7 @@
         }"
       class="maximizeButton"
     >
-      <span class="icon icon-maximize"></span>
+      <app-icon class="window-button" [icon]="'icon-maximize'"></app-icon>
     </div>
     <div
       (click)="initiateClose()"
@@ -47,7 +47,7 @@
         }"
       class="closeButton"
     >
-      <span class="icon icon-close"></span>
+      <app-icon class="window-button" [icon]="'icon-close'"></app-icon>
     </div>
   </div>
 

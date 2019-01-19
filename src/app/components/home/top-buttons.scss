@@ -1,5 +1,10 @@
 @import "variables";
 
+.window-button {
+  display: inline-block;
+  width: 15px;
+}
+
 .top-logo {
   margin: -2px 8px 0 4px;
 }
@@ -10,10 +15,10 @@
 }
 
 .winBtn {
-  color: #333333;
+  fill: #333333;
   cursor: pointer;
   position: fixed;
-  transition-property: color;
+  transition-property: fill;
   transition: 600ms;
 
   &.closeButton {
@@ -32,8 +37,8 @@
   }
 
   &:hover {
-    color: #ff6666;
-    transition-property: color;
+    fill: #ff6666;
+    transition-property: fill;
     transition: 200ms;
   }
 }
@@ -43,7 +48,7 @@
   box-sizing: border-box;
   cursor: pointer;
   height: 13px;
-  padding: 0 0 0 3px;
+  padding: 0;
   position: fixed;
   top: 3.5px;
   transition: 400ms;
@@ -51,46 +56,37 @@
 
   &.closeButton {
     background: #fe6058;
-    color: #fe6058;
+    fill: #fe6058;
     left: 7px;
 
-    & .icon {
-      transform: translate(0.5px, -3px) !important;
+    & .window-button {
+      transform: translate(-1px, -1px) !important;
     }
   }
 
   &.maximizeButton {
     background: #29ca42;
-    color: #29ca42;
+    fill: #29ca42;
     left: 47px;
 
-    & .icon {
-      transform: translate(0.5px, -3px) !important;
+    & .window-button {
+      transform: translate(-1px, -1px) !important;
     }
   }
 
   &.minimizeButton {
     background: #fec02f;
-    color: #fec02f;
+    fill: #fec02f;
     left: 27px;
 
-    & .icon {
-      transform: translate(0, -3px) !important;
+    & .window-button {
+      transform: translate(-1px, -1px) !important;
     }
   }
 
   &:hover {
     transition: 200ms;
-    color: #000000;
-  }
-
-  & .icon {
-    position: absolute;
-    transform: translate(1px, -3px);
-
-    &:before {
-      font-size: 12px;
-    }
+    fill: #000000;
   }
 }
 
@@ -98,15 +94,15 @@
   background: #222222;
 
   & .draggable {
-    color: #888888;
+    fill: #888888;
   }
 
   & .winBtn {
-    color: #aaaaaa;
+    fill: #aaaaaa;
 
     &:hover {
       transition: 200ms;
-      color: #ff6666;
+      fill: #ff6666;
     }
   }
 }

@@ -2,21 +2,27 @@
 
 .icon {
   cursor: pointer;
-}
+  display: inline-block;
+  max-height: 15px;
+  max-width: 15px;
+  position: absolute;
+  transform: translate(0, 2px);
+  width: 15px;
+  fill: $gray-60;
+  transition-duration: 200ms;
+  transition-property: fill;
 
-.icon-video,
-.icon-folder {
-  font-size: 12px;
-  margin-right: 5px;
-  // color: #444444;
+  &:hover {
+    fill: $gray-80;
+  }
 }
 
 .folder-container {
   max-height: 18px;
   min-width: calc(100vw - 100px);
   overflow: hidden;
-  .icon-folder-blank:before {
-    color: $gray-60;
+  .icon-folder-blank {
+    fill: $gray-60;
     position: absolute;
     transform: translate(0, 3px);
   }
@@ -46,8 +52,8 @@
   min-width: calc(100vw - 100px);
   overflow: hidden;
 
-  .icon-video-blank:before {
-    color: $gray-60;
+  .icon-video-blank {
+    fill: $gray-60;
     position: absolute;
     transform: translate(0, 3px);
   }

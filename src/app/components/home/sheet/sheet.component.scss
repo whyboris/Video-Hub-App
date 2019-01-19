@@ -6,14 +6,21 @@
   border: 1px solid $gray-50;
   box-shadow: 0 3px 7px 3px rgba(0, 0, 0, 0.3);
   box-sizing: border-box;
+  height: 80vh;
   left: 10vw;
+  overflow-y: scroll;
   padding: 2%;
   position: fixed;
-  overflow-y: scroll;
   top: 10%;
-  height: 80vh;
   width: calc(80vw + 10px);
   z-index: 30;
+
+  // Consider making larger
+  // Will need to add a `close` button if made bigger
+  // top: 4vh;
+  // left: 2vw;
+  // height: 94vh;
+  // width: calc(95vw + 10px);
 
   @include scrollBar;
 }
@@ -21,10 +28,10 @@
 .filmstrip-container {
   display: inline-block;
   overflow: hidden;
+  padding: 9px;
   position: relative;
   transition-property: height;
   transition: 300ms;
-  padding: 9px;
 }
 
 .video-box {
@@ -79,4 +86,11 @@
 .larger-font {
   font-size: 16px;
   margin-top: 4px;
+}
+
+.reset-button {
+  margin: 0 10px;
+  max-width: initial;
+  padding: 0 10px;
+  transform: translate(0, -3px);
 }

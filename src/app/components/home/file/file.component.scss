@@ -26,21 +26,23 @@
   width: 21px;
 }
 
-.folder {
+.folder-name {
+  cursor: pointer;
   display: inline-block;
   font-size: 10px;
-}
-
-.folder {
-  cursor: pointer;
   font-size: 12px;
   font-weight: bold;
   text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .icon-folder-lol {
-  color: $gray-70;
+  cursor: pointer;
+  display: inline-block;
+  fill: $gray-70;
+  height: 20px;
   margin-right: 2px;
+  transform: translate(-4px, 4px);
+  width: 15px;
 }
 
 .title {
