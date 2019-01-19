@@ -17,7 +17,6 @@
       *ngIf="showMeta"
       [ngStyle]="{ color: darkMode ? '#555555' : '#BBBBBB' }"
       class="size"
-      @metaAppear
     >
       {{ video.resolution }}
     </div>
@@ -36,7 +35,6 @@
         *ngIf="showMeta"
         [ngStyle]="{ color: darkMode ? '#555555' : '#666666' }"
         class="fileSize"
-        @metaAppear
       >
         ({{ video.fileSizeDisplay }})
       </div>
@@ -48,7 +46,7 @@
       class="length"
       @metaAppear
     >
-      {{ video.duration | lengthPipe }}
+      {{ video.durationDisplay }}
     </div>
 
   </ng-template>

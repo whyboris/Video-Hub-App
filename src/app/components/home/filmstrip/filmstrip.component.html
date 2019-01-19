@@ -14,7 +14,7 @@
         'background-size': 'auto ' + imgHeight + 'px'
       }"
   >
-    <span *ngIf="showMeta" class="time" >{{ video.duration | lengthPipe }}</span>
+    <span *ngIf="showMeta" class="time" >{{ video.durationDisplay }}</span>
     <span *ngIf="showMeta" class="rez" >{{ video.resolution }}</span>
   </div>
 

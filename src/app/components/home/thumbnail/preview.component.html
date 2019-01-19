@@ -17,7 +17,7 @@
         'background-position-x': percentOffset + '%'
       }"
   >
-    <span *ngIf="showMeta" class="time" @metaAppear>{{ video.duration | lengthPipe }}</span>
+    <span *ngIf="showMeta" class="time" @metaAppear>{{ video.durationDisplay }}</span>
     <span *ngIf="showMeta" class="rez" @metaAppear>{{ video.resolution }}</span>
   </div>
 
