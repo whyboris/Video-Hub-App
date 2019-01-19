@@ -177,6 +177,7 @@ const shell = require('electron').shell;
 
 import {
   alphabetizeFinalArray,
+  checkForCorruptFile,
   countFoldersInFinalArray,
   extractAllMetadata,
   findAndImportNewFiles,
@@ -807,7 +808,7 @@ function extractAllScreenshots(
       const fileHash: string = theFinalArray[currentElement].hash;
       const screens = theFinalArray[currentElement].screens;
 
-      generateScreenshotStrip(
+      checkForCorruptFile(
         pathToVideo,
         fileHash,
         duration,
