@@ -183,6 +183,7 @@ import {
   missingThumbsIndex,
   sendCurrentProgress,
   generateScreenshotStrip,
+  checkForCorruptFile,
   updateFinalArrayWithHD,
   writeVhaFileToDisk,
   findAndImportNewFiles
@@ -804,7 +805,7 @@ function extractAllScreenshots(
       const fileHash: string = theFinalArray[currentElement].hash;
       const numOfScreenshots = theFinalArray[currentElement].numOfScreenshots;
 
-      generateScreenshotStrip(
+      checkForCorruptFile(
         pathToVideo,
         fileHash,
         duration,
