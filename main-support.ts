@@ -184,6 +184,63 @@ const spawn = require('child_process').spawn;
 // also spawns a shell (can pass a single cmd string)
 const exec = require('child_process').exec;
 
+export function checkForCorruptFile(pathToVideo: string,
+  fileHash: string,
+  duration: number,
+  screenshotHeight: number,
+  numberOfScreenshots: number,
+  saveLocation: string,
+  done: any) {
+    if (fs.existsSync(saveLocation + '/filmstrips/' + fileHash + '.jpg')) {
+      // console.log("thumbnails for " + fileHash + " already exist");
+      takeTenClips(pathToVideo,
+                   fileHash,
+                   duration,
+                   screenshotHeight,
+                   saveLocation,
+                   done);
+      return;
+    }
+
+    const totalCount = numberOfScreenshots;
+    const step: number = duration / (totalCount + 1);
+
+    const check = (current) => {
+      if (current === totalCount) {
+        generateScreenshotStrip(pathToVideo,
+          fileHash,
+          duration,
+          screenshotHeight,
+          numberOfScreenshots,
+          saveLocation,
+          done);
+          return;
+      }
+      // check for complete file
+      const time = (current + 1) * step; // +1 so we don't pick the 0th frame
+      const checkCommand = 'ffmpeg -v warning -ss ' + time + ' -t 1 -i "' + pathToVideo + '" -f null -';
+      const corruptRegex = /Output file is empty, nothing was encoded/g;
+      exec(checkCommand, (err, data, stderr) => {
+        console.log(data);
+        console.log(stderr);
+        if (err) {
+          // skip this file
+          console.log(pathToVideo + ' was corrupt, skipping!');
+          done();
+        } else {
+          if (data.match(corruptRegex) || stderr.match(corruptRegex)) {
+            // skip this file
+            console.log(pathToVideo + ' was corrupt, skipping!');
+            done();
+          } else {
+            check(current + 1);
+          }
+        }
+      });
+    };
+    check(0);
+  }
+
 /**
  * Take 10 screenshots of a particular file
  * at particular file size
@@ -354,18 +411,17 @@ export function extractFirstFrame(saveLocation: string, fileHash: string, done: 
 
 export function deleteThumbnails(imageLocation: string, hash: string) {
   // console.log('deleting ' + hash);
-  const filePath = path.join(imageLocation, hash);
-  const files = [ 'filmstrips/' + filePath + '.jpg',
-                  'clips/' + filePath + '.mp4',
-                  'thumbnails/' + filePath + '.jpg' ];
+  const files = [ imageLocation + '/filmstrips/' + hash + '.jpg',
+                  imageLocation + '/clips/' + hash + '.mp4',
+                  imageLocation + '/thumbnails/' + hash + '.jpg' ];
 
   files.forEach((file) => {
     if (fs.existsSync(file)) {
       fs.unlinkSync(file, (err) => {
-        // console.log(err);
+        console.log(err);
         // Don't even sweat it dawg!
       });
-      // console.log('deleted ' + file);
+      console.log('deleted ' + file);
     }
   });
 }
