@@ -411,18 +411,17 @@ export function extractFirstFrame(saveLocation: string, fileHash: string, done: 
 
 export function deleteThumbnails(imageLocation: string, hash: string) {
   // console.log('deleting ' + hash);
-  const filePath = path.join(imageLocation, hash);
-  const files = [ 'filmstrips/' + filePath + '.jpg',
-                  'clips/' + filePath + '.mp4',
-                  'thumbnails/' + filePath + '.jpg' ];
+  const files = [ imageLocation + '/filmstrips/' + hash + '.jpg',
+                  imageLocation + '/clips/' + hash + '.mp4',
+                  imageLocation + '/thumbnails/' + hash + '.jpg' ];
 
   files.forEach((file) => {
     if (fs.existsSync(file)) {
       fs.unlinkSync(file, (err) => {
-        // console.log(err);
+        console.log(err);
         // Don't even sweat it dawg!
       });
-      // console.log('deleted ' + file);
+      console.log('deleted ' + file);
     }
   });
 }
