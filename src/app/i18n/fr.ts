@@ -153,7 +153,7 @@ export const French = {
     importingFrom: 'Importer de:',
     loadFromFile: 'Charger depuis un fichier',
     nameYourHub: 'Nommez votre hub',
-    numOfScreenshots: 'Nombre de captures d\'écran par vidéo',
+    screens: 'Nombre de captures d\'écran par vidéo',
     openPrevious: 'Ouvrir le hub précédent',
     openPreviouslySaved: 'Ouvrir un hub vidéo préalablement enregistré',
     recentlyOpened: 'Hubs récemment ouverts:',

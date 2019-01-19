@@ -177,16 +177,17 @@ const shell = require('electron').shell;
 
 import {
   alphabetizeFinalArray,
+  checkForCorruptFile,
   countFoldersInFinalArray,
   extractAllMetadata,
+  findAndImportNewFiles,
+  generateScreenshotStrip,
   getVideoPathsAndNames,
+  insertTemporaryFields,
   missingThumbsIndex,
   sendCurrentProgress,
-  generateScreenshotStrip,
-  checkForCorruptFile,
   updateFinalArrayWithHD,
-  writeVhaFileToDisk,
-  findAndImportNewFiles
+  writeVhaFileToDisk
 } from './main-support';
 
 import { FinalObject, ImageElement } from './src/app/components/common/final-object.interface';
@@ -268,6 +269,8 @@ function openThisDamnFile(pathToVhaFile: string) {
       }
 
       setGlobalsFromVhaFile(lastSavedFinalObject); // sets source folder ETC
+
+      lastSavedFinalObject.images = insertTemporaryFields(lastSavedFinalObject.images);
 
       console.log(globals.selectedSourceFolder + ' - videos location');
       console.log(globals.selectedOutputFolder + ' - output location');
@@ -723,7 +726,7 @@ function sendFinalResultHome(
   theFinalArray: ImageElement[]
 ): void {
 
-  const myFinalArray: ImageElement[] = alphabetizeFinalArray(theFinalArray);
+  const myFinalArray: ImageElement[] = insertTemporaryFields(alphabetizeFinalArray(theFinalArray));
 
   const finalObject: FinalObject = {
     hubName: globals.hubName,
@@ -803,14 +806,14 @@ function extractAllScreenshots(
 
       const duration: number = theFinalArray[currentElement].duration;
       const fileHash: string = theFinalArray[currentElement].hash;
-      const numOfScreenshots = theFinalArray[currentElement].numOfScreenshots;
+      const screens = theFinalArray[currentElement].screens;
 
       checkForCorruptFile(
         pathToVideo,
         fileHash,
         duration,
         screenshotHeight,
-        numOfScreenshots,
+        screens,
         screenshotFolder,
         extractTenCallback
       );

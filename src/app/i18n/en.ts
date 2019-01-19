@@ -77,6 +77,8 @@ export const English = {
     shuffleGalleryNowHint: 'Shuffle current results',
     starFilterDescription: 'Toggles the star filter', // TRANSLATE
     starFilterHint: 'Star filter', // TRANSLATE
+    sortOrderDescription: 'Toggles the sort order filter', // TRANSLATE
+    sortOrderHint: 'Sort order', // TRANSLATE
     startWizardDescription: 'Starts wizard again: create a new video hub or open recent',
     startWizardHint: 'Start wizard',
     tagExclusionDescription: 'Toggles the search filter to exclude any files that contain the filter tags',
@@ -99,13 +101,20 @@ export const English = {
     fileUnion: 'file union',
     folder: 'folder contains',
     folderUnion: 'folder union',
-    tagUnion: 'tags union',
-    tagIntersection: 'tags contain',
-    tagExclusion: 'tags do not contain',
     found: 'found',
     magic: 'folder or file contains',
     or: 'or',
     recentlyOpened: 'Recently opened hubs:',
+    similarTo: 'and similar to:', // TRANSLATE
+    sortDefault: 'Default',
+    sortRandom: 'Random',
+    sortSizeAsc: 'Size Ascending',
+    sortSizeDesc: 'Size Descending',
+    sortTimeAsc: 'Time Ascending',
+    sortTimeDesc: 'Time Descending',
+    tagExclusion: 'tags do not contain',
+    tagIntersection: 'tags contain',
+    tagUnion: 'tags union',
     totalFolders: 'folder',
     totalFoldersPlural: 'folders',
     videos: 'videos',
@@ -177,7 +186,7 @@ export const English = {
     minute: 'minute',
     minutes: 'minutes',
     nameYourHub: 'Name your hub',
-    numOfScreenshots: 'Number of screenshots',
+    screens: 'Number of screenshots',
     openPrevious: 'Open previous hub',
     openPreviouslySaved: 'Open a previously-saved Video Hub',
     recentlyOpened: 'Recently-opened hubs:',

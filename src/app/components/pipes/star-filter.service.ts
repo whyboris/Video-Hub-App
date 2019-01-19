@@ -32,14 +32,14 @@ export class StarFilterService {
     } else {
       result = starRating;
     }
-    this.addResolution(result);
+    this.addStarRating(result);
   }
 
   /**
    * Populate the frequency map
    * @param resolution
    */
-  private addResolution(starRating: number): void {
+  private addStarRating(starRating: number): void {
     this.frequencyMap.set(starRating, this.frequencyMap.get(starRating) + 1);
   }
 

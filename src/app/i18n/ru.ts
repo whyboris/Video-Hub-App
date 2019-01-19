@@ -165,7 +165,7 @@ export const Russian = {
     minute: 'минуту',
     minutes: 'минут',
     nameYourHub: 'Назови свой хаб',
-    numOfScreenshots: 'Количество скриншотов',
+    screens: 'Количество скриншотов',
     openPrevious: 'Открыть предыдущий хаб',
     openPreviouslySaved: 'Откройте ранее сохраненный видео хаб',
     recentlyOpened: 'Недавно открытые хабы:',

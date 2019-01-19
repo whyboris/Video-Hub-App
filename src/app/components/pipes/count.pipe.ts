@@ -2,6 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { ShowLimitService } from './show-limit.service';
 
+import { ImageElement } from '../common/final-object.interface';
+
 @Pipe({
   name: 'countPipe'
 })
@@ -16,7 +18,7 @@ export class CountPipe implements PipeTransform {
    * @param finalArray
    * @param itemLimit    {number} Maximum number of items to show in results
    */
-  transform(finalArray: any, itemLimit?: number): any {
+  transform(finalArray: ImageElement[], itemLimit?: number): any {
 
     this.showLimitService.showResults(finalArray.length, finalArray.length);
 

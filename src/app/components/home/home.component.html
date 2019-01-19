@@ -132,7 +132,7 @@
     [hubName]="appState.hubName"
     [imgHeight]="imgHeight"
     [imgId]="itemToDisplay.hash"
-    [numOfScreenshots]="itemToDisplay.numOfScreenshots"
+    [screens]="itemToDisplay.screens"
     [rez]="itemToDisplay.resolution"
     [time]="itemToDisplay.duration"
     [title]="itemToDisplay.cleanName"
@@ -174,7 +174,7 @@
       [imgHeight]="100"
       [imgId]="itemToRename.hash"
       [largerFont]="true"
-      [numOfScreenshots]="itemToRename.numOfScreenshots"
+      [screens]="itemToRename.screens"
       [rez]="itemToRename.resolution"
       [showMeta]="true"
       [time]="itemToRename.duration"
@@ -654,11 +654,25 @@
       <!-- Lev Distance -->
       <div class="levDistance" *ngIf="showSimilar">
         <span class="levSpan">
-          and similar to:
+          {{ 'SIDEBAR.similarTo' | translate }}
         </span>
         <span class="searchWord" (click)="clearLev()">
           {{ findMostSimilar }}
         </span>
+      </div>
+
+      <div class='sortFilter' *ngIf="settingsButtons['sortOrder'].toggled">
+        <select
+          (change)="selectFilterOrder($event.target.value)"
+          class="size-dropdown languageDropDown sortDropdown"
+        >
+          <option value="default" selected="selected">{{ 'SIDEBAR.sortDefault' | translate }}</option>
+          <option value="sizeAsc">{{ 'SIDEBAR.sortSizeAsc' | translate }}</option>
+          <option value="sizeDesc">{{ 'SIDEBAR.sortSizeDesc' | translate }}</option>
+          <option value="timeAsc">{{ 'SIDEBAR.sortTimeAsc' | translate }}</option>
+          <option value="timeDesc">{{ 'SIDEBAR.sortTimeDesc' | translate }}</option>
+          <option value="random">{{ 'SIDEBAR.sortRandom' | translate }}</option>
+        </select>
       </div>
 
       <!-- total found -->
@@ -730,7 +744,7 @@
                 | similarityPipe: showSimilar : findMostSimilar
                 | wordFrequencyPipe: settingsButtons['showFreq'].toggled : (settingsButtons['extendedWordCloud'].toggled ? 100 : 9)
                 | countPipe
-                | randomizePipe: shuffleTheViewNow
+                | sortingPipe: sortType : shuffleTheViewNow
                 | folderViewPipe: settingsButtons['showFoldersOnly'].toggled
                                   || (appState.currentView === 'files' && settingsButtons['showFolderInFileView'].toggled)
                                   : settingsButtons['showFoldersOnly'].toggled"
@@ -755,7 +769,7 @@
           [hubName]="appState.hubName"
           [imgHeight]="imgHeight"
           [imgId]="item.hash"
-          [numOfScreenshots]="item.numOfScreenshots"
+          [screens]="item.screens"
           [rez]="item.resolution"
           [time]="item.duration"
           [title]="item.cleanName"
@@ -779,7 +793,7 @@
           [hubName]="appState.hubName"
           [imgHeight]="imgHeight"
           [imgId]="item.hash"
-          [numOfScreenshots]="item.numOfScreenshots"
+          [screens]="item.screens"
           [rez]="item.resolution"
           [time]="item.duration"
           [title]="item.cleanName"
@@ -802,7 +816,7 @@
           [imgHeight]="imgHeight"
           [galleryWidth]="galleryWidth"
           [imgId]="item.hash"
-          [numOfScreenshots]="item.numOfScreenshots"
+          [screens]="item.screens"
           [rez]="item.resolution"
           [time]="item.duration"
           [title]="item.cleanName"
@@ -860,19 +874,15 @@
           (openFileRequest)="openVideo($event)"
           (editFinalArrayTag)="editFinalArrayTag($event)"
           (editFinalArrayStars)="editFinalArrayStars($event)"
+          [video]="item"
           [elHeight]="imgHeight + textPaddingHeight"
           [elWidth]="previewWidth"
           [tags]="item.tags"
-          [fileSize]="item.fileSize"
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
           [imgHeight]="imgHeight"
           [imgId]="item.hash"
-          [numOfScreenshots]="item.numOfScreenshots"
-          [rez]="item.resolution"
           [star]="item.stars"
-          [time]="item.duration"
-          [title]="item.cleanName"
           [darkMode]="settingsButtons['darkMode'].toggled"
           [hoverScrub]="settingsButtons['hoverScrub'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
@@ -1058,7 +1068,6 @@
       [disabled]="wizard.selectedOutputFolder === '' || wizard.selectedSourceFolder === '' || futureHubName === ''"
       class="size-dropdown languageDropDown"
     >
-      <option value="72">72px</option>
       <option value="144">144px</option>
       <option value="216">216px</option>
       <option value="288" selected="selected">288px</option>
@@ -1087,7 +1096,7 @@
     </div>
 
     <select
-      (change)="selectNumOfScreenshots($event.target.value)"
+      (change)="selectNumOfScreens($event.target.value)"
       [disabled]="wizard.selectedOutputFolder === '' || wizard.selectedSourceFolder === '' || futureHubName === ''"
       class="size-dropdown languageDropDown"
     >
@@ -1102,7 +1111,7 @@
     </select>
 
     <span class="step-description">
-      {{ 'WIZARD.numOfScreenshots' | translate }}
+      {{ 'WIZARD.screens' | translate }}
     </span>
 
     <div

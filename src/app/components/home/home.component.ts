@@ -16,6 +16,7 @@ import { HistoryItem } from '../common/history-item.interface';
 import { ImportSettingsObject } from '../common/import.interface';
 import { SavableProperties } from '../common/savable-properties.interface';
 import { SettingsObject } from '../common/settings-object.interface';
+import { SortType } from '../pipes/sorting.pipe';
 import { TagEmission, StarEmission } from './details/details.component';
 import { WizardOptions } from '../common/wizard-options.interface';
 
@@ -211,10 +212,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   // WIP
 
+  sortType: SortType = 'default';
+
   manualTagFilterString: string = '';
   manualTagShowFrequency: boolean = true;
 
-  numOfScreenshots = 10; // hardcoded for now. Only used for import - TODO - refactor?
+  screens = 10; // hardcoded for now. Only used for import - TODO - refactor?
 
   isFirstRunEver = false;
 
@@ -472,6 +475,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.canCloseWizard = true;
       this.showWizard = false;
       this.finalArray = this.demo ? finalObject.images.slice(0, 50) : finalObject.images;
+      console.log(this.finalArray);
       this.buildFileMap();
       this.flickerReduceOverlay = false;
     });
@@ -601,7 +605,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       exportFolderPath: this.wizard.selectedOutputFolder,
       hubName: (this.futureHubName || 'untitled'),
       imgHeight: this.screenshotSizeForImport,
-      numberOfScreenshots: this.numOfScreenshots,
+      numberOfScreenshots: this.screens,
       videoDirPath: this.wizard.selectedSourceFolder
     };
     this.electronService.ipcRenderer.send('start-the-import', importOptions, this.wizard.listOfFiles);
@@ -923,6 +927,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.verifyThumbnails();
     } else if (uniqueKey === 'rescanDirectory') {
       this.rescanDirectory();
+    } else if (uniqueKey === 'sortOrder') {
+      this.sortType = 'default';
+      this.settingsButtons['sortOrder'].toggled = !this.settingsButtons['sortOrder'].toggled;
     } else if (uniqueKey === 'shuffleGalleryNow') {
       this.shuffleTheViewNow++;
     } else if (uniqueKey === 'randomizeGallery') {
@@ -979,7 +986,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       selectedSourceFolder: '',
       selectedOutputFolder: ''
     };
-    this.numOfScreenshots = 10; // default
+    this.screens = 10; // default
     this.screenshotSizeForImport = 288; // default
     this.toggleSettings();
     this.showWizard = true;
@@ -1167,10 +1174,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   /**
    * Called on screenshot size dropdown select
-   * @param numOfScreenshots - string of number of screenshots per video
+   * @param screens - string of number of screenshots per video
    */
-  selectNumOfScreenshots(numOfScreenshots: string) {
-    this.numOfScreenshots = parseFloat(numOfScreenshots);
+  selectNumOfScreens(screens: string) {
+    this.screens = parseFloat(screens);
   }
 
   // ---- HANDLE EXTRACTING AND RESTORING SETTINGS ON OPEN AND BEFORE CLOSE ------
@@ -1518,6 +1525,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.finalArray[position].stars = emission.stars;
     this.finalArrayNeedsSaving = true;
     this.forceStarFilterUpdate = !this.forceStarFilterUpdate;
+  }
+
+  selectFilterOrder(type: SortType): void {
+    console.log(type);
+    this.sortType = type;
+    // this.shuffleTheViewNow++;
   }
 
 

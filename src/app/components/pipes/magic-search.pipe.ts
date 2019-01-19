@@ -1,5 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+import { ImageElement } from '../common/final-object.interface';
+
 @Pipe({
   name: 'magicSearchPipe'
 })
@@ -10,7 +12,7 @@ export class MagicSearchPipe implements PipeTransform {
    * @param finalArray
    * @param searchString  the search string
    */
-  transform(finalArray: any, searchString?: string): any {
+  transform(finalArray: ImageElement[], searchString?: string): any {
     if (searchString === '') {
       return finalArray;
     } else {

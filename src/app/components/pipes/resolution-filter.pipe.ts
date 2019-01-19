@@ -1,6 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 import { ResolutionFilterService, ResolutionString } from './resolution-filter.service';
+import { ImageElement } from '../common/final-object.interface';
 
 @Pipe({
   name: 'resolutionFilterPipe'
@@ -9,18 +10,7 @@ export class ResolutionFilterPipe implements PipeTransform {
 
   constructor(
     public resolutionFilterService: ResolutionFilterService
-  ) {
-    this.resolutionMap.set('', 0.5);
-    this.resolutionMap.set('720', 1.5);
-    this.resolutionMap.set('720+', 1.5);
-    this.resolutionMap.set('1080', 2.5);
-    this.resolutionMap.set('1080+', 2.5);
-    this.resolutionMap.set('4K', 3.5);
-    this.resolutionMap.set('4K+', 3.5);
-    // console.log(this.resolutionMap);
-  }
-
-  resolutionMap: Map<ResolutionString, number> = new Map();
+  ) { }
 
   /**
    * Filter and show only videos that are within the resolution bounds
@@ -29,16 +19,14 @@ export class ResolutionFilterPipe implements PipeTransform {
    * @param leftBound
    * @param rightBound
    */
-  transform(finalArray: any, render?: boolean, leftBound?: number, rightBound?: number): any {
+  transform(finalArray: ImageElement[], render?: boolean, leftBound?: number, rightBound?: number): any {
 
     if (render && finalArray.length > 0) {
-
-      // console.log('RESOLUTION FILTER RUNNING !!!');
 
       this.resolutionFilterService.resetMap();
 
       finalArray.forEach(element => {
-        this.resolutionFilterService.addString(element.resolution);
+        this.resolutionFilterService.addString(element.resBucket);
       });
 
       this.resolutionFilterService.computeFrequencyArray();
@@ -46,7 +34,7 @@ export class ResolutionFilterPipe implements PipeTransform {
       // now actually filter stuff out
 
       return finalArray.filter((element) => {
-        const currentResValue: number = this.resolutionMap.get(element.resolution);
+        const currentResValue: number = element.resBucket;
         if ( currentResValue > leftBound && currentResValue < rightBound) {
           return true;
         } else {

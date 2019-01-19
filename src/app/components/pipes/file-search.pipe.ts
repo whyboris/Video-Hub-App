@@ -1,5 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+import { ImageElement } from '../common/final-object.interface';
+
 @Pipe({
   name: 'fileSearchPipe'
 })
@@ -15,7 +17,7 @@ export class FileSearchPipe implements PipeTransform {
    * @param exclude         {boolean} whether excluding results that contain the word
    */
   transform(
-    finalArray: any,
+    finalArray: ImageElement[],
     arrOfStrings?: string[],
     useless?: boolean,
     union?: boolean,

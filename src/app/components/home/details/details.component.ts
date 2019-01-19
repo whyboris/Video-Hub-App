@@ -1,9 +1,11 @@
 import { Component, Input, OnInit, ElementRef, ViewChild, Output, EventEmitter } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { galleryItemAppear } from '../../common/animations';
 
 import { ManualTagsService } from '../manual-tags/manual-tags.service';
-import { StarRating } from '../../common/final-object.interface';
+
+import { StarRating, ImageElement } from '../../common/final-object.interface';
+
+import { galleryItemAppear } from '../../common/animations';
 
 export interface TagEmission {
   id: string;
@@ -30,10 +32,11 @@ export class DetailsComponent implements OnInit {
   @Output() editFinalArrayTag = new EventEmitter<TagEmission>();
   @Output() openFileRequest = new EventEmitter<string>();
 
+  @Input() video: ImageElement;
+
   @Input() darkMode: boolean;
   @Input() elHeight: number;
   @Input() elWidth: number;
-  @Input() fileSize: number;
   @Input() folderPath: string;
   @Input() hoverScrub: boolean;
   @Input() hubName: string;
@@ -41,13 +44,9 @@ export class DetailsComponent implements OnInit {
   @Input() imgHeight: number;
   @Input() imgId: any; // the filename of screenshot strip without `.jpg`
   @Input() largerFont: boolean;
-  @Input() numOfScreenshots: number;
   @Input() randomImage: boolean; // all code related to this currently removed
   @Input() returnToFirstScreenshot: boolean;
-  @Input() rez: string;
   @Input() showMeta: boolean;
-  @Input() time: string;
-  @Input() title: string;
   @Input() star: StarRating;
 
   percentOffset: number = 0;
@@ -89,7 +88,7 @@ export class DetailsComponent implements OnInit {
       const cursorX = $event.layerX;
       const containerWidth = this.filmstripHolder.nativeElement.getBoundingClientRect().width;
 
-      this.percentOffset = (100 / (this.numOfScreenshots - 1)) * Math.floor(cursorX / (containerWidth / this.numOfScreenshots));
+      this.percentOffset = (100 / (this.video.screens - 1)) * Math.floor(cursorX / (containerWidth / this.video.screens));
     }
   }
 
