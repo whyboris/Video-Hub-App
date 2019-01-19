@@ -18,10 +18,11 @@
     {{ tagService.tagsMap.get(tag) }}
   </span>
 
-  <span
+  <app-icon
     *ngIf="allowRemoval"
-    class="icon icon-close removeTag"
+    [icon]="'icon-close'"
+    class="removeTag"
     (click)="removeTag(tag)"
   >
-  </span>
+  </app-icon>
 </div>
