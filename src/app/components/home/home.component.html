@@ -661,17 +661,17 @@
         </span>
       </div>
 
-      <div class='sortFilter'>
+      <div class='sortFilter' *ngIf="settingsButtons['sortOrder'].toggled">
         <select
           (change)="selectFilterOrder($event.target.value)"
           class="size-dropdown languageDropDown sortDropdown"
         >
-          <option value="default">{{ 'SIDEBAR.sortDefault' | translate }}</option>
-          <option value="random">{{ 'SIDEBAR.sortRandom' | translate }}</option>
+          <option value="default" selected="selected">{{ 'SIDEBAR.sortDefault' | translate }}</option>
           <option value="sizeAsc">{{ 'SIDEBAR.sortSizeAsc' | translate }}</option>
           <option value="sizeDesc">{{ 'SIDEBAR.sortSizeDesc' | translate }}</option>
           <option value="timeAsc">{{ 'SIDEBAR.sortTimeAsc' | translate }}</option>
           <option value="timeDesc">{{ 'SIDEBAR.sortTimeDesc' | translate }}</option>
+          <option value="random">{{ 'SIDEBAR.sortRandom' | translate }}</option>
         </select>
       </div>
 
@@ -1072,7 +1072,6 @@
       [disabled]="wizard.selectedOutputFolder === '' || wizard.selectedSourceFolder === '' || futureHubName === ''"
       class="size-dropdown languageDropDown"
     >
-      <option value="72">72px</option>
       <option value="144">144px</option>
       <option value="216">216px</option>
       <option value="288" selected="selected">288px</option>

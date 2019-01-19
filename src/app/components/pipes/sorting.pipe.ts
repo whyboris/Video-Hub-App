@@ -59,8 +59,11 @@ export class SortingPipe implements PipeTransform {
       });
       return sorted.slice(0);
     } else {
-      console.log('default');
-      return galleryArray;
+      console.log('default sort');
+      const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
+        return x.index - y.index;
+      });
+      return sorted.slice(0);
     }
 
   }

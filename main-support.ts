@@ -10,28 +10,40 @@ import { acceptableFiles } from './main-filenames';
 
 import { globals } from './main-globals';
 
+interface ResolutionMeta {
+  label: ResolutionString;
+  bucket: number;
+}
+
 /**
- * Label the video according to these rules
- * 5th item is size (720, 1080, etc)
+ * Label the video according to cosest resolution label
  * @param width
  * @param height
  */
-export function labelVideo(width: number, height: number): ResolutionString {
-  let size: ResolutionString = '';
+function labelVideo(width: number, height: number): ResolutionMeta {
+  let label: ResolutionString = '';
+  let bucket: number = 0.5;
   if (width === 3840 && height === 2160) {
-    size = '4K';
+    label = '4K';
+    bucket = 3.5;
   } else if (width === 1920 && height === 1080) {
-    size = '1080';
+    label = '1080';
+    bucket = 2.5;
   } else if (width === 1280 && height === 720) {
-    size = '720';
+    label = '720';
+    bucket = 1.5;
   } else if (width > 3840) {
-    size = '4K+';
+    label = '4K+';
+    bucket = 3.5;
   } else if (width > 1920) {
-    size = '1080+';
+    label = '1080+';
+    bucket = 2.5;
   } else if (width > 720) {
-    size = '720+';
+    label = '720+';
+    bucket = 1.5;
   }
-  return size;
+
+  return { label: label, bucket: bucket };
 }
 
 /**
@@ -57,6 +69,31 @@ export function alphabetizeFinalArray(imagesArray: ImageElement[]): ImageElement
       return -1;
     }
   });
+}
+
+/**
+ * Writes / overwrites:
+ *   unique index for default sort
+ *   video resolution string
+ *   resolution category for resolution filtering
+ */
+export function insertTemporaryFields(imagesArray: ImageElement[]): ImageElement[] {
+
+  let counter = 0;
+
+  imagesArray.forEach(element => {
+
+    // set resolution string & bucket
+    const resolution: ResolutionMeta = labelVideo(element.width, element.height);
+    element.resolution = resolution.label;
+    element.resBucket = resolution.bucket;
+
+    // set index for default sorting
+    element.index = counter;
+    counter++;
+  });
+
+  return imagesArray;
 }
 
 /**
@@ -152,10 +189,14 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
                 fileName: file.name,
                 fileSize: 0,
                 hash: '',
+                height: 0,
+                index: 0,
                 numOfScreenshots: 10, // hardcoded default
                 partialPath: partialPath,
+                resBucket: 0,
                 resolution: '',
-                stars: 0.5
+                stars: 0.5,
+                width: 0,
               };
               elementIndex++;
             }
@@ -556,15 +597,16 @@ function extractMetadataForThisONEFile(
       const fileDuration = metadata.streams[0].duration || metadata.format.duration;
 
       const duration = Math.round(fileDuration) || 0;
-      const origWidth = metadata.streams[0].width;
-      const origHeight = metadata.streams[0].height;
-      const sizeLabel = labelVideo(origWidth, origHeight);
+      const origWidth = metadata.streams[0].width || 0; // ffprobe does not detect it on some MKV streams
+      const origHeight = metadata.streams[0].height || 0;
       const fileSize: string = metadata.format.size; // ffprobe returns a string of a number!
-      imageElement.hash = hashFile(filePath);
+
       imageElement.duration = duration;
       imageElement.fileSize = parseInt(fileSize, 10);
+      imageElement.hash = hashFile(filePath);
+      imageElement.height = origHeight;
+      imageElement.width = origWidth;
       imageElement.numOfScreenshots = computeNumberOfScreenshots(numberOfScreenshots, duration);
-      imageElement.resolution = sizeLabel;
 
       extractMetaCallback(imageElement);
     }

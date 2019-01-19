@@ -28,10 +28,14 @@ export class FolderViewPipe implements PipeTransform {
             fileName: element.fileName,
             fileSize: 0,
             hash: '',
+            height: 0,
+            index: 0,
             numOfScreenshots: 10, // temp hardcoded
             partialPath: element.partialPath,
+            resBucket: 0,
             resolution: '',
-            stars: 0.5
+            stars: 0.5,
+            width: 0,
           };
 
           arrWithFolders.push(tempClone);

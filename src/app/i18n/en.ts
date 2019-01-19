@@ -77,6 +77,8 @@ export const English = {
     shuffleGalleryNowHint: 'Shuffle current results',
     starFilterDescription: 'Toggles the star filter', // TRANSLATE
     starFilterHint: 'Star filter', // TRANSLATE
+    sortOrderDescription: 'Toggles the sort order filter', // TRANSLATE
+    sortOrderHint: 'Sort order', // TRANSLATE
     startWizardDescription: 'Starts wizard again: create a new video hub or open recent',
     startWizardHint: 'Start wizard',
     tagExclusionDescription: 'Toggles the search filter to exclude any files that contain the filter tags',

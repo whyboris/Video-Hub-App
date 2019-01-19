@@ -475,6 +475,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.canCloseWizard = true;
       this.showWizard = false;
       this.finalArray = this.demo ? finalObject.images.slice(0, 50) : finalObject.images;
+      console.log(this.finalArray);
       this.buildFileMap();
       this.flickerReduceOverlay = false;
     });
@@ -926,6 +927,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.verifyThumbnails();
     } else if (uniqueKey === 'rescanDirectory') {
       this.rescanDirectory();
+    } else if (uniqueKey === 'sortOrder') {
+      this.sortType = 'default';
+      this.settingsButtons['sortOrder'].toggled = !this.settingsButtons['sortOrder'].toggled;
     } else if (uniqueKey === 'shuffleGalleryNow') {
       this.shuffleTheViewNow++;
     } else if (uniqueKey === 'randomizeGallery') {
