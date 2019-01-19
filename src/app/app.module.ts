@@ -91,7 +91,7 @@ import { WrapperPipe } from './components/pipes/wrapper.pipe';
     TagsComponent,
     TopComponent,
     ViewTagsComponent,
-    WordFrequencyPipe
+    WordFrequencyPipe,
     WrapperPipe
   ],
   imports: [
