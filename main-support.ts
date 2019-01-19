@@ -121,10 +121,25 @@ export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: stri
     finalObject.inputDir = '';
   }
 
+  finalObject.images = stripOutTemporaryFields(finalObject.images);
+
   const json = JSON.stringify(finalObject);
   // write the file
   fs.writeFile(pathToTheFile, json, 'utf8', done);
   // CATCH ERRORS !?!!?!!
+}
+
+/**
+ * Strip out all the temporary fields
+ * @param imagesArray
+ */
+function stripOutTemporaryFields(imagesArray: ImageElement[]): ImageElement[] {
+  imagesArray.forEach((element) => {
+    delete(element.index);
+    delete(element.resBucket);
+    delete(element.resolution);
+  });
+  return imagesArray;
 }
 
 /**
