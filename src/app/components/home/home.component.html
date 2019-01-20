@@ -586,7 +586,12 @@
       </ng-container>
       <!-- end of magic search -->
 
-      <!-- resolution filter & frequency histogram -->
+      <!-- durationFilter -->
+      <div *ngIf="settingsButtons['durationFilter'].toggled">
+        DURATION WIP
+      </div>
+
+      <!-- resolution filter & its frequency histogram -->
       <div *ngIf="settingsButtons['resolutionFilter'].toggled" class="resolutionFilterContainer">
         <div class="frequencyGraphContainer">
           <ng-container *ngFor="let resolution of resolutionFreqArr; index as i">
@@ -625,7 +630,7 @@
 
       </div>
 
-      <!-- star filter & frequency histogram -->
+      <!-- star filter & its frequency histogram -->
       <div *ngIf="settingsButtons['starFilter'].toggled" class="resolutionFilterContainer">
         <div class="frequencyGraphContainer">
           <ng-container *ngFor="let resolution of starRatingFreqArr; index as i">

@@ -14,6 +14,7 @@ export const SettingsButtonsGroups: string[][] = [
     'tagIntersection',
     'tagExclusion',
     'magic',
+    'durationFilter',
     'resolutionFilter',
     'starFilter',
     'sortOrder',
@@ -330,6 +331,13 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-star',
     title: 'BUTTONS.starFilterHint',
     description: 'BUTTONS.starFilterDescription',
+  },
+  'durationFilter': {
+    hidden: false,
+    toggled: true,
+    iconName: 'icon-hourglass',
+    title: 'BUTTONS.durationFilterHint',
+    description: 'BUTTONS.durationFilterDescription',
   },
   'sortOrder': {
     hidden: false,
