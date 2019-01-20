@@ -24,6 +24,8 @@ I would love to see the improvements you make to this app and am happy to accept
 
 Please add a translation if you know another language. It's a process that will take you 5-10 minutes, just [follow the instrutions](https://github.com/whyboris/Video-Hub-App/tree/master/src/app/i18n)!
 
+Please consider improving or adding an icon to the app. It's a simple process, just [follow the instructions](https://github.com/whyboris/Video-Hub-App/tree/master/src/app/components/common/home/icon)!
+
 ## Upcoming features
 
 A list of upcoming features is [listed on the official website](https://videohubapp.com/future.html).
