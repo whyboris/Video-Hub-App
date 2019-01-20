@@ -110,7 +110,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'showDetails': {
     hidden: false,
     toggled: false,
-    iconName: 'icon-show-thumbnails',
+    iconName: 'icon-show-details',
     title: 'BUTTONS.showDetailsHint',
     description: 'BUTTONS.showDetailsDescription',
   },
@@ -124,7 +124,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'showFullView': {
     hidden: false,
     toggled: false,
-    iconName: 'icon-show-filmstrip',
+    iconName: 'icon-show-full-view',
     title: 'BUTTONS.showFullViewHint',
     description: 'BUTTONS.showFullViewDescription',
   },
@@ -327,7 +327,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'starFilter': {
     hidden: false,
     toggled: true,
-    iconName: 'icon-res-filter',
+    iconName: 'icon-star',
     title: 'BUTTONS.starFilterHint',
     description: 'BUTTONS.starFilterDescription',
   },
@@ -348,7 +348,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'extendedWordCloud': {
     hidden: false,
     toggled: false,
-    iconName: 'icon-cloud',
+    iconName: 'icon-cloud-plus',
     title: 'BUTTONS.extendedWordCloudHint',
     description: 'BUTTONS.extendedWordCloudDescription',
   },
