@@ -7,9 +7,11 @@ export class LengthPipe implements PipeTransform {
 
   /**
    * Return length of video file formatted as X:XX:XX
+   * or if `omitSeconds` then `Xhr XXmin`
    * @param numOfSec
+   * @param omitSeconds
    */
-  transform(numOfSec: number): string {
+  transform(numOfSec: number, omitSeconds?: boolean): string {
     if (numOfSec === undefined) {
       return '';
     } else {
@@ -17,10 +19,16 @@ export class LengthPipe implements PipeTransform {
       const mm = (Math.floor(numOfSec / 60) % 60).toString();
       const ss = (Math.floor(numOfSec) % 60).toString();
 
-      return (hh !== '0' ? hh + ':' : '')
-           + (mm.length !== 2 ? '0' + mm : mm)
-           + ':'
-           + (ss.length !== 2 ? '0' : '') + ss;
+      if (omitSeconds) {
+        const zeroHours = (hh === '0');
+        return (zeroHours ? '' : hh + ':')
+               + (mm.length !== 2 ? (zeroHours ? '' : '0') + mm : mm)
+               + (zeroHours ? ' min' : '');
+      } else {
+        return (hh !== '0' ? hh + ':' : '')
+               + (mm.length !== 2 ? '0' + mm : mm)
+               + (ss.length !== 2 ? '0' : '') + ss;
+      }
     }
   }
 

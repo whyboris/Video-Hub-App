@@ -7,7 +7,7 @@ import { LengthPipe } from './length.pipe';
 export class WrapperPipe implements PipeTransform {
   transform(value: any, pipe?: string): any {
     if (pipe === 'lengthPipe') {
-      return new LengthPipe().transform(value);
+      return new LengthPipe().transform(value, true);
     }
     return value;
   }

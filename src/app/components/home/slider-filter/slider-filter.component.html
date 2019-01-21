@@ -56,6 +56,6 @@
   >
     {{ convertToIndex(currentXright) | wrapperPipe : labelFormatPipe }}
   </span>
-  <span *ngIf="showLabels" class="minLabel">{{ minimumValue | wrapperPipe : labelFormatPipe }}</span>
+  <span *ngIf="showLabels" class="minLabel">0 min</span>
   <span *ngIf="showLabels" class="maxLabel">{{ maximumValue | wrapperPipe : labelFormatPipe }}</span>
 </div>
