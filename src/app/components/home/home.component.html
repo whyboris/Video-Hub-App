@@ -744,9 +744,9 @@
                 | fileSearchPipe: filters[2].array : filters[2].bool : true  : 1  : false
                 | fileSearchPipe: filters[3].array : filters[3].bool : false : 1  : false
                 | fileSearchPipe: filters[4].array : filters[4].bool : true  : 1  : true
-                | fileSearchPipe: filters[5].array : filters[5].bool : true  : 2  : false
-                | fileSearchPipe: filters[6].array : filters[6].bool : false : 2  : false
-                | fileSearchPipe: filters[7].array : filters[7].bool : true  : 2  : true
+                | fileSearchPipe: filters[5].array : filters[5].bool : true  : 2  : false : settingsButtons['manualTags'].toggled : settingsButtons['autoFileTags'].toggled : settingsButtons['autoFolderTags'].toggled
+                | fileSearchPipe: filters[6].array : filters[6].bool : false : 2  : false : settingsButtons['manualTags'].toggled : settingsButtons['autoFileTags'].toggled : settingsButtons['autoFolderTags'].toggled
+                | fileSearchPipe: filters[7].array : filters[7].bool : true  : 2  : true : settingsButtons['manualTags'].toggled : settingsButtons['autoFileTags'].toggled : settingsButtons['autoFolderTags'].toggled
                 | resolutionFilterPipe: settingsButtons['resolutionFilter'].toggled : freqLeftBound : freqRightBound
                 | lengthFilterPipe: settingsButtons['resolutionFilter'].toggled : lengthLeftBound : lengthRightBound
                 | starFilterPipe: settingsButtons['starFilter'].toggled : starLeftBound : starRightBound : forceStarFilterUpdate

@@ -22,7 +22,10 @@ export class FileSearchPipe implements PipeTransform {
     useless?: boolean,
     union?: boolean,
     searchType?: number,
-    exclude?: boolean
+    exclude?: boolean,
+    manualTags?: boolean,
+    autoFileTags?: boolean,
+    autoFolderTags?: boolean
   ): any {
     // console.log('fileSearchPipe triggered');
     // console.log(arrOfStrings);
@@ -43,7 +46,16 @@ export class FileSearchPipe implements PipeTransform {
           } else if (searchType === 1) {
             searchString = item.fileName;
           } else if (searchType === 2) {
-            searchString = item.cleanName;
+            searchString = '';
+            if (manualTags && item.tags) {
+              searchString += item.tags.join(' ');
+            }
+            if (autoFileTags) {
+              searchString += ' ' + item.cleanName;
+            }
+            if (autoFolderTags) {
+              searchString += ' ' + item.partialPath.replace(/(\/|\\)/, ' ');
+            }
           }
           if (searchString.toLowerCase().indexOf(element.toLowerCase()) !== -1) {
             matchFound++;
