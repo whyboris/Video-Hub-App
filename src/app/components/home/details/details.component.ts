@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ElementRef, ViewChild, Output, EventEmitter }
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { ManualTagsService } from '../manual-tags/manual-tags.service';
+import { Tag, TagsService } from '../tags/tags.service';
 
 import { StarRating, ImageElement } from '../../common/final-object.interface';
 
@@ -31,6 +32,7 @@ export class DetailsComponent implements OnInit {
   @Output() editFinalArrayStars = new EventEmitter<StarEmission>();
   @Output() editFinalArrayTag = new EventEmitter<TagEmission>();
   @Output() openFileRequest = new EventEmitter<string>();
+  @Output() filterTag = new EventEmitter<object>();
 
   @Input() video: ImageElement;
 
@@ -40,7 +42,6 @@ export class DetailsComponent implements OnInit {
   @Input() folderPath: string;
   @Input() hoverScrub: boolean;
   @Input() hubName: string;
-  @Input() tags: string[];
   @Input() imgHeight: number;
   @Input() imgId: any; // the filename of screenshot strip without `.jpg`
   @Input() largerFont: boolean;
@@ -48,6 +49,9 @@ export class DetailsComponent implements OnInit {
   @Input() returnToFirstScreenshot: boolean;
   @Input() showMeta: boolean;
   @Input() star: StarRating;
+  @Input() showManualTags: boolean;
+  @Input() showAutoFileTags: boolean;
+  @Input() showAutoFolderTags: boolean;
 
   percentOffset: number = 0;
   firstFilePath = '';
@@ -56,7 +60,8 @@ export class DetailsComponent implements OnInit {
   starRatingHack: StarRating;
 
   constructor(
-    public tagService: ManualTagsService,
+    public manualTagsService: ManualTagsService,
+    public tagsService: TagsService,
     public sanitizer: DomSanitizer
   ) { }
 
@@ -93,10 +98,10 @@ export class DetailsComponent implements OnInit {
   }
 
   addThisTag(tag: string) {
-    if (this.tags && this.tags.includes(tag)) {
+    if (this.video.tags && this.video.tags.includes(tag)) {
       console.log('TAG ALREADY ADDED!');
     } else {
-      this.tagService.addTag(tag);
+      this.manualTagsService.addTag(tag);
 
       this.editFinalArrayTag.emit({
         id: this.imgId,
@@ -106,8 +111,12 @@ export class DetailsComponent implements OnInit {
     }
   }
 
+  filterThisTag(event: object) {
+    this.filterTag.emit(event);
+  }
+
   removeThisTag(tag: string) {
-    this.tagService.removeTag(tag);
+    this.manualTagsService.removeTag(tag);
 
     this.editFinalArrayTag.emit({
       id: this.imgId,

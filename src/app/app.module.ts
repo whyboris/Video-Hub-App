@@ -12,13 +12,14 @@ import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 
 import { AlphabetPrefixService } from './components/pipes/alphabet-prefix.service';
 import { AutoTagsSaveService } from './components/home/tags/tags-save.service';
-import { AutoTagsService } from './components/home/tags/tags.service';
+import { AutoTagsService } from './components/home/tags/autotags.service';
 import { ElectronService } from './providers/electron.service';
 import { HomeComponent } from './components/home/home.component';
 import { ManualTagsService } from './components/home/manual-tags/manual-tags.service';
 import { ResolutionFilterService } from './components/pipes/resolution-filter.service';
 import { ShowLimitService } from './components/pipes/show-limit.service';
 import { StarFilterService } from './components/pipes/star-filter.service';
+import { TagsService } from './components/home/tags/tags.service';
 import { WordFrequencyService } from './components/pipes/word-frequency.service';
 
 import { AddTagComponent } from './components/home/manual-tags/add-tag.component';
@@ -117,6 +118,7 @@ import { WrapperPipe } from './components/pipes/wrapper.pipe';
     ShowLimitService,
     SimilarityService,
     StarFilterService,
+    TagsService,
     WordFrequencyService,
   ],
   bootstrap: [AppComponent]

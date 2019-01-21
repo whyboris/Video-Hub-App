@@ -1,6 +1,10 @@
 /* tslint:disable */
 export const Russian = {
   BUTTONS: {
+    autoFileTagsHint: 'Toggle auto file tags', // TRANSLATE
+    autoFileTagsDescription: 'Toggle generation of auto tags based on file names', // TRANSLATE
+    autoFolderTagsHint: 'Toggle auto folder tags', // TRANSLATE
+    autoFolderTagsDescription: 'Toggle generation of auto tags based on folder names', // TRANSLATE
     autoplayClipsDescription: 'Переключить опцию для автоматического воспроизведения клипов предварительного просмотра видео',
     autoplayClipsHint: 'Переключить клипы автозапуска',
     clearHistoryDescription: 'Очищает недавно открытую историю',
@@ -38,6 +42,8 @@ export const Russian = {
     makeLargerHint: 'Увеличить размер предварительного просмотра',
     makeSmallerDescription: 'Уменьшает размеры предварительного просмотра миниатюр и диафильмов',
     makeSmallerHint: 'Уменьшить размер предварительного просмотра',
+    manualTagsHint: 'Toggle manual tags', // TRANSLATE
+    manualTagsDescription: 'Toggle manual tagging feature', // TRANSLATE
     randomImageDescription: 'Переключает, показывается ли случайный скриншот из каждого видео каждый раз, когда вы ищете или прокручиваете',
     randomImageHint: 'Показать случайный скриншот',
     randomizeGalleryDescription: 'Рандомизирует порядок видеофайлов после каждого поиска',

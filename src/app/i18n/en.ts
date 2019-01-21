@@ -1,6 +1,10 @@
 /* tslint:disable */
 export const English = {
   BUTTONS: {
+    autoFileTagsHint: 'Toggle auto file tags', // TRANSLATE
+    autoFileTagsDescription: 'Toggle generation of auto tags based on file names', // TRANSLATE
+    autoFolderTagsHint: 'Toggle auto folder tags', // TRANSLATE
+    autoFolderTagsDescription: 'Toggle generation of auto tags based on folder names', // TRANSLATE
     autoplayClipsDescription: 'Toggle option to autoplay video preview clips',
     autoplayClipsHint: 'Toggle autoplay clips',
     clearHistoryDescription: 'Clears the recently-opened history',
@@ -39,6 +43,8 @@ export const English = {
     makeLargerHint: 'Increase preview size',
     makeSmallerDescription: 'Decreases thumbnail and filmstrip preview sizes',
     makeSmallerHint: 'Decrease preview size',
+    manualTagsHint: 'Toggle manual tags', // TRANSLATE
+    manualTagsDescription: 'Toggle manual tagging feature', // TRANSLATE
     randomImageDescription: 'Toggles whether a random screenshot from each video is shown every time you search or scroll',
     randomImageHint: 'Show random screenshot',
     randomizeGalleryDescription: 'Randomizes the order of video files after every search',

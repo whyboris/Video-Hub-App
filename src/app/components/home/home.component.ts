@@ -1058,7 +1058,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Computes the preview width for thumbnails view
    */
   public computePreviewWidth(): void {
-    if (this.appState.currentView === 'clips' || this.appState.currentView === 'thumbs') {
+    if (this.appState.currentView === 'clips' || this.appState.currentView === 'thumbs' || this.appState.currentView === 'details') {
       this.previewWidth = this.imgHeight * (16 / 9);
     }
   }
