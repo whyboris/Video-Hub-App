@@ -8,6 +8,7 @@
   <span
     class="tag"
     [ngStyle]="{background: tag.colour}"
+    (click)="tagClick(tag, $event)"
   >
     {{ tag.name }}
   </span>

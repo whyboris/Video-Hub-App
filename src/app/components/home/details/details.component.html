@@ -49,6 +49,7 @@
 
     <app-view-tags-component
       [tags]="tagsService.getTags(this.video, this.showManualTags, this.showAutoFileTags, this.showAutoFolderTags, this.video.tags)"
+      (tagClicked)="filterThisTag($event)"
       (removeTagEmit)="removeThisTag($event)"
     ></app-view-tags-component>
 

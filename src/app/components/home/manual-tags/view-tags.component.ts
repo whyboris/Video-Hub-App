@@ -13,11 +13,16 @@ export class ViewTagsComponent {
   @Input() tags: Tag[];
   @Input() displayFrequency: boolean;
 
+  @Output() tagClicked = new EventEmitter<object>();
   @Output() removeTagEmit = new EventEmitter<string>();
 
   constructor(
     public tagService: ManualTagsService
   ) { }
+
+  tagClick(tag: Tag, event: Event): void {
+    this.tagClicked.emit({tag, event});
+  }
 
   removeTag(tag: string): void {
     console.log('remove tag clicked');

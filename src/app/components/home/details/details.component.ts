@@ -32,6 +32,7 @@ export class DetailsComponent implements OnInit {
   @Output() editFinalArrayStars = new EventEmitter<StarEmission>();
   @Output() editFinalArrayTag = new EventEmitter<TagEmission>();
   @Output() openFileRequest = new EventEmitter<string>();
+  @Output() filterTag = new EventEmitter<object>();
 
   @Input() video: ImageElement;
 
@@ -108,6 +109,10 @@ export class DetailsComponent implements OnInit {
         type: 'add'
       });
     }
+  }
+
+  filterThisTag(event: object) {
+    this.filterTag.emit(event);
   }
 
   removeThisTag(tag: string) {

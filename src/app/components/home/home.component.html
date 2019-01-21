@@ -872,6 +872,7 @@
           (openFileRequest)="openVideo($event)"
           (editFinalArrayTag)="editFinalArrayTag($event)"
           (editFinalArrayStars)="editFinalArrayStars($event)"
+          (filterTag)="handleFileWordClicked($event.tag.name, $event.event)"
 
           [video]="item"
 
