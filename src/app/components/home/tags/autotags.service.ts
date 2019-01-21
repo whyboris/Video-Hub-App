@@ -9,6 +9,9 @@ export interface WordAndFreq {
   freq: number;
 }
 
+// Strip out: {}()[] as well as 'for', 'her', 'the', 'and', '-', & ','
+export const autoFileTagsRegex = /{|}|\(|\)|\[|\]|\b(for|her|the|and)\b|,|-/gi;
+
 @Injectable()
 export class AutoTagsService {
 
@@ -79,11 +82,8 @@ export class AutoTagsService {
    * @param finalArray - the whole initial ImageElement[]
    */
   private storeFinalArrayInMemory(finalArray: ImageElement[]): void {
-    // Strip out: {}()[] as well as 'for', 'her', 'the', 'and', '-', & ','
-    const regex = /{|}|\(|\)|\[|\]|\b(for|her|the|and)\b|,|-/gi;
-
     finalArray.forEach((element) => {
-      const cleanedFileName: string = element.cleanName.toLowerCase().replace(regex, '');
+      const cleanedFileName: string = element.cleanName.toLowerCase().replace(autoFileTagsRegex, '');
 
       this.onlyFileNames.push(cleanedFileName);
       this.addString(cleanedFileName);

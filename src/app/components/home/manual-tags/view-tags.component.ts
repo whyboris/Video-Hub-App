@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ManualTagsService } from './manual-tags.service';
+import { Tag } from '../tags/tags.service';
 
 @Component({
   selector: 'app-view-tags-component',
@@ -9,8 +10,7 @@ import { ManualTagsService } from './manual-tags.service';
 })
 export class ViewTagsComponent {
 
-  @Input() tags: string[];
-  @Input() allowRemoval: boolean;
+  @Input() tags: Tag[];
   @Input() displayFrequency: boolean;
 
   @Output() removeTagEmit = new EventEmitter<string>();

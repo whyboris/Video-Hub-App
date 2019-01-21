@@ -881,7 +881,6 @@
           [hubName]="appState.hubName"
           [imgHeight]="imgHeight"
 
-          [tags]="item.tags"
           [imgId]="item.hash"
           [star]="item.stars"
 
@@ -891,6 +890,9 @@
           [randomImage]="settingsButtons['randomImage'].toggled"
           [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
+          [showManualTags]="settingsButtons['manualTags'].toggled"
+          [showAutoFileTags]="settingsButtons['autoFileTags'].toggled"
+          [showAutoFolderTags]="settingsButtons['autoFolderTags'].toggled"
         ></app-details-item>
       </ng-container>
 

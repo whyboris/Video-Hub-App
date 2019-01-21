@@ -19,6 +19,7 @@ import { ManualTagsService } from './components/home/manual-tags/manual-tags.ser
 import { ResolutionFilterService } from './components/pipes/resolution-filter.service';
 import { ShowLimitService } from './components/pipes/show-limit.service';
 import { StarFilterService } from './components/pipes/star-filter.service';
+import { TagsService } from './components/home/tags/tags.service';
 import { WordFrequencyService } from './components/pipes/word-frequency.service';
 
 import { AddTagComponent } from './components/home/manual-tags/add-tag.component';
@@ -117,6 +118,7 @@ import { WrapperPipe } from './components/pipes/wrapper.pipe';
     ShowLimitService,
     SimilarityService,
     StarFilterService,
+    TagsService,
     WordFrequencyService,
   ],
   bootstrap: [AppComponent]

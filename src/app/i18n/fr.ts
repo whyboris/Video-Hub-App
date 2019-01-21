@@ -1,6 +1,10 @@
 /* tslint:disable */
 export const French = {
   BUTTONS: {
+    autoFileTagsHint: 'Toggle auto file tags', // TRANSLATE
+    autoFileTagsDescription: 'Toggle generation of auto tags based on file names', // TRANSLATE
+    autoFolderTagsHint: 'Toggle auto folder tags', // TRANSLATE
+    autoFolderTagsDescription: 'Toggle generation of auto tags based on folder names', // TRANSLATE
     clearHistoryDescription: 'Efface l\'histoire récemment ouverte',
     clearHistoryHint: 'Histoire claire',
     darkModeDescription: 'Bascule entre les modes sombre et clair',
@@ -35,6 +39,8 @@ export const French = {
     makeLargerHint: 'Augmenter la taille de l\'aperçu',
     makeSmallerDescription: 'Diminue la taille des aperçus des vignettes et des bandes',
     makeSmallerHint: 'Diminuer la taille de l\'aperçu',
+    manualTagsHint: 'Toggle manual tags', // TRANSLATE
+    manualTagsDescription: 'Toggle manual tagging feature', // TRANSLATE
     randomImageDescription: 'Indique si une capture d\'écran aléatoire de chaque vidéo est affichée à chaque recherche ou défilement.',
     randomImageHint: 'Afficher une capture d\'écran aléatoire',
     randomizeGalleryDescription: 'Randomise l\'ordre des fichiers vidéo après chaque recherche',

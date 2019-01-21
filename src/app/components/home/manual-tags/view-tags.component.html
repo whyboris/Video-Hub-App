@@ -2,27 +2,28 @@
   *ngFor="let tag of tags; index as i"
   class="singleTag"
 >
-  <span *ngIf="allowRemoval" class="coverTheX">
+  <span *ngIf="tag.removable" class="coverTheX">
     &ensp;
   </span>
   <span
     class="tag"
+    [ngStyle]="{background: tag.colour}"
   >
-    {{ tag }}
+    {{ tag.name }}
   </span>
 
   <span
     *ngIf="displayFrequency"
     class="tag frequency"
   >
-    {{ tagService.tagsMap.get(tag) }}
+    {{ tagService.tagsMap.get(tag.name) }}
   </span>
 
   <app-icon
-    *ngIf="allowRemoval"
+    *ngIf="tag.removable"
     [icon]="'icon-close'"
     class="removeTag"
-    (click)="removeTag(tag)"
+    (click)="removeTag(tag.name)"
   >
   </app-icon>
 </div>
