@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { AutoTagsService } from './tags.service';
+import { AutoTagsService } from './autotags.service';
 
 @Pipe({
   name: 'tagMatchPipe'

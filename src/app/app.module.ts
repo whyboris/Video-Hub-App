@@ -12,7 +12,7 @@ import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 
 import { AlphabetPrefixService } from './components/pipes/alphabet-prefix.service';
 import { AutoTagsSaveService } from './components/home/tags/tags-save.service';
-import { AutoTagsService } from './components/home/tags/tags.service';
+import { AutoTagsService } from './components/home/tags/autotags.service';
 import { ElectronService } from './providers/electron.service';
 import { HomeComponent } from './components/home/home.component';
 import { ManualTagsService } from './components/home/manual-tags/manual-tags.service';

@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { WordAndFreq } from './tags.service';
+import { WordAndFreq } from './autotags.service';
 
 @Pipe({
   name: 'tagFilterPipe'

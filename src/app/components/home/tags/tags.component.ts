@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, OnDestroy, ViewChild, ElementRef, OnInit } from '@angular/core';
 
-import { AutoTagsService, WordAndFreq } from './tags.service';
+import { AutoTagsService, WordAndFreq } from './autotags.service';
 import { AutoTagsSaveService } from './tags-save.service';
 
 import { ImageElement } from '../../../components/common/final-object.interface';
