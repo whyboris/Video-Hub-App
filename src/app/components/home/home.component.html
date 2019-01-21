@@ -587,8 +587,17 @@
       <!-- end of magic search -->
 
       <!-- durationFilter -->
-      <div *ngIf="settingsButtons['durationFilter'].toggled">
-        DURATION WIP
+      <div *ngIf="settingsButtons['durationFilter'].toggled" class="resolutionFilterContainer">
+
+        <app-slider-filter
+          (newSliderFilterSelected)="newLengthFilterSelected($event)"
+          [darkMode]="settingsButtons['darkMode'].toggled"
+          [labelFormatPipe]="'lengthPipe'"
+          [maximumValue]="longest"
+          [minimumValue]="0"
+          [showLabels]="true"
+          [steps]="50"
+        ></app-slider-filter>
       </div>
 
       <!-- resolution filter & its frequency histogram -->
@@ -617,17 +626,6 @@
           [minimumValue]="0"
           [steps]="4"
         ></app-slider-filter>
-
-        <app-slider-filter
-          (newSliderFilterSelected)="newLengthFilterSelected($event)"
-          [darkMode]="settingsButtons['darkMode'].toggled"
-          [labelFormatPipe]="'lengthPipe'"
-          [maximumValue]="longest"
-          [minimumValue]="0"
-          [showLabels]="true"
-          [steps]="50"
-        ></app-slider-filter>
-
       </div>
 
       <!-- star filter & its frequency histogram -->
@@ -747,8 +745,8 @@
                 | fileSearchPipe: filters[5].array : filters[5].bool : true  : 2  : false : settingsButtons['manualTags'].toggled : settingsButtons['autoFileTags'].toggled : settingsButtons['autoFolderTags'].toggled
                 | fileSearchPipe: filters[6].array : filters[6].bool : false : 2  : false : settingsButtons['manualTags'].toggled : settingsButtons['autoFileTags'].toggled : settingsButtons['autoFolderTags'].toggled
                 | fileSearchPipe: filters[7].array : filters[7].bool : true  : 2  : true : settingsButtons['manualTags'].toggled : settingsButtons['autoFileTags'].toggled : settingsButtons['autoFolderTags'].toggled
-                | resolutionFilterPipe: settingsButtons['resolutionFilter'].toggled : freqLeftBound : freqRightBound
                 | lengthFilterPipe: settingsButtons['resolutionFilter'].toggled : lengthLeftBound : lengthRightBound
+                | resolutionFilterPipe: settingsButtons['resolutionFilter'].toggled : freqLeftBound : freqRightBound
                 | starFilterPipe: settingsButtons['starFilter'].toggled : starLeftBound : starRightBound : forceStarFilterUpdate
                 | similarityPipe: showSimilar : findMostSimilar
                 | wordFrequencyPipe: settingsButtons['showFreq'].toggled : (settingsButtons['extendedWordCloud'].toggled ? 100 : 9) : settingsButtons['manualTags'].toggled : settingsButtons['autoFileTags'].toggled : settingsButtons['autoFolderTags'].toggled

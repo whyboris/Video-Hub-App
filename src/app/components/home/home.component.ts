@@ -475,13 +475,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.setTags(finalObject.addTags, finalObject.removeTags);
       this.manualTagsService.populateManualTagsService(finalObject.images);
 
+      this.finalArray = this.demo ? finalObject.images.slice(0, 50) : finalObject.images;
+
       this.canCloseWizard = true;
       this.showWizard = false;
-      this.finalArray = this.demo ? finalObject.images.slice(0, 50) : finalObject.images;
       this.flickerReduceOverlay = false;
+
       this.finalArray.forEach((element: ImageElement): void => {
         this.longest = Math.max(element.duration, this.longest);
       });
+      // round to nearest 60 seconds
+      this.longest = Math.ceil(this.longest / 60) * 60;
     });
 
     // Returning settings
