@@ -37,7 +37,7 @@ export class ClipComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    // this.imgId is `undefined` when no screenshot taken -- because of ffmpeg extraction error
+    // this.video.hash is `undefined` when no screenshot taken -- because of ffmpeg extraction error
     if (this.video.hash === undefined) {
       this.noError = false;
     }
