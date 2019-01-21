@@ -27,7 +27,7 @@
         }"
       class="minimizeButton"
     >
-      <span class="icon icon-minus"></span>
+      <app-icon class="window-button" [icon]="'icon-minus'"></app-icon>
     </div>
     <div
       (click)="initiateMaximize()"
@@ -37,7 +37,7 @@
         }"
       class="maximizeButton"
     >
-      <span class="icon icon-maximize"></span>
+      <app-icon class="window-button" [icon]="'icon-maximize'"></app-icon>
     </div>
     <div
       (click)="initiateClose()"
@@ -47,7 +47,7 @@
         }"
       class="closeButton"
     >
-      <span class="icon icon-close"></span>
+      <app-icon class="window-button" [icon]="'icon-close'"></app-icon>
     </div>
   </div>
 
@@ -157,7 +157,7 @@
     class="closeSettings closeRename"
     title="{{ 'RIGHTCLICK.cancelRename' | translate }}"
   >
-    <span class="icon icon-close"></span>
+    <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
   </div>
 
     <span class="renameHeading">{{ 'RIGHTCLICK.renameTitle' | translate }}</span>
@@ -220,7 +220,7 @@
       class="closeSettings"
       title="{{ 'SETTINGS.closeSettings' | translate }}"
     >
-      <span class="icon icon-close"></span>
+      <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
     </div>
     <app-tags-component
       [hubName]="appState.hubName"
@@ -241,7 +241,7 @@
       class="closeSettings"
       title="{{ 'SETTINGS.closeSettings' | translate }}"
     >
-      <span class="icon icon-close"></span>
+      <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
     </div>
 
     <button (click)="showSettingsGroup(0)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 0 }">
@@ -290,7 +290,7 @@
                     }"
                   title="{{ settingsButtons[buttonKey].title | translate }}"
                 >
-                  <span class="icon {{ settingsButtons[buttonKey].iconName }}"></span>
+                  <app-icon [icon]="settingsButtons[buttonKey].iconName"></app-icon>
                 </button>
 
                 <span
@@ -330,7 +330,7 @@
             flatSettingsButton:    settingsButtons['flatIcons'].toggled
           }"
         >
-          <span class="icon icon-minus"></span>
+          <app-icon [icon]="'icon-minus'"></app-icon>
         </button>
         <button
           (click)="resetZoomLevel()"
@@ -349,7 +349,7 @@
             flatSettingsButton:    settingsButtons['flatIcons'].toggled
           }"
         >
-          <span class="icon icon-plus"></span>
+          <app-icon [icon]="'icon-plus'"></app-icon>
         </button>
       </div>
 
@@ -477,7 +477,7 @@
                 }"
               title="{{ settingsButtons[buttonKey].title | translate }}"
             >
-              <span class="icon {{ settingsButtons[buttonKey].iconName }}"></span>
+              <app-icon class="icon" [icon]="settingsButtons[buttonKey].iconName"></app-icon>
             </button><!--
         --></ng-container><!--
         --><!--
@@ -491,13 +491,13 @@
         class="gearButton"
         title="{{ 'SETTINGS.settings' | translate }}"
       >
-        <span class="icon icon-gear"></span>
+        <app-icon [icon]="'icon-gear'"></app-icon>
       </div>
 
     </div>
 
     <div (click)="toggleSettingsMenu()" [ngClass]="{ flipped: !appState.menuHidden }" class="hidingSettingsMenu">
-      <span class="icon icon-chevron-down-mini"></span>
+      <app-icon class="mini-chevron" [icon]="'icon-chevron-down-mini'"></app-icon>
     </div>
 
     <div
@@ -517,7 +517,7 @@
       <ng-container *ngFor="let filter of filters; index as j">
         <ng-container *ngIf="settingsButtons[filter.uniqueKey].toggled">
 
-          <span class="icon input-icon {{ settingsButtons[filter.uniqueKey].iconName }}"></span>
+          <app-icon class="input-icon" [icon]="settingsButtons[filter.uniqueKey].iconName"></app-icon>
           <input
             id="{{ filter.uniqueKey }}"
             (keyup.enter)="onEnterKey(filter.string, j)"
@@ -559,7 +559,7 @@
 
       <!-- magic search -->
       <ng-container *ngIf="settingsButtons['magic'].toggled">
-        <span class="icon input-icon {{ settingsButtons['magic'].iconName }}"></span>
+        <app-icon class="input-icon" [icon]="settingsButtons['magic'].iconName"></app-icon>
         <input
           #magicSearch
           (keydown.escape)="magicSearchString = ''"
@@ -586,7 +586,12 @@
       </ng-container>
       <!-- end of magic search -->
 
-      <!-- resolution filter & frequency histogram -->
+      <!-- durationFilter -->
+      <div *ngIf="settingsButtons['durationFilter'].toggled">
+        DURATION WIP
+      </div>
+
+      <!-- resolution filter & its frequency histogram -->
       <div *ngIf="settingsButtons['resolutionFilter'].toggled" class="resolutionFilterContainer">
         <div class="frequencyGraphContainer">
           <ng-container *ngFor="let resolution of resolutionFreqArr; index as i">
@@ -606,25 +611,26 @@
         </div>
 
         <app-slider-filter
+          (newSliderFilterSelected)="newResFilterSelected($event)"
           [darkMode]="settingsButtons['darkMode'].toggled"
           [maximumValue]="4"
           [minimumValue]="0"
           [steps]="4"
-          (newSliderFilterSelected)="newResFilterSelected($event)"
         ></app-slider-filter>
 
         <app-slider-filter
+          (newSliderFilterSelected)="newLengthFilterSelected($event)"
           [darkMode]="settingsButtons['darkMode'].toggled"
+          [labelFormatPipe]="'lengthPipe'"
           [maximumValue]="longest"
           [minimumValue]="0"
-          [steps]="50"
           [showLabels]="true"
-          [labelFormatPipe]="'lengthPipe'"
-          (newSliderFilterSelected)="newLengthFilterSelected($event)"
+          [steps]="50"
         ></app-slider-filter>
+
       </div>
 
-      <!-- star filter & frequency histogram -->
+      <!-- star filter & its frequency histogram -->
       <div *ngIf="settingsButtons['starFilter'].toggled" class="resolutionFilterContainer">
         <div class="frequencyGraphContainer">
           <ng-container *ngFor="let resolution of starRatingFreqArr; index as i">
@@ -941,7 +947,7 @@
 <div *ngIf="showWizard" class="wizard" @myWizardAnimation>
 
   <div *ngIf="canCloseWizard" (click)="hideWizard()" class="closeWizard" title="{{ 'WIZARD.closeButton' | translate }}">
-    <span class="icon icon-close"></span>
+    <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
   </div>
 
   <div class="left-side" @slowFadeIn>

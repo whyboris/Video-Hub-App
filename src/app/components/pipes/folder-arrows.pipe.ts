@@ -12,11 +12,13 @@ export class FolderArrowsPipe implements PipeTransform {
    */
   transform(folderPath: string, trailing: boolean): string {
 
+    const arrowString: string = '<span class="icon icon-arrow"></span>';
+
     let htmlString = folderPath;
-    htmlString = htmlString.replace(/\//g, '<span class="icon icon-arrow"></span>');
-    htmlString = htmlString.replace(/\\/g, '<span class="icon icon-arrow"></span>');
+    htmlString = htmlString.replace(/\//g, arrowString);
+    htmlString = htmlString.replace(/\\/g, arrowString);
     if (trailing) {
-      htmlString = htmlString + '<span class="icon icon-arrow"></span>';
+      htmlString = htmlString + arrowString;
     }
 
     return `${htmlString}`;

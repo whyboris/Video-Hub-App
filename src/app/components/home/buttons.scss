@@ -7,14 +7,28 @@ button {
   outline: none;
 }
 
+.close-modal-icon {
+  display: inline-block;
+  transition-duration: 150ms;
+  transition-property: fill;
+  width: 15px;
+
+  &:hover {
+    fill: #ff6666;
+  }
+}
+
 .flatSettingsButton {
   background: transparent;
   border: none;
-  color: $gray-50;
-  margin-right: 4px;
+  fill: $gray-50;
+  margin-right: 8px;
   margin-top: 2px;
   transition: $button-toggle-length;
   transition-property: color;
+
+  min-width: 15px;
+  padding: 0;
 
   &:hover {
     text-shadow: 0 0 3px $white;
@@ -22,18 +36,18 @@ button {
   }
 
   &:active {
-    color: #b5cbff;
+    fill: #b5cbff;
     transition: $button-toggle-length;
   }
 
   &:last-child {
-    margin-right: 8px;
+    margin-right: 12px;
   }
 
 }
 
 .flatSettingsButtonToggled {
-  color: #729aff;
+  fill: #729aff;
   transition: $button-toggle-length;
 }
 
@@ -51,17 +65,15 @@ button {
   max-width: 21px;
   min-height: 21px;
   min-width: 21px;
-  padding: 0;
+  padding: 2px;
   text-align: center;
   transition: $button-toggle-length;
   transition-property: color, transform, background-color, margin, opacity;
 
   & .icon {
-    &:before {
-      color: $gray-70;
-      transform: translate(-1px, -1px);
-      transition: $button-toggle-length;
-    }
+    fill: $gray-70;
+    transform: translate(-1px, -1px);
+    transition: $button-toggle-length;
   }
 
   &:first-child {
@@ -88,11 +100,9 @@ button {
     margin-bottom: 1px;
 
     & .icon {
-      &:before {
-        color: $white;
-        transform: translate(0px, 0px);
-        transition: $button-toggle-length;
-      }
+      fill: $white;
+      transform: translate(0px, 0px);
+      transition: $button-toggle-length;
     }
   }
 
@@ -117,12 +127,10 @@ button {
   }
 
   & .icon {
-    &:before {
-      color: $white;
-      transform: translate(0px, 0px);
-      transition: $button-toggle-length;
-      text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.3);
-    }
+    fill: $white;
+    transform: translate(0px, 0px);
+    transition: $button-toggle-length;
+    text-shadow: 0px 0px 8px rgba(255, 255, 255, 0.3);
   }
 
   span {
@@ -141,9 +149,7 @@ button {
   }
 
   & .icon {
-    &:before {
-      color: #929292;
-    }
+    fill: #929292;
   }
 }
 
@@ -155,8 +161,6 @@ button {
   border-left: 1px solid #000000;
 
   & .icon {
-    &:before {
-      color: white;
-    }
+    fill: white;
   }
 }

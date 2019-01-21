@@ -14,11 +14,12 @@
       <span class="frequency">
         {{ item.freq }}
       </span>
-      <span
+      <app-icon
         *ngIf="editMode"
-        class="icon icon-close"
+        [icon]="'icon-close'"
+        class="icon-lol"
         @tagDeleteButton
-      ></span>
+      ></app-icon>
     </li>
   </ul>
 
@@ -37,11 +38,12 @@
       <span class="frequency">
         {{ item.freq }}
       </span>
-      <span
+      <app-icon
         *ngIf="editMode"
-        class="icon icon-close"
+        class="icon-lol"
+        [icon]="'icon-close'"
         @tagDeleteButton
-      ></span>
+      ></app-icon>
     </li>
   </ul>
 </div>

@@ -29,11 +29,13 @@ import { DonutComponent } from './components/donut/donut.component';
 import { FileComponent } from './components/home/file/file.component';
 import { FilmstripComponent } from './components/home/filmstrip/filmstrip.component';
 import { FullViewComponent } from './components/home/full/full.component';
+import { IconComponent } from './components/home/icon/icon.component';
 import { PreviewComponent } from './components/home/thumbnail/preview.component';
 import { SheetComponent } from './components/home/sheet/sheet.component';
 import { SimilarityService } from './components/pipes/similarity.service';
 import { SliderFilterComponent } from './components/home/slider-filter/slider-filter.component';
 import { StatisticsComponent } from './components/home/statistics/statistics.component';
+import { SvgDefinitionsComponent } from './components/home/icon/svg-definitions.component';
 import { TagsComponent } from './components/home/tags/tags.component';
 import { TopComponent } from './components/home/top/top.component';
 import { ViewTagsComponent } from './components/home/manual-tags/view-tags.component';
@@ -44,8 +46,8 @@ import { FileSearchPipe } from './components/pipes/file-search.pipe';
 import { FileSizePipe } from './components/pipes/file-size.pipe';
 import { FolderArrowsPipe } from './components/pipes/folder-arrows.pipe';
 import { FolderViewPipe } from './components/pipes/folder-view.pipe';
-import { LengthPipe } from './components/pipes/length.pipe';
 import { LengthFilterPipe } from './components/pipes/length-filter.pipe';
+import { LengthPipe } from './components/pipes/length.pipe';
 import { MagicSearchPipe } from './components/pipes/magic-search.pipe';
 import { ManualTagSortPipe } from './components/pipes/manual-tags-sort.pipe';
 import { ResolutionFilterPipe } from './components/pipes/resolution-filter.pipe';
@@ -74,8 +76,9 @@ import { WrapperPipe } from './components/pipes/wrapper.pipe';
     FolderViewPipe,
     FullViewComponent,
     HomeComponent,
-    LengthPipe,
+    IconComponent,
     LengthFilterPipe,
+    LengthPipe,
     MagicSearchPipe,
     ManualTagSortPipe,
     PreviewComponent,
@@ -86,13 +89,14 @@ import { WrapperPipe } from './components/pipes/wrapper.pipe';
     SortingPipe,
     StarFilterPipe,
     StatisticsComponent,
+    SvgDefinitionsComponent,
     TagFilterPipe,
     TagMatchPipe,
     TagsComponent,
     TopComponent,
     ViewTagsComponent,
     WordFrequencyPipe,
-    WrapperPipe
+    WrapperPipe,
   ],
   imports: [
     AppRoutingModule,
@@ -100,7 +104,7 @@ import { WrapperPipe } from './components/pipes/wrapper.pipe';
     BrowserModule,
     FormsModule,
     TranslateModule.forRoot(),
-    VirtualScrollerModule
+    VirtualScrollerModule,
   ],
   providers: [
     AlphabetPrefixService,
@@ -113,7 +117,7 @@ import { WrapperPipe } from './components/pipes/wrapper.pipe';
     ShowLimitService,
     SimilarityService,
     StarFilterService,
-    WordFrequencyService
+    WordFrequencyService,
   ],
   bootstrap: [AppComponent]
 })

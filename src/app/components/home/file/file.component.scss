@@ -26,23 +26,24 @@
   width: 21px;
 }
 
-.folder {
+.folder-name {
+  cursor: pointer;
   display: inline-block;
   font-size: 10px;
-}
-
-.folder {
-  cursor: pointer;
   font-size: 12px;
   font-weight: bold;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  // disabled for better readability:
+  // text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-.icon-folder-blank {
-  color: $gray-70;
+.icon-folder-lol {
+  cursor: pointer;
+  display: inline-block;
+  fill: $gray-70;
+  height: 20px;
   margin-right: 2px;
-  position: absolute;
-  transform: translate(-14px, 1px);
+  transform: translate(-4px, 4px);
+  width: 15px;
 }
 
 .title {

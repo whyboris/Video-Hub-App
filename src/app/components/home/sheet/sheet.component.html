@@ -12,22 +12,28 @@
   </div>
 
   <div style="margin: 20px">
+
     <button
       (click)="decreaseZoomLevel()"
+      class="defaultSettingsButton"
     >
-      <span class="icon icon-minus">zoom out</span>
+      <app-icon [icon]="'icon-minus'">zoom out</app-icon>
     </button>
+
     <button
       (click)="resetZoomLevel()"
-      style="max-width: initial; padding: 0 5px; margin: 0 10px"
-      >
-        <span>{{ 'SETTINGS.reset' | translate }}</span>
+      class="defaultSettingsButton reset-button"
+    >
+      <span>{{ 'SETTINGS.reset' | translate }}</span>
     </button>
+
     <button
       (click)="increaseZoomLevel()"
+      class="defaultSettingsButton"
     >
-      <span class="icon icon-plus">zoom in</span>
+      <app-icon [icon]="'icon-plus'">zoom in</app-icon>
     </button>
+
   </div>
 
   <ng-container

@@ -7,6 +7,8 @@ export const English = {
     clearHistoryHint: 'Clear history',
     darkModeDescription: 'Toggles between dark and light mode',
     darkModeHint: 'Dark mode',
+    durationFilterDescription: 'Toggles the duration filter', // TRANSLATE
+    durationFilterHint: 'Duration filter', // TRANSLATE
     excludeDescription: 'Toggles the search filter to exclude any filenames that contain the filter word',
     excludeHint: 'Exclude filter',
     extendedWordCloudDescription: 'Toggles showing more word cloud tags',
@@ -75,10 +77,10 @@ export const English = {
     showThumbnailsHint: 'Show thumbnails',
     shuffleGalleryNowDescription: 'Shuffles the results in current view',
     shuffleGalleryNowHint: 'Shuffle current results',
-    starFilterDescription: 'Toggles the star filter', // TRANSLATE
-    starFilterHint: 'Star filter', // TRANSLATE
     sortOrderDescription: 'Toggles the sort order filter', // TRANSLATE
     sortOrderHint: 'Sort order', // TRANSLATE
+    starFilterDescription: 'Toggles the star filter', // TRANSLATE
+    starFilterHint: 'Star filter', // TRANSLATE
     startWizardDescription: 'Starts wizard again: create a new video hub or open recent',
     startWizardHint: 'Start wizard',
     tagExclusionDescription: 'Toggles the search filter to exclude any files that contain the filter tags',

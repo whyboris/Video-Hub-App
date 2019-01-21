@@ -8,7 +8,8 @@ import { galleryItemAppear, metaAppear, textAppear } from '../../common/animatio
 @Component({
   selector: 'app-thumbnail-sheet',
   templateUrl: './sheet.component.html',
-  styleUrls: [ './sheet.component.scss' ],
+  styleUrls: [ './../buttons.scss',
+               './sheet.component.scss' ],
   animations: [ galleryItemAppear,
                 textAppear,
                 metaAppear ]
