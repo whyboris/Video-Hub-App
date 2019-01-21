@@ -27,6 +27,7 @@ export class LengthPipe implements PipeTransform {
       } else {
         return (hh !== '0' ? hh + ':' : '')
                + (mm.length !== 2 ? '0' + mm : mm)
+               + ':'
                + (ss.length !== 2 ? '0' : '') + ss;
       }
     }
