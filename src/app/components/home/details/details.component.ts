@@ -9,13 +9,13 @@ import { StarRating, ImageElement } from '../../common/final-object.interface';
 import { galleryItemAppear } from '../../common/animations';
 
 export interface TagEmission {
-  id: string;
+  index: number;
   tag: string;
   type: 'add' | 'remove';
 }
 
 export interface StarEmission {
-  id: string;
+  index: number;
   stars: StarRating;
 }
 
@@ -31,7 +31,7 @@ export class DetailsComponent implements OnInit {
 
   @Output() editFinalArrayStars = new EventEmitter<StarEmission>();
   @Output() editFinalArrayTag = new EventEmitter<TagEmission>();
-  @Output() openFileRequest = new EventEmitter<string>();
+  @Output() openFileRequest = new EventEmitter<number>();
   @Output() filterTag = new EventEmitter<object>();
 
   @Input() video: ImageElement;
@@ -43,7 +43,6 @@ export class DetailsComponent implements OnInit {
   @Input() hoverScrub: boolean;
   @Input() hubName: string;
   @Input() imgHeight: number;
-  @Input() imgId: any; // the filename of screenshot strip without `.jpg`
   @Input() largerFont: boolean;
   @Input() randomImage: boolean; // all code related to this currently removed
   @Input() returnToFirstScreenshot: boolean;
@@ -79,12 +78,12 @@ export class DetailsComponent implements OnInit {
   }
 
   mouseClick() {
-    this.openFileRequest.emit(this.imgId);
+    this.openFileRequest.emit(this.video.index);
   }
 
   ngOnInit() {
-    this.firstFilePath = 'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/thumbnails/' + this.imgId + '.jpg';
-    this.fullFilePath =  'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/filmstrips/' + this.imgId + '.jpg';
+    this.firstFilePath = 'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/thumbnails/' + this.video.hash + '.jpg';
+    this.fullFilePath =  'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/filmstrips/' + this.video.hash + '.jpg';
     this.starRatingHack = this.star;
   }
 
@@ -104,7 +103,7 @@ export class DetailsComponent implements OnInit {
       this.manualTagsService.addTag(tag);
 
       this.editFinalArrayTag.emit({
-        id: this.imgId,
+        index: this.video.index,
         tag: tag,
         type: 'add'
       });
@@ -119,7 +118,7 @@ export class DetailsComponent implements OnInit {
     this.manualTagsService.removeTag(tag);
 
     this.editFinalArrayTag.emit({
-      id: this.imgId,
+      index: this.video.index,
       tag: tag,
       type: 'remove'
     });
@@ -131,7 +130,7 @@ export class DetailsComponent implements OnInit {
     }
     this.starRatingHack = rating; // hack for getting star opacity updated instantly
     this.editFinalArrayStars.emit({
-      id: this.imgId,
+      index: this.video.index,
       stars: rating
     });
   }

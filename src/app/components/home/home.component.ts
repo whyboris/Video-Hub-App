@@ -163,8 +163,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   showSimilar: boolean = false; // to toggle the similarity pipe
 
-  fileMap: Map<string, number>; // should be a map from hash (imageId) to number (element in finalArray);
-
   // for text padding below filmstrip or thumbnail element
   textPaddingHeight: number;
   previewWidth: number;
@@ -386,7 +384,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       //   this.canCloseWizard = true;
       //   this.showWizard = false;
       //   this.finalArray = finalObject.images;
-      //   this.buildFileMap();
       //   setTimeout(() => {
       //     this.toggleButton('showThumbnails');
       //   }, 1000);
@@ -481,8 +478,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.canCloseWizard = true;
       this.showWizard = false;
       this.finalArray = this.demo ? finalObject.images.slice(0, 50) : finalObject.images;
-      console.log(this.finalArray);
-      this.buildFileMap();
       this.flickerReduceOverlay = false;
       this.finalArray.forEach((element: ImageElement): void => {
         this.longest = Math.max(element.duration, this.longest);
@@ -666,19 +661,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if (event.ctrlKey === true || event.metaKey) {
       this.openThumbnailSheet(item);
     } else {
-      this.openVideo(item.hash);
+      this.openVideo(item.index);
     }
   }
 
   /**
    * Open the video with user's default media player
-   * @param imageId unique ID of the video
+   * @param index unique ID of the video
    */
-  public openVideo(imageId): void {
-    const position: number = this.fileMap.get(imageId);
-    this.currentPlayingFolder = this.finalArray[position].partialPath;
-    this.currentPlayingFile = this.finalArray[position].cleanName;
-    const fullPath = this.appState.selectedSourceFolder + this.finalArray[position].partialPath + '/' + this.finalArray[position].fileName;
+  public openVideo(index): void {
+    this.currentPlayingFolder = this.finalArray[index].partialPath;
+    this.currentPlayingFile = this.finalArray[index].cleanName;
+    const fullPath = this.appState.selectedSourceFolder + this.finalArray[index].partialPath + '/' + this.finalArray[index].fileName;
     this.electronService.ipcRenderer.send('openThisFile', fullPath);
     console.log(fullPath);
     this.fullPathToCurrentFile = fullPath;
@@ -763,20 +757,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   // -----------------------------------------------------------------------------------------------
   // Interaction functions
-
-  /**
-   * Create a map
-   * from the imageId (3rd element in each item of finalArray)
-   * to the item location (in finalArray)
-   * They are identical the first time, but will diverge as user rescans video directory
-   */
-  buildFileMap(): void {
-    this.fileMap = new Map;
-    (this.finalArray || []).forEach((element, index) => {
-      this.fileMap.set(element.hash, index);
-    });
-    // console.log(this.fileMap);
-  }
 
   /**
    * Add this file to the recently opened list
@@ -1520,8 +1500,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   editFinalArrayTag(emission: TagEmission): void {
     // console.log(emission);
-
-    const position: number = this.fileMap.get(emission.id);
+    const position: number = emission.index;
 
     if (emission.type === 'add') {
       if (this.finalArray[position].tags) {
@@ -1539,7 +1518,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
 
   editFinalArrayStars(emission: StarEmission): void {
-    const position: number = this.fileMap.get(emission.id);
+    const position: number = emission.index;
     this.finalArray[position].stars = emission.stars;
     this.finalArrayNeedsSaving = true;
     this.forceStarFilterUpdate = !this.forceStarFilterUpdate;

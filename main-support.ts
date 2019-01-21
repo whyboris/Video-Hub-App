@@ -79,9 +79,7 @@ export function alphabetizeFinalArray(imagesArray: ImageElement[]): ImageElement
  */
 export function insertTemporaryFields(imagesArray: ImageElement[]): ImageElement[] {
 
-  let counter = 0;
-
-  imagesArray.forEach(element => {
+  imagesArray.forEach((element, index) => {
 
     // set resolution string & bucket
     const resolution: ResolutionMeta = labelVideo(element.width, element.height);
@@ -91,8 +89,7 @@ export function insertTemporaryFields(imagesArray: ImageElement[]): ImageElement
     element.resolution = resolution.label;
 
     // set index for default sorting
-    element.index = counter;
-    counter++;
+    element.index = index;
   });
 
   return imagesArray;

@@ -16,7 +16,6 @@ export class FileComponent {
   @Input() video: ImageElement;
 
   @Input() darkMode: boolean;
-  @Input() imgId: any;
   @Input() largerFont: boolean;
   @Input() showMeta: boolean;
 

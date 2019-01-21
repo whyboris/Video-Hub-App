@@ -833,7 +833,7 @@
         <app-file-item
           *ngFor="let item of scroll.viewPortItems"
           (contextmenu)="(item.cleanName === '***') ? doNothing() : rightMouseClicked($event, item)"
-          (click)="(item.cleanName === '***') ? handleFolderWordClicked(item.partialPath) : openVideo(item.hash)"
+          (click)="(item.cleanName === '***') ? handleFolderWordClicked(item.partialPath) : openVideo(item.index)"
 
           [video]="item"
 
@@ -882,7 +882,6 @@
           [hubName]="appState.hubName"
           [imgHeight]="imgHeight"
 
-          [imgId]="item.hash"
           [star]="item.stars"
 
           [darkMode]="settingsButtons['darkMode'].toggled"
