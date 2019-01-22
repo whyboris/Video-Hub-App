@@ -120,6 +120,8 @@ export const English = {
     sortSizeDesc: 'Size Descending',
     sortTimeAsc: 'Time Ascending',
     sortTimeDesc: 'Time Descending',
+    sortModifiedAsc: 'Date Modified Ascending',
+    sortModifiedDesc: 'Date Modified Descending',
     tagExclusion: 'tags do not contain',
     tagIntersection: 'tags contain',
     tagUnion: 'tags union',
