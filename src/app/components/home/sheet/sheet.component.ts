@@ -1,9 +1,23 @@
-import { Component, Input, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, Input, Output, OnInit, ElementRef, EventEmitter, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
-import { ImageElement } from '../../common/final-object.interface';
+import { ManualTagsService } from '../manual-tags/manual-tags.service';
+import { Tag, TagsService } from '../tags/tags.service';
+
+import { StarRating, ImageElement } from '../../common/final-object.interface';
 
 import { galleryItemAppear, metaAppear, textAppear } from '../../common/animations';
+
+export interface TagEmission {
+  index: number;
+  tag: string;
+  type: 'add' | 'remove';
+}
+
+export interface StarEmission {
+  index: number;
+  stars: StarRating;
+}
 
 @Component({
   selector: 'app-thumbnail-sheet',
@@ -19,6 +33,11 @@ export class SheetComponent implements OnInit {
   @ViewChild('filmstripHolder') filmstripHolder: ElementRef;
   @ViewChild('thumbHolder') thumbHolder: ElementRef;
 
+  @Output() editFinalArrayStars = new EventEmitter<StarEmission>();
+  @Output() editFinalArrayTag = new EventEmitter<TagEmission>();
+  @Output() openFileRequest = new EventEmitter<number>();
+  @Output() filterTag = new EventEmitter<object>();
+
   @Input() video: ImageElement;
 
   @Input() darkMode: boolean;
@@ -32,18 +51,26 @@ export class SheetComponent implements OnInit {
   @Input() randomImage: boolean; // all code related to this currently removed
   @Input() returnToFirstScreenshot: boolean;
   @Input() showMeta: boolean;
+  @Input() star: StarRating;
+  @Input() showManualTags: boolean;
+  @Input() showAutoFileTags: boolean;
+  @Input() showAutoFolderTags: boolean;
 
   percentOffset: number = 0;
   fullFilePath = '';
   thumbnailsToDisplay = 4;
+  starRatingHack: StarRating;
 
   constructor(
+    public manualTagsService: ManualTagsService,
+    public tagsService: TagsService,
     public sanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
     this.fullFilePath =  'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/filmstrips/' + this.video.hash + '.jpg';
     this.percentOffset = (100 / (this.video.screens - 1));
+    this.starRatingHack = this.star;
   }
 
   decreaseZoomLevel() {
@@ -61,4 +88,44 @@ export class SheetComponent implements OnInit {
       this.thumbnailsToDisplay--;
     }
   }
+
+  addThisTag(tag: string) {
+    if (this.video.tags && this.video.tags.includes(tag)) {
+      console.log('TAG ALREADY ADDED!');
+    } else {
+      this.manualTagsService.addTag(tag);
+
+      this.editFinalArrayTag.emit({
+        index: this.video.index,
+        tag: tag,
+        type: 'add'
+      });
+    }
+  }
+
+  filterThisTag(event: object) {
+    this.filterTag.emit(event);
+  }
+
+  removeThisTag(tag: string) {
+    this.manualTagsService.removeTag(tag);
+
+    this.editFinalArrayTag.emit({
+      index: this.video.index,
+      tag: tag,
+      type: 'remove'
+    });
+  }
+
+  setStarRating(rating: StarRating): void {
+    if (this.starRatingHack === rating) {
+      rating = 0.5; // reset to "N/A" (not rated)
+    }
+    this.starRatingHack = rating; // hack for getting star opacity updated instantly
+    this.editFinalArrayStars.emit({
+      index: this.video.index,
+      stars: rating
+    });
+  }
+
 }
