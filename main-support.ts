@@ -312,7 +312,7 @@ export function checkForCorruptFile(pathToVideo: string,
       }
       // check for complete file
       const time = (current + 1) * step; // +1 so we don't pick the 0th frame
-      const checkCommand = 'ffmpeg -v warning -ss ' + time + ' -t 1 -i "' + pathToVideo + '" -f null -';
+      const checkCommand = 'ffmpeg -v warning -ss ' + time + ' -t 1 -i "' + pathToVideo + '" -map V -f null -';
       const corruptRegex = /Output file is empty, nothing was encoded/g;
       exec(checkCommand, (err, data, stderr) => {
         console.log(data);
@@ -389,7 +389,7 @@ export function generateScreenshotStrip(
   while (current < totalCount) {
     const time = (current + 1) * step; // +1 so we don't pick the 0th frame
     args.push('-ss', time, '-i', pathToVideo);
-    allFramesFiltered += '[' + current + ':v]' + fancyScaleFilter + '[' + current + '];';
+    allFramesFiltered += '[' + current + ':V]' + fancyScaleFilter + '[' + current + '];';
     outputFrames += '[' + current + ']';
     current++;
   }
@@ -451,7 +451,7 @@ export function takeTenClips(
     const time = current * step;
     const preview_duration = 1; // TODO: Make this customisable
     args.push('-ss', time, '-t', preview_duration, '-i', pathToVideo);
-    concat += '[' + (current - 1) + ':v]' + '[' + (current - 1) + ':a]';
+    concat += '[' + (current - 1) + ':V]' + '[' + (current - 1) + ':a]';
     current++;
   }
   concat += 'concat=n=' + (totalCount - 1) + ':v=1:a=1[v][a];[v]scale=-2:' + screenshotHeight + '[v2]';
