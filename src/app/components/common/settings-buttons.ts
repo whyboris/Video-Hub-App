@@ -55,7 +55,7 @@ export const SettingsButtonsGroups: string[][] = [
     'randomImage',
     'randomizeGallery',
     'shuffleGalleryNow',
-    'showFolderInFileView'
+    'showFolderInGallery'
   ],
   [
     'hideTop',
@@ -216,12 +216,12 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     title: 'BUTTONS.shuffleGalleryNowHint',
     description: 'BUTTONS.shuffleGalleryNowDescription',
   },
-  'showFolderInFileView': {
+  'showFolderInGallery': {
     hidden: true,
     toggled: true,
     iconName: 'icon-folder-blank',
-    title: 'BUTTONS.showFolderInFileViewHint',
-    description: 'BUTTONS.showFolderInFileViewDescription',
+    title: 'BUTTONS.showFolderInGalleryHint',
+    description: 'BUTTONS.showFolderInGalleryDescription',
   },
   'makeSmaller': {
     hidden: false,

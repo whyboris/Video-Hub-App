@@ -752,8 +752,8 @@
                 | wordFrequencyPipe: settingsButtons['showFreq'].toggled : (settingsButtons['extendedWordCloud'].toggled ? 100 : 9) : settingsButtons['manualTags'].toggled : settingsButtons['autoFileTags'].toggled : settingsButtons['autoFolderTags'].toggled
                 | countPipe
                 | sortingPipe: sortType : shuffleTheViewNow
-                | folderViewPipe: settingsButtons['showFoldersOnly'].toggled
-                                  || (appState.currentView === 'files' && settingsButtons['showFolderInFileView'].toggled)
+                | folderViewPipe: settingsButtons['showFolderInGallery'].toggled
+                                  || settingsButtons['showFoldersOnly'].toggled
                                   : settingsButtons['showFoldersOnly'].toggled"
     >
 

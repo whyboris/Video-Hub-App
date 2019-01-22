@@ -14,10 +14,10 @@ import { AlphabetPrefixService } from './components/pipes/alphabet-prefix.servic
 import { AutoTagsSaveService } from './components/home/tags/tags-save.service';
 import { AutoTagsService } from './components/home/tags/autotags.service';
 import { ElectronService } from './providers/electron.service';
-import { HomeComponent } from './components/home/home.component';
 import { ManualTagsService } from './components/home/manual-tags/manual-tags.service';
 import { ResolutionFilterService } from './components/pipes/resolution-filter.service';
 import { ShowLimitService } from './components/pipes/show-limit.service';
+import { SimilarityService } from './components/pipes/similarity.service';
 import { StarFilterService } from './components/pipes/star-filter.service';
 import { TagsService } from './components/home/tags/tags.service';
 import { WordFrequencyService } from './components/pipes/word-frequency.service';
@@ -29,11 +29,12 @@ import { DetailsComponent } from './components/home/details/details.component';
 import { DonutComponent } from './components/donut/donut.component';
 import { FileComponent } from './components/home/file/file.component';
 import { FilmstripComponent } from './components/home/filmstrip/filmstrip.component';
+import { FolderComponent } from './components/home/folder/folder.component';
 import { FullViewComponent } from './components/home/full/full.component';
+import { HomeComponent } from './components/home/home.component';
 import { IconComponent } from './components/home/icon/icon.component';
 import { PreviewComponent } from './components/home/thumbnail/preview.component';
 import { SheetComponent } from './components/home/sheet/sheet.component';
-import { SimilarityService } from './components/pipes/similarity.service';
 import { SliderFilterComponent } from './components/home/slider-filter/slider-filter.component';
 import { StatisticsComponent } from './components/home/statistics/statistics.component';
 import { SvgDefinitionsComponent } from './components/home/icon/svg-definitions.component';
@@ -74,6 +75,7 @@ import { WrapperPipe } from './components/pipes/wrapper.pipe';
     FileSizePipe,
     FilmstripComponent,
     FolderArrowsPipe,
+    FolderComponent,
     FolderViewPipe,
     FullViewComponent,
     HomeComponent,

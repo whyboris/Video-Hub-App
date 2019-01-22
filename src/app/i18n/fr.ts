@@ -59,8 +59,8 @@ export const French = {
     showFilesHint: 'Afficher les fichiers',
     showFilmstripDescription: 'Bascule vers l\'affichage en bande de film',
     showFilmstripHint: 'Montrer la pellicule',
-    showFolderInFileViewDescription: 'Affiche les emplacements des dossiers dans la vue du fichier',
-    showFolderInFileViewHint: 'Afficher les dossiers en mode fichier',
+    showFolderInGalleryDescription: 'Affiche les emplacements des dossiers dans la vue du fichier', // CHANGE
+    showFolderInGalleryHint: 'Afficher les dossiers en mode fichier', // CHANGE
     showFoldersOnlyDescription: 'Bascule vers la vue des dossiers uniquement',
     showFoldersOnlyHint: 'Afficher uniquement les dossiers',
     showFreqDescription: 'Bascule le nuage de mots qui affiche jusqu\'à neuf des mots les plus fréquents dans les fichiers actuellement affichés',

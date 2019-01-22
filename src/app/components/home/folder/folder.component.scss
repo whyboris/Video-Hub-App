@@ -1,0 +1,19 @@
+@import "../variables";
+
+.folder-name {
+  cursor: pointer;
+  display: inline-block;
+  font-size: 10px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.icon-folder-lol {
+  cursor: pointer;
+  display: inline-block;
+  fill: $gray-70;
+  height: 20px;
+  margin-right: 2px;
+  transform: translate(-4px, 4px);
+  width: 15px;
+}
