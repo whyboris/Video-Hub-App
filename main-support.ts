@@ -240,6 +240,7 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
                 fileName: file.name,
                 fileSize: 0,
                 fileSizeDisplay: '',
+                mtime: 0,
                 hash: '',
                 height: 0,
                 index: 0,
@@ -707,10 +708,12 @@ function extractMetadataForThisONEFile(
       const duration = Math.round(fileDuration) || 0;
       const origWidth = metadata.streams[0].width || 0; // ffprobe does not detect it on some MKV streams
       const origHeight = metadata.streams[0].height || 0;
-      const fileSize: string = metadata.format.size; // ffprobe returns a string of a number!
+
+      const stat = fs.statSync(filePath);
 
       imageElement.duration = duration;
-      imageElement.fileSize = parseInt(fileSize, 10);
+      imageElement.fileSize = stat.size;
+      imageElement.mtime = stat.mtimeMs;
       imageElement.hash = hashFile(filePath);
       imageElement.height = origHeight;
       imageElement.width = origWidth;

@@ -19,6 +19,7 @@ export interface ImageElement {
   duration: number;              // duration of film as number
   fileName: string;              // for opening the file
   fileSize: number;              // file size in bytes
+  mtime: number;                 // file modification time
   hash: string;                  // used for detecting changed files and as a screenshot identifier
   height: number;                // height of the video
   partialPath: string;           // for opening the file, just prepend the `inputDir`
