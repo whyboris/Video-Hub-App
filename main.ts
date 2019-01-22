@@ -303,6 +303,7 @@ function openThisDamnFile(pathToVhaFile: string) {
 
 function setGlobalsFromVhaFile(vhaFileContents: FinalObject) {
   globals.hubName = vhaFileContents.hubName,
+  globals.numberOfScreenshots = vhaFileContents.numberOfScreenshots;
   globals.screenShotHeight = vhaFileContents.screenshotHeight;
   globals.selectedSourceFolder = vhaFileContents.inputDir;
 }
