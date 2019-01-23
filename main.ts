@@ -2,6 +2,8 @@ import { app, BrowserWindow, screen } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 
+import { globals } from './main-globals';
+
 // ========================================================================================
 // ***************************** BUILD TOGGLE *********************************************
 // ========================================================================================
@@ -14,6 +16,11 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 let win, serve;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
+globals.debug = args.some(val => val === '--debug');
+
+if (globals.debug) {
+  console.log('Debug mode enabled!');
+}
 
 // MY IMPORTANT IMPORT !!!!
 const dialog = require('electron').dialog;
@@ -194,8 +201,6 @@ import { FinalObject, ImageElement } from './src/app/components/common/final-obj
 import { ImportSettingsObject } from './src/app/components/common/import.interface';
 import { SavableProperties } from './src/app/components/common/savable-properties.interface';
 import { SettingsObject } from './src/app/components/common/settings-object.interface';
-
-import { globals } from './main-globals';
 
 let lastSavedFinalObject: FinalObject; // hack for saving the `vha` file again later
 
