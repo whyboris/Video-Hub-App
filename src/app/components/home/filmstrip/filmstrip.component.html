@@ -1,33 +1,44 @@
 <div
   class="meta-container"
-  [ngStyle]="{ height: elHeight + 'px'}"
+  [ngStyle]="{ height: (video.cleanName === '***' ? '20px' : elHeight + 'px') }"
 >
 
-  <div
-    #filmstripHolder
-    (mousemove)="updateFilmXoffset($event)"
-    class="filmstrip-container"
-    [ngStyle]="{
-        height: imgHeight + 'px',
-        'background-image': 'url(' + fullFilePath + ')',
-        'background-position-x': '-' + filmXoffset + 'px',
-        'background-size': 'auto ' + imgHeight + 'px'
-      }"
-  >
-    <span *ngIf="showMeta" class="time" >{{ video.durationDisplay }}</span>
-    <span *ngIf="showMeta" class="rez" >{{ video.resolution }}</span>
+  <div *ngIf="video.cleanName === '***'; else fileNameBlock">
+    <app-folder-item
+      [video]="video"
+      [darkMode]="darkMode"
+    ></app-folder-item>
   </div>
 
-  <span
-    *ngIf="showMeta"
-    [ngClass]="{ 'larger-font': largerFont }"
-    [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
-    class="title"
-  >
-    {{ video.cleanName }}
-    <div class="fileSize" *ngIf="showMeta">
-      ({{ video.fileSizeDisplay }})
+  <ng-template #fileNameBlock>
+
+    <div
+      #filmstripHolder
+      (mousemove)="updateFilmXoffset($event)"
+      class="filmstrip-container"
+      [ngStyle]="{
+          height: imgHeight + 'px',
+          'background-image': 'url(' + fullFilePath + ')',
+          'background-position-x': '-' + filmXoffset + 'px',
+          'background-size': 'auto ' + imgHeight + 'px'
+        }"
+    >
+      <span *ngIf="showMeta" class="time" >{{ video.durationDisplay }}</span>
+      <span *ngIf="showMeta" class="rez" >{{ video.resolution }}</span>
     </div>
-  </span>
+
+    <span
+      *ngIf="showMeta"
+      [ngClass]="{ 'larger-font': largerFont }"
+      [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
+      class="title"
+    >
+      {{ video.cleanName }}
+      <div class="fileSize" *ngIf="showMeta">
+        ({{ video.fileSizeDisplay }})
+      </div>
+    </span>
+
+  </ng-template>
 
 </div>
