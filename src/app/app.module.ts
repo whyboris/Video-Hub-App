@@ -31,6 +31,7 @@ import { FileComponent } from './components/home/file/file.component';
 import { FilmstripComponent } from './components/home/filmstrip/filmstrip.component';
 import { FullViewComponent } from './components/home/full/full.component';
 import { IconComponent } from './components/home/icon/icon.component';
+import { MetaComponent } from './components/home/meta/meta.component';
 import { PreviewComponent } from './components/home/thumbnail/preview.component';
 import { SheetComponent } from './components/home/sheet/sheet.component';
 import { SimilarityService } from './components/pipes/similarity.service';
@@ -82,6 +83,7 @@ import { WrapperPipe } from './components/pipes/wrapper.pipe';
     LengthPipe,
     MagicSearchPipe,
     ManualTagSortPipe,
+    MetaComponent,
     PreviewComponent,
     ResolutionFilterPipe,
     SheetComponent,

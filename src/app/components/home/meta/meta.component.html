@@ -1,0 +1,33 @@
+<div
+  class="meta"
+  [ngStyle]="{ height: imgHeight + 'px' }"
+>
+  <span
+    [ngClass]="{ 'larger-font': largerFont }"
+    [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
+    class="title"
+  >
+    {{ video.cleanName }}
+  </span>
+  <span class="fileSize">
+    {{ video.durationDisplay }} | {{ video.width }} x {{ video.height }} | {{ video.fileSizeDisplay }}
+  </span>
+
+  <button class="star-rating" tabindex="-1" [ngClass]="{ 'star-lit': starRatingHack > 1 }" (click)="setStarRating(1.5)"></button>
+  <button class="star-rating" tabindex="-1" [ngClass]="{ 'star-lit': starRatingHack > 2 }" (click)="setStarRating(2.5)"></button>
+  <button class="star-rating" tabindex="-1" [ngClass]="{ 'star-lit': starRatingHack > 3 }" (click)="setStarRating(3.5)"></button>
+
+  <app-add-tag-component
+    (tag)="addThisTag($event)"
+  ></app-add-tag-component>
+
+  <!-- HACK for now -->
+  <br><br><br>
+
+  <app-view-tags-component
+    [tags]="tagsService.getTags(this.video, this.showManualTags, this.showAutoFileTags, this.showAutoFolderTags, this.video.tags)"
+    (tagClicked)="filterThisTag($event)"
+    (removeTagEmit)="removeThisTag($event)"
+  ></app-view-tags-component>
+
+</div>

@@ -56,7 +56,6 @@ export class DetailsComponent implements OnInit {
   firstFilePath = '';
   fullFilePath = '';
   hover: boolean;
-  starRatingHack: StarRating;
 
   constructor(
     public manualTagsService: ManualTagsService,
@@ -84,7 +83,6 @@ export class DetailsComponent implements OnInit {
   ngOnInit() {
     this.firstFilePath = 'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/thumbnails/' + this.video.hash + '.jpg';
     this.fullFilePath =  'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/filmstrips/' + this.video.hash + '.jpg';
-    this.starRatingHack = this.star;
   }
 
   mouseIsMoving($event) {
@@ -95,44 +93,4 @@ export class DetailsComponent implements OnInit {
       this.percentOffset = (100 / (this.video.screens - 1)) * Math.floor(cursorX / (containerWidth / this.video.screens));
     }
   }
-
-  addThisTag(tag: string) {
-    if (this.video.tags && this.video.tags.includes(tag)) {
-      console.log('TAG ALREADY ADDED!');
-    } else {
-      this.manualTagsService.addTag(tag);
-
-      this.editFinalArrayTag.emit({
-        index: this.video.index,
-        tag: tag,
-        type: 'add'
-      });
-    }
-  }
-
-  filterThisTag(event: object) {
-    this.filterTag.emit(event);
-  }
-
-  removeThisTag(tag: string) {
-    this.manualTagsService.removeTag(tag);
-
-    this.editFinalArrayTag.emit({
-      index: this.video.index,
-      tag: tag,
-      type: 'remove'
-    });
-  }
-
-  setStarRating(rating: StarRating): void {
-    if (this.starRatingHack === rating) {
-      rating = 0.5; // reset to "N/A" (not rated)
-    }
-    this.starRatingHack = rating; // hack for getting star opacity updated instantly
-    this.editFinalArrayStars.emit({
-      index: this.video.index,
-      stars: rating
-    });
-  }
-
 }
