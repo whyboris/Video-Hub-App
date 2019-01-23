@@ -399,12 +399,18 @@ export function generateScreenshotStrip(
   );
 
   const ffmpeg_process = spawn(ffmpegPath, args);
-  // ffmpeg_process.stdout.on('data', function (data) {
-  //   console.log(data);
-  // });
-  // ffmpeg_process.stderr.on('data', function (data) {
-  //   console.log('grep stderr: ' + data);
-  // });
+  // Note from past Cal to future Cal:
+  // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
+  ffmpeg_process.stdout.on('data', function (data) {
+    if (globals.debug) {
+      console.log(data);
+    }
+  });
+  ffmpeg_process.stderr.on('data', function (data) {
+    if (globals.debug) {
+      console.log('grep stderr: ' + data);
+    }
+  });
   ffmpeg_process.on('exit', () => {
     takeTenClips(pathToVideo,
                  fileHash,
@@ -460,12 +466,18 @@ export function takeTenClips(
 
   // now make it all worth it!
   const ffmpeg_process = spawn(ffmpegPath, args);
-  // ffmpeg_process.stdout.on('data', function (data) {
-  //   console.log(data);
-  // });
-  // ffmpeg_process.stderr.on('data', function (data) {
-  //   console.log('grep stderr: ' + data);
-  // });
+  // Note from past Cal to future Cal:
+  // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
+  ffmpeg_process.stdout.on('data', function (data) {
+    if (globals.debug) {
+      console.log(data);
+    }
+  });
+  ffmpeg_process.stderr.on('data', function (data) {
+    if (globals.debug) {
+      console.log('grep stderr: ' + data);
+    }
+  });
   ffmpeg_process.on('exit', () => {
     extractFirstFrame(saveLocation, fileHash, done);
   });
@@ -492,12 +504,18 @@ export function extractFirstFrame(saveLocation: string, fileHash: string, done: 
   ];
   // console.log('extracting clip frame 1');
   const ffmpeg_process = spawn(ffmpegPath, args);
-  // ffmpeg_process.stdout.on('data', function (data) {
-  //   console.log(data);
-  // });
-  // ffmpeg_process.stderr.on('data', function (data) {
-  //   console.log('grep stderr: ' + data);
-  // });
+  // Note from past Cal to future Cal:
+  // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
+  ffmpeg_process.stdout.on('data', function (data) {
+    if (globals.debug) {
+      console.log(data);
+    }
+  });
+  ffmpeg_process.stderr.on('data', function (data) {
+    if (globals.debug) {
+      console.log('grep stderr: ' + data);
+    }
+  });
   ffmpeg_process.on('exit', () => {
     done();
   });
