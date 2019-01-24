@@ -69,13 +69,7 @@
             'background-position-x': (percentOffset * i) + '%'
           }"
       >
-      <span
-        *ngIf="showMeta"
-        class="time"
-        @metaAppear
-      >
-        {{ (video.duration / video.screens) * (i+1) | lengthPipe }}
-      </span>
+      <span *ngIf="showMeta" class="time" @metaAppear>{{ (video.duration / (video.screens + 1)) * (i+1) | lengthPipe }}</span>
       </div>
     </div>
   </ng-container>
