@@ -1,12 +1,10 @@
-import { Component, Input, Output, OnInit, ElementRef, EventEmitter, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, ElementRef, ViewChild, Output, EventEmitter } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { ManualTagsService } from '../manual-tags/manual-tags.service';
 import { Tag, TagsService } from '../tags/tags.service';
 
 import { StarRating, ImageElement } from '../../common/final-object.interface';
-
-import { galleryItemAppear, metaAppear, textAppear } from '../../common/animations';
 
 export interface TagEmission {
   index: number;
@@ -20,18 +18,11 @@ export interface StarEmission {
 }
 
 @Component({
-  selector: 'app-thumbnail-sheet',
-  templateUrl: './sheet.component.html',
-  styleUrls: [ './../buttons.scss',
-               './sheet.component.scss' ],
-  animations: [ galleryItemAppear,
-                textAppear,
-                metaAppear ]
+  selector: 'app-meta-item',
+  templateUrl: './meta.component.html',
+  styleUrls: [ './meta.component.scss' ]
 })
-export class SheetComponent implements OnInit {
-
-  @ViewChild('filmstripHolder') filmstripHolder: ElementRef;
-  @ViewChild('thumbHolder') thumbHolder: ElementRef;
+export class MetaComponent implements OnInit {
 
   @Output() editFinalArrayStars = new EventEmitter<StarEmission>();
   @Output() editFinalArrayTag = new EventEmitter<TagEmission>();
@@ -41,24 +32,14 @@ export class SheetComponent implements OnInit {
   @Input() video: ImageElement;
 
   @Input() darkMode: boolean;
-  @Input() elHeight: number;
-  @Input() elWidth: number;
-  @Input() folderPath: string;
-  @Input() hoverScrub: boolean;
-  @Input() hubName: string;
   @Input() imgHeight: number;
   @Input() largerFont: boolean;
-  @Input() randomImage: boolean; // all code related to this currently removed
-  @Input() returnToFirstScreenshot: boolean;
   @Input() showMeta: boolean;
   @Input() star: StarRating;
   @Input() showManualTags: boolean;
   @Input() showAutoFileTags: boolean;
   @Input() showAutoFolderTags: boolean;
 
-  percentOffset: number = 0;
-  fullFilePath = '';
-  thumbnailsToDisplay = 4;
   starRatingHack: StarRating;
 
   constructor(
@@ -67,26 +48,9 @@ export class SheetComponent implements OnInit {
     public sanitizer: DomSanitizer
   ) { }
 
+
   ngOnInit() {
-    this.fullFilePath =  'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/filmstrips/' + this.video.hash + '.jpg';
-    this.percentOffset = (100 / (this.video.screens - 1));
     this.starRatingHack = this.star;
-  }
-
-  decreaseZoomLevel() {
-    if (this.thumbnailsToDisplay > 1) {
-      this.thumbnailsToDisplay++;
-    }
-  }
-
-  resetZoomLevel() {
-    this.thumbnailsToDisplay = 4;
-  }
-
-  increaseZoomLevel() {
-    if (this.thumbnailsToDisplay < 10) {
-      this.thumbnailsToDisplay--;
-    }
   }
 
   addThisTag(tag: string) {
@@ -101,6 +65,10 @@ export class SheetComponent implements OnInit {
         type: 'add'
       });
     }
+  }
+
+  filterThisTag(event: object) {
+    this.filterTag.emit(event);
   }
 
   removeThisTag(tag: string) {

@@ -25,6 +25,13 @@
   @include scrollBar;
 }
 
+.meta {
+  display: inline-block;
+  padding: 10px 20px;
+  vertical-align: top;
+  box-sizing: border-box;
+}
+
 .filmstrip-container {
   display: inline-block;
   overflow: hidden;
@@ -93,4 +100,27 @@
   max-width: initial;
   padding: 0 10px;
   transform: translate(0, -3px);
+}
+
+.fileSize {
+  display: block;
+  font-size: 10px;
+  margin: 5px 0;
+  opacity: 0.8;
+}
+
+.star-rating {
+  background-color: transparent;
+  background-image: url("./../../../../assets/logo.png");
+  background-size: 20px 20px;
+  border: 0;
+  cursor: pointer;
+  height: 20px;
+  margin: 3px;
+  opacity: 0.3;
+  width: 20px;
+}
+
+.star-lit {
+  opacity: 1;
 }

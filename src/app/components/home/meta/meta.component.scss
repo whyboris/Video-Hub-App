@@ -1,0 +1,60 @@
+.meta {
+  display: inline-block;
+  padding: 10px 20px;
+  vertical-align: top;
+  box-sizing: border-box;
+}
+
+.video-box {
+  background-color: black;
+  background-size: cover;
+  box-shadow: 2px 2px 7px rgba(0,0,0,0.2);
+  cursor: pointer;
+  display: inline-block;
+  overflow: hidden;
+  position: relative;
+}
+
+.title {
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  display: -webkit-box;
+  font-size: 12px;
+  max-height: 54px;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  transition-property: font-size;
+  transition: 300ms;
+  user-select: text;
+  width: 100%;
+  word-wrap: break-word;
+}
+
+.fileSize {
+  display: block;
+  font-size: 10px;
+  margin: 5px 0;
+  opacity: 0.8;
+}
+
+.larger-font {
+  font-size: 16px;
+  margin-top: 4px;
+}
+
+.star-rating {
+  background-color: transparent;
+  background-image: url("./../../../../assets/logo.png");
+  background-size: 20px 20px;
+  border: 0;
+  cursor: pointer;
+  height: 20px;
+  margin: 3px;
+  opacity: 0.3;
+  width: 20px;
+}
+
+.star-lit {
+  opacity: 1;
+}
