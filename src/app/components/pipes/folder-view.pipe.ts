@@ -31,6 +31,7 @@ export class FolderViewPipe implements PipeTransform {
             fileName: element.fileName,
             fileSize: 0,
             fileSizeDisplay: '',
+            mtime: 0,
             hash: '',
             height: 0,
             index: 0,

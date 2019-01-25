@@ -33,6 +33,7 @@ import { FolderComponent } from './components/home/folder/folder.component';
 import { FullViewComponent } from './components/home/full/full.component';
 import { HomeComponent } from './components/home/home.component';
 import { IconComponent } from './components/home/icon/icon.component';
+import { MetaComponent } from './components/home/meta/meta.component';
 import { PreviewComponent } from './components/home/thumbnail/preview.component';
 import { SheetComponent } from './components/home/sheet/sheet.component';
 import { SliderFilterComponent } from './components/home/slider-filter/slider-filter.component';
@@ -84,6 +85,7 @@ import { WrapperPipe } from './components/pipes/wrapper.pipe';
     LengthPipe,
     MagicSearchPipe,
     ManualTagSortPipe,
+    MetaComponent,
     PreviewComponent,
     ResolutionFilterPipe,
     SheetComponent,

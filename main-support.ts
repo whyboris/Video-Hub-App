@@ -240,6 +240,7 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
                 fileName: file.name,
                 fileSize: 0,
                 fileSizeDisplay: '',
+                mtime: 0,
                 hash: '',
                 height: 0,
                 index: 0,
@@ -311,7 +312,7 @@ export function checkForCorruptFile(pathToVideo: string,
       }
       // check for complete file
       const time = (current + 1) * step; // +1 so we don't pick the 0th frame
-      const checkCommand = 'ffmpeg -v warning -ss ' + time + ' -t 1 -i "' + pathToVideo + '" -f null -';
+      const checkCommand = 'ffmpeg -v warning -ss ' + time + ' -t 1 -i "' + pathToVideo + '" -map V -f null -';
       const corruptRegex = /Output file is empty, nothing was encoded/g;
       exec(checkCommand, (err, data, stderr) => {
         console.log(data);
@@ -388,7 +389,7 @@ export function generateScreenshotStrip(
   while (current < totalCount) {
     const time = (current + 1) * step; // +1 so we don't pick the 0th frame
     args.push('-ss', time, '-i', pathToVideo);
-    allFramesFiltered += '[' + current + ':v]' + fancyScaleFilter + '[' + current + '];';
+    allFramesFiltered += '[' + current + ':V]' + fancyScaleFilter + '[' + current + '];';
     outputFrames += '[' + current + ']';
     current++;
   }
@@ -398,12 +399,18 @@ export function generateScreenshotStrip(
   );
 
   const ffmpeg_process = spawn(ffmpegPath, args);
-  // ffmpeg_process.stdout.on('data', function (data) {
-  //   console.log(data);
-  // });
-  // ffmpeg_process.stderr.on('data', function (data) {
-  //   console.log('grep stderr: ' + data);
-  // });
+  // Note from past Cal to future Cal:
+  // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
+  ffmpeg_process.stdout.on('data', function (data) {
+    if (globals.debug) {
+      console.log(data);
+    }
+  });
+  ffmpeg_process.stderr.on('data', function (data) {
+    if (globals.debug) {
+      console.log('grep stderr: ' + data);
+    }
+  });
   ffmpeg_process.on('exit', () => {
     takeTenClips(pathToVideo,
                  fileHash,
@@ -450,7 +457,7 @@ export function takeTenClips(
     const time = current * step;
     const preview_duration = 1; // TODO: Make this customisable
     args.push('-ss', time, '-t', preview_duration, '-i', pathToVideo);
-    concat += '[' + (current - 1) + ':v]' + '[' + (current - 1) + ':a]';
+    concat += '[' + (current - 1) + ':V]' + '[' + (current - 1) + ':a]';
     current++;
   }
   concat += 'concat=n=' + (totalCount - 1) + ':v=1:a=1[v][a];[v]scale=-2:' + screenshotHeight + '[v2]';
@@ -459,12 +466,18 @@ export function takeTenClips(
 
   // now make it all worth it!
   const ffmpeg_process = spawn(ffmpegPath, args);
-  // ffmpeg_process.stdout.on('data', function (data) {
-  //   console.log(data);
-  // });
-  // ffmpeg_process.stderr.on('data', function (data) {
-  //   console.log('grep stderr: ' + data);
-  // });
+  // Note from past Cal to future Cal:
+  // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
+  ffmpeg_process.stdout.on('data', function (data) {
+    if (globals.debug) {
+      console.log(data);
+    }
+  });
+  ffmpeg_process.stderr.on('data', function (data) {
+    if (globals.debug) {
+      console.log('grep stderr: ' + data);
+    }
+  });
   ffmpeg_process.on('exit', () => {
     extractFirstFrame(saveLocation, fileHash, done);
   });
@@ -491,12 +504,18 @@ export function extractFirstFrame(saveLocation: string, fileHash: string, done: 
   ];
   // console.log('extracting clip frame 1');
   const ffmpeg_process = spawn(ffmpegPath, args);
-  // ffmpeg_process.stdout.on('data', function (data) {
-  //   console.log(data);
-  // });
-  // ffmpeg_process.stderr.on('data', function (data) {
-  //   console.log('grep stderr: ' + data);
-  // });
+  // Note from past Cal to future Cal:
+  // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
+  ffmpeg_process.stdout.on('data', function (data) {
+    if (globals.debug) {
+      console.log(data);
+    }
+  });
+  ffmpeg_process.stderr.on('data', function (data) {
+    if (globals.debug) {
+      console.log('grep stderr: ' + data);
+    }
+  });
   ffmpeg_process.on('exit', () => {
     done();
   });
@@ -707,10 +726,12 @@ function extractMetadataForThisONEFile(
       const duration = Math.round(fileDuration) || 0;
       const origWidth = metadata.streams[0].width || 0; // ffprobe does not detect it on some MKV streams
       const origHeight = metadata.streams[0].height || 0;
-      const fileSize: string = metadata.format.size; // ffprobe returns a string of a number!
+
+      const stat = fs.statSync(filePath);
 
       imageElement.duration = duration;
-      imageElement.fileSize = parseInt(fileSize, 10);
+      imageElement.fileSize = stat.size;
+      imageElement.mtime = stat.mtimeMs;
       imageElement.hash = hashFile(filePath);
       imageElement.height = origHeight;
       imageElement.width = origWidth;

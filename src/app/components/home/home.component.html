@@ -125,6 +125,11 @@
   <!-- Thumbnail Sheet Display -->
   <app-thumbnail-sheet
     *ngIf="sheetDisplay"
+    (openFileRequest)="openVideo($event)"
+    (editFinalArrayTag)="editFinalArrayTag($event)"
+    (editFinalArrayStars)="editFinalArrayStars($event)"
+    (filterTag)="handleFileWordClicked($event.tag.name, $event.event)"
+
 
     [elHeight]="imgHeight"
     [elWidth]="previewWidth"
@@ -134,12 +139,17 @@
 
     [video]="itemToDisplay"
 
+    [star]="itemToDisplay.stars"
+
     [darkMode]="settingsButtons['darkMode'].toggled"
     [hoverScrub]="settingsButtons['hoverScrub'].toggled"
     [largerFont]="settingsButtons['fontSizeLarger'].toggled"
     [randomImage]="settingsButtons['randomImage'].toggled"
     [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
     [showMeta]="settingsButtons['showMoreInfo'].toggled"
+    [showManualTags]="settingsButtons['manualTags'].toggled"
+    [showAutoFileTags]="settingsButtons['autoFileTags'].toggled"
+    [showAutoFolderTags]="settingsButtons['autoFolderTags'].toggled"
   >
   </app-thumbnail-sheet>
 
@@ -677,6 +687,8 @@
           <option value="sizeDesc">{{ 'SIDEBAR.sortSizeDesc' | translate }}</option>
           <option value="timeAsc">{{ 'SIDEBAR.sortTimeAsc' | translate }}</option>
           <option value="timeDesc">{{ 'SIDEBAR.sortTimeDesc' | translate }}</option>
+          <option value="modifiedAsc">{{ 'SIDEBAR.sortModifiedAsc' | translate }}</option>
+          <option value="modifiedDesc">{{ 'SIDEBAR.sortModifiedDesc' | translate }}</option>
           <option value="random">{{ 'SIDEBAR.sortRandom' | translate }}</option>
         </select>
       </div>

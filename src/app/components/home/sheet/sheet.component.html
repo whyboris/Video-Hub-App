@@ -1,15 +1,25 @@
 <div
   class="sheet-modal"
 >
-  <div
-    class="sheet-info"
-  >
-    <!-- TODO - TRANSLATE & UPDATE CSS -->
-    <div class="meta-info"><small>Title:</small> {{ video.cleanName }}</div>
-    <div class="meta-info"><small>Duration:</small> {{ video.durationDisplay }}</div>
-    <div class="meta-info"><small>Size:</small> {{ video.fileSizeDisplay }}</div>
-    <div class="meta-info"><small>Resolution:</small> {{ video.width }} x {{ video.height }}</div>
-  </div>
+<app-meta-item
+  (editFinalArrayTag)="editFinalArrayTag.emit($event)"
+  (editFinalArrayStars)="editFinalArrayStars.emit($event)"
+  (filterTag)="filterTag.emit($event)"
+
+  [video]="video"
+
+  [imgHeight]="imgHeight"
+
+  [star]="this.star"
+
+  [darkMode]="darkMode"
+  [largerFont]="largerFont"
+  [showMeta]="showMeta"
+  [showManualTags]="showManualTags"
+  [showAutoFileTags]="showAutoFileTags"
+  [showAutoFolderTags]="showAutoFolderTags"
+></app-meta-item>
+
 
   <div style="margin: 20px">
 
