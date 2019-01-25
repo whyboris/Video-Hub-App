@@ -731,29 +731,58 @@
           'gallery-container-full-width': settingsButtons['hideSidebar'].toggled,
           'gallery-dark-scroll': settingsButtons['darkMode'].toggled
         }"
-      [bufferAmount]="5"
+      [bufferAmount]="0"
       [childHeight]="imgHeight + textPaddingHeight + 20
                       + ( appState.currentView === 'thumbs' ? 4 : 0)
                       - ( appState.currentView === 'files' ? ( imgHeight + 10 ) : 0)"
       [items]="finalArray
                 | magicSearchPipe: magicSearchString
+
                 | fileSearchPipe: filters[0].array : filters[0].bool : true  : 0 : false
+
                 | fileSearchPipe: filters[1].array : filters[1].bool : false : 0 : false
-                | fileSearchPipe: filters[2].array : filters[2].bool : true  : 1  : false
-                | fileSearchPipe: filters[3].array : filters[3].bool : false : 1  : false
-                | fileSearchPipe: filters[4].array : filters[4].bool : true  : 1  : true
-                | fileSearchPipe: filters[5].array : filters[5].bool : true  : 2  : false : settingsButtons['manualTags'].toggled : settingsButtons['autoFileTags'].toggled : settingsButtons['autoFolderTags'].toggled
-                | fileSearchPipe: filters[6].array : filters[6].bool : false : 2  : false : settingsButtons['manualTags'].toggled : settingsButtons['autoFileTags'].toggled : settingsButtons['autoFolderTags'].toggled
-                | fileSearchPipe: filters[7].array : filters[7].bool : true  : 2  : true : settingsButtons['manualTags'].toggled : settingsButtons['autoFileTags'].toggled : settingsButtons['autoFolderTags'].toggled
+
+                | fileSearchPipe: filters[2].array : filters[2].bool : true  : 1 : false
+
+                | fileSearchPipe: filters[3].array : filters[3].bool : false : 1 : false
+
+                | fileSearchPipe: filters[4].array : filters[4].bool : true  : 1 : true
+
+                | fileSearchPipe: filters[5].array : filters[5].bool : true  : 2 : false
+                                : settingsButtons['manualTags'].toggled
+                                : settingsButtons['autoFileTags'].toggled
+                                : settingsButtons['autoFolderTags'].toggled
+
+                | fileSearchPipe: filters[6].array : filters[6].bool : false : 2 : false
+                                : settingsButtons['manualTags'].toggled
+                                : settingsButtons['autoFileTags'].toggled
+                                : settingsButtons['autoFolderTags'].toggled
+
+                | fileSearchPipe: filters[7].array : filters[7].bool : true  : 2 : true
+                                : settingsButtons['manualTags'].toggled
+                                : settingsButtons['autoFileTags'].toggled
+                                : settingsButtons['autoFolderTags'].toggled
+
                 | lengthFilterPipe: settingsButtons['resolutionFilter'].toggled : lengthLeftBound : lengthRightBound
+
                 | resolutionFilterPipe: settingsButtons['resolutionFilter'].toggled : freqLeftBound : freqRightBound
+
                 | starFilterPipe: settingsButtons['starFilter'].toggled : starLeftBound : starRightBound : forceStarFilterUpdate
+
                 | similarityPipe: showSimilar : findMostSimilar
-                | wordFrequencyPipe: settingsButtons['showFreq'].toggled : (settingsButtons['extendedWordCloud'].toggled ? 100 : 9) : settingsButtons['manualTags'].toggled : settingsButtons['autoFileTags'].toggled : settingsButtons['autoFolderTags'].toggled
+
+                | wordFrequencyPipe: settingsButtons['showFreq'].toggled
+                                   : (settingsButtons['extendedWordCloud'].toggled ? 100 : 9)
+                                   : settingsButtons['manualTags'].toggled
+                                   : settingsButtons['autoFileTags'].toggled
+                                   : settingsButtons['autoFolderTags'].toggled
+
                 | countPipe
+
                 | sortingPipe: sortType : shuffleTheViewNow
-                | folderViewPipe: settingsButtons['showFolderInGallery'].toggled
-                                  || settingsButtons['showFoldersOnly'].toggled
+
+                | folderViewPipe: settingsButtons['showFoldersOnly'].toggled
+                                  || (appState.currentView === 'files' && settingsButtons['showFolderInGallery'].toggled)
                                   : settingsButtons['showFoldersOnly'].toggled
                                   : settingsButtons['showFolderInGallery'].toggled"
     >

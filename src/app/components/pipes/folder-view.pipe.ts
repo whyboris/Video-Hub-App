@@ -14,10 +14,10 @@ export class FolderViewPipe implements PipeTransform {
    * @param finalArray
    * @param render      whether to insert folders
    * @param folderOnly  whether to ONLY show folders
-   * @param TEMPVAR     when TRUE - add 'showFolder: true' to element, change nothing else
+   * @param affixFolder when TRUE - add 'showFolder: true' to element, change nothing else
    */
-  transform(finalArray: ImageElement[], render: boolean, folderOnly: boolean, TEMPVAR: boolean): any[] {
-    if (render && !TEMPVAR) {
+  transform(finalArray: ImageElement[], render: boolean, folderOnly: boolean, affixFolder: boolean): any[] {
+    if (render && !affixFolder) {
       const arrWithFolders = [];
 
       let previousFolder = '';
@@ -53,9 +53,8 @@ export class FolderViewPipe implements PipeTransform {
       // console.log('folderViewPipe running');
 
       return arrWithFolders;
-    } else if (TEMPVAR) {
 
-      console.log('LOLOLOL');
+    } else if (affixFolder) {
 
       let previousFolder = '';
 
@@ -63,7 +62,6 @@ export class FolderViewPipe implements PipeTransform {
         if (previousFolder !== element.partialPath) {
           element.showFolder = true;
           previousFolder = element.partialPath;
-          console.log('adding');
         }
       }));
 
