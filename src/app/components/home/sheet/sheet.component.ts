@@ -103,10 +103,6 @@ export class SheetComponent implements OnInit {
     }
   }
 
-  filterThisTag(event: object) {
-    this.filterTag.emit(event);
-  }
-
   removeThisTag(tag: string) {
     this.manualTagsService.removeTag(tag);
 
