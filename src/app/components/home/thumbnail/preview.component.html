@@ -1,48 +1,47 @@
 <div
   [ngStyle]="{
-      height: (video.cleanName === '***' ? '20px' : elHeight + 'px'),
-      width: (video.cleanName === '***' ? 'calc(100vw - 240px)' : elWidth + 'px')
+      height: elHeight + 'px',
+      width: elWidth + 'px'
     }"
   class="filmstrip-container"
   @galleryItemAppear
 >
 
-  <div *ngIf="video.cleanName === '***'; else fileNameBlock">
+  <div
+    *ngIf="video.showFolder"
+    class="gallery-folder-name"
+  >
     <app-folder-item
       [video]="video"
       [darkMode]="darkMode"
     ></app-folder-item>
   </div>
 
-  <ng-template #fileNameBlock>
+  <div
+    #filmstripHolder
+    class="video-box"
+    (mousemove)="mouseIsMoving($event)"
+    [ngStyle]="{
+        height: imgHeight + 'px',
+        'background-image': 'url(' + (hover ? fullFilePath : firstFilePath) + ')',
+        'background-position-x': percentOffset + '%'
+      }"
+  >
+    <span *ngIf="showMeta" class="time" @metaAppear>{{ video.durationDisplay }}</span>
+    <span *ngIf="showMeta" class="rez" @metaAppear>{{ video.resolution }}</span>
+  </div>
 
-    <div
-      #filmstripHolder
-      class="video-box"
-      (mousemove)="mouseIsMoving($event)"
-      [ngStyle]="{
-          height: imgHeight + 'px',
-          'background-image': 'url(' + (hover ? fullFilePath : firstFilePath) + ')',
-          'background-position-x': percentOffset + '%'
-        }"
-    >
-      <span *ngIf="showMeta" class="time" @metaAppear>{{ video.durationDisplay }}</span>
-      <span *ngIf="showMeta" class="rez" @metaAppear>{{ video.resolution }}</span>
+  <span
+    *ngIf="showMeta"
+    [ngClass]="{ 'larger-font': largerFont }"
+    [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
+    class="title"
+    @textAppear
+  >
+    {{ video.cleanName }}
+    <div class="fileSize" *ngIf="showMeta">
+      {{ showMeta ? '(' + video.fileSizeDisplay + ')' : '' }}
     </div>
-
-    <span
-      *ngIf="showMeta"
-      [ngClass]="{ 'larger-font': largerFont }"
-      [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
-      class="title"
-      @textAppear
-    >
-      {{ video.cleanName }}
-      <div class="fileSize" *ngIf="showMeta">
-        {{ showMeta ? '(' + video.fileSizeDisplay + ')' : '' }}
-      </div>
-    </span>
-
-  </ng-template>
+  </span>
 
 </div>

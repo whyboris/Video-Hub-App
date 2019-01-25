@@ -731,7 +731,7 @@
           'gallery-container-full-width': settingsButtons['hideSidebar'].toggled,
           'gallery-dark-scroll': settingsButtons['darkMode'].toggled
         }"
-      [bufferAmount]="0"
+      [bufferAmount]="5"
       [childHeight]="imgHeight + textPaddingHeight + 20
                       + ( appState.currentView === 'thumbs' ? 4 : 0)
                       - ( appState.currentView === 'files' ? ( imgHeight + 10 ) : 0)"
@@ -754,7 +754,8 @@
                 | sortingPipe: sortType : shuffleTheViewNow
                 | folderViewPipe: settingsButtons['showFolderInGallery'].toggled
                                   || settingsButtons['showFoldersOnly'].toggled
-                                  : settingsButtons['showFoldersOnly'].toggled"
+                                  : settingsButtons['showFoldersOnly'].toggled
+                                  : settingsButtons['showFolderInGallery'].toggled"
     >
 
     <!-- 24 above is 20 pixels for element and 4 for the fudge factor -->

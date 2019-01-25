@@ -27,6 +27,7 @@ export interface ImageElement {
   width: number;                 // width of the video
   // OPTIONAL
   tags?: string[];               // tags associated with this particular file
+  showFolder?: boolean;          // when TRUE show the folder -- only changed by folder-view.pipe
   // Stripped out and not saved in the VHA file
   durationDisplay: string;       // displayed duration in X:XX:XX format
   fileSizeDisplay: string;       // displayed as XXXmb or X.Xgb

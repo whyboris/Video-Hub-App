@@ -1,0 +1,17 @@
+@import "../variables";
+
+.gallery-folder-name {
+  max-height: 27px;
+  overflow: hidden;
+  position: absolute;
+  transform: translate(-10px, -25px);
+
+  :before {
+    border-left: 1px solid $gray-60;
+    border-top: 1px solid $gray-60;
+    content: "";
+    height: 30px;
+    position: absolute;
+    width: 50px;
+  }
+}

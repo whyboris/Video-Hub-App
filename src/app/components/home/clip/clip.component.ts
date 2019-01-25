@@ -8,7 +8,8 @@ import { galleryItemAppear, metaAppear, textAppear } from '../../common/animatio
 @Component({
   selector: 'app-clip-item',
   templateUrl: './clip.component.html',
-  styleUrls: [ './clip.component.scss' ],
+  styleUrls: [ './clip.component.scss',
+               './../folder/folder.gallery.scss'],
   animations: [ galleryItemAppear,
                 textAppear,
                 metaAppear ]

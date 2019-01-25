@@ -1,45 +1,44 @@
 <div
   class="meta-container"
   [ngStyle]="{
-    height: (video.cleanName === '***' ? '20px' : (rowOffsets.length * _imgHeight + 30 + 'px')),
+    height: rowOffsets.length * _imgHeight + 30 + 'px',
     width: computedWidth + 'px'
   }"
 >
   <!-- the 30 px added above is the padding for the text  -->
 
-  <div *ngIf="video.cleanName === '***'; else fileNameBlock">
+  <div
+    *ngIf="video.showFolder"
+    class="gallery-folder-name"
+  >
     <app-folder-item
       [video]="video"
       [darkMode]="darkMode"
     ></app-folder-item>
   </div>
 
-  <ng-template #fileNameBlock>
+  <div
+    *ngFor="let row of rowOffsets; index as idx"
+    class="filmstrip-container"
+    [ngStyle]="{
+        height: _imgHeight + 'px',
+        'background-image': 'url(' + fullFilePath + ')',
+        'background-position-x': '-' + (row * _imgHeight * 16 / 9) + 'px',
+        'background-size': 'auto ' + _imgHeight + 'px'
+      }"
+  >
+  </div>
 
-    <div
-      *ngFor="let row of rowOffsets; index as idx"
-      class="filmstrip-container"
-      [ngStyle]="{
-          height: _imgHeight + 'px',
-          'background-image': 'url(' + fullFilePath + ')',
-          'background-position-x': '-' + (row * _imgHeight * 16 / 9) + 'px',
-          'background-size': 'auto ' + _imgHeight + 'px'
-        }"
-    >
+  <span
+    *ngIf="showMeta"
+    [ngClass]="{ 'larger-font': largerFont }"
+    [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
+    class="title"
+  >
+    {{ video.cleanName }}
+    <div class="fileSize" *ngIf="showMeta">
+      ({{ video.fileSizeDisplay }})
     </div>
-
-    <span
-      *ngIf="showMeta"
-      [ngClass]="{ 'larger-font': largerFont }"
-      [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
-      class="title"
-    >
-      {{ video.cleanName }}
-      <div class="fileSize" *ngIf="showMeta">
-        ({{ video.fileSizeDisplay }})
-      </div>
-    </span>
-
-  </ng-template>
+  </span>
 
 </div>

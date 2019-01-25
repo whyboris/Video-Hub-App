@@ -8,7 +8,8 @@ import { galleryItemAppear, metaAppear, textAppear } from '../../common/animatio
 @Component({
   selector: 'app-full-item',
   templateUrl: './full.component.html',
-  styleUrls: ['./full.component.scss'],
+  styleUrls: ['./full.component.scss',
+              './../folder/folder.gallery.scss' ],
   animations: [ galleryItemAppear,
                 textAppear,
                 metaAppear ]

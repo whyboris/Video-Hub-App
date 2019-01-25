@@ -22,7 +22,8 @@ export interface StarEmission {
 @Component({
   selector: 'app-details-item',
   templateUrl: './details.component.html',
-  styleUrls: [ './details.component.scss' ],
+  styleUrls: [ './details.component.scss',
+               './../folder/folder.gallery.scss' ],
   animations: [ galleryItemAppear ]
 })
 export class DetailsComponent implements OnInit {

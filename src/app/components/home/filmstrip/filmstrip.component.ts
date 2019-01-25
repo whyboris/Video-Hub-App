@@ -6,7 +6,8 @@ import { ImageElement } from '../../common/final-object.interface';
 @Component({
   selector: 'app-filmstrip-item',
   templateUrl: './filmstrip.component.html',
-  styleUrls: ['./filmstrip.component.scss'],
+  styleUrls: ['./filmstrip.component.scss',
+              './../folder/folder.gallery.scss'],
   animations: [ galleryItemAppear,
                 textAppear,
                 metaAppear ]
