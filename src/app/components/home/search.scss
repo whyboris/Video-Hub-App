@@ -1,5 +1,9 @@
 @import "variables";
 
+.filterContainer {
+  overflow: hidden;
+}
+
 .hidingSettingsMenu {
   cursor: pointer;
   left: 8px;

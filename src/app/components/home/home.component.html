@@ -264,12 +264,9 @@
       {{ 'SETTINGS.tabMain' | translate }}
     </button>
     <button (click)="showSettingsGroup(3)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 3 }">
-      {{ 'SETTINGS.tabMisc' | translate }}
-    </button>
-    <button (click)="showSettingsGroup(4)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 4 }">
       {{ 'SETTINGS.tabShortcuts' | translate }}
     </button>
-    <button (click)="showSettingsGroup(5)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 5 }">
+    <button (click)="showSettingsGroup(4)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 4 }">
       {{ 'SETTINGS.statistics' | translate }}
     </button>
     <div class="metaGroupDivider"></div>
@@ -277,13 +274,22 @@
     <div [id]=i *ngFor="let group of settingsMetaGroup; index as i">
       <div *ngIf="settingToShow == i">
 
-        <h2>{{ settingsMetaGroupLabels[i] | translate }}</h2>
+        <span
+          class="setting-heading"
+          style="border-top: 0"
+        >
+          {{ settingsMetaGroupLabels[i] | translate }}
+        </span>
 
         <div *ngFor="let buttonKey of group">
           <div *ngIf="buttonKey !== 'break'; else insertBreak">
             <div
               class="searchButtonsSettings"
             >
+
+              <span class="setting-heading" *ngIf="settingsButtons[buttonKey]['settingsHeading']">
+                {{ settingsButtons[buttonKey]['settingsHeading'] }}
+              </span>
 
               <div
                 [ngClass]="{ buttonOpacityLower: settingsButtons[buttonKey].hidden }"
@@ -298,6 +304,7 @@
                       flatSettingsButton:           settingsButtons['flatIcons'].toggled,
                       flatSettingsButtonToggled:    settingsButtons['flatIcons'].toggled && settingsButtons[buttonKey].toggled
                     }"
+                  style="min-width: 36px; min-height: 36px"
                   title="{{ settingsButtons[buttonKey].title | translate }}"
                 >
                   <app-icon [icon]="settingsButtons[buttonKey].iconName"></app-icon>
@@ -326,65 +333,68 @@
           </ng-template>
         </div>
       </div>
-    </div>
 
-    <div *ngIf="settingToShow == 3">
+      <div class="misc-settings" *ngIf="settingToShow == 2 && i == 2">
 
-      <h2>{{ 'SETTINGS.changeAppZoom' | translate }}</h2>
+        <span class="setting-heading">{{ 'SETTINGS.changeAppZoom' | translate }}</span>
 
-      <div style="margin: 20px">
-        <button
-          (click)="decreaseZoomLevel()"
-          [ngClass]="{
-            defaultSettingsButton: !settingsButtons['flatIcons'].toggled,
-            flatSettingsButton:    settingsButtons['flatIcons'].toggled
-          }"
-        >
-          <app-icon [icon]="'icon-minus'"></app-icon>
-        </button>
-        <button
-          (click)="resetZoomLevel()"
-          [ngClass]="{
-            defaultSettingsButton: !settingsButtons['flatIcons'].toggled,
-            flatSettingsButton:    settingsButtons['flatIcons'].toggled
-          }"
-          style="max-width: initial; padding: 0 5px; margin: 0 10px"
+        <div class="zoom-buttons">
+          <button
+            (click)="decreaseZoomLevel()"
+            [ngClass]="{
+              defaultSettingsButton: !settingsButtons['flatIcons'].toggled,
+              flatSettingsButton:    settingsButtons['flatIcons'].toggled
+            }"
           >
-            <span>{{ 'SETTINGS.reset' | translate }}</span>
-        </button>
-        <button
-          (click)="increaseZoomLevel()"
-          [ngClass]="{
-            defaultSettingsButton: !settingsButtons['flatIcons'].toggled,
-            flatSettingsButton:    settingsButtons['flatIcons'].toggled
-          }"
-        >
-          <app-icon [icon]="'icon-plus'"></app-icon>
-        </button>
-      </div>
+            <app-icon [icon]="'icon-minus'"></app-icon>
+          </button>
+          <button
+            (click)="resetZoomLevel()"
+            [ngClass]="{
+              defaultSettingsButton: !settingsButtons['flatIcons'].toggled,
+              flatSettingsButton:    settingsButtons['flatIcons'].toggled
+            }"
+            style="max-width: initial; padding: 0 15px; margin: 0 10px"
+            >
+              <span>{{ 'SETTINGS.reset' | translate }}</span>
+          </button>
+          <button
+            (click)="increaseZoomLevel()"
+            [ngClass]="{
+              defaultSettingsButton: !settingsButtons['flatIcons'].toggled,
+              flatSettingsButton:    settingsButtons['flatIcons'].toggled
+            }"
+          >
+            <app-icon [icon]="'icon-plus'"></app-icon>
+          </button>
+        </div>
 
-      <h2>{{ 'SETTINGS.changeLanguage' | translate }}</h2>
+        <span class="setting-heading">{{ 'SETTINGS.changeLanguage' | translate }}</span>
 
-      <div style="margin: 20px">
-        <select (change)="changeLanguage($event.target.value)" class="languageDropDown">
-          <option value="en" [selected]="appState.language == 'en'">English</option>
-          <option value="ru" [selected]="appState.language == 'ru'">Русский</option>
-          <option value="fr" [selected]="appState.language == 'fr'">Française</option>
-        </select>
-      </div>
+        <div style="margin: 20px">
+          <select (change)="changeLanguage($event.target.value)" class="languageDropDown">
+            <option value="en" [selected]="appState.language == 'en'">English</option>
+            <option value="ru" [selected]="appState.language == 'ru'">Русский</option>
+            <option value="fr" [selected]="appState.language == 'fr'">Française</option>
+          </select>
+        </div>
 
-      <div class="credits-and-help" (click)="openOnlineHelp()">
-        {{ 'SETTINGS.FAQ' | translate }}
-      </div>
+        <div class="credits-and-help" (click)="openOnlineHelp()">
+          {{ 'SETTINGS.FAQ' | translate }}
+        </div>
 
-      <div class="app-version">
-        <span>v{{ versionNumber }} {{ demo ? ' DEMO - limited to 50 video files' : '' }}</span>
-        <img width="30px" height="30px" src="./assets/logo.png">
+        <div class="app-version">
+          <span>v{{ versionNumber }} {{ demo ? ' DEMO - limited to 50 video files' : '' }}</span>
+          <img width="30px" height="30px" src="./assets/logo.png">
+        </div>
+
       </div>
 
     </div>
 
-    <div *ngIf="settingToShow == 4" class="shortcutMenu">
+    <!-- KEYBOARD SHORTCUTS -->
+
+    <div *ngIf="settingToShow == 3" class="shortcutMenu">
 
       <span>{{ 'SHORTCUTS.hold' | translate }}<em class="key modifierKey">Ctrl</em>
         <ng-container *ngIf="macVersion">
@@ -410,7 +420,9 @@
 
     </div>
 
-    <div *ngIf="settingToShow == 5" class="shortcutMenu">
+    <!-- HUB STATISTICS -->
+
+    <div *ngIf="settingToShow == 4" class="shortcutMenu">
 
       <app-statistics [finalArray]="finalArray" [numFolders]="appState.numOfFolders"></app-statistics>
 
@@ -525,7 +537,11 @@
 
       <!-- SEARCH BOXES -->
       <ng-container *ngFor="let filter of filters; index as j">
-        <ng-container *ngIf="settingsButtons[filter.uniqueKey].toggled">
+        <div
+          *ngIf="settingsButtons[filter.uniqueKey].toggled"
+          class="filterContainer"
+          @filterItemAppear
+        >
 
           <app-icon class="input-icon" [icon]="settingsButtons[filter.uniqueKey].iconName"></app-icon>
           <input
@@ -563,7 +579,7 @@
             </ng-container>
           </div>
 
-        </ng-container>
+        </div>
       </ng-container>
       <!-- end of regular search inputs -->
 
@@ -749,21 +765,57 @@
                       - ( appState.currentView === 'files' ? ( imgHeight + 10 ) : 0)"
       [items]="finalArray
                 | magicSearchPipe: magicSearchString
+
                 | fileSearchPipe: filters[0].array : filters[0].bool : true  : 0 : false
+
                 | fileSearchPipe: filters[1].array : filters[1].bool : false : 0 : false
-                | fileSearchPipe: filters[2].array : filters[2].bool : true  : 1  : false
-                | fileSearchPipe: filters[3].array : filters[3].bool : false : 1  : false
-                | fileSearchPipe: filters[4].array : filters[4].bool : true  : 1  : true
-                | fileSearchPipe: filters[5].array : filters[5].bool : true  : 2  : false : settingsButtons['manualTags'].toggled : settingsButtons['autoFileTags'].toggled : settingsButtons['autoFolderTags'].toggled
-                | fileSearchPipe: filters[6].array : filters[6].bool : false : 2  : false : settingsButtons['manualTags'].toggled : settingsButtons['autoFileTags'].toggled : settingsButtons['autoFolderTags'].toggled
-                | fileSearchPipe: filters[7].array : filters[7].bool : true  : 2  : true : settingsButtons['manualTags'].toggled : settingsButtons['autoFileTags'].toggled : settingsButtons['autoFolderTags'].toggled
-                | lengthFilterPipe: settingsButtons['resolutionFilter'].toggled : lengthLeftBound : lengthRightBound
-                | resolutionFilterPipe: settingsButtons['resolutionFilter'].toggled : freqLeftBound : freqRightBound
-                | starFilterPipe: settingsButtons['starFilter'].toggled : starLeftBound : starRightBound : forceStarFilterUpdate
+
+                | fileSearchPipe: filters[2].array : filters[2].bool : true  : 1 : false
+
+                | fileSearchPipe: filters[3].array : filters[3].bool : false : 1 : false
+
+                | fileSearchPipe: filters[4].array : filters[4].bool : true  : 1 : true
+
+                | fileSearchPipe: filters[5].array : filters[5].bool : true  : 2 : false
+                                  : settingsButtons['manualTags'].toggled
+                                  : settingsButtons['autoFileTags'].toggled
+                                  : settingsButtons['autoFolderTags'].toggled
+
+                | fileSearchPipe: filters[6].array : filters[6].bool : false : 2 : false
+                                  : settingsButtons['manualTags'].toggled
+                                  : settingsButtons['autoFileTags'].toggled
+                                  : settingsButtons['autoFolderTags'].toggled
+
+                | fileSearchPipe: filters[7].array : filters[7].bool : true  : 2 : true
+                                  : settingsButtons['manualTags'].toggled
+                                  : settingsButtons['autoFileTags'].toggled
+                                  : settingsButtons['autoFolderTags'].toggled
+
+                | lengthFilterPipe: settingsButtons['resolutionFilter'].toggled
+                                    : lengthLeftBound
+                                    : lengthRightBound
+
+                | resolutionFilterPipe: settingsButtons['resolutionFilter'].toggled
+                                        : freqLeftBound
+                                        : freqRightBound
+
+                | starFilterPipe: settingsButtons['starFilter'].toggled
+                                  : starLeftBound
+                                  : starRightBound
+                                  : forceStarFilterUpdate
+
                 | similarityPipe: showSimilar : findMostSimilar
-                | wordFrequencyPipe: settingsButtons['showFreq'].toggled : (settingsButtons['extendedWordCloud'].toggled ? 100 : 9) : settingsButtons['manualTags'].toggled : settingsButtons['autoFileTags'].toggled : settingsButtons['autoFolderTags'].toggled
+
+                | wordFrequencyPipe: settingsButtons['showFreq'].toggled
+                                     : (settingsButtons['extendedWordCloud'].toggled ? 100 : 9)
+                                     : settingsButtons['manualTags'].toggled
+                                     : settingsButtons['autoFileTags'].toggled
+                                     : settingsButtons['autoFolderTags'].toggled
+
                 | countPipe
+
                 | sortingPipe: sortType : shuffleTheViewNow
+
                 | folderViewPipe: settingsButtons['showFoldersOnly'].toggled
                                   || (appState.currentView === 'files' && settingsButtons['showFolderInFileView'].toggled)
                                   : settingsButtons['showFoldersOnly'].toggled"

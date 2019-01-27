@@ -10,8 +10,9 @@ export class LengthPipe implements PipeTransform {
    * or if `omitSeconds` then `Xhr XXmin`
    * @param numOfSec
    * @param omitSeconds
+   * @param printHrMin -- include `hr` and `min` in display
    */
-  transform(numOfSec: number, omitSeconds?: boolean): string {
+  transform(numOfSec: number, omitSeconds?: boolean, printHrMin?: boolean): string {
     if (numOfSec === undefined) {
       return '';
     } else {
@@ -21,9 +22,14 @@ export class LengthPipe implements PipeTransform {
 
       if (omitSeconds) {
         const zeroHours = (hh === '0');
-        return (zeroHours ? '' : hh + ':')
+        const display = (zeroHours ? '' : hh + ':')
                + (mm.length !== 2 ? (zeroHours ? '' : '0') + mm : mm)
                + (zeroHours ? ' min' : '');
+        if (printHrMin) {
+          return (display.replace(':', ' hr ') + ' min');
+        } else {
+          return display;
+        }
       } else {
         return (hh !== '0' ? hh + ':' : '')
                + (mm.length !== 2 ? '0' + mm : mm)

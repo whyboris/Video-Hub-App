@@ -1,5 +1,7 @@
 import { SettingsButton } from './settings-buttons.interface';
 
+// Add `SettingsButtons` items here so they show up in the buttons ribbon and in the settings
+// Each array separates buttons into their own button groups visually
 export const SettingsButtonsGroups: string[][] = [
   [
     'hideSidebar',
@@ -25,7 +27,6 @@ export const SettingsButtonsGroups: string[][] = [
   [
     'showFreq',
     'extendedWordCloud',
-    'showTags',
     'showRecent'
   ],
   [
@@ -40,6 +41,9 @@ export const SettingsButtonsGroups: string[][] = [
   [
     'makeSmaller',
     'makeLarger',
+  ],
+  [
+    'showTags',
   ],
   [
     'darkMode',
@@ -62,12 +66,12 @@ export const SettingsButtonsGroups: string[][] = [
     'flatIcons'
   ],
   [
-    'resetSettings',
-    'clearHistory',
+    'rescanDirectory',
     'importNewFiles',
     'verifyThumbnails',
-    'rescanDirectory',
-    'startWizard'
+    'startWizard',
+    'resetSettings',
+    'clearHistory'
   ]
 ];
 
@@ -89,9 +93,11 @@ export const SettingsMetaGroup: any = [
     ...SettingsButtonsGroups[6],
     'break',
     ...SettingsButtonsGroups[7],
+    'break',
+    ...SettingsButtonsGroups[8],
   ],
   [
-    ...SettingsButtonsGroups[8],
+    ...SettingsButtonsGroups[9],
   ],
 ];
 
@@ -159,6 +165,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-tag',
     title: 'BUTTONS.showTagsHint',
     description: 'BUTTONS.showTagsDescription',
+    settingsHeading: 'Auto-generated tags'
   },
   'showMoreInfo': {
     hidden: false,
@@ -229,6 +236,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-minus',
     title: 'BUTTONS.makeSmallerHint',
     description: 'BUTTONS.makeSmallerDescription',
+    settingsHeading: 'Zoom gallery view'
   },
   'makeLarger': {
     hidden: false,
@@ -243,6 +251,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-darken',
     title: 'BUTTONS.darkModeHint',
     description: 'BUTTONS.darkModeDescription',
+    settingsHeading: 'Dark mode'
   },
   'showTagTray': {
     hidden: false,
@@ -250,6 +259,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-tag',
     title: 'BUTTONS.tagTrayHint',
     description: 'BUTTONS.tagTrayDescription',
+    settingsHeading: 'Miscellaneous view settings'
   },
   'tagFrequencySort': {
     hidden: false,
@@ -264,6 +274,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-folder-plus',
     title: 'BUTTONS.folderUnionHint',
     description: 'BUTTONS.folderUnionDescription',
+    settingsHeading: 'Folder, file, and tag search filters'
   },
   'folder': {
     hidden: false,
@@ -320,6 +331,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-cloud',
     title: 'BUTTONS.manualTagsHint',
     description: 'BUTTONS.manualTagsDescription',
+    settingsHeading: 'Duration, Size, Resolution, and Star Filters & Sorting options'
   },
   'autoFileTags': {
     hidden: true,
@@ -376,6 +388,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-cloud',
     title: 'BUTTONS.showFreqHint',
     description: 'BUTTONS.showFreqDescription',
+    settingsHeading: 'Word cloud & recently opened files'
   },
   'extendedWordCloud': {
     hidden: false,
@@ -404,6 +417,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-chevron-up',
     title: 'BUTTONS.hideTopHint',
     description: 'BUTTONS.hideTopDescription',
+    settingsHeading: 'Hide top bar'
   },
   'flatIcons': {
     hidden: false,
@@ -411,6 +425,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
     title: 'BUTTONS.flatIconsHint',
     description: 'BUTTONS.flatIconsDescription',
+    settingsHeading: 'Button style'
   },
   'startWizard': {
     hidden: false,
@@ -418,6 +433,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
     title: 'BUTTONS.startWizardHint',
     description: 'BUTTONS.startWizardDescription',
+    settingsHeading: 'Create a new hub'
   },
   'clearHistory': {
     hidden: false,
@@ -432,6 +448,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
     title: 'BUTTONS.resetSettingsHint',
     description: 'BUTTONS.resetSettingsDescription',
+    settingsHeading: 'Various settings'
   },
   // TODO: Make these able to add to the button bar!
   'importNewFiles': {

@@ -53,10 +53,12 @@ h3 {
 }
 
 .credits-and-help {
-  cursor: pointer;
   color: $gray-60;
-  font-size: 12px;
-  margin: 30px 70px;
+  cursor: pointer;
+  font-size: 14px;
+  margin: 30px 70px 0;
+  padding-top: 30px;
+  text-align: center;
 }
 
 .app-version {
@@ -136,6 +138,10 @@ h3 {
   margin: 15px 15px 15px 50px;
 }
 
+.misc-settings {
+  margin: 60px 20px 20px 10px;
+}
+
 .extraSettingsText {
   color: $gray-50;
   font-size: 12px;
@@ -143,8 +149,17 @@ h3 {
   line-height: 20px;
 }
 
+.setting-heading {
+  display: block;
+  margin-bottom: 24px;
+  text-align: center;
+  padding-top: 20px;
+  border-top: 1px solid $gray-40;
+}
+
 .buttonDescription {
   display: block;
+  margin-bottom: 12px;
   max-height: 41px;
   min-height: 41px;   // also hardcoded in home.component as [ngStyle]
   position: relative;
@@ -159,12 +174,12 @@ h3 {
   -webkit-line-clamp: 3;
   color: $black;
   display: -webkit-box;
-  font-size: 12px;
-  left: 60px;
+  font-size: 14px;
+  left: 80px;
   overflow: hidden;
   pointer-events: none;
   position: absolute;
-  top: 3px;
+  top: 9px;
 }
 
 .buttonOpacityLower {
@@ -174,9 +189,9 @@ h3 {
 .eyeIconContainer {
   cursor: pointer;
   display: block;
-  left: 35px;
+  left: 50px;
   position: absolute;
-  top: 1px;
+  top: 8px;
 }
 
 .eye-open {
@@ -207,8 +222,8 @@ h3 {
 }
 
 .shortcutMenu {
-  margin: 15px;
-  font-size: 12px;
+  margin: 40px 30px;
+  font-size: 14px;
 }
 
 .languageDropDown {
@@ -250,4 +265,16 @@ h3 {
 
 .without-numbers {
   padding-inline-start: 34px;
+}
+
+.zoom-buttons {
+  margin: 20px;
+
+  button {
+    font-size: 16px;
+    display: inline-block;
+    vertical-align: top;
+    min-width: 36px;
+    min-height: 36px
+  }
 }
