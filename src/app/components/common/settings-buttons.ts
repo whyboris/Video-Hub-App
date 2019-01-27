@@ -15,10 +15,9 @@ export const SettingsButtonsGroups: string[][] = [
     'tagUnion',
     'tagIntersection',
     'tagExclusion',
-    'manualTags',
-    'autoFileTags',
-    'autoFolderTags',
     'magic',
+  ],
+  [
     'durationFilter',
     'resolutionFilter',
     'starFilter',
@@ -43,11 +42,16 @@ export const SettingsButtonsGroups: string[][] = [
     'makeLarger',
   ],
   [
-    'showTags',
+    'darkMode',
   ],
   [
-    'darkMode',
+    'showTags',
+    'autoFileTags',
+    'autoFolderTags',
+  ],
+  [
     'showTagTray',
+    'manualTags',
     'tagFrequencySort'
   ],
   [
@@ -82,10 +86,10 @@ export const SettingsMetaGroup: any = [
     ...SettingsButtonsGroups[1],
     'break',
     ...SettingsButtonsGroups[2],
+    'break',
+    ...SettingsButtonsGroups[3],
   ],
   [
-    ...SettingsButtonsGroups[3],
-    'break',
     ...SettingsButtonsGroups[4],
     'break',
     ...SettingsButtonsGroups[5],
@@ -95,9 +99,14 @@ export const SettingsMetaGroup: any = [
     ...SettingsButtonsGroups[7],
     'break',
     ...SettingsButtonsGroups[8],
+    'break',
+    ...SettingsButtonsGroups[9],
+    'break',
+    ...SettingsButtonsGroups[10],
+
   ],
   [
-    ...SettingsButtonsGroups[9],
+    ...SettingsButtonsGroups[11],
   ],
 ];
 
@@ -173,6 +182,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-tag',
     title: 'BUTTONS.showMoreInfoHint',
     description: 'BUTTONS.showMoreInfoDescription',
+    settingsHeading: 'SETTINGS.miscView',
   },
   'fontSizeLarger': {
     hidden: true,
@@ -259,7 +269,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-tag',
     title: 'BUTTONS.tagTrayHint',
     description: 'BUTTONS.tagTrayDescription',
-    settingsHeading: 'SETTINGS.miscView'
+    settingsHeading: 'SETTINGS.manualTags'
   },
   'tagFrequencySort': {
     hidden: false,
@@ -330,8 +340,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     toggled: true,
     iconName: 'icon-cloud',
     title: 'BUTTONS.manualTagsHint',
-    description: 'BUTTONS.manualTagsDescription',
-    settingsHeading: 'SETTINGS.sortingFilters'
+    description: 'BUTTONS.manualTagsDescription'
   },
   'autoFileTags': {
     hidden: true,
@@ -374,6 +383,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-hourglass',
     title: 'BUTTONS.durationFilterHint',
     description: 'BUTTONS.durationFilterDescription',
+    settingsHeading: 'SETTINGS.sortingFilters',
   },
   'sortOrder': {
     hidden: false,
