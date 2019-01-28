@@ -17,7 +17,8 @@
     ]
   },
   "include": [
-    "main.ts"
+    "main.ts",
+    "transcode-server.ts"
   ],
   "exclude": [
     "node_modules",

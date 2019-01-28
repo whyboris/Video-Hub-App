@@ -10,6 +10,7 @@ main.js
 main-filenames.js
 main-support.js
 main-globals.js
+transcode-server.js
 src/**/*.js
 *.js.map
 
