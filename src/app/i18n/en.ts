@@ -79,6 +79,7 @@ export const English = {
     showRecentHint: 'Show recently opened hubs',
     showTagsDescription: 'Toggle showing auto-generated tags. They are generated from file names automatically',
     showTagsHint: 'Show auto-generated tags',
+    showTagsMoreInfo: 'These tags are generated automatically from the file names. Clicking on any tag will find all files that contain the word in the file name. You can also add manual tags to files individually in the "Details View".',
     showThumbnailsDescription: 'Switches to the thumbnails view',
     showThumbnailsHint: 'Show thumbnails',
     shuffleGalleryNowDescription: 'Shuffles the results in current view',

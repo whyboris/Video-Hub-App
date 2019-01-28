@@ -304,7 +304,6 @@
                       flatSettingsButton:           settingsButtons['flatIcons'].toggled,
                       flatSettingsButtonToggled:    settingsButtons['flatIcons'].toggled && settingsButtons[buttonKey].toggled
                     }"
-                  style="min-width: 36px; min-height: 36px"
                   title="{{ settingsButtons[buttonKey].title | translate }}"
                 >
                   <app-icon [icon]="settingsButtons[buttonKey].iconName"></app-icon>
@@ -321,6 +320,17 @@
                   class="buttonDescriptionText"
                 >
                   {{ settingsButtons[buttonKey].description | translate }}
+
+                  <span
+                    *ngIf="settingsButtons[buttonKey].moreInfo"
+                    class="more-info"
+                  >
+                    i
+                  </span>
+                  <span class="tooltip-text">
+                    {{ settingsButtons[buttonKey].moreInfo | translate }}
+                  </span>
+
                 </span>
 
               </div>

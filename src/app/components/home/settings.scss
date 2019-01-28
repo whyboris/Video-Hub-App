@@ -170,16 +170,15 @@ h3 {
 }
 
 .buttonDescriptionText {
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
+  display: -webkit-box !important;
+  -webkit-line-clamp: 3 !important;
+  -webkit-box-orient: vertical !important;
   color: $black;
-  display: -webkit-box;
   font-size: 14px;
   left: 80px;
   overflow: hidden;
-  pointer-events: none;
   position: absolute;
-  top: 9px;
+  top: 2px;
 }
 
 .buttonOpacityLower {
@@ -189,9 +188,9 @@ h3 {
 .eyeIconContainer {
   cursor: pointer;
   display: block;
-  left: 50px;
+  left: 42px;
   position: absolute;
-  top: 8px;
+  top: 1px;
 }
 
 .eye-open {
@@ -229,6 +228,29 @@ h3 {
 .languageDropDown {
   border-radius: 5px;
   padding: 6px;
+}
+
+.more-info {
+  border-radius: 50%;
+  border: 1px solid #729aff;
+  color: #729aff;
+  display: inline-block;
+  font-size: 10px;
+  font-style: italic;
+  height: 12px;
+  line-height: 12px;
+  margin-top: 2px;
+  text-align: center;
+  width: 12px;
+  cursor: none;
+}
+
+.tooltip-text {
+  visibility: hidden;
+}
+
+.more-info:hover + .tooltip-text {
+  visibility: visible !important;
 }
 
 .sortDropdown {
