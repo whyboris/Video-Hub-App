@@ -32,6 +32,7 @@ import { globals } from '../../../../main-globals';
 
 import {
   donutAppear,
+  filterItemAppear,
   galleryItemAppear,
   historyItemRemove,
   modalAnimation,
@@ -65,6 +66,7 @@ import {
   ],
   animations: [
     donutAppear,
+    filterItemAppear,
     galleryItemAppear,
     historyItemRemove,
     modalAnimation,
@@ -828,6 +830,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Show or hide settings
    */
   toggleSettings(): void {
+    this.settingToShow = 2;
     this.buttonsInView = !this.buttonsInView;
   }
 

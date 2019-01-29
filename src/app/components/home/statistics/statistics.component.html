@@ -1,8 +1,8 @@
 <div class="statistics">
 
-  <h2 class="heading">{{ 'STATISTICS.heading' | translate }}</h2>
+  <span class="stats-heading">{{ 'STATISTICS.heading' | translate }}</span>
 
-  <table>
+  <table class="stats-table">
     <tr>
       <td colSpan=2 class="spanBoth">{{ 'STATISTICS.general' | translate }}</td>
     </tr>
@@ -22,22 +22,22 @@
 
     <tr>
       <td>{{ 'STATISTICS.shortest' | translate }}</td>
-      <td class="rightCol">{{ shortest | lengthPipe }}</td>
+      <td class="rightCol">{{ shortest | lengthPipe : true }}</td>
     </tr>
 
     <tr>
       <td>{{ 'STATISTICS.longest' | translate }}</td>
-      <td class="rightCol">{{ longest | lengthPipe }}</td>
+      <td class="rightCol">{{ longest | lengthPipe : true : true }}</td>
     </tr>
 
     <tr>
-      <td>{{ 'STATISTICS.total' | translate }}</td>
-      <td class="rightCol">{{ totalLength | lengthPipe }}</td>
+      <td>{{ 'STATISTICS.total' | translate : true }}</td>
+      <td class="rightCol">{{ totalLength | lengthPipe : true : true }}</td>
     </tr>
 
     <tr>
       <td>{{ 'STATISTICS.average' | translate }}</td>
-      <td class="rightCol">{{ avgLength | lengthPipe }}</td>
+      <td class="rightCol">{{ avgLength | lengthPipe : true }}</td>
     </tr>
 
     <tr>

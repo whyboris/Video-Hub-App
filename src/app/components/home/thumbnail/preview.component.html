@@ -4,7 +4,6 @@
       width: elWidth + 'px'
     }"
   class="filmstrip-container"
-  @galleryItemAppear
 >
 
   <div
@@ -17,8 +16,8 @@
         'background-position-x': percentOffset + '%'
       }"
   >
-    <span *ngIf="showMeta" class="time" @metaAppear>{{ video.durationDisplay }}</span>
-    <span *ngIf="showMeta" class="rez" @metaAppear>{{ video.resolution }}</span>
+    <span *ngIf="showMeta" class="time">{{ video.durationDisplay }}</span>
+    <span *ngIf="showMeta" class="rez">{{ video.resolution }}</span>
   </div>
 
   <span
@@ -26,7 +25,6 @@
     [ngClass]="{ 'larger-font': largerFont }"
     [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
     class="title"
-    @textAppear
   >
     {{ video.cleanName }}
     <div class="fileSize" *ngIf="showMeta">

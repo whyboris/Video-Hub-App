@@ -117,6 +117,21 @@ export const textAppear = trigger('textAppear', [
   )]
 );
 
+export const filterItemAppear = trigger('filterItemAppear', [
+  transition(
+    ':enter', [
+      style({ height: 0, opacity: 0 }),
+      animate('300ms ease-in', style({ height: '64px', opacity: 1 }))
+    ]
+  ),
+  transition(
+    ':leave', [
+      style({ height: '64px', opacity: 1 }),
+      animate('300ms ease-out', style({ height: 0, opacity: 0 }))
+    ]
+  )]
+);
+
 export const tagDeleteButton = trigger('tagDeleteButton', [
   transition(
     ':enter', [
