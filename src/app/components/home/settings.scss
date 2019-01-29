@@ -234,23 +234,36 @@ h3 {
   border-radius: 50%;
   border: 1px solid #729aff;
   color: #729aff;
+  cursor: none;
   display: inline-block;
-  font-size: 10px;
+  font-size: 11px;
   font-style: italic;
   height: 12px;
-  line-height: 12px;
-  margin-top: 2px;
   text-align: center;
+  transition-duration: 150ms;
+  transition-property: color border-color;
   width: 12px;
-  cursor: none;
+
+  &:hover {
+    border-color: white;
+    color: white;
+    transition-duration: 150ms;
+    transition-property: color border-color;
+  }
 }
 
 .tooltip-text {
-  visibility: hidden;
+  opacity: 0;
+  transition-delay: 500ms;
+  transition-duration: 500ms;
+  transition-property: opacity;
 }
 
 .more-info:hover + .tooltip-text {
-  visibility: visible !important;
+  opacity: 1;
+  transition-delay: 0ms;
+  transition-duration: 0ms;
+  transition-property: opacity;
 }
 
 .sortDropdown {
