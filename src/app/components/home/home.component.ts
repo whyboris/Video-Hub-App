@@ -224,6 +224,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   screens = 10; // hardcoded for now. Only used for import - TODO - refactor?
 
+  screensPerVideo: boolean = true; // true = N screenshots per video; false = 1 screenshot every N minutes
+
   isFirstRunEver = false;
 
   galleryWidth: number;
@@ -1161,7 +1163,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Called on screenshot size dropdown select
    * @param pxHeightForImport - string of number of pixels for the height of each screenshot
    */
-  selectScreenshotSize(pxHeightForImport: string) {
+  selectScreenshotSize(pxHeightForImport: string): void {
     // TODO better prediction
     const height = parseInt(pxHeightForImport, 10);
     this.wizard.totalImportSize = Math.round((height / 100) * this.wizard.totalNumberOfFiles * 36 / 1000);
@@ -1172,8 +1174,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Called on screenshot size dropdown select
    * @param screens - string of number of screenshots per video
    */
-  selectNumOfScreens(screens: string) {
+  selectNumOfScreens(screens: string): void {
     this.screens = parseFloat(screens);
+  }
+
+  /**
+   * Sets the `screensPerVideo` boolean
+   * true = N screenshots per video
+   * false = 1 screenshot per N minutes
+   * @param bool boolean
+   */
+  setScreensPerVideo(bool: boolean): void {
+    this.screensPerVideo = bool;
   }
 
   // ---- HANDLE EXTRACTING AND RESTORING SETTINGS ON OPEN AND BEFORE CLOSE ------

@@ -1139,21 +1139,70 @@
       4
     </div>
 
-    <select
-      (change)="selectScreenshotSize($event.target.value)"
-      [disabled]="wizard.selectedOutputFolder === '' || wizard.selectedSourceFolder === '' || futureHubName === ''"
-      class="size-dropdown languageDropDown"
+    <div
+      class="ssNumSelection"
+      style="margin-top: 20px"
+      [ngClass]="{ 'dim-row': !screensPerVideo
+                            || wizard.selectedOutputFolder === ''
+                            || wizard.selectedSourceFolder === ''
+                            || futureHubName === ''
+      }"
     >
-      <option value="144">144px</option>
-      <option value="216">216px</option>
-      <option value="288" selected="selected">288px</option>
-      <option value="360">360px</option>
-      <option value="432">432px</option>
-    </select>
 
-    <span class="step-description">
-      {{ 'WIZARD.sizeOfScreenshots' | translate }}
-    </span>
+      <input
+        type="radio"
+        name="ssNumSelection"
+        checked
+        (change)="setScreensPerVideo(true)"
+        [disabled]="wizard.selectedOutputFolder === ''
+                 || wizard.selectedSourceFolder === ''
+                 || futureHubName === ''"
+      >
+      <input
+        type="number"
+        class="size-dropdown languageDropDown numSelect"
+        value=10
+        min=3
+        max=30
+        onKeyDown="return false"
+        [disabled]="wizard.selectedOutputFolder === ''
+                 || wizard.selectedSourceFolder === ''
+                 || futureHubName === ''
+                 || !screensPerVideo"
+      >
+      screenshots per video
+
+    </div>
+
+    <div
+      class="ssNumSelection"
+      [ngClass]="{ 'dim-row': screensPerVideo }"
+    >
+
+      <input
+        type="radio"
+        name="ssNumSelection"
+        (change)="setScreensPerVideo(false)"
+        [disabled]="wizard.selectedOutputFolder === ''
+                 || wizard.selectedSourceFolder === ''
+                 || futureHubName === ''"
+      >
+      1 screenshot every
+      <input
+        type="number"
+        class="size-dropdown languageDropDown numSelect"
+        value=5
+        min=1
+        max=20
+        onKeyDown="return false"
+        [disabled]="wizard.selectedOutputFolder === ''
+                 || wizard.selectedSourceFolder === ''
+                 || futureHubName === ''
+                 || screensPerVideo"
+      >
+      minutes
+
+    </div>
 
     <div
       *ngIf="wizard.selectedOutputFolder !== ''"
@@ -1172,6 +1221,24 @@
     </div>
 
     <select
+      (change)="selectScreenshotSize($event.target.value)"
+      class="size-dropdown languageDropDown"
+      [disabled]="wizard.selectedOutputFolder === ''
+               || wizard.selectedSourceFolder === ''
+               || futureHubName === ''"
+    >
+      <option value="144">144px</option>
+      <option value="216">216px</option>
+      <option value="288" selected="selected">288px</option>
+      <option value="360">360px</option>
+      <option value="432">432px</option>
+    </select>
+
+    <span class="step-description">
+      {{ 'WIZARD.sizeOfScreenshots' | translate }}
+    </span>
+
+    <!-- <select
       (change)="selectNumOfScreens($event.target.value)"
       [disabled]="wizard.selectedOutputFolder === '' || wizard.selectedSourceFolder === '' || futureHubName === ''"
       class="size-dropdown languageDropDown"
@@ -1188,10 +1255,13 @@
 
     <span class="step-description">
       {{ 'WIZARD.screens' | translate }}
-    </span>
+    </span> -->
 
     <div
-      [ngClass]="{ 'current-step': wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder !== '' }"
+      [ngClass]="{
+        'current-step': wizard.selectedOutputFolder !== ''
+                     && wizard.selectedSourceFolder !== ''
+      }"
       class="steps"
     >
       5
@@ -1208,16 +1278,25 @@
       {{ 'WIZARD.createVideoHub' | translate }}
     </button>
 
-    <span class="description" *ngIf="wizard.totalNumberOfFiles !== -1">
+    <span
+      class="description"
+      *ngIf="wizard.totalNumberOfFiles !== -1"
+    >
       {{ 'WIZARD.expected' | translate }}
     </span>
-    <span class="step-description" *ngIf="wizard.totalNumberOfFiles !== -1">
+    <span
+      class="step-description"
+      *ngIf="wizard.totalNumberOfFiles !== -1"
+    >
       <span class="emphasis-number">
         {{ wizard.totalImportTime }}
       </span>
       {{ 'WIZARD.timeToImport' | translate }}
     </span>
-    <span class="step-description" *ngIf="wizard.totalNumberOfFiles !== -1">
+    <span
+      class="step-description"
+      *ngIf="wizard.totalNumberOfFiles !== -1"
+    >
       <span class="emphasis-number">
         {{ wizard.totalImportSize }}
       </span>
