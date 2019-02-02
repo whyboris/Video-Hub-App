@@ -1,7 +1,16 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { ImageElement } from '../common/final-object.interface';
 
-export type SortType = 'random' | 'default' | 'sizeAsc' | 'sizeDesc' | 'timeAsc' | 'timeDesc' | 'modifiedAsc' | 'modifiedDesc';
+export type SortType = 'default'
+                     | 'modifiedAsc'
+                     | 'modifiedDesc'
+                     | 'random'
+                     | 'sizeAsc'
+                     | 'sizeDesc'
+                     | 'starAsc'
+                     | 'starDesc'
+                     | 'timeAsc'
+                     | 'timeDesc';
 
 @Pipe({
   name: 'sortingPipe'
@@ -56,6 +65,16 @@ export class SortingPipe implements PipeTransform {
     } else if (sortingType === 'timeDesc') {
       const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
         return y.duration - x.duration;
+      });
+      return sorted.slice(0);
+    } else if (sortingType === 'starAsc') {
+      const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
+        return x.stars - y.stars;
+      });
+      return sorted.slice(0);
+    } else if (sortingType === 'starDesc') {
+      const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
+        return y.stars - x.stars;
       });
       return sorted.slice(0);
     } else if (sortingType === 'modifiedAsc') {
