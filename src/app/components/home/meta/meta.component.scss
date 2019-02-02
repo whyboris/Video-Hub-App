@@ -58,3 +58,15 @@
 .star-lit {
   opacity: 1;
 }
+
+.year {
+  width: 110px;
+  // THIS ELEMENT WILL BE STYLED ONCE BRANCH `thumbnail-number-selection` lands
+}
+
+.arrowsHidden {
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+  }
+}

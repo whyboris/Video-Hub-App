@@ -17,7 +17,7 @@ import { ImportSettingsObject } from '../common/import.interface';
 import { SavableProperties } from '../common/savable-properties.interface';
 import { SettingsObject } from '../common/settings-object.interface';
 import { SortType } from '../pipes/sorting.pipe';
-import { TagEmission, StarEmission } from './details/details.component';
+import { TagEmission, StarEmission, YearEmission } from './details/details.component';
 import { WizardOptions } from '../common/wizard-options.interface';
 
 import { AppState, SupportedLanguage } from '../common/app-state';
@@ -1525,7 +1525,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.finalArrayNeedsSaving = true;
   }
 
-
+  /**
+   * Update FinalArray with new star rating for some element
+   * @param emission
+   */
   editFinalArrayStars(emission: StarEmission): void {
     const position: number = emission.index;
     this.finalArray[position].stars = emission.stars;
@@ -1533,6 +1536,20 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.forceStarFilterUpdate = !this.forceStarFilterUpdate;
   }
 
+  /**
+   * Update FinalArray with new year tag for some element
+   * @param emission
+   */
+  editFinalArrayYear(emission: YearEmission): void {
+    const position: number = emission.index;
+    this.finalArray[position].year = emission.year;
+    this.finalArrayNeedsSaving = true;
+  }
+
+  /**
+   * Select a particular sort order (star rating, number of times played, etc)
+   * @param type
+   */
   selectFilterOrder(type: SortType): void {
     console.log(type);
     this.sortType = type;

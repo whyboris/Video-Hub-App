@@ -10,8 +10,29 @@
     {{ video.cleanName }}
   </span>
   <span class="fileSize">
-    {{ video.durationDisplay }} | {{ video.width }} x {{ video.height }} | {{ video.fileSizeDisplay }}
-  </span>
+    {{ video.durationDisplay }}
+
+    | {{ video.width }} x {{ video.height }}
+
+    | {{ video.fileSizeDisplay }}
+
+    | <input
+        #yearInput
+        (change)="validateYear($event)"
+        (click)="autoFillYear($event)"
+        (keydown)="preventUnwantedKeypress($event)"
+        (keyup.enter)="validateYear($event)"
+        (keyup.esc)="validateYear($event)"
+        [(ngModel)]="yearHack"
+        [ngClass]="{ arrowsHidden: !yearHack }"
+        class="year"
+        max="3000"
+        min="1800"
+        placeholder="some year"
+        type="number"
+      >
+
+    </span>
   <span class="fileSize" *ngIf="video.timesPlayed">
     {{ 'TAGS.timesPlayed' | translate }}: {{ video.timesPlayed }}
   </span>

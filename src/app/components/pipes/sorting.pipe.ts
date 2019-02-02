@@ -11,6 +11,8 @@ export type SortType = 'default'
                      | 'starDesc'
                      | 'timeAsc'
                      | 'timeDesc'
+                     | 'yearAsc'
+                     | 'yearDesc'
                      | 'timesPlayedAsc'
                      | 'timesPlayedDesc';
 
@@ -77,6 +79,16 @@ export class SortingPipe implements PipeTransform {
     } else if (sortingType === 'starDesc') {
       const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
         return y.stars - x.stars;
+      });
+      return sorted.slice(0);
+    } else if (sortingType === 'yearAsc') {
+      const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
+        return (x.year || 0) - (y.year || 0);
+      });
+      return sorted.slice(0);
+    } else if (sortingType === 'yearDesc') {
+      const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
+        return (y.year || 0) - (x.year || 0);
       });
       return sorted.slice(0);
     } else if (sortingType === 'timesPlayedAsc') {

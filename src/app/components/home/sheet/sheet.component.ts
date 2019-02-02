@@ -7,6 +7,7 @@ import { Tag, TagsService } from '../tags/tags.service';
 import { StarRating, ImageElement } from '../../common/final-object.interface';
 
 import { galleryItemAppear, metaAppear, textAppear } from '../../common/animations';
+import { YearEmission } from '../details/details.component';
 
 export interface TagEmission {
   index: number;
@@ -35,8 +36,9 @@ export class SheetComponent implements OnInit {
 
   @Output() editFinalArrayStars = new EventEmitter<StarEmission>();
   @Output() editFinalArrayTag = new EventEmitter<TagEmission>();
-  @Output() openFileRequest = new EventEmitter<number>();
+  @Output() editFinalArrayYear = new EventEmitter<YearEmission>();
   @Output() filterTag = new EventEmitter<object>();
+  @Output() openFileRequest = new EventEmitter<number>();
 
   @Input() video: ImageElement;
 
