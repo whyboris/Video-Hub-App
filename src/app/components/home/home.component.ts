@@ -678,6 +678,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public openVideo(index): void {
     this.currentPlayingFolder = this.finalArray[index].partialPath;
     this.currentPlayingFile = this.finalArray[index].cleanName;
+    this.finalArray[index].timesPlayed ? this.finalArray[index].timesPlayed++ : this.finalArray[index].timesPlayed = 1;
+    this.finalArrayNeedsSaving = true;
     const fullPath = this.appState.selectedSourceFolder + this.finalArray[index].partialPath + '/' + this.finalArray[index].fileName;
     this.electronService.ipcRenderer.send('openThisFile', fullPath);
     console.log(fullPath);

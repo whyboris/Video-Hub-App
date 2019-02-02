@@ -19,12 +19,13 @@ export interface ImageElement {
   duration: number;              // duration of film as number
   fileName: string;              // for opening the file
   fileSize: number;              // file size in bytes
-  mtime: number;                 // file modification time
   hash: string;                  // used for detecting changed files and as a screenshot identifier
   height: number;                // height of the video
+  mtime: number;                 // file modification time
   partialPath: string;           // for opening the file, just prepend the `inputDir`
   screens: number;               // number of screenshots for this file
   stars: StarRating;             // star rating 0 = n/a, otherwise 1, 2, 3
+  timesPlayed: number;          // number of times the file has been launched by VHA
   width: number;                 // width of the video
   // OPTIONAL
   tags?: string[];               // tags associated with this particular file

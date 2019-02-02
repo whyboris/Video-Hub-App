@@ -125,6 +125,8 @@ export const English = {
     sortStarDesc: 'Star Descending',
     sortTimeAsc: 'Time Ascending',
     sortTimeDesc: 'Time Descending',
+    sortTimesPlayedAsc: 'Times played Ascending',
+    sortTimesPlayedDesc: 'Times played Descending',
     tagExclusion: 'tags do not contain',
     tagIntersection: 'tags contain',
     tagUnion: 'tags union',
@@ -239,6 +241,7 @@ export const English = {
     presentTags: 'Tags in this hub',
     showFrequency: 'Show Frequency',
     starRating: 'Star rating',
+    timesPlayed: 'Timeos played',
   },
   SHORTCUTS: {
     andPress: 'and press',

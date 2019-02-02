@@ -10,7 +10,9 @@ export type SortType = 'default'
                      | 'starAsc'
                      | 'starDesc'
                      | 'timeAsc'
-                     | 'timeDesc';
+                     | 'timeDesc'
+                     | 'timesPlayedAsc'
+                     | 'timesPlayedDesc';
 
 @Pipe({
   name: 'sortingPipe'
@@ -75,6 +77,16 @@ export class SortingPipe implements PipeTransform {
     } else if (sortingType === 'starDesc') {
       const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
         return y.stars - x.stars;
+      });
+      return sorted.slice(0);
+    } else if (sortingType === 'timesPlayedAsc') {
+      const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
+        return x.timesPlayed - y.timesPlayed;
+      });
+      return sorted.slice(0);
+    } else if (sortingType === 'timesPlayedDesc') {
+      const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
+        return y.timesPlayed - x.timesPlayed;
       });
       return sorted.slice(0);
     } else if (sortingType === 'modifiedAsc') {

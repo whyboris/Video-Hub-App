@@ -12,6 +12,9 @@
   <span class="fileSize">
     {{ video.durationDisplay }} | {{ video.width }} x {{ video.height }} | {{ video.fileSizeDisplay }}
   </span>
+  <span class="fileSize" *ngIf="video.timesPlayed">
+    {{ 'TAGS.timesPlayed' | translate }}: {{ video.timesPlayed }}
+  </span>
 
   <button class="star-rating" tabindex="-1" [ngClass]="{ 'star-lit': starRatingHack > 1 }" (click)="setStarRating(1.5)"></button>
   <button class="star-rating" tabindex="-1" [ngClass]="{ 'star-lit': starRatingHack > 2 }" (click)="setStarRating(2.5)"></button>
