@@ -241,7 +241,7 @@ export const English = {
     presentTags: 'Tags in this hub',
     showFrequency: 'Show Frequency',
     starRating: 'Star rating',
-    timesPlayed: 'Timeos played',
+    timesPlayed: 'Times played',
   },
   SHORTCUTS: {
     andPress: 'and press',

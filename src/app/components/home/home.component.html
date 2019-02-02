@@ -434,7 +434,12 @@
 
     <div *ngIf="settingToShow == 4" class="shortcutMenu">
 
-      <app-statistics [finalArray]="finalArray" [numFolders]="appState.numOfFolders"></app-statistics>
+      <app-statistics
+        [finalArray]="finalArray"
+        [hubName]="appState.hubName"
+        [numFolders]="appState.numOfFolders"
+        [pathToVhaFile]="appState.currentVhaFile"
+      ></app-statistics>
 
     </div>
 

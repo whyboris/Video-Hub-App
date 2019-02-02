@@ -10,7 +10,9 @@ import { ImageElement } from '../../common/final-object.interface';
 export class StatisticsComponent implements OnInit {
 
   @Input() finalArray: ImageElement[];
+  @Input() hubName: string;
   @Input() numFolders: number;
+  @Input() pathToVhaFile: string;
 
   totalFiles: number;
 
