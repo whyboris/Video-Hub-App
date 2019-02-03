@@ -18,6 +18,16 @@
   text-align: center;
 }
 
+.title {
+  color: $black;
+  font-weight: bold;
+}
+
+.folder {
+  font-style: italic;
+  margin-top: 10px;
+}
+
 .rightCol {
   padding: 3px 10px;
   text-align: right;

@@ -19,6 +19,11 @@ export interface StarEmission {
   stars: StarRating;
 }
 
+export interface YearEmission {
+  index: number;
+  year: number;
+}
+
 @Component({
   selector: 'app-details-item',
   templateUrl: './details.component.html',
@@ -31,8 +36,9 @@ export class DetailsComponent implements OnInit {
 
   @Output() editFinalArrayStars = new EventEmitter<StarEmission>();
   @Output() editFinalArrayTag = new EventEmitter<TagEmission>();
-  @Output() openFileRequest = new EventEmitter<number>();
+  @Output() editFinalArrayYear = new EventEmitter<YearEmission>();
   @Output() filterTag = new EventEmitter<object>();
+  @Output() openFileRequest = new EventEmitter<number>();
 
   @Input() video: ImageElement;
 

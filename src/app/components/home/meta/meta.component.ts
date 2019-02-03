@@ -1,10 +1,11 @@
-import { Component, Input, OnInit, ElementRef, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { ManualTagsService } from '../manual-tags/manual-tags.service';
-import { Tag, TagsService } from '../tags/tags.service';
+import { TagsService } from '../tags/tags.service';
 
 import { StarRating, ImageElement } from '../../common/final-object.interface';
+import { YearEmission } from '../details/details.component';
 
 export interface TagEmission {
   index: number;
@@ -24,10 +25,13 @@ export interface StarEmission {
 })
 export class MetaComponent implements OnInit {
 
+  @ViewChild('yearInput') yearInput: ElementRef;
+
   @Output() editFinalArrayStars = new EventEmitter<StarEmission>();
   @Output() editFinalArrayTag = new EventEmitter<TagEmission>();
-  @Output() openFileRequest = new EventEmitter<number>();
+  @Output() editFinalArrayYear = new EventEmitter<YearEmission>();
   @Output() filterTag = new EventEmitter<object>();
+  @Output() openFileRequest = new EventEmitter<number>();
 
   @Input() video: ImageElement;
 
@@ -41,16 +45,19 @@ export class MetaComponent implements OnInit {
   @Input() showAutoFolderTags: boolean;
 
   starRatingHack: StarRating;
+  yearHack: number;
 
   constructor(
+    private cd: ChangeDetectorRef,
     public manualTagsService: ManualTagsService,
-    public tagsService: TagsService,
-    public sanitizer: DomSanitizer
+    public sanitizer: DomSanitizer,
+    public tagsService: TagsService
   ) { }
 
 
   ngOnInit() {
     this.starRatingHack = this.star;
+    this.yearHack = this.video.year;
   }
 
   addThisTag(tag: string) {
@@ -90,6 +97,58 @@ export class MetaComponent implements OnInit {
       index: this.video.index,
       stars: rating
     });
+  }
+
+  /**
+   * Update the FinalArray with the year!
+   * @param year
+   */
+  setYear(year: number): void {
+    this.editFinalArrayYear.emit({
+      index: this.video.index,
+      year: year,
+    });
+  }
+
+  /**
+   * Prevent `e` and `.` input
+   * @param event key press on the <input>
+   */
+  preventUnwantedKeypress(event: any): void {
+    if (event.key === '.' || event.key === 'e') {
+      event.preventDefault();
+    }
+  }
+
+  /**
+   * Validate the year and save it to model
+   * @param event
+   */
+  validateYear(event: any): void {
+    const currVal = event.target.valueAsNumber;
+
+    if (currVal < 1800 || currVal > 3000) {
+      this.yearHack = 2000;
+      this.cd.detectChanges();
+    } else {
+      this.yearHack = currVal;
+    }
+    this.yearInput.nativeElement.blur();
+    this.setYear(this.yearHack);
+  }
+
+  /**
+   * Auto-fill the year if it's not present
+   * @param event
+   */
+  autoFillYear($event: any) {
+    if (!this.yearHack) {
+      this.yearHack = 2000;
+      this.setYear(2000);
+      setTimeout(() => {
+        this.yearInput.nativeElement.select();
+      }, 1);
+    }
   }
 
 }

@@ -2,6 +2,9 @@
 
   <span class="stats-heading">{{ 'STATISTICS.heading' | translate }}</span>
 
+  <span class="stats-heading title">{{ hubName }}</span>
+  <span class="stats-heading folder" [innerHtml]="pathToVhaFile | folderArrowsPipe"></span>
+
   <table class="stats-table">
     <tr>
       <td colSpan=2 class="spanBoth">{{ 'STATISTICS.general' | translate }}</td>

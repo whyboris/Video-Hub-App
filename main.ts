@@ -189,7 +189,6 @@ import {
   countFoldersInFinalArray,
   extractAllMetadata,
   findAndImportNewFiles,
-  generateScreenshotStrip,
   getVideoPathsAndNames,
   insertTemporaryFields,
   missingThumbsIndex,

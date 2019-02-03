@@ -128,8 +128,8 @@
     (openFileRequest)="openVideo($event)"
     (editFinalArrayTag)="editFinalArrayTag($event)"
     (editFinalArrayStars)="editFinalArrayStars($event)"
+    (editFinalArrayYear)="editFinalArrayYear($event)"
     (filterTag)="handleFileWordClicked($event.tag.name, $event.event)"
-
 
     [elHeight]="imgHeight"
     [elWidth]="previewWidth"
@@ -434,7 +434,12 @@
 
     <div *ngIf="settingToShow == 4" class="shortcutMenu">
 
-      <app-statistics [finalArray]="finalArray" [numFolders]="appState.numOfFolders"></app-statistics>
+      <app-statistics
+        [finalArray]="finalArray"
+        [hubName]="appState.hubName"
+        [numFolders]="appState.numOfFolders"
+        [pathToVhaFile]="appState.currentVhaFile"
+      ></app-statistics>
 
     </div>
 
@@ -713,8 +718,14 @@
           <option value="sizeDesc">{{ 'SIDEBAR.sortSizeDesc' | translate }}</option>
           <option value="timeAsc">{{ 'SIDEBAR.sortTimeAsc' | translate }}</option>
           <option value="timeDesc">{{ 'SIDEBAR.sortTimeDesc' | translate }}</option>
+          <option value="timesPlayedAsc">{{ 'SIDEBAR.sortTimesPlayedAsc' | translate }}</option>
+          <option value="timesPlayedDesc">{{ 'SIDEBAR.sortTimesPlayedDesc' | translate }}</option>
           <option value="modifiedAsc">{{ 'SIDEBAR.sortModifiedAsc' | translate }}</option>
           <option value="modifiedDesc">{{ 'SIDEBAR.sortModifiedDesc' | translate }}</option>
+          <option value="yearAsc">{{ 'SIDEBAR.sortYearAsc' | translate }}</option>
+          <option value="yearDesc">{{ 'SIDEBAR.sortYearDesc' | translate }}</option>
+          <option value="starAsc">{{ 'SIDEBAR.sortStarAsc' | translate }}</option>
+          <option value="starDesc">{{ 'SIDEBAR.sortStarDesc' | translate }}</option>
           <option value="random">{{ 'SIDEBAR.sortRandom' | translate }}</option>
         </select>
       </div>
@@ -940,11 +951,13 @@
       <ng-container *ngIf="appState.currentView === 'details'">
         <app-details-item
           *ngFor="let item of scroll.viewPortItems"
+
           (contextmenu)="rightMouseClicked($event, item)"
-          (openFileRequest)="openVideo($event)"
-          (editFinalArrayTag)="editFinalArrayTag($event)"
           (editFinalArrayStars)="editFinalArrayStars($event)"
+          (editFinalArrayTag)="editFinalArrayTag($event)"
+          (editFinalArrayYear)="editFinalArrayYear($event)"
           (filterTag)="handleFileWordClicked($event.tag.name, $event.event)"
+          (openFileRequest)="openVideo($event)"
 
           [video]="item"
 
@@ -993,9 +1006,9 @@
   <app-view-tags-component
     [displayFrequency]="manualTagShowFrequency"
     [tags]="manualTagsService.tagsList | manualTagSortPipe
-      : manualTagFilterString
-      : settingsButtons['tagFrequencySort'].toggled
-      : manualTagsService.pipeToggleHack"
+                                       : manualTagFilterString
+                                       : settingsButtons['tagFrequencySort'].toggled
+                                       : manualTagsService.pipeToggleHack"
   ></app-view-tags-component>
 </div>
 

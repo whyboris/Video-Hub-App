@@ -10,7 +10,30 @@
     {{ video.cleanName }}
   </span>
   <span class="fileSize">
-    {{ video.durationDisplay }} | {{ video.width }} x {{ video.height }} | {{ video.fileSizeDisplay }}
+    {{ video.durationDisplay }}
+
+    | {{ video.width }} x {{ video.height }}
+
+    | {{ video.fileSizeDisplay }}
+
+    | <input
+        #yearInput
+        (change)="validateYear($event)"
+        (click)="autoFillYear($event)"
+        (keydown)="preventUnwantedKeypress($event)"
+        (keyup.enter)="validateYear($event)"
+        (keyup.esc)="validateYear($event)"
+        [(ngModel)]="yearHack"
+        class="year"
+        max="3000"
+        min="1800"
+        placeholder="YYYY"
+        type="number"
+      >
+
+    </span>
+  <span class="fileSize" *ngIf="video.timesPlayed">
+    {{ 'TAGS.timesPlayed' | translate }}: {{ video.timesPlayed }}
   </span>
 
   <button class="star-rating" tabindex="-1" [ngClass]="{ 'star-lit': starRatingHack > 1 }" (click)="setStarRating(1.5)"></button>
