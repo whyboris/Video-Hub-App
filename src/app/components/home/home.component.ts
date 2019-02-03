@@ -117,8 +117,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   currentPlayingFolder = '';
   magicSearchString = '';
 
-  showWizard = false; // set to true if `noSettingsPresent` message comes
-
   progressPercent = 0;
   canCloseWizard = false;
 
@@ -128,8 +126,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   progressNum1 = 0;
   progressNum2 = 100;
-
-  screenshotSizeForImport = 288; // default to 288px
 
   myTimeout = null;
 
@@ -179,18 +175,23 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   shuffleTheViewNow = 0; // dummy number to force re-shuffle current view
 
-  futureHubName = '';
   hubNameToRemember = '';
   importStage = 0;
 
   // temp variables for the wizard during import
   wizard: WizardOptions = {
-    totalNumberOfFiles: -1,
+    futureHubName: '',
     listOfFiles: [],
-    totalImportTime: 0,
-    totalImportSize: 0,
+    screensPerVideo: true,
+    screenshotSizeForImport: 288,
+    selectedOutputFolder: '',
     selectedSourceFolder: '',
-    selectedOutputFolder: ''
+    showWizard: false,
+    ssConstant: 10,
+    ssVariable: 5,
+    totalImportSize: 0,
+    totalImportTime: 0,
+    totalNumberOfFiles: -1,
   };
 
   extractionPercent = 1;
@@ -222,8 +223,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   manualTagFilterString: string = '';
   manualTagShowFrequency: boolean = true;
 
-  screens = 10; // hardcoded for now. Only used for import - TODO - refactor?
-
   isFirstRunEver = false;
 
   galleryWidth: number;
@@ -237,7 +236,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (event.key === 's') {
         this.shuffleTheViewNow++;
       } else if (event.key === 'o') {
-        if (this.showWizard === false) {
+        if (this.wizard.showWizard === false) {
           this.toggleSettings();
         }
       } else if (event.key === 'f') {
@@ -290,8 +289,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.magicSearch.nativeElement.focus();
         }, 1);
       }
-    } else if (event.key === 'Escape' && this.showWizard === true && this.canCloseWizard === true) {
-      this.showWizard = false;
+    } else if (event.key === 'Escape' && this.wizard.showWizard === true && this.canCloseWizard === true) {
+      this.wizard.showWizard = false;
     } else if (event.key === 'Escape' && this.buttonsInView) {
       this.buttonsInView = false;
     } else if (event.key === 'Escape' && (this.rightClickShowing || this.renamingNow || this.sheetDisplay)) {
@@ -384,7 +383,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       //   this.appState.selectedOutputFolder = 'images';
       //   this.appState.selectedSourceFolder = finalObject.inputDir;
       //   this.canCloseWizard = true;
-      //   this.showWizard = false;
+      //   this.wizard.showWizard = false;
       //   this.finalArray = finalObject.images;
       //   setTimeout(() => {
       //     this.toggleButton('showThumbnails');
@@ -480,7 +479,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.finalArray = this.demo ? finalObject.images.slice(0, 50) : finalObject.images;
 
       this.canCloseWizard = true;
-      this.showWizard = false;
+      this.wizard.showWizard = false;
       this.flickerReduceOverlay = false;
 
       this.finalArray.forEach((element: ImageElement): void => {
@@ -508,7 +507,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       } else if (settingsObject.appState.currentVhaFile) {
         this.loadThisVhaFile(settingsObject.appState.currentVhaFile);
       } else {
-        this.showWizard = true;
+        this.wizard.showWizard = true;
         this.flickerReduceOverlay = false;
       }
     });
@@ -520,7 +519,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (firstRun) {
         this.firstRunLogic();
       }
-      this.showWizard = true;
+      this.wizard.showWizard = true;
       this.flickerReduceOverlay = false;
     });
 
@@ -613,9 +612,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.importStage = 1;
     const importOptions: ImportSettingsObject = {
       exportFolderPath: this.wizard.selectedOutputFolder,
-      hubName: (this.futureHubName || 'untitled'),
-      imgHeight: this.screenshotSizeForImport,
-      numberOfScreenshots: this.screens,
+      hubName: (this.wizard.futureHubName || 'untitled'),
+      imgHeight: this.wizard.screenshotSizeForImport,
+      ssVariable: this.wizard.ssVariable,
+      ssConstant: this.wizard.ssConstant,
+      screensPerVideo: this.wizard.screensPerVideo,
       videoDirPath: this.wizard.selectedSourceFolder
     };
     this.electronService.ipcRenderer.send('start-the-import', importOptions, this.wizard.listOfFiles);
@@ -835,7 +836,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   hideWizard(): void {
-    this.showWizard = false;
+    this.wizard.showWizard = false;
   }
 
   tagClicked(event: string): void {
@@ -973,19 +974,21 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Start the wizard again
    */
   public startWizard(): void {
-    this.futureHubName = '';
     this.wizard = {
-      totalNumberOfFiles: -1,
+      futureHubName: '',
       listOfFiles: [],
-      totalImportTime: 0,
-      totalImportSize: 0,
+      screensPerVideo: true,
+      screenshotSizeForImport: 288, // default
+      selectedOutputFolder: '',
       selectedSourceFolder: '',
-      selectedOutputFolder: ''
+      showWizard: true,
+      ssConstant: 3,
+      ssVariable: 10,
+      totalImportSize: 0,
+      totalImportTime: 0,
+      totalNumberOfFiles: -1,
     };
-    this.screens = 10; // default
-    this.screenshotSizeForImport = 288; // default
     this.toggleSettings();
-    this.showWizard = true;
   }
 
   /**
@@ -1161,19 +1164,33 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Called on screenshot size dropdown select
    * @param pxHeightForImport - string of number of pixels for the height of each screenshot
    */
-  selectScreenshotSize(pxHeightForImport: string) {
-    // TODO better prediction
+  selectScreenshotSize(pxHeightForImport: string): void {
     const height = parseInt(pxHeightForImport, 10);
+    this.wizard.screenshotSizeForImport = height;
+    // TODO better prediction
     this.wizard.totalImportSize = Math.round((height / 100) * this.wizard.totalNumberOfFiles * 36 / 1000);
-    this.screenshotSizeForImport = height;
   }
 
   /**
    * Called on screenshot size dropdown select
    * @param screens - string of number of screenshots per video
    */
-  selectNumOfScreens(screens: string) {
-    this.screens = parseFloat(screens);
+  selectNumOfScreens(screens: string): void {
+    if (this.wizard.screensPerVideo) {
+      this.wizard.ssConstant = parseFloat(screens);
+    } else {
+      this.wizard.ssVariable = parseFloat(screens);
+    }
+  }
+
+  /**
+   * Sets the `screensPerVideo` boolean
+   * true = N screenshots per video
+   * false = 1 screenshot per N minutes
+   * @param bool boolean
+   */
+  setScreensPerVideo(bool: boolean): void {
+    this.wizard.screensPerVideo = bool;
   }
 
   // ---- HANDLE EXTRACTING AND RESTORING SETTINGS ON OPEN AND BEFORE CLOSE ------

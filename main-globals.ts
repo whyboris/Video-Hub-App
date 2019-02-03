@@ -1,29 +1,37 @@
 export const globals: Globals = {
-  version: '2.0.0a',
-  vhaFileVersion: 2,
-  angularApp: null,               // reference used to send messages back to Angular App
+  angularApp: null,            // reference used to send messages back to Angular App
   cancelCurrentImport: false,
-  currentlyOpenVhaFile: '',       // OFFICAL DECREE IN NODE WHICH FILE IS CURRENTLY OPEN !!!
+  currentlyOpenVhaFile: '',    // OFFICAL DECREE IN NODE WHICH FILE IS CURRENTLY OPEN !!!
   debug: false,
-  hubName: 'untitled',            // in case user doesn't name their hub any name
-  numberOfScreenshots: 10,
-  screenShotHeight: 288,
+  hubName: 'untitled',         // in case user doesn't name their hub any name
   selectedOutputFolder: '',
   selectedSourceFolder: '',
-  winRef: null
+  version: '',
+  vhaFileVersion: 2,
+  winRef: null,
+  screenshotSettings: {
+    fixed: true,               // true => N screenshots per video; false => 1 screenshot every N minutes
+    height: 288,
+    n: 10,
+  },
 };
 
 interface Globals {
-  version: string;
-  vhaFileVersion: number;
   angularApp: any;
   cancelCurrentImport: boolean;
   currentlyOpenVhaFile: string;
   debug: boolean;
   hubName: string;
-  numberOfScreenshots: number;
-  screenShotHeight: number;
+  screenshotSettings: ScreenshotSettings;
   selectedOutputFolder: string;
   selectedSourceFolder: string;
+  version: string;
+  vhaFileVersion: number;
   winRef: any;
+}
+
+export interface ScreenshotSettings {
+  fixed: boolean;
+  height: number;
+  n: number;
 }

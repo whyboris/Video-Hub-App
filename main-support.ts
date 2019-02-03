@@ -8,7 +8,7 @@ import { ResolutionString } from './src/app/components/pipes/resolution-filter.s
 
 import { acceptableFiles } from './main-filenames';
 
-import { globals } from './main-globals';
+import { globals, ScreenshotSettings } from './main-globals';
 
 interface ResolutionMeta {
   label: ResolutionString;
@@ -652,7 +652,7 @@ export function finalArrayWithoutDeleted(
  * Extract the meta data & store it in the final array
  * @param theFinalArray   -- ImageElement[] with dummy meta
  * @param videoFolderPath -- the full path to the base folder for video files
- * @param numberOfScreenshots -- number of screenshots to extract
+ * @param screenshotSettings -- ScreenshotSettings
  * @param metaStartIndex  -- the starting point in finalArray from where to extract metadata
  *                           (should be 0 when first scan, should be index of first element when rescan)
  * @param done            -- callback when done with all metadata extraction
@@ -660,7 +660,7 @@ export function finalArrayWithoutDeleted(
 export function extractAllMetadata(
   theFinalArray: ImageElement[],
   videoFolderPath: string,
-  numberOfScreenshots: number,
+  screenshotSettings: ScreenshotSettings,
   metaStartIndex: number,
   done: any
 ): void {
@@ -689,7 +689,7 @@ export function extractAllMetadata(
                                     theFinalArray[iterator].partialPath,
                                     theFinalArray[iterator].fileName));
 
-      extractMetadataForThisONEFile(filePathNEW, numberOfScreenshots, theFinalArray[iterator], extractMetaDataCallback);
+      extractMetadataForThisONEFile(filePathNEW, screenshotSettings, theFinalArray[iterator], extractMetaDataCallback);
 
     } else {
 
@@ -705,12 +705,13 @@ export function extractAllMetadata(
  * Updates the finalArray with the metadata about one particualar requested file
  * Updates newLastScreenCounterNEW global variable !!!
  * @param filePath              path to the file
- * @param numberOfScreenshots   number of screenshots to extract
+ * @param screenshotSettings    ScreenshotSettings
  * @param imageElement          index in array to update
+ * @param callback
  */
 function extractMetadataForThisONEFile(
   filePath: string,
-  numberOfScreenshots: number,
+  screenshotSettings: ScreenshotSettings,
   imageElement: ImageElement,
   extractMetaCallback: any
 ): void {
@@ -735,7 +736,7 @@ function extractMetadataForThisONEFile(
       imageElement.hash = hashFile(filePath);
       imageElement.height = origHeight;
       imageElement.width = origWidth;
-      imageElement.screens = computeNumberOfScreenshots(numberOfScreenshots, duration);
+      imageElement.screens = computeNumberOfScreenshots(screenshotSettings, duration);
 
       extractMetaCallback(imageElement);
     }
@@ -743,21 +744,18 @@ function extractMetadataForThisONEFile(
 }
 
 /**
- * Compute the number of screenshots to extract
- * @param numberOfScreenshots
+ * Compute the number of screenshots to extract for a particular video
+ * @param screenshotSettings
  * @param duration - number of seconds in a video
- * Note:  duration < 1 indicates the rate of screenshots per minute,
- * e.g.   duration = 0.25 means 0.25 screenshots per minute, or 1 screenshot every 4 minutes
- *        duration = 10 means 10 screenshots per video
  */
-function computeNumberOfScreenshots(numberOfScreenshots: number, duration: number): number {
+function computeNumberOfScreenshots(screenshotSettings: ScreenshotSettings, duration: number): number {
   let total: number;
-  if (numberOfScreenshots <= 1) {
-    total = Math.ceil(duration / 60 * numberOfScreenshots);
+  if (screenshotSettings.fixed) {
+    total = screenshotSettings.n;
   } else {
-    total = numberOfScreenshots;
+    total = Math.ceil(duration / 60 / screenshotSettings.n);
   }
-  return total === 0 ? 1 : total;
+  return total;
 }
 
 /**
@@ -801,14 +799,14 @@ function hashFile(file: string): string {
  * @param angularFinalArray       -- array of ImageElements from Angular - most current view
  * @param hdFinalArray            -- array of ImageElements from current hard drive scan
  * @param inputFolder             -- the input folder (where videos are)
- * @param numberOfScreenshots     -- the number of screenshots per video
+ * @param screenshotSettings      -- ScreenshotSettings
  * @param extractMetadataCallback -- function for extractAllMetadata to call when done
  */
 export function findAndImportNewFiles(
   angularFinalArray: ImageElement[],
   hdFinalArray: ImageElement[],
   inputFolder: string,
-  numberOfScreenshots: number,
+  screenshotSettings: ScreenshotSettings,
   extractMetadataCallback
 ): void {
 
@@ -825,7 +823,7 @@ export function findAndImportNewFiles(
     extractAllMetadata(
       finalArrayUpdated,
       inputFolder,
-      numberOfScreenshots,
+      screenshotSettings,
       metaRescanStartIndex,
       extractMetadataCallback // actually = sendFinalResultHome
     );
@@ -847,7 +845,7 @@ export function findAndImportNewFiles(
  * @param angularFinalArray       -- array of ImageElements from Angular - most current view
  * @param hdFinalArray            -- array of ImageElements from current hard drive scan
  * @param inputFolder             -- the input folder (where videos are)
- * @param numberOfScreenshots     -- the number of screenshots per video
+ * @param screenshotSettings      -- ScreenshotSettings
  * @param folderToDeleteFrom      -- path to folder where `.jpg` files are
  * @param extractMetadataCallback -- function for extractAllMetadata to call when done
  */
@@ -855,7 +853,7 @@ export function updateFinalArrayWithHD(
   angularFinalArray: ImageElement[],
   hdFinalArray: ImageElement[],
   inputFolder: string,
-  numberOfScreenshots: number,
+  screenshotSettings: ScreenshotSettings,
   folderToDeleteFrom: string,
   extractMetadataCallback
 ): void {
@@ -877,7 +875,7 @@ export function updateFinalArrayWithHD(
     extractAllMetadata(
       finalArrayUpdated,
       inputFolder,
-      numberOfScreenshots,
+      screenshotSettings,
       metaRescanStartIndex,
       extractMetadataCallback // actually = sendFinalResultHome
     );
