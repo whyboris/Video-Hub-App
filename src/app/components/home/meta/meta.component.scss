@@ -1,3 +1,5 @@
+@import "../variables";
+
 .meta {
   display: inline-block;
   padding: 10px 20px;
@@ -60,13 +62,11 @@
 }
 
 .year {
-  width: 110px;
-  // THIS ELEMENT WILL BE STYLED ONCE BRANCH `thumbnail-number-selection` lands
-}
-
-.arrowsHidden {
-  &::-webkit-outer-spin-button,
-  &::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-  }
+  background-color: transparent;
+  border-radius: 0;
+  border: 0;
+  font-size: 10px;
+  outline: none;
+  padding: 0;
+  width: 42px;
 }

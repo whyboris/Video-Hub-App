@@ -24,11 +24,10 @@
         (keyup.enter)="validateYear($event)"
         (keyup.esc)="validateYear($event)"
         [(ngModel)]="yearHack"
-        [ngClass]="{ arrowsHidden: !yearHack }"
         class="year"
         max="3000"
         min="1800"
-        placeholder="some year"
+        placeholder="YYYY"
         type="number"
       >
 
