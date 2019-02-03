@@ -304,8 +304,9 @@ input[type="radio"]:checked:before {
 }
 
 .sortDropdown {
-  max-width: 166px;
   margin: 15px 0 10px;
+  max-width: 166px;
+  min-width: 166px;
 }
 
 .key {
