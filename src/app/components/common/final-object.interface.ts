@@ -1,17 +1,17 @@
 import { ResolutionString } from '../pipes/resolution-filter.service';
+import { ScreenshotSettings } from '../../../../main-globals';
 
 export type StarRating = 0.5 | 1.5 | 2.5 | 3.5;
 
 export interface FinalObject {
-  version: number;              // version of this vha file
   addTags?: string[];           // tags to add
   hubName: string;              // the name of the hub -- for recently-opened
   images: ImageElement[];       // see below
   inputDir: string;             // later may support array of many input directories
   numOfFolders: number;         // number of folders
-  numberOfScreenshots: number;  // number of screenshots to extract per video (for re-scanning in the future)
   removeTags?: string[];        // tags to remove
-  screenshotHeight: number;     // screen shot height -- so when you reimport it remembers your preference
+  screenshotSettings: ScreenshotSettings;
+  version: number;              // version of this vha file
 }
 
 export interface ImageElement {
@@ -27,10 +27,14 @@ export interface ImageElement {
   stars: StarRating;             // star rating 0 = n/a, otherwise 1, 2, 3
   timesPlayed: number;           // number of times the file has been launched by VHA
   width: number;                 // width of the video
+  // ========================================================================
   // OPTIONAL
+  // ------------------------------------------------------------------------
   tags?: string[];               // tags associated with this particular file
   year?: number;                 // optional tag to track the year of the video
+  // ========================================================================
   // Stripped out and not saved in the VHA file
+  // ------------------------------------------------------------------------
   durationDisplay: string;       // displayed duration in X:XX:XX format
   fileSizeDisplay: string;       // displayed as XXXmb or X.Xgb
   index: number;                 // for the `default` sort order

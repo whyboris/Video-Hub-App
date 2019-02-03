@@ -8,6 +8,7 @@ import { globals } from './main-globals';
 // ***************************** BUILD TOGGLE *********************************************
 // ========================================================================================
 const demo = false;
+globals.version = '2.0.0a';
 // ========================================================================================
 
 
@@ -307,8 +308,7 @@ function openThisDamnFile(pathToVhaFile: string) {
 
 function setGlobalsFromVhaFile(vhaFileContents: FinalObject) {
   globals.hubName = vhaFileContents.hubName,
-  globals.numberOfScreenshots = vhaFileContents.numberOfScreenshots;
-  globals.screenShotHeight = vhaFileContents.screenshotHeight;
+  globals.screenshotSettings = vhaFileContents.screenshotSettings;
   globals.selectedSourceFolder = vhaFileContents.inputDir;
 }
 
@@ -441,7 +441,6 @@ ipc.on('import-new-files', function (event, currentAngularFinalArray: ImageEleme
  * Initiate verifying all files have thumbnails
  */
 ipc.on('verify-thumbnails', function (event) {
-  const currentVideoFolder = globals.selectedSourceFolder;
   globals.cancelCurrentImport = false;
   verifyThumbnails();
 });
@@ -460,7 +459,7 @@ ipc.on('rescan-current-directory', function (event, currentAngularFinalArray: Im
 const pathToAppData = app.getPath('appData');
 
 /**
- * Close the window
+ * Close the window / quit / exit the app
  */
 ipc.on('close-window', function (event, settingsToSave: SettingsObject, savableProperties: SavableProperties) {
 
@@ -530,10 +529,21 @@ ipc.on('start-the-import', function (event, options: ImportSettingsObject, video
 
     globals.cancelCurrentImport = false;
     globals.hubName = options.hubName;
-    globals.numberOfScreenshots = options.numberOfScreenshots;
-    globals.screenShotHeight = options.imgHeight;
     globals.selectedOutputFolder = options.exportFolderPath;
     globals.selectedSourceFolder = options.videoDirPath;
+
+    // determine number of screenshots
+    let numOfScreenshots: number = 0;
+    if (options.screensPerVideo) {
+      numOfScreenshots = options.ssConstant;
+    } else {
+      numOfScreenshots = options.ssVariable;
+    }
+    globals.screenshotSettings = {
+      fixed: options.screensPerVideo,
+      height: options.imgHeight,
+      n: numOfScreenshots,
+    };
 
     if (demo) {
       videoFilesWithPaths = videoFilesWithPaths.slice(0, 50);
@@ -542,7 +552,7 @@ ipc.on('start-the-import', function (event, options: ImportSettingsObject, video
     extractAllMetadata(
       videoFilesWithPaths,
       globals.selectedSourceFolder,
-      globals.numberOfScreenshots,
+      globals.screenshotSettings,
       0,
       sendFinalResultHome         // callback for when metdata is done extracting
     );
@@ -570,7 +580,7 @@ function scanForNewFiles(angularFinalArray: ImageElement[], currentVideoFolder: 
       angularFinalArray,
       videosOnHD,
       currentVideoFolder,
-      globals.numberOfScreenshots,
+      globals.screenshotSettings,
       sendFinalResultHome           // callback for when `extractAllMetadata` is called
     );
 
@@ -596,7 +606,7 @@ function verifyThumbnails() {
     lastSavedFinalObject.images,
     globals.selectedSourceFolder,
     screenshotOutputFolder,
-    globals.screenShotHeight,
+    globals.screenshotSettings.height,
     indexesToScan
   );
 }
@@ -622,7 +632,7 @@ function reScanDirectory(angularFinalArray: ImageElement[], currentVideoFolder: 
       angularFinalArray,
       videosOnHD,
       currentVideoFolder,
-      globals.numberOfScreenshots,
+      globals.screenshotSettings,
       folderToDeleteFrom,
       sendFinalResultHome           // callback for when `extractAllMetadata` is called
     );
@@ -739,8 +749,7 @@ function sendFinalResultHome(
     hubName: globals.hubName,
     inputDir: globals.selectedSourceFolder,
     numOfFolders: countFoldersInFinalArray(myFinalArray),
-    numberOfScreenshots: globals.numberOfScreenshots,
-    screenshotHeight: globals.screenShotHeight,
+    screenshotSettings: globals.screenshotSettings,
     images: myFinalArray,
   };
 
@@ -767,7 +776,7 @@ function sendFinalResultHome(
       myFinalArray,
       globals.selectedSourceFolder,
       screenshotOutputFolder,
-      globals.screenShotHeight,
+      globals.screenshotSettings.height,
       indexesToScan
     );
 

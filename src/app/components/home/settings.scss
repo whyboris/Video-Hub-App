@@ -230,6 +230,43 @@ h3 {
   padding: 6px;
 }
 
+.numSelect {
+  border: 1px solid $gray-50;
+  margin: 0 3px 0 !important;
+  width: 30px;
+  user-select: none;
+}
+
+.ssNumSelection {
+  font-size: 12px;
+  margin-left: 10px;
+}
+
+input[type="radio"] {
+  -webkit-appearance: inherit;
+  border-radius: 10px;
+  border: 1px solid $gray-50;
+  cursor: pointer;
+  height: 15px;
+  outline: none;
+  transform: translate(0, 5px);
+  width: 15px;
+}
+
+input[type="radio"]:checked:before {
+  background: #729aff;
+  border-radius: 10px;
+  border: 3px solid $gray-10;
+  content:"";
+  height: 7px;
+  position: absolute;
+  width: 7px;
+}
+
+.dim-row {
+  opacity: 0.5;
+}
+
 .more-info {
   border-radius: 50%;
   border: 1px solid #729aff;

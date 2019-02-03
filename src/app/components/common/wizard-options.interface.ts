@@ -1,9 +1,17 @@
-import { ImageElement } from "./final-object.interface";
+import { ImageElement } from './final-object.interface';
+
+// meant to keep the full state of the Wizard settings chosen
 export interface WizardOptions {
-  totalNumberOfFiles: number;
+  futureHubName: string;
   listOfFiles: ImageElement[];
-  totalImportTime: number;
-  totalImportSize: number;
-  selectedSourceFolder: string;
+  screensPerVideo: boolean; // true = N screenshots per video; false = 1 screenshot every N minutes
+  screenshotSizeForImport: number;
   selectedOutputFolder: string;
+  selectedSourceFolder: string;
+  showWizard: boolean;
+  ssConstant: number;
+  ssVariable: number;
+  totalImportSize: number;
+  totalImportTime: number;
+  totalNumberOfFiles: number;
 }
