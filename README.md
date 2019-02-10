@@ -34,8 +34,10 @@ A list of upcoming features is [listed on the official website](https://videohub
 
 - Angular v7.1.3
 - Angular-CLI v7.1.3
-- Electron v4.0.0 (internally uses Node v10.11.0 and Chrome 69)
+- Electron v4.0.4 (internally uses Node v10.11.0 and Chrome 69)
 - Electron Builder v20.36.2
+- Node v10.15.1
+- npm v6.4.1
 
 ## Thank you
 

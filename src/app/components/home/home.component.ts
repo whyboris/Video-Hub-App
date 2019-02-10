@@ -108,8 +108,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // ========================================================================================
   demo = false;
   webDemo = false;
-  versionNumber = globals.version;
   macVersion = false;
+  // !!! make sure to update the `globals.version` and the `package.json` version numbers !!!
   // ========================================================================================
 
   // REORGANIZE / keep
