@@ -1,5 +1,19 @@
-// string = search string, array = array of filters, bool = dummy to flip to trigger pipe
-// array for `file`, `fileUnion`, `folder`, `folderUnion`, and `exclude`
+// array for `fileIntersection`, `fileUnion`, `folderIntersection`, `folderUnion`, and `exclude`
+// string = search string
+// array = array of filters
+// bool = dummy to flip to trigger pipe
+
+export const FilterKeyNames: string[] = [
+  'folderUnion',
+  'folderIntersection',
+  'fileUnion',
+  'fileIntersection',
+  'exclude',
+  'tagUnion',
+  'tagIntersection',
+  'tagExclusion',
+];
+
 export let Filters = [
   {
     uniqueKey: 'folderUnion',
@@ -10,7 +24,7 @@ export let Filters = [
     conjunction: 'SIDEBAR.or',
     color: '#FFD672'
   }, {
-    uniqueKey: 'folder',
+    uniqueKey: 'folderIntersection',
     string: '',
     array: [],
     bool: true,
@@ -26,7 +40,7 @@ export let Filters = [
     conjunction: 'SIDEBAR.or',
     color: '#6e96ff'
   }, {
-    uniqueKey: 'file',
+    uniqueKey: 'fileIntersection',
     string: '',
     array: [],
     bool: true,
@@ -67,3 +81,14 @@ export let Filters = [
     color: '#FF8888'
   }
 ];
+
+export const filterKeyToIndex = {
+  folderUnion: 0,
+  folderIntersection: 1,
+  fileUnion: 2,
+  fileIntersection: 3,
+  exclude: 4,
+  tagUnion: 5,
+  tagIntersection: 6,
+  tagExclusion: 7,
+};

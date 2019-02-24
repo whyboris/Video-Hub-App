@@ -12,7 +12,10 @@
         }"
     >
       <img width="16px" height="16px" class="top-logo" src="./assets/logo.png">
-      <span class="heading-title">
+      <span
+        class="heading-title"
+        [ngStyle]="{ 'color': settingsButtons['darkMode'].toggled ? '#AAAAAA' : '#111111' }"
+      >
         Video Hub App
         <b>{{ demo ? ' demo - limited to 50 video files ' : '' }}</b>
         {{ importStage !== 0 ? ' - ' + progressString + ' - ' : ' - ' }}
@@ -599,7 +602,7 @@
       <!-- end of regular search inputs -->
 
       <!-- magic search -->
-      <ng-container *ngIf="settingsButtons['magic'].toggled">
+      <div *ngIf="settingsButtons['magic'].toggled" @filterItemAppear>
         <app-icon class="input-icon" [icon]="settingsButtons['magic'].iconName"></app-icon>
         <input
           #magicSearch
@@ -624,7 +627,7 @@
             {{ magicSearchString }}
           </span>
         </div>
-      </ng-container>
+      </div>
       <!-- end of magic search -->
 
       <!-- durationFilter -->
