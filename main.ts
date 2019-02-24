@@ -747,7 +747,7 @@ function sendFinalResultHome(
   theFinalArray: ImageElement[]
 ): void {
 
-  const myFinalArray: ImageElement[] = insertTemporaryFields(alphabetizeFinalArray(theFinalArray));
+  const myFinalArray: ImageElement[] = alphabetizeFinalArray(theFinalArray);
 
   const finalObject: FinalObject = {
     version: globals.vhaFileVersion,
@@ -765,6 +765,8 @@ function sendFinalResultHome(
   writeVhaFileToDisk(finalObject, pathToTheFile, () => {
 
     globals.currentlyOpenVhaFile = pathToTheFile;
+
+    finalObject.images = insertTemporaryFields(finalObject.images);
 
     globals.angularApp.sender.send(
       'finalObjectReturning',
