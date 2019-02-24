@@ -112,6 +112,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // !!! make sure to update the `globals.version` and the `package.json` version numbers !!!
   // ========================================================================================
 
+  versionNumber = globals.version;
+
   // REORGANIZE / keep
   currentPlayingFile = '';
   currentPlayingFolder = '';

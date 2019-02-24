@@ -44,13 +44,6 @@ export const SettingsButtonsGroups: string[][] = [
     'showClips',
   ],
   [
-    'makeSmaller',
-    'makeLarger',
-  ],
-  [
-    'darkMode',
-  ],
-  [
     'showTags',
     'autoFileTags',
     'autoFolderTags',
@@ -72,14 +65,21 @@ export const SettingsButtonsGroups: string[][] = [
     'showFolderInFileView'
   ],
   [
+    'makeSmaller',
+    'makeLarger',
+  ],
+  [
+    'darkMode',
+  ],
+  [
     'hideTop',
     'flatIcons'
   ],
   [
+    'startWizard',
     'rescanDirectory',
     'importNewFiles',
     'verifyThumbnails',
-    'startWizard',
     'resetSettings',
     'clearHistory'
   ]
@@ -330,7 +330,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'tagIntersection': {
     hidden: false,
-    toggled: true,
+    toggled: false,
     iconName: 'icon-video-minus',
     title: 'BUTTONS.tagIntersectionHint',
     description: 'BUTTONS.tagIntersectionDescription',
@@ -372,21 +372,21 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'resolutionFilter': {
     hidden: false,
-    toggled: true,
+    toggled: false,
     iconName: 'icon-res-filter',
     title: 'BUTTONS.resolutionFilterHint',
     description: 'BUTTONS.resolutionFilterDescription',
   },
   'starFilter': {
     hidden: false,
-    toggled: true,
+    toggled: false,
     iconName: 'icon-star',
     title: 'BUTTONS.starFilterHint',
     description: 'BUTTONS.starFilterDescription',
   },
   'durationFilter': {
     hidden: false,
-    toggled: true,
+    toggled: false,
     iconName: 'icon-hourglass',
     title: 'BUTTONS.durationFilterHint',
     description: 'BUTTONS.durationFilterDescription',
@@ -394,7 +394,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'sortOrder': {
     hidden: false,
-    toggled: true,
+    toggled: false,
     iconName: 'icon-res-filter',
     title: 'BUTTONS.sortOrderHint',
     description: 'BUTTONS.sortOrderDescription',
@@ -416,35 +416,35 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'sortOptionTimesPlayed': {
     hidden: false,
-    toggled: true,
+    toggled: false,
     iconName: 'icon-checkmark',
     title: '',
     description: 'BUTTONS.sortOptionTimesPlayedDescription',
   },
   'sortOptionStar': {
     hidden: false,
-    toggled: true,
+    toggled: false,
     iconName: 'icon-checkmark',
     title: '',
     description: 'BUTTONS.sortOptionStarDescription',
   },
   'sortOptionYear': {
     hidden: false,
-    toggled: true,
+    toggled: false,
     iconName: 'icon-checkmark',
     title: '',
     description: 'BUTTONS.sortOptionYearDescription',
   },
   'sortOptionModified': {
     hidden: false,
-    toggled: true,
+    toggled: false,
     iconName: 'icon-checkmark',
     title: '',
     description: 'BUTTONS.sortOptionModifiedDescription',
   },
   'showFreq': {
     hidden: false,
-    toggled: true,
+    toggled: false,
     iconName: 'icon-cloud',
     title: 'BUTTONS.showFreqHint',
     description: 'BUTTONS.showFreqDescription',
@@ -459,7 +459,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'showRecent': {
     hidden: false,
-    toggled: true,
+    toggled: false,
     iconName: 'icon-show-filenames',
     title: 'BUTTONS.showRecentHint',
     description: 'BUTTONS.showRecentDescription',
@@ -492,8 +492,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     toggled: false,
     iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
     title: 'BUTTONS.startWizardHint',
-    description: 'BUTTONS.startWizardDescription',
-    settingsHeading: 'SETTINGS.createNew'
+    description: 'BUTTONS.startWizardDescription'
   },
   'clearHistory': {
     hidden: false,
@@ -531,5 +530,6 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
     title: 'BUTTONS.rescanDirectoryHint',
     description: 'BUTTONS.rescanDirectoryDescription',
+    settingsHeading: 'SETTINGS.currentHub'
   }
 };
