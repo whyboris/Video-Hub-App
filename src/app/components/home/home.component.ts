@@ -228,6 +228,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   galleryWidth: number;
   longest: number = 0;
 
+  rootFolderLive: boolean = true; // set to `false` when loading hub but video folder is not connected
+
   // Listen for key presses
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -460,8 +462,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       finalObject: FinalObject,
       pathToFile: string,
       outputFolderWithTrailingSlash: string,
-      changedRootFolder = false
+      changedRootFolder: boolean = false,
+      rootFolderLive: boolean = true,
     ) => {
+      this.rootFolderLive = rootFolderLive;
       this.finalArrayNeedsSaving = changedRootFolder;
       this.appState.currentVhaFile = pathToFile;
       this.hubNameToRemember = finalObject.hubName;
@@ -682,9 +686,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.finalArray[index].timesPlayed ? this.finalArray[index].timesPlayed++ : this.finalArray[index].timesPlayed = 1;
     this.finalArrayNeedsSaving = true;
     const fullPath = this.appState.selectedSourceFolder + this.finalArray[index].partialPath + '/' + this.finalArray[index].fileName;
-    this.electronService.ipcRenderer.send('openThisFile', fullPath);
-    console.log(fullPath);
     this.fullPathToCurrentFile = fullPath;
+    console.log(fullPath);
+    if (this.rootFolderLive) {
+      this.electronService.ipcRenderer.send('openThisFile', fullPath);
+    }
   }
 
   public openOnlineHelp(): void {

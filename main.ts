@@ -242,6 +242,7 @@ function openThisDamnFile(pathToVhaFile: string) {
       }
 
       let changedRootFolder = false;
+      let rootFolderLive = true;
       // check root folder exists
       if (!fs.existsSync(lastSavedFinalObject.inputDir)) {
         // see if the user wants to change the root folder
@@ -271,6 +272,9 @@ function openThisDamnFile(pathToVhaFile: string) {
           lastSavedFinalObject = null;
           globals.angularApp.sender.send('pleaseOpenWizard');
           return;
+        } else if (result === 1) {
+          console.log('PROCEED ANYWAY');
+          rootFolderLive = false;
         }
       }
 
@@ -300,7 +304,8 @@ function openThisDamnFile(pathToVhaFile: string) {
         lastSavedFinalObject,
         pathToVhaFile,
         globals.selectedOutputFolder + path.sep,   // app needs the trailing slash (at least for now)
-        changedRootFolder
+        changedRootFolder,
+        rootFolderLive
       );
     }
   });
@@ -766,6 +771,8 @@ function sendFinalResultHome(
       finalObject,
       pathToTheFile,
       globals.selectedOutputFolder + path.sep // app needs the trailing slash (at least for now)
+      // changedRootFolder -- no need to initialize
+      // rootFolderLive    -- no need to initialize
     );
 
     const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
