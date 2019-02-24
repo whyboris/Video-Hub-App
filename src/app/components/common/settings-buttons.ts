@@ -8,9 +8,9 @@ export const SettingsButtonsGroups: string[][] = [
   ],
   [
     'folderUnion',
-    'folder',
+    'folderIntersection',
     'fileUnion',
-    'file',
+    'fileIntersection',
     'exclude',
     'tagUnion',
     'tagIntersection',
@@ -293,7 +293,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.folderUnionDescription',
     settingsHeading: 'SETTINGS.searchFilters'
   },
-  'folder': {
+  'folderIntersection': {
     hidden: false,
     toggled: true,
     iconName: 'icon-folder-minus',
@@ -307,7 +307,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     title: 'BUTTONS.fileUnionHint',
     description: 'BUTTONS.fileUnionDescription',
   },
-  'file': {
+  'fileIntersection': {
     hidden: false,
     toggled: true,
     iconName: 'icon-video-minus',

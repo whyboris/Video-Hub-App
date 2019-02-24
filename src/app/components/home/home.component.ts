@@ -21,7 +21,7 @@ import { TagEmission, StarEmission, YearEmission } from './details/details.compo
 import { WizardOptions } from '../common/wizard-options.interface';
 
 import { AppState, SupportedLanguage } from '../common/app-state';
-import { Filters } from '../common/filters';
+import { Filters, filterKeyToIndex, FilterKeyNames } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, SettingsMetaGroup } from '../common/settings-buttons';
 
 import { English } from '../../i18n/en';
@@ -870,52 +870,80 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
+   * Helper method for `toggleButton` to set `toggled` boolean true
+   * @param uniqueKey
+   */
+  toggleButtonTrue(uniqueKey: string): void {
+    this.settingsButtons[uniqueKey].toggled = true;
+  }
+
+  /**
+   * Helper method for `toggleButton` to set `toggled` boolean to its opposite
+   * @param uniqueKey
+   */
+  toggleButtonOpposite(uniqueKey: string): void {
+    this.settingsButtons[uniqueKey].toggled = !this.settingsButtons[uniqueKey].toggled;
+  }
+
+  /**
    * Perform appropriate action when a button is clicked
    * @param   uniqueKey   the uniqueKey string of the button
    */
   toggleButton(uniqueKey: string): void {
+    // ======== View buttons ================
     if (uniqueKey === 'showThumbnails') {
       this.toggleAllViewsButtonsOff();
-      this.settingsButtons['showThumbnails'].toggled = true;
+      this.toggleButtonTrue(uniqueKey);
       this.appState.currentView = 'thumbs';
       this.computeTextBufferAmount();
       this.scrollToTop();
     } else if (uniqueKey === 'showFilmstrip') {
       this.toggleAllViewsButtonsOff();
-      this.settingsButtons['showFilmstrip'].toggled = true;
+      this.toggleButtonTrue(uniqueKey);
       this.appState.currentView = 'filmstrip';
       this.computeTextBufferAmount();
       this.scrollToTop();
     } else if (uniqueKey === 'showFiles') {
       this.toggleAllViewsButtonsOff();
-      this.settingsButtons['showFiles'].toggled = true;
+      this.toggleButtonTrue(uniqueKey);
       this.appState.currentView = 'files';
       this.computeTextBufferAmount();
       this.scrollToTop();
     } else if (uniqueKey === 'showFoldersOnly') {
       this.toggleAllViewsButtonsOff();
-      this.settingsButtons['showFoldersOnly'].toggled = true;
+      this.toggleButtonTrue(uniqueKey);
       this.appState.currentView = 'files';
       this.computeTextBufferAmount();
       this.scrollToTop();
     } else if (uniqueKey === 'showClips') {
       this.toggleAllViewsButtonsOff();
-      this.settingsButtons['showClips'].toggled = true;
+      this.toggleButtonTrue(uniqueKey);
       this.appState.currentView = 'clips';
       this.computeTextBufferAmount();
       this.scrollToTop();
     } else if (uniqueKey === 'showFullView') {
       this.toggleAllViewsButtonsOff();
-      this.settingsButtons['showFullView'].toggled = true;
+      this.toggleButtonTrue(uniqueKey);
       this.appState.currentView = 'fullView';
       this.computeTextBufferAmount();
       this.scrollToTop();
     } else if (uniqueKey === 'showDetails') {
       this.toggleAllViewsButtonsOff();
-      this.settingsButtons['showDetails'].toggled = true;
+      this.toggleButtonTrue(uniqueKey);
       this.appState.currentView = 'details';
       this.computeTextBufferAmount();
       this.scrollToTop();
+
+    // ======== Filter buttons =========================
+    } else if (FilterKeyNames.includes(uniqueKey)) {
+      this.filters[filterKeyToIndex[uniqueKey]].array = [];
+      this.filters[filterKeyToIndex[uniqueKey]].bool = !this.filters[filterKeyToIndex[uniqueKey]].bool;
+      this.toggleButtonOpposite(uniqueKey);
+    } else if (uniqueKey === 'magic') {
+      this.magicSearchString = '';
+      this.toggleButtonOpposite(uniqueKey);
+
+    // ======== Other buttons ========================
     } else if (uniqueKey === 'makeSmaller') {
       this.decreaseSize();
       this.updateGalleryWidthMeasurement();
@@ -936,16 +964,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.rescanDirectory();
     } else if (uniqueKey === 'sortOrder') {
       this.sortType = 'default';
-      this.settingsButtons['sortOrder'].toggled = !this.settingsButtons['sortOrder'].toggled;
+      this.toggleButtonOpposite(uniqueKey);
     } else if (uniqueKey === 'shuffleGalleryNow') {
       this.shuffleTheViewNow++;
     } else if (uniqueKey === 'randomizeGallery') {
       if (this.settingsButtons['randomizeGallery'].toggled === true) {
         this.shuffleTheViewNow = 0;
       }
-      this.settingsButtons['randomizeGallery'].toggled = !this.settingsButtons['randomizeGallery'].toggled;
+      this.toggleButtonOpposite(uniqueKey);
     } else {
-      this.settingsButtons[uniqueKey].toggled = !this.settingsButtons[uniqueKey].toggled;
+      this.toggleButtonOpposite(uniqueKey);
       if (uniqueKey === 'showMoreInfo') {
         this.computeTextBufferAmount();
       }
