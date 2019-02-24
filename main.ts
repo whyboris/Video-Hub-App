@@ -321,6 +321,8 @@ function setGlobalsFromVhaFile(vhaFileContents: FinalObject) {
 // Methods that interact with Angular
 // ============================================================
 
+const pathToAppData = app.getPath('appData');
+
 /**
  * Just started -- hello -- send over the settings or open wizard
  */
@@ -460,8 +462,6 @@ ipc.on('rescan-current-directory', function (event, currentAngularFinalArray: Im
   globals.cancelCurrentImport = false;
   reScanDirectory(currentAngularFinalArray, currentVideoFolder);
 });
-
-const pathToAppData = app.getPath('appData');
 
 /**
  * Close the window / quit / exit the app
