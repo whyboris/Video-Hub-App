@@ -20,7 +20,7 @@ import { SortType } from '../pipes/sorting.pipe';
 import { TagEmission, StarEmission, YearEmission } from './details/details.component';
 import { WizardOptions } from '../common/wizard-options.interface';
 
-import { AppState, SupportedLanguage, defaultHeights, ImageHeights } from '../common/app-state';
+import { AppState, SupportedLanguage, defaultHeights, ImageHeights, allSupportedViews, SupportedView } from '../common/app-state';
 import { Filters, filterKeyToIndex, FilterKeyNames } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, SettingsMetaGroup } from '../common/settings-buttons';
 
@@ -126,7 +126,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   imgHeight: ImageHeights = defaultHeights;
 
-  currentViewImgHeight: number = 100;
+  currentViewImgHeight: number = 144;
 
   progressNum1 = 0;
   progressNum2 = 100;
@@ -905,60 +905,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Perform appropriate action when a button is clicked
    * @param   uniqueKey   the uniqueKey string of the button
    */
-  toggleButton(uniqueKey: string): void {
+  toggleButton(uniqueKey: string | SupportedView): void {
     // ======== View buttons ================
-    if (uniqueKey === 'showThumbnails') {
+    if (allSupportedViews.includes(<SupportedView>uniqueKey)) {
       this.savePreviousViewSize();
       this.toggleAllViewsButtonsOff();
       this.toggleButtonTrue(uniqueKey);
       this.restoreViewSize(uniqueKey);
-      this.appState.currentView = uniqueKey;
-      this.computeTextBufferAmount();
-      this.scrollToTop();
-    } else if (uniqueKey === 'showFilmstrip') {
-      this.savePreviousViewSize();
-      this.toggleAllViewsButtonsOff();
-      this.toggleButtonTrue(uniqueKey);
-      this.restoreViewSize(uniqueKey);
-      this.appState.currentView = uniqueKey;
-      this.computeTextBufferAmount();
-      this.scrollToTop();
-    } else if (uniqueKey === 'showFiles') {
-      this.savePreviousViewSize();
-      this.toggleAllViewsButtonsOff();
-      this.toggleButtonTrue(uniqueKey);
-      this.appState.currentView = uniqueKey;
-      this.computeTextBufferAmount();
-      this.scrollToTop();
-    } else if (uniqueKey === 'showFoldersOnly') {
-      this.savePreviousViewSize();
-      this.toggleAllViewsButtonsOff();
-      this.toggleButtonTrue(uniqueKey);
-      this.appState.currentView = 'showFiles'; // notice it's different
-      this.computeTextBufferAmount();
-      this.scrollToTop();
-    } else if (uniqueKey === 'showClips') {
-      this.savePreviousViewSize();
-      this.toggleAllViewsButtonsOff();
-      this.toggleButtonTrue(uniqueKey);
-      this.restoreViewSize(uniqueKey);
-      this.appState.currentView = uniqueKey;
-      this.computeTextBufferAmount();
-      this.scrollToTop();
-    } else if (uniqueKey === 'showFullView') {
-      this.savePreviousViewSize();
-      this.toggleAllViewsButtonsOff();
-      this.toggleButtonTrue(uniqueKey);
-      this.restoreViewSize(uniqueKey);
-      this.appState.currentView = uniqueKey;
-      this.computeTextBufferAmount();
-      this.scrollToTop();
-    } else if (uniqueKey === 'showDetails') {
-      this.savePreviousViewSize();
-      this.toggleAllViewsButtonsOff();
-      this.toggleButtonTrue(uniqueKey);
-      this.restoreViewSize(uniqueKey);
-      this.appState.currentView = uniqueKey;
+      if (uniqueKey === 'showFoldersOnly') {
+        this.appState.currentView = 'showFiles';
+      } else {
+        this.appState.currentView = <SupportedView>uniqueKey;
+      }
       this.computeTextBufferAmount();
       this.scrollToTop();
 
@@ -1094,8 +1052,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Decrease preview size
    */
   public decreaseSize(): void {
-    if (this.currentViewImgHeight > 50) {
-      this.currentViewImgHeight = this.currentViewImgHeight - 25;
+    if (this.currentViewImgHeight > 100) {
+      this.currentViewImgHeight = this.currentViewImgHeight - 36;
     }
     this.computePreviewWidth();
   }
@@ -1104,8 +1062,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Increase preview size
    */
   public increaseSize(): void {
-    if (this.currentViewImgHeight < 300) {
-      this.currentViewImgHeight = this.currentViewImgHeight + 25;
+    if (this.currentViewImgHeight < 500) {
+      this.currentViewImgHeight = this.currentViewImgHeight + 36;
     }
     this.computePreviewWidth();
   }

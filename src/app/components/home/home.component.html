@@ -513,7 +513,11 @@
                   flatSettingsButton:                settingsButtons['flatIcons'].toggled,
 
                   flatSettingsButtonToggled:         settingsButtons['flatIcons'].toggled
-                                                  && settingsButtons[buttonKey].toggled
+                                                  && settingsButtons[buttonKey].toggled,
+
+                  disabledButton:                    (settingsButtons[buttonKey].iconName === 'icon-minus'
+                                                  || settingsButtons[buttonKey].iconName === 'icon-plus')
+                                                  && appState.currentView === 'showFiles'
                 }"
               title="{{ settingsButtons[buttonKey].title | translate }}"
             >

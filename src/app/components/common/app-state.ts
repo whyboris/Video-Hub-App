@@ -11,13 +11,32 @@ export type SupportedView = 'showThumbnails'
                           | 'showFoldersOnly'
                           | 'showClips';
 
+export const allSupportedViews: SupportedView[] = [
+  'showThumbnails',
+  'showFilmstrip',
+  'showFullView',
+  'showDetails',
+  'showFiles',
+  'showFoldersOnly',
+  'showClips',
+];
+
+export interface ImageHeights {
+  thumbnailSheet: number;
+  showThumbnails: number;
+  showFilmstrip: number;
+  showFullView: number;
+  showDetails: number;
+  showClips: number;
+}
+
 export const defaultHeights: ImageHeights = {
-  thumbnailSheet: 100,
-  showThumbnails: 100,
-  showFilmstrip: 100,
-  showFullView: 100,
-  showDetails: 100,
-  showClips: 100,
+  thumbnailSheet: 144,
+  showThumbnails: 144,
+  showFilmstrip: 144,
+  showFullView: 144,
+  showDetails: 144,
+  showClips: 144,
 };
 
 export let AppState: AppStateInterface = {
@@ -44,13 +63,4 @@ export interface AppStateInterface {
   numOfFolders: number;
   selectedOutputFolder: string;
   selectedSourceFolder: string;
-}
-
-export interface ImageHeights {
-  thumbnailSheet: number;
-  showThumbnails: number;
-  showFilmstrip: number;
-  showFullView: number;
-  showDetails: number;
-  showClips: number;
 }
