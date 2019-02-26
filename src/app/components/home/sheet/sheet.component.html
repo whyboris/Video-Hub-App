@@ -2,6 +2,7 @@
   class="sheet-modal"
 >
 <app-meta-item
+  class="meta"
   (editFinalArrayStars)="editFinalArrayStars.emit($event)"
   (editFinalArrayTag)="editFinalArrayTag.emit($event)"
   (editFinalArrayYear)="editFinalArrayYear.emit($event)"
@@ -22,13 +23,13 @@
 ></app-meta-item>
 
 
-  <div style="margin: 20px">
+  <div class="zoomButtons">
 
     <button
       (click)="decreaseZoomLevel()"
       class="defaultSettingsButton"
     >
-      <app-icon [icon]="'icon-minus'">zoom out</app-icon>
+      <app-icon [icon]="'icon-minus'"></app-icon>
     </button>
 
     <button
@@ -42,13 +43,13 @@
       (click)="increaseZoomLevel()"
       class="defaultSettingsButton"
     >
-      <app-icon [icon]="'icon-plus'">zoom in</app-icon>
+      <app-icon [icon]="'icon-plus'"></app-icon>
     </button>
 
   </div>
 
   <ng-container
-  *ngFor="let dummy of ' '.repeat(video.screens).split(''); index as i"
+    *ngFor="let _ of ' '.repeat(video.screens).split(''); index as i"
   >
     <div
       [ngStyle]="{
@@ -68,7 +69,13 @@
             'background-position-x': (percentOffset * i) + '%'
           }"
       >
-      <span *ngIf="showMeta" class="time" @metaAppear>{{ (video.duration / video.screens) * (i+1) | lengthPipe }}</span>
+      <span
+        *ngIf="showMeta"
+        class="time"
+        @metaAppear
+      >
+        {{ (video.duration / video.screens) * (i+1) | lengthPipe }}
+      </span>
       </div>
     </div>
   </ng-container>

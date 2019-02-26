@@ -25,11 +25,18 @@
   @include scrollBar;
 }
 
+.zoomButtons {
+  position: absolute;
+  top: 40px;
+  right: 40px;
+}
+
 .meta {
-  display: inline-block;
-  padding: 10px 20px;
-  vertical-align: top;
   box-sizing: border-box;
+  display: inline-block;
+  height: 180px;
+  vertical-align: top;
+  width: 100%;
 }
 
 .filmstrip-container {

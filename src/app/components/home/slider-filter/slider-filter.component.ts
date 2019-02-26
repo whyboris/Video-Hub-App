@@ -81,7 +81,7 @@ export class SliderFilterComponent implements OnInit, OnDestroy {
    * @param value
    */
   convertToIndex(value: number): number {
-    return (value / this.width) * (this.maximumValue - this. minimumValue) + this.minimumValue;
+    return (value / this.width) * (this.maximumValue - this.minimumValue) + this.minimumValue;
   }
 
   /**
@@ -115,7 +115,6 @@ export class SliderFilterComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    console.log('destroyed!');
     this.newSliderFilterSelected.emit([this.minimumValue, this.maximumValue]);
   }
 

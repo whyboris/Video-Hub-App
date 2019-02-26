@@ -134,11 +134,11 @@
     (editFinalArrayYear)="editFinalArrayYear($event)"
     (filterTag)="handleFileWordClicked($event.tag.name, $event.event)"
 
-    [elHeight]="imgHeight"
+    [elHeight]="currentViewImgHeight"
     [elWidth]="previewWidth"
     [folderPath]="appState.selectedOutputFolder"
     [hubName]="appState.hubName"
-    [imgHeight]="imgHeight"
+    [imgHeight]="currentViewImgHeight"
 
     [video]="itemToDisplay"
 
@@ -513,7 +513,11 @@
                   flatSettingsButton:                settingsButtons['flatIcons'].toggled,
 
                   flatSettingsButtonToggled:         settingsButtons['flatIcons'].toggled
-                                                  && settingsButtons[buttonKey].toggled
+                                                  && settingsButtons[buttonKey].toggled,
+
+                  disabledButton:                    (settingsButtons[buttonKey].iconName === 'icon-minus'
+                                                  || settingsButtons[buttonKey].iconName === 'icon-plus')
+                                                  && appState.currentView === 'showFiles'
                 }"
               title="{{ settingsButtons[buttonKey].title | translate }}"
             >
@@ -812,9 +816,9 @@
           'gallery-dark-scroll': settingsButtons['darkMode'].toggled
         }"
       [bufferAmount]="0"
-      [childHeight]="imgHeight + textPaddingHeight + 20
-                      + ( appState.currentView === 'thumbs' ? 4 : 0)
-                      - ( appState.currentView === 'files' ? ( imgHeight + 10 ) : 0)"
+      [childHeight]="currentViewImgHeight + textPaddingHeight + 20
+                      + ( appState.currentView === 'showThumbnails' ? 4 : 0)
+                      - ( appState.currentView === 'showFiles' ? ( currentViewImgHeight + 10 ) : 0)"
       [items]="finalArray
                 | magicSearchPipe: magicSearchString
 
@@ -869,7 +873,7 @@
                 | sortingPipe: sortType : shuffleTheViewNow
 
                 | folderViewPipe: settingsButtons['showFoldersOnly'].toggled
-                                  || (appState.currentView === 'files' && settingsButtons['showFolderInFileView'].toggled)
+                                  || (appState.currentView === 'showFiles' && settingsButtons['showFolderInFileView'].toggled)
                                   : settingsButtons['showFoldersOnly'].toggled"
     >
 
@@ -880,17 +884,17 @@
             it uses the width of the first child element
             so I can set 100vw for filmstrip -->
 
-      <ng-container *ngIf="appState.currentView === 'thumbs'">
+      <ng-container *ngIf="appState.currentView === 'showThumbnails'">
         <app-gallery-item
           *ngFor="let item of scroll.viewPortItems"
           (click)="handleClick($event, item)"
           (contextmenu)="rightMouseClicked($event, item)"
 
-          [elHeight]="imgHeight + textPaddingHeight"
+          [elHeight]="currentViewImgHeight + textPaddingHeight"
           [elWidth]="previewWidth"
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
-          [imgHeight]="imgHeight"
+          [imgHeight]="currentViewImgHeight"
 
           [video]="item"
 
@@ -903,7 +907,7 @@
         ></app-gallery-item>
       </ng-container>
 
-      <ng-container *ngIf="appState.currentView === 'filmstrip'">
+      <ng-container *ngIf="appState.currentView === 'showFilmstrip'">
         <app-filmstrip-item
           *ngFor="let item of scroll.viewPortItems"
           (click)="handleClick($event, item)"
@@ -911,10 +915,10 @@
 
           [video]="item"
 
-          [elHeight]="imgHeight + textPaddingHeight"
+          [elHeight]="currentViewImgHeight + textPaddingHeight"
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
-          [imgHeight]="imgHeight"
+          [imgHeight]="currentViewImgHeight"
 
           [darkMode]="settingsButtons['darkMode'].toggled"
           [hoverScrub]="settingsButtons['hoverScrub'].toggled"
@@ -923,7 +927,7 @@
         ></app-filmstrip-item>
       </ng-container>
 
-      <ng-container *ngIf="appState.currentView === 'fullView'">
+      <ng-container *ngIf="appState.currentView === 'showFullView'">
         <app-full-item
           *ngFor="let item of scroll.viewPortItems"
           (click)="handleClick($event, item)"
@@ -931,11 +935,11 @@
 
           [video]="item"
 
-          [elHeight]="imgHeight + textPaddingHeight"
+          [elHeight]="currentViewImgHeight + textPaddingHeight"
           [folderPath]="appState.selectedOutputFolder"
           [galleryWidth]="galleryWidth"
           [hubName]="appState.hubName"
-          [imgHeight]="imgHeight"
+          [imgHeight]="currentViewImgHeight"
 
           [darkMode]="settingsButtons['darkMode'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
@@ -943,7 +947,7 @@
         ></app-full-item>
       </ng-container>
 
-      <ng-container *ngIf="appState.currentView === 'files'">
+      <ng-container *ngIf="appState.currentView === 'showFiles'">
         <app-file-item
           *ngFor="let item of scroll.viewPortItems"
           (contextmenu)="(item.cleanName === '***') ? doNothing() : rightMouseClicked($event, item)"
@@ -957,7 +961,7 @@
         ></app-file-item>
       </ng-container>
 
-      <ng-container *ngIf="appState.currentView === 'clips'">
+      <ng-container *ngIf="appState.currentView === 'showClips'">
         <app-clip-item
           *ngFor="let item of scroll.viewPortItems"
 
@@ -966,11 +970,11 @@
 
           [video]="item"
 
-          [elHeight]="imgHeight + textPaddingHeight"
+          [elHeight]="currentViewImgHeight + textPaddingHeight"
           [elWidth]="previewWidth"
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
-          [imgHeight]="imgHeight"
+          [imgHeight]="currentViewImgHeight"
 
           [autoplay]="settingsButtons['autoplayClips'].toggled"
           [darkMode]="settingsButtons['darkMode'].toggled"
@@ -979,7 +983,7 @@
         ></app-clip-item>
       </ng-container>
 
-      <ng-container *ngIf="appState.currentView === 'details'">
+      <ng-container *ngIf="appState.currentView === 'showDetails'">
         <app-details-item
           *ngFor="let item of scroll.viewPortItems"
 
@@ -992,11 +996,11 @@
 
           [video]="item"
 
-          [elHeight]="imgHeight + textPaddingHeight"
+          [elHeight]="currentViewImgHeight + textPaddingHeight"
           [elWidth]="previewWidth"
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
-          [imgHeight]="imgHeight"
+          [imgHeight]="currentViewImgHeight"
 
           [star]="item.stars"
 
