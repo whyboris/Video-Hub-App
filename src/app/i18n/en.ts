@@ -49,6 +49,8 @@ export const English = {
     randomImageHint: 'Show random screenshot',
     randomizeGalleryDescription: 'Randomizes the order of video files after every search',
     randomizeGalleryHint: 'Randomize gallery order',
+    regenerateLibraryDescription: 'Regenerate all library metadata, except thumbnails and user entered metadata',
+    regenerateLibraryHint: 'Regenerate library',
     rescanDirectoryDescription: 'Rescan the video folder for any file changes (addition, renaming, deletion of videos) and update the current hub',
     rescanDirectoryHint: 'Rescan directory',
     resetSettingsDescription: 'Reset settings and buttons to their default values',

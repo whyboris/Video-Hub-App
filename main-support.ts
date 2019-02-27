@@ -603,10 +603,13 @@ export function findAllNewFiles(
       const pathStripped = newElement.partialPath.replace(inputFolder, '');
       if (pathStripped === oldElement.partialPath && newElement.fileName === oldElement.fileName) {
         matchFound = true;
+        newElement.hash = oldElement.hash;
       }
     });
 
     if (!matchFound) { // means new element !!!
+      const filePath = path.join(inputFolder, newElement.partialPath, newElement.fileName);
+      newElement.hash = hashFile(filePath);
       theDiff.push(newElement);
     }
   });
@@ -631,23 +634,42 @@ export function finalArrayWithoutDeleted(
 ): ImageElement[] {
   const cleanedArray: ImageElement[] = angularFinalArray.filter((value) => {
     let matchFound = false;
+    let hashFound = false;
 
     hdFinalArray.forEach((newElement) => {
+      if (value.hash === newElement.hash) {
+        hashFound = true;
+      }
       const pathStripped = newElement.partialPath.replace(inputFolder, '');
       if (pathStripped === value.partialPath && newElement.fileName === value.fileName) {
         matchFound = true;
       }
     });
 
+    if (!hashFound) {
+      deleteThumbnails(folderWhereImagesAre, value.hash);
+    }
     if (matchFound) {
       return true;
     } else {
-      deleteThumbnails(folderWhereImagesAre, value.hash);
       return false;
     }
   });
 
   return cleanedArray;
+}
+
+/**
+ * Returns true if there's user metadata to copy
+ * @param element to check
+ */
+export function hasUserMetadata(
+  element: ImageElement
+) {
+  return element.timesPlayed !== 0 ||
+         element.stars !== 0.5 ||
+         element.tags ||
+         element.year;
 }
 
 /**
@@ -659,7 +681,8 @@ export function copyUserMetadataForFile(
   oldElement: ImageElement,
   newElement: ImageElement
 ) {
-  // TODO update this as needed
+  console.log('copying for ' + oldElement.fileName);
+  // TODO update this and above as needed
   newElement.stars = oldElement.stars;
   newElement.tags = oldElement.tags;
   newElement.timesPlayed = oldElement.timesPlayed;
@@ -676,11 +699,13 @@ export function copyUserMetadata(
   newArray: ImageElement[]
 ) {
   oldArray.forEach((oldElement) => {
-    newArray.forEach((newElement) => {
-      if (oldElement.hash === newElement.hash) {
-        copyUserMetadataForFile(oldElement, newElement);
-      }
-    });
+    if (hasUserMetadata(oldElement)) {
+      newArray.forEach((newElement) => {
+        if (oldElement.hash === newElement.hash) {
+          copyUserMetadataForFile(oldElement, newElement);
+        }
+      });
+    }
   });
 }
 
@@ -773,7 +798,9 @@ function extractMetadataForThisONEFile(
       imageElement.duration = duration;
       imageElement.fileSize = stat.size;
       imageElement.mtime = stat.mtimeMs;
-      imageElement.hash = hashFile(filePath);
+      if (imageElement.hash !== '') {
+        imageElement.hash = hashFile(filePath);
+      }
       imageElement.height = origHeight;
       imageElement.width = origWidth;
       imageElement.screens = computeNumberOfScreenshots(screenshotSettings, duration);
@@ -796,6 +823,21 @@ function computeNumberOfScreenshots(screenshotSettings: ScreenshotSettings, dura
     total = Math.ceil(duration / 60 / screenshotSettings.n);
   }
   return total;
+}
+/**
+ * Update the entire array with new hashes
+ *
+ * @param imageArray
+ * @param videoFolderPath
+ */
+function updateArrayWithHashes(
+  imageArray: ImageElement[],
+  videoFolderPath: string
+) {
+  imageArray.forEach((element) => {
+    const filePath = path.join(videoFolderPath, element.partialPath, element.fileName);
+    element.hash = hashFile(filePath);
+  });
 }
 
 /**
@@ -875,6 +917,45 @@ export function findAndImportNewFiles(
     sendCurrentProgress(1, 1, 0); // indicates 100%
   }
 
+}
+
+/**
+ * Regenerates the library,
+ * figures out what files no longer exist,
+ * deletes .jpg files from HD,
+ * and calls `extractAllMetadata`
+ * (which will then send file home and start extracting images)
+ * @param angularFinalArray       -- array of ImageElements from Angular - most current view
+ * @param hdFinalArray            -- array of ImageElements from current hard drive scan
+ * @param inputFolder             -- the input folder (where videos are)
+ * @param screenshotSettings      -- ScreenshotSettings
+ * @param folderToDeleteFrom      -- path to folder where `.jpg` files are
+ * @param extractMetadataCallback -- function for extractAllMetadata to call when done
+ */
+export function regenerateLibrary(
+  angularFinalArray: ImageElement[],
+  hdFinalArray: ImageElement[],
+  inputFolder: string,
+  screenshotSettings: ScreenshotSettings,
+  folderToDeleteFrom: string,
+  extractMetadataCallback
+): void {
+
+  updateArrayWithHashes(hdFinalArray, inputFolder);
+
+  // Copy any user metadata
+  copyUserMetadata(angularFinalArray, hdFinalArray);
+
+  // Remove thumbnails no longer present
+  finalArrayWithoutDeleted(angularFinalArray, hdFinalArray, inputFolder, folderToDeleteFrom);
+
+  extractAllMetadata(
+    hdFinalArray,
+    inputFolder,
+    screenshotSettings,
+    0,
+    extractMetadataCallback // actually = sendFinalResultHome
+  );
 }
 
 /**
