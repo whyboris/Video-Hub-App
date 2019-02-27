@@ -47,13 +47,14 @@
 
 .star-rating {
   background-color: transparent;
-  background-image: url("./../../../../assets/logo.png");
-  background-size: 20px 20px;
   border: 0;
   cursor: pointer;
+  fill: yellow;
   height: 20px;
-  margin: 3px;
+  margin: 0;
   opacity: 0.3;
+  outline: none;
+  padding: 0;
   width: 20px;
 }
 

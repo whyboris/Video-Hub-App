@@ -19,6 +19,8 @@ export class StarFilterService {
     this.frequencyMap.set(1.5, 0);
     this.frequencyMap.set(2.5, 0);
     this.frequencyMap.set(3.5, 0);
+    this.frequencyMap.set(4.5, 0);
+    this.frequencyMap.set(5.5, 0);
   }
 
   /**
@@ -44,33 +46,26 @@ export class StarFilterService {
   }
 
   /**
-   * Get number of videos with the most frequent resolution
-   */
-  private getMostFrequent(): number {
-    let largestFreq = 0;
-
-    this.frequencyMap.forEach((value, key) => {
-      if (value > largestFreq) {
-        largestFreq = value;
-      }
-    });
-
-    return largestFreq;
-  }
-
-  /**
-   * Computes the array 9 objects long with most frequent words
-   * Creates `height` property, scaled between 8 and 22 proportionally
+   * Computes the array 6 objects long
+   * Creates `height` property
    * calls `.next` on BehaviorSubject
    */
   public computeFrequencyArray(): void {
 
-    // console.log(this.frequencyMap);
+    // Don't let the `N/A` column to be higher than all others
+    // find max value and set `N/A` to just 1 more than that
+    const first: number = this.frequencyMap.get(0.5);
+    let max: number = 0;
+    this.frequencyMap.forEach((value, key) => {
+      if (key !== 0.5 && value > max) {
+        max = value;
+      }
+    });
+    if (first > max) {
+      this.frequencyMap.set(0.5, max + 1);
+    }
 
-    const largestFrequency: number = this.getMostFrequent();
-    // console.log(largestFrequency);
-
-    const scalar = 100 / largestFrequency;
+    const scalar = 100 / max;
 
     this.frequencyMap.forEach((value, key) => {
       let finalValue = Math.round(value * scalar);
@@ -80,16 +75,15 @@ export class StarFilterService {
       this.frequencyMap.set(key, finalValue);
     });
 
-    // console.log(this.frequencyMap);
-
     const finalResult: number[] = [
       this.frequencyMap.get(0.5),
       this.frequencyMap.get(1.5),
       this.frequencyMap.get(2.5),
-      this.frequencyMap.get(3.5)
+      this.frequencyMap.get(3.5),
+      this.frequencyMap.get(4.5),
+      this.frequencyMap.get(5.5)
     ];
 
-    // console.log(finalResult);
     this.finalStarMapBehaviorSubject.next(finalResult);
   }
 
