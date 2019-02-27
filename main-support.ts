@@ -149,6 +149,8 @@ export function countFoldersInFinalArray(imagesArray: ImageElement[]): number {
  * @param done          -- function to execute when done writing the file
  */
 export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: string, done): void {
+  const inputDir = finalObject.inputDir;
+
   // check for relative paths
   if (finalObject.inputDir === path.parse(pathToTheFile).dir) {
     finalObject.inputDir = '';
@@ -160,6 +162,9 @@ export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: stri
   // write the file
   fs.writeFile(pathToTheFile, json, 'utf8', done);
   // CATCH ERRORS !?!!?!!
+
+  // Restore the inputDir incase we removed it
+  finalObject.inputDir = inputDir;
 }
 
 /**
