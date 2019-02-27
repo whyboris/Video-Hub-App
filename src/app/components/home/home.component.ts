@@ -148,8 +148,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // stuff to do with star filter
   starRatingFreqArr: number[];
   starLeftBound: number = 0;
-  starRightBound: number = 5;
-  starRatingNames: string[] = ['N/A', '1', '2', '3'];
+  starRightBound: number = 6;
+  starRatingNames: string[] = ['N/A', '1', '2', '3', '4', '5'];
   forceStarFilterUpdate: boolean = true;
 
   // other
