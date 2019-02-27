@@ -645,6 +645,40 @@ export function finalArrayWithoutDeleted(
   return cleanedArray;
 }
 
+/**
+ * Copy all user metadata from oldElement to newElement
+ * @param oldElement
+ * @param newElement
+ */
+export function copyUserMetadataForFile(
+  oldElement: ImageElement,
+  newElement: ImageElement
+) {
+  // TODO update this as needed
+  newElement.stars = oldElement.stars;
+  newElement.tags = oldElement.tags;
+  newElement.timesPlayed = oldElement.timesPlayed;
+  newElement.year = oldElement.year;
+}
+
+/**
+ * Copy any user entered metadata from oldArray to newArray by hash key
+ * @param oldArray to copy from
+ * @param newArray to copy to
+ */
+export function copyUserMetadata(
+  oldArray: ImageElement[],
+  newArray: ImageElement[]
+) {
+  oldArray.forEach((oldElement) => {
+    newArray.forEach((newElement) => {
+      if (oldElement.hash === newElement.hash) {
+        copyUserMetadataForFile(oldElement, newElement);
+      }
+    });
+  });
+}
+
 // --------------------------------------------------------------------------------------------
 // -- EXTRACT METADATA --
 // --------------------------------------------------------------------------------------------
@@ -815,6 +849,9 @@ export function findAndImportNewFiles(
   const onlyNewElements: ImageElement[] =
     findAllNewFiles(angularFinalArray, hdFinalArray, inputFolder);
 
+  // Copy any metadata incase files were moved
+  copyUserMetadata(angularFinalArray, onlyNewElements);
+
   // If there are new files
   if (onlyNewElements.length > 0) {
 
@@ -862,6 +899,9 @@ export function updateFinalArrayWithHD(
   // Generate ImageElement[] of all the new elements to be added
   const onlyNewElements: ImageElement[] =
     findAllNewFiles(angularFinalArray, hdFinalArray, inputFolder);
+
+  // Copy any metadata incase files were moved
+  copyUserMetadata(angularFinalArray, onlyNewElements);
 
   // remove from FinalArray all files that are no longer in the video folder
   const allDeletedRemoved: ImageElement[] =
