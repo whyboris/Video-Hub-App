@@ -157,6 +157,15 @@ export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: stri
   finalObject.images = stripOutTemporaryFields(finalObject.images);
 
   const json = JSON.stringify(finalObject);
+
+  // backup current file
+  try {
+  fs.renameSync(pathToTheFile, pathToTheFile + '.bak');
+  } catch (err) {
+    console.log('Error backup up file! Moving on...');
+    console.log(err);
+  }
+
   // write the file
   fs.writeFile(pathToTheFile, json, 'utf8', done);
   // CATCH ERRORS !?!!?!!
