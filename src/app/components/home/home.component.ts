@@ -948,6 +948,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.verifyThumbnails();
     } else if (uniqueKey === 'rescanDirectory') {
       this.rescanDirectory();
+    } else if (uniqueKey === 'regenerateLibrary') {
+      this.regenerateLibrary();
     } else if (uniqueKey === 'sortOrder') {
       this.sortType = 'default';
       this.toggleButtonOpposite(uniqueKey);
@@ -1046,6 +1048,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.toggleSettings();
     console.log('rescanning');
     this.electronService.ipcRenderer.send('rescan-current-directory', this.finalArray);
+  }
+
+  /**
+   * Regenerate the library
+   */
+  public regenerateLibrary(): void {
+    this.progressNum1 = 0;
+    this.importStage = 1;
+    this.toggleSettings();
+    console.log('regenerating library');
+    this.electronService.ipcRenderer.send('regenerate-library', this.finalArray);
   }
 
   /**

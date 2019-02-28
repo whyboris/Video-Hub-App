@@ -80,6 +80,7 @@ export const SettingsButtonsGroups: string[][] = [
     'rescanDirectory',
     'importNewFiles',
     'verifyThumbnails',
+    'regenerateLibrary',
     'resetSettings',
     'clearHistory'
   ]
@@ -531,5 +532,12 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     title: 'BUTTONS.rescanDirectoryHint',
     description: 'BUTTONS.rescanDirectoryDescription',
     settingsHeading: 'SETTINGS.currentHub'
+  },
+  'regenerateLibrary': {
+    hidden: false,
+    toggled: false,
+    iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
+    title: 'BUTTONS.regenerateLibraryHint',
+    description: 'BUTTONS.regenerateLibraryDescription',
   }
 };

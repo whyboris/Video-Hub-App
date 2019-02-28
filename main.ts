@@ -194,7 +194,8 @@ import {
   missingThumbsIndex,
   sendCurrentProgress,
   updateFinalArrayWithHD,
-  writeVhaFileToDisk
+  writeVhaFileToDisk,
+  regenerateLibrary
 } from './main-support';
 
 import { FinalObject, ImageElement } from './src/app/components/common/final-object.interface';
@@ -464,6 +465,15 @@ ipc.on('rescan-current-directory', function (event, currentAngularFinalArray: Im
 });
 
 /**
+ * Initiate regenerating the library
+ */
+ipc.on('regenerate-library', function (event, currentAngularFinalArray: ImageElement[]) {
+  const currentVideoFolder = globals.selectedSourceFolder;
+  globals.cancelCurrentImport = false;
+  regenerateMetadata(currentAngularFinalArray, currentVideoFolder);
+});
+
+/**
  * Close the window / quit / exit the app
  */
 ipc.on('close-window', function (event, settingsToSave: SettingsObject, savableProperties: SavableProperties) {
@@ -634,6 +644,43 @@ function reScanDirectory(angularFinalArray: ImageElement[], currentVideoFolder: 
     const folderToDeleteFrom = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
 
     updateFinalArrayWithHD(
+      angularFinalArray,
+      videosOnHD,
+      currentVideoFolder,
+      globals.screenshotSettings,
+      folderToDeleteFrom,
+      sendFinalResultHome           // callback for when `extractAllMetadata` is called
+    );
+
+  } else {
+    sendCurrentProgress(1, 1, 0);
+    dialog.showMessageBox({
+      message: 'Directory ' + currentVideoFolder + ' does not exist',
+      buttons: ['OK']
+    });
+  }
+}
+
+/**
+ * Completely regenerate the library and metadata, but preserve thumbnails and user generated metadata
+ * Useful when new metadata is added eg.
+ *
+ * @param angularFinalArray  ImageElment[] from Angular (might have renamed files)
+ * @param currentVideoFolder
+ */
+function regenerateMetadata(angularFinalArray: ImageElement[], currentVideoFolder: string) {
+
+  // rescan the source directory
+  if (fs.existsSync(currentVideoFolder)) {
+    let videosOnHD: ImageElement[] = getVideoPathsAndNames(currentVideoFolder);
+
+    if (demo) {
+      videosOnHD = videosOnHD.slice(0, 50);
+    }
+
+    const folderToDeleteFrom = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
+
+    regenerateLibrary(
       angularFinalArray,
       videosOnHD,
       currentVideoFolder,
