@@ -807,7 +807,7 @@ function extractMetadataForThisONEFile(
       imageElement.duration = duration;
       imageElement.fileSize = stat.size;
       imageElement.mtime = stat.mtimeMs;
-      if (imageElement.hash !== '') {
+      if (imageElement.hash === '') {
         imageElement.hash = hashFile(filePath);
       }
       imageElement.height = origHeight;
