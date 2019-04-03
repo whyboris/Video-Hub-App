@@ -749,9 +749,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param filter
    */
   handleFolderWordClicked(filter: string): void {
-    if (this.settingsButtons['showFoldersOnly']) {
-      this.toggleButton('showFiles'); // needed when we're in folder view
-    }
     this.showSidebar();
     if (!this.settingsButtons['folderIntersection'].toggled) {
       this.settingsButtons['folderIntersection'].toggled = true;

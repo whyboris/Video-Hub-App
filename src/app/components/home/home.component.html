@@ -873,7 +873,7 @@
                 | sortingPipe: sortType : shuffleTheViewNow
 
                 | folderViewPipe: settingsButtons['showFoldersOnly'].toggled
-                                  || (appState.currentView === 'showFiles' && settingsButtons['showFolderInFileView'].toggled)
+                                  || (settingsButtons['showFolderInFileView'].toggled)
                                   : settingsButtons['showFoldersOnly'].toggled
                                   : filters[1].array"
     >
@@ -888,8 +888,8 @@
       <ng-container *ngIf="appState.currentView === 'showThumbnails'">
         <app-gallery-item
           *ngFor="let item of scroll.viewPortItems"
-          (click)="handleClick($event, item)"
-          (contextmenu)="rightMouseClicked($event, item)"
+          (contextmenu)="(item.cleanName === '***') ? doNothing() : rightMouseClicked($event, item)"
+          (click)="(item.cleanName === '***') ? handleFolderWordClicked(item.partialPath) : handleClick($event, item)"
 
           [elHeight]="currentViewImgHeight + textPaddingHeight"
           [elWidth]="previewWidth"
@@ -966,8 +966,8 @@
         <app-clip-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (click)="handleClick($event, item)"
-          (contextmenu)="rightMouseClicked($event, item)"
+          (contextmenu)="(item.cleanName === '***') ? doNothing() : rightMouseClicked($event, item)"
+          (click)="(item.cleanName === '***') ? handleFolderWordClicked(item.partialPath) : handleClick($event, item)"
 
           [video]="item"
 

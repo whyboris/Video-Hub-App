@@ -6,6 +6,96 @@
   class="filmstrip-container"
 >
 
+<div *ngIf="video.cleanName === '***'; else fileNameBlock">
+  <div
+    #filmstripHolder
+    class="video-box"
+    [ngStyle]="{
+        height: imgHeight + 'px',
+        'border': 'dashed white'
+      }"
+  >
+  <video
+    *ngIf="noError && autoplay"
+    [src]="'file://' + folderPath + '/' + folderThumbPaths[0]"
+    [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[0])"
+    [ngStyle]="{
+        height: '50%',
+        width: '50%',
+        position: 'absolute'
+      }"
+    onmouseover="this.muted = false;"
+    onmouseout="this.muted = true;"
+    onloadstart="this.muted = true;"
+    loop
+    autoplay
+  ></video>
+  <video
+    *ngIf="noError && autoplay"
+    [src]="'file://' + folderPath + '/' + folderThumbPaths[1]"
+    [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[1])"
+    [ngStyle]="{
+        height: '50%',
+        width: '50%',
+        left: '50%',
+        position: 'absolute'
+      }"
+    onmouseover="this.muted = false;"
+    onmouseout="this.muted = true;"
+    onloadstart="this.muted = true;"
+    loop
+    autoplay
+  ></video>
+  <video
+    *ngIf="noError && autoplay"
+    [src]="'file://' + folderPath + '/' + folderThumbPaths[2]"
+    [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[2])"
+    [ngStyle]="{
+        height: '50%',
+        width: '50%',
+        top: '50%',
+        position: 'absolute'
+      }"
+    onmouseover="this.muted = false;"
+    onmouseout="this.muted = true;"
+    onloadstart="this.muted = true;"
+    loop
+    autoplay
+  ></video>
+  <video
+    *ngIf="noError && autoplay"
+    [src]="'file://' + folderPath + '/' + folderThumbPaths[3]"
+    [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[3])"
+    [ngStyle]="{
+        height: '50%',
+        width: '50%',
+        left: '50%',
+        top: '50%',
+        position: 'absolute'
+      }"
+    onmouseover="this.muted = false;"
+    onmouseout="this.muted = true;"
+    onloadstart="this.muted = true;"
+    loop
+    autoplay
+  ></video>
+</div>
+
+<span
+  *ngIf="showMeta"
+  [ngClass]="{ 'larger-font': largerFont }"
+  [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
+  class="title"
+>
+  {{ video.fileName }}
+  <div class="fileSize" *ngIf="showMeta">
+    {{ '(' + video.fileSize + ')' }}
+  </div>
+</span>
+</div>
+
+<ng-template #fileNameBlock>
+
 <div
   class="video-box"
   [ngStyle]="{ height: imgHeight + 'px' }"
@@ -51,5 +141,5 @@
     {{ showMeta ? '(' + video.fileSizeDisplay + ')' : '' }}
   </div>
 </span>
-
+</ng-template>
 </div>
