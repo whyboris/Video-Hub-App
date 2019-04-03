@@ -874,7 +874,8 @@
 
                 | folderViewPipe: settingsButtons['showFoldersOnly'].toggled
                                   || (appState.currentView === 'showFiles' && settingsButtons['showFolderInFileView'].toggled)
-                                  : settingsButtons['showFoldersOnly'].toggled"
+                                  : settingsButtons['showFoldersOnly'].toggled
+                                  : filters[1].array"
     >
 
     <!-- 24 above is 20 pixels for element and 4 for the fudge factor -->
