@@ -331,7 +331,7 @@ ipc.on('just-started', function (event, someMessage) {
   globals.angularApp = event;
   globals.winRef = win;
 
-  fs.readFile(path.join(pathToAppData, 'video-hub-app', 'settings.json'), (err, data) => {
+  fs.readFile(path.join(pathToAppData, 'video-hub-app', 'settings2.json'), (err, data) => {
     if (err) {
       win.setBounds({ x: 0, y: 0, width: screenWidth, height: screenHeight });
       event.sender.send('pleaseOpenWizard', true); // firstRun = true!
@@ -490,7 +490,7 @@ ipc.on('close-window', function (event, settingsToSave: SettingsObject, savableP
   }
 
   // TODO -- catch bug if user closes before selecting the output folder ?!??
-  fs.writeFile(path.join(pathToAppData, 'video-hub-app', 'settings.json'), json, 'utf8', () => {
+  fs.writeFile(path.join(pathToAppData, 'video-hub-app', 'settings2.json'), json, 'utf8', () => {
     if (savableProperties !== null) {
       lastSavedFinalObject.addTags = savableProperties.addTags;
       lastSavedFinalObject.removeTags = savableProperties.removeTags;
