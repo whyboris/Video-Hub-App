@@ -888,9 +888,11 @@
       <ng-container *ngIf="appState.currentView === 'showThumbnails'">
         <app-gallery-item
           *ngFor="let item of scroll.viewPortItems"
+          (videoClick)="handleClick($event, item)"
+          (sheetClick)="this.openThumbnailSheet(item)"
+          (contextmenu)="rightMouseClicked($event, item)"
 
           (click)="(item.cleanName === '***') ? handleFolderWordClicked(item.partialPath) : handleClick($event, item)"
-          (contextmenu)="(item.cleanName === '***') ? doNothing() : rightMouseClicked($event, item)"
 
           [elHeight]="previewHeight + textPaddingHeight"
           [elWidth]="previewWidth"

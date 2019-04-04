@@ -88,6 +88,7 @@
     #filmstripHolder
     class="video-box"
     (mousemove)="mouseIsMoving($event)"
+    (click)="videoClick.emit($event)"
     [ngStyle]="{
         height: imgHeight + 'px',
         'background-image': 'url(' + (hover ? fullFilePath : firstFilePath) + ')',
@@ -112,7 +113,9 @@
       {{ showMeta ? '(' + video.fileSizeDisplay + ')' : '' }}
     </div>
   </span>
+  <app-icon
+  class="sheet-icon"
+  [icon]="'icon-show-thumbnails'"
+  (click)="sheetClick.emit()"></app-icon>
 </ng-template>
-
-
 </div>

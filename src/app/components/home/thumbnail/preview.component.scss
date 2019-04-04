@@ -16,6 +16,15 @@
   position: relative;
 }
 
+.sheet-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 16px;
+  width: 16px;
+  fill: white;
+}
+
 .folder-item {
   background-color: black;
   background-size: cover;
