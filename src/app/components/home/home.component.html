@@ -816,9 +816,6 @@
           'gallery-dark-scroll': settingsButtons['darkMode'].toggled
         }"
       [bufferAmount]="0"
-      [childHeight]="currentViewImgHeight + textPaddingHeight + 20
-                      + ( appState.currentView === 'showThumbnails' ? 4 : 0)
-                      - ( appState.currentView === 'showFiles' ? ( currentViewImgHeight + 10 ) : 0)"
       [items]="finalArray
                 | magicSearchPipe: magicSearchString
 
