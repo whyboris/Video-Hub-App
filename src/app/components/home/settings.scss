@@ -176,7 +176,6 @@ h3 {
   color: $black;
   font-size: 14px;
   left: 80px;
-  overflow: hidden;
   position: absolute;
   top: 2px;
 }
@@ -290,17 +289,25 @@ input[type="radio"]:checked:before {
 }
 
 .tooltip-text {
-  opacity: 0;
-  transition-delay: 500ms;
-  transition-duration: 500ms;
-  transition-property: opacity;
+  visibility: hidden;
+  width: 120px;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 5px;
+  border-radius: 6px;
+
+  /* Position the tooltip text - see examples below! */
+  width: 70vw;
+  bottom: 100%;
+  left: 10px;
+  margin-left: -60px; /* Use half of the width (120/2 = 60), to center the tooltip */
+  position: absolute;
+  z-index: 1;
 }
 
 .more-info:hover + .tooltip-text {
-  opacity: 1;
-  transition-delay: 0ms;
-  transition-duration: 0ms;
-  transition-property: opacity;
+  visibility: visible;
 }
 
 .sortDropdown {
