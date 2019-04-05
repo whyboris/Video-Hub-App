@@ -873,7 +873,7 @@
                 | sortingPipe: sortType : shuffleTheViewNow
 
                 | folderViewPipe: settingsButtons['showFoldersOnly'].toggled
-                                  || (settingsButtons['showFolderInFileView'].toggled)
+                                  || (settingsButtons['showFolderInFileView'].toggled && sortType === 'default')
                                   : settingsButtons['showFoldersOnly'].toggled
                                   : filters[1].array"
     >
