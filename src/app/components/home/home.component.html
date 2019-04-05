@@ -872,8 +872,10 @@
 
                 | sortingPipe: sortType : shuffleTheViewNow
 
-                | folderViewPipe: settingsButtons['showFoldersOnly'].toggled
-                                  || (settingsButtons['showFolderInFileView'].toggled && sortType === 'default')
+                | folderViewPipe: (settingsButtons['showFolderInFileView'].toggled && sortType === 'default')
+                                  && (appState.currentView === 'showThumbnails' ||
+                                      appState.currentView === 'showFiles' ||
+                                      appState.currentView === 'showClips')
                                   : settingsButtons['showFoldersOnly'].toggled
                                   : filters[1].array"
     >
