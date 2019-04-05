@@ -8,7 +8,6 @@ export type SupportedView = 'showThumbnails'
                           | 'showFullView'
                           | 'showDetails'
                           | 'showFiles'
-                          | 'showFoldersOnly'
                           | 'showClips';
 
 export const allSupportedViews: SupportedView[] = [
@@ -17,7 +16,6 @@ export const allSupportedViews: SupportedView[] = [
   'showFullView',
   'showDetails',
   'showFiles',
-  'showFoldersOnly',
   'showClips',
 ];
 

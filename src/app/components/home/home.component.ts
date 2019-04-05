@@ -863,7 +863,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.settingsButtons['showDetails'].toggled = false;
     this.settingsButtons['showFiles'].toggled = false;
     this.settingsButtons['showFilmstrip'].toggled = false;
-    this.settingsButtons['showFoldersOnly'].toggled = false;
     this.settingsButtons['showFullView'].toggled = false;
     this.settingsButtons['showThumbnails'].toggled = false;
   }
@@ -909,11 +908,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.toggleAllViewsButtonsOff();
       this.toggleButtonTrue(uniqueKey);
       this.restoreViewSize(uniqueKey);
-      if (uniqueKey === 'showFoldersOnly') {
-        this.appState.currentView = 'showFiles';
-      } else {
-        this.appState.currentView = <SupportedView>uniqueKey;
-      }
+      this.appState.currentView = <SupportedView>uniqueKey;
       this.computeTextBufferAmount();
       this.scrollToTop();
 

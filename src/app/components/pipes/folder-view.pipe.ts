@@ -15,11 +15,10 @@ export class FolderViewPipe implements PipeTransform {
    * @param render      whether to insert folders
    * @param folderOnly  whether to ONLY show folders
    */
-  transform(finalArray: ImageElement[], render: boolean, folderOnly: boolean, prefixPath?: string[]): any[] {
+  transform(finalArray: ImageElement[], render: boolean, prefixPath?: string[]): any[] {
     if (render) {
       const arrWithFolders = [];
 
-      let previousFolder = '';
       let previousPath = '';
 
       if (prefixPath.length) {
@@ -48,63 +47,36 @@ export class FolderViewPipe implements PipeTransform {
         prefixPath = [''];
       }
       finalArray.forEach((element, index) => {
-        if (prefixPath.length) {
-          const path = element.partialPath.substring(prefixPath[0].length + 1).split('/');
-          if (!folderOnly && element.partialPath === prefixPath[0]) {
-            arrWithFolders.push(element);
-          } else if (path.length >= 1) {
-            if (path[0] !== previousPath) {
-              const tempClone: ImageElement = {
-                cleanName: '***',
-                duration: 0,
-                durationDisplay: '',
-                fileName: path[0],
-                fileSize: 1,
-                fileSizeDisplay: '',
-                hash: element.hash,
-                height: 0,
-                index: 0,
-                mtime: 0,
-                partialPath: prefixPath + '/' + path[0],
-                resBucket: 0,
-                resolution: '',
-                screens: 10, // temp hardcoded
-                stars: 0.5,
-                timesPlayed: 0,
-                width: 0,
-              };
-              arrWithFolders.push(tempClone);
-              previousPath = path[0];
-            } else {
-              arrWithFolders[arrWithFolders.length - 1].fileSize++;
-              arrWithFolders[arrWithFolders.length - 1].hash += ':' + element.hash;
-            }
-          }
-        } else if (previousFolder !== element.partialPath) {
-          const tempClone: ImageElement = {
-            cleanName: '***',
-            duration: 0,
-            durationDisplay: '',
-            fileName: element.fileName,
-            fileSize: 0,
-            fileSizeDisplay: '',
-            hash: '',
-            height: 0,
-            index: 0,
-            mtime: 0,
-            partialPath: element.partialPath,
-            resBucket: 0,
-            resolution: '',
-            screens: 10, // temp hardcoded
-            stars: 0.5,
-            timesPlayed: 0,
-            width: 0,
-          };
-
-          arrWithFolders.push(tempClone);
-          previousFolder = element.partialPath;
-        } else if (!folderOnly) {
+        const path = element.partialPath.substring(prefixPath[0].length + 1).split('/');
+        if (element.partialPath === prefixPath[0]) {
           arrWithFolders.push(element);
+        } else if (path.length >= 1) {
+          if (path[0] !== previousPath) {
+            const tempClone: ImageElement = {
+              cleanName: '***',
+              duration: 0,
+              durationDisplay: '',
+              fileName: path[0],
+              fileSize: 1,
+              fileSizeDisplay: '',
+              hash: element.hash,
+              height: 0,
+              index: 0,
+              mtime: 0,
+              partialPath: prefixPath + '/' + path[0],
+              resBucket: 0,
+              resolution: '',
+              screens: 10, // temp hardcoded
+              stars: 0.5,
+              timesPlayed: 0,
+              width: 0,
+            };
+            arrWithFolders.push(tempClone);
+            previousPath = path[0];
+          } else {
+            arrWithFolders[arrWithFolders.length - 1].fileSize++;
+            arrWithFolders[arrWithFolders.length - 1].hash += ':' + element.hash;
+          }
         }
       });
 
