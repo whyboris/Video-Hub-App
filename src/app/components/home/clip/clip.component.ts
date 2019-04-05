@@ -43,7 +43,6 @@ export class ClipComponent implements OnInit {
   ngOnInit() {
     // multiple hashes?
     if (this.video.hash.indexOf(':') !== -1) {
-      console.log('test');
       const hashes = this.video.hash.split(':');
 
       this.shuffle(hashes).slice(0, 4).forEach((hash) => {

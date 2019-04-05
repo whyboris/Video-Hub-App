@@ -56,7 +56,6 @@ export class PreviewComponent implements OnInit {
   ngOnInit() {
     // multiple hashes?
     if (this.video.hash.indexOf(':') !== -1) {
-      console.log('test');
       const hashes = this.video.hash.split(':');
       this.shuffle(hashes).slice(0, 4).forEach((hash) => {
         this.folderThumbPaths.push('file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/thumbnails/' + hash + '.jpg');

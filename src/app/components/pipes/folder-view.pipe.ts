@@ -22,7 +22,6 @@ export class FolderViewPipe implements PipeTransform {
       let previousFolder = '';
       let previousPath = '';
 
-      console.log(prefixPath);
       if (prefixPath.length) {
         const upButton: ImageElement = {
           cleanName: '***',
@@ -74,7 +73,6 @@ export class FolderViewPipe implements PipeTransform {
                 timesPlayed: 0,
                 width: 0,
               };
-              console.log(tempClone);
               arrWithFolders.push(tempClone);
               previousPath = path[0];
             } else {

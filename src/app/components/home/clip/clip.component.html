@@ -16,7 +16,7 @@
       }"
   >
   <video
-    *ngIf="noError && !autoplay"
+    *ngIf="noError && !autoplay && folderThumbPaths[0]"
     [src]="'file://' + folderPath + '/' + folderThumbPaths[0]"
     [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[0])"
     [ngStyle]="{
@@ -29,7 +29,7 @@
     loop
   ></video>
   <video
-    *ngIf="noError && !autoplay"
+    *ngIf="noError && !autoplay && folderThumbPaths[1]"
     [src]="'file://' + folderPath + '/' + folderThumbPaths[1]"
     [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[1])"
     [ngStyle]="{
@@ -43,7 +43,7 @@
     loop
   ></video>
   <video
-    *ngIf="noError && !autoplay"
+    *ngIf="noError && !autoplay && folderThumbPaths[2]"
     [src]="'file://' + folderPath + '/' + folderThumbPaths[2]"
     [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[2])"
     [ngStyle]="{
@@ -57,7 +57,7 @@
     loop
   ></video>
   <video
-    *ngIf="noError && !autoplay"
+    *ngIf="noError && !autoplay && folderThumbPaths[3]"
     [src]="'file://' + folderPath + '/' + folderThumbPaths[3]"
     [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[3])"
     [ngStyle]="{
@@ -72,7 +72,7 @@
     loop
   ></video>
   <video
-    *ngIf="noError && autoplay"
+    *ngIf="noError && autoplay && folderThumbPaths[0]"
     [src]="'file://' + folderPath + '/' + folderThumbPaths[0]"
     [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[0])"
     [ngStyle]="{
@@ -87,7 +87,7 @@
     autoplay
   ></video>
   <video
-    *ngIf="noError && autoplay"
+    *ngIf="noError && autoplay && folderThumbPaths[1]"
     [src]="'file://' + folderPath + '/' + folderThumbPaths[1]"
     [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[1])"
     [ngStyle]="{
@@ -103,7 +103,7 @@
     autoplay
   ></video>
   <video
-    *ngIf="noError && autoplay"
+    *ngIf="noError && autoplay && folderThumbPaths[2]"
     [src]="'file://' + folderPath + '/' + folderThumbPaths[2]"
     [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[2])"
     [ngStyle]="{
@@ -119,7 +119,7 @@
     autoplay
   ></video>
   <video
-    *ngIf="noError && autoplay"
+    *ngIf="noError && autoplay && folderThumbPaths[3]"
     [src]="'file://' + folderPath + '/' + folderThumbPaths[3]"
     [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[3])"
     [ngStyle]="{
