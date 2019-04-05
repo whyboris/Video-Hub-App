@@ -9,11 +9,10 @@
 <div *ngIf="video.cleanName === '***'; else fileNameBlock">
   <div
     #filmstripHolder
-    class="video-box"
+    class="video-box folder"
     [ngStyle]="{
-        height: imgHeight + 'px',
-        'border': 'dashed white'
-      }"
+        height: imgHeight + 'px'
+    }"
   >
   <video
     *ngIf="noError && !autoplay && folderThumbPaths[0]"

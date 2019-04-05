@@ -9,12 +9,11 @@
 <div *ngIf="video.cleanName === '***'; else fileNameBlock">
   <div
     #filmstripHolder
-    class="video-box"
+    class="video-box folder"
     (mousemove)="mouseIsMoving($event)"
     [ngStyle]="{
-        height: imgHeight + 'px',
-        'border': 'dashed white'
-      }"
+        height: imgHeight + 'px'
+    }"
   >
     <div
       *ngIf="folderThumbPaths[0]"
