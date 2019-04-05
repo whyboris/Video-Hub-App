@@ -16,6 +16,62 @@
       }"
   >
   <video
+    *ngIf="noError && !autoplay"
+    [src]="'file://' + folderPath + '/' + folderThumbPaths[0]"
+    [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[0])"
+    [ngStyle]="{
+        height: '50%',
+        width: '50%',
+        position: 'absolute'
+      }"
+    onmouseover="this.play().catch((err) => {this.load()})"
+    onmouseout="this.pause()"
+    loop
+  ></video>
+  <video
+    *ngIf="noError && !autoplay"
+    [src]="'file://' + folderPath + '/' + folderThumbPaths[1]"
+    [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[1])"
+    [ngStyle]="{
+        height: '50%',
+        width: '50%',
+        left: '50%',
+        position: 'absolute'
+      }"
+    onmouseover="this.play().catch((err) => {this.load()})"
+    onmouseout="this.pause()"
+    loop
+  ></video>
+  <video
+    *ngIf="noError && !autoplay"
+    [src]="'file://' + folderPath + '/' + folderThumbPaths[2]"
+    [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[2])"
+    [ngStyle]="{
+        height: '50%',
+        width: '50%',
+        top: '50%',
+        position: 'absolute'
+      }"
+    onmouseover="this.play().catch((err) => {this.load()})"
+    onmouseout="this.pause()"
+    loop
+  ></video>
+  <video
+    *ngIf="noError && !autoplay"
+    [src]="'file://' + folderPath + '/' + folderThumbPaths[3]"
+    [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[3])"
+    [ngStyle]="{
+        height: '50%',
+        width: '50%',
+        left: '50%',
+        top: '50%',
+        position: 'absolute'
+      }"
+    onmouseover="this.play().catch((err) => {this.load()})"
+    onmouseout="this.pause()"
+    loop
+  ></video>
+  <video
     *ngIf="noError && autoplay"
     [src]="'file://' + folderPath + '/' + folderThumbPaths[0]"
     [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[0])"
