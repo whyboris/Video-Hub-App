@@ -31,7 +31,7 @@ export class FolderViewPipe implements PipeTransform {
           fileSizeDisplay: '',
           hash: '',
           height: 0,
-          index: 0,
+          index: -1, // always show at the top
           mtime: 0,
           partialPath: prefixPath[0].substring(0, prefixPath[0].lastIndexOf('/')),
           resBucket: 0,
