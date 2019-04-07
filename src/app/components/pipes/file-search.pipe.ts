@@ -59,7 +59,7 @@ export class FileSearchPipe implements PipeTransform {
               searchString += ' ' + item.cleanName;
             }
             if (autoFolderTags) {
-              searchString += ' ' + item.partialPath.replace(/(\/|\\)/, ' ');
+              searchString += ' ' + item.partialPath.replace(/(\/)/, ' ');
             }
           }
           if (searchString.toLowerCase().indexOf(element.toLowerCase()) !== -1) {
