@@ -57,12 +57,12 @@ export class FolderViewPipe implements PipeTransform {
               duration: 0,
               durationDisplay: '',
               fileName: path[0],
-              fileSize: 1,
-              fileSizeDisplay: '',
+              fileSize: element.fileSize,
+              fileSizeDisplay: '1',
               hash: element.hash,
               height: 0,
-              index: 0,
-              mtime: 0,
+              index: element.index,
+              mtime: element.mtime,
               partialPath: prefixPath + '/' + path[0],
               resBucket: 0,
               resolution: '',
@@ -74,7 +74,14 @@ export class FolderViewPipe implements PipeTransform {
             arrWithFolders.push(tempClone);
             previousPath = path[0];
           } else {
-            arrWithFolders[arrWithFolders.length - 1].fileSize++;
+            // Folder stats will be the sum of the video stats within them
+            arrWithFolders[arrWithFolders.length - 1].fileSize += element.fileSize;
+            arrWithFolders[arrWithFolders.length - 1].fileSizeDisplay =
+                  parseFloat(arrWithFolders[arrWithFolders.length - 1].fileSizeDisplay) + 1;
+            arrWithFolders[arrWithFolders.length - 1].duration += element.duration;
+            arrWithFolders[arrWithFolders.length - 1].timesPlayed += element.timesPlayed;
+            arrWithFolders[arrWithFolders.length - 1].mtime = Math.max(arrWithFolders[arrWithFolders.length - 1].mtime, element.mtime);
+            arrWithFolders[arrWithFolders.length - 1].stars += element.stars - 0.5;
             arrWithFolders[arrWithFolders.length - 1].hash += ':' + element.hash;
           }
         }

@@ -870,13 +870,13 @@
 
                 | countPipe
 
-                | sortingPipe: sortType : shuffleTheViewNow
-
-                | folderViewPipe: (settingsButtons['showFolders'].toggled && sortType === 'default')
+                | folderViewPipe: (settingsButtons['showFolders'].toggled)
                                   && (appState.currentView === 'showThumbnails' ||
                                       appState.currentView === 'showFiles' ||
                                       appState.currentView === 'showClips')
-                                  : filters[1].array"
+                                  : filters[1].array
+
+                | sortingPipe: sortType : shuffleTheViewNow"
     >
 
     <!-- 24 above is 20 pixels for element and 4 for the fudge factor -->
