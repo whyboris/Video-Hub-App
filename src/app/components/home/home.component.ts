@@ -1083,7 +1083,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
         || this.appState.currentView === 'showThumbnails'
         || this.appState.currentView === 'showDetails') {
       this.previewWidth = (this.galleryWidth / this.currentViewPerRow) - 40; // 40px margin
-    } else if ( this.appState.currentView === 'showFilmstrip' ) {
+    } else if ( this.appState.currentView === 'showFilmstrip'
+             || this.appState.currentView === 'showFullView' ) {
       this.previewWidth = ((this.galleryWidth - 30) / this.currentViewPerRow);
     }
     this.currentViewImgHeight = this.previewWidth * (9 / 16);
