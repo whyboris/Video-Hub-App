@@ -1078,13 +1078,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Computes the preview width for thumbnails view
    */
   public computePreviewWidth(): void {
+    this.updateGalleryWidthMeasurement();
     if (   this.appState.currentView === 'showClips'
         || this.appState.currentView === 'showThumbnails'
         || this.appState.currentView === 'showDetails') {
-      this.updateGalleryWidthMeasurement();
       this.previewWidth = (this.galleryWidth / this.currentViewPerRow) - 40; // 40px margin
-      this.currentViewImgHeight = this.previewWidth * (9 / 16);
+    } else if ( this.appState.currentView === 'showFilmstrip' ) {
+      this.previewWidth = ((this.galleryWidth - 30) / this.currentViewPerRow);
     }
+    this.currentViewImgHeight = this.previewWidth * (9 / 16);
   }
 
   /**
