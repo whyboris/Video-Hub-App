@@ -20,7 +20,7 @@ import { SortType } from '../pipes/sorting.pipe';
 import { TagEmission, StarEmission, YearEmission } from './details/details.component';
 import { WizardOptions } from '../common/wizard-options.interface';
 
-import { AppState, SupportedLanguage, defaultHeights, ImageHeights, allSupportedViews, SupportedView } from '../common/app-state';
+import { AppState, SupportedLanguage, defaultImgsPerRow, RowNumbers, allSupportedViews, SupportedView } from '../common/app-state';
 import { Filters, filterKeyToIndex, FilterKeyNames } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, SettingsMetaGroup } from '../common/settings-buttons';
 
@@ -124,10 +124,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   appMaximized = false;
 
-  imgHeight: ImageHeights = defaultHeights;
+  imgsPerRow: RowNumbers = defaultImgsPerRow;
 
   currentViewImgHeight: number = 144;
-  currentViewPerRow: number = 4;
+  currentImgsPerRow: number = 5;
 
   progressNum1 = 0;
   progressNum2 = 100;
@@ -649,7 +649,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public initiateClose(): void {
-    this.appState.imgHeight = this.imgHeight;
+    this.savePreviousViewSize();
+    this.appState.imgsPerRow = this.imgsPerRow;
     this.electronService.ipcRenderer.send('close-window', this.getSettingsForSave(), this.saveVhaIfNeeded());
   }
 
@@ -890,14 +891,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Save the current view image size
    */
   savePreviousViewSize(): void {
-    this.imgHeight[this.appState.currentView] = this.currentViewImgHeight;
+    this.imgsPerRow[this.appState.currentView] = this.currentImgsPerRow;
   }
 
   /**
    * Restore the image height for the particular view
    */
   restoreViewSize(view: string): void {
-    this.currentViewImgHeight = this.imgHeight[view];
+    this.currentImgsPerRow = this.imgsPerRow[view];
   }
 
   /**
@@ -1062,7 +1063,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Decrease preview size
    */
   public decreaseSize(): void {
-    this.currentViewPerRow++;
+    this.currentImgsPerRow++;
     this.computePreviewWidth();
   }
 
@@ -1070,7 +1071,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Increase preview size
    */
   public increaseSize(): void {
-    this.currentViewPerRow--;
+    if (this.currentImgsPerRow > 1) {
+      this.currentImgsPerRow--;
+    }
     this.computePreviewWidth();
   }
 
@@ -1082,10 +1085,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if (   this.appState.currentView === 'showClips'
         || this.appState.currentView === 'showThumbnails'
         || this.appState.currentView === 'showDetails') {
-      this.previewWidth = (this.galleryWidth / this.currentViewPerRow) - 40; // 40px margin
+      this.previewWidth = (this.galleryWidth / this.currentImgsPerRow) - 40; // 40px margin
     } else if ( this.appState.currentView === 'showFilmstrip'
              || this.appState.currentView === 'showFullView' ) {
-      this.previewWidth = ((this.galleryWidth - 30) / this.currentViewPerRow);
+      this.previewWidth = ((this.galleryWidth - 30) / this.currentImgsPerRow);
     }
     this.currentViewImgHeight = this.previewWidth * (9 / 16);
   }
@@ -1293,8 +1296,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (!settingsObject.appState.currentZoomLevel) {  // catch error <-- old VHA apps didn't have `currentZoomLevel`
         this.appState.currentZoomLevel = 1;
       }
+      if (!settingsObject.appState.imgsPerRow) {
+        this.appState.imgsPerRow = defaultImgsPerRow;
+      }
     }
-    this.imgHeight = this.appState.imgHeight;
+    this.imgsPerRow = this.appState.imgsPerRow;
+    this.currentImgsPerRow = this.imgsPerRow[this.appState.currentView];
     this.grabAllSettingsKeys().forEach(element => {
       if (settingsObject.buttonSettings[element]) {
         this.settingsButtons[element].toggled = settingsObject.buttonSettings[element].toggled;
