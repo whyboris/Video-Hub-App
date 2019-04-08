@@ -127,6 +127,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   imgHeight: ImageHeights = defaultHeights;
 
   currentViewImgHeight: number = 144;
+  currentViewPerRow: number = 4;
 
   progressNum1 = 0;
   progressNum2 = 100;
@@ -535,7 +536,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.updateGalleryWidthMeasurement(); // so that fullView knows its size
+    this.computePreviewWidth(); // so that fullView knows its size
     // this is required, otherwise when user drops the file, it opens as plaintext
     document.ondragover = document.ondrop = (ev) => {
       ev.preventDefault();
@@ -564,9 +565,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.myTimeout = setTimeout(() => {
       // console.log('Virtual scroll refreshed');
       this.virtualScroller.refresh();
-      if (this.appState.currentView === 'showFullView') {
-        this.updateGalleryWidthMeasurement();
-      }
+      this.computePreviewWidth();
     }, delay);
   }
 
@@ -770,7 +769,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   showSidebar(): void {
     if (this.settingsButtons['hideSidebar'].toggled) {
       this.toggleButton('hideSidebar');
-      this.updateGalleryWidthMeasurement();
+      this.computePreviewWidth();
     }
   }
 
@@ -932,10 +931,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // ======== Other buttons ========================
     } else if (uniqueKey === 'makeSmaller') {
       this.decreaseSize();
-      this.updateGalleryWidthMeasurement();
     } else if (uniqueKey === 'makeLarger') {
       this.increaseSize();
-      this.updateGalleryWidthMeasurement();
     } else if (uniqueKey === 'startWizard') {
       this.startWizard();
     } else if (uniqueKey === 'clearHistory') {
@@ -968,7 +965,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (uniqueKey === 'hideSidebar') {
         setTimeout(() => {
           this.virtualScroller.refresh();
-          this.updateGalleryWidthMeasurement();
+          this.computePreviewWidth();
         }, 300);
       }
     }
@@ -1065,9 +1062,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Decrease preview size
    */
   public decreaseSize(): void {
-    if (this.currentViewImgHeight > 100) {
-      this.currentViewImgHeight = this.currentViewImgHeight - 36;
-    }
+    this.currentViewPerRow++;
     this.computePreviewWidth();
   }
 
@@ -1075,9 +1070,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Increase preview size
    */
   public increaseSize(): void {
-    if (this.currentViewImgHeight < 500) {
-      this.currentViewImgHeight = this.currentViewImgHeight + 36;
-    }
+    this.currentViewPerRow--;
     this.computePreviewWidth();
   }
 
@@ -1088,7 +1081,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if (   this.appState.currentView === 'showClips'
         || this.appState.currentView === 'showThumbnails'
         || this.appState.currentView === 'showDetails') {
-      this.previewWidth = this.currentViewImgHeight * (16 / 9);
+      this.updateGalleryWidthMeasurement();
+      this.previewWidth = (this.galleryWidth / this.currentViewPerRow) - 40; // 40px margin
+      this.currentViewImgHeight = this.previewWidth * (9 / 16);
     }
   }
 
@@ -1096,7 +1091,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Compute and update the galleryWidth
    */
   public updateGalleryWidthMeasurement(): void {
-    this.galleryWidth = document.getElementById('scrollDiv').getBoundingClientRect().width;
+    this.galleryWidth = document.getElementById('scrollDiv').getBoundingClientRect().width - 20;
   }
 
   /**
