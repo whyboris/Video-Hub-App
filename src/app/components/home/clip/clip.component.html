@@ -144,7 +144,7 @@
 >
   {{ video.fileName }}
   <div class="fileSize" *ngIf="showMeta">
-    {{ '(' + video.fileSize + ')' }}
+    {{ video.fileSize | fileSizePipe }} [{{ video.fileSizeDisplay }} files]
   </div>
 </span>
 </div>
