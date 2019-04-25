@@ -36,7 +36,7 @@ export class WordFrequencyPipe implements PipeTransform {
           this.wordFrequencyService.addString(element.cleanName);
         }
         if (showAutoFolderTags) {
-          this.wordFrequencyService.addString(element.partialPath.replace(/(\/|\\)/g, ' '));
+          this.wordFrequencyService.addString(element.partialPath.replace(/(\/)/g, ' '));
         }
       });
 

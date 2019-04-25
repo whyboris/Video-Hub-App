@@ -14,8 +14,6 @@ export class TopComponent {
   private _folder = '';
   @Input() set folderString(folderString: string) {
     this._folder = (folderString && folderString.trim()) || '';
-    // Turn backslashes into forward slashes
-    this._folder = this._folder.replace(/\\/g, '/');
     this.folderNameArray = this._folder.split('/');
   }
   get folderString(): string { return this._folder; }

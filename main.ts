@@ -194,7 +194,8 @@ import {
   missingThumbsIndex,
   sendCurrentProgress,
   updateFinalArrayWithHD,
-  writeVhaFileToDisk
+  writeVhaFileToDisk,
+  regenerateLibrary
 } from './main-support';
 
 import { FinalObject, ImageElement } from './src/app/components/common/final-object.interface';
@@ -330,7 +331,7 @@ ipc.on('just-started', function (event, someMessage) {
   globals.angularApp = event;
   globals.winRef = win;
 
-  fs.readFile(path.join(pathToAppData, 'video-hub-app', 'settings.json'), (err, data) => {
+  fs.readFile(path.join(pathToAppData, 'video-hub-app', 'settings2.json'), (err, data) => {
     if (err) {
       win.setBounds({ x: 0, y: 0, width: screenWidth, height: screenHeight });
       event.sender.send('pleaseOpenWizard', true); // firstRun = true!
@@ -464,6 +465,15 @@ ipc.on('rescan-current-directory', function (event, currentAngularFinalArray: Im
 });
 
 /**
+ * Initiate regenerating the library
+ */
+ipc.on('regenerate-library', function (event, currentAngularFinalArray: ImageElement[]) {
+  const currentVideoFolder = globals.selectedSourceFolder;
+  globals.cancelCurrentImport = false;
+  regenerateMetadata(currentAngularFinalArray, currentVideoFolder);
+});
+
+/**
  * Close the window / quit / exit the app
  */
 ipc.on('close-window', function (event, settingsToSave: SettingsObject, savableProperties: SavableProperties) {
@@ -480,7 +490,7 @@ ipc.on('close-window', function (event, settingsToSave: SettingsObject, savableP
   }
 
   // TODO -- catch bug if user closes before selecting the output folder ?!??
-  fs.writeFile(path.join(pathToAppData, 'video-hub-app', 'settings.json'), json, 'utf8', () => {
+  fs.writeFile(path.join(pathToAppData, 'video-hub-app', 'settings2.json'), json, 'utf8', () => {
     if (savableProperties !== null) {
       lastSavedFinalObject.addTags = savableProperties.addTags;
       lastSavedFinalObject.removeTags = savableProperties.removeTags;
@@ -634,6 +644,43 @@ function reScanDirectory(angularFinalArray: ImageElement[], currentVideoFolder: 
     const folderToDeleteFrom = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
 
     updateFinalArrayWithHD(
+      angularFinalArray,
+      videosOnHD,
+      currentVideoFolder,
+      globals.screenshotSettings,
+      folderToDeleteFrom,
+      sendFinalResultHome           // callback for when `extractAllMetadata` is called
+    );
+
+  } else {
+    sendCurrentProgress(1, 1, 0);
+    dialog.showMessageBox({
+      message: 'Directory ' + currentVideoFolder + ' does not exist',
+      buttons: ['OK']
+    });
+  }
+}
+
+/**
+ * Completely regenerate the library and metadata, but preserve thumbnails and user generated metadata
+ * Useful when new metadata is added eg.
+ *
+ * @param angularFinalArray  ImageElment[] from Angular (might have renamed files)
+ * @param currentVideoFolder
+ */
+function regenerateMetadata(angularFinalArray: ImageElement[], currentVideoFolder: string) {
+
+  // rescan the source directory
+  if (fs.existsSync(currentVideoFolder)) {
+    let videosOnHD: ImageElement[] = getVideoPathsAndNames(currentVideoFolder);
+
+    if (demo) {
+      videosOnHD = videosOnHD.slice(0, 50);
+    }
+
+    const folderToDeleteFrom = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
+
+    regenerateLibrary(
       angularFinalArray,
       videosOnHD,
       currentVideoFolder,

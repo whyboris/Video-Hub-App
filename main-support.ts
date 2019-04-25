@@ -149,6 +149,8 @@ export function countFoldersInFinalArray(imagesArray: ImageElement[]): number {
  * @param done          -- function to execute when done writing the file
  */
 export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: string, done): void {
+  const inputDir = finalObject.inputDir;
+
   // check for relative paths
   if (finalObject.inputDir === path.parse(pathToTheFile).dir) {
     finalObject.inputDir = '';
@@ -157,9 +159,21 @@ export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: stri
   finalObject.images = stripOutTemporaryFields(finalObject.images);
 
   const json = JSON.stringify(finalObject);
+
+  // backup current file
+  try {
+  fs.renameSync(pathToTheFile, pathToTheFile + '.bak');
+  } catch (err) {
+    console.log('Error backup up file! Moving on...');
+    console.log(err);
+  }
+
   // write the file
   fs.writeFile(pathToTheFile, json, 'utf8', done);
   // CATCH ERRORS !?!!?!!
+
+  // Restore the inputDir incase we removed it
+  finalObject.inputDir = inputDir;
 }
 
 /**
@@ -230,8 +244,8 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
           } else {
             const extension = file.name.split('.').pop();
             if (acceptableFiles.includes(extension.toLowerCase()) && !file.name.match(fileIgnoreRegex)) {
-              // before adding, remove the redundant prefix: sourceFolderPath
-              const partialPath = dir.replace(sourceFolderPath, '');
+              // before adding, remove the redundant prefix: sourceFolderPath, and convert forward slashes into back slashes
+              const partialPath = dir.replace(sourceFolderPath, '').replace(/\\/g, '/');
               // fil finalArray with 3 correct and 5 dummy pieces of data
               finalArray[elementIndex] = {
                 cleanName: cleanUpFileName(file.name),
@@ -598,10 +612,13 @@ export function findAllNewFiles(
       const pathStripped = newElement.partialPath.replace(inputFolder, '');
       if (pathStripped === oldElement.partialPath && newElement.fileName === oldElement.fileName) {
         matchFound = true;
+        newElement.hash = oldElement.hash;
       }
     });
 
     if (!matchFound) { // means new element !!!
+      const filePath = path.join(inputFolder, newElement.partialPath, newElement.fileName);
+      newElement.hash = hashFile(filePath);
       theDiff.push(newElement);
     }
   });
@@ -626,23 +643,79 @@ export function finalArrayWithoutDeleted(
 ): ImageElement[] {
   const cleanedArray: ImageElement[] = angularFinalArray.filter((value) => {
     let matchFound = false;
+    let hashFound = false;
 
     hdFinalArray.forEach((newElement) => {
+      if (value.hash === newElement.hash) {
+        hashFound = true;
+      }
       const pathStripped = newElement.partialPath.replace(inputFolder, '');
       if (pathStripped === value.partialPath && newElement.fileName === value.fileName) {
         matchFound = true;
       }
     });
 
+    if (!hashFound) {
+      deleteThumbnails(folderWhereImagesAre, value.hash);
+    }
     if (matchFound) {
       return true;
     } else {
-      deleteThumbnails(folderWhereImagesAre, value.hash);
       return false;
     }
   });
 
   return cleanedArray;
+}
+
+/**
+ * Returns true if there's user metadata to copy
+ * @param element to check
+ */
+export function hasUserMetadata(
+  element: ImageElement
+) {
+  return element.timesPlayed !== 0 ||
+         element.stars !== 0.5 ||
+         element.tags ||
+         element.year;
+}
+
+/**
+ * Copy all user metadata from oldElement to newElement
+ * @param oldElement
+ * @param newElement
+ */
+export function copyUserMetadataForFile(
+  oldElement: ImageElement,
+  newElement: ImageElement
+) {
+  console.log('copying for ' + oldElement.fileName);
+  // TODO update this and above as needed
+  newElement.stars = oldElement.stars;
+  newElement.tags = oldElement.tags;
+  newElement.timesPlayed = oldElement.timesPlayed;
+  newElement.year = oldElement.year;
+}
+
+/**
+ * Copy any user entered metadata from oldArray to newArray by hash key
+ * @param oldArray to copy from
+ * @param newArray to copy to
+ */
+export function copyUserMetadata(
+  oldArray: ImageElement[],
+  newArray: ImageElement[]
+) {
+  oldArray.forEach((oldElement) => {
+    if (hasUserMetadata(oldElement)) {
+      newArray.forEach((newElement) => {
+        if (oldElement.hash === newElement.hash) {
+          copyUserMetadataForFile(oldElement, newElement);
+        }
+      });
+    }
+  });
 }
 
 // --------------------------------------------------------------------------------------------
@@ -734,7 +807,9 @@ function extractMetadataForThisONEFile(
       imageElement.duration = duration;
       imageElement.fileSize = stat.size;
       imageElement.mtime = stat.mtimeMs;
-      imageElement.hash = hashFile(filePath);
+      if (imageElement.hash === '') {
+        imageElement.hash = hashFile(filePath);
+      }
       imageElement.height = origHeight;
       imageElement.width = origWidth;
       imageElement.screens = computeNumberOfScreenshots(screenshotSettings, duration);
@@ -757,6 +832,21 @@ function computeNumberOfScreenshots(screenshotSettings: ScreenshotSettings, dura
     total = Math.ceil(duration / 60 / screenshotSettings.n);
   }
   return total;
+}
+/**
+ * Update the entire array with new hashes
+ *
+ * @param imageArray
+ * @param videoFolderPath
+ */
+function updateArrayWithHashes(
+  imageArray: ImageElement[],
+  videoFolderPath: string
+) {
+  imageArray.forEach((element) => {
+    const filePath = path.join(videoFolderPath, element.partialPath, element.fileName);
+    element.hash = hashFile(filePath);
+  });
 }
 
 /**
@@ -815,6 +905,9 @@ export function findAndImportNewFiles(
   const onlyNewElements: ImageElement[] =
     findAllNewFiles(angularFinalArray, hdFinalArray, inputFolder);
 
+  // Copy any metadata incase files were moved
+  copyUserMetadata(angularFinalArray, onlyNewElements);
+
   // If there are new files
   if (onlyNewElements.length > 0) {
 
@@ -833,6 +926,45 @@ export function findAndImportNewFiles(
     sendCurrentProgress(1, 1, 0); // indicates 100%
   }
 
+}
+
+/**
+ * Regenerates the library,
+ * figures out what files no longer exist,
+ * deletes .jpg files from HD,
+ * and calls `extractAllMetadata`
+ * (which will then send file home and start extracting images)
+ * @param angularFinalArray       -- array of ImageElements from Angular - most current view
+ * @param hdFinalArray            -- array of ImageElements from current hard drive scan
+ * @param inputFolder             -- the input folder (where videos are)
+ * @param screenshotSettings      -- ScreenshotSettings
+ * @param folderToDeleteFrom      -- path to folder where `.jpg` files are
+ * @param extractMetadataCallback -- function for extractAllMetadata to call when done
+ */
+export function regenerateLibrary(
+  angularFinalArray: ImageElement[],
+  hdFinalArray: ImageElement[],
+  inputFolder: string,
+  screenshotSettings: ScreenshotSettings,
+  folderToDeleteFrom: string,
+  extractMetadataCallback
+): void {
+
+  updateArrayWithHashes(hdFinalArray, inputFolder);
+
+  // Copy any user metadata
+  copyUserMetadata(angularFinalArray, hdFinalArray);
+
+  // Remove thumbnails no longer present
+  finalArrayWithoutDeleted(angularFinalArray, hdFinalArray, inputFolder, folderToDeleteFrom);
+
+  extractAllMetadata(
+    hdFinalArray,
+    inputFolder,
+    screenshotSettings,
+    0,
+    extractMetadataCallback // actually = sendFinalResultHome
+  );
 }
 
 /**
@@ -862,6 +994,9 @@ export function updateFinalArrayWithHD(
   // Generate ImageElement[] of all the new elements to be added
   const onlyNewElements: ImageElement[] =
     findAllNewFiles(angularFinalArray, hdFinalArray, inputFolder);
+
+  // Copy any metadata incase files were moved
+  copyUserMetadata(angularFinalArray, onlyNewElements);
 
   // remove from FinalArray all files that are no longer in the video folder
   const allDeletedRemoved: ImageElement[] =

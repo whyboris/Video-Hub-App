@@ -816,9 +816,6 @@
           'gallery-dark-scroll': settingsButtons['darkMode'].toggled
         }"
       [bufferAmount]="0"
-      [childHeight]="currentViewImgHeight + textPaddingHeight + 20
-                      + ( appState.currentView === 'showThumbnails' ? 4 : 0)
-                      - ( appState.currentView === 'showFiles' ? ( currentViewImgHeight + 10 ) : 0)"
       [items]="finalArray
                 | magicSearchPipe: magicSearchString
 
@@ -870,11 +867,13 @@
 
                 | countPipe
 
-                | sortingPipe: sortType : shuffleTheViewNow
+                | folderViewPipe: (settingsButtons['showFolders'].toggled)
+                                  && (appState.currentView === 'showThumbnails' ||
+                                      appState.currentView === 'showFiles' ||
+                                      appState.currentView === 'showClips')
+                                  : filters[1].array
 
-                | folderViewPipe: settingsButtons['showFoldersOnly'].toggled
-                                  || (appState.currentView === 'showFiles' && settingsButtons['showFolderInFileView'].toggled)
-                                  : settingsButtons['showFoldersOnly'].toggled"
+                | sortingPipe: sortType : shuffleTheViewNow"
     >
 
     <!-- 24 above is 20 pixels for element and 4 for the fudge factor -->
@@ -887,8 +886,8 @@
       <ng-container *ngIf="appState.currentView === 'showThumbnails'">
         <app-gallery-item
           *ngFor="let item of scroll.viewPortItems"
-          (click)="handleClick($event, item)"
-          (contextmenu)="rightMouseClicked($event, item)"
+          (contextmenu)="(item.cleanName === '***') ? doNothing() : rightMouseClicked($event, item)"
+          (click)="(item.cleanName === '***') ? handleFolderWordClicked(item.partialPath) : handleClick($event, item)"
 
           [elHeight]="currentViewImgHeight + textPaddingHeight"
           [elWidth]="previewWidth"
@@ -965,8 +964,8 @@
         <app-clip-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (click)="handleClick($event, item)"
-          (contextmenu)="rightMouseClicked($event, item)"
+          (contextmenu)="(item.cleanName === '***') ? doNothing() : rightMouseClicked($event, item)"
+          (click)="(item.cleanName === '***') ? handleFolderWordClicked(item.partialPath) : handleClick($event, item)"
 
           [video]="item"
 

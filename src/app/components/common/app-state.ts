@@ -8,7 +8,6 @@ export type SupportedView = 'showThumbnails'
                           | 'showFullView'
                           | 'showDetails'
                           | 'showFiles'
-                          | 'showFoldersOnly'
                           | 'showClips';
 
 export const allSupportedViews: SupportedView[] = [
@@ -17,11 +16,10 @@ export const allSupportedViews: SupportedView[] = [
   'showFullView',
   'showDetails',
   'showFiles',
-  'showFoldersOnly',
   'showClips',
 ];
 
-export interface ImageHeights {
+export interface RowNumbers {
   thumbnailSheet: number;
   showThumbnails: number;
   showFilmstrip: number;
@@ -30,13 +28,13 @@ export interface ImageHeights {
   showClips: number;
 }
 
-export const defaultHeights: ImageHeights = {
-  thumbnailSheet: 144,
-  showThumbnails: 144,
-  showFilmstrip: 144,
-  showFullView: 144,
-  showDetails: 144,
-  showClips: 144,
+export const defaultImgsPerRow: RowNumbers = {
+  thumbnailSheet: 5,
+  showThumbnails: 5,
+  showFilmstrip: 5,
+  showFullView: 5,
+  showDetails: 4,
+  showClips: 4,
 };
 
 export let AppState: AppStateInterface = {
@@ -44,7 +42,7 @@ export let AppState: AppStateInterface = {
   currentView: 'showThumbnails',
   currentZoomLevel: 1,
   hubName: '',
-  imgHeight: defaultHeights,         // gallery/filmstrip height
+  imgsPerRow: defaultImgsPerRow,         // gallery/filmstrip height
   language: 'en',
   menuHidden: false,
   numOfFolders: 0,
@@ -57,7 +55,7 @@ export interface AppStateInterface {
   currentView: SupportedView;
   currentZoomLevel: number;
   hubName: string;
-  imgHeight: ImageHeights;
+  imgsPerRow: RowNumbers;
   language: SupportedLanguage;
   menuHidden: boolean;
   numOfFolders: number;

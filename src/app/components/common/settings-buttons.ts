@@ -40,7 +40,6 @@ export const SettingsButtonsGroups: string[][] = [
     'showFullView',
     'showDetails',
     'showFiles',
-    'showFoldersOnly',
     'showClips',
   ],
   [
@@ -62,7 +61,7 @@ export const SettingsButtonsGroups: string[][] = [
     'randomImage',
     'randomizeGallery',
     'shuffleGalleryNow',
-    'showFolderInFileView'
+    'showFolders'
   ],
   [
     'makeSmaller',
@@ -80,6 +79,7 @@ export const SettingsButtonsGroups: string[][] = [
     'rescanDirectory',
     'importNewFiles',
     'verifyThumbnails',
+    'regenerateLibrary',
     'resetSettings',
     'clearHistory'
   ]
@@ -160,13 +160,6 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     title: 'BUTTONS.showFilesHint',
     description: 'BUTTONS.showFilesDescription',
   },
-  'showFoldersOnly': {
-    hidden: false,
-    toggled: false,
-    iconName: 'icon-folder-blank',
-    title: 'BUTTONS.showFoldersOnlyHint',
-    description: 'BUTTONS.showFoldersOnlyDescription',
-  },
   'showClips': {
     hidden: false,
     toggled: false,
@@ -240,12 +233,12 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     title: 'BUTTONS.shuffleGalleryNowHint',
     description: 'BUTTONS.shuffleGalleryNowDescription',
   },
-  'showFolderInFileView': {
+  'showFolders': {
     hidden: true,
     toggled: true,
     iconName: 'icon-folder-blank',
-    title: 'BUTTONS.showFolderInFileViewHint',
-    description: 'BUTTONS.showFolderInFileViewDescription',
+    title: 'BUTTONS.showFoldersHint',
+    description: 'BUTTONS.showFoldersDescription',
   },
   'makeSmaller': {
     hidden: false,
@@ -531,5 +524,12 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     title: 'BUTTONS.rescanDirectoryHint',
     description: 'BUTTONS.rescanDirectoryDescription',
     settingsHeading: 'SETTINGS.currentHub'
+  },
+  'regenerateLibrary': {
+    hidden: false,
+    toggled: false,
+    iconName: 'icon-checkmark', // this specific icon makes the setting only appear in All Settings (behind gear button)
+    title: 'BUTTONS.regenerateLibraryHint',
+    description: 'BUTTONS.regenerateLibraryDescription',
   }
 };

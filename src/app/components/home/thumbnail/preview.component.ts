@@ -34,6 +34,9 @@ export class PreviewComponent implements OnInit {
   fullFilePath = '';
   hover: boolean;
 
+  folderThumbPaths = [];
+  numberOfThumbs = 0;
+
   constructor(
     public sanitizer: DomSanitizer
   ) { }
@@ -51,8 +54,30 @@ export class PreviewComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.firstFilePath = 'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/thumbnails/' + this.video.hash + '.jpg';
-    this.fullFilePath =  'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/filmstrips/' + this.video.hash + '.jpg';
+    // multiple hashes?
+    if (this.video.hash.indexOf(':') !== -1) {
+      const hashes = this.video.hash.split(':');
+      this.shuffle(hashes).slice(0, 4).forEach((hash) => {
+        this.folderThumbPaths.push('file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/thumbnails/' + hash + '.jpg');
+      });
+      this.numberOfThumbs = this.folderThumbPaths.length;
+    } else {
+      this.firstFilePath = 'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/thumbnails/' + this.video.hash + '.jpg';
+      this.fullFilePath =  'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/filmstrips/' + this.video.hash + '.jpg';
+      this.folderThumbPaths.push(this.firstFilePath);
+      this.numberOfThumbs = 1;
+    }
+  }
+
+  shuffle(a) {
+    let j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
+    return a;
   }
 
   mouseIsMoving($event) {

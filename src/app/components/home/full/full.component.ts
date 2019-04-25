@@ -17,8 +17,7 @@ export class FullViewComponent implements OnInit {
 
   @Input()
   set galleryWidth(galleryWidth: number) {
-    this._metaWidth = galleryWidth - 40;
-    // 40px is removed as required padding inside the gallery
+    this._metaWidth = galleryWidth;
     this.render();
   }
 
