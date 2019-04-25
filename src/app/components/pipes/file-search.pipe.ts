@@ -36,6 +36,11 @@ export class FileSearchPipe implements PipeTransform {
       console.log('file search pipe working');
       return finalArray.filter((item) => {
 
+        // exact prefix match
+        if (arrOfStrings[0].startsWith('/')) {
+          return item.partialPath.startsWith(arrOfStrings[0]);
+        }
+
         let matchFound = 0;
 
         arrOfStrings.forEach(element => {
@@ -54,7 +59,7 @@ export class FileSearchPipe implements PipeTransform {
               searchString += ' ' + item.cleanName;
             }
             if (autoFolderTags) {
-              searchString += ' ' + item.partialPath.replace(/(\/|\\)/, ' ');
+              searchString += ' ' + item.partialPath.replace(/(\/)/, ' ');
             }
           }
           if (searchString.toLowerCase().indexOf(element.toLowerCase()) !== -1) {

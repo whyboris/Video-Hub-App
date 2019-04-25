@@ -244,8 +244,8 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
           } else {
             const extension = file.name.split('.').pop();
             if (acceptableFiles.includes(extension.toLowerCase()) && !file.name.match(fileIgnoreRegex)) {
-              // before adding, remove the redundant prefix: sourceFolderPath
-              const partialPath = dir.replace(sourceFolderPath, '');
+              // before adding, remove the redundant prefix: sourceFolderPath, and convert forward slashes into back slashes
+              const partialPath = dir.replace(sourceFolderPath, '').replace(/\\/g, '/');
               // fil finalArray with 3 correct and 5 dummy pieces of data
               finalArray[elementIndex] = {
                 cleanName: cleanUpFileName(file.name),

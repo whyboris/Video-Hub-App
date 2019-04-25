@@ -16,7 +16,6 @@ export class FolderArrowsPipe implements PipeTransform {
 
     let htmlString = folderPath;
     htmlString = htmlString.replace(/\//g, arrowString);
-    htmlString = htmlString.replace(/\\/g, arrowString);
     if (trailing) {
       htmlString = htmlString + arrowString;
     }

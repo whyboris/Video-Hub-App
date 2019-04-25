@@ -749,12 +749,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param filter
    */
   handleFolderWordClicked(filter: string): void {
-    if (this.settingsButtons['showFoldersOnly']) {
-      this.toggleButton('showFiles'); // needed when we're in folder view
-    }
     this.showSidebar();
-    if (!this.settingsButtons['folder'].toggled) {
-      this.settingsButtons['folder'].toggled = true;
+    if (!this.settingsButtons['folderIntersection'].toggled) {
+      this.settingsButtons['folderIntersection'].toggled = true;
     }
     this.onEnterKey(filter, 1); // 1st item is the `folder` filter
   }
@@ -866,7 +863,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.settingsButtons['showDetails'].toggled = false;
     this.settingsButtons['showFiles'].toggled = false;
     this.settingsButtons['showFilmstrip'].toggled = false;
-    this.settingsButtons['showFoldersOnly'].toggled = false;
     this.settingsButtons['showFullView'].toggled = false;
     this.settingsButtons['showThumbnails'].toggled = false;
   }
@@ -912,11 +908,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.toggleAllViewsButtonsOff();
       this.toggleButtonTrue(uniqueKey);
       this.restoreViewSize(uniqueKey);
-      if (uniqueKey === 'showFoldersOnly') {
-        this.appState.currentView = 'showFiles';
-      } else {
-        this.appState.currentView = <SupportedView>uniqueKey;
-      }
+      this.appState.currentView = <SupportedView>uniqueKey;
       this.computeTextBufferAmount();
       this.scrollToTop();
 
@@ -1142,11 +1134,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param origin -- number in filter array of the filter to target
    */
   onEnterKey(value: string, origin: number): void {
-    let trimmed = value.trim();
+    const trimmed = value.trim();
     // removes '/' from folder path if there
     // happens when user clicks folder path in file view
-    if (trimmed[0] === '/' || trimmed[0] === '\\') {
-      trimmed = trimmed.substr(1);
+    if (trimmed[0] === '/') {
+      this.filters[origin].array = [];
     }
     if (trimmed) {
       // don't include duplicates
@@ -1155,6 +1147,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.filters[origin].bool = !this.filters[origin].bool;
         this.filters[origin].string = '';
       }
+    } else {
+      this.filters[origin].array = [];
+      this.filters[origin].bool = !this.filters[origin].bool;
+      this.filters[origin].string = '';
     }
     this.scrollToTop();
     this.shouldWeShuffle();

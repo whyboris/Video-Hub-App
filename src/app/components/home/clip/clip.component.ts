@@ -32,19 +32,48 @@ export class ClipComponent implements OnInit {
   poster: string;
   pathToVideo: string = '';
 
+  folderThumbPaths = [];
+  folderPosterPaths = [];
+  numberOfThumbs = 0;
+
   constructor(
     public sanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
-    // this.video.hash is `undefined` when no screenshot taken -- because of ffmpeg extraction error
-    if (this.video.hash === undefined) {
-      this.noError = false;
-    }
-    // hack -- populate hardcoded values -- fix later
-    const fileHash = this.video.hash;
+    // multiple hashes?
+    if (this.video.hash.indexOf(':') !== -1) {
+      const hashes = this.video.hash.split(':');
 
-    this.pathToVideo = 'vha-' + this.hubName + '/clips/' + fileHash + '.mp4';
-    this.poster = 'vha-' + this.hubName + '/thumbnails/' + fileHash + '.jpg';
+      this.shuffle(hashes).slice(0, 4).forEach((hash) => {
+        this.folderThumbPaths.push('vha-' + this.hubName + '/clips/' + hash + '.mp4');
+        this.folderPosterPaths.push('vha-' + this.hubName + '/thumbnails/' + hash + '.jpg');
+      });
+      this.numberOfThumbs = this.folderThumbPaths.length;
+    } else {
+      // this.video.hash is `undefined` when no screenshot taken -- because of ffmpeg extraction error
+      if (this.video.hash === undefined) {
+        this.noError = false;
+      }
+      // hack -- populate hardcoded values -- fix later
+      const fileHash = this.video.hash;
+
+      this.pathToVideo = 'vha-' + this.hubName + '/clips/' + fileHash + '.mp4';
+      this.poster = 'vha-' + this.hubName + '/thumbnails/' + fileHash + '.jpg';
+      this.folderThumbPaths.push(this.pathToVideo);
+      this.folderPosterPaths.push(this.poster);
+      this.numberOfThumbs = 1;
+    }
+  }
+
+  shuffle(a) {
+    let j, x, i;
+    for (i = a.length - 1; i > 0; i--) {
+        j = Math.floor(Math.random() * (i + 1));
+        x = a[i];
+        a[i] = a[j];
+        a[j] = x;
+    }
+    return a;
   }
 }

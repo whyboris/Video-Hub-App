@@ -6,6 +6,80 @@
   class="filmstrip-container"
 >
 
+<div *ngIf="video.cleanName === '***'; else fileNameBlock">
+  <div
+    #filmstripHolder
+    class="video-box folder"
+    (mousemove)="mouseIsMoving($event)"
+    [ngStyle]="{
+        height: imgHeight + 'px'
+    }"
+  >
+    <div
+      *ngIf="folderThumbPaths[0]"
+      class="video-box"
+      [ngStyle]="{
+        height: '50%',
+        width: '50%',
+        position: 'absolute',
+        'background-image': 'url(' + folderThumbPaths[0] + ')'
+      }"
+    ></div>
+    <div
+      *ngIf="folderThumbPaths[1]"
+      class="video-box"
+      [ngStyle]="{
+        height: '50%',
+        width: '50%',
+        left: '50%',
+        top: '0%',
+        position: 'absolute',
+        'background-image': 'url(' + folderThumbPaths[1] + ')'
+      }"
+    ></div>
+    <div
+      *ngIf="folderThumbPaths[2]"
+      class="video-box"
+      [ngStyle]="{
+        height: '50%',
+        width: '50%',
+        left: '0%',
+        top: '50%',
+        position: 'absolute',
+        'background-image': 'url(' + folderThumbPaths[2] + ')'
+      }"
+    ></div>
+    <div
+      *ngIf="folderThumbPaths[3]"
+      class="video-box"
+      [ngStyle]="{
+        height: '50%',
+        width: '50%',
+        left: '50%',
+        top: '50%',
+        position: 'absolute',
+        'background-image': 'url(' + folderThumbPaths[3] + ')'
+      }"
+    ></div>
+    <span *ngIf="showMeta" class="time">{{ video.durationDisplay }}</span>
+    <span *ngIf="showMeta" class="rez">{{ video.resolution }}</span>
+  </div>
+
+  <span
+    *ngIf="showMeta"
+    [ngClass]="{ 'larger-font': largerFont }"
+    [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
+    class="title"
+  >
+    {{ video.fileName }}
+    <div class="fileSize" *ngIf="showMeta">
+      {{ video.fileSize | fileSizePipe }} [{{ video.fileSizeDisplay }} files]
+    </div>
+  </span>
+</div>
+
+<ng-template #fileNameBlock>
+
   <div
     #filmstripHolder
     class="video-box"
@@ -31,5 +105,7 @@
       {{ showMeta ? '(' + video.fileSizeDisplay + ')' : '' }}
     </div>
   </span>
+</ng-template>
+
 
 </div>
