@@ -1,5 +1,10 @@
 @import "../variables";
 
+.icon-image {
+  width: 16px;
+  transform: translateY(2px);
+}
+
 .statistics {
   font-size: 12px;
 }
@@ -21,6 +26,11 @@
 .title {
   color: $black;
   font-weight: bold;
+}
+
+.hub-name {
+  font-size: 20px;
+  font-weight: normal;
 }
 
 .folder {

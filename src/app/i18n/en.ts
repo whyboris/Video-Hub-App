@@ -179,6 +179,7 @@ export const English = {
     shortest: 'shortest',
     smallest: 'smallest',
     total: 'total',
+    videoFolder: 'Videos located here:',
     videoLengths: 'Video lengths',
   },
   RIGHTCLICK: {
