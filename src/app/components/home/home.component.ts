@@ -1073,7 +1073,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Computes the preview width for thumbnails view
    */
   public computePreviewWidth(): void {
-    this.updateGalleryWidthMeasurement();
+    this.galleryWidth = document.getElementById('scrollDiv').getBoundingClientRect().width - 20;
+
     if (   this.appState.currentView === 'showClips'
         || this.appState.currentView === 'showThumbnails'
         || this.appState.currentView === 'showDetails') {
@@ -1083,13 +1084,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.previewWidth = ((this.galleryWidth - 30) / this.currentImgsPerRow);
     }
     this.currentViewImgHeight = this.previewWidth * (9 / 16);
-  }
-
-  /**
-   * Compute and update the galleryWidth
-   */
-  public updateGalleryWidthMeasurement(): void {
-    this.galleryWidth = document.getElementById('scrollDiv').getBoundingClientRect().width - 20;
   }
 
   /**
