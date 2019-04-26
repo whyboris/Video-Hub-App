@@ -16,47 +16,35 @@
   >
     <div
       *ngIf="folderThumbPaths[0]"
-      class="video-box"
+      class="folder-item"
       [ngStyle]="{
-        height: '50%',
-        width: '50%',
-        position: 'absolute',
         'background-image': 'url(' + folderThumbPaths[0] + ')'
       }"
     ></div>
     <div
       *ngIf="folderThumbPaths[1]"
-      class="video-box"
+      class="folder-item"
       [ngStyle]="{
-        height: '50%',
-        width: '50%',
         left: '50%',
         top: '0%',
-        position: 'absolute',
         'background-image': 'url(' + folderThumbPaths[1] + ')'
       }"
     ></div>
     <div
       *ngIf="folderThumbPaths[2]"
-      class="video-box"
+      class="folder-item"
       [ngStyle]="{
-        height: '50%',
-        width: '50%',
         left: '0%',
         top: '50%',
-        position: 'absolute',
         'background-image': 'url(' + folderThumbPaths[2] + ')'
       }"
     ></div>
     <div
       *ngIf="folderThumbPaths[3]"
-      class="video-box"
+      class="folder-item"
       [ngStyle]="{
-        height: '50%',
-        width: '50%',
         left: '50%',
         top: '50%',
-        position: 'absolute',
         'background-image': 'url(' + folderThumbPaths[3] + ')'
       }"
     ></div>
