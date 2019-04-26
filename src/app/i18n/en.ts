@@ -170,6 +170,7 @@ export const English = {
   STATISTICS: {
     average: 'average',
     fileSizes: 'File sizes',
+    files: 'files',
     general: 'General',
     heading: 'Statistics for the current hub:',
     largest: 'largest',

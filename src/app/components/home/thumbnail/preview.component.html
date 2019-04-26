@@ -9,11 +9,10 @@
 <div *ngIf="video.cleanName === '***'; else fileNameBlock">
   <div
     #filmstripHolder
+    *ngIf="video.fileName !== 'up'; else upIcon"
     class="video-box folder"
     (mousemove)="mouseIsMoving($event)"
-    [ngStyle]="{
-        height: imgHeight + 'px'
-    }"
+    [ngStyle]="{ height: imgHeight + 'px' }"
   >
     <div
       *ngIf="folderThumbPaths[0]"
@@ -63,17 +62,34 @@
     ></div>
     <span *ngIf="showMeta" class="time">{{ video.durationDisplay }}</span>
     <span *ngIf="showMeta" class="rez">{{ video.resolution }}</span>
+    <div class="folder-icon">
+      <app-icon [icon]="'icon-folder-blank'"></app-icon>
+    </div>
   </div>
 
+  <ng-template #upIcon>
+    <div
+      class="video-box folder"
+      [ngStyle]="{ height: imgHeight + 'px' }"
+    >
+      <div class="up-icon">
+        <app-icon [icon]="'icon-chevron-left'"></app-icon>
+      </div>
+    </div>
+  </ng-template>
+
   <span
-    *ngIf="showMeta"
+    *ngIf="showMeta && video.fileName !== 'up'"
     [ngClass]="{ 'larger-font': largerFont }"
     [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
     class="title"
   >
     {{ video.fileName }}
-    <div class="fileSize" *ngIf="showMeta">
-      {{ video.fileSize | fileSizePipe }} [{{ video.fileSizeDisplay }} files]
+    <div
+      *ngIf="showMeta"
+      class="fileSize"
+    >
+      {{ video.fileSize | fileSizePipe }} [{{ video.fileSizeDisplay }} {{ 'STATISTICS.files' | translate }}]
     </div>
   </span>
 </div>
@@ -101,7 +117,10 @@
     class="title"
   >
     {{ video.cleanName }}
-    <div class="fileSize" *ngIf="showMeta">
+    <div
+      *ngIf="showMeta"
+      class="fileSize"
+    >
       {{ showMeta ? '(' + video.fileSizeDisplay + ')' : '' }}
     </div>
   </span>

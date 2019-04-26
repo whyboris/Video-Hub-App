@@ -29,13 +29,12 @@ export class PreviewComponent implements OnInit {
   @Input() returnToFirstScreenshot: boolean;
   @Input() showMeta: boolean;
 
-  percentOffset: number = 0;
+  // numberOfThumbs = 0;
   firstFilePath = '';
+  folderThumbPaths: string[] = [];
   fullFilePath = '';
   hover: boolean;
-
-  folderThumbPaths = [];
-  numberOfThumbs = 0;
+  percentOffset: number = 0;
 
   constructor(
     public sanitizer: DomSanitizer
@@ -60,12 +59,12 @@ export class PreviewComponent implements OnInit {
       this.shuffle(hashes).slice(0, 4).forEach((hash) => {
         this.folderThumbPaths.push('file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/thumbnails/' + hash + '.jpg');
       });
-      this.numberOfThumbs = this.folderThumbPaths.length;
+      // this.numberOfThumbs = this.folderThumbPaths.length;
     } else {
       this.firstFilePath = 'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/thumbnails/' + this.video.hash + '.jpg';
       this.fullFilePath =  'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/filmstrips/' + this.video.hash + '.jpg';
       this.folderThumbPaths.push(this.firstFilePath);
-      this.numberOfThumbs = 1;
+      // this.numberOfThumbs = 1;
     }
   }
 
