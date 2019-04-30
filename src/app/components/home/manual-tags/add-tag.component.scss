@@ -10,7 +10,7 @@
   border-color: $gray-80;
   border-width: 0 0 1px;
   box-sizing: border-box;
-  font-size: 11px;
+  font-size: 12px;
   margin: 5px 0 10px;
   outline: none;
   padding-bottom: 0;
@@ -26,9 +26,9 @@
 
 .typeahead {
   color: $gray-60;
-  font-size: 15px;
-  left: 6px;
+  font-size: 12px;
+  left: 5px;
   position:absolute;
-  top: 11px;
+  top: 10px;
   z-index: 1;
 }

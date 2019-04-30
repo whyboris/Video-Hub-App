@@ -18,10 +18,11 @@ export class AddTagComponent {
   ) { }
 
   emitTag(text: string) {
-    this.tag.emit(text);
-    this.currentText = '';
-    this.typeAhead = '';
-
+    if (text.trim()) { // if not empty
+      this.tag.emit(text.trim());
+      this.currentText = '';
+      this.typeAhead = '';
+    }
   }
 
   checkTypeahead(text: string) {
