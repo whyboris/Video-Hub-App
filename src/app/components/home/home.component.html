@@ -887,8 +887,9 @@
       <ng-container *ngIf="appState.currentView === 'showThumbnails'">
         <app-gallery-item
           *ngFor="let item of scroll.viewPortItems"
-          (contextmenu)="(item.cleanName === '***') ? doNothing() : rightMouseClicked($event, item)"
+
           (click)="(item.cleanName === '***') ? handleFolderWordClicked(item.partialPath) : handleClick($event, item)"
+          (contextmenu)="(item.cleanName === '***') ? doNothing() : rightMouseClicked($event, item)"
 
           [elHeight]="currentViewImgHeight + textPaddingHeight"
           [elWidth]="previewWidth"
@@ -904,12 +905,15 @@
           [randomImage]="settingsButtons['randomImage'].toggled"
           [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
+
+          style="display: inline-block"
         ></app-gallery-item>
       </ng-container>
 
       <ng-container *ngIf="appState.currentView === 'showFilmstrip'">
         <app-filmstrip-item
           *ngFor="let item of scroll.viewPortItems"
+
           (click)="handleClick($event, item)"
           (contextmenu)="rightMouseClicked($event, item)"
 
@@ -924,12 +928,15 @@
           [hoverScrub]="settingsButtons['hoverScrub'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
+
+          style="display: block"
         ></app-filmstrip-item>
       </ng-container>
 
       <ng-container *ngIf="appState.currentView === 'showFullView'">
         <app-full-item
           *ngFor="let item of scroll.viewPortItems"
+
           (click)="handleClick($event, item)"
           (contextmenu)="rightMouseClicked($event, item)"
 
@@ -944,20 +951,25 @@
           [darkMode]="settingsButtons['darkMode'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
+
+          style="display: block"
         ></app-full-item>
       </ng-container>
 
       <ng-container *ngIf="appState.currentView === 'showFiles'">
         <app-file-item
           *ngFor="let item of scroll.viewPortItems"
-          (contextmenu)="(item.cleanName === '***') ? doNothing() : rightMouseClicked($event, item)"
+
           (click)="(item.cleanName === '***') ? handleFolderWordClicked(item.partialPath) : openVideo(item.index)"
+          (contextmenu)="(item.cleanName === '***') ? doNothing() : rightMouseClicked($event, item)"
 
           [video]="item"
 
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
           [darkMode]="settingsButtons['darkMode'].toggled"
+
+          style="display: block"
         ></app-file-item>
       </ng-container>
 
@@ -965,8 +977,8 @@
         <app-clip-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (contextmenu)="(item.cleanName === '***') ? doNothing() : rightMouseClicked($event, item)"
           (click)="(item.cleanName === '***') ? handleFolderWordClicked(item.partialPath) : handleClick($event, item)"
+          (contextmenu)="(item.cleanName === '***') ? doNothing() : rightMouseClicked($event, item)"
 
           [video]="item"
 
@@ -980,6 +992,8 @@
           [darkMode]="settingsButtons['darkMode'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
+
+          style="display: inline-block"
         ></app-clip-item>
       </ng-container>
 
@@ -1013,6 +1027,8 @@
           [showManualTags]="settingsButtons['manualTags'].toggled"
           [showAutoFileTags]="settingsButtons['autoFileTags'].toggled"
           [showAutoFolderTags]="settingsButtons['autoFolderTags'].toggled"
+
+          style="display: block"
         ></app-details-item>
       </ng-container>
 
