@@ -95,9 +95,9 @@
 
   <!-- OVERLAY to cancel out sheet display modal -->
   <div
-    *ngIf="sheetDisplay"
+    *ngIf="sheetOverlayShowing"
     class="clickAwayOverlay"
-    (click)="closeSheetDisplay()"
+    (click)="closesheetOverlayShowing()"
     @overlayAppear
   >
   </div>
@@ -127,22 +127,22 @@
 
   <!-- Thumbnail Sheet Display -->
   <app-thumbnail-sheet
-    *ngIf="sheetDisplay"
+    *ngIf="sheetOverlayShowing"
     (openFileRequest)="openVideo($event)"
     (editFinalArrayTag)="editFinalArrayTag($event)"
     (editFinalArrayStars)="editFinalArrayStars($event)"
     (editFinalArrayYear)="editFinalArrayYear($event)"
     (filterTag)="handleFileWordClicked($event.tag.name, $event.event)"
 
-    [elHeight]="currentViewImgHeight"
+    [elHeight]="previewHeight"
     [elWidth]="previewWidth"
     [folderPath]="appState.selectedOutputFolder"
     [hubName]="appState.hubName"
-    [imgHeight]="currentViewImgHeight"
+    [imgHeight]="previewHeight"
 
-    [video]="itemToDisplay"
+    [video]="sheetItemToDisplay"
 
-    [star]="itemToDisplay.stars"
+    [star]="sheetItemToDisplay.stars"
 
     [darkMode]="settingsButtons['darkMode'].toggled"
     [hoverScrub]="settingsButtons['hoverScrub'].toggled"
@@ -892,11 +892,11 @@
           (click)="(item.cleanName === '***') ? handleFolderWordClicked(item.partialPath) : handleClick($event, item)"
           (contextmenu)="(item.cleanName === '***') ? doNothing() : rightMouseClicked($event, item)"
 
-          [elHeight]="currentViewImgHeight + textPaddingHeight"
+          [elHeight]="previewHeight + textPaddingHeight"
           [elWidth]="previewWidth"
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
-          [imgHeight]="currentViewImgHeight"
+          [imgHeight]="previewHeight"
 
           [video]="item"
 
@@ -908,7 +908,7 @@
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
 
           style="display: inline-block"
-          [ngStyle]="{ height: currentViewImgHeight + textPaddingHeight + 20 + 'px' }"
+          [ngStyle]="{ height: previewHeight + textPaddingHeight + 20 + 'px' }"
         ></app-gallery-item>
       </ng-container>
 
@@ -921,10 +921,10 @@
 
           [video]="item"
 
-          [elHeight]="currentViewImgHeight + textPaddingHeight"
+          [elHeight]="previewHeight + textPaddingHeight"
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
-          [imgHeight]="currentViewImgHeight"
+          [imgHeight]="previewHeight"
 
           [darkMode]="settingsButtons['darkMode'].toggled"
           [hoverScrub]="settingsButtons['hoverScrub'].toggled"
@@ -944,11 +944,11 @@
 
           [video]="item"
 
-          [elHeight]="currentViewImgHeight + textPaddingHeight"
+          [elHeight]="previewHeight + textPaddingHeight"
           [folderPath]="appState.selectedOutputFolder"
           [galleryWidth]="galleryWidth"
           [hubName]="appState.hubName"
-          [imgHeight]="currentViewImgHeight"
+          [imgHeight]="previewHeight"
 
           [darkMode]="settingsButtons['darkMode'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
@@ -984,11 +984,11 @@
 
           [video]="item"
 
-          [elHeight]="currentViewImgHeight + textPaddingHeight"
+          [elHeight]="previewHeight + textPaddingHeight"
           [elWidth]="previewWidth"
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
-          [imgHeight]="currentViewImgHeight"
+          [imgHeight]="previewHeight"
 
           [autoplay]="settingsButtons['autoplayClips'].toggled"
           [darkMode]="settingsButtons['darkMode'].toggled"
@@ -1012,11 +1012,11 @@
 
           [video]="item"
 
-          [elHeight]="currentViewImgHeight + textPaddingHeight"
+          [elHeight]="previewHeight + textPaddingHeight"
           [elWidth]="previewWidth"
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
-          [imgHeight]="currentViewImgHeight"
+          [imgHeight]="previewHeight"
 
           [star]="item.stars"
 
@@ -1059,11 +1059,11 @@
     (click)="handleClick($event, item)"
     (contextmenu)="rightMouseClicked($event, item)"
 
-    [elHeight]="currentViewImgHeight + textPaddingHeight"
-    [elWidth]="previewWidth"
+    [elHeight]="previewHeightRelated + textPaddingHeight"
+    [elWidth]="previewWidthRelated"
     [folderPath]="appState.selectedOutputFolder"
     [hubName]="appState.hubName"
-    [imgHeight]="currentViewImgHeight"
+    [imgHeight]="previewHeightRelated"
 
     [video]="item"
 

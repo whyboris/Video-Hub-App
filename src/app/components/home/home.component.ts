@@ -114,75 +114,101 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   versionNumber = globals.version;
 
-  // REORGANIZE / keep
-  currentPlayingFile = '';
-  currentPlayingFolder = '';
-  magicSearchString = '';
+  public finalArray: ImageElement[] = [];
 
-  progressPercent = 0;
-  canCloseWizard = false;
-
-  appMaximized = false;
-
-  imgsPerRow: RowNumbers = defaultImgsPerRow;
-
-  currentViewImgHeight: number = 144;
-  currentImgsPerRow: number = 5;
-
-  progressNum1 = 0;
-  progressNum2 = 100;
+  vhaFileHistory: HistoryItem[] = [];
 
   myTimeout = null;
 
+  // ========================================================================
+  // App state / UI state
+  // ------------------------------------------------------------------------
+
+  appMaximized = false;
   buttonsInView = false;
+  finalArrayNeedsSaving: boolean = false; // if ever a file was renamed, re-save the .vha file
+  flickerReduceOverlay = true;
+  isFirstRunEver = false;
+  rootFolderLive: boolean = true; // set to `false` when loading hub but video folder is not connected
 
-  // temp
-  wordFreqArr: any;
-  currResults: any = { showing: 0, total: 0 };
+  // ========================================================================
+  // Import / extraction progress
+  // ------------------------------------------------------------------------
 
-  // stuff to do with frequency
+  extractionPercent = 1;
+  importStage = 0;
+  progressNum1 = 0;
+  progressNum2 = 100;
+  progressPercent = 0;
+  progressString = '';
+
+  // ========================================================================
+  // Gallery thumbnails
+  // ------------------------------------------------------------------------
+
+  currentImgsPerRow: number = 5;
+  galleryWidth: number;
+  imgsPerRow: RowNumbers = defaultImgsPerRow;
+  previewHeight: number = 144;
+  previewHeightRelated: number = 144;   // For the Related Videos tab:
+  previewWidth: number;
+  previewWidthRelated: number;          // For the Related Videos tab:
+  textPaddingHeight: number;            // for text padding below filmstrip or thumbnail element
+
+  // ========================================================================
+  // Duration filter
+  // ------------------------------------------------------------------------
+
+  lengthLeftBound: number = 0;
+  lengthRightBound: number = Infinity;
+
+  // ========================================================================
+  // Frequency / histogram
+  // ------------------------------------------------------------------------
+
   resolutionFreqArr: number[];
   freqLeftBound: number = 0;
   freqRightBound: number = 4;
   resolutionNames: ResolutionString[] = ['SD', '720', '1080', '4K'];
 
-  // stuff to do with star filter
+  // ========================================================================
+  // Star filter
+  // ------------------------------------------------------------------------
+
   starRatingFreqArr: number[];
   starLeftBound: number = 0;
   starRightBound: number = 6;
   starRatingNames: string[] = ['N/A', '1', '2', '3', '4', '5'];
   forceStarFilterUpdate: boolean = true;
 
-  // other
-  lengthLeftBound: number = 0;
-  lengthRightBound: number = Infinity;
+  // ========================================================================
+  // Right-click / Renaming functionality
+  // ------------------------------------------------------------------------
 
-  rightClickShowing: boolean = false;
-  itemToRename: any; // strongly type this -- it's an element from finalArray !!!
-  renamingWIP: string; // ngModel for renaming file
+  clickedOnFile: boolean;        // whether right-clicked on file or gallery background
+  currentRightClickedItem: ImageElement;
+  itemToRename: ImageElement;
+  nodeRenamingFile: boolean = false;
+  renameErrMsg: string = '';
   renamingExtension: string;
+  renamingNow: boolean = false;
+  renamingWIP: string;           // ngModel for renaming file
+  rightClickPosition: any = { x: 0, y: 0 };
+  rightClickShowing: boolean = false;
 
-  findMostSimilar: string; // for finding similar files to this one
-  showSimilar: boolean = false; // to toggle the similarity pipe
+  // ========================================================================
+  // Thumbnail Sheet Overlay Display
+  // ------------------------------------------------------------------------
 
-  // for text padding below filmstrip or thumbnail element
-  textPaddingHeight: number;
-  previewWidth: number;
+  sheetItemToDisplay: ImageElement;
+  sheetOverlayShowing: boolean = false;
 
-  public finalArray: ImageElement[] = [];
+  // ========================================================================
+  // Variables for the wizard during import
+  // ------------------------------------------------------------------------
 
-  finalArrayNeedsSaving: boolean = false; // if ever a file was renamed, re-save the .vha file
+  canCloseWizard = false;
 
-  vhaFileHistory: HistoryItem[] = [];
-
-  fullPathToCurrentFile = '';
-
-  shuffleTheViewNow = 0; // dummy number to force re-shuffle current view
-
-  hubNameToRemember = '';
-  importStage = 0;
-
-  // temp variables for the wizard during import
   wizard: WizardOptions = {
     futureHubName: '',
     listOfFiles: [],
@@ -198,41 +224,40 @@ export class HomeComponent implements OnInit, AfterViewInit {
     totalNumberOfFiles: -1,
   };
 
-  extractionPercent = 1;
+  // ========================================================================
+  // UNSORTED -- @TODO -- CLEAN UP !!!
+  // ------------------------------------------------------------------------
 
-  flickerReduceOverlay = true;
+  currentPlayingFile = '';
+  currentPlayingFolder = '';
+  fullPathToCurrentFile = '';
 
-  progressString = '';
+  magicSearchString = '';
 
-  // RENAMING FUNCTIONALITY
+  wordFreqArr: any;
+  currResults: any = { showing: 0, total: 0 };
 
-  currentRightClickedItem: any; // element from FinalArray
-  renamingNow: boolean = false;
+  findMostSimilar: string; // for finding similar files to this one
+  showSimilar: boolean = false; // to toggle the similarity pipe
 
-  clickedOnFile: boolean; // whether right-clicked on file or gallery background
+  shuffleTheViewNow = 0; // dummy number to force re-shuffle current view
 
-  rightClickPosition: any = { x: 0, y: 0 };
-
-  nodeRenamingFile: boolean = false;
-  renameErrMsg: string = '';
-
-  // Thumbnail Sheet Display
-  sheetDisplay: boolean = false;
-  itemToDisplay: ImageElement;
-
-  // WIP
+  hubNameToRemember = ''; // don't remember what this variable is for
 
   sortType: SortType = 'default';
 
   manualTagFilterString: string = '';
   manualTagShowFrequency: boolean = true;
 
-  isFirstRunEver = false;
-
-  galleryWidth: number;
   longest: number = 0;
 
-  rootFolderLive: boolean = true; // set to `false` when loading hub but video folder is not connected
+  // ========================================================================
+  // Please add new variables below if they don't fit into any other section
+  // ------------------------------------------------------------------------
+
+
+
+  // ========================================================================
 
   // Listen for key presses
   @HostListener('document:keydown', ['$event'])
@@ -299,10 +324,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.wizard.showWizard = false;
     } else if (event.key === 'Escape' && this.buttonsInView) {
       this.buttonsInView = false;
-    } else if (event.key === 'Escape' && (this.rightClickShowing || this.renamingNow || this.sheetDisplay)) {
+    } else if (event.key === 'Escape' && (this.rightClickShowing || this.renamingNow || this.sheetOverlayShowing)) {
       this.rightClickShowing = false;
       this.renamingNow = false;
-      this.sheetDisplay = false;
+      this.sheetOverlayShowing = false;
     } else if (event.key === 'Escape' && this.settingsButtons['showTags'].toggled) {
       this.toggleButton('showTags');
     }
@@ -939,6 +964,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.rescanDirectory();
     } else if (uniqueKey === 'regenerateLibrary') {
       this.regenerateLibrary();
+    } else if (uniqueKey === 'showRelatedVideosTray') {
+      this.settingsButtons.showRelatedVideosTray.toggled = !this.settingsButtons.showRelatedVideosTray.toggled;
+      this.computePreviewWidth();
     } else if (uniqueKey === 'sortOrder') {
       this.sortType = 'default';
       this.toggleButtonOpposite(uniqueKey);
@@ -1082,7 +1110,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
              || this.appState.currentView === 'showFullView' ) {
       this.previewWidth = ((this.galleryWidth - 30) / this.currentImgsPerRow);
     }
-    this.currentViewImgHeight = this.previewWidth * (9 / 16);
+    this.previewHeight = this.previewWidth * (9 / 16);
+
+    // compute preview dimensions for thumbs in the most similar tab:
+    if (this.settingsButtons['showRelatedVideosTray'].toggled) {
+      this.previewWidthRelated = (this.galleryWidth / 5) - 40;
+      this.previewHeightRelated = this.previewWidthRelated * (9 / 16);
+    }
   }
 
   /**
@@ -1405,8 +1439,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Opens the thumbnail sheet for the selected video
    */
   openThumbnailSheet(item: ImageElement): void {
-    this.itemToDisplay = item;
-    this.sheetDisplay = true;
+    this.sheetItemToDisplay = item;
+    this.sheetOverlayShowing = true;
   }
 
   /**
@@ -1435,8 +1469,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   /**
    * Close the thumbnail sheet
    */
-  closeSheetDisplay() {
-    this.sheetDisplay = false;
+  closesheetOverlayShowing() {
+    this.sheetOverlayShowing = false;
   }
 
   /**
