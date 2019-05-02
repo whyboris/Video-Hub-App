@@ -163,7 +163,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   renamingExtension: string;
 
   findMostSimilar: string; // for finding similar files to this one
-
   showSimilar: boolean = false; // to toggle the similarity pipe
 
   // for text padding below filmstrip or thumbnail element

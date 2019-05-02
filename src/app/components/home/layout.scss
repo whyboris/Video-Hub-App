@@ -211,30 +211,55 @@ $sidebar-width: 190px;
   cursor: pointer;
 }
 
-.manual-tag-tray {
+.bottom-tray {
   background: $gray-10;
   padding: 20px;
   border-top: 1px solid $gray-50;
   bottom: 0;
-  height: 100px;
   left: 0;
   position: fixed;
   width: 100vw;
 }
 
-.manual-tag-tray-label {
-  display: block;
-  font-size: 12px;
-  margin-bottom: 10px;
+.manual-tag-tray {
+  height: 100px;
+
+  .manual-tag-tray-label {
+    display: block;
+    font-size: 12px;
+    margin-bottom: 10px;
+  }
+
+  .showFrequency {
+    border-radius: 3px;
+    border: 1px solid red;
+    left: calc(50vw - 50px);
+    position: absolute;
+    top: 10px;
+  }
 }
 
-.showFrequency {
-  border-radius: 3px;
-  border: 1px solid red;
-  left: calc(50vw - 50px);
-  position: absolute;
-  top: 10px;
+.most-similar-tray {
+  box-sizing: border-box;
+  height: 150px;
+  padding-top: 0;
+
+  .most-similar-comment {
+    color: $gray-70;
+    display: inline-block;
+    font-size: 12px;
+    margin-top: 20px;
+    vertical-align: top;
+    width: 170px;
+  }
+
+  .most-siilar-filename {
+    display: block;
+    font-size: 14px;
+    margin-top: 15px;
+  }
 }
+
 
 // TODO -- keep DRY -- this is taken from `inputFilter`
 .manual-tag-tray-filter {

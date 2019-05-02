@@ -33,7 +33,7 @@ export class SimilarityPipe implements PipeTransform {
 
       return indexes.map((index: number) => {
         return finalArray[index];
-      })
+      });
 
     }
 
