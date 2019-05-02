@@ -812,6 +812,7 @@
                       + (appState.menuHidden ? -32 : 0)) + 'px)',
           'background': settingsButtons['darkMode'].toggled ? '#000000' : '#999999'
         }"
+      [enableUnequalChildrenSizes]="appState.currentView === 'showFullView'"
       [ngClass]="{
           'gallery-container-full-width': settingsButtons['hideSidebar'].toggled,
           'gallery-dark-scroll': settingsButtons['darkMode'].toggled
@@ -907,6 +908,7 @@
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
 
           style="display: inline-block"
+          [ngStyle]="{ height: currentViewImgHeight + textPaddingHeight + 20 + 'px' }"
         ></app-gallery-item>
       </ng-container>
 
