@@ -9,7 +9,10 @@
   >
     {{ video.cleanName }}
   </span>
-  <span class="fileSize">
+  <span
+    class="fileSize"
+    [ngClass]="{ darkModeText: darkMode }"
+  >
     {{ video.durationDisplay }}
 
     | {{ video.width }} x {{ video.height }}
@@ -29,6 +32,7 @@
         min="1800"
         placeholder="YYYY"
         type="number"
+        tabindex="-1"
       >
 
     </span>

@@ -16,8 +16,37 @@
   position: relative;
 }
 
+.folder-item {
+  background-color: black;
+  background-size: cover;
+  height: 50%;
+  overflow: hidden;
+  position: absolute;
+  width: 50%;
+}
+
 .folder {
-  border: dashed white 1px;
+  border-radius: 10px;
+  border: 3px solid white;
+  box-sizing: border-box;
+}
+
+.up-icon {
+  fill: white;
+  left: 14%;
+  position: absolute;
+  top: 36%;
+  transform: translate(-50%, -50%);
+  width: 30%;
+}
+
+.folder-icon {
+  fill: white;
+  left: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 20%;
 }
 
 .time, .rez {

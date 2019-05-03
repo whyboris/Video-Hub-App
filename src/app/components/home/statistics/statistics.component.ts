@@ -13,6 +13,7 @@ export class StatisticsComponent implements OnInit {
   @Input() hubName: string;
   @Input() numFolders: number;
   @Input() pathToVhaFile: string;
+  @Input() videoFolder: string;
 
   totalFiles: number;
 

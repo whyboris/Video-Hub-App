@@ -27,14 +27,13 @@ export class ClipComponent implements OnInit {
   @Input() largerFont: boolean;
   @Input() showMeta: boolean;
 
+  // numberOfThumbs = 0;
+  folderPosterPaths: string[] = [];
+  folderThumbPaths: string[] = [];
   hover: boolean;
   noError = true;
-  poster: string;
   pathToVideo: string = '';
-
-  folderThumbPaths = [];
-  folderPosterPaths = [];
-  numberOfThumbs = 0;
+  poster: string;
 
   constructor(
     public sanitizer: DomSanitizer
@@ -49,7 +48,7 @@ export class ClipComponent implements OnInit {
         this.folderThumbPaths.push('vha-' + this.hubName + '/clips/' + hash + '.mp4');
         this.folderPosterPaths.push('vha-' + this.hubName + '/thumbnails/' + hash + '.jpg');
       });
-      this.numberOfThumbs = this.folderThumbPaths.length;
+      // this.numberOfThumbs = this.folderThumbPaths.length;
     } else {
       // this.video.hash is `undefined` when no screenshot taken -- because of ffmpeg extraction error
       if (this.video.hash === undefined) {
@@ -62,7 +61,7 @@ export class ClipComponent implements OnInit {
       this.poster = 'vha-' + this.hubName + '/thumbnails/' + fileHash + '.jpg';
       this.folderThumbPaths.push(this.pathToVideo);
       this.folderPosterPaths.push(this.poster);
-      this.numberOfThumbs = 1;
+      // this.numberOfThumbs = 1;
     }
   }
 
