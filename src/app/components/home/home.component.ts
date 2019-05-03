@@ -1469,7 +1469,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   /**
    * Close the thumbnail sheet
    */
-  closesheetOverlayShowing() {
+  closeSheetOverlay() {
     this.sheetOverlayShowing = false;
   }
 
