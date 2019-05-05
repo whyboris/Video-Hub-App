@@ -1,8 +1,8 @@
 .filmstrip-container {
   display: inline-block;
+  margin: 20px 20px 0;
   min-height: 170px;
   overflow: hidden;
-  padding: 20px 20px 0; // because ngx-virtual-scroll ignores `margin` but not `padding`
   transition-property: height;
   transition: 300ms;
   width: calc(100% - 40px);

@@ -1,5 +1,5 @@
 .meta-container {
-  padding: 20px 20px 5px; // because ngx-virtual-scroll ignores `margin` but not `padding`
+  margin: 20px 20px 5px;
   transition-property: height;
   transition: 300ms;
   width: calc(100% - 40px);
