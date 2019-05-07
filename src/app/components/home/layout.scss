@@ -213,7 +213,6 @@ $sidebar-width: 190px;
 
 .bottom-tray {
   background: $gray-10;
-  padding: 20px;
   border-top: 1px solid $gray-50;
   bottom: 0;
   left: 0;
@@ -223,6 +222,7 @@ $sidebar-width: 190px;
 
 .manual-tag-tray {
   height: 100px;
+  padding: 20px;
 
   .manual-tag-tray-label {
     display: block;
@@ -248,6 +248,7 @@ $sidebar-width: 190px;
     color: $gray-70;
     display: inline-block;
     font-size: 12px;
+    margin-left: 20px;
     margin-top: 20px;
     vertical-align: top;
     width: 170px;

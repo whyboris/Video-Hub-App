@@ -40,6 +40,7 @@ import {
   overlayAppear,
   rightClickAnimation,
   rightClickContentAnimation,
+  similarResultsText,
   slowFadeIn,
   slowFadeOut,
   topAnimation
@@ -74,6 +75,7 @@ import {
     overlayAppear,
     rightClickAnimation,
     rightClickContentAnimation,
+    similarResultsText,
     slowFadeIn,
     slowFadeOut,
     topAnimation
@@ -1116,8 +1118,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // compute preview dimensions for thumbs in the most similar tab:
     if (this.settingsButtons['showRelatedVideosTray'].toggled) {
-      this.previewWidthRelated = (this.galleryWidth / 5) - 40;
-      this.previewHeightRelated = this.previewWidthRelated * (9 / 16);
+      this.previewWidthRelated = Math.min((this.galleryWidth / 5) - 40, 176);
+      this.previewHeightRelated = Math.min(this.previewWidthRelated * (9 / 16), 144);
     }
   }
 

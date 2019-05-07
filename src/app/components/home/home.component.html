@@ -1041,13 +1041,19 @@
 
 </div> <!-- end of window -->
 
+<!-- MOST SIMILAR BOTTOM TRAY -->
+
 <div
   *ngIf="settingsButtons['showRelatedVideosTray'].toggled"
   class="bottom-tray most-similar-tray"
   @modalAnimation
 >
 
-  <div class="most-similar-comment">
+  <div
+    *ngIf="!this.settingsButtons['hideSidebar'].toggled"
+    class="most-similar-comment"
+    @similarResultsText
+  >
     {{ 'TAGS.showingMostSimilar' | translate }}
     <span class="most-siilar-filename">
       {{ currentPlayingFile }}
@@ -1055,7 +1061,7 @@
   </div>
 
   <app-gallery-item
-    *ngFor="let item of finalArray | similarityPipe: true : currentPlayingFile | slice:0:5 "
+    *ngFor="let item of finalArray | similarityPipe: true : currentPlayingFile | slice:0:7 "
 
     (click)="handleClick($event, item)"
     (contextmenu)="rightMouseClicked($event, item)"
@@ -1075,10 +1081,12 @@
     [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
     [showMeta]="settingsButtons['showMoreInfo'].toggled"
 
-    style="display: inline-block"
+    style="display: inline-block; margin-bottom: 50px"
   ></app-gallery-item>
 
 </div>
+
+<!-- TAGS BOTTOM TRAY -->
 
 <div
   *ngIf="settingsButtons['showTagTray'].toggled"

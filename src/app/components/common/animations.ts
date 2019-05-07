@@ -117,6 +117,21 @@ export const textAppear = trigger('textAppear', [
   )]
 );
 
+export const similarResultsText = trigger('similarResultsText', [
+  transition(
+    ':enter', [
+      style({ opacity: 0, 'margin-left': '-170px' }),
+      animate('300ms ease-in', style({ opacity: 1, 'margin-left': '20px' }))
+    ]
+  ),
+  transition(
+    ':leave', [
+      style({ opacity: 1, 'margin-left': '20px' }),
+      animate('300ms ease-out', style({ opacity: 0, 'margin-left': '-170px' }))
+    ]
+  )]
+);
+
 export const filterItemAppear = trigger('filterItemAppear', [
   transition(
     ':enter', [
