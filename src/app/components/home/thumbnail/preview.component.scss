@@ -42,11 +42,11 @@
 
 .folder-icon {
   fill: white;
-  left: 50%;
+  left: 0;
   position: absolute;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  width: 20%;
+  top: 0;
+  transform: translate(10px, 10px);
+  width: 25px;
 }
 
 .time, .rez {

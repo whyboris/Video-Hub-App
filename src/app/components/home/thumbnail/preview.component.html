@@ -50,9 +50,9 @@
     ></div>
     <span *ngIf="showMeta" class="time">{{ video.durationDisplay }}</span>
     <span *ngIf="showMeta" class="rez">{{ video.resolution }}</span>
-    <div class="folder-icon">
-      <app-icon [icon]="'icon-folder-blank'"></app-icon>
-    </div>
+  </div>
+  <div *ngIf="video.cleanName === '***' && video.fileName !== 'up'" class="folder-icon">
+    <app-icon [icon]="'icon-folder-blank'"></app-icon>
   </div>
 
   <ng-template #upIcon>

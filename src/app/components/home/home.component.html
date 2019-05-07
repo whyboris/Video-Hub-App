@@ -95,9 +95,9 @@
 
   <!-- OVERLAY to cancel out sheet display modal -->
   <div
-    *ngIf="sheetDisplay"
+    *ngIf="sheetOverlayShowing"
     class="clickAwayOverlay"
-    (click)="closeSheetDisplay()"
+    (click)="closeSheetOverlay()"
     @overlayAppear
   >
   </div>
@@ -127,22 +127,22 @@
 
   <!-- Thumbnail Sheet Display -->
   <app-thumbnail-sheet
-    *ngIf="sheetDisplay"
+    *ngIf="sheetOverlayShowing"
     (openFileRequest)="openVideo($event)"
     (editFinalArrayTag)="editFinalArrayTag($event)"
     (editFinalArrayStars)="editFinalArrayStars($event)"
     (editFinalArrayYear)="editFinalArrayYear($event)"
     (filterTag)="handleFileWordClicked($event.tag.name, $event.event)"
 
-    [elHeight]="currentViewImgHeight"
+    [elHeight]="previewHeight"
     [elWidth]="previewWidth"
     [folderPath]="appState.selectedOutputFolder"
     [hubName]="appState.hubName"
-    [imgHeight]="currentViewImgHeight"
+    [imgHeight]="previewHeight"
 
-    [video]="itemToDisplay"
+    [video]="sheetItemToDisplay"
 
-    [star]="itemToDisplay.stars"
+    [star]="sheetItemToDisplay.stars"
 
     [darkMode]="settingsButtons['darkMode'].toggled"
     [hoverScrub]="settingsButtons['hoverScrub'].toggled"
@@ -812,6 +812,7 @@
                       + (appState.menuHidden ? -32 : 0)) + 'px)',
           'background': settingsButtons['darkMode'].toggled ? '#000000' : '#999999'
         }"
+      [enableUnequalChildrenSizes]="appState.currentView === 'showFullView'"
       [ngClass]="{
           'gallery-container-full-width': settingsButtons['hideSidebar'].toggled,
           'gallery-dark-scroll': settingsButtons['darkMode'].toggled
@@ -891,11 +892,11 @@
           (click)="(item.cleanName === '***') ? handleFolderWordClicked(item.partialPath) : handleClick($event, item)"
           (contextmenu)="(item.cleanName === '***') ? doNothing() : rightMouseClicked($event, item)"
 
-          [elHeight]="currentViewImgHeight + textPaddingHeight"
+          [elHeight]="previewHeight + textPaddingHeight"
           [elWidth]="previewWidth"
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
-          [imgHeight]="currentViewImgHeight"
+          [imgHeight]="previewHeight"
 
           [video]="item"
 
@@ -907,6 +908,7 @@
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
 
           style="display: inline-block"
+          [ngStyle]="{ height: previewHeight + textPaddingHeight + 20 + 'px', width: previewWidth }"
         ></app-gallery-item>
       </ng-container>
 
@@ -919,10 +921,10 @@
 
           [video]="item"
 
-          [elHeight]="currentViewImgHeight + textPaddingHeight"
+          [elHeight]="previewHeight + textPaddingHeight"
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
-          [imgHeight]="currentViewImgHeight"
+          [imgHeight]="previewHeight"
 
           [darkMode]="settingsButtons['darkMode'].toggled"
           [hoverScrub]="settingsButtons['hoverScrub'].toggled"
@@ -930,6 +932,7 @@
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
 
           style="display: block"
+          [ngStyle]="{ height: previewHeight + textPaddingHeight + 10 + 'px'}"
         ></app-filmstrip-item>
       </ng-container>
 
@@ -942,11 +945,11 @@
 
           [video]="item"
 
-          [elHeight]="currentViewImgHeight + textPaddingHeight"
+          [elHeight]="previewHeight + textPaddingHeight"
           [folderPath]="appState.selectedOutputFolder"
           [galleryWidth]="galleryWidth"
           [hubName]="appState.hubName"
-          [imgHeight]="currentViewImgHeight"
+          [imgHeight]="previewHeight"
 
           [darkMode]="settingsButtons['darkMode'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
@@ -982,11 +985,11 @@
 
           [video]="item"
 
-          [elHeight]="currentViewImgHeight + textPaddingHeight"
+          [elHeight]="previewHeight + textPaddingHeight"
           [elWidth]="previewWidth"
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
-          [imgHeight]="currentViewImgHeight"
+          [imgHeight]="previewHeight"
 
           [autoplay]="settingsButtons['autoplayClips'].toggled"
           [darkMode]="settingsButtons['darkMode'].toggled"
@@ -1010,11 +1013,11 @@
 
           [video]="item"
 
-          [elHeight]="currentViewImgHeight + textPaddingHeight"
+          [elHeight]="previewHeight + textPaddingHeight"
           [elWidth]="previewWidth"
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
-          [imgHeight]="currentViewImgHeight"
+          [imgHeight]="previewHeight"
 
           [star]="item.stars"
 
@@ -1038,7 +1041,58 @@
 
 </div> <!-- end of window -->
 
-<div class="manual-tag-tray" *ngIf="settingsButtons['showTagTray'].toggled" @modalAnimation>
+<!-- MOST SIMILAR BOTTOM TRAY -->
+
+<div
+  *ngIf="settingsButtons['showRelatedVideosTray'].toggled"
+  class="bottom-tray most-similar-tray"
+  @modalAnimation
+>
+
+  <div
+    *ngIf="!this.settingsButtons['hideSidebar'].toggled"
+    class="most-similar-comment"
+    @similarResultsText
+  >
+    {{ 'TAGS.showingMostSimilar' | translate }}
+    <span class="most-siilar-filename">
+      {{ currentPlayingFile }}
+    </span>
+  </div>
+
+  <app-gallery-item
+    *ngFor="let item of finalArray | similarityPipe: true : currentPlayingFile | slice:0:7 "
+
+    (click)="handleClick($event, item)"
+    (contextmenu)="rightMouseClicked($event, item)"
+
+    [elHeight]="previewHeightRelated + textPaddingHeight"
+    [elWidth]="previewWidthRelated"
+    [folderPath]="appState.selectedOutputFolder"
+    [hubName]="appState.hubName"
+    [imgHeight]="previewHeightRelated"
+
+    [video]="item"
+
+    [darkMode]="settingsButtons['darkMode'].toggled"
+    [hoverScrub]="settingsButtons['hoverScrub'].toggled"
+    [largerFont]="settingsButtons['fontSizeLarger'].toggled"
+    [randomImage]="settingsButtons['randomImage'].toggled"
+    [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
+    [showMeta]="settingsButtons['showMoreInfo'].toggled"
+
+    style="display: inline-block; margin-bottom: 50px"
+  ></app-gallery-item>
+
+</div>
+
+<!-- TAGS BOTTOM TRAY -->
+
+<div
+  *ngIf="settingsButtons['showTagTray'].toggled"
+  class="bottom-tray manual-tag-tray"
+  @modalAnimation
+>
   <span class="manual-tag-tray-label">
     {{ 'TAGS.presentTags' | translate }}:
   </span>

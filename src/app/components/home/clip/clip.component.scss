@@ -7,6 +7,12 @@
   transition: 300ms;
 }
 
+.mini-video-thumb {
+  height: 50%;
+  position: absolute;
+  width: 50%;
+}
+
 .video-box {
   background: black;
   box-shadow: 2px 2px 7px rgba(0,0,0,0.2);

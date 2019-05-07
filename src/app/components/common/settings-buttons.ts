@@ -43,6 +43,9 @@ export const SettingsButtonsGroups: string[][] = [
     'showClips',
   ],
   [
+    'showRelatedVideosTray',
+  ],
+  [
     'showTags',
     'autoFileTags',
     'autoFolderTags',
@@ -109,10 +112,11 @@ export const SettingsMetaGroup: any = [
     ...SettingsButtonsGroups[9],
     'break',
     ...SettingsButtonsGroups[10],
-
+    'break',
+    ...SettingsButtonsGroups[11],
   ],
   [
-    ...SettingsButtonsGroups[11],
+    ...SettingsButtonsGroups[12],
   ],
 ];
 
@@ -262,6 +266,14 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     title: 'BUTTONS.darkModeHint',
     description: 'BUTTONS.darkModeDescription',
     settingsHeading: 'SETTINGS.darkMode'
+  },
+  'showRelatedVideosTray': {
+    hidden: false,
+    toggled: false,
+    iconName: 'icon-show-thumbnails',
+    title: 'BUTTONS.relatedTrayHint',
+    description: 'BUTTONS.relatedTrayDescription',
+    settingsHeading: 'SETTINGS.relatedVideosTray'
   },
   'showTagTray': {
     hidden: false,

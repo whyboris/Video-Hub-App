@@ -29,7 +29,6 @@ export class PreviewComponent implements OnInit {
   @Input() returnToFirstScreenshot: boolean;
   @Input() showMeta: boolean;
 
-  // numberOfThumbs = 0;
   firstFilePath = '';
   folderThumbPaths: string[] = [];
   fullFilePath = '';
@@ -59,12 +58,10 @@ export class PreviewComponent implements OnInit {
       this.shuffle(hashes).slice(0, 4).forEach((hash) => {
         this.folderThumbPaths.push('file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/thumbnails/' + hash + '.jpg');
       });
-      // this.numberOfThumbs = this.folderThumbPaths.length;
     } else {
       this.firstFilePath = 'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/thumbnails/' + this.video.hash + '.jpg';
       this.fullFilePath =  'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/filmstrips/' + this.video.hash + '.jpg';
       this.folderThumbPaths.push(this.firstFilePath);
-      // this.numberOfThumbs = 1;
     }
   }
 
