@@ -908,7 +908,7 @@
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
 
           style="display: inline-block"
-          [ngStyle]="{ height: previewHeight + textPaddingHeight + 20 + 'px' }"
+          [ngStyle]="{ height: previewHeight + textPaddingHeight + 20 + 'px', width: previewWidth }"
         ></app-gallery-item>
       </ng-container>
 
@@ -932,6 +932,7 @@
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
 
           style="display: block"
+          [ngStyle]="{ height: previewHeight + textPaddingHeight + 10 + 'px'}"
         ></app-filmstrip-item>
       </ng-container>
 

@@ -1084,6 +1084,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public decreaseSize(): void {
     this.currentImgsPerRow++;
     this.computePreviewWidth();
+    this.virtualScroller.invalidateAllCachedMeasurements();
   }
 
   /**
@@ -1094,6 +1095,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.currentImgsPerRow--;
     }
     this.computePreviewWidth();
+    this.virtualScroller.invalidateAllCachedMeasurements();
   }
 
   /**
