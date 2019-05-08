@@ -28,16 +28,19 @@ Please consider improving or adding an icon to the app. It's a simple process, j
 
 ## Upcoming features
 
-A list of upcoming features is [listed on the official website](https://videohubapp.com/future.html).
+A list of upcoming features is [listed on the official website](https://videohubapp.com/future.html). Also see [issues](https://github.com/whyboris/Video-Hub-App/issues) for what is in progress.
 
-## Current versions
+## Current project versions
 
-- Angular v7.1.3
-- Angular-CLI v7.1.3
-- Electron v4.0.4 (internally uses Node v10.11.0 and Chrome 69)
-- Electron Builder v20.36.2
-- Node v10.15.1
-- npm v6.4.1
+- Angular v7.2.15
+- Angular-CLI v7.3.9
+- Electron v4.2.0 (internally uses Node v10.11.0 and Chrome 69)
+- Electron Builder v20.38.5
+
+## Current dev environment
+
+- Node v12.0.0
+- npm v6.9.0
 
 ## Thank you
 
