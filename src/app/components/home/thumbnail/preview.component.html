@@ -12,6 +12,7 @@
     *ngIf="video.fileName !== 'up'; else upIcon"
     class="video-box folder"
     (mousemove)="mouseIsMoving($event)"
+    (click)="videoClick.emit($event)"
     [ngStyle]="{ height: imgHeight + 'px' }"
   >
     <div
@@ -58,6 +59,7 @@
   <ng-template #upIcon>
     <div
       class="video-box folder"
+      (click)="videoClick.emit($event)"
       [ngStyle]="{ height: imgHeight + 'px' }"
     >
       <div class="up-icon">
