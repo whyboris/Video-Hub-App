@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { ImageElement } from '../../common/final-object.interface';
@@ -14,6 +14,9 @@ import { galleryItemAppear, metaAppear, textAppear } from '../../common/animatio
                 metaAppear ]
 })
 export class ClipComponent implements OnInit {
+
+  @Output() videoClick = new EventEmitter<object>();
+  @Output() sheetClick = new EventEmitter<object>();
 
   @Input() video: ImageElement;
 
@@ -37,6 +40,13 @@ export class ClipComponent implements OnInit {
   constructor(
     public sanitizer: DomSanitizer
   ) { }
+
+  @HostListener('mouseenter') onMouseEnter() {
+      this.hover = true;
+  }
+  @HostListener('mouseleave') onMouseLeave() {
+      this.hover = false;
+  }
 
   ngOnInit() {
     // multiple hashes?
