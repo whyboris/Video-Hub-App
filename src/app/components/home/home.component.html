@@ -888,8 +888,8 @@
       <ng-container *ngIf="appState.currentView === 'showThumbnails'">
         <app-gallery-item
           *ngFor="let item of scroll.viewPortItems"
-
-          (click)="(item.cleanName === '***') ? handleFolderWordClicked(item.partialPath) : handleClick($event, item)"
+          (videoClick)="(item.cleanName === '***') ? handleFolderWordClicked(item.partialPath) : handleClick($event, item)"
+          (sheetClick)="this.openThumbnailSheet(item)"
           (contextmenu)="(item.cleanName === '***') ? doNothing() : rightMouseClicked($event, item)"
 
           [elHeight]="previewHeight + textPaddingHeight"
@@ -979,8 +979,8 @@
       <ng-container *ngIf="appState.currentView === 'showClips'">
         <app-clip-item
           *ngFor="let item of scroll.viewPortItems"
-
-          (click)="(item.cleanName === '***') ? handleFolderWordClicked(item.partialPath) : handleClick($event, item)"
+          (videoClick)="(item.cleanName === '***') ? handleFolderWordClicked(item.partialPath) : handleClick($event, item)"
+          (sheetClick)="this.openThumbnailSheet(item)"
           (contextmenu)="(item.cleanName === '***') ? doNothing() : rightMouseClicked($event, item)"
 
           [video]="item"

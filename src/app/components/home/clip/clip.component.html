@@ -10,6 +10,7 @@
   <div
     #filmstripHolder
     class="video-box folder"
+    (click)="videoClick.emit($event)"
     [ngStyle]="{
         height: imgHeight + 'px'
     }"
@@ -130,6 +131,7 @@
     [src]="'file://' + folderPath + '/' + pathToVideo"
     [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + poster)"
     [ngStyle]="{ 'height': imgHeight + 'px' }"
+    (click)="videoClick.emit($event)"
     class="screencap"
     onmouseover="this.play().catch((err) => {this.load()})"
     onmouseout="this.pause()"
@@ -141,6 +143,7 @@
     [src]="'file://' + folderPath + '/' + pathToVideo"
     [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + poster)"
     [ngStyle]="{ 'height': imgHeight + 'px' }"
+    (click)="videoClick.emit($event)"
     class="screencap"
     onmouseover="this.muted = false;"
     onmouseout="this.muted = true;"
@@ -162,5 +165,12 @@
     {{ showMeta ? '(' + video.fileSizeDisplay + ')' : '' }}
   </div>
 </span>
+<app-icon
+  class="sheet-icon"
+  [icon]="'icon-show-thumbnails'"
+  (click)="sheetClick.emit()"
+  [ngStyle]="{
+    'opacity': (this.hover ? 1 : 0)
+  }"></app-icon>
 </ng-template>
 </div>

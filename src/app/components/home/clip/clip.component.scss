@@ -21,6 +21,16 @@
   position: relative;
 }
 
+.sheet-icon {
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 16px;
+  width: 16px;
+  fill: white;
+  opacity: 0;
+}
+
 .folder {
   border-radius: 10px;
   border: 3px solid white;

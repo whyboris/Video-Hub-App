@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, HostListener, Input, Output, EventEmitter, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { galleryItemAppear, metaAppear, textAppear } from '../../common/animations';
 import { ImageElement } from '../../common/final-object.interface';
@@ -14,6 +14,9 @@ import { ImageElement } from '../../common/final-object.interface';
 export class PreviewComponent implements OnInit {
 
   @ViewChild('filmstripHolder') filmstripHolder: ElementRef;
+
+  @Output() videoClick = new EventEmitter<object>();
+  @Output() sheetClick = new EventEmitter<object>();
 
   @Input() video: ImageElement;
 

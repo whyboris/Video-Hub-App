@@ -12,6 +12,7 @@
     *ngIf="video.fileName !== 'up'; else upIcon"
     class="video-box folder"
     (mousemove)="mouseIsMoving($event)"
+    (click)="videoClick.emit($event)"
     [ngStyle]="{ height: imgHeight + 'px' }"
   >
     <div
@@ -58,6 +59,7 @@
   <ng-template #upIcon>
     <div
       class="video-box folder"
+      (click)="videoClick.emit($event)"
       [ngStyle]="{ height: imgHeight + 'px' }"
     >
       <div class="up-icon">
@@ -88,6 +90,7 @@
     #filmstripHolder
     class="video-box"
     (mousemove)="mouseIsMoving($event)"
+    (click)="videoClick.emit($event)"
     [ngStyle]="{
         height: imgHeight + 'px',
         'background-image': 'url(' + (hover ? fullFilePath : firstFilePath) + ')',
@@ -112,7 +115,12 @@
       {{ showMeta ? '(' + video.fileSizeDisplay + ')' : '' }}
     </div>
   </span>
+  <app-icon
+  class="sheet-icon"
+  [icon]="'icon-show-thumbnails'"
+  (click)="sheetClick.emit()"
+  [ngStyle]="{
+    'opacity': (this.hover ? 1 : 0)
+  }"></app-icon>
 </ng-template>
-
-
 </div>
