@@ -78,6 +78,7 @@ function createWindow() {
   // Create the browser window.
   win = new BrowserWindow({
     webPreferences: {
+      nodeIntegration: true,
       webSecurity: false  // allow files from hard disk to show up
     },
     x: screenWidth / 2 - 210,
@@ -374,7 +375,7 @@ ipc.on('openInExplorer', function(event, fullPath: string) {
  * Open a URL in system's default browser
  */
 ipc.on('pleaseOpenUrl', function(event, urlToOpen: string): void {
-  shell.openExternal(urlToOpen, { activate: true }, (): void => {});
+  shell.openExternal(urlToOpen, { activate: true });
 });
 
 /**
