@@ -317,7 +317,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.toggleButton('showMoreInfo');
       } else if (event.key === 'a') {
         this.toggleButton('hideSidebar');
-      } else if (event.key === 'q') {
+      } else if (event.key === 'g') {
         if (!this.settingsButtons['magic'].toggled) {
           this.settingsButtons['magic'].toggled = true;
         }
@@ -1097,7 +1097,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Increase preview size
    */
   public increaseSize(): void {
-    if (this.currentImgsPerRow > 1) {
+    if (this.appState.currentView === 'showDetails') {
+      if (this.currentImgsPerRow > 2) {
+        this.currentImgsPerRow--;
+      }
+    } else if (this.currentImgsPerRow > 1) {
       this.currentImgsPerRow--;
     }
     this.computePreviewWidth();
