@@ -303,8 +303,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       } else if (event.key === '2') {
         this.toggleButton('showFilmstrip');
       } else if (event.key === '3') {
-        this.toggleButton('showFiles');
+        this.toggleButton('showFullView');
       } else if (event.key === '4') {
+        this.toggleButton('showDetails');
+      } else if (event.key === '5') {
+        this.toggleButton('showFiles');
+      } else if (event.key === '6') {
         this.toggleButton('showClips');
       } else if (event.key === 'h') {
         this.toggleButton('hideTop');
