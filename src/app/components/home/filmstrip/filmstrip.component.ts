@@ -13,7 +13,7 @@ import { ImageElement } from '../../common/final-object.interface';
 })
 export class FilmstripComponent implements OnInit {
 
-  @ViewChild('filmstripHolder') filmstripHolder: ElementRef;
+  @ViewChild('filmstripHolder', { static: false }) filmstripHolder: ElementRef;
 
   @Input() video: ImageElement;
 

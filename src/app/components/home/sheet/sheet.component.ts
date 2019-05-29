@@ -31,8 +31,8 @@ export interface StarEmission {
 })
 export class SheetComponent implements OnInit {
 
-  @ViewChild('filmstripHolder') filmstripHolder: ElementRef;
-  @ViewChild('thumbHolder') thumbHolder: ElementRef;
+  @ViewChild('filmstripHolder', {static: false}) filmstripHolder: ElementRef;
+  @ViewChild('thumbHolder', {static: false}) thumbHolder: ElementRef;
 
   @Output() editFinalArrayStars = new EventEmitter<StarEmission>();
   @Output() editFinalArrayTag = new EventEmitter<TagEmission>();
