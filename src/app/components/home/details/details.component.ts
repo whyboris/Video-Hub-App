@@ -32,7 +32,7 @@ export interface YearEmission {
 })
 export class DetailsComponent implements OnInit {
 
-  @ViewChild('filmstripHolder') filmstripHolder: ElementRef;
+  @ViewChild('filmstripHolder', { static: false }) filmstripHolder: ElementRef;
 
   @Output() editFinalArrayStars = new EventEmitter<StarEmission>();
   @Output() editFinalArrayTag = new EventEmitter<TagEmission>();

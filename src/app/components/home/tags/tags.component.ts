@@ -23,7 +23,7 @@ export class TagsComponent implements OnInit, OnDestroy {
 
   @Output() tagClicked = new EventEmitter<string>();
 
-  @ViewChild('filterInput') filterInput: ElementRef;
+  @ViewChild('filterInput', { static: false }) filterInput: ElementRef;
 
   oneWordTags: WordAndFreq[];
   twoWordTags: WordAndFreq[];

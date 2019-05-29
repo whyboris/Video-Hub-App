@@ -13,7 +13,7 @@ import { ImageElement } from '../../common/final-object.interface';
 })
 export class PreviewComponent implements OnInit {
 
-  @ViewChild('filmstripHolder') filmstripHolder: ElementRef;
+  @ViewChild('filmstripHolder', { static: false }) filmstripHolder: ElementRef;
 
   @Output() videoClick = new EventEmitter<object>();
   @Output() sheetClick = new EventEmitter<object>();

@@ -83,14 +83,14 @@ import {
 })
 export class HomeComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('magicSearch') magicSearch: ElementRef;
-  @ViewChild('renameFileInput') renameFileInput: ElementRef;
-  @ViewChild('searchRef') searchRef: ElementRef;
+  @ViewChild('magicSearch', {static: false}) magicSearch: ElementRef;
+  @ViewChild('renameFileInput', {static: false}) renameFileInput: ElementRef;
+  @ViewChild('searchRef', {static: false}) searchRef: ElementRef;
 
   // used to grab the `scrollable-content` element - background of gallery for right-click
   galleryBackgroundRef: any;
 
-  @ViewChild(VirtualScrollerComponent)
+  @ViewChild(VirtualScrollerComponent, {static: false})
   virtualScroller: VirtualScrollerComponent;
 
   defaultSettingsButtons = {};

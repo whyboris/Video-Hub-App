@@ -25,7 +25,7 @@ export interface StarEmission {
 })
 export class MetaComponent implements OnInit {
 
-  @ViewChild('yearInput') yearInput: ElementRef;
+  @ViewChild('yearInput', { static: false }) yearInput: ElementRef;
 
   @Output() editFinalArrayStars = new EventEmitter<StarEmission>();
   @Output() editFinalArrayTag = new EventEmitter<TagEmission>();
