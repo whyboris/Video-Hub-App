@@ -38,9 +38,9 @@
   },
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "1.0.17",
-    "@ffprobe-installer/ffprobe": "1.0.9",
+    "@ffprobe-installer/ffprobe": "1.0.12",
     "@ngx-translate/core": "11.0.1",
-    "ngx-virtual-scroller": "2.1.0"
+    "ngx-virtual-scroller": "3.0.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.800.0",
