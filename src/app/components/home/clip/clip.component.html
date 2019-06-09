@@ -145,6 +145,7 @@
     [ngStyle]="{ 'height': imgHeight + 'px' }"
     (click)="videoClick.emit($event)"
     class="screencap"
+    [volume]="shouldMute()"
     onmouseover="this.muted = false;"
     onmouseout="this.muted = true;"
     onloadstart="this.muted = true;"

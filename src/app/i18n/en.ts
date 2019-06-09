@@ -45,6 +45,8 @@ export const English = {
     makeSmallerHint: 'Decrease preview size',
     manualTagsDescription: 'Toggle manual tagging feature',
     manualTagsHint: 'Toggle manual tags',
+    muteClipsDescription: 'Toggle whether hovering the mouse over video will play the sound',
+    muteClipsHint: 'Toggle sound when hovering over video',
     randomImageDescription: 'Toggle whether a random screenshot from each video is shown every time you search or scroll',
     randomImageHint: 'Show random screenshot',
     randomizeGalleryDescription: 'Randomize the order of video files after every search',
