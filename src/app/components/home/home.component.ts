@@ -31,6 +31,7 @@ import { Russian } from '../../i18n/ru';
 import { globals } from '../../../../main-globals';
 
 import {
+  buttonAnimation,
   donutAppear,
   filterItemAppear,
   galleryItemAppear,
@@ -66,6 +67,7 @@ import {
     './rightclick.scss'
   ],
   animations: [
+    buttonAnimation,
     donutAppear,
     filterItemAppear,
     galleryItemAppear,

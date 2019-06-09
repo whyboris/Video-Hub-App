@@ -1,4 +1,4 @@
-import { animate, state, style, transition, trigger } from '@angular/animations';
+import { animate, style, transition, trigger } from '@angular/animations';
 
 export const modalAnimation = trigger('modalAnimation', [
   transition(
@@ -9,8 +9,23 @@ export const modalAnimation = trigger('modalAnimation', [
   ),
   transition(
     ':leave', [
-      style({ transform: 'translateX(0)', 'opacity': 1 }),
+      style({ transform: 'translateY(0)', 'opacity': 1 }),
       animate('250ms ease-out', style({ transform: 'translateY(10px)', opacity: 0 }))
+    ]
+  )]
+);
+
+export const buttonAnimation = trigger('buttonAnimation', [
+  transition(
+    ':enter', [
+      style({ opacity: 0, transform: 'scale(0.5)', 'box-shadow': '0 0 20px 10px #ffffff' }),
+      animate('250ms ease-in', style({ opacity: 1, transform: 'scale(1)', 'box-shadow': '0 0 0px 0px #ff6666' }))
+    ]
+  ),
+  transition(
+    ':leave', [
+      style({ 'opacity': 1, transform: 'scale(1)', 'box-shadow': '0 0 0px 0px #ff6666' }),
+      animate('250ms ease-out', style({ opacity: 0, transform: 'scale(0.5)', 'box-shadow': '0 0 20px 10px #ffffff' }))
     ]
   )]
 );

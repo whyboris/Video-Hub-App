@@ -309,7 +309,7 @@
                     }"
                   title="{{ settingsButtons[buttonKey].title | translate }}"
                 >
-                  <app-icon [icon]="settingsButtons[buttonKey].iconName"></app-icon>
+                  <app-icon class="icon" [icon]="settingsButtons[buttonKey].iconName"></app-icon>
                 </button>
 
                 <span
@@ -524,6 +524,7 @@
                                                   && appState.currentView === 'showFiles'
                 }"
               title="{{ settingsButtons[buttonKey].title | translate }}"
+              @buttonAnimation
             >
               <app-icon class="icon" [icon]="settingsButtons[buttonKey].iconName"></app-icon>
             </button><!--
@@ -997,6 +998,7 @@
           [autoplay]="settingsButtons['autoplayClips'].toggled"
           [darkMode]="settingsButtons['darkMode'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
+          [mutedNow]="settingsButtons['muteClips'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
 
           style="display: inline-block"
