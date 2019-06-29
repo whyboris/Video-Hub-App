@@ -27,6 +27,7 @@ import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, Settin
 import { English } from '../../i18n/en';
 import { French } from '../../i18n/fr';
 import { Russian } from '../../i18n/ru';
+import { BrazilianPortuguese } from '../../i18n/pt_br';
 
 import { globals } from '../../../../main-globals';
 
@@ -1580,6 +1581,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.translate.use('fr');
         this.translate.setTranslation('fr', French );
         this.appState.language = 'fr';
+        break;
+      case 'pt_br':
+        this.translate.use('pt_br');
+        this.translate.setTranslation('pt_br', BrazilianPortuguese );
+        this.appState.language = 'pt_br';
         break;
       default:
         this.translate.use('en');
