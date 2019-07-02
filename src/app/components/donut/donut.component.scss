@@ -37,11 +37,12 @@ $donut-border-width: 0.5em;
 }
 
 .value-bar {
+  border: $donut-border-width solid $progress-color; /* The border is 0.35 but making it larger removes visual artifacts */
+
   /* This is an overlayed square, that is made round with the border radius,
   then it is cut to display only the left half, then rotated clockwise
   to escape the outer clipping path. */
   border-radius: 50%;
-  border: $donut-border-width solid $progress-color; /* The border is 0.35 but making it larger removes visual artifacts */
   box-sizing: border-box;
   clip: rect(0, 2em, 4em, 0);
   height: $donut-height;
@@ -53,9 +54,10 @@ $donut-border-width: 0.5em;
 
 /* Progress bar filling the whole right half for values above 50% */
 .progress-circle.over50 .first50-bar {
+  border: $donut-border-width solid $progress-color;
+
   /* Progress bar for the first 50%, filling the whole right half */
   border-radius: 50%;
-  border: $donut-border-width solid $progress-color;
   clip: rect(0, 4em, 4em, 2em);
   height: 3em;
   position: absolute; /* needed for clipping */

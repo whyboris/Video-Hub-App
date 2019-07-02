@@ -1,9 +1,9 @@
 @import "../variables";
 
 .element-container {
+  height: 20px;
   margin: 10px 20px 0px 20px;
   position: relative;
-  height: 20px;
 }
 
 .length,
@@ -53,8 +53,8 @@
   overflow: hidden;
   text-align: left;
   text-overflow: ellipsis;
-  transition-property: margin width;
   transition: 300ms;
+  transition-property: margin width;
   white-space: nowrap;
 
   // below is now in [ngStyle]

@@ -4,15 +4,15 @@ $transition-length: 300ms;
 
 .metaGroupButton {
   background-color: #c0c0c0;
+  border: 1px solid gray;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
-  border: 1px solid gray;
   font-size: 12px;
   margin: 10px 10px -1px;
   padding: 8px;
   position: relative;
-  transition-property: text-shadow background-color;
   transition: 300ms;
+  transition-property: text-shadow background-color;
 }
 
 .metaGroupDivider {
@@ -25,14 +25,14 @@ $transition-length: 300ms;
   background-color: #d8d8d8;
   border-bottom: 1px solid #d8d8d8;
   text-shadow:0px 0px 1px black;
-  transition-property: text-shadow background-color;
   transition: 300ms;
+  transition-property: text-shadow background-color;
   z-index: 10;
 }
 
 h2, h3 {
-  font-size: 16px;
   color: $gray-60;
+  font-size: 16px;
   margin: 15px 0 0 10px;
 }
 
@@ -77,8 +77,8 @@ h3 {
   }
 
   span {
-    font-size: 12px;
     color: $gray-40;
+    font-size: 12px;
   }
 }
 
@@ -90,6 +90,7 @@ h3 {
   position: sticky;
   top: 1px;
   transition-duration: 300ms;
+
   &:hover {
     color: #990000;
     transition-duration: 300ms;
@@ -105,8 +106,8 @@ h3 {
 
 .settings-buttons-group {
   float: left;
-  margin-right: 8px;
   margin-bottom: 10px; // if ever app width is too small, buttons spill over; this pushes them below cutoff
+  margin-right: 8px;
   max-height: 23px;
   z-index: 2;
 }
@@ -115,13 +116,13 @@ h3 {
   display: inline-block;
   height: 10px;
   margin: 3px;
-  width: 10px;
   transition: $transition-length;
+  width: 10px;
 }
 
 .buttonSpacerExpanded {
-  width: 30px;
   transition: $transition-length;
+  width: 30px;
 }
 
 .gallerySettingsButtons {
@@ -135,9 +136,9 @@ h3 {
 .galleryButtonsSettings {
   left: 20px;
   max-width: calc(100% - 30px);
-  transform: translate(-10px, 0);
   position: relative;
   top: 20px;
+  transform: translate(-10px, 0);
   transition: 100ms;
 }
 
@@ -157,11 +158,11 @@ h3 {
 }
 
 .setting-heading {
+  border-top: 1px solid $gray-40;
   display: block;
   margin-bottom: 24px;
-  text-align: center;
   padding-top: 20px;
-  border-top: 1px solid $gray-40;
+  text-align: center;
 }
 
 .buttonDescription {
@@ -177,12 +178,12 @@ h3 {
 }
 
 .buttonDescriptionText {
-  display: -webkit-box !important;
-  -webkit-line-clamp: 3 !important;
   -webkit-box-orient: vertical !important;
   color: $black;
+  display: -webkit-box !important;
   font-size: 14px;
   left: 80px;
+  -webkit-line-clamp: 3 !important;
   overflow: hidden;
   position: absolute;
   top: 2px;
@@ -202,17 +203,17 @@ h3 {
 
 .eye-open {
   &:before {
-    font-family: "vh-icon-font";
     content: '\f17f';
     display: inline-block;
+    font-family: "vh-icon-font";
   }
 }
 
 .eye-closed {
   &:before {
-    font-family: "vh-icon-font";
     content: '\f17b';
     display: inline-block;
+    font-family: "vh-icon-font";
   }
 }
 
@@ -228,8 +229,8 @@ h3 {
 }
 
 .shortcutMenu {
-  margin: 40px 30px;
   font-size: 14px;
+  margin: 40px 30px;
 }
 
 .languageDropDown {
@@ -240,8 +241,8 @@ h3 {
 .numSelect {
   border: 1px solid $gray-50;
   margin: 0 3px 0 !important;
-  width: 30px;
   user-select: none;
+  width: 30px;
 }
 
 .ssNumSelection {
@@ -251,8 +252,8 @@ h3 {
 
 input[type="radio"] {
   -webkit-appearance: inherit;
-  border-radius: 10px;
   border: 1px solid $gray-50;
+  border-radius: 10px;
   cursor: pointer;
   height: 15px;
   outline: none;
@@ -262,8 +263,8 @@ input[type="radio"] {
 
 input[type="radio"]:checked:before {
   background: #729aff;
-  border-radius: 10px;
   border: 3px solid $gray-10;
+  border-radius: 10px;
   content:"";
   height: 7px;
   position: absolute;
@@ -275,8 +276,8 @@ input[type="radio"]:checked:before {
 }
 
 .more-info {
-  border-radius: 50%;
   border: 1px solid #729aff;
+  border-radius: 50%;
   color: #729aff;
   cursor: none;
   display: inline-block;
@@ -318,8 +319,8 @@ input[type="radio"]:checked:before {
 
 .key {
   background: #EEEEEE;
-  border-radius: 3px;
   border: 1px solid #888888;
+  border-radius: 3px;
   color: black;
   display: inline-block;
   font-style: normal;
@@ -331,8 +332,8 @@ input[type="radio"]:checked:before {
 
 .modifierKey {
   line-height: 20px;
-  margin-right: initial;
   margin: 0 4px;
+  margin-right: initial;
   padding: 3px 10px;
   width: initial;
 }
@@ -352,10 +353,10 @@ input[type="radio"]:checked:before {
   margin: 20px;
 
   button {
-    font-size: 16px;
     display: inline-block;
-    vertical-align: top;
+    font-size: 16px;
+    min-height: 36px;
     min-width: 36px;
-    min-height: 36px
+    vertical-align: top
   }
 }

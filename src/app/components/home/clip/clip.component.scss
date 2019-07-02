@@ -3,8 +3,8 @@
   margin: 20px 20px 0;
   overflow: hidden;
   position: relative;
-  transition-property: height;
   transition: 300ms;
+  transition-property: height;
 }
 
 .mini-video-thumb {
@@ -22,18 +22,18 @@
 }
 
 .sheet-icon {
-  position: absolute;
-  top: 0;
-  right: 0;
-  height: 16px;
-  width: 16px;
   fill: white;
+  height: 16px;
   opacity: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 16px;
 }
 
 .folder {
-  border-radius: 10px;
   border: 3px solid white;
+  border-radius: 10px;
   box-sizing: border-box;
 }
 
@@ -62,18 +62,18 @@
 
 .title {
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
   cursor: pointer;
   display: -webkit-box;
   font-size: 12px;
+  -webkit-line-clamp: 3;
   margin: 6px 2px 0px;
   max-height: 54px;
   overflow: hidden;
   position: absolute;
   text-align: left;
   text-overflow: ellipsis;
-  transition-property: font-size;
   transition: 300ms;
+  transition-property: font-size;
   width: 100%;
   word-wrap: break-word;
 }

@@ -27,14 +27,14 @@ ul {
 
 .clickable {
   cursor: pointer;
-  transition-property: color;
   transition: 200ms;
   transition-delay: 50ms;
+  transition-property: color;
 
   &:hover {
     color: #729aff;
-    transition-property: color;
     transition: 30ms;
+    transition-property: color;
   }
 }
 
@@ -63,16 +63,16 @@ ul {
 }
 
 .edit-bar {
-  display: flex;
   align-items: baseline;
   background: $gray-15;
   bottom: 15px;
   box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
   margin: 0;
   padding: 15px;
   position: fixed;
   width: calc(100% - 235px);
-  justify-content: space-between;
 }
 
 .col1 {
@@ -90,8 +90,8 @@ ul {
 // inherits styles from 'search-input.scss'
 .inputFilter {
   bottom: 23px;
-  padding-left: 5px;
   max-width: 150px;
+  padding-left: 5px;
   text-align: center;
 }
 
@@ -103,10 +103,10 @@ ul {
 // inherits styles from 'wizard-button.scss'
 .wizardButton {
   display: inline-block;
+  margin: 5px;
   min-width: auto;
   padding: 5px 10px;
   width: auto;
-  margin: 5px;
 }
 
 .addButton {
@@ -125,8 +125,8 @@ ul {
 }
 
 .alignLeft {
-  text-align: left;
   margin-left: 5px;
+  text-align: left;
 }
 
 .editModeActive {

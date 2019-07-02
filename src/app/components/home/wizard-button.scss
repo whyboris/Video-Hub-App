@@ -2,8 +2,8 @@
 
 .wizardButton {
   background: #DDDDDD;
-  border-radius: 10px;
   border: 1px solid #a7a7a7;
+  border-radius: 10px;
   cursor: pointer;
   margin: 15px;
   max-height: 50px;
@@ -11,8 +11,8 @@
   min-width: 190px;
   outline: none;
   padding: 10px;
-  transition-property: background-color, box-shadow, color;
   transition: 300ms;
+  transition-property: background-color, box-shadow, color;
 
   &:enabled {
     box-shadow: 1px 2px 4px rgba(0,0,0,0.5);

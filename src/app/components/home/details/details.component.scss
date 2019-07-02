@@ -3,16 +3,16 @@
   margin: 20px 20px 0;
   min-height: 170px;
   overflow: hidden;
-  transition-property: height;
   transition: 300ms;
+  transition-property: height;
   width: calc(100% - 40px);
 }
 
 .meta {
+  box-sizing: border-box;
   display: inline-block;
   padding: 10px 20px;
   vertical-align: top;
-  box-sizing: border-box;
 }
 
 .video-box {
@@ -27,15 +27,15 @@
 
 .title {
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
   display: -webkit-box;
   font-size: 12px;
+  -webkit-line-clamp: 3;
   max-height: 54px;
   overflow: hidden;
   text-align: left;
   text-overflow: ellipsis;
-  transition-property: font-size;
   transition: 300ms;
+  transition-property: font-size;
   user-select: text;
   width: 100%;
   word-wrap: break-word;

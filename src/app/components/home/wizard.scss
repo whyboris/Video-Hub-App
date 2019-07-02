@@ -3,18 +3,18 @@
 .wizard {
   background: $gray-10;
   height: 100vh;
+  height: calc(100vh - 50px);
   overflow-y: scroll;
   padding-top: 30px;
   position: fixed;
   top: 20px; // accounts for draggable region
   width: 100%;
   z-index: 30;
-  height: calc(100vh - 50px);
 
 
   h1 {
-    font-size: 14px;
     color: $gray-60;
+    font-size: 14px;
   }
 
   span {
@@ -49,11 +49,11 @@
     border-left: 1px solid $gray-20;
     // box-sizing: border-box;
     float: left;
-    // max-width: 60vw;
-    width: calc(50vw - 100px);
     min-height: calc(100vh - 180px);
     min-width: 300px;
     padding: 50px;
+    // max-width: 60vw;
+    width: calc(50vw - 100px);
   }
 
   .steps {
@@ -114,24 +114,24 @@
           display: inline-block !important;
           font-size: 14px !important;
           transform: translate(-9px, -5px);
-          transition-property: text-shadow;
           transition: 300ms;
+          transition-property: text-shadow;
         }
 
         &:hover {
           .history-name {
             color: #ff7777;
             text-shadow: 0px 0px 3px rgba(255, 255, 255, 0.5);
-            transition-property: text-shadow;
             transition: 300ms;
+            transition-property: text-shadow;
           }
         }
 
         .clear-history-item {
           position: absolute;
           transform: translate(-32px, 3px);
-          transition-property: color;
           transition: 300ms;
+          transition-property: color;
 
           &:hover {
             color: red;
@@ -143,8 +143,8 @@
         }
 
         span {
-          padding-left: 10px;
           font-style: italic;
+          padding-left: 10px;
         }
       }
     }
@@ -159,16 +159,16 @@
     justify-content: center;
     position: absolute;
     text-align: center;
+    transform: translate(260px, -56px);
     transition: 300ms;
     transition-property: width, height;
-    transform: translate(260px, -56px);
   }
 
   .path {
-    pointer-events: none;
     color: black;
-    min-height: 20px;
     margin-left: 26px;
+    min-height: 20px;
+    pointer-events: none;
   }
 
   .recent {
@@ -179,10 +179,10 @@
   }
 
   .step-description {
-    pointer-events: none;
     color: $gray-60;
-    min-height: 20px;
     margin-left: 16px;
+    min-height: 20px;
+    pointer-events: none;
   }
 
   .emphasis-number {
@@ -212,9 +212,9 @@
 }
 
 .hub-name-input {
+  margin-left: 15px;
   margin-top: 16px;
   padding-left: 5px;
-  margin-left: 15px;
 }
 
 .history-icon {
@@ -223,7 +223,6 @@
 }
 
 @media (max-width: 760px) {
-
   .wizard {
     margin: 0;
 
@@ -240,9 +239,9 @@
     border-top: 1px solid $gray-20;
     margin-bottom: 100px;
     margin-left: 20px;
+    min-height: initial !important;
     min-width: calc(100vw - 150px) !important;
     width: calc(100vw - 150px) !important;
-    min-height: initial !important;
 
     & > * {
       transform: translate(-20px, 0);

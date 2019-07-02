@@ -13,19 +13,19 @@
   z-index: 20;
 
   &:hover {
-    transition: 100ms;
     transform: scale(1.5);
+    transition: 100ms;
   }
 }
 
 .mini-chevron {
-  width: 15px;
   display: block;
+  width: 15px;
 }
 
 .flipped {
-  transform-origin: 7.5px 7.5px;
   transform: rotate(180deg);
+  transform-origin: 7.5px 7.5px;
   transition: 100ms;
 
   &:hover {
@@ -80,36 +80,36 @@
 }
 
 .frequency {
-  margin-top: 20px;
   color: $gray-50;
+  margin-top: 20px;
 
   span {
-    margin: 0 4px;
     cursor: pointer;
+    margin: 0 4px;
   }
 }
 
 .recently-opened-label {
   color: $gray-50;
+  display: block;
   font-style: italic;
   margin-bottom: 10px;
-  display: block;
 }
 
 .recently-opened {
-  margin-top: 40px;
   font-size: 10px;
+  margin-top: 40px;
 
   ul {
     margin: 0;
     padding: 0;
 
     li {
-      list-style: none;
-      font-size: 12px;
-      padding-left: 5px;
-      margin-top: 5px;
       cursor: pointer;
+      font-size: 12px;
+      list-style: none;
+      margin-top: 5px;
+      padding-left: 5px;
     }
   }
 }

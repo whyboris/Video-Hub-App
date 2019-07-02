@@ -1,0 +1,34 @@
+{
+  "extends": "stylelint-config-recommended-scss",
+  "plugins": [
+    "stylelint-order",
+    "stylelint-scss"
+  ],
+  "rules": {
+    "block-closing-brace-newline-before": "always",
+    "block-opening-brace-newline-after": "always",
+    "comment-empty-line-before": [
+      "always",
+      {
+        "except": [
+          "first-nested"
+        ]
+      }
+      ],
+    "font-family-no-missing-generic-family-keyword": null,
+    "indentation": 2,
+    "no-descending-specificity": null,
+    "no-empty-source": null,
+    "order/properties-alphabetical-order": true,
+    "rule-empty-line-before": [
+      "always",
+      {
+        "except": [
+          "after-single-line-comment",
+          "first-nested"
+        ]
+      }
+    ],
+    "selector-type-no-unknown": null
+  }
+}

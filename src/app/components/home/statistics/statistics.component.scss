@@ -1,8 +1,8 @@
 @import "../variables";
 
 .icon-image {
-  width: 16px;
   transform: translateY(2px);
+  width: 16px;
 }
 
 .statistics {
@@ -10,8 +10,8 @@
 }
 
 .stats-table {
-  margin: 10px auto;
   font-size: 14px;
+  margin: 10px auto;
   min-width: 240px;
 }
 
@@ -45,7 +45,7 @@
 
 .spanBoth {
   font-weight: bold;
-  padding-top: 20px;
   padding-bottom: 5px;
+  padding-top: 20px;
   text-align: center;
 }

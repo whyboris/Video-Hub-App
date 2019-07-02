@@ -1,7 +1,7 @@
 .meta-container {
   margin: 20px 20px 5px;
-  transition-property: height;
   transition: 300ms;
+  transition-property: height;
   width: calc(100% - 40px);
 }
 
@@ -24,8 +24,8 @@
   overflow: hidden;
   text-align: left;
   text-overflow: ellipsis;
-  transition-property: font-size;
   transition: 300ms;
+  transition-property: font-size;
   white-space: nowrap;
   width: 100%;
 }

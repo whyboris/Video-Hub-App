@@ -3,14 +3,14 @@
 .icon {
   cursor: pointer;
   display: inline-block;
+  fill: $gray-60;
   max-height: 15px;
   max-width: 15px;
   position: absolute;
   transform: translate(0, 2px);
-  width: 15px;
-  fill: $gray-60;
   transition-duration: 200ms;
   transition-property: fill;
+  width: 15px;
 
   &:hover {
     fill: $gray-80;
@@ -21,12 +21,14 @@
   max-height: 18px;
   min-width: calc(100vw - 100px);
   overflow: hidden;
+
   .icon-folder-blank {
     fill: $gray-60;
     position: absolute;
     transform: translate(0, 3px);
   }
-   :nth-child(2) {
+
+  :nth-child(2) {
     margin-left: 23px;
   }
 }
@@ -39,6 +41,7 @@
   margin-right: 5px;
   transition: 300ms;
   transition-property: color;
+
   &:after {
     content: '\f1a0'; // chevron-right
     font-family: "vh-icon-font";
@@ -57,7 +60,8 @@
     position: absolute;
     transform: translate(0, 3px);
   }
-   :nth-child(2) {
+
+  :nth-child(2) {
     margin-left: 23px;
   }
 }

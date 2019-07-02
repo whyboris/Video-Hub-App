@@ -1,26 +1,28 @@
 @font-face {
   font-family: "vh-icon-font";
-  src: url('../fonts/videohubicon.woff') format('woff');
-  font-weight: normal;
   font-style: normal;
+  font-weight: normal;
+  src: url('../fonts/videohubicon.woff') format('woff');
 }
 
 .icon:before {
-  position: relative;
   font-family: "vh-icon-font";
-  speak: none;
   font-size: 15px;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  position: relative;
+  speak: none;
+  text-transform: none;
 }
 
 // Last remaining used one
-.icon-chevron-right:before { content: "\f1a0"; }
+.icon-chevron-right:before {
+  content: "\f1a0";
+}
 
 // .icon-checkmark:before { content: "\f1a5"; } // checkmark was `\f194` but now the same as power
 // .icon-chevron-down-mini:before { content: "\f1a1"; }
