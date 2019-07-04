@@ -1,3 +1,15 @@
+/*
+ * This whole file is meant to contain only PURE functions
+ *
+ * There should be no side-effects of running any of them
+ * They should depend only on their inputs and behave exactly
+ * the same way each time they run no matter the outside state
+ *
+ * The only exception is `extractAllScreenshots`
+ * which checks the global variable `globals.cancelCurrentImport`
+ * in case it needs to not run
+ */
+
 import * as path from 'path';
 
 const fs = require('fs');
@@ -318,7 +330,7 @@ export function extractAllScreenshots(
   const itemTotal = elementsToScan.length;
   let iterator = -1; // gets incremented to 0 on first call
 
-  const extractThumbScreensAndClip = (): void => {
+  const extractIterator = (): void => {
     iterator++;
 
     if ((iterator < itemTotal) && !globals.cancelCurrentImport) {
@@ -328,32 +340,45 @@ export function extractAllScreenshots(
       const currentElement = elementsToScan[iterator];
 
       const pathToVideo: string = (path.join(videoFolderPath,
-        theFinalArray[currentElement].partialPath,
-        theFinalArray[currentElement].fileName));
+                                             theFinalArray[currentElement].partialPath,
+                                             theFinalArray[currentElement].fileName));
 
       const duration: number = theFinalArray[currentElement].duration;
       const fileHash: string = theFinalArray[currentElement].hash;
       const numOfScreens: number = theFinalArray[currentElement].screens;
 
-      checkForCorruptFile(
+      extractThumbFilmstripAndClip(
         pathToVideo,
         fileHash,
         duration,
         screenshotHeight,
         numOfScreens,
         screenshotFolder,
-        extractThumbScreensAndClip
+        extractIterator
       );
     } else {
       sendCurrentProgress(1, 1, 0); // indicates 100%
     }
   };
 
-  extractThumbScreensAndClip();
+  extractIterator();
 }
 
-
-export function checkForCorruptFile(pathToVideo: string,
+/**
+ * Generate screenshot strip or preview clip conditionally
+ *
+ * If screenshot strip exists, create mp4 preview, otherwise create screenshots
+ *
+ * @param pathToVideo
+ * @param fileHash
+ * @param duration
+ * @param screenshotHeight
+ * @param numberOfScreenshots
+ * @param saveLocation
+ * @param done -- callback when done
+ */
+export function extractThumbFilmstripAndClip(
+  pathToVideo: string,
   fileHash: string,
   duration: number,
   screenshotHeight: number,
@@ -363,12 +388,12 @@ export function checkForCorruptFile(pathToVideo: string,
 ) {
   if (fs.existsSync(saveLocation + '/filmstrips/' + fileHash + '.jpg')) {
     // console.log("thumbnails for " + fileHash + " already exist");
-    takeTenClips(pathToVideo,
-                 fileHash,
-                 duration,
-                 screenshotHeight,
-                 saveLocation,
-                 done);
+    generatePreviewClip(pathToVideo,
+                        fileHash,
+                        duration,
+                        screenshotHeight,
+                        saveLocation,
+                        done);
     return;
   }
 
@@ -435,12 +460,12 @@ export function generateScreenshotStrip(
 
   if (fs.existsSync(saveLocation + '/filmstrips/' + fileHash + '.jpg')) {
     // console.log("thumbnails for " + fileHash + " already exist");
-    takeTenClips(pathToVideo,
-                 fileHash,
-                 duration,
-                 screenshotHeight,
-                 saveLocation,
-                 done);
+    generatePreviewClip(pathToVideo,
+                        fileHash,
+                        duration,
+                        screenshotHeight,
+                        saveLocation,
+                        done);
     return;
   }
 
@@ -488,26 +513,26 @@ export function generateScreenshotStrip(
     }
   });
   ffmpeg_process.on('exit', () => {
-    takeTenClips(pathToVideo,
-                 fileHash,
-                 duration,
-                 screenshotHeight,
-                 saveLocation,
-                 done);
+    generatePreviewClip(pathToVideo,
+                        fileHash,
+                        duration,
+                        screenshotHeight,
+                        saveLocation,
+                        done);
   });
 }
 
 /**
- * Take 10 screenshots of a particular file
- * at particular file size
- * save as particular fileNumber
+ * Generate the mp4 preview clip of the video file
+ *
  * @param pathToVideo  -- full path to the video file
  * @param fileHash     -- hash of the video file
+ * @param duration     -- duration of the original video file
  * @param screenshotHeight   -- resolution in pixels (defaul is 100)
  * @param saveLocation -- folder where to save jpg files
  * @param done         -- callback when done
  */
-export function takeTenClips(
+export function generatePreviewClip(
   pathToVideo: string,
   fileHash: string,
   duration: number,

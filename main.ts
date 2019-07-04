@@ -786,6 +786,10 @@ ipc.on('try-to-rename-this-file', function(event, sourceFolder: string, relPath:
 /**
  * Writes the vha file and sends contents back to Angular App
  * Starts the process to extract all the images
+ *
+ * METHOD NOT A PURE FUNCTION !!!
+ * INTERACTS with `lastSavedFinalObject`
+ *
  * @param theFinalArray -- `finalArray` with all the metadata filled in
  */
 function sendFinalResultHome(theFinalArray: ImageElement[]): void {
