@@ -52,13 +52,12 @@ button {
 }
 
 .defaultSettingsButton {
-
   background: $gray-15;
-  border: 1px solid $gray-30; // don't alphabetize this one
+  border: 1px solid $gray-30; // keep ordered above `border-` properties
   border-left: 1px solid $gray-10;
   border-radius: 0;
   border-top: 1px solid $gray-10;
-  // box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
   box-sizing: border-box;
   margin: 0;
   max-height: 21px;
@@ -118,7 +117,7 @@ button {
   border-top: 1px solid rgba(0, 0, 0, 0.05);
   box-shadow: none;
   margin-bottom: 1px;
-  // transform: translate(0, 1px);
+  transform: translateY(1px);
   &:hover {
     background-color: $gray-30 !important;
   }
