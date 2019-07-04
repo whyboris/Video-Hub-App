@@ -1,12 +1,13 @@
 @import "variables";
 
 .filesView {
-  margin: 5px 40px !important;
   height: auto !important;
+  margin: 5px 40px !important;
 
   .length {
     transform: translate(0px, 1px) !important;
   }
+
   .size {
     text-align: right;
     transform: translate(-35px, 1px) !important;
@@ -39,11 +40,11 @@
 
 .title {
   -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
   color: #5D5D5D;
   cursor: pointer;
   display: -webkit-box;
   font-size: 12px;
+  -webkit-line-clamp: 3;
   margin: 6px 2px 0px;
   max-height: 54px;
   overflow: hidden;
@@ -83,8 +84,8 @@
 }
 
 .gallery {
-  display: flex;
   align-content: flex-start;
+  display: flex;
   flex-flow: row wrap;
   font-size: 0;
   margin-top: 10px;

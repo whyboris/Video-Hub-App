@@ -14,13 +14,15 @@ $black: #000000;
 
 @mixin scrollBar {
   &::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
     background-color: $gray-15;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
   }
+
   &::-webkit-scrollbar {
     width: 10px;
     // background-color: #bbbbbb;
   }
+
   &::-webkit-scrollbar-thumb {
     background-color: $gray-50;
   }
@@ -30,10 +32,12 @@ $black: #000000;
   &::-webkit-scrollbar-track {
     visibility: hidden;
   }
+
   &::-webkit-scrollbar {
-    width: 10px;
     visibility: hidden;
+    width: 10px;
   }
+
   &::-webkit-scrollbar-thumb {
     visibility: hidden;
   }
@@ -41,15 +45,17 @@ $black: #000000;
 
 @mixin scrollBarShown {
   &::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
     background-color: $gray-15;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
     visibility: initial;
   }
+
   &::-webkit-scrollbar {
-    width: 10px;
     visibility: initial;
+    width: 10px;
     // background-color: #bbbbbb;
   }
+
   &::-webkit-scrollbar-thumb {
     background-color: $gray-50;
     visibility: initial;

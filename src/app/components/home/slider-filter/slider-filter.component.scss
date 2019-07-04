@@ -15,20 +15,20 @@
 .leftSide,
 .rightSide {
   background: #cecece;
-  border-radius: 15px;
   border: 1px solid #8b8b8b;
+  border-radius: 15px;
   min-height: 5px;
   position: absolute;
   top: 25px;
-  transition-property: width;
   transition: 200ms;
+  transition-property: width;
 }
 
 .darkMode {
   background: #565656;
   border: 1px solid #444444;
-  border-top: 1px solid #282828;
   border-bottom: 1px solid #737373;
+  border-top: 1px solid #282828;
 }
 
 .leftSide {
@@ -50,15 +50,15 @@
 
 .dragger {
   background-color: $gray-05;
-  border-radius: 4px;
   border: 1px solid $gray-50;
+  border-radius: 4px;
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25);
   height: 14px;
   position: absolute;
   right: 0;
   transform: translate(1px, -6px);
-  transition-property: background-color transform;
   transition: 200ms;
+  transition-property: background-color transform;
   width: 7px;
 
   &:before {

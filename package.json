@@ -34,7 +34,9 @@
     "electron:local": "npm run build:prod && electron .",
     "electron:linux": "npm run build:prod && electron-builder build --linux",
     "electron:windows": "npm run build:prod && electron-builder build --windows",
-    "electron:mac": "npm run build:prod && electron-builder build --mac"
+    "electron:mac": "npm run build:prod && electron-builder build --mac",
+    "lint:scss": "stylelint \"./src/**/*.scss\"",
+    "lint:scss:fix": "stylelint \"./src/**/*.scss\" --fix"
   },
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "1.0.18",
@@ -63,6 +65,10 @@
     "node-sass": "4.12.0",
     "npm-run-all": "4.1.5",
     "rxjs": "6.5.2",
+    "stylelint": "10.1.0",
+    "stylelint-config-recommended-scss": "3.3.0",
+    "stylelint-order": "3.0.0",
+    "stylelint-scss": "3.8.0",
     "ts-node": "8.3.0",
     "tslint": "5.17.0",
     "typescript": "3.4.5",

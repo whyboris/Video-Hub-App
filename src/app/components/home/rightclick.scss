@@ -11,14 +11,14 @@
 
 .rightClickMenu {
   background: $gray-30;
-  border-radius: 10px;
   border: 1px solid $gray-50;
+  border-radius: 10px;
   box-shadow: 0 3px 7px 3px rgba(0, 0, 0, 0.3);
   box-sizing: border-box;
   font-size: 12px;
+  overflow: hidden;
   position: absolute;
   z-index: 30;
-  overflow: hidden;
 
   ul {
     margin: 0;
@@ -32,10 +32,10 @@
       transition-property: transform text-shadow;
 
       &:hover {
-        transition: 100ms;
-        transition-property: transform text-shadow;
         // transform: translate(0, -1px);
         text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+        transition: 100ms;
+        transition-property: transform text-shadow;
       }
     }
   }
@@ -43,8 +43,8 @@
 
 .renameMenu {
   background: $gray-30;
-  border-radius: 10px;
   border: 1px solid $gray-50;
+  border-radius: 10px;
   box-shadow: 0 3px 7px 3px rgba(0, 0, 0, 0.3);
   box-sizing: border-box;
   height: 275px;
@@ -95,8 +95,8 @@
   font-size: 16px;
   left: 40px;
   outline: none;
-  padding-bottom: 0;
   padding: 6px 6px 6px 2px;
+  padding-bottom: 0;
   position: absolute;
   top: 170px;
   width: 90%;
@@ -149,8 +149,8 @@
 
 .closeRename {
   position: absolute;
-  top: 11px;
   right: 19px;
+  top: 11px;
 }
 
 .closeRenameDark {

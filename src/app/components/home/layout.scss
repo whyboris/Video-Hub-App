@@ -21,22 +21,22 @@ $sidebar-width: 190px;
 
 .progress-modal {
   background: $gray-10;
-  border-radius: 10px;
   border: 1px solid $gray-20;
+  border-radius: 10px;
   box-shadow: 1px 1px 5px rgba(0,0,0,0.2);
   box-sizing: border-box;
+  left: 5vw;
   padding: 20px;
   position: fixed;
   top: calc(50vh - 30px);
   width: 90vw;
-  left: 5vw;
   z-index: 101;
 }
 
 .progress-container {
   background: $gray-50;
-  border-radius: 3px;
   border: 1px solid $gray-60;
+  border-radius: 3px;
   box-sizing: border-box;
   height: 19px;
   width: 100%;
@@ -50,17 +50,17 @@ $sidebar-width: 190px;
 }
 
 .progress-numbers {
-  font-size: 12px;
   color: $gray-40;
   float: right;
+  font-size: 12px;
   margin-top: 10px;
 }
 
 // LAYOUT STYLING
 .window {
-  width: 100vw;
   height: 100vh;
   overflow: hidden;
+  width: 100vw;
 }
 
 .titleBar {
@@ -105,8 +105,8 @@ $sidebar-width: 190px;
 
 .window-content {
   position: relative;
-  transition-property: transform;
   transition: 300ms;
+  transition-property: transform;
 }
 
 .allSettings {
@@ -151,14 +151,13 @@ $sidebar-width: 190px;
   box-sizing: border-box;
   height: 100vh;
   max-width: $sidebar-width !important;
+  overflow-y: scroll;
   padding: 10px 10px 140px;
   position: absolute;
   top: $settings-height;
   transform: translate(0, 0);
   transition: 300ms;
   width: $sidebar-width;
-  // don't alphabetize for some reason
-  overflow-y: scroll;
 
   @include scrollBarHidden;
 }
@@ -203,12 +202,12 @@ $sidebar-width: 190px;
 }
 
 .cancelProgress {
+  cursor: pointer;
   font-size: 10px;
   position: fixed;
-  top: 36px;
   right: 42px;
+  top: 36px;
   z-index: 9999;
-  cursor: pointer;
 }
 
 .bottom-tray {
@@ -231,8 +230,8 @@ $sidebar-width: 190px;
   }
 
   .showFrequency {
-    border-radius: 3px;
     border: 1px solid red;
+    border-radius: 3px;
     left: calc(50vw - 50px);
     position: absolute;
     top: 10px;
@@ -270,8 +269,8 @@ $sidebar-width: 190px;
   box-sizing: border-box;
   font-size: 15px;
   outline: none;
-  padding-bottom: 0;
   padding: 6px;
+  padding-bottom: 0;
   position: absolute;
   right: 50px;
   top: 10px;

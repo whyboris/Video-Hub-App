@@ -24,20 +24,20 @@ button {
   fill: $gray-50;
   margin-right: 8px;
   margin-top: 2px;
-  transition: $button-toggle-length;
-  transition-property: color;
 
   min-width: 15px;
   padding: 0;
+  transition-duration: $button-toggle-length;
+  transition-property: color;
 
   &:hover {
     text-shadow: 0 0 3px $white;
-    transition: $button-toggle-length;
+    transition-duration: $button-toggle-length;
   }
 
   &:active {
     fill: #b5cbff;
-    transition: $button-toggle-length;
+    transition-duration: $button-toggle-length;
   }
 
   &:last-child {
@@ -48,17 +48,16 @@ button {
 
 .flatSettingsButtonToggled {
   fill: #729aff;
-  transition: $button-toggle-length;
+  transition-duration: $button-toggle-length;
 }
 
 .defaultSettingsButton {
-  border: 1px solid $gray-30; // don't alphabetize this one
-
   background: $gray-15;
+  border: 1px solid $gray-30; // keep ordered above `border-` properties
   border-left: 1px solid $gray-10;
   border-radius: 0;
   border-top: 1px solid $gray-10;
-  // box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
   box-sizing: border-box;
   margin: 0;
   max-height: 21px;
@@ -67,7 +66,7 @@ button {
   min-width: 21px;
   padding: 2px;
   text-align: center;
-  transition: $button-toggle-length;
+  transition-duration: $button-toggle-length;
   transition-property: color, transform, background-color, margin, opacity;
 
   & .icon {
@@ -75,12 +74,13 @@ button {
   }
 
   &:first-child {
-    border-top-left-radius: 5px !important;
     border-bottom-left-radius: 5px !important;
+    border-top-left-radius: 5px !important;
   }
+
   &:last-child {
-    border-top-right-radius: 5px !important;
     border-bottom-right-radius: 5px !important;
+    border-top-right-radius: 5px !important;
   }
 
   &:hover {
@@ -89,14 +89,14 @@ button {
 
   &:active {
     background: $gray-30 !important;
-    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
     border-bottom: 1px solid rgba(255, 255, 255, 0.5);
     border-left: 0px;
     border-right: 1px solid rgba(255, 255, 255, 0.5);
-    border-top: 0px;
     border-right: 0;
-    transform: translate(1px, 1px);
+    border-top: 0px;
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2);
     margin-bottom: 1px;
+    transform: translate(1px, 1px);
 
     & .icon {
       fill: $white;
@@ -105,20 +105,19 @@ button {
 
   span {
     cursor: pointer;
-    transition: $button-toggle-length;
+    transition-duration: $button-toggle-length;
   }
 }
 
 .defaultSettingsButtonToggled {
   background: $gray-40 !important;
-  border-top: 1px solid rgba(0, 0, 0, 0.05);
-  border-right: 1px solid $gray-40;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   border-left: 0px;
+  border-right: 1px solid $gray-40;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
   box-shadow: none;
   margin-bottom: 1px;
-  // transform: translate(0, 1px);
-
+  transform: translateY(1px);
   &:hover {
     background-color: $gray-30 !important;
   }
@@ -128,13 +127,13 @@ button {
   }
 
   span {
-    transition: $button-toggle-length;
+    transition-duration: $button-toggle-length;
   }
 }
 
 .defaultSettingsButtonDark {
-  border: 1px solid #111111;
   background: #222222;
+  border: 1px solid #111111;
   border-left: 1px solid #444444;
   border-top: 1px solid #444444;
 
@@ -149,10 +148,10 @@ button {
 
 .defaultSettingsButtonDarkToggled {
   background: #000000 !important;
-  border-top: 1px solid #333333;
-  border-right: 1px solid #222222;
   border-bottom: 1px solid #222222;
   border-left: 1px solid #000000;
+  border-right: 1px solid #222222;
+  border-top: 1px solid #333333;
 
   & .icon {
     fill: white;
@@ -161,6 +160,6 @@ button {
 
 .disabledButton {
   cursor: initial;
-  pointer-events: none;
   opacity: 0.5;
+  pointer-events: none;
 }
