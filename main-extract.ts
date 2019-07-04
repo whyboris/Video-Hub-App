@@ -326,7 +326,7 @@ const extractFirstFrame = (saveLocation: string, fileHash: string) => {
 
   return new Promise((resolve, reject) => {
 
-    if (fs.existsSync(saveLocation + '/thumbnails/' + fileHash + '.jpg')) {
+    if (fs.existsSync(saveLocation + '/clips/' + fileHash + '.jpg')) {
       resolve(true);
     }
 
@@ -335,7 +335,7 @@ const extractFirstFrame = (saveLocation: string, fileHash: string) => {
       '-i', saveLocation + '/clips/' + fileHash + '.mp4',
       '-frames', 1,
       '-f', 'image2',
-      saveLocation + '/thumbnails/' + fileHash + '.jpg',
+      saveLocation + '/clips/' + fileHash + '.jpg',
     ];
     // console.log('extracting clip frame 1');
     const ffmpeg_process = spawn(ffmpegPath, args);
@@ -368,6 +368,14 @@ const extractFirstFrame = (saveLocation: string, fileHash: string) => {
  *
  * DANGEROUSLY DEPENDS ON a global variable `globals.cancelCurrentImport`
  * that can get toggled while scanning all screenshots
+ *
+ * Extract following this order
+ *    1. check if input file exists (false -> extract next item)
+ *    2. check if input file has all the screens available (false -> extract next item)
+ *    3. extract the SINGLE screenshot
+ *    4. extract the FLIMSTRIP
+ *    5. extract the CLIP (if `clipSnippets` !== 0)
+ *    6. extract the CLIP preview
  *
  * @param theFinalArray     -- finalArray of ImageElements
  * @param videoFolderPath   -- path to base folder where videos are
@@ -407,90 +415,60 @@ export function extractFromTheseFiles(
       const fileHash: string = theFinalArray[currentElement].hash;
       const numOfScreens: number = theFinalArray[currentElement].screens;
 
-      // use the Promises and .then INSTEAD !!!
+      checkIfInputFileExists(pathToVideo)
 
-      /*
+        .then(content => {
+          console.log('01 - file extists = ' + content);
 
-       ORDER OF THINGS
+          if (content === false) {
+            throw new Error('NOTPRESENT');
+          }
 
-      1. check if input file exists (accessible?)
-      2. check if input file has all the screens available
-      3. extract a SINGLE screenshot
-      4. extract the FLIMSTRIP
-      5. extract the CLIP
-      6. extract the CLIP preview
+          return checkAllScreensExist(pathToVideo, duration, numOfScreens);
+        })
 
-      iterate
+        .then(content => {
+          console.log('02 - all screenshots present = ' + content);
 
-       */
+          if (content === false) {
+            throw new Error('FILE MIGHT BE CORRUPT');
+          }
 
-      checkIfInputFileExists(pathToVideo).then(content => {
+          return extractSingleFrame(pathToVideo, screenshotFolder, fileHash, screenshotHeight, duration);
+        })
 
-        console.log('01 - file extists = ' + content);
+        .then(content => {
+          console.log('03 - single screenshot extracted = ' + content);
 
-        if (content === false) {
-          throw new Error('NOTPRESENT');
-        }
+          return generateScreenshotStrip(pathToVideo, fileHash, duration, screenshotHeight, numOfScreens, screenshotFolder);
+        })
 
-        return checkAllScreensExist(pathToVideo, duration, numOfScreens);
+        .then(content => {
+          console.log('04 - filmstrip generated = ' + content);
 
-      }).then(content => {
+          if (clipSnippets === 0) {
+            throw new Error('USER DOES NOT WANT CLIPS');
+          }
 
-        console.log('02 - all screenshots present = ' + content);
+          return generatePreviewClip(pathToVideo, fileHash, duration, screenshotHeight, screenshotFolder, clipSnippets);
+        })
 
-        if (content === false) {
-          throw new Error('FILE MIGHT BE CORRUPT');
-        }
+        .then(content => {
+          console.log('05 - preview clip generated = ' + content);
 
-        return extractSingleFrame(pathToVideo,
-                                  screenshotFolder,
-                                  fileHash,
-                                  screenshotHeight,
-                                  duration);
+          return extractFirstFrame(screenshotFolder, fileHash);
+        })
 
-      }).then(content => {
+        .then(content => {
+          console.log('06 - extracted first thumb = ' + content);
 
-        console.log('03 - single screenshot extracted = ' + content);
+          extractIterator(); // resume iterating
+        })
 
-        return generateScreenshotStrip(pathToVideo,
-                                       fileHash,
-                                       duration,
-                                       screenshotHeight,
-                                       numOfScreens,
-                                       screenshotFolder);
-
-      }).then(content => {
-
-        console.log('04 - filmstrip generated = ' + content);
-
-        if (clipSnippets === 0) {
-          throw new Error('USER DOES NOT WANT CLIPS');
-        }
-
-        return generatePreviewClip(pathToVideo,
-                                   fileHash,
-                                   duration,
-                                   screenshotHeight,
-                                   screenshotFolder,
-                                   clipSnippets);
-
-      }).then(content => {
-
-        console.log('05 - preview clip generated = ' + content);
-
-        return extractFirstFrame(screenshotFolder, fileHash);
-
-      }).then(content => {
-
-        console.log('06 - extracted first thumb = ' + content);
-
-        // when all done with EVERYTHING
-        extractIterator();
-
-      }).catch((err) => {
-        console.log('EXTRACTION ERROR: ' + err);
-        extractIterator();
-      });
+        .catch((err) => {
+          console.log('EXTRACTION ERROR: ' + err);
+          extractIterator();
+        });
 
     } else {
       sendCurrentProgress(1, 1, 0); // indicates 100%
@@ -499,12 +477,3 @@ export function extractFromTheseFiles(
 
   extractIterator();
 }
-
-/*
-==============================================================
- TO DO LIST:
-
- make every method check if the file exists before writing --
- so as to not re-extract :)
-==============================================================
-*/
