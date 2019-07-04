@@ -553,7 +553,7 @@ ipc.on('start-the-import', function (event, options: ImportSettingsObject, video
       numOfScreenshots = options.ssVariable;
     }
     globals.screenshotSettings = {
-      generateClips: options.generateClips,
+      clipSnippets: options.clipSnippets,
       fixed: options.screensPerVideo,
       height: options.imgHeight,
       n: numOfScreenshots,
@@ -621,7 +621,8 @@ function verifyThumbnails() {
     globals.selectedSourceFolder,
     screenshotOutputFolder,
     globals.screenshotSettings.height,
-    indexesToScan
+    indexesToScan,
+    globals.screenshotSettings.clipSnippets
   );
 }
 
@@ -834,7 +835,8 @@ function sendFinalResultHome(theFinalArray: ImageElement[]): void {
       globals.selectedSourceFolder,
       screenshotOutputFolder,
       globals.screenshotSettings.height,
-      indexesToScan
+      indexesToScan,
+      globals.screenshotSettings.clipSnippets
     );
 
   });

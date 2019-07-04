@@ -657,7 +657,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.appState.selectedOutputFolder = this.wizard.selectedOutputFolder;
     this.importStage = 1;
     const importOptions: ImportSettingsObject = {
-      generateClips: true, // !!! TODO -  MAKE THIS A USER TOGGLE !!!
+      clipSnippets: 9, // !!! TODO -  MAKE THIS A USER TOGGLE !!!
       exportFolderPath: this.wizard.selectedOutputFolder,
       hubName: (this.wizard.futureHubName || 'untitled'),
       imgHeight: this.wizard.screenshotSizeForImport,

@@ -110,6 +110,58 @@ const checkAllScreensExist = (
 };
 
 /**
+ * Extract a single frame from the original video
+ * @param saveLocation
+ * @param fileHash
+ */
+const extractSingleFrame = (
+  pathToVideo: string,
+  saveLocation: string,
+  fileHash: string,
+  screenshotHeight: number,
+  duration: number
+) => {
+
+  return new Promise((resolve, reject) => {
+
+    if (fs.existsSync(saveLocation + '/thumbnails/' + fileHash + '.jpg')) {
+      resolve(true);
+    }
+
+    const ssWidth: number = screenshotHeight * (16 / 9);
+
+    const args = [
+      '-ss', duration / 10,
+      '-i', pathToVideo,
+      '-frames', 1,
+      '-q:v', '2',
+      '-vf', 'scale=w=' + ssWidth + ':h=' + screenshotHeight + ':force_original_aspect_ratio=decrease',
+      saveLocation + '/thumbnails/' + fileHash + '.jpg',
+    ];
+    // console.log('extracting clip frame 1');
+    const ffmpeg_process = spawn(ffmpegPath, args);
+    // Note from past Cal to future Cal:
+    // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
+    ffmpeg_process.stdout.on('data', function (data) {
+      if (globals.debug) {
+        console.log(data);
+      }
+    });
+    ffmpeg_process.stderr.on('data', function (data) {
+      if (globals.debug) {
+        console.log('grep stderr: ' + data);
+      }
+    });
+    ffmpeg_process.on('exit', () => {
+      resolve(true);
+    });
+
+  });
+
+};
+
+
+/**
  * Take N screenshots of a particular file
  * at particular file size
  * save as particular fileHash
@@ -194,11 +246,14 @@ const generateScreenshotStrip = (
 /**
  * Generate the mp4 preview clip of the video file
  *
+ * TODO -- allow user to change `totalCount` !!!!!!!
+ *
  * @param pathToVideo  -- full path to the video file
  * @param fileHash     -- hash of the video file
  * @param duration     -- duration of the original video file
- * @param screenshotHeight   -- resolution in pixels (defaul is 100)
+ * @param screenshotHeight   -- resolution in pixels (default is 100)
  * @param saveLocation -- folder where to save jpg files
+ * @param clipSnippets -- number of clip snippets to extract
  */
 const generatePreviewClip = (
   pathToVideo: string,
@@ -206,6 +261,7 @@ const generatePreviewClip = (
   duration: number,
   screenshotHeight: number,
   saveLocation: string,
+  clipSnippets: number
 ) => {
 
   return new Promise((resolve, reject) => {
@@ -216,7 +272,7 @@ const generatePreviewClip = (
     }
 
     let current = 1;
-    const totalCount = 10;
+    const totalCount = clipSnippets;
     const step: number = duration / totalCount;
     const args = [];
     let concat = '';
@@ -318,13 +374,15 @@ const extractFirstFrame = (saveLocation: string, fileHash: string) => {
  * @param screenshotFolder  -- path to folder where .jpg files will be saved
  * @param screenshotHeight  -- number in px how tall each screenshot should be
  * @param elementsToScan    -- array of indexes of elements in finalArray for which to extract screenshots
+ * @param clipSnippets      -- number of clip snippets to extract; 0 == do not extract clip
  */
 export function extractFromTheseFiles(
   theFinalArray: ImageElement[],
   videoFolderPath: string,
   screenshotFolder: string,
   screenshotHeight: number,
-  elementsToScan: number[]
+  elementsToScan: number[],
+  clipSnippets: number,
 ): void {
 
   // final array already saved at this point - nothing to update inside it
@@ -360,23 +418,39 @@ export function extractFromTheseFiles(
       3. extract a SINGLE screenshot
       4. extract the FLIMSTRIP
       5. extract the CLIP
-
-      (currently step 3 is last);
+      6. extract the CLIP preview
 
       iterate
 
        */
 
-      checkIfInputFileExists(pathToVideo).
-      then(content => {
+      checkIfInputFileExists(pathToVideo).then(content => {
 
-        console.log('file extists = ' + content);
+        console.log('01 - file extists = ' + content);
+
+        if (content === false) {
+          throw new Error('NOTPRESENT');
+        }
 
         return checkAllScreensExist(pathToVideo, duration, numOfScreens);
 
       }).then(content => {
 
-        console.log('all screenshots present = ' + content);
+        console.log('02 - all screenshots present = ' + content);
+
+        if (content === false) {
+          throw new Error('FILE MIGHT BE CORRUPT');
+        }
+
+        return extractSingleFrame(pathToVideo,
+                                  screenshotFolder,
+                                  fileHash,
+                                  screenshotHeight,
+                                  duration);
+
+      }).then(content => {
+
+        console.log('03 - single screenshot extracted = ' + content);
 
         return generateScreenshotStrip(pathToVideo,
                                        fileHash,
@@ -387,27 +461,35 @@ export function extractFromTheseFiles(
 
       }).then(content => {
 
-        console.log('filmstrip generated = ' + content);
+        console.log('04 - filmstrip generated = ' + content);
+
+        if (clipSnippets === 0) {
+          throw new Error('USER DOES NOT WANT CLIPS');
+        }
 
         return generatePreviewClip(pathToVideo,
                                    fileHash,
                                    duration,
                                    screenshotHeight,
-                                   screenshotFolder);
+                                   screenshotFolder,
+                                   clipSnippets);
 
       }).then(content => {
 
-        console.log('preview clip generated = ' + content);
+        console.log('05 - preview clip generated = ' + content);
 
         return extractFirstFrame(screenshotFolder, fileHash);
 
       }).then(content => {
 
-        console.log('extracted first thumb = ' + content);
+        console.log('06 - extracted first thumb = ' + content);
 
         // when all done with EVERYTHING
         extractIterator();
 
+      }).catch((err) => {
+        console.log('EXTRACTION ERROR: ' + err);
+        extractIterator();
       });
 
     } else {
