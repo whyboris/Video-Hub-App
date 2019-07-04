@@ -215,6 +215,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   canCloseWizard = false;
 
   wizard: WizardOptions = {
+    clipSnippets: 9,
+    extractClips: false,
     futureHubName: '',
     listOfFiles: [],
     screensPerVideo: true,
@@ -657,7 +659,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.appState.selectedOutputFolder = this.wizard.selectedOutputFolder;
     this.importStage = 1;
     const importOptions: ImportSettingsObject = {
-      clipSnippets: 9, // !!! TODO -  MAKE THIS A USER TOGGLE !!!
+      clipSnippets: this.wizard.extractClips ? this.wizard.clipSnippets : 0,
       exportFolderPath: this.wizard.selectedOutputFolder,
       hubName: (this.wizard.futureHubName || 'untitled'),
       imgHeight: this.wizard.screenshotSizeForImport,
@@ -1034,6 +1036,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   public startWizard(): void {
     this.wizard = {
+      clipSnippets: 9,
+      extractClips: false,
       futureHubName: '',
       listOfFiles: [],
       screensPerVideo: true,
@@ -1266,6 +1270,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } else {
       this.wizard.ssVariable = parseFloat(screens);
     }
+  }
+
+  /**
+   * Called on screenshot size dropdown select
+   * @param screens - string of number of screenshots per video
+   */
+  selectNumOfClipSnippets(screens: string): void {
+    this.wizard.clipSnippets = parseFloat(screens);
   }
 
   /**
