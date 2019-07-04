@@ -7,9 +7,10 @@
 /out-tsc
 /app-builds
 main.js
+main-extract.js
 main-filenames.js
-main-support.js
 main-globals.js
+main-support.js
 src/**/*.js
 *.js.map
 

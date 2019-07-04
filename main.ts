@@ -184,7 +184,6 @@ import {
   alphabetizeFinalArray,
   countFoldersInFinalArray,
   extractAllMetadata,
-  extractAllScreenshots,
   findAndImportNewFiles,
   getVideoPathsAndNames,
   insertTemporaryFields,
@@ -194,6 +193,8 @@ import {
   updateFinalArrayWithHD,
   writeVhaFileToDisk
 } from './main-support';
+
+import { extractAllScreenshots } from './main-extract';
 
 import { FinalObject, ImageElement } from './src/app/components/common/final-object.interface';
 import { ImportSettingsObject } from './src/app/components/common/import.interface';

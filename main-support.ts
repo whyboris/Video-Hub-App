@@ -4,23 +4,22 @@
  * There should be no side-effects of running any of them
  * They should depend only on their inputs and behave exactly
  * the same way each time they run no matter the outside state
- *
- * The only exception is `extractAllScreenshots`
- * which checks the global variable `globals.cancelCurrentImport`
- * in case it needs to not run
  */
 
 import * as path from 'path';
 
 const fs = require('fs');
+
 const hasher = require('crypto').createHash;
 
-import { FinalObject, ImageElement } from './src/app/components/common/final-object.interface';
-import { ResolutionString } from './src/app/components/pipes/resolution-filter.service';
+const exec = require('child_process').exec;
+
+const ffprobePath = require('@ffprobe-installer/ffprobe').path.replace('app.asar', 'app.asar.unpacked');
 
 import { acceptableFiles } from './main-filenames';
-
 import { globals, ScreenshotSettings } from './main-globals';
+import { FinalObject, ImageElement } from './src/app/components/common/final-object.interface';
+import { ResolutionString } from './src/app/components/pipes/resolution-filter.service';
 
 interface ResolutionMeta {
   label: ResolutionString;
@@ -293,335 +292,11 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
   return finalArray;
 }
 
-// -------------- SCAN IMAGES AND SAVE THEM !!! -----------------
-
-const ffprobePath = require('@ffprobe-installer/ffprobe').path.replace('app.asar', 'app.asar.unpacked');
-const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path.replace('app.asar', 'app.asar.unpacked');
-
-// sends data back as a stream as process runs
-// requires an array of args
-const spawn = require('child_process').spawn;
-// sends all data back once the process exits in a buffer
-// also spawns a shell (can pass a single cmd string)
-const exec = require('child_process').exec;
-
 /**
- * Start extracting screenshots now that metadata has been retreived and sent over to the app
- *
- * DANGEROUSLY DEPENDS ON a global variable `globals.cancelCurrentImport`
- * that can get toggled while scanning all screenshots
- *
- * @param theFinalArray     -- finalArray of ImageElements
- * @param videoFolderPath   -- path to base folder where videos are
- * @param screenshotFolder  -- path to folder where .jpg files will be saved
- * @param screenshotHeight  -- number in px how tall each screenshot should be
- * @param elementsToScan    -- array of indexes of elements in finalArray for which to extract screenshots
+ * Delete thumbnails
+ * @param imageLocation
+ * @param hash
  */
-export function extractAllScreenshots(
-  theFinalArray: ImageElement[],
-  videoFolderPath: string,
-  screenshotFolder: string,
-  screenshotHeight: number,
-  elementsToScan: number[]
-): void {
-
-  // final array already saved at this point - nothing to update inside it
-  // just walk through `elementsToScan` to extract screenshots for elements in `theFinalArray`
-  const itemTotal = elementsToScan.length;
-  let iterator = -1; // gets incremented to 0 on first call
-
-  const extractIterator = (): void => {
-    iterator++;
-
-    if ((iterator < itemTotal) && !globals.cancelCurrentImport) {
-
-      sendCurrentProgress(iterator, itemTotal, 2);
-
-      const currentElement = elementsToScan[iterator];
-
-      const pathToVideo: string = (path.join(videoFolderPath,
-                                             theFinalArray[currentElement].partialPath,
-                                             theFinalArray[currentElement].fileName));
-
-      const duration: number = theFinalArray[currentElement].duration;
-      const fileHash: string = theFinalArray[currentElement].hash;
-      const numOfScreens: number = theFinalArray[currentElement].screens;
-
-      extractThumbFilmstripAndClip(
-        pathToVideo,
-        fileHash,
-        duration,
-        screenshotHeight,
-        numOfScreens,
-        screenshotFolder,
-        extractIterator
-      );
-    } else {
-      sendCurrentProgress(1, 1, 0); // indicates 100%
-    }
-  };
-
-  extractIterator();
-}
-
-/**
- * Generate screenshot strip or preview clip conditionally
- *
- * If screenshot strip exists, create mp4 preview, otherwise create screenshots
- *
- * @param pathToVideo
- * @param fileHash
- * @param duration
- * @param screenshotHeight
- * @param numberOfScreenshots
- * @param saveLocation
- * @param done -- callback when done
- */
-export function extractThumbFilmstripAndClip(
-  pathToVideo: string,
-  fileHash: string,
-  duration: number,
-  screenshotHeight: number,
-  numberOfScreenshots: number,
-  saveLocation: string,
-  done: any
-) {
-  if (fs.existsSync(saveLocation + '/filmstrips/' + fileHash + '.jpg')) {
-    // console.log("thumbnails for " + fileHash + " already exist");
-    generatePreviewClip(pathToVideo,
-                        fileHash,
-                        duration,
-                        screenshotHeight,
-                        saveLocation,
-                        done);
-    return;
-  }
-
-  const totalCount = numberOfScreenshots;
-  const step: number = duration / (totalCount + 1);
-
-  const check = (current) => {
-    if (current === totalCount) {
-      generateScreenshotStrip(pathToVideo,
-                              fileHash,
-                              duration,
-                              screenshotHeight,
-                              numberOfScreenshots,
-                              saveLocation,
-                              done);
-      return;
-    }
-    // check for complete file
-    const time = (current + 1) * step; // +1 so we don't pick the 0th frame
-    const checkCommand = 'ffmpeg -v warning -ss ' + time + ' -t 1 -i "' + pathToVideo + '" -map V -f null -';
-    const corruptRegex = /Output file is empty, nothing was encoded/g;
-    exec(checkCommand, (err, data, stderr) => {
-      console.log(data);
-      console.log(stderr);
-      if (err) {
-        // skip this file
-        console.log(pathToVideo + ' was corrupt, skipping!');
-        done();
-      } else {
-        if (data.match(corruptRegex) || stderr.match(corruptRegex)) {
-          // skip this file
-          console.log(pathToVideo + ' was corrupt, skipping!');
-          done();
-        } else {
-          check(current + 1);
-        }
-      }
-    });
-  };
-  check(0);
-}
-
-/**
- * Take 10 screenshots of a particular file
- * at particular file size
- * save as particular fileHash
- * @param pathToVideo          -- full path to the video file
- * @param fileHash             -- hash of the video file
- * @param duration             -- duration of clip
- * @param screenshotHeight     -- height of screenshot in pixels (defaul is 100)
- * @param numberOfScreenshots  -- number of screenshots to extract
- * @param saveLocation         -- folder where to save jpg files
- * @param done                 -- callback when done
- */
-export function generateScreenshotStrip(
-  pathToVideo: string,
-  fileHash: string,
-  duration: number,
-  screenshotHeight: number,
-  numberOfScreenshots: number,
-  saveLocation: string,
-  done: any
-) {
-
-  if (fs.existsSync(saveLocation + '/filmstrips/' + fileHash + '.jpg')) {
-    // console.log("thumbnails for " + fileHash + " already exist");
-    generatePreviewClip(pathToVideo,
-                        fileHash,
-                        duration,
-                        screenshotHeight,
-                        saveLocation,
-                        done);
-    return;
-  }
-
-  let current = 0;
-  const totalCount = numberOfScreenshots;
-  const step: number = duration / (totalCount + 1);
-  const args = [];
-  let allFramesFiltered = '';
-  let outputFrames = '';
-
-  // Hardcode a specific 16:9 ratio
-  const ssWidth: number = screenshotHeight * (16 / 9);
-  // const ssPadWidth: number = ssWidth + 2;
-  const ratioString: string = ssWidth + ':' + screenshotHeight;
-  // const ratioPadString: string = ssPadWidth + ':' + screenshotHeight;
-
-  // sweet thanks to StackExchange!
-  // https://superuser.com/questions/547296/resizing-videos-with-ffmpeg-avconv-to-fit-into-static-sized-player
-  const fancyScaleFilter = 'scale=' + ratioString + ':force_original_aspect_ratio=decrease,pad=' + ratioString + ':(ow-iw)/2:(oh-ih)/2';
-
-  // make the magic filter
-  while (current < totalCount) {
-    const time = (current + 1) * step; // +1 so we don't pick the 0th frame
-    args.push('-ss', time, '-i', pathToVideo);
-    allFramesFiltered += '[' + current + ':V]' + fancyScaleFilter + '[' + current + '];';
-    outputFrames += '[' + current + ']';
-    current++;
-  }
-  args.push('-frames', 1,
-    '-filter_complex', allFramesFiltered + outputFrames + 'hstack=inputs=' + totalCount,
-    saveLocation + '/filmstrips/' + fileHash + '.jpg'
-  );
-
-  const ffmpeg_process = spawn(ffmpegPath, args);
-  // Note from past Cal to future Cal:
-  // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
-  ffmpeg_process.stdout.on('data', function (data) {
-    if (globals.debug) {
-      console.log(data);
-    }
-  });
-  ffmpeg_process.stderr.on('data', function (data) {
-    if (globals.debug) {
-      console.log('grep stderr: ' + data);
-    }
-  });
-  ffmpeg_process.on('exit', () => {
-    generatePreviewClip(pathToVideo,
-                        fileHash,
-                        duration,
-                        screenshotHeight,
-                        saveLocation,
-                        done);
-  });
-}
-
-/**
- * Generate the mp4 preview clip of the video file
- *
- * @param pathToVideo  -- full path to the video file
- * @param fileHash     -- hash of the video file
- * @param duration     -- duration of the original video file
- * @param screenshotHeight   -- resolution in pixels (defaul is 100)
- * @param saveLocation -- folder where to save jpg files
- * @param done         -- callback when done
- */
-export function generatePreviewClip(
-  pathToVideo: string,
-  fileHash: string,
-  duration: number,
-  screenshotHeight: number,
-  saveLocation: string,
-  done: any
-) {
-
-  if (fs.existsSync(saveLocation + '/clips/' + fileHash + '.mp4')) {
-    // console.log("thumbnails for " + fileHash + " already exist");
-    extractFirstFrame(saveLocation, fileHash, done);
-    return;
-  }
-
-  let current = 1;
-  const totalCount = 10;
-  const step: number = duration / totalCount;
-  const args = [];
-  let concat = '';
-
-  // make the magic filter
-  while (current < totalCount) {
-    const time = current * step;
-    const preview_duration = 1; // TODO: Make this customisable
-    args.push('-ss', time, '-t', preview_duration, '-i', pathToVideo);
-    concat += '[' + (current - 1) + ':V]' + '[' + (current - 1) + ':a]';
-    current++;
-  }
-  concat += 'concat=n=' + (totalCount - 1) + ':v=1:a=1[v][a];[v]scale=-2:' + screenshotHeight + '[v2]';
-  args.push('-filter_complex', concat, '-map', '[v2]', '-map', '[a]', saveLocation + '/clips/' + fileHash + '.mp4');
-  // phfff glad that's over
-
-  // now make it all worth it!
-  const ffmpeg_process = spawn(ffmpegPath, args);
-  // Note from past Cal to future Cal:
-  // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
-  ffmpeg_process.stdout.on('data', function (data) {
-    if (globals.debug) {
-      console.log(data);
-    }
-  });
-  ffmpeg_process.stderr.on('data', function (data) {
-    if (globals.debug) {
-      console.log('grep stderr: ' + data);
-    }
-  });
-  ffmpeg_process.on('exit', () => {
-    extractFirstFrame(saveLocation, fileHash, done);
-  });
-}
-
-/**
- * Extract the first frame from the preview clip
- * @param saveLocation
- * @param fileHash
- * @param done
- */
-export function extractFirstFrame(saveLocation: string, fileHash: string, done: any) {
-  if (fs.existsSync(saveLocation + '/thumbnails/' + fileHash + '.jpg')) {
-    done();
-    return;
-  }
-
-  const args = [
-  '-ss', 0,
-  '-i', saveLocation + '/clips/' + fileHash + '.mp4',
-  '-frames', 1,
-  '-f', 'image2',
-  saveLocation + '/thumbnails/' + fileHash + '.jpg',
-  ];
-  // console.log('extracting clip frame 1');
-  const ffmpeg_process = spawn(ffmpegPath, args);
-  // Note from past Cal to future Cal:
-  // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
-  ffmpeg_process.stdout.on('data', function (data) {
-    if (globals.debug) {
-      console.log(data);
-    }
-  });
-  ffmpeg_process.stderr.on('data', function (data) {
-    if (globals.debug) {
-      console.log('grep stderr: ' + data);
-    }
-  });
-  ffmpeg_process.on('exit', () => {
-    done();
-  });
-}
-
 export function deleteThumbnails(imageLocation: string, hash: string) {
   // console.log('deleting ' + hash);
   const files = [ imageLocation + '/filmstrips/' + hash + '.jpg',
@@ -639,8 +314,12 @@ export function deleteThumbnails(imageLocation: string, hash: string) {
   });
 }
 
-// GENERATE INDEXES FOR ARRAY
-
+/**
+ * Check if thumbnail, flimstrip, and clip is present
+ * return boolean
+ * @param fileHash
+ * @param screenshotFolder
+ */
 export function hasAllThumbs(fileHash: string, screenshotFolder: string): boolean {
   // Check in reverse order for efficiency
   return fs.existsSync(screenshotFolder + '/thumbnails/' + fileHash + '.jpg')
@@ -677,7 +356,6 @@ export function everyIndex(fullArray: ImageElement[]): number[] {
   return indexes;
 }
 
-
 /**
  * Find all the new files added to the source directory and return array of them
  * @param angularFinalArray  -- finalArray as it stands currently in the app
@@ -711,7 +389,6 @@ export function findAllNewFiles(
 
   return theDiff;
 }
-
 
 /**
  * Clean up ImageElement[] coming from Angular, removing all elements for videos no longer on the Hard Drive
@@ -967,7 +644,6 @@ function hashFile(file: string): string {
 
 }
 
-
 /**
  * Figures out what new files there are,
  * adds them to the finalArray,
@@ -1107,7 +783,6 @@ export function updateFinalArrayWithHD(
   }
 
 }
-
 
 /**
  * Sends progress to Angular App
