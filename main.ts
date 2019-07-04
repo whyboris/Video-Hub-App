@@ -328,7 +328,7 @@ ipc.on('just-started', function (event, someMessage) {
   globals.angularApp = event;
   globals.winRef = win;
 
-  fs.readFile(path.join(pathToAppData, 'video-hub-app', 'settings2.json'), (err, data) => {
+  fs.readFile(path.join(pathToAppData, 'video-hub-app-2', 'settings.json'), (err, data) => {
     if (err) {
       win.setBounds({ x: 0, y: 0, width: screenWidth, height: screenHeight });
       event.sender.send('pleaseOpenWizard', true); // firstRun = true!
@@ -481,20 +481,20 @@ ipc.on('close-window', function (event, settingsToSave: SettingsObject, savableP
   const json = JSON.stringify(settingsToSave);
 
   try {
-    fs.statSync(path.join(pathToAppData, 'video-hub-app'));
+    fs.statSync(path.join(pathToAppData, 'video-hub-app-2'));
   } catch (e) {
-    fs.mkdirSync(path.join(pathToAppData, 'video-hub-app'));
+    fs.mkdirSync(path.join(pathToAppData, 'video-hub-app-2'));
   }
 
   // TODO -- catch bug if user closes before selecting the output folder ?!??
-  fs.writeFile(path.join(pathToAppData, 'video-hub-app', 'settings2.json'), json, 'utf8', () => {
+  fs.writeFile(path.join(pathToAppData, 'video-hub-app-2', 'settings.json'), json, 'utf8', () => {
     if (savableProperties !== null) {
       lastSavedFinalObject.addTags = savableProperties.addTags;
       lastSavedFinalObject.removeTags = savableProperties.removeTags;
       lastSavedFinalObject.images = savableProperties.images;
       writeVhaFileToDisk(lastSavedFinalObject, globals.currentlyOpenVhaFile, () => {
         // file writing done !!!
-        console.log('.vha file written before closing !!!');
+        console.log('.vha2 file written before closing !!!');
         BrowserWindow.getFocusedWindow().close();
       });
     } else {
@@ -518,7 +518,7 @@ ipc.on('start-the-import', function (event, options: ImportSettingsObject, video
   const outDir: string = options.exportFolderPath;
 
   // make sure no hub name under the same name exists
-  if (fs.existsSync(path.join(outDir, options.hubName + '.vha'))) {
+  if (fs.existsSync(path.join(outDir, options.hubName + '.vha2'))) {
 
     dialog.showMessageBox({
       message: 'Hub already exists with this name. \n' +
@@ -705,7 +705,7 @@ ipc.on('system-open-file-through-modal', function (event, somethingElse) {
       title: 'Please select a previously-saved Video Hub file',
       filters: [{
         name: 'Video Hub files',
-        extensions: ['vha']
+        extensions: ['vha2']
       }],
       properties: ['openFile']
     }, function (files) {
@@ -804,7 +804,7 @@ function sendFinalResultHome(
 
   lastSavedFinalObject = finalObject;
 
-  const pathToTheFile = path.join(globals.selectedOutputFolder, globals.hubName + '.vha');
+  const pathToTheFile = path.join(globals.selectedOutputFolder, globals.hubName + '.vha2');
 
   writeVhaFileToDisk(finalObject, pathToTheFile, () => {
 

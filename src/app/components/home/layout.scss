@@ -208,6 +208,10 @@ $sidebar-width: 190px;
   right: 42px;
   top: 36px;
   z-index: 9999;
+
+  &:hover {
+    color: #ff6666;
+  }
 }
 
 .bottom-tray {

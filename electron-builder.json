@@ -1,5 +1,5 @@
 {
-  "productName": "Video Hub App",
+  "productName": "Video Hub App 2",
   "directories": {
     "output": "release/"
   },
@@ -51,7 +51,7 @@
     "perMachine": true
   },
   "fileAssociations": {
-    "ext": "vha",
+    "ext": "vha2",
     "name": "Video Hub App file",
     "role": "Editor"
   }
