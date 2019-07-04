@@ -11,6 +11,7 @@ export const globals: Globals = {
   winRef: null,
   screenshotSettings: {
     fixed: true,               // true => N screenshots per video; false => 1 screenshot every N minutes
+    generateClips: true,
     height: 288,
     n: 10,
   },
@@ -32,6 +33,7 @@ interface Globals {
 
 export interface ScreenshotSettings {
   fixed: boolean;
+  generateClips: boolean;
   height: number;
   n: number;
 }

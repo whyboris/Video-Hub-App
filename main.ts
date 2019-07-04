@@ -8,7 +8,7 @@ import { globals } from './main-globals';
 // ***************************** BUILD TOGGLE *********************************************
 // ========================================================================================
 const demo = false;
-globals.version = '1.9.5';
+globals.version = '1.9.8';
 // ========================================================================================
 
 
@@ -182,17 +182,17 @@ const shell = require('electron').shell;
 
 import {
   alphabetizeFinalArray,
-  checkForCorruptFile,
   countFoldersInFinalArray,
   extractAllMetadata,
+  extractAllScreenshots,
   findAndImportNewFiles,
   getVideoPathsAndNames,
   insertTemporaryFields,
   missingThumbsIndex,
+  regenerateLibrary,
   sendCurrentProgress,
   updateFinalArrayWithHD,
-  writeVhaFileToDisk,
-  regenerateLibrary
+  writeVhaFileToDisk
 } from './main-support';
 
 import { FinalObject, ImageElement } from './src/app/components/common/final-object.interface';
@@ -552,6 +552,7 @@ ipc.on('start-the-import', function (event, options: ImportSettingsObject, video
       numOfScreenshots = options.ssVariable;
     }
     globals.screenshotSettings = {
+      generateClips: options.generateClips,
       fixed: options.screensPerVideo,
       height: options.imgHeight,
       n: numOfScreenshots,
@@ -787,9 +788,7 @@ ipc.on('try-to-rename-this-file', function(event, sourceFolder: string, relPath:
  * Starts the process to extract all the images
  * @param theFinalArray -- `finalArray` with all the metadata filled in
  */
-function sendFinalResultHome(
-  theFinalArray: ImageElement[]
-): void {
+function sendFinalResultHome(theFinalArray: ImageElement[]): void {
 
   const myFinalArray: ImageElement[] = alphabetizeFinalArray(theFinalArray);
 
@@ -834,62 +833,4 @@ function sendFinalResultHome(
     );
 
   });
-}
-
-// DANGEROUSLY DEPENDS ON a global variable `globals.cancelCurrentImport`
-// that can get toggled while scanning all screenshots
-
-/**
- * Start extracting screenshots now that metadata has been retreived and sent over to the app
- * @param theFinalArray     -- finalArray of ImageElements
- * @param videoFolderPath   -- path to base folder where videos are
- * @param screenshotFolder  -- path to folder where .jpg files will be saved
- * @param screenshotHeight    -- number in px how large each screenshot should be
- * @param elementsToScan    -- array of indexes of elements in finalArray for which to extract screenshots
- */
-function extractAllScreenshots(
-  theFinalArray: ImageElement[],
-  videoFolderPath: string,
-  screenshotFolder: string,
-  screenshotHeight: number,
-  elementsToScan: number[]
-): void {
-
-  // final array already saved at this point - nothing to update inside it
-  // just walk through `elementsToScan` to extract screenshots for elements in `theFinalArray`
-  const itemTotal = elementsToScan.length;
-  let iterator = -1; // gets incremented to 0 on first call
-
-  const extractTenCallback = (): void => {
-    iterator++;
-
-    if ((iterator < itemTotal) && !globals.cancelCurrentImport) {
-
-      sendCurrentProgress(iterator, itemTotal, 2);
-
-      const currentElement = elementsToScan[iterator];
-
-      const pathToVideo: string = (path.join(videoFolderPath,
-                                             theFinalArray[currentElement].partialPath,
-                                             theFinalArray[currentElement].fileName));
-
-      const duration: number = theFinalArray[currentElement].duration;
-      const fileHash: string = theFinalArray[currentElement].hash;
-      const screens = theFinalArray[currentElement].screens;
-
-      checkForCorruptFile(
-        pathToVideo,
-        fileHash,
-        duration,
-        screenshotHeight,
-        screens,
-        screenshotFolder,
-        extractTenCallback
-      );
-    } else {
-      sendCurrentProgress(1, 1, 0); // indicates 100%
-    }
-  };
-
-  extractTenCallback();
 }

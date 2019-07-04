@@ -473,21 +473,27 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // stage = 0 hides progress bar
     // stage = 1 shows meta progress
     // stage = 2 shows jpg progress
-    this.electronService.ipcRenderer.on('processingProgress', (event, a: number, b: number, stage: number) => {
+    this.electronService.ipcRenderer.on('processingProgress', (
+      event,
+      current: number,
+      total: number,
+      stage: number
+    ) => {
+      console.log('receiving META SCAN UPDATE !!!' + current);
       this.importStage = stage;
-      this.progressNum1 = a;
-      this.progressNum2 = b;
-      this.progressPercent = a / b;
-      this.progressString = 'loading - ' + Math.round(a * 100 / b) + '%';
+      this.progressNum1 = current;
+      this.progressNum2 = total;
+      this.progressPercent = current / total;
+      this.progressString = 'loading - ' + Math.round(current * 100 / total) + '%';
       if (this.importStage === 2) {
         if (this.isFirstRunEver) {
           this.toggleButton('showThumbnails');
           console.log('SHOULD FIX THE FIRST RUN BUG!!!');
           this.isFirstRunEver = false;
         }
-        this.extractionPercent = Math.round(100 * a / b);
+        this.extractionPercent = Math.round(100 * current / total);
       }
-      if (a === b) {
+      if (current === total) {
         this.extractionPercent = 1;
         this.importStage = 0;
         this.appState.hubName = this.hubNameToRemember; // could this cause bugs ??? TODO: investigate!
@@ -651,6 +657,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.appState.selectedOutputFolder = this.wizard.selectedOutputFolder;
     this.importStage = 1;
     const importOptions: ImportSettingsObject = {
+      generateClips: true, // !!! TODO -  MAKE THIS A USER TOGGLE !!!
       exportFolderPath: this.wizard.selectedOutputFolder,
       hubName: (this.wizard.futureHubName || 'untitled'),
       imgHeight: this.wizard.screenshotSizeForImport,

@@ -162,7 +162,7 @@ export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: stri
 
   // backup current file
   try {
-  fs.renameSync(pathToTheFile, pathToTheFile + '.bak');
+    fs.renameSync(pathToTheFile, pathToTheFile + '.bak');
   } catch (err) {
     console.log('Error backup up file! Moving on...');
     console.log(err);
@@ -293,62 +293,123 @@ const spawn = require('child_process').spawn;
 // also spawns a shell (can pass a single cmd string)
 const exec = require('child_process').exec;
 
+/**
+ * Start extracting screenshots now that metadata has been retreived and sent over to the app
+ *
+ * DANGEROUSLY DEPENDS ON a global variable `globals.cancelCurrentImport`
+ * that can get toggled while scanning all screenshots
+ *
+ * @param theFinalArray     -- finalArray of ImageElements
+ * @param videoFolderPath   -- path to base folder where videos are
+ * @param screenshotFolder  -- path to folder where .jpg files will be saved
+ * @param screenshotHeight  -- number in px how tall each screenshot should be
+ * @param elementsToScan    -- array of indexes of elements in finalArray for which to extract screenshots
+ */
+export function extractAllScreenshots(
+  theFinalArray: ImageElement[],
+  videoFolderPath: string,
+  screenshotFolder: string,
+  screenshotHeight: number,
+  elementsToScan: number[]
+): void {
+
+  // final array already saved at this point - nothing to update inside it
+  // just walk through `elementsToScan` to extract screenshots for elements in `theFinalArray`
+  const itemTotal = elementsToScan.length;
+  let iterator = -1; // gets incremented to 0 on first call
+
+  const extractThumbScreensAndClip = (): void => {
+    iterator++;
+
+    if ((iterator < itemTotal) && !globals.cancelCurrentImport) {
+
+      sendCurrentProgress(iterator, itemTotal, 2);
+
+      const currentElement = elementsToScan[iterator];
+
+      const pathToVideo: string = (path.join(videoFolderPath,
+        theFinalArray[currentElement].partialPath,
+        theFinalArray[currentElement].fileName));
+
+      const duration: number = theFinalArray[currentElement].duration;
+      const fileHash: string = theFinalArray[currentElement].hash;
+      const numOfScreens: number = theFinalArray[currentElement].screens;
+
+      checkForCorruptFile(
+        pathToVideo,
+        fileHash,
+        duration,
+        screenshotHeight,
+        numOfScreens,
+        screenshotFolder,
+        extractThumbScreensAndClip
+      );
+    } else {
+      sendCurrentProgress(1, 1, 0); // indicates 100%
+    }
+  };
+
+  extractThumbScreensAndClip();
+}
+
+
 export function checkForCorruptFile(pathToVideo: string,
   fileHash: string,
   duration: number,
   screenshotHeight: number,
   numberOfScreenshots: number,
   saveLocation: string,
-  done: any) {
-    if (fs.existsSync(saveLocation + '/filmstrips/' + fileHash + '.jpg')) {
-      // console.log("thumbnails for " + fileHash + " already exist");
-      takeTenClips(pathToVideo,
-                   fileHash,
-                   duration,
-                   screenshotHeight,
-                   saveLocation,
-                   done);
+  done: any
+) {
+  if (fs.existsSync(saveLocation + '/filmstrips/' + fileHash + '.jpg')) {
+    // console.log("thumbnails for " + fileHash + " already exist");
+    takeTenClips(pathToVideo,
+                 fileHash,
+                 duration,
+                 screenshotHeight,
+                 saveLocation,
+                 done);
+    return;
+  }
+
+  const totalCount = numberOfScreenshots;
+  const step: number = duration / (totalCount + 1);
+
+  const check = (current) => {
+    if (current === totalCount) {
+      generateScreenshotStrip(pathToVideo,
+                              fileHash,
+                              duration,
+                              screenshotHeight,
+                              numberOfScreenshots,
+                              saveLocation,
+                              done);
       return;
     }
-
-    const totalCount = numberOfScreenshots;
-    const step: number = duration / (totalCount + 1);
-
-    const check = (current) => {
-      if (current === totalCount) {
-        generateScreenshotStrip(pathToVideo,
-          fileHash,
-          duration,
-          screenshotHeight,
-          numberOfScreenshots,
-          saveLocation,
-          done);
-          return;
-      }
-      // check for complete file
-      const time = (current + 1) * step; // +1 so we don't pick the 0th frame
-      const checkCommand = 'ffmpeg -v warning -ss ' + time + ' -t 1 -i "' + pathToVideo + '" -map V -f null -';
-      const corruptRegex = /Output file is empty, nothing was encoded/g;
-      exec(checkCommand, (err, data, stderr) => {
-        console.log(data);
-        console.log(stderr);
-        if (err) {
+    // check for complete file
+    const time = (current + 1) * step; // +1 so we don't pick the 0th frame
+    const checkCommand = 'ffmpeg -v warning -ss ' + time + ' -t 1 -i "' + pathToVideo + '" -map V -f null -';
+    const corruptRegex = /Output file is empty, nothing was encoded/g;
+    exec(checkCommand, (err, data, stderr) => {
+      console.log(data);
+      console.log(stderr);
+      if (err) {
+        // skip this file
+        console.log(pathToVideo + ' was corrupt, skipping!');
+        done();
+      } else {
+        if (data.match(corruptRegex) || stderr.match(corruptRegex)) {
           // skip this file
           console.log(pathToVideo + ' was corrupt, skipping!');
           done();
         } else {
-          if (data.match(corruptRegex) || stderr.match(corruptRegex)) {
-            // skip this file
-            console.log(pathToVideo + ' was corrupt, skipping!');
-            done();
-          } else {
-            check(current + 1);
-          }
+          check(current + 1);
         }
-      });
-    };
-    check(0);
-  }
+      }
+    });
+  };
+  check(0);
+}
 
 /**
  * Take 10 screenshots of a particular file
@@ -558,8 +619,8 @@ export function deleteThumbnails(imageLocation: string, hash: string) {
 export function hasAllThumbs(fileHash: string, screenshotFolder: string): boolean {
   // Check in reverse order for efficiency
   return fs.existsSync(screenshotFolder + '/thumbnails/' + fileHash + '.jpg')
-         && fs.existsSync(screenshotFolder + '/clips/' + fileHash + '.mp4')
-         && fs.existsSync(screenshotFolder + '/filmstrips/' + fileHash + '.jpg');
+      && fs.existsSync(screenshotFolder + '/clips/' + fileHash + '.mp4') // !!! TODO - TOGGLE with user's preference
+      && fs.existsSync(screenshotFolder + '/filmstrips/' + fileHash + '.jpg');
 }
 
 /**
@@ -1030,6 +1091,7 @@ export function updateFinalArrayWithHD(
  * @param stage number -- 0 = done, 1 = meta, 2 = jpg
  */
 export function sendCurrentProgress(current: number, total: number, stage: number): void {
+  console.log('sending SCAN PROGRESS HOME' + current);
   globals.angularApp.sender.send('processingProgress', current, total, stage);
   if (stage !== 0) {
     globals.winRef.setProgressBar(current / total);
