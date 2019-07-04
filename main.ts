@@ -194,7 +194,7 @@ import {
   writeVhaFileToDisk
 } from './main-support';
 
-import { extractAllScreenshots } from './main-extract';
+import { extractFromTheseFiles } from './main-extract';
 
 import { FinalObject, ImageElement } from './src/app/components/common/final-object.interface';
 import { ImportSettingsObject } from './src/app/components/common/import.interface';
@@ -290,7 +290,7 @@ function openThisDamnFile(pathToVhaFile: string) {
       //
       // const indexesToScan: number[] = missingThumbsIndex(lastSavedFinalObject.images, screenshotOutputFolder);
       //
-      // extractAllScreenshots(
+      // extractFromTheseFiles(
       //   lastSavedFinalObject.images,
       //   globals.selectedSourceFolder,
       //   screenshotOutputFolder,
@@ -616,7 +616,7 @@ function verifyThumbnails() {
 
   const indexesToScan: number[] = missingThumbsIndex(lastSavedFinalObject.images, screenshotOutputFolder);
 
-  extractAllScreenshots(
+  extractFromTheseFiles(
     lastSavedFinalObject.images,
     globals.selectedSourceFolder,
     screenshotOutputFolder,
@@ -829,7 +829,7 @@ function sendFinalResultHome(theFinalArray: ImageElement[]): void {
 
     const indexesToScan: number[] = missingThumbsIndex(myFinalArray, screenshotOutputFolder);
 
-    extractAllScreenshots(
+    extractFromTheseFiles(
       myFinalArray,
       globals.selectedSourceFolder,
       screenshotOutputFolder,
