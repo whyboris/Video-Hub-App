@@ -15,6 +15,10 @@
  * He implemented the efficient filmstrip and clip extraction!
  */
 
+// ========================================================================================
+//          Imports
+// ========================================================================================
+
 const fs = require('fs');
 
 import * as path from 'path';
@@ -33,6 +37,10 @@ import { globals } from './main-globals';
 import { sendCurrentProgress } from './main-support';
 
 import { ImageElement } from './src/app/components/common/final-object.interface';
+
+// ========================================================================================
+//          Promises
+// ========================================================================================
 
 /**
  * Check whether the input video file is still accessible
@@ -101,11 +109,11 @@ const checkAllScreensExist = (
 
 };
 
-
 /**
- * Take 10 screenshots of a particular file
+ * Take N screenshots of a particular file
  * at particular file size
  * save as particular fileHash
+ *
  * @param pathToVideo          -- full path to the video file
  * @param fileHash             -- hash of the video file
  * @param duration             -- duration of clip
@@ -144,7 +152,10 @@ const generateScreenshotStrip = (
 
     // sweet thanks to StackExchange!
     // https://superuser.com/questions/547296/resizing-videos-with-ffmpeg-avconv-to-fit-into-static-sized-player
-    const fancyScaleFilter = 'scale=' + ratioString + ':force_original_aspect_ratio=decrease,pad=' + ratioString + ':(ow-iw)/2:(oh-ih)/2';
+    const fancyScaleFilter = 'scale='
+                              + ratioString
+                              + ':force_original_aspect_ratio=decrease,pad='
+                              + ratioString + ':(ow-iw)/2:(oh-ih)/2';
 
     // make the magic filter
     while (current < totalCount) {
@@ -219,7 +230,13 @@ const generatePreviewClip = (
       current++;
     }
     concat += 'concat=n=' + (totalCount - 1) + ':v=1:a=1[v][a];[v]scale=-2:' + screenshotHeight + '[v2]';
-    args.push('-filter_complex', concat, '-map', '[v2]', '-map', '[a]', saveLocation + '/clips/' + fileHash + '.mp4');
+    args.push('-filter_complex',
+              concat,
+              '-map',
+              '[v2]',
+              '-map',
+              '[a]',
+              saveLocation + '/clips/' + fileHash + '.mp4');
     // phfff glad that's over
 
     // now make it all worth it!
@@ -285,6 +302,10 @@ const extractFirstFrame = (saveLocation: string, fileHash: string) => {
   });
 
 };
+
+// ========================================================================================
+//          Extraction engine
+// ========================================================================================
 
 /**
  * Start extracting screenshots now that metadata has been retreived and sent over to the app
