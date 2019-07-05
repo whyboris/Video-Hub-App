@@ -5,8 +5,7 @@
   <span
     *ngIf="tag.removable"
     class="coverTheX"
-
-    [ngStyle]="{ 'background-color': darkMode ? '#000000' : 'undefined' }"
+    [ngClass]="{ 'coverTheX-dark': darkMode }"
   >
     &ensp;
   </span>
