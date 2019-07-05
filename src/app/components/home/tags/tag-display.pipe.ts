@@ -1,6 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 
-import { SettingsButtons } from '../../common/settings-buttons';
 import { autoFileTagsRegex } from './autotags.service';
 
 import { ImageElement } from '../../common/final-object.interface';
@@ -11,11 +10,12 @@ export interface Tag {
   removable: boolean;
 }
 
-@Injectable()
-export class TagsService {
-  settingsButtons = SettingsButtons;
+@Pipe({
+  name: 'tagDisplayPipe'
+})
+export class TagsDisplayPipe implements PipeTransform {
 
-  public getTags(
+  transform(
     video: ImageElement,
     manualTags: boolean,
     autoFileTags: boolean,

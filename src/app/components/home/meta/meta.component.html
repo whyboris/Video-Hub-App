@@ -85,11 +85,21 @@
     (tag)="addThisTag($event)"
   ></app-add-tag-component>
 
-  <!-- HACK for now -->
+  <!-- HACK for now
+
+  TODO -- GET CSS RIGHT --
+  do not let too many tags push the div down to below the preview --
+  stay on the right!
+
+  -->
   <br><br><br>
 
   <app-view-tags-component
-    [tags]="tagsService.getTags(this.video, this.showManualTags, this.showAutoFileTags, this.showAutoFolderTags, this.video.tags)"
+    [tags]="this.video | tagDisplayPipe
+                       : this.showManualTags
+                       : this.showAutoFileTags
+                       : this.showAutoFolderTags
+                       : this.video.tags"
     [darkMode]="darkMode"
     (tagClicked)="filterThisTag($event)"
     (removeTagEmit)="removeThisTag($event)"

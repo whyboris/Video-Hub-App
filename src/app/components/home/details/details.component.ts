@@ -2,7 +2,6 @@ import { Component, Input, OnInit, ElementRef, ViewChild, Output, EventEmitter }
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { ManualTagsService } from '../manual-tags/manual-tags.service';
-import { Tag, TagsService } from '../tags/tags.service';
 
 import { StarRating, ImageElement } from '../../common/final-object.interface';
 
@@ -65,7 +64,6 @@ export class DetailsComponent implements OnInit {
 
   constructor(
     public manualTagsService: ManualTagsService,
-    public tagsService: TagsService,
     public sanitizer: DomSanitizer
   ) { }
 

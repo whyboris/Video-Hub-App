@@ -2,7 +2,6 @@ import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectorRef, View
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { ManualTagsService } from '../manual-tags/manual-tags.service';
-import { TagsService } from '../tags/tags.service';
 
 import { StarRating, ImageElement } from '../../common/final-object.interface';
 import { YearEmission } from '../details/details.component';
@@ -50,8 +49,7 @@ export class MetaComponent implements OnInit {
   constructor(
     private cd: ChangeDetectorRef,
     public manualTagsService: ManualTagsService,
-    public sanitizer: DomSanitizer,
-    public tagsService: TagsService
+    public sanitizer: DomSanitizer
   ) { }
 
 
