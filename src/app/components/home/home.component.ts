@@ -260,7 +260,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // Please add new variables below if they don't fit into any other section
   // ------------------------------------------------------------------------
 
-
+  detailsMaxWidth: number = 1000; // used to keep track of max width for details in details view
 
   // ========================================================================
 
@@ -1121,6 +1121,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
         || this.appState.currentView === 'showThumbnails'
         || this.appState.currentView === 'showDetails') {
       this.previewWidth = (this.galleryWidth / this.currentImgsPerRow) - 40; // 40px margin
+
+      // used in details view only
+      this.detailsMaxWidth = this.galleryWidth - this.previewWidth - 40; // 40px is just an estimate here
+
     } else if ( this.appState.currentView === 'showFilmstrip'
              || this.appState.currentView === 'showFullView' ) {
       this.previewWidth = ((this.galleryWidth - 30) / this.currentImgsPerRow);

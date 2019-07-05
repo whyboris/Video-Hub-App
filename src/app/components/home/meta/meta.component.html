@@ -1,6 +1,6 @@
 <div
   class="meta"
-  [ngStyle]="{ height: imgHeight + 'px' }"
+  [ngStyle]="{ height: imgHeight + 'px', 'max-width': maxWidth + 'px' }"
 >
   <span
     [ngClass]="{ 'larger-font': largerFont }"
@@ -85,21 +85,14 @@
     (tag)="addThisTag($event)"
   ></app-add-tag-component>
 
-  <!-- HACK for now
-
-  TODO -- GET CSS RIGHT --
-  do not let too many tags push the div down to below the preview --
-  stay on the right!
-
-  -->
-  <br><br><br>
+  <br><br><br>  <!-- TODO -- stop using `<br>` here -->
 
   <app-view-tags-component
     [tags]="this.video | tagDisplayPipe
                        : this.showManualTags
                        : this.showAutoFileTags
                        : this.showAutoFolderTags
-                       : this.video.tags"
+                       : tagViewUpdateHack"
     [darkMode]="darkMode"
     (tagClicked)="filterThisTag($event)"
     (removeTagEmit)="removeThisTag($event)"

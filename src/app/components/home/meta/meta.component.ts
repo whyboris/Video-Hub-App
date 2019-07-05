@@ -42,9 +42,12 @@ export class MetaComponent implements OnInit {
   @Input() showManualTags: boolean;
   @Input() showAutoFileTags: boolean;
   @Input() showAutoFolderTags: boolean;
+  @Input() maxWidth: number;
 
   starRatingHack: StarRating;
   yearHack: number;
+
+  tagViewUpdateHack: boolean = false;
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -70,6 +73,7 @@ export class MetaComponent implements OnInit {
         type: 'add'
       });
     }
+    this.tagViewUpdateHack = !this.tagViewUpdateHack;
   }
 
   filterThisTag(event: object) {
@@ -84,6 +88,7 @@ export class MetaComponent implements OnInit {
       tag: tag,
       type: 'remove'
     });
+    this.tagViewUpdateHack = !this.tagViewUpdateHack;
   }
 
   setStarRating(rating: StarRating): void {

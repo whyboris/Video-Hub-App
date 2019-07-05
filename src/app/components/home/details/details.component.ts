@@ -41,6 +41,8 @@ export class DetailsComponent implements OnInit {
 
   @Input() video: ImageElement;
 
+  @Input() maxWidth: number;
+
   @Input() darkMode: boolean;
   @Input() elHeight: number;
   @Input() elWidth: number;

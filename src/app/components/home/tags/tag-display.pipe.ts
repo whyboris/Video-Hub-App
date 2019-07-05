@@ -20,7 +20,7 @@ export class TagsDisplayPipe implements PipeTransform {
     manualTags: boolean,
     autoFileTags: boolean,
     autoFolderTags: boolean,
-    uselessTags: string[]
+    updateViewHack: boolean
   ): Tag[] {
 
     const tags: Tag[] = [];
