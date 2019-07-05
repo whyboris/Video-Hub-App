@@ -269,6 +269,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.magicDescription',
     hidden: false,
     iconName: 'icon-looking-glass',
+    moreInfo: 'BUTTONS.magicMoreInfo',
     title: 'BUTTONS.magicHint',
     toggled: true
   },

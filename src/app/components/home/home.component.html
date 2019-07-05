@@ -298,13 +298,11 @@
               </span>
 
               <div
-                [ngClass]="{ buttonOpacityLower: settingsButtons[buttonKey].hidden }"
                 class="buttonDescription"
               >
                 <button
                   (click)="toggleButton(buttonKey)"
                   [ngClass]="{
-                      buttonOpacityLower:           settingsButtons[buttonKey].hidden,
                       defaultSettingsButton:        !settingsButtons['flatIcons'].toggled,
                       defaultSettingsButtonToggled: !settingsButtons['flatIcons'].toggled && settingsButtons[buttonKey].toggled,
                       flatSettingsButton:           settingsButtons['flatIcons'].toggled,
