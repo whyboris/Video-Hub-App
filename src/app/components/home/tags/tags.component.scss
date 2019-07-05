@@ -32,7 +32,7 @@ ul {
   transition-property: color;
 
   &:hover {
-    color: #729aff;
+    color: $pretty-blue;
     transition: 30ms;
     transition-property: color;
   }
@@ -153,7 +153,7 @@ ul {
 }
 
 .add-error {
-  color: #729aff;
+  color: $pretty-blue;
 }
 
 @media (max-width: 550px) {

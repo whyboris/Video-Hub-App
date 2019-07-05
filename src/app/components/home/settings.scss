@@ -262,7 +262,7 @@ input[type="radio"] {
 }
 
 input[type="radio"]:checked:before {
-  background: #729aff;
+  background: $pretty-blue;
   border: 3px solid $gray-10;
   border-radius: 10px;
   content:"";
@@ -276,9 +276,9 @@ input[type="radio"]:checked:before {
 }
 
 .more-info {
-  border: 1px solid #729aff;
+  border: 1px solid $pretty-blue;
   border-radius: 50%;
-  color: #729aff;
+  color: $pretty-blue;
   cursor: none;
   display: inline-block;
   font-size: 11px;

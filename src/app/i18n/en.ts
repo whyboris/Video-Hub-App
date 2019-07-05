@@ -249,7 +249,7 @@ export const English = {
     filterList         :'Filter list',
     filterTags         :'Filter tags',
     presentTags        :'Tags in this hub',
-    showFrequency      :'Show Frequency',
+    showFrequency      :'Toggle frequency',
     showingMostSimilar :'Showing most similar to:',
     starRating         :'Star rating',
     timesPlayed        :'Times played',
