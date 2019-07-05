@@ -261,7 +261,8 @@ const generatePreviewClip = (
   duration: number,
   screenshotHeight: number,
   saveLocation: string,
-  clipSnippets: number
+  clipSnippets: number,
+  snippetLength: number
 ) => {
 
   return new Promise((resolve, reject) => {
@@ -280,7 +281,7 @@ const generatePreviewClip = (
     // make the magic filter
     while (current < totalCount) {
       const time = current * step;
-      const preview_duration = 1; // TODO: Make this customisable
+      const preview_duration = snippetLength;
       args.push('-ss', time, '-t', preview_duration, '-i', pathToVideo);
       concat += '[' + (current - 1) + ':V]' + '[' + (current - 1) + ':a]';
       current++;
@@ -383,6 +384,7 @@ const extractFirstFrame = (saveLocation: string, fileHash: string) => {
  * @param screenshotHeight  -- number in px how tall each screenshot should be
  * @param elementsToScan    -- array of indexes of elements in finalArray for which to extract screenshots
  * @param clipSnippets      -- number of clip snippets to extract; 0 == do not extract clip
+ * @param snippetLength     -- length of each snippet in the clip
  */
 export function extractFromTheseFiles(
   theFinalArray: ImageElement[],
@@ -391,6 +393,7 @@ export function extractFromTheseFiles(
   screenshotHeight: number,
   elementsToScan: number[],
   clipSnippets: number,
+  snippetLength: number,
 ): void {
 
   // final array already saved at this point - nothing to update inside it
@@ -434,13 +437,17 @@ export function extractFromTheseFiles(
             throw new Error('FILE MIGHT BE CORRUPT');
           }
 
-          return extractSingleFrame(pathToVideo, screenshotFolder, fileHash, screenshotHeight, duration);
+          return extractSingleFrame(
+            pathToVideo, screenshotFolder, fileHash, screenshotHeight, duration
+          );
         })
 
         .then(content => {
           console.log('03 - single screenshot extracted = ' + content);
 
-          return generateScreenshotStrip(pathToVideo, fileHash, duration, screenshotHeight, numOfScreens, screenshotFolder);
+          return generateScreenshotStrip(
+            pathToVideo, fileHash, duration, screenshotHeight, numOfScreens, screenshotFolder
+          );
         })
 
         .then(content => {
@@ -450,7 +457,9 @@ export function extractFromTheseFiles(
             throw new Error('USER DOES NOT WANT CLIPS');
           }
 
-          return generatePreviewClip(pathToVideo, fileHash, duration, screenshotHeight, screenshotFolder, clipSnippets);
+          return generatePreviewClip(
+            pathToVideo, fileHash, duration, screenshotHeight, screenshotFolder, clipSnippets, snippetLength
+          );
         })
 
         .then(content => {

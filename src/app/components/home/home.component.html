@@ -1402,6 +1402,33 @@
 
     </div>
 
+
+    <div [ngClass]="{ 'dim-row': !wizard.extractClips }" style="margin-left: 38px">
+
+      <span class="step-four-text">
+        {{ 'WIZARD.eachSnippet' | translate }}
+      </span>
+
+      <input
+        (change)="selectLengthOfClipSnippets($event.target.value)"
+        type="number"
+        class="size-dropdown languageDropDown numSelect"
+        value=1
+        min=1
+        max=5
+        onKeyDown="return false"
+        [disabled]="wizard.selectedOutputFolder === ''
+                || wizard.selectedSourceFolder === ''
+                || wizard.futureHubName === ''
+                || !wizard.screensPerVideo"
+      >
+
+      <span class="step-four-text">
+        {{ 'WIZARD.secondsLong' | translate }}
+      </span>
+
+    </div>
+
     <div
       [ngClass]="{
         'current-step': wizard.selectedOutputFolder !== ''

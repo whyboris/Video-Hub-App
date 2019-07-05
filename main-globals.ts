@@ -10,8 +10,9 @@ export const globals: Globals = {
   vhaFileVersion: 2,
   winRef: null,
   screenshotSettings: {
-    fixed: true,               // true => N screenshots per video; false => 1 screenshot every N minutes
+    clipSnippetLength: 1,          // the length of each snippet in the clip
     clipSnippets: 10,          // the number of video snippets in every clip; 0 == no clip extracted
+    fixed: true,               // true => N screenshots per video; false => 1 screenshot every N minutes
     height: 288,
     n: 10,
   },
@@ -32,8 +33,9 @@ interface Globals {
 }
 
 export interface ScreenshotSettings {
-  fixed: boolean;
+  clipSnippetLength: number;
   clipSnippets: number;
+  fixed: boolean;
   height: number;
   n: number;
 }

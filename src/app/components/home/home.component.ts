@@ -215,6 +215,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   canCloseWizard = false;
 
   wizard: WizardOptions = {
+    clipSnippetLength: 1,
     clipSnippets: 9,
     extractClips: false,
     futureHubName: '',
@@ -659,13 +660,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.appState.selectedOutputFolder = this.wizard.selectedOutputFolder;
     this.importStage = 1;
     const importOptions: ImportSettingsObject = {
+      clipSnippetLength: this.wizard.clipSnippetLength,
       clipSnippets: this.wizard.extractClips ? this.wizard.clipSnippets : 0,
       exportFolderPath: this.wizard.selectedOutputFolder,
       hubName: (this.wizard.futureHubName || 'untitled'),
       imgHeight: this.wizard.screenshotSizeForImport,
-      ssVariable: this.wizard.ssVariable,
-      ssConstant: this.wizard.ssConstant,
       screensPerVideo: this.wizard.screensPerVideo,
+      ssConstant: this.wizard.ssConstant,
+      ssVariable: this.wizard.ssVariable,
       videoDirPath: this.wizard.selectedSourceFolder
     };
     this.electronService.ipcRenderer.send('start-the-import', importOptions, this.wizard.listOfFiles);
@@ -1036,6 +1038,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   public startWizard(): void {
     this.wizard = {
+      clipSnippetLength: 1,
       clipSnippets: 9,
       extractClips: false,
       futureHubName: '',
@@ -1273,11 +1276,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Called on screenshot size dropdown select
-   * @param screens - string of number of screenshots per video
+   * Called on screenshot options selection HTML
+   * @param screens - string of number of snipppets per clip
    */
   selectNumOfClipSnippets(screens: string): void {
     this.wizard.clipSnippets = parseFloat(screens);
+  }
+
+  /**
+   * Called on screenshot options selection HTML
+   * @param length - string of number of seconds per snippet in each clip
+   */
+  selectLengthOfClipSnippets(length: string): void {
+    this.wizard.clipSnippetLength = parseFloat(length);
   }
 
   /**

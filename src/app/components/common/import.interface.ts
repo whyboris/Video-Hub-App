@@ -1,4 +1,5 @@
 export interface ImportSettingsObject {
+  clipSnippetLength: number;
   clipSnippets: number;
   exportFolderPath: string;
   hubName: string;
