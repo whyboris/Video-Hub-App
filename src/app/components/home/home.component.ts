@@ -261,6 +261,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // ------------------------------------------------------------------------
 
   detailsMaxWidth: number = 1000; // used to keep track of max width for details in details view
+  tagTypeAhead: string = '';
 
   // ========================================================================
 
@@ -359,8 +360,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     public electronService: ElectronService,
     public manualTagsService: ManualTagsService,
     public resolutionFilterService: ResolutionFilterService,
-    public starFilterService: StarFilterService,
     public showLimitService: ShowLimitService,
+    public starFilterService: StarFilterService,
     public tagsSaveService: AutoTagsSaveService,
     public translate: TranslateService,
     public wordFrequencyService: WordFrequencyService,
@@ -1668,6 +1669,34 @@ export class HomeComponent implements OnInit, AfterViewInit {
     console.log(type);
     this.sortType = type;
     // this.shuffleTheViewNow++;
+  }
+
+  /**
+   * Check type-ahead for the manually-added tags!
+   * @param text     input text to check type-ahead
+   * @param compute  whether or not to perform the lookup
+   */
+  checkTagTypeahead(text: string, compute: boolean) {
+    if (compute) {
+      this.tagTypeAhead = this.manualTagsService.getTypeahead(text);
+    }
+  }
+
+  /**
+   * Add tag to search when pressing tab
+   * !!! but only when on the tag search field !!!
+   * @param $event
+   * @param execute
+   * @param origin -- the `j` in the template, just pass it on to the `onEnterKey`
+   */
+  typeaheadTabPressed($event, execute: boolean, origin: number): void {
+    if (execute) {
+      if (this.tagTypeAhead !== '') {
+        this.onEnterKey(this.tagTypeAhead, origin);
+        this.tagTypeAhead = '';
+        $event.preventDefault();
+      }
+    }
   }
 
 }

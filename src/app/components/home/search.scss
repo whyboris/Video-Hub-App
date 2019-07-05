@@ -114,6 +114,13 @@
   }
 }
 
+.tag-type-ahead-on-home {
+  color: $pretty-blue;
+  display: block;
+  position: absolute;
+  transform: translate(20px, -28px);
+  z-index: -1;
+}
 
 .levDistance {
   .searchWord {

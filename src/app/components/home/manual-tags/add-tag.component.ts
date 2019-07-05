@@ -14,7 +14,7 @@ export class AddTagComponent {
   typeAhead: string = '';
 
   constructor(
-    public tagService: ManualTagsService
+    public manualTagsService: ManualTagsService
   ) { }
 
   emitTag(text: string) {
@@ -26,7 +26,7 @@ export class AddTagComponent {
   }
 
   checkTypeahead(text: string) {
-    this.typeAhead = this.tagService.getTypeahead(text);
+    this.typeAhead = this.manualTagsService.getTypeahead(text);
   }
 
   tabPressed($event): void {

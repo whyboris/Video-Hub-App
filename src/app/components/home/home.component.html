@@ -589,11 +589,18 @@
             (keydown.backspace)="onBackspace(filter.string, j)"
             (keydown.escape)="filter.string = ''"
             [(ngModel)]="filter.string"
+            (keydown.Tab)="typeaheadTabPressed($event, filter.uniqueKey === 'tagIntersection', j)"
+            (ngModelChange)="checkTagTypeahead($event, filter.uniqueKey === 'tagIntersection')"
             [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
             class="inputFilter"
             placeholder="{{ filter.placeholder | translate }}"
             type="text"
           >
+
+          <span
+            *ngIf="filter.uniqueKey === 'tagIntersection'"
+            class="tag-type-ahead-on-home"
+          >{{ tagTypeAhead }}</span>
 
           <div class="filteredWords">
             <ng-container *ngIf="filter.array.length > 0">
