@@ -10,8 +10,23 @@ import { Tag } from '../tags/tags.service';
 })
 export class ViewTagsComponent {
 
-  @Input() tags: Tag[];
+  _tags: Tag[];
+
+  @Input()
+  set tags(tags: Tag[] | string[]) {
+
+    if ((typeof tags[0]) === 'string') {
+      this._tags = this.stringToTagObject(<string[]>tags);
+    } else {
+      this._tags = <Tag[]>tags;
+    }
+
+    console.log('HAPPEN HAPPEN');
+
+  }
+
   @Input() displayFrequency: boolean;
+  @Input() darkMode: boolean;
 
   @Output() tagClicked = new EventEmitter<object>();
   @Output() removeTagEmit = new EventEmitter<string>();
@@ -21,12 +36,29 @@ export class ViewTagsComponent {
   ) { }
 
   tagClick(tag: Tag, event: Event): void {
-    this.tagClicked.emit({tag, event});
+    this.tagClicked.emit({ tag, event });
   }
 
   removeTag(tag: string): void {
     console.log('remove tag clicked');
     this.removeTagEmit.emit(tag);
+  }
+
+  stringToTagObject(tagList: string[]): Tag[] {
+
+    console.log('running stringToTagObject');
+
+    const hackList: Tag[] = [];
+
+    tagList.forEach((tag) => {
+      hackList.push({
+        name: tag,
+        colour: undefined,
+        removable: false,
+      });
+    });
+
+    return hackList;
   }
 
 }

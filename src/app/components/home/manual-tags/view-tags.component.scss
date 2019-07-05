@@ -2,7 +2,7 @@
 
 .singleTag {
   display: inline-block;
-  margin-right: 10px;
+  margin: 0 10px 10px 0;
   position: relative;
 
   .tag {
@@ -21,12 +21,16 @@
   }
 
   .coverTheX {
-    background: $gray-40;
-    height: 22px;
+    background-color: $gray-40;
+    height: 16px;
     position: absolute;
-    transform: translate(-6px, 0);
+    transform: translate(6px, 2px);
     width: 12px;
     z-index: 2;
+  }
+
+  .coverTheX-dark {
+    background-color: black;
   }
 
   .removeTag {
@@ -36,10 +40,10 @@
     display: inline-block;
     fill: red;
     height: 16px;
+    left: 0;
     padding-left: 1px;
     position: absolute;
-    right: 0;
-    top: 3px;
+    top: 2px;
     transform: translate(0, 0);
     transition-delay: 0.25s;
     transition-duration: 0.25s;
@@ -50,7 +54,7 @@
 
   &:hover {
     .removeTag {
-      transform: translate(14px, 0);
+      transform: translate(0, -14px);
       transition-delay: 0.5s;
       transition-duration: 0.25s;
       transition-property: transform;

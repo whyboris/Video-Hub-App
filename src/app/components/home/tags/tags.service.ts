@@ -15,8 +15,16 @@ export interface Tag {
 export class TagsService {
   settingsButtons = SettingsButtons;
 
-  public getTags(video: ImageElement, manualTags: boolean, autoFileTags: boolean, autoFolderTags: boolean, uselessTags: string[]) {
+  public getTags(
+    video: ImageElement,
+    manualTags: boolean,
+    autoFileTags: boolean,
+    autoFolderTags: boolean,
+    uselessTags: string[]
+  ): Tag[] {
+
     const tags: Tag[] = [];
+
     if (manualTags) {
       if (video.tags) {
         video.tags.forEach(tag => {
@@ -24,6 +32,7 @@ export class TagsService {
         });
       }
     }
+
     if (autoFileTags) {
       const cleanedFileName: string = video.cleanName.toLowerCase().replace(autoFileTagsRegex, '');
       cleanedFileName.split(' ').forEach(word => {
@@ -32,6 +41,7 @@ export class TagsService {
         }
       });
     }
+
     if (autoFolderTags) {
       const cleanedFileName: string = video.partialPath.toLowerCase().replace('.', '');
       cleanedFileName.split('/').forEach(word => {
@@ -40,6 +50,7 @@ export class TagsService {
         }
       });
     }
+
     return tags;
   }
 }

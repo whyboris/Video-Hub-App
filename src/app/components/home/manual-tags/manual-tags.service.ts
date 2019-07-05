@@ -5,7 +5,7 @@ import { ImageElement } from '../../common/final-object.interface';
 @Injectable()
 export class ManualTagsService {
 
-  tagsMap: Map<string, number> = new Map();
+  tagsMap: Map<string, number> = new Map(); // map tag name to its frequency
   tagsList: string[] = [];
   pipeToggleHack: boolean = false;
 

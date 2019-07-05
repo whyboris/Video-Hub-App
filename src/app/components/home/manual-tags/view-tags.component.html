@@ -1,13 +1,18 @@
 <div
-  *ngFor="let tag of tags; index as i"
+  *ngFor="let tag of _tags; index as i"
   class="singleTag"
 >
-  <span *ngIf="tag.removable" class="coverTheX">
+  <span
+    *ngIf="tag.removable"
+    class="coverTheX"
+
+    [ngStyle]="{ 'background-color': darkMode ? '#000000' : 'undefined' }"
+  >
     &ensp;
   </span>
   <span
     class="tag"
-    [ngStyle]="{background: tag.colour}"
+    [ngStyle]="{ background: tag.colour }"
     (click)="tagClick(tag, $event)"
   >
     {{ tag.name }}
