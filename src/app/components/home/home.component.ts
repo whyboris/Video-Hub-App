@@ -1351,7 +1351,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     });
     this.computeTextBufferAmount();
+
     this.settingsButtons['showTags'].toggled = false; // never show tags on load (they don't load right anyway)
+
+    if (this.settingsButtons['showTagTray'].toggled) {
+      this.settingsButtons['showTagTray'].toggled = false;
+      setTimeout(() => {
+        this.settingsButtons['showTagTray'].toggled = true; // needs a delay to show up correctly
+      }, 100);
+    }
   }
 
   /**
