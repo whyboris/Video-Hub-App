@@ -613,28 +613,26 @@ function updateArrayWithHashes(
 }
 
 /**
- * Hash a given file using it's file name and size
- * md5(file.name + file.size)
- * @param fileName  -- file name to hash
- * @param fileSize  -- file size to hash
+ * Hash a given file using its size
+ * @param pathToFile  -- path to file
  */
-function hashFile(file: string): string {
+function hashFile(pathToFile: string): string {
   const sampleSize = 16 * 1024;
   const sampleThreshold = 128 * 1024;
-  const stats = fs.statSync(file);
+  const stats = fs.statSync(pathToFile);
   const fileSize = stats.size;
 
   let data: Buffer;
   if (fileSize < sampleThreshold) {
-    data = fs.readFileSync(file); // too small, just read the whole file
+    data = fs.readFileSync(pathToFile); // too small, just read the whole file
   } else {
     data = Buffer.alloc(sampleSize * 3);
-    const fd = fs.openSync(file, 'r');
+    const fd = fs.openSync(pathToFile, 'r');
     fs.readSync(fd, data, 0, sampleSize, 0);                                  // read beginning of file
     fs.readSync(fd, data, sampleSize, sampleSize, fileSize / 2);              // read middle of file
     fs.readSync(fd, data, sampleSize * 2, sampleSize, fileSize - sampleSize); // read end of file
+    fs.closeSync(fd);  // if you don't close, you get `EMFILE: too many open files` error
   }
-
 
   // append the file size to the data
   const buf = Buffer.concat([data, Buffer.from(fileSize.toString())]);
