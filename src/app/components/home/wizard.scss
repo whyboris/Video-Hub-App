@@ -11,7 +11,6 @@
   width: 100%;
   z-index: 30;
 
-
   h1 {
     color: $gray-60;
     font-size: 14px;
@@ -20,6 +19,13 @@
   span {
     display: block;
     font-size: 12px;
+  }
+
+  .clip-check-box {
+    cursor: pointer;
+    height: 14px;
+    margin: 10px 5px 8px 12px;
+    width: 20px;
   }
 
   .closeWizard {
@@ -159,7 +165,7 @@
     justify-content: center;
     position: absolute;
     text-align: center;
-    transform: translate(260px, -56px);
+    transform: translate(280px, -56px);
     transition: 300ms;
     transition-property: width, height;
   }
@@ -181,6 +187,14 @@
   .step-description {
     color: $gray-60;
     margin-left: 16px;
+    min-height: 20px;
+    pointer-events: none;
+  }
+
+  .step-four-text {
+    color: black;
+    display: inline-block;
+    margin-left: 0;
     min-height: 20px;
     pointer-events: none;
   }

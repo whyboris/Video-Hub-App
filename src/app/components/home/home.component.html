@@ -1295,7 +1295,7 @@
                  || wizard.futureHubName === ''
                  || !wizard.screensPerVideo"
       >
-      screenshots per video
+      {{ 'WIZARD.screenshotsPerVideo' | translate }}
 
     </div>
 
@@ -1312,7 +1312,7 @@
                  || wizard.selectedSourceFolder === ''
                  || wizard.futureHubName === ''"
       >
-      1 screenshot every
+      {{ 'WIZARD.oneScreenshotEvery' | translate }}
       <input
         (change)="selectNumOfScreens($event.target.value)"
         type="number"
@@ -1326,7 +1326,7 @@
                  || wizard.futureHubName === ''
                  || wizard.screensPerVideo"
       >
-      minutes
+      {{ 'WIZARD.minutes' | translate }}
 
     </div>
 
@@ -1360,28 +1360,74 @@
       <option value="432">432px</option>
     </select>
 
-    <span class="step-description">
+    <span
+      class="step-four-text"
+      [ngClass]="{ 'dim-row': !(wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder !== '') }"
+    >
       {{ 'WIZARD.sizeOfScreenshots' | translate }}
     </span>
 
-    <!-- <select
-      (change)="selectNumOfScreens($event.target.value)"
-      [disabled]="wizard.selectedOutputFolder === '' || wizard.selectedSourceFolder === '' || wizard.futureHubName === ''"
-      class="size-dropdown languageDropDown"
-    >
-      <option value="5">5 {{ 'WIZARD.total' | translate }}</option>
-      <option value="10" selected="selected">10 {{ 'WIZARD.total' | translate }}</option>
-      <option value="15">15 {{ 'WIZARD.total' | translate }}</option>
-      <option value="20">20 {{ 'WIZARD.total' | translate }}</option>
-      <option value="0.1">1 {{ 'WIZARD.every' | translate }} 10 {{ 'WIZARD.minutes' | translate }}</option>
-      <option value="0.2">1 {{ 'WIZARD.every' | translate }} 5 {{ 'WIZARD.minutes' | translate }}</option>
-      <option value="0.3333">1 {{ 'WIZARD.every' | translate }} 3 {{ 'WIZARD.minutes' | translate }}</option>
-      <option value="1">1 {{ 'WIZARD.every' | translate }} {{ 'WIZARD.minute' | translate }}</option>
-    </select>
+    <div [ngClass]="{ 'dim-row': !wizard.extractClips }">
 
-    <span class="step-description">
-      {{ 'WIZARD.screens' | translate }}
-    </span> -->
+      <input
+        type="checkbox"
+        [(ngModel)]="wizard.extractClips"
+        class="clip-check-box"
+        [disabled]="wizard.selectedOutputFolder === ''
+                || wizard.selectedSourceFolder === ''
+                || wizard.futureHubName === ''"
+      >
+
+      <span class="step-four-text">
+        {{ 'WIZARD.extractClips' | translate }}
+      </span>
+
+      <input
+        (change)="selectNumOfClipSnippets($event.target.value)"
+        type="number"
+        class="size-dropdown languageDropDown numSelect"
+        value=10
+        min=3
+        max=15
+        onKeyDown="return false"
+        [disabled]="wizard.selectedOutputFolder === ''
+                || wizard.selectedSourceFolder === ''
+                || wizard.futureHubName === ''
+                || !wizard.screensPerVideo"
+      >
+
+      <span class="step-four-text">
+        {{ 'WIZARD.clipSnippets' | translate }}
+      </span>
+
+    </div>
+
+
+    <div [ngClass]="{ 'dim-row': !wizard.extractClips }" style="margin-left: 38px">
+
+      <span class="step-four-text">
+        {{ 'WIZARD.eachSnippet' | translate }}
+      </span>
+
+      <input
+        (change)="selectLengthOfClipSnippets($event.target.value)"
+        type="number"
+        class="size-dropdown languageDropDown numSelect"
+        value=1
+        min=1
+        max=5
+        onKeyDown="return false"
+        [disabled]="wizard.selectedOutputFolder === ''
+                || wizard.selectedSourceFolder === ''
+                || wizard.futureHubName === ''
+                || !wizard.screensPerVideo"
+      >
+
+      <span class="step-four-text">
+        {{ 'WIZARD.secondsLong' | translate }}
+      </span>
+
+    </div>
 
     <div
       [ngClass]="{

@@ -7,9 +7,10 @@
 /out-tsc
 /app-builds
 main.js
+main-extract.js
 main-filenames.js
-main-support.js
 main-globals.js
+main-support.js
 src/**/*.js
 *.js.map
 
@@ -34,10 +35,6 @@ src/**/*.js
 
 # misc
 npm-debug.log
-
-# e2e
-/e2e/*.js
-/e2e/*.map
 
 # System Files
 .DS_Store
