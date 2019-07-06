@@ -631,7 +631,7 @@ function hashFile(pathToFile: string): string {
     fs.readSync(fd, data, 0, sampleSize, 0);                                  // read beginning of file
     fs.readSync(fd, data, sampleSize, sampleSize, fileSize / 2);              // read middle of file
     fs.readSync(fd, data, sampleSize * 2, sampleSize, fileSize - sampleSize); // read end of file
-    fs.close(fd);
+    fs.closeSync(fd);  // if you don't close, you get `EMFILE: too many open files` error
   }
 
   // append the file size to the data
