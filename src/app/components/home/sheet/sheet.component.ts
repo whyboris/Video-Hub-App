@@ -2,7 +2,6 @@ import { Component, Input, Output, OnInit, ElementRef, EventEmitter, ViewChild }
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { ManualTagsService } from '../manual-tags/manual-tags.service';
-import { Tag, TagsService } from '../tags/tags.service';
 
 import { StarRating, ImageElement } from '../../common/final-object.interface';
 
@@ -65,7 +64,6 @@ export class SheetComponent implements OnInit {
 
   constructor(
     public manualTagsService: ManualTagsService,
-    public tagsService: TagsService,
     public sanitizer: DomSanitizer
   ) { }
 

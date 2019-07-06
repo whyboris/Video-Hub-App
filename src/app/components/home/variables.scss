@@ -12,6 +12,8 @@ $gray-80: #333333;
 $gray-90: #1A1A1A;
 $black: #000000;
 
+$pretty-blue: #729aff;
+
 @mixin scrollBar {
   &::-webkit-scrollbar-track {
     background-color: $gray-15;

@@ -2,7 +2,6 @@ import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectorRef, View
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { ManualTagsService } from '../manual-tags/manual-tags.service';
-import { TagsService } from '../tags/tags.service';
 
 import { StarRating, ImageElement } from '../../common/final-object.interface';
 import { YearEmission } from '../details/details.component';
@@ -43,15 +42,17 @@ export class MetaComponent implements OnInit {
   @Input() showManualTags: boolean;
   @Input() showAutoFileTags: boolean;
   @Input() showAutoFolderTags: boolean;
+  @Input() maxWidth: number;
 
   starRatingHack: StarRating;
   yearHack: number;
 
+  tagViewUpdateHack: boolean = false;
+
   constructor(
     private cd: ChangeDetectorRef,
     public manualTagsService: ManualTagsService,
-    public sanitizer: DomSanitizer,
-    public tagsService: TagsService
+    public sanitizer: DomSanitizer
   ) { }
 
 
@@ -72,6 +73,7 @@ export class MetaComponent implements OnInit {
         type: 'add'
       });
     }
+    this.tagViewUpdateHack = !this.tagViewUpdateHack;
   }
 
   filterThisTag(event: object) {
@@ -86,6 +88,7 @@ export class MetaComponent implements OnInit {
       tag: tag,
       type: 'remove'
     });
+    this.tagViewUpdateHack = !this.tagViewUpdateHack;
   }
 
   setStarRating(rating: StarRating): void {

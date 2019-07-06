@@ -263,7 +263,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // Please add new variables below if they don't fit into any other section
   // ------------------------------------------------------------------------
 
-
+  detailsMaxWidth: number = 1000; // used to keep track of max width for details in details view
+  tagTypeAhead: string = '';
 
   // ========================================================================
 
@@ -362,8 +363,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     public electronService: ElectronService,
     public manualTagsService: ManualTagsService,
     public resolutionFilterService: ResolutionFilterService,
-    public starFilterService: StarFilterService,
     public showLimitService: ShowLimitService,
+    public starFilterService: StarFilterService,
     public tagsSaveService: AutoTagsSaveService,
     public translate: TranslateService,
     public wordFrequencyService: WordFrequencyService,
@@ -1135,6 +1136,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
         || this.appState.currentView === 'showThumbnails'
         || this.appState.currentView === 'showDetails') {
       this.previewWidth = (this.galleryWidth / this.currentImgsPerRow) - 40; // 40px margin
+
+      // used in details view only
+      this.detailsMaxWidth = this.galleryWidth - this.previewWidth - 40; // 40px is just an estimate here
+
     } else if ( this.appState.currentView === 'showFilmstrip'
              || this.appState.currentView === 'showFullView' ) {
       this.previewWidth = ((this.galleryWidth - 30) / this.currentImgsPerRow);
@@ -1377,7 +1382,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     });
     this.computeTextBufferAmount();
+
     this.settingsButtons['showTags'].toggled = false; // never show tags on load (they don't load right anyway)
+
+    if (this.settingsButtons['showTagTray'].toggled) {
+      this.settingsButtons['showTagTray'].toggled = false;
+      setTimeout(() => {
+        this.settingsButtons['showTagTray'].toggled = true; // needs a delay to show up correctly
+      }, 100);
+    }
   }
 
   /**
@@ -1688,5 +1701,32 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // this.shuffleTheViewNow++;
   }
 
+  /**
+   * Check type-ahead for the manually-added tags!
+   * @param text     input text to check type-ahead
+   * @param compute  whether or not to perform the lookup
+   */
+  checkTagTypeahead(text: string, compute: boolean) {
+    if (compute) {
+      this.tagTypeAhead = this.manualTagsService.getTypeahead(text);
+    }
+  }
+
+  /**
+   * Add tag to search when pressing tab
+   * !!! but only when on the tag search field !!!
+   * @param $event
+   * @param execute
+   * @param origin -- the `j` in the template, just pass it on to the `onEnterKey`
+   */
+  typeaheadTabPressed($event, execute: boolean, origin: number): void {
+    if (execute) {
+      if (this.tagTypeAhead !== '') {
+        this.onEnterKey(this.tagTypeAhead, origin);
+        this.tagTypeAhead = '';
+        $event.preventDefault();
+      }
+    }
+  }
 
 }

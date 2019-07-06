@@ -224,7 +224,8 @@ $sidebar-width: 190px;
 }
 
 .manual-tag-tray {
-  height: 100px;
+  box-sizing: border-box;
+  height: 140px;
   padding: 20px;
 
   .manual-tag-tray-label {
@@ -234,11 +235,15 @@ $sidebar-width: 190px;
   }
 
   .showFrequency {
-    border: 1px solid red;
-    border-radius: 3px;
-    left: calc(50vw - 50px);
+    background: none;
+    border: none;
+    bottom: 10px;
     position: absolute;
-    top: 10px;
+    right: 10px;
+
+    &:hover {
+      color: $pretty-blue;
+    }
   }
 }
 
@@ -276,7 +281,7 @@ $sidebar-width: 190px;
   padding: 6px;
   padding-bottom: 0;
   position: absolute;
-  right: 50px;
+  right: 18px;
   top: 10px;
   width: 140px;
 

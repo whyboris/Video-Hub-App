@@ -8,7 +8,7 @@ import { AutoTagsService } from './autotags.service';
 export class TagMatchPipe implements PipeTransform {
 
   constructor(
-    public tagsService: AutoTagsService
+    public autoTagsService: AutoTagsService
   ) { }
 
   /**
@@ -19,7 +19,7 @@ export class TagMatchPipe implements PipeTransform {
     if (query === '') {
       return '';
     } else {
-      return this.tagsService.findMatches(query).toString() + ' found';
+      return this.autoTagsService.findMatches(query).toString() + ' found'; // TODO someday add i18n
     }
   }
 

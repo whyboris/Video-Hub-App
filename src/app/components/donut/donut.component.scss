@@ -1,4 +1,4 @@
-$progress-color: #729aff;
+@import "../home/variables";
 
 $donut-height: 4em;
 $donut-width: 4em;
@@ -37,7 +37,7 @@ $donut-border-width: 0.5em;
 }
 
 .value-bar {
-  border: $donut-border-width solid $progress-color; /* The border is 0.35 but making it larger removes visual artifacts */
+  border: $donut-border-width solid $pretty-blue; /* The border is 0.35 but making it larger removes visual artifacts */
 
   /* This is an overlayed square, that is made round with the border radius,
   then it is cut to display only the left half, then rotated clockwise
@@ -54,7 +54,7 @@ $donut-border-width: 0.5em;
 
 /* Progress bar filling the whole right half for values above 50% */
 .progress-circle.over50 .first50-bar {
-  border: $donut-border-width solid $progress-color;
+  border: $donut-border-width solid $pretty-blue;
 
   /* Progress bar for the first 50%, filling the whole right half */
   border-radius: 50%;

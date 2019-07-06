@@ -102,7 +102,7 @@
   >
   </div>
 
-  <!-- RIGHT CLICK MODAL -->
+  <!-- ===========   RIGHT CLICK MODAL    =========== -->
   <div
     *ngIf="rightClickShowing"
     [ngStyle]="{
@@ -125,7 +125,7 @@
     </ng-template>
   </div>
 
-  <!-- Thumbnail Sheet Display -->
+  <!-- ===========   Thumbnail Sheet Display   =========== -->
   <app-thumbnail-sheet
     *ngIf="sheetOverlayShowing"
     (openFileRequest)="openVideo($event)"
@@ -156,7 +156,7 @@
   >
   </app-thumbnail-sheet>
 
-  <!-- RENAMING MODAL -->
+  <!-- ===========    RENAMING MODAL    =========== -->
   <div
     *ngIf="renamingNow"
     [ngClass]="{ renameDark: settingsButtons['darkMode'].toggled }"
@@ -242,7 +242,10 @@
     ></app-tags-component>
   </div>
 
-  <!-- SETTINGS / OPTIONS MODAL -->
+  <!-- ==================================================== -->
+  <!-- ===========   SETTINGS / OPTIONS MODAL   =========== -->
+  <!-- ==================================================== -->
+
   <div
     *ngIf="buttonsInView"
     class="settingsModal"
@@ -295,13 +298,11 @@
               </span>
 
               <div
-                [ngClass]="{ buttonOpacityLower: settingsButtons[buttonKey].hidden }"
                 class="buttonDescription"
               >
                 <button
                   (click)="toggleButton(buttonKey)"
                   [ngClass]="{
-                      buttonOpacityLower:           settingsButtons[buttonKey].hidden,
                       defaultSettingsButton:        !settingsButtons['flatIcons'].toggled,
                       defaultSettingsButtonToggled: !settingsButtons['flatIcons'].toggled && settingsButtons[buttonKey].toggled,
                       flatSettingsButton:           settingsButtons['flatIcons'].toggled,
@@ -367,7 +368,7 @@
               defaultSettingsButton: !settingsButtons['flatIcons'].toggled,
               flatSettingsButton:    settingsButtons['flatIcons'].toggled
             }"
-            style="max-width: initial; padding: 0 15px; margin: 0 10px"
+            style="margin: 0 10px; max-width: initial; padding: 0 15px;"
             >
               <span>{{ 'SETTINGS.reset' | translate }}</span>
           </button>
@@ -406,7 +407,7 @@
 
     </div>
 
-    <!-- KEYBOARD SHORTCUTS -->
+    <!-- ===========   KEYBOARD SHORTCUTS    =========== -->
 
     <div *ngIf="settingToShow == 3" class="shortcutMenu">
 
@@ -484,6 +485,10 @@
     }"
   >
 
+    <!-- ============================================== -->
+    <!-- =============     ALL SETTINGS     =========== -->
+    <!-- ============================================== -->
+
     <div
       class="allSettings"
       [ngStyle]="{
@@ -550,6 +555,10 @@
       <app-icon class="mini-chevron" [icon]="'icon-chevron-down-mini'"></app-icon>
     </div>
 
+    <!-- ============================================== -->
+    <!-- ===========         SIDEBAR        =========== -->
+    <!-- ============================================== -->
+
     <div
       [ngClass]="{ 'sidebar-hidden': settingsButtons['hideSidebar'].toggled }"
       [ngStyle]="{ 'background': settingsButtons['darkMode'].toggled ? '#444444' : '#d8d8d8' }"
@@ -578,11 +587,18 @@
             (keydown.backspace)="onBackspace(filter.string, j)"
             (keydown.escape)="filter.string = ''"
             [(ngModel)]="filter.string"
+            (keydown.Tab)="typeaheadTabPressed($event, filter.uniqueKey === 'tagIntersection', j)"
+            (ngModelChange)="checkTagTypeahead($event, filter.uniqueKey === 'tagIntersection')"
             [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
             class="inputFilter"
             placeholder="{{ filter.placeholder | translate }}"
             type="text"
           >
+
+          <span
+            *ngIf="filter.uniqueKey === 'tagIntersection'"
+            class="tag-type-ahead-on-home"
+          >{{ tagTypeAhead }}</span>
 
           <div class="filteredWords">
             <ng-container *ngIf="filter.array.length > 0">
@@ -806,7 +822,9 @@
 
     </div> <!-- closing the SIDEBAR -->
 
-    <!-- THE GALLERY PANE -->
+    <!-- ============================================== -->
+    <!-- ===========    THE GALLERY PANE    =========== -->
+    <!-- ============================================== -->
 
     <virtual-scroller
       #scroll
@@ -1019,6 +1037,8 @@
 
           [video]="item"
 
+          [maxWidth]="detailsMaxWidth"
+
           [elHeight]="previewHeight + textPaddingHeight"
           [elWidth]="previewWidth"
           [folderPath]="appState.selectedOutputFolder"
@@ -1120,6 +1140,7 @@
                                        : manualTagFilterString
                                        : settingsButtons['tagFrequencySort'].toggled
                                        : manualTagsService.pipeToggleHack"
+    (tagClicked)="handleFileWordClicked($event.tag.name, $event.event)"
   ></app-view-tags-component>
 </div>
 
@@ -1140,7 +1161,9 @@
 
 <div [ngClass]="{ 'disabled-overlay': importStage === 1 }"></div>
 
-<!-- WIZARD -->
+<!-- ============================================== -->
+<!-- ================    WIZARD    ================ -->
+<!-- ============================================== -->
 
 <div *ngIf="wizard.showWizard" class="wizard" @myWizardAnimation>
 
