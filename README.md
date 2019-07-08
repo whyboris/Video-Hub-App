@@ -32,10 +32,12 @@ A list of upcoming features is [listed on the official website](https://videohub
 
 ## Current project versions
 
-- Angular v8.0.0
-- Angular-CLI v8.0.0
-- Electron v5.0.4 (internally uses Node v12.0.0 and Chrome 73)
-- Electron Builder v20.43.0
+| Library | Version | Date | Comment |
+| ------- | ------- | ---- | ------- |
+| Angular | v8.1.0  | June 2019 | |
+| Angular-CLI | v8.1.0 | June 2019 | |
+| Electron | v5.0.6 | June 2019 | (internally uses Node v12.0.0 and Chrome 73) |
+| Electron Builder | v20.44.4 | June 2019 | |
 
 ## Current dev environment
 
