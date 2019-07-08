@@ -35,13 +35,37 @@ in_list() {
   return 1
 }
 
+# check current OS
+get_os() {
+  unm=`uname | awk '{print $1}'`
+  case "$unm" in
+    "Darwin")
+      result="osx"
+      ;;
+    "Linux")
+      result="linux"
+      ;;
+    *)
+      result="none"
+  esac
+  return 0
+}
+
 # check if NEW_LANG_CODE is in app-state.ts
 _list1=`cat ../components/common/app-state.ts | grep 'export type SupportedLanguage' | cut -d'=' -f 2 | sed "s/^ '//" | sed "s/';$//" | sed "s/' | '/ /g"`
 in_list $NEW_LANG_CODE "$_list1"
 if [ $result = "true" ]; then
   echo $NEW_LANG_CODE 'already in app-state.ts'
 else
-  sed -i "/export type SupportedLanguage/ s/;$/ | '$NEW_LANG_CODE';/" ../components/common/app-state.ts
+  get_os
+  if [ $result = 'linux' ]; then
+    sed -i "/export type SupportedLanguage/ s/;$/ | '$NEW_LANG_CODE';/" ../components/common/app-state.ts
+  elif [ $result = 'osx' ]; then
+    sed -i "" "/export type SupportedLanguage/ s/;$/ | '$NEW_LANG_CODE';/" ../components/common/app-state.ts
+  else
+    echo 'System not supported'
+    exit 1
+  fi
   echo 'added' $NEW_LANG_CODE 'to app-state.ts...'
 fi
 
@@ -53,7 +77,6 @@ if [ $result = "true" ]; then
   echo $NEW_LANG_CODE ' already in home.component.ts'
 else
   last=`echo $_list2 | awk '{print $NF}'`
-  echo 'last...:' $last
   sed -i "/i18n\/$last/ s/$/\nimport \{ $NEW_LANG_NAME \} from '..\/..\/i18n\/$NEW_LANG_CODE';/" ../components/home/home.component.ts
   echo 'added' $NEW_LANG_CODE 'to home.component.ts...'
 
