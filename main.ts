@@ -302,7 +302,7 @@ function openThisDamnFile(pathToVhaFile: string) {
         'finalObjectReturning',
         lastSavedFinalObject,
         pathToVhaFile,
-        globals.selectedOutputFolder + path.sep,   // app needs the trailing slash (at least for now)
+        getHtmlPath(globals.selectedOutputFolder),
         changedRootFolder,
         rootFolderLive
       );
@@ -310,6 +310,28 @@ function openThisDamnFile(pathToVhaFile: string) {
   });
 }
 
+/**
+ * Return an HTML string for a path to the `vha` file
+ * e.g. `C:\Some folder` becomes `C:/Some%20folder`
+ * @param anyOsPath
+ */
+function getHtmlPath(anyOsPath: string): string {
+      // Windows was misbehaving
+      // so we normalize the path (just in case) and replace all `\` with `/` in this instance
+      // because at this point Electron will be showing images following the path provided
+      // with the `file:///` protocol -- seems to work
+      const normalizedPath: string = path.normalize(anyOsPath);
+      const forwardSlashes: string = normalizedPath.replace(/\\/g, '/');
+      return forwardSlashes.replace(/ /g, '%20');
+}
+
+/**
+ * Update 3 globals:
+ *  - hubName
+ *  - screenshotSettings
+ *  - selectedSourceFolder
+ * @param vhaFileContents
+ */
 function setGlobalsFromVhaFile(vhaFileContents: FinalObject) {
   globals.hubName = vhaFileContents.hubName,
   globals.screenshotSettings = vhaFileContents.screenshotSettings;
