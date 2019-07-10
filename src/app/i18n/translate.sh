@@ -40,13 +40,11 @@ get_os() {
   unm=`uname | awk '{print $1}'`
   case "$unm" in
     "Darwin")
-      result="osx"
-      ;;
-    "Linux")
-      result="linux"
+      SED_HACK='""'
       ;;
     *)
-      result="none"
+      SED_HACK=''
+      ;;
   esac
   return 0
 }
@@ -58,14 +56,7 @@ if [ $result = "true" ]; then
   echo $NEW_LANG_CODE 'already in app-state.ts'
 else
   get_os
-  if [ $result = 'linux' ]; then
-    sed -i "/export type SupportedLanguage/ s/;$/ | '$NEW_LANG_CODE';/" ../components/common/app-state.ts
-  elif [ $result = 'osx' ]; then
-    sed -i "" "/export type SupportedLanguage/ s/;$/ | '$NEW_LANG_CODE';/" ../components/common/app-state.ts
-  else
-    echo 'System not supported'
-    exit 1
-  fi
+  sed -i $SED_HACK "/export type SupportedLanguage/ s/;$/ | '$NEW_LANG_CODE';/" ../components/common/app-state.ts
   echo 'added' $NEW_LANG_CODE 'to app-state.ts...'
 fi
 
@@ -77,7 +68,7 @@ if [ $result = "true" ]; then
   echo $NEW_LANG_CODE ' already in home.component.ts'
 else
   last=`echo $_list2 | awk '{print $NF}'`
-  sed -i "/i18n\/$last/ s/$/\nimport \{ $NEW_LANG_NAME \} from '..\/..\/i18n\/$NEW_LANG_CODE';/" ../components/home/home.component.ts
+  sed -i $SED_HACK "/i18n\/$last/ s/$/\nimport \{ $NEW_LANG_NAME \} from '..\/..\/i18n\/$NEW_LANG_CODE';/" ../components/home/home.component.ts
   echo 'added' $NEW_LANG_CODE 'to home.component.ts...'
 
   # add case
@@ -85,7 +76,8 @@ else
   if [ $test ]; then
     echo $NEW_LANG_CODE ' case already added'
   else
-    sed -i "/this.appState.language = '$last'/ s/$/\n        break;\n      case '$NEW_LANG_CODE':\n        this.translate.use('$NEW_LANG_CODE');\n        this.translate.setTranslation('$NEW_LANG_CODE', $NEW_LANG_NAME );\n        this.appState.language = '$NEW_LANG_CODE';/" ../components/home/home.component.ts
+    get_os
+    sed -i $SED_HACK "/this.appState.language = '$last'/ s/$/\n        break;\n      case '$NEW_LANG_CODE':\n        this.translate.use('$NEW_LANG_CODE');\n        this.translate.setTranslation('$NEW_LANG_CODE', $NEW_LANG_NAME );\n        this.appState.language = '$NEW_LANG_CODE';/" ../components/home/home.component.ts  sed -i "/i18n\/$last/ s/$/\nimport \{ $NEW_LANG_NAME \} from '..\/..\/i18n\/$NEW_LANG_CODE';/" ../components/home/home.component.ts
     echo 'added case for' $NEW_LANG_CODE 'in home.component.ts...'
   fi
 
@@ -94,7 +86,8 @@ else
   if [ $test ]; then
     echo $NEW_LANG_CODE ' already in home.component.html'
   else
-    sed -i "/value=\"$last\"/ s/$/\n            <option value=\"$NEW_LANG_CODE\" \[selected\]=\"appState.language == '$NEW_LANG_CODE'\">$NEW_LANG_NAME<\/option>/" ../components/home/home.component.html
+    get_os
+    sed -i $SED_HACK "/value=\"$last\"/ s/$/\n            <option value=\"$NEW_LANG_CODE\" \[selected\]=\"appState.language == '$NEW_LANG_CODE'\">$NEW_LANG_NAME<\/option>/" ../components/home/home.component.html
     echo 'added option entry for' $NEW_LANG_CODE 'in home.component.html...'
   fi
 fi
