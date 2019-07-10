@@ -49,13 +49,15 @@ get_os() {
   return 0
 }
 
+# check OS
+get_os
+
 # check if NEW_LANG_CODE is in app-state.ts
 _list1=`cat ../components/common/app-state.ts | grep 'export type SupportedLanguage' | cut -d'=' -f 2 | sed "s/^ '//" | sed "s/';$//" | sed "s/' | '/ /g"`
 in_list $NEW_LANG_CODE "$_list1"
 if [ $result = "true" ]; then
   echo $NEW_LANG_CODE 'already in app-state.ts'
 else
-  get_os
   sed -i $SED_HACK "/export type SupportedLanguage/ s/;$/ | '$NEW_LANG_CODE';/" ../components/common/app-state.ts
   echo 'added' $NEW_LANG_CODE 'to app-state.ts...'
 fi
