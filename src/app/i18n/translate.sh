@@ -77,7 +77,7 @@ else
     echo $NEW_LANG_CODE ' case already added'
   else
     get_os
-    sed -i $SED_HACK "/this.appState.language = '$last'/ s/$/\n        break;\n      case '$NEW_LANG_CODE':\n        this.translate.use('$NEW_LANG_CODE');\n        this.translate.setTranslation('$NEW_LANG_CODE', $NEW_LANG_NAME );\n        this.appState.language = '$NEW_LANG_CODE';/" ../components/home/home.component.ts  sed -i "/i18n\/$last/ s/$/\nimport \{ $NEW_LANG_NAME \} from '..\/..\/i18n\/$NEW_LANG_CODE';/" ../components/home/home.component.ts
+    sed -i $SED_HACK "/this.appState.language = '$last'/ s/$/\n        break;\n      case '$NEW_LANG_CODE':\n        this.translate.use('$NEW_LANG_CODE');\n        this.translate.setTranslation('$NEW_LANG_CODE', $NEW_LANG_NAME );\n        this.appState.language = '$NEW_LANG_CODE';/" ../components/home/home.component.ts
     echo 'added case for' $NEW_LANG_CODE 'in home.component.ts...'
   fi
 
