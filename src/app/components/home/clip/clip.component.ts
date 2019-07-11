@@ -72,13 +72,6 @@ export class ClipComponent implements OnInit {
     }
   }
 
-  /**
-   * Hack to mute the video by changing the volume to 0 or 1
-   */
-  shouldMute(): number {
-    return this.forceMute ? 0 : 1;
-  }
-
   shuffle(a) {
     let j, x, i;
     for (i = a.length - 1; i > 0; i--) {
