@@ -28,7 +28,7 @@ export class ClipComponent implements OnInit {
   @Input() hubName: string;
   @Input() imgHeight: number;
   @Input() largerFont: boolean;
-  @Input() mutedNow: boolean;
+  @Input() forceMute: boolean;
   @Input() showMeta: boolean;
 
   folderPosterPaths: string[] = [];
@@ -76,7 +76,7 @@ export class ClipComponent implements OnInit {
    * Hack to mute the video by changing the volume to 0 or 1
    */
   shouldMute(): number {
-    return this.mutedNow ? 0 : 1;
+    return this.forceMute ? 0 : 1;
   }
 
   shuffle(a) {
