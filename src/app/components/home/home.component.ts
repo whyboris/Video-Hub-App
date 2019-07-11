@@ -588,7 +588,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (ev.dataTransfer.files.length > 0) {
         const fullPath = ev.dataTransfer.files[0].path;
         ev.preventDefault();
-        if (fullPath.slice(-5) === '.vha2') {
+        if (fullPath.endsWith('.vha2')) {
           this.electronService.ipcRenderer.send(
             'load-this-vha-file', ev.dataTransfer.files[0].path, this.saveVhaIfNeeded()
           );
