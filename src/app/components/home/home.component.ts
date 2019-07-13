@@ -257,7 +257,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   manualTagFilterString: string = '';
   manualTagShowFrequency: boolean = true;
 
-  longest: number = 0; // longest duration of all the video files -- only used in the Duration Filter
+  durationOutlierCutoff: number = 0; // for the duration filter to cut off outliers
 
   // ========================================================================
   // Please add new variables below if they don't fit into any other section
@@ -534,11 +534,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.wizard.showWizard = false;
       this.flickerReduceOverlay = false;
 
-      this.finalArray.forEach((element: ImageElement): void => {
-        this.longest = Math.max(element.duration, this.longest);
-      });
-      // round to nearest 60 seconds
-      this.longest = Math.ceil(this.longest / 60) * 60;
+      this.setUpDurationFilterValues(this.finalArray);
     });
 
     // Returning settings
@@ -1425,15 +1421,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.starRightBound = selection[1];
   }
 
-  /*
-   * Update the min and max resolution for the resolution filter
-   * @param selection
-   */
-  newLengthFilterSelected(selection: number[]): void {
-    this.lengthLeftBound = selection[0];
-    this.lengthRightBound = selection[1];
-  }
-
   clearLev(): void {
     this.showSimilar = false;
   }
@@ -1727,6 +1714,46 @@ export class HomeComponent implements OnInit, AfterViewInit {
         $event.preventDefault();
       }
     }
+  }
+
+  /*
+   * Update the min and max resolution for the resolution filter
+   * hacked to set rightBound to Infinity when close-enough to the right side
+   * @param selection
+   */
+  newLengthFilterSelected(selection: number[]): void {
+    this.lengthLeftBound = selection[0];
+
+    if (selection[1] > this.durationOutlierCutoff - 10) {
+      this.lengthRightBound = Infinity;
+    } else {
+      this.lengthRightBound = selection[1];
+    }
+  }
+
+  setUpDurationFilterValues(finalArray: ImageElement[]): void {
+    const durations: number[] = finalArray.map((element) => { return element.duration; });
+
+    const cutoff = this.getOutlierCutoff(durations);
+
+    this.durationOutlierCutoff = Math.floor(cutoff);
+  }
+
+  /**
+   * Given an array of numbers
+   * returns the cutoff for outliers
+   * defined unconventionally as "anything beyond the 3rd quartile + 3 * IQR (the inter-quartile range)"
+   * @param someArray
+   */
+  getOutlierCutoff(someArray: number[]): number {
+    const values = someArray.slice();
+    values.sort((a, b) => { return a - b; });
+
+    const q1 = values[Math.floor((values.length / 4))];
+    const q3 = values[Math.ceil((values.length * (3 / 4)))];
+    const iqr = q3 - q1;
+
+    return q3 + iqr * 3;
   }
 
 }

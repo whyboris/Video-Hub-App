@@ -663,9 +663,9 @@
           (newSliderFilterSelected)="newLengthFilterSelected($event)"
           [darkMode]="settingsButtons['darkMode'].toggled"
           [labelFormatPipe]="'lengthPipe'"
-          [maximumValue]="longest"
+          [maximumValue]="durationOutlierCutoff"
           [minimumValue]="0"
-          [showLabels]="true"
+          [lengthFilter]="true"
           [steps]="50"
         ></app-slider-filter>
       </div>
