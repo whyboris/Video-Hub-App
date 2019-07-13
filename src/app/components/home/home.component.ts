@@ -472,6 +472,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.importStage = 0;
     });
 
+    // Happens on a Mac when the OS Dark Mode is enabled/disabled
+    this.electronService.ipcRenderer.on('osDarkModeChange', (event, mode: string) => {
+      console.log('OS DARK MODE CHANGE!!!');
+      console.log(mode);
+    });
+
     // Progress bar messages
     // for META EXTRACTION
     // stage = 0 hides progress bar

@@ -2,6 +2,8 @@ import { app, BrowserWindow, screen } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 
+const { systemPreferences } = require('electron')
+
 import { globals } from './main-globals';
 
 // ========================================================================================
@@ -166,6 +168,21 @@ try {
   // Catch Error
   // throw e;
 }
+
+systemPreferences.subscribeNotification(
+  'AppleInterfaceThemeChangedNotification',
+  function theThemeHasChanged () {
+    console.log('!!!!!!!!!!!!!!!!!!!');
+    console.log('DARK MODE !?!?!?!?!?');
+    console.log(systemPreferences.isDarkMode());
+    if (systemPreferences.isDarkMode()) {
+      tellElectronDarkModeChange('dark');
+    } else {
+      tellElectronDarkModeChange('light');
+    }
+    console.log('!!!!!!!!!!!!!!!!!!!');
+  }
+);
 
 // ========================================================================================
 // My imports
@@ -351,6 +368,13 @@ ipc.on('just-started', function (event, someMessage) {
   globals.angularApp = event;
   globals.winRef = win;
 
+  console.log('!!!!!!!!!!!!');
+  console.log('just started');
+  console.log('OS DARK MODE !?');
+  console.log(systemPreferences.getEffectiveAppearance()); // <string> dark, light, or unknown
+  tellElectronDarkModeChange(systemPreferences.getEffectiveAppearance());
+  console.log('!!!!!!!!!!!!');
+
   fs.readFile(path.join(pathToAppData, 'video-hub-app-2', 'settings.json'), (err, data) => {
     if (err) {
       win.setBounds({ x: 0, y: 0, width: screenWidth, height: screenHeight });
@@ -525,6 +549,14 @@ ipc.on('close-window', function (event, settingsToSave: SettingsObject, savableP
     }
   });
 });
+
+/**
+ * Notify front-end about OS change in Dark Mode setting
+ * @param mode
+ */
+function tellElectronDarkModeChange(mode: string) {
+  globals.angularApp.sender.send('osDarkModeChange', mode);
+}
 
 /**
  * Interrupt current import process
