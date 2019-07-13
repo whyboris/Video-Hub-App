@@ -257,7 +257,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   manualTagFilterString: string = '';
   manualTagShowFrequency: boolean = true;
 
-  longest: number = 0;
+  longest: number = 0; // longest duration of all the video files -- only used in the Duration Filter
 
   // ========================================================================
   // Please add new variables below if they don't fit into any other section

@@ -701,10 +701,10 @@
       <!-- star filter & its frequency histogram -->
       <div *ngIf="settingsButtons['starFilter'].toggled" class="resolutionFilterContainer">
         <div class="frequencyGraphContainerStar">
-          <ng-container *ngFor="let resolution of starRatingFreqArr; index as i">
+          <ng-container *ngFor="let starRating of starRatingFreqArr; index as i">
             <div
               [ngClass]="{ resDisabled: (i < starLeftBound) || (i >= starRightBound) }"
-              [ngStyle]="{ height: resolution + '%' }"
+              [ngStyle]="{ height: starRating + '%' }"
               class="frequency-bar-star"
             >
             </div>
@@ -789,7 +789,7 @@
 
       <!-- total found -->
       <div class="filteringTotal">
-        <span>{{ currResults.total }} {{ 'SIDEBAR.found' | translate }}</span>
+        <span>{{ currResults.total | number:'.0' }} {{ 'SIDEBAR.found' | translate }}</span>
       </div>
 
       <!-- word cloud -->

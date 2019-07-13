@@ -62,7 +62,7 @@ export class StarFilterService {
       }
     });
     if (first > max) {
-      this.frequencyMap.set(0.5, max + 1);
+      this.frequencyMap.set(0.5, max);
     }
 
     const scalar = 100 / max;
