@@ -35,6 +35,8 @@ export const English = {
     hideTopHint                        :'Hide top',
     hoverScrubDescription              :'Hovering over thumbnails shows preview screenshots',
     hoverScrubHint                     :'Enable hover animations',
+    thumbAutoAdvanceDescription        :'Hovering over thumbnails cycles through screenshots',
+    thumbAutoAdvanceHint               :'Enable thumbnail auto advance',
     importNewFilesDescription          :'Quickly scan for new files only and import them',
     importNewFilesHint                 :'Import new files',
     magicDescription                   :'Enable the magic search which updates the results as you type.',

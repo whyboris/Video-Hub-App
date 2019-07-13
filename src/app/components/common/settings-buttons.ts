@@ -59,6 +59,7 @@ export const SettingsButtonsGroups: string[][] = [
     'showMoreInfo',
     'fontSizeLarger',
     'hoverScrub',
+    'thumbAutoAdvance',
     'muteClips',
     'returnToFirstScreenshot',
     'autoplayClips',
@@ -255,6 +256,13 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-toggle-scrub',
     title: 'BUTTONS.hoverScrubHint',
     toggled: true
+  },
+  'thumbAutoAdvance': {
+    description: 'BUTTONS.thumbAutoAdvanceDescription',
+    hidden: true,
+    iconName: 'icon-toggle-scrub',
+    title: 'BUTTONS.thumbAutoAdvanceHint',
+    toggled: false
   },
   // TODO: Make these able to add to the button bar!
   'importNewFiles': {
