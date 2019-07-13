@@ -561,7 +561,14 @@
 
     <div
       [ngClass]="{ 'sidebar-hidden': settingsButtons['hideSidebar'].toggled }"
-      [ngStyle]="{ 'background': settingsButtons['darkMode'].toggled ? '#444444' : '#d8d8d8' }"
+      [ngStyle]="{
+                    'height': 'calc(100vh - ' + (
+                                                  (settingsButtons['hideTop'].toggled ? 53 : 98)
+                                                + (appState.menuHidden ? -32 : 0)
+                                                + (settingsButtons['showRelatedVideosTray'].toggled ? 160 : 0)
+                                                                                                                ) + 'px)',
+                    'background': settingsButtons['darkMode'].toggled ? '#444444' : '#d8d8d8'
+                 }"
       class="sidebar"
       #searchRef
     >
@@ -831,8 +838,11 @@
       id="scrollDiv"
       class="gallery-container"
       [ngStyle]="{
-          'height': 'calc(100vh - ' + ((settingsButtons['hideTop'].toggled ? 53 : 98)
-                      + (appState.menuHidden ? -32 : 0)) + 'px)',
+          'height': 'calc(100vh - ' + (
+                                          (settingsButtons['hideTop'].toggled ? 53 : 98)
+                                        + (appState.menuHidden ? -32 : 0)
+                                        + (settingsButtons['showRelatedVideosTray'].toggled ? 170 : 0)
+                                                                                                        ) + 'px)',
           'background': settingsButtons['darkMode'].toggled ? '#000000' : '#999999'
         }"
       [enableUnequalChildrenSizes]="appState.currentView === 'showFullView'"
