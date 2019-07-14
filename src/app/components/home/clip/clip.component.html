@@ -20,6 +20,7 @@
     [src]="'file://' + folderPath + '/' + folderThumbPaths[0]"
     [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[0])"
     class="mini-video-thumb"
+    [volume]="forceMute ? 0 : 1"
     onmouseover="this.play().catch((err) => {this.load()})"
     onmouseout="this.pause()"
     loop
@@ -29,6 +30,7 @@
     [src]="'file://' + folderPath + '/' + folderThumbPaths[1]"
     [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[1])"
     class="mini-video-thumb"
+    [volume]="forceMute ? 0 : 1"
     style="left: 50%"
     onmouseover="this.play().catch((err) => {this.load()})"
     onmouseout="this.pause()"
@@ -39,6 +41,7 @@
     [src]="'file://' + folderPath + '/' + folderThumbPaths[2]"
     [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[2])"
     class="mini-video-thumb"
+    [volume]="forceMute ? 0 : 1"
     style="top: 50%"
     onmouseover="this.play().catch((err) => {this.load()})"
     onmouseout="this.pause()"
@@ -49,16 +52,18 @@
     [src]="'file://' + folderPath + '/' + folderThumbPaths[3]"
     [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[3])"
     class="mini-video-thumb"
+    [volume]="forceMute ? 0 : 1"
     style="left: 50%; top: 50%"
     onmouseover="this.play().catch((err) => {this.load()})"
     onmouseout="this.pause()"
     loop
   ></video>
   <video
-    *ngIf="noError && autoplay && folderThumbPaths[0]"
+    *ngIf="noError && autoplay && appInFocus && folderThumbPaths[0]"
     [src]="'file://' + folderPath + '/' + folderThumbPaths[0]"
     [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[0])"
     class="mini-video-thumb"
+    [volume]="forceMute ? 0 : 1"
     onmouseover="this.muted = false;"
     onmouseout="this.muted = true;"
     onloadstart="this.muted = true;"
@@ -66,10 +71,11 @@
     autoplay
   ></video>
   <video
-    *ngIf="noError && autoplay && folderThumbPaths[1]"
+    *ngIf="noError && autoplay && appInFocus && folderThumbPaths[1]"
     [src]="'file://' + folderPath + '/' + folderThumbPaths[1]"
     [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[1])"
     class="mini-video-thumb"
+    [volume]="forceMute ? 0 : 1"
     style="left: 50%"
     onmouseover="this.muted = false;"
     onmouseout="this.muted = true;"
@@ -78,10 +84,11 @@
     autoplay
   ></video>
   <video
-    *ngIf="noError && autoplay && folderThumbPaths[2]"
+    *ngIf="noError && autoplay && appInFocus && folderThumbPaths[2]"
     [src]="'file://' + folderPath + '/' + folderThumbPaths[2]"
     [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[2])"
     class="mini-video-thumb"
+    [volume]="forceMute ? 0 : 1"
     style="top: 50%"
     onmouseover="this.muted = false;"
     onmouseout="this.muted = true;"
@@ -90,10 +97,11 @@
     autoplay
   ></video>
   <video
-    *ngIf="noError && autoplay && folderThumbPaths[3]"
+    *ngIf="noError && autoplay && appInFocus && folderThumbPaths[3]"
     [src]="'file://' + folderPath + '/' + folderThumbPaths[3]"
     [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[3])"
     class="mini-video-thumb"
+    [volume]="forceMute ? 0 : 1"
     style="left: 50%; top: 50%"
     onmouseover="this.muted = false;"
     onmouseout="this.muted = true;"
@@ -133,13 +141,14 @@
     [ngStyle]="{ 'height': imgHeight + 'px' }"
     (click)="videoClick.emit($event)"
     class="screencap"
+    [volume]="forceMute ? 0 : 1"
     onmouseover="this.play().catch((err) => {this.load()})"
     onmouseout="this.pause()"
     loop
   ></video>
 
   <video
-    *ngIf="noError && autoplay"
+    *ngIf="noError && autoplay && appInFocus"
     [src]="'file://' + folderPath + '/' + pathToVideo"
     [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + poster)"
     [ngStyle]="{ 'height': imgHeight + 'px' }"

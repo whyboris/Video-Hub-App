@@ -1,4 +1,4 @@
-import { Component, HostListener, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, HostListener, Input, Output, EventEmitter, OnInit, ChangeDetectorRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { ImageElement } from '../../common/final-object.interface';
@@ -31,6 +31,7 @@ export class ClipComponent implements OnInit {
   @Input() forceMute: boolean;
   @Input() showMeta: boolean;
 
+  appInFocus: boolean = true;
   folderPosterPaths: string[] = [];
   folderThumbPaths: string[] = [];
   hover: boolean;
@@ -39,14 +40,23 @@ export class ClipComponent implements OnInit {
   poster: string;
 
   constructor(
-    public sanitizer: DomSanitizer
+    public sanitizer: DomSanitizer,
+    public cd: ChangeDetectorRef
   ) { }
 
   @HostListener('mouseenter') onMouseEnter() {
-      this.hover = true;
+    this.hover = true;
   }
   @HostListener('mouseleave') onMouseLeave() {
-      this.hover = false;
+    this.hover = false;
+  }
+  @HostListener('window:blur', ['$event'])
+  onBlur(event: any): void {
+    this.appInFocus = false;
+  }
+  @HostListener('window:focus', ['$event'])
+  onFocus(event: any): void {
+    this.appInFocus = true;
   }
 
   ngOnInit() {
