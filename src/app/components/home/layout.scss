@@ -249,7 +249,9 @@ $sidebar-width: 190px;
 
 .most-similar-tray {
   box-sizing: border-box;
-  height: 150px;
+  // height - must be same as the hardcoded value in <virtual-scroller> height property
+  //          & close to the .sidebar <div> `ngStyle` height property
+  height: 170px;
   padding-top: 0;
 
   .most-similar-comment {
