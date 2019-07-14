@@ -11,7 +11,7 @@ export class SliderFilterComponent implements OnInit, OnDestroy {
   @Input() minimumValue: number;
   @Input() maximumValue: number;
   @Input() steps: number;
-  @Input() showLabels?: boolean = false;
+  @Input() lengthFilter?: boolean = false;
   @Input() labelFormatPipe?: string;
 
   @Output() newSliderFilterSelected = new EventEmitter<number[]>();
@@ -81,7 +81,14 @@ export class SliderFilterComponent implements OnInit, OnDestroy {
    * @param value
    */
   convertToIndex(value: number): number {
-    return (value / this.width) * (this.maximumValue - this.minimumValue) + this.minimumValue;
+
+    const cutoff = (value / this.width) * (this.maximumValue - this.minimumValue) + this.minimumValue;
+
+    if (this.lengthFilter && cutoff > this.maximumValue) {
+      return Infinity;
+    } else {
+      return cutoff;
+    }
   }
 
   /**

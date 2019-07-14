@@ -15,6 +15,8 @@ export class LengthPipe implements PipeTransform {
   transform(numOfSec: number, omitSeconds?: boolean, printHrMin?: boolean): string {
     if (numOfSec === undefined) {
       return '';
+    } else if (numOfSec === Infinity) {
+      return 'every';
     } else {
       const hh = (Math.floor(numOfSec / 3600)).toString();
       const mm = (Math.floor(numOfSec / 60) % 60).toString();
