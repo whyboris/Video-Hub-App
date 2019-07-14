@@ -929,6 +929,7 @@
           [randomImage]="settingsButtons['randomImage'].toggled"
           [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
+          [thumbAutoAdvance]="settingsButtons['thumbAutoAdvance'].toggled"
 
           style="display: inline-block"
           [ngStyle]="{ height: previewHeight + textPaddingHeight + 20 + 'px', width: previewWidth }"
@@ -1409,7 +1410,7 @@
         (change)="selectNumOfClipSnippets($event.target.value)"
         type="number"
         class="size-dropdown languageDropDown numSelect"
-        value=10
+        value=5
         min=3
         max=15
         onKeyDown="return false"

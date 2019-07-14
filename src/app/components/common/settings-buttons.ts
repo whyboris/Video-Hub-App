@@ -56,12 +56,17 @@ export const SettingsButtonsGroups: string[][] = [
     'tagFrequencySort'
   ],
   [
+    'hoverScrub',
+    'thumbAutoAdvance',
+    'returnToFirstScreenshot',
+  ],
+  [
+    'muteClips',
+    'autoplayClips',
+  ],
+  [
     'showMoreInfo',
     'fontSizeLarger',
-    'hoverScrub',
-    'muteClips',
-    'returnToFirstScreenshot',
-    'autoplayClips',
     'randomImage',
     'randomizeGallery',
     'shuffleGalleryNow',
@@ -115,9 +120,13 @@ export const SettingsMetaGroup: any = [
     ...SettingsButtonsGroups[10],
     'break',
     ...SettingsButtonsGroups[11],
+    'break',
+    ...SettingsButtonsGroups[12],
+    'break',
+    ...SettingsButtonsGroups[13],
   ],
   [
-    ...SettingsButtonsGroups[12],
+    ...SettingsButtonsGroups[14],
   ],
 ];
 
@@ -253,8 +262,16 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.hoverScrubDescription',
     hidden: true,
     iconName: 'icon-toggle-scrub',
+    settingsHeading: 'SETTINGS.thumbnailHeading',
     title: 'BUTTONS.hoverScrubHint',
     toggled: true
+  },
+  'thumbAutoAdvance': {
+    description: 'BUTTONS.thumbAutoAdvanceDescription',
+    hidden: true,
+    iconName: 'icon-toggle-scrub',
+    title: 'BUTTONS.thumbAutoAdvanceHint',
+    toggled: false
   },
   // TODO: Make these able to add to the button bar!
   'importNewFiles': {
@@ -299,6 +316,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.muteClipsDescription',
     hidden: true,
     iconName: 'icon-toggle-scrub',
+    settingsHeading: 'SETTINGS.clipsHeading',
     title: 'BUTTONS.muteClipsHint',
     toggled: true
   },
