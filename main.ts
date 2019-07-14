@@ -44,7 +44,7 @@ if (!gotTheLock) {
   app.quit();
 } else {
 
-  app.on('second-instance', (event, argv: string[], workingDirectory) => {
+  app.on('second-instance', (event, argv: string[], workingDirectory: string) => {
 
     // dialog.showMessageBox({
     //   message: 'second-instance: \n' + argv[0] + ' \n' + argv[1],
@@ -184,13 +184,10 @@ import {
   alphabetizeFinalArray,
   countFoldersInFinalArray,
   extractAllMetadata,
-  findAndImportNewFiles,
   getVideoPathsAndNames,
   insertTemporaryFields,
   missingThumbsIndex,
-  regenerateLibrary,
   sendCurrentProgress,
-  updateFinalArrayWithHD,
   writeVhaFileToDisk
 } from './main-support';
 
@@ -459,45 +456,6 @@ ipc.on('choose-output', function (event, someMessage) {
 });
 
 /**
- * Initiate scanning for new files and importing them
- * now receives the finalArray from `home.component`
- * because the user may have renamed files from within the app!
- */
-ipc.on('import-new-files', function (event, currentAngularFinalArray: ImageElement[]) {
-  const currentVideoFolder = globals.selectedSourceFolder;
-  globals.cancelCurrentImport = false;
-  scanForNewFiles(currentAngularFinalArray, currentVideoFolder);
-});
-
-/**
- * Initiate verifying all files have thumbnails
- */
-ipc.on('verify-thumbnails', function (event) {
-  globals.cancelCurrentImport = false;
-  verifyThumbnails();
-});
-
-/**
- * Initiate rescan of the directory NEW
- * now receives the finalArray from `home.component`
- * because the user may have renamed files from within the app!
- */
-ipc.on('rescan-current-directory', function (event, currentAngularFinalArray: ImageElement[]) {
-  const currentVideoFolder = globals.selectedSourceFolder;
-  globals.cancelCurrentImport = false;
-  reScanDirectory(currentAngularFinalArray, currentVideoFolder);
-});
-
-/**
- * Initiate regenerating the library
- */
-ipc.on('regenerate-library', function (event, currentAngularFinalArray: ImageElement[]) {
-  const currentVideoFolder = globals.selectedSourceFolder;
-  globals.cancelCurrentImport = false;
-  regenerateMetadata(currentAngularFinalArray, currentVideoFolder);
-});
-
-/**
  * Close the window / quit / exit the app
  */
 ipc.on('close-window', function (event, settingsToSave: SettingsObject, savableProperties: SavableProperties) {
@@ -601,134 +559,6 @@ ipc.on('start-the-import', function (event, options: ImportSettingsObject, video
   }
 
 });
-
-/**
- * Begin scanning for new files and importing them
- *
- * @param angularFinalArray  ImageElment[] from Angular (might have renamed files)
- */
-function scanForNewFiles(angularFinalArray: ImageElement[], currentVideoFolder: string) {
-
-  // rescan the source directory
-  if (fs.existsSync(currentVideoFolder)) {
-    let videosOnHD: ImageElement[] = getVideoPathsAndNames(currentVideoFolder);
-
-    if (demo) {
-      videosOnHD = videosOnHD.slice(0, 50);
-    }
-
-    findAndImportNewFiles(
-      angularFinalArray,
-      videosOnHD,
-      currentVideoFolder,
-      globals.screenshotSettings,
-      sendFinalResultHome           // callback for when `extractAllMetadata` is called
-    );
-
-  } else {
-    sendCurrentProgress(1, 1, 0);
-    dialog.showMessageBox({
-      message: 'Directory ' + currentVideoFolder + ' does not exist',
-      buttons: ['OK']
-    });
-  }
-}
-
-/**
- * Scan for missing thumbnails and generate them
- */
-function verifyThumbnails() {
-  // resume extracting any missing thumbnails
-  const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
-
-  const indexesToScan: number[] = missingThumbsIndex(
-    lastSavedFinalObject.images,
-    screenshotOutputFolder,
-    globals.screenshotSettings.clipSnippets > 0
-  );
-
-  extractFromTheseFiles(
-    lastSavedFinalObject.images,
-    globals.selectedSourceFolder,
-    screenshotOutputFolder,
-    globals.screenshotSettings.height,
-    indexesToScan,
-    globals.screenshotSettings.clipSnippets,
-    globals.screenshotSettings.clipSnippetLength
-  );
-}
-
-/**
- * Begins rescan procedure compared to what the app has currently
- *
- * @param angularFinalArray  ImageElment[] from Angular (might have renamed files)
- */
-function reScanDirectory(angularFinalArray: ImageElement[], currentVideoFolder: string) {
-
-  // rescan the source directory
-  if (fs.existsSync(currentVideoFolder)) {
-    let videosOnHD: ImageElement[] = getVideoPathsAndNames(currentVideoFolder);
-
-    if (demo) {
-      videosOnHD = videosOnHD.slice(0, 50);
-    }
-
-    const folderToDeleteFrom = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
-
-    updateFinalArrayWithHD(
-      angularFinalArray,
-      videosOnHD,
-      currentVideoFolder,
-      globals.screenshotSettings,
-      folderToDeleteFrom,
-      sendFinalResultHome           // callback for when `extractAllMetadata` is called
-    );
-
-  } else {
-    sendCurrentProgress(1, 1, 0);
-    dialog.showMessageBox({
-      message: 'Directory ' + currentVideoFolder + ' does not exist',
-      buttons: ['OK']
-    });
-  }
-}
-
-/**
- * Completely regenerate the library and metadata, but preserve thumbnails and user generated metadata
- * Useful when new metadata is added eg.
- *
- * @param angularFinalArray  ImageElment[] from Angular (might have renamed files)
- * @param currentVideoFolder
- */
-function regenerateMetadata(angularFinalArray: ImageElement[], currentVideoFolder: string) {
-
-  // rescan the source directory
-  if (fs.existsSync(currentVideoFolder)) {
-    let videosOnHD: ImageElement[] = getVideoPathsAndNames(currentVideoFolder);
-
-    if (demo) {
-      videosOnHD = videosOnHD.slice(0, 50);
-    }
-
-    const folderToDeleteFrom = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
-
-    regenerateLibrary(
-      angularFinalArray,
-      videosOnHD,
-      currentVideoFolder,
-      globals.screenshotSettings,
-      folderToDeleteFrom,
-      sendFinalResultHome           // callback for when `extractAllMetadata` is called
-    );
-
-  } else {
-    sendCurrentProgress(1, 1, 0);
-    dialog.showMessageBox({
-      message: 'Directory ' + currentVideoFolder + ' does not exist',
-      buttons: ['OK']
-    });
-  }
-}
 
 /**
  * Summon system modal to choose the *.vha file
@@ -877,4 +707,186 @@ function sendFinalResultHome(theFinalArray: ImageElement[]): void {
     );
 
   });
+}
+
+
+// ===========================================================================================
+// RESCAN - electron messages
+// -------------------------------------------------------------------------------------------
+
+/**
+ * Initiate scanning for new files and importing them
+ * now receives the finalArray from `home.component`
+ * because the user may have renamed files from within the app!
+ */
+ipc.on('import-new-files', function (event, currentAngularFinalArray: ImageElement[]) {
+  const currentVideoFolder = globals.selectedSourceFolder;
+  globals.cancelCurrentImport = false;
+  scanForNewFiles(currentAngularFinalArray, currentVideoFolder);
+});
+
+/**
+ * Initiate rescan of the directory NEW
+ * now receives the finalArray from `home.component`
+ * because the user may have renamed files from within the app!
+ */
+ipc.on('rescan-current-directory', function (event, currentAngularFinalArray: ImageElement[]) {
+  const currentVideoFolder = globals.selectedSourceFolder;
+  globals.cancelCurrentImport = false;
+  reScanDirectory(currentAngularFinalArray, currentVideoFolder);
+});
+
+/**
+ * Initiate regenerating the library
+ */
+ipc.on('regenerate-library', function (event, currentAngularFinalArray: ImageElement[]) {
+  const currentVideoFolder = globals.selectedSourceFolder;
+  globals.cancelCurrentImport = false;
+  regenerateMetadata(currentAngularFinalArray, currentVideoFolder);
+});
+
+/**
+ * Initiate verifying all files have thumbnails
+ */
+ipc.on('verify-thumbnails', function (event) {
+  globals.cancelCurrentImport = false;
+  verifyThumbnails();
+});
+
+// ===========================================================================================
+// RESCAN - methods
+// -------------------------------------------------------------------------------------------
+
+/**
+ * Scan for missing thumbnails and generate them
+ */
+function verifyThumbnails() {
+  // resume extracting any missing thumbnails
+  const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
+
+  const indexesToScan: number[] = missingThumbsIndex(
+    lastSavedFinalObject.images,
+    screenshotOutputFolder,
+    globals.screenshotSettings.clipSnippets > 0
+  );
+
+  extractFromTheseFiles(
+    lastSavedFinalObject.images,
+    globals.selectedSourceFolder,
+    screenshotOutputFolder,
+    globals.screenshotSettings.height,
+    indexesToScan,
+    globals.screenshotSettings.clipSnippets,
+    globals.screenshotSettings.clipSnippetLength
+  );
+}
+
+import {
+  findAndImportNewFiles,
+  regenerateLibrary,
+  updateFinalArrayWithHD,
+} from './main-rescan';
+
+/**
+ * Begins rescan procedure compared to what the app has currently
+ *
+ * @param angularFinalArray  ImageElment[] from Angular (might have renamed files)
+ */
+function reScanDirectory(angularFinalArray: ImageElement[], currentVideoFolder: string) {
+
+  // rescan the source directory
+  if (fs.existsSync(currentVideoFolder)) {
+    let videosOnHD: ImageElement[] = getVideoPathsAndNames(currentVideoFolder);
+
+    if (demo) {
+      videosOnHD = videosOnHD.slice(0, 50);
+    }
+
+    const folderToDeleteFrom = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
+
+    updateFinalArrayWithHD(
+      angularFinalArray,
+      videosOnHD,
+      currentVideoFolder,
+      globals.screenshotSettings,
+      folderToDeleteFrom,
+      sendFinalResultHome           // callback for when `extractAllMetadata` is called
+    );
+
+  } else {
+    sendCurrentProgress(1, 1, 0);
+    dialog.showMessageBox({
+      message: 'Directory ' + currentVideoFolder + ' does not exist',
+      buttons: ['OK']
+    });
+  }
+}
+
+/**
+ * Begin scanning for new files and importing them
+ *
+ * @param angularFinalArray  ImageElment[] from Angular (might have renamed files)
+ */
+function scanForNewFiles(angularFinalArray: ImageElement[], currentVideoFolder: string) {
+
+  // rescan the source directory
+  if (fs.existsSync(currentVideoFolder)) {
+    let videosOnHD: ImageElement[] = getVideoPathsAndNames(currentVideoFolder);
+
+    if (demo) {
+      videosOnHD = videosOnHD.slice(0, 50);
+    }
+
+    findAndImportNewFiles(
+      angularFinalArray,
+      videosOnHD,
+      currentVideoFolder,
+      globals.screenshotSettings,
+      sendFinalResultHome           // callback for when `extractAllMetadata` is called
+    );
+
+  } else {
+    sendCurrentProgress(1, 1, 0);
+    dialog.showMessageBox({
+      message: 'Directory ' + currentVideoFolder + ' does not exist',
+      buttons: ['OK']
+    });
+  }
+}
+
+/**
+ * Completely regenerate the library and metadata, but preserve thumbnails and user generated metadata
+ * Useful when new metadata is added eg.
+ *
+ * @param angularFinalArray  ImageElment[] from Angular (might have renamed files)
+ * @param currentVideoFolder
+ */
+function regenerateMetadata(angularFinalArray: ImageElement[], currentVideoFolder: string) {
+
+  // rescan the source directory
+  if (fs.existsSync(currentVideoFolder)) {
+    let videosOnHD: ImageElement[] = getVideoPathsAndNames(currentVideoFolder);
+
+    if (demo) {
+      videosOnHD = videosOnHD.slice(0, 50);
+    }
+
+    const folderToDeleteFrom = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
+
+    regenerateLibrary(
+      angularFinalArray,
+      videosOnHD,
+      currentVideoFolder,
+      globals.screenshotSettings,
+      folderToDeleteFrom,
+      sendFinalResultHome           // callback for when `extractAllMetadata` is called
+    );
+
+  } else {
+    sendCurrentProgress(1, 1, 0);
+    dialog.showMessageBox({
+      message: 'Directory ' + currentVideoFolder + ' does not exist',
+      buttons: ['OK']
+    });
+  }
 }
