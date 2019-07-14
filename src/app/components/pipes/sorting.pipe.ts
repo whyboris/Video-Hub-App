@@ -52,7 +52,7 @@ export class SortingPipe implements PipeTransform {
    */
   transform(galleryArray: ImageElement[], sortingType: SortType, forceSortUpdateHack: number): ImageElement[] {
 
-    console.log('SORTING RUNNING');
+    // console.log('SORTING RUNNING'); // ENABLE AND CHECK IF IT RUNS TOO OFTEN !!!
 
     if (sortingType === 'random') {
       let currentIndex = (galleryArray[0].index === -1 ? 1 : 0); // skip 'up button' if present
@@ -136,7 +136,7 @@ export class SortingPipe implements PipeTransform {
       });
       return sorted.slice(0);
     } else {
-      console.log('default sort');
+      // console.log('default sort'); // TODO -- Re-enable and optimize!
       const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'index', true);
       });

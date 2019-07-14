@@ -6,7 +6,7 @@
   class="filmstrip-container"
 >
 
-<div *ngIf="video.cleanName === '***'; else fileNameBlock">
+<div *ngIf="video.cleanName === '***'; else singleThumbnail">
   <div
     #filmstripHolder
     *ngIf="video.fileName !== 'up'; else upIcon"
@@ -84,12 +84,14 @@
   </span>
 </div>
 
-<ng-template #fileNameBlock>
+<ng-template #singleThumbnail>
 
   <div
     #filmstripHolder
     class="video-box"
     (mousemove)="mouseIsMoving($event)"
+    (mouseenter)="mouseEntered()"
+    (mouseleave)="mouseLeft()"
     (click)="videoClick.emit($event)"
     [ngStyle]="{
         height: imgHeight + 'px',

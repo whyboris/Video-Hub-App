@@ -82,16 +82,17 @@
   </button>
 
   <app-add-tag-component
+    *ngIf="showManualTags"
     (tag)="addThisTag($event)"
   ></app-add-tag-component>
 
   <br><br><br>  <!-- TODO -- stop using `<br>` here -->
 
   <app-view-tags-component
-    [tags]="this.video | tagDisplayPipe
-                       : this.showManualTags
-                       : this.showAutoFileTags
-                       : this.showAutoFolderTags
+    [tags]="video | tagDisplayPipe
+                       : showManualTags
+                       : showAutoFileTags
+                       : showAutoFolderTags
                        : tagViewUpdateHack"
     [darkMode]="darkMode"
     (tagClicked)="filterThisTag($event)"

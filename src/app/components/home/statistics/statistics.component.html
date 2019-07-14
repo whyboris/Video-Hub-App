@@ -17,12 +17,12 @@
     </tr>
     <tr>
       <td>{{ 'STATISTICS.numOfFiles' | translate }}</td>
-      <td class="rightCol">{{ totalFiles }}</td>
+      <td class="rightCol">{{ totalFiles | number:'.0' }}</td>
     </tr>
 
     <tr>
       <td>{{ 'STATISTICS.numOfFolders' | translate }}</td>
-      <td class="rightCol">{{ numFolders }}</td>
+      <td class="rightCol">{{ numFolders | number:'.0' }}</td>
     </tr>
 
     <tr>

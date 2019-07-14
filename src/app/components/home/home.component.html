@@ -147,7 +147,6 @@
     [darkMode]="settingsButtons['darkMode'].toggled"
     [hoverScrub]="settingsButtons['hoverScrub'].toggled"
     [largerFont]="settingsButtons['fontSizeLarger'].toggled"
-    [randomImage]="settingsButtons['randomImage'].toggled"
     [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
     [showMeta]="settingsButtons['showMoreInfo'].toggled"
     [showManualTags]="settingsButtons['manualTags'].toggled"
@@ -561,7 +560,14 @@
 
     <div
       [ngClass]="{ 'sidebar-hidden': settingsButtons['hideSidebar'].toggled }"
-      [ngStyle]="{ 'background': settingsButtons['darkMode'].toggled ? '#444444' : '#d8d8d8' }"
+      [ngStyle]="{
+                    'height': 'calc(100vh - ' + (
+                                                  (settingsButtons['hideTop'].toggled ? 53 : 98)
+                                                + (appState.menuHidden ? -32 : 0)
+                                                + (settingsButtons['showRelatedVideosTray'].toggled ? 160 : 0)
+                                                                                                                ) + 'px)',
+                    'background': settingsButtons['darkMode'].toggled ? '#444444' : '#d8d8d8'
+                 }"
       class="sidebar"
       #searchRef
     >
@@ -663,9 +669,9 @@
           (newSliderFilterSelected)="newLengthFilterSelected($event)"
           [darkMode]="settingsButtons['darkMode'].toggled"
           [labelFormatPipe]="'lengthPipe'"
-          [maximumValue]="longest"
+          [maximumValue]="durationOutlierCutoff"
           [minimumValue]="0"
-          [showLabels]="true"
+          [lengthFilter]="true"
           [steps]="50"
         ></app-slider-filter>
       </div>
@@ -701,10 +707,10 @@
       <!-- star filter & its frequency histogram -->
       <div *ngIf="settingsButtons['starFilter'].toggled" class="resolutionFilterContainer">
         <div class="frequencyGraphContainerStar">
-          <ng-container *ngFor="let resolution of starRatingFreqArr; index as i">
+          <ng-container *ngFor="let starRating of starRatingFreqArr; index as i">
             <div
               [ngClass]="{ resDisabled: (i < starLeftBound) || (i >= starRightBound) }"
-              [ngStyle]="{ height: resolution + '%' }"
+              [ngStyle]="{ height: starRating + '%' }"
               class="frequency-bar-star"
             >
             </div>
@@ -740,6 +746,7 @@
       <div class='sortFilter' *ngIf="settingsButtons['sortOrder'].toggled">
         <select
           (change)="selectFilterOrder($event.target.value)"
+          #sortFilterElement
           class="size-dropdown languageDropDown sortDropdown"
         >
           <option value="default" selected="selected">
@@ -789,7 +796,7 @@
 
       <!-- total found -->
       <div class="filteringTotal">
-        <span>{{ currResults.total }} {{ 'SIDEBAR.found' | translate }}</span>
+        <span>{{ currResults.total | number:'.0' }} {{ 'SIDEBAR.found' | translate }}</span>
       </div>
 
       <!-- word cloud -->
@@ -831,8 +838,11 @@
       id="scrollDiv"
       class="gallery-container"
       [ngStyle]="{
-          'height': 'calc(100vh - ' + ((settingsButtons['hideTop'].toggled ? 53 : 98)
-                      + (appState.menuHidden ? -32 : 0)) + 'px)',
+          'height': 'calc(100vh - ' + (
+                                          (settingsButtons['hideTop'].toggled ? 53 : 98)
+                                        + (appState.menuHidden ? -32 : 0)
+                                        + (settingsButtons['showRelatedVideosTray'].toggled ? 170 : 0)
+                                                                                                        ) + 'px)',
           'background': settingsButtons['darkMode'].toggled ? '#000000' : '#999999'
         }"
       [enableUnequalChildrenSizes]="appState.currentView === 'showFullView'"
@@ -926,9 +936,9 @@
           [darkMode]="settingsButtons['darkMode'].toggled"
           [hoverScrub]="settingsButtons['hoverScrub'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
-          [randomImage]="settingsButtons['randomImage'].toggled"
           [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
+          [thumbAutoAdvance]="settingsButtons['thumbAutoAdvance'].toggled"
 
           style="display: inline-block"
           [ngStyle]="{ height: previewHeight + textPaddingHeight + 20 + 'px', width: previewWidth }"
@@ -1050,7 +1060,6 @@
           [darkMode]="settingsButtons['darkMode'].toggled"
           [hoverScrub]="settingsButtons['hoverScrub'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
-          [randomImage]="settingsButtons['randomImage'].toggled"
           [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
           [showManualTags]="settingsButtons['manualTags'].toggled"
@@ -1103,7 +1112,6 @@
     [darkMode]="settingsButtons['darkMode'].toggled"
     [hoverScrub]="settingsButtons['hoverScrub'].toggled"
     [largerFont]="settingsButtons['fontSizeLarger'].toggled"
-    [randomImage]="settingsButtons['randomImage'].toggled"
     [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
     [showMeta]="settingsButtons['showMoreInfo'].toggled"
 
@@ -1409,7 +1417,7 @@
         (change)="selectNumOfClipSnippets($event.target.value)"
         type="number"
         class="size-dropdown languageDropDown numSelect"
-        value=10
+        value=5
         min=3
         max=15
         onKeyDown="return false"

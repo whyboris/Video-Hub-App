@@ -10,6 +10,7 @@ main.js
 main-extract.js
 main-filenames.js
 main-globals.js
+main-rescan.js
 main-support.js
 src/**/*.js
 *.js.map

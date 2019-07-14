@@ -42,7 +42,7 @@
     </div>
   </div>
   <span
-    *ngIf="showLabels"
+    *ngIf="lengthFilter"
     class="leftLabel"
     [ngStyle]="{
       left: ((currentXleft > 35) ? currentXleft - 35 : 0) + 'px'
@@ -51,7 +51,7 @@
     {{ convertToIndex(currentXleft) | wrapperPipe : labelFormatPipe }}
   </span>
   <span
-    *ngIf="showLabels"
+    *ngIf="lengthFilter"
     class="rightLabel"
     [ngStyle]="{
       right: 160 - ((currentXright < 125) ? currentXright + 35 : 160) + 'px'
@@ -59,6 +59,6 @@
   >
     {{ convertToIndex(currentXright) | wrapperPipe : labelFormatPipe }}
   </span>
-  <span *ngIf="showLabels" class="minLabel">0 min</span>
-  <span *ngIf="showLabels" class="maxLabel">{{ maximumValue | wrapperPipe : labelFormatPipe }}</span>
+  <span *ngIf="lengthFilter" class="minLabel">0 min</span>
+  <span *ngIf="lengthFilter" class="maxLabel">∞</span>
 </div>

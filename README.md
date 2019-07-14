@@ -30,7 +30,9 @@ Please consider improving or adding an icon to the app. It's a simple process, j
 
 A list of upcoming features is [listed on the official website](https://videohubapp.com/future.html). Also see [issues](https://github.com/whyboris/Video-Hub-App/issues) for what is in progress.
 
-## Current project versions
+## Development
+
+Main dependencies in use:
 
 | Library | Version | Date | Comment |
 | ------- | ------- | ---- | ------- |
@@ -39,7 +41,7 @@ A list of upcoming features is [listed on the official website](https://videohub
 | Electron | v5.0.6 | June 2019 | (internally uses Node v12.0.0 and Chrome 73) |
 | Electron Builder | v20.44.4 | June 2019 | |
 
-## Current dev environment
+Recommended for development:
 
 - Node v12.0.0
 - npm v6.9.0

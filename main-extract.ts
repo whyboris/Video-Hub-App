@@ -77,33 +77,54 @@ const checkAllScreensExist = (
     const totalCount = numberOfScreenshots;
     const step: number = duration / (totalCount + 1);
 
+    // check for complete file
     const check = (current) => {
       if (current === totalCount) {
         resolve(true);
       }
-      // check for complete file
+
+      // !!!!!!
+      // Notice this keeps running even after screenshots successfully extracted!
+      // !!!!!!
+      console.log('checking ' + current);
+
       const time = (current + 1) * step; // +1 so we don't pick the 0th frame
-      const checkCommand = 'ffmpeg -v warning -ss ' + time + ' -t 1 -i "' + pathToVideo + '" -map V -f null -';
       const corruptRegex = /Output file is empty, nothing was encoded/g;
-      exec(checkCommand, (err, data, stderr) => {
-        console.log(data);
-        console.log(stderr);
-        if (err) {
-          // skip this file
-          console.log(pathToVideo + ' was corrupt, skipping!');
-          resolve(false);
-        } else {
-          if (data.match(corruptRegex) || stderr.match(corruptRegex)) {
+
+      const args = [
+        '-v', 'warning', '-ss', time, '-t', '1', '-i', pathToVideo, '-map', 'V', '-f', 'null', '-',
+      ];
+      // console.log('extracting clip frame 1');
+      const ffmpeg_process = spawn(ffmpegPath, args);
+      // Note from past Cal to future Cal:
+      // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
+      ffmpeg_process.stdout.on('data', function (data) {
+        if (globals.debug) {
+          console.log(data);
+          if (data.match(corruptRegex)) {
             // skip this file
             console.log(pathToVideo + ' was corrupt, skipping!');
             resolve(false);
-          } else {
-            check(current + 1);
           }
         }
       });
+      ffmpeg_process.stderr.on('data', function (data) {
+        if (globals.debug) {
+          console.log('grep stderr: ' + data);
+          if (data.match(corruptRegex)) {
+            console.log(pathToVideo + ' was corrupt, skipping!');
+            resolve(false);
+          }
+          resolve(false);
+        }
+      });
+      ffmpeg_process.on('exit', () => {
+        check(current + 1);
+      });
     };
-    check(0);
+    // check(0);
+    console.log('checkAllScreensExist is DISABLED !!!');
+    resolve(true);
 
   });
 

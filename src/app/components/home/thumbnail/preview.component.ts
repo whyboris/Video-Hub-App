@@ -1,5 +1,4 @@
-import { Component, HostListener, Input, Output, EventEmitter, OnInit, ElementRef, ViewChild } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { Component, Input, Output, EventEmitter, OnInit, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 import { galleryItemAppear, metaAppear, textAppear } from '../../common/animations';
 import { ImageElement } from '../../common/final-object.interface';
 
@@ -11,7 +10,7 @@ import { ImageElement } from '../../common/final-object.interface';
                 textAppear,
                 metaAppear ]
 })
-export class PreviewComponent implements OnInit {
+export class PreviewComponent implements OnInit, OnDestroy {
 
   @ViewChild('filmstripHolder', { static: false }) filmstripHolder: ElementRef;
 
@@ -28,34 +27,23 @@ export class PreviewComponent implements OnInit {
   @Input() hubName: string;
   @Input() imgHeight: number;
   @Input() largerFont: boolean;
-  @Input() randomImage: boolean; // all code related to this currently removed
   @Input() returnToFirstScreenshot: boolean;
   @Input() showMeta: boolean;
+  @Input() thumbAutoAdvance: boolean;
 
+  containerWidth: number;
   firstFilePath = '';
   folderThumbPaths: string[] = [];
   fullFilePath = '';
   hover: boolean;
+  indexToShow: number = 1;
   percentOffset: number = 0;
+  scrollInterval: any = null;
 
-  constructor(
-    public sanitizer: DomSanitizer
-  ) { }
-
-  @HostListener('mouseenter') onMouseEnter() {
-    if (this.hoverScrub) {
-      this.hover = true;
-    }
-  }
-  @HostListener('mouseleave') onMouseLeave() {
-    if (this.hoverScrub && this.returnToFirstScreenshot) {
-      this.hover = false;
-      this.percentOffset = 0;
-    }
-  }
+  constructor() { }
 
   ngOnInit() {
-    // multiple hashes?
+    // multiple hashes == folder view
     if (this.video.hash.indexOf(':') !== -1) {
       const hashes = this.video.hash.split(':');
       this.shuffle(hashes).slice(0, 4).forEach((hash) => {
@@ -68,7 +56,46 @@ export class PreviewComponent implements OnInit {
     }
   }
 
-  shuffle(a) {
+  mouseEntered() {
+    this.containerWidth = this.filmstripHolder.nativeElement.getBoundingClientRect().width;
+
+    if (this.thumbAutoAdvance) {
+      this.hover = true;
+
+      this.scrollInterval = setInterval(() => {
+        this.percentOffset = this.indexToShow * (100 / (this.video.screens - 1));
+        this.indexToShow++;
+      }, 750);
+
+    } else if (this.hoverScrub) {
+      this.hover = true;
+    }
+  }
+
+  mouseLeft() {
+    if (this.thumbAutoAdvance) {
+      clearInterval(this.scrollInterval);
+    }
+
+    if (this.returnToFirstScreenshot) {
+      this.hover = false;
+      this.percentOffset = 0;
+    }
+  }
+
+  mouseIsMoving($event) {
+    if (this.hoverScrub) {
+      const cursorX = $event.layerX;
+      this.indexToShow = Math.floor(cursorX * (this.video.screens / this.containerWidth));
+      this.percentOffset = this.indexToShow * (100 / (this.video.screens - 1));
+    }
+  }
+
+  /**
+   * Used to choose random screenshots for the folder view
+   * @param a - a string of hashes to choose from
+   */
+  shuffle(a: string[]): string[] {
     let j, x, i;
     for (i = a.length - 1; i > 0; i--) {
         j = Math.floor(Math.random() * (i + 1));
@@ -79,13 +106,8 @@ export class PreviewComponent implements OnInit {
     return a;
   }
 
-  mouseIsMoving($event) {
-    if (this.hoverScrub) {
-      const cursorX = $event.layerX;
-      const containerWidth = this.filmstripHolder.nativeElement.getBoundingClientRect().width;
-
-      this.percentOffset = (100 / (this.video.screens - 1)) * Math.floor(cursorX / (containerWidth / this.video.screens));
-    }
+  ngOnDestroy() {
+    clearInterval(this.scrollInterval);
   }
 
 }
