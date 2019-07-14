@@ -8,7 +8,7 @@ import { globals } from './main-globals';
 // ***************************** BUILD TOGGLE *********************************************
 // ========================================================================================
 const demo = false;
-globals.version = '1.9.8';
+globals.version = '1.9.9';
 // ========================================================================================
 
 
@@ -288,7 +288,11 @@ function openThisDamnFile(pathToVhaFile: string) {
       // // resume extracting any missing thumbnails
       // const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
       //
-      // const indexesToScan: number[] = missingThumbsIndex(lastSavedFinalObject.images, screenshotOutputFolder);
+      // const indexesToScan: number[] = missingThumbsIndex(
+      //   lastSavedFinalObject.images,
+      //   screenshotOutputFolder
+      //   globals.screenshotSettings.clipSnippets > 0
+      // );
       //
       // extractFromTheseFiles(
       //   lastSavedFinalObject.images,
@@ -637,7 +641,11 @@ function verifyThumbnails() {
   // resume extracting any missing thumbnails
   const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
 
-  const indexesToScan: number[] = missingThumbsIndex(lastSavedFinalObject.images, screenshotOutputFolder);
+  const indexesToScan: number[] = missingThumbsIndex(
+    lastSavedFinalObject.images,
+    screenshotOutputFolder,
+    globals.screenshotSettings.clipSnippets > 0
+  );
 
   extractFromTheseFiles(
     lastSavedFinalObject.images,
@@ -845,14 +853,18 @@ function sendFinalResultHome(theFinalArray: ImageElement[]): void {
       'finalObjectReturning',
       finalObject,
       pathToTheFile,
-      globals.selectedOutputFolder + path.sep // app needs the trailing slash (at least for now)
+      globals.selectedOutputFolder + path.sep // app needs the trailing slash (at least for now) -- TODO check if needed still
       // changedRootFolder -- no need to initialize
       // rootFolderLive    -- no need to initialize
     );
 
     const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
 
-    const indexesToScan: number[] = missingThumbsIndex(myFinalArray, screenshotOutputFolder);
+    const indexesToScan: number[] = missingThumbsIndex(
+      myFinalArray,
+      screenshotOutputFolder,
+      globals.screenshotSettings.clipSnippets > 0 // convert number to appropriate boolean
+    );
 
     extractFromTheseFiles(
       myFinalArray,

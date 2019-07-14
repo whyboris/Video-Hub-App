@@ -181,9 +181,9 @@ export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: stri
 
   // write the file
   fs.writeFile(pathToTheFile, json, 'utf8', done);
-  // CATCH ERRORS !?!!?!!
+  // TODO ? CATCH ERRORS ?
 
-  // Restore the inputDir incase we removed it
+  // Restore the inputDir in case we removed it
   finalObject.inputDir = inputDir;
 }
 
@@ -317,24 +317,36 @@ export function deleteThumbnails(imageLocation: string, hash: string) {
 /**
  * Check if thumbnail, flimstrip, and clip is present
  * return boolean
- * @param fileHash
- * @param screenshotFolder
+ * @param fileHash           - unique identifier of the file
+ * @param screenshotFolder   - path to where thumbnails are
+ * @param shouldExtractClips - whether or not to extract clips
  */
-export function hasAllThumbs(fileHash: string, screenshotFolder: string): boolean {
+export function hasAllThumbs(
+  fileHash: string,
+  screenshotFolder: string,
+  shouldExtractClips: boolean
+): boolean {
   // Check in reverse order for efficiency
   return fs.existsSync(screenshotFolder + '/thumbnails/' + fileHash + '.jpg')
-      && fs.existsSync(screenshotFolder + '/clips/' + fileHash + '.mp4') // !!! TODO - TOGGLE with user's preference
-      && fs.existsSync(screenshotFolder + '/filmstrips/' + fileHash + '.jpg');
+      && fs.existsSync(screenshotFolder + '/filmstrips/' + fileHash + '.jpg')
+      && shouldExtractClips ? fs.existsSync(screenshotFolder + '/clips/' + fileHash + '.mp4') : true;
 }
 
 /**
  * Generate indexes for any files missing thumbnails
+ * @param fullArray          - ImageElement array
+ * @param screenshotFolder   - path to where thumbnails are stored
+ * @param shouldExtractClips - boolean -- whether to extract clips or not
  */
-export function missingThumbsIndex(fullArray: ImageElement[], screenshotFolder: string): number[] {
+export function missingThumbsIndex(
+  fullArray: ImageElement[],
+  screenshotFolder: string,
+  shouldExtractClips: boolean
+): number[] {
   const indexes: number[] = [];
   const total: number = fullArray.length;
   for (let i = 0; i < total; i++) {
-    if (!hasAllThumbs(fullArray[i].hash, screenshotFolder)) {
+    if (!hasAllThumbs(fullArray[i].hash, screenshotFolder, shouldExtractClips)) {
       indexes.push(i);
     }
   }
@@ -526,7 +538,12 @@ export function extractAllMetadata(
                                     theFinalArray[iterator].partialPath,
                                     theFinalArray[iterator].fileName));
 
-      extractMetadataForThisONEFile(filePathNEW, screenshotSettings, theFinalArray[iterator], extractMetaDataCallback);
+      extractMetadataForThisONEFile(
+        filePathNEW,
+        screenshotSettings,
+        theFinalArray[iterator],
+        extractMetaDataCallback
+      );
 
     } else {
 
@@ -539,8 +556,8 @@ export function extractAllMetadata(
 }
 
 /**
- * Updates the finalArray with the metadata about one particualar requested file
- * Updates newLastScreenCounterNEW global variable !!!
+ * Extracts information about a single file using `ffprobe`
+ * Stores information into the ImageElement and returns it via callback
  * @param filePath              path to the file
  * @param screenshotSettings    ScreenshotSettings
  * @param imageElement          index in array to update
