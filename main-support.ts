@@ -326,7 +326,6 @@ export function hasAllThumbs(
   screenshotFolder: string,
   shouldExtractClips: boolean
 ): boolean {
-  // Check in reverse order for efficiency
   return fs.existsSync(screenshotFolder + '/thumbnails/' + fileHash + '.jpg')
       && fs.existsSync(screenshotFolder + '/filmstrips/' + fileHash + '.jpg')
       && shouldExtractClips ? fs.existsSync(screenshotFolder + '/clips/' + fileHash + '.mp4') : true;
@@ -336,7 +335,7 @@ export function hasAllThumbs(
  * Generate indexes for any files missing thumbnails
  * @param fullArray          - ImageElement array
  * @param screenshotFolder   - path to where thumbnails are stored
- * @param shouldExtractClips - boolean -- whether to extract clips or not
+ * @param shouldExtractClips - boolean -- whether user wants to extract clips or not
  */
 export function missingThumbsIndex(
   fullArray: ImageElement[],
@@ -349,20 +348,6 @@ export function missingThumbsIndex(
     if (!hasAllThumbs(fullArray[i].hash, screenshotFolder, shouldExtractClips)) {
       indexes.push(i);
     }
-  }
-
-  return indexes;
-}
-
-/**
- * Generate indexes for each element in finalArray, e.g.
- * [0, 1, 2, 3, ..., n] where n = finalArray.length
- */
-export function everyIndex(fullArray: ImageElement[]): number[] {
-  const indexes: number[] = [];
-  const total: number = fullArray.length;
-  for (let i = 0; i < total; i++) {
-    indexes.push(i);
   }
 
   return indexes;
@@ -813,4 +798,22 @@ export function sendCurrentProgress(current: number, total: number, stage: numbe
   } else {
     globals.winRef.setProgressBar(-1);
   }
+}
+
+// ===========================================================================================
+// UNUSIED !?!?!?!?!
+// ===========================================================================================
+
+/**
+ * Generate indexes for each element in finalArray, e.g.
+ * [0, 1, 2, 3, ..., n] where n = finalArray.length
+ */
+export function everyIndex(fullArray: ImageElement[]): number[] {
+  const indexes: number[] = [];
+  const total: number = fullArray.length;
+  for (let i = 0; i < total; i++) {
+    indexes.push(i);
+  }
+
+  return indexes;
 }
