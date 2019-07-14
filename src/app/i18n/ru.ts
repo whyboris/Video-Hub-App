@@ -44,8 +44,6 @@ export const Russian = {
     makeSmallerHint: 'Уменьшить размер предварительного просмотра',
     manualTagsHint: 'Toggle manual tags',
     manualTagsDescription: 'Toggle manual tagging feature',
-    randomImageDescription: 'Переключает, показывается ли случайный скриншот из каждого видео каждый раз, когда вы ищете или прокручиваете',
-    randomImageHint: 'Показать случайный скриншот',
     randomizeGalleryDescription: 'Рандомизирует порядок видеофайлов после каждого поиска',
     randomizeGalleryHint: 'Рандомизировать порядок галереи',
     rescanDirectoryDescription: 'Повторно сканирует папку видео для любых изменений файла (добавление, переименование, удаление видео) и обновляет текущий хаб',

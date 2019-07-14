@@ -50,8 +50,6 @@ export const English = {
     manualTagsHint                     :'Enable manual tags',
     muteClipsDescription               :'Mute all sound',
     muteClipsHint                      :'Mute all sound',
-    randomImageDescription             :'??? REMOVE THIS FEATURE ??? Enable random screenshot whenever you search or scroll',
-    randomImageHint                    :'Show random screenshot',
     randomizeGalleryDescription        :'Randomize the order of video files after every search',
     randomizeGalleryHint               :'Randomize gallery order',
     regenerateLibraryDescription       :'Regenerate all library metadata, except thumbnails and user entered metadata',

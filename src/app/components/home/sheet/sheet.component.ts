@@ -49,7 +49,6 @@ export class SheetComponent implements OnInit {
   @Input() hubName: string;
   @Input() imgHeight: number;
   @Input() largerFont: boolean;
-  @Input() randomImage: boolean; // all code related to this currently removed
   @Input() returnToFirstScreenshot: boolean;
   @Input() showMeta: boolean;
   @Input() star: StarRating;
