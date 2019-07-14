@@ -51,8 +51,8 @@ export const SettingsButtonsGroups: string[][] = [
     'autoFolderTags',
   ],
   [
-    'showTagTray',
     'manualTags',
+    'showTagTray',
     'tagFrequencySort'
   ],
   [
@@ -309,6 +309,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.manualTagsDescription',
     hidden: true,
     iconName: 'icon-cloud',
+    settingsHeading: 'SETTINGS.manualTags',
     title: 'BUTTONS.manualTagsHint',
     toggled: true
   },
@@ -460,7 +461,6 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.tagTrayDescription',
     hidden: false,
     iconName: 'icon-tag',
-    settingsHeading: 'SETTINGS.manualTags',
     title: 'BUTTONS.tagTrayHint',
     toggled: false
   },

@@ -1054,6 +1054,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.toggleSettings();
   }
 
+
+  // ==========================================================================================
+  // Methods for RESCAN
+  // ==========================================================================================
+
   /**
    * Scan for new files and import them
    */
@@ -1097,6 +1102,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     console.log('regenerating library');
     this.electronService.ipcRenderer.send('regenerate-library', this.finalArray);
   }
+
+  // ==========================================================================================
 
   /**
    * Decrease preview size
