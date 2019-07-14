@@ -790,7 +790,8 @@ import {
 /**
  * Begins rescan procedure compared to what the app has currently
  *
- * @param angularFinalArray  ImageElment[] from Angular (might have renamed files)
+ * @param angularFinalArray  - ImageElment[] from Angular (might have renamed files)
+ * @param currentVideoFolder - source folder where videos are located (globals.selectedSourceFolder)
  */
 function reScanDirectory(angularFinalArray: ImageElement[], currentVideoFolder: string) {
 
@@ -825,7 +826,8 @@ function reScanDirectory(angularFinalArray: ImageElement[], currentVideoFolder: 
 /**
  * Begin scanning for new files and importing them
  *
- * @param angularFinalArray  ImageElment[] from Angular (might have renamed files)
+ * @param angularFinalArray  - ImageElment[] from Angular (might have renamed files)
+ * @param currentVideoFolder - source folder where videos are located (globals.selectedSourceFolder)
  */
 function scanForNewFiles(angularFinalArray: ImageElement[], currentVideoFolder: string) {
 
@@ -858,8 +860,8 @@ function scanForNewFiles(angularFinalArray: ImageElement[], currentVideoFolder: 
  * Completely regenerate the library and metadata, but preserve thumbnails and user generated metadata
  * Useful when new metadata is added eg.
  *
- * @param angularFinalArray  ImageElment[] from Angular (might have renamed files)
- * @param currentVideoFolder
+ * @param angularFinalArray  - ImageElment[] from Angular (might have renamed files)
+ * @param currentVideoFolder - source folder where videos are located (globals.selectedSourceFolder)
  */
 function regenerateMetadata(angularFinalArray: ImageElement[], currentVideoFolder: string) {
 

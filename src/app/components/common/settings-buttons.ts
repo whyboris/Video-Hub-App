@@ -51,8 +51,8 @@ export const SettingsButtonsGroups: string[][] = [
     'autoFolderTags',
   ],
   [
-    'showTagTray',
     'manualTags',
+    'showTagTray',
     'tagFrequencySort'
   ],
   [
@@ -67,8 +67,7 @@ export const SettingsButtonsGroups: string[][] = [
   [
     'showMoreInfo',
     'fontSizeLarger',
-    'randomImage',
-    'randomizeGallery',
+    // 'randomizeGallery', // TODO - disabled for now
     'shuffleGalleryNow',
     'showFolders'
   ],
@@ -143,6 +142,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.autoFileTagsDescription',
     hidden: true,
     iconName: 'icon-cloud',
+    moreInfo: 'BUTTONS.autoFileTagsMoreInfo',
     title: 'BUTTONS.autoFileTagsHint',
     toggled: true
   },
@@ -150,6 +150,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.autoFolderTagsDescription',
     hidden: true,
     iconName: 'icon-cloud',
+    moreInfo: 'BUTTONS.autoFolderTagsMoreInfo',
     title: 'BUTTONS.autoFolderTagsHint',
     toggled: false
   },
@@ -309,6 +310,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.manualTagsDescription',
     hidden: true,
     iconName: 'icon-cloud',
+    settingsHeading: 'SETTINGS.manualTags',
     title: 'BUTTONS.manualTagsHint',
     toggled: true
   },
@@ -319,13 +321,6 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     settingsHeading: 'SETTINGS.clipsHeading',
     title: 'BUTTONS.muteClipsHint',
     toggled: true
-  },
-  'randomImage': {
-    description: 'BUTTONS.randomImageDescription',
-    hidden: true,
-    iconName: 'icon-random',
-    title: 'BUTTONS.randomImageHint',
-    toggled: false
   },
   'randomizeGallery': {
     description: 'BUTTONS.randomizeGalleryDescription',
@@ -460,7 +455,6 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.tagTrayDescription',
     hidden: false,
     iconName: 'icon-tag',
-    settingsHeading: 'SETTINGS.manualTags',
     title: 'BUTTONS.tagTrayHint',
     toggled: false
   },

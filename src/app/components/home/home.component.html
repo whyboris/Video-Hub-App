@@ -147,7 +147,6 @@
     [darkMode]="settingsButtons['darkMode'].toggled"
     [hoverScrub]="settingsButtons['hoverScrub'].toggled"
     [largerFont]="settingsButtons['fontSizeLarger'].toggled"
-    [randomImage]="settingsButtons['randomImage'].toggled"
     [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
     [showMeta]="settingsButtons['showMoreInfo'].toggled"
     [showManualTags]="settingsButtons['manualTags'].toggled"
@@ -747,6 +746,7 @@
       <div class='sortFilter' *ngIf="settingsButtons['sortOrder'].toggled">
         <select
           (change)="selectFilterOrder($event.target.value)"
+          #sortFilterElement
           class="size-dropdown languageDropDown sortDropdown"
         >
           <option value="default" selected="selected">
@@ -936,7 +936,6 @@
           [darkMode]="settingsButtons['darkMode'].toggled"
           [hoverScrub]="settingsButtons['hoverScrub'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
-          [randomImage]="settingsButtons['randomImage'].toggled"
           [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
           [thumbAutoAdvance]="settingsButtons['thumbAutoAdvance'].toggled"
@@ -1061,7 +1060,6 @@
           [darkMode]="settingsButtons['darkMode'].toggled"
           [hoverScrub]="settingsButtons['hoverScrub'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
-          [randomImage]="settingsButtons['randomImage'].toggled"
           [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
           [showManualTags]="settingsButtons['manualTags'].toggled"
@@ -1114,7 +1112,6 @@
     [darkMode]="settingsButtons['darkMode'].toggled"
     [hoverScrub]="settingsButtons['hoverScrub'].toggled"
     [largerFont]="settingsButtons['fontSizeLarger'].toggled"
-    [randomImage]="settingsButtons['randomImage'].toggled"
     [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
     [showMeta]="settingsButtons['showMoreInfo'].toggled"
 

@@ -89,6 +89,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild('magicSearch', {static: false}) magicSearch: ElementRef;
   @ViewChild('renameFileInput', {static: false}) renameFileInput: ElementRef;
   @ViewChild('searchRef', {static: false}) searchRef: ElementRef;
+  @ViewChild('sortFilterElement', {static: false}) sortFilterElement: ElementRef;
 
   // used to grab the `scrollable-content` element - background of gallery for right-click
   galleryBackgroundRef: any;
@@ -988,12 +989,21 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.sortType = 'default';
       this.toggleButtonOpposite(uniqueKey);
     } else if (uniqueKey === 'shuffleGalleryNow') {
+      this.sortType = 'random';
       this.shuffleTheViewNow++;
-    } else if (uniqueKey === 'randomizeGallery') {
-      if (this.settingsButtons['randomizeGallery'].toggled === true) {
-        this.shuffleTheViewNow = 0;
+      // in case the sort filter is showin on the sidebar:
+      if (this.sortFilterElement) {
+        const allOptions = this.sortFilterElement.nativeElement.options;
+        allOptions[allOptions.length - 1].selected = true;
       }
-      this.toggleButtonOpposite(uniqueKey);
+    } else if (uniqueKey === 'randomizeGallery') {
+      console.log('RANDOMIZE GALLERY DISABLED !!!');
+      console.log('TODO - fix and test thoroughly first!');
+      // if (this.settingsButtons['randomizeGallery'].toggled === true) {
+      //   this.sortType = 'random';
+      //   this.shuffleTheViewNow = 0;
+      // }
+      // this.toggleButtonOpposite(uniqueKey);
     } else {
       this.toggleButtonOpposite(uniqueKey);
       if (uniqueKey === 'showMoreInfo') {
@@ -1054,6 +1064,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.toggleSettings();
   }
 
+
+  // ==========================================================================================
+  // Methods for RESCAN
+  // ==========================================================================================
+
   /**
    * Scan for new files and import them
    */
@@ -1097,6 +1112,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     console.log('regenerating library');
     this.electronService.ipcRenderer.send('regenerate-library', this.finalArray);
   }
+
+  // ==========================================================================================
 
   /**
    * Decrease preview size

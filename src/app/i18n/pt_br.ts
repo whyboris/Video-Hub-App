@@ -47,8 +47,6 @@ export const BrazilianPortuguese = {
     manualTagsHint: 'Alternar tags manuais',
     muteClipsDescription: 'Silenciar todo o som',
     muteClipsHint: 'Silenciar todo o som',
-    randomImageDescription: '??? REMOVER ESTE RECURSO ??? Ativar captura de tela aleatória sempre que você pesquisar ou rolar',
-    randomImageHint: 'Mostrar captura de tela aleatória',
     randomizeGalleryDescription: 'Randomize a ordem dos arquivos de vídeo após cada pesquisa',
     randomizeGalleryHint: 'Randomize o pedido da galeria',
     regenerateLibraryDescription: 'Regenerar todos os metadados da biblioteca, exceto miniaturas e metadados inseridos pelo usuário',
