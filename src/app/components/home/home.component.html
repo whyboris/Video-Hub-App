@@ -746,6 +746,7 @@
       <div class='sortFilter' *ngIf="settingsButtons['sortOrder'].toggled">
         <select
           (change)="selectFilterOrder($event.target.value)"
+          #sortFilterElement
           class="size-dropdown languageDropDown sortDropdown"
         >
           <option value="default" selected="selected">

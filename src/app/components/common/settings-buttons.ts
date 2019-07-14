@@ -67,7 +67,7 @@ export const SettingsButtonsGroups: string[][] = [
   [
     'showMoreInfo',
     'fontSizeLarger',
-    'randomizeGallery',
+    // 'randomizeGallery', // TODO - disabled for now
     'shuffleGalleryNow',
     'showFolders'
   ],
