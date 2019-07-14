@@ -142,6 +142,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.autoFileTagsDescription',
     hidden: true,
     iconName: 'icon-cloud',
+    moreInfo: 'BUTTONS.autoFileTagsMoreInfo',
     title: 'BUTTONS.autoFileTagsHint',
     toggled: true
   },
@@ -149,6 +150,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.autoFolderTagsDescription',
     hidden: true,
     iconName: 'icon-cloud',
+    moreInfo: 'BUTTONS.autoFolderTagsMoreInfo',
     title: 'BUTTONS.autoFolderTagsHint',
     toggled: false
   },
