@@ -172,15 +172,11 @@ try {
 systemPreferences.subscribeNotification(
   'AppleInterfaceThemeChangedNotification',
   function theThemeHasChanged () {
-    console.log('!!!!!!!!!!!!!!!!!!!');
-    console.log('DARK MODE !?!?!?!?!?');
-    console.log(systemPreferences.isDarkMode());
     if (systemPreferences.isDarkMode()) {
       tellElectronDarkModeChange('dark');
     } else {
       tellElectronDarkModeChange('light');
     }
-    console.log('!!!!!!!!!!!!!!!!!!!');
   }
 );
 
@@ -369,12 +365,7 @@ ipc.on('just-started', function (event, someMessage) {
   globals.angularApp = event;
   globals.winRef = win;
 
-  console.log('!!!!!!!!!!!!');
-  console.log('just started');
-  console.log('OS DARK MODE !?');
-  console.log(systemPreferences.getEffectiveAppearance()); // <string> dark, light, or unknown
   tellElectronDarkModeChange(systemPreferences.getEffectiveAppearance());
-  console.log('!!!!!!!!!!!!');
 
   fs.readFile(path.join(pathToAppData, 'video-hub-app-2', 'settings.json'), (err, data) => {
     if (err) {

@@ -474,9 +474,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     // Happens on a Mac when the OS Dark Mode is enabled/disabled
-    this.electronService.ipcRenderer.on('osDarkModeChange', (event, mode: string) => {
-      console.log('OS DARK MODE CHANGE!!!');
-      console.log(mode);
+    this.electronService.ipcRenderer.on('osDarkModeChange', (event, desiredMode: string) => {
+
+      const darkModeOn: boolean = this.settingsButtons['darkMode'].toggled;
+
+      if (darkModeOn && desiredMode === 'light') {
+        this.toggleButton('darkMode');
+        this.cd.detectChanges();
+      } else if (!darkModeOn && desiredMode === 'dark') {
+        this.toggleButton('darkMode');
+        this.cd.detectChanges();
+      }
     });
 
     // Progress bar messages
