@@ -6,6 +6,8 @@ const { systemPreferences } = require('electron')
 
 import { globals } from './main-globals';
 
+const codeRunningOnMac: boolean = process.platform === 'darwin';
+
 // ========================================================================================
 // ***************************** BUILD TOGGLE *********************************************
 // ========================================================================================
@@ -169,16 +171,18 @@ try {
   // throw e;
 }
 
-systemPreferences.subscribeNotification(
-  'AppleInterfaceThemeChangedNotification',
-  function theThemeHasChanged () {
-    if (systemPreferences.isDarkMode()) {
-      tellElectronDarkModeChange('dark');
-    } else {
-      tellElectronDarkModeChange('light');
+if (codeRunningOnMac) {
+  systemPreferences.subscribeNotification(
+    'AppleInterfaceThemeChangedNotification',
+    function theThemeHasChanged () {
+      if (systemPreferences.isDarkMode()) {
+        tellElectronDarkModeChange('dark');
+      } else {
+        tellElectronDarkModeChange('light');
+      }
     }
-  }
-);
+  );
+}
 
 // ========================================================================================
 // My imports
@@ -365,7 +369,9 @@ ipc.on('just-started', function (event, someMessage) {
   globals.angularApp = event;
   globals.winRef = win;
 
-  tellElectronDarkModeChange(systemPreferences.getEffectiveAppearance());
+  if (codeRunningOnMac) {
+    tellElectronDarkModeChange(systemPreferences.getEffectiveAppearance());
+  }
 
   fs.readFile(path.join(pathToAppData, 'video-hub-app-2', 'settings.json'), (err, data) => {
     if (err) {
