@@ -402,7 +402,7 @@ ipc.on('just-started', function (event, someMessage) {
  * Open a particular video file clicked inside Angular
  */
 ipc.on('openThisFile', function (event, fullFilePath) {
-  shell.openItem(fullFilePath);
+  shell.openItem(path.normalize(fullFilePath)); // normalize because on windows, the path sometimes is mixing `\` and `/`
 });
 
 /**
