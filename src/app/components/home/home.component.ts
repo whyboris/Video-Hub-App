@@ -86,10 +86,10 @@ import {
 })
 export class HomeComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('magicSearch', {static: false}) magicSearch: ElementRef;
-  @ViewChild('renameFileInput', {static: false}) renameFileInput: ElementRef;
-  @ViewChild('searchRef', {static: false}) searchRef: ElementRef;
-  @ViewChild('sortFilterElement', {static: false}) sortFilterElement: ElementRef;
+  @ViewChild('magicSearch',       { static: false }) magicSearch: ElementRef;
+  @ViewChild('renameFileInput',   { static: false }) renameFileInput: ElementRef;
+  @ViewChild('searchRef',         { static: false }) searchRef: ElementRef;
+  @ViewChild('sortFilterElement', { static: false }) sortFilterElement: ElementRef;
 
   // used to grab the `scrollable-content` element - background of gallery for right-click
   galleryBackgroundRef: any;
@@ -281,14 +281,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.toggleSettings();
         }
       } else if (event.key === 'f') {
-        if (this.settingsButtons['file'].toggled === false) {
-          this.settingsButtons['file'].toggled = true;
+        if (this.settingsButtons['fileIntersection'].toggled === false) {
+          this.settingsButtons['fileIntersection'].toggled = true;
         }
         this.showSidebar();
         setTimeout(() => {
-          if (this.searchRef.nativeElement.children.file) {
-            // focus on the search !!!
-            this.searchRef.nativeElement.children.file.focus();
+          if (this.searchRef.nativeElement.querySelector('#fileIntersection')) {
+            this.searchRef.nativeElement.querySelector('#fileIntersection').focus();
           }
         }, 1);
       } else if (event.key === 'n') {
