@@ -1086,44 +1086,64 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Scan for new files and import them
    */
   public importNewFiles(): void {
-    this.progressNum1 = 0;
-    this.importStage = 1;
-    this.toggleSettings();
-    console.log('scanning for new files');
-    this.electronService.ipcRenderer.send('import-new-files', this.finalArray);
+    if (this.rootFolderLive) {
+      this.progressNum1 = 0;
+      this.importStage = 1;
+      this.toggleSettings();
+      console.log('scanning for new files');
+      this.electronService.ipcRenderer.send('import-new-files', this.finalArray);
+    } else {
+      // TODO - tell user folder not live !!!
+      console.log('ROOT FOLDER NOT LIVE');
+    }
   }
 
   /**
    * Verify all files have thumbnails
    */
   public verifyThumbnails(): void {
-    this.progressNum1 = 0;
-    this.importStage = 2;
-    this.toggleSettings();
-    console.log('verifying thumbnails');
-    this.electronService.ipcRenderer.send('verify-thumbnails', this.finalArray);
+    if (this.rootFolderLive) {
+      this.progressNum1 = 0;
+      this.importStage = 2;
+      this.toggleSettings();
+      console.log('verifying thumbnails');
+      this.electronService.ipcRenderer.send('verify-thumbnails', this.finalArray);
+    } else {
+      // TODO - tell user folder not live !!!
+      console.log('ROOT FOLDER NOT LIVE');
+    }
   }
 
   /**
    * Rescan the current input directory
    */
   public rescanDirectory(): void {
-    this.progressNum1 = 0;
-    this.importStage = 1;
-    this.toggleSettings();
-    console.log('rescanning');
-    this.electronService.ipcRenderer.send('rescan-current-directory', this.finalArray);
+    if (this.rootFolderLive) {
+      this.progressNum1 = 0;
+      this.importStage = 1;
+      this.toggleSettings();
+      console.log('rescanning');
+      this.electronService.ipcRenderer.send('rescan-current-directory', this.finalArray);
+    } else {
+      // TODO - tell user folder not live !!!
+      console.log('ROOT FOLDER NOT LIVE');
+    }
   }
 
   /**
    * Regenerate the library
    */
   public regenerateLibrary(): void {
-    this.progressNum1 = 0;
-    this.importStage = 1;
-    this.toggleSettings();
-    console.log('regenerating library');
-    this.electronService.ipcRenderer.send('regenerate-library', this.finalArray);
+    if (this.rootFolderLive) {
+      this.progressNum1 = 0;
+      this.importStage = 1;
+      this.toggleSettings();
+      console.log('regenerating library');
+      this.electronService.ipcRenderer.send('regenerate-library', this.finalArray);
+    } else {
+      // TODO - tell user folder not live !!!
+      console.log('ROOT FOLDER NOT LIVE');
+    }
   }
 
   // ==========================================================================================
