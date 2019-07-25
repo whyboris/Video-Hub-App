@@ -1257,7 +1257,7 @@
     </span>
     <span class="path" [innerHtml]="wizard.selectedSourceFolder | folderArrowsPipe : false">
     </span>
-    <span class="step-description" *ngIf="wizard.totalNumberOfFiles !== -1">
+    <span class="step-description" [ngStyle]="{ opacity: wizard.totalNumberOfFiles === -1 ? 0 : 1 }">
       {{ 'WIZARD.found' | translate }}
       <span class="emphasis-number">
         {{ wizard.totalNumberOfFiles | number }}

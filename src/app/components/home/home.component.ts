@@ -449,6 +449,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.wizard.selectedSourceFolder = filePath;
         this.wizard.selectedOutputFolder = filePath;
       }
+
+      this.cd.detectChanges();
     });
 
     // Rename file response
@@ -467,6 +469,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // Returning Output
     this.electronService.ipcRenderer.on('outputFolderChosen', (event, filePath) => {
       this.wizard.selectedOutputFolder = filePath;
+      this.cd.detectChanges();
     });
 
     // Happens if a file with the same hub name already exists in the directory
@@ -499,7 +502,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       total: number,
       stage: ImportStage
     ) => {
-      console.log('receiving META SCAN UPDATE !!!' + current);
       this.importStage = stage;
       this.progressNum1 = current;
       this.progressNum2 = total;
@@ -518,6 +520,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.importStage = 'done';
         this.appState.hubName = this.hubNameToRemember; // could this cause bugs ??? TODO: investigate!
       }
+      this.cd.detectChanges();
     });
 
     // Final object returns
