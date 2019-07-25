@@ -495,7 +495,7 @@ export function hashFile(pathToFile: string): string {
  * @param stage ImportStage
  */
 export function sendCurrentProgress(current: number, total: number, stage: ImportStage): void {
-  console.log('sending SCAN PROGRESS HOME' + current);
+  console.log('Stage: ' + stage + ' - ' + current + ' / ' + total);
   globals.angularApp.sender.send('processingProgress', current, total, stage);
   if (stage !== 'done') {
     globals.winRef.setProgressBar(current / total);
