@@ -13,94 +13,6 @@ import { hashFile, extractAllMetadata, sendCurrentProgress } from './main-suppor
 import { ImageElement } from './src/app/components/common/final-object.interface';
 import { ScreenshotSettings } from './main-globals';
 
-/**
- * Regenerates the library,
- * figures out what files no longer exist,
- * deletes .jpg files from HD,
- * and calls `extractAllMetadata`
- * (which will then send file home and start extracting images)
- * @param angularFinalArray       -- array of ImageElements from Angular - most current view
- * @param hdFinalArray            -- array of ImageElements from current hard drive scan
- * @param inputFolder             -- the input folder (where videos are)
- * @param screenshotSettings      -- ScreenshotSettings
- * @param folderToDeleteFrom      -- path to folder where `.jpg` files are
- * @param extractMetadataCallback -- function for extractAllMetadata to call when done
- */
-export function regenerateLibrary(
-  angularFinalArray: ImageElement[],
-  hdFinalArray: ImageElement[],
-  inputFolder: string,
-  screenshotSettings: ScreenshotSettings,
-  folderToDeleteFrom: string,
-  extractMetadataCallback
-): void {
-
-  updateArrayWithHashes(hdFinalArray, inputFolder);
-
-  // Copy any user metadata
-  copyUserMetadata(angularFinalArray, hdFinalArray);
-
-  // Remove thumbnails no longer present
-  finalArrayWithoutDeleted(angularFinalArray, hdFinalArray, inputFolder, folderToDeleteFrom);
-
-  extractAllMetadata(
-    hdFinalArray,
-    inputFolder,
-    screenshotSettings,
-    0,
-    extractMetadataCallback // actually = sendFinalResultHome
-  );
-}
-
-/**
- * Update the entire array with new hashes
- *
- * @param imageArray
- * @param videoFolderPath
- */
-export function updateArrayWithHashes(
-  imageArray: ImageElement[],
-  videoFolderPath: string
-) {
-  imageArray.forEach((element) => {
-    const filePath = path.join(videoFolderPath, element.partialPath, element.fileName);
-    element.hash = hashFile(filePath);
-  });
-}
-
-/**
- * Find all the new files added to the source directory and return array of them
- * @param angularFinalArray  -- finalArray as it stands currently in the app
- * @param hdFinalArray  -- finalArray ais it stands on the Hard Drive (after scan)
- * @param inputFolder  -- location where all the videos are
- */
-export function findAllNewFiles(
-  angularFinalArray: ImageElement[],
-  hdFinalArray: ImageElement[],
-  inputFolder: string,
-): ImageElement[] {
-
-  const theDiff: ImageElement[] = [];
-
-  hdFinalArray.forEach((newElement) => {
-    let matchFound = false;
-    angularFinalArray.forEach((oldElement) => {
-      const pathStripped = newElement.partialPath.replace(inputFolder, '');
-      if (pathStripped === oldElement.partialPath && newElement.fileName === oldElement.fileName) {
-        matchFound = true;
-        newElement.hash = oldElement.hash;
-      }
-    });
-
-    if (!matchFound) { // means new element !!!
-      const filePath = path.join(inputFolder, newElement.partialPath, newElement.fileName);
-      newElement.hash = hashFile(filePath);
-      theDiff.push(newElement);
-    }
-  });
-
-  return theDiff;
-}
 
 /**
  * Figures out what new files there are,
@@ -203,6 +115,61 @@ export function updateFinalArrayWithHD(
 
 }
 
+
+// ===========================================================================================
+// Helper methods
+// -------------------------------------------------------------------------------------------
+
+/**
+ * Update the entire array with new hashes
+ *
+ * @param imageArray
+ * @param videoFolderPath
+ */
+export function updateArrayWithHashes(
+  imageArray: ImageElement[],
+  videoFolderPath: string
+) {
+  imageArray.forEach((element) => {
+    const filePath = path.join(videoFolderPath, element.partialPath, element.fileName);
+    element.hash = hashFile(filePath);
+  });
+}
+
+/**
+ * Find all the new files added to the source directory and return array of them
+ * @param angularFinalArray  -- finalArray as it stands currently in the app
+ * @param hdFinalArray  -- finalArray ais it stands on the Hard Drive (after scan)
+ * @param inputFolder  -- location where all the videos are
+ */
+export function findAllNewFiles(
+  angularFinalArray: ImageElement[],
+  hdFinalArray: ImageElement[],
+  inputFolder: string,
+): ImageElement[] {
+
+  const theDiff: ImageElement[] = [];
+
+  hdFinalArray.forEach((newElement) => {
+    let matchFound = false;
+    angularFinalArray.forEach((oldElement) => {
+      const pathStripped = newElement.partialPath.replace(inputFolder, '');
+      if (pathStripped === oldElement.partialPath && newElement.fileName === oldElement.fileName) {
+        matchFound = true;
+        newElement.hash = oldElement.hash;
+      }
+    });
+
+    if (!matchFound) { // means new element !!!
+      const filePath = path.join(inputFolder, newElement.partialPath, newElement.fileName);
+      newElement.hash = hashFile(filePath);
+      theDiff.push(newElement);
+    }
+  });
+
+  return theDiff;
+}
+
 /**
  * Clean up ImageElement[] coming from Angular, removing all elements for videos no longer on the Hard Drive
  * Also deletes all the .jpg images related to the video files that are no longer present
@@ -243,11 +210,6 @@ export function finalArrayWithoutDeleted(
 
   return cleanedArray;
 }
-
-
-// ===========================================================================================
-// Helper methods
-// -------------------------------------------------------------------------------------------
 
 /**
  * Delete thumbnails
@@ -319,4 +281,48 @@ export function copyUserMetadata(
       });
     }
   });
+}
+
+
+// ===========================================================================================
+// RESCAN - ARCHIVED
+// -------------------------------------------------------------------------------------------
+
+/**
+ * Regenerates the library,
+ * figures out what files no longer exist,
+ * deletes .jpg files from HD,
+ * and calls `extractAllMetadata`
+ * (which will then send file home and start extracting images)
+ * @param angularFinalArray       -- array of ImageElements from Angular - most current view
+ * @param hdFinalArray            -- array of ImageElements from current hard drive scan
+ * @param inputFolder             -- the input folder (where videos are)
+ * @param screenshotSettings      -- ScreenshotSettings
+ * @param folderToDeleteFrom      -- path to folder where `.jpg` files are
+ * @param extractMetadataCallback -- function for extractAllMetadata to call when done
+ */
+export function regenerateLibrary(
+  angularFinalArray: ImageElement[],
+  hdFinalArray: ImageElement[],
+  inputFolder: string,
+  screenshotSettings: ScreenshotSettings,
+  folderToDeleteFrom: string,
+  extractMetadataCallback
+): void {
+
+  updateArrayWithHashes(hdFinalArray, inputFolder);
+
+  // Copy any user metadata
+  copyUserMetadata(angularFinalArray, hdFinalArray);
+
+  // Remove thumbnails no longer present
+  finalArrayWithoutDeleted(angularFinalArray, hdFinalArray, inputFolder, folderToDeleteFrom);
+
+  extractAllMetadata(
+    hdFinalArray,
+    inputFolder,
+    screenshotSettings,
+    0,
+    extractMetadataCallback // actually = sendFinalResultHome
+  );
 }

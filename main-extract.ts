@@ -131,7 +131,7 @@ const checkAllScreensExist = (
 };
 
 /**
- * Extract a single frame from the original video
+ * Extract a single frame from the original video (if screenshot not already present)
  * @param saveLocation
  * @param fileHash
  */
@@ -186,6 +186,7 @@ const extractSingleFrame = (
  * Take N screenshots of a particular file
  * at particular file size
  * save as particular fileHash
+ * (if filmstrip not already present)
  *
  * @param pathToVideo          -- full path to the video file
  * @param fileHash             -- hash of the video file
@@ -266,6 +267,7 @@ const generateScreenshotStrip = (
 
 /**
  * Generate the mp4 preview clip of the video file
+ * (if clip is not already present)
  *
  * TODO -- allow user to change `totalCount` !!!!!!!
  *
@@ -341,6 +343,7 @@ const generatePreviewClip = (
 
 /**
  * Extract the first frame from the preview clip
+ * (if the screenshot not already present)
  * @param saveLocation
  * @param fileHash
  */

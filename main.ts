@@ -766,15 +766,6 @@ ipc.on('rescan-current-directory', function (event, currentAngularFinalArray: Im
 });
 
 /**
- * Initiate regenerating the library
- */
-ipc.on('regenerate-library', function (event, currentAngularFinalArray: ImageElement[]) {
-  const currentVideoFolder = globals.selectedSourceFolder;
-  globals.cancelCurrentImport = false;
-  regenerateMetadata(currentAngularFinalArray, currentVideoFolder);
-});
-
-/**
  * Initiate verifying all files have thumbnails
  */
 ipc.on('verify-thumbnails', function (event) {
@@ -884,6 +875,20 @@ function scanForNewFiles(angularFinalArray: ImageElement[], currentVideoFolder: 
     });
   }
 }
+
+
+// ===========================================================================================
+// RESCAN - ARCHIVED
+// -------------------------------------------------------------------------------------------
+
+/**
+ * Initiate regenerating the library
+ */
+ipc.on('regenerate-library', function (event, currentAngularFinalArray: ImageElement[]) {
+  const currentVideoFolder = globals.selectedSourceFolder;
+  globals.cancelCurrentImport = false;
+  regenerateMetadata(currentAngularFinalArray, currentVideoFolder);
+});
 
 /**
  * Completely regenerate the library and metadata, but preserve thumbnails and user generated metadata
