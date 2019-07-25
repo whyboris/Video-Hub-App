@@ -306,9 +306,9 @@ export function hasAllThumbs(
   screenshotFolder: string,
   shouldExtractClips: boolean
 ): boolean {
-  return fs.existsSync(screenshotFolder + '/thumbnails/' + fileHash + '.jpg')
-      && fs.existsSync(screenshotFolder + '/filmstrips/' + fileHash + '.jpg')
-      && shouldExtractClips ? fs.existsSync(screenshotFolder + '/clips/' + fileHash + '.mp4') : true;
+  return fs.existsSync(path.join(screenshotFolder, '/thumbnails/', fileHash + '.jpg'))
+      && fs.existsSync(path.join(screenshotFolder, '/filmstrips/', fileHash + '.jpg'))
+      && (shouldExtractClips ? fs.existsSync(path.join(screenshotFolder, '/clips/', fileHash + '.mp4')) : true);
 }
 
 /**
