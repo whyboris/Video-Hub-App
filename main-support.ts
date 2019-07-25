@@ -26,6 +26,8 @@ interface ResolutionMeta {
   bucket: number;
 }
 
+export type ImportStage = 'importingMeta' | 'importingScreenshots' | 'done';
+
 /**
  * Label the video according to cosest resolution label
  * @param width
@@ -370,7 +372,7 @@ export function extractAllMetadata(
 
     if (iterator < itemTotal) {
 
-      sendCurrentProgress(iterator, itemTotal, 1);
+      sendCurrentProgress(iterator, itemTotal, 'importingMeta');
 
       const filePathNEW = (path.join(videoFolderPath,
                                     theFinalArray[iterator].partialPath,
@@ -490,12 +492,12 @@ export function hashFile(pathToFile: string): string {
  * Sends progress to Angular App
  * @param current number
  * @param total number
- * @param stage number -- 0 = done, 1 = meta, 2 = jpg
+ * @param stage ImportStage
  */
-export function sendCurrentProgress(current: number, total: number, stage: number): void {
+export function sendCurrentProgress(current: number, total: number, stage: ImportStage): void {
   console.log('sending SCAN PROGRESS HOME' + current);
   globals.angularApp.sender.send('processingProgress', current, total, stage);
-  if (stage !== 0) {
+  if (stage !== 'done') {
     globals.winRef.setProgressBar(current / total);
   } else {
     globals.winRef.setProgressBar(-1);

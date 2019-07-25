@@ -14,6 +14,7 @@ import { WordFrequencyService } from '../../components/pipes/word-frequency.serv
 import { FinalObject, ImageElement } from '../common/final-object.interface';
 import { HistoryItem } from '../common/history-item.interface';
 import { ImportSettingsObject } from '../common/import.interface';
+import { ImportStage } from '../../../../main-support';
 import { SavableProperties } from '../common/savable-properties.interface';
 import { SettingsObject } from '../common/settings-object.interface';
 import { SortType } from '../pipes/sorting.pipe';
@@ -142,7 +143,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // ------------------------------------------------------------------------
 
   extractionPercent = 1;
-  importStage = 0;
+  importStage: ImportStage = 'done';
   progressNum1 = 0;
   progressNum2 = 100;
   progressPercent = 0;
@@ -386,7 +387,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // To test the progress bar
     // setInterval(() => {
-    //   this.importStage = this.importStage === 2 ? 1 : 2;
+    //   this.importStage = this.importStage === 'importingScreenshots' ? 'importingMeta' : 'importingScreenshots';
     // }, 3000);
 
     // To test the progress bar
@@ -469,7 +470,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // Happens if a file with the same hub name already exists in the directory
     this.electronService.ipcRenderer.on('pleaseFixHubName', (event) => {
-      this.importStage = 0;
+      this.importStage = 'done';
     });
 
     // Happens on a Mac when the OS Dark Mode is enabled/disabled
@@ -495,7 +496,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       event,
       current: number,
       total: number,
-      stage: number
+      stage: ImportStage
     ) => {
       console.log('receiving META SCAN UPDATE !!!' + current);
       this.importStage = stage;
@@ -503,7 +504,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.progressNum2 = total;
       this.progressPercent = current / total;
       this.progressString = 'loading - ' + Math.round(current * 100 / total) + '%';
-      if (this.importStage === 2) {
+      if (this.importStage === 'importingScreenshots') {
         if (this.isFirstRunEver) {
           this.toggleButton('showThumbnails');
           console.log('SHOULD FIX THE FIRST RUN BUG!!!');
@@ -513,7 +514,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
       if (current === total) {
         this.extractionPercent = 1;
-        this.importStage = 0;
+        this.importStage = 'done';
         this.appState.hubName = this.hubNameToRemember; // could this cause bugs ??? TODO: investigate!
       }
     });
@@ -669,7 +670,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public importFresh(): void {
     this.appState.selectedSourceFolder = this.wizard.selectedSourceFolder;
     this.appState.selectedOutputFolder = this.wizard.selectedOutputFolder;
-    this.importStage = 1;
+    this.importStage = 'importingMeta';
     const importOptions: ImportSettingsObject = {
       clipSnippetLength: this.wizard.clipSnippetLength,
       clipSnippets: this.wizard.extractClips ? this.wizard.clipSnippets : 0,
@@ -685,7 +686,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public cancelCurrentImport(): void {
-    this.importStage = 0;
+    this.importStage = 'done';
     this.electronService.ipcRenderer.send('cancel-current-import');
   }
 
@@ -1088,7 +1089,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public importNewFiles(): void {
     if (this.rootFolderLive) {
       this.progressNum1 = 0;
-      this.importStage = 1;
+      this.importStage = 'importingMeta';
       this.toggleSettings();
       console.log('scanning for new files');
       this.electronService.ipcRenderer.send('import-new-files', this.finalArray);
@@ -1104,7 +1105,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public verifyThumbnails(): void {
     if (this.rootFolderLive) {
       this.progressNum1 = 0;
-      this.importStage = 2;
+      this.importStage = 'importingScreenshots';
       this.toggleSettings();
       console.log('verifying thumbnails');
       this.electronService.ipcRenderer.send('verify-thumbnails', this.finalArray);
@@ -1120,7 +1121,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public rescanDirectory(): void {
     if (this.rootFolderLive) {
       this.progressNum1 = 0;
-      this.importStage = 1;
+      this.importStage = 'importingMeta';
       this.toggleSettings();
       console.log('rescanning');
       this.electronService.ipcRenderer.send('rescan-current-directory', this.finalArray);
@@ -1136,7 +1137,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public regenerateLibrary(): void {
     if (this.rootFolderLive) {
       this.progressNum1 = 0;
-      this.importStage = 1;
+      this.importStage = 'importingMeta';
       this.toggleSettings();
       console.log('regenerating library');
       this.electronService.ipcRenderer.send('regenerate-library', this.finalArray);

@@ -55,7 +55,7 @@ export function findAndImportNewFiles(
     );
 
   } else {
-    sendCurrentProgress(1, 1, 0); // indicates 100%
+    sendCurrentProgress(1, 1, 'done'); // indicates 100%
   }
 
 }
@@ -110,7 +110,7 @@ export function updateFinalArrayWithHD(
     );
 
   } else {
-    sendCurrentProgress(1, 1, 0); // indicates 100%
+    sendCurrentProgress(1, 1, 'done'); // indicates 100%
   }
 
 }

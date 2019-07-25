@@ -835,7 +835,7 @@ function reScanDirectory(angularFinalArray: ImageElement[], currentVideoFolder: 
     );
 
   } else {
-    sendCurrentProgress(1, 1, 0);
+    sendCurrentProgress(1, 1, 'done');
     dialog.showMessageBox({
       message: 'Directory ' + currentVideoFolder + ' does not exist',
       buttons: ['OK']
@@ -868,7 +868,7 @@ function scanForNewFiles(angularFinalArray: ImageElement[], currentVideoFolder: 
     );
 
   } else {
-    sendCurrentProgress(1, 1, 0);
+    sendCurrentProgress(1, 1, 'done');
     dialog.showMessageBox({
       message: 'Directory ' + currentVideoFolder + ' does not exist',
       buttons: ['OK']
@@ -919,7 +919,7 @@ function regenerateMetadata(angularFinalArray: ImageElement[], currentVideoFolde
     );
 
   } else {
-    sendCurrentProgress(1, 1, 0);
+    sendCurrentProgress(1, 1, 'done');
     dialog.showMessageBox({
       message: 'Directory ' + currentVideoFolder + ' does not exist',
       buttons: ['OK']

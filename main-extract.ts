@@ -430,7 +430,7 @@ export function extractFromTheseFiles(
 
     if ((iterator < itemTotal) && !globals.cancelCurrentImport) {
 
-      sendCurrentProgress(iterator, itemTotal, 2);
+      sendCurrentProgress(iterator, itemTotal, 'importingScreenshots');
 
       const currentElement = elementsToScan[iterator];
 
@@ -504,7 +504,7 @@ export function extractFromTheseFiles(
         });
 
     } else {
-      sendCurrentProgress(1, 1, 0); // indicates 100%
+      sendCurrentProgress(1, 1, 'done'); // indicates 100%
     }
   };
 
