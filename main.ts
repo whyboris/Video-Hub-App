@@ -745,37 +745,31 @@ function sendFinalResultHome(theFinalArray: ImageElement[]): void {
 
 /**
  * Initiate scanning for new files and importing them
- * now receives the finalArray from `home.component`
+ * Now receives the finalArray from `home.component`
  * because the user may have renamed files from within the app!
  */
-ipc.on('import-new-files', function (event, currentAngularFinalArray: ImageElement[]) {
+ipc.on('only-import-new-files', function (event, currentAngularFinalArray: ImageElement[]) {
   const currentVideoFolder = globals.selectedSourceFolder;
   globals.cancelCurrentImport = false;
-  scanForNewFiles(currentAngularFinalArray, currentVideoFolder);
+  importOnlyNewFiles(currentAngularFinalArray, currentVideoFolder);
 });
 
 /**
- * Initiate rescan of the directory NEW
- * now receives the finalArray from `home.component`
+ * Initiate rescan of the input directory
+ * This will import new videos
+ * and delete screenshots for videos no longer present in the input folder
+ * Now receives the finalArray from `home.component`
  * because the user may have renamed files from within the app!
  */
 ipc.on('rescan-current-directory', function (event, currentAngularFinalArray: ImageElement[]) {
   const currentVideoFolder = globals.selectedSourceFolder;
   globals.cancelCurrentImport = false;
-  reScanDirectory(currentAngularFinalArray, currentVideoFolder);
-});
-
-/**
- * Initiate regenerating the library
- */
-ipc.on('regenerate-library', function (event, currentAngularFinalArray: ImageElement[]) {
-  const currentVideoFolder = globals.selectedSourceFolder;
-  globals.cancelCurrentImport = false;
-  regenerateMetadata(currentAngularFinalArray, currentVideoFolder);
+  reScanCurrentDirectory(currentAngularFinalArray, currentVideoFolder);
 });
 
 /**
  * Initiate verifying all files have thumbnails
+ * Excellent for continuing the screenshot import if it was ever cancelled
  */
 ipc.on('verify-thumbnails', function (event) {
   globals.cancelCurrentImport = false;
@@ -813,7 +807,7 @@ function verifyThumbnails() {
 import {
   findAndImportNewFiles,
   regenerateLibrary,
-  updateFinalArrayWithHD,
+  rescanAddAndDelete,
 } from './main-rescan';
 
 /**
@@ -822,7 +816,7 @@ import {
  * @param angularFinalArray  - ImageElment[] from Angular (might have renamed files)
  * @param currentVideoFolder - source folder where videos are located (globals.selectedSourceFolder)
  */
-function reScanDirectory(angularFinalArray: ImageElement[], currentVideoFolder: string) {
+function reScanCurrentDirectory(angularFinalArray: ImageElement[], currentVideoFolder: string) {
 
   // rescan the source directory
   if (fs.existsSync(currentVideoFolder)) {
@@ -834,7 +828,7 @@ function reScanDirectory(angularFinalArray: ImageElement[], currentVideoFolder: 
 
     const folderToDeleteFrom = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
 
-    updateFinalArrayWithHD(
+    rescanAddAndDelete(
       angularFinalArray,
       videosOnHD,
       currentVideoFolder,
@@ -844,7 +838,7 @@ function reScanDirectory(angularFinalArray: ImageElement[], currentVideoFolder: 
     );
 
   } else {
-    sendCurrentProgress(1, 1, 0);
+    sendCurrentProgress(1, 1, 'done');
     dialog.showMessageBox({
       message: 'Directory ' + currentVideoFolder + ' does not exist',
       buttons: ['OK']
@@ -858,7 +852,7 @@ function reScanDirectory(angularFinalArray: ImageElement[], currentVideoFolder: 
  * @param angularFinalArray  - ImageElment[] from Angular (might have renamed files)
  * @param currentVideoFolder - source folder where videos are located (globals.selectedSourceFolder)
  */
-function scanForNewFiles(angularFinalArray: ImageElement[], currentVideoFolder: string) {
+function importOnlyNewFiles(angularFinalArray: ImageElement[], currentVideoFolder: string) {
 
   // rescan the source directory
   if (fs.existsSync(currentVideoFolder)) {
@@ -877,13 +871,27 @@ function scanForNewFiles(angularFinalArray: ImageElement[], currentVideoFolder: 
     );
 
   } else {
-    sendCurrentProgress(1, 1, 0);
+    sendCurrentProgress(1, 1, 'done');
     dialog.showMessageBox({
       message: 'Directory ' + currentVideoFolder + ' does not exist',
       buttons: ['OK']
     });
   }
 }
+
+
+// ===========================================================================================
+// RESCAN - ARCHIVED
+// -------------------------------------------------------------------------------------------
+
+/**
+ * Initiate regenerating the library
+ */
+ipc.on('regenerate-library', function (event, currentAngularFinalArray: ImageElement[]) {
+  const currentVideoFolder = globals.selectedSourceFolder;
+  globals.cancelCurrentImport = false;
+  regenerateMetadata(currentAngularFinalArray, currentVideoFolder);
+});
 
 /**
  * Completely regenerate the library and metadata, but preserve thumbnails and user generated metadata
@@ -914,7 +922,7 @@ function regenerateMetadata(angularFinalArray: ImageElement[], currentVideoFolde
     );
 
   } else {
-    sendCurrentProgress(1, 1, 0);
+    sendCurrentProgress(1, 1, 'done');
     dialog.showMessageBox({
       message: 'Directory ' + currentVideoFolder + ' does not exist',
       buttons: ['OK']
