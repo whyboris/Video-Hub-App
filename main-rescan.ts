@@ -65,7 +65,7 @@ export function findAndImportNewFiles(
  * adds them to the finalArray,
  * figures out what files no longer exist,
  * removes them from finalArray,
- * deletes .jpg files from HD,
+ * deletes .jpg files from HD,    <---------- WARNING !!!
  * and calls `extractAllMetadata`
  * (which will then send file home and start extracting images)
  * @param angularFinalArray       -- array of ImageElements from Angular - most current view
@@ -75,7 +75,7 @@ export function findAndImportNewFiles(
  * @param folderToDeleteFrom      -- path to folder where `.jpg` files are
  * @param extractMetadataCallback -- function for extractAllMetadata to call when done
  */
-export function updateFinalArrayWithHD(
+export function rescanAddAndDelete(
   angularFinalArray: ImageElement[],
   hdFinalArray: ImageElement[],
   inputFolder: string,

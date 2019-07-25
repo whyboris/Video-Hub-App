@@ -9,7 +9,7 @@
  * All functions are PURE
  * The only exception is `extractFromTheseFiles`
  * which checks the global variable `globals.cancelCurrentImport`
- * in case it needs to not run
+ * in case it needs to stop running (user interrupt)
  *
  * Huge thank you to cal2195 for the code contribution
  * He implemented the efficient filmstrip and clip extraction!

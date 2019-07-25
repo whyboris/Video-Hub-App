@@ -1092,7 +1092,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.importStage = 'importingMeta';
       this.toggleSettings();
       console.log('scanning for new files');
-      this.electronService.ipcRenderer.send('import-new-files', this.finalArray);
+      this.electronService.ipcRenderer.send('only-import-new-files', this.finalArray);
     } else {
       // TODO - tell user folder not live !!!
       console.log('ROOT FOLDER NOT LIVE');
