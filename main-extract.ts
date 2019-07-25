@@ -32,7 +32,7 @@ const spawn = require('child_process').spawn;
 // also spawns a shell (can pass a single cmd string)
 const exec = require('child_process').exec;
 
-import { globals } from './main-globals';
+import { globals, ScreenshotSettings } from './main-globals';
 
 import { sendCurrentProgress } from './main-support';
 
@@ -396,29 +396,29 @@ const extractFirstFrame = (saveLocation: string, fileHash: string) => {
  *
  * Extract following this order
  *    1. check if input file exists (false -> extract next item)
- *    2. check if input file has all the screens available (false -> extract next item)
+ *    2. check if input file has all the screens available, that is not corrupt (false -> extract next item)
  *    3. extract the SINGLE screenshot
  *    4. extract the FLIMSTRIP
  *    5. extract the CLIP (if `clipSnippets` !== 0)
  *    6. extract the CLIP preview
  *
- * @param theFinalArray     -- finalArray of ImageElements
- * @param videoFolderPath   -- path to base folder where videos are
- * @param screenshotFolder  -- path to folder where .jpg files will be saved
- * @param screenshotHeight  -- number in px how tall each screenshot should be
- * @param elementsToScan    -- array of indexes of elements in finalArray for which to extract screenshots
- * @param clipSnippets      -- number of clip snippets to extract; 0 == do not extract clip
- * @param snippetLength     -- length of each snippet in the clip
+ * @param theFinalArray      -- finalArray of ImageElements
+ * @param videoFolderPath    -- path to base folder where videos are
+ * @param screenshotFolder   -- path to folder where .jpg files will be saved
+ * @param screenshotSettings -- ScreenshotSettings object
+ * @param elementsToScan     -- array of indexes of elements in finalArray for which to extract screenshots
  */
 export function extractFromTheseFiles(
   theFinalArray: ImageElement[],
   videoFolderPath: string,
   screenshotFolder: string,
-  screenshotHeight: number,
+  screenshotSettings: ScreenshotSettings,
   elementsToScan: number[],
-  clipSnippets: number,
-  snippetLength: number,
 ): void {
+
+  const screenshotHeight: number = screenshotSettings.height;            // -- number in px how tall each screenshot should be
+  const clipSnippets: number =     screenshotSettings.clipSnippets;      // -- number of clip snippets to extract; 0 == do not extract clip
+  const snippetLength: number =    screenshotSettings.clipSnippetLength; // -- length of each snippet in the clip
 
   // final array already saved at this point - nothing to update inside it
   // just walk through `elementsToScan` to extract screenshots for elements in `theFinalArray`

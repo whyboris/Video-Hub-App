@@ -30,7 +30,7 @@ import { French } from '../../i18n/fr';
 import { Russian } from '../../i18n/ru';
 import { BrazilianPortuguese } from '../../i18n/pt_br';
 
-import { globals } from '../../../../main-globals';
+import { globals, ScreenshotSettings } from '../../../../main-globals';
 
 import {
   buttonAnimation,
@@ -267,6 +267,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   detailsMaxWidth: number = 1000; // used to keep track of max width for details in details view
   tagTypeAhead: string = '';
+  currentScreenshotSettings: ScreenshotSettings; // currently only used for the statistics page
 
   // ========================================================================
 
@@ -528,6 +529,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       changedRootFolder: boolean = false,
       rootFolderLive: boolean = true,
     ) => {
+
+      this.currentScreenshotSettings = finalObject.screenshotSettings;
+
       this.rootFolderLive = rootFolderLive;
       this.finalArrayNeedsSaving = changedRootFolder;
       this.appState.currentVhaFile = pathToFile;
