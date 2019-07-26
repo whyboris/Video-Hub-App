@@ -298,7 +298,10 @@ function openThisDamnFile(pathToVhaFile: string) {
       console.log(globals.selectedSourceFolder + ' - videos location');
       console.log(globals.selectedOutputFolder + ' - output location');
 
+      // WARNING: `extractFromTheseFiles` METHOD CHANGED SIGNIFICANTLY WHILE THIS CODE WAS COMMENTED OUT
+      //
       // TODO: Make this a setting toggle :)
+      //
       // // resume extracting any missing thumbnails
       // const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
       //
@@ -729,10 +732,8 @@ function sendFinalResultHome(theFinalArray: ImageElement[]): void {
       myFinalArray,
       globals.selectedSourceFolder,
       screenshotOutputFolder,
-      globals.screenshotSettings.height,
+      globals.screenshotSettings,
       indexesToScan,
-      globals.screenshotSettings.clipSnippets,
-      globals.screenshotSettings.clipSnippetLength
     );
 
   });
@@ -797,10 +798,8 @@ function verifyThumbnails() {
     lastSavedFinalObject.images,
     globals.selectedSourceFolder,
     screenshotOutputFolder,
-    globals.screenshotSettings.height,
+    globals.screenshotSettings,
     indexesToScan,
-    globals.screenshotSettings.clipSnippets,
-    globals.screenshotSettings.clipSnippetLength
   );
 }
 

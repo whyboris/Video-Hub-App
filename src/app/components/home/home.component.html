@@ -446,6 +446,7 @@
         [hubName]="appState.hubName"
         [numFolders]="appState.numOfFolders"
         [pathToVhaFile]="appState.currentVhaFile"
+        [screenshotSettings]="currentScreenshotSettings"
         [videoFolder]="appState.selectedSourceFolder"
       ></app-statistics>
 
@@ -1256,7 +1257,8 @@
     </span>
     <span class="path" [innerHtml]="wizard.selectedSourceFolder | folderArrowsPipe : false">
     </span>
-    <span class="step-description" *ngIf="wizard.totalNumberOfFiles !== -1">
+    <span class="step-description" [ngStyle]="{ opacity: wizard.totalNumberOfFiles === -1 ? 0 : 1 }">
+      <!-- don't use *ngIf on this element, else it disappears and changes height of section -->
       {{ 'WIZARD.found' | translate }}
       <span class="emphasis-number">
         {{ wizard.totalNumberOfFiles | number }}

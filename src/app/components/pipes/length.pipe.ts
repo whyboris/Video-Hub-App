@@ -11,8 +11,14 @@ export class LengthPipe implements PipeTransform {
    * @param numOfSec
    * @param omitSeconds
    * @param printHrMin -- include `hr` and `min` in display
+   * @param printDays  -- include `days` -- used only in `statistics.component.html`
    */
-  transform(numOfSec: number, omitSeconds?: boolean, printHrMin?: boolean): string {
+  transform(
+    numOfSec: number,
+    omitSeconds?: boolean,
+    printHrMin?: boolean,
+    printDays?: boolean
+  ): string {
     if (numOfSec === undefined) {
       return '';
     } else if (numOfSec === Infinity) {
@@ -28,6 +34,12 @@ export class LengthPipe implements PipeTransform {
                + (mm.length !== 2 ? (zeroHours ? '' : '0') + mm : mm)
                + (zeroHours ? ' min' : '');
         if (printHrMin) {
+          if (printDays) {
+            const dd: number = (Math.floor(numOfSec / 86400));
+            if (dd > 3) {
+              return dd.toString() + '+ days';
+            }
+          }
           return (display.replace(':', ' hr ') + ' min');
         } else {
           return display;
