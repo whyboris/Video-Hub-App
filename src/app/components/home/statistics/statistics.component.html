@@ -39,16 +39,18 @@
     <tr>
       <td>{{ 'STATISTICS.numOfThumbs' | translate }}</td>
       <td class="rightCol">
-        {{ screenshotSettings.fixed ? ''          : 'one every' }}
+        {{ screenshotSettings.fixed ? ''                                  : ('STATISTICS.oneEvery' | translate) }}
         {{ screenshotSettings.n }}
-        {{ screenshotSettings.fixed ? 'per video' : 'minutes' }}
+        {{ screenshotSettings.fixed ? ('STATISTICS.perVideo' | translate) : ('STATISTICS.minutes' | translate) }}
       </td>
     </tr>
 
     <tr>
       <td>{{ 'STATISTICS.numOfClips' | translate }}</td>
       <td class="rightCol">
-        {{ screenshotSettings.clipSnippets > 0 ? screenshotSettings.clipSnippets + ' per video' : 'do not extract' }}
+        {{ screenshotSettings.clipSnippets > 0
+           ? screenshotSettings.clipSnippets + ' ' + ('STATISTICS.perVideo' | translate)
+           : ('STATISTICS.doNotExtract' | translate) }}
       </td>
     </tr>
 
@@ -56,7 +58,7 @@
       <td>{{ 'STATISTICS.snippetLength' | translate }}</td>
       <td class="rightCol">
         {{ screenshotSettings.clipSnippetLength }}
-        seconds
+        {{ 'STATISTICS.seconds' | translate }}
       </td>
     </tr>
   </table>

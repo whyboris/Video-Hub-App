@@ -557,6 +557,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.flickerReduceOverlay = false;
 
       this.setUpDurationFilterValues(this.finalArray);
+
+      this.cd.detectChanges();
     });
 
     // Returning settings
