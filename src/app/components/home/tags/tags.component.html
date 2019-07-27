@@ -4,21 +4,20 @@
       <span class="prefix">
         {{ item.word | alphabetPrefixPipe }}
       </span>
+      <span class="frequency">
+        {{ item.freq }}
+      </span>
       <span
         (click)="tagWasClicked(item.word)"
         [ngClass]="{ strikethrough: editMode }"
         class="clickable"
       >
-        {{ item.word }}
-      </span>
-      <span class="frequency">
-        {{ item.freq }}
-      </span>
+        {{ item.word }}<!--
+   --></span>
       <app-icon
-        *ngIf="editMode"
+        [ngStyle]="{ opacity: editMode ? 1 : 0 }"
         [icon]="'icon-close'"
         class="icon-lol"
-        @tagDeleteButton
       ></app-icon>
     </li>
   </ul>
@@ -28,21 +27,20 @@
       <span class="prefix">
         {{ item.word | alphabetPrefixPipe }}
       </span>
+      <span class="frequency">
+        {{ item.freq }}
+      </span>
       <span
         (click)="tagWasClicked(item.word)"
         [ngClass]="{ strikethrough: editMode }"
         class="clickable"
       >
-        {{ item.word }}
-      </span>
-      <span class="frequency">
-        {{ item.freq }}
-      </span>
+        {{ item.word }}<!--
+   --></span>
       <app-icon
-        *ngIf="editMode"
+        [ngStyle]="{ opacity: editMode ? 1 : 0 }"
         class="icon-lol"
         [icon]="'icon-close'"
-        @tagDeleteButton
       ></app-icon>
     </li>
   </ul>

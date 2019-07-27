@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, OnDestroy, ViewChild, ElementRef, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnDestroy, ViewChild, ElementRef, OnInit, ChangeDetectorRef } from '@angular/core';
 
 import { AutoTagsService, WordAndFreq } from './autotags.service';
 import { AutoTagsSaveService } from './tags-save.service';

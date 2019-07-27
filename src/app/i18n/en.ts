@@ -269,7 +269,7 @@ export const English = {
     addSuccess         :'added successfully',
     addTag             :'Add tag',
     alreadyExists      :'tag already exists',
-    delete             :'delete',
+    delete             :'delete mode',
     filterList         :'Filter list',
     filterTags         :'Filter tags',
     presentTags        :'Tags in this hub',

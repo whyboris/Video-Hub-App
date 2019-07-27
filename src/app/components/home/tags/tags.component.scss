@@ -27,6 +27,7 @@ ul {
 
 .clickable {
   cursor: pointer;
+  margin-left: 25px;
   transition: 200ms;
   transition-delay: 50ms;
   transition-property: color;
@@ -41,9 +42,11 @@ ul {
 .frequency {
   color: $gray-50;
   cursor: default;
-  display: inline-block;
   font-size: 10px;
-  transform: translate(3px, -2px);
+  position: absolute;
+  text-align: right;
+  transform: translate(-3px, 2px);
+  width: 20px;
 }
 
 .capitalize {
@@ -64,7 +67,8 @@ ul {
 
 .edit-bar {
   align-items: baseline;
-  background: $gray-15;
+  background: $gray-10;
+  border-top: 1px solid $gray-30;
   bottom: 15px;
   box-sizing: border-box;
   display: flex;
@@ -106,6 +110,7 @@ ul {
   margin: 5px;
   min-width: auto;
   padding: 5px 10px;
+  white-space: nowrap;
   width: auto;
 }
 
@@ -130,19 +135,25 @@ ul {
 }
 
 .editModeActive {
-  background: #ff7777;
+  background-color: $pretty-red;
   border: 1px solid #885555;
   box-shadow: 0px 0px 0px rgba(0, 0, 0, 0) !important;
   transform: translateY(1px);
+  transition-duration: 50ms;
+  transition-property: background-color, border;
 
   &:hover {
-    background: #ff9999;
+    background-color: #ff9999;
   }
 }
 
 .icon-lol {
+  fill: $pretty-red;
   position: absolute;
-  transform: translate(12px, 1px);
+  transform: translate(3px, 1px);
+  transition-duration: 300ms;
+  transition-property: opacity;
+  width: 15px;
 }
 
 .strikethrough {
