@@ -161,6 +161,7 @@ export const English = {
     hideTopBar        :'Hide top bar',
     manualTags        :'Manual tag settings',
     miscView          :'Miscellaneous view settings',
+    noClipsExtracted  :'No clips extracted',
     otherSettings     :'Create a new hub',
     relatedVideosTray :'Related videos',
     reloadUpdate      :'Reload / update hub',
