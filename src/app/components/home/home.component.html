@@ -1010,31 +1010,6 @@
         ></app-file-item>
       </ng-container>
 
-      <ng-container *ngIf="appState.currentView === 'showClips'">
-        <app-clip-item
-          *ngFor="let item of scroll.viewPortItems"
-          (videoClick)="(item.cleanName === '***') ? handleFolderWordClicked(item.partialPath) : handleClick($event, item)"
-          (sheetClick)="this.openThumbnailSheet(item)"
-          (contextmenu)="(item.cleanName === '***') ? doNothing() : rightMouseClicked($event, item)"
-
-          [video]="item"
-
-          [elHeight]="previewHeight + textPaddingHeight"
-          [elWidth]="previewWidth"
-          [folderPath]="appState.selectedOutputFolder"
-          [hubName]="appState.hubName"
-          [imgHeight]="previewHeight"
-
-          [autoplay]="settingsButtons['autoplayClips'].toggled"
-          [darkMode]="settingsButtons['darkMode'].toggled"
-          [largerFont]="settingsButtons['fontSizeLarger'].toggled"
-          [forceMute]="settingsButtons['muteClips'].toggled"
-          [showMeta]="settingsButtons['showMoreInfo'].toggled"
-
-          style="display: inline-block"
-        ></app-clip-item>
-      </ng-container>
-
       <ng-container *ngIf="appState.currentView === 'showDetails'">
         <app-details-item
           *ngFor="let item of scroll.viewPortItems"
@@ -1069,6 +1044,37 @@
 
           style="display: block"
         ></app-details-item>
+      </ng-container>
+
+      <ng-container *ngIf="appState.currentView === 'showClips' && currentScreenshotSettings.clipSnippets > 0">
+        <app-clip-item
+          *ngFor="let item of scroll.viewPortItems"
+          (videoClick)="(item.cleanName === '***') ? handleFolderWordClicked(item.partialPath) : handleClick($event, item)"
+          (sheetClick)="this.openThumbnailSheet(item)"
+          (contextmenu)="(item.cleanName === '***') ? doNothing() : rightMouseClicked($event, item)"
+
+          [video]="item"
+
+          [elHeight]="previewHeight + textPaddingHeight"
+          [elWidth]="previewWidth"
+          [folderPath]="appState.selectedOutputFolder"
+          [hubName]="appState.hubName"
+          [imgHeight]="previewHeight"
+
+          [autoplay]="settingsButtons['autoplayClips'].toggled"
+          [darkMode]="settingsButtons['darkMode'].toggled"
+          [largerFont]="settingsButtons['fontSizeLarger'].toggled"
+          [forceMute]="settingsButtons['muteClips'].toggled"
+          [showMeta]="settingsButtons['showMoreInfo'].toggled"
+
+          style="display: inline-block"
+        ></app-clip-item>
+      </ng-container>
+
+      <ng-container *ngIf="appState.currentView === 'showClips' && currentScreenshotSettings.clipSnippets === 0">
+        <span class="no-clips-message" [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }">
+          {{ 'SETTINGS.noClipsExtracted' | translate }}
+        </span>
       </ng-container>
 
     </virtual-scroller>

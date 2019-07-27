@@ -271,6 +271,11 @@ $sidebar-width: 190px;
   }
 }
 
+.no-clips-message {
+  display: block;
+  margin: 100px 0 0;
+  text-align: center;
+}
 
 // TODO -- keep DRY -- this is taken from `inputFilter`
 .manual-tag-tray-filter {
