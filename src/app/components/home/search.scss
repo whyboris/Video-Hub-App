@@ -96,6 +96,16 @@
   margin-bottom: 10px;
 }
 
+.sidebar-recently-opened {
+  transition-duration: 250ms;
+  transition-property: color;
+
+  &:hover {
+    color: $pretty-blue;
+    transition-property: color;
+  }
+}
+
 .recently-opened {
   font-size: 10px;
   margin-top: 40px;

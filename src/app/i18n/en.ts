@@ -229,7 +229,7 @@ export const English = {
   },
   WIZARD: {
     change                 :'Change',
-    clearRecent            :'clear recent history',
+    clearRecent            :'clear all recent history',
     clipSnippets           :'snippets',
     closeButton            :'Close wizard',
     createVideoHub         :'Create the Video Hub',

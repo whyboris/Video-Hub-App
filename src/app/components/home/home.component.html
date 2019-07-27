@@ -822,6 +822,7 @@
           <li
             *ngFor="let historyItem of vhaFileHistory; index as i"
             (click)="openFromHistory(i)"
+            class="sidebar-recently-opened"
           >
             {{ historyItem.hubName }}
           </li>
@@ -1208,11 +1209,15 @@
 
       <ul>
         <li *ngFor="let historyItem of vhaFileHistory; index as i" (click)="openFromHistory(i)" @historyItemRemove>
-          <span
+          <div
+            class="clear-history-item"
             (click)="removeFromHistory($event, i)"
-            class="icon icon-close clear-history-item"
-            title="{{ 'WIZARD.removeFromHistory' | translate }}"
-          ></span>
+          >
+            <app-icon
+              [icon]="'icon-close'"
+            ></app-icon>
+          </div>
+            <!-- title="{{ 'WIZARD.removeFromHistory' | translate }}" -->
           <img class="history-icon" src="./assets/logo.png">
           <span class="history-name">{{ historyItem.hubName }}</span>
           <br>
