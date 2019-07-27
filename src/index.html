@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <title>Video Hub App</title>
@@ -12,22 +13,22 @@
     }
 
     .spinner {
-      position: fixed;
-      top: calc(50vh + 50px);
-      left: calc(50vw - 25px);
-      width: 50px;
-      height: 40px;
-      text-align: center;
       font-size: 10px;
+      height: 40px;
+      left: calc(50vw - 25px);
+      position: fixed;
+      text-align: center;
+      top: calc(50vh + 50px);
+      width: 50px;
     }
 
-    .spinner > div {
+    .spinner>div {
+      animation: sk-stretchdelay 1.2s infinite ease-in-out;
       background-color: #BBBBBB;
       box-shadow: inset 0 0 1px rgba(0, 0, 0, 0.2);
       display: inline-block;
       height: 100%;
       width: 6px;
-      animation: sk-stretchdelay 1.2s infinite ease-in-out;
     }
 
     .spinner .rect2 {
@@ -47,17 +48,28 @@
     }
 
     @-webkit-keyframes sk-stretchdelay {
-      0%, 40%, 100% { -webkit-transform: scaleY(0.4) }  
-      20% { -webkit-transform: scaleY(1.0) }
+      0%,
+      40%,
+      100% {
+        -webkit-transform: scaleY(0.4)
+      }
+
+      20% {
+        -webkit-transform: scaleY(1.0)
+      }
     }
 
     @keyframes sk-stretchdelay {
-      0%, 40%, 100% { 
-        transform: scaleY(0.4);
+      0%,
+      40%,
+      100% {
         -webkit-transform: scaleY(0.4);
-      }  20% { 
-        transform: scaleY(1.0);
+        transform: scaleY(0.4);
+      }
+
+      20% {
         -webkit-transform: scaleY(1.0);
+        transform: scaleY(1.0);
       }
     }
 
@@ -70,6 +82,7 @@
     }
   </style>
 </head>
+
 <body>
   <app-root>
     <img src='./assets/favicon.png' class="logo">
@@ -82,4 +95,5 @@
     </div>
   </app-root>
 </body>
+
 </html>
