@@ -132,7 +132,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // ------------------------------------------------------------------------
 
   appMaximized = false;
-  buttonsInView = false;
+  settingsModalOpen = false;
   finalArrayNeedsSaving: boolean = false; // if ever a file was renamed, re-save the .vha file
   flickerReduceOverlay = true;
   isFirstRunEver = false;
@@ -294,7 +294,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         }, 1);
       } else if (event.key === 'n') {
         this.startWizard();
-        this.buttonsInView = false;
+        this.settingsModalOpen = false;
       } else if (event.key === 'd') {
         this.toggleButton('darkMode');
       } else if (event.key === 'q') {
@@ -337,8 +337,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     } else if (event.key === 'Escape' && this.wizard.showWizard === true && this.canCloseWizard === true) {
       this.wizard.showWizard = false;
-    } else if (event.key === 'Escape' && this.buttonsInView) {
-      this.buttonsInView = false;
+    } else if (event.key === 'Escape' && this.settingsModalOpen) {
+      this.settingsModalOpen = false;
     } else if (event.key === 'Escape' && (this.rightClickShowing || this.renamingNow || this.sheetOverlayShowing)) {
       this.rightClickShowing = false;
       this.renamingNow = false;
@@ -906,7 +906,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   toggleSettings(): void {
     this.settingToShow = 2;
-    this.buttonsInView = !this.buttonsInView;
+    this.settingsModalOpen = !this.settingsModalOpen;
   }
 
   hideWizard(): void {
@@ -1099,7 +1099,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if (this.rootFolderLive) {
       this.progressNum1 = 0;
       this.importStage = 'importingMeta';
-      this.toggleSettings();
+      if (this.settingsModalOpen) {
+        this.toggleSettings();
+      }
       console.log('scanning for new files');
       this.electronService.ipcRenderer.send('only-import-new-files', this.finalArray);
     } else {
@@ -1131,7 +1133,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if (this.rootFolderLive) {
       this.progressNum1 = 0;
       this.importStage = 'importingMeta';
-      this.toggleSettings();
+      if (this.settingsModalOpen) {
+        this.toggleSettings();
+      }
       console.log('rescanning');
       this.electronService.ipcRenderer.send('rescan-current-directory', this.finalArray);
     } else {

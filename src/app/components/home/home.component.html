@@ -246,7 +246,7 @@
   <!-- ==================================================== -->
 
   <div
-    *ngIf="buttonsInView"
+    *ngIf="settingsModalOpen"
     class="settingsModal"
     @modalAnimation
   >
@@ -542,7 +542,7 @@
       <!-- GEAR BUTTON -->
       <div
         (click)="toggleSettings()"
-        [ngClass]="{ gearButtonActive: buttonsInView }"
+        [ngClass]="{ gearButtonActive: settingsModalOpen }"
         class="gearButton"
         title="{{ 'SETTINGS.settings' | translate }}"
       >
