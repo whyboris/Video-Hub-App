@@ -192,7 +192,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'extendedWordCloud': {
     description: 'BUTTONS.extendedWordCloudDescription',
-    hidden: false,
+    hidden: true,
     iconName: 'icon-cloud-plus',
     title: 'BUTTONS.extendedWordCloudHint',
     toggled: false
@@ -306,6 +306,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.manualTagsDescription',
     hidden: true,
     iconName: 'icon-cloud',
+    moreInfo: 'BUTTONS.manualTagsMoreInfo',
     settingsHeading: 'SETTINGS.manualTags',
     title: 'BUTTONS.manualTagsHint',
     toggled: true
@@ -447,7 +448,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'showTagTray': {
     description: 'BUTTONS.tagTrayDescription',
-    hidden: false,
+    hidden: true,
     iconName: 'icon-tag',
     title: 'BUTTONS.tagTrayHint',
     toggled: false
@@ -539,14 +540,14 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'tagFrequencySort': {
     description: 'BUTTONS.tagFrequencySortDescription',
-    hidden: false,
+    hidden: true,
     iconName: 'icon-tag',
     title: 'BUTTONS.tagFrequencySortHint',
     toggled: false
   },
   'tagIntersection': {
     description: 'BUTTONS.tagIntersectionDescription',
-    hidden: false,
+    hidden: true,
     iconName: 'icon-video-minus',
     title: 'BUTTONS.tagIntersectionHint',
     toggled: false
