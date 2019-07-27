@@ -66,6 +66,7 @@ export const SettingsButtonsGroups: string[][] = [
   ],
   [
     'showMoreInfo',
+    'compactView',
     'fontSizeLarger',
     // 'randomizeGallery', // TODO - disabled for now
     'shuffleGalleryNow',
@@ -421,6 +422,14 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     settingsHeading: 'SETTINGS.miscView',
     title: 'BUTTONS.showMoreInfoHint',
     toggled: true
+  },
+  'compactView': {
+    description: 'BUTTONS.compactViewDescription',
+    hidden: false,
+    iconName: 'icon-tag',
+    moreInfo: 'BUTTONS.compactViewMoreInfo',
+    title: 'BUTTONS.compactViewHint',
+    toggled: false
   },
   'showRecent': {
     description: 'BUTTONS.showRecentDescription',

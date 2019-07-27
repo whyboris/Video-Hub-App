@@ -932,6 +932,8 @@
           [hubName]="appState.hubName"
           [imgHeight]="previewHeight"
 
+          [compactView]="settingsButtons['compactView'].toggled"
+
           [video]="item"
 
           [darkMode]="settingsButtons['darkMode'].toggled"
@@ -942,7 +944,13 @@
           [thumbAutoAdvance]="settingsButtons['thumbAutoAdvance'].toggled"
 
           style="display: inline-block"
-          [ngStyle]="{ height: previewHeight + textPaddingHeight + 20 + 'px', width: previewWidth }"
+          [ngStyle]="{
+              height: previewHeight +
+                      textPaddingHeight +
+                      (settingsButtons['compactView'].toggled ? 0 : 20) +
+                      'px',
+              width: previewWidth
+            }"
         ></app-gallery-item>
       </ng-container>
 

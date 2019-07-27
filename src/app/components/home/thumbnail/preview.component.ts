@@ -19,6 +19,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
 
   @Input() video: ImageElement;
 
+  @Input() compactView: boolean;
   @Input() darkMode: boolean;
   @Input() elHeight: number;
   @Input() elWidth: number;
