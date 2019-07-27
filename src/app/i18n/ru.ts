@@ -107,7 +107,6 @@ export const Russian = {
     closeSettings: 'Закрыть настройки',
     galleryAndView: 'Галерея и настройки просмотра',
     otherSettings: 'Другие настройки',
-    reloadUpdate: 'Обновить / обновить концентратор',
     reset: 'сброс',
     searchAndFilter: 'Настройки поиска и фильтра',
     settings: 'настройки',

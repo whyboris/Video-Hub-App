@@ -98,7 +98,6 @@ export const French = {
     closeSettings: 'Fermer les paramètres',
     galleryAndView: 'Paramètres de la galerie et de la vue',
     otherSettings: 'Autres réglages',
-    reloadUpdate: 'Recharger / mettre à jour le hub',
     reset: 'réinitialiser',
     searchAndFilter: 'Paramètres de recherche et de filtrage',
     settings: 'Réglages',

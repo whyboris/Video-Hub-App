@@ -154,7 +154,6 @@ export const BrazilianPortuguese = {
     miscView: 'Configurações de exibição variadas',
     otherSettings: 'Crie um novo hub',
     relatedVideosTray: 'Vídeos relacionados',
-    reloadUpdate: 'Recarregar / atualizar hub',
     reset: 'restabelecer',
     searchAndFilter: 'Configurações de pesquisa e filtro',
     searchFilters: 'Filtros de pesquisa de pasta, arquivo e tag',

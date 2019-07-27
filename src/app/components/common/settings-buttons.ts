@@ -134,7 +134,6 @@ export const SettingsMetaGroupLabels: string[] = [
   'SETTINGS.searchAndFilter',
   'SETTINGS.galleryAndView',
   'SETTINGS.otherSettings',
-  'SETTINGS.reloadUpdate' // CURRENTLY UNUSED
 ];
 
 export let SettingsButtons: { [s: string]: SettingsButton } = {
