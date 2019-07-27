@@ -274,8 +274,8 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'importNewFiles': {
     description: 'BUTTONS.importNewFilesDescription',
-    hidden: false,
-    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
+    hidden: true,
+    iconName: 'icon-random',
     moreInfo: 'BUTTONS.importNewFilesMoreInfo',
     title: 'BUTTONS.importNewFilesHint',
     toggled: false
@@ -335,8 +335,8 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'rescanDirectory': {
     description: 'BUTTONS.rescanDirectoryDescription',
-    hidden: false,
-    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
+    hidden: true,
+    iconName: 'icon-random',
     moreInfo: 'BUTTONS.rescanDirectoryMoreInfo',
     settingsHeading: 'SETTINGS.currentHub',
     title: 'BUTTONS.rescanDirectoryHint',
