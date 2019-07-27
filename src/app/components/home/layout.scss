@@ -120,8 +120,8 @@ $sidebar-width: 190px;
 
 .all-settings {
   background-color: $gray-20;
-  border-bottom: 1px solid $gray-40;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+  border-bottom: 1px solid $gray-30;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   box-sizing: border-box;
   height: $settings-height;
   min-width: 500px;
@@ -143,19 +143,20 @@ $sidebar-width: 190px;
   padding: 6px 5px;
 }
 
-.settingsModal {
-  background-color: $gray-15;
+.settings-modal {
+  background-color: $gray-10;
+  border: 1px solid $gray-50;
   border-bottom-left-radius: 10px;
   border-top-left-radius: 10px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.2);
   box-sizing: border-box;
-  height: calc(100vh - 280px);
+  height: calc(100vh - 215px);
   left: 200px;
   min-width: 270px;
   overflow-y: scroll;
   padding: 5px 5px 25px;
   position: fixed;
-  top: 265px;
+  top: 200px;
   width: calc(100% - 215px);
   z-index: 500;
 

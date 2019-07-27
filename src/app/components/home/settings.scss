@@ -3,8 +3,8 @@
 $transition-length: 300ms;
 
 .metaGroupButton {
-  background-color: #c0c0c0;
-  border: 1px solid gray;
+  background-color: $gray-15;
+  border: 1px solid $gray-50;
   border-top-left-radius: 5px;
   border-top-right-radius: 5px;
   font-size: 12px;
@@ -22,8 +22,8 @@ $transition-length: 300ms;
 }
 
 .metaGroupSelected {
-  background-color: $gray-15;
-  border-bottom: 1px solid $gray-15;
+  background-color: $gray-10;
+  border-bottom: 1px solid $gray-10;
   text-shadow:0px 0px 1px black;
   transition: 300ms;
   transition-property: text-shadow background-color;
