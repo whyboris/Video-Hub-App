@@ -37,7 +37,7 @@
   }
 
   &:hover {
-    fill: #ff6666;
+    fill: $pretty-red;
     transition: 200ms;
     transition-property: fill;
   }
@@ -101,7 +101,7 @@
     fill: #aaaaaa;
 
     &:hover {
-      fill: #ff6666;
+      fill: $pretty-red;
       transition: 200ms;
     }
   }

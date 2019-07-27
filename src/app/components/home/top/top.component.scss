@@ -34,7 +34,7 @@
 }
 
 .folder-word {
-  color: #777777;
+  color: $gray-50;
   cursor: pointer;
   display: inline-block;
   font-size: 12px;
@@ -79,13 +79,13 @@
 
 .dark-mode-override {
   & .folder-word {
-    color: #999999;
+    color: $gray-40;
     transition: 300ms;
     transition-property: color;
   }
 
   & .file-words {
-    color: #a7a7a7;
+    color: $gray-70;
     transition: 300ms;
     transition-property: color;
   }

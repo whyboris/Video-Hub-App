@@ -28,6 +28,11 @@
   right: 0;
   top: 0;
   width: 16px;
+
+  &:hover {
+    cursor: pointer;
+    opacity: 1 !important;
+  }
 }
 
 .folder-item {
