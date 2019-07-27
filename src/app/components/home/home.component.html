@@ -455,14 +455,9 @@
 
   <header
     *ngIf="!settingsButtons['hideTop'].toggled"
-    class="top"
-    [ngStyle]="{
-       'background-image': 'linear-gradient(to bottom, '
-          + (settingsButtons['darkMode'].toggled ? '#555555' : '#e4e4e4') + ' 0%, '
-          + (settingsButtons['darkMode'].toggled ? '#333333' : '#cfcfcf') + ' 100%)',
-       'border-bottom': '1px solid ' + (settingsButtons['darkMode'].toggled ? '#3a3a3a' : '#b3b3b3')
-     }"
-     @topAnimation
+    class="top-of-buttons"
+    [ngClass]="{ 'top-of-buttons-dark-mode': settingsButtons['darkMode'].toggled }"
+    @topAnimation
   >
 
     <app-top-component
@@ -489,10 +484,10 @@
     <!-- ============================================== -->
 
     <div
-      class="allSettings"
-      [ngStyle]="{
-        'background': settingsButtons['darkMode'].toggled ? '#333333' : '#CCCCCC',
-        'border-bottom': settingsButtons['darkMode'].toggled ? '#000000' : '#999999'
+      class="all-settings"
+      [ngClass]="{
+        'all-settings-dark-mode': settingsButtons['darkMode'].toggled,
+        'all-settings-flat-icons': settingsButtons['flatIcons'].toggled
       }"
     >
 

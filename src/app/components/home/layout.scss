@@ -89,12 +89,21 @@ $sidebar-width: 190px;
   width: calc(100vw - 70px);
 }
 
-.top {
+.top-of-buttons {
+  background-image: linear-gradient(to bottom, $gray-10 0%, $gray-20 100%);
+  border-bottom: 1px solid $gray-30;
   height: $top-region;
   overflow: hidden;
   position: relative;
+  transition-duration: 300ms;
+  transition-property: border-bottom;
   width: 100%;
   z-index: 20;
+}
+
+.top-of-buttons-dark-mode {
+  background-image: linear-gradient(to bottom, $gray-70 0%, $gray-80 100%);
+  border-bottom: 1px solid $gray-80;
 }
 
 .top-content-position {
@@ -109,23 +118,33 @@ $sidebar-width: 190px;
   transition-property: transform;
 }
 
-.allSettings {
-  // background: $gray-20; // part of [ngStyle]
+.all-settings {
+  background-color: $gray-20;
   border-bottom: 1px solid $gray-40;
   box-shadow: 0 2px 10px rgba(0,0,0,0.2);
   box-sizing: border-box;
   height: $settings-height;
   min-width: 500px;
   overflow: hidden;
-  padding: 5px;
+  padding: 4px 5px;
   position: absolute;
   transition: 300ms;
+  transition-property: background-color;
   width: 100%;
   z-index: 500;
 }
 
+.all-settings-dark-mode {
+  background-color: $gray-80;
+  border-bottom: $black;
+}
+
+.all-settings-flat-icons {
+  padding: 6px 5px;
+}
+
 .settingsModal {
-  background: $gray-15;
+  background-color: $gray-15;
   border-bottom-left-radius: 10px;
   border-top-left-radius: 10px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.2);
@@ -148,7 +167,7 @@ $sidebar-width: 190px;
 }
 
 .sidebar {
-  background: $gray-15;
+  background-color: $gray-15;
   border-right: 1px solid $gray-30;
   box-sizing: border-box;
   height: 100vh;
