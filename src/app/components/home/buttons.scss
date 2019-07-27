@@ -134,12 +134,12 @@ button {
 
 .defaultSettingsButtonDark {
   background: #222222;
-  border: 1px solid #111111;
-  border-left: 1px solid #444444;
-  border-top: 1px solid #444444;
+  border: 1px solid $gray-90;
+  border-left: 1px solid $gray-70;
+  border-top: 1px solid $gray-70;
 
   &:hover {
-    background-color: #666666 !important;
+    background-color: $gray-60 !important;
   }
 
   & .icon {
@@ -148,11 +148,11 @@ button {
 }
 
 .defaultSettingsButtonDarkToggled {
-  background: #000000 !important;
+  background: $black !important;
   border-bottom: 1px solid #222222;
-  border-left: 1px solid #000000;
+  border-left: 1px solid $black;
   border-right: 1px solid #222222;
-  border-top: 1px solid #333333;
+  border-top: 1px solid $gray-80;
 
   & .icon {
     fill: white;
