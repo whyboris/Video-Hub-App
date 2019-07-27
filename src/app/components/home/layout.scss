@@ -148,6 +148,8 @@ $sidebar-width: 190px;
 }
 
 .sidebar {
+  background: $gray-15;
+  border-right: 1px solid $gray-30;
   box-sizing: border-box;
   height: 100vh;
   max-width: $sidebar-width !important;
@@ -160,6 +162,11 @@ $sidebar-width: 190px;
   width: $sidebar-width;
 
   @include scrollBarHidden;
+}
+
+.sidebar-dark-mode {
+  background: $gray-90;
+  border: 1px solid $black;
 }
 
 .sidebar-hidden {
