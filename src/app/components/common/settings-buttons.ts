@@ -397,7 +397,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     hidden: false,
     iconName: 'icon-folder-blank',
     title: 'BUTTONS.showFoldersHint',
-    toggled: true
+    toggled: false
   },
   'showFreq': {
     description: 'BUTTONS.showFreqDescription',
