@@ -845,13 +845,12 @@
                                           (settingsButtons['hideTop'].toggled ? 53 : 98)
                                         + (appState.menuHidden ? -32 : 0)
                                         + (settingsButtons['showRelatedVideosTray'].toggled ? 170 : 0)
-                                                                                                        ) + 'px)',
-          'background': settingsButtons['darkMode'].toggled ? '#000000' : '#CCCCCC'
+                                                                                                        ) + 'px)'
         }"
       [enableUnequalChildrenSizes]="appState.currentView === 'showFullView'"
       [ngClass]="{
           'gallery-container-full-width': settingsButtons['hideSidebar'].toggled,
-          'gallery-dark-scroll': settingsButtons['darkMode'].toggled
+          'gallery-container-dark-mode': settingsButtons['darkMode'].toggled
         }"
       [bufferAmount]="0"
       [items]="finalArray

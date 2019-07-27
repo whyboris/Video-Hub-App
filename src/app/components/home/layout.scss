@@ -175,6 +175,7 @@ $sidebar-width: 190px;
 }
 
 .gallery-container {
+  background: $gray-20;
   box-sizing: border-box;
   left: $sidebar-width;
   overflow-y: scroll;
@@ -187,7 +188,9 @@ $sidebar-width: 190px;
   @include scrollBar;
 }
 
-.gallery-dark-scroll {
+.gallery-container-dark-mode {
+  background: $black;
+
   &::-webkit-scrollbar-track {
     background-color: $gray-70;
   }
