@@ -87,7 +87,7 @@ export const SettingsButtonsGroups: string[][] = [
     'rescanDirectory',
     'importNewFiles',
     'verifyThumbnails',
-    'regenerateLibrary',
+    // 'regenerateLibrary', // TODO - maybe enable someday?
     'resetSettings',
     'clearHistory'
   ]
@@ -164,8 +164,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'clearHistory': {
     description: 'BUTTONS.clearHistoryDescription',
     hidden: false,
-    iconName: 'icon-checkmark',
-    // this specific icon makes the setting only appear in All Settings (behind gear button)
+    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     title: 'BUTTONS.clearHistoryHint',
     toggled: false
   },
@@ -216,9 +215,8 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'flatIcons': {
     description: 'BUTTONS.flatIconsDescription',
     hidden: false,
-    iconName: 'icon-checkmark',
+    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     settingsHeading: 'SETTINGS.buttonStyle',
-    // this specific icon makes the setting only appear in All Settings (behind gear button)
     title: 'BUTTONS.flatIconsHint',
     toggled: false
   },
@@ -274,12 +272,11 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     title: 'BUTTONS.thumbAutoAdvanceHint',
     toggled: false
   },
-  // TODO: Make these able to add to the button bar!
   'importNewFiles': {
     description: 'BUTTONS.importNewFilesDescription',
     hidden: false,
-    iconName: 'icon-checkmark',
-    // this specific icon makes the setting only appear in All Settings (behind gear button)
+    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
+    moreInfo: 'BUTTONS.importNewFilesMoreInfo',
     title: 'BUTTONS.importNewFilesHint',
     toggled: false
   },
@@ -332,26 +329,24 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'regenerateLibrary': {
     description: 'BUTTONS.regenerateLibraryDescription',
     hidden: false,
-    iconName: 'icon-checkmark',
-    // this specific icon makes the setting only appear in All Settings (behind gear button)
+    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     title: 'BUTTONS.regenerateLibraryHint',
     toggled: false
   },
   'rescanDirectory': {
     description: 'BUTTONS.rescanDirectoryDescription',
     hidden: false,
-    iconName: 'icon-checkmark',
+    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
+    moreInfo: 'BUTTONS.rescanDirectoryMoreInfo',
     settingsHeading: 'SETTINGS.currentHub',
-    // this specific icon makes the setting only appear in All Settings (behind gear button)
     title: 'BUTTONS.rescanDirectoryHint',
     toggled: false
   },
   'resetSettings': {
     description: 'BUTTONS.resetSettingsDescription',
     hidden: false,
-    iconName: 'icon-checkmark',
+    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     settingsHeading: 'SETTINGS.variousSettings',
-    // this specific icon makes the setting only appear in All Settings (behind gear button)
     title: 'BUTTONS.resetSettingsHint',
     toggled: false
   },
@@ -475,28 +470,28 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'sortOptionModified': {
     description: 'BUTTONS.sortOptionModifiedDescription',
     hidden: false,
-    iconName: 'icon-checkmark',
+    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     title: '',
     toggled: false
   },
   'sortOptionSize': {
     description: 'BUTTONS.sortOptionSizeDescription',
     hidden: false,
-    iconName: 'icon-checkmark',
+    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     title: '',
     toggled: true
   },
   'sortOptionStar': {
     description: 'BUTTONS.sortOptionStarDescription',
     hidden: false,
-    iconName: 'icon-checkmark',
+    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     title: '',
     toggled: false
   },
   'sortOptionTime': {
     description: 'BUTTONS.sortOptionTimeDescription',
     hidden: false,
-    iconName: 'icon-checkmark',
+    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     settingsHeading: 'BUTTONS.sortOptionsHeading',
     title: '',
     toggled: true
@@ -504,14 +499,14 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'sortOptionTimesPlayed': {
     description: 'BUTTONS.sortOptionTimesPlayedDescription',
     hidden: false,
-    iconName: 'icon-checkmark',
+    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     title: '',
     toggled: false
   },
   'sortOptionYear': {
     description: 'BUTTONS.sortOptionYearDescription',
     hidden: false,
-    iconName: 'icon-checkmark',
+    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     title: '',
     toggled: false
   },
@@ -532,8 +527,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'startWizard': {
     description: 'BUTTONS.startWizardDescription',
     hidden: false,
-    iconName: 'icon-checkmark',
-    // this specific icon makes the setting only appear in All Settings (behind gear button)
+    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     title: 'BUTTONS.startWizardHint',
     toggled: false
   },
@@ -568,8 +562,8 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'verifyThumbnails': {
     description: 'BUTTONS.verifyThumbnailsDescription',
     hidden: false,
-    iconName: 'icon-checkmark',
-    // this specific icon makes the setting only appear in All Settings (behind gear button)
+    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
+    moreInfo: 'BUTTONS.verifyThumbnailsMoreInfo',
     title: 'BUTTONS.verifyThumbnailsHint',
     toggled: false
   }

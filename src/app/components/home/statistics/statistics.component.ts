@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
 import { ImageElement } from '../../common/final-object.interface';
+import { ScreenshotSettings } from '../../../../../main-globals';
 
 @Component({
   selector: 'app-statistics',
@@ -13,6 +14,7 @@ export class StatisticsComponent implements OnInit {
   @Input() hubName: string;
   @Input() numFolders: number;
   @Input() pathToVhaFile: string;
+  @Input() screenshotSettings: ScreenshotSettings;
   @Input() videoFolder: string;
 
   totalFiles: number;

@@ -13,10 +13,59 @@ import { hashFile, extractAllMetadata, sendCurrentProgress } from './main-suppor
 import { ImageElement } from './src/app/components/common/final-object.interface';
 import { ScreenshotSettings } from './main-globals';
 
+
 /**
- * Regenerates the library,
+ * Figures out what new files there are,
+ * adds them to the finalArray,
+ * and calls `extractAllMetadata`
+ * (which will then send file home and start extracting images)
+ * @param angularFinalArray       -- array of ImageElements from Angular - most current view
+ * @param hdFinalArray            -- array of ImageElements from current hard drive scan
+ * @param inputFolder             -- the input folder (where videos are)
+ * @param screenshotSettings      -- ScreenshotSettings
+ * @param extractMetadataCallback -- function for extractAllMetadata to call when done
+ */
+export function findAndImportNewFiles(
+  angularFinalArray: ImageElement[],
+  hdFinalArray: ImageElement[],
+  inputFolder: string,
+  screenshotSettings: ScreenshotSettings,
+  extractMetadataCallback
+): void {
+
+  // Generate ImageElement[] of all the new elements to be added
+  const onlyNewElements: ImageElement[] =
+    findAllNewFiles(angularFinalArray, hdFinalArray, inputFolder);
+
+  // Copy any metadata incase files were moved
+  copyUserMetadata(angularFinalArray, onlyNewElements);
+
+  // If there are new files
+  if (onlyNewElements.length > 0) {
+
+    const metaRescanStartIndex = angularFinalArray.length;
+    const finalArrayUpdated = angularFinalArray.concat(onlyNewElements);
+
+    extractAllMetadata(
+      finalArrayUpdated,
+      inputFolder,
+      screenshotSettings,
+      metaRescanStartIndex,
+      extractMetadataCallback // actually = sendFinalResultHome
+    );
+
+  } else {
+    sendCurrentProgress(1, 1, 'done'); // indicates 100%
+  }
+
+}
+
+/**
+ * Figures out what new files there are,
+ * adds them to the finalArray,
  * figures out what files no longer exist,
- * deletes .jpg files from HD,
+ * removes them from finalArray,
+ * deletes .jpg files from HD,    <---------- WARNING !!!
  * and calls `extractAllMetadata`
  * (which will then send file home and start extracting images)
  * @param angularFinalArray       -- array of ImageElements from Angular - most current view
@@ -26,7 +75,7 @@ import { ScreenshotSettings } from './main-globals';
  * @param folderToDeleteFrom      -- path to folder where `.jpg` files are
  * @param extractMetadataCallback -- function for extractAllMetadata to call when done
  */
-export function regenerateLibrary(
+export function rescanAddAndDelete(
   angularFinalArray: ImageElement[],
   hdFinalArray: ImageElement[],
   inputFolder: string,
@@ -35,22 +84,41 @@ export function regenerateLibrary(
   extractMetadataCallback
 ): void {
 
-  updateArrayWithHashes(hdFinalArray, inputFolder);
+  // Generate ImageElement[] of all the new elements to be added
+  const onlyNewElements: ImageElement[] =
+    findAllNewFiles(angularFinalArray, hdFinalArray, inputFolder);
 
-  // Copy any user metadata
-  copyUserMetadata(angularFinalArray, hdFinalArray);
+  // Copy any metadata incase files were moved
+  copyUserMetadata(angularFinalArray, onlyNewElements);
 
-  // Remove thumbnails no longer present
-  finalArrayWithoutDeleted(angularFinalArray, hdFinalArray, inputFolder, folderToDeleteFrom);
+  // remove from FinalArray all files that are no longer in the video folder
+  const allDeletedRemoved: ImageElement[] =
+    finalArrayWithoutDeleted(angularFinalArray, hdFinalArray, inputFolder, folderToDeleteFrom);
 
-  extractAllMetadata(
-    hdFinalArray,
-    inputFolder,
-    screenshotSettings,
-    0,
-    extractMetadataCallback // actually = sendFinalResultHome
-  );
+  // If there are new files OR if any files have been deleted !!!
+  if (onlyNewElements.length > 0 || allDeletedRemoved.length < angularFinalArray.length) {
+
+    const metaRescanStartIndex = allDeletedRemoved.length;
+    const finalArrayUpdated = allDeletedRemoved.concat(onlyNewElements);
+
+    extractAllMetadata(
+      finalArrayUpdated,
+      inputFolder,
+      screenshotSettings,
+      metaRescanStartIndex,
+      extractMetadataCallback // actually = sendFinalResultHome
+    );
+
+  } else {
+    sendCurrentProgress(1, 1, 'done'); // indicates 100%
+  }
+
 }
+
+
+// ===========================================================================================
+// Helper methods
+// -------------------------------------------------------------------------------------------
 
 /**
  * Update the entire array with new hashes
@@ -103,107 +171,6 @@ export function findAllNewFiles(
 }
 
 /**
- * Figures out what new files there are,
- * adds them to the finalArray,
- * and calls `extractAllMetadata`
- * (which will then send file home and start extracting images)
- * @param angularFinalArray       -- array of ImageElements from Angular - most current view
- * @param hdFinalArray            -- array of ImageElements from current hard drive scan
- * @param inputFolder             -- the input folder (where videos are)
- * @param screenshotSettings      -- ScreenshotSettings
- * @param extractMetadataCallback -- function for extractAllMetadata to call when done
- */
-export function findAndImportNewFiles(
-  angularFinalArray: ImageElement[],
-  hdFinalArray: ImageElement[],
-  inputFolder: string,
-  screenshotSettings: ScreenshotSettings,
-  extractMetadataCallback
-): void {
-
-  // Generate ImageElement[] of all the new elements to be added
-  const onlyNewElements: ImageElement[] =
-    findAllNewFiles(angularFinalArray, hdFinalArray, inputFolder);
-
-  // Copy any metadata incase files were moved
-  copyUserMetadata(angularFinalArray, onlyNewElements);
-
-  // If there are new files
-  if (onlyNewElements.length > 0) {
-
-    const metaRescanStartIndex = angularFinalArray.length;
-    const finalArrayUpdated = angularFinalArray.concat(onlyNewElements);
-
-    extractAllMetadata(
-      finalArrayUpdated,
-      inputFolder,
-      screenshotSettings,
-      metaRescanStartIndex,
-      extractMetadataCallback // actually = sendFinalResultHome
-    );
-
-  } else {
-    sendCurrentProgress(1, 1, 0); // indicates 100%
-  }
-
-}
-
-/**
- * Figures out what new files there are,
- * adds them to the finalArray,
- * figures out what files no longer exist,
- * removes them from finalArray,
- * deletes .jpg files from HD,
- * and calls `extractAllMetadata`
- * (which will then send file home and start extracting images)
- * @param angularFinalArray       -- array of ImageElements from Angular - most current view
- * @param hdFinalArray            -- array of ImageElements from current hard drive scan
- * @param inputFolder             -- the input folder (where videos are)
- * @param screenshotSettings      -- ScreenshotSettings
- * @param folderToDeleteFrom      -- path to folder where `.jpg` files are
- * @param extractMetadataCallback -- function for extractAllMetadata to call when done
- */
-export function updateFinalArrayWithHD(
-  angularFinalArray: ImageElement[],
-  hdFinalArray: ImageElement[],
-  inputFolder: string,
-  screenshotSettings: ScreenshotSettings,
-  folderToDeleteFrom: string,
-  extractMetadataCallback
-): void {
-
-  // Generate ImageElement[] of all the new elements to be added
-  const onlyNewElements: ImageElement[] =
-    findAllNewFiles(angularFinalArray, hdFinalArray, inputFolder);
-
-  // Copy any metadata incase files were moved
-  copyUserMetadata(angularFinalArray, onlyNewElements);
-
-  // remove from FinalArray all files that are no longer in the video folder
-  const allDeletedRemoved: ImageElement[] =
-    finalArrayWithoutDeleted(angularFinalArray, hdFinalArray, inputFolder, folderToDeleteFrom);
-
-  // If there are new files OR if any files have been deleted !!!
-  if (onlyNewElements.length > 0 || allDeletedRemoved.length < angularFinalArray.length) {
-
-    const metaRescanStartIndex = allDeletedRemoved.length;
-    const finalArrayUpdated = allDeletedRemoved.concat(onlyNewElements);
-
-    extractAllMetadata(
-      finalArrayUpdated,
-      inputFolder,
-      screenshotSettings,
-      metaRescanStartIndex,
-      extractMetadataCallback // actually = sendFinalResultHome
-    );
-
-  } else {
-    sendCurrentProgress(1, 1, 0); // indicates 100%
-  }
-
-}
-
-/**
  * Clean up ImageElement[] coming from Angular, removing all elements for videos no longer on the Hard Drive
  * Also deletes all the .jpg images related to the video files that are no longer present
  * @param angularFinalArray  -- ImageElement[] representing what is currently in Angular
@@ -243,11 +210,6 @@ export function finalArrayWithoutDeleted(
 
   return cleanedArray;
 }
-
-
-// ===========================================================================================
-// Helper methods
-// -------------------------------------------------------------------------------------------
 
 /**
  * Delete thumbnails
@@ -319,4 +281,48 @@ export function copyUserMetadata(
       });
     }
   });
+}
+
+
+// ===========================================================================================
+// RESCAN - ARCHIVED
+// -------------------------------------------------------------------------------------------
+
+/**
+ * Regenerates the library,
+ * figures out what files no longer exist,
+ * deletes .jpg files from HD,
+ * and calls `extractAllMetadata`
+ * (which will then send file home and start extracting images)
+ * @param angularFinalArray       -- array of ImageElements from Angular - most current view
+ * @param hdFinalArray            -- array of ImageElements from current hard drive scan
+ * @param inputFolder             -- the input folder (where videos are)
+ * @param screenshotSettings      -- ScreenshotSettings
+ * @param folderToDeleteFrom      -- path to folder where `.jpg` files are
+ * @param extractMetadataCallback -- function for extractAllMetadata to call when done
+ */
+export function regenerateLibrary(
+  angularFinalArray: ImageElement[],
+  hdFinalArray: ImageElement[],
+  inputFolder: string,
+  screenshotSettings: ScreenshotSettings,
+  folderToDeleteFrom: string,
+  extractMetadataCallback
+): void {
+
+  updateArrayWithHashes(hdFinalArray, inputFolder);
+
+  // Copy any user metadata
+  copyUserMetadata(angularFinalArray, hdFinalArray);
+
+  // Remove thumbnails no longer present
+  finalArrayWithoutDeleted(angularFinalArray, hdFinalArray, inputFolder, folderToDeleteFrom);
+
+  extractAllMetadata(
+    hdFinalArray,
+    inputFolder,
+    screenshotSettings,
+    0,
+    extractMetadataCallback // actually = sendFinalResultHome
+  );
 }

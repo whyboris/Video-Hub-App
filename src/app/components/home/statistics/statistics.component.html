@@ -11,7 +11,7 @@
   <span class="stats-heading title">{{ 'STATISTICS.videoFolder' | translate }}</span>
   <span class="stats-heading folder" [innerHtml]="videoFolder | folderArrowsPipe"></span>
 
-  <table class="stats-table">
+  <table class="stats-table" style="position: absolute; right: 50%">
     <tr>
       <td colSpan=2 class="spanBoth">{{ 'STATISTICS.general' | translate }}</td>
     </tr>
@@ -25,6 +25,45 @@
       <td class="rightCol">{{ numFolders | number:'.0' }}</td>
     </tr>
 
+    <tr>
+      <td colSpan=2 class="spanBoth" style="padding-top: 68px;">
+        {{ 'STATISTICS.settings' | translate }}
+      </td>
+    </tr>
+
+    <tr>
+      <td>{{ 'STATISTICS.screenHeight' | translate }}</td>
+      <td class="rightCol">{{ screenshotSettings.height }}px</td>
+    </tr>
+
+    <tr>
+      <td>{{ 'STATISTICS.numOfThumbs' | translate }}</td>
+      <td class="rightCol">
+        {{ screenshotSettings.fixed ? ''                                  : ('STATISTICS.oneEvery' | translate) }}
+        {{ screenshotSettings.n }}
+        {{ screenshotSettings.fixed ? ('STATISTICS.perVideo' | translate) : ('STATISTICS.minutes' | translate) }}
+      </td>
+    </tr>
+
+    <tr>
+      <td>{{ 'STATISTICS.numOfClips' | translate }}</td>
+      <td class="rightCol">
+        {{ screenshotSettings.clipSnippets > 0
+           ? screenshotSettings.clipSnippets + ' ' + ('STATISTICS.perVideo' | translate)
+           : ('STATISTICS.doNotExtract' | translate) }}
+      </td>
+    </tr>
+
+    <tr *ngIf="screenshotSettings.clipSnippets > 0">
+      <td>{{ 'STATISTICS.snippetLength' | translate }}</td>
+      <td class="rightCol">
+        {{ screenshotSettings.clipSnippetLength }}
+        {{ 'STATISTICS.seconds' | translate }}
+      </td>
+    </tr>
+  </table>
+
+  <table class="stats-table" style="left: 50%; position: absolute;">
     <tr>
       <td colSpan=2 class="spanBoth">{{ 'STATISTICS.videoLengths' | translate }}</td>
     </tr>
@@ -41,7 +80,7 @@
 
     <tr>
       <td>{{ 'STATISTICS.total' | translate : true }}</td>
-      <td class="rightCol">{{ totalLength | lengthPipe : true : true }}</td>
+      <td class="rightCol">{{ totalLength | lengthPipe : true : true : true }}</td>
     </tr>
 
     <tr>
@@ -72,7 +111,6 @@
       <td>{{ 'STATISTICS.average' | translate }}</td>
       <td class="rightCol">{{ avgSize | fileSizePipe : true }}</td>
     </tr>
-
   </table>
 
 </div>

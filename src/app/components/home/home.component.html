@@ -18,7 +18,7 @@
       >
         Video Hub App 2
         <b>{{ demo ? ' demo - limited to 50 video files ' : '' }}</b>
-        {{ importStage !== 0 ? ' - ' + progressString + ' - ' : ' - ' }}
+        {{ importStage !== 'done' ? ' - ' + progressString + ' - ' : ' - ' }}
         {{ appState.hubName }}
       </span>
     </div>
@@ -60,7 +60,7 @@
     @slowFadeOut
   ></div>
 
-  <div *ngIf="importStage === 2" class="cancelProgress" @donutAppear>
+  <div *ngIf="importStage === 'importingScreenshots'" class="cancelProgress" @donutAppear>
     <span
       (click)="cancelCurrentImport()"
       [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
@@ -70,7 +70,7 @@
   </div>
 
   <app-donut
-    *ngIf="importStage === 2"
+    *ngIf="importStage === 'importingScreenshots'"
     class="screenShotProgressPercent"
     [score]="extractionPercent"
     [darkMode]="settingsButtons['darkMode'].toggled"
@@ -446,6 +446,7 @@
         [hubName]="appState.hubName"
         [numFolders]="appState.numOfFolders"
         [pathToVhaFile]="appState.currentVhaFile"
+        [screenshotSettings]="currentScreenshotSettings"
         [videoFolder]="appState.selectedSourceFolder"
       ></app-statistics>
 
@@ -1009,31 +1010,6 @@
         ></app-file-item>
       </ng-container>
 
-      <ng-container *ngIf="appState.currentView === 'showClips'">
-        <app-clip-item
-          *ngFor="let item of scroll.viewPortItems"
-          (videoClick)="(item.cleanName === '***') ? handleFolderWordClicked(item.partialPath) : handleClick($event, item)"
-          (sheetClick)="this.openThumbnailSheet(item)"
-          (contextmenu)="(item.cleanName === '***') ? doNothing() : rightMouseClicked($event, item)"
-
-          [video]="item"
-
-          [elHeight]="previewHeight + textPaddingHeight"
-          [elWidth]="previewWidth"
-          [folderPath]="appState.selectedOutputFolder"
-          [hubName]="appState.hubName"
-          [imgHeight]="previewHeight"
-
-          [autoplay]="settingsButtons['autoplayClips'].toggled"
-          [darkMode]="settingsButtons['darkMode'].toggled"
-          [largerFont]="settingsButtons['fontSizeLarger'].toggled"
-          [forceMute]="settingsButtons['muteClips'].toggled"
-          [showMeta]="settingsButtons['showMoreInfo'].toggled"
-
-          style="display: inline-block"
-        ></app-clip-item>
-      </ng-container>
-
       <ng-container *ngIf="appState.currentView === 'showDetails'">
         <app-details-item
           *ngFor="let item of scroll.viewPortItems"
@@ -1068,6 +1044,37 @@
 
           style="display: block"
         ></app-details-item>
+      </ng-container>
+
+      <ng-container *ngIf="appState.currentView === 'showClips' && currentScreenshotSettings.clipSnippets > 0">
+        <app-clip-item
+          *ngFor="let item of scroll.viewPortItems"
+          (videoClick)="(item.cleanName === '***') ? handleFolderWordClicked(item.partialPath) : handleClick($event, item)"
+          (sheetClick)="this.openThumbnailSheet(item)"
+          (contextmenu)="(item.cleanName === '***') ? doNothing() : rightMouseClicked($event, item)"
+
+          [video]="item"
+
+          [elHeight]="previewHeight + textPaddingHeight"
+          [elWidth]="previewWidth"
+          [folderPath]="appState.selectedOutputFolder"
+          [hubName]="appState.hubName"
+          [imgHeight]="previewHeight"
+
+          [autoplay]="settingsButtons['autoplayClips'].toggled"
+          [darkMode]="settingsButtons['darkMode'].toggled"
+          [largerFont]="settingsButtons['fontSizeLarger'].toggled"
+          [forceMute]="settingsButtons['muteClips'].toggled"
+          [showMeta]="settingsButtons['showMoreInfo'].toggled"
+
+          style="display: inline-block"
+        ></app-clip-item>
+      </ng-container>
+
+      <ng-container *ngIf="appState.currentView === 'showClips' && currentScreenshotSettings.clipSnippets === 0">
+        <span class="no-clips-message" [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }">
+          {{ 'SETTINGS.noClipsExtracted' | translate }}
+        </span>
       </ng-container>
 
     </virtual-scroller>
@@ -1155,7 +1162,7 @@
 <!-- IMPORT MODAL  -->
 
 <div
-  *ngIf="importStage === 1"
+  *ngIf="importStage === 'importingMeta'"
   class="progress-modal"
   @modalAnimation
 >
@@ -1167,7 +1174,7 @@
   </div>
 </div>
 
-<div [ngClass]="{ 'disabled-overlay': importStage === 1 }"></div>
+<div [ngClass]="{ 'disabled-overlay': importStage === 'importingMeta' }"></div>
 
 <!-- ============================================== -->
 <!-- ================    WIZARD    ================ -->
@@ -1256,7 +1263,8 @@
     </span>
     <span class="path" [innerHtml]="wizard.selectedSourceFolder | folderArrowsPipe : false">
     </span>
-    <span class="step-description" *ngIf="wizard.totalNumberOfFiles !== -1">
+    <span class="step-description" [ngStyle]="{ opacity: wizard.totalNumberOfFiles === -1 ? 0 : 1 }">
+      <!-- don't use *ngIf on this element, else it disappears and changes height of section -->
       {{ 'WIZARD.found' | translate }}
       <span class="emphasis-number">
         {{ wizard.totalNumberOfFiles | number }}
@@ -1424,7 +1432,8 @@
         [disabled]="wizard.selectedOutputFolder === ''
                 || wizard.selectedSourceFolder === ''
                 || wizard.futureHubName === ''
-                || !wizard.screensPerVideo"
+                || !wizard.screensPerVideo
+                || !wizard.extractClips"
       >
 
       <span class="step-four-text">
@@ -1451,7 +1460,8 @@
         [disabled]="wizard.selectedOutputFolder === ''
                 || wizard.selectedSourceFolder === ''
                 || wizard.futureHubName === ''
-                || !wizard.screensPerVideo"
+                || !wizard.screensPerVideo
+                || !wizard.extractClips"
       >
 
       <span class="step-four-text">
@@ -1473,7 +1483,7 @@
       class="wizardButton"
       [disabled]="wizard.selectedOutputFolder === ''
                || wizard.selectedSourceFolder === ''
-               || importStage !== 0
+               || importStage !== 'done'
                || wizard.futureHubName === ''
                || wizard.totalNumberOfFiles === 0"
       (click)="importFresh()"

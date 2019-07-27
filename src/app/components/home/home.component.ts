@@ -14,6 +14,7 @@ import { WordFrequencyService } from '../../components/pipes/word-frequency.serv
 import { FinalObject, ImageElement } from '../common/final-object.interface';
 import { HistoryItem } from '../common/history-item.interface';
 import { ImportSettingsObject } from '../common/import.interface';
+import { ImportStage } from '../../../../main-support';
 import { SavableProperties } from '../common/savable-properties.interface';
 import { SettingsObject } from '../common/settings-object.interface';
 import { SortType } from '../pipes/sorting.pipe';
@@ -29,7 +30,7 @@ import { French } from '../../i18n/fr';
 import { Russian } from '../../i18n/ru';
 import { BrazilianPortuguese } from '../../i18n/pt_br';
 
-import { globals } from '../../../../main-globals';
+import { globals, ScreenshotSettings } from '../../../../main-globals';
 
 import {
   buttonAnimation,
@@ -142,7 +143,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // ------------------------------------------------------------------------
 
   extractionPercent = 1;
-  importStage = 0;
+  importStage: ImportStage = 'done';
   progressNum1 = 0;
   progressNum2 = 100;
   progressPercent = 0;
@@ -266,6 +267,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   detailsMaxWidth: number = 1000; // used to keep track of max width for details in details view
   tagTypeAhead: string = '';
+  currentScreenshotSettings: ScreenshotSettings; // currently only used for the statistics page
 
   // ========================================================================
 
@@ -386,7 +388,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // To test the progress bar
     // setInterval(() => {
-    //   this.importStage = this.importStage === 2 ? 1 : 2;
+    //   this.importStage = this.importStage === 'importingScreenshots' ? 'importingMeta' : 'importingScreenshots';
     // }, 3000);
 
     // To test the progress bar
@@ -447,6 +449,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.wizard.selectedSourceFolder = filePath;
         this.wizard.selectedOutputFolder = filePath;
       }
+
+      this.cd.detectChanges();
     });
 
     // Rename file response
@@ -465,11 +469,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // Returning Output
     this.electronService.ipcRenderer.on('outputFolderChosen', (event, filePath) => {
       this.wizard.selectedOutputFolder = filePath;
+      this.cd.detectChanges();
     });
 
     // Happens if a file with the same hub name already exists in the directory
     this.electronService.ipcRenderer.on('pleaseFixHubName', (event) => {
-      this.importStage = 0;
+      this.importStage = 'done';
     });
 
     // Happens on a Mac when the OS Dark Mode is enabled/disabled
@@ -495,15 +500,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
       event,
       current: number,
       total: number,
-      stage: number
+      stage: ImportStage
     ) => {
-      console.log('receiving META SCAN UPDATE !!!' + current);
       this.importStage = stage;
       this.progressNum1 = current;
       this.progressNum2 = total;
       this.progressPercent = current / total;
       this.progressString = 'loading - ' + Math.round(current * 100 / total) + '%';
-      if (this.importStage === 2) {
+      if (this.importStage === 'importingScreenshots') {
         if (this.isFirstRunEver) {
           this.toggleButton('showThumbnails');
           console.log('SHOULD FIX THE FIRST RUN BUG!!!');
@@ -513,9 +517,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
       if (current === total) {
         this.extractionPercent = 1;
-        this.importStage = 0;
+        this.importStage = 'done';
         this.appState.hubName = this.hubNameToRemember; // could this cause bugs ??? TODO: investigate!
       }
+      this.cd.detectChanges();
     });
 
     // Final object returns
@@ -527,6 +532,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       changedRootFolder: boolean = false,
       rootFolderLive: boolean = true,
     ) => {
+
+      this.currentScreenshotSettings = finalObject.screenshotSettings;
+
       this.rootFolderLive = rootFolderLive;
       this.finalArrayNeedsSaving = changedRootFolder;
       this.appState.currentVhaFile = pathToFile;
@@ -549,6 +557,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.flickerReduceOverlay = false;
 
       this.setUpDurationFilterValues(this.finalArray);
+
+      this.cd.detectChanges();
     });
 
     // Returning settings
@@ -669,7 +679,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public importFresh(): void {
     this.appState.selectedSourceFolder = this.wizard.selectedSourceFolder;
     this.appState.selectedOutputFolder = this.wizard.selectedOutputFolder;
-    this.importStage = 1;
+    this.importStage = 'importingMeta';
     const importOptions: ImportSettingsObject = {
       clipSnippetLength: this.wizard.clipSnippetLength,
       clipSnippets: this.wizard.extractClips ? this.wizard.clipSnippets : 0,
@@ -685,7 +695,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public cancelCurrentImport(): void {
-    this.importStage = 0;
+    this.importStage = 'done';
     this.electronService.ipcRenderer.send('cancel-current-import');
   }
 
@@ -1086,44 +1096,64 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Scan for new files and import them
    */
   public importNewFiles(): void {
-    this.progressNum1 = 0;
-    this.importStage = 1;
-    this.toggleSettings();
-    console.log('scanning for new files');
-    this.electronService.ipcRenderer.send('import-new-files', this.finalArray);
+    if (this.rootFolderLive) {
+      this.progressNum1 = 0;
+      this.importStage = 'importingMeta';
+      this.toggleSettings();
+      console.log('scanning for new files');
+      this.electronService.ipcRenderer.send('only-import-new-files', this.finalArray);
+    } else {
+      // TODO - tell user folder not live !!!
+      console.log('ROOT FOLDER NOT LIVE');
+    }
   }
 
   /**
    * Verify all files have thumbnails
    */
   public verifyThumbnails(): void {
-    this.progressNum1 = 0;
-    this.importStage = 2;
-    this.toggleSettings();
-    console.log('verifying thumbnails');
-    this.electronService.ipcRenderer.send('verify-thumbnails', this.finalArray);
+    if (this.rootFolderLive) {
+      this.progressNum1 = 0;
+      this.importStage = 'importingScreenshots';
+      this.toggleSettings();
+      console.log('verifying thumbnails');
+      this.electronService.ipcRenderer.send('verify-thumbnails', this.finalArray);
+    } else {
+      // TODO - tell user folder not live !!!
+      console.log('ROOT FOLDER NOT LIVE');
+    }
   }
 
   /**
    * Rescan the current input directory
    */
   public rescanDirectory(): void {
-    this.progressNum1 = 0;
-    this.importStage = 1;
-    this.toggleSettings();
-    console.log('rescanning');
-    this.electronService.ipcRenderer.send('rescan-current-directory', this.finalArray);
+    if (this.rootFolderLive) {
+      this.progressNum1 = 0;
+      this.importStage = 'importingMeta';
+      this.toggleSettings();
+      console.log('rescanning');
+      this.electronService.ipcRenderer.send('rescan-current-directory', this.finalArray);
+    } else {
+      // TODO - tell user folder not live !!!
+      console.log('ROOT FOLDER NOT LIVE');
+    }
   }
 
   /**
    * Regenerate the library
    */
   public regenerateLibrary(): void {
-    this.progressNum1 = 0;
-    this.importStage = 1;
-    this.toggleSettings();
-    console.log('regenerating library');
-    this.electronService.ipcRenderer.send('regenerate-library', this.finalArray);
+    if (this.rootFolderLive) {
+      this.progressNum1 = 0;
+      this.importStage = 'importingMeta';
+      this.toggleSettings();
+      console.log('regenerating library');
+      this.electronService.ipcRenderer.send('regenerate-library', this.finalArray);
+    } else {
+      // TODO - tell user folder not live !!!
+      console.log('ROOT FOLDER NOT LIVE');
+    }
   }
 
   // ==========================================================================================

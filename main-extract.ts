@@ -9,7 +9,7 @@
  * All functions are PURE
  * The only exception is `extractFromTheseFiles`
  * which checks the global variable `globals.cancelCurrentImport`
- * in case it needs to not run
+ * in case it needs to stop running (user interrupt)
  *
  * Huge thank you to cal2195 for the code contribution
  * He implemented the efficient filmstrip and clip extraction!
@@ -32,7 +32,7 @@ const spawn = require('child_process').spawn;
 // also spawns a shell (can pass a single cmd string)
 const exec = require('child_process').exec;
 
-import { globals } from './main-globals';
+import { globals, ScreenshotSettings } from './main-globals';
 
 import { sendCurrentProgress } from './main-support';
 
@@ -131,7 +131,7 @@ const checkAllScreensExist = (
 };
 
 /**
- * Extract a single frame from the original video
+ * Extract a single frame from the original video (if screenshot not already present)
  * @param saveLocation
  * @param fileHash
  */
@@ -186,6 +186,7 @@ const extractSingleFrame = (
  * Take N screenshots of a particular file
  * at particular file size
  * save as particular fileHash
+ * (if filmstrip not already present)
  *
  * @param pathToVideo          -- full path to the video file
  * @param fileHash             -- hash of the video file
@@ -266,6 +267,7 @@ const generateScreenshotStrip = (
 
 /**
  * Generate the mp4 preview clip of the video file
+ * (if clip is not already present)
  *
  * TODO -- allow user to change `totalCount` !!!!!!!
  *
@@ -341,6 +343,7 @@ const generatePreviewClip = (
 
 /**
  * Extract the first frame from the preview clip
+ * (if the screenshot not already present)
  * @param saveLocation
  * @param fileHash
  */
@@ -393,29 +396,29 @@ const extractFirstFrame = (saveLocation: string, fileHash: string) => {
  *
  * Extract following this order
  *    1. check if input file exists (false -> extract next item)
- *    2. check if input file has all the screens available (false -> extract next item)
+ *    2. check if input file has all the screens available, that is not corrupt (false -> extract next item)
  *    3. extract the SINGLE screenshot
  *    4. extract the FLIMSTRIP
  *    5. extract the CLIP (if `clipSnippets` !== 0)
  *    6. extract the CLIP preview
  *
- * @param theFinalArray     -- finalArray of ImageElements
- * @param videoFolderPath   -- path to base folder where videos are
- * @param screenshotFolder  -- path to folder where .jpg files will be saved
- * @param screenshotHeight  -- number in px how tall each screenshot should be
- * @param elementsToScan    -- array of indexes of elements in finalArray for which to extract screenshots
- * @param clipSnippets      -- number of clip snippets to extract; 0 == do not extract clip
- * @param snippetLength     -- length of each snippet in the clip
+ * @param theFinalArray      -- finalArray of ImageElements
+ * @param videoFolderPath    -- path to base folder where videos are
+ * @param screenshotFolder   -- path to folder where .jpg files will be saved
+ * @param screenshotSettings -- ScreenshotSettings object
+ * @param elementsToScan     -- array of indexes of elements in finalArray for which to extract screenshots
  */
 export function extractFromTheseFiles(
   theFinalArray: ImageElement[],
   videoFolderPath: string,
   screenshotFolder: string,
-  screenshotHeight: number,
+  screenshotSettings: ScreenshotSettings,
   elementsToScan: number[],
-  clipSnippets: number,
-  snippetLength: number,
 ): void {
+
+  const screenshotHeight: number = screenshotSettings.height;            // -- number in px how tall each screenshot should be
+  const clipSnippets: number =     screenshotSettings.clipSnippets;      // -- number of clip snippets to extract; 0 == do not extract clip
+  const snippetLength: number =    screenshotSettings.clipSnippetLength; // -- length of each snippet in the clip
 
   // final array already saved at this point - nothing to update inside it
   // just walk through `elementsToScan` to extract screenshots for elements in `theFinalArray`
@@ -427,7 +430,7 @@ export function extractFromTheseFiles(
 
     if ((iterator < itemTotal) && !globals.cancelCurrentImport) {
 
-      sendCurrentProgress(iterator, itemTotal, 2);
+      sendCurrentProgress(iterator, itemTotal, 'importingScreenshots');
 
       const currentElement = elementsToScan[iterator];
 
@@ -501,7 +504,7 @@ export function extractFromTheseFiles(
         });
 
     } else {
-      sendCurrentProgress(1, 1, 0); // indicates 100%
+      sendCurrentProgress(1, 1, 'done'); // indicates 100%
     }
   };
 
