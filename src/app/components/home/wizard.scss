@@ -79,11 +79,11 @@
   }
 
   .fulfilled {
-    background-color: $wizard-green;
+    background-color: $pretty-green;
   }
 
   .current-step {
-    background-color: $pretty-red-lighter;
+    background-color: $pretty-red;
     transition: 300ms;
   }
 

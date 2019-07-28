@@ -135,15 +135,15 @@ ul {
 }
 
 .editModeActive {
-  background-color: $pretty-red-lighter;
-  border: 1px solid $pretty-brownish;
+  background-color: $pretty-red;
+  border: 1px solid $dark-red;
   box-shadow: 0px 0px 0px rgba(0, 0, 0, 0) !important;
   transform: translateY(1px);
   transition-duration: 50ms;
   transition-property: background-color, border;
 
   &:hover {
-    background-color: $pretty-red-lightest;
+    background-color: $pretty-red-lighter;
   }
 }
 

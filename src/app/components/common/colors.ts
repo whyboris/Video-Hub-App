@@ -2,7 +2,7 @@ export enum Colors {
   autoFileTags =       '#a8bffb',
   autoFolderTags =     '#fec02f',
   manualTags =         '#63ff61',
-  // don't alphabetize belot
+  // don't alphabetize below
   // this is the order in which filters appear
   folderUnion =        '#FFD672',
   folderIntersection = '#ffe5a5',
