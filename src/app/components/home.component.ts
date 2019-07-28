@@ -278,56 +278,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if (event.ctrlKey === true || event.metaKey) {
 
       switch(event.key) {
-        case('s'):
-          this.toggleButton('shuffleGalleryNow');
-          break;
 
-        case('o'):
-          if (this.wizard.showWizard === false) {
-            this.toggleSettings();
-          }
-          break;
-
-        case('f'):
-          if (this.settingsButtons['fileIntersection'].toggled === false) {
-            this.settingsButtons['fileIntersection'].toggled = true;
-          }
-          this.showSidebar();
-          setTimeout(() => {
-            if (this.searchRef.nativeElement.querySelector('#fileIntersection')) {
-              this.searchRef.nativeElement.querySelector('#fileIntersection').focus();
-            }
-          }, 1);
-          break;
-
-        case('n'):
-          this.startWizard();
-          this.settingsModalOpen = false;
-          this.settingsButtons['showTags'].toggled = false;
-          break;
-
-        case('d'):
-          this.toggleButton('darkMode');
-          break;
-
-        case('q'):
-          event.preventDefault();
-          event.stopPropagation();
-          this.initiateClose();
-          break;
-
-        case('z'):
-          this.toggleButton('makeSmaller');
-          break;
-
-        case('x'):
-          this.toggleButton('makeLarger');
-          break;
-
-        case('t'):
-          if (!this.wizard.showWizard) {
-            this.toggleButton('showTags');
-          }
+        case('a'):
+          this.toggleButton('hideSidebar');
           break;
 
         case('i'):
@@ -358,6 +311,46 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.toggleButton('showClips');
           break;
 
+        case('s'):
+          this.toggleButton('shuffleGalleryNow');
+          break;
+
+        case('d'):
+          this.toggleButton('darkMode');
+          break;
+
+        case('z'):
+          this.toggleButton('makeSmaller');
+          break;
+
+        case('x'):
+          this.toggleButton('makeLarger');
+          break;
+
+        case('o'):
+          if (this.wizard.showWizard === false) {
+            this.toggleSettings();
+          }
+          break;
+
+        case('t'):
+          if (!this.wizard.showWizard) {
+            this.toggleButton('showTags');
+          }
+          break;
+
+        case('q'):
+          event.preventDefault();
+          event.stopPropagation();
+          this.initiateClose();
+          break;
+
+        case('n'):
+          this.startWizard();
+          this.settingsModalOpen = false;
+          this.settingsButtons['showTags'].toggled = false;
+          break;
+
         case('h'):
           this.toggleButton('hideTop');
           this.toggleButton('hideSidebar');
@@ -365,8 +358,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.toggleButton('showMoreInfo');
           break;
 
-        case('a'):
-          this.toggleButton('hideSidebar');
+        case('f'):
+          if (this.settingsButtons['fileIntersection'].toggled === false) {
+            this.settingsButtons['fileIntersection'].toggled = true;
+          }
+          this.showSidebar();
+          setTimeout(() => {
+            if (this.searchRef.nativeElement.querySelector('#fileIntersection')) {
+              this.searchRef.nativeElement.querySelector('#fileIntersection').focus();
+            }
+          }, 1);
           break;
 
         case('g'):
