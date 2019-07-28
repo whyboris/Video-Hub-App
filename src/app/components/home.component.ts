@@ -4,33 +4,33 @@ import { TranslateService } from '@ngx-translate/core';
 import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
 
 import { AutoTagsSaveService } from './tags-auto/tags-save.service';
-import { ElectronService } from '../../providers/electron.service';
+import { ElectronService } from '../providers/electron.service';
 import { ManualTagsService } from './tags-manual/manual-tags.service';
-import { ResolutionFilterService, ResolutionString } from '../../components/pipes/resolution-filter.service';
-import { ShowLimitService } from '../../components/pipes/show-limit.service';
-import { StarFilterService } from '../pipes/star-filter.service';
-import { WordFrequencyService } from '../../components/pipes/word-frequency.service';
+import { ResolutionFilterService, ResolutionString } from './pipes/resolution-filter.service';
+import { ShowLimitService } from './pipes/show-limit.service';
+import { StarFilterService } from './pipes/star-filter.service';
+import { WordFrequencyService } from './pipes/word-frequency.service';
 
-import { FinalObject, ImageElement } from '../common/final-object.interface';
-import { HistoryItem } from '../common/history-item.interface';
-import { ImportSettingsObject } from '../common/import.interface';
-import { ImportStage } from '../../../../main-support';
-import { SavableProperties } from '../common/savable-properties.interface';
-import { SettingsObject } from '../common/settings-object.interface';
-import { SortType } from '../pipes/sorting.pipe';
+import { FinalObject, ImageElement } from './common/final-object.interface';
+import { HistoryItem } from './common/history-item.interface';
+import { ImportSettingsObject } from './common/import.interface';
+import { ImportStage } from '../../../main-support';
+import { SavableProperties } from './common/savable-properties.interface';
+import { SettingsObject } from './common/settings-object.interface';
+import { SortType } from './pipes/sorting.pipe';
 import { TagEmission, StarEmission, YearEmission } from './views/details/details.component';
-import { WizardOptions } from '../common/wizard-options.interface';
+import { WizardOptions } from './common/wizard-options.interface';
 
-import { AppState, SupportedLanguage, defaultImgsPerRow, RowNumbers, allSupportedViews, SupportedView } from '../common/app-state';
-import { Filters, filterKeyToIndex, FilterKeyNames } from '../common/filters';
-import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, SettingsMetaGroup } from '../common/settings-buttons';
+import { AppState, SupportedLanguage, defaultImgsPerRow, RowNumbers, allSupportedViews, SupportedView } from './common/app-state';
+import { Filters, filterKeyToIndex, FilterKeyNames } from './common/filters';
+import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, SettingsMetaGroup } from './common/settings-buttons';
 
-import { English } from '../../i18n/en';
-import { French } from '../../i18n/fr';
-import { Russian } from '../../i18n/ru';
-import { BrazilianPortuguese } from '../../i18n/pt_br';
+import { English } from '../i18n/en';
+import { French } from '../i18n/fr';
+import { Russian } from '../i18n/ru';
+import { BrazilianPortuguese } from '../i18n/pt_br';
 
-import { globals, ScreenshotSettings } from '../../../../main-globals';
+import { globals, ScreenshotSettings } from '../../../main-globals';
 
 import {
   buttonAnimation,
@@ -47,7 +47,7 @@ import {
   slowFadeIn,
   slowFadeOut,
   topAnimation
-} from '../common/animations';
+} from './common/animations';
 
 // import { DemoContent } from '../../../assets/demo-content';
 

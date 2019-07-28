@@ -3,9 +3,9 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 import { ManualTagsService } from '../../tags-manual/manual-tags.service';
 
-import { StarRating, ImageElement } from '../../../common/final-object.interface';
+import { StarRating, ImageElement } from '../../common/final-object.interface';
 
-import { galleryItemAppear } from '../../../common/animations';
+import { galleryItemAppear } from '../../common/animations';
 
 export interface TagEmission {
   index: number;

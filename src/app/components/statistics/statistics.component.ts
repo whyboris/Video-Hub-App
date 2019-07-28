@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { ImageElement } from '../../common/final-object.interface';
-import { ScreenshotSettings } from '../../../../../main-globals';
+import { ImageElement } from '../common/final-object.interface';
+import { ScreenshotSettings } from '../../../../main-globals';
 
 @Component({
   selector: 'app-statistics',
