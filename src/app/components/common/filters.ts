@@ -1,3 +1,5 @@
+import { Colors } from './colors';
+
 // array for `fileIntersection`, `fileUnion`, `folderIntersection`, `folderUnion`, and `exclude`
 // string = search string
 // array = array of filters
@@ -14,15 +16,25 @@ export const FilterKeyNames: string[] = [
   'tagExclusion',
 ];
 
-export let Filters = [
+interface FilterObject {
+  uniqueKey: string;
+  string: string;
+  array: string[]; // container for all search strings
+  bool: boolean;
+  placeholder: string;
+  conjunction: string;
+  color: string;
+}
+
+export let Filters: FilterObject[] = [
   {
     uniqueKey: 'folderUnion',
     string: '',
-    array: [], // contains search strings
+    array: [],
     bool: true,
     placeholder: 'SIDEBAR.folderUnion',
     conjunction: 'SIDEBAR.or',
-    color: '#FFD672'
+    color: Colors.folderUnion
   }, {
     uniqueKey: 'folderIntersection',
     string: '',
@@ -30,7 +42,7 @@ export let Filters = [
     bool: true,
     placeholder: 'SIDEBAR.folder',
     conjunction: 'SIDEBAR.and',
-    color: '#ffe5a5'
+    color: Colors.folderIntersection
   }, {
     uniqueKey: 'fileUnion',
     string: '',
@@ -38,7 +50,7 @@ export let Filters = [
     bool: true,
     placeholder: 'SIDEBAR.fileUnion',
     conjunction: 'SIDEBAR.or',
-    color: '#6e96ff'
+    color: Colors.fileUnion
   }, {
     uniqueKey: 'fileIntersection',
     string: '',
@@ -46,7 +58,7 @@ export let Filters = [
     bool: true,
     placeholder: 'SIDEBAR.file',
     conjunction: 'SIDEBAR.and',
-    color: '#b1c6fd'
+    color: Colors.fileIntersection
   }, {
     uniqueKey: 'exclude',
     string: '',
@@ -54,7 +66,7 @@ export let Filters = [
     bool: true,
     placeholder: 'SIDEBAR.exclude',
     conjunction: 'SIDEBAR.or',
-    color: '#FF8888'
+    color: Colors.exclude
   }, {
     uniqueKey: 'tagUnion',
     string: '',
@@ -62,7 +74,7 @@ export let Filters = [
     bool: true,
     placeholder: 'SIDEBAR.tagUnion',
     conjunction: 'SIDEBAR.or',
-    color: '#6e96ff'
+    color: Colors.tagUnion
   }, {
     uniqueKey: 'tagIntersection',
     string: '',
@@ -70,7 +82,7 @@ export let Filters = [
     bool: true,
     placeholder: 'SIDEBAR.tagIntersection',
     conjunction: 'SIDEBAR.and',
-    color: '#b1c6fd'
+    color: Colors.tagIntersection
   }, {
     uniqueKey: 'tagExclusion',
     string: '',
@@ -78,7 +90,7 @@ export let Filters = [
     bool: true,
     placeholder: 'SIDEBAR.tagExclusion',
     conjunction: 'SIDEBAR.or',
-    color: '#FF8888'
+    color: Colors.tagExclusion
   }
 ];
 

@@ -618,7 +618,7 @@
                 <span
                   (click)="removeThisFilter(i, j)"
                   [ngStyle]="{ background: filter.color }"
-                  class="searchWord"
+                  class="search-word"
                 >
                   {{ string }}
                 </span>
@@ -651,7 +651,7 @@
             *ngIf="magicSearchString !== ''"
             (click)="magicSearchString = ''"
             [ngStyle]="{ background: '#aaffaa' }"
-            class="searchWord"
+            class="search-word"
           >
             {{ magicSearchString }}
           </span>
@@ -735,7 +735,7 @@
         <span class="levSpan">
           {{ 'SIDEBAR.similarTo' | translate }}
         </span>
-        <span class="searchWord" (click)="clearLev()">
+        <span class="search-word" (click)="clearLev()">
           {{ findMostSimilar }}
         </span>
       </div>

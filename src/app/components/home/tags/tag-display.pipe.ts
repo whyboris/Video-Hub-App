@@ -4,6 +4,8 @@ import { autoFileTagsRegex } from './autotags.service';
 
 import { ImageElement } from '../../common/final-object.interface';
 
+import { Colors } from '../../common/colors';
+
 export interface Tag {
   name: string;
   colour: string;
@@ -28,7 +30,7 @@ export class TagsDisplayPipe implements PipeTransform {
     if (manualTags) {
       if (video.tags) {
         video.tags.forEach(tag => {
-          tags.push({name: tag, colour: '#63ff61', removable: true});
+          tags.push({name: tag, colour: Colors.manualTags, removable: true});
         });
       }
     }
@@ -36,8 +38,8 @@ export class TagsDisplayPipe implements PipeTransform {
     if (autoFileTags) {
       const cleanedFileName: string = video.cleanName.toLowerCase().replace(autoFileTagsRegex, '');
       cleanedFileName.split(' ').forEach(word => {
-        if (word.length >= 3) { // don't hardcode :(
-          tags.push({name: word, colour: '#a8bffb', removable: false});
+        if (word.length >= 3) { // TODO - fix hardcoding ?
+          tags.push({name: word, colour: Colors.autoFileTags, removable: false});
         }
       });
     }
@@ -45,8 +47,8 @@ export class TagsDisplayPipe implements PipeTransform {
     if (autoFolderTags) {
       const cleanedFileName: string = video.partialPath.toLowerCase().replace('.', '');
       cleanedFileName.split('/').forEach(word => {
-        if (word.length >= 3) {
-          tags.push({name: word, colour: '#fec02f', removable: false});
+        if (word.length >= 3) { // TODO - fix hardcoding ?
+          tags.push({name: word, colour: Colors.autoFolderTags, removable: false});
         }
       });
     }

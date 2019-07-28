@@ -15,6 +15,11 @@ $black:   #000000;
 $pretty-blue: #729aff;
 $pretty-red:  #ff6666;
 
+// All filter colors defined in `filters.ts`
+$show-similar-to:      #aaffaa;
+$manual-tag-color:     #f1ceb8;
+$manual-tag-frequency: #d1ae98;
+
 @mixin scrollBar {
   &::-webkit-scrollbar-track {
     background-color: $gray-15;
