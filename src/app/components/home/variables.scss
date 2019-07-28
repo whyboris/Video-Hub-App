@@ -9,16 +9,35 @@ $gray-50: #808080;
 $gray-60: #666666;
 $gray-70: #4D4D4D;
 $gray-80: #333333;
+$gray-85: #222222; // only used on `defaultSettingsButtonDark`
 $gray-90: #1A1A1A;
 $black:   #000000;
 
+$light-blue:  #b5cbff; // only on flat settings button active
 $pretty-blue: #729aff;
 $pretty-red:  #ff6666;
+
+
+$pretty-brownish:     #885555;
+$pretty-red-lighter:  #ff7777; // reconcile with `pretty-red`
+$pretty-red-lightest: #ff9999; // reconcile with `pretty-red`
+
+$current-progress:    #66b452;
+
+// Currently only in use in the Wizard
+$dark-red:            #990000;
+$wizard-green:        #8ab76c;
+$wizard-screenshot:   #c7dabb;
 
 // All filter colors defined in `filters.ts`
 $show-similar-to:      #aaffaa;
 $manual-tag-color:     #f1ceb8;
 $manual-tag-frequency: #d1ae98;
+
+// Only for close buttons on Mac
+$close-button:    #fe6058;
+$maximize-button: #29ca42;
+$minimize-botton: #fec02f;
 
 @mixin scrollBar {
   &::-webkit-scrollbar-track {

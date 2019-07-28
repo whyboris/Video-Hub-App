@@ -36,7 +36,7 @@ button {
   }
 
   &:active {
-    fill: #b5cbff;
+    fill: $light-blue;
     transition-duration: $button-toggle-length;
   }
 
@@ -133,7 +133,7 @@ button {
 }
 
 .defaultSettingsButtonDark {
-  background: #222222;
+  background: $gray-85;
   border: 1px solid $gray-90;
   border-left: 1px solid $gray-70;
   border-top: 1px solid $gray-70;
@@ -143,15 +143,15 @@ button {
   }
 
   & .icon {
-    fill: #929292;
+    fill: $gray-40;
   }
 }
 
 .defaultSettingsButtonDarkToggled {
   background: $black !important;
-  border-bottom: 1px solid #222222;
+  border-bottom: 1px solid $gray-85;
   border-left: 1px solid $black;
-  border-right: 1px solid #222222;
+  border-right: 1px solid $gray-85;
   border-top: 1px solid $gray-80;
 
   & .icon {

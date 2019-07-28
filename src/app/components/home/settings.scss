@@ -92,7 +92,7 @@ h3 {
   transition-duration: 300ms;
 
   &:hover {
-    color: #990000;
+    color: $dark-red;
     transition-duration: 300ms;
   }
 }
@@ -314,8 +314,8 @@ input[type="radio"]:checked:before {
 }
 
 .key {
-  background: #EEEEEE;
-  border: 1px solid #888888;
+  background: $gray-10;
+  border: 1px solid $gray-50;
   border-radius: 3px;
   color: black;
   display: inline-block;

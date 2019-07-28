@@ -40,7 +40,7 @@
 
 .title {
   -webkit-box-orient: vertical;
-  color: #5D5D5D;
+  color: $gray-70;
   cursor: pointer;
   display: -webkit-box;
   font-size: 12px;
@@ -59,7 +59,7 @@
 }
 
 .folder {
-  color: #333333;
+  color: $gray-80;
   cursor: pointer;
   font-size: 12px;
   font-weight: bold;

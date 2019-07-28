@@ -16,7 +16,7 @@
 
 .winBtn {
   cursor: pointer;
-  fill: #333333;
+  fill: $gray-80;
   position: fixed;
   transition: 600ms;
   transition-property: fill;
@@ -55,8 +55,8 @@
   width: 13px;
 
   &.closeButton {
-    background: #fe6058;
-    fill: #fe6058;
+    background: $close-button;
+    fill: $close-button;
     left: 7px;
 
     & .window-button {
@@ -65,8 +65,8 @@
   }
 
   &.maximizeButton {
-    background: #29ca42;
-    fill: #29ca42;
+    background: $maximize-button;
+    fill: $maximize-button;
     left: 47px;
 
     & .window-button {
@@ -75,8 +75,8 @@
   }
 
   &.minimizeButton {
-    background: #fec02f;
-    fill: #fec02f;
+    background: $minimize-botton;
+    fill: $minimize-botton;
     left: 27px;
 
     & .window-button {
@@ -85,20 +85,20 @@
   }
 
   &:hover {
-    fill: #000000;
+    fill: $black;
     transition: 200ms;
   }
 }
 
 .dark-mode-override { // needs to be after titleBar and winBtn and draggable
-  background: #222222;
+  background: $gray-85;
 
   & .draggable {
-    fill: #888888;
+    fill: $gray-50;
   }
 
   & .winBtn {
-    fill: #aaaaaa;
+    fill: $gray-30;
 
     &:hover {
       fill: $pretty-red;
