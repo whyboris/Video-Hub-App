@@ -11,17 +11,17 @@ import { TranslateModule } from '@ngx-translate/core';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 
 import { AlphabetPrefixService } from './components/pipes/alphabet-prefix.service';
-import { AutoTagsSaveService } from './components/home/tags/tags-save.service';
-import { AutoTagsService } from './components/home/tags/autotags.service';
+import { AutoTagsSaveService } from './components/home/tags-auto/tags-save.service';
+import { AutoTagsService } from './components/home/tags-auto/autotags.service';
 import { ElectronService } from './providers/electron.service';
 import { HomeComponent } from './components/home/home.component';
-import { ManualTagsService } from './components/home/manual-tags/manual-tags.service';
+import { ManualTagsService } from './components/home/tags-manual/manual-tags.service';
 import { ResolutionFilterService } from './components/pipes/resolution-filter.service';
 import { ShowLimitService } from './components/pipes/show-limit.service';
 import { StarFilterService } from './components/pipes/star-filter.service';
 import { WordFrequencyService } from './components/pipes/word-frequency.service';
 
-import { AddTagComponent } from './components/home/manual-tags/add-tag.component';
+import { AddTagComponent } from './components/home/tags-manual/add-tag.component';
 import { AppComponent } from './app.component';
 import { ClipComponent } from './components/home/views/clip/clip.component';
 import { DetailsComponent } from './components/home/views/details/details.component';
@@ -37,9 +37,9 @@ import { SimilarityService } from './components/pipes/similarity.service';
 import { SliderFilterComponent } from './components/home/slider-filter/slider-filter.component';
 import { StatisticsComponent } from './components/home/statistics/statistics.component';
 import { SvgDefinitionsComponent } from './components/home/icon/svg-definitions.component';
-import { TagsComponent } from './components/home/tags/tags.component';
+import { TagsComponent } from './components/home/tags-auto/tags.component';
 import { TopComponent } from './components/home/top/top.component';
-import { ViewTagsComponent } from './components/home/manual-tags/view-tags.component';
+import { ViewTagsComponent } from './components/home/tags-manual/view-tags.component';
 
 import { AlphabetPrefixPipe } from './components/pipes/alphabet-prefix.pipe';
 import { CountPipe } from './components/pipes/count.pipe';
@@ -55,9 +55,9 @@ import { ResolutionFilterPipe } from './components/pipes/resolution-filter.pipe'
 import { SimilarityPipe } from './components/pipes/similarity.pipe';
 import { SortingPipe } from './components/pipes/sorting.pipe';
 import { StarFilterPipe } from './components/pipes/star-filter.pipe';
-import { TagFilterPipe } from './components/home/tags/tag-filter.pipe';
-import { TagMatchPipe } from './components/home/tags/tag-match.pipe';
-import { TagsDisplayPipe } from './components/home/tags/tag-display.pipe';
+import { TagFilterPipe } from './components/home/tags-auto/tag-filter.pipe';
+import { TagMatchPipe } from './components/home/tags-auto/tag-match.pipe';
+import { TagsDisplayPipe } from './components/home/tags-auto/tag-display.pipe';
 import { WordFrequencyPipe } from './components/pipes/word-frequency.pipe';
 import { WrapperPipe } from './components/pipes/wrapper.pipe';
 

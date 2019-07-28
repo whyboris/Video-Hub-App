@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { ManualTagsService } from '../home/manual-tags/manual-tags.service';
+import { ManualTagsService } from '../home/tags-manual/manual-tags.service';
 
 @Pipe({
   name: 'manualTagSortPipe'

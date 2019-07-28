@@ -3,9 +3,9 @@ import { Component, ChangeDetectorRef, OnInit, HostListener, ViewChild, ElementR
 import { TranslateService } from '@ngx-translate/core';
 import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
 
-import { AutoTagsSaveService } from './tags/tags-save.service';
+import { AutoTagsSaveService } from './tags-auto/tags-save.service';
 import { ElectronService } from '../../providers/electron.service';
-import { ManualTagsService } from './manual-tags/manual-tags.service';
+import { ManualTagsService } from './tags-manual/manual-tags.service';
 import { ResolutionFilterService, ResolutionString } from '../../components/pipes/resolution-filter.service';
 import { ShowLimitService } from '../../components/pipes/show-limit.service';
 import { StarFilterService } from '../pipes/star-filter.service';

@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ManualTagsService } from './manual-tags.service';
-import { Tag } from '../tags/tag-display.pipe';
+import { Tag } from '../tags-auto/tag-display.pipe';
 
 @Component({
   selector: 'app-view-tags-component',

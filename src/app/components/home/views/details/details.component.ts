@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ElementRef, ViewChild, Output, EventEmitter } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
-import { ManualTagsService } from '../../manual-tags/manual-tags.service';
+import { ManualTagsService } from '../../tags-manual/manual-tags.service';
 
 import { StarRating, ImageElement } from '../../../common/final-object.interface';
 
