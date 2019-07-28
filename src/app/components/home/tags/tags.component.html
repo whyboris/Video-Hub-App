@@ -14,6 +14,7 @@
       >
         {{ item.word }}<!--
    --></span>
+      <!-- using opacity instead of *ngIf because creation of hundreds of elements is slow -->
       <app-icon
         [ngStyle]="{ opacity: editMode ? 1 : 0 }"
         [icon]="'icon-close'"
@@ -37,6 +38,7 @@
       >
         {{ item.word }}<!--
    --></span>
+      <!-- using opacity instead of *ngIf because creation of hundreds of elements is slow -->
       <app-icon
         [ngStyle]="{ opacity: editMode ? 1 : 0 }"
         class="icon-lol"

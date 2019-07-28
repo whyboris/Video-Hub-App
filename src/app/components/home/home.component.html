@@ -1207,12 +1207,12 @@
           <div
             class="clear-history-item"
             (click)="removeFromHistory($event, i)"
+            title="{{ 'WIZARD.removeFromHistory' | translate }}"
           >
             <app-icon
               [icon]="'icon-close'"
             ></app-icon>
           </div>
-            <!-- title="{{ 'WIZARD.removeFromHistory' | translate }}" -->
           <img class="history-icon" src="./assets/logo.png">
           <span class="history-name">{{ historyItem.hubName }}</span>
           <br>

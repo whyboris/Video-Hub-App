@@ -1,11 +1,11 @@
-import { Component, EventEmitter, Input, Output, OnDestroy, ViewChild, ElementRef, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnDestroy, ViewChild, ElementRef, OnInit } from '@angular/core';
 
 import { AutoTagsService, WordAndFreq } from './autotags.service';
 import { AutoTagsSaveService } from './tags-save.service';
 
 import { ImageElement } from '../../../components/common/final-object.interface';
 
-import { slowFadeIn, tagDeleteButton, donutAppear } from '../../../components/common/animations';
+import { slowFadeIn, donutAppear } from '../../../components/common/animations';
 
 @Component({
   selector: 'app-tags-component',
@@ -14,7 +14,7 @@ import { slowFadeIn, tagDeleteButton, donutAppear } from '../../../components/co
               '../fonts/icons.scss',
               '../wizard-button.scss',
               'tags.component.scss'],
-  animations: [slowFadeIn, tagDeleteButton, donutAppear]
+  animations: [slowFadeIn, donutAppear]
 })
 export class TagsComponent implements OnInit, OnDestroy {
 
