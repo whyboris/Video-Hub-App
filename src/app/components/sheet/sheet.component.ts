@@ -1,12 +1,12 @@
 import { Component, Input, Output, OnInit, ElementRef, EventEmitter, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
-import { ManualTagsService } from '../manual-tags/manual-tags.service';
+import { ManualTagsService } from '../tags-manual/manual-tags.service';
 
-import { StarRating, ImageElement } from '../../common/final-object.interface';
+import { StarRating, ImageElement } from '../common/final-object.interface';
 
-import { galleryItemAppear, metaAppear, textAppear } from '../../common/animations';
-import { YearEmission } from '../details/details.component';
+import { galleryItemAppear, metaAppear, textAppear } from '../common/animations';
+import { YearEmission } from '../views/details/details.component';
 
 export interface TagEmission {
   index: number;

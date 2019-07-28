@@ -7,7 +7,7 @@ import { ImageElement } from '../../common/final-object.interface';
   selector: 'app-file-item',
   templateUrl: './file.component.html',
   styleUrls: ['./file.component.scss',
-              '../fonts/icons.scss'],
+              '../../fonts/icons.scss'],
   animations: [ galleryItemAppear,
                 metaAppear ]
 })
