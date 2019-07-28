@@ -277,7 +277,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // .metaKey is for mac `command` button
     if (event.ctrlKey === true || event.metaKey) {
       if (event.key === 's') {
-        this.shuffleTheViewNow++;
+        this.toggleButton('shuffleGalleryNow');
       } else if (event.key === 'o') {
         if (this.wizard.showWizard === false) {
           this.toggleSettings();
@@ -310,6 +310,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
         if (!this.wizard.showWizard) {
           this.toggleButton('showTags');
         }
+      } else if (event.key === 'i') {
+        this.toggleButton('showMoreInfo');
       } else if (event.key === '1') {
         this.toggleButton('showThumbnails');
       } else if (event.key === '2') {
@@ -844,7 +846,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   openInExplorer(): void {
-    console.log('should open explorer');
+    // console.log('should open explorer');
     this.electronService.ipcRenderer.send('openInExplorer', this.fullPathToCurrentFile);
   }
 
