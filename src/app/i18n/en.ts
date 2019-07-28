@@ -223,6 +223,7 @@ export const English = {
     renameFrom           :'from:',
     renameTitle          :'Rename',
     renameTo             :'to:',
+    sheetModal           :'Details',
     showSimilar          :'Show similar',
     shuffle              :'Shuffle results',
     viewFolder           :'View folder',

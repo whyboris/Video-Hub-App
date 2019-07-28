@@ -117,6 +117,7 @@
       <li (click)="showSimilarNow()">{{ 'RIGHTCLICK.showSimilar' | translate }}</li>
       <li (click)="showOnlyThisFolderNow()">{{ 'RIGHTCLICK.viewFolder' | translate }}</li>
       <li (click)="openContainingFolderNow()">{{ 'RIGHTCLICK.openFolder' | translate }}</li>
+      <li (click)="openThumbnailSheet(currentRightClickedItem)">{{ 'RIGHTCLICK.sheetModal' | translate }}</li>
     </ul>
     <ng-template #galleryOptions>
       <ul @rightClickContentAnimation>
