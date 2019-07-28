@@ -34,8 +34,8 @@
   }
 }
 
-.filteringTotal {
-  color: $gray-30;
+.filtering-total {
+  color: $gray-40;
   cursor: default;
   font-size: 12px;
   margin: 15px 0 15px;
@@ -94,6 +94,16 @@
   display: block;
   font-style: italic;
   margin-bottom: 10px;
+}
+
+.sidebar-recently-opened {
+  transition-duration: 250ms;
+  transition-property: color;
+
+  &:hover {
+    color: $pretty-blue;
+    transition-property: color;
+  }
 }
 
 .recently-opened {

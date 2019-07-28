@@ -144,7 +144,6 @@
 
     [star]="sheetItemToDisplay.stars"
 
-    [darkMode]="settingsButtons['darkMode'].toggled"
     [hoverScrub]="settingsButtons['hoverScrub'].toggled"
     [largerFont]="settingsButtons['fontSizeLarger'].toggled"
     [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
@@ -224,7 +223,7 @@
 
   <div
     *ngIf="settingsButtons['showTags'].toggled"
-    class="settingsModal"
+    class="settings-modal"
     @modalAnimation
   >
     <div
@@ -247,7 +246,7 @@
 
   <div
     *ngIf="settingsModalOpen"
-    class="settingsModal"
+    class="settings-modal"
     @modalAnimation
   >
 
@@ -259,22 +258,22 @@
       <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
     </div>
 
-    <button (click)="showSettingsGroup(0)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 0 }">
+    <button (click)="showSettingsGroup(0)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 0 }">
       {{ 'SETTINGS.tabFilter' | translate }}
     </button>
-    <button (click)="showSettingsGroup(1)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 1 }">
+    <button (click)="showSettingsGroup(1)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 1 }">
       {{ 'SETTINGS.tabView' | translate }}
     </button>
-    <button (click)="showSettingsGroup(2)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 2 }">
+    <button (click)="showSettingsGroup(2)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 2 }">
       {{ 'SETTINGS.tabMain' | translate }}
     </button>
-    <button (click)="showSettingsGroup(3)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 3 }">
+    <button (click)="showSettingsGroup(3)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 3 }">
       {{ 'SETTINGS.tabShortcuts' | translate }}
     </button>
-    <button (click)="showSettingsGroup(4)" class="metaGroupButton" [ngClass]="{ 'metaGroupSelected': settingToShow == 4 }">
+    <button (click)="showSettingsGroup(4)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 4 }">
       {{ 'SETTINGS.statistics' | translate }}
     </button>
-    <div class="metaGroupDivider"></div>
+    <div class="meta-group-divider"></div>
 
     <div [id]=i *ngFor="let group of settingsMetaGroup; index as i">
       <div *ngIf="settingToShow == i">
@@ -456,14 +455,9 @@
 
   <header
     *ngIf="!settingsButtons['hideTop'].toggled"
-    class="top"
-    [ngStyle]="{
-       'background-image': 'linear-gradient(to bottom, '
-          + (settingsButtons['darkMode'].toggled ? '#555555' : '#e4e4e4') + ' 0%, '
-          + (settingsButtons['darkMode'].toggled ? '#333333' : '#cfcfcf') + ' 100%)',
-       'border-bottom': '1px solid ' + (settingsButtons['darkMode'].toggled ? '#3a3a3a' : '#b3b3b3')
-     }"
-     @topAnimation
+    class="top-of-buttons"
+    [ngClass]="{ 'top-of-buttons-dark-mode': settingsButtons['darkMode'].toggled }"
+    @topAnimation
   >
 
     <app-top-component
@@ -490,10 +484,10 @@
     <!-- ============================================== -->
 
     <div
-      class="allSettings"
-      [ngStyle]="{
-        'background': settingsButtons['darkMode'].toggled ? '#333333' : '#CCCCCC',
-        'border-bottom': settingsButtons['darkMode'].toggled ? '#000000' : '#999999'
+      class="all-settings"
+      [ngClass]="{
+        'all-settings-dark-mode': settingsButtons['darkMode'].toggled,
+        'all-settings-flat-icons': settingsButtons['flatIcons'].toggled
       }"
     >
 
@@ -560,20 +554,22 @@
     <!-- ============================================== -->
 
     <div
-      [ngClass]="{ 'sidebar-hidden': settingsButtons['hideSidebar'].toggled }"
+      [ngClass]="{
+                    'sidebar-hidden': settingsButtons['hideSidebar'].toggled,
+                    'sidebar-dark-mode': settingsButtons['darkMode'].toggled
+      }"
       [ngStyle]="{
                     'height': 'calc(100vh - ' + (
                                                   (settingsButtons['hideTop'].toggled ? 53 : 98)
                                                 + (appState.menuHidden ? -32 : 0)
                                                 + (settingsButtons['showRelatedVideosTray'].toggled ? 160 : 0)
-                                                                                                                ) + 'px)',
-                    'background': settingsButtons['darkMode'].toggled ? '#444444' : '#d8d8d8'
+                                                                                                                ) + 'px)'
                  }"
       class="sidebar"
       #searchRef
     >
 
-      <div class="filteringTotal">
+      <div class="filtering-total">
         {{ appState.numOfFolders | number }}
         {{ (appState.numOfFolders === 1 ? 'SIDEBAR.totalFolders' : 'SIDEBAR.totalFoldersPlural') | translate }}<br>
         {{ finalArray.length | number }} {{ 'SIDEBAR.videos' | translate }}
@@ -796,7 +792,7 @@
       </div>
 
       <!-- total found -->
-      <div class="filteringTotal">
+      <div class="filtering-total">
         <span>{{ currResults.total | number:'.0' }} {{ 'SIDEBAR.found' | translate }}</span>
       </div>
 
@@ -822,6 +818,7 @@
           <li
             *ngFor="let historyItem of vhaFileHistory; index as i"
             (click)="openFromHistory(i)"
+            class="sidebar-recently-opened"
           >
             {{ historyItem.hubName }}
           </li>
@@ -843,13 +840,12 @@
                                           (settingsButtons['hideTop'].toggled ? 53 : 98)
                                         + (appState.menuHidden ? -32 : 0)
                                         + (settingsButtons['showRelatedVideosTray'].toggled ? 170 : 0)
-                                                                                                        ) + 'px)',
-          'background': settingsButtons['darkMode'].toggled ? '#000000' : '#999999'
+                                                                                                        ) + 'px)'
         }"
       [enableUnequalChildrenSizes]="appState.currentView === 'showFullView'"
       [ngClass]="{
           'gallery-container-full-width': settingsButtons['hideSidebar'].toggled,
-          'gallery-dark-scroll': settingsButtons['darkMode'].toggled
+          'gallery-container-dark-mode': settingsButtons['darkMode'].toggled
         }"
       [bufferAmount]="0"
       [items]="finalArray
@@ -932,6 +928,8 @@
           [hubName]="appState.hubName"
           [imgHeight]="previewHeight"
 
+          [compactView]="settingsButtons['compactView'].toggled"
+
           [video]="item"
 
           [darkMode]="settingsButtons['darkMode'].toggled"
@@ -942,7 +940,13 @@
           [thumbAutoAdvance]="settingsButtons['thumbAutoAdvance'].toggled"
 
           style="display: inline-block"
-          [ngStyle]="{ height: previewHeight + textPaddingHeight + 20 + 'px', width: previewWidth }"
+          [ngStyle]="{
+              height: previewHeight +
+                      textPaddingHeight +
+                      (settingsButtons['compactView'].toggled ? 0 : 20) +
+                      'px',
+              width: previewWidth
+            }"
         ></app-gallery-item>
       </ng-container>
 
@@ -1200,11 +1204,15 @@
 
       <ul>
         <li *ngFor="let historyItem of vhaFileHistory; index as i" (click)="openFromHistory(i)" @historyItemRemove>
-          <span
+          <div
+            class="clear-history-item"
             (click)="removeFromHistory($event, i)"
-            class="icon icon-close clear-history-item"
             title="{{ 'WIZARD.removeFromHistory' | translate }}"
-          ></span>
+          >
+            <app-icon
+              [icon]="'icon-close'"
+            ></app-icon>
+          </div>
           <img class="history-icon" src="./assets/logo.png">
           <span class="history-name">{{ historyItem.hubName }}</span>
           <br>

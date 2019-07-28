@@ -7,6 +7,10 @@
   transition-property: height;
 }
 
+.compact-margins {
+  margin: 0 2px;
+}
+
 .video-box {
   background-color: black;
   background-size: cover;
@@ -24,6 +28,11 @@
   right: 0;
   top: 0;
   width: 16px;
+
+  &:hover {
+    cursor: pointer;
+    opacity: 1 !important;
+  }
 }
 
 .folder-item {
@@ -101,5 +110,5 @@
 
 .larger-font {
   font-size: 16px;
-  margin-top: 4px;
+  margin-top: 2px;
 }

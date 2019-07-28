@@ -66,6 +66,7 @@ export const SettingsButtonsGroups: string[][] = [
   ],
   [
     'showMoreInfo',
+    'compactView',
     'fontSizeLarger',
     // 'randomizeGallery', // TODO - disabled for now
     'shuffleGalleryNow',
@@ -134,7 +135,6 @@ export const SettingsMetaGroupLabels: string[] = [
   'SETTINGS.searchAndFilter',
   'SETTINGS.galleryAndView',
   'SETTINGS.otherSettings',
-  'SETTINGS.reloadUpdate' // CURRENTLY UNUSED
 ];
 
 export let SettingsButtons: { [s: string]: SettingsButton } = {
@@ -193,7 +193,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'extendedWordCloud': {
     description: 'BUTTONS.extendedWordCloudDescription',
-    hidden: false,
+    hidden: true,
     iconName: 'icon-cloud-plus',
     title: 'BUTTONS.extendedWordCloudHint',
     toggled: false
@@ -307,6 +307,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.manualTagsDescription',
     hidden: true,
     iconName: 'icon-cloud',
+    moreInfo: 'BUTTONS.manualTagsMoreInfo',
     settingsHeading: 'SETTINGS.manualTags',
     title: 'BUTTONS.manualTagsHint',
     toggled: true
@@ -394,10 +395,10 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'showFolders': {
     description: 'BUTTONS.showFoldersDescription',
-    hidden: true,
+    hidden: false,
     iconName: 'icon-folder-blank',
     title: 'BUTTONS.showFoldersHint',
-    toggled: true
+    toggled: false
   },
   'showFreq': {
     description: 'BUTTONS.showFreqDescription',
@@ -421,6 +422,14 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     settingsHeading: 'SETTINGS.miscView',
     title: 'BUTTONS.showMoreInfoHint',
     toggled: true
+  },
+  'compactView': {
+    description: 'BUTTONS.compactViewDescription',
+    hidden: false,
+    iconName: 'icon-tag',
+    moreInfo: 'BUTTONS.compactViewMoreInfo',
+    title: 'BUTTONS.compactViewHint',
+    toggled: false
   },
   'showRecent': {
     description: 'BUTTONS.showRecentDescription',
@@ -448,7 +457,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'showTagTray': {
     description: 'BUTTONS.tagTrayDescription',
-    hidden: false,
+    hidden: true,
     iconName: 'icon-tag',
     title: 'BUTTONS.tagTrayHint',
     toggled: false
@@ -540,14 +549,14 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'tagFrequencySort': {
     description: 'BUTTONS.tagFrequencySortDescription',
-    hidden: false,
+    hidden: true,
     iconName: 'icon-tag',
     title: 'BUTTONS.tagFrequencySortHint',
     toggled: false
   },
   'tagIntersection': {
     description: 'BUTTONS.tagIntersectionDescription',
-    hidden: false,
+    hidden: true,
     iconName: 'icon-video-minus',
     title: 'BUTTONS.tagIntersectionHint',
     toggled: false

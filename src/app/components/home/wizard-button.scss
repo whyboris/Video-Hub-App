@@ -1,8 +1,8 @@
-
+@import 'variables';
 
 .wizardButton {
-  background: #DDDDDD;
-  border: 1px solid #a7a7a7;
+  background: $gray-15;
+  border: 1px solid $gray-30;
   border-radius: 10px;
   cursor: pointer;
   margin: 15px;
@@ -19,7 +19,7 @@
   }
 
   &:hover {
-    background: #EEEEEE;
+    background: $gray-10;
   }
 
   &:disabled {

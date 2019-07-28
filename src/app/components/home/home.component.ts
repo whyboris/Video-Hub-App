@@ -987,6 +987,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.toggleButtonOpposite(uniqueKey);
 
     // ======== Other buttons ========================
+    } else if (uniqueKey === 'compactView') {
+      this.toggleButtonOpposite(uniqueKey);
+      if (this.settingsButtons['showThumbnails'].toggled) {
+        this.computeTextBufferAmount();
+      }
     } else if (uniqueKey === 'makeSmaller') {
       this.decreaseSize();
     } else if (uniqueKey === 'makeLarger') {
@@ -1190,20 +1195,27 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Computes the preview width for thumbnails view
    */
   public computePreviewWidth(): void {
-    this.galleryWidth = document.getElementById('scrollDiv').getBoundingClientRect().width - 20;
+    // Subtract 14 -- it is a bit more than the scrollbar on the right
+    this.galleryWidth = document.getElementById('scrollDiv').getBoundingClientRect().width - 14;
 
-    if (   this.appState.currentView === 'showClips'
-        || this.appState.currentView === 'showThumbnails'
-        || this.appState.currentView === 'showDetails') {
-      this.previewWidth = (this.galleryWidth / this.currentImgsPerRow) - 40; // 40px margin
+    if (
+         this.appState.currentView === 'showClips'
+      || this.appState.currentView === 'showThumbnails'
+      || this.appState.currentView === 'showDetails'
+    ) {
+      const margin: number = (this.settingsButtons['compactView'].toggled ? 4 : 40);
+      this.previewWidth = (this.galleryWidth / this.currentImgsPerRow) - margin;
 
       // used in details view only
       this.detailsMaxWidth = this.galleryWidth - this.previewWidth - 40; // 40px is just an estimate here
 
-    } else if ( this.appState.currentView === 'showFilmstrip'
-             || this.appState.currentView === 'showFullView' ) {
+    } else if (
+         this.appState.currentView === 'showFilmstrip'
+      || this.appState.currentView === 'showFullView'
+    ) {
       this.previewWidth = ((this.galleryWidth - 30) / this.currentImgsPerRow);
     }
+
     this.previewHeight = this.previewWidth * (9 / 16);
 
     // compute preview dimensions for thumbs in the most similar tab:
@@ -1221,7 +1233,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public computeTextBufferAmount(): void {
     this.computePreviewWidth();
     if (this.appState.currentView === 'showThumbnails') {
-      if (this.settingsButtons.showMoreInfo.toggled) {
+      if (this.settingsButtons.compactView.toggled) {
+        this.textPaddingHeight = 0;
+      } else if (this.settingsButtons.showMoreInfo.toggled) {
         this.textPaddingHeight = 55;
       } else {
         this.textPaddingHeight = 20;

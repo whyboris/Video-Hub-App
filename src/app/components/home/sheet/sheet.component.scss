@@ -6,12 +6,12 @@
   border-radius: 10px;
   box-shadow: 0 3px 7px 3px rgba(0, 0, 0, 0.3);
   box-sizing: border-box;
-  height: 80vh;
+  height: calc(100vh - 130px);
   left: 10vw;
   overflow-y: scroll;
   padding: 2%;
   position: fixed;
-  top: 10%;
+  top: 115px;
   width: calc(80vw + 10px);
   z-index: 30;
 

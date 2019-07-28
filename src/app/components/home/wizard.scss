@@ -98,6 +98,10 @@
     cursor: pointer;
     font-style: italic;
     margin: 20px 0 0 20px;
+
+    &:hover {
+      color: $pretty-red;
+    }
   }
 
   .recently-opened-wizard {
@@ -121,26 +125,40 @@
           font-size: 14px !important;
           transform: translate(-9px, -5px);
           transition: 300ms;
-          transition-property: text-shadow;
+          transition-property: color;
         }
 
         &:hover {
           .history-name {
-            color: #ff7777;
-            text-shadow: 0px 0px 3px rgba(255, 255, 255, 0.5);
+            color: $pretty-blue;
+            text-shadow: 0px 0px 5px rgba(255, 255, 255, 1);
             transition: 300ms;
-            transition-property: text-shadow;
+            transition-property: color;
           }
         }
 
         .clear-history-item {
+          cursor: not-allowed;
+          opacity: 0.15;
           position: absolute;
           transform: translate(-32px, 3px);
-          transition: 300ms;
-          transition-property: color;
+          width: 15px;
 
           &:hover {
-            color: red;
+            fill: $pretty-red;
+            opacity: 1;
+            pointer-events: all;
+
+            &+img {
+              &+span {
+                // really hacky way to select the `span`
+                // following the `.clear-history-item`
+                // which happens to be after `img`
+                color: $pretty-red;
+                text-decoration: line-through;
+              }
+            }
+
           }
 
           &:before {
