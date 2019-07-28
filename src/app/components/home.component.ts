@@ -1240,30 +1240,41 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   public computeTextBufferAmount(): void {
     this.computePreviewWidth();
-    if (this.appState.currentView === 'showThumbnails') {
-      if (this.settingsButtons.compactView.toggled) {
-        this.textPaddingHeight = 0;
-      } else if (this.settingsButtons.showMoreInfo.toggled) {
-        this.textPaddingHeight = 55;
-      } else {
+
+    switch(this.appState.currentView) {
+      case 'showThumbnails':
+        if (this.settingsButtons.compactView.toggled) {
+          this.textPaddingHeight = 0;
+        } else if (this.settingsButtons.showMoreInfo.toggled) {
+          this.textPaddingHeight = 55;
+        } else {
+          this.textPaddingHeight = 20;
+        }
+        break;
+
+      case 'showFilmstrip':
+        if (this.settingsButtons.showMoreInfo.toggled) {
+          this.textPaddingHeight = 20;
+        } else {
+          this.textPaddingHeight = 0;
+        }
+        break;
+
+      case 'showFiles':
         this.textPaddingHeight = 20;
-      }
-    } else if (this.appState.currentView === 'showFilmstrip') {
-      if (this.settingsButtons.showMoreInfo.toggled) {
-        this.textPaddingHeight = 20;
-      } else {
-        this.textPaddingHeight = 0;
-      }
-    } else if (this.appState.currentView === 'showFiles') {
-      this.textPaddingHeight = 20;
-    } else if (this.appState.currentView === 'showClips') {
-      if (this.settingsButtons.showMoreInfo.toggled) {
-        this.textPaddingHeight = 55;
-      } else {
-        this.textPaddingHeight = 20;
-      }
+        break;
+
+      case 'showClips':
+        if (this.settingsButtons.showMoreInfo.toggled) {
+          this.textPaddingHeight = 55;
+        } else {
+          this.textPaddingHeight = 20;
+        }
+        break;
+
+      default:
+        console.log('this should not happen!');
     }
-    // console.log('textPaddingHeight = ' + this.textPaddingHeight);
   }
 
   magicSearchChanged(event): void {
