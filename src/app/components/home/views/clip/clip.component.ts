@@ -1,9 +1,9 @@
 import { Component, HostListener, Input, Output, EventEmitter, OnInit, ChangeDetectorRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
-import { ImageElement } from '../../common/final-object.interface';
+import { ImageElement } from '../../../common/final-object.interface';
 
-import { galleryItemAppear, metaAppear, textAppear } from '../../common/animations';
+import { galleryItemAppear, metaAppear, textAppear } from '../../../common/animations';
 
 @Component({
   selector: 'app-clip-item',

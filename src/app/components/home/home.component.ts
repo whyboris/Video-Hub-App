@@ -18,7 +18,7 @@ import { ImportStage } from '../../../../main-support';
 import { SavableProperties } from '../common/savable-properties.interface';
 import { SettingsObject } from '../common/settings-object.interface';
 import { SortType } from '../pipes/sorting.pipe';
-import { TagEmission, StarEmission, YearEmission } from './details/details.component';
+import { TagEmission, StarEmission, YearEmission } from './views/details/details.component';
 import { WizardOptions } from '../common/wizard-options.interface';
 
 import { AppState, SupportedLanguage, defaultImgsPerRow, RowNumbers, allSupportedViews, SupportedView } from '../common/app-state';

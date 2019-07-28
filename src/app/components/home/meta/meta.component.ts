@@ -4,7 +4,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { ManualTagsService } from '../manual-tags/manual-tags.service';
 
 import { StarRating, ImageElement } from '../../common/final-object.interface';
-import { YearEmission } from '../details/details.component';
+import { YearEmission } from '../views/details/details.component';
 
 export interface TagEmission {
   index: number;

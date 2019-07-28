@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { galleryItemAppear, metaAppear, textAppear } from '../../common/animations';
-import { ImageElement } from '../../common/final-object.interface';
+import { galleryItemAppear, metaAppear, textAppear } from '../../../common/animations';
+import { ImageElement } from '../../../common/final-object.interface';
 
 @Component({
   selector: 'app-filmstrip-item',

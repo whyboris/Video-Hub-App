@@ -23,15 +23,15 @@ import { WordFrequencyService } from './components/pipes/word-frequency.service'
 
 import { AddTagComponent } from './components/home/manual-tags/add-tag.component';
 import { AppComponent } from './app.component';
-import { ClipComponent } from './components/home/clip/clip.component';
-import { DetailsComponent } from './components/home/details/details.component';
+import { ClipComponent } from './components/home/views/clip/clip.component';
+import { DetailsComponent } from './components/home/views/details/details.component';
 import { DonutComponent } from './components/donut/donut.component';
-import { FileComponent } from './components/home/file/file.component';
-import { FilmstripComponent } from './components/home/filmstrip/filmstrip.component';
-import { FullViewComponent } from './components/home/full/full.component';
+import { FileComponent } from './components/home/views/file/file.component';
+import { FilmstripComponent } from './components/home/views/filmstrip/filmstrip.component';
+import { FullViewComponent } from './components/home/views/full/full.component';
 import { IconComponent } from './components/home/icon/icon.component';
 import { MetaComponent } from './components/home/meta/meta.component';
-import { PreviewComponent } from './components/home/thumbnail/preview.component';
+import { PreviewComponent } from './components/home/views/thumbnail/preview.component';
 import { SheetComponent } from './components/home/sheet/sheet.component';
 import { SimilarityService } from './components/pipes/similarity.service';
 import { SliderFilterComponent } from './components/home/slider-filter/slider-filter.component';
