@@ -55,7 +55,7 @@
   fill: yellow;
   height: 20px;
   margin: 0;
-  opacity: 0.3;
+  opacity: 0.4;
   outline: none;
   padding: 0;
   width: 20px;
@@ -63,6 +63,7 @@
 
 .star-lit {
   opacity: 1;
+  transform: scale(1.5);
 }
 
 .year {
