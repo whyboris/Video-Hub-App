@@ -295,6 +295,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       } else if (event.key === 'n') {
         this.startWizard();
         this.settingsModalOpen = false;
+        this.settingsButtons['showTags'].toggled = false;
       } else if (event.key === 'd') {
         this.toggleButton('darkMode');
       } else if (event.key === 'q') {
@@ -306,7 +307,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       } else if (event.key === 'x') {
         this.toggleButton('makeLarger');
       } else if (event.key === 't') {
-        this.toggleButton('showTags');
+        if (!this.wizard.showWizard) {
+          this.toggleButton('showTags');
+        }
       } else if (event.key === '1') {
         this.toggleButton('showThumbnails');
       } else if (event.key === '2') {
@@ -1004,6 +1007,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.resetSettingsToDefault();
     } else if (uniqueKey === 'importNewFiles') {
       this.importNewFiles();
+    } else if (uniqueKey === 'showTags') {
+      if (this.settingsModalOpen) {
+        this.settingsModalOpen = false;
+      }
+      this.toggleButtonOpposite('showTags');
     } else if (uniqueKey === 'verifyThumbnails') {
       this.verifyThumbnails();
     } else if (uniqueKey === 'rescanDirectory') {
