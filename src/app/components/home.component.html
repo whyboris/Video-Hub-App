@@ -140,6 +140,8 @@
     [hubName]="appState.hubName"
     [imgHeight]="previewHeight"
 
+    [darkMode]="settingsButtons['darkMode'].toggled"
+
     [video]="sheetItemToDisplay"
 
     [star]="sheetItemToDisplay.stars"
@@ -368,7 +370,7 @@
             }"
             style="margin: 0 10px; max-width: initial; padding: 0 15px;"
             >
-              <span>{{ 'SETTINGS.reset' | translate }}</span>
+              <span>{{ 'SETTINGS.resetZoom' | translate }}</span>
           </button>
           <button
             (click)="increaseZoomLevel()"

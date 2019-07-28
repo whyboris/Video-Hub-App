@@ -168,7 +168,7 @@ export const English = {
     noClipsExtracted  :'No clips extracted',
     otherSettings     :'Create a new hub',
     relatedVideosTray :'Related videos',
-    reset             :'reset',
+    resetZoom         :'reset zoom',
     searchAndFilter   :'Search & filter settings',
     searchFilters     :'Folder, file, and tag search filters',
     settings          :'Settings',

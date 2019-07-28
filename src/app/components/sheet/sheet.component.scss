@@ -1,7 +1,7 @@
 @import "../variables";
 
 .sheet-modal {
-  background: $gray-30;
+  background: $gray-10;
   border: 1px solid $gray-50;
   border-radius: 10px;
   box-shadow: 0 3px 7px 3px rgba(0, 0, 0, 0.3);
@@ -25,13 +25,11 @@
   @include scrollBar;
 }
 
-.zoomButtons {
-  position: absolute;
-  right: 40px;
-  top: 40px;
+.sheet-modal-dark-mode {
+  background-color: $gray-80;
 }
 
-.meta {
+.meta-container {
   box-sizing: border-box;
   display: inline-block;
   height: 180px;
@@ -56,50 +54,13 @@
   position: relative;
 }
 
-.time, .rez {
+.time {
   bottom: 4px;
   color: rgba(255, 255, 255, 0.7);
   font-size: 10px;
   position: absolute;
-  z-index: 2;
-}
-
-.time {
   right: 4px;
-}
-
-.rez {
-  left: 3px;
-}
-
-.title {
-  -webkit-box-orient: vertical;
-  cursor: pointer;
-  display: -webkit-box;
-  font-size: 12px;
-  -webkit-line-clamp: 3;
-  margin: 6px 2px 0px;
-  max-height: 54px;
-  overflow: hidden;
-  position: absolute;
-  text-align: left;
-  text-overflow: ellipsis;
-  transition: 300ms;
-  transition-property: font-size;
-  width: 100%;
-  word-wrap: break-word;
-}
-
-.fileSize {
-  display: block;
-  font-size: 10px;
-  margin: 5px 0;
-  opacity: 0.8;
-}
-
-.larger-font {
-  font-size: 16px;
-  margin-top: 4px;
+  z-index: 2;
 }
 
 .reset-button {
@@ -107,4 +68,10 @@
   max-width: initial;
   padding: 0 10px;
   transform: translate(0, -3px);
+}
+
+.zoomButtons {
+  position: absolute;
+  right: 40px;
+  top: 40px;
 }

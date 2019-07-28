@@ -1,8 +1,9 @@
 <div
   class="sheet-modal"
+  [ngClass]="{ 'sheet-modal-dark-mode': darkMode }"
 >
 <app-meta-item
-  class="meta"
+  class="meta-container"
   (editFinalArrayStars)="editFinalArrayStars.emit($event)"
   (editFinalArrayTag)="editFinalArrayTag.emit($event)"
   (editFinalArrayYear)="editFinalArrayYear.emit($event)"
@@ -36,7 +37,7 @@
       (click)="resetZoomLevel()"
       class="defaultSettingsButton reset-button"
     >
-      <span>{{ 'SETTINGS.reset' | translate }}</span>
+      <span>{{ 'SETTINGS.resetZoom' | translate }}</span>
     </button>
 
     <button
