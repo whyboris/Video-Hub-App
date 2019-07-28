@@ -12,7 +12,7 @@ $sidebar-width: 190px;
 }
 
 .reduceFlicker {
-  background: #eeeeee;
+  background: $gray-10;
   height: 100vh;
   position: fixed;
   width: 100vw;
@@ -42,7 +42,7 @@ $sidebar-width: 190px;
   width: 100%;
 
   .current-progress {
-    background: #66b452;
+    background: $pretty-green;
     border-radius: 3px;
     height: 17px;
     transition: 500ms;
@@ -80,7 +80,7 @@ $sidebar-width: 190px;
 
 .draggable {
   -webkit-app-region: drag;
-  color: #444444;
+  color: $gray-70;
   font-size: 12px;
   position: absolute;
   text-align: center;

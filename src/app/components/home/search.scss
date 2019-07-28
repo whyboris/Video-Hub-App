@@ -49,7 +49,7 @@
   width: 15px;
 }
 
-.searchWord {
+.search-word {
   border-radius: 6px;
   // border: 1px solid $gray-40;
   box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.3);
@@ -72,7 +72,7 @@
 
 .conjunction {
   font-size: 10px;
-  margin: 3px; // coincides with .searchWord margin-left: 0;
+  margin: 3px; // coincides with .search-word margin-left: 0;
 }
 
 .notFiltered {
@@ -133,13 +133,13 @@
 }
 
 .levDistance {
-  .searchWord {
-    background: #aaffaa;
+  .search-word {
+    background: $show-similar-to;
   }
 }
 
 .levSpan {
-  color: #B3B3B3;
+  color: $gray-30;
   cursor: default;
   font-size: 12px;
   margin: 15px 0 15px;

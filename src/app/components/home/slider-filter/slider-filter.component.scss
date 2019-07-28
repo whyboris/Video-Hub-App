@@ -14,8 +14,8 @@
 .sliderBackTrack,
 .leftSide,
 .rightSide {
-  background: #cecece;
-  border: 1px solid #8b8b8b;
+  background: $gray-20;
+  border: 1px solid $gray-50;
   border-radius: 15px;
   min-height: 5px;
   position: absolute;
@@ -25,10 +25,10 @@
 }
 
 .darkMode {
-  background: #565656;
-  border: 1px solid #444444;
-  border-bottom: 1px solid #737373;
-  border-top: 1px solid #282828;
+  background: $gray-60;
+  border: 1px solid $gray-70;
+  border-bottom: 1px solid $gray-50;
+  border-top: 1px solid $gray-80;
 }
 
 .leftSide {
@@ -37,15 +37,10 @@
 }
 
 .rightSide {
-  background: #a3a3a3;
-  border: 1px solid #686868;
+  background: $pretty-blue;
+  border: 1px solid $gray-60;
   max-width: 153px;
   z-index: 2;
-}
-
-.rightSideDarkMode {
-  background: #5d72a7;
-  border-bottom: 1px solid #828282
 }
 
 .dragger {
@@ -77,8 +72,8 @@
 }
 
 .draggerDarkMode {
-  background-color: #8a8888;
-  border: 1px solid #313131;
+  background-color: $gray-30;
+  border: 1px solid $gray-80;
 }
 
 .isDragging {

@@ -6,8 +6,8 @@
   position: relative;
 
   .tag {
-    // copied from `searchWord` class -- TODO - keep DRY
-    background-color: #f1ceb8;
+    // copied from `search-word` class -- TODO - keep DRY
+    background-color: $manual-tag-color;
     border-radius: 4px;
     box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.3);
     cursor: pointer;
@@ -21,7 +21,7 @@
   }
 
   .coverTheX {
-    background-color: $gray-40;
+    background-color: $gray-20;
     height: 16px;
     position: absolute;
     transform: translate(6px, 2px);
@@ -33,27 +33,27 @@
     background-color: black;
   }
 
-  .removeTag {
-    background-color: #d1ae98;
+  .remove-tag {
+    background-color: $manual-tag-frequency;
     border-radius: 4px;
     cursor: not-allowed;
     display: inline-block;
     fill: red;
-    height: 16px;
+    height: 15px;
     left: 0;
     padding-left: 1px;
     position: absolute;
-    top: 2px;
+    top: 3px;
     transform: translate(0, 0);
     transition-delay: 0.25s;
     transition-duration: 0.25s;
     transition-property: transform;
-    width: 16px;
+    width: 15px;
     z-index: 1;
   }
 
   &:hover {
-    .removeTag {
+    .remove-tag {
       transform: translate(0, -14px);
       transition-delay: 0.5s;
       transition-duration: 0.25s;
@@ -62,7 +62,7 @@
   }
 
   .frequency {
-    background-color: #d1ae98;
+    background-color: $manual-tag-frequency;
     padding-left: 10px;
     transform: translate(-5px, 0);
     z-index: 1;

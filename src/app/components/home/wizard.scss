@@ -37,7 +37,7 @@
     transition-duration: 300ms;
 
     &:hover {
-      color: #990000;
+      color: $dark-red;
       transition-duration: 300ms;
     }
   }
@@ -63,7 +63,7 @@
   }
 
   .steps {
-    background-color: #c5c5c5;
+    background-color: $gray-20;
     border-radius: 9px;
     box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.07);
     color: $white;
@@ -79,11 +79,11 @@
   }
 
   .fulfilled {
-    background-color: #8ab76c;
+    background-color: $pretty-green;
   }
 
   .current-step {
-    background-color: #ff7777;
+    background-color: $pretty-red;
     transition: 300ms;
   }
 
@@ -176,7 +176,7 @@
 
   .screenshot-preview {
     align-items: center;
-    background-color: #c7dabb;
+    background-color: $wizard-screenshot;
     border: 1px solid $gray-50;
     display: flex;
     font-size: 12px;

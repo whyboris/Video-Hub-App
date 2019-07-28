@@ -92,7 +92,7 @@ h3 {
   transition-duration: 300ms;
 
   &:hover {
-    color: #990000;
+    color: $dark-red;
     transition-duration: 300ms;
   }
 }
@@ -313,10 +313,11 @@ input[type="radio"]:checked:before {
   min-width: 166px;
 }
 
-.key {
-  background: #EEEEEE;
-  border: 1px solid #888888;
+.shortcut-key {
+  background: $white;
+  border: 1px solid $gray-50;
   border-radius: 3px;
+  box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
   color: black;
   display: inline-block;
   font-style: normal;
@@ -326,7 +327,7 @@ input[type="radio"]:checked:before {
   width: 16px;
 }
 
-.modifierKey {
+.modifier-key {
   line-height: 20px;
   margin: 0 4px;
   margin-right: initial;

@@ -409,29 +409,29 @@
 
     <div *ngIf="settingToShow == 3" class="shortcutMenu">
 
-      <span>{{ 'SHORTCUTS.hold' | translate }}<em class="key modifierKey">Ctrl</em>
+      <span>{{ 'SHORTCUTS.hold' | translate }}<em class="shortcut-key modifier-key">Ctrl</em>
         <ng-container *ngIf="macVersion">
-          {{ 'SHORTCUTS.or' | translate }} <em class="key modifierKey">Command</em>
+          {{ 'SHORTCUTS.or' | translate }} <em class="shortcut-key modifier-key">Command</em>
         </ng-container>
         {{ 'SHORTCUTS.andPress' | translate }}:</span>
       <ul class="without-numbers">
-        <li class="listElement"><em class="key">1</em> - {{ 'SHORTCUTS.showThumb' | translate }}</li>
-        <li class="listElement"><em class="key">2</em> - {{ 'SHORTCUTS.showFilm' | translate }}</li>
-        <li class="listElement"><em class="key">3</em> - {{ 'SHORTCUTS.showFull' | translate }}</li>
-        <li class="listElement"><em class="key">4</em> - {{ 'SHORTCUTS.showDetail' | translate }}</li>
-        <li class="listElement"><em class="key">5</em> - {{ 'SHORTCUTS.showFile' | translate }}</li>
-        <li class="listElement"><em class="key">6</em> - {{ 'SHORTCUTS.showClip' | translate }}</li>
-        <li class="listElement"><em class="key">f</em> - {{ 'SHORTCUTS.focusOnFile' | translate }}</li>
-        <li class="listElement"><em class="key">g</em> - {{ 'SHORTCUTS.focusOnMagic' | translate }}</li>
-        <li class="listElement"><em class="key">z</em> - {{ 'SHORTCUTS.makeSmaller' | translate }}</li>
-        <li class="listElement"><em class="key">x</em> - {{ 'SHORTCUTS.makeLarger' | translate }}</li>
-        <li class="listElement"><em class="key">s</em> - {{ 'SHORTCUTS.shuffle' | translate }}</li>
-        <li class="listElement"><em class="key">o</em> - {{ 'SHORTCUTS.toggleSettings' | translate }}</li>
-        <li class="listElement"><em class="key">d</em> - {{ 'SHORTCUTS.toggleDarkMode' | translate }}</li>
-        <li class="listElement"><em class="key">t</em> - {{ 'SHORTCUTS.toggleViewMeta' | translate }}</li>
-        <li class="listElement"><em class="key">a</em> - {{ 'SHORTCUTS.toggleSearchBar' | translate }}</li>
-        <li class="listElement"><em class="key">h</em> - {{ 'SHORTCUTS.toggleMinimalMode' | translate }}</li>
-        <li class="listElement"><em class="key">n</em> - {{ 'SHORTCUTS.toggleWizard' | translate }}</li>
+        <li class="listElement"><em class="shortcut-key">1</em> - {{ 'SHORTCUTS.showThumb' | translate }}</li>
+        <li class="listElement"><em class="shortcut-key">2</em> - {{ 'SHORTCUTS.showFilm' | translate }}</li>
+        <li class="listElement"><em class="shortcut-key">3</em> - {{ 'SHORTCUTS.showFull' | translate }}</li>
+        <li class="listElement"><em class="shortcut-key">4</em> - {{ 'SHORTCUTS.showDetail' | translate }}</li>
+        <li class="listElement"><em class="shortcut-key">5</em> - {{ 'SHORTCUTS.showFile' | translate }}</li>
+        <li class="listElement"><em class="shortcut-key">6</em> - {{ 'SHORTCUTS.showClip' | translate }}</li>
+        <li class="listElement"><em class="shortcut-key">f</em> - {{ 'SHORTCUTS.focusOnFile' | translate }}</li>
+        <li class="listElement"><em class="shortcut-key">g</em> - {{ 'SHORTCUTS.focusOnMagic' | translate }}</li>
+        <li class="listElement"><em class="shortcut-key">z</em> - {{ 'SHORTCUTS.makeSmaller' | translate }}</li>
+        <li class="listElement"><em class="shortcut-key">x</em> - {{ 'SHORTCUTS.makeLarger' | translate }}</li>
+        <li class="listElement"><em class="shortcut-key">s</em> - {{ 'SHORTCUTS.shuffle' | translate }}</li>
+        <li class="listElement"><em class="shortcut-key">o</em> - {{ 'SHORTCUTS.toggleSettings' | translate }}</li>
+        <li class="listElement"><em class="shortcut-key">d</em> - {{ 'SHORTCUTS.toggleDarkMode' | translate }}</li>
+        <li class="listElement"><em class="shortcut-key">t</em> - {{ 'SHORTCUTS.toggleViewMeta' | translate }}</li>
+        <li class="listElement"><em class="shortcut-key">a</em> - {{ 'SHORTCUTS.toggleSearchBar' | translate }}</li>
+        <li class="listElement"><em class="shortcut-key">h</em> - {{ 'SHORTCUTS.toggleMinimalMode' | translate }}</li>
+        <li class="listElement"><em class="shortcut-key">n</em> - {{ 'SHORTCUTS.toggleWizard' | translate }}</li>
       </ul>
 
     </div>
@@ -618,7 +618,7 @@
                 <span
                   (click)="removeThisFilter(i, j)"
                   [ngStyle]="{ background: filter.color }"
-                  class="searchWord"
+                  class="search-word"
                 >
                   {{ string }}
                 </span>
@@ -651,7 +651,7 @@
             *ngIf="magicSearchString !== ''"
             (click)="magicSearchString = ''"
             [ngStyle]="{ background: '#aaffaa' }"
-            class="searchWord"
+            class="search-word"
           >
             {{ magicSearchString }}
           </span>
@@ -735,7 +735,7 @@
         <span class="levSpan">
           {{ 'SIDEBAR.similarTo' | translate }}
         </span>
-        <span class="searchWord" (click)="clearLev()">
+        <span class="search-word" (click)="clearLev()">
           {{ findMostSimilar }}
         </span>
       </div>
