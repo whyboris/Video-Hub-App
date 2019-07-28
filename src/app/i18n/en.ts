@@ -55,8 +55,6 @@ export const English = {
     manualTagsMoreInfo                 :'See these in the Details View',
     muteClipsDescription               :'Mute all sound',
     muteClipsHint                      :'Mute all sound',
-    randomizeGalleryDescription        :'Randomize the order of videos after every search',
-    randomizeGalleryHint               :'Randomize gallery order',
     regenerateLibraryDescription       :'Regenerate all library metadata, except thumbnails and user entered metadata',
     regenerateLibraryHint              :'Regenerate library',
     relatedTrayDescription             :'Show tray with 5 related videos based on the last video you clicked',

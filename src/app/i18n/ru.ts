@@ -44,8 +44,6 @@ export const Russian = {
     makeSmallerHint: 'Уменьшить размер предварительного просмотра',
     manualTagsHint: 'Toggle manual tags',
     manualTagsDescription: 'Toggle manual tagging feature',
-    randomizeGalleryDescription: 'Рандомизирует порядок видеофайлов после каждого поиска',
-    randomizeGalleryHint: 'Рандомизировать порядок галереи',
     rescanDirectoryDescription: 'Повторно сканирует папку видео для любых изменений файла (добавление, переименование, удаление видео) и обновляет текущий хаб',
     rescanDirectoryHint: 'Пересканировать каталог',
     resetSettingsDescription: 'Сбрасывает настройки и кнопки к значениям по умолчанию',

@@ -759,7 +759,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.finalArrayNeedsSaving = true;
     const fullPath = this.appState.selectedSourceFolder + this.finalArray[index].partialPath + '/' + this.finalArray[index].fileName;
     this.fullPathToCurrentFile = fullPath;
-    console.log(fullPath);
+    // console.log(fullPath);
     if (this.rootFolderLive) {
       this.electronService.ipcRenderer.send('openThisFile', fullPath);
     }
@@ -1051,14 +1051,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
         const allOptions = this.sortFilterElement.nativeElement.options;
         allOptions[allOptions.length - 1].selected = true;
       }
-    } else if (uniqueKey === 'randomizeGallery') {
-      console.log('RANDOMIZE GALLERY DISABLED !!!');
-      console.log('TODO - fix and test thoroughly first!');
-      // if (this.settingsButtons['randomizeGallery'].toggled === true) {
-      //   this.sortType = 'random';
-      //   this.shuffleTheViewNow = 0;
-      // }
-      // this.toggleButtonOpposite(uniqueKey);
     } else {
       this.toggleButtonOpposite(uniqueKey);
       if (uniqueKey === 'showMoreInfo') {
@@ -1075,17 +1067,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   public showSettingsGroup(group: number): void {
     this.settingToShow = group;
-  }
-
-  /**
-   * Complex logic to see if we should shuffle things!
-   */
-  public shouldWeShuffle(): void {
-    if (this.settingsButtons['randomizeGallery'].toggled === true) {
-      this.shuffleTheViewNow++;
-    } else {
-      this.shuffleTheViewNow = 0;
-    }
   }
 
   /**
@@ -1295,10 +1276,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
 
-  magicSearchChanged(event): void {
-    this.shouldWeShuffle();
-  }
-
   /**
    * Add search string to filter array
    * When user presses the `ENTER` key
@@ -1325,7 +1302,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.filters[origin].string = '';
     }
     this.scrollToTop();
-    this.shouldWeShuffle();
   }
 
   /**
@@ -1338,7 +1314,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.filters[origin].array.pop();
       this.filters[origin].bool = !this.filters[origin].bool;
     }
-    this.shouldWeShuffle();
   }
 
   /**
@@ -1350,7 +1325,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   removeThisFilter(item: number, origin: number): void {
     this.filters[origin].array.splice(item, 1);
     this.filters[origin].bool = !this.filters[origin].bool;
-    this.shouldWeShuffle();
   }
 
   /**
@@ -1545,7 +1519,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   showSimilarNow(): void {
     this.findMostSimilar = this.currentRightClickedItem.cleanName;
-    console.log(this.findMostSimilar);
+    // console.log(this.findMostSimilar);
     this.showSimilar = true;
   }
 
@@ -1798,9 +1772,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param type
    */
   selectFilterOrder(type: SortType): void {
-    console.log(type);
     this.sortType = type;
-    // this.shuffleTheViewNow++;
   }
 
   /**

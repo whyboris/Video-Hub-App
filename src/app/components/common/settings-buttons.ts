@@ -68,7 +68,6 @@ export const SettingsButtonsGroups: string[][] = [
     'showMoreInfo',
     'compactView',
     'fontSizeLarger',
-    // 'randomizeGallery', // TODO - disabled for now
     'shuffleGalleryNow',
     'showFolders'
   ],
@@ -319,13 +318,6 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     settingsHeading: 'SETTINGS.clipsHeading',
     title: 'BUTTONS.muteClipsHint',
     toggled: true
-  },
-  'randomizeGallery': {
-    description: 'BUTTONS.randomizeGalleryDescription',
-    hidden: true,
-    iconName: 'icon-random',
-    title: 'BUTTONS.randomizeGalleryHint',
-    toggled: false
   },
   'regenerateLibrary': {
     description: 'BUTTONS.regenerateLibraryDescription',

@@ -73,7 +73,7 @@ export class SortingPipe implements PipeTransform {
 
         currentIndex += 1;
       }
-      console.log('VIEW SHUFFLED');
+      // console.log('VIEW SHUFFLED');
       return newArray;
     } else if (sortingType === 'sizeAsc') {
       const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {

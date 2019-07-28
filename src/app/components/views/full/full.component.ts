@@ -55,9 +55,6 @@ export class FullViewComponent implements OnInit {
     const imgWidth = this._imgHeight * 16 / 9;
     const imagesPerRow = Math.floor(this._metaWidth / imgWidth) || 1; // never let this be zero
     this.computedWidth = imgWidth * imagesPerRow;
-    console.log(this.video);
-    // !!! WARNING !!! ### !!! ??? WHY IS `video` undefined sometimes in this view?
-    // TODO -- investigate why `video` is sometimes undefined!
     const numOfRows = Math.ceil((<any>(this.video || {screens: 0}).screens) / imagesPerRow);
     this.rowOffsets = [];
     for (let i = 0; i < numOfRows; i++) {

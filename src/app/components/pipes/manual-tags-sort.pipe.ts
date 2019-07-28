@@ -28,7 +28,7 @@ export class ManualTagSortPipe implements PipeTransform {
 
     if (sortByFrequency) {
 
-      console.log('SORTING BY FREQUENCY !!!');
+      // console.log('SORTING BY FREQUENCY !!!');
 
       sortedTags = allTags.sort((a, b): any => {
         return this.manualTagService.tagsMap.get(a) < this.manualTagService.tagsMap.get(b) ? 1 : -1;

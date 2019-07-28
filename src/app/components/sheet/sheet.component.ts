@@ -90,7 +90,7 @@ export class SheetComponent implements OnInit {
 
   addThisTag(tag: string) {
     if (this.video.tags && this.video.tags.includes(tag)) {
-      console.log('TAG ALREADY ADDED!');
+      // console.log('TAG ALREADY ADDED!');
     } else {
       this.manualTagsService.addTag(tag);
 
