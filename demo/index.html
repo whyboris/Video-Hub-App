@@ -9,102 +9,113 @@
         margin: 0;
         overflow: hidden;
       }
+
       .about {
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        width: 20%;
-        z-index: 200;
         background: #ffffbb;
-        padding: 20px;
         border-radius: 10px;
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        left: 20px;
+        padding: 20px;
+        position: fixed;
+        top: 20px;
+        width: 20%;
+        z-index: 200;
       }
+
       .heading {
-        position: relative;
         color:black;
-        font-size: 16px;
         display: block;
         font-family: "Roboto", Arial, sans-serif;
-      }
-      .description {
-        display: block;
+        font-size: 16px;
         position: relative;
-        color: black;
-        margin-top: 10px;
-        font-size: 12px;
-        font-family: sans-serif;
-        font-style: italic;
       }
+
+      .description {
+        color: black;
+        display: block;
+        font-family: sans-serif;
+        font-size: 12px;
+        font-style: italic;
+        margin-top: 10px;
+        position: relative;
+      }
+
       a {
         color: black;
       }
+
       .win-taskbar {
-        position: fixed;
-        height: 40px;
         background: #002d4f;
         border: 0;
         bottom: 0;
-        width: 100vw;
-        left: 0;
-      }
-      .mac-dock {
-        position: fixed;
         height: 40px;
-        background: white;
-        left: calc(50vw - 125px);
-        bottom: 0;
-      }
-      .mac-tray {
+        left: 0;
         position: fixed;
-        height: 20px;
         width: 100vw;
+      }
+
+      .mac-dock {
+        background: white;
+        bottom: 0;
+        height: 40px;
+        left: calc(50vw - 125px);
+        position: fixed;
+      }
+
+      .mac-tray {
         background: #e8eff5;
         border-bottom: 1px solid #8898a6;
-        top: 0;
         box-shadow: 0 0 5 rgba(0, 0, 0, 0.3);
+        height: 20px;
+        position: fixed;
+        top: 0;
+        width: 100vw;
       }
+
       .fake {
-        position: absolute;
         bottom: 0;
+        position: absolute;
       }
+
       .videoHub {
-        top: 120px;
-        left: 80px;
-        width: calc(100vw - 160px);
-        height: calc(100vh - 300px);
-        max-width: calc(100vw - 160px);
-        max-height: calc(100vh - 160px);
         border: 0;
-        position: relative;
         box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-        resize: both;
+        height: calc(100vh - 300px);
+        left: 80px;
+        max-height: calc(100vh - 160px);
+        max-width: calc(100vw - 160px);
         min-height: 300px;
         min-width: 400px;
+        position: relative;
+        resize: both;
+        top: 120px;
+        width: calc(100vw - 160px);
         z-index: 1;
       }
+
       .fakeComputer {
+        background-attachment: scroll;
         background-image: url(../dist/desktop.jpg);
         background-position: 50%;
         background-size: cover;
-        background-attachment: scroll;
         height: 100vh;
       }
+
       .resizeHelper {
-        position: absolute;
-        top: calc(100vh - 170px);
-        right: 80px;
-        margin: 0;
-        border: 1px solid black;
-        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
-        border-radius: 5px;
         background: #ffffbb;
-        padding: 10px;
+        border: 1px solid black;
+        border-radius: 5px;
+        border-top-right-radius: 0;
+        box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
         color: black;
         font-family: sans-serif;
         font-size: 12px;
         line-height: 16px;
-        border-top-right-radius: 0;
+        margin: 0;
+        padding: 10px;
+        position: absolute;
+        right: 80px;
+        top: calc(100vh - 170px);
         z-index: 0;
       }
     </style>
