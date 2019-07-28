@@ -24,6 +24,15 @@
   }
 }
 
+.dark-mode {
+  border-color: $gray-60;
+  color: white;
+
+  &::placeholder {
+    color: $gray-60;
+  }
+}
+
 .typeahead {
   color: $gray-60;
   font-size: 12px;

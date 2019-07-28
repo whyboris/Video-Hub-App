@@ -1,6 +1,6 @@
 @import "variables";
 
-.clickAwayOverlay {
+.click-away-overlay {
   background-color: rgba(0, 0, 0, 0.1);
   cursor: initial;
   height: 100vh;
@@ -9,8 +9,8 @@
   z-index: 29;
 }
 
-.rightClickMenu {
-  background: $gray-30;
+.right-click-menu {
+  background: $gray-10;
   border: 1px solid $gray-50;
   border-radius: 10px;
   box-shadow: 0 3px 7px 3px rgba(0, 0, 0, 0.3);
@@ -41,8 +41,8 @@
   }
 }
 
-.renameMenu {
-  background: $gray-30;
+.rename-popup {
+  background: $gray-10;
   border: 1px solid $gray-50;
   border-radius: 10px;
   box-shadow: 0 3px 7px 3px rgba(0, 0, 0, 0.3);
@@ -143,7 +143,7 @@
   color: white;
 }
 
-.disableMouseClicks {
+.disable-mouse-clicks {
   pointer-events: auto;
 }
 

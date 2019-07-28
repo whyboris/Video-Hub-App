@@ -797,7 +797,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Add filter to FILE search when word in file is clicked
    * @param filter
    */
-  handleFileWordClicked(filter: string, event?): void {
+  handleTagWordClicked(filter: string, event?): void {
     this.showSidebar();
     if (event && event.shiftKey) { // Shift click to exclude
       if (!this.settingsButtons['tagExclusion'].toggled) {
@@ -809,6 +809,25 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.settingsButtons['tagIntersection'].toggled = true;
       }
       this.onEnterKey(filter, 6); // 6th item is the `tag` filter
+    }
+  }
+
+  /**
+   * Add filter to FILE search when word in file is clicked
+   * @param filter
+   */
+  handleFileWordClicked(filter: string, event?): void {
+    this.showSidebar();
+    if (event && event.shiftKey) {
+      if (!this.settingsButtons['exclude'].toggled) {
+        this.settingsButtons['exclude'].toggled = true;
+      }
+      this.onEnterKey(filter, 4); // 3rd item is the `exclude` filter
+    } else {
+      if (!this.settingsButtons['fileIntersection'].toggled) {
+        this.settingsButtons['fileIntersection'].toggled = true;
+      }
+      this.onEnterKey(filter, 3); // 3rd item is the `fileIntersection` filter
     }
   }
 
@@ -918,7 +937,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   tagClicked(event: string): void {
     this.filters[3].array = []; // clear search array
-    this.handleFileWordClicked(event);
+    this.handleTagWordClicked(event);
     this.toggleButton('showTags'); // close the modal
   }
 
@@ -1240,30 +1259,40 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   public computeTextBufferAmount(): void {
     this.computePreviewWidth();
-    if (this.appState.currentView === 'showThumbnails') {
-      if (this.settingsButtons.compactView.toggled) {
-        this.textPaddingHeight = 0;
-      } else if (this.settingsButtons.showMoreInfo.toggled) {
-        this.textPaddingHeight = 55;
-      } else {
+
+    switch(this.appState.currentView) {
+      case 'showThumbnails':
+        if (this.settingsButtons.compactView.toggled) {
+          this.textPaddingHeight = 0;
+        } else if (this.settingsButtons.showMoreInfo.toggled) {
+          this.textPaddingHeight = 55;
+        } else {
+          this.textPaddingHeight = 20;
+        }
+        break;
+
+      case 'showFilmstrip':
+        if (this.settingsButtons.showMoreInfo.toggled) {
+          this.textPaddingHeight = 20;
+        } else {
+          this.textPaddingHeight = 0;
+        }
+        break;
+
+      case 'showFiles':
         this.textPaddingHeight = 20;
-      }
-    } else if (this.appState.currentView === 'showFilmstrip') {
-      if (this.settingsButtons.showMoreInfo.toggled) {
-        this.textPaddingHeight = 20;
-      } else {
-        this.textPaddingHeight = 0;
-      }
-    } else if (this.appState.currentView === 'showFiles') {
-      this.textPaddingHeight = 20;
-    } else if (this.appState.currentView === 'showClips') {
-      if (this.settingsButtons.showMoreInfo.toggled) {
-        this.textPaddingHeight = 55;
-      } else {
-        this.textPaddingHeight = 20;
-      }
+        break;
+
+      case 'showClips':
+        if (this.settingsButtons.showMoreInfo.toggled) {
+          this.textPaddingHeight = 55;
+        } else {
+          this.textPaddingHeight = 20;
+        }
+        break;
+
+      // default case not needed
     }
-    // console.log('textPaddingHeight = ' + this.textPaddingHeight);
   }
 
   magicSearchChanged(event): void {

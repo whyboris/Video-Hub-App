@@ -22,12 +22,6 @@
   min-width: calc(100vw - 100px);
   overflow: hidden;
 
-  .icon-folder-blank {
-    fill: $gray-60;
-    position: absolute;
-    transform: translate(0, 3px);
-  }
-
   :nth-child(2) {
     margin-left: 23px;
   }

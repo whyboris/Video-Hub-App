@@ -84,6 +84,7 @@
   <app-add-tag-component
     *ngIf="showManualTags"
     (tag)="addThisTag($event)"
+    [darkMode]="darkMode"
   ></app-add-tag-component>
 
   <br><br><br>  <!-- TODO -- stop using `<br>` here -->

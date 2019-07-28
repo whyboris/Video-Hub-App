@@ -15,7 +15,7 @@
 
     <div
       *ngIf="showMeta"
-      [ngStyle]="{ color: darkMode ? '#555555' : '#BBBBBB' }"
+      [ngClass]="{ 'meta-dark-mode': darkMode }"
       class="size"
     >
       {{ video.resolution }}
@@ -23,18 +23,20 @@
 
     <div
       class="title"
+      [ngClass]="{
+        'title-dark-mode': darkMode,
+        'larger-font': largerFont
+      }"
       [ngStyle]="{
           width: 'calc(100% - ' + (showMeta ? '65px' : '10px') + ')',
-          margin: showMeta ? '0 30px' : '0 10px',
-          color: darkMode ? '#777777' : '#444444'
+          margin: showMeta ? '0 30px' : '0 10px'
         }"
-      [ngClass]="{ 'larger-font': largerFont }"
     >
       {{ video.cleanName }}
       <div
         *ngIf="showMeta"
-        [ngStyle]="{ color: darkMode ? '#555555' : '#666666' }"
         class="fileSize"
+        [ngClass]="{ 'meta-dark-mode': darkMode }"
       >
         ({{ video.fileSizeDisplay }})
       </div>
@@ -42,8 +44,8 @@
 
     <div
       *ngIf="showMeta"
-      [ngStyle]="{ color: darkMode ? '#555555' : '#BBBBBB' }"
       class="length"
+      [ngClass]="{ 'meta-dark-mode': darkMode }"
     >
       {{ video.durationDisplay }}
     </div>

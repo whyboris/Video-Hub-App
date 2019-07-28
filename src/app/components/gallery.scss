@@ -58,22 +58,6 @@
   font-size: 16px;
 }
 
-.folder {
-  color: $gray-80;
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: bold;
-  margin: 16px 0 10px -19px;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
-
-  .icon-folder-blank {
-    color: $gray-70;
-    margin-right: 2px;
-    position: absolute;
-    transform: translate(-15px, -1px);
-  }
-}
-
 // add arrows styling to what the folder-arrows.pipe puts out
 /deep/ .icon-arrow:before {
   color: $gray-50;

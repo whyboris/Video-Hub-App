@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { ManualTagsService } from './manual-tags.service';
 
 @Component({
@@ -7,6 +7,8 @@ import { ManualTagsService } from './manual-tags.service';
   styleUrls: ['add-tag.component.scss']
 })
 export class AddTagComponent {
+
+  @Input() darkMode: boolean;
 
   @Output() tag = new EventEmitter<string>();
 

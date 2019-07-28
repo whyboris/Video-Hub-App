@@ -8,13 +8,6 @@
   width: calc(100% - 40px);
 }
 
-.meta {
-  box-sizing: border-box;
-  display: inline-block;
-  padding: 10px 20px;
-  vertical-align: top;
-}
-
 .video-box {
   background-color: black;
   background-size: cover;
@@ -22,48 +15,4 @@
   display: inline-block;
   overflow: hidden;
   position: relative;
-}
-
-.title {
-  -webkit-box-orient: vertical;
-  display: -webkit-box;
-  font-size: 12px;
-  -webkit-line-clamp: 3;
-  max-height: 54px;
-  overflow: hidden;
-  text-align: left;
-  text-overflow: ellipsis;
-  transition: 300ms;
-  transition-property: font-size;
-  user-select: text;
-  width: 100%;
-  word-wrap: break-word;
-}
-
-.fileSize {
-  display: block;
-  font-size: 10px;
-  margin: 5px 0;
-  opacity: 0.8;
-}
-
-.larger-font {
-  font-size: 16px;
-  margin-top: 4px;
-}
-
-.star-rating {
-  background-color: transparent;
-  background-image: url("./../../../../assets/logo.png");
-  background-size: 20px 20px;
-  border: 0;
-  cursor: pointer;
-  height: 20px;
-  margin: 3px;
-  opacity: 0.3;
-  width: 20px;
-}
-
-.star-lit {
-  opacity: 1;
 }

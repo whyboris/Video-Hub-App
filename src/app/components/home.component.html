@@ -80,7 +80,7 @@
   <!-- OVERLAY to cancel out right click modal -->
   <div
     *ngIf="rightClickShowing"
-    class="clickAwayOverlay"
+    class="click-away-overlay"
     @overlayAppear
   >
   </div>
@@ -88,7 +88,7 @@
   <!-- OVERLAY to cancel out rename modal -->
   <div
     *ngIf="renamingNow"
-    class="clickAwayOverlay disableMouseClicks"
+    class="click-away-overlay disable-mouse-clicks"
     @overlayAppear
   >
   </div>
@@ -96,7 +96,7 @@
   <!-- OVERLAY to cancel out sheet display modal -->
   <div
     *ngIf="sheetOverlayShowing"
-    class="clickAwayOverlay"
+    class="click-away-overlay"
     (click)="closeSheetOverlay()"
     @overlayAppear
   >
@@ -109,7 +109,7 @@
         top: rightClickPosition.y + 'px',
         left: rightClickPosition.x + 'px'
       }"
-    class="rightClickMenu"
+    class="right-click-menu"
     @rightClickAnimation
   >
     <ul *ngIf="clickedOnFile; else galleryOptions" @rightClickContentAnimation>
@@ -117,6 +117,7 @@
       <li (click)="showSimilarNow()">{{ 'RIGHTCLICK.showSimilar' | translate }}</li>
       <li (click)="showOnlyThisFolderNow()">{{ 'RIGHTCLICK.viewFolder' | translate }}</li>
       <li (click)="openContainingFolderNow()">{{ 'RIGHTCLICK.openFolder' | translate }}</li>
+      <li (click)="openThumbnailSheet(currentRightClickedItem)">{{ 'RIGHTCLICK.sheetModal' | translate }}</li>
     </ul>
     <ng-template #galleryOptions>
       <ul @rightClickContentAnimation>
@@ -132,13 +133,15 @@
     (editFinalArrayTag)="editFinalArrayTag($event)"
     (editFinalArrayStars)="editFinalArrayStars($event)"
     (editFinalArrayYear)="editFinalArrayYear($event)"
-    (filterTag)="handleFileWordClicked($event.tag.name, $event.event)"
+    (filterTag)="handleTagWordClicked($event.tag.name, $event.event)"
 
     [elHeight]="previewHeight"
     [elWidth]="previewWidth"
     [folderPath]="appState.selectedOutputFolder"
     [hubName]="appState.hubName"
     [imgHeight]="previewHeight"
+
+    [darkMode]="settingsButtons['darkMode'].toggled"
 
     [video]="sheetItemToDisplay"
 
@@ -158,7 +161,7 @@
   <div
     *ngIf="renamingNow"
     [ngClass]="{ renameDark: settingsButtons['darkMode'].toggled }"
-    class="renameMenu"
+    class="rename-popup"
     @modalAnimation
   >
 
@@ -368,7 +371,7 @@
             }"
             style="margin: 0 10px; max-width: initial; padding: 0 15px;"
             >
-              <span>{{ 'SETTINGS.reset' | translate }}</span>
+              <span>{{ 'SETTINGS.resetZoom' | translate }}</span>
           </button>
           <button
             (click)="increaseZoomLevel()"
@@ -498,7 +501,7 @@
         ><ng-container
             *ngFor="let buttonKey of btnGroup"
           ><!--
-          --><button
+         --><button
               *ngIf="!settingsButtons[buttonKey].hidden && settingsButtons[buttonKey].iconName !== 'icon-checkmark'"
               (click)="toggleButton(buttonKey)"
               [ngClass]="{
@@ -1022,7 +1025,7 @@
           (editFinalArrayStars)="editFinalArrayStars($event)"
           (editFinalArrayTag)="editFinalArrayTag($event)"
           (editFinalArrayYear)="editFinalArrayYear($event)"
-          (filterTag)="handleFileWordClicked($event.tag.name, $event.event)"
+          (filterTag)="handleTagWordClicked($event.tag.name, $event.event)"
           (openFileRequest)="openVideo($event)"
 
           [video]="item"
@@ -1159,7 +1162,7 @@
                                        : manualTagFilterString
                                        : settingsButtons['tagFrequencySort'].toggled
                                        : manualTagsService.pipeToggleHack"
-    (tagClicked)="handleFileWordClicked($event.tag.name, $event.event)"
+    (tagClicked)="handleTagWordClicked($event.tag.name, $event.event)"
   ></app-view-tags-component>
 </div>
 
