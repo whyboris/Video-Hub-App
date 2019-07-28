@@ -80,7 +80,7 @@
   <!-- OVERLAY to cancel out right click modal -->
   <div
     *ngIf="rightClickShowing"
-    class="clickAwayOverlay"
+    class="click-away-overlay"
     @overlayAppear
   >
   </div>
@@ -88,7 +88,7 @@
   <!-- OVERLAY to cancel out rename modal -->
   <div
     *ngIf="renamingNow"
-    class="clickAwayOverlay disableMouseClicks"
+    class="click-away-overlay disable-mouse-clicks"
     @overlayAppear
   >
   </div>
@@ -96,7 +96,7 @@
   <!-- OVERLAY to cancel out sheet display modal -->
   <div
     *ngIf="sheetOverlayShowing"
-    class="clickAwayOverlay"
+    class="click-away-overlay"
     (click)="closeSheetOverlay()"
     @overlayAppear
   >
@@ -109,7 +109,7 @@
         top: rightClickPosition.y + 'px',
         left: rightClickPosition.x + 'px'
       }"
-    class="rightClickMenu"
+    class="right-click-menu"
     @rightClickAnimation
   >
     <ul *ngIf="clickedOnFile; else galleryOptions" @rightClickContentAnimation>
@@ -158,7 +158,7 @@
   <div
     *ngIf="renamingNow"
     [ngClass]="{ renameDark: settingsButtons['darkMode'].toggled }"
-    class="renameMenu"
+    class="rename-popup"
     @modalAnimation
   >
 
@@ -498,7 +498,7 @@
         ><ng-container
             *ngFor="let buttonKey of btnGroup"
           ><!--
-          --><button
+         --><button
               *ngIf="!settingsButtons[buttonKey].hidden && settingsButtons[buttonKey].iconName !== 'icon-checkmark'"
               (click)="toggleButton(buttonKey)"
               [ngClass]="{
