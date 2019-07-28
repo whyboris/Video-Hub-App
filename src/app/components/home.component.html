@@ -133,7 +133,7 @@
     (editFinalArrayTag)="editFinalArrayTag($event)"
     (editFinalArrayStars)="editFinalArrayStars($event)"
     (editFinalArrayYear)="editFinalArrayYear($event)"
-    (filterTag)="handleFileWordClicked($event.tag.name, $event.event)"
+    (filterTag)="handleTagWordClicked($event.tag.name, $event.event)"
 
     [elHeight]="previewHeight"
     [elWidth]="previewWidth"
@@ -1025,7 +1025,7 @@
           (editFinalArrayStars)="editFinalArrayStars($event)"
           (editFinalArrayTag)="editFinalArrayTag($event)"
           (editFinalArrayYear)="editFinalArrayYear($event)"
-          (filterTag)="handleFileWordClicked($event.tag.name, $event.event)"
+          (filterTag)="handleTagWordClicked($event.tag.name, $event.event)"
           (openFileRequest)="openVideo($event)"
 
           [video]="item"
@@ -1162,7 +1162,7 @@
                                        : manualTagFilterString
                                        : settingsButtons['tagFrequencySort'].toggled
                                        : manualTagsService.pipeToggleHack"
-    (tagClicked)="handleFileWordClicked($event.tag.name, $event.event)"
+    (tagClicked)="handleTagWordClicked($event.tag.name, $event.event)"
   ></app-view-tags-component>
 </div>
 

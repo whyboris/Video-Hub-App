@@ -797,7 +797,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Add filter to FILE search when word in file is clicked
    * @param filter
    */
-  handleFileWordClicked(filter: string, event?): void {
+  handleTagWordClicked(filter: string, event?): void {
     this.showSidebar();
     if (event && event.shiftKey) { // Shift click to exclude
       if (!this.settingsButtons['tagExclusion'].toggled) {
@@ -809,6 +809,25 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.settingsButtons['tagIntersection'].toggled = true;
       }
       this.onEnterKey(filter, 6); // 6th item is the `tag` filter
+    }
+  }
+
+  /**
+   * Add filter to FILE search when word in file is clicked
+   * @param filter
+   */
+  handleFileWordClicked(filter: string, event?): void {
+    this.showSidebar();
+    if (event && event.shiftKey) {
+      if (!this.settingsButtons['exclude'].toggled) {
+        this.settingsButtons['exclude'].toggled = true;
+      }
+      this.onEnterKey(filter, 4); // 3rd item is the `exclude` filter
+    } else {
+      if (!this.settingsButtons['fileIntersection'].toggled) {
+        this.settingsButtons['fileIntersection'].toggled = true;
+      }
+      this.onEnterKey(filter, 3); // 3rd item is the `fileIntersection` filter
     }
   }
 
@@ -918,7 +937,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   tagClicked(event: string): void {
     this.filters[3].array = []; // clear search array
-    this.handleFileWordClicked(event);
+    this.handleTagWordClicked(event);
     this.toggleButton('showTags'); // close the modal
   }
 
@@ -1272,8 +1291,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         }
         break;
 
-      default:
-        console.log('this should not happen!');
+      // default case not needed
     }
   }
 
