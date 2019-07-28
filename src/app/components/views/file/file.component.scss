@@ -8,6 +8,7 @@
 
 .length,
 .size {
+  color: $gray-50;
   cursor: pointer;
   display: block;
   font-size: 10px;
@@ -24,6 +25,17 @@
   left: 0;
   text-align: right;
   width: 21px;
+}
+
+.fileSize {
+  color: $gray-60;
+  display: inline-block;
+  font-size: 10px;
+  opacity: 0.8;
+}
+
+.meta-dark-mode {
+  color: $gray-60;
 }
 
 .folder-name {
@@ -47,6 +59,7 @@
 }
 
 .title {
+  color: $gray-80;
   cursor: pointer;
   display: inline-block;
   font-size: 12px;
@@ -62,10 +75,8 @@
   // width: calc( 100% - 65px );
 }
 
-.fileSize {
-  display: inline-block;
-  font-size: 10px;
-  opacity: 0.8;
+.title-dark-mode {
+  color: $gray-10;
 }
 
 .larger-font {
