@@ -38,9 +38,11 @@ export class SortingPipe implements PipeTransform {
       return 1;
     }
     if (decreasing) {
-      return (x[property] || 0) - (y[property] || 0); // note: || 0 needed for `year` only
+      return (x[property] || Infinity) - (y[property] || Infinity);
+      // note: `|| Infinity` needed for `year` sort only -- to put everything without a year below
     } else {
       return (y[property] || 0) - (x[property] || 0);
+      // Note `|| 0` needed only for `year` sort only -- to put everything without a year below
     }
   }
 
@@ -107,7 +109,7 @@ export class SortingPipe implements PipeTransform {
       return sorted.slice(0);
     } else if (sortingType === 'yearAsc') {
       const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
-        return this.sortFunctionLol(x, y, 'year', false);
+        return this.sortFunctionLol(x, y, 'year', true);
       });
       return sorted.slice(0);
     } else if (sortingType === 'yearDesc') {

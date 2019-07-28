@@ -99,6 +99,7 @@ export const English = {
     sortOptionTimeDescription          :'Show the duration order option in the sorting dropdown',
     sortOptionTimesPlayedDescription   :'Show the times played order option in the sorting dropdown',
     sortOptionYearDescription          :'Show the year order option in the sorting dropdown',
+    sortOptionYearMoreInfo             :'Only affected by the year you manually set in the details view',
     sortOptionsHeading                 :'Show or hide various sorting options in the dropdown',
     sortOrderDescription               :'Show the sort order filter',
     sortOrderHint                      :'Sort order',

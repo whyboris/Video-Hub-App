@@ -508,6 +508,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.sortOptionYearDescription',
     hidden: false,
     iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
+    moreInfo: 'BUTTONS.sortOptionYearMoreInfo',
     title: '',
     toggled: false
   },
