@@ -16,7 +16,7 @@ export class MagicSearchPipe implements PipeTransform {
     if (searchString === '') {
       return finalArray;
     } else {
-      console.log('magic search pipe working');
+      // console.log('magic search pipe working');
       return finalArray.filter(item =>
         item.partialPath.toLowerCase().indexOf(searchString.toLowerCase()) !== -1
         || item.fileName.toLowerCase().indexOf(searchString.toLowerCase()) !== -1

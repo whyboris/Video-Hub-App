@@ -276,68 +276,111 @@ export class HomeComponent implements OnInit, AfterViewInit {
   handleKeyboardEvent(event: KeyboardEvent) {
     // .metaKey is for mac `command` button
     if (event.ctrlKey === true || event.metaKey) {
-      if (event.key === 's') {
-        this.shuffleTheViewNow++;
-      } else if (event.key === 'o') {
-        if (this.wizard.showWizard === false) {
-          this.toggleSettings();
-        }
-      } else if (event.key === 'f') {
-        if (this.settingsButtons['fileIntersection'].toggled === false) {
-          this.settingsButtons['fileIntersection'].toggled = true;
-        }
-        this.showSidebar();
-        setTimeout(() => {
-          if (this.searchRef.nativeElement.querySelector('#fileIntersection')) {
-            this.searchRef.nativeElement.querySelector('#fileIntersection').focus();
+
+      switch(event.key) {
+
+        case('a'):
+          this.toggleButton('hideSidebar');
+          break;
+
+        case('i'):
+          this.toggleButton('showMoreInfo');
+          break;
+
+        case('1'):
+          this.toggleButton('showThumbnails');
+          break;
+
+        case('2'):
+          this.toggleButton('showFilmstrip');
+          break;
+
+        case('3'):
+          this.toggleButton('showFullView');
+          break;
+
+        case('4'):
+          this.toggleButton('showDetails');
+          break;
+
+        case('5'):
+          this.toggleButton('showFiles');
+          break;
+
+        case('6'):
+          this.toggleButton('showClips');
+          break;
+
+        case('s'):
+          this.toggleButton('shuffleGalleryNow');
+          break;
+
+        case('d'):
+          this.toggleButton('darkMode');
+          break;
+
+        case('z'):
+          this.toggleButton('makeSmaller');
+          break;
+
+        case('x'):
+          this.toggleButton('makeLarger');
+          break;
+
+        case('o'):
+          if (this.wizard.showWizard === false) {
+            this.toggleSettings();
           }
-        }, 1);
-      } else if (event.key === 'n') {
-        this.startWizard();
-        this.settingsModalOpen = false;
-        this.settingsButtons['showTags'].toggled = false;
-      } else if (event.key === 'd') {
-        this.toggleButton('darkMode');
-      } else if (event.key === 'q') {
-        event.preventDefault();
-        event.stopPropagation();
-        this.initiateClose();
-      } else if (event.key === 'z') {
-        this.toggleButton('makeSmaller');
-      } else if (event.key === 'x') {
-        this.toggleButton('makeLarger');
-      } else if (event.key === 't') {
-        if (!this.wizard.showWizard) {
-          this.toggleButton('showTags');
-        }
-      } else if (event.key === '1') {
-        this.toggleButton('showThumbnails');
-      } else if (event.key === '2') {
-        this.toggleButton('showFilmstrip');
-      } else if (event.key === '3') {
-        this.toggleButton('showFullView');
-      } else if (event.key === '4') {
-        this.toggleButton('showDetails');
-      } else if (event.key === '5') {
-        this.toggleButton('showFiles');
-      } else if (event.key === '6') {
-        this.toggleButton('showClips');
-      } else if (event.key === 'h') {
-        this.toggleButton('hideTop');
-        this.toggleButton('hideSidebar');
-        this.toggleSettingsMenu();
-        this.toggleButton('showMoreInfo');
-      } else if (event.key === 'a') {
-        this.toggleButton('hideSidebar');
-      } else if (event.key === 'g') {
-        if (!this.settingsButtons['magic'].toggled) {
-          this.settingsButtons['magic'].toggled = true;
-        }
-        this.showSidebar();
-        setTimeout(() => {
-          this.magicSearch.nativeElement.focus();
-        }, 1);
+          break;
+
+        case('t'):
+          if (!this.wizard.showWizard) {
+            this.toggleButton('showTags');
+          }
+          break;
+
+        case('q'):
+          event.preventDefault();
+          event.stopPropagation();
+          this.initiateClose();
+          break;
+
+        case('n'):
+          this.startWizard();
+          this.settingsModalOpen = false;
+          this.settingsButtons['showTags'].toggled = false;
+          break;
+
+        case('h'):
+          this.toggleButton('hideTop');
+          this.toggleButton('hideSidebar');
+          this.toggleSettingsMenu();
+          this.toggleButton('showMoreInfo');
+          break;
+
+        case('f'):
+          if (this.settingsButtons['fileIntersection'].toggled === false) {
+            this.settingsButtons['fileIntersection'].toggled = true;
+          }
+          this.showSidebar();
+          setTimeout(() => {
+            if (this.searchRef.nativeElement.querySelector('#fileIntersection')) {
+              this.searchRef.nativeElement.querySelector('#fileIntersection').focus();
+            }
+          }, 1);
+          break;
+
+        case('g'):
+          if (!this.settingsButtons['magic'].toggled) {
+            this.settingsButtons['magic'].toggled = true;
+          }
+          this.showSidebar();
+          setTimeout(() => {
+            this.magicSearch.nativeElement.focus();
+          }, 1);
+          break;
       }
+
     } else if (event.key === 'Escape' && this.wizard.showWizard === true && this.canCloseWizard === true) {
       this.wizard.showWizard = false;
     } else if (event.key === 'Escape' && this.settingsModalOpen) {
@@ -759,7 +802,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.finalArrayNeedsSaving = true;
     const fullPath = this.appState.selectedSourceFolder + this.finalArray[index].partialPath + '/' + this.finalArray[index].fileName;
     this.fullPathToCurrentFile = fullPath;
-    console.log(fullPath);
+    // console.log(fullPath);
     if (this.rootFolderLive) {
       this.electronService.ipcRenderer.send('openThisFile', fullPath);
     }
@@ -844,7 +887,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   openInExplorer(): void {
-    console.log('should open explorer');
+    // console.log('should open explorer');
     this.electronService.ipcRenderer.send('openInExplorer', this.fullPathToCurrentFile);
   }
 
@@ -1051,14 +1094,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
         const allOptions = this.sortFilterElement.nativeElement.options;
         allOptions[allOptions.length - 1].selected = true;
       }
-    } else if (uniqueKey === 'randomizeGallery') {
-      console.log('RANDOMIZE GALLERY DISABLED !!!');
-      console.log('TODO - fix and test thoroughly first!');
-      // if (this.settingsButtons['randomizeGallery'].toggled === true) {
-      //   this.sortType = 'random';
-      //   this.shuffleTheViewNow = 0;
-      // }
-      // this.toggleButtonOpposite(uniqueKey);
     } else {
       this.toggleButtonOpposite(uniqueKey);
       if (uniqueKey === 'showMoreInfo') {
@@ -1075,17 +1110,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   public showSettingsGroup(group: number): void {
     this.settingToShow = group;
-  }
-
-  /**
-   * Complex logic to see if we should shuffle things!
-   */
-  public shouldWeShuffle(): void {
-    if (this.settingsButtons['randomizeGallery'].toggled === true) {
-      this.shuffleTheViewNow++;
-    } else {
-      this.shuffleTheViewNow = 0;
-    }
   }
 
   /**
@@ -1295,10 +1319,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
 
-  magicSearchChanged(event): void {
-    this.shouldWeShuffle();
-  }
-
   /**
    * Add search string to filter array
    * When user presses the `ENTER` key
@@ -1325,7 +1345,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.filters[origin].string = '';
     }
     this.scrollToTop();
-    this.shouldWeShuffle();
   }
 
   /**
@@ -1338,7 +1357,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.filters[origin].array.pop();
       this.filters[origin].bool = !this.filters[origin].bool;
     }
-    this.shouldWeShuffle();
   }
 
   /**
@@ -1350,7 +1368,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   removeThisFilter(item: number, origin: number): void {
     this.filters[origin].array.splice(item, 1);
     this.filters[origin].bool = !this.filters[origin].bool;
-    this.shouldWeShuffle();
   }
 
   /**
@@ -1545,7 +1562,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   showSimilarNow(): void {
     this.findMostSimilar = this.currentRightClickedItem.cleanName;
-    console.log(this.findMostSimilar);
+    // console.log(this.findMostSimilar);
     this.showSimilar = true;
   }
 
@@ -1798,9 +1815,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param type
    */
   selectFilterOrder(type: SortType): void {
-    console.log(type);
     this.sortType = type;
-    // this.shuffleTheViewNow++;
   }
 
   /**

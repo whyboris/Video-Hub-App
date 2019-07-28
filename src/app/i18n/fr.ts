@@ -41,8 +41,6 @@ export const French = {
     makeSmallerHint: 'Diminuer la taille de l\'aperçu',
     manualTagsHint: 'Toggle manual tags',
     manualTagsDescription: 'Toggle manual tagging feature',
-    randomizeGalleryDescription: 'Randomise l\'ordre des fichiers vidéo après chaque recherche',
-    randomizeGalleryHint: 'Randomiser la galerie',
     rescanDirectoryDescription: 'Réanalyser le dossier vidéo pour détecter toute modification de fichier (ajout, changement de nom, suppression de vidéos) et mettre à jour le concentrateur actuel',
     rescanDirectoryHint: 'Réanalyser le répertoire',
     resetSettingsDescription: 'Réinitialise les paramètres et les boutons à leurs valeurs par défaut',

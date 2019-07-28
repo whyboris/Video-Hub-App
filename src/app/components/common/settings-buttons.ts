@@ -68,7 +68,6 @@ export const SettingsButtonsGroups: string[][] = [
     'showMoreInfo',
     'compactView',
     'fontSizeLarger',
-    // 'randomizeGallery', // TODO - disabled for now
     'shuffleGalleryNow',
     'showFolders'
   ],
@@ -320,13 +319,6 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     title: 'BUTTONS.muteClipsHint',
     toggled: true
   },
-  'randomizeGallery': {
-    description: 'BUTTONS.randomizeGalleryDescription',
-    hidden: true,
-    iconName: 'icon-random',
-    title: 'BUTTONS.randomizeGalleryHint',
-    toggled: false
-  },
   'regenerateLibrary': {
     description: 'BUTTONS.regenerateLibraryDescription',
     hidden: false,
@@ -516,6 +508,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.sortOptionYearDescription',
     hidden: false,
     iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
+    moreInfo: 'BUTTONS.sortOptionYearMoreInfo',
     title: '',
     toggled: false
   },

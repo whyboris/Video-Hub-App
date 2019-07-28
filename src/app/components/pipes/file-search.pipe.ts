@@ -33,7 +33,7 @@ export class FileSearchPipe implements PipeTransform {
     if (arrOfStrings.length === 0) {
       return finalArray;
     } else {
-      console.log('file search pipe working');
+      // console.log('file search pipe working');
       return finalArray.filter((item) => {
 
         // exact prefix match

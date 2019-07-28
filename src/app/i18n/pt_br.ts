@@ -47,8 +47,6 @@ export const BrazilianPortuguese = {
     manualTagsHint: 'Alternar tags manuais',
     muteClipsDescription: 'Silenciar todo o som',
     muteClipsHint: 'Silenciar todo o som',
-    randomizeGalleryDescription: 'Randomize a ordem dos arquivos de vídeo após cada pesquisa',
-    randomizeGalleryHint: 'Randomize o pedido da galeria',
     regenerateLibraryDescription: 'Regenerar todos os metadados da biblioteca, exceto miniaturas e metadados inseridos pelo usuário',
     regenerateLibraryHint: 'Regenerar biblioteca',
     relatedTrayDescription: 'Mostrar bandeja com 5 vídeos relacionados ao último que você clicou',

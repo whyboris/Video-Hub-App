@@ -132,14 +132,14 @@
   z-index: -1;
 }
 
-.levDistance {
+.lev-distance {
   .search-word {
     background: $show-similar-to;
   }
 }
 
-.levSpan {
-  color: $gray-30;
+.lev-description {
+  color: $gray-50;
   cursor: default;
   font-size: 12px;
   margin: 15px 0 15px;
