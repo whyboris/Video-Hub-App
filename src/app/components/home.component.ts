@@ -276,70 +276,110 @@ export class HomeComponent implements OnInit, AfterViewInit {
   handleKeyboardEvent(event: KeyboardEvent) {
     // .metaKey is for mac `command` button
     if (event.ctrlKey === true || event.metaKey) {
-      if (event.key === 's') {
-        this.toggleButton('shuffleGalleryNow');
-      } else if (event.key === 'o') {
-        if (this.wizard.showWizard === false) {
-          this.toggleSettings();
-        }
-      } else if (event.key === 'f') {
-        if (this.settingsButtons['fileIntersection'].toggled === false) {
-          this.settingsButtons['fileIntersection'].toggled = true;
-        }
-        this.showSidebar();
-        setTimeout(() => {
-          if (this.searchRef.nativeElement.querySelector('#fileIntersection')) {
-            this.searchRef.nativeElement.querySelector('#fileIntersection').focus();
+
+      switch(event.key) {
+        case('s'):
+          this.toggleButton('shuffleGalleryNow');
+          break;
+
+        case('o'):
+          if (this.wizard.showWizard === false) {
+            this.toggleSettings();
           }
-        }, 1);
-      } else if (event.key === 'n') {
-        this.startWizard();
-        this.settingsModalOpen = false;
-        this.settingsButtons['showTags'].toggled = false;
-      } else if (event.key === 'd') {
-        this.toggleButton('darkMode');
-      } else if (event.key === 'q') {
-        event.preventDefault();
-        event.stopPropagation();
-        this.initiateClose();
-      } else if (event.key === 'z') {
-        this.toggleButton('makeSmaller');
-      } else if (event.key === 'x') {
-        this.toggleButton('makeLarger');
-      } else if (event.key === 't') {
-        if (!this.wizard.showWizard) {
-          this.toggleButton('showTags');
-        }
-      } else if (event.key === 'i') {
-        this.toggleButton('showMoreInfo');
-      } else if (event.key === '1') {
-        this.toggleButton('showThumbnails');
-      } else if (event.key === '2') {
-        this.toggleButton('showFilmstrip');
-      } else if (event.key === '3') {
-        this.toggleButton('showFullView');
-      } else if (event.key === '4') {
-        this.toggleButton('showDetails');
-      } else if (event.key === '5') {
-        this.toggleButton('showFiles');
-      } else if (event.key === '6') {
-        this.toggleButton('showClips');
-      } else if (event.key === 'h') {
-        this.toggleButton('hideTop');
-        this.toggleButton('hideSidebar');
-        this.toggleSettingsMenu();
-        this.toggleButton('showMoreInfo');
-      } else if (event.key === 'a') {
-        this.toggleButton('hideSidebar');
-      } else if (event.key === 'g') {
-        if (!this.settingsButtons['magic'].toggled) {
-          this.settingsButtons['magic'].toggled = true;
-        }
-        this.showSidebar();
-        setTimeout(() => {
-          this.magicSearch.nativeElement.focus();
-        }, 1);
+          break;
+
+        case('f'):
+          if (this.settingsButtons['fileIntersection'].toggled === false) {
+            this.settingsButtons['fileIntersection'].toggled = true;
+          }
+          this.showSidebar();
+          setTimeout(() => {
+            if (this.searchRef.nativeElement.querySelector('#fileIntersection')) {
+              this.searchRef.nativeElement.querySelector('#fileIntersection').focus();
+            }
+          }, 1);
+          break;
+
+        case('n'):
+          this.startWizard();
+          this.settingsModalOpen = false;
+          this.settingsButtons['showTags'].toggled = false;
+          break;
+
+        case('d'):
+          this.toggleButton('darkMode');
+          break;
+
+        case('q'):
+          event.preventDefault();
+          event.stopPropagation();
+          this.initiateClose();
+          break;
+
+        case('z'):
+          this.toggleButton('makeSmaller');
+          break;
+
+        case('x'):
+          this.toggleButton('makeLarger');
+          break;
+
+        case('t'):
+          if (!this.wizard.showWizard) {
+            this.toggleButton('showTags');
+          }
+          break;
+
+        case('i'):
+          this.toggleButton('showMoreInfo');
+          break;
+
+        case('1'):
+          this.toggleButton('showThumbnails');
+          break;
+
+        case('2'):
+          this.toggleButton('showFilmstrip');
+          break;
+
+        case('3'):
+          this.toggleButton('showFullView');
+          break;
+
+        case('4'):
+          this.toggleButton('showDetails');
+          break;
+
+        case('5'):
+          this.toggleButton('showFiles');
+          break;
+
+        case('6'):
+          this.toggleButton('showClips');
+          break;
+
+        case('h'):
+          this.toggleButton('hideTop');
+          this.toggleButton('hideSidebar');
+          this.toggleSettingsMenu();
+          this.toggleButton('showMoreInfo');
+          break;
+
+        case('a'):
+          this.toggleButton('hideSidebar');
+          break;
+
+        case('g'):
+          if (!this.settingsButtons['magic'].toggled) {
+            this.settingsButtons['magic'].toggled = true;
+          }
+          this.showSidebar();
+          setTimeout(() => {
+            this.magicSearch.nativeElement.focus();
+          }, 1);
+          break;
       }
+
     } else if (event.key === 'Escape' && this.wizard.showWizard === true && this.canCloseWizard === true) {
       this.wizard.showWizard = false;
     } else if (event.key === 'Escape' && this.settingsModalOpen) {
