@@ -9,7 +9,7 @@ import { globals } from './main-globals';
 const codeRunningOnMac: boolean = process.platform === 'darwin';
 
 // ========================================================================================
-// *FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER*** BUILD TOGGLE *FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER*
+// ***************************** BUILD TOGGLE *********************************************
 // ========================================================================================
 const demo = false;
 globals.version = '1.9.9';
