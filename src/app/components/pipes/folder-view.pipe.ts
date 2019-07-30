@@ -9,31 +9,119 @@ export class FolderViewPipe implements PipeTransform {
 
   constructor() { }
 
+
   /**
-   * Inserts folders os elements for file view
+   * Takes ImageElement array and returns 4 hashes
+   * separated by `:` so the folderView has something to show!
+   * @param files
+   */
+  extractFourPreviewHashes(files: ImageElement[]): string {
+    let hashes: string = '';
+
+    for (let n = 0; n < 4; n++) {
+      if (files[n]) {
+        hashes += ':' + files[n].hash;
+      } else {
+        break;
+      }
+    }
+
+    if (hashes.charAt(0) === ':') {
+      hashes = hashes.slice(1);
+    }
+
+    return hashes;
+  }
+
+
+  /**
+   * Serves TWO important purposes:
+   *  (1) to group all the videos in subdirectory into a folder - displaying 1 element in gallery
+   *  (2) to allow user to navigate to a particular subfolder by clicking on it
+   *      - must allow for an `UP` folder as well - to navigate backwards !!!
    * @param finalArray
    * @param render      whether to insert folders
-   * @param folderOnly  whether to ONLY show folders
+   * @param prefixPath  whether to ONLY show folders
    */
-  transform(finalArray: ImageElement[], render: boolean, prefixPath?: string[]): any[] {
+  transform(finalArray: ImageElement[], render: boolean, prefixPath?: string): ImageElement[] {
+
     if (render) {
-      const arrWithFolders = [];
 
-      let previousPath = '';
+      console.log('prefix path is: ' + prefixPath);
+      console.log('INCOMING array length is: ' + finalArray.length);
 
+      // to make things easier & faster:
+      // first remove all elements not within the specific subfolder
+      let subCopy: ImageElement[] = [];
+
+      if (prefixPath) {
+        subCopy = finalArray.filter((element) => {
+          return (
+               element.partialPath === (prefixPath)               // needs to be exact
+            || element.partialPath.startsWith(prefixPath + '/')   // or starts with exactly
+                                                                  //  - otherwise `1` and `1.5` coincide when you click `1`
+          );
+        });
+
+      } else {
+        subCopy = finalArray;
+      }
+
+      console.log('subCopy length: ' + subCopy.length);
+
+      // now create a MAP !!!
+      // from `partialPath` to all the elements that have that path
+
+      const pathToElementsMap: Map<string, ImageElement[]> = new Map();
+
+      subCopy.forEach((element) => {
+
+        let firstFolder: string;
+
+        if (prefixPath) {
+          firstFolder = element.partialPath.replace(prefixPath, '');
+        } else {
+
+
+          // only grab the first subfolder !!!
+          // e.g.
+          // abc => abc
+          // abc/def => abc
+          // abc/def/xyz => abc
+
+          firstFolder = element.partialPath.split('/')[1] || ''; // first element always empty element ?!?!?!?
+          // console.log(firstFolder);
+        }
+        // -- crap code can cause bugs                            ^^^^   ^^^^ to prevent undefined !?!!!
+
+        if (pathToElementsMap.has(firstFolder)) {
+          pathToElementsMap.set(firstFolder, [...pathToElementsMap.get(firstFolder), element]);
+        } else {
+          pathToElementsMap.set(firstFolder, [element]);
+        }
+      });
+
+      // later -- filter out subfolders within folders !!!
+
+      console.log(pathToElementsMap);
+
+      // the array we'll return back !!!!
+      const arrWithFolders: ImageElement[] = [];
+
+      // append the UP folder if we're inside any folder !!!
       if (prefixPath.length) {
         const upButton: ImageElement = {
-          cleanName: '***',
+          cleanName: '*FOLDER*',
           duration: 0,
           durationDisplay: '',
-          fileName: 'up',
+          fileName: '*UP*',
           fileSize: 0,
           fileSizeDisplay: '',
           hash: '',
           height: 0,
           index: -1, // always show at the top
           mtime: 0,
-          partialPath: prefixPath[0].substring(0, prefixPath[0].lastIndexOf('/')),
+          partialPath: prefixPath.substring(0, prefixPath.lastIndexOf('/')),
           resBucket: 0,
           resolution: '',
           screens: 10, // temp hardcoded
@@ -43,53 +131,41 @@ export class FolderViewPipe implements PipeTransform {
         };
         arrWithFolders.push(upButton);
       }
-      if (!prefixPath.length) {
-        prefixPath = [''];
-      }
-      finalArray.forEach((element, index) => {
-        const path = element.partialPath.substring(prefixPath[0].length + 1).split('/');
-        if (element.partialPath === prefixPath[0]) {
-          arrWithFolders.push(element);
-        } else if (path.length >= 1) {
-          if (path[0] !== previousPath) {
-            const tempClone: ImageElement = {
-              cleanName: '***',
-              duration: 0,
-              durationDisplay: '',
-              fileName: path[0],
-              fileSize: element.fileSize,
-              fileSizeDisplay: '1',
-              hash: element.hash,
-              height: 0,
-              index: element.index,
-              mtime: element.mtime,
-              partialPath: prefixPath + '/' + path[0],
-              resBucket: 0,
-              resolution: '',
-              screens: 10, // temp hardcoded
-              stars: 0.5,
-              timesPlayed: 0,
-              width: 0,
-            };
-            arrWithFolders.push(tempClone);
-            previousPath = path[0];
-          } else {
-            // Folder stats will be the sum of the video stats within them
-            arrWithFolders[arrWithFolders.length - 1].fileSize += element.fileSize;
-            arrWithFolders[arrWithFolders.length - 1].fileSizeDisplay =
-                  parseFloat(arrWithFolders[arrWithFolders.length - 1].fileSizeDisplay) + 1;
-            arrWithFolders[arrWithFolders.length - 1].duration += element.duration;
-            arrWithFolders[arrWithFolders.length - 1].timesPlayed += element.timesPlayed;
-            arrWithFolders[arrWithFolders.length - 1].mtime = Math.max(arrWithFolders[arrWithFolders.length - 1].mtime, element.mtime);
-            arrWithFolders[arrWithFolders.length - 1].stars += element.stars - 0.5;
-            arrWithFolders[arrWithFolders.length - 1].hash += ':' + element.hash;
-          }
+
+      // now for each element in the map create the element to display!!!
+      pathToElementsMap.forEach((value: ImageElement[], key: string) => {
+
+        if (key === '') {
+          arrWithFolders.push(...value); // spread out all files in root folder
+        } else {
+
+          const folderWithStuff: ImageElement = {
+            cleanName: '*FOLDER*',
+            duration: 0,
+            durationDisplay: '',
+            fileName: key.replace('/', ''),
+            fileSize: 0,
+            fileSizeDisplay: value.length.toString(),
+            hash: this.extractFourPreviewHashes(value),
+            height: 0,
+            // TODO -- set to 0 -- once the `sorting.pipe` is fixed !!!
+            index: 0.5, // always show at the top but after the `UP` folder -- DO NOT SET TO ZERO (0) -- default sort has `|| infinity`
+            mtime: 0,
+            partialPath: (prefixPath || '/') + key, // must set this for the folder click to register!
+            resBucket: 0,
+            resolution: '',
+            screens: 10,
+            stars: 0.5,
+            timesPlayed: 0,
+            width: 0,
+          };
+          arrWithFolders.push(folderWithStuff);
         }
+
       });
 
-      // console.log('folderViewPipe running');
-
       return arrWithFolders;
+
     } else {
       return finalArray;
     }

@@ -14,7 +14,7 @@
  * Learn more in https://angular.io/docs/ts/latest/guide/browser-support.html
  */
 
-/***************************************************************************************************
+/*FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER*
  * BROWSER POLYFILLS
  */
 
@@ -23,13 +23,13 @@
 // import 'core-js/es7/reflect';
 
 
-/***************************************************************************************************
+/*FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER*
  * Zone JS is required by Angular itself.
  */
 import 'zone.js/dist/zone'; // Included with Angular CLI.
 
 
-/***************************************************************************************************
+/*FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER**FOLDER*
  * APPLICATION IMPORTS
  */
 

@@ -7,10 +7,10 @@
   [ngClass]="{ 'compact-margins': compactView }"
 >
 
-  <div *ngIf="video.cleanName === '***'; else singleThumbnail">
+  <div *ngIf="video.cleanName === '*FOLDER*'; else singleThumbnail">
     <div
       #filmstripHolder
-      *ngIf="video.fileName !== 'up'; else upIcon"
+      *ngIf="video.fileName !== '*UP*'; else upIcon"
       class="video-box folder"
       (mousemove)="mouseIsMoving($event)"
       (click)="videoClick.emit($event)"
@@ -53,7 +53,7 @@
       <span *ngIf="showMeta" class="time">{{ video.durationDisplay }}</span>
       <span *ngIf="showMeta" class="rez">{{ video.resolution }}</span>
     </div>
-    <div *ngIf="video.cleanName === '***' && video.fileName !== 'up'" class="folder-icon">
+    <div *ngIf="video.cleanName === '*FOLDER*' && video.fileName !== '*UP*'" class="folder-icon">
       <app-icon [icon]="'icon-folder-blank'"></app-icon>
     </div>
 
@@ -70,7 +70,7 @@
     </ng-template>
 
     <span
-      *ngIf="showMeta && video.fileName !== 'up'"
+      *ngIf="showMeta && video.fileName !== '*UP*'"
       [ngClass]="{ 'larger-font': largerFont }"
       [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
       class="title"

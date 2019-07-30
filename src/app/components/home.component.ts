@@ -268,6 +268,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   detailsMaxWidth: number = 1000; // used to keep track of max width for details in details view
   tagTypeAhead: string = '';
   currentScreenshotSettings: ScreenshotSettings; // currently only used for the statistics page
+  folderViewNavigationPath: string = '';
 
   // ========================================================================
 
@@ -277,7 +278,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // .metaKey is for mac `command` button
     if (event.ctrlKey === true || event.metaKey) {
 
-      switch(event.key) {
+      switch (event.key) {
 
         case('a'):
           this.toggleButton('hideSidebar');
@@ -886,6 +887,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.onEnterKey(filter, 1); // 1st item is the `folder` filter
   }
 
+  /**
+   * Add filter to FOLDER search when word in folder is clicked
+   * @param filter
+   */
+  handleFolderIconClicked(filter: string): void {
+    console.log('folder name clicked:');
+    console.log(filter);
+    this.folderViewNavigationPath = filter;
+  }
+
   openInExplorer(): void {
     // console.log('should open explorer');
     this.electronService.ipcRenderer.send('openInExplorer', this.fullPathToCurrentFile);
@@ -1284,7 +1295,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public computeTextBufferAmount(): void {
     this.computePreviewWidth();
 
-    switch(this.appState.currentView) {
+    switch (this.appState.currentView) {
       case 'showThumbnails':
         if (this.settingsButtons.compactView.toggled) {
           this.textPaddingHeight = 0;
@@ -1329,9 +1340,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const trimmed = value.trim();
     // removes '/' from folder path if there
     // happens when user clicks folder path in file view
+    console.log('trimmed value: ');
+    console.log(trimmed);
     if (trimmed[0] === '/') {
       this.filters[origin].array = [];
     }
+    // if (trimmed.includes('/')) {
+    //   this.filters[origin].array = trimmed.split('/').filter((el: string) => { return el.length; });
+    // } else if (trimmed) {
     if (trimmed) {
       // don't include duplicates
       if (!this.filters[origin].array.includes(trimmed)) {

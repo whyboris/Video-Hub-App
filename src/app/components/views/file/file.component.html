@@ -2,7 +2,7 @@
   class="element-container"
 >
 
-  <div *ngIf="video.cleanName === '***'; else fileNameBlock">
+  <div *ngIf="video.cleanName === '*FOLDER*'; else fileNameBlock">
     <app-icon [icon]="'icon-folder-blank'" class="icon-folder-lol"></app-icon>
     <span
       [innerHtml]="video.partialPath | folderArrowsPipe : true"
