@@ -198,6 +198,21 @@ export const historyItemRemove = trigger('historyItemRemove', [
   )]
 );
 
+export const breadcrumbsAppear = trigger('breadcrumbsAppear', [
+  transition(
+    ':enter', [
+      style({ top: 0 }),
+      animate('300ms ease', style({ top: '32px' }))
+    ]
+  ),
+  transition(
+    ':leave', [
+      style({ top: '32px' }),
+      animate('300ms ease', style({ top: 0 }))
+    ]
+  )]
+);
+
 // ==================================================================================
 // ARCHIVED -- UNUSED
 // ----------------------------------------------------------------------------------

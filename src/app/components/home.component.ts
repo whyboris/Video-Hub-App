@@ -33,6 +33,7 @@ import { BrazilianPortuguese } from '../i18n/pt_br';
 import { globals, ScreenshotSettings } from '../../../main-globals';
 
 import {
+  breadcrumbsAppear,
   buttonAnimation,
   donutAppear,
   filterItemAppear,
@@ -69,6 +70,7 @@ import {
     './rightclick.scss'
   ],
   animations: [
+    breadcrumbsAppear,
     buttonAnimation,
     donutAppear,
     filterItemAppear,

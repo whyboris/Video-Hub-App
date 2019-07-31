@@ -54,25 +54,6 @@
     </div>
   </div>
 
-  <div style="
-      background: white;
-      border: 1px solid black;
-      left: 189px;
-      padding: 5px;
-      position: fixed;
-      top: 100px;
-      width: 100%;
-      z-index: 100;
-    "
-  >
-    <span class="lev-description">
-      showing only inside:
-    </span>
-    <span class="search-word">
-      {{ folderViewNavigationPath || 'no filter' }}
-    </span>
-  </div>
-
   <div
     *ngIf="flickerReduceOverlay !== false"
     class="reduceFlicker"
@@ -572,6 +553,23 @@
       <app-icon class="mini-chevron" [icon]="'icon-chevron-down-mini'"></app-icon>
     </div>
 
+    <!-- BREADCRUMBS -->
+    <div
+      *ngIf="settingsButtons['showFolders'].toggled && (appState.currentView === 'showThumbnails' ||
+                                                        appState.currentView === 'showFiles' ||
+                                                        appState.currentView === 'showClips')"
+      [ngClass]="{ 'breadcrumbs-full-width': settingsButtons['hideSidebar'].toggled }"
+      class="breadcrumbs"
+      @breadcrumbsAppear
+    >
+      <span class="lev-description">
+        showing only inside:
+      </span>
+      <span class="search-word">
+        {{ folderViewNavigationPath || 'no filter' }}
+      </span>
+    </div>
+
     <!-- ============================================== -->
     <!-- ===========         SIDEBAR        =========== -->
     <!-- ============================================== -->
@@ -867,7 +865,11 @@
       [enableUnequalChildrenSizes]="appState.currentView === 'showFullView'"
       [ngClass]="{
           'gallery-container-full-width': settingsButtons['hideSidebar'].toggled,
-          'gallery-container-dark-mode': settingsButtons['darkMode'].toggled
+          'gallery-container-dark-mode': settingsButtons['darkMode'].toggled,
+          'gallery-showing-breadcrumbs': settingsButtons['showFolders'].toggled
+                                         && (appState.currentView === 'showThumbnails' ||
+                                             appState.currentView === 'showFiles' ||
+                                             appState.currentView === 'showClips')
         }"
       [bufferAmount]="0"
       [items]="finalArray
