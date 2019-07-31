@@ -47,8 +47,8 @@ export class FolderViewPipe implements PipeTransform {
 
     if (render) {
 
-      console.log('prefix path is: ' + prefixPath);
-      console.log('INCOMING array length is: ' + finalArray.length);
+      // console.log('prefix path is: ' + prefixPath);
+      // console.log('INCOMING array length is: ' + finalArray.length);
 
       // to make things easier & faster:
       // first remove all elements not within the specific subfolder
@@ -67,7 +67,7 @@ export class FolderViewPipe implements PipeTransform {
         subCopy = finalArray;
       }
 
-      console.log('subCopy length: ' + subCopy.length);
+      // console.log('subCopy length: ' + subCopy.length);
 
       // now create a MAP !!!
       // from `partialPath` to all the elements that have that path
@@ -101,9 +101,7 @@ export class FolderViewPipe implements PipeTransform {
         }
       });
 
-      // later -- filter out subfolders within folders !!!
-
-      console.log(pathToElementsMap);
+      // console.log(pathToElementsMap);
 
       // the array we'll return back !!!!
       const arrWithFolders: ImageElement[] = [];

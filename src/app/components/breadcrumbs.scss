@@ -1,6 +1,7 @@
 @import "variables";
 
 .breadcrumb-icon {
+  cursor: pointer;
   fill: $gray-60;
   left: 7px;
   max-height: 15px;
@@ -29,6 +30,11 @@
   transition-property: left, width;
   width: calc(100vw - #{$sidebar-width});
   z-index: 100;
+
+  span:last-child {
+    color: $gray-90;
+    pointer-events: none;
+  }
 }
 
 .gallery-showing-breadcrumbs {

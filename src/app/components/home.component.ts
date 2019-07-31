@@ -900,6 +900,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.folderViewNavigationPath = filter;
   }
 
+  /**
+   * Handle clicking on a particular breadcrumb
+   * @param idx is roughly index of the folder depth clicked
+   */
+  handleBbreadcrumbClicked(idx: number): void {
+    this.folderViewNavigationPath = this.folderViewNavigationPath.split('/').slice(0, idx + 1).join('/');
+  }
+
   openInExplorer(): void {
     // console.log('should open explorer');
     this.electronService.ipcRenderer.send('openInExplorer', this.fullPathToCurrentFile);
