@@ -1,12 +1,5 @@
 @import "variables";
 
-// variable
-$top-region: 45px;
-
-$settings-height: 32px;
-
-$sidebar-width: 190px;
-
 /deep/ * {
   user-select: none;
 }
@@ -141,29 +134,6 @@ $sidebar-width: 190px;
 
 .all-settings-flat-icons {
   padding: 6px 5px;
-}
-
-.breadcrumbs {
-  background: white;
-  border: 1px solid black;
-  box-sizing: border-box;
-  left: #{$sidebar-width};
-  padding: 5px;
-  position: absolute;
-  top: 32px;
-  transition-duration: 300ms;
-  transition-property: left, width;
-  width: calc(100vw - #{$sidebar-width});
-  z-index: 100;
-}
-
-.gallery-showing-breadcrumbs {
-  margin-top: 30px;
-}
-
-.breadcrumbs-full-width {
-  left: 0;
-  width: 100vw;
 }
 
 .settings-modal {

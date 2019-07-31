@@ -5,13 +5,12 @@
 >
   <app-icon class="icon" [icon]="'icon-folder-blank'" (click)="openInExplorer()"></app-icon>
   <span
-  *ngFor="let item of folderNameArray"
+    *ngFor="let item of folderNameArray"
     (click)="folderWordClicked(item)"
     class="folder-word"
   >
     {{ item }}
   </span>
-
 </div>
 
 <div

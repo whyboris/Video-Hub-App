@@ -562,12 +562,15 @@
       class="breadcrumbs"
       @breadcrumbsAppear
     >
-      <span class="lev-description">
-        showing only inside:
+      <app-icon class="breadcrumb-icon" [icon]="'icon-folder-blank'" (click)="openInExplorer()"></app-icon>
+      <span
+        *ngFor="let item of folderViewNavigationPath.split('/')"
+        (click)="handleFolderWordClicked(item)"
+        class="breadcrumb-folder-word"
+      >
+        {{ item }}
       </span>
-      <span class="search-word">
-        {{ folderViewNavigationPath || 'no filter' }}
-      </span>
+
     </div>
 
     <!-- ============================================== -->
