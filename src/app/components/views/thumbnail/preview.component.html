@@ -9,7 +9,6 @@
 
   <div *ngIf="video.cleanName === '*FOLDER*'; else singleThumbnail">
     <div
-      #filmstripHolder
       *ngIf="video.fileName !== '*UP*'; else upFolderDiv"
       class="video-box folder"
       (mousemove)="mouseIsMoving($event)"
