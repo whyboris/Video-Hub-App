@@ -84,11 +84,12 @@ export class SortingPipe implements PipeTransform {
       }
       // console.log('VIEW SHUFFLED');
       return newArray;
+
     } else if (sortingType === 'sizeAsc') {
       const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'fileSize', true);
       });
-      return sorted.slice(0); // SEND BACK A CLONE - else the vied does not update
+      return sorted.slice(0); // SEND BACK A CLONE - else the view does not update
     } else if (sortingType === 'sizeDesc') {
       const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'fileSize', false);

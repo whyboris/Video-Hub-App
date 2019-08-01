@@ -1351,14 +1351,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const trimmed = value.trim();
     // removes '/' from folder path if there
     // happens when user clicks folder path in file view
-    console.log('trimmed value: ');
-    console.log(trimmed);
     if (trimmed[0] === '/') {
       this.filters[origin].array = [];
     }
-    // if (trimmed.includes('/')) {
-    //   this.filters[origin].array = trimmed.split('/').filter((el: string) => { return el.length; });
-    // } else if (trimmed) {
     if (trimmed) {
       // don't include duplicates
       if (!this.filters[origin].array.includes(trimmed)) {
