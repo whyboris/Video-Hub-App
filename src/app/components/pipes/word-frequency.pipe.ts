@@ -29,7 +29,7 @@ export class WordFrequencyPipe implements PipeTransform {
     showManualTags: boolean,
     showAutoFileTags: boolean,
     showAutoFolderTags: boolean
-  ): ImageElement {
+  ): ImageElement[] {
 
     if (render && finalArray.length > 0) {
 
