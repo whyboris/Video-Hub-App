@@ -24,12 +24,9 @@
     <div
       class="title"
       [ngClass]="{
-        'title-dark-mode': darkMode,
-        'larger-font': largerFont
-      }"
-      [ngStyle]="{
-          width: 'calc(100% - ' + (showMeta ? '65px' : '10px') + ')',
-          margin: showMeta ? '0 30px' : '0 10px'
+          'title-dark-mode': darkMode,
+          'larger-font': largerFont,
+          'showing-meta': showMeta
         }"
     >
       {{ video.cleanName }}

@@ -5,7 +5,7 @@ import { ManualTagsService } from '../tags-manual/manual-tags.service';
 
 import { StarRating, ImageElement } from '../common/final-object.interface';
 
-import { galleryItemAppear, metaAppear, textAppear } from '../common/animations';
+import { metaAppear, textAppear, modalAnimation } from '../common/animations';
 import { YearEmission } from '../views/details/details.component';
 
 export interface TagEmission {
@@ -24,7 +24,7 @@ export interface StarEmission {
   templateUrl: './sheet.component.html',
   styleUrls: [ './../buttons.scss',
                './sheet.component.scss' ],
-  animations: [ galleryItemAppear,
+  animations: [ modalAnimation,
                 textAppear,
                 metaAppear ]
 })

@@ -63,15 +63,6 @@ export const topAnimation = trigger('topAnimation', [
   )]
 );
 
-export const galleryItemAppear = trigger('galleryItemAppear', [
-  transition(
-    ':enter', [
-      style({ opacity: 0 }),
-      animate('300ms ease-out', style({}))
-    ]
-  )]
-);
-
 export const metaAppear = trigger('metaAppear', [
   transition(
     ':enter', [

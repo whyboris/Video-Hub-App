@@ -44,8 +44,6 @@
   font-size: 10px;
   font-size: 12px;
   font-weight: bold;
-  // disabled for better readability:
-  // text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
 }
 
 .icon-folder-lol {
@@ -66,13 +64,11 @@
   overflow: hidden;
   text-align: left;
   text-overflow: ellipsis;
+  transform: translate(0, 0);
   transition: 300ms;
-  transition-property: margin width;
+  transition-property: width, transform;
   white-space: nowrap;
-
-  // below is now in [ngStyle]
-  // margin: 0 30px;
-  // width: calc( 100% - 65px );
+  width: calc(100% - 20px);
 }
 
 .title-dark-mode {
@@ -81,4 +77,9 @@
 
 .larger-font {
   font-size: 16px;
+}
+
+.showing-meta {
+  transform: translate(35px, 0);
+  width: calc(100% - 65px);
 }

@@ -52,6 +52,7 @@ import { LengthPipe } from './components/pipes/length.pipe';
 import { MagicSearchPipe } from './components/pipes/magic-search.pipe';
 import { ManualTagSortPipe } from './components/pipes/manual-tags-sort.pipe';
 import { ResolutionFilterPipe } from './components/pipes/resolution-filter.pipe';
+import { ReturnZeroPipe } from './components/pipes/returnZero.pipe';
 import { SimilarityPipe } from './components/pipes/similarity.pipe';
 import { SortingPipe } from './components/pipes/sorting.pipe';
 import { StarFilterPipe } from './components/pipes/star-filter.pipe';
@@ -86,6 +87,7 @@ import { WrapperPipe } from './components/pipes/wrapper.pipe';
     MetaComponent,
     PreviewComponent,
     ResolutionFilterPipe,
+    ReturnZeroPipe,
     SheetComponent,
     SimilarityPipe,
     SliderFilterComponent,

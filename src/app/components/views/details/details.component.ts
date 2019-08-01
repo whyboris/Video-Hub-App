@@ -5,8 +5,6 @@ import { ManualTagsService } from '../../tags-manual/manual-tags.service';
 
 import { StarRating, ImageElement } from '../../common/final-object.interface';
 
-import { galleryItemAppear } from '../../common/animations';
-
 export interface TagEmission {
   index: number;
   tag: string;
@@ -26,8 +24,7 @@ export interface YearEmission {
 @Component({
   selector: 'app-details-item',
   templateUrl: './details.component.html',
-  styleUrls: [ './details.component.scss' ],
-  animations: [ galleryItemAppear ]
+  styleUrls: [ './details.component.scss' ]
 })
 export class DetailsComponent implements OnInit {
 

@@ -3,14 +3,13 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 import { ImageElement } from '../../common/final-object.interface';
 
-import { galleryItemAppear, metaAppear, textAppear } from '../../common/animations';
+import { metaAppear, textAppear } from '../../common/animations';
 
 @Component({
   selector: 'app-clip-item',
   templateUrl: './clip.component.html',
   styleUrls: [ './clip.component.scss' ],
-  animations: [ galleryItemAppear,
-                textAppear,
+  animations: [ textAppear,
                 metaAppear ]
 })
 export class ClipComponent implements OnInit {

@@ -876,6 +876,9 @@
         }"
       [bufferAmount]="0"
       [items]="finalArray
+
+                | returnZeroPipe: (appState.currentView === 'showClips' && currentScreenshotSettings.clipSnippets === 0)
+
                 | magicSearchPipe: magicSearchString
 
                 | fileSearchPipe: filters[0].array : filters[0].bool : true  : 0 : false
@@ -1084,7 +1087,7 @@
         ></app-details-item>
       </ng-container>
 
-      <ng-container *ngIf="appState.currentView === 'showClips' && currentScreenshotSettings.clipSnippets > 0">
+      <ng-container *ngIf="appState.currentView === 'showClips'">
         <app-clip-item
           *ngFor="let item of scroll.viewPortItems"
           (videoClick)="(item.cleanName === '*FOLDER*') ? handleFolderWordClicked(item.partialPath) : handleClick($event, item)"
@@ -1109,13 +1112,20 @@
         ></app-clip-item>
       </ng-container>
 
-      <ng-container *ngIf="appState.currentView === 'showClips' && currentScreenshotSettings.clipSnippets === 0">
-        <span class="no-clips-message" [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }">
-          {{ 'SETTINGS.noClipsExtracted' | translate }}
-        </span>
-      </ng-container>
-
     </virtual-scroller>
+
+    <div
+      *ngIf="currResults.total === 0"
+      class="no-results"
+      [ngStyle]="{ 'padding-left': settingsButtons['hideSidebar'].toggled ? 0 : '190px' }"
+    >
+      <ng-container *ngIf="(appState.currentView === 'showClips' && currentScreenshotSettings.clipSnippets === 0); else noResultsFound">
+        {{ 'SETTINGS.noClipsExtracted' | translate }}
+      </ng-container>
+      <ng-template #noResultsFound>
+        {{ 'SETTINGS.noResultsFound' | translate }}
+      </ng-template>
+    </div>
 
   </div> <!-- end of window-content -->
 
@@ -1418,7 +1428,6 @@
           width: ((wizard.screenshotSizeForImport) * (16 / 9)) + 'px',
           height: wizard.screenshotSizeForImport + 'px'
         }"
-      @galleryItemAppear
     >
       {{ 'WIZARD.imported' | translate }}
       <br>
