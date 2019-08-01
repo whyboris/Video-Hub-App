@@ -62,3 +62,20 @@
     padding-right: 3px;
   }
 }
+
+.breadcrumbs-dark-mode {
+  background: $gray-80;
+  border-bottom: 1px solid $gray-70;
+
+  .breadcrumb-icon {
+    fill: $gray-30;
+  }
+
+  .breadcrumb-folder-word {
+    color: $gray-30;
+  }
+
+  span:last-child {
+    color: $gray-10;
+  }
+}

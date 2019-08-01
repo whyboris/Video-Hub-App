@@ -22,6 +22,10 @@
       fill: $dark-blue;
     }
 
+    .back-icon-dark-mode {
+      fill: $pretty-blue;
+    }
+
     .icon-folder-lol {
       fill: $pretty-blue;
     }
@@ -37,6 +41,10 @@
   transition-duration: 300ms;
   transition-property: fill;
   width: 16px;
+}
+
+.back-icon-dark-mode {
+  fill: white;
 }
 
 .length,

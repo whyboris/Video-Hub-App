@@ -14,7 +14,11 @@
     </ng-container>
 
     <ng-template #backButton>
-      <app-icon class="back-icon" [icon]="'icon-chevron-left'"></app-icon>
+      <app-icon
+        class="back-icon"
+        [icon]="'icon-chevron-left'"
+        [ngClass]="{ 'back-icon-dark-mode': darkMode }"
+      ></app-icon>
     </ng-template>
 
   </div>
