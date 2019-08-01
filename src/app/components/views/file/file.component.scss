@@ -1,19 +1,59 @@
 @import "../../variables";
 
 .element-container {
+  cursor: pointer;
   height: 20px;
-  margin: 10px 20px 0px 20px;
+  margin: 0px 20px;
+  padding: 5px 0;
   position: relative;
+
+  &:hover {
+    .folder-name,
+    .title {
+      color: $dark-blue
+    }
+
+    .folder-name-dark-mode,
+    .title-dark-mode {
+      color: $pretty-blue;
+    }
+
+    .back-icon {
+      fill: $dark-blue;
+    }
+
+    .back-icon-dark-mode {
+      fill: $pretty-blue;
+    }
+
+    .icon-folder-lol {
+      fill: $pretty-blue;
+    }
+  }
+}
+
+.back-icon {
+  fill: black;
+  height: 18px;
+  left: 9px;
+  position: absolute;
+  top: 6px;
+  transition-duration: 300ms;
+  transition-property: fill;
+  width: 16px;
+}
+
+.back-icon-dark-mode {
+  fill: white;
 }
 
 .length,
 .size {
   color: $gray-50;
-  cursor: pointer;
   display: block;
   font-size: 10px;
   position: absolute;
-  top: 1px;
+  top: 6px;
   z-index: 200;
 }
 
@@ -39,40 +79,40 @@
 }
 
 .folder-name {
-  cursor: pointer;
-  display: inline-block;
-  font-size: 10px;
+  color: $gray-80;
   font-size: 12px;
-  font-weight: bold;
-  // disabled for better readability:
-  // text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  left: 36px;
+  position: absolute;
+
+}
+
+.folder-name-dark-mode {
+  color: $gray-10;
 }
 
 .icon-folder-lol {
-  cursor: pointer;
-  display: inline-block;
-  fill: $gray-70;
-  height: 20px;
-  margin-right: 2px;
-  transform: translate(-4px, 4px);
+  fill: $gray-50;
+  height: 15px;
+  left: 10px;
+  position: absolute;
+  top: 5px;
+  transition-duration: 300ms;
+  transition-property: fill;
   width: 15px;
 }
 
 .title {
   color: $gray-80;
-  cursor: pointer;
   display: inline-block;
   font-size: 12px;
   overflow: hidden;
   text-align: left;
   text-overflow: ellipsis;
+  transform: translate(10px, 0);
   transition: 300ms;
-  transition-property: margin width;
+  transition-property: width, transform, color;
   white-space: nowrap;
-
-  // below is now in [ngStyle]
-  // margin: 0 30px;
-  // width: calc( 100% - 65px );
+  width: calc(100% - 20px);
 }
 
 .title-dark-mode {
@@ -81,4 +121,9 @@
 
 .larger-font {
   font-size: 16px;
+}
+
+.showing-meta {
+  transform: translate(35px, 0);
+  width: calc(100% - 65px);
 }

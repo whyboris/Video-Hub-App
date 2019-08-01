@@ -3,14 +3,13 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 import { ImageElement } from '../../common/final-object.interface';
 
-import { galleryItemAppear, metaAppear, textAppear } from '../../common/animations';
+import { metaAppear, textAppear } from '../../common/animations';
 
 @Component({
   selector: 'app-full-item',
   templateUrl: './full.component.html',
   styleUrls: ['./full.component.scss'],
-  animations: [ galleryItemAppear,
-                textAppear,
+  animations: [ textAppear,
                 metaAppear ]
 })
 export class FullViewComponent implements OnInit {

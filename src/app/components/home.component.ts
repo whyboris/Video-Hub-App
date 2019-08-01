@@ -33,10 +33,10 @@ import { BrazilianPortuguese } from '../i18n/pt_br';
 import { globals, ScreenshotSettings } from '../../../main-globals';
 
 import {
+  breadcrumbsAppear,
   buttonAnimation,
   donutAppear,
   filterItemAppear,
-  galleryItemAppear,
   historyItemRemove,
   modalAnimation,
   myWizardAnimation,
@@ -56,6 +56,7 @@ import {
   templateUrl: './home.component.html',
   styleUrls: [
     './layout.scss',
+    './breadcrumbs.scss',
     './top-buttons.scss',
     './settings.scss',
     './buttons.scss',
@@ -69,10 +70,10 @@ import {
     './rightclick.scss'
   ],
   animations: [
+    breadcrumbsAppear,
     buttonAnimation,
     donutAppear,
     filterItemAppear,
-    galleryItemAppear,
     historyItemRemove,
     modalAnimation,
     myWizardAnimation,
@@ -268,6 +269,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   detailsMaxWidth: number = 1000; // used to keep track of max width for details in details view
   tagTypeAhead: string = '';
   currentScreenshotSettings: ScreenshotSettings; // currently only used for the statistics page
+  folderViewNavigationPath: string = '';
 
   // ========================================================================
 
@@ -277,7 +279,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // .metaKey is for mac `command` button
     if (event.ctrlKey === true || event.metaKey) {
 
-      switch(event.key) {
+      switch (event.key) {
 
         case('a'):
           this.toggleButton('hideSidebar');
@@ -593,6 +595,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       // Update history of opened files
       this.updateVhaFileHistory(pathToFile, finalObject.inputDir, finalObject.hubName);
 
+      this.folderViewNavigationPath = '';
+
       this.setTags(finalObject.addTags, finalObject.removeTags);
       this.manualTagsService.populateManualTagsService(finalObject.images);
 
@@ -884,6 +888,24 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.settingsButtons['folderIntersection'].toggled = true;
     }
     this.onEnterKey(filter, 1); // 1st item is the `folder` filter
+  }
+
+  /**
+   * Add filter to FOLDER search when word in folder is clicked
+   * @param filter
+   */
+  handleFolderIconClicked(filter: string): void {
+    console.log('folder name clicked:');
+    console.log(filter);
+    this.folderViewNavigationPath = filter;
+  }
+
+  /**
+   * Handle clicking on a particular breadcrumb
+   * @param idx is roughly index of the folder depth clicked
+   */
+  handleBbreadcrumbClicked(idx: number): void {
+    this.folderViewNavigationPath = this.folderViewNavigationPath.split('/').slice(0, idx + 1).join('/');
   }
 
   openInExplorer(): void {
@@ -1284,7 +1306,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public computeTextBufferAmount(): void {
     this.computePreviewWidth();
 
-    switch(this.appState.currentView) {
+    switch (this.appState.currentView) {
       case 'showThumbnails':
         if (this.settingsButtons.compactView.toggled) {
           this.textPaddingHeight = 0;

@@ -19,7 +19,7 @@ export class SimilarityPipe implements PipeTransform {
    * @param render      whether to use the pipe or not
    * @param file        for what file to find similar files
    */
-  transform(finalArray: ImageElement[], render: boolean, file: string): any {
+  transform(finalArray: ImageElement[], render: boolean, file: string): ImageElement[] {
 
     if (render && finalArray.length > 0) {
 

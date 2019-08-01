@@ -21,7 +21,13 @@ export class StarFilterPipe implements PipeTransform {
    * @param rightBound
    * @param forceUpdate -- dummy variable to trick the pure pipe into updating
    */
-  transform(finalArray: ImageElement[], render?: boolean, leftBound?: number, rightBound?: number, forceUpdate?: boolean): any {
+  transform(
+    finalArray: ImageElement[],
+    render?: boolean,
+    leftBound?: number,
+    rightBound?: number,
+    forceUpdate?: boolean
+  ): ImageElement[] {
 
     if (render && finalArray.length > 0) {
 

@@ -1,5 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+import { ImageElement } from '../common/final-object.interface';
+
 @Pipe({
   name: 'lengthFilterPipe'
 })
@@ -12,7 +14,7 @@ export class LengthFilterPipe implements PipeTransform {
    * @param leftBound
    * @param rightBound
    */
-  transform(finalArray: any, render?: boolean, leftBound?: number, rightBound?: number): any {
+  transform(finalArray: ImageElement[], render?: boolean, leftBound?: number, rightBound?: number): ImageElement[] {
 
     if (render && finalArray.length > 0) {
       return finalArray.filter((element) => {

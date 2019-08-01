@@ -12,7 +12,7 @@ export class MagicSearchPipe implements PipeTransform {
    * @param finalArray
    * @param searchString  the search string
    */
-  transform(finalArray: ImageElement[], searchString?: string): any {
+  transform(finalArray: ImageElement[], searchString?: string): ImageElement[] {
     if (searchString === '') {
       return finalArray;
     } else {

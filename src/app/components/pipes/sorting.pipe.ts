@@ -38,6 +38,13 @@ export class SortingPipe implements PipeTransform {
       return 1;
     }
     if (decreasing) {
+
+      // !!! TODO -- the || Infinity makes the first element always go to the end :( !!!!!!!!!!!
+      // MUST FIX !!!!!!!!!!!!!!!!
+
+      // fix inside the `yearAsc` instead of here !!!
+      // maybe send in PROPERTY into this method rather than the full ImageElement !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
       return (x[property] || Infinity) - (y[property] || Infinity);
       // note: `|| Infinity` needed for `year` sort only -- to put everything without a year below
     } else {
@@ -77,11 +84,12 @@ export class SortingPipe implements PipeTransform {
       }
       // console.log('VIEW SHUFFLED');
       return newArray;
+
     } else if (sortingType === 'sizeAsc') {
       const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'fileSize', true);
       });
-      return sorted.slice(0); // SEND BACK A CLONE - else the vied does not update
+      return sorted.slice(0); // SEND BACK A CLONE - else the view does not update
     } else if (sortingType === 'sizeDesc') {
       const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'fileSize', false);
@@ -138,7 +146,7 @@ export class SortingPipe implements PipeTransform {
       });
       return sorted.slice(0);
     } else {
-      // console.log('default sort'); // TODO -- Re-enable and optimize!
+      console.log('default sort -- TODO: refactor year bug'); // TODO -- Re-enable and optimize!
       const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'index', true);
       });

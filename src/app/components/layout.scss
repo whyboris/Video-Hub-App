@@ -1,12 +1,5 @@
 @import "variables";
 
-// variable
-$top-region: 45px;
-
-$settings-height: 32px;
-
-$sidebar-width: 190px;
-
 /deep/ * {
   user-select: none;
 }
@@ -325,4 +318,14 @@ $sidebar-width: 190px;
   &::placeholder {
     color: $gray-80;
   }
+}
+
+.no-results {
+  box-sizing: border-box;
+  position: absolute;
+  text-align: center;
+  top: 130px;
+  transition-duration: 300ms;
+  transition-property: padding-left;
+  width: 100%;
 }

@@ -17,6 +17,15 @@
   cursor: pointer;
   overflow: hidden;
   position: relative;
+
+  .up-icon {
+    fill: white;
+    left: 14%;
+    position: absolute;
+    top: 36%;
+    transform: translate(-50%, -50%);
+    width: 30%;
+  }
 }
 
 .sheet-icon {
@@ -49,17 +58,9 @@
   box-sizing: border-box;
 }
 
-.up-icon {
-  fill: white;
-  left: 14%;
-  position: absolute;
-  top: 36%;
-  transform: translate(-50%, -50%);
-  width: 30%;
-}
-
 .folder-icon {
   fill: white;
+  filter: drop-shadow(0 0 10px black);
   left: 0;
   position: absolute;
   top: 0;

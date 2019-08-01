@@ -63,15 +63,6 @@ export const topAnimation = trigger('topAnimation', [
   )]
 );
 
-export const galleryItemAppear = trigger('galleryItemAppear', [
-  transition(
-    ':enter', [
-      style({ opacity: 0 }),
-      animate('300ms ease-out', style({}))
-    ]
-  )]
-);
-
 export const metaAppear = trigger('metaAppear', [
   transition(
     ':enter', [
@@ -194,6 +185,21 @@ export const historyItemRemove = trigger('historyItemRemove', [
     ':leave', [
       style({ 'max-height': '50px', 'margin-bottom': '12px', 'opacity': 1, 'overflow-y': 'hidden' }),
       animate('300ms ease-out', style({ 'max-height': 0, opacity: 0, 'margin-bottom': 0 }))
+    ]
+  )]
+);
+
+export const breadcrumbsAppear = trigger('breadcrumbsAppear', [
+  transition(
+    ':enter', [
+      style({ top: 0 }),
+      animate('300ms ease', style({ top: '32px' }))
+    ]
+  ),
+  transition(
+    ':leave', [
+      style({ top: '32px' }),
+      animate('300ms ease', style({ top: 0 }))
     ]
   )]
 );

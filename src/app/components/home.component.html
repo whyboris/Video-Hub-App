@@ -553,6 +553,29 @@
       <app-icon class="mini-chevron" [icon]="'icon-chevron-down-mini'"></app-icon>
     </div>
 
+    <!-- BREADCRUMBS -->
+    <div
+      *ngIf="settingsButtons['showFolders'].toggled && (appState.currentView === 'showThumbnails' ||
+                                                        appState.currentView === 'showFiles' ||
+                                                        appState.currentView === 'showClips')"
+      [ngClass]="{
+          'breadcrumbs-full-width': settingsButtons['hideSidebar'].toggled,
+          'breadcrumbs-dark-mode': settingsButtons['darkMode'].toggled
+        }"
+      class="breadcrumbs"
+      @breadcrumbsAppear
+    >
+      <app-icon class="breadcrumb-icon" [icon]="'icon-folder-blank'" (click)="folderViewNavigationPath = ''"></app-icon>
+      <span
+        *ngFor="let item of folderViewNavigationPath.split('/'); index as idx"
+        (click)="handleBbreadcrumbClicked(idx)"
+        class="breadcrumb-folder-word"
+      >
+        {{ item }}
+      </span>
+
+    </div>
+
     <!-- ============================================== -->
     <!-- ===========         SIDEBAR        =========== -->
     <!-- ============================================== -->
@@ -838,6 +861,7 @@
       #scroll
       id="scrollDiv"
       class="gallery-container"
+
       [ngStyle]="{
           'height': 'calc(100vh - ' + (
                                           (settingsButtons['hideTop'].toggled ? 53 : 98)
@@ -845,13 +869,24 @@
                                         + (settingsButtons['showRelatedVideosTray'].toggled ? 170 : 0)
                                                                                                         ) + 'px)'
         }"
+
       [enableUnequalChildrenSizes]="appState.currentView === 'showFullView'"
+
       [ngClass]="{
           'gallery-container-full-width': settingsButtons['hideSidebar'].toggled,
-          'gallery-container-dark-mode': settingsButtons['darkMode'].toggled
+          'gallery-container-dark-mode': settingsButtons['darkMode'].toggled,
+          'gallery-showing-breadcrumbs': settingsButtons['showFolders'].toggled
+                                         && (appState.currentView === 'showThumbnails' ||
+                                             appState.currentView === 'showFiles' ||
+                                             appState.currentView === 'showClips')
         }"
+
       [bufferAmount]="0"
+
       [items]="finalArray
+
+                | returnZeroPipe: (appState.currentView === 'showClips' && currentScreenshotSettings.clipSnippets === 0)
+
                 | magicSearchPipe: magicSearchString
 
                 | fileSearchPipe: filters[0].array : filters[0].bool : true  : 0 : false
@@ -906,10 +941,16 @@
                                   && (appState.currentView === 'showThumbnails' ||
                                       appState.currentView === 'showFiles' ||
                                       appState.currentView === 'showClips')
-                                  : filters[1].array
+                                  : folderViewNavigationPath
 
                 | sortingPipe: sortType : shuffleTheViewNow"
     >
+
+    <!--
+      TODO:
+        1) maybe move `magicSearchPipe` to just below starFilterPipe !?
+        2) move countPipe to after `folderViewPipe` ?
+    -->
 
     <!-- 24 above is 20 pixels for element and 4 for the fudge factor -->
 
@@ -921,9 +962,9 @@
       <ng-container *ngIf="appState.currentView === 'showThumbnails'">
         <app-gallery-item
           *ngFor="let item of scroll.viewPortItems"
-          (videoClick)="(item.cleanName === '***') ? handleFolderWordClicked(item.partialPath) : handleClick($event, item)"
+          (videoClick)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
           (sheetClick)="this.openThumbnailSheet(item)"
-          (contextmenu)="(item.cleanName === '***') ? doNothing() : rightMouseClicked($event, item)"
+          (contextmenu)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event, item)"
 
           [elHeight]="previewHeight + textPaddingHeight"
           [elWidth]="previewWidth"
@@ -1004,8 +1045,8 @@
         <app-file-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (click)="(item.cleanName === '***') ? handleFolderWordClicked(item.partialPath) : openVideo(item.index)"
-          (contextmenu)="(item.cleanName === '***') ? doNothing() : rightMouseClicked($event, item)"
+          (click)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : openVideo(item.index)"
+          (contextmenu)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event, item)"
 
           [video]="item"
 
@@ -1053,12 +1094,12 @@
         ></app-details-item>
       </ng-container>
 
-      <ng-container *ngIf="appState.currentView === 'showClips' && currentScreenshotSettings.clipSnippets > 0">
+      <ng-container *ngIf="appState.currentView === 'showClips'">
         <app-clip-item
           *ngFor="let item of scroll.viewPortItems"
-          (videoClick)="(item.cleanName === '***') ? handleFolderWordClicked(item.partialPath) : handleClick($event, item)"
+          (videoClick)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
           (sheetClick)="this.openThumbnailSheet(item)"
-          (contextmenu)="(item.cleanName === '***') ? doNothing() : rightMouseClicked($event, item)"
+          (contextmenu)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event, item)"
 
           [video]="item"
 
@@ -1078,13 +1119,20 @@
         ></app-clip-item>
       </ng-container>
 
-      <ng-container *ngIf="appState.currentView === 'showClips' && currentScreenshotSettings.clipSnippets === 0">
-        <span class="no-clips-message" [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }">
-          {{ 'SETTINGS.noClipsExtracted' | translate }}
-        </span>
-      </ng-container>
-
     </virtual-scroller>
+
+    <div
+      *ngIf="currResults.total === 0"
+      class="no-results"
+      [ngStyle]="{ 'padding-left': settingsButtons['hideSidebar'].toggled ? 0 : '190px' }"
+    >
+      <ng-container *ngIf="(appState.currentView === 'showClips' && currentScreenshotSettings.clipSnippets === 0); else noResultsFound">
+        {{ 'SETTINGS.noClipsExtracted' | translate }}
+      </ng-container>
+      <ng-template #noResultsFound>
+        {{ 'SETTINGS.noResultsFound' | translate }}
+      </ng-template>
+    </div>
 
   </div> <!-- end of window-content -->
 
@@ -1387,7 +1435,6 @@
           width: ((wizard.screenshotSizeForImport) * (16 / 9)) + 'px',
           height: wizard.screenshotSizeForImport + 'px'
         }"
-      @galleryItemAppear
     >
       {{ 'WIZARD.imported' | translate }}
       <br>

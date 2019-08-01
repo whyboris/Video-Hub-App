@@ -2,16 +2,28 @@
   class="element-container"
 >
 
-  <div *ngIf="video.cleanName === '***'; else fileNameBlock">
-    <app-icon [icon]="'icon-folder-blank'" class="icon-folder-lol"></app-icon>
-    <span
-      [innerHtml]="video.partialPath | folderArrowsPipe : true"
-      [ngStyle]="{ color: darkMode ? '#999999' : '#333333' }"
-      class="folder-name"
-    ></span>
+  <div *ngIf="video.cleanName === '*FOLDER*'; else fileViewDiv">
+    <ng-container
+      *ngIf="video.fileName !== '*UP*'; else backButton"
+    >
+      <app-icon [icon]="'icon-folder-blank'" class="icon-folder-lol"></app-icon>
+      <span
+        class="folder-name"
+        [ngClass]="{ 'folder-name-dark-mode': darkMode }"
+      >{{ video.fileName }}</span>
+    </ng-container>
+
+    <ng-template #backButton>
+      <app-icon
+        class="back-icon"
+        [icon]="'icon-chevron-left'"
+        [ngClass]="{ 'back-icon-dark-mode': darkMode }"
+      ></app-icon>
+    </ng-template>
+
   </div>
 
-  <ng-template #fileNameBlock>
+  <ng-template #fileViewDiv>
 
     <div
       *ngIf="showMeta"
@@ -24,12 +36,9 @@
     <div
       class="title"
       [ngClass]="{
-        'title-dark-mode': darkMode,
-        'larger-font': largerFont
-      }"
-      [ngStyle]="{
-          width: 'calc(100% - ' + (showMeta ? '65px' : '10px') + ')',
-          margin: showMeta ? '0 30px' : '0 10px'
+          'title-dark-mode': darkMode,
+          'larger-font': largerFont,
+          'showing-meta': showMeta
         }"
     >
       {{ video.cleanName }}

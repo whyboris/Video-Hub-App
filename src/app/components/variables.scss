@@ -24,9 +24,9 @@ $pretty-red:   #ff6666;
 $dark-red:     #990000;
 $pretty-green: #66b452;
 $pretty-blue:  #729aff;
+$dark-blue:    #0031ad; // only on file/text view on hover
 $light-blue:   #b5cbff; // only on flat settings button active
 //                           using `$pretty-blue` is not bright enough
-
 
 // =============================================================
 // Filter / tag colors -- also see `filters.ts`
@@ -49,6 +49,14 @@ $pretty-red-lighter: #ff9999; // occurs on `delete mode` button in tags
 $close-button:    #fe6058;
 $maximize-button: #29ca42;
 $minimize-botton: #fec02f;
+
+
+// =============================================================
+// Layout variables
+// -------------------------------------------------------------
+$settings-height: 32px;
+$sidebar-width: 190px;
+$top-region: 45px;
 
 
 // =============================================================

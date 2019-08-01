@@ -1,0 +1,81 @@
+@import "variables";
+
+.breadcrumb-icon {
+  cursor: pointer;
+  fill: $gray-60;
+  left: 7px;
+  max-height: 15px;
+  max-width: 15px;
+  position: absolute;
+  top: 7px;
+  transition-duration: 200ms;
+  transition-property: fill;
+  width: 15px;
+
+  &:hover {
+    fill: $gray-80;
+  }
+}
+
+.breadcrumbs {
+  background: $gray-10;
+  border-bottom: 1px solid $gray-40;
+  box-sizing: border-box;
+  height: 30px;
+  left: #{$sidebar-width};
+  padding: 5px 5px 5px 28px;
+  position: absolute;
+  top: 32px;
+  transition-duration: 300ms;
+  transition-property: left, width;
+  width: calc(100vw - #{$sidebar-width});
+  z-index: 100;
+
+  span:last-child {
+    color: $gray-90;
+    pointer-events: none;
+  }
+}
+
+.gallery-showing-breadcrumbs {
+  margin-top: 30px;
+}
+
+.breadcrumbs-full-width {
+  left: 0;
+  width: 100vw;
+}
+
+.breadcrumb-folder-word {
+  color: $gray-50;
+  cursor: pointer;
+  display: inline-block;
+  font-size: 12px;
+  margin-right: 5px;
+  transition: 300ms;
+  transition-property: color;
+
+  &:after {
+    content: '\f1a0'; // chevron-right
+    font-family: "vh-icon-font";
+    padding-left: 3px;
+    padding-right: 3px;
+  }
+}
+
+.breadcrumbs-dark-mode {
+  background: $gray-80;
+  border-bottom: 1px solid $gray-70;
+
+  .breadcrumb-icon {
+    fill: $gray-30;
+  }
+
+  .breadcrumb-folder-word {
+    color: $gray-30;
+  }
+
+  span:last-child {
+    color: $gray-10;
+  }
+}
