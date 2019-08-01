@@ -18,7 +18,17 @@
   cursor: pointer;
   overflow: hidden;
   position: relative;
+
+  .up-icon {
+    fill: white;
+    left: 14%;
+    position: absolute;
+    top: 36%;
+    transform: translate(-50%, -50%);
+    width: 30%;
+  }
 }
+
 
 .sheet-icon {
   fill: white;

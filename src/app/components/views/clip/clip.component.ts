@@ -63,7 +63,7 @@ export class ClipComponent implements OnInit {
     if (this.video.hash.indexOf(':') !== -1) {
       const hashes = this.video.hash.split(':');
 
-      this.shuffle(hashes).slice(0, 4).forEach((hash) => {
+      hashes.slice(0, 4).forEach((hash) => {
         this.folderThumbPaths.push('vha-' + this.hubName + '/clips/' + hash + '.mp4');
         this.folderPosterPaths.push('vha-' + this.hubName + '/thumbnails/' + hash + '.jpg');
       });
@@ -81,14 +81,4 @@ export class ClipComponent implements OnInit {
     }
   }
 
-  shuffle(a) {
-    let j, x, i;
-    for (i = a.length - 1; i > 0; i--) {
-        j = Math.floor(Math.random() * (i + 1));
-        x = a[i];
-        a[i] = a[j];
-        a[j] = x;
-    }
-    return a;
-  }
 }

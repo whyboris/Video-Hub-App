@@ -10,7 +10,7 @@
   <div *ngIf="video.cleanName === '*FOLDER*'; else singleThumbnail">
     <div
       #filmstripHolder
-      *ngIf="video.fileName !== '*UP*'; else upIcon"
+      *ngIf="video.fileName !== '*UP*'; else upFolderDiv"
       class="video-box folder"
       (mousemove)="mouseIsMoving($event)"
       (click)="videoClick.emit($event)"
@@ -57,7 +57,7 @@
       <app-icon [icon]="'icon-folder-blank'"></app-icon>
     </div>
 
-    <ng-template #upIcon>
+    <ng-template #upFolderDiv>
       <div
         class="video-box folder"
         (click)="videoClick.emit($event)"

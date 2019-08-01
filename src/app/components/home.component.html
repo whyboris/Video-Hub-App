@@ -858,6 +858,7 @@
       #scroll
       id="scrollDiv"
       class="gallery-container"
+
       [ngStyle]="{
           'height': 'calc(100vh - ' + (
                                           (settingsButtons['hideTop'].toggled ? 53 : 98)
@@ -865,7 +866,9 @@
                                         + (settingsButtons['showRelatedVideosTray'].toggled ? 170 : 0)
                                                                                                         ) + 'px)'
         }"
+
       [enableUnequalChildrenSizes]="appState.currentView === 'showFullView'"
+
       [ngClass]="{
           'gallery-container-full-width': settingsButtons['hideSidebar'].toggled,
           'gallery-container-dark-mode': settingsButtons['darkMode'].toggled,
@@ -874,7 +877,9 @@
                                              appState.currentView === 'showFiles' ||
                                              appState.currentView === 'showClips')
         }"
+
       [bufferAmount]="0"
+
       [items]="finalArray
 
                 | returnZeroPipe: (appState.currentView === 'showClips' && currentScreenshotSettings.clipSnippets === 0)
@@ -1038,7 +1043,7 @@
         <app-file-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (click)="(item.cleanName === '*FOLDER*') ? handleFolderWordClicked(item.partialPath) : openVideo(item.index)"
+          (click)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : openVideo(item.index)"
           (contextmenu)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event, item)"
 
           [video]="item"
@@ -1090,7 +1095,7 @@
       <ng-container *ngIf="appState.currentView === 'showClips'">
         <app-clip-item
           *ngFor="let item of scroll.viewPortItems"
-          (videoClick)="(item.cleanName === '*FOLDER*') ? handleFolderWordClicked(item.partialPath) : handleClick($event, item)"
+          (videoClick)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
           (sheetClick)="this.openThumbnailSheet(item)"
           (contextmenu)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event, item)"
 
