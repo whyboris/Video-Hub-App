@@ -16,11 +16,20 @@ export class WordFrequencyPipe implements PipeTransform {
   /**
    * Return only items that match search string
    * @param finalArray
-   * @param render       whether to calculate the wordFrequency
-   * @param numberOfTags number of tags to generate for the word cloud
+   * @param render              whether to calculate the wordFrequency
+   * @param numberOfTags        number of tags to generate for the word cloud
+   * @param showManualTags      boolean
+   * @param showAutoFileTags    boolean
+   * @param showAutoFolderTags  boolean
    */
-  transform(finalArray: ImageElement[], render: boolean, numberOfTags: number,
-    showManualTags: boolean, showAutoFileTags: boolean, showAutoFolderTags: boolean): any {
+  transform(
+    finalArray: ImageElement[],
+    render: boolean,
+    numberOfTags: number,
+    showManualTags: boolean,
+    showAutoFileTags: boolean,
+    showAutoFolderTags: boolean
+  ): ImageElement {
 
     if (render && finalArray.length > 0) {
 

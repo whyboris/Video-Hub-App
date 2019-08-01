@@ -11,7 +11,7 @@ export class FileSearchPipe implements PipeTransform {
    * Return only items that match search string
    * @param finalArray
    * @param arrOfStrings    {string}  the search string array
-   * @param useless         {boolean} that is flipped just to trigger pipe to work
+   * @param renderHack      {boolean} that is flipped just to trigger an pipe update
    * @param union           {boolean} whether it's a union or intersection
    * @param searchType      {number} type of search (0: folder, 1: file, 2: tag)
    * @param exclude         {boolean} whether excluding results that contain the word
@@ -19,14 +19,14 @@ export class FileSearchPipe implements PipeTransform {
   transform(
     finalArray: ImageElement[],
     arrOfStrings?: string[],
-    useless?: boolean,
+    renderHack?: boolean,
     union?: boolean,
     searchType?: number,
     exclude?: boolean,
     manualTags?: boolean,
     autoFileTags?: boolean,
     autoFolderTags?: boolean
-  ): any {
+  ): ImageElement[] {
     // console.log('fileSearchPipe triggered');
     // console.log(arrOfStrings);
 

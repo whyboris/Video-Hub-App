@@ -19,7 +19,7 @@ export class ResolutionFilterPipe implements PipeTransform {
    * @param leftBound
    * @param rightBound
    */
-  transform(finalArray: ImageElement[], render?: boolean, leftBound?: number, rightBound?: number): any {
+  transform(finalArray: ImageElement[], render?: boolean, leftBound?: number, rightBound?: number): ImageElement[] {
 
     if (render && finalArray.length > 0) {
 
