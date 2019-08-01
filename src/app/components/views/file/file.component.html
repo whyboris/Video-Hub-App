@@ -8,8 +8,8 @@
     >
       <app-icon [icon]="'icon-folder-blank'" class="icon-folder-lol"></app-icon>
       <span
-        [ngStyle]="{ color: darkMode ? '#999999' : '#333333' }"
         class="folder-name"
+        [ngClass]="{ 'folder-name-dark-mode': darkMode }"
       >{{ video.fileName }}</span>
     </ng-container>
 

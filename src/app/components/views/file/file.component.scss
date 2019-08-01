@@ -8,16 +8,22 @@
   position: relative;
 
   &:hover {
+    .folder-name,
     .title {
-      color: $dark-blue;
+      color: $dark-blue
     }
 
+    .folder-name-dark-mode,
     .title-dark-mode {
       color: $pretty-blue;
     }
 
     .back-icon {
       fill: $dark-blue;
+    }
+
+    .icon-folder-lol {
+      fill: $pretty-blue;
     }
   }
 }
@@ -65,9 +71,15 @@
 }
 
 .folder-name {
+  color: $gray-80;
   font-size: 12px;
   left: 36px;
   position: absolute;
+
+}
+
+.folder-name-dark-mode {
+  color: $gray-10;
 }
 
 .icon-folder-lol {
@@ -76,6 +88,8 @@
   left: 10px;
   position: absolute;
   top: 5px;
+  transition-duration: 300ms;
+  transition-property: fill;
   width: 15px;
 }
 

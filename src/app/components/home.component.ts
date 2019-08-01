@@ -595,6 +595,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       // Update history of opened files
       this.updateVhaFileHistory(pathToFile, finalObject.inputDir, finalObject.hubName);
 
+      this.folderViewNavigationPath = '';
+
       this.setTags(finalObject.addTags, finalObject.removeTags);
       this.manualTagsService.populateManualTagsService(finalObject.images);
 
