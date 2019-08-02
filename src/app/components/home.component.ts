@@ -525,6 +525,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.importStage = 'done';
     });
 
+    // happens when user replaced a thumbnail and process is done
+    this.electronService.ipcRenderer.on('thumbnail-replaced', (event) => {
+      console.log('REPLACED !!!!');
+      this.electronService.webFrame.clearCache();
+    });
+
     // Happens on a Mac when the OS Dark Mode is enabled/disabled
     this.electronService.ipcRenderer.on('osDarkModeChange', (event, desiredMode: string) => {
 
@@ -541,9 +547,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // Progress bar messages
     // for META EXTRACTION
-    // stage = 0 hides progress bar
-    // stage = 1 shows meta progress
-    // stage = 2 shows jpg progress
     this.electronService.ipcRenderer.on('processingProgress', (
       event,
       current: number,
@@ -649,22 +652,44 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit() {
-    this.computePreviewWidth(); // so that fullView knows its size
+    this.computePreviewWidth(); // so that fullView knows its size // TODO -- check if still needed!
     // this is required, otherwise when user drops the file, it opens as plaintext
     document.ondragover = document.ondrop = (ev) => {
       ev.preventDefault();
     };
     document.body.ondrop = (ev) => {
       if (ev.dataTransfer.files.length > 0) {
-        const fullPath = ev.dataTransfer.files[0].path;
+        const fullPath: string = ev.dataTransfer.files[0].path;
         ev.preventDefault();
         if (fullPath.endsWith('.vha2')) {
           this.electronService.ipcRenderer.send(
-            'load-this-vha-file', ev.dataTransfer.files[0].path, this.saveVhaIfNeeded()
+            'load-this-vha-file', fullPath, this.saveVhaIfNeeded()
           );
         }
       }
     };
+  }
+
+  /**
+   * Handle dropping something over an item in the gallery
+   * Used to handle dropping a .jpg file to replace preview!
+   * @param event         drop event - containing path to possible jpg file
+   * @param galleryItem   item in the gallery over which jpg was dropped
+   */
+  droppedSomethingOverVideo(event, galleryItem: ImageElement) {
+    const pathToNewJpg: string = event.dataTransfer.files[0].path;
+    if (
+      (
+          pathToNewJpg.endsWith('.jpg')
+       || pathToNewJpg.endsWith('.jpeg')
+       || pathToNewJpg.endsWith('.png')
+      )
+       && galleryItem.cleanName !== '*FOLDER*'
+    ) {
+      this.electronService.ipcRenderer.send(
+        'replace-thumbnail', pathToNewJpg, galleryItem
+      );
+    }
   }
 
   /**

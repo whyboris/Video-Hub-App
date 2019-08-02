@@ -29,8 +29,6 @@ const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path.replace('app.asar', 
 // requires an array of args
 const spawn = require('child_process').spawn;
 // sends all data back once the process exits in a buffer
-// also spawns a shell (can pass a single cmd string)
-const exec = require('child_process').exec;
 
 import { globals, ScreenshotSettings } from './main-globals';
 
@@ -84,6 +82,7 @@ const checkAllScreensExist = (
       }
 
       // !!!!!!
+      // TODO -- see if still a problem !!!!!!!!!!!!!
       // Notice this keeps running even after screenshots successfully extracted!
       // !!!!!!
       console.log('checking ' + current);
@@ -509,4 +508,56 @@ export function extractFromTheseFiles(
   };
 
   extractIterator();
+}
+
+// ========================================================================================
+//         Helper method
+// ========================================================================================
+
+/**
+ * Replace original file with new file
+ * use ffmpeg to convert and letterbox to fit width and height
+ *
+ * @param oldFile
+ * @param newFile
+ * @param height
+ */
+export function replaceThumbnailWithNewImage(
+  oldFile: string,
+  newFile: string,
+  height: number
+) {
+
+  return new Promise((resolve, reject) => {
+
+    console.log('Resizing new image and replacing old thumbnail');
+
+    const width: number = Math.floor(height * (16 / 9));
+
+    const args = [
+      '-y', '-i', newFile,
+      '-vf', 'scale=w=' + width + ':h=' + height + ':force_original_aspect_ratio=decrease,' +
+             'pad='     + width + ':'   + height + ':(ow-iw)/2:(oh-ih)/2',
+      oldFile,
+    ];
+
+    const ffmpeg_process = spawn(ffmpegPath, args);
+    // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
+    ffmpeg_process.stdout.on('data', function (data) {
+      if (globals.debug) {
+        console.log(data);
+      }
+    });
+    ffmpeg_process.stderr.on('data', function (data) {
+      if (globals.debug) {
+        console.log('grep stderr: ' + data);
+      }
+    });
+    ffmpeg_process.on('exit', () => {
+      console.log('Done replacing the thumbnail!');
+      resolve(true);
+    });
+
+  });
+
 }
