@@ -29,8 +29,6 @@ const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path.replace('app.asar', 
 // requires an array of args
 const spawn = require('child_process').spawn;
 // sends all data back once the process exits in a buffer
-// also spawns a shell (can pass a single cmd string)
-const exec = require('child_process').exec;
 
 import { globals, ScreenshotSettings } from './main-globals';
 
@@ -509,4 +507,62 @@ export function extractFromTheseFiles(
   };
 
   extractIterator();
+}
+
+// ========================================================================================
+//         Helper method
+// ========================================================================================
+
+/**
+ * Replace original file with new file
+ * use ffmpeg to convert and letterbox to fit width and height
+ *
+ * @param oldFile
+ * @param newFile
+ * @param height
+ */
+export function replaceThumbnailWithNewImage(
+  oldFile: string,
+  newFile: string,
+  height: number
+) {
+
+  return new Promise((resolve, reject) => {
+
+    console.log('RESIZING !?!?!?!?');
+
+    const width: number = Math.floor(height * (16 / 9));
+
+    // desired command:
+    // ffmpeg -y -i IN.png -vf "scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2" OUT.jpg
+
+    const args = [
+      '-y', '-i', newFile,
+      '-vf', '"scale=' + width + ':' + height + ':force_original_aspect_ratio=decrease,' +
+                'pad=' + width + ':' + height + ':(ow-iw)/2:(oh-ih)/2"',
+      oldFile,
+    ];
+
+    console.log(ffmpegPath);
+    console.log(args.join(' '));
+
+    const ffmpeg_process = spawn(ffmpegPath, args);
+    // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
+    ffmpeg_process.stdout.on('data', function (data) {
+      if (globals.debug) {
+        console.log(data);
+      }
+    });
+    ffmpeg_process.stderr.on('data', function (data) {
+      if (globals.debug) {
+        console.log('grep stderr: ' + data);
+      }
+    });
+    ffmpeg_process.on('exit', () => {
+      console.log('DONE');
+      resolve(true);
+    });
+
+  });
+
 }

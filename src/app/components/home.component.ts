@@ -675,7 +675,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   droppedSomethingOverVideo(event, galleryItem: ImageElement) {
     const pathToNewJpg: string = event.dataTransfer.files[0].path;
-    if (pathToNewJpg.endsWith('.jpg') && galleryItem.cleanName !== '*FOLDER*') {
+    if (
+      (
+          pathToNewJpg.endsWith('.jpg')
+       || pathToNewJpg.endsWith('.jpeg')
+       || pathToNewJpg.endsWith('.png')
+      )
+       && galleryItem.cleanName !== '*FOLDER*'
+    ) {
       this.electronService.ipcRenderer.send(
         'replace-thumbnail', pathToNewJpg, galleryItem
       );

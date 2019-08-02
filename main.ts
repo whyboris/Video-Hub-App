@@ -208,7 +208,7 @@ import {
   writeVhaFileToDisk
 } from './main-support';
 
-import { extractFromTheseFiles } from './main-extract';
+import { extractFromTheseFiles, replaceThumbnailWithNewImage } from './main-extract';
 
 import { FinalObject, ImageElement } from './src/app/components/common/final-object.interface';
 import { ImportSettingsObject } from './src/app/components/common/import.interface';
@@ -434,19 +434,17 @@ ipc.on('maximize-window', function (event, someMessage) {
 /**
  * Method to replace thumbnail of a particular item
  */
-ipc.on('replace-thumbnail', function(event, pathToJpg: string, item: ImageElement) {
+ipc.on('replace-thumbnail', function(event, pathToIncomingJpg: string, item: ImageElement) {
   const fileToReplace: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName, 'thumbnails', item.hash + '.jpg');
 
-  try {
-    fs.stat(fileToReplace, (stuff) => {
-      fs.copyFile(pathToJpg, fileToReplace, (err) => {
-        // don't do anything
-        // console.log(err);
-      });
+
+  if (fs.existsSync(fileToReplace)) {
+    const height: number = globals.screenshotSettings.height;
+
+    replaceThumbnailWithNewImage(fileToReplace, pathToIncomingJpg, height)
+    .then((data) => {
+      console.log(data);
     });
-  } catch (e) {
-    // don't do anything
-    // console.log(e);
   }
 });
 
