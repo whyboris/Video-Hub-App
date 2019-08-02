@@ -966,6 +966,8 @@
           (sheetClick)="this.openThumbnailSheet(item)"
           (contextmenu)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event, item)"
 
+          (drop)="droppedSomethingOverVideo($event, item)"
+
           [elHeight]="previewHeight + textPaddingHeight"
           [elWidth]="previewWidth"
           [folderPath]="appState.selectedOutputFolder"

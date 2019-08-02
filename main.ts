@@ -432,6 +432,25 @@ ipc.on('maximize-window', function (event, someMessage) {
 });
 
 /**
+ * Method to replace thumbnail of a particular item
+ */
+ipc.on('replace-thumbnail', function(event, pathToJpg: string, item: ImageElement) {
+  const fileToReplace: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName, 'thumbnails', item.hash + '.jpg');
+
+  try {
+    fs.stat(fileToReplace, (stuff) => {
+      fs.copyFile(pathToJpg, fileToReplace, (err) => {
+        // don't do anything
+        // console.log(err);
+      });
+    });
+  } catch (e) {
+    // don't do anything
+    // console.log(e);
+  }
+});
+
+/**
  * Un-Maximize the window
  */
 ipc.on('un-maximize-window', function (event, someMessage) {
