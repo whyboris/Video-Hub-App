@@ -525,6 +525,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.importStage = 'done';
     });
 
+    // happens when user replaced a thumbnail and process is done
+    this.electronService.ipcRenderer.on('thumbnail-replaced', (event) => {
+      console.log('REPLACED !!!!');
+      this.electronService.webFrame.clearCache();
+    });
+
     // Happens on a Mac when the OS Dark Mode is enabled/disabled
     this.electronService.ipcRenderer.on('osDarkModeChange', (event, desiredMode: string) => {
 
@@ -541,9 +547,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // Progress bar messages
     // for META EXTRACTION
-    // stage = 0 hides progress bar
-    // stage = 1 shows meta progress
-    // stage = 2 shows jpg progress
     this.electronService.ipcRenderer.on('processingProgress', (
       event,
       current: number,
@@ -686,10 +689,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.electronService.ipcRenderer.send(
         'replace-thumbnail', pathToNewJpg, galleryItem
       );
-
-      setTimeout(() => {
-        this.electronService.webFrame.clearCache();
-      }, 2000);
     }
   }
 

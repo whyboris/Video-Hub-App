@@ -82,6 +82,7 @@ const checkAllScreensExist = (
       }
 
       // !!!!!!
+      // TODO -- see if still a problem !!!!!!!!!!!!!
       // Notice this keeps running even after screenshots successfully extracted!
       // !!!!!!
       console.log('checking ' + current);
@@ -529,22 +530,16 @@ export function replaceThumbnailWithNewImage(
 
   return new Promise((resolve, reject) => {
 
-    console.log('RESIZING !?!?!?!?');
+    console.log('Resizing new image and replacing old thumbnail');
 
     const width: number = Math.floor(height * (16 / 9));
 
-    // desired command:
-    // ffmpeg -y -i IN.png -vf "scale=1280:720:force_original_aspect_ratio=decrease,pad=1280:720:(ow-iw)/2:(oh-ih)/2" OUT.jpg
-
     const args = [
       '-y', '-i', newFile,
-      '-vf', '"scale=' + width + ':' + height + ':force_original_aspect_ratio=decrease,' +
-                'pad=' + width + ':' + height + ':(ow-iw)/2:(oh-ih)/2"',
+      '-vf', 'scale=w=' + width + ':h=' + height + ':force_original_aspect_ratio=decrease,' +
+             'pad='     + width + ':'   + height + ':(ow-iw)/2:(oh-ih)/2',
       oldFile,
     ];
-
-    console.log(ffmpegPath);
-    console.log(args.join(' '));
 
     const ffmpeg_process = spawn(ffmpegPath, args);
     // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
@@ -559,7 +554,7 @@ export function replaceThumbnailWithNewImage(
       }
     });
     ffmpeg_process.on('exit', () => {
-      console.log('DONE');
+      console.log('Done replacing the thumbnail!');
       resolve(true);
     });
 

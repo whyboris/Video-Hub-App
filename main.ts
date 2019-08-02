@@ -442,9 +442,14 @@ ipc.on('replace-thumbnail', function(event, pathToIncomingJpg: string, item: Ima
     const height: number = globals.screenshotSettings.height;
 
     replaceThumbnailWithNewImage(fileToReplace, pathToIncomingJpg, height)
-    .then((data) => {
-      console.log(data);
-    });
+      .then(success => {
+        if (success) {
+          event.sender.send('thumbnail-replaced');
+        }
+      })
+      .catch((err) => {
+        // console.log(err);
+      });
   }
 });
 
