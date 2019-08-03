@@ -11,17 +11,22 @@ export class FolderViewPipe implements PipeTransform {
 
 
   /**
-   * Determine folder size (simply sum up all the elements' sizes)
+   * Determine folder size and duration (simply sum up all the elements' properties)
    * @param files
    */
-  determineFolderSize(files: ImageElement[]): number {
-    let total: number = 0;
+  determineFolderProperties(files: ImageElement[]): any {
+    let totalFileSize: number = 0;
+    let totalDuration: number = 0;
 
     files.forEach((element: ImageElement) => {
-      total += element.fileSize;
+      totalFileSize += element.fileSize;
+      totalDuration += element.duration;
     });
 
-    return total;
+    return {
+      folderSize: totalFileSize,
+      folderDuration: totalDuration
+    };
   }
 
   /**
@@ -151,12 +156,14 @@ export class FolderViewPipe implements PipeTransform {
           arrWithFolders.push(...value); // spread out all files in root folder
         } else {
 
+          const folderProperties = this.determineFolderProperties(value);
+
           const folderWithStuff: ImageElement = {
             cleanName: '*FOLDER*',
-            duration: 0,
+            duration: folderProperties.folderDuration,
             durationDisplay: '',
             fileName: key.replace('/', ''),
-            fileSize: this.determineFolderSize(value),
+            fileSize: folderProperties.folderSize,
             fileSizeDisplay: value.length.toString(),
             hash: this.extractFourPreviewHashes(value),
             height: 0,
