@@ -477,10 +477,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.electronService.ipcRenderer.on('inputFolderChosen', (event, filePath, listOfFiles) => {
       this.wizard.totalNumberOfFiles = listOfFiles.length;
       this.wizard.listOfFiles = listOfFiles;
-      // TODO better prediction
 
       if (listOfFiles.length > 0) {
-        this.wizard.totalImportTime = Math.round(listOfFiles.length * 2.25 / 60);
+        // TODO better prediction
+        // this.wizard.totalImportTime = Math.round(listOfFiles.length * 2.25 / 60);
         this.wizard.selectedSourceFolder = filePath;
         this.wizard.selectedOutputFolder = filePath;
       }
@@ -1427,7 +1427,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const height = parseInt(pxHeightForImport, 10);
     this.wizard.screenshotSizeForImport = height;
     // TODO better prediction
-    this.wizard.totalImportSize = Math.round((height / 100) * this.wizard.totalNumberOfFiles * 36 / 1000);
+    // this.wizard.totalImportSize = Math.round((height / 100) * this.wizard.totalNumberOfFiles * 36 / 1000);
   }
 
   /**

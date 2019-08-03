@@ -2,8 +2,8 @@
 
 .wizard {
   background: $gray-10;
-  height: 100vh;
   height: calc(100vh - 50px);
+  overflow-x: hidden;
   overflow-y: scroll;
   padding-top: 30px;
   position: fixed;
@@ -283,4 +283,15 @@
       transform: translate(-48px, 24px);
     }
   }
+}
+
+.gradient-to-indicate-scrolling {
+  background-image: linear-gradient(rgba(230, 230, 230, 0), $gray-10);
+  bottom: 0;
+  display: block;
+  height: 100px;
+  pointer-events: none;
+  position: fixed;
+  width: 100vw;
+  z-index: 30;
 }
