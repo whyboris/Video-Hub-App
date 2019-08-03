@@ -211,7 +211,7 @@ const generateScreenshotStrip = (
     }
 
     let current = 0;
-    const totalCount = numberOfScreenshots;
+    const totalCount = numberOfScreenshots < 3 ? 3 : numberOfScreenshots; // minimum 3 screenshots!
     const step: number = duration / (totalCount + 1);
     const args = [];
     let allFramesFiltered = '';
