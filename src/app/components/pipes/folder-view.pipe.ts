@@ -1,6 +1,13 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { ImageElement } from '../common/final-object.interface';
+import { ImageElement, StarRating } from '../common/final-object.interface';
+
+interface FolderProperties {
+  byteSize: number;    //                             corresponds to ImageElement `fileSize`
+  duration: number;    // in seconds,                 corresponds to ImageElement `duration`
+  starAverage: StarRating; // averaged weight of stars rounded to nearest `StarRating`
+}
+
 
 @Pipe({
   name: 'folderViewPipe'
@@ -9,6 +16,35 @@ export class FolderViewPipe implements PipeTransform {
 
   constructor() { }
 
+
+  /**
+   * Determine folder size and duration (simply sum up all the elements' properties)
+   * @param files
+   */
+  determineFolderProperties(files: ImageElement[]): FolderProperties {
+    let totalFileSize: number = 0;
+    let totalDuration: number = 0;
+    let starAverage: number = 0;
+    let totalStars: number = 0;
+
+    files.forEach((element: ImageElement) => {
+      totalFileSize += element.fileSize;
+      totalDuration += element.duration;
+      if (element.stars !== 0.5) {
+        totalStars += 1;
+        starAverage += element.stars;
+      }
+    });
+
+    const starString: StarRating = <StarRating><unknown>((Math.round(starAverage / totalStars - 0.5) + 0.5) || 0.5).toString();
+    //                                                      sometimes this calculation results in NaN so we ^^^^^^^
+
+    return {
+      byteSize: totalFileSize,
+      duration: totalDuration,
+      starAverage: starString,
+    };
+  }
 
   /**
    * Takes ImageElement array and returns 4 hashes
@@ -117,12 +153,12 @@ export class FolderViewPipe implements PipeTransform {
           fileSizeDisplay: '',
           hash: '',
           height: 0,
-          index: -1, // always show at the top
+          index: 0,
           mtime: 0,
           partialPath: prefixPath.substring(0, prefixPath.lastIndexOf('/')),
           resBucket: 0,
           resolution: '',
-          screens: 10, // temp hardcoded
+          screens: 0,
           stars: 0.5,
           timesPlayed: 0,
           width: 0,
@@ -137,23 +173,24 @@ export class FolderViewPipe implements PipeTransform {
           arrWithFolders.push(...value); // spread out all files in root folder
         } else {
 
+          const folderProperties: FolderProperties = this.determineFolderProperties(value);
+
           const folderWithStuff: ImageElement = {
             cleanName: '*FOLDER*',
-            duration: 0,
+            duration: folderProperties.duration,
             durationDisplay: '',
             fileName: key.replace('/', ''),
-            fileSize: 0,
+            fileSize: folderProperties.byteSize,
             fileSizeDisplay: value.length.toString(),
             hash: this.extractFourPreviewHashes(value),
             height: 0,
-            // TODO -- set to 0 -- once the `sorting.pipe` is fixed !!!
-            index: 0.5, // always show at the top but after the `UP` folder -- DO NOT SET TO ZERO (0) -- default sort has `|| infinity`
+            index: -1, // always show at the top (but after the `UP` folder) in the default view
             mtime: 0,
             partialPath: (prefixPath || '/') + key, // must set this for the folder click to register!
             resBucket: 0,
             resolution: '',
-            screens: 10,
-            stars: 0.5,
+            screens: 0,
+            stars: folderProperties.starAverage,
             timesPlayed: 0,
             width: 0,
           };

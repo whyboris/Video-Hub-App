@@ -2,15 +2,33 @@
   class="element-container"
 >
 
+  <!-- FOLDER BLOCK -->
+
   <div *ngIf="video.cleanName === '*FOLDER*'; else fileViewDiv">
     <ng-container
       *ngIf="video.fileName !== '*UP*'; else backButton"
     >
+      <div *ngIf="showMeta" class="number-of-files">
+        {{ video.fileSizeDisplay | number }}
+      </div>
       <app-icon [icon]="'icon-folder-blank'" class="icon-folder-lol"></app-icon>
-      <span
+      <div
         class="folder-name"
         [ngClass]="{ 'folder-name-dark-mode': darkMode }"
-      >{{ video.fileName }}</span>
+      >{{ video.fileName }}
+        <div class="folder-size" *ngIf="showMeta">
+          {{ video.fileSize | fileSizePipe }}
+        </div>
+      </div>
+
+      <div
+        *ngIf="showMeta"
+        class="length"
+        [ngClass]="{ 'meta-dark-mode': darkMode }"
+      >
+        {{ video.duration | lengthPipe : true : true : true }}
+      </div>
+
     </ng-container>
 
     <ng-template #backButton>
@@ -22,6 +40,9 @@
     </ng-template>
 
   </div>
+
+
+  <!-- INDIVIDUAL FILE BLOCK -->
 
   <ng-template #fileViewDiv>
 

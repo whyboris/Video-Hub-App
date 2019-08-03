@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { ImageElement } from '../common/final-object.interface';
+import { ImageElement, StarRating } from '../common/final-object.interface';
 
 export type SortType = 'default'
                      | 'modifiedAsc'
@@ -32,25 +32,38 @@ export class SortingPipe implements PipeTransform {
    */
   sortFunctionLol(x: ImageElement, y: ImageElement, property: string, decreasing: boolean): number {
     // up button first
-    if (x.index === -1) {
+    if (x.fileName === '*UP*') {
       return -1;
-    } else if (y.index === -1) {
+    } else if (y.fileName === '*UP*') {
       return 1;
     }
-    if (decreasing) {
 
-      // !!! TODO -- the || Infinity makes the first element always go to the end :( !!!!!!!!!!!
-      // MUST FIX !!!!!!!!!!!!!!!!
-
-      // fix inside the `yearAsc` instead of here !!!
-      // maybe send in PROPERTY into this method rather than the full ImageElement !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-      return (x[property] || Infinity) - (y[property] || Infinity);
-      // note: `|| Infinity` needed for `year` sort only -- to put everything without a year below
-    } else {
-      return (y[property] || 0) - (x[property] || 0);
-      // Note `|| 0` needed only for `year` sort only -- to put everything without a year below
+    // handle `year` case:   show properties that are not empty first
+    if (property === 'year') {
+      if (decreasing) {
+        return (x.year || Infinity) - (y.year || Infinity);
+      } else {
+        return (y.year || 0)        - (x.year || 0);
+      }
     }
+
+    // handle `stars` case:  show properties that are not empty first
+    if (property === 'stars') {
+      if (decreasing) {
+        return (  x.stars === <StarRating><unknown>0.5 ? Infinity : x.stars)
+               - (y.stars === <StarRating><unknown>0.5 ? Infinity : y.stars);
+      } else {
+        return (  y.stars === <StarRating><unknown>0.5 ? 0        : y.stars)
+               - (x.stars === <StarRating><unknown>0.5 ? 0        : x.stars);
+      }
+    }
+
+    if (decreasing) {
+      return (x[property]) - (y[property]);
+    } else {
+      return (y[property]) - (x[property]);
+    }
+
   }
 
   /**
@@ -64,7 +77,7 @@ export class SortingPipe implements PipeTransform {
     // console.log('SORTING RUNNING'); // ENABLE AND CHECK IF IT RUNS TOO OFTEN !!!
 
     if (sortingType === 'random') {
-      let currentIndex = (galleryArray[0].index === -1 ? 1 : 0); // skip 'up button' if present
+      let currentIndex = (galleryArray[0].fileName === '*UP*' ? 1 : 0); // skip 'up button' if present
       let temporaryValue;
       let randomIndex;
 
@@ -146,7 +159,6 @@ export class SortingPipe implements PipeTransform {
       });
       return sorted.slice(0);
     } else {
-      console.log('default sort -- TODO: refactor year bug'); // TODO -- Re-enable and optimize!
       const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'index', true);
       });
