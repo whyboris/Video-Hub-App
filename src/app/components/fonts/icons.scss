@@ -15,11 +15,11 @@
   font-variant: normal;
   font-weight: normal;
   position: relative;
-  speak: none;
   text-transform: none;
 }
 
 // Last remaining used one
+// TODO -- check where / how used
 .icon-chevron-right:before {
   content: "\f1a0";
 }

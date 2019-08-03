@@ -117,12 +117,12 @@ export class FolderViewPipe implements PipeTransform {
           fileSizeDisplay: '',
           hash: '',
           height: 0,
-          index: -1, // always show at the top
+          index: 0,
           mtime: 0,
           partialPath: prefixPath.substring(0, prefixPath.lastIndexOf('/')),
           resBucket: 0,
           resolution: '',
-          screens: 10, // temp hardcoded
+          screens: 0,
           stars: 0.5,
           timesPlayed: 0,
           width: 0,
@@ -146,13 +146,12 @@ export class FolderViewPipe implements PipeTransform {
             fileSizeDisplay: value.length.toString(),
             hash: this.extractFourPreviewHashes(value),
             height: 0,
-            // TODO -- set to 0 -- once the `sorting.pipe` is fixed !!!
-            index: 0.5, // always show at the top but after the `UP` folder -- DO NOT SET TO ZERO (0) -- default sort has `|| infinity`
+            index: -1, // always show at the top (but after the `UP` folder)
             mtime: 0,
             partialPath: (prefixPath || '/') + key, // must set this for the folder click to register!
             resBucket: 0,
             resolution: '',
-            screens: 10,
+            screens: 0,
             stars: 0.5,
             timesPlayed: 0,
             width: 0,

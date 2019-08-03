@@ -32,25 +32,34 @@ export class SortingPipe implements PipeTransform {
    */
   sortFunctionLol(x: ImageElement, y: ImageElement, property: string, decreasing: boolean): number {
     // up button first
-    if (x.index === -1) {
+    if (x.fileName === '*UP*') {
       return -1;
-    } else if (y.index === -1) {
+    } else if (y.fileName === '*UP*') {
       return 1;
     }
-    if (decreasing) {
 
-      // !!! TODO -- the || Infinity makes the first element always go to the end :( !!!!!!!!!!!
-      // MUST FIX !!!!!!!!!!!!!!!!
+    // // folders after
+    // if (x.cleanName === '*FOLDER*') {
+    //   return -1;
+    // } else if (y.cleanName === '*FOLDER*') {
+    //   return 1;
+    // }
 
-      // fix inside the `yearAsc` instead of here !!!
-      // maybe send in PROPERTY into this method rather than the full ImageElement !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-      return (x[property] || Infinity) - (y[property] || Infinity);
-      // note: `|| Infinity` needed for `year` sort only -- to put everything without a year below
-    } else {
-      return (y[property] || 0) - (x[property] || 0);
-      // Note `|| 0` needed only for `year` sort only -- to put everything without a year below
+    // if sort by year, show properties that are not empty first
+    if (property === 'year') {
+      if (decreasing) {
+        return (x[property] || Infinity) - (y[property] || Infinity);
+      } else {
+        return (y[property] || 0)        - (x[property] || 0);
+      }
     }
+
+    if (decreasing) {
+      return (x[property]) - (y[property]);
+    } else {
+      return (y[property]) - (x[property]);
+    }
+
   }
 
   /**
@@ -64,7 +73,7 @@ export class SortingPipe implements PipeTransform {
     // console.log('SORTING RUNNING'); // ENABLE AND CHECK IF IT RUNS TOO OFTEN !!!
 
     if (sortingType === 'random') {
-      let currentIndex = (galleryArray[0].index === -1 ? 1 : 0); // skip 'up button' if present
+      let currentIndex = (galleryArray[0].fileName === '*UP*' ? 1 : 0); // skip 'up button' if present
       let temporaryValue;
       let randomIndex;
 
@@ -146,7 +155,6 @@ export class SortingPipe implements PipeTransform {
       });
       return sorted.slice(0);
     } else {
-      console.log('default sort -- TODO: refactor year bug'); // TODO -- Re-enable and optimize!
       const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'index', true);
       });
