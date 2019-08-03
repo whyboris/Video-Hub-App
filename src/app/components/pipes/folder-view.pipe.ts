@@ -1,6 +1,13 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { ImageElement } from '../common/final-object.interface';
+import { ImageElement, StarRating } from '../common/final-object.interface';
+
+interface FolderProperties {
+  byteSize: number;    //                             corresponds to ImageElement `fileSize`
+  duration: number;    // in seconds,                 corresponds to ImageElement `duration`
+  starAverage: StarRating; // averaged weight of stars rounded to nearest `StarRating`
+}
+
 
 @Pipe({
   name: 'folderViewPipe'
@@ -14,18 +21,28 @@ export class FolderViewPipe implements PipeTransform {
    * Determine folder size and duration (simply sum up all the elements' properties)
    * @param files
    */
-  determineFolderProperties(files: ImageElement[]): any {
+  determineFolderProperties(files: ImageElement[]): FolderProperties {
     let totalFileSize: number = 0;
     let totalDuration: number = 0;
+    let starAverage: number = 0;
+    let totalStars: number = 0;
 
     files.forEach((element: ImageElement) => {
       totalFileSize += element.fileSize;
       totalDuration += element.duration;
+      if (element.stars !== 0.5) {
+        totalStars += 1;
+        starAverage += element.stars;
+      }
     });
 
+    const starString: StarRating = <StarRating><unknown>((Math.round(starAverage / totalStars - 0.5) + 0.5) || 0.5).toString();
+    //                                                      sometimes this calculation results in NaN so we ^^^^^^^
+
     return {
-      folderSize: totalFileSize,
-      folderDuration: totalDuration
+      byteSize: totalFileSize,
+      duration: totalDuration,
+      starAverage: starString,
     };
   }
 
@@ -156,14 +173,15 @@ export class FolderViewPipe implements PipeTransform {
           arrWithFolders.push(...value); // spread out all files in root folder
         } else {
 
-          const folderProperties = this.determineFolderProperties(value);
+          const folderProperties: FolderProperties = this.determineFolderProperties(value);
+          console.log('star average: ' + folderProperties.starAverage);
 
           const folderWithStuff: ImageElement = {
             cleanName: '*FOLDER*',
-            duration: folderProperties.folderDuration,
+            duration: folderProperties.byteSize,
             durationDisplay: '',
             fileName: key.replace('/', ''),
-            fileSize: folderProperties.folderSize,
+            fileSize: folderProperties.duration,
             fileSizeDisplay: value.length.toString(),
             hash: this.extractFourPreviewHashes(value),
             height: 0,
@@ -173,7 +191,7 @@ export class FolderViewPipe implements PipeTransform {
             resBucket: 0,
             resolution: '',
             screens: 0,
-            stars: 0.5,
+            stars: folderProperties.starAverage,
             timesPlayed: 0,
             width: 0,
           };
