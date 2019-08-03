@@ -7,6 +7,8 @@
   [ngClass]="{ 'compact-margins': compactView }"
 >
 
+  <!-- FOLDER BLOCK -->
+
   <div *ngIf="video.cleanName === '*FOLDER*'; else singleThumbnail">
     <div
       *ngIf="video.fileName !== '*UP*'; else upFolderDiv"
@@ -82,6 +84,9 @@
       </div>
     </span>
   </div>
+
+
+  <!-- INDIVIDUAL FILE BLOCK -->
 
   <ng-template #singleThumbnail>
 

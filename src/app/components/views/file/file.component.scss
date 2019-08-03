@@ -83,11 +83,27 @@
   font-size: 12px;
   left: 36px;
   position: absolute;
+}
 
+.folder-size {
+  color: $gray-60;
+  display: inline-block;
+  font-size: 10px;
 }
 
 .folder-name-dark-mode {
   color: $gray-10;
+}
+
+.number-of-files {
+  color: $gray-60;
+  display: block;
+  font-size: 10px;
+  left: -25px;
+  position: absolute;
+  text-align: right;
+  top: 7px;
+  width: 30px;
 }
 
 .icon-folder-lol {
@@ -102,7 +118,7 @@
 }
 
 .title {
-  color: $gray-80;
+  color: $black;
   display: inline-block;
   font-size: 12px;
   overflow: hidden;
