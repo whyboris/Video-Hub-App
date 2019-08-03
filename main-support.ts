@@ -455,6 +455,11 @@ function computeNumberOfScreenshots(screenshotSettings: ScreenshotSettings, dura
   } else {
     total = Math.ceil(duration / 60 / screenshotSettings.n);
   }
+
+  if (total < 3) {
+    total = 3; // minimum 3 screenshots!
+  }
+
   return total;
 }
 
