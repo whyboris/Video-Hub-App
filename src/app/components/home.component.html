@@ -1238,6 +1238,8 @@
     <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
   </div>
 
+  <div class="gradient-to-indicate-scrolling"></div>
+
   <div class="left-side" @slowFadeIn>
 
     <h2>{{ 'WIZARD.openPrevious' | translate }}</h2>
@@ -1526,6 +1528,7 @@
     </div>
 
     <div
+      style="margin-top: 30px;"
       [ngClass]="{
         'current-step': wizard.selectedOutputFolder !== ''
                      && wizard.selectedSourceFolder !== ''
@@ -1535,6 +1538,7 @@
       5
     </div>
     <button
+      style="margin-top: 45px;"
       class="wizardButton"
       [disabled]="wizard.selectedOutputFolder === ''
                || wizard.selectedSourceFolder === ''
@@ -1545,7 +1549,7 @@
     >
       {{ 'WIZARD.createVideoHub' | translate }}
     </button>
-
+<!--
     <span
       class="description"
       *ngIf="wizard.totalNumberOfFiles !== -1"
@@ -1570,6 +1574,7 @@
       </span>
       {{ 'WIZARD.sizeToImport' | translate }}
     </span>
+-->
 
   </div>
 

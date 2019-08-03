@@ -259,7 +259,7 @@ export const English = {
     selectFolderWithVideo  :'Please select the folder with your video files',
     selectWhereFilesStored :'Please select the folder where your Video Hub will be stored',
     size                   :'size',
-    sizeOfScreenshots      :'Size of screenshots',
+    sizeOfScreenshots      :'Height of screenshots',
     sizeToImport           :'mb of disk space',
     timeToImport           :'minutes to import',
     videoDirectory         :'video directory',
