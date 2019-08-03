@@ -112,18 +112,13 @@
     class="right-click-menu"
     @rightClickAnimation
   >
-    <ul *ngIf="clickedOnFile; else galleryOptions" @rightClickContentAnimation>
+    <ul @rightClickContentAnimation>
       <li (click)="openRenameFileModal()">{{ 'RIGHTCLICK.renameFile' | translate }}</li>
       <li (click)="showSimilarNow()">{{ 'RIGHTCLICK.showSimilar' | translate }}</li>
       <li (click)="showOnlyThisFolderNow()">{{ 'RIGHTCLICK.viewFolder' | translate }}</li>
       <li (click)="openContainingFolderNow()">{{ 'RIGHTCLICK.openFolder' | translate }}</li>
       <li (click)="openThumbnailSheet(currentRightClickedItem)">{{ 'RIGHTCLICK.sheetModal' | translate }}</li>
     </ul>
-    <ng-template #galleryOptions>
-      <ul @rightClickContentAnimation>
-        <li (click)="toggleButton('shuffleGalleryNow')">{{ 'RIGHTCLICK.shuffle' | translate }}</li>
-      </ul>
-    </ng-template>
   </div>
 
   <!-- ===========   Thumbnail Sheet Display   =========== -->
