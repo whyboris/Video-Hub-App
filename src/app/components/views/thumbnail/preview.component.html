@@ -49,8 +49,7 @@
           'background-image': 'url(' + folderThumbPaths[3] + ')'
         }"
       ></div>
-      <span *ngIf="showMeta" class="time">{{ video.durationDisplay }}</span>
-      <span *ngIf="showMeta" class="rez">{{ video.resolution }}</span>
+      <span *ngIf="showMeta" class="time folder-time">{{ video.duration | lengthPipe : true : true : true }}</span>
     </div>
     <div *ngIf="video.cleanName === '*FOLDER*' && video.fileName !== '*UP*'" class="folder-icon">
       <app-icon [icon]="'icon-folder-blank'"></app-icon>

@@ -174,18 +174,17 @@ export class FolderViewPipe implements PipeTransform {
         } else {
 
           const folderProperties: FolderProperties = this.determineFolderProperties(value);
-          console.log('star average: ' + folderProperties.starAverage);
 
           const folderWithStuff: ImageElement = {
             cleanName: '*FOLDER*',
-            duration: folderProperties.byteSize,
+            duration: folderProperties.duration,
             durationDisplay: '',
             fileName: key.replace('/', ''),
-            fileSize: folderProperties.duration,
+            fileSize: folderProperties.byteSize,
             fileSizeDisplay: value.length.toString(),
             hash: this.extractFourPreviewHashes(value),
             height: 0,
-            index: -1, // always show at the top (but after the `UP` folder)
+            index: -1, // always show at the top (but after the `UP` folder) in the default view
             mtime: 0,
             partialPath: (prefixPath || '/') + key, // must set this for the folder click to register!
             resBucket: 0,
