@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { ImageElement } from '../common/final-object.interface';
+import { ImageElement, StarRating } from '../common/final-object.interface';
 
 export type SortType = 'default'
                      | 'modifiedAsc'
@@ -38,19 +38,23 @@ export class SortingPipe implements PipeTransform {
       return 1;
     }
 
-    // // folders after
-    // if (x.cleanName === '*FOLDER*') {
-    //   return -1;
-    // } else if (y.cleanName === '*FOLDER*') {
-    //   return 1;
-    // }
-
-    // if sort by year, show properties that are not empty first
+    // handle `year` case:   show properties that are not empty first
     if (property === 'year') {
       if (decreasing) {
-        return (x[property] || Infinity) - (y[property] || Infinity);
+        return (x.year || Infinity) - (y.year || Infinity);
       } else {
-        return (y[property] || 0)        - (x[property] || 0);
+        return (y.year || 0)        - (x.year || 0);
+      }
+    }
+
+    // handle `stars` case:  show properties that are not empty first
+    if (property === 'stars') {
+      if (decreasing) {
+        return (  x.stars === <StarRating><unknown>0.5 ? Infinity : x.stars)
+               - (y.stars === <StarRating><unknown>0.5 ? Infinity : y.stars);
+      } else {
+        return (  y.stars === <StarRating><unknown>0.5 ? 0        : y.stars)
+               - (x.stars === <StarRating><unknown>0.5 ? 0        : x.stars);
       }
     }
 
