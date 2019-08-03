@@ -11,6 +11,20 @@ export class FolderViewPipe implements PipeTransform {
 
 
   /**
+   * Determine folder size (simply sum up all the elements' sizes)
+   * @param files
+   */
+  determineFolderSize(files: ImageElement[]): number {
+    let total: number = 0;
+
+    files.forEach((element: ImageElement) => {
+      total += element.fileSize;
+    });
+
+    return total;
+  }
+
+  /**
    * Takes ImageElement array and returns 4 hashes
    * separated by `:` so the folderView has something to show!
    * @param files
@@ -142,7 +156,7 @@ export class FolderViewPipe implements PipeTransform {
             duration: 0,
             durationDisplay: '',
             fileName: key.replace('/', ''),
-            fileSize: 0,
+            fileSize: this.determineFolderSize(value),
             fileSizeDisplay: value.length.toString(),
             hash: this.extractFourPreviewHashes(value),
             height: 0,
