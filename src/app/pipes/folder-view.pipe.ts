@@ -86,7 +86,7 @@ export class FolderViewPipe implements PipeTransform {
    *
    * @param finalArray
    * @param render      whether to insert folders
-   * @param prefixPath  whether to ONLY show folders
+   * @param prefixPath  current folder in view (full path to "current working directory")
    */
   transform(finalArray: ImageElement[], render: boolean, prefixPath?: string): ImageElement[] {
 
@@ -113,38 +113,51 @@ export class FolderViewPipe implements PipeTransform {
 
       subCopy.forEach((element) => {
 
-        let firstFolder: string;
+        let keyForMap: string;
+        // can either be one of two:
+        // (1) name of subfolder -- immediately inside the "CWD", or
+        // (2) full file name    -- immediately inside the "CWD" (Current Working Directory)
 
         if (prefixPath) {
 
-          // if has sub-folders, trim them out !!!
-          if (element.partialPath.replace(prefixPath, '').substring(1).includes('/')) {
-            // make sure to remove the first `/` in path  ^^^^^^^^^^^^
-            // if without `prefixPath` the path includes `/` it means it's nested deeper
+          //   `remainingPath` is what is remaining after `prefixPath` has been removed
+          const remainingPath: string = element.partialPath.replace(prefixPath, '');
+          // two scenarios:
+          //  (1) it's an element inside a subfolder
+          //  (2) it's a file inside the "current working directory"
+
+          // if it includes `/` it means it is a sub-folder
+          // Case (1)
+          if (remainingPath.substring(1).includes('/')) {
+            // make sure to remove the first character -- it is always `/`
 
             // first element may be nested, e.g. `/a/b/c.mp4`
             // if `prefixPath` is `a` the first folder should be `/b` not `/b/c`
-            firstFolder = '/' + element.partialPath.replace(prefixPath, '').split('/')[1];
+            keyForMap = '/' + remainingPath.split('/')[1];
             // first replace the `prefixPath`       ^^^^^^^^^^^^^^^^^^^^^^^
             // then split string into array and grab the first element      ^^^^^^^^^^^^^
+
           } else {
             // this element is a single file
-            firstFolder = element.partialPath.replace(prefixPath, '');
+            // Case (2)
+            keyForMap = remainingPath;
           }
 
         } else {
           // only grab the first subfolder
           // e.g.
-          //    abc => abc
-          //    abc/def => abc
+          //    abc         => abc
+          //    abc/def     => abc
           //    abc/def/xyz => abc
-          firstFolder = element.partialPath.split('/')[1] || ''; // first element always empty element ?!?!?!?
+          keyForMap = element.partialPath.split('/')[1] || '';
+          // first element [0] always empty element   ^^^ so we grab the second:
+          // ("/abc").split('/') ==> ['', 'abc']
         }
 
-        if (pathToElementsMap.has(firstFolder)) {
-          pathToElementsMap.set(firstFolder, [...pathToElementsMap.get(firstFolder), element]);
+        if (pathToElementsMap.has(keyForMap)) {
+          pathToElementsMap.set(keyForMap, [...pathToElementsMap.get(keyForMap), element]);
         } else {
-          pathToElementsMap.set(firstFolder, [element]);
+          pathToElementsMap.set(keyForMap, [element]);
         }
       });
 
