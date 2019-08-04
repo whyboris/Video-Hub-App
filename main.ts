@@ -2,7 +2,7 @@ import { app, BrowserWindow, screen } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 
-const { systemPreferences } = require('electron')
+const { systemPreferences } = require('electron');
 
 import { globals } from './main-globals';
 
@@ -210,10 +210,10 @@ import {
 
 import { extractFromTheseFiles, replaceThumbnailWithNewImage } from './main-extract';
 
-import { FinalObject, ImageElement } from './src/app/components/common/final-object.interface';
-import { ImportSettingsObject } from './src/app/components/common/import.interface';
-import { SavableProperties } from './src/app/components/common/savable-properties.interface';
-import { SettingsObject } from './src/app/components/common/settings-object.interface';
+import { FinalObject, ImageElement } from './src/app/common/final-object.interface';
+import { ImportSettingsObject } from './src/app/common/import.interface';
+import { SavableProperties } from './src/app/common/savable-properties.interface';
+import { SettingsObject } from './src/app/common/settings-object.interface';
 
 let lastSavedFinalObject: FinalObject; // hack for saving the `vha` file again later
 

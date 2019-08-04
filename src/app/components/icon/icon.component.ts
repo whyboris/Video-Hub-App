@@ -4,7 +4,7 @@ import { Component, Input } from '@angular/core';
   selector: 'app-icon',
   templateUrl: './icon.component.html',
   styleUrls: ['./icon.component.scss',
-              '../fonts/icons.scss']
+              '../../fonts/icons.scss']
 })
 export class IconComponent {
 

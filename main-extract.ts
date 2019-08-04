@@ -34,7 +34,7 @@ import { globals, ScreenshotSettings } from './main-globals';
 
 import { sendCurrentProgress } from './main-support';
 
-import { ImageElement } from './src/app/components/common/final-object.interface';
+import { ImageElement } from './src/app/common/final-object.interface';
 
 // ========================================================================================
 //          Promises
