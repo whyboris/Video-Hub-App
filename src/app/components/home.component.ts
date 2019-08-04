@@ -6,24 +6,24 @@ import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
 import { AutoTagsSaveService } from './tags-auto/tags-save.service';
 import { ElectronService } from '../providers/electron.service';
 import { ManualTagsService } from './tags-manual/manual-tags.service';
-import { ResolutionFilterService, ResolutionString } from './pipes/resolution-filter.service';
-import { ShowLimitService } from './pipes/show-limit.service';
-import { StarFilterService } from './pipes/star-filter.service';
-import { WordFrequencyService } from './pipes/word-frequency.service';
+import { ResolutionFilterService, ResolutionString } from '../pipes/resolution-filter.service';
+import { ShowLimitService } from '../pipes/show-limit.service';
+import { StarFilterService } from '../pipes/star-filter.service';
+import { WordFrequencyService } from '../pipes/word-frequency.service';
 
-import { FinalObject, ImageElement } from './common/final-object.interface';
-import { HistoryItem } from './common/history-item.interface';
-import { ImportSettingsObject } from './common/import.interface';
+import { FinalObject, ImageElement } from '../common/final-object.interface';
+import { HistoryItem } from '../common/history-item.interface';
+import { ImportSettingsObject } from '../common/import.interface';
 import { ImportStage } from '../../../main-support';
-import { SavableProperties } from './common/savable-properties.interface';
-import { SettingsObject } from './common/settings-object.interface';
-import { SortType } from './pipes/sorting.pipe';
+import { SavableProperties } from '../common/savable-properties.interface';
+import { SettingsObject } from '../common/settings-object.interface';
+import { SortType } from '../pipes/sorting.pipe';
 import { TagEmission, StarEmission, YearEmission } from './views/details/details.component';
-import { WizardOptions } from './common/wizard-options.interface';
+import { WizardOptions } from '../common/wizard-options.interface';
 
-import { AppState, SupportedLanguage, defaultImgsPerRow, RowNumbers, allSupportedViews, SupportedView } from './common/app-state';
-import { Filters, filterKeyToIndex, FilterKeyNames } from './common/filters';
-import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, SettingsMetaGroup } from './common/settings-buttons';
+import { AppState, SupportedLanguage, defaultImgsPerRow, RowNumbers, allSupportedViews, SupportedView } from '../common/app-state';
+import { Filters, filterKeyToIndex, FilterKeyNames } from '../common/filters';
+import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, SettingsMetaGroup } from '../common/settings-buttons';
 
 import { English } from '../i18n/en';
 import { French } from '../i18n/fr';
@@ -47,7 +47,7 @@ import {
   slowFadeIn,
   slowFadeOut,
   topAnimation
-} from './common/animations';
+} from '../common/animations';
 
 // import { DemoContent } from '../../../assets/demo-content';
 
@@ -62,7 +62,7 @@ import {
     './buttons.scss',
     './search.scss',
     './search-input.scss',
-    './fonts/icons.scss',
+    '../fonts/icons.scss',
     './gallery.scss',
     './wizard-button.scss',
     './wizard.scss',

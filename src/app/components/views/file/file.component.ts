@@ -1,12 +1,12 @@
 import { Component, Input } from '@angular/core';
 
-import { ImageElement } from '../../common/final-object.interface';
+import { ImageElement } from '../../../common/final-object.interface';
 
 @Component({
   selector: 'app-file-item',
   templateUrl: './file.component.html',
   styleUrls: ['./file.component.scss',
-              '../../fonts/icons.scss']
+              '../../../fonts/icons.scss']
 })
 export class FileComponent {
 
