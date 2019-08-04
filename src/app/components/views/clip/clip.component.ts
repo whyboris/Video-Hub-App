@@ -8,7 +8,8 @@ import { metaAppear, textAppear } from '../../common/animations';
 @Component({
   selector: 'app-clip-item',
   templateUrl: './clip.component.html',
-  styleUrls: [ './clip.component.scss' ],
+  styleUrls: [ './clip.component.scss',
+               '../time-and-rez.scss' ],
   animations: [ textAppear,
                 metaAppear ]
 })

@@ -68,28 +68,12 @@
   width: 25px;
 }
 
-.time, .rez {
-  bottom: 4px;
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 10px;
-  position: absolute;
-  z-index: 2;
-}
-
-.time {
-  right: 4px;
-}
-
 .folder-time {
   background: black;
   border-radius: 5px;
   color: white;
   display: block;
   padding: 2px;
-}
-
-.rez {
-  left: 3px;
 }
 
 .title {

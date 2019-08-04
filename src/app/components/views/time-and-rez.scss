@@ -1,0 +1,15 @@
+.time, .rez {
+  bottom: 4px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 10px;
+  position: absolute;
+  z-index: 2;
+}
+
+.time {
+  right: 4px;
+}
+
+.rez {
+  left: 3px;
+}
