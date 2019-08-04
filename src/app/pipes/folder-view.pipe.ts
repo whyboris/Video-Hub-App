@@ -86,7 +86,7 @@ export class FolderViewPipe implements PipeTransform {
    *
    * @param finalArray
    * @param render      whether to insert folders
-   * @param prefixPath  current folder in view (full path to "current working directory")
+   * @param prefixPath  current folder in view (full path to CWD - "current working directory")
    */
   transform(finalArray: ImageElement[], render: boolean, prefixPath?: string): ImageElement[] {
 
@@ -119,26 +119,18 @@ export class FolderViewPipe implements PipeTransform {
         // (2) full file name    -- immediately inside the "CWD" (Current Working Directory)
 
         if (prefixPath) {
-
           //   `remainingPath` is what is remaining after `prefixPath` has been removed
           const remainingPath: string = element.partialPath.replace(prefixPath, '');
-          // two scenarios:
-          //  (1) it's an element inside a subfolder
-          //  (2) it's a file inside the "current working directory"
 
-          // if it includes `/` it means it is a sub-folder
-          // Case (1)
+          // Case (1)  -- if it includes `/` it means it is a sub-folder
           if (remainingPath.substring(1).includes('/')) {
-            // make sure to remove the first character -- it is always `/`
+            //             ^^^^^^^^^^^^^ make sure to remove the first character -- it is always `/`
 
             // first element may be nested, e.g. `/a/b/c.mp4`
             // if `prefixPath` is `a` the first folder should be `/b` not `/b/c`
             keyForMap = '/' + remainingPath.split('/')[1];
-            // first replace the `prefixPath`       ^^^^^^^^^^^^^^^^^^^^^^^
-            // then split string into array and grab the first element      ^^^^^^^^^^^^^
 
           } else {
-            // this element is a single file
             // Case (2)
             keyForMap = remainingPath;
           }
@@ -168,8 +160,8 @@ export class FolderViewPipe implements PipeTransform {
       if (prefixPath.length) {
         const upButton: ImageElement = NewImageElement();
 
-        upButton.cleanName = '*FOLDER*';
-        upButton.fileName = '*UP*';
+        upButton.cleanName   = '*FOLDER*';
+        upButton.fileName    = '*UP*';
         upButton.partialPath = prefixPath.substring(0, prefixPath.lastIndexOf('/')),
 
         arrWithFolders.push(upButton);
