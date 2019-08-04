@@ -24,14 +24,15 @@ export class ClipComponent implements OnInit {
   @Input() video: ImageElement;
 
   @Input() autoplay: boolean;
+  @Input() compactView: boolean;
   @Input() darkMode: boolean;
   @Input() elHeight: number;
   @Input() elWidth: number;
   @Input() folderPath: string;
+  @Input() forceMute: boolean;
   @Input() hubName: string;
   @Input() imgHeight: number;
   @Input() largerFont: boolean;
-  @Input() forceMute: boolean;
   @Input() showMeta: boolean;
 
   appInFocus: boolean = true;

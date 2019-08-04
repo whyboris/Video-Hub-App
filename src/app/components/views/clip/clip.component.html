@@ -4,6 +4,7 @@
       width: elWidth + 'px'
     }"
   class="filmstrip-container"
+  [ngClass]="{ 'compact-margins': compactView }"
 >
 
   <div *ngIf="video.cleanName === '*FOLDER*'; else singleThumbnailDiv">

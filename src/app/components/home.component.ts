@@ -1088,7 +1088,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // ======== Other buttons ========================
     } else if (uniqueKey === 'compactView') {
       this.toggleButtonOpposite(uniqueKey);
-      if (this.settingsButtons['showThumbnails'].toggled) {
+      if (
+           this.settingsButtons['showThumbnails'].toggled
+        || this.settingsButtons['showClips'].toggled
+      ) {
         this.computeTextBufferAmount();
       }
     } else if (uniqueKey === 'makeSmaller') {
@@ -1342,7 +1345,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
         break;
 
       case 'showClips':
-        if (this.settingsButtons.showMoreInfo.toggled) {
+        if (this.settingsButtons.compactView.toggled) {
+          this.textPaddingHeight = 0;
+        } else if (this.settingsButtons.showMoreInfo.toggled) {
           this.textPaddingHeight = 55;
         } else {
           this.textPaddingHeight = 20;
