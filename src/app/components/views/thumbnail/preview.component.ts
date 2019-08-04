@@ -5,8 +5,11 @@ import { ImageElement } from '../../common/final-object.interface';
 @Component({
   selector: 'app-gallery-item',
   templateUrl: './preview.component.html',
-  styleUrls: [ './preview.component.scss',
-               '../time-and-rez.scss' ],
+  styleUrls: [
+      '../clip-and-preview.scss',
+      '../time-and-rez.scss',
+      './preview.component.scss',
+    ],
   animations: [ textAppear,
                 metaAppear ]
 })

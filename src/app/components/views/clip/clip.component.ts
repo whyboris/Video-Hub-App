@@ -8,8 +8,11 @@ import { metaAppear, textAppear } from '../../common/animations';
 @Component({
   selector: 'app-clip-item',
   templateUrl: './clip.component.html',
-  styleUrls: [ './clip.component.scss',
-               '../time-and-rez.scss' ],
+  styleUrls: [
+      '../clip-and-preview.scss',
+      '../time-and-rez.scss',
+      './clip.component.scss',
+    ],
   animations: [ textAppear,
                 metaAppear ]
 })
@@ -76,7 +79,7 @@ export class ClipComponent implements OnInit {
       const fileHash = this.video.hash;
 
       this.pathToVideo = 'vha-' + this.hubName + '/clips/' + fileHash + '.mp4';
-      this.poster = 'vha-' + this.hubName + '/thumbnails/' + fileHash + '.jpg';
+      this.poster = 'vha-' + this.hubName + '/clips/' + fileHash + '.jpg';
       this.folderThumbPaths.push(this.pathToVideo);
       this.folderPosterPaths.push(this.poster);
     }

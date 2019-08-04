@@ -1,0 +1,48 @@
+.filmstrip-container {
+  display: inline-block;
+  margin: 20px 20px 0;
+  overflow: hidden;
+  position: relative;
+  transition: 300ms;
+  transition-property: height;
+}
+
+.title {
+  -webkit-box-orient: vertical;
+  cursor: pointer;
+  display: -webkit-box;
+  font-size: 12px;
+  -webkit-line-clamp: 3;
+  margin: 6px 2px 0px;
+  max-height: 54px;
+  overflow: hidden;
+  position: absolute;
+  text-align: left;
+  text-overflow: ellipsis;
+  transition: 300ms;
+  transition-property: font-size;
+  width: 100%;
+  word-wrap: break-word;
+}
+
+.larger-font {
+  font-size: 16px;
+  margin-top: 4px;
+}
+
+.video-box {
+  background-color: black;
+  background-size: cover;
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+
+  .up-icon {
+    fill: white;
+    left: 14%;
+    position: absolute;
+    top: 36%;
+    transform: translate(-50%, -50%);
+    width: 30%;
+  }
+}
