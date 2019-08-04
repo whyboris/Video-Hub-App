@@ -810,6 +810,10 @@ function verifyThumbnails() {
   // resume extracting any missing thumbnails
   const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
 
+  // verify if the output folder existence
+  // if not found, recreate in order to regenerate image previews
+  verifyScreenshotOutputFolder();
+
   const indexesToScan: number[] = missingThumbsIndex(
     lastSavedFinalObject.images,
     screenshotOutputFolder,
@@ -824,6 +828,23 @@ function verifyThumbnails() {
     indexesToScan,
   );
 }
+
+/**
+ * If output folder is missing, recreate it in order to regenerate
+ * the previews, because previews were regenerated but never saved
+ */
+function verifyScreenshotOutputFolder() {
+  const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
+
+  if (!fs.existsSync(screenshotOutputFolder)) {
+    console.log('vha-hubName folder did not exist, creating');
+    fs.mkdirSync(path.join(screenshotOutputFolder));
+    fs.mkdirSync(path.join(screenshotOutputFolder + '/filmstrips'));
+    fs.mkdirSync(path.join(screenshotOutputFolder + '/thumbnails'));
+    fs.mkdirSync(path.join(screenshotOutputFolder + '/clips'));
+  }
+}
+
 
 import {
   findAndImportNewFiles,
