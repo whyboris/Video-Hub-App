@@ -41,3 +41,26 @@ export interface ImageElement {
   resBucket: number;             // the resolution category the video falls into (for faster sorting)
   resolution: ResolutionString;  // e.g. `720`, `1080`, `SD`, `HD`
 }
+
+// Use this to create a new ImageElement if needed
+export function NewImageElement(): ImageElement {
+  return {
+    cleanName: '',
+    duration: 0,
+    durationDisplay: '',
+    fileName: '',
+    fileSize: 0,
+    fileSizeDisplay: '',
+    hash: '',
+    height: 0,
+    index: 0,
+    mtime: 0,
+    partialPath: '',
+    resBucket: 0,
+    resolution: '',
+    screens: 0,
+    stars: 0.5,
+    timesPlayed: 0,
+    width: 0,
+  };
+}

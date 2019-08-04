@@ -910,6 +910,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     console.log('folder name clicked:');
     console.log(filter);
     this.folderViewNavigationPath = filter;
+    this.scrollToTop();
   }
 
   /**

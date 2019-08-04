@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { ImageElement, StarRating } from '../common/final-object.interface';
+import { ImageElement, StarRating, NewImageElement } from '../common/final-object.interface';
 
 interface FolderProperties {
   byteSize: number;    //                             corresponds to ImageElement `fileSize`
@@ -138,25 +138,12 @@ export class FolderViewPipe implements PipeTransform {
 
       // Step 4: append the UP folder if we're inside any folder
       if (prefixPath.length) {
-        const upButton: ImageElement = {
-          cleanName: '*FOLDER*',
-          duration: 0,
-          durationDisplay: '',
-          fileName: '*UP*',
-          fileSize: 0,
-          fileSizeDisplay: '',
-          hash: '',
-          height: 0,
-          index: 0,
-          mtime: 0,
-          partialPath: prefixPath.substring(0, prefixPath.lastIndexOf('/')),
-          resBucket: 0,
-          resolution: '',
-          screens: 0,
-          stars: 0.5,
-          timesPlayed: 0,
-          width: 0,
-        };
+        const upButton: ImageElement = NewImageElement();
+
+        upButton.cleanName = '*FOLDER*';
+        upButton.fileName = '*UP*';
+        upButton.partialPath = prefixPath.substring(0, prefixPath.lastIndexOf('/')),
+
         arrWithFolders.push(upButton);
       }
 
@@ -169,25 +156,18 @@ export class FolderViewPipe implements PipeTransform {
 
           const folderProperties: FolderProperties = this.determineFolderProperties(value);
 
-          const folderWithStuff: ImageElement = {
-            cleanName: '*FOLDER*',
-            duration: folderProperties.duration,
-            durationDisplay: '',
-            fileName: key.replace('/', ''),
-            fileSize: folderProperties.byteSize,
-            fileSizeDisplay: value.length.toString(),
-            hash: this.extractFourPreviewHashes(value),
-            height: 0,
-            index: -1, // always show at the top (but after the `UP` folder) in the default view
-            mtime: 0,
-            partialPath: (prefixPath || '/') + key, // must set this for the folder click to register!
-            resBucket: 0,
-            resolution: '',
-            screens: 0,
-            stars: folderProperties.starAverage,
-            timesPlayed: 0,
-            width: 0,
-          };
+          const folderWithStuff: ImageElement = NewImageElement();
+
+          folderWithStuff.cleanName       = '*FOLDER*',
+          folderWithStuff.duration        = folderProperties.duration,
+          folderWithStuff.fileName        = key.replace('/', ''),
+          folderWithStuff.fileSize        = folderProperties.byteSize,
+          folderWithStuff.fileSizeDisplay = value.length.toString(),
+          folderWithStuff.hash            = this.extractFourPreviewHashes(value),
+          folderWithStuff.index           = -1, // always show at the top (but after the `UP` folder) in the default view
+          folderWithStuff.partialPath     = (prefixPath || '/') + key, // must set this for the folder click to register!
+          folderWithStuff.stars           = folderProperties.starAverage,
+
           arrWithFolders.push(folderWithStuff);
         }
 
