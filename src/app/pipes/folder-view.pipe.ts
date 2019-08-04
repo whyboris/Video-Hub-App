@@ -100,7 +100,6 @@ export class FolderViewPipe implements PipeTransform {
           return (
                element.partialPath === (prefixPath)               // needs to be exact
             || element.partialPath.startsWith(prefixPath + '/')   // or starts with exactly
-                                                                  //  - otherwise `1` and `1.5` coincide when you click `1`
           );
         });
 
@@ -110,28 +109,33 @@ export class FolderViewPipe implements PipeTransform {
 
       // Step 2: create a map from first subfolder within `prefixPath` to each element inside that subfolder
       const pathToElementsMap: Map<string, ImageElement[]> = new Map();
+      // looks like:
+      //   "" => Array(3)           <-- means 3 files in CWD
+      //   "Folder1" => Array(25)   <-- means 25 files in subfolder named "Folder1"
+      //   "Folder2" => Array(7)    <-- etc
 
+      // Note we are always working with `.partialPath` which is always a folder path, never file name
       subCopy.forEach((element) => {
 
         let keyForMap: string;
         // can either be one of two:
-        // (1) name of subfolder -- immediately inside the "CWD", or
-        // (2) full file name    -- immediately inside the "CWD" (Current Working Directory)
+        // (1) "" => points to array of elements directly inside "CWD"
+        // (2) folder name => only folder immediately inside the "CWD" (Current Working Directory)
 
         if (prefixPath) {
           //   `remainingPath` is what is remaining after `prefixPath` has been removed
           const remainingPath: string = element.partialPath.replace(prefixPath, '');
 
-          // Case (1)  -- if it includes `/` it means it is a sub-folder
+          // If it includes `/` it means it is an element inside a sub-folder
+          // we store it in the key for the bottom-most folder in "CWD"
           if (remainingPath.substring(1).includes('/')) {
             //             ^^^^^^^^^^^^^ make sure to remove the first character -- it is always `/`
 
-            // first element may be nested, e.g. `/a/b/c.mp4`
+            // first element may be nested, e.g. `/a/b/c`
             // if `prefixPath` is `a` the first folder should be `/b` not `/b/c`
             keyForMap = '/' + remainingPath.split('/')[1];
 
           } else {
-            // Case (2)
             keyForMap = remainingPath;
           }
 
@@ -142,7 +146,7 @@ export class FolderViewPipe implements PipeTransform {
           //    abc/def     => abc
           //    abc/def/xyz => abc
           keyForMap = element.partialPath.split('/')[1] || '';
-          // first element [0] always empty element   ^^^ so we grab the second:
+          // first element [0] always empty element ^^^ so we grab the second:
           // ("/abc").split('/') ==> ['', 'abc']
         }
 

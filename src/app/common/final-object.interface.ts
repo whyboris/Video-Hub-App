@@ -22,7 +22,7 @@ export interface ImageElement {
   hash: string;                  // used for detecting changed files and as a screenshot identifier
   height: number;                // height of the video
   mtime: number;                 // file modification time
-  partialPath: string;           // for opening the file, just prepend the `inputDir`
+  partialPath: string;           // for opening the file, just prepend the `inputDir` (starts with "/", is "/fldr1/fldr2", or can be "")
   screens: number;               // number of screenshots for this file
   stars: StarRating;             // star rating 0 = n/a, otherwise 1, 2, 3
   timesPlayed: number;           // number of times the file has been launched by VHA
