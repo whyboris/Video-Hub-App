@@ -957,11 +957,13 @@
       <ng-container *ngIf="appState.currentView === 'showThumbnails'">
         <app-gallery-item
           *ngFor="let item of scroll.viewPortItems"
-          (videoClick)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
-          (sheetClick)="this.openThumbnailSheet(item)"
-          (contextmenu)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event, item)"
 
+          (contextmenu)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event, item)"
           (drop)="droppedSomethingOverVideo($event, item)"
+          (sheetClick)="this.openThumbnailSheet(item)"
+          (videoClick)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+
+          [video]="item"
 
           [elHeight]="previewHeight + textPaddingHeight"
           [elWidth]="previewWidth"
@@ -970,9 +972,6 @@
           [imgHeight]="previewHeight"
 
           [compactView]="settingsButtons['compactView'].toggled"
-
-          [video]="item"
-
           [darkMode]="settingsButtons['darkMode'].toggled"
           [hoverScrub]="settingsButtons['hoverScrub'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
@@ -1047,9 +1046,9 @@
 
           [video]="item"
 
+          [darkMode]="settingsButtons['darkMode'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
-          [darkMode]="settingsButtons['darkMode'].toggled"
 
           style="display: block"
         ></app-file-item>
@@ -1082,10 +1081,10 @@
           [hoverScrub]="settingsButtons['hoverScrub'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
           [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
-          [showMeta]="settingsButtons['showMoreInfo'].toggled"
-          [showManualTags]="settingsButtons['manualTags'].toggled"
           [showAutoFileTags]="settingsButtons['autoFileTags'].toggled"
           [showAutoFolderTags]="settingsButtons['autoFolderTags'].toggled"
+          [showManualTags]="settingsButtons['manualTags'].toggled"
+          [showMeta]="settingsButtons['showMoreInfo'].toggled"
 
           style="display: block"
         ></app-details-item>
@@ -1094,9 +1093,10 @@
       <ng-container *ngIf="appState.currentView === 'showClips'">
         <app-clip-item
           *ngFor="let item of scroll.viewPortItems"
-          (videoClick)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
-          (sheetClick)="this.openThumbnailSheet(item)"
+
           (contextmenu)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event, item)"
+          (sheetClick)="this.openThumbnailSheet(item)"
+          (videoClick)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
 
           [video]="item"
 
@@ -1107,9 +1107,10 @@
           [imgHeight]="previewHeight"
 
           [autoplay]="settingsButtons['autoplayClips'].toggled"
+          [compactView]="settingsButtons['compactView'].toggled"
           [darkMode]="settingsButtons['darkMode'].toggled"
-          [largerFont]="settingsButtons['fontSizeLarger'].toggled"
           [forceMute]="settingsButtons['muteClips'].toggled"
+          [largerFont]="settingsButtons['fontSizeLarger'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
 
           style="display: inline-block"

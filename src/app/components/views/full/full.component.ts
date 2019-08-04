@@ -8,7 +8,7 @@ import { metaAppear, textAppear } from '../../common/animations';
 @Component({
   selector: 'app-full-item',
   templateUrl: './full.component.html',
-  styleUrls: ['./full.component.scss'],
+  styleUrls: ['../film-and-full.scss'],
   animations: [ textAppear,
                 metaAppear ]
 })
