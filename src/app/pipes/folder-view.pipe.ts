@@ -18,7 +18,7 @@ export class FolderViewPipe implements PipeTransform {
 
 
   /**
-   * Determine folder size and duration (simply sum up all the elements' properties)
+   * Determine folder size, duration, and average star rating (simply sum up / average the relevant ImageElement properties)
    * @param files
    */
   determineFolderProperties(files: ImageElement[]): FolderProperties {
@@ -37,7 +37,7 @@ export class FolderViewPipe implements PipeTransform {
     });
 
     const starString: StarRating = <StarRating><unknown>((Math.round(starAverage / totalStars - 0.5) + 0.5) || 0.5).toString();
-    //                                                      sometimes this calculation results in NaN so we ^^^^^^^
+    //                         since `totalStars` can be 0, sometimes this calculation results in NaN so we ^^^^^^^
 
     return {
       byteSize: totalFileSize,
@@ -116,7 +116,22 @@ export class FolderViewPipe implements PipeTransform {
         let firstFolder: string;
 
         if (prefixPath) {
-          firstFolder = element.partialPath.replace(prefixPath, '');
+
+          // if has sub-folders, trim them out !!!
+          if (element.partialPath.replace(prefixPath, '').substring(1).includes('/')) {
+            // make sure to remove the first `/` in path  ^^^^^^^^^^^^
+            // if without `prefixPath` the path includes `/` it means it's nested deeper
+
+            // first element may be nested, e.g. `/a/b/c.mp4`
+            // if `prefixPath` is `a` the first folder should be `/b` not `/b/c`
+            firstFolder = '/' + element.partialPath.replace(prefixPath, '').split('/')[1];
+            // first replace the `prefixPath`       ^^^^^^^^^^^^^^^^^^^^^^^
+            // then split string into array and grab the first element      ^^^^^^^^^^^^^
+          } else {
+            // this element is a single file
+            firstFolder = element.partialPath.replace(prefixPath, '');
+          }
+
         } else {
           // only grab the first subfolder
           // e.g.
