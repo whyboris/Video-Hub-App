@@ -75,6 +75,15 @@ export class FolderViewPipe implements PipeTransform {
    *  (1) to group all the videos in subdirectory into a folder - displaying 1 element in gallery
    *  (2) to allow user to navigate to a particular subfolder by clicking on it
    *      - must allow for an `UP` folder as well - to navigate backwards !!!
+   *
+   * The process has 6 steps:
+   *  (1) create a subCopy (only elements that are within `prefixPath`)
+   *  (2) create a Map (from first subfolder to every element within the subfolder)
+   *  (3) create a new ImageElement[] to return back (empty at this stage)
+   *  (4) insert `UP` folder if `prefixPath` exists
+   *  (5) convert the Map into ImageElements to display (filling array from step 3)
+   *  (6) return the newly-created ImageElement[]
+   *
    * @param finalArray
    * @param render      whether to insert folders
    * @param prefixPath  whether to ONLY show folders
@@ -83,11 +92,7 @@ export class FolderViewPipe implements PipeTransform {
 
     if (render) {
 
-      // console.log('prefix path is: ' + prefixPath);
-      // console.log('INCOMING array length is: ' + finalArray.length);
-
-      // to make things easier & faster:
-      // first remove all elements not within the specific subfolder
+      // Step 1: select subset of elments - only those within `prefixPath`
       let subCopy: ImageElement[] = [];
 
       if (prefixPath) {
@@ -103,11 +108,7 @@ export class FolderViewPipe implements PipeTransform {
         subCopy = finalArray;
       }
 
-      // console.log('subCopy length: ' + subCopy.length);
-
-      // now create a MAP !!!
-      // from `partialPath` to all the elements that have that path
-
+      // Step 2: create a map from first subfolder within `prefixPath` to each element inside that subfolder
       const pathToElementsMap: Map<string, ImageElement[]> = new Map();
 
       subCopy.forEach((element) => {
@@ -117,18 +118,13 @@ export class FolderViewPipe implements PipeTransform {
         if (prefixPath) {
           firstFolder = element.partialPath.replace(prefixPath, '');
         } else {
-
-
-          // only grab the first subfolder !!!
+          // only grab the first subfolder
           // e.g.
-          // abc => abc
-          // abc/def => abc
-          // abc/def/xyz => abc
-
+          //    abc => abc
+          //    abc/def => abc
+          //    abc/def/xyz => abc
           firstFolder = element.partialPath.split('/')[1] || ''; // first element always empty element ?!?!?!?
-          // console.log(firstFolder);
         }
-        // -- crap code can cause bugs                            ^^^^   ^^^^ to prevent undefined !?!!!
 
         if (pathToElementsMap.has(firstFolder)) {
           pathToElementsMap.set(firstFolder, [...pathToElementsMap.get(firstFolder), element]);
@@ -137,12 +133,10 @@ export class FolderViewPipe implements PipeTransform {
         }
       });
 
-      // console.log(pathToElementsMap);
-
-      // the array we'll return back !!!!
+      // Step 3: create a new array to return filled with folders as ImageElements
       const arrWithFolders: ImageElement[] = [];
 
-      // append the UP folder if we're inside any folder !!!
+      // Step 4: append the UP folder if we're inside any folder
       if (prefixPath.length) {
         const upButton: ImageElement = {
           cleanName: '*FOLDER*',
@@ -166,11 +160,11 @@ export class FolderViewPipe implements PipeTransform {
         arrWithFolders.push(upButton);
       }
 
-      // now for each element in the map create the element to display!!!
+      // Step 5: convert the Map into ImageElements to display
       pathToElementsMap.forEach((value: ImageElement[], key: string) => {
 
         if (key === '') {
-          arrWithFolders.push(...value); // spread out all files in root folder
+          arrWithFolders.push(...value); // spread out all files in current (root or `prefixPath`) folder
         } else {
 
           const folderProperties: FolderProperties = this.determineFolderProperties(value);
@@ -199,6 +193,7 @@ export class FolderViewPipe implements PipeTransform {
 
       });
 
+      // Step 6: return
       return arrWithFolders;
 
     } else {
