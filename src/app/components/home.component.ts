@@ -921,6 +921,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   handleBbreadcrumbClicked(idx: number): void {
     this.folderViewNavigationPath = this.folderViewNavigationPath.split('/').slice(0, idx + 1).join('/');
+    this.scrollToTop();
   }
 
   openInExplorer(): void {
@@ -1097,6 +1098,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       ) {
         this.computeTextBufferAmount();
       }
+    } else if (uniqueKey === 'showFolders') {
+      this.toggleButtonOpposite('showFolders');
+      this.scrollToTop();
     } else if (uniqueKey === 'makeSmaller') {
       this.decreaseSize();
     } else if (uniqueKey === 'makeLarger') {
