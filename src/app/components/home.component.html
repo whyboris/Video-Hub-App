@@ -765,7 +765,8 @@
         <select
           (change)="selectFilterOrder($event.target.value)"
           #sortFilterElement
-          class="size-dropdown languageDropDown sortDropdown"
+          class="size-dropdown languageDropDown sort-dropdown"
+          [ngClass]="{ 'sort-dropdown-dark-mode': settingsButtons['darkMode'].toggled }"
         >
           <option value="default" selected="selected">
             {{ 'SIDEBAR.sortDefault' | translate }}

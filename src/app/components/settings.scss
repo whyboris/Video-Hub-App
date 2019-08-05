@@ -307,10 +307,16 @@ input[type="radio"]:checked:before {
   transition-property: opacity;
 }
 
-.sortDropdown {
+.sort-dropdown {
   margin: 15px 0 10px;
   max-width: 166px;
   min-width: 166px;
+  outline: none;
+}
+
+.sort-dropdown-dark-mode {
+  background: black;
+  color: white;
 }
 
 .shortcut-key {
