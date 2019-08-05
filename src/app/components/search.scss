@@ -141,7 +141,9 @@
 .lev-description {
   color: $gray-50;
   cursor: default;
+  display: block;
   font-size: 12px;
-  margin: 15px 0 15px;
+  margin: 6px 0 4px;
+  padding: 0;
   text-align: left;
 }
