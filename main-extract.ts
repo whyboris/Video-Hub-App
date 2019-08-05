@@ -155,8 +155,7 @@ const extractSingleFrame = (
       '-i', pathToVideo,
       '-frames', 1,
       '-q:v', '2',
-      '-vf', 'scale=w=' + ssWidth + ':h=' + screenshotHeight + ':force_original_aspect_ratio=decrease,' +
-             'pad='     + ssWidth + ':'   + screenshotHeight + ':(ow-iw)/2:(oh-ih)/2',
+      '-vf', scaleAndPadString(ssWidth, screenshotHeight),
       saveLocation + '/thumbnails/' + fileHash + '.jpg',
     ];
     // console.log('extracting clip frame 1');
@@ -220,16 +219,8 @@ const generateScreenshotStrip = (
 
     // Hardcode a specific 16:9 ratio
     const ssWidth: number = screenshotHeight * (16 / 9);
-    // const ssPadWidth: number = ssWidth + 2;
-    const ratioString: string = ssWidth + ':' + screenshotHeight;
-    // const ratioPadString: string = ssPadWidth + ':' + screenshotHeight;
 
-    // sweet thanks to StackExchange!
-    // https://superuser.com/questions/547296/resizing-videos-with-ffmpeg-avconv-to-fit-into-static-sized-player
-    const fancyScaleFilter = 'scale='
-                              + ratioString
-                              + ':force_original_aspect_ratio=decrease,pad='
-                              + ratioString + ':(ow-iw)/2:(oh-ih)/2';
+    const fancyScaleFilter: string = scaleAndPadString(ssWidth, screenshotHeight);
 
     // make the magic filter
     while (current < totalCount) {
@@ -512,7 +503,7 @@ export function extractFromTheseFiles(
 }
 
 // ========================================================================================
-//         Helper method
+//         Helper methods
 // ========================================================================================
 
 /**
@@ -537,8 +528,7 @@ export function replaceThumbnailWithNewImage(
 
     const args = [
       '-y', '-i', newFile,
-      '-vf', 'scale=w=' + width + ':h=' + height + ':force_original_aspect_ratio=decrease,' +
-             'pad='     + width + ':'   + height + ':(ow-iw)/2:(oh-ih)/2',
+      '-vf', scaleAndPadString(width, height),
       oldFile,
     ];
 
@@ -560,5 +550,19 @@ export function replaceThumbnailWithNewImage(
     });
 
   });
+
+}
+
+/**
+ * Generate the correct `scale=` & `pad=` string for ffmpeg
+ * @param width
+ * @param height
+ */
+function scaleAndPadString(width: number, height: number): string {
+  // sweet thanks to StackExchange!
+  // https://superuser.com/questions/547296/resizing-videos-with-ffmpeg-avconv-to-fit-into-static-sized-player
+
+  return 'scale=w=' + width + ':h=' + height + ':force_original_aspect_ratio=decrease,' +
+         'pad='     + width + ':'   + height + ':(ow-iw)/2:(oh-ih)/2';
 
 }
