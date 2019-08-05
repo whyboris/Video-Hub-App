@@ -121,10 +121,10 @@ const checkAllScreensExist = (
         check(current + 1);
       });
     };
-    // check(0);
     console.log('checkAllScreensExist is DISABLED !!!');
+    // uncomment line below to enable
+    // check(0);
     resolve(true);
-
   });
 
 };
@@ -155,7 +155,8 @@ const extractSingleFrame = (
       '-i', pathToVideo,
       '-frames', 1,
       '-q:v', '2',
-      '-vf', 'scale=w=' + ssWidth + ':h=' + screenshotHeight + ':force_original_aspect_ratio=decrease',
+      '-vf', 'scale=w=' + ssWidth + ':h=' + screenshotHeight + ':force_original_aspect_ratio=decrease,' +
+             'pad='     + ssWidth + ':'   + screenshotHeight + ':(ow-iw)/2:(oh-ih)/2',
       saveLocation + '/thumbnails/' + fileHash + '.jpg',
     ];
     // console.log('extracting clip frame 1');
