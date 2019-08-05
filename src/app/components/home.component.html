@@ -560,11 +560,12 @@
       class="breadcrumbs"
       @breadcrumbsAppear
     >
-      <app-icon class="breadcrumb-icon" [icon]="'icon-folder-blank'" (click)="folderViewNavigationPath = ''"></app-icon>
+      <app-icon class="breadcrumb-folder-icon" [icon]="'icon-folder-blank'" (click)="folderViewNavigationPath = ''"></app-icon>
       <span
         *ngFor="let item of folderViewNavigationPath.split('/'); index as idx"
         (click)="handleBbreadcrumbClicked(idx)"
         class="breadcrumb-folder-word"
+        @breadcrumbWordAppear
       >
         {{ item }}
       </span>

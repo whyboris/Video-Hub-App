@@ -33,6 +33,7 @@ import { BrazilianPortuguese } from '../i18n/pt_br';
 import { globals, ScreenshotSettings } from '../../../main-globals';
 
 import {
+  breadcrumbWordAppear,
   breadcrumbsAppear,
   buttonAnimation,
   donutAppear,
@@ -71,6 +72,7 @@ import {
   ],
   animations: [
     breadcrumbsAppear,
+    breadcrumbWordAppear,
     buttonAnimation,
     donutAppear,
     filterItemAppear,
