@@ -3,7 +3,7 @@
 .icon {
   cursor: pointer;
   display: inline-block;
-  fill: $gray-60;
+  fill: $gray-50;
   max-height: 15px;
   max-width: 15px;
   position: absolute;
@@ -13,7 +13,7 @@
   width: 15px;
 
   &:hover {
-    fill: $gray-80;
+    fill: $pretty-blue;
   }
 }
 
@@ -25,22 +25,26 @@
   :nth-child(2) {
     margin-left: 23px;
   }
-}
 
-.folder-word {
-  color: $gray-50;
-  cursor: pointer;
-  display: inline-block;
-  font-size: 12px;
-  margin-right: 5px;
-  transition: 300ms;
-  transition-property: color;
+  .folder-word {
+    color: $gray-60;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 12px;
+    margin-right: 5px;
+    transition: 300ms;
+    transition-property: color;
 
-  &:after {
-    content: '\f1a0'; // chevron-right
-    font-family: "vh-icon-font";
-    padding-left: 3px;
-    padding-right: 3px;
+    &:hover {
+      color: $dark-blue;
+    }
+
+    &:after {
+      content: '\f1a0'; // chevron-right
+      font-family: "vh-icon-font";
+      padding-left: 3px;
+      padding-right: 3px;
+    }
   }
 }
 
@@ -50,7 +54,6 @@
   overflow: hidden;
 
   .icon-video-blank {
-    fill: $gray-60;
     position: absolute;
     transform: translate(0, 3px);
   }
@@ -58,29 +61,48 @@
   :nth-child(2) {
     margin-left: 23px;
   }
-}
 
-.file-words {
-  color: $gray-70;
-  cursor: pointer;
-  display: inline-block;
-  font-size: 14px;
-  margin-right: 5px;
-  transition: 300ms;
-  transition-property: color;
-}
+  .file-word {
+    color: $gray-80;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 14px;
+    margin-right: 5px;
+    transition: 300ms;
+    transition-property: color;
 
+    &:hover {
+      color: $dark-blue;
+    }
+  }
+}
 
 .dark-mode-override {
   & .folder-word {
-    color: $gray-40;
+    color: $gray-30;
     transition: 300ms;
     transition-property: color;
+
+    &:hover {
+      color: $pretty-blue;
+    }
   }
 
-  & .file-words {
-    color: $gray-70;
+  & .file-word {
+    color: $gray-20;
     transition: 300ms;
     transition-property: color;
+
+    &:hover {
+      color: $pretty-blue;
+    }
+  }
+
+  & .icon {
+    fill: $gray-10;
+
+    &:hover {
+      fill: $light-blue;
+    }
   }
 }
