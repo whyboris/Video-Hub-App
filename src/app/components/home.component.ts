@@ -1373,24 +1373,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   onEnterKey(value: string, origin: number): void {
     const trimmed = value.trim();
-    // removes '/' from folder path if there
-    // happens when user clicks folder path in file view
-    if (trimmed[0] === '/') {
-      this.filters[origin].array = [];
-    }
     if (trimmed) {
       // don't include duplicates
       if (!this.filters[origin].array.includes(trimmed)) {
         this.filters[origin].array.push(trimmed);
         this.filters[origin].bool = !this.filters[origin].bool;
         this.filters[origin].string = '';
+        this.scrollToTop();
       }
-    } else {
-      this.filters[origin].array = [];
-      this.filters[origin].bool = !this.filters[origin].bool;
-      this.filters[origin].string = '';
     }
-    this.scrollToTop();
   }
 
   /**
