@@ -22,7 +22,7 @@ export interface ImageElement {
   hash: string;                  // used for detecting changed files and as a screenshot identifier
   height: number;                // height of the video
   mtime: number;                 // file modification time
-  partialPath: string;           // for opening the file, just prepend the `inputDir`
+  partialPath: string;           // for opening the file, just prepend the `inputDir` (starts with "/", is "/fldr1/fldr2", or can be "")
   screens: number;               // number of screenshots for this file
   stars: StarRating;             // star rating 0 = n/a, otherwise 1, 2, 3
   timesPlayed: number;           // number of times the file has been launched by VHA
@@ -40,4 +40,27 @@ export interface ImageElement {
   index: number;                 // for the `default` sort order
   resBucket: number;             // the resolution category the video falls into (for faster sorting)
   resolution: ResolutionString;  // e.g. `720`, `1080`, `SD`, `HD`
+}
+
+// Use this to create a new ImageElement if needed
+export function NewImageElement(): ImageElement {
+  return {
+    cleanName: '',
+    duration: 0,
+    durationDisplay: '',
+    fileName: '',
+    fileSize: 0,
+    fileSizeDisplay: '',
+    hash: '',
+    height: 0,
+    index: 0,
+    mtime: 0,
+    partialPath: '',
+    resBucket: 0,
+    resolution: '',
+    screens: 0,
+    stars: 0.5,
+    timesPlayed: 0,
+    width: 0,
+  };
 }

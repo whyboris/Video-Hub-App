@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { ImageElement, StarRating } from '../common/final-object.interface';
+import { ImageElement, StarRating, NewImageElement } from '../common/final-object.interface';
 
 interface FolderProperties {
   byteSize: number;    //                             corresponds to ImageElement `fileSize`
@@ -18,7 +18,7 @@ export class FolderViewPipe implements PipeTransform {
 
 
   /**
-   * Determine folder size and duration (simply sum up all the elements' properties)
+   * Determine folder size, duration, and average star rating (simply sum up / average the relevant ImageElement properties)
    * @param files
    */
   determineFolderProperties(files: ImageElement[]): FolderProperties {
@@ -37,7 +37,7 @@ export class FolderViewPipe implements PipeTransform {
     });
 
     const starString: StarRating = <StarRating><unknown>((Math.round(starAverage / totalStars - 0.5) + 0.5) || 0.5).toString();
-    //                                                      sometimes this calculation results in NaN so we ^^^^^^^
+    //                         since `totalStars` can be 0, sometimes this calculation results in NaN so we ^^^^^^^
 
     return {
       byteSize: totalFileSize,
@@ -75,19 +75,24 @@ export class FolderViewPipe implements PipeTransform {
    *  (1) to group all the videos in subdirectory into a folder - displaying 1 element in gallery
    *  (2) to allow user to navigate to a particular subfolder by clicking on it
    *      - must allow for an `UP` folder as well - to navigate backwards !!!
+   *
+   * The process has 6 steps:
+   *  (1) create a subCopy (only elements that are within `prefixPath`)
+   *  (2) create a Map (from first subfolder to every element within the subfolder)
+   *  (3) create a new ImageElement[] to return back (empty at this stage)
+   *  (4) insert `UP` folder if `prefixPath` exists
+   *  (5) convert the Map into ImageElements to display (filling array from step 3)
+   *  (6) return the newly-created ImageElement[]
+   *
    * @param finalArray
    * @param render      whether to insert folders
-   * @param prefixPath  whether to ONLY show folders
+   * @param prefixPath  current folder in view (full path to CWD - "current working directory")
    */
   transform(finalArray: ImageElement[], render: boolean, prefixPath?: string): ImageElement[] {
 
     if (render) {
 
-      // console.log('prefix path is: ' + prefixPath);
-      // console.log('INCOMING array length is: ' + finalArray.length);
-
-      // to make things easier & faster:
-      // first remove all elements not within the specific subfolder
+      // Step 1: select subset of elments - only those within `prefixPath`
       let subCopy: ImageElement[] = [];
 
       if (prefixPath) {
@@ -95,7 +100,6 @@ export class FolderViewPipe implements PipeTransform {
           return (
                element.partialPath === (prefixPath)               // needs to be exact
             || element.partialPath.startsWith(prefixPath + '/')   // or starts with exactly
-                                                                  //  - otherwise `1` and `1.5` coincide when you click `1`
           );
         });
 
@@ -103,102 +107,97 @@ export class FolderViewPipe implements PipeTransform {
         subCopy = finalArray;
       }
 
-      // console.log('subCopy length: ' + subCopy.length);
-
-      // now create a MAP !!!
-      // from `partialPath` to all the elements that have that path
-
+      // Step 2: create a map from first subfolder within `prefixPath` to each element inside that subfolder
       const pathToElementsMap: Map<string, ImageElement[]> = new Map();
+      // looks like:
+      //   "" => Array(3)           <-- means 3 files in CWD
+      //   "Folder1" => Array(25)   <-- means 25 files in subfolder named "Folder1"
+      //   "Folder2" => Array(7)    <-- etc
 
+      // Note we are always working with `.partialPath` which is always a folder path, never file name
       subCopy.forEach((element) => {
 
-        let firstFolder: string;
+        let keyForMap: string;
+        // can either be one of two:
+        // (1) "" => points to array of elements directly inside "CWD"
+        // (2) folder name => only folder immediately inside the "CWD" (Current Working Directory)
 
         if (prefixPath) {
-          firstFolder = element.partialPath.replace(prefixPath, '');
+          //   `remainingPath` is what is remaining after `prefixPath` has been removed
+          const remainingPath: string = element.partialPath.replace(prefixPath, '');
+
+          // If it includes `/` it means it is an element inside a sub-folder
+          // we store it in the key for the bottom-most folder in "CWD"
+          if (remainingPath.substring(1).includes('/')) {
+            //             ^^^^^^^^^^^^^ make sure to remove the first character -- it is always `/`
+
+            // first element may be nested, e.g. `/a/b/c`
+            // if `prefixPath` is `a` the first folder should be `/b` not `/b/c`
+            keyForMap = '/' + remainingPath.split('/')[1];
+
+          } else {
+            keyForMap = remainingPath;
+          }
+
         } else {
-
-
-          // only grab the first subfolder !!!
+          // only grab the first subfolder
           // e.g.
-          // abc => abc
-          // abc/def => abc
-          // abc/def/xyz => abc
-
-          firstFolder = element.partialPath.split('/')[1] || ''; // first element always empty element ?!?!?!?
-          // console.log(firstFolder);
+          //    abc         => abc
+          //    abc/def     => abc
+          //    abc/def/xyz => abc
+          keyForMap = element.partialPath.split('/')[1] || '';
+          // first element [0] always empty element ^^^ so we grab the second:
+          // ("/abc").split('/') ==> ['', 'abc']
         }
-        // -- crap code can cause bugs                            ^^^^   ^^^^ to prevent undefined !?!!!
 
-        if (pathToElementsMap.has(firstFolder)) {
-          pathToElementsMap.set(firstFolder, [...pathToElementsMap.get(firstFolder), element]);
+        if (pathToElementsMap.has(keyForMap)) {
+          pathToElementsMap.set(keyForMap, [...pathToElementsMap.get(keyForMap), element]);
         } else {
-          pathToElementsMap.set(firstFolder, [element]);
+          pathToElementsMap.set(keyForMap, [element]);
         }
       });
 
-      // console.log(pathToElementsMap);
-
-      // the array we'll return back !!!!
+      // Step 3: create a new array to return filled with folders as ImageElements
       const arrWithFolders: ImageElement[] = [];
 
-      // append the UP folder if we're inside any folder !!!
+      // Step 4: append the UP folder if we're inside any folder
       if (prefixPath.length) {
-        const upButton: ImageElement = {
-          cleanName: '*FOLDER*',
-          duration: 0,
-          durationDisplay: '',
-          fileName: '*UP*',
-          fileSize: 0,
-          fileSizeDisplay: '',
-          hash: '',
-          height: 0,
-          index: 0,
-          mtime: 0,
-          partialPath: prefixPath.substring(0, prefixPath.lastIndexOf('/')),
-          resBucket: 0,
-          resolution: '',
-          screens: 0,
-          stars: 0.5,
-          timesPlayed: 0,
-          width: 0,
-        };
+        const upButton: ImageElement = NewImageElement();
+
+        upButton.cleanName   = '*FOLDER*';
+        upButton.fileName    = '*UP*';
+        upButton.partialPath = prefixPath.substring(0, prefixPath.lastIndexOf('/')),
+
         arrWithFolders.push(upButton);
       }
 
-      // now for each element in the map create the element to display!!!
+      // Step 5: convert the Map into ImageElements to display
       pathToElementsMap.forEach((value: ImageElement[], key: string) => {
 
         if (key === '') {
-          arrWithFolders.push(...value); // spread out all files in root folder
+          arrWithFolders.push(...value); // spread out all files in current (root or `prefixPath`) folder
         } else {
 
           const folderProperties: FolderProperties = this.determineFolderProperties(value);
 
-          const folderWithStuff: ImageElement = {
-            cleanName: '*FOLDER*',
-            duration: folderProperties.duration,
-            durationDisplay: '',
-            fileName: key.replace('/', ''),
-            fileSize: folderProperties.byteSize,
-            fileSizeDisplay: value.length.toString(),
-            hash: this.extractFourPreviewHashes(value),
-            height: 0,
-            index: -1, // always show at the top (but after the `UP` folder) in the default view
-            mtime: 0,
-            partialPath: (prefixPath || '/') + key, // must set this for the folder click to register!
-            resBucket: 0,
-            resolution: '',
-            screens: 0,
-            stars: folderProperties.starAverage,
-            timesPlayed: 0,
-            width: 0,
-          };
+          const folderWithStuff: ImageElement = NewImageElement();
+
+          folderWithStuff.cleanName       = '*FOLDER*',
+          folderWithStuff.duration        = folderProperties.duration,
+          folderWithStuff.fileName        = key.replace('/', ''),
+          folderWithStuff.fileSize        = folderProperties.byteSize,
+          folderWithStuff.fileSizeDisplay = value.length.toString(),
+          folderWithStuff.hash            = this.extractFourPreviewHashes(value),
+          folderWithStuff.index           = -1, // always show at the top (but after the `UP` folder) in the default view
+          folderWithStuff.partialPath     = (prefixPath || '/') + key, // must set this for the folder click to register!
+          folderWithStuff.stars           = folderProperties.starAverage,
+
           arrWithFolders.push(folderWithStuff);
         }
 
       });
 
+      // Step 6: return
       return arrWithFolders;
 
     } else {
