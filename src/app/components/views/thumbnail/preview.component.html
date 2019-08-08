@@ -96,7 +96,7 @@
       (mousemove)="mouseIsMoving($event)"
       (mouseenter)="mouseEntered()"
       (mouseleave)="mouseLeft()"
-      (click)="videoClick.emit($event)"
+      (click)="videoClick.emit({ event: $event, time: indexToShow })"
       [ngStyle]="{
           height: imgHeight + 'px',
           'background-image': 'url(' + (hover ? fullFilePath : firstFilePath) + ')',

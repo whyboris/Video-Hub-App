@@ -818,20 +818,26 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public handleClick(event: MouseEvent, item: ImageElement) {
+  public handleClick(event: { event: MouseEvent, time: number }, item: ImageElement) {
+
+    console.log('CLICKED EVENT');
+    console.log(event);
+    console.log(item);
+
     // ctrl/cmd + click for thumbnail sheet
-    if (event.ctrlKey === true || event.metaKey) {
+    if (event.event.ctrlKey === true || event.event.metaKey) {
       this.openThumbnailSheet(item);
     } else {
-      this.openVideo(item.index);
+      this.openVideo(item.index, event.time);
     }
   }
 
   /**
    * Open the video with user's default media player
    * @param index unique ID of the video
+   * @param timeToStart an index of the thumbnail !!! -- needs to be converted to time in seconds !!!
    */
-  public openVideo(index): void {
+  public openVideo(index: number, timeToStart?: number): void {
     this.currentPlayingFolder = this.finalArray[index].partialPath;
     this.currentPlayingFile = this.finalArray[index].cleanName;
     this.finalArray[index].timesPlayed ? this.finalArray[index].timesPlayed++ : this.finalArray[index].timesPlayed = 1;
@@ -841,9 +847,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // console.log(fullPath);
 
     if (this.appState.preferredVideoPlayer) {
-      console.log('OPENING AT TIMESTAMP !!!!!!');
+
+      // in seconds
+      const time: number = this.finalArray[index].duration / (this.finalArray[index].screens + 1) * (timeToStart + 1);
+
       const execPath: string = this.appState.preferredVideoPlayer;
-      const time: number = 9000; // TODO - CHANGE NOW ;)
+
       this.electronService.ipcRenderer.send('openThisFileWithFlags', execPath, fullPath, this.getVideoPlayerArgs(execPath, time));
     } else if (this.rootFolderLive) {
       this.electronService.ipcRenderer.send('openThisFile', fullPath);
@@ -861,10 +870,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const argz: string[] = [];
 
     if (playerPath.includes('vlc')) {
-      argz.push('--start-time=' + (time / 1000).toString()); // in seconds
+      argz.push('--start-time=' + time.toString()); // in seconds
     } else {
       argz.push('/start');
-      argz.push(time.toString()); // in milliseconds
+      argz.push((1000 * time).toString()); // in milliseconds
     }
 
     return argz;
