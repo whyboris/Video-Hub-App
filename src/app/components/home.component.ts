@@ -834,22 +834,25 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   /**
    * Open the video with user's default media player
-   * @param index unique ID of the video
-   * @param timeToStart an index of the thumbnail !!! -- needs to be converted to time in seconds !!!
+   * or with their preferred media player, if chosen
+   *
+   * @param index                 unique ID of the video
+   * @param clickedThumbnailIndex an index of the thumbnail clicked
    */
-  public openVideo(index: number, timeToStart?: number): void {
-    this.currentPlayingFolder = this.finalArray[index].partialPath;
-    this.currentPlayingFile = this.finalArray[index].cleanName;
+  public openVideo(index: number, clickedThumbnailIndex?: number): void {
+    // update number of times played
     this.finalArray[index].timesPlayed ? this.finalArray[index].timesPlayed++ : this.finalArray[index].timesPlayed = 1;
     this.finalArrayNeedsSaving = true;
-    const fullPath = this.appState.selectedSourceFolder + this.finalArray[index].partialPath + '/' + this.finalArray[index].fileName;
+
+    const clickedElement: ImageElement = this.finalArray[index];
+
+    this.currentPlayingFolder = clickedElement.partialPath;
+    this.currentPlayingFile = clickedElement.cleanName;
+    const fullPath = this.appState.selectedSourceFolder + clickedElement.partialPath + '/' + clickedElement.fileName;
     this.fullPathToCurrentFile = fullPath;
-    // console.log(fullPath);
 
     if (this.appState.preferredVideoPlayer) {
-
-      // in seconds
-      const time: number = this.finalArray[index].duration / (this.finalArray[index].screens + 1) * (timeToStart + 1);
+      const time: number = clickedElement.duration / (clickedElement.screens + 1) * (clickedThumbnailIndex + 1);
 
       const execPath: string = this.appState.preferredVideoPlayer;
 
@@ -859,8 +862,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Determine the required arguments to open video player at particular time
+   * @param playerPath  full path to user's preferred video player
+   * @param time        time in seconds
+   */
   public getVideoPlayerArgs(playerPath: string, time: number): string[] {
-
     // if user doesn't want to open at timestamp, don't!
     if (!this.settingsButtons['openAtTimestamp'].toggled) {
       return [];
