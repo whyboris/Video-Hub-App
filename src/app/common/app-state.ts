@@ -46,6 +46,7 @@ export let AppState: AppStateInterface = {
   language: 'en',
   menuHidden: false,
   numOfFolders: 0,
+  preferredVideoPlayer: '',
   selectedOutputFolder: '',
   selectedSourceFolder: ''
 };
@@ -59,6 +60,7 @@ export interface AppStateInterface {
   language: SupportedLanguage;
   menuHidden: boolean;
   numOfFolders: number;
+  preferredVideoPlayer: string;
   selectedOutputFolder: string;
   selectedSourceFolder: string;
 }

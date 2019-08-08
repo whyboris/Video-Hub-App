@@ -520,6 +520,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.electronService.webFrame.clearCache();
     });
 
+    this.electronService.ipcRenderer.on('preferred-video-player-returning', (event, filePath) => {
+      console.log('executable is:');
+      console.log(filePath);
+      this.appState.preferredVideoPlayer = filePath;
+      this.cd.detectChanges();
+    });
+
     // Happens on a Mac when the OS Dark Mode is enabled/disabled
     this.electronService.ipcRenderer.on('osDarkModeChange', (event, desiredMode: string) => {
 
@@ -624,6 +631,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.wizard.showWizard = true;
         this.flickerReduceOverlay = false;
       }
+
+      console.log('this is your preferred video player:');
+      console.log(settingsObject.appState.preferredVideoPlayer);
+
     });
 
     this.electronService.ipcRenderer.on('pleaseOpenWizard', (event, firstRun) => {
@@ -700,7 +711,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Only allow characters and numbers for hub name
    * @param event key press event
    */
-  public validateHubName(event: any) {
+  public validateHubName(event: any): boolean {
     const keyCode = event.charCode;
     if (keyCode === 32) {
       return true;
@@ -712,6 +723,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Summon a dialog to open a default video player
+   */
+  public chooseDefaultVideoPlayer(): void {
+    this.electronService.ipcRenderer.send('select-default-video-player');
   }
 
   // ---------------- INTERACT WITH ELECTRON ------------------ //
@@ -821,7 +839,20 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const fullPath = this.appState.selectedSourceFolder + this.finalArray[index].partialPath + '/' + this.finalArray[index].fileName;
     this.fullPathToCurrentFile = fullPath;
     // console.log(fullPath);
-    if (this.rootFolderLive) {
+
+    if (this.appState.preferredVideoPlayer && this.settingsButtons['openAtTimestamp'].toggled) {
+
+      console.log('OPENING AT TIMESTAMP !!!!!!');
+
+      // const execPath: string = 'C:\\Program Files\\MPC-BE x64\\mpc-be64.exe';
+      const execPath: string = this.appState.preferredVideoPlayer;
+      const argz: string[] = [];
+      argz.push('/start');
+      argz.push('9000');
+
+      this.electronService.ipcRenderer.send('openThisFileWithFlags', execPath, fullPath, argz);
+
+    } else if (this.rootFolderLive) {
       this.electronService.ipcRenderer.send('openThisFile', fullPath);
     }
   }
@@ -1532,7 +1563,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if (settingsObject.appState) {
       this.appState = settingsObject.appState;
       if (!settingsObject.appState.currentZoomLevel) {  // catch error <-- old VHA apps didn't have `currentZoomLevel`
-        this.appState.currentZoomLevel = 1;
+        this.appState.currentZoomLevel = 1;             // TODO -- remove whole block -- not needed any more !?!?!?!??!?! -----------------!
       }
       if (!settingsObject.appState.imgsPerRow) {
         this.appState.imgsPerRow = defaultImgsPerRow;

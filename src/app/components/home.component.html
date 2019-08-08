@@ -346,6 +346,12 @@
 
       <div class="misc-settings" *ngIf="settingToShow == 2 && i == 2">
 
+        <div style="margin-bottom: 20px">
+          {{ appState.preferredVideoPlayer ? appState.preferredVideoPlayer : 'NONE CHOSEN' }}
+
+          <button (click)="chooseDefaultVideoPlayer()">{{ 'SETTINGS.chooseVideoPlayer' | translate }}</button>
+        </div>
+
         <span class="setting-heading">{{ 'SETTINGS.changeAppZoom' | translate }}</span>
 
         <div class="zoom-buttons">
