@@ -840,21 +840,34 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.fullPathToCurrentFile = fullPath;
     // console.log(fullPath);
 
-    if (this.appState.preferredVideoPlayer && this.settingsButtons['openAtTimestamp'].toggled) {
-
+    if (this.appState.preferredVideoPlayer) {
       console.log('OPENING AT TIMESTAMP !!!!!!');
-
-      // const execPath: string = 'C:\\Program Files\\MPC-BE x64\\mpc-be64.exe';
       const execPath: string = this.appState.preferredVideoPlayer;
-      const argz: string[] = [];
-      argz.push('/start');
-      argz.push('9000');
-
-      this.electronService.ipcRenderer.send('openThisFileWithFlags', execPath, fullPath, argz);
-
+      const time: number = 9000; // TODO - CHANGE NOW ;)
+      this.electronService.ipcRenderer.send('openThisFileWithFlags', execPath, fullPath, this.getVideoPlayerArgs(execPath, time));
     } else if (this.rootFolderLive) {
       this.electronService.ipcRenderer.send('openThisFile', fullPath);
     }
+  }
+
+  public getVideoPlayerArgs(playerPath: string, time: number): string[] {
+
+    // if user doesn't want to open at timestamp, don't!
+    if (!this.settingsButtons['openAtTimestamp'].toggled) {
+      return [];
+    }
+
+    // else, figure out the correct command line flags
+    const argz: string[] = [];
+
+    if (playerPath.includes('vlc')) {
+      argz.push('--start-time=' + (time / 1000).toString()); // in seconds
+    } else {
+      argz.push('/start');
+      argz.push(time.toString()); // in milliseconds
+    }
+
+    return argz;
   }
 
   public openOnlineHelp(): void {
