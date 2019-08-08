@@ -33,6 +33,7 @@ import { BrazilianPortuguese } from '../i18n/pt_br';
 import { globals, ScreenshotSettings } from '../../../main-globals';
 
 import {
+  breadcrumbWordAppear,
   breadcrumbsAppear,
   buttonAnimation,
   donutAppear,
@@ -71,6 +72,7 @@ import {
   ],
   animations: [
     breadcrumbsAppear,
+    breadcrumbWordAppear,
     buttonAnimation,
     donutAppear,
     filterItemAppear,
@@ -919,6 +921,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   handleBbreadcrumbClicked(idx: number): void {
     this.folderViewNavigationPath = this.folderViewNavigationPath.split('/').slice(0, idx + 1).join('/');
+    this.scrollToTop();
   }
 
   openInExplorer(): void {
@@ -1095,6 +1098,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       ) {
         this.computeTextBufferAmount();
       }
+    } else if (uniqueKey === 'showFolders') {
+      this.toggleButtonOpposite('showFolders');
+      this.scrollToTop();
     } else if (uniqueKey === 'makeSmaller') {
       this.decreaseSize();
     } else if (uniqueKey === 'makeLarger') {
@@ -1367,24 +1373,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   onEnterKey(value: string, origin: number): void {
     const trimmed = value.trim();
-    // removes '/' from folder path if there
-    // happens when user clicks folder path in file view
-    if (trimmed[0] === '/') {
-      this.filters[origin].array = [];
-    }
     if (trimmed) {
       // don't include duplicates
       if (!this.filters[origin].array.includes(trimmed)) {
         this.filters[origin].array.push(trimmed);
         this.filters[origin].bool = !this.filters[origin].bool;
         this.filters[origin].string = '';
+        this.scrollToTop();
       }
-    } else {
-      this.filters[origin].array = [];
-      this.filters[origin].bool = !this.filters[origin].bool;
-      this.filters[origin].string = '';
     }
-    this.scrollToTop();
   }
 
   /**

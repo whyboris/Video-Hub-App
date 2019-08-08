@@ -76,7 +76,7 @@ export const English = {
     showFilesHint                      :'Text view',
     showFilmstripDescription           :'Show filmstrip view',
     showFilmstripHint                  :'Filmstrip view',
-    showFoldersDescription             :'Show folders in Thumbnails and Text views',
+    showFoldersDescription             :'Show folders in Thumbnails, Clips, and Text views',
     showFoldersHint                    :'Show folders',
     showFreqDescription                :'Show the word cloud which shows up to nine of the most frequent words in currently shown files',
     showFreqHint                       :'Word cloud',

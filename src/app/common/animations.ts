@@ -204,6 +204,23 @@ export const breadcrumbsAppear = trigger('breadcrumbsAppear', [
   )]
 );
 
+export const breadcrumbWordAppear = trigger('breadcrumbWordAppear', [
+  transition(
+    ':enter', [
+      style({ opacity: 0, transform: 'translate(-10px, 0)' }),
+      animate('300ms ease', style({ opacity: 1, transform: 'translate(0, 0)' }))
+    ]
+  ),
+  transition(
+    ':leave', [
+      style({ opacity: 1, transform: 'translate(0, 0)' }),
+      animate('300ms ease', style({ opacity: 0, transform: 'translate(-10px, 0)' }))
+    ]
+  )]
+);
+
+
+
 // ==================================================================================
 // ARCHIVED -- UNUSED
 // ----------------------------------------------------------------------------------

@@ -1,28 +1,12 @@
 @import "variables";
 
-.breadcrumb-icon {
-  cursor: pointer;
-  fill: $gray-60;
-  left: 7px;
-  max-height: 15px;
-  max-width: 15px;
-  position: absolute;
-  top: 7px;
-  transition-duration: 200ms;
-  transition-property: fill;
-  width: 15px;
-
-  &:hover {
-    fill: $gray-80;
-  }
-}
-
 .breadcrumbs {
   background: $gray-10;
   border-bottom: 1px solid $gray-40;
   box-sizing: border-box;
   height: 30px;
   left: #{$sidebar-width};
+  overflow: hidden;
   padding: 5px 5px 5px 28px;
   position: absolute;
   top: 32px;
@@ -32,8 +16,25 @@
   z-index: 100;
 
   span:last-child {
-    color: $gray-90;
+    color: $dark-blue;
     pointer-events: none;
+  }
+
+  .breadcrumb-folder-icon {
+    cursor: pointer;
+    fill: $gray-60;
+    left: 7px;
+    max-height: 15px;
+    max-width: 15px;
+    position: absolute;
+    top: 7px;
+    transition-duration: 200ms;
+    transition-property: fill;
+    width: 15px;
+
+    &:hover {
+      fill: $dark-blue;
+    }
   }
 }
 
@@ -47,13 +48,18 @@
 }
 
 .breadcrumb-folder-word {
-  color: $gray-50;
+  color: $gray-60;
   cursor: pointer;
   display: inline-block;
   font-size: 12px;
   margin-right: 5px;
+  padding-bottom: 5px; // to hide spillover words if screen is narrow
   transition: 300ms;
   transition-property: color;
+
+  &:hover {
+    color: $dark-blue;
+  }
 
   &:after {
     content: '\f1a0'; // chevron-right
@@ -67,15 +73,23 @@
   background: $gray-80;
   border-bottom: 1px solid $gray-70;
 
-  .breadcrumb-icon {
+  .breadcrumb-folder-icon {
     fill: $gray-30;
+
+    &:hover {
+      fill: $light-blue;
+    }
   }
 
   .breadcrumb-folder-word {
     color: $gray-30;
+
+    &:hover {
+      color: $light-blue;
+    }
   }
 
   span:last-child {
-    color: $gray-10;
+    color: $light-blue;
   }
 }
