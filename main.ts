@@ -406,7 +406,7 @@ ipc.on('select-default-video-player', function (event) {
     title: 'Please select your preferred video player',
     filters: [{
       name: 'Executable',
-      extensions: ['exe', 'dmg']
+      extensions: ['exe', 'app']
     }],
     properties: ['openFile']
   }, function (files) {
