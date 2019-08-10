@@ -1126,9 +1126,10 @@
         <app-clip-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (videoClick)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick({ mouseEvent: $event }, item)"
+          (videoClick)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
+
           (sheetClick)="this.openThumbnailSheet(item)"
-          (contextmenu)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event, item)"
 
           [video]="item"
 

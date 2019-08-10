@@ -19,6 +19,7 @@ import { metaAppear, textAppear } from '../../../common/animations';
 export class ClipComponent implements OnInit {
 
   @Output() videoClick = new EventEmitter<object>();
+  @Output() rightClick = new EventEmitter<object>();
   @Output() sheetClick = new EventEmitter<object>();
 
   @Input() video: ImageElement;
