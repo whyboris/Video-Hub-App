@@ -822,11 +822,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Handle clicking on an item in the gallery
    *
    * @param eventObject - contains the MouseEvent and the thumbIndex (which thumb was clicked)
-   *                                                      only works in the Thumbnail view for now
+   *                                                      only used in the Thumbnail
    * @param item        - ImageElement
    */
   public handleClick(eventObject: { mouseEvent: MouseEvent, thumbIndex?: number }, item: ImageElement) {
 
+    console.log('remove this log later!');
     console.log(eventObject);
 
     // ctrl/cmd + click for thumbnail sheet

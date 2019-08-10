@@ -9,6 +9,8 @@
 
   <div
     *ngFor="let row of rowOffsets; index as idx"
+    (click)="videoClick.emit({ mouseEvent: $event })"
+    (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
     class="filmstrip-container"
     [ngStyle]="{
         height: _imgHeight + 'px',
