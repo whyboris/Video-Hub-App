@@ -97,6 +97,7 @@
       (mouseenter)="mouseEntered()"
       (mouseleave)="mouseLeft()"
       (click)="videoClick.emit({ mouseEvent: $event, thumbIndex: indexToShow })"
+      (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
       [ngStyle]="{
           height: imgHeight + 'px',
           'background-image': 'url(' + (hover ? fullFilePath : firstFilePath) + ')',

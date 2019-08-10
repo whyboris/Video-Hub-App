@@ -1688,7 +1688,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.handleFolderWordClicked(this.currentRightClickedItem.partialPath);
   }
 
-  rightMouseClicked(event: MouseEvent, item): void {
+  rightMouseClicked(event: MouseEvent, item: ImageElement): void {
     const winWidth: number = window.innerWidth;
     const clientX: number = event.clientX;
     const howFarFromRight: number = winWidth - clientX;
