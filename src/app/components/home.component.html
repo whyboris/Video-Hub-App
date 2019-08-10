@@ -1087,8 +1087,8 @@
         <app-details-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (openFileRequest)="handleClick($event, item)"
-          (contextmenu)="rightMouseClicked($event, item)"
+          (videoClick)="handleClick($event, item)"
+          (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
 
           (editFinalArrayStars)="editFinalArrayStars($event)"
           (editFinalArrayTag)="editFinalArrayTag($event)"
