@@ -9,7 +9,7 @@
     (mousemove)="mouseIsMoving($event)"
     (mouseenter)="mouseEnter()"
     (mouseleave)="mouseLeave()"
-    (click)="mouseClick()"
+    (click)="mouseClick($event)"
     [ngStyle]="{
         height: imgHeight + 'px',
         width: elWidth + 'px',

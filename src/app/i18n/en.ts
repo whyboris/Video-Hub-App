@@ -284,6 +284,7 @@ export const English = {
     timesPlayed        :'Times played',
   },
   SHORTCUTS: {
+    andClickAnyFile   :'and click any file to see the file details.',
     andPress          :'and press',
     focusOnFile       :'Focus on file search inptut',
     focusOnMagic      :'Focus on the Magic search',

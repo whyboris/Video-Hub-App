@@ -818,17 +818,22 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public handleClick(event: { event: MouseEvent, time: number }, item: ImageElement) {
+  /**
+   * Handle clicking on an item in the gallery
+   *
+   * @param eventObject - contains the MouseEvent and the thumbIndex (which thumb was clicked)
+   *                                                      only works in the Thumbnail view for now
+   * @param item        - ImageElement
+   */
+  public handleClick(eventObject: { mouseEvent: MouseEvent, thumbIndex?: number }, item: ImageElement) {
 
-    console.log('CLICKED EVENT');
-    console.log(event);
-    console.log(item);
+    console.log(eventObject);
 
     // ctrl/cmd + click for thumbnail sheet
-    if (event.event.ctrlKey === true || event.event.metaKey) {
+    if (eventObject.mouseEvent.ctrlKey === true || eventObject.mouseEvent.metaKey) {
       this.openThumbnailSheet(item);
     } else {
-      this.openVideo(item.index, event.time);
+      this.openVideo(item.index, eventObject.thumbIndex);
     }
   }
 
@@ -852,7 +857,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.fullPathToCurrentFile = fullPath;
 
     if (this.appState.preferredVideoPlayer) {
-      const time: number = clickedElement.duration / (clickedElement.screens + 1) * (clickedThumbnailIndex + 1);
+      const time: number = clickedElement.duration / (clickedElement.screens + 1) * ((clickedThumbnailIndex || 0) + 1);
 
       const execPath: string = this.appState.preferredVideoPlayer;
 
@@ -1694,7 +1699,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const howFarFromBottom: number = winHeight - clientY;
 
     this.rightClickPosition.x = (howFarFromRight < 120) ? clientX - 120 + (howFarFromRight) : clientX;
-    this.rightClickPosition.y = (howFarFromBottom < 140) ? clientY - 140 + (howFarFromBottom) : clientY;
+    this.rightClickPosition.y = (howFarFromBottom < 165) ? clientY - 165 + (howFarFromBottom) : clientY;
 
     this.currentRightClickedItem = item;
     this.rightClickShowing = true;

@@ -34,7 +34,7 @@ export class DetailsComponent implements OnInit {
   @Output() editFinalArrayTag = new EventEmitter<TagEmission>();
   @Output() editFinalArrayYear = new EventEmitter<YearEmission>();
   @Output() filterTag = new EventEmitter<object>();
-  @Output() openFileRequest = new EventEmitter<number>();
+  @Output() openFileRequest = new EventEmitter<object>();
 
   @Input() video: ImageElement;
 
@@ -78,8 +78,8 @@ export class DetailsComponent implements OnInit {
     }
   }
 
-  mouseClick() {
-    this.openFileRequest.emit(this.video.index);
+  mouseClick(event: MouseEvent) {
+    this.openFileRequest.emit({ mouseEvent: event });
   }
 
   ngOnInit() {
