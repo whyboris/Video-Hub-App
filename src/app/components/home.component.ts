@@ -882,11 +882,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // else, figure out the correct command line flags
     const argz: string[] = [];
 
-    if (playerPath.includes('vlc')) {
+    if (playerPath.toLowerCase().includes('vlc')) {
       argz.push('--start-time=' + time.toString()); // in seconds
-    } else {
+    } else if (playerPath.toLowerCase().includes('mpc')) {
       argz.push('/start');
       argz.push((1000 * time).toString()); // in milliseconds
+    } else if (playerPath.toLowerCase().includes('pot')) {
+      argz.push('/seek=' + time.toString());
     }
 
     return argz;

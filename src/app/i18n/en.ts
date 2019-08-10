@@ -56,7 +56,7 @@ export const English = {
     muteClipsDescription               :'Mute all sound',
     muteClipsHint                      :'Mute all sound',
     openAtTimestampDescription         :'Open file at particular time rather than from beginning',
-    openAtTimestampMoreInfo            :'Requires you manually set the default video player below. Works with VLC and MPC',
+    openAtTimestampMoreInfo            :'Requires you manually set the default video player below. Works with VLC, MPC, and POT players only',
     openAtTimestampHint                :'Open file at timestamp',
     regenerateLibraryDescription       :'Regenerate all library metadata, except thumbnails and user entered metadata',
     regenerateLibraryHint              :'Regenerate library',
