@@ -38,6 +38,8 @@ export class SheetComponent implements OnInit {
   @Output() editFinalArrayYear = new EventEmitter<YearEmission>();
   @Output() filterTag = new EventEmitter<object>();
 
+  @Output() openVideoAtTime = new EventEmitter<object>();
+
   @Input() video: ImageElement;
 
   @Input() darkMode: boolean;

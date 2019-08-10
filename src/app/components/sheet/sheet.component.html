@@ -64,6 +64,7 @@
       <div
         #filmstripHolder
         class="video-box"
+        (click)="openVideoAtTime.emit({ mouseEvent: $event, thumbIndex: i })"
         [ngStyle]="{
             height: '100%',
             'background-image': 'url(' + fullFilePath + ')',
