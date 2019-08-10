@@ -62,8 +62,7 @@ h3 {
   color: $gray-60;
   cursor: pointer;
   font-size: 14px;
-  margin: 30px 70px 0;
-  padding-top: 30px;
+  margin: 60px 70px 0;
   text-align: center;
 }
 
@@ -362,4 +361,22 @@ input[type="radio"]:checked:before {
     min-width: 36px;
     vertical-align: top
   }
+}
+
+.player-settings {
+  font-size: 14px;
+  font-style: italic;
+  margin: -24px 0 20px 84px;
+}
+
+.player-current-chosen {
+  font-size: 14px;
+  margin: 0 10px 30px 84px;
+}
+
+.player-settings-button {
+  margin-left: 20px   !important;
+  max-height: initial !important;
+  max-width: initial  !important;
+  padding: 5px        !important;
 }
