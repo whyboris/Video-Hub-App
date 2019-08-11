@@ -266,8 +266,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   detailsMaxWidth: number = 1000; // used to keep track of max width for details in details view
   tagTypeAhead: string = '';
-  currentScreenshotSettings: ScreenshotSettings; // currently only used for the statistics page
   folderViewNavigationPath: string = '';
+
+  currentScreenshotSettings: ScreenshotSettings = {
+    clipSnippetLength: 1,
+    clipSnippets: 0,
+    fixed: true,
+    height: 432,
+    n: 3,
+  }; // currently only used for the statistics page
+     // && to prevent clip view from showing when no clips extracted
+     // defaults set here ONLY because when starting the app in clip view
+     // the app would show error in console log:
+     //   `Cannot read property 'clipSnippets' of undefined`
 
   // ========================================================================
 
@@ -636,10 +647,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.wizard.showWizard = true;
         this.flickerReduceOverlay = false;
       }
-
-      console.log('this is your preferred video player:');
-      console.log(settingsObject.appState.preferredVideoPlayer);
-
     });
 
     this.electronService.ipcRenderer.on('pleaseOpenWizard', (event, firstRun) => {
@@ -863,7 +870,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.fullPathToCurrentFile = fullPath;
 
     if (this.appState.preferredVideoPlayer) {
-      const time: number = clickedElement.duration / (clickedElement.screens + 1) * ((clickedThumbnailIndex || 0) + 1);
+      const time: number = clickedThumbnailIndex
+                           ? clickedElement.duration / (clickedElement.screens + 1) * ((clickedThumbnailIndex) + 1)
+                           : 0;
 
       const execPath: string = this.appState.preferredVideoPlayer;
 

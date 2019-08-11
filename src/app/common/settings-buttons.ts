@@ -323,7 +323,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'openAtTimestamp': {
     description: 'BUTTONS.openAtTimestampDescription',
     hidden: true,
-    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
+    iconName: 'icon-toggle-scrub',
     moreInfo: 'BUTTONS.openAtTimestampMoreInfo',
     title: 'BUTTONS.openAtTimestampHint',
     toggled: false
