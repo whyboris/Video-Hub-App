@@ -9,7 +9,8 @@
     (mousemove)="mouseIsMoving($event)"
     (mouseenter)="mouseEnter()"
     (mouseleave)="mouseLeave()"
-    (click)="mouseClick()"
+    (click)="videoClick.emit({ mouseEvent: $event })"
+    (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
     [ngStyle]="{
         height: imgHeight + 'px',
         width: elWidth + 'px',

@@ -30,7 +30,6 @@ export class MetaComponent implements OnInit {
   @Output() editFinalArrayTag = new EventEmitter<TagEmission>();
   @Output() editFinalArrayYear = new EventEmitter<YearEmission>();
   @Output() filterTag = new EventEmitter<object>();
-  @Output() openFileRequest = new EventEmitter<number>();
 
   @Input() video: ImageElement;
 

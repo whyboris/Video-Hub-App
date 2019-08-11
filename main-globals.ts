@@ -36,6 +36,6 @@ export interface ScreenshotSettings {
   clipSnippetLength: number;
   clipSnippets: number;        // the number of video snippets in every clip; 0 == no clip extracted
   fixed: boolean;
-  height: number;
+  height: number;              // currently only these are allowed '144', '216', '288', '360', '432'
   n: number;
 }

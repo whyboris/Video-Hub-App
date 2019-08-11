@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import { metaAppear, textAppear } from '../../../common/animations';
 import { ImageElement } from '../../../common/final-object.interface';
@@ -14,6 +14,9 @@ import { ImageElement } from '../../../common/final-object.interface';
 export class FilmstripComponent implements OnInit {
 
   @ViewChild('filmstripHolder', { static: false }) filmstripHolder: ElementRef;
+
+  @Output() videoClick = new EventEmitter<object>();
+  @Output() rightClick = new EventEmitter<object>();
 
   @Input() video: ImageElement;
 

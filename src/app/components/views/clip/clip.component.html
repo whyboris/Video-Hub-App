@@ -7,12 +7,14 @@
   [ngClass]="{ 'compact-margins': compactView }"
 >
 
+  <!-- ================================= FOLDER VIEW ================================= -->
+
   <div *ngIf="video.cleanName === '*FOLDER*'; else singleThumbnailDiv">
     <div
       #filmstripHolder
       *ngIf="video.fileName !== '*UP*'; else upFolderDiv"
       class="video-box folder"
-      (click)="videoClick.emit($event)"
+      (click)="videoClick.emit({ mouseEvent: $event })"
       [ngStyle]="{
           height: imgHeight + 'px'
       }"
@@ -116,7 +118,7 @@
   <ng-template #upFolderDiv>
     <div
       class="video-box folder"
-      (click)="videoClick.emit($event)"
+      (click)="videoClick.emit({ mouseEvent: $event })"
       [ngStyle]="{ height: imgHeight + 'px' }"
     >
       <div class="up-icon">
@@ -139,6 +141,8 @@
 
 </div>
 
+<!-- ================================= SINGLE CLIP ================================= -->
+
 <ng-template #singleThumbnailDiv>
 
 <div
@@ -154,7 +158,8 @@
     [src]="'file://' + folderPath + '/' + pathToVideo"
     [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + poster)"
     [ngStyle]="{ 'height': imgHeight + 'px' }"
-    (click)="videoClick.emit($event)"
+    (click)="videoClick.emit({ mouseEvent: $event })"
+    (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
     class="screencap"
     [volume]="forceMute ? 0 : 1"
     onmouseover="this.play().catch((err) => {this.load()})"
@@ -167,7 +172,8 @@
     [src]="'file://' + folderPath + '/' + pathToVideo"
     [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + poster)"
     [ngStyle]="{ 'height': imgHeight + 'px' }"
-    (click)="videoClick.emit($event)"
+    (click)="videoClick.emit({ mouseEvent: $event })"
+    (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
     class="screencap"
     [volume]="forceMute ? 0 : 1"
     onmouseover="this.muted = false;"
@@ -178,6 +184,8 @@
   ></video>
 
 </div>
+
+<!-- ================================= TEXT ================================= -->
 
 <span
   *ngIf="showMeta"

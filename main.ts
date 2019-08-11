@@ -387,6 +387,36 @@ ipc.on('openThisFile', function (event, fullFilePath) {
   shell.openItem(path.normalize(fullFilePath)); // normalize because on windows, the path sometimes is mixing `\` and `/`
 });
 
+const spawn = require('child_process').spawn;
+
+/**
+ * Open a particular video file clicked inside Angular
+ */
+ipc.on('openThisFileWithFlags', function (event, executablePath, fullFilePath: string, argz: string[]) {
+  const allArgs: string[] = [];
+  allArgs.push(path.normalize(fullFilePath));
+  allArgs.push(...argz);
+  console.log(allArgs);
+  spawn(path.normalize(executablePath), allArgs);
+});
+
+ipc.on('select-default-video-player', function (event) {
+  console.log('asking for default video player');
+  dialog.showOpenDialog({
+    title: 'Please select your preferred video player',
+    filters: [{
+      name: 'Executable',
+      extensions: ['exe', 'app']
+    }],
+    properties: ['openFile']
+  }, function (files) {
+    if (files) {
+      const executablePath: string = files[0];
+      event.sender.send('preferred-video-player-returning', executablePath);
+    }
+  });
+});
+
 /**
  * Open the explorer to the relevant file
  */

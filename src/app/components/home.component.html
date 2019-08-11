@@ -55,7 +55,7 @@
   </div>
 
   <div
-    *ngIf="flickerReduceOverlay !== false"
+    *ngIf="flickerReduceOverlay === true"
     class="reduceFlicker"
     @slowFadeOut
   ></div>
@@ -98,6 +98,7 @@
     *ngIf="sheetOverlayShowing"
     class="click-away-overlay"
     (click)="closeSheetOverlay()"
+    (contextmenu)="closeSheetOverlay()"
     @overlayAppear
   >
   </div>
@@ -124,7 +125,7 @@
   <!-- ===========   Thumbnail Sheet Display   =========== -->
   <app-thumbnail-sheet
     *ngIf="sheetOverlayShowing"
-    (openFileRequest)="openVideo($event)"
+    (openVideoAtTime)="handleClick($event, sheetItemToDisplay)"
     (editFinalArrayTag)="editFinalArrayTag($event)"
     (editFinalArrayStars)="editFinalArrayStars($event)"
     (editFinalArrayYear)="editFinalArrayYear($event)"
@@ -346,6 +347,28 @@
 
       <div class="misc-settings" *ngIf="settingToShow == 2 && i == 2">
 
+        <div class="player-settings">{{ 'SETTINGS.preferredPlayer' | translate }}</div>
+
+        <div class="player-current-chosen">
+          {{ appState.preferredVideoPlayer ? appState.preferredVideoPlayer : ('SETTINGS.systemDefault' | translate) }}
+
+          <button
+            class="defaultSettingsButton player-settings-button"
+            (click)="chooseDefaultVideoPlayer()"
+          >
+            {{ 'SETTINGS.chooseVideoPlayer' | translate }}
+          </button>
+
+          <button
+            class="defaultSettingsButton player-settings-button"
+            *ngIf="appState.preferredVideoPlayer"
+            (click)="appState.preferredVideoPlayer = ''"
+          >
+            {{ 'SETTINGS.restorePlayer' | translate }}
+          </button>
+
+        </div>
+
         <span class="setting-heading">{{ 'SETTINGS.changeAppZoom' | translate }}</span>
 
         <div class="zoom-buttons">
@@ -407,11 +430,20 @@
 
     <div *ngIf="settingToShow == 3" class="shortcutMenu">
 
+      <span style="display: block; margin-bottom: 15px;">{{ 'SHORTCUTS.hold' | translate }}<em class="shortcut-key modifier-key">Ctrl</em>
+        <ng-container *ngIf="macVersion">
+          {{ 'SHORTCUTS.or' | translate }} <em class="shortcut-key modifier-key">Command</em>
+        </ng-container>
+          {{ 'SHORTCUTS.andClickAnyFile' | translate }}
+      </span>
+
       <span>{{ 'SHORTCUTS.hold' | translate }}<em class="shortcut-key modifier-key">Ctrl</em>
         <ng-container *ngIf="macVersion">
           {{ 'SHORTCUTS.or' | translate }} <em class="shortcut-key modifier-key">Command</em>
         </ng-container>
-        {{ 'SHORTCUTS.andPress' | translate }}:</span>
+          {{ 'SHORTCUTS.andPress' | translate }}:
+      </span>
+
       <ul class="without-numbers">
         <li class="listElement"><em class="shortcut-key">1</em> - {{ 'SHORTCUTS.showThumb' | translate }}</li>
         <li class="listElement"><em class="shortcut-key">2</em> - {{ 'SHORTCUTS.showFilm' | translate }}</li>
@@ -956,14 +988,17 @@
             it uses the width of the first child element
             so I can set 100vw for filmstrip -->
 
+      <!-- ==================================== THUMBNAILS ==================================== -->
+
       <ng-container *ngIf="appState.currentView === 'showThumbnails'">
         <app-gallery-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (contextmenu)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event, item)"
-          (drop)="droppedSomethingOverVideo($event, item)"
-          (sheetClick)="this.openThumbnailSheet(item)"
           (videoClick)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
+
+          (sheetClick)="this.openThumbnailSheet(item)"
+          (drop)="droppedSomethingOverVideo($event, item)"
 
           [video]="item"
 
@@ -992,12 +1027,14 @@
         ></app-gallery-item>
       </ng-container>
 
+      <!-- ==================================== FILMSTRIP ==================================== -->
+
       <ng-container *ngIf="appState.currentView === 'showFilmstrip'">
         <app-filmstrip-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (click)="handleClick($event, item)"
-          (contextmenu)="rightMouseClicked($event, item)"
+          (videoClick)="handleClick($event, item)"
+          (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
 
           [video]="item"
 
@@ -1016,12 +1053,14 @@
         ></app-filmstrip-item>
       </ng-container>
 
+      <!-- ==================================== FULL VIEW ==================================== -->
+
       <ng-container *ngIf="appState.currentView === 'showFullView'">
         <app-full-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (click)="handleClick($event, item)"
-          (contextmenu)="rightMouseClicked($event, item)"
+          (videoClick)="handleClick($event, item)"
+          (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
 
           [video]="item"
 
@@ -1039,11 +1078,13 @@
         ></app-full-item>
       </ng-container>
 
+      <!-- ==================================== FILES / TEXT ==================================== -->
+
       <ng-container *ngIf="appState.currentView === 'showFiles'">
         <app-file-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (click)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : openVideo(item.index)"
+          (click)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick({ mouseEvent: $event }, item)"
           (contextmenu)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event, item)"
 
           [video]="item"
@@ -1056,16 +1097,19 @@
         ></app-file-item>
       </ng-container>
 
+      <!-- ==================================== DETAILS / META ==================================== -->
+
       <ng-container *ngIf="appState.currentView === 'showDetails'">
         <app-details-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (contextmenu)="rightMouseClicked($event, item)"
+          (videoClick)="handleClick($event, item)"
+          (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
+
           (editFinalArrayStars)="editFinalArrayStars($event)"
           (editFinalArrayTag)="editFinalArrayTag($event)"
           (editFinalArrayYear)="editFinalArrayYear($event)"
           (filterTag)="handleTagWordClicked($event.tag.name, $event.event)"
-          (openFileRequest)="openVideo($event)"
 
           [video]="item"
 
@@ -1092,13 +1136,16 @@
         ></app-details-item>
       </ng-container>
 
+      <!-- ==================================== CLIPS ==================================== -->
+
       <ng-container *ngIf="appState.currentView === 'showClips'">
         <app-clip-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (contextmenu)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event, item)"
-          (sheetClick)="this.openThumbnailSheet(item)"
           (videoClick)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
+
+          (sheetClick)="this.openThumbnailSheet(item)"
 
           [video]="item"
 

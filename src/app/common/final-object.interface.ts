@@ -16,17 +16,17 @@ export interface FinalObject {
 
 export interface ImageElement {
   cleanName: string;             // file name cleaned of dots, underscores,and file extension; for searching
-  duration: number;              // duration of film as number
-  fileName: string;              // for opening the file
+  duration: number;              // number of seconds - duration of film
+  fileName: string;              // full file name with extension - for opening the file
   fileSize: number;              // file size in bytes
   hash: string;                  // used for detecting changed files and as a screenshot identifier
-  height: number;                // height of the video
+  height: number;                // height of the video (px)
   mtime: number;                 // file modification time
   partialPath: string;           // for opening the file, just prepend the `inputDir` (starts with "/", is "/fldr1/fldr2", or can be "")
   screens: number;               // number of screenshots for this file
   stars: StarRating;             // star rating 0 = n/a, otherwise 1, 2, 3
   timesPlayed: number;           // number of times the file has been launched by VHA
-  width: number;                 // width of the video
+  width: number;                 // width of the video (px)
   // ========================================================================
   // OPTIONAL
   // ------------------------------------------------------------------------

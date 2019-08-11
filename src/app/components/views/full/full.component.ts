@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { ImageElement } from '../../../common/final-object.interface';
@@ -13,6 +13,9 @@ import { metaAppear, textAppear } from '../../../common/animations';
                 metaAppear ]
 })
 export class FullViewComponent implements OnInit {
+
+  @Output() videoClick = new EventEmitter<object>();
+  @Output() rightClick = new EventEmitter<object>();
 
   @Input()
   set galleryWidth(galleryWidth: number) {

@@ -266,8 +266,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   detailsMaxWidth: number = 1000; // used to keep track of max width for details in details view
   tagTypeAhead: string = '';
-  currentScreenshotSettings: ScreenshotSettings; // currently only used for the statistics page
   folderViewNavigationPath: string = '';
+
+  currentScreenshotSettings: ScreenshotSettings = {
+    clipSnippetLength: 1,
+    clipSnippets: 0,
+    fixed: true,
+    height: 432,
+    n: 3,
+  }; // currently only used for the statistics page
+     // && to prevent clip view from showing when no clips extracted
+     // defaults set here ONLY because when starting the app in clip view
+     // the app would show error in console log:
+     //   `Cannot read property 'clipSnippets' of undefined`
 
   // ========================================================================
 
@@ -520,6 +531,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.electronService.webFrame.clearCache();
     });
 
+    this.electronService.ipcRenderer.on('preferred-video-player-returning', (event, filePath) => {
+
+      this.appState.preferredVideoPlayer = filePath;
+
+      // Hardcode for MAC & VLC
+      if (this.macVersion && this.appState.preferredVideoPlayer.toLowerCase().includes('vlc')) {
+        this.appState.preferredVideoPlayer = '/Applications/VLC.app/Contents/MacOS/VLC';
+      }
+
+      this.cd.detectChanges();
+    });
+
     // Happens on a Mac when the OS Dark Mode is enabled/disabled
     this.electronService.ipcRenderer.on('osDarkModeChange', (event, desiredMode: string) => {
 
@@ -700,7 +723,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Only allow characters and numbers for hub name
    * @param event key press event
    */
-  public validateHubName(event: any) {
+  public validateHubName(event: any): boolean {
     const keyCode = event.charCode;
     if (keyCode === 32) {
       return true;
@@ -712,6 +735,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Summon a dialog to open a default video player
+   */
+  public chooseDefaultVideoPlayer(): void {
+    this.electronService.ipcRenderer.send('select-default-video-player');
   }
 
   // ---------------- INTERACT WITH ELECTRON ------------------ //
@@ -800,30 +830,84 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public handleClick(event: MouseEvent, item: ImageElement) {
+  /**
+   * Handle clicking on an item in the gallery
+   *
+   * @param eventObject - contains the MouseEvent and the thumbIndex (which thumb was clicked)
+   *                                                      only used in the Thumbnail
+   * @param item        - ImageElement
+   */
+  public handleClick(eventObject: { mouseEvent: MouseEvent, thumbIndex?: number }, item: ImageElement) {
+
+    console.log('remove this log later!');
+    console.log(eventObject);
+
     // ctrl/cmd + click for thumbnail sheet
-    if (event.ctrlKey === true || event.metaKey) {
+    if (eventObject.mouseEvent.ctrlKey === true || eventObject.mouseEvent.metaKey) {
       this.openThumbnailSheet(item);
     } else {
-      this.openVideo(item.index);
+      this.openVideo(item.index, eventObject.thumbIndex);
     }
   }
 
   /**
    * Open the video with user's default media player
-   * @param index unique ID of the video
+   * or with their preferred media player, if chosen
+   *
+   * @param index                 unique ID of the video
+   * @param clickedThumbnailIndex an index of the thumbnail clicked
    */
-  public openVideo(index): void {
-    this.currentPlayingFolder = this.finalArray[index].partialPath;
-    this.currentPlayingFile = this.finalArray[index].cleanName;
+  public openVideo(index: number, clickedThumbnailIndex?: number): void {
+    // update number of times played
     this.finalArray[index].timesPlayed ? this.finalArray[index].timesPlayed++ : this.finalArray[index].timesPlayed = 1;
     this.finalArrayNeedsSaving = true;
-    const fullPath = this.appState.selectedSourceFolder + this.finalArray[index].partialPath + '/' + this.finalArray[index].fileName;
+
+    const clickedElement: ImageElement = this.finalArray[index];
+
+    this.currentPlayingFolder = clickedElement.partialPath;
+    this.currentPlayingFile = clickedElement.cleanName;
+    const fullPath = this.appState.selectedSourceFolder + clickedElement.partialPath + '/' + clickedElement.fileName;
     this.fullPathToCurrentFile = fullPath;
-    // console.log(fullPath);
-    if (this.rootFolderLive) {
+
+    if (this.appState.preferredVideoPlayer) {
+      const time: number = clickedThumbnailIndex
+                           ? clickedElement.duration / (clickedElement.screens + 1) * ((clickedThumbnailIndex) + 1)
+                           : 0;
+
+      const execPath: string = this.appState.preferredVideoPlayer;
+
+      this.electronService.ipcRenderer.send('openThisFileWithFlags', execPath, fullPath, this.getVideoPlayerArgs(execPath, time));
+    } else if (this.rootFolderLive) {
       this.electronService.ipcRenderer.send('openThisFile', fullPath);
     }
+  }
+
+  /**
+   * Determine the required arguments to open video player at particular time
+   * @param playerPath  full path to user's preferred video player
+   * @param time        time in seconds
+   */
+  public getVideoPlayerArgs(playerPath: string, time: number): string[] {
+    // if user doesn't want to open at timestamp, don't!
+    if (!this.settingsButtons['openAtTimestamp'].toggled) {
+      return [];
+    }
+
+    // else, figure out the correct command line flags
+    const argz: string[] = [];
+
+    if        (playerPath.toLowerCase().includes('vlc')) {
+      argz.push('--start-time=' + time.toString()); // in seconds
+
+    } else if (playerPath.toLowerCase().includes('mpc')) {
+      argz.push('/start');
+      argz.push((1000 * time).toString());          // in milliseconds
+
+    } else if (playerPath.toLowerCase().includes('pot')) {
+      argz.push('/seek=' + time.toString());        // in seconds
+    }
+
+    return argz;
   }
 
   public openOnlineHelp(): void {
@@ -1532,7 +1616,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if (settingsObject.appState) {
       this.appState = settingsObject.appState;
       if (!settingsObject.appState.currentZoomLevel) {  // catch error <-- old VHA apps didn't have `currentZoomLevel`
-        this.appState.currentZoomLevel = 1;
+        this.appState.currentZoomLevel = 1;             // TODO -- remove whole block -- not needed any more !?!?!?!??!?! -----------------!
       }
       if (!settingsObject.appState.imgsPerRow) {
         this.appState.imgsPerRow = defaultImgsPerRow;
@@ -1623,7 +1707,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.handleFolderWordClicked(this.currentRightClickedItem.partialPath);
   }
 
-  rightMouseClicked(event: MouseEvent, item): void {
+  rightMouseClicked(event: MouseEvent, item: ImageElement): void {
     const winWidth: number = window.innerWidth;
     const clientX: number = event.clientX;
     const howFarFromRight: number = winWidth - clientX;
@@ -1634,7 +1718,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const howFarFromBottom: number = winHeight - clientY;
 
     this.rightClickPosition.x = (howFarFromRight < 120) ? clientX - 120 + (howFarFromRight) : clientX;
-    this.rightClickPosition.y = (howFarFromBottom < 140) ? clientY - 140 + (howFarFromBottom) : clientY;
+    this.rightClickPosition.y = (howFarFromBottom < 165) ? clientY - 165 + (howFarFromBottom) : clientY;
 
     this.currentRightClickedItem = item;
     this.rightClickShowing = true;

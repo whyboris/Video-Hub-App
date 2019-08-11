@@ -89,7 +89,8 @@ export const SettingsButtonsGroups: string[][] = [
     'verifyThumbnails',
     // 'regenerateLibrary', // TODO - maybe enable someday?
     'resetSettings',
-    'clearHistory'
+    'clearHistory',
+    'openAtTimestamp'
   ]
 ];
 
@@ -318,6 +319,14 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     settingsHeading: 'SETTINGS.clipsHeading',
     title: 'BUTTONS.muteClipsHint',
     toggled: true
+  },
+  'openAtTimestamp': {
+    description: 'BUTTONS.openAtTimestampDescription',
+    hidden: true,
+    iconName: 'icon-toggle-scrub',
+    moreInfo: 'BUTTONS.openAtTimestampMoreInfo',
+    title: 'BUTTONS.openAtTimestampHint',
+    toggled: false
   },
   'regenerateLibrary': {
     description: 'BUTTONS.regenerateLibraryDescription',

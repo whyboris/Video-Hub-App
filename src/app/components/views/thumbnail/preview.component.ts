@@ -19,6 +19,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
 
   @Output() videoClick = new EventEmitter<object>();
   @Output() sheetClick = new EventEmitter<object>();
+  @Output() rightClick = new EventEmitter<object>();
 
   @Input() video: ImageElement;
 
