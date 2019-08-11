@@ -591,7 +591,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       event,
       finalObject: FinalObject,
       pathToFile: string,
-      outputFolderWithTrailingSlash: string,
+      outputFolderPath: string,
       changedRootFolder: boolean = false,
       rootFolderLive: boolean = true,
     ) => {
@@ -604,7 +604,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.hubNameToRemember = finalObject.hubName;
       this.appState.hubName = finalObject.hubName;
       this.appState.numOfFolders = finalObject.numOfFolders;
-      this.appState.selectedOutputFolder = outputFolderWithTrailingSlash;
+      this.appState.selectedOutputFolder = outputFolderPath;
       this.appState.selectedSourceFolder = finalObject.inputDir;
 
       // Update history of opened files
