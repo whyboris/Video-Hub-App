@@ -989,12 +989,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Add filter to FOLDER search when word in folder is clicked
+   * Handle clicking on FOLDER in gallery, or the folder icon in breadcrumbs
    * @param filter
    */
   handleFolderIconClicked(filter: string): void {
-    console.log('folder name clicked:');
-    console.log(filter);
     this.folderViewNavigationPath = filter;
     this.scrollToTop();
   }
@@ -1184,6 +1182,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     } else if (uniqueKey === 'showFolders') {
       this.toggleButtonOpposite('showFolders');
+      if (!this.settingsButtons['showFolders'].toggled) {
+        this.folderViewNavigationPath = '';
+      }
       this.scrollToTop();
     } else if (uniqueKey === 'makeSmaller') {
       this.decreaseSize();
