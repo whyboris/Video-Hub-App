@@ -521,9 +521,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     this.electronService.ipcRenderer.on('preferred-video-player-returning', (event, filePath) => {
-      console.log('executable is:');
-      console.log(filePath);
+
       this.appState.preferredVideoPlayer = filePath;
+
+      // Hardcode for MAC & VLC
+      if (this.macVersion && this.appState.preferredVideoPlayer.toLowerCase().includes('vlc')) {
+        this.appState.preferredVideoPlayer = '/Applications/VLC.app/Contents/MacOS/VLC';
+      }
+
       this.cd.detectChanges();
     });
 
@@ -829,12 +834,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     console.log('remove this log later!');
     console.log(eventObject);
-
-    // Hardcode for MAC
-    if (this.macVersion && this.appState.preferredVideoPlayer.toLowerCase().includes('vlc')) {
-      this.appState.preferredVideoPlayer = '/Applications/VLC.app/Contents/MacOS/VLC';
-      console.log(this.appState.preferredVideoPlayer);
-    }
 
     // ctrl/cmd + click for thumbnail sheet
     if (eventObject.mouseEvent.ctrlKey === true || eventObject.mouseEvent.metaKey) {
