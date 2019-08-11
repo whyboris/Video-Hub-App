@@ -869,7 +869,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const fullPath = this.appState.selectedSourceFolder + clickedElement.partialPath + '/' + clickedElement.fileName;
     this.fullPathToCurrentFile = fullPath;
 
-    if (this.appState.preferredVideoPlayer) {
+    if (this.rootFolderLive && this.appState.preferredVideoPlayer) {
       const time: number = clickedThumbnailIndex
                            ? clickedElement.duration / (clickedElement.screens + 1) * ((clickedThumbnailIndex) + 1)
                            : 0;
