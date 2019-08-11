@@ -916,8 +916,6 @@
 
                 | returnZeroPipe: (appState.currentView === 'showClips' && currentScreenshotSettings.clipSnippets === 0)
 
-                | magicSearchPipe: magicSearchString
-
                 | fileSearchPipe: filters[0].array : filters[0].bool : true  : 0 : false
 
                 | fileSearchPipe: filters[1].array : filters[1].bool : false : 0 : false
@@ -942,6 +940,8 @@
                                   : settingsButtons['manualTags'].toggled
                                   : settingsButtons['autoFileTags'].toggled
                                   : settingsButtons['autoFolderTags'].toggled
+
+                | magicSearchPipe: magicSearchString
 
                 | lengthFilterPipe: settingsButtons['durationFilter'].toggled
                                     : lengthLeftBound
