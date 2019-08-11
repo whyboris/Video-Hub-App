@@ -196,6 +196,7 @@ export const English = {
     doNotExtract  :'do not extract',
     fileSizes     :'File sizes',
     files         :'files',
+    folderNotLive :'video folder not connected',
     general       :'General',
     heading       :'Statistics for the current hub:',
     largest       :'largest',
