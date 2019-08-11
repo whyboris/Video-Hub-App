@@ -19,100 +19,33 @@
           height: imgHeight + 'px'
       }"
     >
-      <video
-        *ngIf="noError && !autoplay && folderThumbPaths[0]"
-        [src]="folderThumbPaths[0]"
-        [poster]="sanitizer.bypassSecurityTrustUrl(folderPosterPaths[0])"
-        class="mini-video-thumb"
-        [volume]="forceMute ? 0 : 1"
-        onmouseover="this.play().catch((err) => {this.load()})"
-        onmouseout="this.pause()"
-        loop
-      ></video>
-      <video
-        *ngIf="noError && !autoplay && folderThumbPaths[1]"
-        [src]="folderThumbPaths[1]"
-        [poster]="sanitizer.bypassSecurityTrustUrl(folderPosterPaths[1])"
-        class="mini-video-thumb"
-        [volume]="forceMute ? 0 : 1"
-        style="left: 50%"
-        onmouseover="this.play().catch((err) => {this.load()})"
-        onmouseout="this.pause()"
-        loop
-      ></video>
-      <video
-        *ngIf="noError && !autoplay && folderThumbPaths[2]"
-        [src]="folderThumbPaths[2]"
-        [poster]="sanitizer.bypassSecurityTrustUrl(folderPosterPaths[2])"
-        class="mini-video-thumb"
-        [volume]="forceMute ? 0 : 1"
-        style="top: 50%"
-        onmouseover="this.play().catch((err) => {this.load()})"
-        onmouseout="this.pause()"
-        loop
-      ></video>
-      <video
-        *ngIf="noError && !autoplay && folderThumbPaths[3]"
-        [src]="folderThumbPaths[3]"
-        [poster]="sanitizer.bypassSecurityTrustUrl(folderPosterPaths[3])"
-        class="mini-video-thumb"
-        [volume]="forceMute ? 0 : 1"
-        style="left: 50%; top: 50%"
-        onmouseover="this.play().catch((err) => {this.load()})"
-        onmouseout="this.pause()"
-        loop
-      ></video>
-      <video
-        *ngIf="noError && autoplay && appInFocus && folderThumbPaths[0]"
-        [src]="folderThumbPaths[0]"
-        [poster]="sanitizer.bypassSecurityTrustUrl(folderPosterPaths[0])"
-        class="mini-video-thumb"
-        [volume]="forceMute ? 0 : 1"
-        onmouseover="this.muted = false;"
-        onmouseout="this.muted = true;"
-        onloadstart="this.muted = true;"
-        loop
-        autoplay
-      ></video>
-      <video
-        *ngIf="noError && autoplay && appInFocus && folderThumbPaths[1]"
-        [src]="folderThumbPaths[1]"
-        [poster]="sanitizer.bypassSecurityTrustUrl(folderPosterPaths[1])"
-        class="mini-video-thumb"
-        [volume]="forceMute ? 0 : 1"
-        style="left: 50%"
-        onmouseover="this.muted = false;"
-        onmouseout="this.muted = true;"
-        onloadstart="this.muted = true;"
-        loop
-        autoplay
-      ></video>
-      <video
-        *ngIf="noError && autoplay && appInFocus && folderThumbPaths[2]"
-        [src]="folderThumbPaths[2]"
-        [poster]="sanitizer.bypassSecurityTrustUrl(folderPosterPaths[2])"
-        class="mini-video-thumb"
-        [volume]="forceMute ? 0 : 1"
-        style="top: 50%"
-        onmouseover="this.muted = false;"
-        onmouseout="this.muted = true;"
-        onloadstart="this.muted = true;"
-        loop
-        autoplay
-      ></video>
-      <video
-        *ngIf="noError && autoplay && appInFocus && folderThumbPaths[3]"
-        [src]="folderThumbPaths[3]"
-        [poster]="sanitizer.bypassSecurityTrustUrl(folderPosterPaths[3])"
-        class="mini-video-thumb"
-        [volume]="forceMute ? 0 : 1"
-        style="left: 50%; top: 50%"
-        onmouseover="this.muted = false;"
-        onmouseout="this.muted = true;"
-        onloadstart="this.muted = true;"
-        loop
-        autoplay
-      ></video>
+      <ng-container *ngFor="let idx of [0, 1, 2, 3]">
+        <video
+          *ngIf="noError && !autoplay && folderThumbPaths[idx]"
+          [src]="folderThumbPaths[idx]"
+          [poster]="sanitizer.bypassSecurityTrustUrl(folderPosterPaths[idx])"
+          class="mini-video-thumb {{ 'folder-preview-' + idx }}"
+          [volume]="forceMute ? 0 : 1"
+          onmouseover="this.play().catch((err) => {this.load()})"
+          onmouseout="this.pause()"
+          loop
+        ></video>
+      </ng-container>
+
+      <ng-container *ngFor="let idx of [0, 1, 2, 3]">
+        <video
+          *ngIf="noError && autoplay && appInFocus && folderThumbPaths[idx]"
+          [src]="folderThumbPaths[idx]"
+          [poster]="sanitizer.bypassSecurityTrustUrl(folderPosterPaths[idx])"
+          class="mini-video-thumb {{ 'folder-preview-' + idx }}"
+          [volume]="forceMute ? 0 : 1"
+          onmouseover="this.muted = false;"
+          onmouseout="this.muted = true;"
+          onloadstart="this.muted = true;"
+          loop
+          autoplay
+        ></video>
+      </ng-container>
   </div>
 
   <ng-template #upFolderDiv>
