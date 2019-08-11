@@ -1218,11 +1218,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } else if (uniqueKey === 'shuffleGalleryNow') {
       this.sortType = 'random';
       this.shuffleTheViewNow++;
-      // in case the sort filter is showin on the sidebar:
-      if (this.sortFilterElement) {
+      this.scrollToTop();
+      // if sort filter is NOT showin on the sidebar, enable
+      if (!this.sortFilterElement) {
+        this.settingsButtons['sortOrder'].toggled = true;
+      }
+      // and set the setting-option to `Random' after timeout to update view
+      setTimeout(() => {
         const allOptions = this.sortFilterElement.nativeElement.options;
         allOptions[allOptions.length - 1].selected = true;
-      }
+      });
     } else {
       this.toggleButtonOpposite(uniqueKey);
       if (uniqueKey === 'showMoreInfo') {

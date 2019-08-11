@@ -795,7 +795,7 @@
         </span>
       </div>
 
-      <div class='sortFilter' *ngIf="settingsButtons['sortOrder'].toggled">
+      <div class='sort-filter' *ngIf="settingsButtons['sortOrder'].toggled" @filterItemAppear>
         <select
           (change)="selectFilterOrder($event.target.value)"
           #sortFilterElement
