@@ -591,7 +591,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       event,
       finalObject: FinalObject,
       pathToFile: string,
-      outputFolderWithTrailingSlash: string,
+      outputFolderPath: string,
       changedRootFolder: boolean = false,
       rootFolderLive: boolean = true,
     ) => {
@@ -604,7 +604,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.hubNameToRemember = finalObject.hubName;
       this.appState.hubName = finalObject.hubName;
       this.appState.numOfFolders = finalObject.numOfFolders;
-      this.appState.selectedOutputFolder = outputFolderWithTrailingSlash;
+      this.appState.selectedOutputFolder = outputFolderPath;
       this.appState.selectedSourceFolder = finalObject.inputDir;
 
       // Update history of opened files
@@ -869,7 +869,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const fullPath = this.appState.selectedSourceFolder + clickedElement.partialPath + '/' + clickedElement.fileName;
     this.fullPathToCurrentFile = fullPath;
 
-    if (this.appState.preferredVideoPlayer) {
+    if (this.rootFolderLive && this.appState.preferredVideoPlayer) {
       const time: number = clickedThumbnailIndex
                            ? clickedElement.duration / (clickedElement.screens + 1) * ((clickedThumbnailIndex) + 1)
                            : 0;
@@ -989,12 +989,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Add filter to FOLDER search when word in folder is clicked
+   * Handle clicking on FOLDER in gallery, or the folder icon in breadcrumbs
    * @param filter
    */
   handleFolderIconClicked(filter: string): void {
-    console.log('folder name clicked:');
-    console.log(filter);
     this.folderViewNavigationPath = filter;
     this.scrollToTop();
   }
@@ -1184,6 +1182,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     } else if (uniqueKey === 'showFolders') {
       this.toggleButtonOpposite('showFolders');
+      if (!this.settingsButtons['showFolders'].toggled) {
+        this.folderViewNavigationPath = '';
+      }
       this.scrollToTop();
     } else if (uniqueKey === 'makeSmaller') {
       this.decreaseSize();
@@ -1217,11 +1218,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } else if (uniqueKey === 'shuffleGalleryNow') {
       this.sortType = 'random';
       this.shuffleTheViewNow++;
-      // in case the sort filter is showin on the sidebar:
-      if (this.sortFilterElement) {
-        const allOptions = this.sortFilterElement.nativeElement.options;
-        allOptions[allOptions.length - 1].selected = true;
+      this.scrollToTop();
+      // if sort filter is NOT showin on the sidebar, enable
+      if (!this.sortFilterElement) {
+        this.settingsButtons['sortOrder'].toggled = true;
       }
+      // and set the setting-option to `Random' after timeout to update view
+      setTimeout(() => {
+        if (this.sortFilterElement) { // just in case, perform check
+          const allOptions = this.sortFilterElement.nativeElement.options;
+          allOptions[allOptions.length - 1].selected = true;
+        }
+      });
     } else {
       this.toggleButtonOpposite(uniqueKey);
       if (uniqueKey === 'showMoreInfo') {

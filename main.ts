@@ -746,9 +746,7 @@ function sendFinalResultHome(theFinalArray: ImageElement[]): void {
       'finalObjectReturning',
       finalObject,
       pathToTheFile,
-      globals.selectedOutputFolder + path.sep // app needs the trailing slash (at least for now) -- TODO check if needed still
-      // changedRootFolder -- no need to initialize
-      // rootFolderLive    -- no need to initialize
+      getHtmlPath(globals.selectedOutputFolder)
     );
 
     const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);

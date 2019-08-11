@@ -20,6 +20,7 @@
         <b>{{ demo ? ' demo - limited to 50 video files ' : '' }}</b>
         {{ importStage !== 'done' ? ' - ' + progressString + ' - ' : ' - ' }}
         {{ appState.hubName }}
+        {{ rootFolderLive ? '' : '(' + ('STATISTICS.folderNotLive' | translate) + ')' }}
       </span>
     </div>
     <div
@@ -794,7 +795,7 @@
         </span>
       </div>
 
-      <div class='sortFilter' *ngIf="settingsButtons['sortOrder'].toggled">
+      <div class='sort-filter' *ngIf="settingsButtons['sortOrder'].toggled" @filterItemAppear>
         <select
           (change)="selectFilterOrder($event.target.value)"
           #sortFilterElement
@@ -916,8 +917,6 @@
 
                 | returnZeroPipe: (appState.currentView === 'showClips' && currentScreenshotSettings.clipSnippets === 0)
 
-                | magicSearchPipe: magicSearchString
-
                 | fileSearchPipe: filters[0].array : filters[0].bool : true  : 0 : false
 
                 | fileSearchPipe: filters[1].array : filters[1].bool : false : 0 : false
@@ -942,6 +941,8 @@
                                   : settingsButtons['manualTags'].toggled
                                   : settingsButtons['autoFileTags'].toggled
                                   : settingsButtons['autoFolderTags'].toggled
+
+                | magicSearchPipe: magicSearchString
 
                 | lengthFilterPipe: settingsButtons['durationFilter'].toggled
                                     : lengthLeftBound
