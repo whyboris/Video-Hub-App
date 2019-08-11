@@ -15,13 +15,15 @@ export class FilePathService {
    * @param hubName    - name of hub (to pick the correct `vha-folder` name)
    * @param subfolder  - whether `thumbnails`, `filmstrips`, or `clips`
    * @param hash       - file hash
+   * @param video      - boolean -- if true then extension is `.mp4`
    */
-  public createFilePath(folderPath: string, hubName: string, subfolder: FolderType, hash: string): string {
+  public createFilePath(folderPath: string, hubName: string, subfolder: FolderType, hash: string, video?: boolean): string {
 
     const fullPath: string = 'file://' + path.normalize(folderPath) +
                               '/' + 'vha-' + hubName.replace(/ /g, '%20') +
                               '/' + subfolder +
-                              '/' + hash + '.jpg';
+                              '/' + hash +
+                              (video ? '.mp4' : '.jpg');
 
     return fullPath;
   }

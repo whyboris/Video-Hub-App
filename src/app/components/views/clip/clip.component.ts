@@ -1,6 +1,8 @@
 import { Component, HostListener, Input, Output, EventEmitter, OnInit, ChangeDetectorRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
+import { FilePathService } from '../file-path.service';
+
 import { ImageElement } from '../../../common/final-object.interface';
 
 import { metaAppear, textAppear } from '../../../common/animations';
@@ -45,6 +47,7 @@ export class ClipComponent implements OnInit {
   poster: string;
 
   constructor(
+    public filePathService: FilePathService,
     public sanitizer: DomSanitizer,
     public cd: ChangeDetectorRef
   ) { }
@@ -70,18 +73,16 @@ export class ClipComponent implements OnInit {
       const hashes = this.video.hash.split(':');
 
       hashes.slice(0, 4).forEach((hash) => {
-        this.folderThumbPaths.push('vha-' + this.hubName + '/clips/' + hash + '.mp4');
-        this.folderPosterPaths.push('vha-' + this.hubName + '/thumbnails/' + hash + '.jpg');
+        this.folderThumbPaths.push( this.filePathService.createFilePath(this.folderPath, this.hubName, 'clips', hash, true));
+        this.folderPosterPaths.push(this.filePathService.createFilePath(this.folderPath, this.hubName, 'clips', hash));
       });
     } else {
       if (this.video.hash === undefined) {
         this.noError = false;
       }
-      // hack -- populate hardcoded values -- fix later
-      const fileHash = this.video.hash;
+      this.pathToVideo = this.filePathService.createFilePath(this.folderPath, this.hubName, 'clips', this.video.hash, true);
+      this.poster =      this.filePathService.createFilePath(this.folderPath, this.hubName, 'clips', this.video.hash);
 
-      this.pathToVideo = 'vha-' + this.hubName + '/clips/' + fileHash + '.mp4';
-      this.poster = 'vha-' + this.hubName + '/clips/' + fileHash + '.jpg';
       this.folderThumbPaths.push(this.pathToVideo);
       this.folderPosterPaths.push(this.poster);
     }

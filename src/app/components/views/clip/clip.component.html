@@ -21,8 +21,8 @@
     >
       <video
         *ngIf="noError && !autoplay && folderThumbPaths[0]"
-        [src]="'file://' + folderPath + '/' + folderThumbPaths[0]"
-        [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[0])"
+        [src]="folderThumbPaths[0]"
+        [poster]="sanitizer.bypassSecurityTrustUrl(folderPosterPaths[0])"
         class="mini-video-thumb"
         [volume]="forceMute ? 0 : 1"
         onmouseover="this.play().catch((err) => {this.load()})"
@@ -31,8 +31,8 @@
       ></video>
       <video
         *ngIf="noError && !autoplay && folderThumbPaths[1]"
-        [src]="'file://' + folderPath + '/' + folderThumbPaths[1]"
-        [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[1])"
+        [src]="folderThumbPaths[1]"
+        [poster]="sanitizer.bypassSecurityTrustUrl(folderPosterPaths[1])"
         class="mini-video-thumb"
         [volume]="forceMute ? 0 : 1"
         style="left: 50%"
@@ -42,8 +42,8 @@
       ></video>
       <video
         *ngIf="noError && !autoplay && folderThumbPaths[2]"
-        [src]="'file://' + folderPath + '/' + folderThumbPaths[2]"
-        [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[2])"
+        [src]="folderThumbPaths[2]"
+        [poster]="sanitizer.bypassSecurityTrustUrl(folderPosterPaths[2])"
         class="mini-video-thumb"
         [volume]="forceMute ? 0 : 1"
         style="top: 50%"
@@ -53,8 +53,8 @@
       ></video>
       <video
         *ngIf="noError && !autoplay && folderThumbPaths[3]"
-        [src]="'file://' + folderPath + '/' + folderThumbPaths[3]"
-        [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[3])"
+        [src]="folderThumbPaths[3]"
+        [poster]="sanitizer.bypassSecurityTrustUrl(folderPosterPaths[3])"
         class="mini-video-thumb"
         [volume]="forceMute ? 0 : 1"
         style="left: 50%; top: 50%"
@@ -64,8 +64,8 @@
       ></video>
       <video
         *ngIf="noError && autoplay && appInFocus && folderThumbPaths[0]"
-        [src]="'file://' + folderPath + '/' + folderThumbPaths[0]"
-        [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[0])"
+        [src]="folderThumbPaths[0]"
+        [poster]="sanitizer.bypassSecurityTrustUrl(folderPosterPaths[0])"
         class="mini-video-thumb"
         [volume]="forceMute ? 0 : 1"
         onmouseover="this.muted = false;"
@@ -76,8 +76,8 @@
       ></video>
       <video
         *ngIf="noError && autoplay && appInFocus && folderThumbPaths[1]"
-        [src]="'file://' + folderPath + '/' + folderThumbPaths[1]"
-        [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[1])"
+        [src]="folderThumbPaths[1]"
+        [poster]="sanitizer.bypassSecurityTrustUrl(folderPosterPaths[1])"
         class="mini-video-thumb"
         [volume]="forceMute ? 0 : 1"
         style="left: 50%"
@@ -89,8 +89,8 @@
       ></video>
       <video
         *ngIf="noError && autoplay && appInFocus && folderThumbPaths[2]"
-        [src]="'file://' + folderPath + '/' + folderThumbPaths[2]"
-        [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[2])"
+        [src]="folderThumbPaths[2]"
+        [poster]="sanitizer.bypassSecurityTrustUrl(folderPosterPaths[2])"
         class="mini-video-thumb"
         [volume]="forceMute ? 0 : 1"
         style="top: 50%"
@@ -102,8 +102,8 @@
       ></video>
       <video
         *ngIf="noError && autoplay && appInFocus && folderThumbPaths[3]"
-        [src]="'file://' + folderPath + '/' + folderThumbPaths[3]"
-        [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + folderPosterPaths[3])"
+        [src]="folderThumbPaths[3]"
+        [poster]="sanitizer.bypassSecurityTrustUrl(folderPosterPaths[3])"
         class="mini-video-thumb"
         [volume]="forceMute ? 0 : 1"
         style="left: 50%; top: 50%"
@@ -155,8 +155,8 @@
 
   <video
     *ngIf="noError && !autoplay"
-    [src]="'file://' + folderPath + '/' + pathToVideo"
-    [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + poster)"
+    [src]="pathToVideo"
+    [poster]="sanitizer.bypassSecurityTrustUrl(poster)"
     [ngStyle]="{ 'height': imgHeight + 'px' }"
     (click)="videoClick.emit({ mouseEvent: $event })"
     (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
@@ -169,8 +169,8 @@
 
   <video
     *ngIf="noError && autoplay && appInFocus"
-    [src]="'file://' + folderPath + '/' + pathToVideo"
-    [poster]="sanitizer.bypassSecurityTrustUrl('file://' + folderPath + '/' + poster)"
+    [src]="pathToVideo"
+    [poster]="sanitizer.bypassSecurityTrustUrl(poster)"
     [ngStyle]="{ 'height': imgHeight + 'px' }"
     (click)="videoClick.emit({ mouseEvent: $event })"
     (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
