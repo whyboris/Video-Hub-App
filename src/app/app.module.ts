@@ -7,13 +7,16 @@ import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 
+// External
 import { TranslateModule } from '@ngx-translate/core';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 
+// Services
 import { AlphabetPrefixService } from './pipes/alphabet-prefix.service';
 import { AutoTagsSaveService } from './components/tags-auto/tags-save.service';
 import { AutoTagsService } from './components/tags-auto/autotags.service';
 import { ElectronService } from './providers/electron.service';
+import { FilePathService } from './components/views/file-path.service';
 import { HomeComponent } from './components/home.component';
 import { ManualTagsService } from './components/tags-manual/manual-tags.service';
 import { ResolutionFilterService } from './pipes/resolution-filter.service';
@@ -21,6 +24,7 @@ import { ShowLimitService } from './pipes/show-limit.service';
 import { StarFilterService } from './pipes/star-filter.service';
 import { WordFrequencyService } from './pipes/word-frequency.service';
 
+// Components
 import { AddTagComponent } from './components/tags-manual/add-tag.component';
 import { AppComponent } from './app.component';
 import { ClipComponent } from './components/views/clip/clip.component';
@@ -41,6 +45,7 @@ import { TagsComponent } from './components/tags-auto/tags.component';
 import { TopComponent } from './components/top/top.component';
 import { ViewTagsComponent } from './components/tags-manual/view-tags.component';
 
+// Pipes
 import { AlphabetPrefixPipe } from './pipes/alphabet-prefix.pipe';
 import { CountPipe } from './pipes/count.pipe';
 import { FileSearchPipe } from './pipes/file-search.pipe';
@@ -117,6 +122,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     AutoTagsSaveService,
     AutoTagsService,
     ElectronService,
+    FilePathService,
     FileSearchPipe,
     ManualTagsService,
     ResolutionFilterService,
