@@ -1225,8 +1225,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
       // and set the setting-option to `Random' after timeout to update view
       setTimeout(() => {
-        const allOptions = this.sortFilterElement.nativeElement.options;
-        allOptions[allOptions.length - 1].selected = true;
+        if (this.sortFilterElement) { // just in case, perform check
+          const allOptions = this.sortFilterElement.nativeElement.options;
+          allOptions[allOptions.length - 1].selected = true;
+        }
       });
     } else {
       this.toggleButtonOpposite(uniqueKey);
