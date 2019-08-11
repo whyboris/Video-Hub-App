@@ -1,6 +1,10 @@
 import { Component, Input, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+
+import { FilePathService } from '../file-path.service';
+
 import { metaAppear, textAppear } from '../../../common/animations';
+
 import { ImageElement } from '../../../common/final-object.interface';
 
 @Component({
@@ -33,11 +37,12 @@ export class FilmstripComponent implements OnInit {
   filmXoffset: number = 0;
 
   constructor(
+    public filePathService: FilePathService,
     public sanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
-    this.fullFilePath =  'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/filmstrips/' + this.video.hash + '.jpg';
+    this.fullFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
   }
 
   updateFilmXoffset($event) {

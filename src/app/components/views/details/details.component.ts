@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ElementRef, ViewChild, Output, EventEmitter }
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { ManualTagsService } from '../../tags-manual/manual-tags.service';
+import { FilePathService } from '../file-path.service';
 
 import { StarRating, ImageElement } from '../../../common/final-object.interface';
 
@@ -63,6 +64,7 @@ export class DetailsComponent implements OnInit {
   hover: boolean;
 
   constructor(
+    public filePathService: FilePathService,
     public manualTagsService: ManualTagsService,
     public sanitizer: DomSanitizer
   ) { }
@@ -81,8 +83,8 @@ export class DetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.firstFilePath = 'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/thumbnails/' + this.video.hash + '.jpg';
-    this.fullFilePath =  'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/filmstrips/' + this.video.hash + '.jpg';
+    this.firstFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'thumbnails', this.video.hash);
+    this.fullFilePath =  this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
   }
 
   mouseIsMoving($event) {

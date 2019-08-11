@@ -19,7 +19,9 @@ export class FilePathService {
   public createFilePath(folderPath: string, hubName: string, subfolder: FolderType, hash: string): string {
 
     const fullPath: string = 'file://' + path.normalize(folderPath) +
-                              '/' + 'vha-' + hubName.replace(/ /g, '%20') + '/' + subfolder + '/' + hash + '.jpg';
+                              '/' + 'vha-' + hubName.replace(/ /g, '%20') +
+                              '/' + subfolder +
+                              '/' + hash + '.jpg';
 
     return fullPath;
   }

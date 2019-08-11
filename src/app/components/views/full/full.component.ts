@@ -1,9 +1,11 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
-import { ImageElement } from '../../../common/final-object.interface';
+import { FilePathService } from '../file-path.service';
 
 import { metaAppear, textAppear } from '../../../common/animations';
+
+import { ImageElement } from '../../../common/final-object.interface';
 
 @Component({
   selector: 'app-full-item',
@@ -45,11 +47,12 @@ export class FullViewComponent implements OnInit {
   rowOffsets: number[];
 
   constructor(
+    public filePathService: FilePathService,
     public sanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
-    this.fullFilePath = 'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/filmstrips/' + this.video.hash + '.jpg';
+    this.fullFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
     this.render();
   }
 

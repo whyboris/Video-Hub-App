@@ -1,8 +1,10 @@
 import { Component, Input, Output, EventEmitter, OnInit, ElementRef, ViewChild, OnDestroy } from '@angular/core';
-import { metaAppear, textAppear } from '../../../common/animations';
-import { ImageElement } from '../../../common/final-object.interface';
 
 import { FilePathService } from '../file-path.service';
+
+import { metaAppear, textAppear } from '../../../common/animations';
+
+import { ImageElement } from '../../../common/final-object.interface';
 
 @Component({
   selector: 'app-gallery-item',
