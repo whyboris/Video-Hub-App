@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { ImageElement, StarRating } from '../common/final-object.interface';
 
 export type SortType = 'default'
+                     | 'hash' // only used by the duplicateFinderPipe
                      | 'modifiedAsc'
                      | 'modifiedDesc'
                      | 'random'
@@ -36,6 +37,16 @@ export class SortingPipe implements PipeTransform {
       return -1;
     } else if (y.fileName === '*UP*') {
       return 1;
+    }
+
+    if (property === 'hash') {
+      if (x.hash < y.hash) {
+        return -1;
+      } if (x.hash > y.hash) {
+        return 1;
+      } else {
+        return 0;
+      }
     }
 
     // handle `year` case:   show properties that are not empty first
@@ -156,6 +167,11 @@ export class SortingPipe implements PipeTransform {
     } else if (sortingType === 'modifiedDesc') {
       const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'mtime', false);
+      });
+      return sorted.slice(0);
+    } else if (sortingType === 'hash') {
+      const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
+        return this.sortFunctionLol(x, y, 'hash', true);
       });
       return sorted.slice(0);
     } else {

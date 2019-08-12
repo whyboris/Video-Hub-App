@@ -796,7 +796,7 @@
       </div>
 
       <!-- Duplicates -->
-      <div class="lev-distance" *ngIf="settingsButtons['duplicateLength'].toggled || settingsButtons['duplicateSize'].toggled">
+      <div class="lev-distance" *ngIf="settingsButtons['duplicateLength'].toggled || settingsButtons['duplicateSize'].toggled || settingsButtons['duplicateHash'].toggled">
         <span class="lev-description">
           {{ 'SIDEBAR.duplicate' | translate }}
         </span>
@@ -805,6 +805,9 @@
         </span>
         <span *ngIf="settingsButtons['duplicateSize'].toggled" class="search-word on-new-line" (click)="settingsButtons['duplicateSize'].toggled = false">
           {{ 'SIDEBAR.dupeBySize' | translate }}
+        </span>
+        <span *ngIf="settingsButtons['duplicateHash'].toggled" class="search-word on-new-line" (click)="settingsButtons['duplicateHash'].toggled = false">
+          {{ 'SIDEBAR.dupeByHash' | translate }}
         </span>
       </div>
 
@@ -962,6 +965,8 @@
                 | duplicateFinderPipe : settingsButtons['duplicateLength'].toggled : 'length'
 
                 | duplicateFinderPipe : settingsButtons['duplicateSize'].toggled : 'size'
+
+                | duplicateFinderPipe : settingsButtons['duplicateHash'].toggled : 'hash'
 
                 | lengthFilterPipe: settingsButtons['durationFilter'].toggled
                                     : lengthLeftBound

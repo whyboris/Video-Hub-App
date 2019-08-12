@@ -4,7 +4,7 @@ import { SortingPipe } from './sorting.pipe';
 
 import { ImageElement } from '../common/final-object.interface';
 
-type DupeType = 'length' | 'size';
+type DupeType = 'length' | 'size' | 'hash';
 
 @Pipe({
   name: 'duplicateFinderPipe'
@@ -78,6 +78,34 @@ export class DuplicateFinderPipe implements PipeTransform {
           }
 
           sizeTracker = element.fileSize;
+        });
+
+        return duplicateArray;
+
+      } else if (dupeType === 'hash') {
+
+        console.log('DUPLICATE FINDER PIPE WORKING');
+
+        const duplicateArray: ImageElement[] = [];
+
+        const sortedByHash: ImageElement[] = this.sortingPipe.transform(finalArray, 'hash', 9001);
+
+        let hashTracker: string = '';
+
+        let lastIndex: number = -1; // keep track of the index of the last item pushed to duplicateArray
+
+        sortedByHash.forEach((element, idx) => {
+
+          if (hashTracker === element.hash) {
+            if (lastIndex !== (idx - 1)) {
+              // in case you have 3 identical in a row!
+              duplicateArray.push(sortedByHash[idx - 1]);
+            }
+            duplicateArray.push(element);
+            lastIndex = idx;
+          }
+
+          hashTracker = element.hash;
         });
 
         return duplicateArray;
