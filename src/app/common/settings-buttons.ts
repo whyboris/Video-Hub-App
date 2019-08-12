@@ -31,6 +31,7 @@ export const SettingsButtonsGroups: string[][] = [
   ],
   [
     'duplicateLength',
+    'duplicateSize',
     'showFreq',
     'extendedWordCloud',
     'showRecent'
@@ -183,6 +184,13 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     settingsHeading: 'SETTINGS.duplicateLength',
     title: 'BUTTONS.duplicateLengthHint',
+    toggled: false
+  },
+  'duplicateSize': {
+    description: 'BUTTONS.duplicateSizeDescription',
+    hidden: true,
+    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
+    title: 'BUTTONS.duplicateSizeHint',
     toggled: false
   },
   'durationFilter': {

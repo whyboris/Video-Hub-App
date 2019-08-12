@@ -18,6 +18,8 @@ export const English = {
     darkModeHint                       :'Dark mode',
     duplicateLengthDescription         :'Show all files that are within 5 seconds of each other in length',
     duplicateLengthHint                :'Length duplicates',
+    duplicateSizeDescription           :'Show all files that are very similar to each other in file size',
+    duplicateSizeHint                  :'Size duplicates',
     durationFilterDescription          :'Show the duration filter',
     durationFilterHint                 :'Duration filter',
     excludeDescription                 :'Show the search filter to exclude any videos that contain the filter word',
@@ -131,6 +133,7 @@ export const English = {
   SIDEBAR: {
     and                :'and',
     dupeByLength       :'similar length',
+    dupeBySize         :'similar size',
     duplicate          :'possibe duplicates:',
     exclude            :'video does not have',
     file               :'video name has',

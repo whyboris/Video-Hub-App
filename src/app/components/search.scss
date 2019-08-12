@@ -136,6 +136,11 @@
   .search-word {
     background: $show-similar-to;
   }
+
+  .on-new-line {
+    display: block;
+    width: max-content;
+  }
 }
 
 .lev-description {

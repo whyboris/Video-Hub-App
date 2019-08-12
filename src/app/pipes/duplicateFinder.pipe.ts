@@ -4,6 +4,8 @@ import { SortingPipe } from './sorting.pipe';
 
 import { ImageElement } from '../common/final-object.interface';
 
+type DupeType = 'length' | 'size';
+
 @Pipe({
   name: 'duplicateFinderPipe'
 })
@@ -17,30 +19,71 @@ export class DuplicateFinderPipe implements PipeTransform {
    * Return only items that match search string
    * @param finalArray
    * @param render      boolean - whether to use the pipe
-   * @param byLength    boolean - whether to find duplicates by length
+   * @param dupeType    whether to find duplicates by length
    */
-  transform(finalArray: ImageElement[], render: boolean, byLength?: boolean): ImageElement[] {
+  transform(finalArray: ImageElement[], render, dupeType: DupeType): ImageElement[] {
     if (!render) {
       return finalArray;
     } else {
-      console.log('DUPLICATE FINDER PIPE WORKING');
 
-      const duplicateArray: ImageElement[] = [];
+      if (dupeType === 'length') {
 
-      const sortedByLength: ImageElement[] = this.sortingPipe.transform(finalArray, 'timeDesc', 9001);
+        console.log('DUPLICATE FINDER PIPE WORKING');
 
-      let lengthTracker: number = 0;
+        const duplicateArray: ImageElement[] = [];
 
-      sortedByLength.forEach((element) => {
+        const sortedByLength: ImageElement[] = this.sortingPipe.transform(finalArray, 'timeDesc', 9001);
 
-        if ((lengthTracker - element.duration) < 10) {
-          duplicateArray.push(element);
-        }
+        let lengthTracker: number = 0;
 
-        lengthTracker = element.duration;
-      });
+        let lastIndex: number = -1; // keep track of the index of the last item pushed to duplicateArray
 
-      return duplicateArray;
+        sortedByLength.forEach((element, idx) => {
+
+          if (Math.abs(lengthTracker - element.duration) < 5) {
+            if (lastIndex !== (idx - 1)) {
+              // in case you have 3 identical in a row!
+              duplicateArray.push(sortedByLength[idx - 1]);
+            }
+            duplicateArray.push(element);
+            lastIndex = idx;
+          }
+
+          lengthTracker = element.duration;
+        });
+
+        return duplicateArray;
+
+      } else if (dupeType === 'size') {
+
+        console.log('DUPLICATE FINDER PIPE WORKING');
+
+        const duplicateArray: ImageElement[] = [];
+
+        const sortedBySize: ImageElement[] = this.sortingPipe.transform(finalArray, 'sizeDesc', 9001);
+
+        let sizeTracker: number = 0;
+
+        let lastIndex: number = -1; // keep track of the index of the last item pushed to duplicateArray
+
+        sortedBySize.forEach((element, idx) => {
+
+          if (Math.abs(sizeTracker - element.fileSize) < 1000) {
+            if (lastIndex !== (idx - 1)) {
+              // in case you have 3 identical in a row!
+              duplicateArray.push(sortedBySize[idx - 1]);
+            }
+            duplicateArray.push(element);
+            lastIndex = idx;
+          }
+
+          sizeTracker = element.fileSize;
+        });
+
+        return duplicateArray;
+
+      }
+
     }
   }
 
