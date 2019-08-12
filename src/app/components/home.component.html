@@ -790,10 +790,22 @@
         <span class="lev-description">
           {{ 'SIDEBAR.similarTo' | translate }}
         </span>
-        <span class="search-word" (click)="clearLev()">
+        <span class="search-word" (click)="showSimilar = false">
           {{ findMostSimilar }}
         </span>
       </div>
+
+      <!-- Duplicates -->
+      <div class="lev-distance" *ngIf="settingsButtons['duplicateLength'].toggled">
+        <span class="lev-description">
+          {{ 'SIDEBAR.duplicate' | translate }}
+        </span>
+        <span class="search-word" (click)="settingsButtons['duplicateLength'].toggled = false">
+          {{ 'SIDEBAR.dupeByLength' | translate }}
+        </span>
+      </div>
+
+      <!-- SORT ORDER -->
 
       <div class='sort-filter' *ngIf="settingsButtons['sortOrder'].toggled" @filterItemAppear>
         <select
@@ -943,6 +955,8 @@
                                   : settingsButtons['autoFolderTags'].toggled
 
                 | magicSearchPipe: magicSearchString
+
+                | duplicateFinderPipe : settingsButtons['duplicateLength'].toggled : true
 
                 | lengthFilterPipe: settingsButtons['durationFilter'].toggled
                                     : lengthLeftBound

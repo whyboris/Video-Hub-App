@@ -1686,10 +1686,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.starRightBound = selection[1];
   }
 
-  clearLev(): void {
-    this.showSimilar = false;
-  }
-
   /**
    * Handle right-click and `Show similar`
    */

@@ -48,6 +48,7 @@ import { ViewTagsComponent } from './components/tags-manual/view-tags.component'
 // Pipes
 import { AlphabetPrefixPipe } from './pipes/alphabet-prefix.pipe';
 import { CountPipe } from './pipes/count.pipe';
+import { DuplicateFinderPipe } from './pipes/duplicateFinder.pipe';
 import { FileSearchPipe } from './pipes/file-search.pipe';
 import { FileSizePipe } from './pipes/file-size.pipe';
 import { FolderArrowsPipe } from './pipes/folder-arrows.pipe';
@@ -76,6 +77,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     CountPipe,
     DetailsComponent,
     DonutComponent,
+    DuplicateFinderPipe,
     FileComponent,
     FileSearchPipe,
     FileSizePipe,
@@ -121,6 +123,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     AlphabetPrefixService,
     AutoTagsSaveService,
     AutoTagsService,
+    DuplicateFinderPipe,
     ElectronService,
     FilePathService,
     FileSearchPipe,
@@ -128,6 +131,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     ResolutionFilterService,
     ShowLimitService,
     SimilarityService,
+    SortingPipe,
     StarFilterService,
     WordFrequencyService,
   ],
