@@ -216,8 +216,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   canCloseWizard = false;
 
   wizard: WizardOptions = {
+    clipHalfRez: true,
     clipSnippetLength: 1,
-    clipSnippets: 9,
+    clipSnippets: 3,
     extractClips: false,
     futureHubName: '',
     listOfFiles: [],
@@ -269,6 +270,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   folderViewNavigationPath: string = '';
 
   currentScreenshotSettings: ScreenshotSettings = {
+    clipHalfRez: true,
     clipSnippetLength: 1,
     clipSnippets: 0,
     fixed: true,
@@ -775,6 +777,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.appState.selectedOutputFolder = this.wizard.selectedOutputFolder;
     this.importStage = 'importingMeta';
     const importOptions: ImportSettingsObject = {
+      clipHalfRez: this.wizard.clipHalfRez,
       clipSnippetLength: this.wizard.clipSnippetLength,
       clipSnippets: this.wizard.extractClips ? this.wizard.clipSnippets : 0,
       exportFolderPath: this.wizard.selectedOutputFolder,
@@ -1260,8 +1263,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   public startWizard(): void {
     this.wizard = {
+      clipHalfRez: true,
       clipSnippetLength: 1,
-      clipSnippets: 9,
+      clipSnippets: 5,
       extractClips: false,
       futureHubName: '',
       listOfFiles: [],

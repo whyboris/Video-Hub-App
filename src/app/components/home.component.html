@@ -1551,7 +1551,7 @@
     </div>
 
 
-    <div [ngClass]="{ 'dim-row': !wizard.extractClips }" style="margin-left: 38px">
+    <div [ngClass]="{ 'dim-row': !wizard.extractClips }" style="margin: 5px 0 0 38px">
 
       <span class="step-four-text">
         {{ 'WIZARD.eachSnippet' | translate }}
@@ -1577,6 +1577,27 @@
       </span>
 
     </div>
+
+    <div [ngClass]="{ 'dim-row': !wizard.extractClips }">
+
+      <input
+        type="checkbox"
+        [(ngModel)]="wizard.clipHalfRez"
+        class="clip-check-box"
+        [disabled]="wizard.selectedOutputFolder === ''
+                || wizard.selectedSourceFolder === ''
+                || wizard.futureHubName === ''
+                || !wizard.screensPerVideo
+                || !wizard.extractClips"
+      >
+
+      <span class="step-four-text">
+        {{ 'WIZARD.clipHalfRez' | translate }}
+      </span>
+
+    </div>
+
+    <!-- STEP 5 -->
 
     <div
       style="margin-top: 30px;"

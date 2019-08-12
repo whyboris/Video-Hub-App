@@ -268,6 +268,7 @@ const generateScreenshotStrip = (
  * @param screenshotHeight   -- resolution in pixels (default is 100)
  * @param saveLocation -- folder where to save jpg files
  * @param clipSnippets -- number of clip snippets to extract
+ * @param clipHalfRez  -- if cilp should be half the resolution of thumbnails
  */
 const generatePreviewClip = (
   pathToVideo: string,
@@ -276,7 +277,8 @@ const generatePreviewClip = (
   screenshotHeight: number,
   saveLocation: string,
   clipSnippets: number,
-  snippetLength: number
+  snippetLength: number,
+  clipHalfRez: boolean
 ) => {
 
   return new Promise((resolve, reject) => {
@@ -300,7 +302,8 @@ const generatePreviewClip = (
       concat += '[' + (current - 1) + ':V]' + '[' + (current - 1) + ':a]';
       current++;
     }
-    concat += 'concat=n=' + (totalCount - 1) + ':v=1:a=1[v][a];[v]scale=-2:' + screenshotHeight + '[v2]';
+    concat += 'concat=n=' + (totalCount - 1) + ':v=1:a=1[v][a];[v]scale=-2:' +
+              (clipHalfRez ? screenshotHeight / 2 : screenshotHeight) + '[v2]';
     args.push('-filter_complex',
               concat,
               '-map',
@@ -410,6 +413,7 @@ export function extractFromTheseFiles(
   const screenshotHeight: number = screenshotSettings.height;            // -- number in px how tall each screenshot should be
   const clipSnippets: number =     screenshotSettings.clipSnippets;      // -- number of clip snippets to extract; 0 == do not extract clip
   const snippetLength: number =    screenshotSettings.clipSnippetLength; // -- length of each snippet in the clip
+  const clipHalfRez: boolean =     screenshotSettings.clipHalfRez;       // -- whether clip should be half resolution of thumbnails
 
   // final array already saved at this point - nothing to update inside it
   // just walk through `elementsToScan` to extract screenshots for elements in `theFinalArray`
@@ -473,7 +477,7 @@ export function extractFromTheseFiles(
           }
 
           return generatePreviewClip(
-            pathToVideo, fileHash, duration, screenshotHeight, screenshotFolder, clipSnippets, snippetLength
+            pathToVideo, fileHash, duration, screenshotHeight, screenshotFolder, clipSnippets, snippetLength, clipHalfRez
           );
         })
 

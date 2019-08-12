@@ -1,4 +1,5 @@
 export interface ImportSettingsObject {
+  clipHalfRez: boolean;
   clipSnippetLength: number;
   clipSnippets: number;
   exportFolderPath: string;
