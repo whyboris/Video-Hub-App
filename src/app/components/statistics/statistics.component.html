@@ -61,6 +61,13 @@
         {{ 'STATISTICS.seconds' | translate }}
       </td>
     </tr>
+
+    <tr *ngIf="screenshotSettings.clipHalfRez">
+      <td>{{ 'STATISTICS.clipHalfRez' | translate }}</td>
+      <td class="rightCol">
+        {{ screenshotSettings.height / 2 }}px
+      </td>
+    </tr>
   </table>
 
   <table class="stats-table" style="left: 50%; position: absolute;">

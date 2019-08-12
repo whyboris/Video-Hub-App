@@ -10,6 +10,7 @@ export const globals: Globals = {
   vhaFileVersion: 2,
   winRef: null,
   screenshotSettings: {
+    clipHalfRez: true,         // whether the clip should be etracted at half rezolution of thumbnails!
     clipSnippetLength: 1,      // the length of each snippet in the clip
     clipSnippets: 0,           // the number of video snippets in every clip; 0 == no clip extracted
     fixed: true,               // true => N screenshots per video; false => 1 screenshot every N minutes
@@ -33,6 +34,7 @@ interface Globals {
 }
 
 export interface ScreenshotSettings {
+  clipHalfRez: boolean;
   clipSnippetLength: number;
   clipSnippets: number;        // the number of video snippets in every clip; 0 == no clip extracted
   fixed: boolean;
