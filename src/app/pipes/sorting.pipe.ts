@@ -80,14 +80,17 @@ export class SortingPipe implements PipeTransform {
   /**
    * Return the same array randomized on next search
    * @param galleryArray
-   * @param sortingType - sorting method
+   * @param sortingType         - sorting method
    * @param forceSortUpdateHack - hack to force the sorting update
+   * @param render              - whether to sort or return as is (needed for DUPLICATE SEARCH)
    */
-  transform(galleryArray: ImageElement[], sortingType: SortType, forceSortUpdateHack: number): ImageElement[] {
+  transform(galleryArray: ImageElement[], sortingType: SortType, forceSortUpdateHack: number, render: boolean): ImageElement[] {
 
-    // console.log('SORTING RUNNING'); // ENABLE AND CHECK IF IT RUNS TOO OFTEN !!!
+    // console.log('SORTING RUNNING'); // TODO - ENABLE AND CHECK IF IT RUNS TOO OFTEN !!!
 
-    if (sortingType === 'random') {
+    if (render) {
+      return galleryArray;
+    } else if (sortingType === 'random') {
       let currentIndex = (galleryArray[0].fileName === '*UP*' ? 1 : 0); // skip 'up button' if present
       let temporaryValue;
       let randomIndex;

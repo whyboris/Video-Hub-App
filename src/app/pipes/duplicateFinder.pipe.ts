@@ -28,11 +28,11 @@ export class DuplicateFinderPipe implements PipeTransform {
 
       if (dupeType === 'length') {
 
-        console.log('DUPLICATE FINDER PIPE WORKING');
+        console.log('DUPLICATE by LENGTH');
 
         const duplicateArray: ImageElement[] = [];
 
-        const sortedByLength: ImageElement[] = this.sortingPipe.transform(finalArray, 'timeDesc', 9001);
+        const sortedByLength: ImageElement[] = this.sortingPipe.transform(finalArray, 'timeDesc', 9001, true);
 
         let lengthTracker: number = 0;
 
@@ -40,7 +40,7 @@ export class DuplicateFinderPipe implements PipeTransform {
 
         sortedByLength.forEach((element, idx) => {
 
-          if (Math.abs(lengthTracker - element.duration) < 5) {
+          if (Math.abs(lengthTracker - element.duration) < 1) {
             if (lastIndex !== (idx - 1)) {
               // in case you have 3 identical in a row!
               duplicateArray.push(sortedByLength[idx - 1]);
@@ -56,11 +56,11 @@ export class DuplicateFinderPipe implements PipeTransform {
 
       } else if (dupeType === 'size') {
 
-        console.log('DUPLICATE FINDER PIPE WORKING');
+        console.log('DUPLICATE by SIZE');
 
         const duplicateArray: ImageElement[] = [];
 
-        const sortedBySize: ImageElement[] = this.sortingPipe.transform(finalArray, 'sizeDesc', 9001);
+        const sortedBySize: ImageElement[] = this.sortingPipe.transform(finalArray, 'sizeDesc', 9001, true);
 
         let sizeTracker: number = 0;
 
@@ -68,7 +68,7 @@ export class DuplicateFinderPipe implements PipeTransform {
 
         sortedBySize.forEach((element, idx) => {
 
-          if (Math.abs(sizeTracker - element.fileSize) < 1000) {
+          if (Math.abs(sizeTracker - element.fileSize) < 500) {
             if (lastIndex !== (idx - 1)) {
               // in case you have 3 identical in a row!
               duplicateArray.push(sortedBySize[idx - 1]);
@@ -84,11 +84,11 @@ export class DuplicateFinderPipe implements PipeTransform {
 
       } else if (dupeType === 'hash') {
 
-        console.log('DUPLICATE FINDER PIPE WORKING');
+        console.log('DUPLICATE by HASH');
 
         const duplicateArray: ImageElement[] = [];
 
-        const sortedByHash: ImageElement[] = this.sortingPipe.transform(finalArray, 'hash', 9001);
+        const sortedByHash: ImageElement[] = this.sortingPipe.transform(finalArray, 'hash', 9001, true);
 
         let hashTracker: string = '';
 
@@ -97,6 +97,8 @@ export class DuplicateFinderPipe implements PipeTransform {
         sortedByHash.forEach((element, idx) => {
 
           if (hashTracker === element.hash) {
+            console.log(element.hash);
+            console.log(hashTracker);
             if (lastIndex !== (idx - 1)) {
               // in case you have 3 identical in a row!
               duplicateArray.push(sortedByHash[idx - 1]);

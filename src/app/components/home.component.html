@@ -997,7 +997,9 @@
                                       appState.currentView === 'showClips')
                                   : folderViewNavigationPath
 
-                | sortingPipe: sortType : shuffleTheViewNow"
+                | sortingPipe: sortType : shuffleTheViewNow : !(   settingsButtons['duplicateLength'].toggled
+                                                                || settingsButtons['duplicateSize'].toggled
+                                                                || settingsButtons['duplicateHash'].toggled)"
     >
 
     <!--
