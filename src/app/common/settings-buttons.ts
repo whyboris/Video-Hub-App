@@ -199,6 +199,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     hidden: true,
     iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     title: 'BUTTONS.duplicateHashHint',
+    moreInfo: 'BUTTONS.duplicateHashMoreInfo',
     toggled: false
   },
   'durationFilter': {

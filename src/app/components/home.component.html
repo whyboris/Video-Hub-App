@@ -813,7 +813,16 @@
 
       <!-- SORT ORDER -->
 
-      <div class='sort-filter' *ngIf="settingsButtons['sortOrder'].toggled" @filterItemAppear>
+      <div
+        class='sort-filter'
+        *ngIf="settingsButtons['sortOrder'].toggled"
+        [ngClass]="{
+            'temp-disabled': (   settingsButtons['duplicateLength'].toggled
+                              || settingsButtons['duplicateSize'].toggled
+                              || settingsButtons['duplicateHash'].toggled)
+          }"
+        @filterItemAppear
+      >
         <select
           (change)="selectFilterOrder($event.target.value)"
           #sortFilterElement
@@ -997,9 +1006,9 @@
                                       appState.currentView === 'showClips')
                                   : folderViewNavigationPath
 
-                | sortingPipe: sortType : shuffleTheViewNow : !(   settingsButtons['duplicateLength'].toggled
-                                                                || settingsButtons['duplicateSize'].toggled
-                                                                || settingsButtons['duplicateHash'].toggled)"
+                | sortingPipe: sortType : shuffleTheViewNow : (   settingsButtons['duplicateLength'].toggled
+                                                               || settingsButtons['duplicateSize'].toggled
+                                                               || settingsButtons['duplicateHash'].toggled)"
     >
 
     <!--

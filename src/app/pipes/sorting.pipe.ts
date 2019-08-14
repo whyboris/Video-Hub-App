@@ -82,13 +82,15 @@ export class SortingPipe implements PipeTransform {
    * @param galleryArray
    * @param sortingType         - sorting method
    * @param forceSortUpdateHack - hack to force the sorting update
-   * @param render              - whether to sort or return as is (needed for DUPLICATE SEARCH)
+   * @param skip                - whether to sort or return as is (needed for DUPLICATE SEARCH)
    */
-  transform(galleryArray: ImageElement[], sortingType: SortType, forceSortUpdateHack: number, render: boolean): ImageElement[] {
+  transform(galleryArray: ImageElement[], sortingType: SortType, forceSortUpdateHack: number, skip: boolean): ImageElement[] {
 
-    // console.log('SORTING RUNNING'); // TODO - ENABLE AND CHECK IF IT RUNS TOO OFTEN !!!
+    console.log('SORTING RUNNING'); // TODO - ENABLE AND CHECK IF IT RUNS TOO OFTEN !!!
+    console.log(sortingType);
 
-    if (render) {
+    if (skip) {
+      console.log('skipping !!!');
       return galleryArray;
     } else if (sortingType === 'random') {
       let currentIndex = (galleryArray[0].fileName === '*UP*' ? 1 : 0); // skip 'up button' if present

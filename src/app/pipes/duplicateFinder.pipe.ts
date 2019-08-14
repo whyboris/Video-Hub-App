@@ -32,7 +32,7 @@ export class DuplicateFinderPipe implements PipeTransform {
 
         const duplicateArray: ImageElement[] = [];
 
-        const sortedByLength: ImageElement[] = this.sortingPipe.transform(finalArray, 'timeDesc', 9001, true);
+        const sortedByLength: ImageElement[] = this.sortingPipe.transform(finalArray, 'timeDesc', 9001, false);
 
         let lengthTracker: number = 0;
 
@@ -60,7 +60,7 @@ export class DuplicateFinderPipe implements PipeTransform {
 
         const duplicateArray: ImageElement[] = [];
 
-        const sortedBySize: ImageElement[] = this.sortingPipe.transform(finalArray, 'sizeDesc', 9001, true);
+        const sortedBySize: ImageElement[] = this.sortingPipe.transform(finalArray, 'sizeDesc', 9001, false);
 
         let sizeTracker: number = 0;
 
@@ -88,7 +88,7 @@ export class DuplicateFinderPipe implements PipeTransform {
 
         const duplicateArray: ImageElement[] = [];
 
-        const sortedByHash: ImageElement[] = this.sortingPipe.transform(finalArray, 'hash', 9001, true);
+        const sortedByHash: ImageElement[] = this.sortingPipe.transform(finalArray, 'hash', 9001, false);
 
         let hashTracker: string = '';
 
@@ -97,8 +97,6 @@ export class DuplicateFinderPipe implements PipeTransform {
         sortedByHash.forEach((element, idx) => {
 
           if (hashTracker === element.hash) {
-            console.log(element.hash);
-            console.log(hashTracker);
             if (lastIndex !== (idx - 1)) {
               // in case you have 3 identical in a row!
               duplicateArray.push(sortedByHash[idx - 1]);
