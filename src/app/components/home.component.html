@@ -832,6 +832,12 @@
           <option value="default" selected="selected">
             {{ 'SIDEBAR.sortDefault' | translate }}
           </option>
+          <option *ngIf="settingsButtons['sortOptionAlphabetical'].toggled" value="alphabetAsc">
+            &#x25B2; {{ 'SIDEBAR.sortAlphabetical' | translate }}
+          </option>
+          <option *ngIf="settingsButtons['sortOptionAlphabetical'].toggled" value="alphabetDesc">
+            &#x25BC; {{ 'SIDEBAR.sortAlphabetical' | translate }}
+          </option>
           <option *ngIf="settingsButtons['sortOptionTime'].toggled" value="timeAsc">
             &#x25B2; {{ 'SIDEBAR.sortTime' | translate }}
           </option>
