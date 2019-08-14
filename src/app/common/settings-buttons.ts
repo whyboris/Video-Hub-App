@@ -22,6 +22,7 @@ export const SettingsButtonsGroups: string[][] = [
     'resolutionFilter',
     'starFilter',
     'sortOrder',
+    'sortOptionAlphabetical',
     'sortOptionTime',
     'sortOptionSize',
     'sortOptionTimesPlayed',
@@ -503,6 +504,14 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     title: 'BUTTONS.shuffleGalleryNowHint',
     toggled: false
   },
+  'sortOptionAlphabetical': {
+    description: 'BUTTONS.sortOptionAlphabeticalDescription',
+    hidden: false,
+    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
+    settingsHeading: 'BUTTONS.sortOptionsHeading',
+    title: '',
+    toggled: false
+  },
   'sortOptionModified': {
     description: 'BUTTONS.sortOptionModifiedDescription',
     hidden: false,
@@ -528,7 +537,6 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.sortOptionTimeDescription',
     hidden: false,
     iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
-    settingsHeading: 'BUTTONS.sortOptionsHeading',
     title: '',
     toggled: true
   },

@@ -3,6 +3,8 @@ import { ImageElement, StarRating } from '../common/final-object.interface';
 
 export type SortType = 'default'
                      | 'hash' // only used by the duplicateFinderPipe
+                     | 'alphabetAsc'
+                     | 'alphabetDesc'
                      | 'modifiedAsc'
                      | 'modifiedDesc'
                      | 'random'
@@ -37,6 +39,16 @@ export class SortingPipe implements PipeTransform {
       return -1;
     } else if (y.fileName === '*UP*') {
       return 1;
+    }
+
+    if (property === 'alphabetical') {
+      if (x.fileName < y.fileName) {
+        return decreasing ? -1 : 1;
+      } if (x.fileName > y.fileName) {
+        return decreasing ? 1 : -1;
+      } else {
+        return 0;
+      }
     }
 
     if (property === 'hash') {
@@ -114,6 +126,16 @@ export class SortingPipe implements PipeTransform {
       // console.log('VIEW SHUFFLED');
       return newArray;
 
+    } else if (sortingType === 'alphabetAsc') {
+      const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
+        return this.sortFunctionLol(x, y, 'alphabetical', true);
+      });
+      return sorted.slice(0); // SEND BACK A CLONE - else the view does not update
+    } else if (sortingType === 'alphabetDesc') {
+      const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
+        return this.sortFunctionLol(x, y, 'alphabetical', false);
+      });
+      return sorted.slice(0);
     } else if (sortingType === 'sizeAsc') {
       const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'fileSize', true);
