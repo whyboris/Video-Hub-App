@@ -30,6 +30,9 @@ export const SettingsButtonsGroups: string[][] = [
     'sortOptionModified',
   ],
   [
+    'duplicateLength',
+    'duplicateSize',
+    'duplicateHash',
     'showFreq',
     'extendedWordCloud',
     'showRecent'
@@ -174,6 +177,29 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-darken',
     settingsHeading: 'SETTINGS.darkMode',
     title: 'BUTTONS.darkModeHint',
+    toggled: false
+  },
+  'duplicateLength': {
+    description: 'BUTTONS.duplicateLengthDescription',
+    hidden: true,
+    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
+    settingsHeading: 'SETTINGS.duplicateLength',
+    title: 'BUTTONS.duplicateLengthHint',
+    toggled: false
+  },
+  'duplicateSize': {
+    description: 'BUTTONS.duplicateSizeDescription',
+    hidden: true,
+    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
+    title: 'BUTTONS.duplicateSizeHint',
+    toggled: false
+  },
+  'duplicateHash': {
+    description: 'BUTTONS.duplicateHashDescription',
+    hidden: true,
+    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
+    title: 'BUTTONS.duplicateHashHint',
+    moreInfo: 'BUTTONS.duplicateHashMoreInfo',
     toggled: false
   },
   'durationFilter': {

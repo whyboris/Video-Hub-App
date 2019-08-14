@@ -16,9 +16,8 @@ export class CountPipe implements PipeTransform {
   /**
    * Return only items that match search string
    * @param finalArray
-   * @param itemLimit    {number} Maximum number of items to show in results
    */
-  transform(finalArray: ImageElement[], itemLimit?: number): any {
+  transform(finalArray: ImageElement[]): any {
 
     this.showLimitService.showResults(finalArray.length, finalArray.length);
 

@@ -2,6 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 import { ImageElement, StarRating } from '../common/final-object.interface';
 
 export type SortType = 'default'
+                     | 'hash' // only used by the duplicateFinderPipe
                      | 'modifiedAsc'
                      | 'modifiedDesc'
                      | 'random'
@@ -38,6 +39,16 @@ export class SortingPipe implements PipeTransform {
       return 1;
     }
 
+    if (property === 'hash') {
+      if (x.hash < y.hash) {
+        return -1;
+      } if (x.hash > y.hash) {
+        return 1;
+      } else {
+        return 0;
+      }
+    }
+
     // handle `year` case:   show properties that are not empty first
     if (property === 'year') {
       if (decreasing) {
@@ -69,14 +80,19 @@ export class SortingPipe implements PipeTransform {
   /**
    * Return the same array randomized on next search
    * @param galleryArray
-   * @param sortingType - sorting method
+   * @param sortingType         - sorting method
    * @param forceSortUpdateHack - hack to force the sorting update
+   * @param skip                - whether to sort or return as is (needed for DUPLICATE SEARCH)
    */
-  transform(galleryArray: ImageElement[], sortingType: SortType, forceSortUpdateHack: number): ImageElement[] {
+  transform(galleryArray: ImageElement[], sortingType: SortType, forceSortUpdateHack: number, skip: boolean): ImageElement[] {
 
-    // console.log('SORTING RUNNING'); // ENABLE AND CHECK IF IT RUNS TOO OFTEN !!!
+    console.log('SORTING RUNNING'); // TODO - ENABLE AND CHECK IF IT RUNS TOO OFTEN !!!
+    console.log(sortingType);
 
-    if (sortingType === 'random') {
+    if (skip) {
+      console.log('skipping !!!');
+      return galleryArray;
+    } else if (sortingType === 'random') {
       let currentIndex = (galleryArray[0].fileName === '*UP*' ? 1 : 0); // skip 'up button' if present
       let temporaryValue;
       let randomIndex;
@@ -156,6 +172,11 @@ export class SortingPipe implements PipeTransform {
     } else if (sortingType === 'modifiedDesc') {
       const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'mtime', false);
+      });
+      return sorted.slice(0);
+    } else if (sortingType === 'hash') {
+      const sorted = galleryArray.sort((x: ImageElement, y: ImageElement): any => {
+        return this.sortFunctionLol(x, y, 'hash', true);
       });
       return sorted.slice(0);
     } else {
