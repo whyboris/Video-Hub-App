@@ -259,7 +259,7 @@ function openThisDamnFile(pathToVhaFile: string) {
       // check root folder exists
       if (!fs.existsSync(lastSavedFinalObject.inputDir)) {
         // see if the user wants to change the root folder
-        const result = dialog.showMessageBox({
+        const result = dialog.showMessageBoxSync({
           message: 'Video folder not found:',
           detail: lastSavedFinalObject.inputDir,
           buttons: ['Select Root Folder', 'Continue Anyway', 'Cancel']
