@@ -88,7 +88,9 @@ h3 {
   opacity: 1;
   position: sticky;
   top: 1px;
+  transform: translate(0, -52px);
   transition-duration: 300ms;
+  z-index: 101;
 
   &:hover {
     color: $dark-red;
@@ -379,4 +381,14 @@ input[type="radio"]:checked:before {
   max-height: initial !important;
   max-width: initial  !important;
   padding: 5px        !important;
+}
+
+.all-settings-tabs {
+  background: $gray-10;
+  box-shadow: 0 10px 20px $gray-10;
+  padding: 10px;
+  position: fixed;
+  transform: translate(0, -60px);
+  width: calc(100% - 255px);
+  z-index: 100;
 }
