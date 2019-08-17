@@ -105,6 +105,11 @@ export class SortingPipe implements PipeTransform {
       console.log('skipping !!!');
       return galleryArray;
     } else if (sortingType === 'random') {
+
+      if (galleryArray.length === 0) {
+        return []; // else `galleryArray[0] errors out!
+      }
+
       let currentIndex = (galleryArray[0].fileName === '*UP*' ? 1 : 0); // skip 'up button' if present
       let temporaryValue;
       let randomIndex;

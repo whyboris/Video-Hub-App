@@ -7,8 +7,9 @@ import { Component, Input } from '@angular/core';
 })
 export class DonutComponent {
 
-  @Input() score: number;
   @Input() darkMode: boolean;
+  @Input() percent: number;
+  @Input() timeRemaining: number;
 
   constructor() { }
 

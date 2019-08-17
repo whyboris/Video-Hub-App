@@ -67,3 +67,9 @@ $donut-border-width: 0.5em;
 .progress-circle:not(.over50) .first50-bar{
   display: none;
 }
+
+.time-remaining {
+  font-size: 10px;
+  position: absolute;
+  transform: translate(-31px, 19px);
+}

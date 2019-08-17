@@ -261,6 +261,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   durationOutlierCutoff: number = 0; // for the duration filter to cut off outliers
 
+  // time remaining calculator !!!
+  timeExtractionStarted;
+  timeExtractionRemaining;
+
   // ========================================================================
   // Please add new variables below if they don't fit into any other section
   // ------------------------------------------------------------------------
@@ -442,7 +446,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // }, 3000);
 
     // To test the progress bar
+    // this.importStage = 'importingMeta';
+    // this.importStage = 'importingScreenshots';
+    // this.timeExtractionRemaining = 100;
     // setInterval(() => {
+    //   this.timeExtractionRemaining = this.timeExtractionRemaining - 2;
     //   this.extractionPercent = this.extractionPercent + 8;
     //   if (this.extractionPercent > 99) {
     //     this.extractionPercent = 1;
@@ -567,6 +575,20 @@ export class HomeComponent implements OnInit, AfterViewInit {
       total: number,
       stage: ImportStage
     ) => {
+
+      if (current === 1) {
+        this.timeExtractionStarted = new Date().getTime();
+      }
+
+      if (current > 3) {
+        const thisInstant = new Date().getTime();
+        const timeElapsed = thisInstant - this.timeExtractionStarted;
+        this.timeExtractionRemaining = Math.round((total - current) * (timeElapsed / current) / 1000); // convert MS to seconds
+        if (this.timeExtractionRemaining < 1) {
+          this.timeExtractionRemaining = 0;
+        }
+      }
+
       this.importStage = stage;
       this.progressNum1 = current;
       this.progressNum2 = total;
@@ -691,17 +713,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param galleryItem   item in the gallery over which jpg was dropped
    */
   droppedSomethingOverVideo(event, galleryItem: ImageElement) {
-    const pathToNewJpg: string = event.dataTransfer.files[0].path;
+    const pathToNewImage: string = event.dataTransfer.files[0].path.toLowerCase();
     if (
       (
-          pathToNewJpg.endsWith('.jpg')
-       || pathToNewJpg.endsWith('.jpeg')
-       || pathToNewJpg.endsWith('.png')
+          pathToNewImage.endsWith('.jpg')
+       || pathToNewImage.endsWith('.jpeg')
+       || pathToNewImage.endsWith('.png')
       )
        && galleryItem.cleanName !== '*FOLDER*'
     ) {
       this.electronService.ipcRenderer.send(
-        'replace-thumbnail', pathToNewJpg, galleryItem
+        'replace-thumbnail', pathToNewImage, galleryItem
       );
     }
   }
