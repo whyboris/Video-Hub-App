@@ -285,6 +285,8 @@ export const English = {
     size                   :'size',
     sizeOfScreenshots      :'Height of screenshots',
     sizeToImport           :'mb of disk space',
+    stage                  :'stage',
+    stopImport             :'stop',
     timeToImport           :'minutes to import',
     videoDirectory         :'video directory',
     videos                 :'videos',

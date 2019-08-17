@@ -44,9 +44,14 @@
 
 .progress-numbers {
   color: $gray-40;
-  float: right;
   font-size: 12px;
   margin-top: 10px;
+}
+
+.progress-numbers-center {
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%);
 }
 
 // LAYOUT STYLING
@@ -216,7 +221,6 @@
 }
 
 .screenShotProgressPercent {
-  // border: 1px solid red;
   font-size: 12px;
   position: fixed;
   right: 4px;
@@ -224,13 +228,22 @@
   z-index: 9999;
 }
 
-.cancelProgress {
+.cancel-progress {
+  color: black;
   cursor: pointer;
   font-size: 10px;
   position: fixed;
   right: 42px;
-  top: 36px;
+  top: 32px;
   z-index: 9999;
+
+  &:hover {
+    color: $pretty-red;
+  }
+}
+
+.cancel-progress-dark {
+  color: white;
 
   &:hover {
     color: $pretty-red;

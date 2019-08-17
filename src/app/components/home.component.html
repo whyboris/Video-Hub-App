@@ -61,19 +61,20 @@
     @slowFadeOut
   ></div>
 
-  <div *ngIf="importStage === 'importingScreenshots'" class="cancelProgress" @donutAppear>
+  <div *ngIf="importStage === 'importingScreenshots'" class="cancel-progress" @donutAppear>
     <span
       (click)="cancelCurrentImport()"
-      [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
+      [ngClass]="{ 'cancel-progress-dark': settingsButtons['darkMode'].toggled }"
     >
-      cancel
+      {{ 'WIZARD.stopImport' | translate }}
     </span>
   </div>
 
   <app-donut
     *ngIf="importStage === 'importingScreenshots'"
     class="screenShotProgressPercent"
-    [score]="extractionPercent"
+    [percent]="extractionPercent"
+    [timeRemaining]="timeExtractionRemaining"
     [darkMode]="settingsButtons['darkMode'].toggled"
     @donutAppear
   ></app-donut>
@@ -1315,9 +1316,15 @@
   <div class="progress-container">
     <div class="current-progress" [ngStyle]="{ width: progressPercent * 100 + '%' }"></div>
   </div>
-  <div class="progress-numbers">
+
+  <span class="progress-numbers" style="float: left"> {{ 'WIZARD.stage' | translate }} 1 / 2 </span>
+
+  <div class="progress-numbers progress-numbers-center">
     {{ progressNum1 }} / {{ progressNum2 }}
   </div>
+
+  <span class="progress-numbers" style="float: right">{{ timeExtractionRemaining > 0 ? (timeExtractionRemaining | lengthPipe) : '' }}</span>
+
 </div>
 
 <div [ngClass]="{ 'disabled-overlay': importStage === 'importingMeta' }"></div>
