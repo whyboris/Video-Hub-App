@@ -34,17 +34,14 @@ A list of upcoming features is [listed on the official website](https://videohub
 
 Main dependencies in use:
 
-| Library | Version | Date | Comment |
-| ------- | ------- | ---- | ------- |
-| Angular | v8.1.0  | June 2019 | |
-| Angular-CLI | v8.1.0 | June 2019 | |
-| Electron | v5.0.6 | June 2019 | (internally uses Node v12.0.0 and Chrome 73) |
-| Electron Builder | v20.44.4 | June 2019 | |
+| Library     | Version | Date        | Comment |
+| -------     | ------- | ----        | ------- |
+| Angular     | v8.2.3  | August 2019 |         |
+| Angular-CLI | v8.2.3  | August 2019 |         |
+| Electron    | v6.0.2  | August 2019 | (internally uses Node v12.0.0 and Chrome 73) |
+| Electron Builder | v20.44.4 | June 2019 |     |
 
-Recommended for development:
-
-- Node v12.0.0
-- npm v6.9.0
+App confirmed to work with latest versions of node and npm as of June 2019.
 
 ## Thank you
 
