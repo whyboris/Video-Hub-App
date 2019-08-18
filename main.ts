@@ -8,6 +8,11 @@ import { globals } from './main-globals';
 
 const codeRunningOnMac: boolean = process.platform === 'darwin';
 
+// System messages - import ENGLISH as default
+// on Angular load, we'll receive and replace these with the appropriate translations
+import { English } from './src/app/i18n/en';
+const systemMessages = English.SYSTEM;
+
 // ========================================================================================
 // ***************************** BUILD TOGGLE *********************************************
 // ========================================================================================
@@ -236,7 +241,7 @@ function openThisDamnFile(pathToVhaFile: string) {
   fs.readFile(pathToVhaFile, (err, data) => {
     if (err) {
       dialog.showMessageBox(win, {
-        message: 'No such file found:',
+        message: systemMessages.noSuchFileFound,
         detail: pathToVhaFile,
         buttons: ['OK']
       });
@@ -260,9 +265,9 @@ function openThisDamnFile(pathToVhaFile: string) {
       if (!fs.existsSync(lastSavedFinalObject.inputDir)) {
         // see if the user wants to change the root folder
         dialog.showMessageBox(win, {
-          message: 'Video folder not found:',
+          message: systemMessages.videoFolderNotFound,
           detail: lastSavedFinalObject.inputDir,
-          buttons: ['Select Root Folder', 'Continue Anyway', 'Cancel']
+          buttons: [systemMessages.selectRootFolder, systemMessages.continueAnyway, systemMessages.cancel]
         }).then(result => {
 
           const buttonIndex: number = result.response;
@@ -424,7 +429,7 @@ ipc.on('openThisFileWithFlags', function (event, executablePath, fullFilePath: s
 ipc.on('select-default-video-player', function (event) {
   console.log('asking for default video player');
   dialog.showOpenDialog(win, {
-    title: 'Please select your preferred video player',
+    title: systemMessages.selectDefaultPlayer,
     filters: [{
       name: 'Executable',
       extensions: ['exe', 'app']
@@ -599,9 +604,8 @@ ipc.on('start-the-import', function (event, options: ImportSettingsObject, video
   if (fs.existsSync(path.join(outDir, options.hubName + '.vha2'))) {
 
     dialog.showMessageBox(win, {
-      message: 'Hub already exists with this name.' +
-        '\n' +
-        'Please change the hub name above',
+      message: systemMessages.hubAlreadyExists +
+        '\n' + systemMessages.pleaseChangeName,
       buttons: ['OK']
     });
 
@@ -662,7 +666,7 @@ ipc.on('start-the-import', function (event, options: ImportSettingsObject, video
  */
 ipc.on('system-open-file-through-modal', function (event, somethingElse) {
   dialog.showOpenDialog(win, {
-      title: 'Please select a previously-saved Video Hub file',
+      title: systemMessages.selectPreviousHub,
       filters: [{
         name: 'Video Hub App 2 files',
         extensions: ['vha2']
@@ -903,11 +907,7 @@ function reScanCurrentDirectory(angularFinalArray: ImageElement[], currentVideoF
     );
 
   } else {
-    sendCurrentProgress(1, 1, 'done');
-    dialog.showMessageBox(win, {
-      message: 'Directory ' + currentVideoFolder + ' does not exist',
-      buttons: ['OK']
-    });
+    tellUserDirDoesNotExist(currentVideoFolder);
   }
 }
 
@@ -936,11 +936,7 @@ function importOnlyNewFiles(angularFinalArray: ImageElement[], currentVideoFolde
     );
 
   } else {
-    sendCurrentProgress(1, 1, 'done');
-    dialog.showMessageBox(win, {
-      message: 'Directory ' + currentVideoFolder + ' does not exist',
-      buttons: ['OK']
-    });
+    tellUserDirDoesNotExist(currentVideoFolder);
   }
 }
 
@@ -987,10 +983,18 @@ function regenerateMetadata(angularFinalArray: ImageElement[], currentVideoFolde
     );
 
   } else {
-    sendCurrentProgress(1, 1, 'done');
-    dialog.showMessageBox(win, {
-      message: 'Directory ' + currentVideoFolder + ' does not exist',
-      buttons: ['OK']
-    });
+    tellUserDirDoesNotExist(currentVideoFolder);
   }
+}
+
+/**
+ * Cancel current import progress & tell user directory does not exist!
+ * @param currentVideoFolder
+ */
+function tellUserDirDoesNotExist(currentVideoFolder: string) {
+  sendCurrentProgress(1, 1, 'done');
+  dialog.showMessageBox(win, {
+    message: systemMessages.directory + ' ' + currentVideoFolder + ' ' + systemMessages.doesNotExist,
+    buttons: ['OK']
+  });
 }

@@ -328,5 +328,18 @@ export const English = {
     toggleSearchBar   :'Toggle the search side-bar',
     toggleSettings    :'Toggle settings',
     toggleWizard      :'Toggle the wizard view',
+  },
+  SYSTEM: {
+    noSuchFileFound     :'No such file found:',
+    videoFolderNotFound :'Video folder not found:',
+    selectRootFolder    :'Select Root Folder',
+    continueAnyway      :'Continue Anyway',
+    cancel              :'Cancel',
+    selectDefaultPlayer :'Please select your preferred video player',
+    hubAlreadyExists    :'Hub already exists with this name',
+    pleaseChangeName    :'Please change the hub name above',
+    selectPreviousHub   :'Please select a previously-saved Video Hub file',
+    directory           :'Directory',
+    doesNotExist        :'does not exist',
   }
 };
