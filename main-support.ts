@@ -251,7 +251,7 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
     files.forEach(function (file) {
       if (!fileSystemReserved(file.name)) {
         try {
-          // if the item is a _DIRECTORY_
+          // if the item is a _SYMLINK_ or a _DIRECTORY_
           if (
             (file.isSymbolicLink() || file.isDirectory())
             && !file.name.match(folderIgnoreRegex)
