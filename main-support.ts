@@ -18,7 +18,7 @@ const ffprobePath = require('@ffprobe-installer/ffprobe').path.replace('app.asar
 
 import { acceptableFiles } from './main-filenames';
 import { globals, ScreenshotSettings } from './main-globals';
-import { FinalObject, ImageElement } from './src/app/common/final-object.interface';
+import { FinalObject, ImageElement, NewImageElement } from './src/app/common/final-object.interface';
 import { ResolutionString } from './src/app/pipes/resolution-filter.service';
 
 interface ResolutionMeta {
@@ -263,25 +263,11 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
               // before adding, remove the redundant prefix: sourceFolderPath, and convert forward slashes into back slashes
               const partialPath = dir.replace(sourceFolderPath, '').replace(/\\/g, '/');
               // fil finalArray with 3 correct and 5 dummy pieces of data
-              finalArray[elementIndex] = {
-                cleanName: cleanUpFileName(file.name),
-                duration: 0,
-                durationDisplay: '',
-                fileName: file.name,
-                fileSize: 0,
-                fileSizeDisplay: '',
-                hash: '',
-                height: 0,
-                index: 0,
-                mtime: 0,
-                partialPath: partialPath,
-                resBucket: 0,
-                resolution: '',
-                screens: 10, // hardcoded default
-                stars: 0.5,
-                timesPlayed: 0,
-                width: 0,
-              };
+              finalArray[elementIndex] = NewImageElement();
+              finalArray[elementIndex].cleanName = cleanUpFileName(file.name);
+              finalArray[elementIndex].fileName = file.name;
+              finalArray[elementIndex].partialPath = partialPath;
+
               elementIndex++;
             }
           }
