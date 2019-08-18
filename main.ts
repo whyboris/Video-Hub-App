@@ -50,7 +50,7 @@ if (!gotTheLock) {
 
   app.on('second-instance', (event, argv: string[], workingDirectory: string) => {
 
-    // dialog.showMessageBox({
+    // dialog.showMessageBoxSync({
     //   message: 'second-instance: \n' + argv[0] + ' \n' + argv[1],
     //   buttons: ['OK']
     // });
@@ -235,7 +235,7 @@ function openThisDamnFile(pathToVhaFile: string) {
 
   fs.readFile(pathToVhaFile, (err, data) => {
     if (err) {
-      dialog.showMessageBox({
+      dialog.showMessageBoxSync({
         message: 'No such file found:',
         detail: pathToVhaFile,
         buttons: ['OK']
@@ -264,31 +264,44 @@ function openThisDamnFile(pathToVhaFile: string) {
           detail: lastSavedFinalObject.inputDir,
           buttons: ['Select Root Folder', 'Continue Anyway', 'Cancel']
         });
+
+        // Select Root Folder
         if (result === 0) {
           // select the new root folder
-          const files = dialog.showOpenDialog({
+          dialog.showOpenDialog(win, {
             properties: ['openDirectory']
+          }).then(result0 => {
+            const inputDirPath: string = result0.filePaths[0];
+
+            if (inputDirPath) {
+              // update the root folder
+              lastSavedFinalObject.inputDir = inputDirPath;
+              changedRootFolder = true;
+            } else {
+              // show the wizard instead
+              lastSavedFinalObject = null;
+              globals.angularApp.sender.send('pleaseOpenWizard');
+              return;
+            }
+
+          }).catch(err0 => {
+            console.log('open VHA file: this should not happen');
+            console.log(err0);
           });
-          if (files) {
-            // update the root folder
-            const inputDirPath: string = files[0];
-            lastSavedFinalObject.inputDir = inputDirPath;
-            changedRootFolder = true;
-          } else {
-            // show the wizard instead
-            lastSavedFinalObject = null;
-            globals.angularApp.sender.send('pleaseOpenWizard');
-            return;
-          }
+
+        // Continue Anyway
         } else if (result === 2) {
           // show the wizard instead
           lastSavedFinalObject = null;
           globals.angularApp.sender.send('pleaseOpenWizard');
           return;
+
+        // Cancel
         } else if (result === 1) {
           console.log('PROCEED ANYWAY');
           rootFolderLive = false;
         }
+
       }
 
       setGlobalsFromVhaFile(lastSavedFinalObject); // sets source folder ETC
@@ -402,18 +415,21 @@ ipc.on('openThisFileWithFlags', function (event, executablePath, fullFilePath: s
 
 ipc.on('select-default-video-player', function (event) {
   console.log('asking for default video player');
-  dialog.showOpenDialog({
+  dialog.showOpenDialog(win, {
     title: 'Please select your preferred video player',
     filters: [{
       name: 'Executable',
       extensions: ['exe', 'app']
     }],
     properties: ['openFile']
-  }, function (files) {
-    if (files) {
-      const executablePath: string = files[0];
+  }).then(result => {
+    const executablePath: string = result.filePaths[0];
+    if (executablePath) {
       event.sender.send('preferred-video-player-returning', executablePath);
     }
+  }).catch(err => {
+    console.log('select default video player: this should not happen!');
+    console.log(err);
   });
 });
 
@@ -485,13 +501,16 @@ ipc.on('minimize-window', function (event, someMessage) {
  * where all the videos are located
  */
 ipc.on('choose-input', function (event, someMessage) {
-  dialog.showOpenDialog({
+  dialog.showOpenDialog(win, {
     properties: ['openDirectory']
-  }, function (files) {
-    if (files) {
-      const inputDirPath: string = files[0];
+  }).then(result => {
+    const inputDirPath: string = result.filePaths[0];
+    if (inputDirPath) {
       event.sender.send('inputFolderChosen', inputDirPath, getVideoPathsAndNames(inputDirPath));
     }
+  }).catch(err => {
+    console.log('choose-input: this should not happen!');
+    console.log(err);
   });
 });
 
@@ -500,13 +519,16 @@ ipc.on('choose-input', function (event, someMessage) {
  * where the final .vha file, vha-folder, and all screenshots will be saved
  */
 ipc.on('choose-output', function (event, someMessage) {
-  dialog.showOpenDialog({
+  dialog.showOpenDialog(win, {
     properties: ['openDirectory']
-  }, function (files) {
-    if (files) {
-      const outputDirPath = files[0];
+  }).then(result => {
+    const outputDirPath: string = result.filePaths[0];
+    if (outputDirPath) {
       event.sender.send('outputFolderChosen', outputDirPath);
     }
+  }).catch(err => {
+    console.log('choose-output: this should not happen!');
+    console.log(err);
   });
 });
 
@@ -568,7 +590,7 @@ ipc.on('start-the-import', function (event, options: ImportSettingsObject, video
   // make sure no hub name under the same name exists
   if (fs.existsSync(path.join(outDir, options.hubName + '.vha2'))) {
 
-    dialog.showMessageBox({
+    dialog.showMessageBoxSync({
       message: 'Hub already exists with this name. \n' +
         'Please change the hub name above',
       buttons: ['OK']
@@ -630,21 +652,26 @@ ipc.on('start-the-import', function (event, options: ImportSettingsObject, video
  * send settings object to App
  */
 ipc.on('system-open-file-through-modal', function (event, somethingElse) {
-  dialog.showOpenDialog({
+  dialog.showOpenDialog(win, {
       title: 'Please select a previously-saved Video Hub file',
       filters: [{
-        name: 'Video Hub files',
+        name: 'Video Hub App 2 files',
         extensions: ['vha2']
       }],
       properties: ['openFile']
-    }, function (files) {
-      if (files) {
-        // console.log('the user has chosen this previously-saved .vha file: ' + files[0]);
-        // TODO: maybe check if file ends in .vha before parsing !?!!
-        // TODO: fix up this stupid pattern of overriding method with variable !!!
-        userWantedToOpen = files[0];
-        openThisDamnFile(files[0]);
+    }).then(result => {
+      const chosenFile: string = result.filePaths[0];
+
+      if (chosenFile) {
+        // console.log('the user has chosen this previously-saved .vha file: ' + chosenFile);
+        // TODO: maybe check if file ends in .vha2 before parsing !?!!
+        // TODO: fix up this stupid pattern of overriding method with variable ?
+        userWantedToOpen = chosenFile;
+        openThisDamnFile(chosenFile);
       }
+    }).catch(err => {
+      console.log('system open file through modal: this should not happen');
+      console.log(err);
     });
 });
 
@@ -868,7 +895,7 @@ function reScanCurrentDirectory(angularFinalArray: ImageElement[], currentVideoF
 
   } else {
     sendCurrentProgress(1, 1, 'done');
-    dialog.showMessageBox({
+    dialog.showMessageBoxSync({
       message: 'Directory ' + currentVideoFolder + ' does not exist',
       buttons: ['OK']
     });
@@ -901,7 +928,7 @@ function importOnlyNewFiles(angularFinalArray: ImageElement[], currentVideoFolde
 
   } else {
     sendCurrentProgress(1, 1, 'done');
-    dialog.showMessageBox({
+    dialog.showMessageBoxSync({
       message: 'Directory ' + currentVideoFolder + ' does not exist',
       buttons: ['OK']
     });
@@ -952,7 +979,7 @@ function regenerateMetadata(angularFinalArray: ImageElement[], currentVideoFolde
 
   } else {
     sendCurrentProgress(1, 1, 'done');
-    dialog.showMessageBox({
+    dialog.showMessageBoxSync({
       message: 'Directory ' + currentVideoFolder + ' does not exist',
       buttons: ['OK']
     });
