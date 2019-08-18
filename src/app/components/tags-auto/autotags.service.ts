@@ -9,8 +9,8 @@ export interface WordAndFreq {
   freq: number;
 }
 
-// Strip out: {}()[] as well as 'for', 'her', 'the', 'and', '-', & ','
-export const autoFileTagsRegex = /{|}|\(|\)|\[|\]|\b(for|her|the|and)\b|,|-/gi;
+// Strip out: {}()[] as well as 'for', 'her', 'the', 'him', 'and', '-', & ','
+export const autoFileTagsRegex = /{|}|\(|\)|\[|\]|\b(for|her|the|him|and)\b|,|-/gi;
 
 @Injectable()
 export class AutoTagsService {
