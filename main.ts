@@ -10,8 +10,9 @@ const codeRunningOnMac: boolean = process.platform === 'darwin';
 
 // System messages - import ENGLISH as default
 // on Angular load, we'll receive and replace these with the appropriate translations
+// translations received via `system-messages-updated`
 import { English } from './src/app/i18n/en';
-const systemMessages = English.SYSTEM;
+let systemMessages = English.SYSTEM;
 
 // ========================================================================================
 // ***************************** BUILD TOGGLE *********************************************
@@ -591,6 +592,11 @@ function tellElectronDarkModeChange(mode: string) {
  */
 ipc.on('cancel-current-import', function(event): void {
   globals.cancelCurrentImport = true;
+});
+
+ipc.on('system-messages-updated', function(event, newSystemMessages): void {
+  console.log('new translated system messages recieved !!!');
+  systemMessages = newSystemMessages;
 });
 
 /**

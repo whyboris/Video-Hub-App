@@ -1902,6 +1902,26 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.appState.language = 'en';
         break;
     }
+
+    this.updateSystemMessages();
+  }
+
+  /**
+   * Update the systemMessages `main.ts`
+   * so that ... i18n everywhere!
+   */
+  updateSystemMessages() {
+    const newMessages = {};
+
+    for (const key in English.SYSTEM) {
+      if (English.SYSTEM[key]) {
+        newMessages[key] = this.translate.instant('SYSTEM.' + key);
+      }
+    }
+
+    this.electronService.ipcRenderer.send(
+      'system-messages-updated', newMessages
+    );
   }
 
   /**

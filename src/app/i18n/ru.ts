@@ -206,5 +206,14 @@ export const Russian = {
     toggleSettings: 'Переключить настройки',
     toggleViewMeta: 'Переключить просмотр имени файла, разрешения и длины',
     toggleWizard: 'Переключить вид мастера',
+  },
+  SYSTEM: {
+    cancel              :'Показать FAKE TRANSLATION FOR TESTING',
+    continueAnyway      :'Показать FAKE TRANSLATION FOR TESTING',
+    directory           :'Показать FAKE TRANSLATION FOR TESTING',
+    doesNotExist        :'Показать FAKE TRANSLATION FOR TESTING',
+    selectPreviousHub   :'Показать FAKE TRANSLATION FOR TESTING',
+    selectRootFolder    :'Показать FAKE TRANSLATION FOR TESTING',
+    videoFolderNotFound :'Показать FAKE TRANSLATION FOR TESTING',
   }
 };
