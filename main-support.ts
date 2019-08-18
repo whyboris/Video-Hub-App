@@ -252,7 +252,10 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
       if (!fileSystemReserved(file.name)) {
         try {
           // if the item is a _DIRECTORY_
-          if (file.isDirectory() && !file.name.match(folderIgnoreRegex)) {
+          if (
+            (file.isSymbolicLink() || file.isDirectory())
+            && !file.name.match(folderIgnoreRegex)
+          ) {
             filelist = walkSync(path.join(dir, file.name), filelist);
           } else {
             const extension = file.name.split('.').pop();
