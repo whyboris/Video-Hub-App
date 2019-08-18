@@ -50,7 +50,7 @@ if (!gotTheLock) {
 
   app.on('second-instance', (event, argv: string[], workingDirectory: string) => {
 
-    // dialog.showMessageBoxSync({
+    // dialog.showMessageBox(win, {
     //   message: 'second-instance: \n' + argv[0] + ' \n' + argv[1],
     //   buttons: ['OK']
     // });
@@ -235,7 +235,7 @@ function openThisDamnFile(pathToVhaFile: string) {
 
   fs.readFile(pathToVhaFile, (err, data) => {
     if (err) {
-      dialog.showMessageBoxSync({
+      dialog.showMessageBox(win, {
         message: 'No such file found:',
         detail: pathToVhaFile,
         buttons: ['OK']
@@ -259,48 +259,56 @@ function openThisDamnFile(pathToVhaFile: string) {
       // check root folder exists
       if (!fs.existsSync(lastSavedFinalObject.inputDir)) {
         // see if the user wants to change the root folder
-        const result = dialog.showMessageBoxSync({
+        dialog.showMessageBox(win, {
           message: 'Video folder not found:',
           detail: lastSavedFinalObject.inputDir,
           buttons: ['Select Root Folder', 'Continue Anyway', 'Cancel']
+        }).then(result => {
+
+          const buttonIndex: number = result.response;
+
+          // Select Root Folder
+          if (buttonIndex === 0) {
+            // select the new root folder
+            dialog.showOpenDialog(win, {
+              properties: ['openDirectory']
+            }).then(result0 => {
+              const inputDirPath: string = result0.filePaths[0];
+
+              if (inputDirPath) {
+                // update the root folder
+                lastSavedFinalObject.inputDir = inputDirPath;
+                changedRootFolder = true;
+              } else {
+                // show the wizard instead
+                lastSavedFinalObject = null;
+                globals.angularApp.sender.send('pleaseOpenWizard');
+                return;
+              }
+
+            }).catch(err0 => {
+              console.log('open VHA file: this should not happen');
+              console.log(err0);
+            });
+
+          // Continue Anyway
+          } else if (buttonIndex === 2) {
+            // show the wizard instead
+            lastSavedFinalObject = null;
+            globals.angularApp.sender.send('pleaseOpenWizard');
+            return;
+
+          // Cancel
+          } else if (buttonIndex === 1) {
+            console.log('PROCEED ANYWAY');
+            rootFolderLive = false;
+          }
+
+
+        }).catch(err2 => {
+          console.log('openThisDamnFile: this should not happen!');
+          console.log(err2);
         });
-
-        // Select Root Folder
-        if (result === 0) {
-          // select the new root folder
-          dialog.showOpenDialog(win, {
-            properties: ['openDirectory']
-          }).then(result0 => {
-            const inputDirPath: string = result0.filePaths[0];
-
-            if (inputDirPath) {
-              // update the root folder
-              lastSavedFinalObject.inputDir = inputDirPath;
-              changedRootFolder = true;
-            } else {
-              // show the wizard instead
-              lastSavedFinalObject = null;
-              globals.angularApp.sender.send('pleaseOpenWizard');
-              return;
-            }
-
-          }).catch(err0 => {
-            console.log('open VHA file: this should not happen');
-            console.log(err0);
-          });
-
-        // Continue Anyway
-        } else if (result === 2) {
-          // show the wizard instead
-          lastSavedFinalObject = null;
-          globals.angularApp.sender.send('pleaseOpenWizard');
-          return;
-
-        // Cancel
-        } else if (result === 1) {
-          console.log('PROCEED ANYWAY');
-          rootFolderLive = false;
-        }
 
       }
 
@@ -590,8 +598,9 @@ ipc.on('start-the-import', function (event, options: ImportSettingsObject, video
   // make sure no hub name under the same name exists
   if (fs.existsSync(path.join(outDir, options.hubName + '.vha2'))) {
 
-    dialog.showMessageBoxSync({
-      message: 'Hub already exists with this name. \n' +
+    dialog.showMessageBox(win, {
+      message: 'Hub already exists with this name.' +
+        '\n' +
         'Please change the hub name above',
       buttons: ['OK']
     });
@@ -895,7 +904,7 @@ function reScanCurrentDirectory(angularFinalArray: ImageElement[], currentVideoF
 
   } else {
     sendCurrentProgress(1, 1, 'done');
-    dialog.showMessageBoxSync({
+    dialog.showMessageBox(win, {
       message: 'Directory ' + currentVideoFolder + ' does not exist',
       buttons: ['OK']
     });
@@ -928,7 +937,7 @@ function importOnlyNewFiles(angularFinalArray: ImageElement[], currentVideoFolde
 
   } else {
     sendCurrentProgress(1, 1, 'done');
-    dialog.showMessageBoxSync({
+    dialog.showMessageBox(win, {
       message: 'Directory ' + currentVideoFolder + ' does not exist',
       buttons: ['OK']
     });
@@ -979,7 +988,7 @@ function regenerateMetadata(angularFinalArray: ImageElement[], currentVideoFolde
 
   } else {
     sendCurrentProgress(1, 1, 'done');
-    dialog.showMessageBoxSync({
+    dialog.showMessageBox(win, {
       message: 'Directory ' + currentVideoFolder + ' does not exist',
       buttons: ['OK']
     });

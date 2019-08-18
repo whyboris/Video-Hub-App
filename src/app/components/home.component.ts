@@ -533,6 +533,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // Happens if a file with the same hub name already exists in the directory
     this.electronService.ipcRenderer.on('pleaseFixHubName', (event) => {
       this.importStage = 'done';
+      this.cd.detectChanges();
     });
 
     // happens when user replaced a thumbnail and process is done
