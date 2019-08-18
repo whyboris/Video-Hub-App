@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
 
+import { autoFileTagsRegex } from '../components/tags-auto/autotags.service';
+
 interface WordFreqAndHeight {
   word: string;
   freq: number;
@@ -30,9 +32,7 @@ export class WordFrequencyService {
    * @param filename
    */
   public addString(filename: string): void {
-    // Strip out: {}()[] as well as 'for', 'her', 'the', 'and', & ','
-    const regex = /{|}|\(|\)|\[|\]|\b(for|her|the|and)\b|,/gi;
-    filename = filename.replace(regex, '');
+    filename = filename.replace(autoFileTagsRegex, '');
     const wordArray = filename.split(' ');
     wordArray.forEach(word => {
       if (!(word.length < 3)) {

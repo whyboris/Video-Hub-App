@@ -18,7 +18,7 @@ const ffprobePath = require('@ffprobe-installer/ffprobe').path.replace('app.asar
 
 import { acceptableFiles } from './main-filenames';
 import { globals, ScreenshotSettings } from './main-globals';
-import { FinalObject, ImageElement } from './src/app/common/final-object.interface';
+import { FinalObject, ImageElement, NewImageElement } from './src/app/common/final-object.interface';
 import { ResolutionString } from './src/app/pipes/resolution-filter.service';
 
 interface ResolutionMeta {
@@ -251,8 +251,11 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
     files.forEach(function (file) {
       if (!fileSystemReserved(file.name)) {
         try {
-          // if the item is a _DIRECTORY_
-          if (file.isDirectory() && !file.name.match(folderIgnoreRegex)) {
+          // if the item is a _SYMLINK_ or a _DIRECTORY_
+          if (
+            (file.isSymbolicLink() || file.isDirectory())
+            && !file.name.match(folderIgnoreRegex)
+          ) {
             filelist = walkSync(path.join(dir, file.name), filelist);
           } else {
             const extension = file.name.split('.').pop();
@@ -260,25 +263,11 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
               // before adding, remove the redundant prefix: sourceFolderPath, and convert forward slashes into back slashes
               const partialPath = dir.replace(sourceFolderPath, '').replace(/\\/g, '/');
               // fil finalArray with 3 correct and 5 dummy pieces of data
-              finalArray[elementIndex] = {
-                cleanName: cleanUpFileName(file.name),
-                duration: 0,
-                durationDisplay: '',
-                fileName: file.name,
-                fileSize: 0,
-                fileSizeDisplay: '',
-                hash: '',
-                height: 0,
-                index: 0,
-                mtime: 0,
-                partialPath: partialPath,
-                resBucket: 0,
-                resolution: '',
-                screens: 10, // hardcoded default
-                stars: 0.5,
-                timesPlayed: 0,
-                width: 0,
-              };
+              finalArray[elementIndex] = NewImageElement();
+              finalArray[elementIndex].cleanName = cleanUpFileName(file.name);
+              finalArray[elementIndex].fileName = file.name;
+              finalArray[elementIndex].partialPath = partialPath;
+
               elementIndex++;
             }
           }
@@ -507,22 +496,4 @@ export function sendCurrentProgress(current: number, total: number, stage: Impor
   } else {
     globals.winRef.setProgressBar(-1);
   }
-}
-
-// ===========================================================================================
-// UNUSED !!!!!!?!!!!!!
-// ===========================================================================================
-
-/**
- * Generate indexes for each element in finalArray, e.g.
- * [0, 1, 2, 3, ..., n] where n = finalArray.length
- */
-export function everyIndex(fullArray: ImageElement[]): number[] {
-  const indexes: number[] = [];
-  const total: number = fullArray.length;
-  for (let i = 0; i < total; i++) {
-    indexes.push(i);
-  }
-
-  return indexes;
 }
