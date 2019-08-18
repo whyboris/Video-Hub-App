@@ -1,8 +1,9 @@
-import { Component, ChangeDetectorRef, OnInit, HostListener, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 
 import { TranslateService } from '@ngx-translate/core';
 import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
 
+// Services
 import { AutoTagsSaveService } from './tags-auto/tags-save.service';
 import { ElectronService } from '../providers/electron.service';
 import { ManualTagsService } from './tags-manual/manual-tags.service';
@@ -11,6 +12,7 @@ import { ShowLimitService } from '../pipes/show-limit.service';
 import { StarFilterService } from '../pipes/star-filter.service';
 import { WordFrequencyService } from '../pipes/word-frequency.service';
 
+// Interfaces
 import { FinalObject, ImageElement } from '../common/final-object.interface';
 import { HistoryItem } from '../common/history-item.interface';
 import { ImportSettingsObject } from '../common/import.interface';
@@ -21,17 +23,19 @@ import { SortType } from '../pipes/sorting.pipe';
 import { TagEmission, StarEmission, YearEmission } from './views/details/details.component';
 import { WizardOptions } from '../common/wizard-options.interface';
 
+// Constants, etc
 import { AppState, SupportedLanguage, defaultImgsPerRow, RowNumbers, allSupportedViews, SupportedView } from '../common/app-state';
 import { Filters, filterKeyToIndex, FilterKeyNames } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, SettingsMetaGroup } from '../common/settings-buttons';
+import { globals, ScreenshotSettings } from '../../../main-globals';
 
+// Languages
 import { English } from '../i18n/en';
 import { French } from '../i18n/fr';
 import { Russian } from '../i18n/ru';
 import { BrazilianPortuguese } from '../i18n/pt_br';
 
-import { globals, ScreenshotSettings } from '../../../main-globals';
-
+// Animations
 import {
   breadcrumbWordAppear,
   breadcrumbsAppear,
