@@ -508,21 +508,3 @@ export function sendCurrentProgress(current: number, total: number, stage: Impor
     globals.winRef.setProgressBar(-1);
   }
 }
-
-// ===========================================================================================
-// UNUSED !!!!!!?!!!!!!
-// ===========================================================================================
-
-/**
- * Generate indexes for each element in finalArray, e.g.
- * [0, 1, 2, 3, ..., n] where n = finalArray.length
- */
-export function everyIndex(fullArray: ImageElement[]): number[] {
-  const indexes: number[] = [];
-  const total: number = fullArray.length;
-  for (let i = 0; i < total; i++) {
-    indexes.push(i);
-  }
-
-  return indexes;
-}
