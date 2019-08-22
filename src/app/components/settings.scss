@@ -92,6 +92,13 @@ h3 {
   }
 }
 
+.close-settings-fade-out-override {
+  position: absolute;
+  right: 4px;
+  top: 7px;
+  transform: none;
+}
+
 .gearButtonActive {
   color: $gray-60;
   transform: rotate(180deg);
@@ -264,6 +271,18 @@ input[type="radio"]:checked:before {
 
 .dim-row {
   opacity: 0.5;
+}
+
+.modal-fade-out {
+  background: linear-gradient($gray-10, $gray-10, transparent);
+  display: block;
+  height: 50px;
+  margin-bottom: -50px;
+  position: sticky;
+  top: 0;
+  transform: translate(0, -20px);
+  width: 100%;
+  z-index: 2;
 }
 
 .more-info {
