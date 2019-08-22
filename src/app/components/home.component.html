@@ -166,7 +166,7 @@
   <div
     (click)="closeRename()"
     [ngClass]="{ closeRenameDark: settingsButtons['darkMode'].toggled }"
-    class="closeSettings closeRename"
+    class="close-settings closeRename"
     title="{{ 'RIGHTCLICK.cancelRename' | translate }}"
   >
     <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
@@ -220,7 +220,7 @@
       {{ 'RIGHTCLICK.renameButton' | translate }}
     </button>
 
-</div>
+  </div>
 
   <div
     *ngIf="settingsButtons['showTags'].toggled"
@@ -229,7 +229,7 @@
   >
     <div
       (click)="toggleButton('showTags')"
-      class="closeSettings"
+      class="close-settings"
       title="{{ 'SETTINGS.closeSettings' | translate }}"
     >
       <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
@@ -245,6 +245,30 @@
   <!-- ===========   SETTINGS / OPTIONS MODAL   =========== -->
   <!-- ==================================================== -->
 
+
+
+  <div
+    *ngIf="settingsModalOpen"
+    class="all-settings-tabs"
+    @modalAnimation
+  >
+    <button (click)="showSettingsGroup(0)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 0 }">
+      {{ 'SETTINGS.tabFilter' | translate }}
+    </button>
+    <button (click)="showSettingsGroup(1)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 1 }">
+      {{ 'SETTINGS.tabView' | translate }}
+    </button>
+    <button (click)="showSettingsGroup(2)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 2 }">
+      {{ 'SETTINGS.tabMain' | translate }}
+    </button>
+    <button (click)="showSettingsGroup(3)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 3 }">
+      {{ 'SETTINGS.tabShortcuts' | translate }}
+    </button>
+    <button (click)="showSettingsGroup(4)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 4 }">
+      {{ 'SETTINGS.statistics' | translate }}
+    </button>
+  </div>
+
   <div
     *ngIf="settingsModalOpen"
     class="settings-modal"
@@ -253,29 +277,10 @@
 
     <div
       (click)="toggleSettings()"
-      class="closeSettings"
+      class="close-settings"
       title="{{ 'SETTINGS.closeSettings' | translate }}"
     >
       <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
-    </div>
-
-    <div class="all-settings-tabs">
-      <button (click)="showSettingsGroup(0)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 0 }">
-        {{ 'SETTINGS.tabFilter' | translate }}
-      </button>
-      <button (click)="showSettingsGroup(1)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 1 }">
-        {{ 'SETTINGS.tabView' | translate }}
-      </button>
-      <button (click)="showSettingsGroup(2)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 2 }">
-        {{ 'SETTINGS.tabMain' | translate }}
-      </button>
-      <button (click)="showSettingsGroup(3)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 3 }">
-        {{ 'SETTINGS.tabShortcuts' | translate }}
-      </button>
-      <button (click)="showSettingsGroup(4)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 4 }">
-        {{ 'SETTINGS.statistics' | translate }}
-      </button>
-      <div class="meta-group-divider"></div>
     </div>
 
     <div [id]=i *ngFor="let group of settingsMetaGroup; index as i">

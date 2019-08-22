@@ -15,12 +15,6 @@ $transition-length: 300ms;
   transition-property: text-shadow background-color;
 }
 
-.meta-group-divider {
-  border-bottom: 1px solid gray;
-  position: relative;
-  z-index: 1;
-}
-
 .meta-group-selected {
   background-color: $gray-10;
   border-bottom: 1px solid $gray-10;
@@ -81,14 +75,14 @@ h3 {
   }
 }
 
-.closeSettings {
+.close-settings {
   cursor: pointer;
   float: right;
   margin-right: 3px;
   opacity: 1;
   position: sticky;
   top: 1px;
-  transform: translate(0, -52px);
+  transform: translate(0, -11px);
   transition-duration: 300ms;
   z-index: 101;
 
@@ -384,11 +378,9 @@ input[type="radio"]:checked:before {
 }
 
 .all-settings-tabs {
-  background: $gray-10;
-  box-shadow: 0 10px 20px $gray-10;
-  padding: 10px;
+  left: 210px;
   position: fixed;
-  transform: translate(0, -60px);
+  top: 159px;
   width: calc(100% - 255px);
-  z-index: 100;
+  z-index: 501;
 }
