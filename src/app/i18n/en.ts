@@ -63,7 +63,7 @@ export const English = {
     muteClipsDescription               :'Mute all sound',
     muteClipsHint                      :'Mute all sound',
     openAtTimestampDescription         :'Open file at particular time rather than from beginning in Thumbnails view',
-    openAtTimestampMoreInfo            :'Requires you manually set the default video player below. Works on Windows with VLC, MPC, and POT players only; on Mac only with LVC',
+    openAtTimestampMoreInfo            :'Requires you manually set the default video player below. Works on Windows with VLC, MPC, and POT players only; on Mac only with VLC',
     openAtTimestampHint                :'Open file at timestamp',
     regenerateLibraryDescription       :'Regenerate all library metadata, except thumbnails and user entered metadata',
     regenerateLibraryHint              :'Regenerate library',
