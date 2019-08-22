@@ -23,6 +23,7 @@ export interface StarEmission {
   selector: 'app-thumbnail-sheet',
   templateUrl: './sheet.component.html',
   styleUrls: [ './../buttons.scss',
+               './../views/time-and-rez.scss',
                './sheet.component.scss' ],
   animations: [ modalAnimation,
                 textAppear,
