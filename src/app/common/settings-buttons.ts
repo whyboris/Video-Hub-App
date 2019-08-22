@@ -508,6 +508,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.sortOptionAlphabeticalDescription',
     hidden: false,
     iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
+    moreInfo: 'BUTTONS.sortOptionAlphabeticalMoreInfo',
     settingsHeading: 'BUTTONS.sortOptionsHeading',
     title: '',
     toggled: false
@@ -516,36 +517,41 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.sortOptionModifiedDescription',
     hidden: false,
     iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
+    moreInfo: 'BUTTONS.sortOptionModifiedMoreInfo',
     title: '',
-    toggled: false
+    toggled: false,
   },
   'sortOptionSize': {
     description: 'BUTTONS.sortOptionSizeDescription',
     hidden: false,
     iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
+    moreInfo: 'BUTTONS.sortOptionSizeMoreInfo',
     title: '',
-    toggled: true
+    toggled: true,
   },
   'sortOptionStar': {
     description: 'BUTTONS.sortOptionStarDescription',
     hidden: false,
     iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
+    moreInfo: 'BUTTONS.sortOptionStarMoreInfo',
     title: '',
-    toggled: false
+    toggled: false,
   },
   'sortOptionTime': {
     description: 'BUTTONS.sortOptionTimeDescription',
     hidden: false,
     iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
+    moreInfo: 'BUTTONS.sortOptionTimeMoreInfo',
     title: '',
-    toggled: true
+    toggled: true,
   },
   'sortOptionTimesPlayed': {
     description: 'BUTTONS.sortOptionTimesPlayedDescription',
     hidden: false,
     iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
+    moreInfo: 'BUTTONS.sortOptionTimesPlayedMoreInfo',
     title: '',
-    toggled: false
+    toggled: false,
   },
   'sortOptionYear': {
     description: 'BUTTONS.sortOptionYearDescription',
