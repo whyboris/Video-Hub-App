@@ -184,6 +184,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.duplicateLengthDescription',
     hidden: true,
     iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
+    moreInfo: 'BUTTONS.duplicateLengthMoreInfo',
     settingsHeading: 'SETTINGS.duplicateLength',
     title: 'BUTTONS.duplicateLengthHint',
     toggled: false
@@ -192,6 +193,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.duplicateSizeDescription',
     hidden: true,
     iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
+    moreInfo: 'BUTTONS.duplicateSizeMoreInfo',
     title: 'BUTTONS.duplicateSizeHint',
     toggled: false
   },
@@ -207,12 +209,14 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.durationFilterDescription',
     hidden: false,
     iconName: 'icon-hourglass',
+    moreInfo: 'BUTTONS.durationFilterMoreInfo',
     settingsHeading: 'SETTINGS.sortingFilters',
     title: 'BUTTONS.durationFilterHint',
     toggled: false
   },
   'exclude': {
     description: 'BUTTONS.excludeDescription',
+    moreInfo: 'BUTTONS.excludeMoreInfo',
     hidden: true,
     iconName: 'icon-video-x',
     title: 'BUTTONS.excludeHint',
@@ -227,6 +231,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'fileIntersection': {
     description: 'BUTTONS.fileDescription',
+    moreInfo: 'BUTTONS.fileMoreInfo',
     hidden: false,
     iconName: 'icon-video-minus',
     title: 'BUTTONS.fileHint',
@@ -234,6 +239,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'fileUnion': {
     description: 'BUTTONS.fileUnionDescription',
+    moreInfo: 'BUTTONS.fileUnionMoreInfo',
     hidden: true,
     iconName: 'icon-video-plus',
     title: 'BUTTONS.fileUnionHint',
@@ -249,6 +255,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'folderIntersection': {
     description: 'BUTTONS.folderDescription',
+    moreInfo: 'BUTTONS.folderMoreInfo',
     hidden: false,
     iconName: 'icon-folder-minus',
     title: 'BUTTONS.folderHint',
@@ -256,6 +263,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'folderUnion': {
     description: 'BUTTONS.folderUnionDescription',
+    moreInfo: 'BUTTONS.folderUnionMoreInfo',
     hidden: true,
     iconName: 'icon-folder-plus',
     settingsHeading: 'SETTINGS.searchFilters',
@@ -383,6 +391,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.resolutionFilterDescription',
     hidden: false,
     iconName: 'icon-res-filter',
+    moreInfo: 'BUTTONS.resolutionFilterMoreInfo',
     title: 'BUTTONS.resolutionFilterHint',
     toggled: false
   },
@@ -565,6 +574,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.sortOrderDescription',
     hidden: false,
     iconName: 'icon-res-filter',
+    moreInfo: 'BUTTONS.sortOrderMoreInfo',
     title: 'BUTTONS.sortOrderHint',
     toggled: false
   },
@@ -572,6 +582,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.starFilterDescription',
     hidden: false,
     iconName: 'icon-star',
+    moreInfo: 'BUTTONS.starFilterMoreInfo',
     title: 'BUTTONS.starFilterHint',
     toggled: false
   },
@@ -584,6 +595,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'tagExclusion': {
     description: 'BUTTONS.tagExclusionDescription',
+    moreInfo: 'BUTTONS.tagExclusionMoreInfo',
     hidden: true,
     iconName: 'icon-video-x',
     title: 'BUTTONS.tagExclusionHint',
@@ -598,6 +610,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'tagIntersection': {
     description: 'BUTTONS.tagIntersectionDescription',
+    moreInfo: 'BUTTONS.tagIntersectionMoreInfo',
     hidden: true,
     iconName: 'icon-video-minus',
     title: 'BUTTONS.tagIntersectionHint',
@@ -605,6 +618,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'tagUnion': {
     description: 'BUTTONS.tagUnionDescription',
+    moreInfo: 'BUTTONS.tagUnionMoreInfo',
     hidden: true,
     iconName: 'icon-video-plus',
     title: 'BUTTONS.tagUnionHint',
