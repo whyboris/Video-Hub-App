@@ -55,6 +55,7 @@
     </div>
     <div *ngIf="video.cleanName === '*FOLDER*' && video.fileName !== '*UP*'" class="folder-icon">
       <app-icon [icon]="'icon-folder-blank'"></app-icon>
+      <div class="items-in-folder">{{ video.fileSizeDisplay }}</div>
     </div>
 
     <ng-template #upFolderDiv>
@@ -80,7 +81,7 @@
         *ngIf="showMeta"
         class="fileSize"
       >
-        {{ video.fileSize | fileSizePipe }} [{{ video.fileSizeDisplay }} {{ 'STATISTICS.files' | translate }}]
+        {{ video.fileSize | fileSizePipe }}
       </div>
     </span>
   </div>
