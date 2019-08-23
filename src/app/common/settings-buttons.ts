@@ -224,6 +224,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'extendedWordCloud': {
     description: 'BUTTONS.extendedWordCloudDescription',
+    moreInfo: 'BUTTONS.extendedWordCloudMoreInfo',
     hidden: true,
     iconName: 'icon-cloud-plus',
     title: 'BUTTONS.extendedWordCloudHint',
@@ -294,6 +295,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'hoverScrub': {
     description: 'BUTTONS.hoverScrubDescription',
+    moreInfo: 'BUTTONS.hoverScrubMoreInfo',
     hidden: true,
     iconName: 'icon-toggle-scrub',
     settingsHeading: 'SETTINGS.thumbnailHeading',
@@ -302,6 +304,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'thumbAutoAdvance': {
     description: 'BUTTONS.thumbAutoAdvanceDescription',
+    moreInfo: 'BUTTONS.thumbAutoAdvanceMoreInfo',
     hidden: true,
     iconName: 'icon-toggle-scrub',
     title: 'BUTTONS.thumbAutoAdvanceHint',
@@ -397,6 +400,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'returnToFirstScreenshot': {
     description: 'BUTTONS.returnToFirstScreenshotDescription',
+    moreInfo: 'BUTTONS.returnToFirstScreenshotMoreInfo',
     hidden: true,
     iconName: 'icon-toggle-scrub',
     title: 'BUTTONS.returnToFirstScreenshotHint',
@@ -439,6 +443,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'showFreq': {
     description: 'BUTTONS.showFreqDescription',
+    moreInfo: 'BUTTONS.showFreqMoreInfo',
     hidden: false,
     iconName: 'icon-cloud',
     settingsHeading: 'SETTINGS.wordCloud',
@@ -477,6 +482,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'showRelatedVideosTray': {
     description: 'BUTTONS.relatedTrayDescription',
+    moreInfo: 'BUTTONS.relatedTrayMoreInfo',
     hidden: false,
     iconName: 'icon-show-thumbnails',
     settingsHeading: 'SETTINGS.relatedVideosTray',
