@@ -133,7 +133,8 @@ export class MetaComponent implements OnInit {
       this.yearHack = 2000;
       this.cd.detectChanges();
     } else {
-      this.yearHack = currVal;
+      // when deleting the year, currVal is NaN
+      this.yearHack = isNaN(currVal) ? undefined : currVal;
     }
     this.yearInput.nativeElement.blur();
     this.setYear(this.yearHack);
