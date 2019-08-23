@@ -47,6 +47,13 @@ export const SettingsButtonsGroups: string[][] = [
     'showClips',
   ],
   [
+    'showFolders',
+    'compactView',
+    'showMoreInfo',
+    'fontSizeLarger',
+    'shuffleGalleryNow',
+  ],
+  [
     'showRelatedVideosTray',
   ],
   [
@@ -67,13 +74,6 @@ export const SettingsButtonsGroups: string[][] = [
   [
     'muteClips',
     'autoplayClips',
-  ],
-  [
-    'showMoreInfo',
-    'compactView',
-    'fontSizeLarger',
-    'shuffleGalleryNow',
-    'showFolders'
   ],
   [
     'makeSmaller',
@@ -436,8 +436,10 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'showFolders': {
     description: 'BUTTONS.showFoldersDescription',
+    moreInfo: 'BUTTONS.showFoldersMoreInfo',
     hidden: false,
     iconName: 'icon-folder-blank',
+    settingsHeading: 'SETTINGS.miscView',
     title: 'BUTTONS.showFoldersHint',
     toggled: false
   },
@@ -461,7 +463,6 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.showMoreInfoDescription',
     hidden: false,
     iconName: 'icon-tag',
-    settingsHeading: 'SETTINGS.miscView',
     title: 'BUTTONS.showMoreInfoHint',
     toggled: true
   },

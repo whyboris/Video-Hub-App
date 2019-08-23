@@ -113,6 +113,10 @@ h3 {
   margin-right: 8px;
   max-height: 23px;
   z-index: 2;
+
+  &:empty {
+    display: none;
+  }
 }
 
 .buttonSpacer {
