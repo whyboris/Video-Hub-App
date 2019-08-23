@@ -10,6 +10,7 @@ $transition-length: 300ms;
   font-size: 12px;
   margin: 10px 10px -1px;
   padding: 8px;
+  pointer-events: all;
   position: relative;
   transition: 300ms;
   transition-property: text-shadow background-color;
@@ -90,6 +91,13 @@ h3 {
     color: $dark-red;
     transition-duration: 300ms;
   }
+}
+
+.close-settings-fade-out-override {
+  position: absolute;
+  right: 4px;
+  top: 7px;
+  transform: none;
 }
 
 .gearButtonActive {
@@ -266,6 +274,18 @@ input[type="radio"]:checked:before {
   opacity: 0.5;
 }
 
+.modal-fade-out {
+  background: linear-gradient($gray-10, $gray-10, transparent);
+  display: block;
+  height: 50px;
+  margin-bottom: -50px;
+  position: sticky;
+  top: 0;
+  transform: translate(0, -20px);
+  width: 100%;
+  z-index: 2;
+}
+
 .more-info {
   border: 1px solid $pretty-blue;
   border-radius: 50%;
@@ -379,6 +399,7 @@ input[type="radio"]:checked:before {
 
 .all-settings-tabs {
   left: 210px;
+  pointer-events: none;
   position: fixed;
   top: 159px;
   width: calc(100% - 255px);

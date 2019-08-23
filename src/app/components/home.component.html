@@ -245,7 +245,7 @@
   <!-- ===========   SETTINGS / OPTIONS MODAL   =========== -->
   <!-- ==================================================== -->
 
-
+  <!-- TABS -->
 
   <div
     *ngIf="settingsModalOpen"
@@ -269,19 +269,27 @@
     </button>
   </div>
 
+  <!-- MODAL -->
+
   <div
     *ngIf="settingsModalOpen"
     class="settings-modal"
     @modalAnimation
   >
 
-    <div
-      (click)="toggleSettings()"
-      class="close-settings"
-      title="{{ 'SETTINGS.closeSettings' | translate }}"
-    >
-      <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
+    <!-- fade out & close button -->
+
+    <div class="modal-fade-out">
+      <div
+        (click)="toggleSettings()"
+        class="close-settings close-settings-fade-out-override"
+        title="{{ 'SETTINGS.closeSettings' | translate }}"
+      >
+        <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
+      </div>
     </div>
+
+    <!-- BUTTONS -->
 
     <div [id]=i *ngFor="let group of settingsMetaGroup; index as i">
       <div *ngIf="settingToShow == i">

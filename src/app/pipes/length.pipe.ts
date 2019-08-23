@@ -40,7 +40,7 @@ export class LengthPipe implements PipeTransform {
               return dd.toString() + '+ days';
             }
           }
-          return (display.replace(':', ' hr '));
+          return (display.replace(':', ' hr ') + ' min');
         } else {
           return display;
         }
