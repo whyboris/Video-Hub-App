@@ -254,7 +254,7 @@ export const English = {
     settings      :'Extraction settings',
     shortest      :'shortest',
     smallest      :'smallest',
-    clipHalfRez   :'Clip at half resolution',
+    clipHeight    :'Clip height',
     snippetLength :'Clip snippet length',
     total         :'total',
     videoFolder   :'Videos located here:',
@@ -281,7 +281,6 @@ export const English = {
   WIZARD: {
     change                 :'Change',
     clearRecent            :'clear all recent history',
-    clipHalfRez            :'at half resolution of thumbnails',
     clipSnippets           :'snippets',
     closeButton            :'Close wizard',
     createVideoHub         :'Create the Video Hub',

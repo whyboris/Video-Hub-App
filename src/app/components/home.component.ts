@@ -220,7 +220,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   canCloseWizard = false;
 
   wizard: WizardOptions = {
-    clipHalfRez: true,
+    clipHeight: 144,
     clipSnippetLength: 1,
     clipSnippets: 3,
     extractClips: false,
@@ -278,7 +278,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   folderViewNavigationPath: string = '';
 
   currentScreenshotSettings: ScreenshotSettings = {
-    clipHalfRez: true,
+    clipHeight: 144,
     clipSnippetLength: 1,
     clipSnippets: 0,
     fixed: true,
@@ -804,7 +804,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.appState.selectedOutputFolder = this.wizard.selectedOutputFolder;
     this.importStage = 'importingMeta';
     const importOptions: ImportSettingsObject = {
-      clipHalfRez: this.wizard.clipHalfRez,
+      clipHeight: this.wizard.clipHeight,
       clipSnippetLength: this.wizard.clipSnippetLength,
       clipSnippets: this.wizard.extractClips ? this.wizard.clipSnippets : 0,
       exportFolderPath: this.wizard.selectedOutputFolder,
@@ -1287,7 +1287,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   public startWizard(): void {
     this.wizard = {
-      clipHalfRez: true,
+      clipHeight: 144, // default = half the screenshot height
       clipSnippetLength: 1,
       clipSnippets: 5,
       extractClips: false,
@@ -1549,8 +1549,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
   selectScreenshotSize(pxHeightForImport: string): void {
     const height = parseInt(pxHeightForImport, 10);
     this.wizard.screenshotSizeForImport = height;
-    // TODO better prediction
-    // this.wizard.totalImportSize = Math.round((height / 100) * this.wizard.totalNumberOfFiles * 36 / 1000);
+  }
+
+  /**
+   * Called on screenshot size dropdown select
+   * @param pxHeightForImport - string of number of pixels for the height of each screenshot
+   */
+  selectClipSize(pxHeightForImport: string): void {
+    const height = parseInt(pxHeightForImport, 10);
+    this.wizard.clipHeight = height;
   }
 
   /**

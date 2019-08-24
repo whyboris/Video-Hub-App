@@ -641,7 +641,7 @@ ipc.on('start-the-import', function (event, options: ImportSettingsObject, video
       numOfScreenshots = options.ssVariable;
     }
     globals.screenshotSettings = {
-      clipHalfRez: options.clipHalfRez,
+      clipHeight: options.clipHeight,
       clipSnippetLength: options.clipSnippetLength,
       clipSnippets: options.clipSnippets,
       fixed: options.screensPerVideo,
