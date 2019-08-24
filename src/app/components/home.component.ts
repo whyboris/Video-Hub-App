@@ -869,9 +869,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   public handleClick(eventObject: { mouseEvent: MouseEvent, thumbIndex?: number }, item: ImageElement) {
 
-    console.log('remove this log later!');
-    console.log(eventObject);
-
     // ctrl/cmd + click for thumbnail sheet
     if (eventObject.mouseEvent.ctrlKey === true || eventObject.mouseEvent.metaKey) {
       this.openThumbnailSheet(item);
@@ -2040,17 +2037,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Given an array of numbers
    * returns the cutoff for outliers
    * defined unconventionally as "anything beyond the 3rd quartile + 3 * IQR (the inter-quartile range)"
+   *   cutoff may be the max number if the other computation returns a number too high
    * @param someArray
    */
   getOutlierCutoff(someArray: number[]): number {
     const values = someArray.slice();
+    const max = Math.max(...values);
     values.sort((a, b) => { return a - b; });
 
     const q1 = values[Math.floor((values.length / 4))];
     const q3 = values[Math.ceil((values.length * (3 / 4)))];
     const iqr = q3 - q1;
 
-    return q3 + iqr * 3;
+    return Math.min((q3 + iqr * 3), max);
   }
 
 }

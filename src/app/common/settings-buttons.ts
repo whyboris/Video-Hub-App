@@ -47,7 +47,14 @@ export const SettingsButtonsGroups: string[][] = [
     'showClips',
   ],
   [
+    'compactView',
+    'showMoreInfo',
+    'fontSizeLarger',
+  ],
+  [
+    'showFolders',
     'showRelatedVideosTray',
+    'shuffleGalleryNow',
   ],
   [
     'showTags',
@@ -67,13 +74,6 @@ export const SettingsButtonsGroups: string[][] = [
   [
     'muteClips',
     'autoplayClips',
-  ],
-  [
-    'showMoreInfo',
-    'compactView',
-    'fontSizeLarger',
-    'shuffleGalleryNow',
-    'showFolders'
   ],
   [
     'makeSmaller',
@@ -436,7 +436,9 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'showFolders': {
     description: 'BUTTONS.showFoldersDescription',
+    moreInfo: 'BUTTONS.showFoldersMoreInfo',
     hidden: false,
+    settingsHeading: 'SETTINGS.viewSettings',
     iconName: 'icon-folder-blank',
     title: 'BUTTONS.showFoldersHint',
     toggled: false
@@ -461,12 +463,12 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.showMoreInfoDescription',
     hidden: false,
     iconName: 'icon-tag',
-    settingsHeading: 'SETTINGS.miscView',
     title: 'BUTTONS.showMoreInfoHint',
     toggled: true
   },
   'compactView': {
     description: 'BUTTONS.compactViewDescription',
+    settingsHeading: 'SETTINGS.miscView',
     hidden: false,
     iconName: 'icon-tag',
     moreInfo: 'BUTTONS.compactViewMoreInfo',
@@ -485,7 +487,6 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     moreInfo: 'BUTTONS.relatedTrayMoreInfo',
     hidden: false,
     iconName: 'icon-show-thumbnails',
-    settingsHeading: 'SETTINGS.relatedVideosTray',
     title: 'BUTTONS.relatedTrayHint',
     toggled: false
   },

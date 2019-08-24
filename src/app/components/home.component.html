@@ -1265,7 +1265,7 @@
   <app-gallery-item
     *ngFor="let item of finalArray | similarityPipe: true : currentPlayingFile | slice:0:7 "
 
-    (click)="handleClick($event, item)"
+    (videoClick)="handleClick($event, item)"
     (contextmenu)="rightMouseClicked($event, item)"
 
     [elHeight]="previewHeightRelated + textPaddingHeight"
