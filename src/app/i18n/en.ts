@@ -311,6 +311,7 @@ export const English = {
     selectWhereFilesStored :'Please select the folder where your Video Hub will be stored',
     size                   :'size',
     sizeOfScreenshots      :'Height of screenshots',
+    sizeOfClips            :'Height of clips',
     sizeToImport           :'mb of disk space',
     stage                  :'stage',
     stopImport             :'stop',
