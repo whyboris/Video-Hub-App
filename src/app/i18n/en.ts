@@ -216,6 +216,7 @@ export const English = {
     preferredPlayer   :'Preferred video player:',
     resetZoom         :'reset zoom',
     restorePlayer     :'use system default',
+    rootFolderNotLive :'Video folder not connected',
     searchAndFilter   :'Search & filter settings',
     searchFilters     :'Search filters',
     settings          :'Settings',

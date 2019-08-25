@@ -105,6 +105,14 @@
   >
   </div>
 
+  <div
+    *ngIf="folderNotConnectedErrorShowing"
+    class="folder-not-connected-error"
+    @modalAnimation
+  >
+    {{ 'SETTINGS.rootFolderNotLive' | translate }}
+  </div>
+
   <!-- ===========   RIGHT CLICK MODAL    =========== -->
   <div
     *ngIf="rightClickShowing"

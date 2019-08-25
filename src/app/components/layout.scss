@@ -404,3 +404,15 @@
   opacity: 0.3;
   pointer-events: none;
 }
+
+.folder-not-connected-error {
+  background: $pretty-red;
+  border: 1px solid red;
+  border-radius: 15px;
+  color: white;
+  left: 220px;
+  padding: 10px 20px;
+  position: fixed;
+  top: 220px;
+  z-index: 501;
+}

@@ -221,11 +221,11 @@ import { ImportSettingsObject } from './src/app/common/import.interface';
 import { SavableProperties } from './src/app/common/savable-properties.interface';
 import { SettingsObject } from './src/app/common/settings-object.interface';
 
-let lastSavedFinalObject: FinalObject; // hack for saving the `vha` file again later
+let lastSavedFinalObject: FinalObject; // hack for saving the `vha2` file again later
 
 /**
- * Load the .vha file and send it to app
- * @param pathToVhaFile full path to the .vha file
+ * Load the .vha2 file and send it to app
+ * @param pathToVhaFile full path to the .vha2 file
  */
 function openThisDamnFile(pathToVhaFile: string) {
 
@@ -241,13 +241,16 @@ function openThisDamnFile(pathToVhaFile: string) {
 
   fs.readFile(pathToVhaFile, (err, data) => {
     if (err) {
+
       dialog.showMessageBox(win, {
         message: systemMessages.noSuchFileFound,
         detail: pathToVhaFile,
         buttons: ['OK']
       });
       globals.angularApp.sender.send('pleaseOpenWizard');
+
     } else {
+
       globals.currentlyOpenVhaFile = pathToVhaFile;
       lastSavedFinalObject = JSON.parse(data);
       console.log('opened vha file version: ' + lastSavedFinalObject.version);
@@ -262,61 +265,58 @@ function openThisDamnFile(pathToVhaFile: string) {
 
       let changedRootFolder = false;
       let rootFolderLive = true;
+
       // check root folder exists
       if (!fs.existsSync(lastSavedFinalObject.inputDir)) {
         // see if the user wants to change the root folder
-        dialog.showMessageBox(win, {
+        const buttonIndex: number = dialog.showMessageBoxSync(win, {
           message: systemMessages.videoFolderNotFound,
           detail: lastSavedFinalObject.inputDir,
-          buttons: [systemMessages.selectRootFolder, systemMessages.continueAnyway, systemMessages.cancel]
-        }).then(result => {
+          buttons: [
+            systemMessages.selectRootFolder, // 0
+            systemMessages.continueAnyway,   // 1
+            systemMessages.cancel            // 2
+          ]
+        });
 
-          const buttonIndex: number = result.response;
+        // Select Root Folder
+        if (buttonIndex === 0) {
+          // select the new root folder
+          const pathsArray: any = dialog.showOpenDialogSync(win, {
+          //                      ^^^^^^^^^^^^^^^^^^ returns `string[]`
+            properties: ['openDirectory']
+          });
 
-          // Select Root Folder
-          if (buttonIndex === 0) {
-            // select the new root folder
-            dialog.showOpenDialog(win, {
-              properties: ['openDirectory']
-            }).then(result0 => {
-              const inputDirPath: string = result0.filePaths[0];
+          const inputDirPath: string = pathsArray[0];
 
-              if (inputDirPath) {
-                // update the root folder
-                lastSavedFinalObject.inputDir = inputDirPath;
-                changedRootFolder = true;
-              } else {
-                // show the wizard instead
-                lastSavedFinalObject = null;
-                globals.angularApp.sender.send('pleaseOpenWizard');
-                return;
-              }
-
-            }).catch(err0 => {
-              console.log('open VHA file: this should not happen');
-              console.log(err0);
-            });
-
-          // Continue Anyway
-          } else if (buttonIndex === 2) {
+          if (inputDirPath) {
+            // update the root folder
+            lastSavedFinalObject.inputDir = inputDirPath;
+            changedRootFolder = true;
+          } else {
             // show the wizard instead
             lastSavedFinalObject = null;
             globals.angularApp.sender.send('pleaseOpenWizard');
             return;
-
-          // Cancel
-          } else if (buttonIndex === 1) {
-            console.log('PROCEED ANYWAY');
-            rootFolderLive = false;
           }
 
+        // Continue anyway
+        } else if (buttonIndex === 1) {
+          console.log('PROCEED ANYWAY');
+          rootFolderLive = false;
 
-        }).catch(err2 => {
-          console.log('openThisDamnFile: this should not happen!');
-          console.log(err2);
-        });
+        // Cancel
+        } else if (buttonIndex === 2) {
+          console.log('CANCEL');
+          // show the wizard instead
+          lastSavedFinalObject = null;
+          globals.angularApp.sender.send('pleaseOpenWizard');
+          return;
+        }
 
       }
+
+      console.log('THIS SHOULD NOT RUN UNTIL MODAL CLICKED !!!');
 
       setGlobalsFromVhaFile(lastSavedFinalObject); // sets source folder ETC
 

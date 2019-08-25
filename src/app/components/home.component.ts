@@ -267,6 +267,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   timeExtractionStarted;
   timeExtractionRemaining;
 
+  folderNotConnectedErrorShowing: boolean = false;
+
   // ========================================================================
   // Please add new variables below if they don't fit into any other section
   // ------------------------------------------------------------------------
@@ -621,6 +623,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       changedRootFolder: boolean = false,
       rootFolderLive: boolean = true,
     ) => {
+
+      console.log('root folder?');
+      console.log(rootFolderLive);
 
       this.currentScreenshotSettings = finalObject.screenshotSettings;
 
@@ -1314,8 +1319,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       console.log('scanning for new files');
       this.electronService.ipcRenderer.send('only-import-new-files', this.finalArray);
     } else {
-      // TODO - tell user folder not live !!!
-      console.log('ROOT FOLDER NOT LIVE');
+      this.notifyRootFolderNotLive();
     }
   }
 
@@ -1330,8 +1334,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       console.log('verifying thumbnails');
       this.electronService.ipcRenderer.send('verify-thumbnails', this.finalArray);
     } else {
-      // TODO - tell user folder not live !!!
-      console.log('ROOT FOLDER NOT LIVE');
+      this.notifyRootFolderNotLive();
     }
   }
 
@@ -1348,8 +1351,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       console.log('rescanning');
       this.electronService.ipcRenderer.send('rescan-current-directory', this.finalArray);
     } else {
-      // TODO - tell user folder not live !!!
-      console.log('ROOT FOLDER NOT LIVE');
+      this.notifyRootFolderNotLive();
     }
   }
 
@@ -1364,9 +1366,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
       console.log('regenerating library');
       this.electronService.ipcRenderer.send('regenerate-library', this.finalArray);
     } else {
-      // TODO - tell user folder not live !!!
-      console.log('ROOT FOLDER NOT LIVE');
+      this.notifyRootFolderNotLive();
     }
+  }
+
+  /**
+   * Notify user root folder is not live
+   */
+  notifyRootFolderNotLive(): void {
+    this.folderNotConnectedErrorShowing = true;
+    setTimeout(() => {
+      this.folderNotConnectedErrorShowing = false;
+    }, 1500);
   }
 
   // ==========================================================================================
@@ -1777,8 +1788,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     this.itemToRename = item;
     this.renamingNow = true;
-
-    console.log(this.itemToRename);
 
     setTimeout(() => {
       this.renameFileInput.nativeElement.focus();
