@@ -16,7 +16,7 @@
     background-color: $gray-20;
     height: 16px;
     position: absolute;
-    transform: translate(6px, 2px);
+    transform: translate(6px, 3px);
     width: 12px;
     z-index: 2;
   }
@@ -27,26 +27,28 @@
 
   .remove-tag {
     background-color: $manual-tag-frequency;
-    border-radius: 4px;
+    border: 1px solid $manual-tag-remove-border;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    box-sizing: border-box;
     cursor: not-allowed;
     display: inline-block;
     fill: red;
-    height: 15px;
-    left: 0;
-    padding-left: 1px;
+    height: 14px;
+    left: 1px;
     position: absolute;
     top: 3px;
     transform: translate(0, 0);
     transition-delay: 0.25s;
     transition-duration: 0.25s;
     transition-property: transform;
-    width: 15px;
+    width: 16px;
     z-index: 1;
   }
 
   &:hover {
     .remove-tag {
-      transform: translate(0, -14px);
+      transform: translate(0, -13px);
       transition-delay: 0.5s;
       transition-duration: 0.25s;
       transition-property: transform;
