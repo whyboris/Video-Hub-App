@@ -233,13 +233,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     showWizard: false,
     ssConstant: 10,
     ssVariable: 5,
-    totalImportSize: 0,
-    totalImportTime: 0,
     totalNumberOfFiles: -1,
   };
 
   // ========================================================================
-  // UNSORTED -- @TODO -- CLEAN UP !!!
+  // UNSORTED -- TODO -- CLEAN UP !!!
   // ------------------------------------------------------------------------
 
   currentPlayingFile = '';
@@ -482,12 +480,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.debounceUpdateMax(10);
       });
 
+      // -- DEMO CONTENT -- hasn't been updated in over 1 year
+      //                    will need updating if enabled
       // if (this.webDemo) {
       //   const finalObject = DemoContent;
-      //   // TODO -- MAYBE ???? UPDATE SINCE THE BELOW HAS BEEN UPDATED
-      //   // identical to `finalObjectReturning`
+      //   // should be identical to `finalObjectReturning`
       //   this.appState.numOfFolders = finalObject.numOfFolders;
-      //   // DEMO CONTENT -- CONFIRM THAT IT WORKS !!!
       //   this.appState.selectedOutputFolder = 'images';
       //   this.appState.selectedSourceFolder = finalObject.inputDir;
       //   this.canCloseWizard = true;
@@ -506,8 +504,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.wizard.listOfFiles = listOfFiles;
 
       if (listOfFiles.length > 0) {
-        // TODO better prediction
-        // this.wizard.totalImportTime = Math.round(listOfFiles.length * 2.25 / 60);
         this.wizard.selectedSourceFolder = filePath;
         this.wizard.selectedOutputFolder = filePath;
       }
@@ -1300,8 +1296,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       showWizard: true,
       ssConstant: 3,
       ssVariable: 10,
-      totalImportSize: 0,
-      totalImportTime: 0,
       totalNumberOfFiles: -1,
     };
     this.toggleSettings();
