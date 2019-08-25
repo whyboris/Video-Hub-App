@@ -214,7 +214,7 @@
           || nodeRenamingFile
           || renamingWIP.length === 0
         "
-      class="wizardButton btnRename"
+      class="wizard-button button-rename"
       (click)="attemptToRename()"
     >
       {{ 'RIGHTCLICK.renameButton' | translate }}
@@ -1358,7 +1358,7 @@
 
     <h2>{{ 'WIZARD.openPrevious' | translate }}</h2>
 
-    <button class="wizardButton" (click)="loadFromFile()" title="{{ 'WIZARD.openPreviouslySaved' | translate }}">
+    <button class="wizard-button" (click)="loadFromFile()" title="{{ 'WIZARD.openPreviouslySaved' | translate }}">
       {{ 'WIZARD.loadFromFile' | translate }}
     </button>
 
@@ -1421,7 +1421,7 @@
       2
     </div>
     <button
-      class="wizardButton"
+      class="wizard-button"
       (click)="selectSourceDirectory()"
       [disabled]="wizard.futureHubName === ''"
       title="{{ 'WIZARD.selectFolderWithVideo' | translate }}"
@@ -1452,7 +1452,7 @@
       3
     </div>
     <button
-      class="wizardButton"
+      class="wizard-button"
       (click)="selectOutputDirectory()"
       [disabled]="wizard.selectedSourceFolder === '' || wizard.futureHubName === ''"
       title="{{ 'WIZARD.selectWhereFilesStored' | translate }}"
@@ -1689,7 +1689,7 @@
 
     <button
       style="margin-top: 45px;"
-      class="wizardButton"
+      class="wizard-button start-import"
       [disabled]="wizard.selectedOutputFolder === ''
                || wizard.selectedSourceFolder === ''
                || importStage !== 'done'
