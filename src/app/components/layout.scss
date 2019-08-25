@@ -271,25 +271,57 @@
   input {
     color: $gray-40;
   }
+
+  input {
+    &::placeholder {
+      color: $gray-50 !important;
+    }
+  }
 }
 
 .manual-tag-tray {
   box-sizing: border-box;
   height: 140px;
-  padding: 20px;
+
+  .all-the-tags {
+    left: 200px;
+    padding-right: 15px;
+    position: absolute;
+    top:16px;
+  }
 
   .manual-tag-tray-label {
     display: block;
     font-size: 12px;
-    margin-bottom: 10px;
+    left: 10px;
+    position: absolute;
+    text-align: right;
+    top: 20px;
+    width: 166px;
+  }
+
+  // added on top of .filter-general
+  .manual-tag-tray-filter {
+    border-color: $gray-80;
+    font-size: 15px;
+    left: 20px;
+    padding: 6px;
+    padding-bottom: 0;
+    position: absolute;
+    top: 40px;
+    width: 155px;
+
+    &::placeholder {
+      color: $gray-80;
+    }
   }
 
   .showFrequency {
     background: none;
     border: none;
     bottom: 10px;
+    left: 20px;
     position: absolute;
-    right: 10px;
 
     &:hover {
       color: $pretty-blue;
@@ -325,22 +357,6 @@
   display: block;
   margin: 100px 0 0;
   text-align: center;
-}
-
-// added on top of .filter-general
-.manual-tag-tray-filter {
-  border-color: $gray-80;
-  font-size: 15px;
-  padding: 6px;
-  padding-bottom: 0;
-  position: absolute;
-  right: 18px;
-  top: 10px;
-  width: 140px;
-
-  &::placeholder {
-    color: $gray-80;
-  }
 }
 
 .no-results {
