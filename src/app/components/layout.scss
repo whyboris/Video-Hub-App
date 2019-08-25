@@ -260,6 +260,15 @@
   transition-duration: 300ms;
   transition-property: background-color;
   width: 100vw;
+
+  .close-bottom-tray {
+    cursor: pointer;
+    display: block;
+    position: absolute;
+    right: 3px;
+    top: 5px;
+    z-index: 10;
+  }
 }
 
 .manual-tag-tray {
