@@ -214,7 +214,7 @@
           || nodeRenamingFile
           || renamingWIP.length === 0
         "
-      class="wizardButton btnRename"
+      class="wizard-button button-rename"
       (click)="attemptToRename()"
     >
       {{ 'RIGHTCLICK.renameButton' | translate }}
@@ -1358,7 +1358,7 @@
 
     <h2>{{ 'WIZARD.openPrevious' | translate }}</h2>
 
-    <button class="wizardButton" (click)="loadFromFile()" title="{{ 'WIZARD.openPreviouslySaved' | translate }}">
+    <button class="wizard-button" (click)="loadFromFile()" title="{{ 'WIZARD.openPreviouslySaved' | translate }}">
       {{ 'WIZARD.loadFromFile' | translate }}
     </button>
 
@@ -1421,7 +1421,7 @@
       2
     </div>
     <button
-      class="wizardButton"
+      class="wizard-button"
       (click)="selectSourceDirectory()"
       [disabled]="wizard.futureHubName === ''"
       title="{{ 'WIZARD.selectFolderWithVideo' | translate }}"
@@ -1452,7 +1452,7 @@
       3
     </div>
     <button
-      class="wizardButton"
+      class="wizard-button"
       (click)="selectOutputDirectory()"
       [disabled]="wizard.selectedSourceFolder === '' || wizard.futureHubName === ''"
       title="{{ 'WIZARD.selectWhereFilesStored' | translate }}"
@@ -1577,6 +1577,16 @@
       {{ 'WIZARD.sizeOfScreenshots' | translate }}
     </span>
 
+    <!-- STEP 5 -->
+
+    <div
+      [ngClass]="{ 'fulfilled': wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder !== '' }"
+      class="steps"
+      style="transform: translate(-24px, 11px);"
+    >
+      5
+    </div>
+
     <div [ngClass]="{ 'dim-row': !wizard.extractClips }">
 
       <input
@@ -1643,24 +1653,28 @@
 
     <div [ngClass]="{ 'dim-row': !wizard.extractClips }">
 
-      <input
-        type="checkbox"
-        [(ngModel)]="wizard.clipHalfRez"
-        class="clip-check-box"
-        [disabled]="wizard.selectedOutputFolder === ''
-                || wizard.selectedSourceFolder === ''
-                || wizard.futureHubName === ''
-                || !wizard.screensPerVideo
-                || !wizard.extractClips"
+      <select
+        (change)="selectClipSize($event.target.value)"
+        class="size-dropdown languageDropDown"
+        [disabled]="!wizard.extractClips"
       >
+        <option value="144" selected="selected">144px</option>
+        <option value="216">216px</option>
+        <option value="288">288px</option>
+        <option value="360">360px</option>
+        <option value="432">432px</option>
+      </select>
 
-      <span class="step-four-text">
-        {{ 'WIZARD.clipHalfRez' | translate }}
+      <span
+        class="step-four-text"
+        [ngClass]="{ 'dim-row': !(wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder !== '') }"
+      >
+        {{ 'WIZARD.sizeOfClips' | translate }}
       </span>
 
     </div>
 
-    <!-- STEP 5 -->
+    <!-- STEP 6 -->
 
     <div
       style="margin-top: 30px;"
@@ -1670,11 +1684,12 @@
       }"
       class="steps"
     >
-      5
+      6
     </div>
+
     <button
       style="margin-top: 45px;"
-      class="wizardButton"
+      class="wizard-button start-import"
       [disabled]="wizard.selectedOutputFolder === ''
                || wizard.selectedSourceFolder === ''
                || importStage !== 'done'

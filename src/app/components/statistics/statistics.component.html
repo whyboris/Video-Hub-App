@@ -63,10 +63,10 @@
       </td>
     </tr>
 
-    <tr *ngIf="screenshotSettings.clipHalfRez">
-      <td>{{ 'STATISTICS.clipHalfRez' | translate }}</td>
+    <tr *ngIf="screenshotSettings.clipSnippets > 0">
+      <td>{{ 'STATISTICS.clipHeight' | translate }}</td>
       <td class="rightCol">
-        {{ screenshotSettings.height / 2 }}px
+        {{ screenshotSettings.clipHeight }}px
       </td>
     </tr>
   </table>

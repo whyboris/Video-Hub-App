@@ -84,8 +84,32 @@
   }
 
   .current-step {
-    background-color: $pretty-red;
+    background-color: $pretty-green;
+    padding-right: 8px;
     transition: 300ms;
+
+    &:after {
+      animation: triangleSlide 0.5s forwards;
+      border: solid transparent;
+      border-left-color: $pretty-green;
+      border-width: 7px;
+      content: " ";
+      height: 0;
+      left: 12px;
+      margin-top: -7px;
+      pointer-events: none;
+      position: absolute;
+      top: 50%;
+      opacity: 0;
+      width: 0;
+    }
+  }
+
+  @keyframes triangleSlide {
+    100% {
+      opacity: 1;
+      transform: translate(11px, 0);
+    }
   }
 
   .description {
@@ -228,7 +252,7 @@
     &:not([disabled]) {
       cursor: pointer;
     }
-    margin: 18px 14px 14px;
+    margin: 10px 14px 14px;
   }
 
   @include scrollBarHidden;

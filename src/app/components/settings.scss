@@ -239,6 +239,11 @@ h3 {
 .languageDropDown {
   border-radius: 5px;
   padding: 6px;
+
+  &:disabled {
+    cursor: initial;
+    pointer-events: none;
+  }
 }
 
 .numSelect {
