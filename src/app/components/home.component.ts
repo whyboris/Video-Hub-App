@@ -517,10 +517,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       if (success) {
         // UPDATE THE FINAL ARRAY !!!
-        this.replaceOriginalFileName();
+        this.replaceFileNameInFinalArray();
         this.closeRename();
       } else {
         this.renameErrMsg = errMsg;
+        this.cd.detectChanges();
       }
     });
 
@@ -1777,6 +1778,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.itemToRename = item;
     this.renamingNow = true;
 
+    console.log(this.itemToRename);
+
     setTimeout(() => {
       this.renameFileInput.nativeElement.focus();
     }, 0);
@@ -1794,6 +1797,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   closeRename() {
     this.renamingNow = false;
+    this.cd.detectChanges();
   }
 
   /**
@@ -1830,17 +1834,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   /**
    * Searches through the `finalArray` and updates the file name and display name
-   * TODO -- BUG?!?? -- check if this errors out when hub has two files with duplicate file names !!!
+   * Should not error out if two files have the same name
    */
-  replaceOriginalFileName(): void {
+  replaceFileNameInFinalArray(): void {
     const oldFileName = this.currentRightClickedItem.fileName;
 
-    for (let i = 0; i < this.finalArray.length; i++) {
-      if (this.finalArray[i].fileName === oldFileName) {
-        this.finalArray[i].fileName = this.renamingWIP + '.' + this.renamingExtension;
-        this.finalArray[i].cleanName = this.renamingWIP;
-        break;
-      }
+    const i = this.itemToRename.index;
+
+    if (this.finalArray[i].fileName === oldFileName) {
+      this.finalArray[i].fileName = this.renamingWIP + '.' + this.renamingExtension;
+      this.finalArray[i].cleanName = this.renamingWIP;
     }
 
     this.finalArrayNeedsSaving = true;
