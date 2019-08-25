@@ -53,15 +53,18 @@
   width: 15px;
 }
 
-.search-word {
-  border-radius: 6px;
-  // border: 1px solid $gray-40;
+.search-or-tag-general {
+  border-radius: 4px;
   box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.3);
   cursor: pointer;
   display: inline-block;
   font-size: 10px;
+  height: 12px;
+  padding: 2px 4px;
+}
+
+.search-word {
   margin: 3px 0;
-  padding: 2px 4px 2px 4px;
 
   &:hover {
     text-decoration: line-through;
@@ -139,6 +142,7 @@
 .lev-distance {
   .search-word {
     background: $show-similar-to;
+    height: initial;
   }
 
   .on-new-line {

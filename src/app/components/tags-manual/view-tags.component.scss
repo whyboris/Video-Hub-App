@@ -6,16 +6,8 @@
   position: relative;
 
   .tag {
-    // copied from `search-word` class -- TODO - keep DRY
     background-color: $manual-tag-color;
-    border-radius: 4px;
-    box-shadow: 1px 1px 3px 0px rgba(0,0,0,0.3);
-    cursor: pointer;
-    display: inline-block;
-    font-size: 10px;
-    height: 12px;
     margin: 0;
-    padding: 2px 4px;
     position: relative;
     z-index: 3;
   }
@@ -63,6 +55,7 @@
 
   .frequency {
     background-color: $manual-tag-frequency;
+    color: $gray-90;
     cursor: initial;
     padding-left: 10px;
     transform: translate(-5px, 0);

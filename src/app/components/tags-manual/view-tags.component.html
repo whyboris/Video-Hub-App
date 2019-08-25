@@ -10,7 +10,7 @@
     &ensp;
   </span>
   <span
-    class="tag"
+    class="search-or-tag-general tag"
     [ngStyle]="{ background: tag.colour }"
     (click)="tagClick(tag, $event)"
   >
@@ -19,7 +19,7 @@
 
   <span
     *ngIf="displayFrequency"
-    class="tag frequency"
+    class="search-or-tag-general tag frequency"
   >
     {{ tagService.tagsMap.get(tag.name) }}
   </span>

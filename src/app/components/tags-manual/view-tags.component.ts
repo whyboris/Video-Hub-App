@@ -5,7 +5,8 @@ import { Tag } from '../tags-auto/tag-display.pipe';
 @Component({
   selector: 'app-view-tags-component',
   templateUrl: 'view-tags.component.html',
-  styleUrls: ['view-tags.component.scss',
+  styleUrls: ['../search.scss',
+              'view-tags.component.scss',
               '../../fonts/icons.scss']
 })
 export class ViewTagsComponent {
