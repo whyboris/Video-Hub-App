@@ -124,10 +124,16 @@
     @rightClickAnimation
   >
     <ul @rightClickContentAnimation>
-      <li (click)="openRenameFileModal()">{{ 'RIGHTCLICK.renameFile' | translate }}</li>
+      <li
+        (click)="openRenameFileModal()"
+        [ngClass]="{ 'right-click-disabled': !rootFolderLive }"
+      >{{ 'RIGHTCLICK.renameFile' | translate }}</li>
       <li (click)="showSimilarNow()">{{ 'RIGHTCLICK.showSimilar' | translate }}</li>
       <li (click)="showOnlyThisFolderNow()">{{ 'RIGHTCLICK.viewFolder' | translate }}</li>
-      <li (click)="openContainingFolderNow()">{{ 'RIGHTCLICK.openFolder' | translate }}</li>
+      <li
+        (click)="openContainingFolderNow()"
+        [ngClass]="{ 'right-click-disabled': !rootFolderLive }"
+      >{{ 'RIGHTCLICK.openFolder' | translate }}</li>
       <li (click)="openThumbnailSheet(currentRightClickedItem)">{{ 'RIGHTCLICK.sheetModal' | translate }}</li>
     </ul>
   </div>
