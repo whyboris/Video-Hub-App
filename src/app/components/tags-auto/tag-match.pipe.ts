@@ -1,5 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+import { TranslateService } from '@ngx-translate/core';
+
 import { AutoTagsService } from './autotags.service';
 
 @Pipe({
@@ -8,7 +10,8 @@ import { AutoTagsService } from './autotags.service';
 export class TagMatchPipe implements PipeTransform {
 
   constructor(
-    public autoTagsService: AutoTagsService
+    public autoTagsService: AutoTagsService,
+    public translate: TranslateService,
   ) { }
 
   /**
@@ -19,7 +22,7 @@ export class TagMatchPipe implements PipeTransform {
     if (query === '') {
       return '';
     } else {
-      return this.autoTagsService.findMatches(query).toString() + ' found'; // TODO someday add i18n
+      return this.autoTagsService.findMatches(query).toString() + ' ' + this.translate.instant('SIDEBAR.found');
     }
   }
 
