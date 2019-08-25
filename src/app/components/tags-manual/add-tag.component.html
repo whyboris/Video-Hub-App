@@ -1,7 +1,7 @@
 <div class="inputContainer">
   <input
     #tagInputField
-    class="inputFilter"
+    class="filter-general input-filter"
     [ngClass]="{ 'dark-mode' : darkMode }"
     (keyup.enter)="emitTag(currentText)"
     (keyup.esc)="escape()"

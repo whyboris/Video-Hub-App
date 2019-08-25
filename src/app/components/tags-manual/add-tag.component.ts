@@ -4,7 +4,8 @@ import { ManualTagsService } from './manual-tags.service';
 @Component({
   selector: 'app-add-tag-component',
   templateUrl: 'add-tag.component.html',
-  styleUrls: ['add-tag.component.scss']
+  styleUrls: ['../search-input.scss',
+              'add-tag.component.scss']
 })
 export class AddTagComponent {
 

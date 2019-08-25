@@ -593,7 +593,14 @@
 
     </div>
 
-    <div (click)="toggleSettingsMenu()" [ngClass]="{ flipped: !appState.menuHidden }" class="hidingSettingsMenu">
+    <div
+      (click)="toggleSettingsMenu()"
+      class="hiding-settings-menu"
+      [ngClass]="{
+          flipped: !appState.menuHidden,
+          'hiding-settings-menu-dark': settingsButtons['darkMode'].toggled
+        }"
+    >
       <app-icon class="mini-chevron" [icon]="'icon-chevron-down-mini'"></app-icon>
     </div>
 
@@ -665,7 +672,7 @@
             (keydown.Tab)="typeaheadTabPressed($event, filter.uniqueKey === 'tagIntersection', j)"
             (ngModelChange)="checkTagTypeahead($event, filter.uniqueKey === 'tagIntersection')"
             [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
-            class="inputFilter"
+            class="filter-general input-filter"
             placeholder="{{ filter.placeholder | translate }}"
             type="text"
           >
@@ -711,7 +718,7 @@
           [(ngModel)]="magicSearchString"
           [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
           type="text"
-          class="inputFilter"
+          class="filter-general input-filter"
           placeholder="{{ 'SIDEBAR.magic' | translate }}"
         >
 
@@ -1405,7 +1412,7 @@
     <input
       [(ngModel)]="wizard.futureHubName"
       (keypress)="validateHubName($event)"
-      class="inputFilter hub-name-input"
+      class="filter-general input-filter hub-name-input"
     >
     <span class="step-description">
       {{ 'WIZARD.nameYourHub' | translate }}

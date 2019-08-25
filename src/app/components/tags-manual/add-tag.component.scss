@@ -5,14 +5,9 @@
 }
 
 // TODO -- keep DRY -- this is taken from `inputFilter`
-.inputFilter {
-  background: transparent;
+.input-filter {
   border-color: $gray-80;
-  border-width: 0 0 1px;
-  box-sizing: border-box;
   font-size: 12px;
-  margin: 5px 0 10px;
-  outline: none;
   padding: 4px;
   padding-bottom: 0;
   position: absolute;
