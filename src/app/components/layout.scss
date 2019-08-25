@@ -314,14 +314,10 @@
   text-align: center;
 }
 
-// TODO -- keep DRY -- this is taken from `inputFilter`
+// added on top of .filter-general
 .manual-tag-tray-filter {
-  background: transparent;
   border-color: $gray-80;
-  border-width: 0 0 1px;
-  box-sizing: border-box;
   font-size: 15px;
-  outline: none;
   padding: 6px;
   padding-bottom: 0;
   position: absolute;

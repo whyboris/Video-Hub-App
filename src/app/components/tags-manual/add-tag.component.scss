@@ -4,7 +4,7 @@
   position: relative;
 }
 
-// TODO -- keep DRY -- this is taken from `inputFilter`
+// added on top of .filter-general
 .input-filter {
   border-color: $gray-80;
   font-size: 12px;
