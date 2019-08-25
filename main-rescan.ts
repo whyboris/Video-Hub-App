@@ -255,12 +255,10 @@ export function copyUserMetadataForFile(
   oldElement: ImageElement,
   newElement: ImageElement
 ) {
-  console.log('copying for ' + oldElement.fileName);
-  // TODO update this and above as needed
-  newElement.stars = oldElement.stars;
-  newElement.tags = oldElement.tags;
+  newElement.stars       = oldElement.stars;
+  newElement.tags        = oldElement.tags;
   newElement.timesPlayed = oldElement.timesPlayed;
-  newElement.year = oldElement.year;
+  newElement.year        = oldElement.year;
 }
 
 /**

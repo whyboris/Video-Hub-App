@@ -683,7 +683,6 @@ ipc.on('system-open-file-through-modal', function (event, somethingElse) {
 
       if (chosenFile) {
         // console.log('the user has chosen this previously-saved .vha file: ' + chosenFile);
-        // TODO: maybe check if file ends in .vha2 before parsing !?!!
         // TODO: fix up this stupid pattern of overriding method with variable ?
         userWantedToOpen = chosenFile;
         openThisDamnFile(chosenFile);
