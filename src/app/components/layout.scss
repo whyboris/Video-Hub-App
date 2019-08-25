@@ -257,29 +257,101 @@
   bottom: 0;
   left: 0;
   position: fixed;
+  transition-duration: 300ms;
+  transition-property: background-color;
   width: 100vw;
+
+  .close-bottom-tray {
+    cursor: pointer;
+    display: block;
+    position: absolute;
+    right: 3px;
+    top: 5px;
+    z-index: 10;
+  }
 }
 
 .manual-tag-tray {
   box-sizing: border-box;
   height: 140px;
-  padding: 20px;
 
-  .manual-tag-tray-label {
+  .manual-tag-tray-label,
+  .tag-sort-by-toggle,
+  .show-frequency {
     display: block;
     font-size: 12px;
-    margin-bottom: 10px;
+    left: 10px;
+    position: absolute;
+    text-align: right;
+    width: 166px;
   }
 
-  .showFrequency {
+  .manual-tag-tray-label {
+    top: 20px;
+  }
+
+  .tag-sort-by-toggle {
+    top: 46px;
+  }
+
+  .show-frequency {
+    top: 72px;
+  }
+
+  .tag-sort-by-toggle,
+  .show-frequency {
     background: none;
     border: none;
-    bottom: 10px;
-    position: absolute;
-    right: 10px;
+    color: $gray-70;
+    padding-right: 0;
 
     &:hover {
       color: $pretty-blue;
+    }
+  }
+
+  .all-the-tags {
+    left: 200px;
+    padding-right: 15px;
+    position: absolute;
+    top: 16px;
+  }
+
+  // added on top of .filter-general
+  .manual-tag-tray-filter {
+    border-color: $gray-80;
+    font-size: 15px;
+    left: 20px;
+    padding: 6px;
+    padding-bottom: 0;
+    position: absolute;
+    top: 90px;
+    width: 155px;
+
+    &::placeholder {
+      color: $gray-80;
+    }
+  }
+}
+
+.bottom-tray-dark {
+  background: black;
+  border-top: 1px solid $gray-80;
+
+  button,
+  span,
+  input {
+    color: $gray-40;
+  }
+
+  .tag-sort-by-toggle,
+  .show-frequency {
+    color: $gray-60;
+  }
+
+  input {
+    &::placeholder {
+      color: $gray-50 !important;
     }
   }
 }
@@ -314,26 +386,6 @@
   text-align: center;
 }
 
-// TODO -- keep DRY -- this is taken from `inputFilter`
-.manual-tag-tray-filter {
-  background: transparent;
-  border-color: $gray-80;
-  border-width: 0 0 1px;
-  box-sizing: border-box;
-  font-size: 15px;
-  outline: none;
-  padding: 6px;
-  padding-bottom: 0;
-  position: absolute;
-  right: 18px;
-  top: 10px;
-  width: 140px;
-
-  &::placeholder {
-    color: $gray-80;
-  }
-}
-
 .no-results {
   box-sizing: border-box;
   position: absolute;
@@ -351,4 +403,16 @@
 .temp-disabled {
   opacity: 0.3;
   pointer-events: none;
+}
+
+.folder-not-connected-error {
+  background: $pretty-red;
+  border: 1px solid red;
+  border-radius: 15px;
+  color: white;
+  left: 220px;
+  padding: 10px 20px;
+  position: fixed;
+  top: 220px;
+  z-index: 501;
 }

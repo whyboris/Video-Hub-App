@@ -260,14 +260,13 @@ const generateScreenshotStrip = (
  * Generate the mp4 preview clip of the video file
  * (if clip is not already present)
  *
- * TODO -- allow user to change `totalCount` !!!!!!!
- *
- * @param pathToVideo  -- full path to the video file
- * @param fileHash     -- hash of the video file
- * @param duration     -- duration of the original video file
- * @param clipHeight   -- height of clip
- * @param saveLocation -- folder where to save jpg files
- * @param clipSnippets -- number of clip snippets to extract
+ * @param pathToVideo   -- full path to the video file
+ * @param fileHash      -- hash of the video file
+ * @param duration      -- duration of the original video file
+ * @param clipHeight    -- height of clip
+ * @param saveLocation  -- folder where to save jpg files
+ * @param clipSnippets  -- number of clip snippets to extract
+ * @param snippetLength -- length in seconds of each snippet
  */
 const generatePreviewClip = (
   pathToVideo: string,

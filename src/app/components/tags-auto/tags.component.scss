@@ -91,15 +91,15 @@ ul {
   width: 200px;
 }
 
-// inherits styles from 'search-input.scss'
-.inputFilter {
+// added on top of .filter-general
+.input-filter {
   bottom: 23px;
   max-width: 150px;
   padding-left: 5px;
   text-align: center;
 }
 
-.inputAdd {
+.input-add {
   text-align: left;
   width: 140px;
 }

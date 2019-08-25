@@ -105,6 +105,14 @@
   >
   </div>
 
+  <div
+    *ngIf="folderNotConnectedErrorShowing"
+    class="folder-not-connected-error"
+    @modalAnimation
+  >
+    {{ 'SETTINGS.rootFolderNotLive' | translate }}
+  </div>
+
   <!-- ===========   RIGHT CLICK MODAL    =========== -->
   <div
     *ngIf="rightClickShowing"
@@ -116,10 +124,16 @@
     @rightClickAnimation
   >
     <ul @rightClickContentAnimation>
-      <li (click)="openRenameFileModal()">{{ 'RIGHTCLICK.renameFile' | translate }}</li>
+      <li
+        (click)="openRenameFileModal()"
+        [ngClass]="{ 'right-click-disabled': !rootFolderLive }"
+      >{{ 'RIGHTCLICK.renameFile' | translate }}</li>
       <li (click)="showSimilarNow()">{{ 'RIGHTCLICK.showSimilar' | translate }}</li>
       <li (click)="showOnlyThisFolderNow()">{{ 'RIGHTCLICK.viewFolder' | translate }}</li>
-      <li (click)="openContainingFolderNow()">{{ 'RIGHTCLICK.openFolder' | translate }}</li>
+      <li
+        (click)="openContainingFolderNow()"
+        [ngClass]="{ 'right-click-disabled': !rootFolderLive }"
+      >{{ 'RIGHTCLICK.openFolder' | translate }}</li>
       <li (click)="openThumbnailSheet(currentRightClickedItem)">{{ 'RIGHTCLICK.sheetModal' | translate }}</li>
     </ul>
   </div>
@@ -593,7 +607,14 @@
 
     </div>
 
-    <div (click)="toggleSettingsMenu()" [ngClass]="{ flipped: !appState.menuHidden }" class="hidingSettingsMenu">
+    <div
+      (click)="toggleSettingsMenu()"
+      class="hiding-settings-menu"
+      [ngClass]="{
+          flipped: !appState.menuHidden,
+          'hiding-settings-menu-dark': settingsButtons['darkMode'].toggled
+        }"
+    >
       <app-icon class="mini-chevron" [icon]="'icon-chevron-down-mini'"></app-icon>
     </div>
 
@@ -665,7 +686,7 @@
             (keydown.Tab)="typeaheadTabPressed($event, filter.uniqueKey === 'tagIntersection', j)"
             (ngModelChange)="checkTagTypeahead($event, filter.uniqueKey === 'tagIntersection')"
             [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
-            class="inputFilter"
+            class="filter-general input-filter"
             placeholder="{{ filter.placeholder | translate }}"
             type="text"
           >
@@ -690,7 +711,7 @@
                 <span
                   (click)="removeThisFilter(i, j)"
                   [ngStyle]="{ background: filter.color }"
-                  class="search-word"
+                  class="search-or-tag-general search-word"
                 >
                   {{ string }}
                 </span>
@@ -711,7 +732,7 @@
           [(ngModel)]="magicSearchString"
           [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
           type="text"
-          class="inputFilter"
+          class="filter-general input-filter"
           placeholder="{{ 'SIDEBAR.magic' | translate }}"
         >
 
@@ -722,7 +743,7 @@
             *ngIf="magicSearchString !== ''"
             (click)="magicSearchString = ''"
             [ngStyle]="{ background: '#aaffaa' }"
-            class="search-word"
+            class="search-or-tag-general search-word"
           >
             {{ magicSearchString }}
           </span>
@@ -806,7 +827,7 @@
         <span class="lev-description">
           {{ 'SIDEBAR.similarTo' | translate }}
         </span>
-        <span class="search-word" (click)="showSimilar = false">
+        <span class="search-or-tag-general search-word" (click)="showSimilar = false">
           {{ findMostSimilar }}
         </span>
       </div>
@@ -816,13 +837,13 @@
         <span class="lev-description">
           {{ 'SIDEBAR.duplicate' | translate }}
         </span>
-        <span *ngIf="settingsButtons['duplicateLength'].toggled" class="search-word on-new-line" (click)="settingsButtons['duplicateLength'].toggled = false">
+        <span *ngIf="settingsButtons['duplicateLength'].toggled" class="search-or-tag-general search-word on-new-line" (click)="settingsButtons['duplicateLength'].toggled = false">
           {{ 'SIDEBAR.dupeByLength' | translate }}
         </span>
-        <span *ngIf="settingsButtons['duplicateSize'].toggled" class="search-word on-new-line" (click)="settingsButtons['duplicateSize'].toggled = false">
+        <span *ngIf="settingsButtons['duplicateSize'].toggled" class="search-or-tag-general search-word on-new-line" (click)="settingsButtons['duplicateSize'].toggled = false">
           {{ 'SIDEBAR.dupeBySize' | translate }}
         </span>
-        <span *ngIf="settingsButtons['duplicateHash'].toggled" class="search-word on-new-line" (click)="settingsButtons['duplicateHash'].toggled = false">
+        <span *ngIf="settingsButtons['duplicateHash'].toggled" class="search-or-tag-general search-word on-new-line" (click)="settingsButtons['duplicateHash'].toggled = false">
           {{ 'SIDEBAR.dupeByHash' | translate }}
         </span>
       </div>
@@ -1248,8 +1269,17 @@
 <div
   *ngIf="settingsButtons['showRelatedVideosTray'].toggled"
   class="bottom-tray most-similar-tray"
+  [ngClass]="{ 'bottom-tray-dark': settingsButtons['darkMode'].toggled }"
   @modalAnimation
 >
+
+  <div
+    (click)="settingsButtons['showRelatedVideosTray'].toggled = false"
+    class="close-bottom-tray"
+    title="{{ 'SETTINGS.closeRelatedTray' | translate }}"
+  >
+    <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
+  </div>
 
   <div
     *ngIf="!this.settingsButtons['hideSidebar'].toggled"
@@ -1292,24 +1322,43 @@
 <div
   *ngIf="settingsButtons['showTagTray'].toggled"
   class="bottom-tray manual-tag-tray"
+  [ngClass]="{ 'bottom-tray-dark': settingsButtons['darkMode'].toggled }"
   @modalAnimation
 >
+
+  <div
+    (click)="settingsButtons['showTagTray'].toggled = false"
+    class="close-bottom-tray"
+    title="{{ 'TAGS.closeTagTray' | translate }}"
+  >
+    <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
+  </div>
+
   <span class="manual-tag-tray-label">
     {{ 'TAGS.presentTags' | translate }}:
   </span>
   <button
     (click)="manualTagShowFrequency = !manualTagShowFrequency"
-    class="showFrequency"
+    class="show-frequency"
   >
-    {{ 'TAGS.showFrequency' | translate }}
+    {{ (manualTagShowFrequency ? 'TAGS.showingFrequency'
+                               : 'TAGS.hidingFrequency') | translate }}
+  </button>
+  <button
+    (click)="settingsButtons['tagFrequencySort'].toggled = !settingsButtons['tagFrequencySort'].toggled"
+    class="tag-sort-by-toggle"
+  >
+    {{ (settingsButtons['tagFrequencySort'].toggled ? 'TAGS.sortByFrequency'
+                                                    : 'TAGS.sortAlphabetical') | translate }}
   </button>
   <input
     (keyup.esc)="manualTagFilterString = ''"
     [(ngModel)]="manualTagFilterString"
-    class="manual-tag-tray-filter"
+    class="filter-general manual-tag-tray-filter"
     placeholder="{{ 'TAGS.filterTags' | translate }}"
   >
   <app-view-tags-component
+    class="all-the-tags"
     [displayFrequency]="manualTagShowFrequency"
     [tags]="manualTagsService.tagsList | manualTagSortPipe
                                        : manualTagFilterString
@@ -1405,7 +1454,7 @@
     <input
       [(ngModel)]="wizard.futureHubName"
       (keypress)="validateHubName($event)"
-      class="inputFilter hub-name-input"
+      class="filter-general input-filter hub-name-input"
     >
     <span class="step-description">
       {{ 'WIZARD.nameYourHub' | translate }}
@@ -1699,32 +1748,6 @@
     >
       {{ 'WIZARD.createVideoHub' | translate }}
     </button>
-<!--
-    <span
-      class="description"
-      *ngIf="wizard.totalNumberOfFiles !== -1"
-    >
-      {{ 'WIZARD.expected' | translate }}
-    </span>
-    <span
-      class="step-description"
-      *ngIf="wizard.totalNumberOfFiles !== -1"
-    >
-      <span class="emphasis-number">
-        {{ wizard.totalImportTime }}
-      </span>
-      {{ 'WIZARD.timeToImport' | translate }}
-    </span>
-    <span
-      class="step-description"
-      *ngIf="wizard.totalNumberOfFiles !== -1"
-    >
-      <span class="emphasis-number">
-        {{ wizard.totalImportSize }}
-      </span>
-      {{ 'WIZARD.sizeToImport' | translate }}
-    </span>
--->
 
   </div>
 

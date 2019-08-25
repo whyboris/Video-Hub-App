@@ -5,7 +5,8 @@ import { Tag } from '../tags-auto/tag-display.pipe';
 @Component({
   selector: 'app-view-tags-component',
   templateUrl: 'view-tags.component.html',
-  styleUrls: ['view-tags.component.scss',
+  styleUrls: ['../search.scss',
+              'view-tags.component.scss',
               '../../fonts/icons.scss']
 })
 export class ViewTagsComponent {
@@ -21,7 +22,7 @@ export class ViewTagsComponent {
       this._tags = <Tag[]>tags;
     }
 
-    console.log('HAPPEN HAPPEN');
+    // console.log('HAPPEN HAPPEN');
 
   }
 
@@ -40,13 +41,13 @@ export class ViewTagsComponent {
   }
 
   removeTag(tag: string): void {
-    console.log('remove tag clicked');
+    // console.log('remove tag clicked');
     this.removeTagEmit.emit(tag);
   }
 
   stringToTagObject(tagList: string[]): Tag[] {
 
-    console.log('running stringToTagObject');
+    // console.log('running stringToTagObject');
 
     const hackList: Tag[] = [];
 

@@ -145,7 +145,7 @@ function getDurationDisplay(numOfSec: number): string {
 /**
  * Count the number of unique folders in the final array
  */
-export function countFoldersInFinalArray(imagesArray: ImageElement[]): number {  // TODO -- run this after rescan !!!!!?!!!!!!
+export function countFoldersInFinalArray(imagesArray: ImageElement[]): number {
   const finalArrayFolderMap: Map<string, number> = new Map;
   imagesArray.forEach((element: ImageElement) => {
     if (!finalArrayFolderMap.has(element.partialPath)) {
@@ -429,7 +429,7 @@ function extractMetadataForThisONEFile(
 }
 
 // ===========================================================================================
-// TODO -- re-sort all the methods into some coherent grouping
+// Other supporting methods
 // ===========================================================================================
 
 /**
@@ -489,7 +489,6 @@ export function hashFile(pathToFile: string): string {
  * @param stage ImportStage
  */
 export function sendCurrentProgress(current: number, total: number, stage: ImportStage): void {
-  console.log('Stage: ' + stage + ' - ' + current + ' / ' + total);
   globals.angularApp.sender.send('processingProgress', current, total, stage);
   if (stage !== 'done') {
     globals.winRef.setProgressBar(current / total);

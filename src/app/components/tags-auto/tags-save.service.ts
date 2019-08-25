@@ -32,7 +32,7 @@ export class AutoTagsSaveService {
       this.addTags.push(tag);
     }
 
-    console.log(this.addTags);
+    // console.log(this.addTags);
   }
 
   /**
@@ -52,7 +52,7 @@ export class AutoTagsSaveService {
       this.removeTags.push(tag);
     }
 
-    console.log(this.removeTags);
+    // console.log(this.removeTags);
   }
 
   /**

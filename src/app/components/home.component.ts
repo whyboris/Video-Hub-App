@@ -233,13 +233,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     showWizard: false,
     ssConstant: 10,
     ssVariable: 5,
-    totalImportSize: 0,
-    totalImportTime: 0,
     totalNumberOfFiles: -1,
   };
 
   // ========================================================================
-  // UNSORTED -- @TODO -- CLEAN UP !!!
+  // UNSORTED -- TODO -- CLEAN UP !!!
   // ------------------------------------------------------------------------
 
   currentPlayingFile = '';
@@ -268,6 +266,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // time remaining calculator !!!
   timeExtractionStarted;
   timeExtractionRemaining;
+
+  folderNotConnectedErrorShowing: boolean = false;
 
   // ========================================================================
   // Please add new variables below if they don't fit into any other section
@@ -482,12 +482,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.debounceUpdateMax(10);
       });
 
+      // -- DEMO CONTENT -- hasn't been updated in over 1 year
+      //                    will need updating if enabled
       // if (this.webDemo) {
       //   const finalObject = DemoContent;
-      //   // TODO -- MAYBE ???? UPDATE SINCE THE BELOW HAS BEEN UPDATED
-      //   // identical to `finalObjectReturning`
+      //   // should be identical to `finalObjectReturning`
       //   this.appState.numOfFolders = finalObject.numOfFolders;
-      //   // DEMO CONTENT -- CONFIRM THAT IT WORKS !!!
       //   this.appState.selectedOutputFolder = 'images';
       //   this.appState.selectedSourceFolder = finalObject.inputDir;
       //   this.canCloseWizard = true;
@@ -506,8 +506,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.wizard.listOfFiles = listOfFiles;
 
       if (listOfFiles.length > 0) {
-        // TODO better prediction
-        // this.wizard.totalImportTime = Math.round(listOfFiles.length * 2.25 / 60);
         this.wizard.selectedSourceFolder = filePath;
         this.wizard.selectedOutputFolder = filePath;
       }
@@ -521,10 +519,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       if (success) {
         // UPDATE THE FINAL ARRAY !!!
-        this.replaceOriginalFileName();
+        this.replaceFileNameInFinalArray();
         this.closeRename();
       } else {
         this.renameErrMsg = errMsg;
+        this.cd.detectChanges();
       }
     });
 
@@ -542,7 +541,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // happens when user replaced a thumbnail and process is done
     this.electronService.ipcRenderer.on('thumbnail-replaced', (event) => {
-      console.log('REPLACED !!!!');
       this.electronService.webFrame.clearCache();
     });
 
@@ -1075,14 +1073,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     if (!matchFound) {
-      // TODO -- use slice -- this is reall really dumb!
-      this.vhaFileHistory.reverse();
-      this.vhaFileHistory.push(newHistoryItem);
-      this.vhaFileHistory.reverse();
+      this.vhaFileHistory.unshift(newHistoryItem);
     }
-
-    // console.log('CURRENT HISTORY OF VHA FILES');
-    // console.log(this.vhaFileHistory);
   }
 
   /**
@@ -1300,8 +1292,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       showWizard: true,
       ssConstant: 3,
       ssVariable: 10,
-      totalImportSize: 0,
-      totalImportTime: 0,
       totalNumberOfFiles: -1,
     };
     this.toggleSettings();
@@ -1322,11 +1312,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (this.settingsModalOpen) {
         this.toggleSettings();
       }
-      console.log('scanning for new files');
       this.electronService.ipcRenderer.send('only-import-new-files', this.finalArray);
     } else {
-      // TODO - tell user folder not live !!!
-      console.log('ROOT FOLDER NOT LIVE');
+      this.notifyRootFolderNotLive();
     }
   }
 
@@ -1338,11 +1326,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.progressNum1 = 0;
       this.importStage = 'importingScreenshots';
       this.toggleSettings();
-      console.log('verifying thumbnails');
       this.electronService.ipcRenderer.send('verify-thumbnails', this.finalArray);
     } else {
-      // TODO - tell user folder not live !!!
-      console.log('ROOT FOLDER NOT LIVE');
+      this.notifyRootFolderNotLive();
     }
   }
 
@@ -1356,11 +1342,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (this.settingsModalOpen) {
         this.toggleSettings();
       }
-      console.log('rescanning');
       this.electronService.ipcRenderer.send('rescan-current-directory', this.finalArray);
     } else {
-      // TODO - tell user folder not live !!!
-      console.log('ROOT FOLDER NOT LIVE');
+      this.notifyRootFolderNotLive();
     }
   }
 
@@ -1372,12 +1356,20 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.progressNum1 = 0;
       this.importStage = 'importingMeta';
       this.toggleSettings();
-      console.log('regenerating library');
       this.electronService.ipcRenderer.send('regenerate-library', this.finalArray);
     } else {
-      // TODO - tell user folder not live !!!
-      console.log('ROOT FOLDER NOT LIVE');
+      this.notifyRootFolderNotLive();
     }
+  }
+
+  /**
+   * Notify user root folder is not live
+   */
+  notifyRootFolderNotLive(): void {
+    this.folderNotConnectedErrorShowing = true;
+    setTimeout(() => {
+      this.folderNotConnectedErrorShowing = false;
+    }, 1500);
   }
 
   // ==========================================================================================
@@ -1806,6 +1798,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   closeRename() {
     this.renamingNow = false;
+    this.cd.detectChanges();
   }
 
   /**
@@ -1842,17 +1835,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   /**
    * Searches through the `finalArray` and updates the file name and display name
-   * TODO -- BUG?!?? -- check if this errors out when hub has two files with duplicate file names !!!
+   * Should not error out if two files have the same name
    */
-  replaceOriginalFileName(): void {
+  replaceFileNameInFinalArray(): void {
     const oldFileName = this.currentRightClickedItem.fileName;
 
-    for (let i = 0; i < this.finalArray.length; i++) {
-      if (this.finalArray[i].fileName === oldFileName) {
-        this.finalArray[i].fileName = this.renamingWIP + '.' + this.renamingExtension;
-        this.finalArray[i].cleanName = this.renamingWIP;
-        break;
-      }
+    const i = this.itemToRename.index;
+
+    if (this.finalArray[i].fileName === oldFileName) {
+      this.finalArray[i].fileName = this.renamingWIP + '.' + this.renamingExtension;
+      this.finalArray[i].cleanName = this.renamingWIP;
     }
 
     this.finalArrayNeedsSaving = true;
@@ -1943,7 +1935,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param emission - the type, tag, and uniqe ID of the file (hash)
    */
   editFinalArrayTag(emission: TagEmission): void {
-    // console.log(emission);
     const position: number = emission.index;
 
     if (emission.type === 'add') {
@@ -1953,7 +1944,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.finalArray[position].tags = [emission.tag];
       }
     } else {
-      console.log('removing tag!');
       this.finalArray[position].tags.splice(this.finalArray[position].tags.indexOf(emission.tag), 1);
     }
 

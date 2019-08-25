@@ -39,6 +39,11 @@
       }
     }
   }
+
+  .right-click-disabled {
+    color: $gray-50;
+    pointer-events: none;
+  }
 }
 
 .rename-popup {
