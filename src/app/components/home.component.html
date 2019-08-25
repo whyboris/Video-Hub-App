@@ -1255,6 +1255,7 @@
 <div
   *ngIf="settingsButtons['showRelatedVideosTray'].toggled"
   class="bottom-tray most-similar-tray"
+  [ngClass]="{ 'bottom-tray-dark': settingsButtons['darkMode'].toggled }"
   @modalAnimation
 >
 
@@ -1299,6 +1300,7 @@
 <div
   *ngIf="settingsButtons['showTagTray'].toggled"
   class="bottom-tray manual-tag-tray"
+  [ngClass]="{ 'bottom-tray-dark': settingsButtons['darkMode'].toggled }"
   @modalAnimation
 >
   <span class="manual-tag-tray-label">

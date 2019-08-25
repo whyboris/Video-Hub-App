@@ -257,7 +257,20 @@
   bottom: 0;
   left: 0;
   position: fixed;
+  transition-duration: 300ms;
+  transition-property: background-color;
   width: 100vw;
+}
+
+.bottom-tray-dark {
+  background: black;
+  border-top: 1px solid $gray-80;
+
+  button,
+  span,
+  input {
+    color: $gray-40;
+  }
 }
 
 .manual-tag-tray {
