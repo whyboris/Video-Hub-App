@@ -1071,14 +1071,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     if (!matchFound) {
-      // TODO -- use slice -- this is reall really dumb!
-      this.vhaFileHistory.reverse();
-      this.vhaFileHistory.push(newHistoryItem);
-      this.vhaFileHistory.reverse();
+      this.vhaFileHistory.unshift(newHistoryItem);
     }
-
-    // console.log('CURRENT HISTORY OF VHA FILES');
-    // console.log(this.vhaFileHistory);
   }
 
   /**
