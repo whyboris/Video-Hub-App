@@ -262,42 +262,50 @@
   width: 100vw;
 }
 
-.bottom-tray-dark {
-  background: black;
-  border-top: 1px solid $gray-80;
-
-  button,
-  span,
-  input {
-    color: $gray-40;
-  }
-
-  input {
-    &::placeholder {
-      color: $gray-50 !important;
-    }
-  }
-}
-
 .manual-tag-tray {
   box-sizing: border-box;
   height: 140px;
 
-  .all-the-tags {
-    left: 200px;
-    padding-right: 15px;
-    position: absolute;
-    top:16px;
-  }
-
-  .manual-tag-tray-label {
+  .manual-tag-tray-label,
+  .tag-sort-by-toggle,
+  .show-frequency {
     display: block;
     font-size: 12px;
     left: 10px;
     position: absolute;
     text-align: right;
-    top: 20px;
     width: 166px;
+  }
+
+  .manual-tag-tray-label {
+    top: 20px;
+  }
+
+  .tag-sort-by-toggle {
+    top: 46px;
+  }
+
+  .show-frequency {
+    top: 72px;
+  }
+
+  .tag-sort-by-toggle,
+  .show-frequency {
+    background: none;
+    border: none;
+    color: $gray-70;
+    padding-right: 0;
+
+    &:hover {
+      color: $pretty-blue;
+    }
+  }
+
+  .all-the-tags {
+    left: 200px;
+    padding-right: 15px;
+    position: absolute;
+    top: 16px;
   }
 
   // added on top of .filter-general
@@ -308,23 +316,33 @@
     padding: 6px;
     padding-bottom: 0;
     position: absolute;
-    top: 40px;
+    top: 90px;
     width: 155px;
 
     &::placeholder {
       color: $gray-80;
     }
   }
+}
 
-  .showFrequency {
-    background: none;
-    border: none;
-    bottom: 10px;
-    left: 20px;
-    position: absolute;
+.bottom-tray-dark {
+  background: black;
+  border-top: 1px solid $gray-80;
 
-    &:hover {
-      color: $pretty-blue;
+  button,
+  span,
+  input {
+    color: $gray-40;
+  }
+
+  .tag-sort-by-toggle,
+  .show-frequency {
+    color: $gray-60;
+  }
+
+  input {
+    &::placeholder {
+      color: $gray-50 !important;
     }
   }
 }
