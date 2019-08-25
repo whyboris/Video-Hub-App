@@ -35,7 +35,7 @@ export class DuplicateFinderPipe implements PipeTransform {
 
       switch(dupeType) {
         case 'length':
-          console.log('DUPLICATE by LENGTH');
+          // console.log('DUPLICATE by LENGTH');
           sortBy = 'timeDesc';
           initial = 0;
           feature = 'duration';
@@ -43,7 +43,7 @@ export class DuplicateFinderPipe implements PipeTransform {
           break;
 
       case 'size':
-          console.log('DUPLICATE by SIZE');
+          // console.log('DUPLICATE by SIZE');
           sortBy = 'sizeDesc';
           initial = 0;
           feature = 'fileSize';
@@ -51,7 +51,7 @@ export class DuplicateFinderPipe implements PipeTransform {
           break;
 
         case 'hash':
-          console.log('DUPLICATE by HASH');
+          // console.log('DUPLICATE by HASH');
           sortBy = 'hash';
           initial = '';
           feature = 'hash';
@@ -59,7 +59,7 @@ export class DuplicateFinderPipe implements PipeTransform {
           break;
 
         default:
-          console.log('this should never happen!');
+          // console.log('this should never happen!');
           break;
       }
 

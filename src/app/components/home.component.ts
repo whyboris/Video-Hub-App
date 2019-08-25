@@ -541,7 +541,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // happens when user replaced a thumbnail and process is done
     this.electronService.ipcRenderer.on('thumbnail-replaced', (event) => {
-      console.log('REPLACED !!!!');
       this.electronService.webFrame.clearCache();
     });
 
@@ -623,9 +622,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       changedRootFolder: boolean = false,
       rootFolderLive: boolean = true,
     ) => {
-
-      console.log('root folder?');
-      console.log(rootFolderLive);
 
       this.currentScreenshotSettings = finalObject.screenshotSettings;
 
@@ -1316,7 +1312,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (this.settingsModalOpen) {
         this.toggleSettings();
       }
-      console.log('scanning for new files');
       this.electronService.ipcRenderer.send('only-import-new-files', this.finalArray);
     } else {
       this.notifyRootFolderNotLive();
@@ -1331,7 +1326,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.progressNum1 = 0;
       this.importStage = 'importingScreenshots';
       this.toggleSettings();
-      console.log('verifying thumbnails');
       this.electronService.ipcRenderer.send('verify-thumbnails', this.finalArray);
     } else {
       this.notifyRootFolderNotLive();
@@ -1348,7 +1342,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (this.settingsModalOpen) {
         this.toggleSettings();
       }
-      console.log('rescanning');
       this.electronService.ipcRenderer.send('rescan-current-directory', this.finalArray);
     } else {
       this.notifyRootFolderNotLive();
@@ -1363,7 +1356,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.progressNum1 = 0;
       this.importStage = 'importingMeta';
       this.toggleSettings();
-      console.log('regenerating library');
       this.electronService.ipcRenderer.send('regenerate-library', this.finalArray);
     } else {
       this.notifyRootFolderNotLive();
@@ -1943,7 +1935,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param emission - the type, tag, and uniqe ID of the file (hash)
    */
   editFinalArrayTag(emission: TagEmission): void {
-    // console.log(emission);
     const position: number = emission.index;
 
     if (emission.type === 'add') {
@@ -1953,7 +1944,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.finalArray[position].tags = [emission.tag];
       }
     } else {
-      console.log('removing tag!');
       this.finalArray[position].tags.splice(this.finalArray[position].tags.indexOf(emission.tag), 1);
     }
 

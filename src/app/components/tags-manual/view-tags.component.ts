@@ -41,7 +41,7 @@ export class ViewTagsComponent {
   }
 
   removeTag(tag: string): void {
-    console.log('remove tag clicked');
+    // console.log('remove tag clicked');
     this.removeTagEmit.emit(tag);
   }
 
