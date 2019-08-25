@@ -98,11 +98,11 @@ export class SortingPipe implements PipeTransform {
    */
   transform(galleryArray: ImageElement[], sortingType: SortType, forceSortUpdateHack: number, skip: boolean): ImageElement[] {
 
-    console.log('SORTING RUNNING'); // TODO - ENABLE AND CHECK IF IT RUNS TOO OFTEN !!!
-    console.log(sortingType);
+    // console.log('SORTING RUNNING');
+    // console.log(sortingType);
 
     if (skip) {
-      console.log('skipping !!!');
+      // console.log('skipping !!!');
       return galleryArray;
     } else if (sortingType === 'random') {
 

@@ -4,22 +4,3 @@
   font-weight: normal;
   src: url('../fonts/videohubicon.woff') format('woff');
 }
-
-.icon:before {
-  font-family: "vh-icon-font";
-  font-size: 15px;
-
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  font-style: normal;
-  font-variant: normal;
-  font-weight: normal;
-  position: relative;
-  text-transform: none;
-}
-
-// Last remaining used one
-// TODO -- check where / how used
-.icon-chevron-right:before {
-  content: "\f1a0";
-}

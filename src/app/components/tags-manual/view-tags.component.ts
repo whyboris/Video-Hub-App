@@ -22,7 +22,7 @@ export class ViewTagsComponent {
       this._tags = <Tag[]>tags;
     }
 
-    console.log('HAPPEN HAPPEN');
+    // console.log('HAPPEN HAPPEN');
 
   }
 
@@ -47,7 +47,7 @@ export class ViewTagsComponent {
 
   stringToTagObject(tagList: string[]): Tag[] {
 
-    console.log('running stringToTagObject');
+    // console.log('running stringToTagObject');
 
     const hackList: Tag[] = [];
 

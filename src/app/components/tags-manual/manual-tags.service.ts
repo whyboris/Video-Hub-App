@@ -69,9 +69,9 @@ export class ManualTagsService {
       }
     });
 
-    console.log('done populating manual tags:');
-    console.log(this.tagsList);
-    console.log(this.tagsMap);
+    // console.log('done populating manual tags:');
+    // console.log(this.tagsList);
+    // console.log(this.tagsMap);
   }
 
   forceTagSortPipeUpdate(): void {
