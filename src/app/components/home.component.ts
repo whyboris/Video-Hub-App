@@ -30,10 +30,10 @@ import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, Settin
 import { globals, ScreenshotSettings } from '../../../main-globals';
 
 // Languages
-import { English } from '../i18n/en';
-import { French } from '../i18n/fr';
-import { Russian } from '../i18n/ru';
-import { BrazilianPortuguese } from '../i18n/pt_br';
+import { English } from '../../../i18n/en';
+import { French } from '../../../i18n/fr';
+import { Russian } from '../../../i18n/ru';
+import { BrazilianPortuguese } from '../../../i18n/pt_br';
 
 // Animations
 import {

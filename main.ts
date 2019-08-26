@@ -11,7 +11,7 @@ const codeRunningOnMac: boolean = process.platform === 'darwin';
 // System messages - import ENGLISH as default
 // on Angular load, we'll receive and replace these with the appropriate translations
 // translations received via `system-messages-updated`
-import { English } from './src/app/i18n/en';
+import { English } from './i18n/en';
 let systemMessages = English.SYSTEM;
 
 // ========================================================================================
