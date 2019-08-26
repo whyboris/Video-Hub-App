@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 
-import { ImageElement } from '../../common/final-object.interface';
+import { ImageElement } from '../../../../interfaces/final-object.interface';
 import { ScreenshotSettings } from '../../../../main-globals';
 
 @Component({

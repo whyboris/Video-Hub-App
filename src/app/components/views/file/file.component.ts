@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { ImageElement } from '../../../common/final-object.interface';
+import { ImageElement } from '../../../../../interfaces/final-object.interface';
 
 @Component({
   selector: 'app-file-item',

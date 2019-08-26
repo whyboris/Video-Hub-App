@@ -24,6 +24,6 @@
   "include": [
     "main.ts",
     "src/**/*",
-    "i18n"
+    "i18n", "interfaces/wizard-options.interface.ts", "interfaces/settings-object.interface.ts", "interfaces/settings-buttons.interface.ts", "interfaces/import.interface.ts", "interfaces/savable-properties.interface.ts", "interfaces/history-item.interface.ts", "interfaces/final-object.interface.ts"
   ]
 }

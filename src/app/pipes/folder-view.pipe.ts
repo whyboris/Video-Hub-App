@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { ImageElement, StarRating, NewImageElement } from '../common/final-object.interface';
+import { ImageElement, StarRating, NewImageElement } from '../../../interfaces/final-object.interface';
 
 interface FolderProperties {
   byteSize: number;    //                             corresponds to ImageElement `fileSize`

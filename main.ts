@@ -216,10 +216,10 @@ import {
 
 import { extractFromTheseFiles, replaceThumbnailWithNewImage } from './main-extract';
 
-import { FinalObject, ImageElement } from './src/app/common/final-object.interface';
-import { ImportSettingsObject } from './src/app/common/import.interface';
-import { SavableProperties } from './src/app/common/savable-properties.interface';
-import { SettingsObject } from './src/app/common/settings-object.interface';
+import { FinalObject, ImageElement } from './interfaces/final-object.interface';
+import { ImportSettingsObject } from './interfaces/import.interface';
+import { SavableProperties } from './interfaces/savable-properties.interface';
+import { SettingsObject } from './interfaces/settings-object.interface';
 
 let lastSavedFinalObject: FinalObject; // hack for saving the `vha2` file again later
 

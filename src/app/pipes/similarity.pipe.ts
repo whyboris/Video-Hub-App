@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { SimilarityService } from './similarity.service';
 
-import { ImageElement } from '../common/final-object.interface';
+import { ImageElement } from '../../../interfaces/final-object.interface';
 
 @Pipe({
   name: 'similarityPipe'

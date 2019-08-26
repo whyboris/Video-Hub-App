@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { autoFileTagsRegex } from './autotags.service';
 
-import { ImageElement } from '../../common/final-object.interface';
+import { ImageElement } from '../../../../interfaces/final-object.interface';
 
 import { Colors } from '../../common/colors';
 

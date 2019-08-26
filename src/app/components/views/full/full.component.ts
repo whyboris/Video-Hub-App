@@ -5,7 +5,7 @@ import { FilePathService } from '../file-path.service';
 
 import { metaAppear, textAppear } from '../../../common/animations';
 
-import { ImageElement } from '../../../common/final-object.interface';
+import { ImageElement } from '../../../../../interfaces/final-object.interface';
 
 @Component({
   selector: 'app-full-item',

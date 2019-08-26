@@ -3,7 +3,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 import { FilePathService } from '../file-path.service';
 
-import { ImageElement } from '../../../common/final-object.interface';
+import { ImageElement } from '../../../../../interfaces/final-object.interface';
 
 import { metaAppear, textAppear } from '../../../common/animations';
 

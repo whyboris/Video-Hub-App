@@ -18,7 +18,7 @@ const ffprobePath = require('@ffprobe-installer/ffprobe').path.replace('app.asar
 
 import { acceptableFiles } from './main-filenames';
 import { globals, ScreenshotSettings } from './main-globals';
-import { FinalObject, ImageElement, NewImageElement } from './src/app/common/final-object.interface';
+import { FinalObject, ImageElement, NewImageElement } from './interfaces/final-object.interface';
 import { ResolutionString } from './src/app/pipes/resolution-filter.service';
 
 interface ResolutionMeta {

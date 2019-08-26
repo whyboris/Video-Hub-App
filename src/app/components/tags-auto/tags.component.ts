@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, Output, OnDestroy, ViewChild, ElementRe
 import { AutoTagsService, WordAndFreq } from './autotags.service';
 import { AutoTagsSaveService } from './tags-save.service';
 
-import { ImageElement } from '../../common/final-object.interface';
+import { ImageElement } from '../../../../interfaces/final-object.interface';
 
 import { slowFadeIn, donutAppear } from '../../common/animations';
 
