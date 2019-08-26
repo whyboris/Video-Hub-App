@@ -1,4 +1,4 @@
-import { ImageElement } from '../src/app/common/final-object.interface';
+import { ImageElement } from './final-object.interface';
 
 export interface SavableProperties {
   addTags: string[];      // tags to add

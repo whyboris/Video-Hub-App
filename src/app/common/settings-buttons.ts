@@ -1,4 +1,4 @@
-import { SettingsButton } from '../../../interfaces/settings-buttons.interface';
+import { SettingsButton } from './settings-buttons.interface';
 
 // Add `SettingsButtons` items here so they show up in the buttons ribbon and in the settings
 // Each array separates buttons into their own button groups visually

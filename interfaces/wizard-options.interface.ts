@@ -1,4 +1,4 @@
-import { ImageElement } from '../src/app/common/final-object.interface';
+import { ImageElement } from './final-object.interface';
 
 // meant to keep the full state of the Wizard settings chosen
 export interface WizardOptions {

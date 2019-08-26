@@ -1,5 +1,5 @@
 import { AppStateInterface } from '../src/app/common/app-state';
-import { HistoryItem } from '../src/app/common/history-item.interface';
+import { HistoryItem } from './history-item.interface';
 
 export interface SettingsObject {
   appState: AppStateInterface;
