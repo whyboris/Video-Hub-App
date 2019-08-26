@@ -314,9 +314,9 @@ function openThisDamnFile(pathToVhaFile: string) {
           return;
         }
 
-      }
+        console.log('THIS SHOULD NOT RUN UNTIL MODAL CLICKED !!!');
 
-      console.log('THIS SHOULD NOT RUN UNTIL MODAL CLICKED !!!');
+      }
 
       setGlobalsFromVhaFile(lastSavedFinalObject); // sets source folder ETC
 
