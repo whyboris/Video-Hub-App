@@ -17,6 +17,7 @@ src/**/*.js
 
 # TS to JS
 /interfaces/*.js
+/i18n/*.js
 
 # dependencies
 /node_modules
