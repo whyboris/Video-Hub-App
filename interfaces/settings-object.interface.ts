@@ -1,4 +1,4 @@
-import { AppStateInterface } from './app-state';
+import { AppStateInterface } from '../src/app/common/app-state';
 import { HistoryItem } from './history-item.interface';
 
 export interface SettingsObject {

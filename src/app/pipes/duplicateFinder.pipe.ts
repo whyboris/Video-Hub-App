@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { SortingPipe } from './sorting.pipe';
 
-import { ImageElement } from '../common/final-object.interface';
+import { ImageElement } from '../../../interfaces/final-object.interface';
 
 type DupeType = 'length'   | 'size'     | 'hash';
 type SortBy =   'timeDesc' | 'sizeDesc' | 'hash';

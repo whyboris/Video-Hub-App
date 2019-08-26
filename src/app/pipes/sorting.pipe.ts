@@ -1,5 +1,5 @@
 import { Pipe, PipeTransform } from '@angular/core';
-import { ImageElement, StarRating } from '../common/final-object.interface';
+import { ImageElement, StarRating } from '../../../interfaces/final-object.interface';
 
 export type SortType = 'default'
                      | 'hash' // only used by the duplicateFinderPipe

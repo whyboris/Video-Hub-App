@@ -13,15 +13,15 @@ import { StarFilterService } from '../pipes/star-filter.service';
 import { WordFrequencyService } from '../pipes/word-frequency.service';
 
 // Interfaces
-import { FinalObject, ImageElement } from '../common/final-object.interface';
-import { HistoryItem } from '../common/history-item.interface';
-import { ImportSettingsObject } from '../common/import.interface';
+import { FinalObject, ImageElement } from '../../../interfaces/final-object.interface';
+import { HistoryItem } from '../../../interfaces/history-item.interface';
+import { ImportSettingsObject } from '../../../interfaces/import.interface';
 import { ImportStage } from '../../../main-support';
-import { SavableProperties } from '../common/savable-properties.interface';
-import { SettingsObject } from '../common/settings-object.interface';
+import { SavableProperties } from '../../../interfaces/savable-properties.interface';
+import { SettingsObject } from '../../../interfaces/settings-object.interface';
 import { SortType } from '../pipes/sorting.pipe';
 import { TagEmission, StarEmission, YearEmission } from './views/details/details.component';
-import { WizardOptions } from '../common/wizard-options.interface';
+import { WizardOptions } from '../../../interfaces/wizard-options.interface';
 
 // Constants, etc
 import { AppState, SupportedLanguage, defaultImgsPerRow, RowNumbers, allSupportedViews, SupportedView } from '../common/app-state';
@@ -30,10 +30,10 @@ import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, Settin
 import { globals, ScreenshotSettings } from '../../../main-globals';
 
 // Languages
-import { English } from '../i18n/en';
-import { French } from '../i18n/fr';
-import { Russian } from '../i18n/ru';
-import { BrazilianPortuguese } from '../i18n/pt_br';
+import { English } from '../../../i18n/en';
+import { French } from '../../../i18n/fr';
+import { Russian } from '../../../i18n/ru';
+import { BrazilianPortuguese } from '../../../i18n/pt_br';
 
 // Animations
 import {

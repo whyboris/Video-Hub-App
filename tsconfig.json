@@ -22,6 +22,8 @@
     "node_modules"
   ],
   "include": [
+    "i18n",
+    "interfaces",
     "main.ts",
     "src/**/*"
   ]

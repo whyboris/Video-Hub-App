@@ -11,14 +11,14 @@ const codeRunningOnMac: boolean = process.platform === 'darwin';
 // System messages - import ENGLISH as default
 // on Angular load, we'll receive and replace these with the appropriate translations
 // translations received via `system-messages-updated`
-import { English } from './src/app/i18n/en';
+import { English } from './i18n/en';
 let systemMessages = English.SYSTEM;
 
 // ========================================================================================
 // ***************************** BUILD TOGGLE *********************************************
 // ========================================================================================
 const demo = false;
-globals.version = '1.9.9';
+globals.version = '2.0.0';
 // ========================================================================================
 
 
@@ -216,10 +216,10 @@ import {
 
 import { extractFromTheseFiles, replaceThumbnailWithNewImage } from './main-extract';
 
-import { FinalObject, ImageElement } from './src/app/common/final-object.interface';
-import { ImportSettingsObject } from './src/app/common/import.interface';
-import { SavableProperties } from './src/app/common/savable-properties.interface';
-import { SettingsObject } from './src/app/common/settings-object.interface';
+import { FinalObject, ImageElement } from './interfaces/final-object.interface';
+import { ImportSettingsObject } from './interfaces/import.interface';
+import { SavableProperties } from './interfaces/savable-properties.interface';
+import { SettingsObject } from './interfaces/settings-object.interface';
 
 let lastSavedFinalObject: FinalObject; // hack for saving the `vha2` file again later
 
@@ -314,9 +314,9 @@ function openThisDamnFile(pathToVhaFile: string) {
           return;
         }
 
-      }
+        console.log('THIS SHOULD NOT RUN UNTIL MODAL CLICKED !!!');
 
-      console.log('THIS SHOULD NOT RUN UNTIL MODAL CLICKED !!!');
+      }
 
       setGlobalsFromVhaFile(lastSavedFinalObject); // sets source folder ETC
 

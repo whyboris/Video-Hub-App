@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { ImageElement } from '../../common/final-object.interface';
+import { ImageElement } from '../../../../interfaces/final-object.interface';
 
 @Injectable()
 export class ManualTagsService {

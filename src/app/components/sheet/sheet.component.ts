@@ -3,7 +3,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 import { ManualTagsService } from '../tags-manual/manual-tags.service';
 
-import { StarRating, ImageElement } from '../../common/final-object.interface';
+import { StarRating, ImageElement } from '../../../../interfaces/final-object.interface';
 
 import { metaAppear, textAppear, modalAnimation } from '../../common/animations';
 import { YearEmission } from '../views/details/details.component';
