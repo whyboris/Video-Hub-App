@@ -372,7 +372,7 @@ export const English = {
     pleaseChangeName    :'Please change the hub name above',
     selectDefaultPlayer :'Please select your preferred video player',
     selectPreviousHub   :'Please select a previously-saved Video Hub file',
-    selectRootFolder    :'Select Root Folder',
-    videoFolderNotFound :'Video folder not found:',
+    selectRootFolder    :'Select Source Video Folder',
+    videoFolderNotFound :'Source Video Folder not found:',
   }
 };
