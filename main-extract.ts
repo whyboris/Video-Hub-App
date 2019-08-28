@@ -76,16 +76,18 @@ const checkAllScreensExist = (
     const step: number = duration / (totalCount + 1);
 
     // check for complete file
-    const check = (current) => {
+    const check = (current: number): void => {
       if (current === totalCount) {
+        console.log('resolving TRUE');
         resolve(true);
+        return; // else the rest of the function runs === bad!
       }
 
       // !!!!!!
       // TODO -- see if still a problem !!!!!!!!!!!!!
       // Notice this keeps running even after screenshots successfully extracted!
       // !!!!!!
-      console.log('checking ' + current);
+      // console.log('checking ' + current);
 
       const time = (current + 1) * step; // +1 so we don't pick the 0th frame
       const corruptRegex = /Output file is empty, nothing was encoded/g;
@@ -118,13 +120,14 @@ const checkAllScreensExist = (
         }
       });
       ffmpeg_process.on('exit', () => {
+        console.log('advancing');
         check(current + 1);
       });
     };
-    console.log('checkAllScreensExist is DISABLED !!!');
+    // console.log('checkAllScreensExist is DISABLED !!!');
     // uncomment line below to enable
-    // check(0);
-    resolve(true);
+    check(0);
+    // resolve(true);
   });
 
 };
@@ -236,6 +239,16 @@ const generateScreenshotStrip = (
     );
 
     const ffmpeg_process = spawn(ffmpegPath, args);
+
+    setTimeout(() => {
+      console.log('needs killing?');
+      // console.log(ffmpeg_process);
+      if (!ffmpeg_process.killed) {
+        ffmpeg_process.kill();
+        console.log('process KILLED!');
+      }
+    }, 3000);
+
     // Note from past Cal to future Cal:
     // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
     ffmpeg_process.stdout.on('data', function (data) {
@@ -492,7 +505,7 @@ export function extractFromTheseFiles(
 
         .catch((err) => {
           console.log('EXTRACTION ERROR: ' + err);
-          extractIterator();
+          extractIterator(); // resume iterating
         });
 
     } else {
