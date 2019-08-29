@@ -19,6 +19,8 @@
 //          Imports
 // ========================================================================================
 
+const { performance } = require('perf_hooks');
+
 const fs = require('fs');
 
 import * as path from 'path';
@@ -49,87 +51,11 @@ const checkIfInputFileExists = (pathToFile: string) => {
   return new Promise((resolve, reject) => {
 
     if (fs.existsSync(pathToFile)) {
-      resolve(true);
+      return resolve(true);
     } else {
-      resolve(false);
+      return resolve(false);
     }
   });
-};
-
-/**
- * Check whether screenshots can be extracted from video file
- * To prevent erroring when file is corrupt
- *
- * @param pathToVideo
- * @param duration
- * @param numberOfScreenshots
- */
-const checkAllScreensExist = (
-  pathToVideo: string,
-  duration: number,
-  numberOfScreenshots: number,
-) => {
-
-  return new Promise((resolve, reject) => {
-
-    const totalCount = numberOfScreenshots;
-    const step: number = duration / (totalCount + 1);
-
-    // check for complete file
-    const check = (current: number): void => {
-      if (current === totalCount) {
-        console.log('resolving TRUE');
-        resolve(true);
-        return; // else the rest of the function runs === bad!
-      }
-
-      // !!!!!!
-      // TODO -- see if still a problem !!!!!!!!!!!!!
-      // Notice this keeps running even after screenshots successfully extracted!
-      // !!!!!!
-      // console.log('checking ' + current);
-
-      const time = (current + 1) * step; // +1 so we don't pick the 0th frame
-      const corruptRegex = /Output file is empty, nothing was encoded/g;
-
-      const args = [
-        '-v', 'warning', '-ss', time, '-t', '1', '-i', pathToVideo, '-map', 'V', '-f', 'null', '-',
-      ];
-      // console.log('extracting clip frame 1');
-      const ffmpeg_process = spawn(ffmpegPath, args);
-      // Note from past Cal to future Cal:
-      // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
-      ffmpeg_process.stdout.on('data', function (data) {
-        if (globals.debug) {
-          console.log(data);
-          if (data.match(corruptRegex)) {
-            // skip this file
-            console.log(pathToVideo + ' was corrupt, skipping!');
-            resolve(false);
-          }
-        }
-      });
-      ffmpeg_process.stderr.on('data', function (data) {
-        if (globals.debug) {
-          console.log('grep stderr: ' + data);
-          if (data.match(corruptRegex)) {
-            console.log(pathToVideo + ' was corrupt, skipping!');
-            resolve(false);
-          }
-          resolve(false);
-        }
-      });
-      ffmpeg_process.on('exit', () => {
-        console.log('advancing');
-        check(current + 1);
-      });
-    };
-    // console.log('checkAllScreensExist is DISABLED !!!');
-    // uncomment line below to enable
-    check(0);
-    // resolve(true);
-  });
-
 };
 
 /**
@@ -148,8 +74,10 @@ const extractSingleFrame = (
   return new Promise((resolve, reject) => {
 
     if (fs.existsSync(saveLocation + '/thumbnails/' + fileHash + '.jpg')) {
-      resolve(true);
+      return resolve(true);
     }
+
+    const t0: number = performance.now();
 
     const ssWidth: number = screenshotHeight * (16 / 9);
 
@@ -176,7 +104,9 @@ const extractSingleFrame = (
       }
     });
     ffmpeg_process.on('exit', () => {
-      resolve(true);
+      const t1: number = performance.now();
+      console.log('single frame: ' + (t1 - t0).toString());
+      return resolve(true);
     });
 
   });
@@ -208,9 +138,11 @@ const generateScreenshotStrip = (
 
   return new Promise((resolve, reject) => {
 
+    const t0: number = performance.now();
+
     if (fs.existsSync(saveLocation + '/filmstrips/' + fileHash + '.jpg')) {
       console.log('thumbnails for ' + fileHash + ' already exist');
-      resolve(true);
+      return resolve(true);
     }
 
     let current = 0;
@@ -262,7 +194,9 @@ const generateScreenshotStrip = (
       }
     });
     ffmpeg_process.on('exit', () => {
-      resolve(true);
+      const t1: number = performance.now();
+      console.log('filmstrip: ' + (t1 - t0).toString());
+      return resolve(true);
     });
 
   });
@@ -295,7 +229,7 @@ const generatePreviewClip = (
 
     if (fs.existsSync(saveLocation + '/clips/' + fileHash + '.mp4')) {
       // console.log("thumbnails for " + fileHash + " already exist");
-      resolve(true);
+      return resolve(true);
     }
 
     let current = 1;
@@ -338,7 +272,7 @@ const generatePreviewClip = (
       }
     });
     ffmpeg_process.on('exit', () => {
-      resolve(true);
+      return resolve(true);
     });
 
   });
@@ -356,7 +290,7 @@ const extractFirstFrame = (saveLocation: string, fileHash: string) => {
   return new Promise((resolve, reject) => {
 
     if (fs.existsSync(saveLocation + '/clips/' + fileHash + '.jpg')) {
-      resolve(true);
+      return resolve(true);
     }
 
     const args = [
@@ -381,7 +315,7 @@ const extractFirstFrame = (saveLocation: string, fileHash: string) => {
       }
     });
     ffmpeg_process.on('exit', () => {
-      resolve(true);
+      return resolve(true);
     });
 
   });
@@ -450,21 +384,21 @@ export function extractFromTheseFiles(
       checkIfInputFileExists(pathToVideo)
 
         .then(content => {
-          console.log('01 - file extists = ' + content);
+          console.log('01 - video file extists = ' + content);
 
           if (content === false) {
             throw new Error('NOTPRESENT');
           }
 
-          return checkAllScreensExist(pathToVideo, duration, numOfScreens);
-        })
+        //   return checkAllScreensExist(pathToVideo, duration, numOfScreens);
+        // })
 
-        .then(content => {
-          console.log('02 - all screenshots present = ' + content);
+        // .then(content => {
+        //   console.log('DISABLED - all screenshots present = ' + content);
 
-          if (content === false) {
-            throw new Error('FILE MIGHT BE CORRUPT');
-          }
+        //   if (content === false) {
+        //     throw new Error('FILE MIGHT BE CORRUPT');
+        //   }
 
           return extractSingleFrame(
             pathToVideo, screenshotFolder, fileHash, screenshotHeight, duration
@@ -472,7 +406,7 @@ export function extractFromTheseFiles(
         })
 
         .then(content => {
-          console.log('03 - single screenshot extracted = ' + content);
+          console.log('02 - single screenshot extracted = ' + content);
 
           return generateScreenshotStrip(
             pathToVideo, fileHash, duration, screenshotHeight, numOfScreens, screenshotFolder
@@ -480,7 +414,7 @@ export function extractFromTheseFiles(
         })
 
         .then(content => {
-          console.log('04 - filmstrip generated = ' + content);
+          console.log('03 - filmstrip generated = ' + content);
 
           if (clipSnippets === 0) {
             throw new Error('USER DOES NOT WANT CLIPS');
@@ -492,13 +426,13 @@ export function extractFromTheseFiles(
         })
 
         .then(content => {
-          console.log('05 - preview clip generated = ' + content);
+          console.log('04 - preview clip generated = ' + content);
 
           return extractFirstFrame(screenshotFolder, fileHash);
         })
 
         .then(content => {
-          console.log('06 - extracted first thumb = ' + content);
+          console.log('05 - extracted preview clip thumbnail = ' + content);
 
           extractIterator(); // resume iterating
         })
@@ -560,7 +494,7 @@ export function replaceThumbnailWithNewImage(
     });
     ffmpeg_process.on('exit', () => {
       console.log('Done replacing the thumbnail!');
-      resolve(true);
+      return resolve(true);
     });
 
   });
@@ -580,3 +514,89 @@ function scaleAndPadString(width: number, height: number): string {
          'pad='     + width + ':'   + height + ':(ow-iw)/2:(oh-ih)/2';
 
 }
+
+
+// ========================================================================================
+//         Disabled method
+// ========================================================================================
+
+/**
+ * Check whether screenshots can be extracted from video file
+ * To prevent erroring when file is corrupt
+ *
+ * Method currently disabled because it takes too long:
+ * For 15 screenshots, it takes 1 - 6 seconds to check if the file is not corrupt
+ * This is too long to wait during a regular extraction process
+ * since 99% of the files will not be corrupt
+ *
+ * Furthermore, it does not seem to catch all corrupt files anyway
+ *
+ * The current solution is simply to kill every ffmpeg process after some time
+ * in case it is stuck trying to parse an unparsable file
+ *
+ * @param pathToVideo
+ * @param duration
+ * @param numberOfScreenshots
+ */
+const checkAllScreensExist__DISABLED = (
+  pathToVideo: string,
+  duration: number,
+  numberOfScreenshots: number,
+) => {
+
+  return new Promise((resolve, reject) => {
+
+    const t0: number = performance.now();
+
+    const totalCount = numberOfScreenshots;
+    const step: number = duration / (totalCount + 1);
+
+    // check for complete file
+    const check = (current: number): void => {
+      if (current === totalCount) {
+        console.log('resolving TRUE');
+
+        const t1: number = performance.now();
+        console.log('SS check: ' + (t1 - t0).toString());
+
+        return resolve(true);
+      }
+
+      const time = (current + 1) * step; // +1 so we don't pick the 0th frame
+      const corruptRegex = /Output file is empty, nothing was encoded/g;
+
+      const args = [
+        '-v', 'warning', '-ss', time, '-t', '1', '-i', pathToVideo, '-map', 'V', '-f', 'null', '-',
+      ];
+      // console.log('extracting clip frame 1');
+      const ffmpeg_process = spawn(ffmpegPath, args);
+      // Note from past Cal to future Cal:
+      // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
+      ffmpeg_process.stdout.on('data', function (data) {
+        if (globals.debug) {
+          console.log(data);
+          if (data.match(corruptRegex)) {
+            // skip this file
+            console.log(pathToVideo + ' was corrupt, skipping!');
+            return resolve(false);
+          }
+        }
+      });
+      ffmpeg_process.stderr.on('data', function (data) {
+        if (globals.debug) {
+          console.log('grep stderr: ' + data);
+          if (data.match(corruptRegex)) {
+            console.log(pathToVideo + ' was corrupt, skipping!');
+            return resolve(false);
+          }
+          return resolve(false);
+        }
+      });
+      ffmpeg_process.on('exit', () => {
+        check(current + 1);
+      });
+    };
+    check(0);
+  });
+
+};
