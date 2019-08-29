@@ -38,7 +38,7 @@ Main dependencies in use:
 | -------     | ------- | ----        | ------- |
 | Angular     | v8.2.3  | August 2019 |         |
 | Angular-CLI | v8.2.3  | August 2019 |         |
-| Electron    | v6.0.2  | August 2019 | (internally uses Node v12.4.0 and Chromium 76) |
+| Electron    | v6.0.5  | August 2019 | (internally uses Node v12.4.0 and Chromium 76) |
 | Electron Builder | v20.44.4 | June 2019 |     |
 
 App confirmed to work with latest versions of node and npm as of June 2019. Note you'll need to install the [Angular CLI](https://cli.angular.io) to run the project (`npm install -g @angular/cli`).
