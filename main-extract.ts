@@ -19,6 +19,9 @@
 //          Imports
 // ========================================================================================
 
+// cool method to disable all console.log statements!
+// console.log = function() {};
+
 const { performance } = require('perf_hooks');
 
 const fs = require('fs');
@@ -93,12 +96,12 @@ const extractSingleFrame = (
     const ffmpeg_process = spawn(ffmpegPath, args);
     // Note from past Cal to future Cal:
     // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
-    ffmpeg_process.stdout.on('data', function (data) {
+    ffmpeg_process.stdout.on('data', data => {
       if (globals.debug) {
         console.log(data);
       }
     });
-    ffmpeg_process.stderr.on('data', function (data) {
+    ffmpeg_process.stderr.on('data', data => {
       if (globals.debug) {
         console.log('grep stderr: ' + data);
       }
@@ -112,7 +115,6 @@ const extractSingleFrame = (
   });
 
 };
-
 
 /**
  * Take N screenshots of a particular file
@@ -172,7 +174,7 @@ const generateScreenshotStrip = (
 
     const ffmpeg_process = spawn(ffmpegPath, args);
 
-    setTimeout(() => {
+    const myTimeout = setTimeout(() => {
       console.log('needs killing?');
       // console.log(ffmpeg_process);
       if (!ffmpeg_process.killed) {
@@ -183,12 +185,12 @@ const generateScreenshotStrip = (
 
     // Note from past Cal to future Cal:
     // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
-    ffmpeg_process.stdout.on('data', function (data) {
+    ffmpeg_process.stdout.on('data', data => {
       if (globals.debug) {
         console.log(data);
       }
     });
-    ffmpeg_process.stderr.on('data', function (data) {
+    ffmpeg_process.stderr.on('data', data => {
       if (globals.debug) {
         console.log('grep stderr: ' + data);
       }
@@ -196,6 +198,7 @@ const generateScreenshotStrip = (
     ffmpeg_process.on('exit', () => {
       const t1: number = performance.now();
       console.log('filmstrip: ' + (t1 - t0).toString());
+      clearTimeout(myTimeout);
       return resolve(true);
     });
 
@@ -261,12 +264,12 @@ const generatePreviewClip = (
     const ffmpeg_process = spawn(ffmpegPath, args);
     // Note from past Cal to future Cal:
     // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
-    ffmpeg_process.stdout.on('data', function (data) {
+    ffmpeg_process.stdout.on('data', data => {
       if (globals.debug) {
         console.log(data);
       }
     });
-    ffmpeg_process.stderr.on('data', function (data) {
+    ffmpeg_process.stderr.on('data', data => {
       if (globals.debug) {
         console.log('grep stderr: ' + data);
       }
@@ -304,12 +307,12 @@ const extractFirstFrame = (saveLocation: string, fileHash: string) => {
     const ffmpeg_process = spawn(ffmpegPath, args);
     // Note from past Cal to future Cal:
     // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
-    ffmpeg_process.stdout.on('data', function (data) {
+    ffmpeg_process.stdout.on('data', data => {
       if (globals.debug) {
         console.log(data);
       }
     });
-    ffmpeg_process.stderr.on('data', function (data) {
+    ffmpeg_process.stderr.on('data', data => {
       if (globals.debug) {
         console.log('grep stderr: ' + data);
       }
@@ -389,16 +392,6 @@ export function extractFromTheseFiles(
           if (content === false) {
             throw new Error('NOTPRESENT');
           }
-
-        //   return checkAllScreensExist(pathToVideo, duration, numOfScreens);
-        // })
-
-        // .then(content => {
-        //   console.log('DISABLED - all screenshots present = ' + content);
-
-        //   if (content === false) {
-        //     throw new Error('FILE MIGHT BE CORRUPT');
-        //   }
 
           return extractSingleFrame(
             pathToVideo, screenshotFolder, fileHash, screenshotHeight, duration
@@ -482,12 +475,12 @@ export function replaceThumbnailWithNewImage(
 
     const ffmpeg_process = spawn(ffmpegPath, args);
     // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
-    ffmpeg_process.stdout.on('data', function (data) {
+    ffmpeg_process.stdout.on('data', data => {
       if (globals.debug) {
         console.log(data);
       }
     });
-    ffmpeg_process.stderr.on('data', function (data) {
+    ffmpeg_process.stderr.on('data', data => {
       if (globals.debug) {
         console.log('grep stderr: ' + data);
       }
@@ -534,6 +527,18 @@ function scaleAndPadString(width: number, height: number): string {
  * The current solution is simply to kill every ffmpeg process after some time
  * in case it is stuck trying to parse an unparsable file
  *
+ * Used to be after step 1 (checking video file still present)
+ *
+        //   return checkAllScreensExist(pathToVideo, duration, numOfScreens);
+        // })
+
+        // .then(content => {
+        //   console.log('1.5 - all screenshots present = ' + content);
+
+        //   if (content === false) {
+        //     throw new Error('FILE MIGHT BE CORRUPT');
+        //   }
+ *
  * @param pathToVideo
  * @param duration
  * @param numberOfScreenshots
@@ -572,7 +577,7 @@ const checkAllScreensExist__DISABLED = (
       const ffmpeg_process = spawn(ffmpegPath, args);
       // Note from past Cal to future Cal:
       // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
-      ffmpeg_process.stdout.on('data', function (data) {
+      ffmpeg_process.stdout.on('data', data => {
         if (globals.debug) {
           console.log(data);
           if (data.match(corruptRegex)) {
@@ -582,7 +587,7 @@ const checkAllScreensExist__DISABLED = (
           }
         }
       });
-      ffmpeg_process.stderr.on('data', function (data) {
+      ffmpeg_process.stderr.on('data', data => {
         if (globals.debug) {
           console.log('grep stderr: ' + data);
           if (data.match(corruptRegex)) {
