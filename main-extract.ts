@@ -197,41 +197,42 @@ const extractFirstFrameArgs = (
  * that can get toggled while scanning all screenshots
  *
  * Extract following this order. Each stage returns a boolean
- * RESTART means go back to (1) with the next item on the list
+ * (^) means RESTART -- go back to (1) with the next item-to-extract on the list
  *
- *    1. check if input file exists
- *         true:                   go to (2)
- *         false:                    RESTART
- * THUMB ===================================
- *    2. check thumb exists
- *         true:                   go to (4)
- *         false:                  go to (3)
- *    3. extract the SINGLE screenshot
- *         true:   move to (4)
- *         false:  assume corrupt -- RESTART
- * FILMSTRIP ===============================
- *    4. check filmstrip exists
- *         true:                   go to (6)
- *         false:                  go to (5)
- *    5. extract the FILMSTRIP
- *         true:   clipSnippets === 0 ?
- *           true:   nothing to do - RESTART
- *           false:                go to (6)
- *         false:  assume corrupt -- RESTART
- * CLIP ====================================
- *    6. check clip exists
- *         true:                   go to (8)
- *         false:                  go to (7)
- *    7. extract the CLIP
- *         true:                   go to (8)
- *         false:  assume corrupt -- RESTART
- * CLIP THUMB ==============================
- *    8. check clip thumb exists
- *         true:   RESTART
- *         false:                  go to (9)
- *    9. extract the CLIP preview
- *         true:   RESTART
- *         false:  RESTART
+ * SOURCE FILE ============================
+ *   (1) check if input file exists
+ *         T:                           (2)
+ *         F:                           (^) restart
+ * THUMB ==================================
+ *   (2) check thumb exists
+ *         T:                           (4)
+ *         F:                           (3)
+ *   (3) extract the SINGLE screenshot
+ *         T:                           (4)
+ *         F:                           (^) restart - assume corrupt
+ * FILMSTRIP ==============================
+ *   (4) check filmstrip exists
+ *         T:                           (6)
+ *         F:                           (5)
+ *   (5) extract the FILMSTRIP
+ *         T: (clipSnippets === 0) ?
+ *             T:   nothing to do       (^) restart
+ *             F:                       (6)
+ *         F:                           (^) restart - assume corrupt
+ * CLIP ===================================
+ *   (6) check clip exists
+ *         T:                           (8)
+ *         F:                           (7)
+ *   (7) extract the CLIP
+ *         T:                           (8)
+ *         F:                           (^) restart - assume corrupt
+ * CLIP THUMB =============================
+ *   (8) check clip thumb exists
+ *         T:                           (^) restart
+ *         F:                           (9)
+ *   (9) extract the CLIP preview
+ *         T:                           (^) restart
+ *         F:                           (^) restart
  *
  * @param theFinalArray      -- finalArray of ImageElements
  * @param videoFolderPath    -- path to base folder where videos are
@@ -276,7 +277,7 @@ export function extractFromTheseFiles(
 
       const thumbnailSavePath: string = screenshotFolder + '/thumbnails/' + fileHash + '.jpg';
       const filmstripSavePath: string = screenshotFolder + '/filmstrips/' + fileHash + '.jpg';
-      const clipSavePath: string =      screenshotFolder + '/clips/' +      fileHash + '.mp4';
+      const clipSavePath:      string = screenshotFolder + '/clips/' +      fileHash + '.mp4';
       const clipThumbSavePath: string = screenshotFolder + '/clips/' +      fileHash + '.jpg';
 
       checkFileExists(pathToVideo)                                                            // (1)
