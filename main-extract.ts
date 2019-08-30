@@ -198,34 +198,37 @@ const extractFirstFrameArgs = (
  *
  * Extract following this order. Each stage returns a boolean
  * RESTART means go back to (1) with the next item on the list
+ *
  *    1. check if input file exists
- *         true:   go to (2)
- *         false:  RESTART
- *    ===== THUMB ====
+ *         true:                   go to (2)
+ *         false:                    RESTART
+ * THUMB ===================================
  *    2. check thumb exists
- *         true:   go to (4)
- *         false:  go to (3)
+ *         true:                   go to (4)
+ *         false:                  go to (3)
  *    3. extract the SINGLE screenshot
  *         true:   move to (4)
  *         false:  assume corrupt -- RESTART
- *    ===== FILMSTRIP =====
+ * FILMSTRIP ===============================
  *    4. check filmstrip exists
- *         true:   move to (6)
- *         false:  move to (5)
+ *         true:                   go to (6)
+ *         false:                  go to (5)
  *    5. extract the FILMSTRIP
- *         true:   if `clipSnippets` !== 0, move to (6) else RESTART
- *         false:  assume corrupt -- RSTART
- *    ===== CLIP =====
- *    6. check clip exists
- *         true:   move to (8)
- *         false:  mavo to (7)
- *    7. extract the CLIP
- *         true:   move to (8)
+ *         true:   clipSnippets === 0 ?
+ *           true:   nothing to do - RESTART
+ *           false:                go to (6)
  *         false:  assume corrupt -- RESTART
- *    ===== CLIP THUMB =====
+ * CLIP ====================================
+ *    6. check clip exists
+ *         true:                   go to (8)
+ *         false:                  go to (7)
+ *    7. extract the CLIP
+ *         true:                   go to (8)
+ *         false:  assume corrupt -- RESTART
+ * CLIP THUMB ==============================
  *    8. check clip thumb exists
  *         true:   RESTART
- *         false:  move to (9)
+ *         false:                  go to (9)
  *    9. extract the CLIP preview
  *         true:   RESTART
  *         false:  RESTART
