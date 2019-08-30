@@ -430,39 +430,28 @@ function checkFileExists(pathToFile: string): Promise<boolean> {
  * Replace original file with new file
  * use ffmpeg to convert and letterbox to fit width and height
  *
- * @param oldFile
- * @param newFile
+ * @param oldFile full path to thumbnail to replace
+ * @param newFile full path to sounce image to use as replacement
  * @param height
  */
 export function replaceThumbnailWithNewImage(
   oldFile: string,
   newFile: string,
   height: number
-) {
+): Promise<boolean> {
 
-  return new Promise((resolve, reject) => {
+  console.log('Resizing new image and replacing old thumbnail');
 
-    console.log('Resizing new image and replacing old thumbnail');
+  const width: number = Math.floor(height * (16 / 9));
 
-    const width: number = Math.floor(height * (16 / 9));
+  const args = [
+    '-y', '-i', newFile,
+    '-vf', scaleAndPadString(width, height),
+    oldFile,
+  ];
 
-    const args = [
-      '-y', '-i', newFile,
-      '-vf', scaleAndPadString(width, height),
-      oldFile,
-    ];
-
-    // TODO - confirm 1s is enough
-    spawn_ffmpeg_and_run(args, 1000, 'replacing thumbnail')
-    .then(success => {
-      return resolve(success);
-    })
-    .catch(err => {
-      console.log('what error?');
-    });
-
-  });
-
+  return spawn_ffmpeg_and_run(args, 1000, 'replacing thumbnail');
+  // resizing an image file with ffmpeg should take less than 1 second
 }
 
 /**
