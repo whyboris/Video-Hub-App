@@ -72,7 +72,7 @@ const extractSingleFrame = (
   fileHash: string,
   screenshotHeight: number,
   duration: number
-) => {
+): Promise<boolean> => {
 
   return new Promise((resolve, reject) => {
 
@@ -80,49 +80,25 @@ const extractSingleFrame = (
       return resolve(true);
     }
 
-    const t0: number = performance.now();
-
     const ssWidth: number = screenshotHeight * (16 / 9);
 
-    const args = [
-      '-ss', duration / 10,
+    const args: string[] = [
+      '-ss', (duration / 10).toString(),
       '-i', pathToVideo,
-      '-frames', 1,
+      '-frames', '1',
       '-q:v', '2',
       '-vf', scaleAndPadString(ssWidth, screenshotHeight),
       saveLocation + '/thumbnails/' + fileHash + '.jpg',
     ];
-    // console.log('extracting clip frame 1');
-    const ffmpeg_process = spawn(ffmpegPath, args);
 
-    const killProcessTimeout = setTimeout(() => {
-      if (!ffmpeg_process.killed) {
-        ffmpeg_process.kill();
-        console.log('Single screenshot process KILLED!');
-        return resolve(false);
-      }
-    }, 300); // On my computer it routinely takes 60 - 80ms to extract
-
-
-    // Note from past Cal to future Cal:
-    // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
-    ffmpeg_process.stdout.on('data', data => {
-      if (globals.debug) {
-        console.log(data);
-      }
+     // On my computer it routinely takes 60 - 80ms to extract
+    spawn_ffmpeg_and_run(args, 300, 'single screenshot')
+    .then(success => {
+      return resolve(success);
+    })
+    .catch(err => {
+      console.log('what error?');
     });
-    ffmpeg_process.stderr.on('data', data => {
-      if (globals.debug) {
-        console.log('grep stderr: ' + data);
-      }
-    });
-    ffmpeg_process.on('exit', () => {
-      const t1: number = performance.now();
-      console.log('single frame: ' + (t1 - t0).toString());
-      clearTimeout(killProcessTimeout);
-      return resolve(true);
-    });
-
   });
 
 };
@@ -147,11 +123,9 @@ const generateScreenshotStrip = (
   screenshotHeight: number,
   numberOfScreenshots: number,
   saveLocation: string,
-) => {
+): Promise<boolean> => {
 
   return new Promise((resolve, reject) => {
-
-    const t0: number = performance.now();
 
     if (fs.existsSync(saveLocation + '/filmstrips/' + fileHash + '.jpg')) {
       console.log('thumbnails for ' + fileHash + ' already exist');
@@ -161,7 +135,7 @@ const generateScreenshotStrip = (
     let current = 0;
     const totalCount = numberOfScreenshots;
     const step: number = duration / (totalCount + 1);
-    const args = [];
+    const args: string[] = [];
     let allFramesFiltered = '';
     let outputFrames = '';
 
@@ -173,15 +147,17 @@ const generateScreenshotStrip = (
     // make the magic filter
     while (current < totalCount) {
       const time = (current + 1) * step; // +1 so we don't pick the 0th frame
-      args.push('-ss', time, '-i', pathToVideo);
+      args.push('-ss', time.toString(), '-i', pathToVideo);
       allFramesFiltered += '[' + current + ':V]' + fancyScaleFilter + '[' + current + '];';
       outputFrames += '[' + current + ']';
       current++;
     }
-    args.push('-frames', 1,
+    args.push('-frames', '1',
       '-filter_complex', allFramesFiltered + outputFrames + 'hstack=inputs=' + totalCount,
       saveLocation + '/filmstrips/' + fileHash + '.jpg'
     );
+
+    const t0: number = performance.now();
 
     const ffmpeg_process = spawn(ffmpegPath, args);
 
@@ -236,7 +212,7 @@ const generatePreviewClip = (
   saveLocation: string,
   clipSnippets: number,
   snippetLength: number,
-) => {
+): Promise<boolean> => {
 
   return new Promise((resolve, reject) => {
 
@@ -248,14 +224,14 @@ const generatePreviewClip = (
     let current = 1;
     const totalCount = clipSnippets;
     const step: number = duration / totalCount;
-    const args = [];
+    const args: string[] = [];
     let concat = '';
 
     // make the magic filter
     while (current < totalCount) {
       const time = current * step;
       const preview_duration = snippetLength;
-      args.push('-ss', time, '-t', preview_duration, '-i', pathToVideo);
+      args.push('-ss', time.toString(), '-t', preview_duration.toString(), '-i', pathToVideo);
       concat += '[' + (current - 1) + ':V]' + '[' + (current - 1) + ':a]';
       current++;
     }
@@ -298,7 +274,10 @@ const generatePreviewClip = (
  * @param saveLocation
  * @param fileHash
  */
-const extractFirstFrame = (saveLocation: string, fileHash: string) => {
+const extractFirstFrame = (
+  saveLocation: string,
+  fileHash: string
+): Promise<boolean> => {
 
   return new Promise((resolve, reject) => {
 
@@ -306,10 +285,10 @@ const extractFirstFrame = (saveLocation: string, fileHash: string) => {
       return resolve(true);
     }
 
-    const args = [
-      '-ss', 0,
+    const args: string[] = [
+      '-ss', '0',
       '-i', saveLocation + '/clips/' + fileHash + '.mp4',
-      '-frames', 1,
+      '-frames', '1',
       '-f', 'image2',
       saveLocation + '/clips/' + fileHash + '.jpg',
     ];
@@ -525,6 +504,58 @@ function scaleAndPadString(width: number, height: number): string {
          'pad='     + width + ':'   + height + ':(ow-iw)/2:(oh-ih)/2';
 
 }
+
+/**
+ * Spawn ffmpeg and run the appropriate arguments
+ * Kill the process after maxRunningTime
+ * @param args            args to pass into ffmpeg
+ * @param maxRunningTime  maximum time to run ffmpeg
+ * @param description     log for console.log
+ */
+function spawn_ffmpeg_and_run(
+  args: string[],
+  maxRunningTime: number,
+  description: string
+): Promise<boolean> {
+
+  return new Promise((resolve, reject) => {
+
+    const t0: number = performance.now();
+
+    const ffmpeg_process = spawn(ffmpegPath, args);
+
+    const killProcessTimeout = setTimeout(() => {
+      if (!ffmpeg_process.killed) {
+        ffmpeg_process.kill();
+        console.log(description + ' KILLED EARLY');
+        return resolve(false);
+      }
+    }, maxRunningTime);
+
+
+    // Note from past Cal to future Cal:
+    // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
+    ffmpeg_process.stdout.on('data', data => {
+      if (globals.debug) {
+        console.log(data);
+      }
+    });
+    ffmpeg_process.stderr.on('data', data => {
+      if (globals.debug) {
+        console.log('grep stderr: ' + data);
+      }
+    });
+    ffmpeg_process.on('exit', () => {
+      const t1: number = performance.now();
+      console.log(description + ': ' + (t1 - t0).toString());
+      clearTimeout(killProcessTimeout);
+      return resolve(true);
+    });
+
+  })
+
+}
+
 
 
 // ========================================================================================
