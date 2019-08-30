@@ -94,6 +94,16 @@ const extractSingleFrame = (
     ];
     // console.log('extracting clip frame 1');
     const ffmpeg_process = spawn(ffmpegPath, args);
+
+    const killProcessTimeout = setTimeout(() => {
+      if (!ffmpeg_process.killed) {
+        ffmpeg_process.kill();
+        console.log('Single screenshot process KILLED!');
+        return resolve(false);
+      }
+    }, 300); // On my computer it routinely takes 60 - 80ms to extract
+
+
     // Note from past Cal to future Cal:
     // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
     ffmpeg_process.stdout.on('data', data => {
@@ -109,6 +119,7 @@ const extractSingleFrame = (
     ffmpeg_process.on('exit', () => {
       const t1: number = performance.now();
       console.log('single frame: ' + (t1 - t0).toString());
+      clearTimeout(killProcessTimeout);
       return resolve(true);
     });
 
@@ -174,12 +185,11 @@ const generateScreenshotStrip = (
 
     const ffmpeg_process = spawn(ffmpegPath, args);
 
-    const myTimeout = setTimeout(() => {
-      console.log('needs killing?');
-      // console.log(ffmpeg_process);
+    const killProcessTimeout = setTimeout(() => {
       if (!ffmpeg_process.killed) {
         ffmpeg_process.kill();
-        console.log('process KILLED!');
+        console.log('Filmstrip process KILLED!');
+        return resolve(false);
       }
     }, 3000);
 
@@ -198,7 +208,7 @@ const generateScreenshotStrip = (
     ffmpeg_process.on('exit', () => {
       const t1: number = performance.now();
       console.log('filmstrip: ' + (t1 - t0).toString());
-      clearTimeout(myTimeout);
+      clearTimeout(killProcessTimeout);
       return resolve(true);
     });
 
@@ -386,11 +396,11 @@ export function extractFromTheseFiles(
 
       checkIfInputFileExists(pathToVideo)
 
-        .then(content => {
+        .then((content: boolean) => {
           console.log('01 - video file extists = ' + content);
 
           if (content === false) {
-            throw new Error('NOTPRESENT');
+            throw new Error('VIDEO FILE NOT PRESENT');
           }
 
           return extractSingleFrame(
@@ -398,16 +408,24 @@ export function extractFromTheseFiles(
           );
         })
 
-        .then(content => {
+        .then((content: boolean) => {
           console.log('02 - single screenshot extracted = ' + content);
+
+          if (content === false) {
+            throw new Error('SINGLE SCREENSHOT EXTRACTION TIMED OUT - LIKELY CORRUPT')
+          }
 
           return generateScreenshotStrip(
             pathToVideo, fileHash, duration, screenshotHeight, numOfScreens, screenshotFolder
           );
         })
 
-        .then(content => {
+        .then((content: boolean) => {
           console.log('03 - filmstrip generated = ' + content);
+
+          if (content === false) {
+            throw new Error('CLIP GENERATION TIMED OUT - LIKELY CORRUPT')
+          }
 
           if (clipSnippets === 0) {
             throw new Error('USER DOES NOT WANT CLIPS');
@@ -418,13 +436,13 @@ export function extractFromTheseFiles(
           );
         })
 
-        .then(content => {
+        .then((content: boolean) => {
           console.log('04 - preview clip generated = ' + content);
 
           return extractFirstFrame(screenshotFolder, fileHash);
         })
 
-        .then(content => {
+        .then((content: boolean) => {
           console.log('05 - extracted preview clip thumbnail = ' + content);
 
           extractIterator(); // resume iterating
