@@ -157,35 +157,13 @@ const generateScreenshotStrip = (
       saveLocation + '/filmstrips/' + fileHash + '.jpg'
     );
 
-    const t0: number = performance.now();
-
-    const ffmpeg_process = spawn(ffmpegPath, args);
-
-    const killProcessTimeout = setTimeout(() => {
-      if (!ffmpeg_process.killed) {
-        ffmpeg_process.kill();
-        console.log('Filmstrip process KILLED!');
-        return resolve(false);
-      }
-    }, 3000);
-
-    // Note from past Cal to future Cal:
-    // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
-    ffmpeg_process.stdout.on('data', data => {
-      if (globals.debug) {
-        console.log(data);
-      }
-    });
-    ffmpeg_process.stderr.on('data', data => {
-      if (globals.debug) {
-        console.log('grep stderr: ' + data);
-      }
-    });
-    ffmpeg_process.on('exit', () => {
-      const t1: number = performance.now();
-      console.log('filmstrip: ' + (t1 - t0).toString());
-      clearTimeout(killProcessTimeout);
-      return resolve(true);
+    // TODO -- make 3000 a function of # of screenshots
+    spawn_ffmpeg_and_run(args, 3000, 'filmstrip')
+    .then(success => {
+      return resolve(success);
+    })
+    .catch(err => {
+      console.log('what error?');
     });
 
   });
@@ -246,22 +224,13 @@ const generatePreviewClip = (
               saveLocation + '/clips/' + fileHash + '.mp4');
     // phfff glad that's over
 
-    // now make it all worth it!
-    const ffmpeg_process = spawn(ffmpegPath, args);
-    // Note from past Cal to future Cal:
-    // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
-    ffmpeg_process.stdout.on('data', data => {
-      if (globals.debug) {
-        console.log(data);
-      }
-    });
-    ffmpeg_process.stderr.on('data', data => {
-      if (globals.debug) {
-        console.log('grep stderr: ' + data);
-      }
-    });
-    ffmpeg_process.on('exit', () => {
-      return resolve(true);
+    // TODO - determine max length
+    spawn_ffmpeg_and_run(args, 3000, 'clip')
+    .then(success => {
+      return resolve(success);
+    })
+    .catch(err => {
+      console.log('what error?');
     });
 
   });
@@ -292,22 +261,14 @@ const extractFirstFrame = (
       '-f', 'image2',
       saveLocation + '/clips/' + fileHash + '.jpg',
     ];
-    // console.log('extracting clip frame 1');
-    const ffmpeg_process = spawn(ffmpegPath, args);
-    // Note from past Cal to future Cal:
-    // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
-    ffmpeg_process.stdout.on('data', data => {
-      if (globals.debug) {
-        console.log(data);
-      }
-    });
-    ffmpeg_process.stderr.on('data', data => {
-      if (globals.debug) {
-        console.log('grep stderr: ' + data);
-      }
-    });
-    ffmpeg_process.on('exit', () => {
-      return resolve(true);
+
+    // TODO - confirm 300 ms is enough
+    spawn_ffmpeg_and_run(args, 300, 'clip first frame')
+    .then(success => {
+      return resolve(success);
+    })
+    .catch(err => {
+      console.log('what error?');
     });
 
   });
@@ -470,21 +431,13 @@ export function replaceThumbnailWithNewImage(
       oldFile,
     ];
 
-    const ffmpeg_process = spawn(ffmpegPath, args);
-    // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
-    ffmpeg_process.stdout.on('data', data => {
-      if (globals.debug) {
-        console.log(data);
-      }
-    });
-    ffmpeg_process.stderr.on('data', data => {
-      if (globals.debug) {
-        console.log('grep stderr: ' + data);
-      }
-    });
-    ffmpeg_process.on('exit', () => {
-      console.log('Done replacing the thumbnail!');
-      return resolve(true);
+    // TODO - confirm 1s is enough
+    spawn_ffmpeg_and_run(args, 1000, 'replacing thumbnail')
+    .then(success => {
+      return resolve(success);
+    })
+    .catch(err => {
+      console.log('what error?');
     });
 
   });
