@@ -3,8 +3,7 @@
  * first thumbnail,
  * full filmstrip,
  * the preview clip
- *
- * All the functions return a `Promise`
+ * the clip's first thumbnail
  *
  * All functions are PURE
  * The only exception is `extractFromTheseFiles`
@@ -20,6 +19,7 @@
 // ========================================================================================
 
 // cool method to disable all console.log statements!
+// console.log('console.log disabled in main-extract.ts');
 // console.log = function() {};
 
 const { performance } = require('perf_hooks');  // for logging time taken during debug
@@ -280,10 +280,14 @@ export function extractFromTheseFiles(
       const clipSavePath:      string = screenshotFolder + '/clips/' +      fileHash + '.mp4';
       const clipThumbSavePath: string = screenshotFolder + '/clips/' +      fileHash + '.jpg';
 
+      const maxRunTime: ExtractionDurations = setExtractionDurations(
+        numOfScreens, screenshotHeight, clipSnippets, snippetLength, clipHeight
+      );
+
       checkFileExists(pathToVideo)                                                            // (1)
 
         .then((videoFileExists: boolean) => {
-          console.log('01 - video file live = ' + videoFileExists);
+          // console.log('01 - video file live = ' + videoFileExists);
 
           if (!videoFileExists) {
             throw new Error('VIDEO FILE NOT PRESENT');
@@ -293,23 +297,21 @@ export function extractFromTheseFiles(
         })
 
         .then((thumbExists: boolean) => {
-          console.log('02 - thumbnail already present = ' + thumbExists);
+          // console.log('02 - thumbnail already present = ' + thumbExists);
 
           if (thumbExists) {
             return true;
           } else {
             const ffmpegArgs: string[] =  extractSingleFrameArgs(
-              pathToVideo, screenshotHeight, duration, thumbnailSavePath                      // (3)
+              pathToVideo, screenshotHeight, duration, thumbnailSavePath
             );
 
-            return spawn_ffmpeg_and_run(ffmpegArgs, 1000, 'single screenshot');
-            // On my computer it routinely takes 60 - 80ms to extract
-            // maximum 400ms when at highest resolution
+            return spawn_ffmpeg_and_run(ffmpegArgs, maxRunTime.thumb, 'thumb');               // (3)
           }
         })
 
         .then((thumbSuccess: boolean) => {
-          console.log('03 - single screenshot now present = ' + thumbSuccess);
+          // console.log('03 - single screenshot now present = ' + thumbSuccess);
 
           if (!thumbSuccess) {
             throw new Error('SINGLE SCREENSHOT EXTRACTION TIMED OUT - LIKELY CORRUPT');
@@ -319,23 +321,22 @@ export function extractFromTheseFiles(
         })
 
         .then((filmstripExists: boolean) => {
-          console.log('04 - filmstrip already present = ' + filmstripExists);
+          // console.log('04 - filmstrip already present = ' + filmstripExists);
 
           if (filmstripExists) {
             return true;
           } else {
 
             const ffmpegArgs: string [] = generateScreenshotStripArgs(
-              pathToVideo, duration, screenshotHeight, numOfScreens, filmstripSavePath        // (5)
+              pathToVideo, duration, screenshotHeight, numOfScreens, filmstripSavePath
             );
 
-            return spawn_ffmpeg_and_run(ffmpegArgs, 5000, 'filmstrip');
-            // TODO -- make 3000 a function of # of screenshots
+            return spawn_ffmpeg_and_run(ffmpegArgs, maxRunTime.filmstrip, 'filmstrip');       // (5)
           }
         })
 
         .then((filmstripSuccess: boolean) => {
-          console.log('05 - filmstrip now present = ' + filmstripSuccess);
+          // console.log('05 - filmstrip now present = ' + filmstripSuccess);
 
           if (!filmstripSuccess) {
             throw new Error('FILMSTRIP GENERATION TIMED OUT - LIKELY CORRUPT');
@@ -347,24 +348,23 @@ export function extractFromTheseFiles(
         })
 
         .then((clipExists: boolean) => {
-          console.log('04 - preview clip already present = ' + clipExists);
+          // console.log('04 - preview clip already present = ' + clipExists);
 
           if (clipExists) {
             return true;
           } else {
 
             const ffmpegArgs: string[] = generatePreviewClipArgs(
-              pathToVideo, duration, clipHeight, clipSnippets, snippetLength, clipSavePath    // (7)
+              pathToVideo, duration, clipHeight, clipSnippets, snippetLength, clipSavePath
             );
 
-            return spawn_ffmpeg_and_run(ffmpegArgs, 3000, 'clip');
-            // TODO - determine max length
+            return spawn_ffmpeg_and_run(ffmpegArgs, maxRunTime.clip, 'clip');                 // (7)
           }
 
         })
 
         .then((clipGenerationSuccess: boolean) => {
-          console.log('07 - preview clip now present = ' + clipGenerationSuccess);
+          // console.log('07 - preview clip now present = ' + clipGenerationSuccess);
 
           if (clipGenerationSuccess) {
             return checkFileExists(clipThumbSavePath);                                        // (8)
@@ -374,23 +374,22 @@ export function extractFromTheseFiles(
         })
 
         .then((clipThumbExists: boolean) => {
-          console.log('05 - preview clip thumb already present = ' + clipThumbExists);
+          // console.log('05 - preview clip thumb already present = ' + clipThumbExists);
 
           if (clipThumbExists) {
             return true;
           } else {
             const ffmpegArgs: string[] = extractFirstFrameArgs(clipSavePath, clipThumbSavePath);
 
-            return spawn_ffmpeg_and_run(ffmpegArgs, 300, 'clip first frame');                 // (9)
-            // TODO - confirm 300 ms is enough
+            return spawn_ffmpeg_and_run(ffmpegArgs, maxRunTime.clipThumb, 'clip thumb');      // (9)
           }
         })
 
         .then((success: boolean) => {
-          console.log('09 - preview clip thumb now exists = ' + success);
+          // console.log('09 - preview clip thumb now exists = ' + success);
 
           if (success) {
-            console.log('======= ALL STEPS SUCCESSFUL ==========');
+            // console.log('======= ALL STEPS SUCCESSFUL ==========');
           }
 
           extractIterator(); // resume iterating
@@ -412,6 +411,48 @@ export function extractFromTheseFiles(
 // ========================================================================================
 //         Helper methods
 // ========================================================================================
+
+interface ExtractionDurations {
+  thumb: number;
+  filmstrip: number;
+  clip: number;
+  clipThumb: number;
+}
+
+/**
+ * Set the ExtractionDurations - the maximum running time per extraction type
+ * if ffmpeg takes longer, it is taken out the back and shot - killed with no mercy
+ *
+ * These computations are not exact, meant to give a rough timeout window
+ * to prevent corrupt files from slowing down the extraction too much
+ *
+ * @param numOfScreens
+ * @param screenshotHeight
+ * @param clipSnippets
+ * @param snippetLength
+ * @param clipHeight
+ */
+function setExtractionDurations(
+  numOfScreens: number,
+  screenshotHeight: number,
+  clipSnippets: number,
+  snippetLength: number,
+  clipHeight: number,
+): ExtractionDurations {
+
+  // screenshot heights range from 144px to 432px
+  // we'll call 144 the baseline and increase duration based on this
+  // this means at highest resolution we *tripple* the time we wait
+  const thumbHeightFactor = screenshotHeight / 144;
+  const clipHeightFactor  = clipHeight / 144;
+
+  return {                                                            // for me:
+    thumb:    500 * thumbHeightFactor,                                // never above 300ms
+    filmstrip: 600 * numOfScreens * thumbHeightFactor,                // rarely above 15s
+    clip:     1000 * clipSnippets * snippetLength * clipHeightFactor, // barely ever above 15s
+    clipThumb: 300 * clipHeightFactor,                                // never above 100ms
+  };
+}
 
 /**
  * Return promise for whether file exists
@@ -510,9 +551,9 @@ function spawn_ffmpeg_and_run(
       }
     });
     ffmpeg_process.on('exit', () => {
+      clearTimeout(killProcessTimeout);
       const t1: number = performance.now();
       console.log(description + ': ' + (t1 - t0).toString());
-      clearTimeout(killProcessTimeout);
       return resolve(true);
     });
 

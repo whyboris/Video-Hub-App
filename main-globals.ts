@@ -2,7 +2,7 @@ export const globals: Globals = {
   angularApp: null,            // reference used to send messages back to Angular App
   cancelCurrentImport: false,
   currentlyOpenVhaFile: '',    // OFFICAL DECREE IN NODE WHICH FILE IS CURRENTLY OPEN !!!
-  debug: true,
+  debug: false,
   hubName: 'untitled',         // in case user doesn't name their hub any name
   selectedOutputFolder: '',
   selectedSourceFolder: '',
