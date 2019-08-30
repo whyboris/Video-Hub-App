@@ -448,7 +448,7 @@ function setExtractionDurations(
 
   return {                                                            // for me:
     thumb:     500 * thumbHeightFactor,                               // never above 300ms
-    filmstrip: 650 * numOfScreens * thumbHeightFactor,                // rarely above 15s, but 4K 30screens took 50s
+    filmstrip: 700 * numOfScreens * thumbHeightFactor,                // rarely above 15s, but 4K 30screens took 50s
     clip:     1000 * clipSnippets * snippetLength * clipHeightFactor, // barely ever above 15s
     clipThumb: 300 * clipHeightFactor,                                // never above 100ms
   };
