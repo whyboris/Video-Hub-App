@@ -279,7 +279,7 @@ export function extractFromTheseFiles(
       checkFileExists(pathToVideo)                                                            // (1)
 
         .then((videoFileExists: boolean) => {
-          console.log('01 - video file extists = ' + videoFileExists);
+          console.log('01 - video file live = ' + videoFileExists);
 
           if (!videoFileExists) {
             throw new Error('VIDEO FILE NOT PRESENT');
@@ -289,7 +289,7 @@ export function extractFromTheseFiles(
         })
 
         .then((thumbExists: boolean) => {
-          console.log('02 - thumbnail exists = ' + thumbExists);
+          console.log('02 - thumbnail already present = ' + thumbExists);
 
           if (thumbExists) {
             return true;
@@ -305,7 +305,7 @@ export function extractFromTheseFiles(
         })
 
         .then((thumbSuccess: boolean) => {
-          console.log('02 - single screenshot now present = ' + thumbSuccess);
+          console.log('03 - single screenshot now present = ' + thumbSuccess);
 
           if (!thumbSuccess) {
             throw new Error('SINGLE SCREENSHOT EXTRACTION TIMED OUT - LIKELY CORRUPT');
@@ -315,7 +315,7 @@ export function extractFromTheseFiles(
         })
 
         .then((filmstripExists: boolean) => {
-          console.log('03 - filmstrip exists = ' + filmstripExists);
+          console.log('04 - filmstrip already present = ' + filmstripExists);
 
           if (filmstripExists) {
             return true;
@@ -331,7 +331,7 @@ export function extractFromTheseFiles(
         })
 
         .then((filmstripSuccess: boolean) => {
-          console.log('03 - filmstrip now present = ' + filmstripSuccess);
+          console.log('05 - filmstrip now present = ' + filmstripSuccess);
 
           if (!filmstripSuccess) {
             throw new Error('FILMSTRIP GENERATION TIMED OUT - LIKELY CORRUPT');
@@ -343,7 +343,7 @@ export function extractFromTheseFiles(
         })
 
         .then((clipExists: boolean) => {
-          console.log('04 - preview clip exists = ' + clipExists);
+          console.log('04 - preview clip already present = ' + clipExists);
 
           if (clipExists) {
             return true;
@@ -360,7 +360,7 @@ export function extractFromTheseFiles(
         })
 
         .then((clipGenerationSuccess: boolean) => {
-          console.log('04 - preview clip generated = ' + clipGenerationSuccess);
+          console.log('07 - preview clip now present = ' + clipGenerationSuccess);
 
           if (clipGenerationSuccess) {
             return checkFileExists(clipThumbSavePath);                                        // (8)
@@ -370,7 +370,7 @@ export function extractFromTheseFiles(
         })
 
         .then((clipThumbExists: boolean) => {
-          console.log('05 - preview clip exists = ' + clipThumbExists);
+          console.log('05 - preview clip thumb already present = ' + clipThumbExists);
 
           if (clipThumbExists) {
             return true;
@@ -383,13 +383,17 @@ export function extractFromTheseFiles(
         })
 
         .then((success: boolean) => {
-          console.log('05 - extracted preview clip thumbnail = ' + success);
+          console.log('09 - preview clip thumb now exists = ' + success);
+
+          if (success) {
+            console.log('======= ALL STEPS SUCCESSFUL ==========');
+          }
 
           extractIterator(); // resume iterating
         })
 
         .catch((err) => {
-          console.log('EXTRACTION ERROR: ' + err);
+          console.log('===> ERROR - RESTARTING: ' + err);
           extractIterator(); // resume iterating
         });
 
