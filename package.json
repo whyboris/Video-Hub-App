@@ -59,7 +59,7 @@
     "@types/node": "12.7.2",
     "codelyzer": "5.1.0",
     "core-js": "2.6.4",
-    "electron": "6.0.2",
+    "electron": "6.0.6",
     "electron-builder": "21.2.0",
     "electron-reload": "1.5.0",
     "node-sass": "4.12.0",
