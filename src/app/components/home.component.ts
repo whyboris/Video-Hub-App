@@ -1290,7 +1290,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       selectedOutputFolder: '',
       selectedSourceFolder: '',
       showWizard: true,
-      ssConstant: 3,
+      ssConstant: 10,
       ssVariable: 10,
       totalNumberOfFiles: -1,
     };
