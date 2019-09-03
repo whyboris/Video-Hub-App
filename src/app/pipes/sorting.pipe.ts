@@ -132,67 +132,67 @@ export class SortingPipe implements PipeTransform {
       return newArray;
 
     } else if (sortingType === 'alphabetAsc') {
-      return galleryArray.slice(0).sort((x: ImageElement, y: ImageElement): any => {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'alphabetical', true);
       });
     } else if (sortingType === 'alphabetDesc') {
-      return galleryArray.slice(0).sort((x: ImageElement, y: ImageElement): any => {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'alphabetical', false);
       });
     } else if (sortingType === 'sizeAsc') {
-      return galleryArray.slice(0).sort((x: ImageElement, y: ImageElement): any => {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'fileSize', true);
       });
     } else if (sortingType === 'sizeDesc') {
-      return galleryArray.slice(0).sort((x: ImageElement, y: ImageElement): any => {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'fileSize', false);
       });
     } else if (sortingType === 'timeAsc') {
-      return galleryArray.slice(0).sort((x: ImageElement, y: ImageElement): any => {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'duration', true);
       });
     } else if (sortingType === 'timeDesc') {
-      return galleryArray.slice(0).sort((x: ImageElement, y: ImageElement): any => {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'duration', false);
       });
     } else if (sortingType === 'starAsc') {
-      return galleryArray.slice(0).sort((x: ImageElement, y: ImageElement): any => {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'stars', true);
       });
     } else if (sortingType === 'starDesc') {
-      return galleryArray.slice(0).sort((x: ImageElement, y: ImageElement): any => {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'stars', false);
       });
     } else if (sortingType === 'yearAsc') {
-      return galleryArray.slice(0).sort((x: ImageElement, y: ImageElement): any => {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'year', true);
       });
     } else if (sortingType === 'yearDesc') {
-      return galleryArray.slice(0).sort((x: ImageElement, y: ImageElement): any => {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'year', false);
       });
     } else if (sortingType === 'timesPlayedAsc') {
-      return galleryArray.slice(0).sort((x: ImageElement, y: ImageElement): any => {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'timesPlayed', true);
       });
     } else if (sortingType === 'timesPlayedDesc') {
-      return galleryArray.slice(0).sort((x: ImageElement, y: ImageElement): any => {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'timesPlayed', false);
       });
     } else if (sortingType === 'modifiedAsc') {
-      return galleryArray.slice(0).sort((x: ImageElement, y: ImageElement): any => {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'mtime', true);
       });
     } else if (sortingType === 'modifiedDesc') {
-      return galleryArray.slice(0).sort((x: ImageElement, y: ImageElement): any => {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'mtime', false);
       });
     } else if (sortingType === 'hash') {
-      return galleryArray.slice(0).sort((x: ImageElement, y: ImageElement): any => {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'hash', true);
       });
     } else {
-      return galleryArray.slice(0).sort((x: ImageElement, y: ImageElement): any => {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'index', true);
       });
     }
