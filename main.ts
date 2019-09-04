@@ -3,6 +3,8 @@ import * as path from 'path';
 import * as url from 'url';
 
 const { systemPreferences } = require('electron');
+const electron = require('electron')
+const { powerSaveBlocker } = require('electron');
 
 import { globals } from './main-globals';
 
@@ -118,6 +120,12 @@ function createWindow() {
       slashes: true
     }));
   }
+
+  // Watch for computer powerMonitor
+  // https://electronjs.org/docs/api/power-monitor
+  electron.powerMonitor.on('shutdown', () => {
+    globals.angularApp.sender.send('pleaseShutDownASAP');
+  });
 
   // Emitted when the window is closed.
   win.on('closed', () => {
@@ -508,6 +516,22 @@ ipc.on('minimize-window', function (event, someMessage) {
   if (BrowserWindow.getFocusedWindow()) {
     BrowserWindow.getFocusedWindow().minimize();
   }
+});
+
+
+let preventSleepId: number;
+
+/**
+ * Minimize the window
+ */
+ipc.on('prevent-sleep', function (event, someMessage) {
+  console.log('preventing sleep lol!');
+  preventSleepId = powerSaveBlocker.start('prevent-app-suspension');
+});
+
+ipc.on('allow-sleep', function (event, someMessage) {
+  console.log('allowing sleep again');
+  powerSaveBlocker.stop(preventSleepId);
 });
 
 /**
