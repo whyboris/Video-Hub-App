@@ -2,6 +2,8 @@
 
 [*Video Hub App*](https://videohubapp.com/) is the fastest way to browse and search for videos on your computer. Think of it like YouTube for videos on your computer: browse, search, and preview. Works on Windows, Mac, and Linux!
 
+Read in another language: [English](https://github.com/RayanXY/Video-Hub-App/blob/master/README.md); [Português (Brasileiro)](https://github.com/RayanXY/Video-Hub-App/blob/master/README.br.md)
+
 ## Download now
 
 This software is available for $3.50 through [videohubapp.com](https://videohubapp.com/download.html)
