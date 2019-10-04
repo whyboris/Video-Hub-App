@@ -6,8 +6,8 @@ It's a 2 minute process when using the script (created by @cal2195) and [Google 
 
 ## Steps
 
-1. In your terminal enter this directory: `cd src/app/i18n`
-2. Run the translate command: `./translate.sh German ge` substituting the language and the two-letter abbreviation
+1. In your terminal enter this directory: `cd i18n`
+2. Run the translate command: `./translate.sh German de` substituting the language and the two-letter abbreviation
  - please use the first two letters from this list: https://github.com/electron/electron/blob/master/docs/api/locales.md
 3. The instructions in the script will inform you:
 > copy to_translate.txt contents into Google Translate, and paste the translations into a file called translated.txt
