@@ -34,6 +34,7 @@ import { English } from '../../../i18n/en';
 import { French } from '../../../i18n/fr';
 import { Russian } from '../../../i18n/ru';
 import { BrazilianPortuguese } from '../../../i18n/pt_br';
+import { German } from '../../../i18n/de';
 
 // Animations
 import {
@@ -1891,6 +1892,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.translate.use('pt_br');
         this.translate.setTranslation('pt_br', BrazilianPortuguese );
         this.appState.language = 'pt_br';
+        break;
+      case 'de':
+        this.translate.use('de');
+        this.translate.setTranslation('de', BrazilianPortuguese );
+        this.appState.language = 'de';
         break;
       default:
         this.translate.use('en');
