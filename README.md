@@ -2,6 +2,8 @@
 
 [*Video Hub App*](https://videohubapp.com/) is the fastest way to browse and search for videos on your computer. Think of it like YouTube for videos on your computer: browse, search, and preview. Works on Windows, Mac, and Linux!
 
+Read in another language: [English](https://github.com/RayanXY/Video-Hub-App/blob/master/README.md); [Português (Brasileiro)](https://github.com/RayanXY/Video-Hub-App/blob/master/README.br.md)
+
 ## Download now
 
 This software is available for $3.50 through [videohubapp.com](https://videohubapp.com/download.html)
@@ -22,9 +24,9 @@ This software was built on top of [`angular-electron`](https://github.com/maxime
 
 I would love to see the improvements you make to this app and am happy to accept pull requests. You can reach out if you'd like to coordinate / collaborate, or just jump to [issues](https://github.com/whyboris/Video-Hub-App/issues) to see what's already getting worked on and to add new suggestions!
 
-Please add a translation if you know another language. It's a process that will take you 5-10 minutes, just [follow the instructions](https://github.com/whyboris/Video-Hub-App/tree/master/src/app/i18n)!
+Please add a translation if you know another language. It's a process that will take you 5-10 minutes, just [follow the instructions](https://github.com/whyboris/Video-Hub-App/tree/master/i18n)!
 
-Please consider improving or adding an icon to the app. It's a simple process, just [follow the instructions](https://github.com/whyboris/Video-Hub-App/tree/master/src/app/components/home/icon)!
+Please consider improving or adding an icon to the app. It's a simple process, just [follow the instructions](https://github.com/whyboris/Video-Hub-App/tree/master/src/app/components/icon)!
 
 ## Upcoming features
 
