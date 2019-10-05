@@ -670,6 +670,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       this.setUpDurationFilterValues(this.finalArray);
 
+      this.sortFilterElement.nativeElement.value = this.sortType;
+
       this.cd.detectChanges();
     });
 
@@ -1689,6 +1691,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.appState.imgsPerRow = defaultImgsPerRow;
       }
     }
+    this.sortType = this.appState.currentSort;
     this.imgsPerRow = this.appState.imgsPerRow;
     this.currentImgsPerRow = this.imgsPerRow[this.appState.currentView];
     this.grabAllSettingsKeys().forEach(element => {
@@ -2068,6 +2071,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   selectFilterOrder(type: SortType): void {
     this.sortType = type;
+    this.appState.currentSort = type;
   }
 
   /**
