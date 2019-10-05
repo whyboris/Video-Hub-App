@@ -2,7 +2,7 @@
 
 [*Video Hub App*](https://videohubapp.com/) é o jeito mais rápido de navegar e procurar vídeos em seu computador. Pense nele com um Youtube para os vídeos do seu computador: navegue, procure e veja prévias. Disponível para Windows, Mac e Linux!
 
-Leia em outra línguas: [English](https://github.com/RayanXY/Video-Hub-App/blob/master/README.md); [Português (Brasileiro)](https://github.com/RayanXY/Video-Hub-App/blob/master/README.br.md)
+Leia em outra línguas: [English](https://github.com/whyboris/Video-Hub-App/blob/master/README.md)
 
 ## Baixe agora
 
