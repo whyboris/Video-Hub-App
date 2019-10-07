@@ -14,13 +14,20 @@ After generating the `json` you may open a pull request or first integrate it in
 
 ## Integrating the language into the app
 
-You're welcome to open a _Pull Request_ as is (with just the new `.json` file) and I'll implement the language into the app. Alternatively, you can edit just a few more files and you'll be ready! It's rather eays -- just follow the patterns!
+You're welcome to open a _Pull Request_ as is (with just the new `.json` file) and I'll implement the language into the app. Alternatively, you can edit just a few more files and you'll be ready! It's rather eays -- just follow the patterns! Just edit these three files:
 
-1. Add the two-letter abbreviation to `app-state.ts`, e.g.
+### `app-state.ts`
+
+Add the two-letter abbreviation to the _type_, e.g.
+
 ```ts
 export type SupportedLanguage = 'en' | 'ru' | 'fr';
 ```
-2. Add the language to `home.component.html`, e.g.
+
+### `home.component.html`
+
+Add the language to the dropdown in `home.component.html`, e.g.
+
 ```html
   <select (change)="changeLanguage($event.target.value)" class="languageDropDown">
     <option value="en" [selected]="appState.language == 'en'">English</option>
@@ -28,13 +35,19 @@ export type SupportedLanguage = 'en' | 'ru' | 'fr';
     <option value="fr" [selected]="appState.language == 'fr'">French</option>
   </select>
 ```
-3. Import the file into `home.component.ts`, e.g.
+
+### `home.component.ts`
+
+Import the file into `home.component.ts` with the other imports, e.g.
+
 ```ts
 const English = require('../../../i18n/en.json');
 const French = require('../../../i18n/fr.json');
 const Russian = require('../../../i18n/ru.json)';
 ```
-4. Add the case to the `changeLanguage` method in `home.component.ts` e.g.
+
+Add the _case_ to the _switch_ in the `changeLanguage` method, e.g.
+
 ```ts
   case 'ru':
     this.translate.use('ru');
