@@ -30,12 +30,12 @@ import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, Settin
 import { globals, ScreenshotSettings } from '../../../main-globals';
 
 // Languages
-import { English } from '../../../i18n/en';
-import { French } from '../../../i18n/fr';
-import { Russian } from '../../../i18n/ru';
-import { BrazilianPortuguese } from '../../../i18n/pt_br';
-import { German } from '../../../i18n/de';
-import { Spanish } from '../../../i18n/es';
+const English = require('../../../i18n/en.json');
+const French = require('../../../i18n/fr.json');
+const German = require('../../../i18n/de.json');
+const Portuguese = require('../../../i18n/pt.json');
+const Russian = require('../../../i18n/ru.json');
+const Spanish = require('../../../i18n/es.json');
 
 // Animations
 import {
@@ -1889,14 +1889,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.translate.setTranslation('fr', French);
         this.appState.language = 'fr';
         break;
-      case 'pt_br':
-        this.translate.use('pt_br');
-        this.translate.setTranslation('pt_br', BrazilianPortuguese);
-        this.appState.language = 'pt_br';
+      case 'pt':
+        this.translate.use('pt');
+        this.translate.setTranslation('pt', Portuguese);
+        this.appState.language = 'pt';
         break;
       case 'de':
         this.translate.use('de');
-        this.translate.setTranslation('de', BrazilianPortuguese );
+        this.translate.setTranslation('de', German);
         this.appState.language = 'de';
         break;
       case 'es':
