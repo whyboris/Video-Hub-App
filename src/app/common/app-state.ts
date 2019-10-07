@@ -1,6 +1,20 @@
 // Please conform the supported languages exactly to the first two characters from here:
 // https://github.com/electron/electron/blob/master/docs/api/locales.md
-export type SupportedLanguage = 'en' | 'ru' | 'fr' | 'pt' | 'de' | 'es';
+export type SupportedLanguage =
+  'en'
+| 'ar'
+| 'bn'
+| 'de'
+| 'es'
+| 'fr'
+| 'hi'
+| 'it'
+| 'ja'
+| 'ko'
+| 'ms'
+| 'pt'
+| 'ru'
+| 'zh';
 
 // Let's make these identical to settings buttons!
 export type SupportedView = 'showThumbnails'
