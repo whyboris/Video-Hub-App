@@ -14,7 +14,7 @@ After generating the `json` you may open a pull request or first integrate it in
 
 ## Integrating the language into the app
 
-You're welcome to open a _Pull Request_ as is (with just the new `.json` file) and I'll implement the language into the app. Alternatively, you can edit just a few more files and you'll be ready! It's rather eays -- just follow the patterns! Just edit these three files:
+You're welcome to open a _Pull Request_ as is (with just the new `.json` file) and I'll implement the language into the app. Alternatively, you can edit just a few more files and you'll be ready! It's rather easy -- just follow the patterns! Just edit these three files:
 
 ### `app-state.ts`
 
