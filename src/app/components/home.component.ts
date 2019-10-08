@@ -30,12 +30,20 @@ import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, Settin
 import { globals, ScreenshotSettings } from '../../../main-globals';
 
 // Languages
-import { English } from '../../../i18n/en';
-import { French } from '../../../i18n/fr';
-import { Russian } from '../../../i18n/ru';
-import { BrazilianPortuguese } from '../../../i18n/pt_br';
-import { German } from '../../../i18n/de';
-import { Spanish } from '../../../i18n/es';
+const Arabic = require('../../../i18n/ar.json');
+const Bengali = require('../../../i18n/bn.json');
+const Chinese = require('../../../i18n/zh.json');
+const English = require('../../../i18n/en.json');
+const French = require('../../../i18n/fr.json');
+const German = require('../../../i18n/de.json');
+const Hindi = require('../../../i18n/hi.json');
+const Italian = require('../../../i18n/it.json');
+const Japanese = require('../../../i18n/ja.json');
+const Korean = require('../../../i18n/ko.json');
+const Malay = require('../../../i18n/ms.json');
+const Portuguese = require('../../../i18n/pt.json');
+const Russian = require('../../../i18n/ru.json');
+const Spanish = require('../../../i18n/es.json');
 
 // Animations
 import {
@@ -1889,20 +1897,60 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.translate.setTranslation('fr', French);
         this.appState.language = 'fr';
         break;
-      case 'pt_br':
-        this.translate.use('pt_br');
-        this.translate.setTranslation('pt_br', BrazilianPortuguese);
-        this.appState.language = 'pt_br';
+      case 'pt':
+        this.translate.use('pt');
+        this.translate.setTranslation('pt', Portuguese);
+        this.appState.language = 'pt';
         break;
       case 'de':
         this.translate.use('de');
-        this.translate.setTranslation('de', BrazilianPortuguese );
+        this.translate.setTranslation('de', German);
         this.appState.language = 'de';
         break;
       case 'es':
         this.translate.use('es');
         this.translate.setTranslation('es', Spanish);
         this.appState.language = 'es';
+        break;
+      case 'ar':
+        this.translate.use('ar');
+        this.translate.setTranslation('ar', Arabic);
+        this.appState.language = 'ar';
+        break;
+      case 'bn':
+        this.translate.use('bn');
+        this.translate.setTranslation('bn', Bengali);
+        this.appState.language = 'bn';
+        break;
+      case 'it':
+        this.translate.use('it');
+        this.translate.setTranslation('it', Italian);
+        this.appState.language = 'it';
+        break;
+      case 'hi':
+        this.translate.use('hi');
+        this.translate.setTranslation('hi', Hindi);
+        this.appState.language = 'hi';
+        break;
+      case 'zh':
+        this.translate.use('zh');
+        this.translate.setTranslation('zh', Chinese);
+        this.appState.language = 'zh';
+        break;
+      case 'ja':
+        this.translate.use('ja');
+        this.translate.setTranslation('ja', Japanese);
+        this.appState.language = 'ja';
+        break;
+      case 'ko':
+        this.translate.use('ko');
+        this.translate.setTranslation('ko', Korean);
+        this.appState.language = 'ko';
+        break;
+      case 'ms':
+        this.translate.use('ms');
+        this.translate.setTranslation('ms', Malay);
+        this.appState.language = 'ms';
         break;
       default:
         this.translate.use('en');

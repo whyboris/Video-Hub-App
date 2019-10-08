@@ -2,46 +2,56 @@
 
 Thank you for considering adding an additional translation to Video Hub App!
 
-It's a 2 minute process when using the script (created by @cal2195) and [Google Doc Translate](https://translate.google.com/toolkit/docupload). Or if you are translating individual strings you can use [Google Translate](https://translate.google.com/).
+Translations take seconds using the _Google Translation API_ and the [translate-json-object](https://github.com/KhaledMohamedP/translate-json-object) library, but it does require a _Google Cloud API_ key (please use your own).
 
-## Steps
+Simply `cd i18n`, edit the `translate.js` file there to include your key and the target language abbreviation (e.g. `en`), and run (`node translate.js`).
 
-1. In your terminal enter this directory: `cd i18n`
-2. Run the translate command: `./translate.sh German de` (or `sh ./translate.sh German de` for Mac users) substituting the language and the two-letter abbreviation
- - please use the first two letters from this list: https://github.com/electron/electron/blob/master/docs/api/locales.md
-3. The instructions in the script will inform you:
-> copy to_translate.txt contents into Google Translate, and paste the translations into a file called translated.txt
-4. Once done, press the `Enter` key in your terminal and you're done!
-5. Open a PR (Pull Request) with the changes.
+For abbreviations please choose a 2-letter abbreviation that is on both lists:
+- https://github.com/electron/electron/blob/master/docs/api/locales.md
+- https://cloud.google.com/translate/docs/languages
+
+After generating the `json` you may open a pull request or first integrate it into the app.
 
 ## Integrating the language into the app
 
-You're welcome to open a Pull Request as is and I'll implement the language into the app. Alternatively, you can edit just a few more files and you'll be ready! It's rather eays -- just follow the patterns!
+You're welcome to open a _Pull Request_ as is (with just the new `.json` file) and I'll implement the language into the app. Alternatively, you can edit just a few more files and you'll be ready! It's rather eays -- just follow the patterns! Just edit these three files:
 
-1. The newly generated file will need a change: `export const English = {` -> to the appropriate language name
-2. Add the two-letter abbreviation to `app-state.ts`, e.g.
+### `app-state.ts`
+
+Add the two-letter abbreviation to the _type_, e.g.
+
 ```ts
 export type SupportedLanguage = 'en' | 'ru' | 'fr';
 ```
-3. Add the language to `home.component.html`, e.g.
+
+### `home.component.html`
+
+Add the language to the dropdown in `home.component.html`, e.g.
+
 ```html
-        <select (change)="changeLanguage($event.target.value)" class="languageDropDown">
-          <option value="en" [selected]="appState.language == 'en'">English</option>
-          <option value="ru" [selected]="appState.language == 'ru'">Russian</option>
-          <option value="fr" [selected]="appState.language == 'fr'">French</option>
-        </select>
+  <select (change)="changeLanguage($event.target.value)" class="languageDropDown">
+    <option value="en" [selected]="appState.language == 'en'">English</option>
+    <option value="ru" [selected]="appState.language == 'ru'">Russian</option>
+    <option value="fr" [selected]="appState.language == 'fr'">French</option>
+  </select>
 ```
-4. Import the file into `home.component.ts`, e.g.
+
+### `home.component.ts`
+
+Import the file into `home.component.ts` with the other imports, e.g.
+
 ```ts
-import { English } from '../../i18n/en';
-import { French } from '../../i18n/fr';
-import { Russian } from '../../i18n/ru';
+const English = require('../../../i18n/en.json');
+const French = require('../../../i18n/fr.json');
+const Russian = require('../../../i18n/ru.json)';
 ```
-5. Add the case to the `changeLanguage` method in `home.component.ts` e.g.
+
+Add the _case_ to the _switch_ in the `changeLanguage` method, e.g.
+
 ```ts
-      case 'ru':
-        this.translate.use('ru');
-        this.translate.setTranslation('ru', Russian );
-        this.appState.language = 'ru';
-        break;
+  case 'ru':
+    this.translate.use('ru');
+    this.translate.setTranslation('ru', Russian);
+    this.appState.language = 'ru';
+    break;
 ```
