@@ -604,7 +604,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.tagExclusionDescription',
     moreInfo: 'BUTTONS.tagExclusionMoreInfo',
     hidden: true,
-    iconName: 'icon-video-x',
+    iconName: 'icon-tag-x',
     title: 'BUTTONS.tagExclusionHint',
     toggled: false
   },
@@ -619,7 +619,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.tagIntersectionDescription',
     moreInfo: 'BUTTONS.tagIntersectionMoreInfo',
     hidden: true,
-    iconName: 'icon-video-minus',
+    iconName: 'icon-tag-minus',
     title: 'BUTTONS.tagIntersectionHint',
     toggled: false
   },
@@ -627,7 +627,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.tagUnionDescription',
     moreInfo: 'BUTTONS.tagUnionMoreInfo',
     hidden: true,
-    iconName: 'icon-video-plus',
+    iconName: 'icon-tag-plus',
     title: 'BUTTONS.tagUnionHint',
     toggled: false
   },
