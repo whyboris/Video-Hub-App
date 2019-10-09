@@ -462,7 +462,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'showMoreInfo': {
     description: 'BUTTONS.showMoreInfoDescription',
     hidden: false,
-    iconName: 'icon-tag',
+    iconName: 'icon-show-more-info',
     title: 'BUTTONS.showMoreInfoHint',
     toggled: true
   },
