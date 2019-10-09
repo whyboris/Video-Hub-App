@@ -580,7 +580,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'sortOrder': {
     description: 'BUTTONS.sortOrderDescription',
     hidden: false,
-    iconName: 'icon-res-filter',
+    iconName: 'icon-sort-order',
     moreInfo: 'BUTTONS.sortOrderMoreInfo',
     title: 'BUTTONS.sortOrderHint',
     toggled: false
