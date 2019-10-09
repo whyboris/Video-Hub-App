@@ -47,9 +47,10 @@
 }
 
 .input-icon {
-  fill: $gray-50;
+  fill: white;
+  filter: drop-shadow( 0px 0px 1px rgba(0, 0, 0, .7));
   position: absolute;
-  transform: translate(3px, 11px);
+  transform: translate(0, 12px);
   width: 15px;
 }
 
