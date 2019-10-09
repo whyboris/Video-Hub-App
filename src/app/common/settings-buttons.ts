@@ -478,7 +478,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'showRecent': {
     description: 'BUTTONS.showRecentDescription',
     hidden: false,
-    iconName: 'icon-show-filenames',
+    iconName: 'icon-recent-history',
     title: 'BUTTONS.showRecentHint',
     toggled: false
   },
