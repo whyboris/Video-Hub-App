@@ -470,7 +470,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.compactViewDescription',
     settingsHeading: 'SETTINGS.miscView',
     hidden: false,
-    iconName: 'icon-tag',
+    iconName: 'icon-compact-view',
     moreInfo: 'BUTTONS.compactViewMoreInfo',
     title: 'BUTTONS.compactViewHint',
     toggled: false
