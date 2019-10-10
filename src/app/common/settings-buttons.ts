@@ -274,7 +274,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'fontSizeLarger': {
     description: 'BUTTONS.fontSizeLargerDescription',
     hidden: true,
-    iconName: 'icon-larger',
+    iconName: 'icon-larger-font',
     title: 'BUTTONS.fontSizeLargerHint',
     toggled: false
   },
