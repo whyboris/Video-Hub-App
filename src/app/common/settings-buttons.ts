@@ -344,7 +344,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'manualTags': {
     description: 'BUTTONS.manualTagsDescription',
     hidden: true,
-    iconName: 'icon-tag',
+    iconName: 'icon-tag-manual',
     moreInfo: 'BUTTONS.manualTagsMoreInfo',
     settingsHeading: 'SETTINGS.manualTags',
     title: 'BUTTONS.manualTagsHint',
@@ -502,7 +502,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'showTagTray': {
     description: 'BUTTONS.tagTrayDescription',
     hidden: true,
-    iconName: 'icon-tag',
+    iconName: 'icon-tag-tray',
     title: 'BUTTONS.tagTrayHint',
     toggled: false
   },
@@ -611,7 +611,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'tagFrequencySort': {
     description: 'BUTTONS.tagFrequencySortDescription',
     hidden: true,
-    iconName: 'icon-tag',
+    iconName: 'icon-tag-frequency',
     title: 'BUTTONS.tagFrequencySortHint',
     toggled: false
   },
