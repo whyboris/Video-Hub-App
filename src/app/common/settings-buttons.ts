@@ -486,7 +486,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.relatedTrayDescription',
     moreInfo: 'BUTTONS.relatedTrayMoreInfo',
     hidden: false,
-    iconName: 'icon-show-thumbnails',
+    iconName: 'icon-show-similar',
     title: 'BUTTONS.relatedTrayHint',
     toggled: false
   },
