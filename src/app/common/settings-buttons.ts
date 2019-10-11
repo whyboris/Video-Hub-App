@@ -161,7 +161,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'autoplayClips': {
     description: 'BUTTONS.autoplayClipsDescription',
     hidden: true,
-    iconName: 'icon-toggle-scrub',
+    iconName: 'icon-auto-play-clips',
     title: 'BUTTONS.autoplayClipsHint',
     toggled: false
   },
@@ -353,7 +353,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'muteClips': {
     description: 'BUTTONS.muteClipsDescription',
     hidden: true,
-    iconName: 'icon-toggle-scrub',
+    iconName: 'icon-mute-clips',
     settingsHeading: 'SETTINGS.clipsHeading',
     title: 'BUTTONS.muteClipsHint',
     toggled: true
