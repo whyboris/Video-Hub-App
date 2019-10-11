@@ -313,7 +313,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'importNewFiles': {
     description: 'BUTTONS.importNewFilesDescription',
     hidden: true,
-    iconName: 'icon-random',
+    iconName: 'icon-import-new',
     moreInfo: 'BUTTONS.importNewFilesMoreInfo',
     title: 'BUTTONS.importNewFilesHint',
     toggled: false
@@ -376,7 +376,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'rescanDirectory': {
     description: 'BUTTONS.rescanDirectoryDescription',
     hidden: true,
-    iconName: 'icon-random',
+    iconName: 'icon-import-rescan',
     moreInfo: 'BUTTONS.rescanDirectoryMoreInfo',
     settingsHeading: 'SETTINGS.currentHub',
     title: 'BUTTONS.rescanDirectoryHint',
