@@ -306,7 +306,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.thumbAutoAdvanceDescription',
     moreInfo: 'BUTTONS.thumbAutoAdvanceMoreInfo',
     hidden: true,
-    iconName: 'icon-toggle-scrub',
+    iconName: 'icon-toggle-auto-scrub',
     title: 'BUTTONS.thumbAutoAdvanceHint',
     toggled: false
   },
@@ -402,7 +402,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.returnToFirstScreenshotDescription',
     moreInfo: 'BUTTONS.returnToFirstScreenshotMoreInfo',
     hidden: true,
-    iconName: 'icon-toggle-scrub',
+    iconName: 'icon-toggle-scrub-return',
     title: 'BUTTONS.returnToFirstScreenshotHint',
     toggled: true
   },
