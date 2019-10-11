@@ -30,10 +30,20 @@ import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, Settin
 import { globals, ScreenshotSettings } from '../../../main-globals';
 
 // Languages
-import { English } from '../../../i18n/en';
-import { French } from '../../../i18n/fr';
-import { Russian } from '../../../i18n/ru';
-import { BrazilianPortuguese } from '../../../i18n/pt_br';
+const Arabic = require('../../../i18n/ar.json');
+const Bengali = require('../../../i18n/bn.json');
+const Chinese = require('../../../i18n/zh.json');
+const English = require('../../../i18n/en.json');
+const French = require('../../../i18n/fr.json');
+const German = require('../../../i18n/de.json');
+const Hindi = require('../../../i18n/hi.json');
+const Italian = require('../../../i18n/it.json');
+const Japanese = require('../../../i18n/ja.json');
+const Korean = require('../../../i18n/ko.json');
+const Malay = require('../../../i18n/ms.json');
+const Portuguese = require('../../../i18n/pt.json');
+const Russian = require('../../../i18n/ru.json');
+const Spanish = require('../../../i18n/es.json');
 
 // Animations
 import {
@@ -94,12 +104,12 @@ import {
 })
 export class HomeComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('magicSearch',       { static: false }) magicSearch: ElementRef;
-  @ViewChild('renameFileInput',   { static: false }) renameFileInput: ElementRef;
-  @ViewChild('searchRef',         { static: false }) searchRef: ElementRef;
+  @ViewChild('magicSearch', { static: false }) magicSearch: ElementRef;
+  @ViewChild('renameFileInput', { static: false }) renameFileInput: ElementRef;
+  @ViewChild('searchRef', { static: false }) searchRef: ElementRef;
   @ViewChild('sortFilterElement', { static: false }) sortFilterElement: ElementRef;
 
-  @ViewChild(VirtualScrollerComponent, {static: false})
+  @ViewChild(VirtualScrollerComponent, { static: false })
   virtualScroller: VirtualScrollerComponent;
 
   defaultSettingsButtons = {};
@@ -285,10 +295,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     height: 432,
     n: 3,
   }; // currently only used for the statistics page
-     // && to prevent clip view from showing when no clips extracted
-     // defaults set here ONLY because when starting the app in clip view
-     // the app would show error in console log:
-     //   `Cannot read property 'clipSnippets' of undefined`
+  // && to prevent clip view from showing when no clips extracted
+  // defaults set here ONLY because when starting the app in clip view
+  // the app would show error in console log:
+  //   `Cannot read property 'clipSnippets' of undefined`
 
   // ========================================================================
 
@@ -300,86 +310,86 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       switch (event.key) {
 
-        case('a'):
+        case ('a'):
           this.toggleButton('hideSidebar');
           break;
 
-        case('i'):
+        case ('i'):
           this.toggleButton('showMoreInfo');
           break;
 
-        case('1'):
+        case ('1'):
           this.toggleButton('showThumbnails');
           break;
 
-        case('2'):
+        case ('2'):
           this.toggleButton('showFilmstrip');
           break;
 
-        case('3'):
+        case ('3'):
           this.toggleButton('showFullView');
           break;
 
-        case('4'):
+        case ('4'):
           this.toggleButton('showDetails');
           break;
 
-        case('5'):
+        case ('5'):
           this.toggleButton('showFiles');
           break;
 
-        case('6'):
+        case ('6'):
           this.toggleButton('showClips');
           break;
 
-        case('s'):
+        case ('s'):
           this.toggleButton('shuffleGalleryNow');
           break;
 
-        case('d'):
+        case ('d'):
           this.toggleButton('darkMode');
           break;
 
-        case('z'):
+        case ('z'):
           this.toggleButton('makeSmaller');
           break;
 
-        case('x'):
+        case ('x'):
           this.toggleButton('makeLarger');
           break;
 
-        case('o'):
+        case ('o'):
           if (this.wizard.showWizard === false) {
             this.toggleSettings();
           }
           break;
 
-        case('t'):
+        case ('t'):
           if (!this.wizard.showWizard) {
             this.toggleButton('showTags');
           }
           break;
 
-        case('q'):
+        case ('q'):
           event.preventDefault();
           event.stopPropagation();
           this.initiateClose();
           break;
 
-        case('n'):
+        case ('n'):
           this.startWizard();
           this.settingsModalOpen = false;
           this.settingsButtons['showTags'].toggled = false;
           break;
 
-        case('h'):
+        case ('h'):
           this.toggleButton('hideTop');
           this.toggleButton('hideSidebar');
           this.toggleSettingsMenu();
           this.toggleButton('showMoreInfo');
           break;
 
-        case('f'):
+        case ('f'):
           if (this.settingsButtons['fileIntersection'].toggled === false) {
             this.settingsButtons['fileIntersection'].toggled = true;
           }
@@ -391,7 +401,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           }, 1);
           break;
 
-        case('g'):
+        case ('g'):
           if (!this.settingsButtons['magic'].toggled) {
             this.settingsButtons['magic'].toggled = true;
           }
@@ -726,11 +736,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const pathToNewImage: string = event.dataTransfer.files[0].path.toLowerCase();
     if (
       (
-          pathToNewImage.endsWith('.jpg')
-       || pathToNewImage.endsWith('.jpeg')
-       || pathToNewImage.endsWith('.png')
+        pathToNewImage.endsWith('.jpg')
+        || pathToNewImage.endsWith('.jpeg')
+        || pathToNewImage.endsWith('.png')
       )
-       && galleryItem.cleanName !== '*FOLDER*'
+      && galleryItem.cleanName !== '*FOLDER*'
     ) {
       this.electronService.ipcRenderer.send(
         'replace-thumbnail', pathToNewImage, galleryItem
@@ -904,8 +914,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     if (this.rootFolderLive && this.appState.preferredVideoPlayer) {
       const time: number = clickedThumbnailIndex
-                           ? clickedElement.duration / (clickedElement.screens + 1) * ((clickedThumbnailIndex) + 1)
-                           : 0;
+        ? clickedElement.duration / (clickedElement.screens + 1) * ((clickedThumbnailIndex) + 1)
+        : 0;
 
       const execPath: string = this.appState.preferredVideoPlayer;
 
@@ -929,7 +939,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // else, figure out the correct command line flags
     const argz: string[] = [];
 
-    if        (playerPath.toLowerCase().includes('vlc')) {
+    if (playerPath.toLowerCase().includes('vlc')) {
       argz.push('--start-time=' + time.toString()); // in seconds
 
     } else if (playerPath.toLowerCase().includes('mpc')) {
@@ -1189,7 +1199,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.computeTextBufferAmount();
       this.scrollToTop();
 
-    // ======== Filter buttons =========================
+      // ======== Filter buttons =========================
     } else if (FilterKeyNames.includes(uniqueKey)) {
       this.filters[filterKeyToIndex[uniqueKey]].array = [];
       this.filters[filterKeyToIndex[uniqueKey]].bool = !this.filters[filterKeyToIndex[uniqueKey]].bool;
@@ -1198,11 +1208,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.magicSearchString = '';
       this.toggleButtonOpposite(uniqueKey);
 
-    // ======== Other buttons ========================
+      // ======== Other buttons ========================
     } else if (uniqueKey === 'compactView') {
       this.toggleButtonOpposite(uniqueKey);
       if (
-           this.settingsButtons['showThumbnails'].toggled
+        this.settingsButtons['showThumbnails'].toggled
         || this.settingsButtons['showClips'].toggled
       ) {
         this.computeTextBufferAmount();
@@ -1414,7 +1424,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.galleryWidth = document.getElementById('scrollDiv').getBoundingClientRect().width - 14;
 
     if (
-         this.appState.currentView === 'showClips'
+      this.appState.currentView === 'showClips'
       || this.appState.currentView === 'showThumbnails'
       || this.appState.currentView === 'showDetails'
     ) {
@@ -1425,7 +1435,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.detailsMaxWidth = this.galleryWidth - this.previewWidth - 40; // 40px is just an estimate here
 
     } else if (
-         this.appState.currentView === 'showFilmstrip'
+      this.appState.currentView === 'showFilmstrip'
       || this.appState.currentView === 'showFullView'
     ) {
       this.previewWidth = ((this.galleryWidth - 30) / this.currentImgsPerRow);
@@ -1635,7 +1645,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     // console.log(objectKeys);
-    return(objectKeys);
+    return (objectKeys);
   }
 
   /**
@@ -1732,9 +1742,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   openContainingFolderNow(): void {
     this.fullPathToCurrentFile = this.appState.selectedSourceFolder +
-                                 this.currentRightClickedItem.partialPath +
-                                 '/' +
-                                 this.currentRightClickedItem.fileName;
+      this.currentRightClickedItem.partialPath +
+      '/' +
+      this.currentRightClickedItem.fileName;
 
     this.openInExplorer();
   }
@@ -1826,7 +1836,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if (originalFile === newFileName) {
       this.renameErrMsg = 'RIGHTCLICK.errorMustBeDifferent';
       this.nodeRenamingFile = false;
-    } else if (this.renamingWIP.length === 0 ) {
+    } else if (this.renamingWIP.length === 0) {
       this.renameErrMsg = 'RIGHTCLICK.errorMustNotBeEmpty';
       this.nodeRenamingFile = false;
     } else {
@@ -1887,22 +1897,72 @@ export class HomeComponent implements OnInit, AfterViewInit {
     switch (language) {
       case 'ru':
         this.translate.use('ru');
-        this.translate.setTranslation('ru', Russian );
+        this.translate.setTranslation('ru', Russian);
         this.appState.language = 'ru';
         break;
       case 'fr':
         this.translate.use('fr');
-        this.translate.setTranslation('fr', French );
+        this.translate.setTranslation('fr', French);
         this.appState.language = 'fr';
         break;
-      case 'pt_br':
-        this.translate.use('pt_br');
-        this.translate.setTranslation('pt_br', BrazilianPortuguese );
-        this.appState.language = 'pt_br';
+      case 'pt':
+        this.translate.use('pt');
+        this.translate.setTranslation('pt', Portuguese);
+        this.appState.language = 'pt';
+        break;
+      case 'de':
+        this.translate.use('de');
+        this.translate.setTranslation('de', German);
+        this.appState.language = 'de';
+        break;
+      case 'es':
+        this.translate.use('es');
+        this.translate.setTranslation('es', Spanish);
+        this.appState.language = 'es';
+        break;
+      case 'ar':
+        this.translate.use('ar');
+        this.translate.setTranslation('ar', Arabic);
+        this.appState.language = 'ar';
+        break;
+      case 'bn':
+        this.translate.use('bn');
+        this.translate.setTranslation('bn', Bengali);
+        this.appState.language = 'bn';
+        break;
+      case 'it':
+        this.translate.use('it');
+        this.translate.setTranslation('it', Italian);
+        this.appState.language = 'it';
+        break;
+      case 'hi':
+        this.translate.use('hi');
+        this.translate.setTranslation('hi', Hindi);
+        this.appState.language = 'hi';
+        break;
+      case 'zh':
+        this.translate.use('zh');
+        this.translate.setTranslation('zh', Chinese);
+        this.appState.language = 'zh';
+        break;
+      case 'ja':
+        this.translate.use('ja');
+        this.translate.setTranslation('ja', Japanese);
+        this.appState.language = 'ja';
+        break;
+      case 'ko':
+        this.translate.use('ko');
+        this.translate.setTranslation('ko', Korean);
+        this.appState.language = 'ko';
+        break;
+      case 'ms':
+        this.translate.use('ms');
+        this.translate.setTranslation('ms', Malay);
+        this.appState.language = 'ms';
         break;
       default:
         this.translate.use('en');
-        this.translate.setTranslation('en', English );
+        this.translate.setTranslation('en', English);
         this.appState.language = 'en';
         break;
     }

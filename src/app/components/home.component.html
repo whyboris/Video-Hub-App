@@ -438,9 +438,19 @@
         <div style="margin: 20px">
           <select (change)="changeLanguage($event.target.value)" class="languageDropDown">
             <option value="en" [selected]="appState.language == 'en'">English</option>
-            <option value="ru" [selected]="appState.language == 'ru'">Русский</option>
+            <option value="ja" [selected]="appState.language == 'ja'">日本語</option><!-- Japanese -->
+            <option value="de" [selected]="appState.language == 'de'">Deutsche</option>
             <option value="fr" [selected]="appState.language == 'fr'">Française</option>
-            <option value="pt_br" [selected]="appState.language == 'pt_br'">Português Brasileiro</option>
+            <option value="es" [selected]="appState.language == 'es'">Espanhol</option>
+            <option value="it" [selected]="appState.language == 'it'">Italiana</option>
+            <option value="pt" [selected]="appState.language == 'pt'">Português</option>
+            <option value="ru" [selected]="appState.language == 'ru'">Русский</option>
+            <option value="bn" [selected]="appState.language == 'bn'">বাংলা</option><!-- Bengali -->
+            <option value="hi" [selected]="appState.language == 'hi'">हिंदी</option><!-- Hindi -->
+            <option value="zh" [selected]="appState.language == 'zh'">中文</option><!-- Chinese -->
+            <option value="ko" [selected]="appState.language == 'ko'">한국어</option><!-- Korean -->
+            <option value="ms" [selected]="appState.language == 'ms'">Melayu</option><!-- Malay -->
+            <option value="ar" [selected]="appState.language == 'ar'">العربية</option><!-- Arabic -->
           </select>
         </div>
 
