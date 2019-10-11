@@ -145,7 +145,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'autoFileTags': {
     description: 'BUTTONS.autoFileTagsDescription',
     hidden: true,
-    iconName: 'icon-cloud',
+    iconName: 'icon-tag-auto-file',
     moreInfo: 'BUTTONS.autoFileTagsMoreInfo',
     title: 'BUTTONS.autoFileTagsHint',
     toggled: true
@@ -153,7 +153,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'autoFolderTags': {
     description: 'BUTTONS.autoFolderTagsDescription',
     hidden: true,
-    iconName: 'icon-cloud',
+    iconName: 'icon-tag-auto-folder',
     moreInfo: 'BUTTONS.autoFolderTagsMoreInfo',
     title: 'BUTTONS.autoFolderTagsHint',
     toggled: false
@@ -161,7 +161,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'autoplayClips': {
     description: 'BUTTONS.autoplayClipsDescription',
     hidden: true,
-    iconName: 'icon-toggle-scrub',
+    iconName: 'icon-auto-play-clips',
     title: 'BUTTONS.autoplayClipsHint',
     toggled: false
   },
@@ -274,7 +274,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'fontSizeLarger': {
     description: 'BUTTONS.fontSizeLargerDescription',
     hidden: true,
-    iconName: 'icon-larger',
+    iconName: 'icon-larger-font',
     title: 'BUTTONS.fontSizeLargerHint',
     toggled: false
   },
@@ -306,14 +306,14 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.thumbAutoAdvanceDescription',
     moreInfo: 'BUTTONS.thumbAutoAdvanceMoreInfo',
     hidden: true,
-    iconName: 'icon-toggle-scrub',
+    iconName: 'icon-toggle-auto-scrub',
     title: 'BUTTONS.thumbAutoAdvanceHint',
     toggled: false
   },
   'importNewFiles': {
     description: 'BUTTONS.importNewFilesDescription',
     hidden: true,
-    iconName: 'icon-random',
+    iconName: 'icon-import-new',
     moreInfo: 'BUTTONS.importNewFilesMoreInfo',
     title: 'BUTTONS.importNewFilesHint',
     toggled: false
@@ -344,7 +344,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'manualTags': {
     description: 'BUTTONS.manualTagsDescription',
     hidden: true,
-    iconName: 'icon-cloud',
+    iconName: 'icon-tag-manual',
     moreInfo: 'BUTTONS.manualTagsMoreInfo',
     settingsHeading: 'SETTINGS.manualTags',
     title: 'BUTTONS.manualTagsHint',
@@ -353,7 +353,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'muteClips': {
     description: 'BUTTONS.muteClipsDescription',
     hidden: true,
-    iconName: 'icon-toggle-scrub',
+    iconName: 'icon-mute-clips',
     settingsHeading: 'SETTINGS.clipsHeading',
     title: 'BUTTONS.muteClipsHint',
     toggled: true
@@ -376,7 +376,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'rescanDirectory': {
     description: 'BUTTONS.rescanDirectoryDescription',
     hidden: true,
-    iconName: 'icon-random',
+    iconName: 'icon-import-rescan',
     moreInfo: 'BUTTONS.rescanDirectoryMoreInfo',
     settingsHeading: 'SETTINGS.currentHub',
     title: 'BUTTONS.rescanDirectoryHint',
@@ -402,7 +402,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.returnToFirstScreenshotDescription',
     moreInfo: 'BUTTONS.returnToFirstScreenshotMoreInfo',
     hidden: true,
-    iconName: 'icon-toggle-scrub',
+    iconName: 'icon-toggle-scrub-return',
     title: 'BUTTONS.returnToFirstScreenshotHint',
     toggled: true
   },
@@ -462,7 +462,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'showMoreInfo': {
     description: 'BUTTONS.showMoreInfoDescription',
     hidden: false,
-    iconName: 'icon-tag',
+    iconName: 'icon-show-more-info',
     title: 'BUTTONS.showMoreInfoHint',
     toggled: true
   },
@@ -470,7 +470,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.compactViewDescription',
     settingsHeading: 'SETTINGS.miscView',
     hidden: false,
-    iconName: 'icon-tag',
+    iconName: 'icon-compact-view',
     moreInfo: 'BUTTONS.compactViewMoreInfo',
     title: 'BUTTONS.compactViewHint',
     toggled: false
@@ -478,7 +478,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'showRecent': {
     description: 'BUTTONS.showRecentDescription',
     hidden: false,
-    iconName: 'icon-show-filenames',
+    iconName: 'icon-recent-history',
     title: 'BUTTONS.showRecentHint',
     toggled: false
   },
@@ -486,14 +486,14 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.relatedTrayDescription',
     moreInfo: 'BUTTONS.relatedTrayMoreInfo',
     hidden: false,
-    iconName: 'icon-show-thumbnails',
+    iconName: 'icon-show-similar',
     title: 'BUTTONS.relatedTrayHint',
     toggled: false
   },
   'showTags': {
     description: 'BUTTONS.showTagsDescription',
     hidden: false,
-    iconName: 'icon-tag',
+    iconName: 'icon-tag-auto',
     moreInfo: 'BUTTONS.showTagsMoreInfo',
     settingsHeading: 'SETTINGS.autoGenerated',
     title: 'BUTTONS.showTagsHint',
@@ -502,7 +502,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'showTagTray': {
     description: 'BUTTONS.tagTrayDescription',
     hidden: true,
-    iconName: 'icon-tag',
+    iconName: 'icon-tag-tray',
     title: 'BUTTONS.tagTrayHint',
     toggled: false
   },
@@ -580,7 +580,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
   'sortOrder': {
     description: 'BUTTONS.sortOrderDescription',
     hidden: false,
-    iconName: 'icon-res-filter',
+    iconName: 'icon-sort-order',
     moreInfo: 'BUTTONS.sortOrderMoreInfo',
     title: 'BUTTONS.sortOrderHint',
     toggled: false
@@ -604,14 +604,14 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.tagExclusionDescription',
     moreInfo: 'BUTTONS.tagExclusionMoreInfo',
     hidden: true,
-    iconName: 'icon-video-x',
+    iconName: 'icon-tag-x',
     title: 'BUTTONS.tagExclusionHint',
     toggled: false
   },
   'tagFrequencySort': {
     description: 'BUTTONS.tagFrequencySortDescription',
     hidden: true,
-    iconName: 'icon-tag',
+    iconName: 'icon-tag-frequency',
     title: 'BUTTONS.tagFrequencySortHint',
     toggled: false
   },
@@ -619,7 +619,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.tagIntersectionDescription',
     moreInfo: 'BUTTONS.tagIntersectionMoreInfo',
     hidden: true,
-    iconName: 'icon-video-minus',
+    iconName: 'icon-tag-minus',
     title: 'BUTTONS.tagIntersectionHint',
     toggled: false
   },
@@ -627,7 +627,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.tagUnionDescription',
     moreInfo: 'BUTTONS.tagUnionMoreInfo',
     hidden: true,
-    iconName: 'icon-video-plus',
+    iconName: 'icon-tag-plus',
     title: 'BUTTONS.tagUnionHint',
     toggled: false
   },
