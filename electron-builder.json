@@ -1,5 +1,7 @@
 {
   "productName": "Video Hub App 2",
+  "appId": "com.videohubapp.videohubapp2",
+  "copyright": "Copyright © 2019 Boris Yakubchik",
   "directories": {
     "output": "release/"
   },
