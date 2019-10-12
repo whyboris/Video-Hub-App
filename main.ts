@@ -440,7 +440,7 @@ ipc.on('select-default-video-player', function (event) {
   dialog.showOpenDialog(win, {
     title: systemMessages.selectDefaultPlayer,
     filters: [{
-      name: 'Executable',
+      name: 'Executable', // TODO: i18n fixme
       extensions: ['exe', 'app']
     }],
     properties: ['openFile']
@@ -698,7 +698,7 @@ ipc.on('system-open-file-through-modal', function (event, somethingElse) {
   dialog.showOpenDialog(win, {
       title: systemMessages.selectPreviousHub,
       filters: [{
-        name: 'Video Hub App 2 files',
+        name: 'Video Hub App 2 files', // TODO -- i18n FIX ME
         extensions: ['vha2']
       }],
       properties: ['openFile']
