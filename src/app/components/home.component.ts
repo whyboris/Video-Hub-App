@@ -128,9 +128,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // ***************************** BUILD TOGGLE *********************************************
   // ========================================================================================
   demo = false;
-  webDemo = false;
   macVersion = false;
   // !!! make sure to update the `globals.version` and the `package.json` version numbers !!!
+  // webDemo = false;
   // ========================================================================================
 
   versionNumber = globals.version;
