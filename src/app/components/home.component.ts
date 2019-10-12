@@ -591,6 +591,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       if (current === 1) {
         this.timeExtractionStarted = new Date().getTime();
+        this.electronService.ipcRenderer.send('prevent-sleep');
       }
 
       if (current > 3) {
@@ -618,6 +619,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (current === total) {
         this.extractionPercent = 1;
         this.importStage = 'done';
+        this.electronService.ipcRenderer.send('allow-sleep');
         this.appState.hubName = this.hubNameToRemember; // could this cause bugs ??? TODO: investigate!
       }
       this.cd.detectChanges();
@@ -695,6 +697,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
       this.wizard.showWizard = true;
       this.flickerReduceOverlay = false;
+    });
+
+    // This happens when the computer is about to SHUT DOWN
+    this.electronService.ipcRenderer.on('pleaseShutDownASAP', (event) => {
+      this.initiateClose();
     });
 
     this.justStarted();
@@ -828,6 +835,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   public cancelCurrentImport(): void {
     this.importStage = 'done';
+    this.electronService.ipcRenderer.send('allow-sleep');
     this.electronService.ipcRenderer.send('cancel-current-import');
   }
 
