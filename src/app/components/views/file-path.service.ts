@@ -10,7 +10,7 @@ export class FilePathService {
   constructor() { }
 
   /**
-   * Build the path based on the input
+   * Build the browser-friendly path based on the input (only `/` and `%20`), prepend with `file://`
    * @param folderPath - path to where `vha-folder` is stored
    * @param hubName    - name of hub (to pick the correct `vha-folder` name)
    * @param subfolder  - whether `thumbnails`, `filmstrips`, or `clips`
@@ -19,13 +19,10 @@ export class FilePathService {
    */
   public createFilePath(folderPath: string, hubName: string, subfolder: FolderType, hash: string, video?: boolean): string {
 
-    const fullPath: string = 'file://' + path.normalize(folderPath) +
-                              '/' + 'vha-' + hubName.replace(/ /g, '%20') +
-                              '/' + subfolder +
-                              '/' + hash +
-                              (video ? '.mp4' : '.jpg');
+    return 'file://' + path.normalize(path.join(
+      folderPath, 'vha-' + hubName.replace(/ /g, '%20'), subfolder, hash + (video ? '.mp4' : '.jpg')
+    )).replace(/\\/g, '/');
 
-    return fullPath;
   }
 
 }
