@@ -260,8 +260,9 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
           } else {
             const extension = file.name.split('.').pop();
             if (acceptableFiles.includes(extension.toLowerCase()) && !file.name.match(fileIgnoreRegex)) {
-              // before adding, remove the redundant prefix: sourceFolderPath, and convert forward slashes into back slashes
-              const partialPath = dir.replace(sourceFolderPath, '').replace(/\\/g, '/');
+              // before adding, remove the redundant prefix: sourceFolderPath, and convert back slashes into forward slashes
+              // turns out app works best when the partialPath starts with `/` even in cases when video in root folder
+              const partialPath = ('/' + dir.replace(sourceFolderPath, '').replace(/\\/g, '/')).replace('//', '/');
               // fil finalArray with 3 correct and 5 dummy pieces of data
               finalArray[elementIndex] = NewImageElement();
               finalArray[elementIndex].cleanName = cleanUpFileName(file.name);
