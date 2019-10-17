@@ -442,15 +442,16 @@ function setExtractionDurations(
 
   // screenshot heights range from 144px to 432px
   // we'll call 144 the baseline and increase duration based on this
-  // this means at highest resolution we *tripple* the time we wait
+  // number of pixels grows ~ as square of height, so we square below
+  // this means at highest resolution we multyply by 9 the time we wait
   const thumbHeightFactor = screenshotHeight / 144;
   const clipHeightFactor  = clipHeight / 144;
 
-  return {                                                            // for me:
-    thumb:     500 * thumbHeightFactor,                               // never above 300ms
-    filmstrip: 700 * numOfScreens * thumbHeightFactor,                // rarely above 15s, but 4K 30screens took 50s
-    clip:     1000 * clipSnippets * snippetLength * clipHeightFactor, // barely ever above 15s
-    clipThumb: 300 * clipHeightFactor,                                // never above 100ms
+  return {                                                                                // for me:
+    thumb:     350 * thumbHeightFactor * thumbHeightFactor,                               // never above 300ms
+    filmstrip: 350 * numOfScreens * thumbHeightFactor * thumbHeightFactor,                // rarely above 15s, but 4K 30screens took 50s
+    clip:     1000 * clipSnippets * snippetLength * clipHeightFactor * clipHeightFactor,  // barely ever above 15s
+    clipThumb: 150 * clipHeightFactor * clipHeightFactor,                                 // never above 100ms
   };
 }
 

@@ -336,7 +336,7 @@
   },
   "WIZARD": {
     "change": "Modificare",
-    "clearRecent": "cancella tutta la cronologia recente 1231241414",
+    "clearRecent": "cancella tutta la cronologia recente ",
     "clipSnippets": "snippet",
     "closeButton": "Chiudi procedura guidata",
     "createVideoHub": "Crea l'hub video",
