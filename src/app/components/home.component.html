@@ -1439,7 +1439,7 @@
           <img class="history-icon" src="./assets/logo.png">
           <span class="history-name">{{ historyItem.hubName }}</span>
           <br>
-          <span class="path recent" [innerHtml]="historyItem.vhaFilePath | folderArrowsPipe : false"></span>
+          <span class="path recent" [innerHtml]="historyItem.vhaFilePath | folderArrowsPipe"></span>
         </li>
       </ul>
 
@@ -1492,7 +1492,7 @@
     <span class="step-description">
       {{ 'WIZARD.importingFrom' | translate }}
     </span>
-    <span class="path" [innerHtml]="wizard.selectedSourceFolder | folderArrowsPipe : false">
+    <span class="path" [innerHtml]="wizard.selectedSourceFolder | folderArrowsPipe">
     </span>
     <span class="step-description" [ngStyle]="{ opacity: wizard.totalNumberOfFiles === -1 ? 0 : 1 }">
       <!-- don't use *ngIf on this element, else it disappears and changes height of section -->
@@ -1523,7 +1523,7 @@
     <span class="step-description">
       {{ 'WIZARD.savingTo' | translate }}
     </span>
-    <span class="path" [innerHtml]="wizard.selectedOutputFolder | folderArrowsPipe : false">
+    <span class="path" [innerHtml]="wizard.selectedOutputFolder | folderArrowsPipe">
     </span>
 
     <div
