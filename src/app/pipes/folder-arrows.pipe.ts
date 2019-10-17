@@ -15,7 +15,7 @@ export class FolderArrowsPipe implements PipeTransform {
     const arrowString: string = '<span class="icon icon-arrow"></span>';
 
     let htmlString = folderPath;
-    htmlString = htmlString.replace(/\//g, arrowString);
+    htmlString = htmlString.replace(/\\/g, arrowString);
     if (trailing) {
       htmlString = htmlString + arrowString;
     }

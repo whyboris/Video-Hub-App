@@ -336,7 +336,7 @@
   },
   "WIZARD": {
     "change": "변화",
-    "clearRecent": "모든 최근 기록을 지 웁니다. 1231241414",
+    "clearRecent": "모든 최근 기록을 지 웁니다. ",
     "clipSnippets": "짧은 발췌",
     "closeButton": "마법사 닫기",
     "createVideoHub": "비디오 허브 만들기",

@@ -336,7 +336,7 @@
   },
   "WIZARD": {
     "change": "Change",
-    "clearRecent": "clear all recent history 1231241414",
+    "clearRecent": "clear all recent history ",
     "clipSnippets": "snippets",
     "closeButton": "Close wizard",
     "createVideoHub": "Create the Video Hub",
