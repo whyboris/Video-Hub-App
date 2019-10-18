@@ -59,7 +59,7 @@
 }
 
 // add arrows styling to what the folder-arrows.pipe puts out
-/deep/ .icon-arrow:before {
+::ng-deep .icon-arrow:before {
   color: $gray-50;
   content: '\f1a0'; // chevron-right
   display: inline-block;
