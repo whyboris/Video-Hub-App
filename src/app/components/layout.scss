@@ -1,6 +1,6 @@
 @import "variables";
 
-/deep/ * {
+::ng-deep * {
   user-select: none;
 }
 
