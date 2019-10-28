@@ -14,7 +14,8 @@ export type SupportedLanguage =
 | 'ms'
 | 'pt'
 | 'ru'
-| 'zh';
+| 'zh'
+| 'uk';
 
 // Let's make these identical to settings buttons!
 export type SupportedView = 'showThumbnails'
