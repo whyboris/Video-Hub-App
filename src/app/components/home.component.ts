@@ -44,6 +44,7 @@ const Malay = require('../../../i18n/ms.json');
 const Portuguese = require('../../../i18n/pt.json');
 const Russian = require('../../../i18n/ru.json');
 const Spanish = require('../../../i18n/es.json');
+const Ukrainian = require('../../../i18n/uk.json');
 
 // Animations
 import {
@@ -1959,6 +1960,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.translate.use('ms');
         this.translate.setTranslation('ms', Malay);
         this.appState.language = 'ms';
+        break;
+      case 'uk':
+        this.translate.use('uk');
+        this.translate.setTranslation('uk', Ukrainian);
+        this.appState.language = 'uk';
         break;
       default:
         this.translate.use('en');
