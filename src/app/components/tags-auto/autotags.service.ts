@@ -287,6 +287,8 @@ export class AutoTagsService {
    */
   public findMatches(query: string): number {
     return this.onlyFileNames.filter((element) => {
+      element = element.toLowerCase()
+      query = query.toLowerCase()
       return element.includes(query);
     }).length;
   }
