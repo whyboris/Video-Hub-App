@@ -555,6 +555,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.electronService.webFrame.clearCache();
     });
 
+    this.electronService.ipcRenderer.on('touchBar-to-app', (event, changesFromTouchBar: string) => {
+      if (changesFromTouchBar) {
+        this.toggleButton(changesFromTouchBar, true);
+      }
+    });
+
     this.electronService.ipcRenderer.on('preferred-video-player-returning', (event, filePath) => {
 
       this.appState.preferredVideoPlayer = filePath;
@@ -1188,8 +1194,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   /**
    * Perform appropriate action when a button is clicked
    * @param   uniqueKey   the uniqueKey string of the button
+   * @param   fromIpc     boolean value indicate, call from IPC
    */
-  toggleButton(uniqueKey: string | SupportedView): void {
+  toggleButton(uniqueKey: string | SupportedView, fromIpc = false): void {
     // ======== View buttons ================
     if (allSupportedViews.includes(<SupportedView>uniqueKey)) {
       this.savePreviousViewSize();
@@ -1279,6 +1286,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.computePreviewWidth();
         }, 300);
       }
+    }
+    if (!fromIpc) {
+      this.electronService.ipcRenderer.send('app-to-touchBar', uniqueKey);
+    } else {
+      this.cd.detectChanges();
     }
   }
 
@@ -1682,6 +1694,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (settingsObject.buttonSettings[element]) {
         this.settingsButtons[element].toggled = settingsObject.buttonSettings[element].toggled;
         this.settingsButtons[element].hidden = settingsObject.buttonSettings[element].hidden;
+        // retrieving state of buttons for touchBar
+        if (this.settingsButtons[element].toggled) {
+          this.electronService.ipcRenderer.send('app-to-touchBar', element);
+        }
       }
     });
     this.computeTextBufferAmount();
