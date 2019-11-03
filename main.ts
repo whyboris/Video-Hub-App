@@ -1050,7 +1050,7 @@ function createTouchBar() {
 
   ipc.on('app-to-touchBar', (event, changesFromApp) => {
     if (allSupportedViews.includes(<SupportedView>changesFromApp)) {
-      segmentedViewControl.selectedIndex = supportedViews.indexOf(changesFromApp);
+      segmentedViewControl.selectedIndex = allSupportedViews.indexOf(changesFromApp);
     } else if (changesFromApp === 'showFreq') {
       segmentedFolderControl.selectedIndex = 0;
     } else if (changesFromApp === 'showRecent') {
@@ -1062,14 +1062,6 @@ function createTouchBar() {
     }
   });
 
-  const supportedViews = [
-    'showThumbnails',
-    'showFilmstrip',
-    'showFullView',
-    'showDetails',
-    'showFiles',
-    'showClips'
-  ];
   // recent and freq views
   const segmentedFolderControl = new TouchBarSegmentedControl({
     mode: 'multiple',
