@@ -1,37 +1,12 @@
-import {app, BrowserWindow, screen, TouchBar} from 'electron';
+import { app, BrowserWindow, screen, TouchBar } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
-import {globals} from './main-globals';
-import {
-  alphabetizeFinalArray,
-  countFoldersInFinalArray,
-  extractAllMetadata,
-  getVideoPathsAndNames,
-  insertTemporaryFields,
-  missingThumbsIndex,
-  sendCurrentProgress,
-  writeVhaFileToDisk
-} from './main-support';
 
-import {extractFromTheseFiles, replaceThumbnailWithNewImage} from './main-extract';
-
-import {FinalObject, ImageElement} from './interfaces/final-object.interface';
-import {ImportSettingsObject} from './interfaces/import.interface';
-import {SavableProperties} from './interfaces/savable-properties.interface';
-import {SettingsObject} from './interfaces/settings-object.interface';
-import {findAndImportNewFiles, regenerateLibrary, rescanAddAndDelete} from './main-rescan';
-import {allSupportedViews, SupportedView} from './src/app/common/app-state';
-
-const {
-  TouchBarPopover,
-  TouchBarSegmentedControl,
-  TouchBarSpacer
-} = TouchBar;
-
-const {systemPreferences} = require('electron');
+const { systemPreferences } = require('electron');
 const electron = require('electron');
-const {powerSaveBlocker} = require('electron');
-const nativeImage = require('electron').nativeImage;
+const { powerSaveBlocker } = require('electron');
+
+import { globals } from './main-globals';
 
 const codeRunningOnMac: boolean = process.platform === 'darwin';
 
@@ -40,6 +15,7 @@ const codeRunningOnMac: boolean = process.platform === 'darwin';
 // translations received via `system-messages-updated`
 const English = require('./i18n/en.json');
 let systemMessages = English.SYSTEM;
+
 
 // ========================================================================================
 // ***************************** BUILD TOGGLE *********************************************
@@ -217,7 +193,7 @@ try {
 if (codeRunningOnMac) {
   systemPreferences.subscribeNotification(
     'AppleInterfaceThemeChangedNotification',
-    function theThemeHasChanged() {
+    function theThemeHasChanged () {
       if (systemPreferences.isDarkMode()) {
         tellElectronDarkModeChange('dark');
       } else {
@@ -226,6 +202,7 @@ if (codeRunningOnMac) {
     }
   );
 }
+
 
 // ========================================================================================
 // My imports
@@ -239,6 +216,24 @@ const shell = require('electron').shell;
 // ========================================================================================
 // My variables
 // ========================================================================================
+
+import {
+  alphabetizeFinalArray,
+  countFoldersInFinalArray,
+  extractAllMetadata,
+  getVideoPathsAndNames,
+  insertTemporaryFields,
+  missingThumbsIndex,
+  sendCurrentProgress,
+  writeVhaFileToDisk
+} from './main-support';
+
+import { extractFromTheseFiles, replaceThumbnailWithNewImage } from './main-extract';
+
+import { FinalObject, ImageElement } from './interfaces/final-object.interface';
+import { ImportSettingsObject } from './interfaces/import.interface';
+import { SavableProperties } from './interfaces/savable-properties.interface';
+import { SettingsObject } from './interfaces/settings-object.interface';
 
 let lastSavedFinalObject: FinalObject; // hack for saving the `vha2` file again later
 
@@ -913,6 +908,12 @@ function verifyThumbnails() {
   );
 }
 
+import {
+  findAndImportNewFiles,
+  regenerateLibrary,
+  rescanAddAndDelete,
+} from './main-rescan';
+
 /**
  * Begins rescan procedure compared to what the app has currently
  *
@@ -1032,6 +1033,15 @@ function tellUserDirDoesNotExist(currentVideoFolder: string) {
     buttons: ['OK']
   });
 }
+
+
+import { allSupportedViews, SupportedView } from './src/app/common/app-state';
+const nativeImage = require('electron').nativeImage;
+const {
+  TouchBarPopover,
+  TouchBarSegmentedControl,
+  TouchBarSpacer
+} = TouchBar;
 
 /**
  * Void function for creating touchBar for MAC OS X
