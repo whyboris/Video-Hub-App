@@ -1130,7 +1130,7 @@ function createTouchBar() {
       },
     ],
     change: selectedIndex => {
-      globals.angularApp.sender.send('touchBar-to-app', supportedViews[selectedIndex]);
+      globals.angularApp.sender.send('touchBar-to-app', allSupportedViews[selectedIndex]);
     }
   });
 
@@ -1188,7 +1188,14 @@ function createTouchBar() {
   });
 
   // creating touchBar from existing items
-  const touchBar = new TouchBar({items: [segmentedFolderControl, segmentedPopover, segmentedAnotherViewsControl, new TouchBarSpacer({}), zoomSegmented]});
+  const touchBar = new TouchBar({
+    items: [
+      segmentedFolderControl,
+      segmentedPopover,
+      segmentedAnotherViewsControl,
+      zoomSegmented
+    ]
+  });
 
   // setting touchBar to instance of window
   win.setTouchBar(touchBar);
