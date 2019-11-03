@@ -124,6 +124,9 @@ function createWindow() {
 
   if (codeRunningOnMac) {
     createTouchBar();
+    if (touchBar) {
+      win.setTouchBar(touchBar);
+    }
   }
 
   // Watch for computer powerMonitor
@@ -1035,46 +1038,57 @@ function tellUserDirDoesNotExist(currentVideoFolder: string) {
 }
 
 
-import { allSupportedViews, SupportedView } from './src/app/common/app-state';
+ipc.on('app-to-touchBar', (event, changesFromApp) => {
+  if (allSupportedViews.includes(<SupportedView>changesFromApp)) {
+    segmentedViewControl.selectedIndex = allSupportedViews.indexOf(changesFromApp);
+  } else if (changesFromApp === 'showFreq') {
+    segmentedFolderControl.selectedIndex = 0;
+  } else if (changesFromApp === 'showRecent') {
+    segmentedFolderControl.selectedIndex = 1;
+  } else if (changesFromApp === 'compactView') {
+    segmentedAnotherViewsControl.selectedIndex = 0;
+  } else if (changesFromApp === 'showMoreInfo') {
+    segmentedAnotherViewsControl.selectedIndex = 1;
+  }
+});
+
+
+const allSupportedViews: SupportedView[] = ['showThumbnails', 'showFilmstrip', 'showFullView', 'showDetails', 'showFiles', 'showClips'];
+type SupportedView = 'showThumbnails' | 'showFilmstrip' | 'showFullView' | 'showDetails' | 'showFiles' | 'showClips';
+
 const nativeImage = require('electron').nativeImage;
+const resourcePath = serve ? path.join(__dirname, 'src/assets/icons/mac/touch-bar/') : path.join(process.resourcesPath, 'assets/');
 const {
   TouchBarPopover,
-  TouchBarSegmentedControl,
-  TouchBarSpacer
+  TouchBarSegmentedControl
 } = TouchBar;
+
+// touchBar variables
+let touchBar,
+  segmentedFolderControl,
+  segmentedViewControl,
+  segmentedPopover,
+  segmentedAnotherViewsControl,
+  zoomSegmented;
 
 /**
  * Void function for creating touchBar for MAC OS X
  */
 function createTouchBar() {
 
-  ipc.on('app-to-touchBar', (event, changesFromApp) => {
-    if (allSupportedViews.includes(<SupportedView>changesFromApp)) {
-      segmentedViewControl.selectedIndex = allSupportedViews.indexOf(changesFromApp);
-    } else if (changesFromApp === 'showFreq') {
-      segmentedFolderControl.selectedIndex = 0;
-    } else if (changesFromApp === 'showRecent') {
-      segmentedFolderControl.selectedIndex = 1;
-    } else if (changesFromApp === 'compactView') {
-      segmentedAnotherViewsControl.selectedIndex = 0;
-    } else if (changesFromApp === 'showMoreInfo') {
-      segmentedAnotherViewsControl.selectedIndex = 1;
-    }
-  });
-
   // recent and freq views
-  const segmentedFolderControl = new TouchBarSegmentedControl({
+  segmentedFolderControl = new TouchBarSegmentedControl({
     mode: 'multiple',
     selectedIndex: -1,
     segments: [
       {
-        icon: nativeImage.createFromPath(path.join(__dirname, 'src/assets/icons/mac/touch-bar/icon-cloud.png')).resize({
+        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-cloud.png')).resize({
           width: 22,
           height: 16
         })
       },
       {
-        icon: nativeImage.createFromPath(path.join(__dirname, 'src/assets/icons/mac/touch-bar/icon-recent-history.png')).resize({
+        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-recent-history.png')).resize({
           width: 18,
           height: 18
         })
@@ -1090,40 +1104,40 @@ function createTouchBar() {
   });
 
   // segmentedControl for views
-  const segmentedViewControl = new TouchBarSegmentedControl({
+  segmentedViewControl = new TouchBarSegmentedControl({
     segments: [
       {
-        icon: nativeImage.createFromPath(path.join(__dirname, 'src/assets/icons/mac/touch-bar/icon-show-thumbnails.png')).resize({
+        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-thumbnails.png')).resize({
           width: 15,
           height: 15
         })
       },
       {
-        icon: nativeImage.createFromPath(path.join(__dirname, 'src/assets/icons/mac/touch-bar/icon-show-filmstrip.png')).resize({
+        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-filmstrip.png')).resize({
           width: 20,
           height: 15
         })
       },
       {
-        icon: nativeImage.createFromPath(path.join(__dirname, 'src/assets/icons/mac/touch-bar/icon-show-full-view.png')).resize({
+        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-full-view.png')).resize({
           width: 15,
           height: 15
         })
       },
       {
-        icon: nativeImage.createFromPath(path.join(__dirname, 'src/assets/icons/mac/touch-bar/icon-show-details.png')).resize({
+        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-details.png')).resize({
           width: 15,
           height: 15
         })
       },
       {
-        icon: nativeImage.createFromPath(path.join(__dirname, 'src/assets/icons/mac/touch-bar/icon-show-filenames.png')).resize({
+        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-filenames.png')).resize({
           width: 15,
           height: 15
         })
       },
       {
-        icon: nativeImage.createFromPath(path.join(__dirname, 'src/assets/icons/mac/touch-bar/icon-video-blank.png')).resize({
+        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-video-blank.png')).resize({
           width: 15,
           height: 15
         })
@@ -1135,7 +1149,7 @@ function createTouchBar() {
   });
 
   // Popover button for segmentedControl
-  const segmentedPopover = new TouchBarPopover({
+  segmentedPopover = new TouchBarPopover({
     label: 'Views',
     items: new TouchBar(
       {
@@ -1145,18 +1159,18 @@ function createTouchBar() {
   });
 
   // Segment with compat view and show more info
-  const segmentedAnotherViewsControl = new TouchBarSegmentedControl({
+  segmentedAnotherViewsControl = new TouchBarSegmentedControl({
     mode: 'multiple',
     selectedIndex: -1,
     segments: [
       {
-        icon: nativeImage.createFromPath(path.join(__dirname, 'src/assets/icons/mac/touch-bar/icon-compat-view.png')).resize({
+        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-compat-view.png')).resize({
           width: 16,
           height: 16
         })
       },
       {
-        icon: nativeImage.createFromPath(path.join(__dirname, 'src/assets/icons/mac/touch-bar/icon-show-more-info.png')).resize({
+        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-more-info.png')).resize({
           width: 18,
           height: 20
         })
@@ -1172,7 +1186,7 @@ function createTouchBar() {
   });
 
   // touchBar segment with zoom options
-  const zoomSegmented = new TouchBarSegmentedControl({
+  zoomSegmented = new TouchBarSegmentedControl({
     mode: 'buttons',
     segments: [
       {label: '-'},
@@ -1188,7 +1202,7 @@ function createTouchBar() {
   });
 
   // creating touchBar from existing items
-  const touchBar = new TouchBar({
+  touchBar = new TouchBar({
     items: [
       segmentedFolderControl,
       segmentedPopover,
@@ -1196,8 +1210,5 @@ function createTouchBar() {
       zoomSegmented
     ]
   });
-
-  // setting touchBar to instance of window
-  win.setTouchBar(touchBar);
 }
 

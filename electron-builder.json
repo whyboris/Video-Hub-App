@@ -21,6 +21,12 @@
     "!tsconfig.json",
     "!tslint.json"
   ],
+  "extraResources": [
+    {
+      "from": "src/assets/icons/mac/touch-bar",
+      "to": "assets"
+    }
+  ],
   "win": {
     "icon": "dist/favicon",
     "asar": true,
