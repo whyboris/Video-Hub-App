@@ -377,8 +377,8 @@ function getHtmlPath(anyOsPath: string): string {
  * @param vhaFileContents
  */
 function setGlobalsFromVhaFile(vhaFileContents: FinalObject) {
-  globals.hubName = vhaFileContents.hubName,
-    globals.screenshotSettings = vhaFileContents.screenshotSettings;
+  globals.hubName = vhaFileContents.hubName;
+  globals.screenshotSettings = vhaFileContents.screenshotSettings;
   globals.selectedSourceFolder = vhaFileContents.inputDir;
 }
 
