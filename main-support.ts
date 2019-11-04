@@ -239,8 +239,8 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
 
   const finalArray: ImageElement[] = [];
   let elementIndex = 0;
-  // ignore folders beginning with { '.', '_', 'vha-' }
-  const folderIgnoreRegex = /^(\.|_|vha-).*/g;
+  // ignore folders beginning with { '.', '__MACOS', 'vha-' }
+  const folderIgnoreRegex = /^(\.|__MACOS|vha-).*/g;
   // ignore files beginning with { '.', '_' }
   const fileIgnoreRegex = /^(\.|_).*/g;
 
