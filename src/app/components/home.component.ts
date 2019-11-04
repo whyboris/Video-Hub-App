@@ -670,7 +670,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       this.setUpDurationFilterValues(this.finalArray);
 
-      this.sortFilterElement.nativeElement.value = this.sortType;
+      if (this.sortFilterElement) {
+        this.sortFilterElement.nativeElement.value = this.sortType;
+      }
 
       this.cd.detectChanges();
     });
@@ -1261,8 +1263,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.settingsButtons.showRelatedVideosTray.toggled = !this.settingsButtons.showRelatedVideosTray.toggled;
       this.computePreviewWidth();
     } else if (uniqueKey === 'sortOrder') {
-      this.sortType = 'default';
       this.toggleButtonOpposite(uniqueKey);
+      setTimeout(() => {
+        if (this.sortFilterElement) { // just in case, perform check
+          this.sortFilterElement.nativeElement.value = this.sortType;
+        }
+      });
     } else if (uniqueKey === 'shuffleGalleryNow') {
       this.sortType = 'random';
       this.shuffleTheViewNow++;
