@@ -1,5 +1,4 @@
-import {allSupportedViews, SupportedView} from '../../../interfaces/shared-interfaces';
-export {allSupportedViews, SupportedView};
+import { SupportedView } from '../../../interfaces/shared-interfaces';
 // Please conform the supported languages exactly to the first two characters from here:
 // https://github.com/electron/electron/blob/master/docs/api/locales.md
 export type SupportedLanguage =

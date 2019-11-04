@@ -24,7 +24,8 @@ import { TagEmission, StarEmission, YearEmission } from './views/details/details
 import { WizardOptions } from '../../../interfaces/wizard-options.interface';
 
 // Constants, etc
-import { AppState, SupportedLanguage, defaultImgsPerRow, RowNumbers, allSupportedViews, SupportedView } from '../common/app-state';
+import { AppState, SupportedLanguage, defaultImgsPerRow, RowNumbers } from '../common/app-state';
+import { allSupportedViews, SupportedView } from '../../../interfaces/shared-interfaces';
 import { Filters, filterKeyToIndex, FilterKeyNames } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, SettingsMetaGroup } from '../common/settings-buttons';
 import { globals, ScreenshotSettings } from '../../../main-globals';
