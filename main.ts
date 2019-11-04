@@ -1053,8 +1053,7 @@ ipc.on('app-to-touchBar', (event, changesFromApp) => {
 });
 
 
-const allSupportedViews: SupportedView[] = ['showThumbnails', 'showFilmstrip', 'showFullView', 'showDetails', 'showFiles', 'showClips'];
-type SupportedView = 'showThumbnails' | 'showFilmstrip' | 'showFullView' | 'showDetails' | 'showFiles' | 'showClips';
+import {allSupportedViews, SupportedView} from './interfaces/shared-interfaces';
 
 const nativeImage = require('electron').nativeImage;
 const resourcePath = serve ? path.join(__dirname, 'src/assets/icons/mac/touch-bar/') : path.join(process.resourcesPath, 'assets/');

@@ -1,3 +1,5 @@
+import {allSupportedViews, SupportedView} from '../../../interfaces/shared-interfaces';
+export {allSupportedViews, SupportedView};
 // Please conform the supported languages exactly to the first two characters from here:
 // https://github.com/electron/electron/blob/master/docs/api/locales.md
 export type SupportedLanguage =
@@ -16,23 +18,6 @@ export type SupportedLanguage =
 | 'ru'
 | 'zh'
 | 'uk';
-
-// Let's make these identical to settings buttons!
-export type SupportedView = 'showThumbnails'
-                          | 'showFilmstrip'
-                          | 'showFullView'
-                          | 'showDetails'
-                          | 'showFiles'
-                          | 'showClips';
-
-export const allSupportedViews: SupportedView[] = [
-  'showThumbnails',
-  'showFilmstrip',
-  'showFullView',
-  'showDetails',
-  'showFiles',
-  'showClips',
-];
 
 export interface RowNumbers {
   thumbnailSheet: number;
