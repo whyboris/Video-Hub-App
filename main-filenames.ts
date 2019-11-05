@@ -24,6 +24,7 @@ export const acceptableFiles = [
   'ogg',
   'ogm',
   'rm',
+  'ts',
   'vob',
   'webm',
   'wmv'
