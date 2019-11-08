@@ -1,9 +1,9 @@
-import { app, BrowserWindow, screen } from 'electron';
+import { app, BrowserWindow, screen, TouchBar } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 
 const { systemPreferences } = require('electron');
-const electron = require('electron')
+const electron = require('electron');
 const { powerSaveBlocker } = require('electron');
 
 import { globals } from './main-globals';
@@ -15,6 +15,7 @@ const codeRunningOnMac: boolean = process.platform === 'darwin';
 // translations received via `system-messages-updated`
 const English = require('./i18n/en.json');
 let systemMessages = English.SYSTEM;
+
 
 // ========================================================================================
 // ***************************** BUILD TOGGLE *********************************************
@@ -121,6 +122,13 @@ function createWindow() {
     }));
   }
 
+  if (codeRunningOnMac) {
+    createTouchBar();
+    if (touchBar) {
+      win.setTouchBar(touchBar);
+    }
+  }
+
   // Watch for computer powerMonitor
   // https://electronjs.org/docs/api/power-monitor
   electron.powerMonitor.on('shutdown', () => {
@@ -197,6 +205,7 @@ if (codeRunningOnMac) {
     }
   );
 }
+
 
 // ========================================================================================
 // My imports
@@ -291,7 +300,7 @@ function openThisDamnFile(pathToVhaFile: string) {
         if (buttonIndex === 0) {
           // select the new root folder
           const pathsArray: any = dialog.showOpenDialogSync(win, {
-          //                      ^^^^^^^^^^^^^^^^^^ returns `string[]`
+            //                      ^^^^^^^^^^^^^^^^^^ returns `string[]`
             properties: ['openDirectory']
           });
 
@@ -308,12 +317,12 @@ function openThisDamnFile(pathToVhaFile: string) {
             return;
           }
 
-        // Continue anyway
+          // Continue anyway
         } else if (buttonIndex === 1) {
           console.log('PROCEED ANYWAY');
           rootFolderLive = false;
 
-        // Cancel
+          // Cancel
         } else if (buttonIndex === 2) {
           console.log('CANCEL');
           // show the wizard instead
@@ -351,13 +360,13 @@ function openThisDamnFile(pathToVhaFile: string) {
  * @param anyOsPath
  */
 function getHtmlPath(anyOsPath: string): string {
-      // Windows was misbehaving
-      // so we normalize the path (just in case) and replace all `\` with `/` in this instance
-      // because at this point Electron will be showing images following the path provided
-      // with the `file:///` protocol -- seems to work
-      const normalizedPath: string = path.normalize(anyOsPath);
-      const forwardSlashes: string = normalizedPath.replace(/\\/g, '/');
-      return forwardSlashes.replace(/ /g, '%20');
+  // Windows was misbehaving
+  // so we normalize the path (just in case) and replace all `\` with `/` in this instance
+  // because at this point Electron will be showing images following the path provided
+  // with the `file:///` protocol -- seems to work
+  const normalizedPath: string = path.normalize(anyOsPath);
+  const forwardSlashes: string = normalizedPath.replace(/\\/g, '/');
+  return forwardSlashes.replace(/ /g, '%20');
 }
 
 /**
@@ -368,7 +377,7 @@ function getHtmlPath(anyOsPath: string): string {
  * @param vhaFileContents
  */
 function setGlobalsFromVhaFile(vhaFileContents: FinalObject) {
-  globals.hubName = vhaFileContents.hubName,
+  globals.hubName = vhaFileContents.hubName;
   globals.screenshotSettings = vhaFileContents.screenshotSettings;
   globals.selectedSourceFolder = vhaFileContents.inputDir;
 }
@@ -392,7 +401,7 @@ ipc.on('just-started', function (event, someMessage) {
 
   fs.readFile(path.join(pathToAppData, 'video-hub-app-2', 'settings.json'), (err, data) => {
     if (err) {
-      win.setBounds({ x: 0, y: 0, width: screenWidth, height: screenHeight });
+      win.setBounds({x: 0, y: 0, width: screenWidth, height: screenHeight});
       event.sender.send('pleaseOpenWizard', true); // firstRun = true!
     } else {
 
@@ -402,9 +411,9 @@ ipc.on('just-started', function (event, someMessage) {
       if (savedSettings.windowSizeAndPosition
         && savedSettings.windowSizeAndPosition.x < screenWidth - 200
         && savedSettings.windowSizeAndPosition.y < screenHeight - 200) {
-          win.setBounds(savedSettings.windowSizeAndPosition);
+        win.setBounds(savedSettings.windowSizeAndPosition);
       } else {
-        win.setBounds({ x: 0, y: 0, width: screenWidth, height: screenHeight });
+        win.setBounds({x: 0, y: 0, width: screenWidth, height: screenHeight});
       }
 
       // Reference: https://github.com/electron/electron/blob/master/docs/api/locales.md
@@ -458,15 +467,15 @@ ipc.on('select-default-video-player', function (event) {
 /**
  * Open the explorer to the relevant file
  */
-ipc.on('openInExplorer', function(event, fullPath: string) {
+ipc.on('openInExplorer', function (event, fullPath: string) {
   shell.showItemInFolder(fullPath);
 });
 
 /**
  * Open a URL in system's default browser
  */
-ipc.on('pleaseOpenUrl', function(event, urlToOpen: string): void {
-  shell.openExternal(urlToOpen, { activate: true });
+ipc.on('pleaseOpenUrl', function (event, urlToOpen: string): void {
+  shell.openExternal(urlToOpen, {activate: true});
 });
 
 /**
@@ -481,7 +490,7 @@ ipc.on('maximize-window', function (event, someMessage) {
 /**
  * Method to replace thumbnail of a particular item
  */
-ipc.on('replace-thumbnail', function(event, pathToIncomingJpg: string, item: ImageElement) {
+ipc.on('replace-thumbnail', function (event, pathToIncomingJpg: string, item: ImageElement) {
   const fileToReplace: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName, 'thumbnails', item.hash + '.jpg');
 
 
@@ -614,11 +623,11 @@ function tellElectronDarkModeChange(mode: string) {
 /**
  * Interrupt current import process
  */
-ipc.on('cancel-current-import', function(event): void {
+ipc.on('cancel-current-import', function (event): void {
   globals.cancelCurrentImport = true;
 });
 
-ipc.on('system-messages-updated', function(event, newSystemMessages): void {
+ipc.on('system-messages-updated', function (event, newSystemMessages): void {
   console.log('new translated system messages recieved !!!');
   systemMessages = newSystemMessages;
 });
@@ -696,25 +705,25 @@ ipc.on('start-the-import', function (event, options: ImportSettingsObject, video
  */
 ipc.on('system-open-file-through-modal', function (event, somethingElse) {
   dialog.showOpenDialog(win, {
-      title: systemMessages.selectPreviousHub,
-      filters: [{
-        name: 'Video Hub App 2 files', // TODO -- i18n FIX ME
-        extensions: ['vha2']
-      }],
-      properties: ['openFile']
-    }).then(result => {
-      const chosenFile: string = result.filePaths[0];
+    title: systemMessages.selectPreviousHub,
+    filters: [{
+      name: 'Video Hub App 2 files', // TODO -- i18n FIX ME
+      extensions: ['vha2']
+    }],
+    properties: ['openFile']
+  }).then(result => {
+    const chosenFile: string = result.filePaths[0];
 
-      if (chosenFile) {
-        // console.log('the user has chosen this previously-saved .vha file: ' + chosenFile);
-        // TODO: fix up this stupid pattern of overriding method with variable ?
-        userWantedToOpen = chosenFile;
-        openThisDamnFile(chosenFile);
-      }
-    }).catch(err => {
-      console.log('system open file through modal: this should not happen');
-      console.log(err);
-    });
+    if (chosenFile) {
+      // console.log('the user has chosen this previously-saved .vha file: ' + chosenFile);
+      // TODO: fix up this stupid pattern of overriding method with variable ?
+      userWantedToOpen = chosenFile;
+      openThisDamnFile(chosenFile);
+    }
+  }).catch(err => {
+    console.log('system open file through modal: this should not happen');
+    console.log(err);
+  });
 });
 
 /**
@@ -740,7 +749,7 @@ ipc.on('load-this-vha-file', function (event, pathToVhaFile: string, savableProp
 
 });
 
-ipc.on('try-to-rename-this-file', function(event, sourceFolder: string, relPath: string, file: string, renameTo: string): void {
+ipc.on('try-to-rename-this-file', function (event, sourceFolder: string, relPath: string, file: string, renameTo: string): void {
   console.log('renaming file:');
 
   const original: string = path.join(sourceFolder, relPath, file);
@@ -1027,3 +1036,178 @@ function tellUserDirDoesNotExist(currentVideoFolder: string) {
     buttons: ['OK']
   });
 }
+
+
+ipc.on('app-to-touchBar', (event, changesFromApp) => {
+  if (allSupportedViews.includes(<SupportedView>changesFromApp)) {
+    segmentedViewControl.selectedIndex = allSupportedViews.indexOf(changesFromApp);
+  } else if (changesFromApp === 'showFreq') {
+    segmentedFolderControl.selectedIndex = 0;
+  } else if (changesFromApp === 'showRecent') {
+    segmentedFolderControl.selectedIndex = 1;
+  } else if (changesFromApp === 'compactView') {
+    segmentedAnotherViewsControl.selectedIndex = 0;
+  } else if (changesFromApp === 'showMoreInfo') {
+    segmentedAnotherViewsControl.selectedIndex = 1;
+  }
+});
+
+
+import {allSupportedViews, SupportedView} from './interfaces/shared-interfaces';
+
+const nativeImage = require('electron').nativeImage;
+const resourcePath = serve ? path.join(__dirname, 'src/assets/icons/mac/touch-bar/') : path.join(process.resourcesPath, 'assets/');
+const {
+  TouchBarPopover,
+  TouchBarSegmentedControl
+} = TouchBar;
+
+// touchBar variables
+let touchBar,
+  segmentedFolderControl,
+  segmentedViewControl,
+  segmentedPopover,
+  segmentedAnotherViewsControl,
+  zoomSegmented;
+
+/**
+ * Void function for creating touchBar for MAC OS X
+ */
+function createTouchBar() {
+
+  // recent and freq views
+  segmentedFolderControl = new TouchBarSegmentedControl({
+    mode: 'multiple',
+    selectedIndex: -1,
+    segments: [
+      {
+        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-cloud.png')).resize({
+          width: 22,
+          height: 16
+        })
+      },
+      {
+        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-recent-history.png')).resize({
+          width: 18,
+          height: 18
+        })
+      }
+    ],
+    change: selectedIndex => {
+      if (selectedIndex === 0) {
+        globals.angularApp.sender.send('touchBar-to-app', 'showFreq');
+      } else {
+        globals.angularApp.sender.send('touchBar-to-app', 'showRecent');
+      }
+    }
+  });
+
+  // segmentedControl for views
+  segmentedViewControl = new TouchBarSegmentedControl({
+    segments: [
+      {
+        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-thumbnails.png')).resize({
+          width: 15,
+          height: 15
+        })
+      },
+      {
+        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-filmstrip.png')).resize({
+          width: 20,
+          height: 15
+        })
+      },
+      {
+        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-full-view.png')).resize({
+          width: 15,
+          height: 15
+        })
+      },
+      {
+        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-details.png')).resize({
+          width: 15,
+          height: 15
+        })
+      },
+      {
+        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-filenames.png')).resize({
+          width: 15,
+          height: 15
+        })
+      },
+      {
+        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-video-blank.png')).resize({
+          width: 15,
+          height: 15
+        })
+      },
+    ],
+    change: selectedIndex => {
+      globals.angularApp.sender.send('touchBar-to-app', allSupportedViews[selectedIndex]);
+    }
+  });
+
+  // Popover button for segmentedControl
+  segmentedPopover = new TouchBarPopover({
+    label: 'Views',
+    items: new TouchBar(
+      {
+        items: [segmentedViewControl]
+      }
+    )
+  });
+
+  // Segment with compat view and show more info
+  segmentedAnotherViewsControl = new TouchBarSegmentedControl({
+    mode: 'multiple',
+    selectedIndex: -1,
+    segments: [
+      {
+        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-compat-view.png')).resize({
+          width: 16,
+          height: 16
+        })
+      },
+      {
+        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-more-info.png')).resize({
+          width: 18,
+          height: 20
+        })
+      },
+    ],
+    change: selectedIndex => {
+      if (selectedIndex === 0) {
+        globals.angularApp.sender.send('touchBar-to-app', 'compactView');
+      } else {
+        globals.angularApp.sender.send('touchBar-to-app', 'showMoreInfo');
+      }
+    }
+  });
+
+  // touchBar segment with zoom options
+  zoomSegmented = new TouchBarSegmentedControl({
+    mode: 'buttons',
+    segments: [
+      {label: '-'},
+      {label: '+'}
+    ],
+    change: selectedIndex => {
+      if (selectedIndex === 0) {
+        globals.angularApp.sender.send('touchBar-to-app', 'makeSmaller');
+      } else {
+        globals.angularApp.sender.send('touchBar-to-app', 'makeLarger');
+      }
+    }
+  });
+
+  // creating touchBar from existing items
+  touchBar = new TouchBar({
+    items: [
+      segmentedFolderControl,
+      segmentedPopover,
+      segmentedAnotherViewsControl,
+      zoomSegmented
+    ]
+  });
+}
+
