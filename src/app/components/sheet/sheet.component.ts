@@ -2,6 +2,7 @@ import { Component, Input, Output, OnInit, ElementRef, EventEmitter, ViewChild }
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { ManualTagsService } from '../tags-manual/manual-tags.service';
+import { FilePathService } from "../views/file-path.service";
 
 import { StarRating, ImageElement } from '../../../../interfaces/final-object.interface';
 
@@ -65,11 +66,12 @@ export class SheetComponent implements OnInit {
 
   constructor(
     public manualTagsService: ManualTagsService,
+    public filePathService: FilePathService,
     public sanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
-    this.fullFilePath =  'file://' + this.folderPath + '/' + 'vha-' + this.hubName + '/filmstrips/' + this.video.hash + '.jpg';
+    this.fullFilePath = this.filePathService.createFilePath(this.folderPath,this.hubName,"filmstrips",this.video.hash);
     this.percentOffset = (100 / (this.video.screens - 1));
     this.starRatingHack = this.star;
   }
