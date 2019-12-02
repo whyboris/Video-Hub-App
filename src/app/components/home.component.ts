@@ -670,6 +670,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       this.setUpDurationFilterValues(this.finalArray);
 
+      if (this.sortFilterElement) {
+        this.sortFilterElement.nativeElement.value = this.sortType;
+      }
+
       this.cd.detectChanges();
     });
 
@@ -1259,8 +1263,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.settingsButtons.showRelatedVideosTray.toggled = !this.settingsButtons.showRelatedVideosTray.toggled;
       this.computePreviewWidth();
     } else if (uniqueKey === 'sortOrder') {
-      this.sortType = 'default';
       this.toggleButtonOpposite(uniqueKey);
+      setTimeout(() => {
+        if (this.sortFilterElement) { // just in case, perform check
+          this.sortFilterElement.nativeElement.value = this.sortType;
+        }
+      });
     } else if (uniqueKey === 'shuffleGalleryNow') {
       this.sortType = 'random';
       this.shuffleTheViewNow++;
@@ -1689,6 +1697,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.appState.imgsPerRow = defaultImgsPerRow;
       }
     }
+    this.sortType = this.appState.currentSort;
     this.imgsPerRow = this.appState.imgsPerRow;
     this.currentImgsPerRow = this.imgsPerRow[this.appState.currentView];
     this.grabAllSettingsKeys().forEach(element => {
@@ -2068,6 +2077,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   selectFilterOrder(type: SortType): void {
     this.sortType = type;
+    this.appState.currentSort = type;
   }
 
   /**

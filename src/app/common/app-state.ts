@@ -1,4 +1,6 @@
+import { SortType } from '../pipes/sorting.pipe';
 import { SupportedView } from '../../../interfaces/shared-interfaces';
+
 // Please conform the supported languages exactly to the first two characters from here:
 // https://github.com/electron/electron/blob/master/docs/api/locales.md
 export type SupportedLanguage =
@@ -38,6 +40,7 @@ export const defaultImgsPerRow: RowNumbers = {
 
 export let AppState: AppStateInterface = {
   currentVhaFile: '',     // full path to the .vha file
+  currentSort: 'default',
   currentView: 'showThumbnails',
   currentZoomLevel: 1,
   hubName: '',
@@ -52,6 +55,7 @@ export let AppState: AppStateInterface = {
 
 export interface AppStateInterface {
   currentVhaFile: string;
+  currentSort: SortType;
   currentView: SupportedView;
   currentZoomLevel: number;
   hubName: string;
