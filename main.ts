@@ -1039,16 +1039,18 @@ function tellUserDirDoesNotExist(currentVideoFolder: string) {
 
 
 ipc.on('app-to-touchBar', (event, changesFromApp) => {
-  if (allSupportedViews.includes(<SupportedView>changesFromApp)) {
-    segmentedViewControl.selectedIndex = allSupportedViews.indexOf(changesFromApp);
-  } else if (changesFromApp === 'showFreq') {
-    segmentedFolderControl.selectedIndex = 0;
-  } else if (changesFromApp === 'showRecent') {
-    segmentedFolderControl.selectedIndex = 1;
-  } else if (changesFromApp === 'compactView') {
-    segmentedAnotherViewsControl.selectedIndex = 0;
-  } else if (changesFromApp === 'showMoreInfo') {
-    segmentedAnotherViewsControl.selectedIndex = 1;
+  if (codeRunningOnMac) {
+    if (allSupportedViews.includes(<SupportedView>changesFromApp)) {
+      segmentedViewControl.selectedIndex = allSupportedViews.indexOf(changesFromApp);
+    } else if (changesFromApp === 'showFreq') {
+      segmentedFolderControl.selectedIndex = 0;
+    } else if (changesFromApp === 'showRecent') {
+      segmentedFolderControl.selectedIndex = 1;
+    } else if (changesFromApp === 'compactView') {
+      segmentedAnotherViewsControl.selectedIndex = 0;
+    } else if (changesFromApp === 'showMoreInfo') {
+      segmentedAnotherViewsControl.selectedIndex = 1;
+    }
   }
 });
 
