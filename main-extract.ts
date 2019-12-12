@@ -136,7 +136,7 @@ const generatePreviewClipArgs = (
   savePath: string,
 ): string[] => {
 
-  let current = 1;
+  let current = 0;
   const totalCount = clipSnippets;
   const step: number = duration / totalCount;
   const args: string[] = [];
@@ -147,11 +147,11 @@ const generatePreviewClipArgs = (
     const time = current * step;
     const preview_duration = snippetLength;
     args.push('-ss', time.toString(), '-t', preview_duration.toString(), '-i', pathToVideo);
-    concat += '[' + (current - 1) + ':V]' + '[' + (current - 1) + ':a]';
+    concat += '[' + current + ':V]' + '[' + current + ':a]';
     current++;
   }
 
-  concat += 'concat=n=' + (totalCount - 1) + ':v=1:a=1[v][a];[v]scale=-2:' + clipHeight + '[v2]';
+  concat += 'concat=n=' + totalCount + ':v=1:a=1[v][a];[v]scale=-2:' + clipHeight + '[v2]';
   args.push('-filter_complex',
             concat,
             '-map',
