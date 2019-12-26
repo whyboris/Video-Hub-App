@@ -63,73 +63,80 @@
   @slowFadeIn
 >
 
-<div class="col1">
-  <button
-    class="wizard-button"
-    [ngClass]="{ editModeActive: editMode }"
-    (click)="startEditMode()"
-  >
-    {{ 'TAGS.delete' | translate }}
-  </button>
-</div>
+  <div>
+    <span class="filter-description">
+      {{ 'TAGS.filterList' | translate }}
+    </span>
 
-<div class="col">
-  lol
-  <input
-    (change)="selectMinFrequency($event.target.value)"
-    type="number"
-    class="size-dropdown language-drop-down num-select"
-    value=3
-    min=3
-    max=50
-    onKeyDown="return false"
-  >
-  lol
-</div>
+    <input
+      #filterInput
+      [(ngModel)]="currentFiltering"
+      class="filter-general input-filter"
+      (keydown.escape)="tagInputEscapePress($event)"
+      type="text"
+      placeholder="{{ 'TAGS.any' | translate }}"
+    >
 
-<div class="col2">
-  <input
-    #filterInput
-    [(ngModel)]="currentFiltering"
-    class="filter-general input-filter"
-    type="text"
-  >
+    <input
+      (change)="selectMinFrequency($event.target.value)"
+      type="number"
+      class="num-select"
+      value=4
+      min=4
+      max=50
+    >
 
-  <span class="numFound">
-    {{ 'TAGS.filterList' | translate }}
-  </span>
-</div>
+    <span class="filter-description">
+      {{ 'TAGS.minimum' | translate }}
+    </span>
+  </div>
 
-<div class="col3">
-  <input
-    #addInput
-    (keyup.enter)="addThisTag()"
-    [(ngModel)]="currentAdding"
-    class="filter-general input-filter input-add"
-    type="text"
-  >
+  <div class="break-point-hack"></div>
 
-  <span
-    *ngIf="!showingStatusMessage"
-    class="numFound alignLeft"
-    @donutAppear
-  >
-    {{ currentAdding | tagMatchPipe }}
-  </span>
-  <span
-    *ngIf="showingStatusMessage"
-    class="numFound add-error alignLeft"
-    @donutAppear
-  >
-    {{ statusMessage | translate }}
-  </span>
+  <!-- ADD TAGS -->
 
-  <button
-    (click)="addThisTag()"
-    class="wizard-button add-button"
-  >
-    {{ 'TAGS.add' | translate }}
-  </button>
-</div>
+  <div class="col3 small-rez-hidden">
+    <input
+      #addInput
+      (keyup.enter)="addThisTag()"
+      [(ngModel)]="currentAdding"
+      class="filter-general input-filter input-add"
+      type="text"
+    >
+
+    <button
+      (click)="addThisTag()"
+      class="wizard-button"
+    >
+      {{ 'TAGS.add' | translate }}
+    </button>
+
+    <span
+      *ngIf="!showingStatusMessage"
+      class="num-found align-left"
+      @donutAppear
+    >
+      {{ currentAdding | tagMatchPipe }}
+    </span>
+    <span
+      *ngIf="showingStatusMessage"
+      class="num-found add-error align-left"
+      @donutAppear
+    >
+      {{ statusMessage | translate }}
+    </span>
+  </div>
+
+  <!-- DELETE TAGS -->
+
+  <div class="small-rez-hidden">
+    <button
+      class="wizard-button"
+      [ngClass]="{ editModeActive: editMode }"
+      (click)="startEditMode()"
+    >
+      {{ 'TAGS.delete' | translate }}
+    </button>
+  </div>
 
 </div>

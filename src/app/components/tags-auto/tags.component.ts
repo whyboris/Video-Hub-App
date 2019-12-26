@@ -10,8 +10,7 @@ import { slowFadeIn, donutAppear } from '../../common/animations';
 @Component({
   selector: 'app-tags-component',
   templateUrl: 'tags.component.html',
-  styleUrls: ['../settings.scss',
-              '../search-input.scss',
+  styleUrls: ['../search-input.scss',
               '../../fonts/icons.scss',
               '../wizard-button.scss',
               'tags.component.scss'],
@@ -39,7 +38,7 @@ export class TagsComponent implements OnInit, OnDestroy {
   statusMessage: string = '';
   showingStatusMessage: boolean = false;
 
-  minimumFrequency: number = 3;
+  minimumFrequency: number = 4;
 
   constructor(
     public tagsService: AutoTagsService,
@@ -65,7 +64,7 @@ export class TagsComponent implements OnInit, OnDestroy {
   /**
    * Emit string to home component to search for this string
    */
-  public tagWasClicked(tag: string): void {
+  tagWasClicked(tag: string): void {
     if (this.editMode) {
 
       this.tagsService.removeTag(tag);
@@ -81,7 +80,7 @@ export class TagsComponent implements OnInit, OnDestroy {
     }
   }
 
-  public addThisTag(): any {
+  addThisTag(): any {
     const tagToAdd: string = this.currentAdding.trim();
 
     if (tagToAdd === '') {
@@ -104,11 +103,19 @@ export class TagsComponent implements OnInit, OnDestroy {
     }
   }
 
-  public startEditMode(): void {
+  /**
+   * Toggle edit mode (to allow deletion of tags)
+   */
+  startEditMode(): void {
     this.editMode = !this.editMode;
   }
 
-  public showStatusMessage(message: string): void {
+  /**
+   * Temporarily show a message to the user
+   * Used to show success or error when adding a tag
+   * @param message
+   */
+  showStatusMessage(message: string): void {
     this.statusMessage = message;
     this.showingStatusMessage = true;
     setTimeout(() => {
@@ -122,6 +129,18 @@ export class TagsComponent implements OnInit, OnDestroy {
    */
   selectMinFrequency(min: number): void {
     this.minimumFrequency = min;
+  }
+
+  /**
+   * Clear current tag search if present, otherwise allow app to close the modal
+   * @param event
+   */
+  tagInputEscapePress(event: any): void {
+    if (this.currentFiltering.length) {
+      event.preventDefault();
+      event.stopPropagation();
+      this.currentFiltering = '';
+    }
   }
 
   ngOnDestroy(): void {

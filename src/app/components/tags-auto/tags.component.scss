@@ -69,9 +69,10 @@ ul {
   align-items: baseline;
   background: $gray-10;
   border-top: 1px solid $gray-30;
-  bottom: 15px;
+  bottom: 16px;
   box-sizing: border-box;
   display: flex;
+  flex-flow: wrap;
   justify-content: space-between;
   margin: 0;
   padding: 15px;
@@ -79,13 +80,19 @@ ul {
   width: calc(100% - 235px);
 }
 
-.num-select {
-  outline: none;
-  width: 35px;
+.filter-description {
+  color: $gray-50;
+  font-size: 12px;
 }
 
-.col2 {
-  width: 100px;
+.num-select {
+  background-color: $gray-10;
+  border: none;
+  margin: 0 0 0 14px;
+  outline: none;
+  padding: 0;
+  text-align: right;
+  width: 30px;
 }
 
 .col3 {
@@ -97,7 +104,7 @@ ul {
   bottom: 23px;
   max-width: 150px;
   padding-left: 5px;
-  text-align: center;
+  text-align: left;
 }
 
 .input-add {
@@ -115,13 +122,7 @@ ul {
   width: auto;
 }
 
-.add-button {
-  bottom: 18px;
-  position: absolute;
-  right: 20px;
-}
-
-.numFound {
+.num-found {
   bottom: 15px;
   color: $gray-50;
   display: block;
@@ -130,7 +131,7 @@ ul {
   text-align: center;
 }
 
-.alignLeft {
+.align-left {
   margin-left: 5px;
   text-align: left;
 }
@@ -168,14 +169,13 @@ ul {
   color: $pretty-blue;
 }
 
-@media (max-width: 550px) {
-  .col3 {
-    display: none;
-  }
+.break-point-hack {
+  display: none;
 }
 
-@media (max-width: 650px) {
-  .col1 {
-    display: none;
+@media (max-width: 1000px) {
+  .break-point-hack {
+    display: initial;
+    width: 100%;
   }
 }
