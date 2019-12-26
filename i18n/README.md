@@ -29,7 +29,7 @@ export type SupportedLanguage = 'en' | 'ru' | 'fr';
 Add the language to the dropdown in `home.component.html`, e.g.
 
 ```html
-  <select (change)="changeLanguage($event.target.value)" class="languageDropDown">
+  <select (change)="changeLanguage($event.target.value)" class="language-drop-down">
     <option value="en" [selected]="appState.language == 'en'">English</option>
     <option value="ru" [selected]="appState.language == 'ru'">Russian</option>
     <option value="fr" [selected]="appState.language == 'fr'">French</option>

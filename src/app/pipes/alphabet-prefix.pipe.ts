@@ -1,29 +1,36 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { AlphabetPrefixService } from './alphabet-prefix.service';
+import { WordAndFreq } from '../components/tags-auto/autotags.service';
 
 @Pipe({
   name: 'alphabetPrefixPipe'
 })
 export class AlphabetPrefixPipe implements PipeTransform {
 
-  constructor(
-    public alphabetService: AlphabetPrefixService
-  ) {}
+  constructor() {}
 
   /**
-   * Return only items that match search string
-   * @param someTag
+   * Change the prefix boolean - controls whether prefix is shown
+   * @param allTags
    */
-  transform(someTag: string): string {
+  transform(allTags: WordAndFreq[]): WordAndFreq[] {
 
-    let htmlString = '';
+    let lastLetter: string = '';
 
-    if (this.alphabetService.addPrefix(someTag.charAt(0))) {
-      htmlString = someTag.charAt(0);
-    }
+    allTags.forEach((element: WordAndFreq) => {
 
-    return htmlString;
+      const current = element.word.charAt(0);
+
+      if (lastLetter === current) {
+        element.prefix = undefined;
+      } else {
+        lastLetter = current;
+        element.prefix = current;
+      }
+
+    });
+
+    return allTags;
   }
 
 }

@@ -1,8 +1,12 @@
 <div class="columns-container">
   <ul class="column">
-    <li *ngFor="let item of oneWordTags | tagFilterPipe: currentFiltering">
-      <span class="prefix">
-        {{ item.word | alphabetPrefixPipe }}
+    <li
+      *ngFor="let item of oneWordTags | tagFrequencyPipe: minimumFrequency
+                                      | tagFilterPipe: currentFiltering
+                                      | alphabetPrefixPipe"
+    >
+      <span *ngIf="item.prefix" class="prefix">
+        {{ item.prefix }}
       </span>
       <span class="frequency">
         {{ item.freq }}
@@ -24,9 +28,14 @@
   </ul>
 
   <ul class="column">
-    <li *ngFor="let item of twoWordTags | tagFilterPipe: currentFiltering" class="capitalize">
-      <span class="prefix">
-        {{ item.word | alphabetPrefixPipe }}
+    <li
+      class="capitalize"
+      *ngFor="let item of twoWordTags | tagFrequencyPipe: minimumFrequency
+                                      | tagFilterPipe: currentFiltering
+                                      | alphabetPrefixPipe"
+    >
+      <span *ngIf="item.prefix" class="prefix">
+        {{ item.prefix }}
       </span>
       <span class="frequency">
         {{ item.freq }}
@@ -62,6 +71,20 @@
   >
     {{ 'TAGS.delete' | translate }}
   </button>
+</div>
+
+<div class="col">
+  lol
+  <input
+    (change)="selectMinFrequency($event.target.value)"
+    type="number"
+    class="size-dropdown language-drop-down num-select"
+    value=3
+    min=3
+    max=50
+    onKeyDown="return false"
+  >
+  lol
 </div>
 
 <div class="col2">

@@ -7,6 +7,7 @@ import { ImageElement } from '../../../../interfaces/final-object.interface';
 export interface WordAndFreq {
   word: string;
   freq: number;
+  prefix?: string; // filled in inside alphabetPrefixPipe
 }
 
 // Strip out: {}()[] as well as 'for', 'her', 'the', 'him', 'and', '-', & ','

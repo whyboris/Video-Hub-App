@@ -10,7 +10,8 @@ import { slowFadeIn, donutAppear } from '../../common/animations';
 @Component({
   selector: 'app-tags-component',
   templateUrl: 'tags.component.html',
-  styleUrls: ['../search-input.scss',
+  styleUrls: ['../settings.scss',
+              '../search-input.scss',
               '../../fonts/icons.scss',
               '../wizard-button.scss',
               'tags.component.scss'],
@@ -37,6 +38,8 @@ export class TagsComponent implements OnInit, OnDestroy {
 
   statusMessage: string = '';
   showingStatusMessage: boolean = false;
+
+  minimumFrequency: number = 3;
 
   constructor(
     public tagsService: AutoTagsService,
@@ -111,6 +114,14 @@ export class TagsComponent implements OnInit, OnDestroy {
     setTimeout(() => {
       this.showingStatusMessage = false;
     }, 1500);
+  }
+
+  /**
+   * Set the minimum frequency to show
+   * @param min minimum frequency to show
+   */
+  selectMinFrequency(min: number): void {
+    this.minimumFrequency = min;
   }
 
   ngOnDestroy(): void {
