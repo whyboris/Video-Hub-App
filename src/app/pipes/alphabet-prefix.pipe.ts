@@ -10,7 +10,7 @@ export class AlphabetPrefixPipe implements PipeTransform {
   constructor() {}
 
   /**
-   * Change the prefix boolean - controls whether prefix is shown
+   * Change the prefix string - controls whether prefix is shown
    * @param allTags
    */
   transform(allTags: WordAndFreq[]): WordAndFreq[] {
