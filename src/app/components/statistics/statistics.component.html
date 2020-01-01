@@ -46,6 +46,13 @@
       </td>
     </tr>
 
+    <tr *ngIf="screenshotSettings.clipSnippets > 0">
+      <td>{{ 'STATISTICS.clipHeight' | translate }}</td>
+      <td class="rightCol">
+        {{ screenshotSettings.clipHeight }}px
+      </td>
+    </tr>
+
     <tr>
       <td>{{ 'STATISTICS.numOfClips' | translate }}</td>
       <td class="rightCol">
@@ -63,12 +70,6 @@
       </td>
     </tr>
 
-    <tr *ngIf="screenshotSettings.clipSnippets > 0">
-      <td>{{ 'STATISTICS.clipHeight' | translate }}</td>
-      <td class="rightCol">
-        {{ screenshotSettings.clipHeight }}px
-      </td>
-    </tr>
   </table>
 
   <table class="stats-table" style="left: 50%; position: absolute;">
