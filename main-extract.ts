@@ -138,12 +138,12 @@ const generatePreviewClipArgs = (
 
   let current = 1;
   const totalCount = clipSnippets;
-  const step: number = duration / totalCount;
+  const step: number = duration / (totalCount + 1);
   const args: string[] = [];
   let concat = '';
 
   // make the magic filter
-  while (current < totalCount) {
+  while (current <= totalCount) {
     const time = current * step;
     const preview_duration = snippetLength;
     args.push('-ss', time.toString(), '-t', preview_duration.toString(), '-i', pathToVideo);
@@ -151,7 +151,7 @@ const generatePreviewClipArgs = (
     current++;
   }
 
-  concat += 'concat=n=' + (totalCount - 1) + ':v=1:a=1[v][a];[v]scale=-2:' + clipHeight + '[v2]';
+  concat += 'concat=n=' + totalCount + ':v=1:a=1[v][a];[v]scale=-2:' + clipHeight + '[v2]';
   args.push('-filter_complex',
             concat,
             '-map',
