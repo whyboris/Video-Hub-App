@@ -268,9 +268,7 @@ export function extractFromTheseFiles(
       const elementIndex = elementsToScan[iterator];
       const currentElement = theFinalArray[elementIndex];
 
-      const pathToVideo: string = (path.join(videoFolderPath,
-        currentElement.partialPath,
-        currentElement.fileName));
+      const pathToVideo: string = path.join(videoFolderPath, currentElement.partialPath, currentElement.fileName);
 
       const duration: number = currentElement.duration;
       const fileHash: string = currentElement.hash;
