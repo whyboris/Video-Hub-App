@@ -1,6 +1,8 @@
 import { Component, Input, Output, OnInit, ElementRef, EventEmitter, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
+import * as path from 'path';
+
 import { ManualTagsService } from '../tags-manual/manual-tags.service';
 import { FilePathService } from '../views/file-path.service';
 
@@ -53,11 +55,12 @@ export class SheetComponent implements OnInit {
   @Input() imgHeight: number;
   @Input() largerFont: boolean;
   @Input() returnToFirstScreenshot: boolean;
-  @Input() showMeta: boolean;
-  @Input() star: StarRating;
-  @Input() showManualTags: boolean;
+  @Input() selectedSourceFolder: string;
   @Input() showAutoFileTags: boolean;
   @Input() showAutoFolderTags: boolean;
+  @Input() showManualTags: boolean;
+  @Input() showMeta: boolean;
+  @Input() star: StarRating;
 
   percentOffset: number = 0;
   fullFilePath = '';
@@ -125,6 +128,11 @@ export class SheetComponent implements OnInit {
       index: this.video.index,
       stars: rating
     });
+  }
+
+  copyToClipboard(): void {
+    const fullPath = path.join(this.selectedSourceFolder, this.video.partialPath, this.video.fileName);
+    navigator.clipboard.writeText(fullPath);
   }
 
 }

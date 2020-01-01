@@ -30,9 +30,9 @@ const spawn = require('child_process').spawn;
 
 const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path.replace('app.asar', 'app.asar.unpacked');
 
-import { globals, ScreenshotSettings } from './main-globals';
+import { globals } from './main-globals';
 import { sendCurrentProgress } from './main-support';
-import { ImageElement } from './interfaces/final-object.interface';
+import { ImageElement, ScreenshotSettings } from './interfaces/final-object.interface';
 
 
 // ========================================================================================

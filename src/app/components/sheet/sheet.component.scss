@@ -25,6 +25,30 @@
   @include scrollBar;
 }
 
+.full-path {
+  cursor: pointer;
+  font-size: 12px;
+  margin: 20px;
+
+  .copy-to-clipboard {
+    display: none;
+    position: absolute;
+    transform: translate(-23px, 0);
+    width: 15px;
+  }
+
+  &:hover {
+    .copy-to-clipboard {
+      display: inline-block;
+    }
+  }
+}
+
+.dark-path {
+  color: $gray-30;
+  fill: $gray-30;
+}
+
 .sheet-modal-dark-mode {
   background-color: $gray-80;
 }

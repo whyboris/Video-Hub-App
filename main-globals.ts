@@ -1,3 +1,5 @@
+import { ScreenshotSettings } from './interfaces/final-object.interface';
+
 export const globals: Globals = {
   angularApp: null,            // reference used to send messages back to Angular App
   cancelCurrentImport: false,
@@ -31,13 +33,4 @@ interface Globals {
   version: string;
   vhaFileVersion: number;
   winRef: any;
-}
-
-export interface ScreenshotSettings {
-  clipHeight: number;          // currently only these are allowed '144', '216', '288', '360', '432'
-  clipSnippetLength: number;
-  clipSnippets: number;        // the number of video snippets in every clip; 0 == no clip extracted
-  fixed: boolean;
-  height: number;              // currently only these are allowed '144', '216', '288', '360', '432'
-  n: number;
 }

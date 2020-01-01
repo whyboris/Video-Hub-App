@@ -13,7 +13,7 @@ import { StarFilterService } from '../pipes/star-filter.service';
 import { WordFrequencyService } from '../pipes/word-frequency.service';
 
 // Interfaces
-import { FinalObject, ImageElement } from '../../../interfaces/final-object.interface';
+import { FinalObject, ImageElement, ScreenshotSettings } from '../../../interfaces/final-object.interface';
 import { HistoryItem } from '../../../interfaces/history-item.interface';
 import { ImportSettingsObject } from '../../../interfaces/import.interface';
 import { ImportStage } from '../../../main-support';
@@ -28,7 +28,7 @@ import { AppState, SupportedLanguage, defaultImgsPerRow, RowNumbers } from '../c
 import { allSupportedViews, SupportedView } from '../../../interfaces/shared-interfaces';
 import { Filters, filterKeyToIndex, FilterKeyNames } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, SettingsMetaGroup } from '../common/settings-buttons';
-import { globals, ScreenshotSettings } from '../../../main-globals';
+import { globals } from '../../../main-globals';
 
 // Languages
 const Arabic = require('../../../i18n/ar.json');

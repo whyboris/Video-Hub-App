@@ -1,5 +1,4 @@
 import { ResolutionString } from '../src/app/pipes/resolution-filter.service';
-import { ScreenshotSettings } from '../main-globals';
 
 export type StarRating = 0.5 | 1.5 | 2.5 | 3.5 | 4.5 | 5.5;
 
@@ -63,4 +62,13 @@ export function NewImageElement(): ImageElement {
     timesPlayed: 0,
     width: 0,
   };
+}
+
+export interface ScreenshotSettings {
+  clipHeight: number;          // currently only these are allowed '144', '216', '288', '360', '432'
+  clipSnippetLength: number;
+  clipSnippets: number;        // the number of video snippets in every clip; 0 == no clip extracted
+  fixed: boolean;
+  height: number;              // currently only these are allowed '144', '216', '288', '360', '432'
+  n: number;
 }

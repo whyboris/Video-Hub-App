@@ -147,25 +147,24 @@
     (editFinalArrayYear)="editFinalArrayYear($event)"
     (filterTag)="handleTagWordClicked($event.tag.name, $event.event)"
 
+    [video]="sheetItemToDisplay"
+
     [elHeight]="previewHeight"
     [elWidth]="previewWidth"
     [folderPath]="appState.selectedOutputFolder"
     [hubName]="appState.hubName"
     [imgHeight]="previewHeight"
-
-    [darkMode]="settingsButtons['darkMode'].toggled"
-
-    [video]="sheetItemToDisplay"
-
+    [selectedSourceFolder]="appState.selectedSourceFolder"
     [star]="sheetItemToDisplay.stars"
 
+    [darkMode]="settingsButtons['darkMode'].toggled"
     [hoverScrub]="settingsButtons['hoverScrub'].toggled"
     [largerFont]="settingsButtons['fontSizeLarger'].toggled"
     [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
-    [showMeta]="settingsButtons['showMoreInfo'].toggled"
-    [showManualTags]="settingsButtons['manualTags'].toggled"
     [showAutoFileTags]="settingsButtons['autoFileTags'].toggled"
     [showAutoFolderTags]="settingsButtons['autoFolderTags'].toggled"
+    [showManualTags]="settingsButtons['manualTags'].toggled"
+    [showMeta]="settingsButtons['showMoreInfo'].toggled"
   >
   </app-thumbnail-sheet>
 
