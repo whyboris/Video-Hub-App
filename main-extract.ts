@@ -265,15 +265,15 @@ export function extractFromTheseFiles(
 
       sendCurrentProgress(iterator, itemTotal, 'importingScreenshots');
 
-      const currentElement = elementsToScan[iterator];
+      const elementIndex = elementsToScan[iterator];
+      const currentElement = theFinalArray[elementIndex];
 
-      const pathToVideo: string = (path.join(videoFolderPath,
-        theFinalArray[currentElement].partialPath,
-        theFinalArray[currentElement].fileName));
+      const pathToVideo: string = path.join(videoFolderPath, currentElement.partialPath, currentElement.fileName);
 
-      const duration: number = theFinalArray[currentElement].duration;
-      const fileHash: string = theFinalArray[currentElement].hash;
-      const numOfScreens: number = theFinalArray[currentElement].screens;
+      const duration: number = currentElement.duration;
+      const fileHash: string = currentElement.hash;
+      const numOfScreens: number = currentElement.screens;
+      const sourceHeight: number = currentElement.height;
 
       const thumbnailSavePath: string = screenshotFolder + '/thumbnails/' + fileHash + '.jpg';
       const filmstripSavePath: string = screenshotFolder + '/filmstrips/' + fileHash + '.jpg';
@@ -281,7 +281,7 @@ export function extractFromTheseFiles(
       const clipThumbSavePath: string = screenshotFolder + '/clips/' +      fileHash + '.jpg';
 
       const maxRunTime: ExtractionDurations = setExtractionDurations(
-        numOfScreens, screenshotHeight, clipSnippets, snippetLength, clipHeight
+        sourceHeight, numOfScreens, screenshotHeight, clipSnippets, snippetLength, clipHeight
       );
 
       checkFileExists(pathToVideo)                                                            // (1)
@@ -423,9 +423,10 @@ interface ExtractionDurations {
  * Set the ExtractionDurations - the maximum running time per extraction type
  * if ffmpeg takes longer, it is taken out the back and shot - killed with no mercy
  *
- * These computations are not exact, meant to give a rough timeout window
+ * These computations are not exact, they are meant meant to give a rough timeout window
  * to prevent corrupt files from slowing down the extraction too much
  *
+ * @param sourceHeight - height of the original video
  * @param numOfScreens
  * @param screenshotHeight
  * @param clipSnippets
@@ -433,6 +434,7 @@ interface ExtractionDurations {
  * @param clipHeight
  */
 function setExtractionDurations(
+  sourceHeight: number,
   numOfScreens: number,
   screenshotHeight: number,
   clipSnippets: number,
@@ -444,14 +446,20 @@ function setExtractionDurations(
   // we'll call 144 the baseline and increase duration based on this
   // number of pixels grows ~ as square of height, so we square below
   // this means at highest resolution we multyply by 9 the time we wait
-  const thumbHeightFactor = screenshotHeight / 144;
-  const clipHeightFactor  = clipHeight / 144;
+  const thumbHeightRatio = screenshotHeight / 144;
+  const thumbHeightFactor = thumbHeightRatio * thumbHeightRatio; // square of ratio
+  // not using Math.pow(n,2) because this is apparently faster https://stackoverflow.com/a/26594370/5017391
 
-  return {                                                                                // for me:
-    thumb:     350 * thumbHeightFactor * thumbHeightFactor,                               // never above 300ms
-    filmstrip: 350 * numOfScreens * thumbHeightFactor * thumbHeightFactor,                // rarely above 15s, but 4K 30screens took 50s
-    clip:     1000 * clipSnippets * snippetLength * clipHeightFactor * clipHeightFactor,  // barely ever above 15s
-    clipThumb: 150 * clipHeightFactor * clipHeightFactor,                                 // never above 100ms
+  const clipHeightRatio = clipHeight / 144;
+  const clipHeightFactor = clipHeightRatio * clipHeightRatio; // square of ratio
+
+  const sourceFactor = sourceHeight === 0 ? 1 : sourceHeight / 720; // may be better as a square rather than linear
+
+  return {                                                                            // for me:
+    thumb:     350 * sourceFactor * thumbHeightFactor,                                // never above 300ms
+    filmstrip: 350 * sourceFactor * numOfScreens * thumbHeightFactor,                 // rarely above 15s, but 4K 30screens took 50s
+    clip:     1000 * sourceFactor * clipSnippets * snippetLength * clipHeightFactor,  // barely ever above 15s
+    clipThumb: 150 * sourceFactor * clipHeightFactor,                                 // never above 100ms
   };
 }
 
