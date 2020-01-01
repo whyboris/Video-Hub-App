@@ -12,7 +12,6 @@ import { TranslateModule } from '@ngx-translate/core';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 
 // Services
-import { AlphabetPrefixService } from './pipes/alphabet-prefix.service';
 import { AutoTagsSaveService } from './components/tags-auto/tags-save.service';
 import { AutoTagsService } from './components/tags-auto/autotags.service';
 import { ElectronService } from './providers/electron.service';
@@ -63,6 +62,7 @@ import { SimilarityPipe } from './pipes/similarity.pipe';
 import { SortingPipe } from './pipes/sorting.pipe';
 import { StarFilterPipe } from './pipes/star-filter.pipe';
 import { TagFilterPipe } from './components/tags-auto/tag-filter.pipe';
+import { TagFrequencyPipe } from './components/tags-auto/tag-frequency.pipe';
 import { TagMatchPipe } from './components/tags-auto/tag-match.pipe';
 import { TagsDisplayPipe } from './components/tags-auto/tag-display.pipe';
 import { WordFrequencyPipe } from './pipes/word-frequency.pipe';
@@ -103,6 +103,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     StatisticsComponent,
     SvgDefinitionsComponent,
     TagFilterPipe,
+    TagFrequencyPipe,
     TagMatchPipe,
     TagsComponent,
     TagsDisplayPipe,
@@ -120,7 +121,6 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     VirtualScrollerModule,
   ],
   providers: [
-    AlphabetPrefixService,
     AutoTagsSaveService,
     AutoTagsService,
     DuplicateFinderPipe,
