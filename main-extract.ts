@@ -265,16 +265,17 @@ export function extractFromTheseFiles(
 
       sendCurrentProgress(iterator, itemTotal, 'importingScreenshots');
 
-      const currentElement = elementsToScan[iterator];
+      const elementIndex = elementsToScan[iterator];
+      const currentElement = theFinalArray[elementIndex];
 
       const pathToVideo: string = (path.join(videoFolderPath,
-        theFinalArray[currentElement].partialPath,
-        theFinalArray[currentElement].fileName));
+        currentElement.partialPath,
+        currentElement.fileName));
 
-      const duration: number = theFinalArray[currentElement].duration;
-      const fileHash: string = theFinalArray[currentElement].hash;
-      const numOfScreens: number = theFinalArray[currentElement].screens;
-      const sourceHeight: number = theFinalArray[currentElement].height;
+      const duration: number = currentElement.duration;
+      const fileHash: string = currentElement.hash;
+      const numOfScreens: number = currentElement.screens;
+      const sourceHeight: number = currentElement.height;
 
       const thumbnailSavePath: string = screenshotFolder + '/thumbnails/' + fileHash + '.jpg';
       const filmstripSavePath: string = screenshotFolder + '/filmstrips/' + fileHash + '.jpg';
