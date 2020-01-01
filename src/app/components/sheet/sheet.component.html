@@ -2,27 +2,26 @@
   class="sheet-modal"
   [ngClass]="{ 'sheet-modal-dark-mode': darkMode }"
 >
-<app-meta-item
-  class="meta-container"
-  (editFinalArrayStars)="editFinalArrayStars.emit($event)"
-  (editFinalArrayTag)="editFinalArrayTag.emit($event)"
-  (editFinalArrayYear)="editFinalArrayYear.emit($event)"
-  (filterTag)="filterTag.emit($event)"
 
-  [video]="video"
+  <app-meta-item
+    class="meta-container"
 
-  [imgHeight]="imgHeight"
+    (editFinalArrayStars)="editFinalArrayStars.emit($event)"
+    (editFinalArrayTag)="editFinalArrayTag.emit($event)"
+    (editFinalArrayYear)="editFinalArrayYear.emit($event)"
+    (filterTag)="filterTag.emit($event)"
 
-  [star]="this.star"
+    [video]="video"
 
-  [darkMode]="darkMode"
-  [largerFont]="largerFont"
-  [showMeta]="showMeta"
-  [showManualTags]="showManualTags"
-  [showAutoFileTags]="showAutoFileTags"
-  [showAutoFolderTags]="showAutoFolderTags"
-></app-meta-item>
-
+    [darkMode]="darkMode"
+    [imgHeight]="imgHeight"
+    [largerFont]="largerFont"
+    [showAutoFileTags]="showAutoFileTags"
+    [showAutoFolderTags]="showAutoFolderTags"
+    [showManualTags]="showManualTags"
+    [showMeta]="showMeta"
+    [star]="star"
+  ></app-meta-item>
 
   <div class="zoomButtons">
 
@@ -47,6 +46,11 @@
       <app-icon [icon]="'icon-plus'"></app-icon>
     </button>
 
+  </div>
+
+  <div class="full-path" [ngClass]="{ 'dark-path': darkMode }" (click)="copyToClipboard()">
+     <div class="copy-to-clipboard"><app-icon [icon]="'icon-clipboard'"></app-icon></div>
+    <span [innerHtml]="selectedSourceFolder + video.partialPath + '/' + video.fileName | folderArrowsPipe"></span>
   </div>
 
   <ng-container
