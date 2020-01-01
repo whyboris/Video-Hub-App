@@ -131,8 +131,8 @@ export class SheetComponent implements OnInit {
   }
 
   copyToClipboard(): void {
-    const lol = path.join(this.selectedSourceFolder, this.video.partialPath, this.video.fileName);
-    navigator.clipboard.writeText(lol);
+    const fullPath = path.join(this.selectedSourceFolder, this.video.partialPath, this.video.fileName);
+    navigator.clipboard.writeText(fullPath);
   }
 
 }
