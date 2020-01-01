@@ -136,18 +136,18 @@ const generatePreviewClipArgs = (
   savePath: string,
 ): string[] => {
 
-  let current = 0;
+  let current = 1;
   const totalCount = clipSnippets;
-  const step: number = duration / totalCount;
+  const step: number = duration / (totalCount + 1);
   const args: string[] = [];
   let concat = '';
 
   // make the magic filter
-  while (current < totalCount) {
+  while (current <= totalCount) {
     const time = current * step;
     const preview_duration = snippetLength;
     args.push('-ss', time.toString(), '-t', preview_duration.toString(), '-i', pathToVideo);
-    concat += '[' + current + ':V]' + '[' + current + ':a]';
+    concat += '[' + (current - 1) + ':V]' + '[' + (current - 1) + ':a]';
     current++;
   }
 
