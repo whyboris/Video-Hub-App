@@ -7,7 +7,7 @@ import { ImageElement } from '../../../../interfaces/final-object.interface';
 export interface WordAndFreq {
   word: string;
   freq: number;
-  prefix?: string; // filled in inside alphabetPrefixPipe
+  prefix: string; // filled in inside alphabetPrefixPipe
 }
 
 // Strip out: {}()[] as well as 'for', 'her', 'the', 'him', 'and', '-', & ','
@@ -228,7 +228,8 @@ export class AutoTagsService {
     someMap.forEach((val: number, key: string) => {
       returnArray.push({
         word: key,
-        freq: val
+        freq: val,
+        prefix: undefined, // to be filled in by alphabetPrefixPipe
       });
     });
 
