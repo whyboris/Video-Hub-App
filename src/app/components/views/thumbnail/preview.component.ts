@@ -65,6 +65,15 @@ export class PreviewComponent implements OnInit, OnDestroy {
       this.fullFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
       this.folderThumbPaths.push(this.firstFilePath);
     }
+
+    if (this.video.defaultScreen) {
+      this.hover = true;
+      this.percentOffset = this.defaultScreenOffset(this.video);
+    }
+  }
+
+  defaultScreenOffset(video: ImageElement): number {
+    return 100 * video.defaultScreen / (video.screens - 1);
   }
 
   mouseEntered() {
@@ -88,7 +97,9 @@ export class PreviewComponent implements OnInit, OnDestroy {
       clearInterval(this.scrollInterval);
     }
 
-    if (this.returnToFirstScreenshot) {
+    if (this.video.defaultScreen) {
+      this.percentOffset = this.defaultScreenOffset(this.video);
+    } else if (this.returnToFirstScreenshot) {
       this.hover = false;
       this.percentOffset = 0;
     }

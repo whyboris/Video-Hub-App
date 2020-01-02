@@ -76,6 +76,29 @@
   cursor: pointer;
   overflow: hidden;
   position: relative;
+
+  &:hover {
+    .set-favorite-thumb {
+      opacity: 0.5;
+    }
+  }
+
+  .set-favorite-thumb {
+    fill: yellow;
+    height: 20px;
+    opacity: 0;
+    position: absolute;
+    right: 0;
+    width: 20px;
+
+    &:hover {
+      opacity: 0.8;
+    }
+  }
+
+  .star-selected {
+    opacity: 1 !important;
+  }
 }
 
 .reset-button {

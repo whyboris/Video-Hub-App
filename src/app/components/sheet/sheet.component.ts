@@ -135,4 +135,16 @@ export class SheetComponent implements OnInit {
     navigator.clipboard.writeText(fullPath);
   }
 
+  /**
+   * Set ImageElement defaultScreen property
+   */
+  setDefaultScreenshot(event: any, index: number): void {
+    event.stopPropagation();
+    if (this.video.defaultScreen === index) {
+      this.video.defaultScreen = undefined;
+    } else {
+      this.video.defaultScreen = index;
+    }
+  }
+
 }
