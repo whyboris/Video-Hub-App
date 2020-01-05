@@ -200,7 +200,6 @@
   box-sizing: border-box;
   left: $sidebar-width;
   overflow-y: scroll;
-  padding-bottom: 150px;
   position: absolute;
   top: $settings-height;
   transition: 300ms;
@@ -279,7 +278,8 @@
 }
 
 .tag-tray-menu-left {
-  padding-right: 5px;
+  margin-right: 10px;
+  padding-left: 5px;
   position: relative;
 }
 
@@ -300,15 +300,12 @@
     margin-top: 18px;
   }
 
-  .tag-sort-by-toggle, .show-frequency {
-    margin-top: 11px;
-  }
-
   .tag-sort-by-toggle,
   .show-frequency {
     background: none;
     border: none;
     color: $gray-70;
+    margin-top: 11px;
     padding-right: 0;
 
     &:hover {
@@ -337,8 +334,7 @@
   .manual-tag-tray-filter {
     border-color: $gray-80;
     font-size: 15px;
-    padding-bottom: 0;
-    padding: 6px;
+    padding: 6px 6px 0;
     position: absolute;
     right:0;
     width: 155px;
