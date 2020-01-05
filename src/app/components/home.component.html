@@ -1364,12 +1364,12 @@
                                                     : 'TAGS.sortAlphabetical') | translate }}
   </button>
   <button
-  (click)="manualTagShowFrequency = !manualTagShowFrequency"
-  class="show-frequency"
->
-  {{ (manualTagShowFrequency ? 'TAGS.showingFrequency'
-                             : 'TAGS.hidingFrequency') | translate }}
-</button>
+    (click)="manualTagShowFrequency = !manualTagShowFrequency"
+    class="show-frequency"
+  >
+    {{ (manualTagShowFrequency ? 'TAGS.showingFrequency'
+                               : 'TAGS.hidingFrequency') | translate }}
+  </button>
   <input
     (keyup.esc)="manualTagFilterString = ''"
     [(ngModel)]="manualTagFilterString"
