@@ -1344,13 +1344,12 @@
   [ngClass]="{ 'bottom-tray-dark': settingsButtons['darkMode'].toggled }"
   @modalAnimation
 >
-
-<div
-(click)="settingsButtons['showTagTray'].toggled = false"
-class="close-bottom-tray"
-title="{{ 'TAGS.closeTagTray' | translate }}"
->
-<app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
+  <div
+    (click)="settingsButtons['showTagTray'].toggled = false"
+    class="close-bottom-tray"
+    title="{{ 'TAGS.closeTagTray' | translate }}"
+  >
+  <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
 </div>
 
 <div class="tag-tray-menu-left">

@@ -1261,7 +1261,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.rescanDirectory();
     } else if (uniqueKey === 'regenerateLibrary') {
       this.regenerateLibrary();
+    } else if (uniqueKey === 'showTagTray') {
+      if (this.settingsButtons.showRelatedVideosTray.toggled) {
+        this.settingsButtons.showRelatedVideosTray.toggled = false;
+      }
+      this.settingsButtons.showTagTray.toggled = !this.settingsButtons.showTagTray.toggled;
     } else if (uniqueKey === 'showRelatedVideosTray') {
+      if (this.settingsButtons.showTagTray.toggled) {
+        this.settingsButtons.showTagTray.toggled = false;
+      }
       this.settingsButtons.showRelatedVideosTray.toggled = !this.settingsButtons.showRelatedVideosTray.toggled;
       this.computePreviewWidth();
     } else if (uniqueKey === 'sortOrder') {
