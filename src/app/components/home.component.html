@@ -141,11 +141,12 @@
   <!-- ===========   Thumbnail Sheet Display   =========== -->
   <app-thumbnail-sheet
     *ngIf="sheetOverlayShowing"
-    (openVideoAtTime)="handleClick($event, sheetItemToDisplay)"
-    (editFinalArrayTag)="editFinalArrayTag($event)"
+    (editFinalArrayDefaultScreen)="editDefaultScreenshot($event)"
     (editFinalArrayStars)="editFinalArrayStars($event)"
+    (editFinalArrayTag)="editFinalArrayTag($event)"
     (editFinalArrayYear)="editFinalArrayYear($event)"
     (filterTag)="handleTagWordClicked($event.tag.name, $event.event)"
+    (openVideoAtTime)="handleClick($event, sheetItemToDisplay)"
 
     [video]="sheetItemToDisplay"
 

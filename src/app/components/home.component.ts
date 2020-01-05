@@ -13,6 +13,7 @@ import { StarFilterService } from '../pipes/star-filter.service';
 import { WordFrequencyService } from '../pipes/word-frequency.service';
 
 // Interfaces
+import { DefaultScreenEmission } from './sheet/sheet.component';
 import { FinalObject, ImageElement, ScreenshotSettings } from '../../../interfaces/final-object.interface';
 import { HistoryItem } from '../../../interfaces/history-item.interface';
 import { ImportSettingsObject } from '../../../interfaces/import.interface';
@@ -2068,6 +2069,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
   editFinalArrayYear(emission: YearEmission): void {
     const position: number = emission.index;
     this.finalArray[position].year = emission.year;
+    this.finalArrayNeedsSaving = true;
+  }
+
+  /**
+   * Update FinalArray with the default screenshot for some element
+   * @param emission
+   */
+  editDefaultScreenshot(emission: DefaultScreenEmission): void {
+    const position: number = emission.index;
+    this.finalArray[position].defaultScreen = emission.defaultScreen;
     this.finalArrayNeedsSaving = true;
   }
 

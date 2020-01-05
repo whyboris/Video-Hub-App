@@ -49,7 +49,9 @@
   </div>
 
   <div class="full-path" [ngClass]="{ 'dark-path': darkMode }" (click)="copyToClipboard()">
-     <div class="copy-to-clipboard"><app-icon [icon]="'icon-clipboard'"></app-icon></div>
+    <div class="copy-to-clipboard">
+      <app-icon [icon]="'icon-clipboard'"></app-icon>
+    </div>
     <span [innerHtml]="selectedSourceFolder + video.partialPath + '/' + video.fileName | folderArrowsPipe"></span>
   </div>
 
@@ -75,7 +77,16 @@
             'background-position-x': (percentOffset * i) + '%'
           }"
       >
-      <span *ngIf="showMeta" class="time" @metaAppear>{{ (video.duration / (video.screens + 1)) * (i+1) | lengthPipe }}</span>
+        <div
+          class="set-favorite-thumb"
+          (click)="setDefaultScreenshot($event, i)"
+          [ngClass]="{ 'star-selected' : video.defaultScreen === i }"
+        >
+          <app-icon [icon]="'icon-star'"></app-icon>
+        </div>
+        <span *ngIf="showMeta" class="time" @metaAppear>
+          {{ (video.duration / (video.screens + 1)) * (i+1) | lengthPipe }}
+        </span>
       </div>
     </div>
   </ng-container>

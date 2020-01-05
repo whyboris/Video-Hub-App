@@ -22,6 +22,11 @@ export interface StarEmission {
   stars: StarRating;
 }
 
+export interface DefaultScreenEmission {
+  index: number;
+  defaultScreen: number;
+}
+
 @Component({
   selector: 'app-thumbnail-sheet',
   templateUrl: './sheet.component.html',
@@ -37,11 +42,11 @@ export class SheetComponent implements OnInit {
   @ViewChild('filmstripHolder', {static: false}) filmstripHolder: ElementRef;
   @ViewChild('thumbHolder', {static: false}) thumbHolder: ElementRef;
 
+  @Output() editFinalArrayDefaultScreen = new EventEmitter<DefaultScreenEmission>();
   @Output() editFinalArrayStars = new EventEmitter<StarEmission>();
   @Output() editFinalArrayTag = new EventEmitter<TagEmission>();
   @Output() editFinalArrayYear = new EventEmitter<YearEmission>();
   @Output() filterTag = new EventEmitter<object>();
-
   @Output() openVideoAtTime = new EventEmitter<object>();
 
   @Input() video: ImageElement;
@@ -133,6 +138,18 @@ export class SheetComponent implements OnInit {
   copyToClipboard(): void {
     const fullPath = path.join(this.selectedSourceFolder, this.video.partialPath, this.video.fileName);
     navigator.clipboard.writeText(fullPath);
+  }
+
+  /**
+   * Set ImageElement defaultScreen property
+   */
+  setDefaultScreenshot(event: any, index: number): void {
+    event.stopPropagation();
+
+    this.editFinalArrayDefaultScreen.emit({
+      index: this.video.index,
+      defaultScreen: this.video.defaultScreen === index ? undefined : index
+    });
   }
 
 }
