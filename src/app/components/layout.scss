@@ -223,6 +223,10 @@
   width: 100vw;
 }
 
+.bottom-of-scroller-spacer {
+  height: 160px;
+}
+
 .screenShotProgressPercent {
   font-size: 12px;
   position: fixed;
@@ -316,7 +320,7 @@
     overflow-y: scroll;
     padding: 15px 15px;
     width: 100%;
-    
+
     &::-webkit-scrollbar {
       -webkit-appearance: none;
       box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
