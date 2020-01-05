@@ -108,6 +108,15 @@
       <span *ngIf="showMeta" class="time">{{ video.durationDisplay }}</span>
       <span *ngIf="showMeta" class="rez">{{ video.resolution }}</span>
     </div>
+    <!--
+      .sheet-icon needs to be the next sibling of .video-box for hover to work
+       DO NOT SEPARATE!
+    -->
+    <app-icon
+      class="sheet-icon"
+      [icon]="'icon-show-thumbnails'"
+      (click)="sheetClick.emit()"
+    ></app-icon>
 
     <span
       *ngIf="showMeta"
@@ -123,12 +132,6 @@
         {{ showMeta ? '(' + video.fileSizeDisplay + ')' : '' }}
       </div>
     </span>
-    <app-icon
-      class="sheet-icon"
-      [icon]="'icon-show-thumbnails'"
-      (click)="sheetClick.emit()"
-      [ngStyle]="{ 'opacity': (this.hover ? 1 : 0) }"
-    ></app-icon>
 
   </ng-template>
 

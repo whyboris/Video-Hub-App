@@ -105,7 +105,7 @@ export class PreviewComponent implements OnInit, OnDestroy {
     }
   }
 
-  mouseIsMoving($event) {
+  mouseIsMoving($event: any) {
     if (this.hoverScrub) {
       const cursorX = $event.layerX;
       this.indexToShow = Math.floor(cursorX * (this.video.screens / this.containerWidth));
