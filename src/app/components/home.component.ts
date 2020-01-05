@@ -1210,6 +1210,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.restoreViewSize(uniqueKey);
       this.appState.currentView = <SupportedView>uniqueKey;
       this.computeTextBufferAmount();
+      this.virtualScroller.invalidateAllCachedMeasurements();
       this.scrollToTop();
 
       // ======== Filter buttons =========================
