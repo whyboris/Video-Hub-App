@@ -1350,19 +1350,19 @@ title="{{ 'TAGS.closeTagTray' | translate }}"
     {{ 'TAGS.presentTags' | translate }}:
   </span>
   <button
-    (click)="manualTagShowFrequency = !manualTagShowFrequency"
-    class="show-frequency"
-  >
-    {{ (manualTagShowFrequency ? 'TAGS.showingFrequency'
-                               : 'TAGS.hidingFrequency') | translate }}
-  </button>
-  <button
     (click)="settingsButtons['tagFrequencySort'].toggled = !settingsButtons['tagFrequencySort'].toggled"
     class="tag-sort-by-toggle"
   >
     {{ (settingsButtons['tagFrequencySort'].toggled ? 'TAGS.sortByFrequency'
                                                     : 'TAGS.sortAlphabetical') | translate }}
   </button>
+  <button
+  (click)="manualTagShowFrequency = !manualTagShowFrequency"
+  class="show-frequency"
+>
+  {{ (manualTagShowFrequency ? 'TAGS.showingFrequency'
+                             : 'TAGS.hidingFrequency') | translate }}
+</button>
   <input
     (keyup.esc)="manualTagFilterString = ''"
     [(ngModel)]="manualTagFilterString"
