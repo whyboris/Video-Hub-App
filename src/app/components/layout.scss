@@ -271,7 +271,7 @@
     cursor: pointer;
     display: block;
     position: absolute;
-    right: 8px;
+    right: 12px;
     top: 5px;
     z-index: 10;
   }
@@ -318,16 +318,7 @@
     padding: 15px 15px;
     width: 100%;
 
-    &::-webkit-scrollbar {
-      -webkit-appearance: none;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
-      width: 9px;
-    }
-
-    &::-webkit-scrollbar-thumb {
-      background-color: $gray-50;
-      border-radius: 1px;
-    }
+    @include scrollBarShown;
   }
 
   // added on top of .filter-general
