@@ -97,11 +97,13 @@ export class PreviewComponent implements OnInit, OnDestroy {
       clearInterval(this.scrollInterval);
     }
 
-    if (this.video.defaultScreen) {
-      this.percentOffset = this.defaultScreenOffset(this.video);
-    } else if (this.returnToFirstScreenshot) {
-      this.hover = false;
-      this.percentOffset = 0;
+    if (this.returnToFirstScreenshot) {
+      if (this.video.defaultScreen !== undefined) {
+        this.percentOffset = this.defaultScreenOffset(this.video);
+      } else {
+        this.hover = false;
+        this.percentOffset = 0;
+      }
     }
   }
 
