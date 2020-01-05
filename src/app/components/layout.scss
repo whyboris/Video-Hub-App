@@ -200,7 +200,6 @@
   box-sizing: border-box;
   left: $sidebar-width;
   overflow-y: scroll;
-  padding-bottom: 150px;
   position: absolute;
   top: $settings-height;
   transition: 300ms;
@@ -221,6 +220,10 @@
   left: 0;
   transition: 300ms;
   width: 100vw;
+}
+
+.bottom-of-scroller-spacer {
+  height: 160px;
 }
 
 .screenShotProgressPercent {
@@ -268,20 +271,21 @@
     cursor: pointer;
     display: block;
     position: absolute;
-    right: 8px;
+    right: 12px;
     top: 5px;
     z-index: 10;
   }
 }
 
 .tag-tray-menu-left {
-  padding-right: 5px;
+  margin-right: 10px;
+  padding-left: 5px;
   position: relative;
 }
 
 .manual-tag-tray {
   box-sizing: border-box;
-  height: 140px;
+  height: 170px;
 
   .manual-tag-tray-label,
   .tag-sort-by-toggle,
@@ -296,15 +300,12 @@
     margin-top: 18px;
   }
 
-  .tag-sort-by-toggle, .show-frequency {
-    margin-top: 11px;
-  }
-
   .tag-sort-by-toggle,
   .show-frequency {
     background: none;
     border: none;
     color: $gray-70;
+    margin-top: 11px;
     padding-right: 0;
 
     &:hover {
@@ -316,25 +317,15 @@
     overflow-y: scroll;
     padding: 15px 15px;
     width: 100%;
-    
-    &::-webkit-scrollbar {
-      -webkit-appearance: none;
-      box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
-      width: 9px;
-    }
 
-    &::-webkit-scrollbar-thumb {
-      background-color: $gray-50;
-      border-radius: 1px;
-    }
+    @include scrollBarShown;
   }
 
   // added on top of .filter-general
   .manual-tag-tray-filter {
     border-color: $gray-80;
     font-size: 15px;
-    padding-bottom: 0;
-    padding: 6px;
+    padding: 6px 6px 0;
     position: absolute;
     right:0;
     width: 155px;

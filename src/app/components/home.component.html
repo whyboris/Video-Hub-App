@@ -664,9 +664,10 @@
       }"
       [ngStyle]="{
                     'height': 'calc(100vh - ' + (
-                                                  (settingsButtons['hideTop'].toggled ? 53 : 98)
-                                                + (appState.menuHidden ? -32 : 0)
-                                                + (settingsButtons['showRelatedVideosTray'].toggled ? 160 : 0)
+                                                  (settingsButtons['hideTop'].toggled                 ?  53 : 98)
+                                                + (appState.menuHidden                                ? -32 : 0)
+                                                + ((settingsButtons['showRelatedVideosTray'].toggled
+                                                 || settingsButtons['showTagTray'].toggled)           ? 160 : 0)
                                                                                                                 ) + 'px)'
                  }"
       class="sidebar"
@@ -981,10 +982,11 @@
 
       [ngStyle]="{
           'height': 'calc(100vh - ' + (
-                                          (settingsButtons['hideTop'].toggled ? 53 : 98)
-                                        + (appState.menuHidden ? -32 : 0)
-                                        + (settingsButtons['showRelatedVideosTray'].toggled ? 170 : 0)
-                                                                                                        ) + 'px)'
+                                          (settingsButtons['hideTop'].toggled                 ?  53 : 98)
+                                        + (appState.menuHidden                                ? -32 : 0)
+                                        + ((settingsButtons['showRelatedVideosTray'].toggled
+                                         || settingsButtons['showTagTray'].toggled)           ? 170 : 0)
+                                                                                                          ) + 'px)'
         }"
 
       [enableUnequalChildrenSizes]="appState.currentView === 'showFullView'"
@@ -1262,6 +1264,8 @@
         ></app-clip-item>
       </ng-container>
 
+      <div class="bottom-of-scroller-spacer"></div>
+
     </virtual-scroller>
 
     <div
@@ -1342,13 +1346,12 @@
   [ngClass]="{ 'bottom-tray-dark': settingsButtons['darkMode'].toggled }"
   @modalAnimation
 >
-
-<div
-(click)="settingsButtons['showTagTray'].toggled = false"
-class="close-bottom-tray"
-title="{{ 'TAGS.closeTagTray' | translate }}"
->
-<app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
+  <div
+    (click)="settingsButtons['showTagTray'].toggled = false"
+    class="close-bottom-tray"
+    title="{{ 'TAGS.closeTagTray' | translate }}"
+  >
+  <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
 </div>
 
 <div class="tag-tray-menu-left">
@@ -1363,12 +1366,12 @@ title="{{ 'TAGS.closeTagTray' | translate }}"
                                                     : 'TAGS.sortAlphabetical') | translate }}
   </button>
   <button
-  (click)="manualTagShowFrequency = !manualTagShowFrequency"
-  class="show-frequency"
->
-  {{ (manualTagShowFrequency ? 'TAGS.showingFrequency'
-                             : 'TAGS.hidingFrequency') | translate }}
-</button>
+    (click)="manualTagShowFrequency = !manualTagShowFrequency"
+    class="show-frequency"
+  >
+    {{ (manualTagShowFrequency ? 'TAGS.showingFrequency'
+                               : 'TAGS.hidingFrequency') | translate }}
+  </button>
   <input
     (keyup.esc)="manualTagFilterString = ''"
     [(ngModel)]="manualTagFilterString"
