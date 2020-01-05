@@ -664,9 +664,10 @@
       }"
       [ngStyle]="{
                     'height': 'calc(100vh - ' + (
-                                                  (settingsButtons['hideTop'].toggled ? 53 : 98)
-                                                + (appState.menuHidden ? -32 : 0)
-                                                + (settingsButtons['showRelatedVideosTray'].toggled ? 160 : 0)
+                                                  (settingsButtons['hideTop'].toggled                 ?  53 : 98)
+                                                + (appState.menuHidden                                ? -32 : 0)
+                                                + ((settingsButtons['showRelatedVideosTray'].toggled
+                                                 || settingsButtons['showTagTray'].toggled)           ? 160 : 0)
                                                                                                                 ) + 'px)'
                  }"
       class="sidebar"
@@ -981,10 +982,11 @@
 
       [ngStyle]="{
           'height': 'calc(100vh - ' + (
-                                          (settingsButtons['hideTop'].toggled ? 53 : 98)
-                                        + (appState.menuHidden ? -32 : 0)
-                                        + (settingsButtons['showRelatedVideosTray'].toggled ? 170 : 0)
-                                                                                                        ) + 'px)'
+                                          (settingsButtons['hideTop'].toggled                 ?  53 : 98)
+                                        + (appState.menuHidden                                ? -32 : 0)
+                                        + ((settingsButtons['showRelatedVideosTray'].toggled
+                                         || settingsButtons['showTagTray'].toggled)           ? 170 : 0)
+                                                                                                          ) + 'px)'
         }"
 
       [enableUnequalChildrenSizes]="appState.currentView === 'showFullView'"
