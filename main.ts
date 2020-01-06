@@ -2,6 +2,8 @@ import { app, BrowserWindow, screen, TouchBar } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 
+const trash = require('trash');
+
 const { systemPreferences } = require('electron');
 const electron = require('electron');
 const { powerSaveBlocker } = require('electron');
@@ -485,6 +487,18 @@ ipc.on('maximize-window', function (event, someMessage) {
   if (BrowserWindow.getFocusedWindow()) {
     BrowserWindow.getFocusedWindow().maximize();
   }
+});
+
+/**
+ * Delete file from computer (send to recycling bin / trash)
+ */
+ipc.on('delete-video-file', function (event, item: ImageElement): void {
+  const fileToDelete = path.join(globals.selectedSourceFolder, item.partialPath, item.fileName);
+  console.log('Deleting !!!');
+  console.log(fileToDelete);
+  (async () => {
+    await trash(fileToDelete);
+  })();
 });
 
 /**

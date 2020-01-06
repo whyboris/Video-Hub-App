@@ -1819,6 +1819,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
+   * Deletes a file (moves to recycling bin / trash)
+   */
+  deleteThisFile(item: ImageElement): void {
+    console.log('DELETING !!!');
+    console.log(item);
+    this.electronService.ipcRenderer.send('delete-video-file', item);
+  }
+
+  /**
    * Opens rename file modal, prepares all the name and extension
    */
   openRenameFileModal(): void {
