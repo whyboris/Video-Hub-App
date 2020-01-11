@@ -94,6 +94,7 @@ export const SettingsButtonsGroups: string[][] = [
     // 'regenerateLibrary', // TODO - maybe enable someday?
     'resetSettings',
     'clearHistory',
+    'showDeleteOption',
     'openAtTimestamp'
   ]
 ];
@@ -170,6 +171,14 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     hidden: false,
     iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     title: 'BUTTONS.clearHistoryHint',
+    toggled: false
+  },
+  'showDeleteOption': {
+    description: 'BUTTONS.showDeleteButtonDescription',
+    hidden: true,
+    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
+    moreInfo: 'BUTTONS.showDeleteButtonMoreInfo',
+    title: 'BUTTONS.showDeleteButton',
     toggled: false
   },
   'darkMode': {

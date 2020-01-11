@@ -44,6 +44,10 @@
     color: $gray-50;
     pointer-events: none;
   }
+
+  .right-click-delete {
+    color: $dark-red;
+  }
 }
 
 .rename-popup {
