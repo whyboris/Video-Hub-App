@@ -1803,8 +1803,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const clientY: number = event.clientY;
     const howFarFromBottom: number = winHeight - clientY;
 
-    this.rightClickPosition.x = (howFarFromRight < 120) ? clientX - 120 + (howFarFromRight) : clientX;
-    this.rightClickPosition.y = (howFarFromBottom < 165) ? clientY - 165 + (howFarFromBottom) : clientY;
+    this.rightClickPosition.x = (howFarFromRight < 150) ? clientX - 150 + (howFarFromRight) : clientX;
+    this.rightClickPosition.y = (howFarFromBottom < 190) ? clientY - 190 + (howFarFromBottom) : clientY;
 
     this.currentRightClickedItem = item;
     this.rightClickShowing = true;
@@ -1816,6 +1816,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
   openThumbnailSheet(item: ImageElement): void {
     this.sheetItemToDisplay = item;
     this.sheetOverlayShowing = true;
+  }
+
+  /**
+   * Deletes a file (moves to recycling bin / trash)
+   */
+  deleteThisFile(item: ImageElement): void {
+    console.log('DELETING !!!');
+    console.log(item);
+    this.electronService.ipcRenderer.send('delete-video-file', item);
   }
 
   /**

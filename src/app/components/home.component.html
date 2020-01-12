@@ -135,6 +135,11 @@
         [ngClass]="{ 'right-click-disabled': !rootFolderLive }"
       >{{ 'RIGHTCLICK.openFolder' | translate }}</li>
       <li (click)="openThumbnailSheet(currentRightClickedItem)">{{ 'RIGHTCLICK.sheetModal' | translate }}</li>
+      <li
+        *ngIf="settingsButtons['showDeleteOption'].toggled"
+        (click)="deleteThisFile(currentRightClickedItem)"
+        class="right-click-delete"
+      >{{ 'RIGHTCLICK.delete' | translate }}</li>
     </ul>
   </div>
 
