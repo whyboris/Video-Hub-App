@@ -449,8 +449,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     public starFilterService: StarFilterService,
     public tagsSaveService: AutoTagsSaveService,
     public translate: TranslateService,
-    public wordFrequencyService: WordFrequencyService,
-    private elementRef: ElementRef
+    public wordFrequencyService: WordFrequencyService
   ) { }
 
   ngOnInit() {
@@ -461,8 +460,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // setInterval(() => {
     //   this.importStage = this.importStage === 'importingScreenshots' ? 'importingMeta' : 'importingScreenshots';
     // }, 3000);
-
-    // To test the progress bar
     // this.importStage = 'importingMeta';
     // this.importStage = 'importingScreenshots';
     // this.timeExtractionRemaining = 100;
