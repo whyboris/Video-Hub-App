@@ -37,6 +37,14 @@ export class ManualTagsService {
   }
 
   /**
+   * Removes all the existing tags in {@code tagList} and {@code tagsMap}
+   */
+  removeAllTags(): void {
+    this.tagsMap.clear();
+    this.tagsList = [];
+  }
+
+  /**
    * Get the most likely tag
    * TODO -- curently it gets the FIRST match; later get the MOST COMMON (confer with tagsMap)
    * @param text

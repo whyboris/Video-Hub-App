@@ -660,6 +660,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       this.folderViewNavigationPath = '';
 
+      this.manualTagsService.removeAllTags();
       this.setTags(finalObject.addTags, finalObject.removeTags);
       this.manualTagsService.populateManualTagsService(finalObject.images);
 
