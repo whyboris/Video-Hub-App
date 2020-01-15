@@ -386,6 +386,17 @@ export function extractAllMetadata(
 }
 
 /**
+ * Iterates ffprobe output to find stream with the best resolution (just width, for now)
+ *
+ * @param metadata  the ffProbe metadata object
+ */
+function getBestStream(metadata) {
+  return metadata.streams.reduce(function (a, b) {
+    return a.width > b.width ? a : b;
+  });
+}
+
+/**
  * Extracts information about a single file using `ffprobe`
  * Stores information into the ImageElement and returns it via callback
  * @param filePath              path to the file
@@ -399,18 +410,18 @@ function extractMetadataForThisONEFile(
   imageElement: ImageElement,
   extractMetaCallback: any
 ): void {
-  const ffprobeCommand = '"' + ffprobePath + '" -of json -show_streams -show_format "' + filePath + '"';
+  const ffprobeCommand = '"' + ffprobePath + '" -of json -show_streams -show_format -select_streams V "' + filePath + '"';
   exec(ffprobeCommand, (err, data, stderr) => {
     if (err) {
       extractMetaCallback(imageElement);
     } else {
       const metadata = JSON.parse(data);
-
+      const stream = getBestStream(metadata);
       const fileDuration = metadata.streams[0].duration || metadata.format.duration;
 
       const duration = Math.round(fileDuration) || 0;
-      const origWidth = metadata.streams[0].width || 0; // ffprobe does not detect it on some MKV streams
-      const origHeight = metadata.streams[0].height || 0;
+      const origWidth = stream.width || 0; // ffprobe does not detect it on some MKV streams
+      const origHeight = stream.height || 0;
 
       const stat = fs.statSync(filePath);
 
