@@ -108,6 +108,7 @@ import {
 export class HomeComponent implements OnInit, AfterViewInit {
 
   @ViewChild('magicSearch', { static: false }) magicSearch: ElementRef;
+  @ViewChild('fuzzySearch', { static: false }) fuzzySearch: ElementRef;
   @ViewChild('renameFileInput', { static: false }) renameFileInput: ElementRef;
   @ViewChild('searchRef', { static: false }) searchRef: ElementRef;
   @ViewChild('sortFilterElement', { static: false }) sortFilterElement: ElementRef;
@@ -258,6 +259,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   fullPathToCurrentFile = '';
 
   magicSearchString = '';
+  fuzzySearchString = '';
 
   wordFreqArr: any;
   currResults: any = { showing: 0, total: 0 };
@@ -411,6 +413,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.showSidebar();
           setTimeout(() => {
             this.magicSearch.nativeElement.focus();
+          }, 1);
+          break;
+
+        case ('r'):
+          if (!this.settingsButtons['fuzzy'].toggled) {
+            this.settingsButtons['fuzzy'].toggled = true;
+          }
+          this.showSidebar();
+          setTimeout(() => {
+            this.fuzzySearch.nativeElement.focus();
           }, 1);
           break;
       }
@@ -1219,6 +1231,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.toggleButtonOpposite(uniqueKey);
     } else if (uniqueKey === 'magic') {
       this.magicSearchString = '';
+      this.toggleButtonOpposite(uniqueKey);
+    } else if (uniqueKey === 'fuzzy') {
+      this.fuzzySearchString = '';
       this.toggleButtonOpposite(uniqueKey);
 
       // ======== Other buttons ========================

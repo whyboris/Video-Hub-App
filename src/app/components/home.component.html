@@ -500,6 +500,7 @@
         <li class="listElement"><em class="shortcut-key">6</em> - {{ 'SHORTCUTS.showClip' | translate }}</li>
         <li class="listElement"><em class="shortcut-key">f</em> - {{ 'SHORTCUTS.focusOnFile' | translate }}</li>
         <li class="listElement"><em class="shortcut-key">g</em> - {{ 'SHORTCUTS.focusOnMagic' | translate }}</li>
+        <li class="listElement"><em class="shortcut-key">r</em> - {{ 'SHORTCUTS.focusOnFuzzy' | translate }}</li>
         <li class="listElement"><em class="shortcut-key">z</em> - {{ 'SHORTCUTS.makeSmaller' | translate }}</li>
         <li class="listElement"><em class="shortcut-key">x</em> - {{ 'SHORTCUTS.makeLarger' | translate }}</li>
         <li class="listElement"><em class="shortcut-key">s</em> - {{ 'SHORTCUTS.shuffle' | translate }}</li>
@@ -763,6 +764,35 @@
             class="search-or-tag-general search-word"
           >
             {{ magicSearchString }}
+          </span>
+        </div>
+      </div>
+      <!-- end of magic search -->
+
+
+      <!-- fuzzy search -->
+      <div *ngIf="settingsButtons['fuzzy'].toggled" @filterItemAppear>
+        <app-icon class="input-icon" [icon]="settingsButtons['fuzzy'].iconName"></app-icon>
+        <input
+          #fuzzySearch
+          (keydown.escape)="fuzzySearchString = ''"
+          [(ngModel)]="fuzzySearchString"
+          [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
+          type="text"
+          class="filter-general input-filter"
+          placeholder="{{ 'SIDEBAR.fuzzy' | translate }}"
+        >
+
+        <div
+          class="filteredWords"
+        >
+          <span
+            *ngIf="fuzzySearchString !== '' && fuzzySearchString.length > 2"
+            (click)="fuzzySearchString = ''"
+            [ngStyle]="{ background: '#aaffaa' }"
+            class="search-or-tag-general search-word"
+          >
+            {{ fuzzySearchString }}
           </span>
         </div>
       </div>
@@ -1036,7 +1066,9 @@
                                   : settingsButtons['autoFileTags'].toggled
                                   : settingsButtons['autoFolderTags'].toggled
 
-                | fuzzySearchPipe: magicSearchString
+                | magicSearchPipe: magicSearchString
+
+                | fuzzySearchPipe: fuzzySearchString
 
                 | duplicateFinderPipe : settingsButtons['duplicateLength'].toggled : 'length'
 
@@ -1075,7 +1107,8 @@
 
                 | sortingPipe: sortType : shuffleTheViewNow : (   settingsButtons['duplicateLength'].toggled
                                                                || settingsButtons['duplicateSize'].toggled
-                                                               || settingsButtons['duplicateHash'].toggled)"
+                                                               || settingsButtons['duplicateHash'].toggled
+                                                               || fuzzySearchString.length > 2)"
     >
 
     <!--

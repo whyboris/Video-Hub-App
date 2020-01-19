@@ -11,9 +11,8 @@ import * as Fuse from 'fuse.js';
 export class FuzzySearchPipe implements PipeTransform {
 
   options: Fuse.FuseOptions<ImageElement> = {
-    threshold: 0.5, // 0 => perfect match, 1 => match anything
-    shouldSort: true,
-    maxPatternLength: 32,
+    threshold: 0.4, // 0 => perfect match, 1 => match anything
+    shouldSort: true, // note we disable sorting when fuzzySearchPipe is engaged (searchString > 2)
     minMatchCharLength: 2,
     keys: ['cleanName'],
   };
