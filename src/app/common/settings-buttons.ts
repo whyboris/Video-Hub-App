@@ -16,6 +16,7 @@ export const SettingsButtonsGroups: string[][] = [
     'tagIntersection',
     'tagExclusion',
     'magic',
+    'fuzzy',
   ],
   [
     'durationFilter',
@@ -333,6 +334,14 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-looking-glass',
     moreInfo: 'BUTTONS.magicMoreInfo',
     title: 'BUTTONS.magicHint',
+    toggled: true
+  },
+  'fuzzy': {
+    description: 'BUTTONS.fuzzyDescription',
+    hidden: false,
+    iconName: 'icon-show-similar',
+    moreInfo: 'BUTTONS.fuzzyMoreInfo',
+    title: 'BUTTONS.fuzzyHint',
     toggled: true
   },
   'makeLarger': {
