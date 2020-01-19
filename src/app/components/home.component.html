@@ -1108,7 +1108,7 @@
                 | sortingPipe: sortType : shuffleTheViewNow : (   settingsButtons['duplicateLength'].toggled
                                                                || settingsButtons['duplicateSize'].toggled
                                                                || settingsButtons['duplicateHash'].toggled
-                                                               || fuzzySearchString.length > 2)"
+                                                               || (sortType === 'default' && fuzzySearchString.length > 2))"
     >
 
     <!--
