@@ -106,14 +106,14 @@ export function saveFinalOutput(allFaceBuffers: Buffer[], outputFile: string, si
 
   let tracker = 0;
 
-  let composeParams = [];
+  const composeParams = [];
 
   allFaceBuffers.forEach((face) => {
     composeParams.push({
       input: allFaceBuffers[tracker],
       top: 0,
       left: tracker * sizes.eachSSwidth / 2,
-    })
+    });
     tracker++;
   });
 

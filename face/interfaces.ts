@@ -1,14 +1,14 @@
 export interface CropBox {
-  top: number,
-  left: number,
-  width: number,
-  height: number,
+  top: number;
+  left: number;
+  width: number;
+  height: number;
 }
 
 export interface InputMeta {
-  width: number,
-  height: number,
-  eachSSwidth: number,
+  width: number;
+  height: number;
+  eachSSwidth: number;
 }
 
 // Face API ===============================

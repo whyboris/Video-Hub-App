@@ -27,7 +27,7 @@ async function runEverything(inputFile: string, numOfScreens: number, outputFile
 
   console.log(sizes);
 
-  let all_faces = [];
+  const all_faces = [];
 
   for (let i = 0; i < sizes.width; i = i + sizes.eachSSwidth) {
 

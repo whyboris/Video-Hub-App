@@ -2,7 +2,7 @@ const tf = require('@tensorflow/tfjs-node');
 
 const faceapi = require('face-api.js');
 
-import { InputMeta, FullDetection } from "./interfaces";
+import { FullDetection } from './interfaces';
 
 /**
  * Load the model only once
@@ -20,7 +20,7 @@ export async function loadModel() {
  */
 export async function findTheFaces(imgBuffer: Buffer): Promise<FullDetection[]> {
 
-  const imgTensor = tf.node.decodeJpeg(imgBuffer)
+  const imgTensor = tf.node.decodeJpeg(imgBuffer);
 
   // const detections = await faceapi.detectAllFaces(imgElement);
   // const detections = await faceapi.detectAllFaces(imgElement, new faceapi.TinyFaceDetectorOptions());
