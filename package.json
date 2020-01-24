@@ -42,8 +42,11 @@
     "@ffmpeg-installer/ffmpeg": "1.0.19",
     "@ffprobe-installer/ffprobe": "1.0.12",
     "@ngx-translate/core": "11.0.1",
+    "@tensorflow/tfjs-node": "1.4.0",
+    "face-api.js": "0.22.0",
     "fuse.js": "3.4.6",
     "ngx-virtual-scroller": "3.0.2",
+    "sharp": "0.24.0",
     "trash": "6.1.1"
   },
   "devDependencies": {
