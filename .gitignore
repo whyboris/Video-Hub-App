@@ -14,6 +14,7 @@ main-rescan.js
 main-support.js
 src/**/*.js
 *.js.map
+face/*.js
 
 # TS to JS
 /interfaces/*.js

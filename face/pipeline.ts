@@ -9,7 +9,7 @@ const CURRENT_NUMBER_OF_SCREENS = 1;  // the number of chunks the image is split
 const OUTPUT_FILE_NAME = './output/bbt.jpg';
 const GENDER = 'female';
 
-runEverything(RELATIVE_IMAGE_PATH, CURRENT_NUMBER_OF_SCREENS, OUTPUT_FILE_NAME, GENDER);
+// runEverything(RELATIVE_IMAGE_PATH, CURRENT_NUMBER_OF_SCREENS, OUTPUT_FILE_NAME, GENDER);
 
 // ==== PIPELINE ===================================================================================
 
@@ -19,7 +19,7 @@ runEverything(RELATIVE_IMAGE_PATH, CURRENT_NUMBER_OF_SCREENS, OUTPUT_FILE_NAME, 
  * @param numOfScreens - the number of screenshots in the filmstrip
  * @param outputFile - relative path to OUTPUT image
  */
-async function runEverything(inputFile: string, numOfScreens: number, outputFile: string, gender: Gender) {
+export async function runEverything(inputFile: string, numOfScreens: number, outputFile: string, gender: Gender) {
 
   await loadModel();
 

@@ -25,6 +25,7 @@
     "i18n",
     "interfaces",
     "main.ts",
-    "src/**/*"
+    "src/**/*",
+    "face/**/*"
   ]
 }

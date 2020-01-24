@@ -804,6 +804,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
     return false;
   }
 
+
+  /**
+   * WOOT !!!
+   */
+  extractFaces() {
+    this.electronService.ipcRenderer.send('extract-face', this.finalArray);
+  }
+
+
   /**
    * Summon a dialog to open a default video player
    */

@@ -862,6 +862,36 @@ function sendFinalResultHome(theFinalArray: ImageElement[]): void {
 }
 
 
+import { runEverything } from './face/pipeline';
+
+// ===========================================================================================
+// EXTRACT FACES !!!!!!!!! - electron messages
+// -------------------------------------------------------------------------------------------
+
+let hack: number = 0;
+
+ipc.on('extract-face', function (event, currentAngularFinalArray: ImageElement[]) {
+
+  const element: ImageElement = currentAngularFinalArray[0];
+
+  console.log(element);
+
+  const inputFile: string = path.join(
+    globals.selectedOutputFolder,
+    'vha-' + globals.hubName,
+    '/filmstrips',
+    element.hash + '.jpg');
+
+  console.log(inputFile);
+
+  runEverything(inputFile, element.screens, 'C:/temp/zzz - 00' + hack + '.jpg', 'female');
+
+  hack++;
+});
+
+
+
+
 // ===========================================================================================
 // RESCAN - electron messages
 // -------------------------------------------------------------------------------------------
