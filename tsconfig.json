@@ -26,6 +26,7 @@
     "interfaces",
     "main.ts",
     "src/**/*",
-    "face/**/*"
+    "face/**/*",
+    "weights"
   ]
 }

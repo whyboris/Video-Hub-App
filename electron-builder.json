@@ -1,7 +1,7 @@
 {
   "productName": "Video Hub App 2",
   "appId": "com.videohubapp.videohubapp2",
-  "copyright": "Copyright © 2019 Boris Yakubchik",
+  "copyright": "Copyright © 2020 Boris Yakubchik",
   "directories": {
     "output": "release/"
   },
@@ -29,11 +29,7 @@
   ],
   "win": {
     "icon": "dist/favicon",
-    "asar": true,
-    "asarUnpack": [
-      "../node_modules/@ffmpeg-installer",
-      "../node_modules/@ffprobe-installer"
-    ],
+    "asar": false,
     "target": [
       "nsis"
     ]

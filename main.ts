@@ -872,7 +872,7 @@ let hack: number = 0;
 
 ipc.on('extract-face', function (event, currentAngularFinalArray: ImageElement[]) {
 
-  const element: ImageElement = currentAngularFinalArray[0];
+  const element: ImageElement = currentAngularFinalArray[hack];
 
   console.log(element);
 
@@ -884,7 +884,17 @@ ipc.on('extract-face', function (event, currentAngularFinalArray: ImageElement[]
 
   console.log(inputFile);
 
-  runEverything(inputFile, element.screens, 'C:/temp/zzz - 00' + hack + '.jpg', 'female');
+  const outputFile: string = path.join(globals.selectedOutputFolder, 'zzz - 00' + hack + '.jpg');
+
+  try {
+    runEverything(inputFile, element.screens, outputFile, 'female');
+  } catch (err) {
+    dialog.showMessageBox(win, {
+      message: systemMessages.noSuchFileFound,
+      detail: err,
+      buttons: ['OK']
+    });
+  }
 
   hack++;
 });
