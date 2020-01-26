@@ -673,6 +673,7 @@ ipc.on('start-the-import', function (event, options: ImportSettingsObject, video
       fs.mkdirSync(path.join(outDir, 'vha-' + options.hubName + '/filmstrips'));
       fs.mkdirSync(path.join(outDir, 'vha-' + options.hubName + '/thumbnails'));
       fs.mkdirSync(path.join(outDir, 'vha-' + options.hubName + '/clips'));
+      fs.mkdirSync(path.join(outDir, 'vha-' + options.hubName + '/faces'));
     }
 
     globals.cancelCurrentImport = false;
@@ -884,7 +885,11 @@ ipc.on('extract-face', function (event, currentAngularFinalArray: ImageElement[]
 
   console.log(inputFile);
 
-  const outputFile: string = path.join(globals.selectedOutputFolder, 'zzz - 00' + hack + '.jpg');
+  const outputFile: string = path.join(
+    globals.selectedOutputFolder,
+    'vha-' + globals.hubName,
+    '/faces',
+    element.hash + '.jpg');
 
   try {
     runEverything(inputFile, element.screens, outputFile, 'female');
