@@ -11,7 +11,9 @@
   <span class="stats-heading title">{{ 'STATISTICS.videoFolder' | translate }}</span>
   <span class="stats-heading folder" [innerHtml]="videoFolder | folderArrowsPipe"></span>
 
-  <table class="stats-table" style="position: absolute; right: 50%">
+  <div class="table-container">
+
+  <table class="stats-table">
     <tr>
       <td colSpan=2 class="spanBoth">{{ 'STATISTICS.general' | translate }}</td>
     </tr>
@@ -72,7 +74,7 @@
 
   </table>
 
-  <table class="stats-table" style="left: 50%; position: absolute;">
+  <table class="stats-table">
     <tr>
       <td colSpan=2 class="spanBoth">{{ 'STATISTICS.videoLengths' | translate }}</td>
     </tr>
@@ -121,5 +123,7 @@
       <td class="rightCol">{{ avgSize | fileSizePipe : true }}</td>
     </tr>
   </table>
+
+  </div>
 
 </div>

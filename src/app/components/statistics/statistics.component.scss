@@ -9,11 +9,18 @@
   font-size: 12px;
 }
 
-.stats-table {
-  font-size: 14px;
-  margin: 10px 50px;
-  min-width: 240px;
+.table-container {
+  display: flex;
+  justify-content: space-evenly;
+
+  .stats-table {
+    font-size: 14px;
+    margin: 10px;
+    max-width: 360px;
+    min-width: 290px;
+  }
 }
+
 
 .stats-heading {
   color: $gray-70;
@@ -48,4 +55,14 @@
   padding-bottom: 5px;
   padding-top: 20px;
   text-align: center;
+}
+
+@media (max-width: 900px) {
+  .table-container {
+    flex-direction: column;
+
+    .stats-table {
+      margin: 10px auto;
+    }
+  }
 }
