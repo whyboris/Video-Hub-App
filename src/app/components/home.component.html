@@ -138,6 +138,7 @@
       <li
         *ngIf="settingsButtons['showDeleteOption'].toggled"
         (click)="deleteThisFile(currentRightClickedItem)"
+        [ngClass]="{ 'right-click-disabled': !rootFolderLive }"
         class="right-click-delete"
       >{{ 'RIGHTCLICK.delete' | translate }}</li>
     </ul>

@@ -40,13 +40,13 @@
     }
   }
 
+  .right-click-delete {
+    color: $dark-red;
+  }
+
   .right-click-disabled {
     color: $gray-50;
     pointer-events: none;
-  }
-
-  .right-click-delete {
-    color: $dark-red;
   }
 }
 

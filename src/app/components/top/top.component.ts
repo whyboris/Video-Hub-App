@@ -15,6 +15,10 @@ export class TopComponent {
   @Input() set folderString(folderString: string) {
     this._folder = (folderString && folderString.trim()) || '';
     this.folderNameArray = this._folder.split('/');
+    this.folderNameArray = this.folderNameArray.filter((element, index) => {
+      // TODO -- fix this up:
+      return index === 0 || element !== ''; // ATROCIOUS hack! -- simply to prevent ["", ""]
+    });
   }
   get folderString(): string { return this._folder; }
 
