@@ -49,7 +49,7 @@ export class FilmstripComponent implements OnInit {
     if (this.hoverScrub) {
       const imgWidth = this.imgHeight * (16 / 9); // hardcoded aspect ratio
       const containerWidth = this.filmstripHolder.nativeElement.getBoundingClientRect().width;
-      const howManyScreensOutsideCutoff = (this.video.screens + 1) - Math.floor(containerWidth / imgWidth);
+      const howManyScreensOutsideCutoff = this.video.screens - Math.floor(containerWidth / imgWidth);
 
       const cursorX = $event.layerX; // cursor's X position inside the filmstrip element
       this.filmXoffset = imgWidth * Math.floor(cursorX / (containerWidth / howManyScreensOutsideCutoff));
