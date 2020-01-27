@@ -381,6 +381,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.initiateClose();
           break;
 
+        case ('w'):
+          event.preventDefault();
+          event.stopPropagation();
+          this.initiateClose();
+          break;
+
         case ('n'):
           this.startWizard();
           this.settingsModalOpen = false;
