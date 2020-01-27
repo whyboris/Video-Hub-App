@@ -13,116 +13,116 @@
 
   <div class="table-container">
 
-  <table class="stats-table">
-    <tr>
-      <td colSpan=2 class="spanBoth">{{ 'STATISTICS.general' | translate }}</td>
-    </tr>
+    <table class="stats-table">
+      <tr>
+        <td colSpan=2 class="spanBoth">{{ 'STATISTICS.general' | translate }}</td>
+      </tr>
 
-    <tr>
-      <td>{{ 'STATISTICS.numOfFolders' | translate }}</td>
-      <td class="rightCol">{{ numFolders | number:'.0' }}</td>
-    </tr>
+      <tr>
+        <td>{{ 'STATISTICS.numOfFolders' | translate }}</td>
+        <td class="rightCol">{{ numFolders | number:'.0' }}</td>
+      </tr>
 
-    <tr>
-      <td>{{ 'STATISTICS.numOfFiles' | translate }}</td>
-      <td class="rightCol">{{ totalFiles | number:'.0' }}</td>
-    </tr>
+      <tr>
+        <td>{{ 'STATISTICS.numOfFiles' | translate }}</td>
+        <td class="rightCol">{{ totalFiles | number:'.0' }}</td>
+      </tr>
 
-    <tr>
-      <td colSpan=2 class="spanBoth" style="padding-top: 68px;">
-        {{ 'STATISTICS.settings' | translate }}
-      </td>
-    </tr>
+      <tr>
+        <td colSpan=2 class="spanBoth" style="padding-top: 68px;">
+          {{ 'STATISTICS.settings' | translate }}
+        </td>
+      </tr>
 
-    <tr>
-      <td>{{ 'STATISTICS.screenHeight' | translate }}</td>
-      <td class="rightCol">{{ screenshotSettings.height }}px</td>
-    </tr>
+      <tr>
+        <td>{{ 'STATISTICS.screenHeight' | translate }}</td>
+        <td class="rightCol">{{ screenshotSettings.height }}px</td>
+      </tr>
 
-    <tr>
-      <td>{{ 'STATISTICS.numOfThumbs' | translate }}</td>
-      <td class="rightCol">
-        {{ screenshotSettings.fixed ? ''                                  : ('STATISTICS.oneEvery' | translate) }}
-        {{ screenshotSettings.n }}
-        {{ screenshotSettings.fixed ? ('STATISTICS.perVideo' | translate) : ('STATISTICS.minutes' | translate) }}
-      </td>
-    </tr>
+      <tr>
+        <td>{{ 'STATISTICS.numOfThumbs' | translate }}</td>
+        <td class="rightCol">
+          {{ screenshotSettings.fixed ? ''                                  : ('STATISTICS.oneEvery' | translate) }}
+          {{ screenshotSettings.n }}
+          {{ screenshotSettings.fixed ? ('STATISTICS.perVideo' | translate) : ('STATISTICS.minutes' | translate) }}
+        </td>
+      </tr>
 
-    <tr *ngIf="screenshotSettings.clipSnippets > 0">
-      <td>{{ 'STATISTICS.clipHeight' | translate }}</td>
-      <td class="rightCol">
-        {{ screenshotSettings.clipHeight }}px
-      </td>
-    </tr>
+      <tr *ngIf="screenshotSettings.clipSnippets > 0">
+        <td>{{ 'STATISTICS.clipHeight' | translate }}</td>
+        <td class="rightCol">
+          {{ screenshotSettings.clipHeight }}px
+        </td>
+      </tr>
 
-    <tr>
-      <td>{{ 'STATISTICS.numOfClips' | translate }}</td>
-      <td class="rightCol">
-        {{ screenshotSettings.clipSnippets > 0
-           ? screenshotSettings.clipSnippets + ' ' + ('STATISTICS.perVideo' | translate)
-           : ('STATISTICS.doNotExtract' | translate) }}
-      </td>
-    </tr>
+      <tr>
+        <td>{{ 'STATISTICS.numOfClips' | translate }}</td>
+        <td class="rightCol">
+          {{ screenshotSettings.clipSnippets > 0
+            ? screenshotSettings.clipSnippets + ' ' + ('STATISTICS.perVideo' | translate)
+            : ('STATISTICS.doNotExtract' | translate) }}
+        </td>
+      </tr>
 
-    <tr *ngIf="screenshotSettings.clipSnippets > 0">
-      <td>{{ 'STATISTICS.snippetLength' | translate }}</td>
-      <td class="rightCol">
-        {{ screenshotSettings.clipSnippetLength }}
-        {{ 'STATISTICS.seconds' | translate }}
-      </td>
-    </tr>
+      <tr *ngIf="screenshotSettings.clipSnippets > 0">
+        <td>{{ 'STATISTICS.snippetLength' | translate }}</td>
+        <td class="rightCol">
+          {{ screenshotSettings.clipSnippetLength }}
+          {{ 'STATISTICS.seconds' | translate }}
+        </td>
+      </tr>
 
-  </table>
+    </table>
 
-  <table class="stats-table">
-    <tr>
-      <td colSpan=2 class="spanBoth">{{ 'STATISTICS.videoLengths' | translate }}</td>
-    </tr>
+    <table class="stats-table">
+      <tr>
+        <td colSpan=2 class="spanBoth">{{ 'STATISTICS.videoLengths' | translate }}</td>
+      </tr>
 
-    <tr>
-      <td>{{ 'STATISTICS.shortest' | translate }}</td>
-      <td class="rightCol">{{ shortest | lengthPipe : true }}</td>
-    </tr>
+      <tr>
+        <td>{{ 'STATISTICS.shortest' | translate }}</td>
+        <td class="rightCol">{{ shortest | lengthPipe : true }}</td>
+      </tr>
 
-    <tr>
-      <td>{{ 'STATISTICS.longest' | translate }}</td>
-      <td class="rightCol">{{ longest | lengthPipe : true : true }}</td>
-    </tr>
+      <tr>
+        <td>{{ 'STATISTICS.longest' | translate }}</td>
+        <td class="rightCol">{{ longest | lengthPipe : true : true }}</td>
+      </tr>
 
-    <tr>
-      <td>{{ 'STATISTICS.total' | translate : true }}</td>
-      <td class="rightCol">{{ totalLength | lengthPipe : true : true : true }}</td>
-    </tr>
+      <tr>
+        <td>{{ 'STATISTICS.total' | translate : true }}</td>
+        <td class="rightCol">{{ totalLength | lengthPipe : true : true : true }}</td>
+      </tr>
 
-    <tr>
-      <td>{{ 'STATISTICS.average' | translate }}</td>
-      <td class="rightCol">{{ avgLength | lengthPipe : true }}</td>
-    </tr>
+      <tr>
+        <td>{{ 'STATISTICS.average' | translate }}</td>
+        <td class="rightCol">{{ avgLength | lengthPipe : true }}</td>
+      </tr>
 
-    <tr>
-      <td colSpan=2 class="spanBoth">{{ 'STATISTICS.fileSizes' | translate }}</td>
-    </tr>
+      <tr>
+        <td colSpan=2 class="spanBoth">{{ 'STATISTICS.fileSizes' | translate }}</td>
+      </tr>
 
-    <tr>
-      <td>{{ 'STATISTICS.smallest' | translate }}</td>
-      <td class="rightCol">{{ smallest | fileSizePipe : true }}</td>
-    </tr>
+      <tr>
+        <td>{{ 'STATISTICS.smallest' | translate }}</td>
+        <td class="rightCol">{{ smallest | fileSizePipe : true }}</td>
+      </tr>
 
-    <tr>
-      <td>{{ 'STATISTICS.largest' | translate }}</td>
-      <td class="rightCol">{{ largest | fileSizePipe : true }}</td>
-    </tr>
+      <tr>
+        <td>{{ 'STATISTICS.largest' | translate }}</td>
+        <td class="rightCol">{{ largest | fileSizePipe : true }}</td>
+      </tr>
 
-    <tr>
-      <td>{{ 'STATISTICS.total' | translate }}</td>
-      <td class="rightCol">{{ totalSize | fileSizePipe : true }}</td>
-    </tr>
+      <tr>
+        <td>{{ 'STATISTICS.total' | translate }}</td>
+        <td class="rightCol">{{ totalSize | fileSizePipe : true }}</td>
+      </tr>
 
-    <tr>
-      <td>{{ 'STATISTICS.average' | translate }}</td>
-      <td class="rightCol">{{ avgSize | fileSizePipe : true }}</td>
-    </tr>
-  </table>
+      <tr>
+        <td>{{ 'STATISTICS.average' | translate }}</td>
+        <td class="rightCol">{{ avgSize | fileSizePipe : true }}</td>
+      </tr>
+    </table>
 
   </div>
 
