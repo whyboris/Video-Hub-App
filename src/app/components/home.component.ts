@@ -1,5 +1,7 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 
+import * as path from 'path';
+
 import { TranslateService } from '@ngx-translate/core';
 import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
 
@@ -938,7 +940,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     this.currentPlayingFolder = clickedElement.partialPath;
     this.currentPlayingFile = clickedElement.cleanName;
-    const fullPath = this.appState.selectedSourceFolder + clickedElement.partialPath + '/' + clickedElement.fileName;
+    const fullPath = path.join(
+      this.appState.selectedSourceFolder,
+      clickedElement.partialPath,
+      clickedElement.fileName
+    );
     this.fullPathToCurrentFile = fullPath;
 
     if (this.rootFolderLive && this.appState.preferredVideoPlayer) {
@@ -1078,8 +1084,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.scrollToTop();
   }
 
+  /**
+   * Open folder that contains the (current) clicked file
+   */
   openInExplorer(): void {
-    // console.log('should open explorer');
     this.electronService.ipcRenderer.send('openInExplorer', this.fullPathToCurrentFile);
   }
 
@@ -1797,10 +1805,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Code similar to `openVideo()`
    */
   openContainingFolderNow(): void {
-    this.fullPathToCurrentFile = this.appState.selectedSourceFolder +
-      this.currentRightClickedItem.partialPath +
-      '/' +
-      this.currentRightClickedItem.fileName;
+    this.fullPathToCurrentFile = path.join(
+      this.appState.selectedSourceFolder,
+      this.currentRightClickedItem.partialPath,
+      this.currentRightClickedItem.fileName
+    );
 
     this.openInExplorer();
   }
