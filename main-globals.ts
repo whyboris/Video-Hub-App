@@ -8,7 +8,7 @@ export const globals: Globals = {
   hubName: 'untitled',         // in case user doesn't name their hub any name
   selectedOutputFolder: '',
   selectedSourceFolder: '',
-  version: '2.0.0',            // update it and the `package.json` version in tandem before release!
+  version: '2.1.0',            // update it and the `package.json` version in tandem before release!
   vhaFileVersion: 2,
   winRef: null,
   screenshotSettings: {
