@@ -31,7 +31,8 @@
     "icon": "dist/favicon",
     "asar": false,
     "target": [
-      "nsis"
+      "nsis",
+      "portable"
     ]
   },
   "mac": {
