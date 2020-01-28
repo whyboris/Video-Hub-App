@@ -543,6 +543,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.cd.detectChanges();
     });
 
+    // Response from Main process flattening a folder
+    this.electronService.ipcRenderer.on('flatten-folder-complete', (event, arg) => {
+      this.finalArray = arg;
+      this.finalArrayNeedsSaving = true;
+      this.cd.detectChanges();
+    });
+
     // Rename file response
     this.electronService.ipcRenderer.on('renameFileResponse', (event, success: boolean, errMsg?: string) => {
       this.nodeRenamingFile = false;
@@ -1798,6 +1805,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.findMostSimilar = this.currentRightClickedItem.cleanName;
     // console.log(this.findMostSimilar);
     this.showSimilar = true;
+  }
+
+  flattenFolder(item: ImageElement): void {
+    this.electronService.ipcRenderer.send('flatten-folder'
+      , this.appState.selectedSourceFolder
+      , item.partialPath
+      , this.finalArray
+    );
   }
 
   /**

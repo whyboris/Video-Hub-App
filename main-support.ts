@@ -285,6 +285,60 @@ export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] 
 }
 
 /**
+ * Walks the folder structure, starting potentially from a SUBfolder of the hub (folderViewNavigationPath),
+ * moving all media contents that VHA can recognize to the starting subfolder folderViewNavigationPath.
+ * This is an OS level action, the files actually move.  Files VHA doesn't recognize where they are.  Pre existing
+ * folders stay where they are.  Nothing should get deleted in this version.
+ * VHA's understanding of where the files live also gets updated.
+ * @param sourceFolderPath The folder that VHA considers the root of this hub
+ * @param folderViewNavigationPath The path from the sourceFolderPath to a subfolder VHA recognizes
+ * @param finalArray A list of objects holding VHA info about media files and folders, updated and returned so the app
+ * understands that the flattened media has moved.
+ */
+export function flattenFolder( sourceFolderPath: string, folderViewNavigationPath: string, finalArray: ImageElement[] ) {
+  const fileIgnoreRegex = /^(\.|_).*/g;
+  const folderIgnoreRegex = /^(\.|__MACOS|vha-).*/g;
+  const fullPath = sourceFolderPath + folderViewNavigationPath;
+
+  const syncWalkFlatten = (dir) => {
+    const files = fs.readdirSync(dir, {encoding: 'utf8', withFileTypes: true});
+    files.forEach(function (file) {
+      if (!fileSystemReserved(file.name)) {
+        try {
+          if (
+            (file.isSymbolicLink() || file.isDirectory())
+            && !file.name.match(folderIgnoreRegex)
+          ) {
+            syncWalkFlatten(path.join(dir, file.name));
+          } else {
+            const extension = file.name.split('.').pop();
+            if (acceptableFiles.includes(extension.toLowerCase()) && !file.name.match(fileIgnoreRegex)) {
+              const partialPath = ('/' + dir.replace(sourceFolderPath, '').replace(/\\/g, '/')).replace('//', '/');
+              const fromPath = dir.replace(/\\/g, '/').replace('//', '/') + '/' + file.name;
+              const toPath = fullPath.replace(/\\/g, '/').replace('//', '/') + '/' + file.name;
+              const newPartialPath = folderViewNavigationPath;
+
+              for ( let i = 0; i < finalArray.length; i++ ) {
+                if ( finalArray[i].fileName === file.name && finalArray[i].partialPath === partialPath ) {
+                  // actually move the file on the hard drive
+                  fs.renameSync(fromPath, toPath);
+                  // replace the app's understanding of where this ImageElement lives
+                  finalArray[i].partialPath = newPartialPath;
+                }
+              }
+            }
+          }
+        } catch ( err ) {
+          console.log('err: ', err);
+        }
+      }
+    });
+  };
+  syncWalkFlatten( fullPath );
+  return finalArray;
+}
+
+/**
  * Check if thumbnail, flimstrip, and clip is present
  * return boolean
  * @param fileHash           - unique identifier of the file

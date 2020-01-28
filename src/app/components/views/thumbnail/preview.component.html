@@ -15,6 +15,7 @@
       class="video-box folder"
       (mousemove)="mouseIsMoving($event)"
       (click)="videoClick.emit($event)"
+      (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
       [ngStyle]="{ height: imgHeight + 'px' }"
     >
       <div

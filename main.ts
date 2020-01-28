@@ -230,7 +230,8 @@ import {
   insertTemporaryFields,
   missingThumbsIndex,
   sendCurrentProgress,
-  writeVhaFileToDisk
+  writeVhaFileToDisk,
+  flattenFolder
 } from './main-support';
 
 import { extractFromTheseFiles, replaceThumbnailWithNewImage } from './main-extract';
@@ -487,6 +488,11 @@ ipc.on('maximize-window', function (event, someMessage) {
   if (BrowserWindow.getFocusedWindow()) {
     BrowserWindow.getFocusedWindow().maximize();
   }
+});
+
+ipc.on('flatten-folder', function (event, sourceFolder: string, folderViewNavigationPath: string, finalArray: ImageElement[]) {
+  const newFinalArray = flattenFolder( sourceFolder, folderViewNavigationPath, finalArray );
+  event.reply('flatten-folder-complete', newFinalArray);
 });
 
 /**

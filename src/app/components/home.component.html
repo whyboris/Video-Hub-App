@@ -123,7 +123,7 @@
     class="right-click-menu"
     @rightClickAnimation
   >
-    <ul @rightClickContentAnimation>
+    <ul @rightClickContentAnimation *ngIf="currentRightClickedItem.cleanName!=='*FOLDER*'">
       <li
         (click)="openRenameFileModal()"
         [ngClass]="{ 'right-click-disabled': !rootFolderLive }"
@@ -141,6 +141,10 @@
         [ngClass]="{ 'right-click-disabled': !rootFolderLive }"
         class="right-click-delete"
       >{{ 'RIGHTCLICK.delete' | translate }}</li>
+    </ul>
+
+    <ul @rightClickContentAnimation *ngIf="currentRightClickedItem.cleanName==='*FOLDER*'">
+      <li (click)="flattenFolder(currentRightClickedItem)">Flatten Folder</li>
     </ul>
   </div>
 
@@ -1132,7 +1136,7 @@
           *ngFor="let item of scroll.viewPortItems"
 
           (videoClick)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
-          (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
+          (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
 
           (sheetClick)="this.openThumbnailSheet(item)"
           (drop)="droppedSomethingOverVideo($event, item)"
