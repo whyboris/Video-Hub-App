@@ -18,6 +18,10 @@
   ],
   "main": "main.js",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/whyboris/Video-Hub-App.git"
+  },
   "scripts": {
     "postinstall": "npm run postinstall:electron && electron-builder install-app-deps",
     "postinstall:web": "node postinstall-web",
