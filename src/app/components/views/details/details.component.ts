@@ -52,11 +52,12 @@ export class DetailsComponent implements OnInit {
   @Input() imgHeight: number;
   @Input() largerFont: boolean;
   @Input() returnToFirstScreenshot: boolean;
-  @Input() showMeta: boolean;
-  @Input() star: StarRating;
-  @Input() showManualTags: boolean;
   @Input() showAutoFileTags: boolean;
   @Input() showAutoFolderTags: boolean;
+  @Input() showFaces: boolean;
+  @Input() showManualTags: boolean;
+  @Input() showMeta: boolean;
+  @Input() star: StarRating;
 
   percentOffset: number = 0;
   firstFilePath = '';
@@ -83,7 +84,7 @@ export class DetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.firstFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'thumbnails', this.video.hash);
+    this.firstFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, this.showFaces ? 'faces' : 'thumbnails', this.video.hash);
     this.fullFilePath =  this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
   }
 

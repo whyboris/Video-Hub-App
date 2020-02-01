@@ -875,7 +875,7 @@ ipc.on('extract-face', function (event, currentAngularFinalArray: ImageElement[]
 
   const element: ImageElement = currentAngularFinalArray[hack];
 
-  console.log(element);
+  console.log(element.fileName);
 
   const inputFile: string = path.join(
     globals.selectedOutputFolder,

@@ -31,6 +31,7 @@ export class FilmstripComponent implements OnInit {
   @Input() hubName: string;
   @Input() imgHeight: number;
   @Input() largerFont: boolean;
+  @Input() showFaces: boolean;
   @Input() showMeta: boolean;
 
   fullFilePath: string = '';
@@ -42,7 +43,7 @@ export class FilmstripComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.fullFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
+    this.fullFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, this.showFaces ? 'faces' : 'filmstrips', this.video.hash);
   }
 
   updateFilmXoffset($event) {

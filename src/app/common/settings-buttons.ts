@@ -54,6 +54,7 @@ export const SettingsButtonsGroups: string[][] = [
   ],
   [
     'showFolders',
+    'showFaces',
     'showRelatedVideosTray',
     'shuffleGalleryNow',
   ],
@@ -459,6 +460,14 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     settingsHeading: 'SETTINGS.viewSettings',
     iconName: 'icon-folder-blank',
     title: 'BUTTONS.showFoldersHint',
+    toggled: false
+  },
+  'showFaces': {
+    description: 'BUTTONS.showFacesDescription',
+    moreInfo: 'BUTTONS.showFacesMoreInfo',
+    hidden: false,
+    iconName: 'icon-star',
+    title: 'BUTTONS.showFacesHint',
     toggled: false
   },
   'showFreq': {
