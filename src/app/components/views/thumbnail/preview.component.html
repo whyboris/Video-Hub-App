@@ -7,8 +7,6 @@
   [ngClass]="{ 'compact-margins': compactView }"
 >
 
-  <!-- FOLDER BLOCK -->
-
   <div *ngIf="video.cleanName === '*FOLDER*'; else singleThumbnail">
     <div
       *ngIf="video.fileName !== '*UP*'; else upFolderDiv"
@@ -18,7 +16,7 @@
       [ngStyle]="{ height: imgHeight + 'px' }"
     >
 
-      <!-- Show one thumbnail if there is only one -->
+      <!-- Show one thumbnail if there is only one video inside the folder -->
       <div
         *ngIf="!folderThumbPaths[1] && folderThumbPaths[0]; else fourPreviews"
         class="folder-item-fullsize"
@@ -29,22 +27,11 @@
 
       <span *ngIf="showMeta" class="time folder-time">{{ video.duration | lengthPipe : true : true : true }}</span>
     </div>
+
     <div *ngIf="video.cleanName === '*FOLDER*' && video.fileName !== '*UP*'" class="folder-icon">
       <app-icon [icon]="'icon-folder-blank'"></app-icon>
       <div class="items-in-folder">{{ video.fileSizeDisplay }}</div>
     </div>
-
-    <ng-template #upFolderDiv>
-      <div
-        class="video-box folder"
-        (click)="videoClick.emit($event)"
-        [ngStyle]="{ height: imgHeight + 'px' }"
-      >
-        <div class="up-icon">
-          <app-icon [icon]="'icon-chevron-left'"></app-icon>
-        </div>
-      </div>
-    </ng-template>
 
     <span
       *ngIf="showMeta && video.fileName !== '*UP*'"
@@ -64,9 +51,24 @@
 
 </div>
 
+<!-- ========================= UP FOLDER TEMPLATE ============================================== -->
+<ng-template #upFolderDiv>
 
-<!-- FOUR PREVIEWS BLOCK -->
+  <div
+    class="video-box folder"
+    (click)="videoClick.emit($event)"
+    [ngStyle]="{ height: imgHeight + 'px' }"
+  >
+    <div class="up-icon">
+      <app-icon [icon]="'icon-chevron-left'"></app-icon>
+    </div>
+  </div>
+
+</ng-template>
+
+<!-- ========================= FOUR PREVIEWS TEMPLATE ========================================== -->
 <ng-template #fourPreviews>
+
   <div
     *ngIf="folderThumbPaths[0]"
     class="folder-item"
@@ -74,36 +76,37 @@
       'background-image': 'url(' + folderThumbPaths[0] + ')'
     }"
   ></div>
-<div
-  *ngIf="folderThumbPaths[1]"
-  class="folder-item"
-  [ngStyle]="{
-    left: '50%',
-    top: '0%',
-    'background-image': 'url(' + folderThumbPaths[1] + ')'
-  }"
-></div>
-<div
-  *ngIf="folderThumbPaths[2]"
-  class="folder-item"
-  [ngStyle]="{
-    left: '0%',
-    top: '50%',
-    'background-image': 'url(' + folderThumbPaths[2] + ')'
-  }"
-></div>
-<div
-  *ngIf="folderThumbPaths[3]"
-  class="folder-item"
-  [ngStyle]="{
-    left: '50%',
-    top: '50%',
-    'background-image': 'url(' + folderThumbPaths[3] + ')'
-  }"
-></div>
+  <div
+    *ngIf="folderThumbPaths[1]"
+    class="folder-item"
+    [ngStyle]="{
+      left: '50%',
+      top: '0%',
+      'background-image': 'url(' + folderThumbPaths[1] + ')'
+    }"
+  ></div>
+  <div
+    *ngIf="folderThumbPaths[2]"
+    class="folder-item"
+    [ngStyle]="{
+      left: '0%',
+      top: '50%',
+      'background-image': 'url(' + folderThumbPaths[2] + ')'
+    }"
+  ></div>
+  <div
+    *ngIf="folderThumbPaths[3]"
+    class="folder-item"
+    [ngStyle]="{
+      left: '50%',
+      top: '50%',
+      'background-image': 'url(' + folderThumbPaths[3] + ')'
+    }"
+  ></div>
+
 </ng-template>
 
-<!-- INDIVIDUAL FILE BLOCK -->
+<!-- ========================= INDIVIDUAL FILE TEMPLATE ======================================== -->
 <ng-template #singleThumbnail>
 
   <div
