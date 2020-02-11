@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import * as path from 'path';
 
-type FolderType = 'thumbnails' | 'filmstrips' | 'clips' | 'faces';
+type FolderType = 'thumbnails' | 'filmstrips' | 'clips' | 'faces' | 'facestrips';
 
 @Injectable()
 export class FilePathService {

@@ -673,6 +673,7 @@ ipc.on('start-the-import', function (event, options: ImportSettingsObject, video
       fs.mkdirSync(path.join(outDir, 'vha-' + options.hubName + '/filmstrips'));
       fs.mkdirSync(path.join(outDir, 'vha-' + options.hubName + '/thumbnails'));
       fs.mkdirSync(path.join(outDir, 'vha-' + options.hubName + '/clips'));
+      fs.mkdirSync(path.join(outDir, 'vha-' + options.hubName + '/facestrips'));
       fs.mkdirSync(path.join(outDir, 'vha-' + options.hubName + '/faces'));
     }
 
