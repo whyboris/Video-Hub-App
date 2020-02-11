@@ -27,44 +27,6 @@
         }"
       ></div>
 
-      <!-- Else show a grid of the first four thumbnails -->
-      <ng-template #fourPreviews>
-        <div
-          *ngIf="folderThumbPaths[0]"
-          class="folder-item"
-          [ngStyle]="{
-            'background-image': 'url(' + folderThumbPaths[0] + ')'
-          }"
-        ></div>
-      <div
-        *ngIf="folderThumbPaths[1]"
-        class="folder-item"
-        [ngStyle]="{
-          left: '50%',
-          top: '0%',
-          'background-image': 'url(' + folderThumbPaths[1] + ')'
-        }"
-      ></div>
-      <div
-        *ngIf="folderThumbPaths[2]"
-        class="folder-item"
-        [ngStyle]="{
-          left: '0%',
-          top: '50%',
-          'background-image': 'url(' + folderThumbPaths[2] + ')'
-        }"
-      ></div>
-      <div
-        *ngIf="folderThumbPaths[3]"
-        class="folder-item"
-        [ngStyle]="{
-          left: '50%',
-          top: '50%',
-          'background-image': 'url(' + folderThumbPaths[3] + ')'
-        }"
-      ></div>
-      </ng-template>
-
       <span *ngIf="showMeta" class="time folder-time">{{ video.duration | lengthPipe : true : true : true }}</span>
     </div>
     <div *ngIf="video.cleanName === '*FOLDER*' && video.fileName !== '*UP*'" class="folder-icon">
@@ -100,53 +62,90 @@
     </span>
   </div>
 
-
-  <!-- INDIVIDUAL FILE BLOCK -->
-
-  <ng-template #singleThumbnail>
-
-    <div
-      #filmstripHolder
-      class="video-box"
-      (mousemove)="mouseIsMoving($event)"
-      (mouseenter)="mouseEntered()"
-      (mouseleave)="mouseLeft()"
-      (click)="videoClick.emit({ mouseEvent: $event, thumbIndex: indexToShow })"
-      (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
-      [ngStyle]="{
-          height: imgHeight + 'px',
-          'background-image': 'url(' + (hover ? fullFilePath : firstFilePath) + ')',
-          'background-position-x': percentOffset + '%'
-        }"
-    >
-      <span *ngIf="showMeta" class="time">{{ video.durationDisplay }}</span>
-      <span *ngIf="showMeta" class="rez">{{ video.resolution }}</span>
-    </div>
-    <!--
-      .sheet-icon needs to be the next sibling of .video-box for hover to work
-       DO NOT SEPARATE!
-    -->
-    <app-icon
-      class="sheet-icon"
-      [icon]="'icon-show-thumbnails'"
-      (click)="sheetClick.emit()"
-    ></app-icon>
-
-    <span
-      *ngIf="showMeta"
-      [ngClass]="{ 'larger-font': largerFont }"
-      [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
-      class="title"
-    >
-      {{ video.cleanName }}
-      <div
-        *ngIf="showMeta"
-        class="fileSize"
-      >
-        {{ showMeta ? '(' + video.fileSizeDisplay + ')' : '' }}
-      </div>
-    </span>
-
-  </ng-template>
-
 </div>
+
+
+<!-- FOUR PREVIEWS BLOCK -->
+<ng-template #fourPreviews>
+  <div
+    *ngIf="folderThumbPaths[0]"
+    class="folder-item"
+    [ngStyle]="{
+      'background-image': 'url(' + folderThumbPaths[0] + ')'
+    }"
+  ></div>
+<div
+  *ngIf="folderThumbPaths[1]"
+  class="folder-item"
+  [ngStyle]="{
+    left: '50%',
+    top: '0%',
+    'background-image': 'url(' + folderThumbPaths[1] + ')'
+  }"
+></div>
+<div
+  *ngIf="folderThumbPaths[2]"
+  class="folder-item"
+  [ngStyle]="{
+    left: '0%',
+    top: '50%',
+    'background-image': 'url(' + folderThumbPaths[2] + ')'
+  }"
+></div>
+<div
+  *ngIf="folderThumbPaths[3]"
+  class="folder-item"
+  [ngStyle]="{
+    left: '50%',
+    top: '50%',
+    'background-image': 'url(' + folderThumbPaths[3] + ')'
+  }"
+></div>
+</ng-template>
+
+<!-- INDIVIDUAL FILE BLOCK -->
+<ng-template #singleThumbnail>
+
+  <div
+    #filmstripHolder
+    class="video-box"
+    (mousemove)="mouseIsMoving($event)"
+    (mouseenter)="mouseEntered()"
+    (mouseleave)="mouseLeft()"
+    (click)="videoClick.emit({ mouseEvent: $event, thumbIndex: indexToShow })"
+    (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
+    [ngStyle]="{
+        height: imgHeight + 'px',
+        'background-image': 'url(' + (hover ? fullFilePath : firstFilePath) + ')',
+        'background-position-x': percentOffset + '%'
+      }"
+  >
+    <span *ngIf="showMeta" class="time">{{ video.durationDisplay }}</span>
+    <span *ngIf="showMeta" class="rez">{{ video.resolution }}</span>
+  </div>
+  <!--
+    .sheet-icon needs to be the next sibling of .video-box for hover to work
+      DO NOT SEPARATE!
+  -->
+  <app-icon
+    class="sheet-icon"
+    [icon]="'icon-show-thumbnails'"
+    (click)="sheetClick.emit()"
+  ></app-icon>
+
+  <span
+    *ngIf="showMeta"
+    [ngClass]="{ 'larger-font': largerFont }"
+    [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
+    class="title"
+  >
+    {{ video.cleanName }}
+    <div
+      *ngIf="showMeta"
+      class="fileSize"
+    >
+      {{ showMeta ? '(' + video.fileSizeDisplay + ')' : '' }}
+    </div>
+  </span>
+
+</ng-template>
