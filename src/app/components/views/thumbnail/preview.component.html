@@ -20,7 +20,7 @@
 
       <!-- Show one thumbnail if there is only one -->
       <div
-        *ngIf="!folderThumbPaths[1] && folderThumbPaths[0]"
+        *ngIf="!folderThumbPaths[1] && folderThumbPaths[0]; else fourPreviews"
         class="folder-item-fullsize"
         [ngStyle]="{
           'background-image': 'url(' + folderThumbPaths[0] + ')'
@@ -28,7 +28,7 @@
       ></div>
 
       <!-- Else show a grid of the first four thumbnails -->
-      <div *ngIf="folderThumbPaths[1]">
+      <ng-template #fourPreviews>
         <div
           *ngIf="folderThumbPaths[0]"
           class="folder-item"
@@ -63,7 +63,7 @@
           'background-image': 'url(' + folderThumbPaths[3] + ')'
         }"
       ></div>
-      </div>
+      </ng-template>
 
       <span *ngIf="showMeta" class="time folder-time">{{ video.duration | lengthPipe : true : true : true }}</span>
     </div>
