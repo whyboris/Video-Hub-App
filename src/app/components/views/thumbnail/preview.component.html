@@ -17,13 +17,25 @@
       (click)="videoClick.emit($event)"
       [ngStyle]="{ height: imgHeight + 'px' }"
     >
+
+      <!-- Show one thumbnail if there is only one -->
       <div
-        *ngIf="folderThumbPaths[0]"
-        class="folder-item"
+        *ngIf="!folderThumbPaths[1] && folderThumbPaths[0]"
+        class="folder-item-fullsize"
         [ngStyle]="{
           'background-image': 'url(' + folderThumbPaths[0] + ')'
         }"
       ></div>
+
+      <!-- Else show a grid of the first four thumbnails -->
+      <div *ngIf="folderThumbPaths[1]">
+        <div
+          *ngIf="folderThumbPaths[0]"
+          class="folder-item"
+          [ngStyle]="{
+            'background-image': 'url(' + folderThumbPaths[0] + ')'
+          }"
+        ></div>
       <div
         *ngIf="folderThumbPaths[1]"
         class="folder-item"
@@ -51,6 +63,8 @@
           'background-image': 'url(' + folderThumbPaths[3] + ')'
         }"
       ></div>
+      </div>
+
       <span *ngIf="showMeta" class="time folder-time">{{ video.duration | lengthPipe : true : true : true }}</span>
     </div>
     <div *ngIf="video.cleanName === '*FOLDER*' && video.fileName !== '*UP*'" class="folder-icon">
