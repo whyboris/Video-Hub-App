@@ -57,6 +57,7 @@ import { LengthFilterPipe } from './pipes/length-filter.pipe';
 import { LengthPipe } from './pipes/length.pipe';
 import { MagicSearchPipe } from './pipes/magic-search.pipe';
 import { ManualTagSortPipe } from './pipes/manual-tags-sort.pipe';
+import { PlaylistPipe } from './pipes/playlist.pipe';
 import { ResolutionFilterPipe } from './pipes/resolution-filter.pipe';
 import { ReturnZeroPipe } from './pipes/returnZero.pipe';
 import { SimilarityPipe } from './pipes/similarity.pipe';
@@ -79,7 +80,9 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     DetailsComponent,
     DonutComponent,
     DuplicateFinderPipe,
+    DuplicateFinderPipe,
     FileComponent,
+    FileSearchPipe,
     FileSearchPipe,
     FileSizePipe,
     FilmstripComponent,
@@ -94,12 +97,14 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     MagicSearchPipe,
     ManualTagSortPipe,
     MetaComponent,
+    PlaylistPipe,
     PreviewComponent,
     ResolutionFilterPipe,
     ReturnZeroPipe,
     SheetComponent,
     SimilarityPipe,
     SliderFilterComponent,
+    SortingPipe,
     SortingPipe,
     StarFilterPipe,
     StatisticsComponent,
@@ -125,15 +130,12 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
   providers: [
     AutoTagsSaveService,
     AutoTagsService,
-    DuplicateFinderPipe,
     ElectronService,
     FilePathService,
-    FileSearchPipe,
     ManualTagsService,
     PipeSideEffectService,
     ResolutionFilterService,
     SimilarityService,
-    SortingPipe,
     StarFilterService,
     WordFrequencyService,
   ],
