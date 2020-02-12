@@ -18,8 +18,8 @@ import { ElectronService } from './providers/electron.service';
 import { FilePathService } from './components/views/file-path.service';
 import { HomeComponent } from './components/home.component';
 import { ManualTagsService } from './components/tags-manual/manual-tags.service';
-import { ResolutionFilterService } from './pipes/resolution-filter.service';
 import { PipeSideEffectService } from './pipes/pipe-side-effect.service';
+import { ResolutionFilterService } from './pipes/resolution-filter.service';
 import { StarFilterService } from './pipes/star-filter.service';
 import { WordFrequencyService } from './pipes/word-frequency.service';
 
@@ -130,8 +130,8 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     FilePathService,
     FileSearchPipe,
     ManualTagsService,
-    ResolutionFilterService,
     PipeSideEffectService,
+    ResolutionFilterService,
     SimilarityService,
     SortingPipe,
     StarFilterService,

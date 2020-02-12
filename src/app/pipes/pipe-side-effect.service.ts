@@ -9,8 +9,6 @@ export class PipeSideEffectService {
 
   searchResults: BehaviorSubject<number> = new BehaviorSubject(0);
 
-  constructor() { }
-
   showResults(total: number): void {
 
     if (this.cachedTotal !== total) {

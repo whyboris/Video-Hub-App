@@ -7,8 +7,6 @@ import { WordAndFreq } from '../components/tags-auto/autotags.service';
 })
 export class AlphabetPrefixPipe implements PipeTransform {
 
-  constructor() {}
-
   /**
    * Change the prefix string - controls whether prefix is shown
    * @param allTags

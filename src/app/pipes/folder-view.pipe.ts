@@ -14,9 +14,6 @@ interface FolderProperties {
 })
 export class FolderViewPipe implements PipeTransform {
 
-  constructor() { }
-
-
   /**
    * Determine folder size, duration, and average star rating (simply sum up / average the relevant ImageElement properties)
    * @param files
