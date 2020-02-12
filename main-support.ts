@@ -401,6 +401,22 @@ function getBestStream(metadata) {
 }
 
 /**
+ * Return the duration from file by parsing metadata
+ * @param metadata
+ */
+function getFileDuration(metadata) {
+  try {
+    return metadata.streams[0].duration;
+  } catch (e1) {
+    try {
+      return metadata.format.duration;
+    } catch (e2) {
+      return 0;
+    }
+  }
+}
+
+/**
  * Extracts information about a single file using `ffprobe`
  * Stores information into the ImageElement and returns it via callback
  * @param filePath              path to the file
@@ -421,7 +437,7 @@ function extractMetadataForThisONEFile(
     } else {
       const metadata = JSON.parse(data);
       const stream = getBestStream(metadata);
-      const fileDuration = metadata.streams[0].duration || metadata.format.duration;
+      const fileDuration = getFileDuration(metadata);
 
       const duration = Math.round(fileDuration) || 0;
       const origWidth = stream.width || 0; // ffprobe does not detect it on some MKV streams
