@@ -5,20 +5,17 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable()
 export class ShowLimitService {
 
-  cachedTotal = 0;
+  cachedTotal: number = 0;
 
-  searchResults = new BehaviorSubject({});
+  searchResults: BehaviorSubject<number> = new BehaviorSubject(0);
 
   constructor() { }
 
-  showResults(showing: number, total: number): void {
-    if (total < showing ) {
-      showing = total;
-    }
+  showResults(total: number): void {
 
     if (this.cachedTotal !== total) {
       this.cachedTotal = total;
-      this.searchResults.next({ showing: showing, total: this.cachedTotal });
+      this.searchResults.next(this.cachedTotal);
     }
 
   }

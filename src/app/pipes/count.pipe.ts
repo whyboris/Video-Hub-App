@@ -19,7 +19,7 @@ export class CountPipe implements PipeTransform {
    */
   transform(finalArray: ImageElement[]): any {
 
-    this.showLimitService.showResults(finalArray.length, finalArray.length);
+    this.showLimitService.showResults(finalArray.length);
 
     return finalArray;
   }

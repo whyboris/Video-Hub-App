@@ -264,7 +264,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   fuzzySearchString = '';
 
   wordFreqArr: any;
-  currResults: any = { showing: 0, total: 0 };
+  currResults: number;
 
   findMostSimilar: string; // for finding similar files to this one
   showSimilar: boolean = false; // to toggle the similarity pipe
