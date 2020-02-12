@@ -19,7 +19,7 @@ import { FilePathService } from './components/views/file-path.service';
 import { HomeComponent } from './components/home.component';
 import { ManualTagsService } from './components/tags-manual/manual-tags.service';
 import { ResolutionFilterService } from './pipes/resolution-filter.service';
-import { ShowLimitService } from './pipes/show-limit.service';
+import { PipeSideEffectService } from './pipes/pipe-side-effect.service';
 import { StarFilterService } from './pipes/star-filter.service';
 import { WordFrequencyService } from './pipes/word-frequency.service';
 
@@ -131,7 +131,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     FileSearchPipe,
     ManualTagsService,
     ResolutionFilterService,
-    ShowLimitService,
+    PipeSideEffectService,
     SimilarityService,
     SortingPipe,
     StarFilterService,

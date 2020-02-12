@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { ShowLimitService } from './show-limit.service';
+import { PipeSideEffectService } from './pipe-side-effect.service';
 
 import { ImageElement } from '../../../interfaces/final-object.interface';
 
@@ -10,7 +10,7 @@ import { ImageElement } from '../../../interfaces/final-object.interface';
 export class CountPipe implements PipeTransform {
 
   constructor(
-    public showLimitService: ShowLimitService
+    public pipeSideEffectService: PipeSideEffectService
   ) { }
 
   /**
@@ -19,7 +19,7 @@ export class CountPipe implements PipeTransform {
    */
   transform(finalArray: ImageElement[]): any {
 
-    this.showLimitService.showResults(finalArray.length);
+    this.pipeSideEffectService.showResults(finalArray.length);
 
     return finalArray;
   }

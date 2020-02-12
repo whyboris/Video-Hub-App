@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable()
-export class ShowLimitService {
+export class PipeSideEffectService {
 
   cachedTotal: number = 0;
 
