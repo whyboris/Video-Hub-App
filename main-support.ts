@@ -391,9 +391,13 @@ export function extractAllMetadata(
  * @param metadata  the ffProbe metadata object
  */
 function getBestStream(metadata) {
-  return metadata.streams.reduce(function (a, b) {
-    return a.width > b.width ? a : b;
-  });
+  try {
+    return metadata.streams.reduce((a, b) => a.width > b.width ? a : b);
+  } catch (e) {
+    // if metadata.streams is an empty array or something else is wrong with it
+    // return an empty object so later calls to `stream.width` or `stream.height` do not throw exceptions
+    return {};
+  }
 }
 
 /**
