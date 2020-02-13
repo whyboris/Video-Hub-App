@@ -190,6 +190,37 @@ export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: stri
 }
 
 /**
+ * Format .pls file and write to hard drive
+ * @param playlist
+ */
+export function createDotPlsFile(playlist: ImageElement[], done): void {
+
+  const writeArray: string[] = [];
+
+  writeArray.push('[playlist]');
+  writeArray.push('NumberOfEntries=' + playlist.length);
+
+  for (let i = 0; i < playlist.length; i++) {
+
+    const fullPath: string = path.join(
+      globals.selectedSourceFolder,
+      playlist[i].partialPath,
+      playlist[i].fileName
+    );
+
+    writeArray.push('File' + (i + 1) + '=' + fullPath );
+    writeArray.push('Title' + (i + 1) + '=' + playlist[i].cleanName);
+  }
+
+  writeArray.push(''); // empty line at the end requested by VLC Wiki
+
+  const singleString: string = writeArray.join('\n');
+
+  fs.writeFile('./temp.pls', singleString, 'utf8', done);
+
+}
+
+/**
  * Strip out all the temporary fields
  * @param imagesArray
  */

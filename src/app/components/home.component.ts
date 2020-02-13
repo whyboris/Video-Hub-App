@@ -1289,7 +1289,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } else if (uniqueKey === 'regenerateLibrary') {
       this.regenerateLibrary();
     } else if (uniqueKey == 'playPlaylist') {
-      console.log(this.pipeSideEffectService.galleryShowing);
+      this.electronService.ipcRenderer.send('please-create-playlist', this.pipeSideEffectService.galleryShowing);
     } else if (uniqueKey === 'showTagTray') {
       if (this.settingsButtons.showRelatedVideosTray.toggled) {
         this.settingsButtons.showRelatedVideosTray.toggled = false;
