@@ -1,6 +1,6 @@
 <div
   class="meta"
-  [ngStyle]="{ height: imgHeight + 'px', 'max-width': maxWidth + 'px' }"
+  [ngStyle]="{ 'max-width': maxWidth + 'px' }"
 >
   <span
     [ngClass]="{ 'larger-font': largerFont }"
@@ -35,7 +35,8 @@
         tabindex="-1"
       >
 
-    </span>
+  </span>
+
   <span class="fileSize" *ngIf="video.timesPlayed">
     {{ 'TAGS.timesPlayed' | translate }}: {{ video.timesPlayed }}
   </span>
@@ -85,9 +86,8 @@
     *ngIf="showManualTags"
     (tag)="addThisTag($event)"
     [darkMode]="darkMode"
+    style="display: block;"
   ></app-add-tag-component>
-
-  <br><br><br>  <!-- TODO -- stop using `<br>` here -->
 
   <app-view-tags-component
     [tags]="video | tagDisplayPipe
@@ -98,6 +98,7 @@
     [darkMode]="darkMode"
     (tagClicked)="filterThisTag($event)"
     (removeTagEmit)="removeThisTag($event)"
+    style="display: block;"
   ></app-view-tags-component>
 
 </div>
