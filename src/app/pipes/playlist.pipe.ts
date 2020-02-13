@@ -19,9 +19,7 @@ export class PlaylistPipe implements PipeTransform {
    */
   transform(finalArray: ImageElement[]): any {
 
-    console.log(finalArray);
-
-    this.pipeSideEffectService.showResults(finalArray.length);
+    this.pipeSideEffectService.saveCurrentResults(finalArray);
 
     return finalArray;
   }
