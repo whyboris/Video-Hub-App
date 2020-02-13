@@ -10,7 +10,7 @@ import { AutoTagsSaveService } from './tags-auto/tags-save.service';
 import { ElectronService } from '../providers/electron.service';
 import { ManualTagsService } from './tags-manual/manual-tags.service';
 import { ResolutionFilterService, ResolutionString } from '../pipes/resolution-filter.service';
-import { ShowLimitService } from '../pipes/show-limit.service';
+import { PipeSideEffectService } from '../pipes/pipe-side-effect.service';
 import { StarFilterService } from '../pipes/star-filter.service';
 import { WordFrequencyService } from '../pipes/word-frequency.service';
 
@@ -264,7 +264,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   fuzzySearchString = '';
 
   wordFreqArr: any;
-  currResults: any = { showing: 0, total: 0 };
+  currResults: number;
 
   findMostSimilar: string; // for finding similar files to this one
   showSimilar: boolean = false; // to toggle the similarity pipe
@@ -465,7 +465,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     public electronService: ElectronService,
     public manualTagsService: ManualTagsService,
     public resolutionFilterService: ResolutionFilterService,
-    public showLimitService: ShowLimitService,
+    public pipeSideEffectService: PipeSideEffectService,
     public starFilterService: StarFilterService,
     public tagsSaveService: AutoTagsSaveService,
     public translate: TranslateService,
@@ -506,7 +506,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.starRatingFreqArr = value;
         // this.cd.detectChanges();
       });
-      this.showLimitService.searchResults.subscribe((value) => {
+      this.pipeSideEffectService.searchResults.subscribe((value) => {
         this.currResults = value;
         this.cd.detectChanges();
         this.debounceUpdateMax(10);
@@ -1288,6 +1288,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.rescanDirectory();
     } else if (uniqueKey === 'regenerateLibrary') {
       this.regenerateLibrary();
+    } else if (uniqueKey == 'playPlaylist') {
+      this.electronService.ipcRenderer.send('please-create-playlist', this.pipeSideEffectService.galleryShowing);
     } else if (uniqueKey === 'showTagTray') {
       if (this.settingsButtons.showRelatedVideosTray.toggled) {
         this.settingsButtons.showRelatedVideosTray.toggled = false;

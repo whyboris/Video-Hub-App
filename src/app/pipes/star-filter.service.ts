@@ -8,8 +8,6 @@ export class StarFilterService {
   frequencyMap: Map<number, number> = new Map();
   finalStarMapBehaviorSubject = new BehaviorSubject([]);
 
-  constructor() { }
-
   /**
    * Reset the map to empty
    */
