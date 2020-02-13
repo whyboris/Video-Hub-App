@@ -30,9 +30,9 @@
 .typeahead {
   color: $pretty-blue;
   font-size: 12px;
-  left: 5px;
+  left: 4px;
   pointer-events: none;
   position: absolute;
   top: 9px;
-  z-index: 1;
+  z-index: -1;
 }
