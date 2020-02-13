@@ -97,6 +97,7 @@ export const SettingsButtonsGroups: string[][] = [
     'resetSettings',
     'clearHistory',
     'showDeleteOption',
+    'playPlaylist',
     'openAtTimestamp'
   ]
 ];
@@ -181,6 +182,14 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     moreInfo: 'BUTTONS.showDeleteButtonMoreInfo',
     title: 'BUTTONS.showDeleteButton',
+    toggled: false
+  },
+  'playPlaylist': {
+    description: 'BUTTONS.playlistButtonDescription',
+    hidden: true,
+    iconName: 'icon-video-blank',
+    moreInfo: 'BUTTONS.playlistButtonMoreInfo',
+    title: 'BUTTONS.playlistButton',
     toggled: false
   },
   'darkMode': {

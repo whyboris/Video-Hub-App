@@ -225,6 +225,7 @@ const shell = require('electron').shell;
 import {
   alphabetizeFinalArray,
   countFoldersInFinalArray,
+  createDotPlsFile,
   extractAllMetadata,
   getVideoPathsAndNames,
   insertTemporaryFields,
@@ -487,6 +488,26 @@ ipc.on('maximize-window', function (event, someMessage) {
   if (BrowserWindow.getFocusedWindow()) {
     BrowserWindow.getFocusedWindow().maximize();
   }
+});
+
+/**
+ * Create and play the playlist
+ * 1. filter out *FOLDER*
+ * 2. save .pls file
+ * 3. ask OS to open the .pls file
+ */
+ipc.on('please-create-playlist', function (event, playlist: ImageElement[]) {
+
+  const cleanPlaylist: ImageElement[] = playlist.filter((element: ImageElement) => {
+    return element.cleanName !== '*FOLDER*';
+  });
+
+  if (cleanPlaylist.length) {
+    createDotPlsFile(cleanPlaylist, () => {
+      shell.openItem(path.normalize('./temp.pls'));
+    });
+  }
+
 });
 
 /**

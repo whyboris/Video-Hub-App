@@ -10,8 +10,6 @@ export class ResolutionFilterService {
   frequencyMap: Map<number, number> = new Map();
   finalResolutionMapBehaviorSubject = new BehaviorSubject([]);
 
-  constructor() { }
-
   /**
    * Reset the map to empty
    */
