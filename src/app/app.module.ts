@@ -20,6 +20,7 @@ import { HomeComponent } from './components/home.component';
 import { ManualTagsService } from './components/tags-manual/manual-tags.service';
 import { PipeSideEffectService } from './pipes/pipe-side-effect.service';
 import { ResolutionFilterService } from './pipes/resolution-filter.service';
+import { SimilarityService } from './pipes/similarity.service';
 import { StarFilterService } from './pipes/star-filter.service';
 import { WordFrequencyService } from './pipes/word-frequency.service';
 
@@ -36,7 +37,6 @@ import { IconComponent } from './components/icon/icon.component';
 import { MetaComponent } from './components/meta/meta.component';
 import { PreviewComponent } from './components/views/thumbnail/preview.component';
 import { SheetComponent } from './components/sheet/sheet.component';
-import { SimilarityService } from './pipes/similarity.service';
 import { SliderFilterComponent } from './components/slider-filter/slider-filter.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { SvgDefinitionsComponent } from './components/icon/svg-definitions.component';
@@ -80,9 +80,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     DetailsComponent,
     DonutComponent,
     DuplicateFinderPipe,
-    DuplicateFinderPipe,
     FileComponent,
-    FileSearchPipe,
     FileSearchPipe,
     FileSizePipe,
     FilmstripComponent,
@@ -104,7 +102,6 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     SheetComponent,
     SimilarityPipe,
     SliderFilterComponent,
-    SortingPipe,
     SortingPipe,
     StarFilterPipe,
     StatisticsComponent,
@@ -136,6 +133,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     PipeSideEffectService,
     ResolutionFilterService,
     SimilarityService,
+    SortingPipe,
     StarFilterService,
     WordFrequencyService,
   ],

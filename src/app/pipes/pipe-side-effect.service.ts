@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { BehaviorSubject } from 'rxjs';
 
-import { ImageElement } from 'interfaces/final-object.interface';
+import { ImageElement } from '../../../interfaces/final-object.interface';
 
 @Injectable()
 export class PipeSideEffectService {
