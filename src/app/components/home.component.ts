@@ -1564,6 +1564,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   onEnterKey(value: string, origin: number): void {
     const trimmed = value.trim();
+
+    if (origin === 6) {
+      // the `tags include` search
+      this.tagTypeAhead = '';
+    }
+
     if (trimmed) {
       // don't include duplicates
       if (!this.filters[origin].array.includes(trimmed)) {
