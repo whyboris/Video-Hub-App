@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { ImageElement, StarRating } from '../../../interfaces/final-object.interface';
+import { randomizeArray } from '../../../utility';
 
 export type SortType = 'default'
                      | 'hash' // only used by the duplicateFinderPipe
@@ -110,26 +111,9 @@ export class SortingPipe implements PipeTransform {
         return []; // else `galleryArray[0] errors out!
       }
 
-      let currentIndex = (galleryArray[0].fileName === '*UP*' ? 1 : 0); // skip 'up button' if present
-      let temporaryValue;
-      let randomIndex;
+      const currentIndex = (galleryArray[0].fileName === '*UP*' ? 1 : 0); // skip 'up button' if present
 
-      const newArray = [...galleryArray];
-
-      // While there remain elements to shuffle...
-      while (currentIndex !== galleryArray.length) {
-        // Pick a remaining element...
-        randomIndex = currentIndex + Math.floor(Math.random() * (galleryArray.length - currentIndex));
-
-        // And swap it with the current element.
-        temporaryValue = newArray[currentIndex];
-        newArray[currentIndex] = newArray[randomIndex];
-        newArray[randomIndex] = temporaryValue;
-
-        currentIndex += 1;
-      }
-      // console.log('VIEW SHUFFLED');
-      return newArray;
+      return randomizeArray(galleryArray, currentIndex);
 
     } else if (sortingType === 'alphabetAsc') {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
