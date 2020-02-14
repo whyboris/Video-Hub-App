@@ -877,6 +877,7 @@ function sendFinalResultHome(theFinalArray: ImageElement[]): void {
       screenshotOutputFolder,
       globals.screenshotSettings,
       indexesToScan,
+      false
     );
 
   });
@@ -942,7 +943,8 @@ function verifyThumbnails() {
     globals.selectedSourceFolder,
     screenshotOutputFolder,
     globals.screenshotSettings,
-    indexesToScan,
+    randomizeArray(indexesToScan), // extract screenshots in random order
+    true
   );
 }
 
@@ -1090,7 +1092,8 @@ ipc.on('app-to-touchBar', (event, changesFromApp) => {
 });
 
 
-import {allSupportedViews, SupportedView} from './interfaces/shared-interfaces';
+import { allSupportedViews, SupportedView } from './interfaces/shared-interfaces';
+import { randomizeArray } from './utility';
 
 const nativeImage = require('electron').nativeImage;
 const resourcePath = serve ? path.join(__dirname, 'src/assets/icons/mac/touch-bar/') : path.join(process.resourcesPath, 'assets/');
