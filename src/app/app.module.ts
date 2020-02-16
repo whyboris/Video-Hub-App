@@ -47,6 +47,7 @@ import { ViewTagsComponent } from './components/tags-manual/view-tags.component'
 // Pipes
 import { AlphabetPrefixPipe } from './pipes/alphabet-prefix.pipe';
 import { CountPipe } from './pipes/count.pipe';
+import { DeleteFilePipe } from './pipes/delete-file.pipe';
 import { DuplicateFinderPipe } from './pipes/duplicateFinder.pipe';
 import { FileSearchPipe } from './pipes/file-search.pipe';
 import { FileSizePipe } from './pipes/file-size.pipe';
@@ -59,7 +60,7 @@ import { MagicSearchPipe } from './pipes/magic-search.pipe';
 import { ManualTagSortPipe } from './pipes/manual-tags-sort.pipe';
 import { PlaylistPipe } from './pipes/playlist.pipe';
 import { ResolutionFilterPipe } from './pipes/resolution-filter.pipe';
-import { ReturnZeroPipe } from './pipes/returnZero.pipe';
+import { ReturnZeroPipe } from './pipes/return-zero.pipe';
 import { SimilarityPipe } from './pipes/similarity.pipe';
 import { SortingPipe } from './pipes/sorting.pipe';
 import { StarFilterPipe } from './pipes/star-filter.pipe';
@@ -77,6 +78,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     AppComponent,
     ClipComponent,
     CountPipe,
+    DeleteFilePipe,
     DetailsComponent,
     DonutComponent,
     DuplicateFinderPipe,

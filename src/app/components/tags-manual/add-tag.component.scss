@@ -1,6 +1,6 @@
 @import './../variables';
 
-.inputContainer {
+.input-container {
   position: relative;
 }
 
@@ -10,7 +10,6 @@
   font-size: 12px;
   padding: 4px;
   padding-bottom: 0;
-  position: absolute;
   width: 140px;
   z-index: 2;
 
@@ -29,10 +28,11 @@
 }
 
 .typeahead {
-  color: $gray-60;
+  color: $pretty-blue;
   font-size: 12px;
-  left: 5px;
-  position:absolute;
-  top: 10px;
-  z-index: 1;
+  left: 4px;
+  pointer-events: none;
+  position: absolute;
+  top: 9px;
+  z-index: -1;
 }

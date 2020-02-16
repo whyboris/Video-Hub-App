@@ -515,10 +515,17 @@ ipc.on('please-create-playlist', function (event, playlist: ImageElement[]) {
  */
 ipc.on('delete-video-file', function (event, item: ImageElement): void {
   const fileToDelete = path.join(globals.selectedSourceFolder, item.partialPath, item.fileName);
-  console.log('Deleting !!!');
-  console.log(fileToDelete);
+
   (async () => {
     await trash(fileToDelete);
+
+    // check if file exists
+    fs.access(fileToDelete, fs.F_OK, (err: any) => {
+      if (err) {
+        event.sender.send('file-deleted', item);
+      }
+    });
+
   })();
 });
 
@@ -879,6 +886,7 @@ function sendFinalResultHome(theFinalArray: ImageElement[]): void {
       screenshotOutputFolder,
       globals.screenshotSettings,
       indexesToScan,
+      false
     );
 
   });
@@ -988,7 +996,8 @@ function verifyThumbnails() {
     globals.selectedSourceFolder,
     screenshotOutputFolder,
     globals.screenshotSettings,
-    indexesToScan,
+    randomizeArray(indexesToScan), // extract screenshots in random order
+    true
   );
 }
 
@@ -1136,7 +1145,8 @@ ipc.on('app-to-touchBar', (event, changesFromApp) => {
 });
 
 
-import {allSupportedViews, SupportedView} from './interfaces/shared-interfaces';
+import { allSupportedViews, SupportedView } from './interfaces/shared-interfaces';
+import { randomizeArray } from './utility';
 
 const nativeImage = require('electron').nativeImage;
 const resourcePath = serve ? path.join(__dirname, 'src/assets/icons/mac/touch-bar/') : path.join(process.resourcesPath, 'assets/');

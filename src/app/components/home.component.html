@@ -1042,6 +1042,8 @@
 
       [items]="finalArray
 
+                | deleteFilePipe: deletePipeHack
+
                 | returnZeroPipe: (appState.currentView === 'showClips' && currentScreenshotSettings.clipSnippets === 0)
 
                 | fileSearchPipe: filters[0].array : filters[0].bool : true  : 0 : false

@@ -40,8 +40,8 @@ Main dependencies in use:
 | -------     | ------- | ----        | ------- |
 | Angular     | v8.2.3  | August 2019 |         |
 | Angular-CLI | v8.2.3  | August 2019 |         |
-| Electron    | v7.1.9  | January 2020 | (internally uses Node v12.8.1 and Chromium 78) |
-| Electron Builder | v22.2.0 | January 2020 |     |
+| Electron    | v8.0.0  | February 2020 | (internally uses Node v12.13.0 and Chromium 80) |
+| Electron Builder | v22.3.2 | February 2020 |     |
 
 - **Node**: likely any version of node (v10 or above) should work, but I recommend to use the same one _Electron_ does (`12.8.1`).
 - **Angular CLI**: you'll need to install the [Angular CLI](https://cli.angular.io) to run the project (`npm install -g @angular/cli`).
@@ -58,6 +58,7 @@ This software would not be possible without the tremendous work by other people:
  - [@ffmpeg-installer/ffmpeg](https://www.npmjs.com/package/@ffmpeg-installer/ffmpeg)
  - [@ffprobe-installer/ffprobe](https://www.npmjs.com/package/@ffprobe-installer/ffprobe)
  - [ngx-translate](https://github.com/ngx-translate/core)
+ - [trash](https://github.com/sindresorhus/trash)
  - [Fuse.js](https://github.com/krisk/Fuse)
 
 Since becoming open source, this software was made better with the awesome contributions by [cal2195](https://github.com/cal2195)

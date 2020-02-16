@@ -135,6 +135,8 @@
 .tag-type-ahead-on-home {
   color: $pretty-blue;
   display: block;
+  font-size: 15px;
+  pointer-events: none;
   position: absolute;
   transform: translate(20px, -28px);
   z-index: -1;
