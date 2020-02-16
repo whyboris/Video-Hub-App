@@ -1101,7 +1101,6 @@ ipc.on('app-to-touchBar', (event, changesFromApp) => {
 
 import { allSupportedViews, SupportedView } from './interfaces/shared-interfaces';
 import { randomizeArray } from './utility';
-import { async } from 'rxjs/internal/scheduler/async';
 
 const nativeImage = require('electron').nativeImage;
 const resourcePath = serve ? path.join(__dirname, 'src/assets/icons/mac/touch-bar/') : path.join(process.resourcesPath, 'assets/');
