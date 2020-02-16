@@ -515,10 +515,17 @@ ipc.on('please-create-playlist', function (event, playlist: ImageElement[]) {
  */
 ipc.on('delete-video-file', function (event, item: ImageElement): void {
   const fileToDelete = path.join(globals.selectedSourceFolder, item.partialPath, item.fileName);
-  console.log('Deleting !!!');
-  console.log(fileToDelete);
+
   (async () => {
     await trash(fileToDelete);
+
+    // check if file exists
+    fs.access(fileToDelete, fs.F_OK, (err: any) => {
+      if (err) {
+        event.sender.send('file-deleted', item);
+      }
+    });
+
   })();
 });
 

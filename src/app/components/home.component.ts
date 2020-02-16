@@ -286,6 +286,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   folderNotConnectedErrorShowing: boolean = false;
 
+  deletePipeHack: boolean = false; // to force deletePipe to update
+
   // ========================================================================
   // Please add new variables below if they don't fit into any other section
   // ------------------------------------------------------------------------
@@ -733,6 +735,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // This happens when the computer is about to SHUT DOWN
     this.electronService.ipcRenderer.on('pleaseShutDownASAP', (event) => {
       this.initiateClose();
+    });
+
+    // gets called if `trash` successfully removed the file
+    this.electronService.ipcRenderer.on('file-deleted', (event, element: ImageElement) => {
+      // spot check it's the same element
+      // just in case the message comes back after user has switched to view another hub
+      if (element.fileName === this.finalArray[element.index].fileName) {
+        this.finalArray[element.index].deleted = true;
+        this.deletePipeHack = !this.deletePipeHack;
+        this.finalArrayNeedsSaving = true;
+        this.cd.detectChanges();
+      }
     });
 
     this.justStarted();
@@ -1858,8 +1872,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Deletes a file (moves to recycling bin / trash)
    */
   deleteThisFile(item: ImageElement): void {
-    console.log('DELETING !!!');
-    console.log(item);
     this.electronService.ipcRenderer.send('delete-video-file', item);
   }
 
