@@ -12,6 +12,7 @@ main-filenames.js
 main-globals.js
 main-rescan.js
 main-support.js
+utility.js
 src/**/*.js
 *.js.map
 
