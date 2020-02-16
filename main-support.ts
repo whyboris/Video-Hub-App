@@ -115,8 +115,9 @@ export function insertTemporaryFields(imagesArray: ImageElement[]): ImageElement
 function getFileSizeDisplay(sizeInBytes: number): string {
   if (sizeInBytes) {
     const rounded = Math.round(sizeInBytes / 1000000);
-    // tslint:disable-next-line:max-line-length
-    return (rounded > 999 ? Math.round(rounded / 100) / 10 + 'gb' : rounded + 'mb');
+    return (rounded > 999
+              ? Math.round(rounded / 100) / 10 + 'gb'
+              : rounded + 'mb');
   } else {
     return '';
   }
@@ -170,6 +171,8 @@ export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: stri
   }
 
   finalObject.images = stripOutTemporaryFields(finalObject.images);
+
+  finalObject.images = finalObject.images.filter(element => !element.deleted);
 
   const json = JSON.stringify(finalObject);
 
