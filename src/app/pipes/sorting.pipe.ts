@@ -34,7 +34,12 @@ export class SortingPipe implements PipeTransform {
    * @param property
    * @param decreasing -- boolean to tell whether `ascending` or `descending`
    */
-  sortFunctionLol(x: ImageElement, y: ImageElement, property: string, decreasing: boolean): number {
+  sortFunctionLol(
+    x: ImageElement,
+    y: ImageElement,
+    property: string,
+    decreasing: boolean
+  ): number {
     // up button first
     if (x.fileName === '*UP*') {
       return -1;
@@ -97,7 +102,12 @@ export class SortingPipe implements PipeTransform {
    * @param forceSortUpdateHack - hack to force the sorting update
    * @param skip                - whether to sort or return as is (needed for DUPLICATE SEARCH)
    */
-  transform(galleryArray: ImageElement[], sortingType: SortType, forceSortUpdateHack: number, skip: boolean): ImageElement[] {
+  transform(
+    galleryArray: ImageElement[],
+    sortingType: SortType,
+    forceSortUpdateHack: number,
+    skip: boolean
+  ): ImageElement[] {
 
     // console.log('SORTING RUNNING');
     // console.log(sortingType);

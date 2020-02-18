@@ -1044,27 +1044,27 @@
 
                 | returnZeroPipe: (appState.currentView === 'showClips' && currentScreenshotSettings.clipSnippets === 0)
 
-                | fileSearchPipe: filters[0].array : filters[0].bool : true  : 0 : false
+                | fileSearchPipe: filters[0].array : filters[0].bool : true  : 'folder' : false
 
-                | fileSearchPipe: filters[1].array : filters[1].bool : false : 0 : false
+                | fileSearchPipe: filters[1].array : filters[1].bool : false : 'folder' : false
 
-                | fileSearchPipe: filters[2].array : filters[2].bool : true  : 1 : false
+                | fileSearchPipe: filters[2].array : filters[2].bool : true  : 'file' : false
 
-                | fileSearchPipe: filters[3].array : filters[3].bool : false : 1 : false
+                | fileSearchPipe: filters[3].array : filters[3].bool : false : 'file' : false
 
-                | fileSearchPipe: filters[4].array : filters[4].bool : true  : 1 : true
+                | fileSearchPipe: filters[4].array : filters[4].bool : true  : 'file' : true
 
-                | fileSearchPipe: filters[5].array : filters[5].bool : true  : 2 : false
+                | fileSearchPipe: filters[5].array : filters[5].bool : true  : 'tag' : false
                                   : settingsButtons['manualTags'].toggled
                                   : settingsButtons['autoFileTags'].toggled
                                   : settingsButtons['autoFolderTags'].toggled
 
-                | fileSearchPipe: filters[6].array : filters[6].bool : false : 2 : false
+                | fileSearchPipe: filters[6].array : filters[6].bool : false : 'tag' : false
                                   : settingsButtons['manualTags'].toggled
                                   : settingsButtons['autoFileTags'].toggled
                                   : settingsButtons['autoFolderTags'].toggled
 
-                | fileSearchPipe: filters[7].array : filters[7].bool : true  : 2 : true
+                | fileSearchPipe: filters[7].array : filters[7].bool : true  : 'tag' : true
                                   : settingsButtons['manualTags'].toggled
                                   : settingsButtons['autoFileTags'].toggled
                                   : settingsButtons['autoFolderTags'].toggled

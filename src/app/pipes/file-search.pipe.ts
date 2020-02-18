@@ -2,6 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { ImageElement } from '../../../interfaces/final-object.interface';
 
+type SearchType = 'folder' | 'file' | 'tag';
+
 @Pipe({
   name: 'fileSearchPipe'
 })
@@ -13,15 +15,18 @@ export class FileSearchPipe implements PipeTransform {
    * @param arrOfStrings    {string}  the search string array
    * @param renderHack      {boolean} that is flipped just to trigger an pipe update
    * @param union           {boolean} whether it's a union or intersection
-   * @param searchType      {number} type of search (0: folder, 1: file, 2: tag)
+   * @param searchType      {SearchType}
    * @param exclude         {boolean} whether excluding results that contain the word
+   * @param manualTags      {boolean}
+   * @param autoFileTags    {boolean}
+   * @param autoFolderTags  {boolean}
    */
   transform(
     finalArray: ImageElement[],
     arrOfStrings?: string[],
     renderHack?: boolean,
     union?: boolean,
-    searchType?: number,
+    searchType?: SearchType,
     exclude?: boolean,
     manualTags?: boolean,
     autoFileTags?: boolean,
@@ -46,11 +51,11 @@ export class FileSearchPipe implements PipeTransform {
         arrOfStrings.forEach(element => {
           // search through the FILE or FOLDER array !!!
           let searchString = '';
-          if (searchType === 0) {
+          if (searchType === 'folder') {
             searchString = item.partialPath;
-          } else if (searchType === 1) {
+          } else if (searchType === 'file') {
             searchString = item.fileName;
-          } else if (searchType === 2) {
+          } else if (searchType === 'tag') {
             searchString = '';
             if (manualTags && item.tags) {
               searchString += item.tags.join(' ');

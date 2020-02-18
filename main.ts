@@ -157,7 +157,7 @@ try {
 
   // OPEN FILE ON MAC FROM FILE DOUBLE CLICK
   // THIS RUNS (ONLY) on MAC !!!
-  app.on('will-finish-launching', function () {
+  app.on('will-finish-launching', () => {
     app.on('open-file', (event, filePath: string) => {
       if (filePath) {
         userWantedToOpen = filePath;
@@ -394,7 +394,7 @@ const pathToAppData = app.getPath('appData');
 /**
  * Just started -- hello -- send over the settings or open wizard
  */
-ipc.on('just-started', function (event, someMessage) {
+ipc.on('just-started', (event) => {
   globals.angularApp = event;
   globals.winRef = win;
 
@@ -430,7 +430,7 @@ ipc.on('just-started', function (event, someMessage) {
 /**
  * Open a particular video file clicked inside Angular
  */
-ipc.on('openThisFile', function (event, fullFilePath) {
+ipc.on('openThisFile', (event, fullFilePath) => {
   shell.openItem(path.normalize(fullFilePath)); // normalize because on windows, the path sometimes is mixing `\` and `/`
 });
 
@@ -439,7 +439,7 @@ const spawn = require('child_process').spawn;
 /**
  * Open a particular video file clicked inside Angular
  */
-ipc.on('openThisFileWithFlags', function (event, executablePath, fullFilePath: string, argz: string[]) {
+ipc.on('openThisFileWithFlags', (event, executablePath, fullFilePath: string, argz: string[]) => {
   const allArgs: string[] = [];
   allArgs.push(path.normalize(fullFilePath));
   allArgs.push(...argz);
@@ -447,7 +447,7 @@ ipc.on('openThisFileWithFlags', function (event, executablePath, fullFilePath: s
   spawn(path.normalize(executablePath), allArgs);
 });
 
-ipc.on('select-default-video-player', function (event) {
+ipc.on('select-default-video-player', (event) => {
   console.log('asking for default video player');
   dialog.showOpenDialog(win, {
     title: systemMessages.selectDefaultPlayer,
@@ -470,21 +470,21 @@ ipc.on('select-default-video-player', function (event) {
 /**
  * Open the explorer to the relevant file
  */
-ipc.on('openInExplorer', function (event, fullPath: string) {
+ipc.on('openInExplorer', (event, fullPath: string) => {
   shell.showItemInFolder(fullPath);
 });
 
 /**
  * Open a URL in system's default browser
  */
-ipc.on('pleaseOpenUrl', function (event, urlToOpen: string): void {
+ipc.on('pleaseOpenUrl', (event, urlToOpen: string): void => {
   shell.openExternal(urlToOpen, {activate: true});
 });
 
 /**
  * Maximize the window
  */
-ipc.on('maximize-window', function (event, someMessage) {
+ipc.on('maximize-window', (event) => {
   if (BrowserWindow.getFocusedWindow()) {
     BrowserWindow.getFocusedWindow().maximize();
   }
@@ -496,7 +496,7 @@ ipc.on('maximize-window', function (event, someMessage) {
  * 2. save .pls file
  * 3. ask OS to open the .pls file
  */
-ipc.on('please-create-playlist', function (event, playlist: ImageElement[]) {
+ipc.on('please-create-playlist', (event, playlist: ImageElement[]) => {
 
   const cleanPlaylist: ImageElement[] = playlist.filter((element: ImageElement) => {
     return element.cleanName !== '*FOLDER*';
@@ -513,7 +513,7 @@ ipc.on('please-create-playlist', function (event, playlist: ImageElement[]) {
 /**
  * Delete file from computer (send to recycling bin / trash)
  */
-ipc.on('delete-video-file', function (event, item: ImageElement): void {
+ipc.on('delete-video-file', (event, item: ImageElement): void => {
   const fileToDelete = path.join(globals.selectedSourceFolder, item.partialPath, item.fileName);
 
   (async () => {
@@ -532,7 +532,7 @@ ipc.on('delete-video-file', function (event, item: ImageElement): void {
 /**
  * Method to replace thumbnail of a particular item
  */
-ipc.on('replace-thumbnail', function (event, pathToIncomingJpg: string, item: ImageElement) {
+ipc.on('replace-thumbnail', (event, pathToIncomingJpg: string, item: ImageElement) => {
   const fileToReplace: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName, 'thumbnails', item.hash + '.jpg');
 
 
@@ -554,7 +554,7 @@ ipc.on('replace-thumbnail', function (event, pathToIncomingJpg: string, item: Im
 /**
  * Un-Maximize the window
  */
-ipc.on('un-maximize-window', function (event, someMessage) {
+ipc.on('un-maximize-window', (event) => {
   if (BrowserWindow.getFocusedWindow()) {
     BrowserWindow.getFocusedWindow().unmaximize();
   }
@@ -563,7 +563,7 @@ ipc.on('un-maximize-window', function (event, someMessage) {
 /**
  * Minimize the window
  */
-ipc.on('minimize-window', function (event, someMessage) {
+ipc.on('minimize-window', (event) => {
   if (BrowserWindow.getFocusedWindow()) {
     BrowserWindow.getFocusedWindow().minimize();
   }
@@ -575,12 +575,12 @@ let preventSleepId: number;
 /**
  * Minimize the window
  */
-ipc.on('prevent-sleep', function (event, someMessage) {
+ipc.on('prevent-sleep', (event) => {
   console.log('preventing sleep lol!');
   preventSleepId = powerSaveBlocker.start('prevent-app-suspension');
 });
 
-ipc.on('allow-sleep', function (event, someMessage) {
+ipc.on('allow-sleep', (event) => {
   console.log('allowing sleep again');
   powerSaveBlocker.stop(preventSleepId);
 });
@@ -589,7 +589,7 @@ ipc.on('allow-sleep', function (event, someMessage) {
  * Summon system modal to choose INPUT directory
  * where all the videos are located
  */
-ipc.on('choose-input', function (event, someMessage) {
+ipc.on('choose-input', (event) => {
   dialog.showOpenDialog(win, {
     properties: ['openDirectory']
   }).then(result => {
@@ -607,7 +607,7 @@ ipc.on('choose-input', function (event, someMessage) {
  * Summon system modal to choose OUTPUT directory
  * where the final .vha file, vha-folder, and all screenshots will be saved
  */
-ipc.on('choose-output', function (event, someMessage) {
+ipc.on('choose-output', (event) => {
   dialog.showOpenDialog(win, {
     properties: ['openDirectory']
   }).then(result => {
@@ -624,7 +624,7 @@ ipc.on('choose-output', function (event, someMessage) {
 /**
  * Close the window / quit / exit the app
  */
-ipc.on('close-window', function (event, settingsToSave: SettingsObject, savableProperties: SavableProperties) {
+ipc.on('close-window', (event, settingsToSave: SettingsObject, savableProperties: SavableProperties) => {
 
   // save window size and position
   settingsToSave.windowSizeAndPosition = win.getBounds();
@@ -665,11 +665,11 @@ function tellElectronDarkModeChange(mode: string) {
 /**
  * Interrupt current import process
  */
-ipc.on('cancel-current-import', function (event): void {
+ipc.on('cancel-current-import', (event): void => {
   globals.cancelCurrentImport = true;
 });
 
-ipc.on('system-messages-updated', function (event, newSystemMessages): void {
+ipc.on('system-messages-updated', (event, newSystemMessages): void => {
   console.log('new translated system messages recieved !!!');
   systemMessages = newSystemMessages;
 });
@@ -677,7 +677,7 @@ ipc.on('system-messages-updated', function (event, newSystemMessages): void {
 /**
  * Start extracting the screenshots into a chosen output folder from a chosen input folder
  */
-ipc.on('start-the-import', function (event, options: ImportSettingsObject, videoFilesWithPaths: ImageElement[]) {
+ipc.on('start-the-import', (event, options: ImportSettingsObject, videoFilesWithPaths: ImageElement[]) => {
 
   const outDir: string = options.exportFolderPath;
 
@@ -745,7 +745,7 @@ ipc.on('start-the-import', function (event, options: ImportSettingsObject, video
  * send images object to App
  * send settings object to App
  */
-ipc.on('system-open-file-through-modal', function (event, somethingElse) {
+ipc.on('system-open-file-through-modal', (event, somethingElse) => {
   dialog.showOpenDialog(win, {
     title: systemMessages.selectPreviousHub,
     filters: [{
@@ -771,7 +771,7 @@ ipc.on('system-open-file-through-modal', function (event, somethingElse) {
 /**
  * Import this .vha file
  */
-ipc.on('load-this-vha-file', function (event, pathToVhaFile: string, savableProperties: SavableProperties) {
+ipc.on('load-this-vha-file', (event, pathToVhaFile: string, savableProperties: SavableProperties) => {
 
   if (savableProperties !== null) {
     lastSavedFinalObject.addTags = savableProperties.addTags;
@@ -791,7 +791,7 @@ ipc.on('load-this-vha-file', function (event, pathToVhaFile: string, savableProp
 
 });
 
-ipc.on('try-to-rename-this-file', function (event, sourceFolder: string, relPath: string, file: string, renameTo: string): void {
+ipc.on('try-to-rename-this-file', (event, sourceFolder: string, relPath: string, file: string, renameTo: string): void => {
   console.log('renaming file:');
 
   const original: string = path.join(sourceFolder, relPath, file);
@@ -900,7 +900,7 @@ function sendFinalResultHome(theFinalArray: ImageElement[]): void {
  * Now receives the finalArray from `home.component`
  * because the user may have renamed files from within the app!
  */
-ipc.on('only-import-new-files', function (event, currentAngularFinalArray: ImageElement[]) {
+ipc.on('only-import-new-files', (event, currentAngularFinalArray: ImageElement[]) => {
   const currentVideoFolder = globals.selectedSourceFolder;
   globals.cancelCurrentImport = false;
   importOnlyNewFiles(currentAngularFinalArray, currentVideoFolder);
@@ -913,7 +913,7 @@ ipc.on('only-import-new-files', function (event, currentAngularFinalArray: Image
  * Now receives the finalArray from `home.component`
  * because the user may have renamed files from within the app!
  */
-ipc.on('rescan-current-directory', function (event, currentAngularFinalArray: ImageElement[]) {
+ipc.on('rescan-current-directory', (event, currentAngularFinalArray: ImageElement[]) => {
   const currentVideoFolder = globals.selectedSourceFolder;
   globals.cancelCurrentImport = false;
   reScanCurrentDirectory(currentAngularFinalArray, currentVideoFolder);
@@ -923,7 +923,7 @@ ipc.on('rescan-current-directory', function (event, currentAngularFinalArray: Im
  * Initiate verifying all files have thumbnails
  * Excellent for continuing the screenshot import if it was ever cancelled
  */
-ipc.on('verify-thumbnails', function (event) {
+ipc.on('verify-thumbnails', (event) => {
   globals.cancelCurrentImport = false;
   verifyThumbnails();
 });
@@ -1030,7 +1030,7 @@ function importOnlyNewFiles(angularFinalArray: ImageElement[], currentVideoFolde
 /**
  * Initiate regenerating the library
  */
-ipc.on('regenerate-library', function (event, currentAngularFinalArray: ImageElement[]) {
+ipc.on('regenerate-library', (event, currentAngularFinalArray: ImageElement[]) => {
   const currentVideoFolder = globals.selectedSourceFolder;
   globals.cancelCurrentImport = false;
   regenerateMetadata(currentAngularFinalArray, currentVideoFolder);
