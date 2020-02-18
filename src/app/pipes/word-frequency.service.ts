@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 
 import { autoFileTagsRegex } from '../components/tags-auto/autotags.service';
 
-interface WordFreqAndHeight {
+export interface WordFreqAndHeight {
   word: string;
   freq: number;
   height?: number;
