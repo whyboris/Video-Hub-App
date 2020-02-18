@@ -394,7 +394,7 @@ const pathToAppData = app.getPath('appData');
 /**
  * Just started -- hello -- send over the settings or open wizard
  */
-ipc.on('just-started', (event, someMessage) => {
+ipc.on('just-started', (event) => {
   globals.angularApp = event;
   globals.winRef = win;
 
@@ -484,7 +484,7 @@ ipc.on('pleaseOpenUrl', (event, urlToOpen: string): void => {
 /**
  * Maximize the window
  */
-ipc.on('maximize-window', (event, someMessage) => {
+ipc.on('maximize-window', (event) => {
   if (BrowserWindow.getFocusedWindow()) {
     BrowserWindow.getFocusedWindow().maximize();
   }
@@ -554,7 +554,7 @@ ipc.on('replace-thumbnail', (event, pathToIncomingJpg: string, item: ImageElemen
 /**
  * Un-Maximize the window
  */
-ipc.on('un-maximize-window', (event, someMessage) => {
+ipc.on('un-maximize-window', (event) => {
   if (BrowserWindow.getFocusedWindow()) {
     BrowserWindow.getFocusedWindow().unmaximize();
   }
@@ -563,7 +563,7 @@ ipc.on('un-maximize-window', (event, someMessage) => {
 /**
  * Minimize the window
  */
-ipc.on('minimize-window', (event, someMessage) => {
+ipc.on('minimize-window', (event) => {
   if (BrowserWindow.getFocusedWindow()) {
     BrowserWindow.getFocusedWindow().minimize();
   }
@@ -575,12 +575,12 @@ let preventSleepId: number;
 /**
  * Minimize the window
  */
-ipc.on('prevent-sleep', (event, someMessage) => {
+ipc.on('prevent-sleep', (event) => {
   console.log('preventing sleep lol!');
   preventSleepId = powerSaveBlocker.start('prevent-app-suspension');
 });
 
-ipc.on('allow-sleep', (event, someMessage) => {
+ipc.on('allow-sleep', (event) => {
   console.log('allowing sleep again');
   powerSaveBlocker.stop(preventSleepId);
 });
@@ -589,7 +589,7 @@ ipc.on('allow-sleep', (event, someMessage) => {
  * Summon system modal to choose INPUT directory
  * where all the videos are located
  */
-ipc.on('choose-input', (event, someMessage) => {
+ipc.on('choose-input', (event) => {
   dialog.showOpenDialog(win, {
     properties: ['openDirectory']
   }).then(result => {
@@ -607,7 +607,7 @@ ipc.on('choose-input', (event, someMessage) => {
  * Summon system modal to choose OUTPUT directory
  * where the final .vha file, vha-folder, and all screenshots will be saved
  */
-ipc.on('choose-output', (event, someMessage) => {
+ipc.on('choose-output', (event) => {
   dialog.showOpenDialog(win, {
     properties: ['openDirectory']
   }).then(result => {
