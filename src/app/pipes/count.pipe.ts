@@ -17,7 +17,7 @@ export class CountPipe implements PipeTransform {
    * Return only items that match search string
    * @param finalArray
    */
-  transform(finalArray: ImageElement[]): any {
+  transform(finalArray: ImageElement[]): ImageElement[] {
 
     this.pipeSideEffectService.showResults(finalArray.length);
 

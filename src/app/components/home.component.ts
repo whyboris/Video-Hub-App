@@ -12,7 +12,7 @@ import { ManualTagsService } from './tags-manual/manual-tags.service';
 import { ResolutionFilterService, ResolutionString } from '../pipes/resolution-filter.service';
 import { PipeSideEffectService } from '../pipes/pipe-side-effect.service';
 import { StarFilterService } from '../pipes/star-filter.service';
-import { WordFrequencyService } from '../pipes/word-frequency.service';
+import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency.service';
 
 // Interfaces
 import { DefaultScreenEmission } from './sheet/sheet.component';
@@ -263,7 +263,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   magicSearchString = '';
   fuzzySearchString = '';
 
-  wordFreqArr: any;
+  wordFreqArr: WordFreqAndHeight[];
   currResults: number;
 
   findMostSimilar: string; // for finding similar files to this one
@@ -496,7 +496,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.cloneDefaultButtonSetting();
 
     setTimeout(() => {
-      this.wordFrequencyService.finalMapBehaviorSubject.subscribe((value) => {
+      this.wordFrequencyService.finalMapBehaviorSubject.subscribe((value: WordFreqAndHeight[]) => {
         this.wordFreqArr = value;
         // this.cd.detectChanges();
       });
