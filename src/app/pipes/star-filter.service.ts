@@ -11,7 +11,7 @@ export class StarFilterService {
   /**
    * Reset the map to empty
    */
-  public resetMap() {
+  public resetMap(): void {
     this.frequencyMap = new Map();
     this.frequencyMap.set(0.5, 0);
     this.frequencyMap.set(1.5, 0);

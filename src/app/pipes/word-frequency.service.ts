@@ -14,14 +14,14 @@ interface WordFreqAndHeight {
 export class WordFrequencyService {
 
   wordMap: Map<string, number> = new Map();
-  finalMapBehaviorSubject = new BehaviorSubject([]);
+  finalMapBehaviorSubject: BehaviorSubject<WordFreqAndHeight[]> = new BehaviorSubject([]);
 
   constructor() { }
 
   /**
    * Reset the map to empty
    */
-  public resetMap() {
+  public resetMap(): void {
     this.wordMap = new Map();
   }
 
@@ -69,7 +69,7 @@ export class WordFrequencyService {
    * remove it from the map,
    * and return it with its frequency as an object
    */
-  private getMostFrequent(total: number) {
+  private getMostFrequent(total: number): WordFreqAndHeight {
     let currLargestFreq = 0;
     let currLargestWord = '';
 
