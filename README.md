@@ -60,5 +60,6 @@ This software would not be possible without the tremendous work by other people:
  - [ngx-translate](https://github.com/ngx-translate/core)
  - [trash](https://github.com/sindresorhus/trash)
  - [Fuse.js](https://github.com/krisk/Fuse)
+ - [osx-tag](https://github.com/keichi/osx-tag)
 
 Since becoming open source, this software was made better with the awesome contributions by [cal2195](https://github.com/cal2195)
