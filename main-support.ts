@@ -4,7 +4,13 @@
  * There should be no side-effects of running any of them
  * They should depend only on their inputs and behave exactly
  * the same way each time they run no matter the outside state
+ *
+ * !!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!
+ * DANGEROUSLY DEPENDS ON `codeRunningOnMac` when extracting metadata
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
+
+const codeRunningOnMac: boolean = process.platform === 'darwin'; // <---- MAKES MANY FUNCTIONS NOT PURE !!!!
 
 import * as path from 'path';
 
@@ -13,6 +19,8 @@ const fs = require('fs');
 const hasher = require('crypto').createHash;
 
 const exec = require('child_process').exec;
+
+const tag = require('osx-tag');
 
 const ffprobePath = require('@ffprobe-installer/ffprobe').path.replace('app.asar', 'app.asar.unpacked');
 
@@ -489,7 +497,24 @@ function extractMetadataForThisONEFile(
       imageElement.width = origWidth;
       imageElement.screens = computeNumberOfScreenshots(screenshotSettings, duration);
 
-      extractMetaCallback(imageElement);
+      // !!!! WARNING !!!!!! NOT A PURE FUNCTION ANY MORE !!!!!!!!!!!!!!!
+      if (codeRunningOnMac) {
+        tag.getTags(filePath, (tagErr: any, tags: string[]) => {
+          if (tagErr) {
+            console.log('tags error!!!');
+            extractMetaCallback(imageElement);
+          }
+          console.log('tags found:');
+          console.log(tags);
+          if (tags.length) {
+            imageElement.tags = tags;
+          }
+          extractMetaCallback(imageElement);
+        });
+      } else {
+        extractMetaCallback(imageElement);
+      }
+
     }
   });
 }
