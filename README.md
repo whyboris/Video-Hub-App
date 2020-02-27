@@ -40,10 +40,10 @@ Main dependencies in use:
 | -------     | ------- | ----        | ------- |
 | Angular     | v9.0.1  | February 2020 |         |
 | Angular-CLI | v9.0.2  | February 2020 |         |
-| Electron    | v8.0.0  | February 2020 | (internally uses Node v12.13.0 and Chromium 80) |
+| Electron    | v8.0.1  | February 2020 | (internally uses Node v12.13.0 and Chromium 80) |
 | Electron Builder | v22.3.2 | February 2020 |     |
 
-- **Node**: likely any version of node (v10 or above) should work, but I recommend to use the same one _Electron_ does (`12.8.1`).
+- **Node**: likely any version of node (v10 or above) should work, but I recommend to use the same version as _Electron_ uses internally.
 - **Angular CLI**: you'll need to install the [Angular CLI](https://cli.angular.io) to run the project (`npm install -g @angular/cli`).
 
 ## Thank you
@@ -54,7 +54,7 @@ This software would not be possible without the tremendous work by other people:
  - [Electron](https://github.com/electron/electron)
  - [FFmpeg](https://www.ffmpeg.org/)
  - [angular-electron](https://github.com/maximegris/angular-electron)
- - [angular2-virtual-scroll](https://www.npmjs.com/package/angular2-virtual-scroll)
+ - [ngx-virtual-scroller](https://github.com/rintoj/ngx-virtual-scroller)
  - [@ffmpeg-installer/ffmpeg](https://www.npmjs.com/package/@ffmpeg-installer/ffmpeg)
  - [@ffprobe-installer/ffprobe](https://www.npmjs.com/package/@ffprobe-installer/ffprobe)
  - [ngx-translate](https://github.com/ngx-translate/core)
