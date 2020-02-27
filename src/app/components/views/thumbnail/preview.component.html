@@ -25,7 +25,7 @@
         }"
       ></div>
 
-      <span *ngIf="showMeta" class="time folder-time">{{ video.duration | lengthPipe : true : true : true }}</span>
+      <span *ngIf="showMeta" class="time folder-time">{{ video.duration | lengthPipe : 'folder' }}</span>
     </div>
 
     <div *ngIf="video.cleanName === '*FOLDER*' && video.fileName !== '*UP*'" class="folder-icon">

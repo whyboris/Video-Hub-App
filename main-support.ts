@@ -109,15 +109,16 @@ export function insertTemporaryFields(imagesArray: ImageElement[]): ImageElement
 }
 
 /**
- * Generate the file size formatted as XXXmb or X.Xgb
+ * Generate the file size formatted as ### MB or #.# GB
+ * THIS CODE DUPLICATES THE CODE IN `file-size.pipe.ts`
  * @param fileSize
  */
 function getFileSizeDisplay(sizeInBytes: number): string {
   if (sizeInBytes) {
     const rounded = Math.round(sizeInBytes / 1000000);
     return (rounded > 999
-              ? Math.round(rounded / 100) / 10 + 'gb'
-              : rounded + 'mb');
+              ? (rounded / 1000).toFixed(1) + ' GB'
+              : rounded + ' MB');
   } else {
     return '';
   }

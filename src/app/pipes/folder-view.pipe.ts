@@ -189,7 +189,7 @@ export class FolderViewPipe implements PipeTransform {
           folderWithStuff.duration        = folderProperties.duration,
           folderWithStuff.fileName        = key.replace('/', ''),
           folderWithStuff.fileSize        = folderProperties.byteSize,
-          folderWithStuff.fileSizeDisplay = value.length.toString(),
+          folderWithStuff.fileSizeDisplay = value.length.toString(), // indicates the number of files in the folder!
           folderWithStuff.hash            = this.extractFourPreviewHashes(value),
           folderWithStuff.index           = -1, // always show at the top (but after the `UP` folder) in the default view
           folderWithStuff.mtime           = folderProperties.mtime,
