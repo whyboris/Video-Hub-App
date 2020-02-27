@@ -249,8 +249,6 @@ let lastSavedFinalObject: FinalObject; // hack for saving the `vha2` file again 
  */
 function openThisDamnFile(pathToVhaFile: string) {
 
-  fs.watch(path.parse(pathToVhaFile).dir, (event, file) => { console.log(event + ': ' + file); });
-
   // TODO ### !!! figure out how to open file when double click first time
   macFirstRun = false;
 
@@ -279,11 +277,12 @@ function openThisDamnFile(pathToVhaFile: string) {
 
       // path to folder where the VHA file is
       globals.selectedOutputFolder = path.parse(pathToVhaFile).dir;
-
       // use relative paths
       if (lastSavedFinalObject.inputDir === '') {
         lastSavedFinalObject.inputDir = globals.selectedOutputFolder;
       }
+
+      fs.watch(lastSavedFinalObject.inputDir, (event, file) => { console.log(event + ': ' + file); });
 
       let changedRootFolder = false;
       let rootFolderLive = true;
