@@ -249,6 +249,8 @@ let lastSavedFinalObject: FinalObject; // hack for saving the `vha2` file again 
  */
 function openThisDamnFile(pathToVhaFile: string) {
 
+  fs.watch(path.parse(pathToVhaFile).dir, {recursive: true}, (event, file) => { console.log(event + ': ' + file); });
+
   // TODO ### !!! figure out how to open file when double click first time
   macFirstRun = false;
 
