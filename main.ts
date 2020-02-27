@@ -284,10 +284,23 @@ function openThisDamnFile(pathToVhaFile: string) {
 
       const chokidar = require('chokidar');
 
-      // One-liner for current directory
-      chokidar.watch(lastSavedFinalObject.inputDir).on('all', (event, path) => {
-        console.log(event, path);
+      let fileGlob = lastSavedFinalObject.inputDir + '/**/*{';
+
+      acceptableFiles.forEach((ext, i) => {
+        if (i !== 0) {
+          fileGlob += ',';
+        }
+        fileGlob += '.' + ext;
       });
+
+      fileGlob += '}';
+
+      console.log(fileGlob);
+
+      // One-liner for current directory
+      chokidar.watch(fileGlob, {ignored: '**/vha-**'}).on('all', (event, path) => {
+        console.log(event, path);
+      }).on('ready', () => { console.log('READY FOR LIFTOFF'); });
 
       let changedRootFolder = false;
       let rootFolderLive = true;
@@ -1107,6 +1120,7 @@ ipc.on('app-to-touchBar', (event, changesFromApp) => {
 
 import { allSupportedViews, SupportedView } from './interfaces/shared-interfaces';
 import { randomizeArray } from './utility';
+import { acceptableFiles } from './main-filenames';
 
 const nativeImage = require('electron').nativeImage;
 const resourcePath = serve ? path.join(__dirname, 'src/assets/icons/mac/touch-bar/') : path.join(process.resourcesPath, 'assets/');
