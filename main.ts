@@ -282,7 +282,12 @@ function openThisDamnFile(pathToVhaFile: string) {
         lastSavedFinalObject.inputDir = globals.selectedOutputFolder;
       }
 
-      fs.watch(lastSavedFinalObject.inputDir, (event, file) => { console.log(event + ': ' + file); });
+      const chokidar = require('chokidar');
+
+      // One-liner for current directory
+      chokidar.watch(lastSavedFinalObject.inputDir).on('all', (event, path) => {
+        console.log(event, path);
+      });
 
       let changedRootFolder = false;
       let rootFolderLive = true;
