@@ -21,7 +21,7 @@ export class ManualTagSortPipe implements PipeTransform {
   transform(allTags: string[], filterString: string, sortByFrequency: boolean, forceUpdateHack: boolean): string[] {
 
     if (filterString !== '') {
-      allTags = allTags.filter(tag => tag.includes(filterString));
+      allTags = allTags.filter(tag => (tag.toLowerCase()).includes(filterString.toLowerCase()));
     }
 
     let sortedTags: string[];

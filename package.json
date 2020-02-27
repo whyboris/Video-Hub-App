@@ -43,7 +43,7 @@
     "@ffprobe-installer/ffprobe": "1.0.12",
     "@ngx-translate/core": "12.1.1",
     "fuse.js": "3.4.6",
-    "ngx-virtual-scroller": "3.0.2",
+    "ngx-virtual-scroller": "4.0.2",
     "osx-tag": "0.4.1",
     "trash": "6.1.1"
   },
