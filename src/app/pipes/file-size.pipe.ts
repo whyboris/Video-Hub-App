@@ -6,7 +6,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class FileSizePipe implements PipeTransform {
 
   /**
-   * Return size of file formatted as XXX{MB,GB}
+   * Return size of file formatted as ### MB or ### GB
    * @param sizeInBytes -- file size in bytes
    * @param excludeParen - whether (2.3GB) or 2.3GB
    */

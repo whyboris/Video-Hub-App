@@ -109,7 +109,7 @@ export function insertTemporaryFields(imagesArray: ImageElement[]): ImageElement
 }
 
 /**
- * Generate the file size formatted as XXXmb or X.Xgb
+ * Generate the file size formatted as ### MB or #.# GB
  * THIS CODE DUPLICATES THE CODE IN `file-size.pipe.ts`
  * @param fileSize
  */
