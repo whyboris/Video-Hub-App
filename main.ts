@@ -284,7 +284,7 @@ function openThisDamnFile(pathToVhaFile: string) {
 
       const chokidar = require('chokidar');
 
-      let fileGlob = lastSavedFinalObject.inputDir + '/**/*{';
+      let fileGlob = '**/*{';
 
       acceptableFiles.forEach((ext, i) => {
         if (i !== 0) {
@@ -298,7 +298,7 @@ function openThisDamnFile(pathToVhaFile: string) {
       console.log(fileGlob);
 
       // One-liner for current directory
-      chokidar.watch(fileGlob, {ignored: '**/vha-**'}).on('all', (event, path) => {
+      chokidar.watch(fileGlob, {ignored: '**/vha-**', cwd: lastSavedFinalObject.inputDir}).on('all', (event, path) => {
         console.log(event, path);
       }).on('ready', () => { console.log('READY FOR LIFTOFF'); });
 
