@@ -6,14 +6,21 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class FileSizePipe implements PipeTransform {
 
   /**
-   * Return size of file formatted as XXX{mb,gb}
+   * Return size of file formatted as XXX{MB,GB}
    * @param sizeInBytes -- file size in bytes
+   * @param excludeParen - whether (2.3GB) or 2.3GB
    */
-  transform(sizeInBytes: number, excludeParen: boolean): string {
+  transform(sizeInBytes: number, excludeParen?: boolean): string {
     if (sizeInBytes) {
       const rounded = Math.round(sizeInBytes / 1000000);
-      // tslint:disable-next-line:max-line-length
-      return (excludeParen ? '' : '(') + (rounded > 999 ? Math.round(rounded / 100) / 10 + 'gb' : rounded + 'mb') + (excludeParen ? '' : ')');
+
+      return (excludeParen ? '' : '(')
+           + (
+              rounded > 999
+                ? (rounded / 1000).toFixed(1) + ' GB'
+                : rounded                     + ' MB'
+              )
+           + (excludeParen ? '' : ')');
     } else {
       return '';
     }
