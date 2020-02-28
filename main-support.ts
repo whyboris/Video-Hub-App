@@ -242,9 +242,9 @@ function stripOutTemporaryFields(imagesArray: ImageElement[]): ImageElement[] {
 /**
  * Clean up the displayed file name
  * (1) remove extension
- * (2) replace underscores with spaces
- * (3) replace periods with spaces
- * (4) tripple & double spaces become single spaces
+ * (2) replace underscores with spaces                "_"   => " "
+ * (3) replace periods with spaces                    "."   => " "
+ * (4) tripple & double spaces become single spaces   "   " => " "
  * @param original {string}
  * @return {string}
  */
