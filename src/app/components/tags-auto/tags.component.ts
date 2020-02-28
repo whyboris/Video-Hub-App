@@ -38,7 +38,7 @@ export class TagsComponent implements OnInit, OnDestroy {
   statusMessage: string = '';
   showingStatusMessage: boolean = false;
 
-  minimumFrequency: number = 4;
+  minimumFrequency: number = 0;
 
   constructor(
     public tagsService: AutoTagsService,
