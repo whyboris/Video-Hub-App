@@ -231,7 +231,8 @@ import {
   insertTemporaryFields,
   missingThumbsIndex,
   sendCurrentProgress,
-  writeVhaFileToDisk
+  writeVhaFileToDisk,
+  startFileSystemWatching
 } from './main-support';
 
 import { extractFromTheseFiles, replaceThumbnailWithNewImage } from './main-extract';
@@ -282,25 +283,7 @@ function openThisDamnFile(pathToVhaFile: string) {
         lastSavedFinalObject.inputDir = globals.selectedOutputFolder;
       }
 
-      const chokidar = require('chokidar');
-
-      let fileGlob = '**/*{';
-
-      acceptableFiles.forEach((ext, i) => {
-        if (i !== 0) {
-          fileGlob += ',';
-        }
-        fileGlob += '.' + ext;
-      });
-
-      fileGlob += '}';
-
-      console.log(fileGlob);
-
-      // One-liner for current directory
-      chokidar.watch(fileGlob, {ignored: '**/vha-**', cwd: lastSavedFinalObject.inputDir}).on('all', (event, path) => {
-        console.log(event, path);
-      }).on('ready', () => { console.log('READY FOR LIFTOFF'); });
+      startFileSystemWatching(lastSavedFinalObject.inputDir, lastSavedFinalObject.images);
 
       let changedRootFolder = false;
       let rootFolderLive = true;

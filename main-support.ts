@@ -549,6 +549,49 @@ export function hashFile(pathToFile: string): string {
 }
 
 /**
+ * Hash a given file using its size
+ * @param pathToFile  -- path to file
+ */
+export function hashFileAsync(pathToFile: string): Promise<string> {
+  const sampleSize = 16 * 1024;
+  const sampleThreshold = 128 * 1024;
+  const stats = fs.statSync(pathToFile);
+  const fileSize = stats.size;
+
+  let data: Buffer;
+
+  return new Promise((resolve, reject) => {
+    if (fileSize < sampleThreshold) {
+      data = fs.readFile(pathToFile, (err, data) => {
+        if (err) { throw err; }
+        // append the file size to the data
+        const buf = Buffer.concat([data, Buffer.from(fileSize.toString())]);
+        // make the magic happen!
+        const hash = hasher('md5').update(buf.toString('hex')).digest('hex');
+        resolve(hash);
+      }); // too small, just read the whole file
+    } else {
+      data = Buffer.alloc(sampleSize * 3);
+      fs.open(pathToFile, 'r', (err, fd) => {
+        fs.read(fd, data, 0, sampleSize, 0, (err, bytesRead, buffer) => { // read beginning of file
+          fs.read(fd, data, sampleSize, sampleSize, fileSize / 2, (err, bytesRead, buffer) => {
+            fs.read(fd, data, sampleSize * 2, sampleSize, fileSize - sampleSize, (err, bytesRead, buffer) => {
+              fs.close(fd, (err) => {
+                // append the file size to the data
+                const buf = Buffer.concat([data, Buffer.from(fileSize.toString())]);
+                // make the magic happen!
+                const hash = hasher('md5').update(buf.toString('hex')).digest('hex');
+                resolve(hash);
+              });
+            });
+          });
+        });
+      });
+    }
+  });
+}
+
+/**
  * Sends progress to Angular App
  * @param current number
  * @param total number
@@ -561,4 +604,51 @@ export function sendCurrentProgress(current: number, total: number, stage: Impor
   } else {
     globals.winRef.setProgressBar(-1);
   }
+}
+
+const chokidar = require('chokidar');
+const async = require('async');
+
+const metadataQueue = async.queue(checkForMetadata, 1);
+
+let cachedFinalArray = [];
+
+export function checkForMetadata(file, callback) {
+  console.log('checking metadata for %s', file.fullPath);
+  let found = false;
+  hashFileAsync(file.fullPath).then((hash) => {
+    cachedFinalArray.forEach((element) => {
+      if (element.hash === hash) {
+        found = true;
+      }
+    });
+    console.log('found: %s', found);
+    callback();
+  });
+}
+
+export function startFileSystemWatching(inputDir: String, finalArray: ImageElement[]) {
+
+  cachedFinalArray = finalArray;
+
+  // File glob for only video files, not in vha-* folder
+  let fileGlob = '**/*{';
+
+  acceptableFiles.forEach((ext, i) => {
+    if (i !== 0) {
+      fileGlob += ',';
+    }
+    fileGlob += '.' + ext;
+  });
+
+  fileGlob += '}';
+
+  console.log(fileGlob);
+
+  // One-liner for current directory
+  chokidar.watch(fileGlob, {ignored: '**/vha-**', cwd: inputDir, alwaysStat: true}).on('add', (path, stat) => {
+    // console.log(path);
+    metadataQueue.push({path: path, fullPath: inputDir + '/' + path, stat: stat});
+  }).on('ready', () => { console.log('All files scanned. Watching for changes.'); });
+
 }

@@ -42,10 +42,11 @@
     "@ffmpeg-installer/ffmpeg": "1.0.20",
     "@ffprobe-installer/ffprobe": "1.0.12",
     "@ngx-translate/core": "12.1.1",
+    "async": "^3.2.0",
+    "chokidar": "3.3.1",
     "fuse.js": "3.4.6",
     "ngx-virtual-scroller": "3.0.2",
-    "trash": "6.1.1",
-    "chokidar": "3.3.1"
+    "trash": "6.1.1"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.900.2",
