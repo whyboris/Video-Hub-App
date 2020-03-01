@@ -925,9 +925,9 @@ ipc.on('rescan-current-directory', (event, currentAngularFinalArray: ImageElemen
  * Initiate verifying all files have thumbnails
  * Excellent for continuing the screenshot import if it was ever cancelled
  */
-ipc.on('verify-thumbnails', (event) => {
+ipc.on('verify-thumbnails', (event, finalArray) => {
   globals.cancelCurrentImport = false;
-  verifyThumbnails();
+  verifyThumbnails(finalArray);
 });
 
 // ===========================================================================================
@@ -937,18 +937,21 @@ ipc.on('verify-thumbnails', (event) => {
 /**
  * Scan for missing thumbnails and generate them
  */
-function verifyThumbnails() {
+function verifyThumbnails(finalArray: ImageElement[]) {
   // resume extracting any missing thumbnails
   const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
 
   const indexesToScan: number[] = missingThumbsIndex(
-    lastSavedFinalObject.images,
+    finalArray,
     screenshotOutputFolder,
     globals.screenshotSettings.clipSnippets > 0
   );
 
+  console.log(finalArray);
+  console.log(indexesToScan);
+
   extractFromTheseFiles(
-    lastSavedFinalObject.images,
+    finalArray,
     globals.selectedSourceFolder,
     screenshotOutputFolder,
     globals.screenshotSettings,
@@ -1099,7 +1102,6 @@ ipc.on('app-to-touchBar', (event, changesFromApp) => {
     }
   }
 });
-
 
 import { allSupportedViews, SupportedView } from './interfaces/shared-interfaces';
 import { randomizeArray } from './utility';

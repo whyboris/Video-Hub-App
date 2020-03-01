@@ -16,7 +16,7 @@ import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency
 
 // Interfaces
 import { DefaultScreenEmission } from './sheet/sheet.component';
-import { FinalObject, ImageElement, ScreenshotSettings } from '../../../interfaces/final-object.interface';
+import { FinalObject, ImageElement, ScreenshotSettings, NewImageElement } from '../../../interfaces/final-object.interface';
 import { HistoryItem } from '../../../interfaces/history-item.interface';
 import { ImportSettingsObject } from '../../../interfaces/import.interface';
 import { ImportStage } from '../../../main-support';
@@ -747,6 +747,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.finalArrayNeedsSaving = true;
         this.cd.detectChanges();
       }
+    });
+
+    this.electronService.ipcRenderer.on('newVideoMeta', (event, element: ImageElement) => {
+      element.index = this.finalArray.length;
+      this.finalArray.push(element);
+      console.log(element);
+      this.finalArray = this.finalArray.slice();
+      this.finalArrayNeedsSaving = true;
+      this.cd.detectChanges();
     });
 
     this.justStarted();
