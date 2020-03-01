@@ -702,6 +702,8 @@ export function checkForMetadata(file, callback) {
         imageElement.partialPath = file.partialPath;
         sendNewVideoMetadata(imageElement);
         callback();
+      }, () => {
+        callback(); // error, just continue
       });
   });
 }
