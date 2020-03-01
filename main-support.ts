@@ -21,6 +21,7 @@ import { globals } from './main-globals';
 import { FinalObject, ImageElement, NewImageElement, ScreenshotSettings } from './interfaces/final-object.interface';
 import { ResolutionString } from './src/app/pipes/resolution-filter.service';
 import { Stats } from 'fs';
+import { queueThumbExtraction } from './main-extract';
 
 interface ResolutionMeta {
   label: ResolutionString;
@@ -674,6 +675,11 @@ function sendNewVideoMetadata(imageElement: ImageElement) {
     'newVideoMeta',
     imageElement
   );
+  const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
+
+  if (!hasAllThumbs(imageElement.hash, screenshotOutputFolder, globals.screenshotSettings.clipSnippets > 0 )) {
+    queueThumbExtraction(imageElement);
+  }
 }
 
 export function checkForMetadata(file, callback) {

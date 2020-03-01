@@ -235,7 +235,7 @@ import {
   startFileSystemWatching
 } from './main-support';
 
-import { extractFromTheseFiles, replaceThumbnailWithNewImage } from './main-extract';
+import { replaceThumbnailWithNewImage } from './main-extract';
 
 import { FinalObject, ImageElement } from './interfaces/final-object.interface';
 import { ImportSettingsObject } from './interfaces/import.interface';
@@ -730,13 +730,17 @@ ipc.on('start-the-import', (event, options: ImportSettingsObject, videoFilesWith
       videoFilesWithPaths = videoFilesWithPaths.slice(0, 50);
     }
 
-    extractAllMetadata(
-      videoFilesWithPaths,
-      globals.selectedSourceFolder,
-      globals.screenshotSettings,
-      0,
-      sendFinalResultHome         // callback for when metdata is done extracting
-    );
+    // extractAllMetadata(
+    //   videoFilesWithPaths,
+    //   globals.selectedSourceFolder,
+    //   globals.screenshotSettings,
+    //   0,
+    //   sendFinalResultHome         // callback for when metdata is done extracting
+    // );
+
+    sendFinalResultHome([]);
+
+    startFileSystemWatching(globals.selectedSourceFolder, []);
 
   }
 
@@ -880,14 +884,14 @@ function sendFinalResultHome(theFinalArray: ImageElement[]): void {
       globals.screenshotSettings.clipSnippets > 0 // convert number to appropriate boolean
     );
 
-    extractFromTheseFiles(
-      myFinalArray,
-      globals.selectedSourceFolder,
-      screenshotOutputFolder,
-      globals.screenshotSettings,
-      indexesToScan,
-      false
-    );
+    // extractFromTheseFiles(
+    //   myFinalArray,
+    //   globals.selectedSourceFolder,
+    //   screenshotOutputFolder,
+    //   globals.screenshotSettings,
+    //   indexesToScan,
+    //   false
+    // );
 
   });
 }
@@ -950,14 +954,14 @@ function verifyThumbnails(finalArray: ImageElement[]) {
   console.log(finalArray);
   console.log(indexesToScan);
 
-  extractFromTheseFiles(
-    finalArray,
-    globals.selectedSourceFolder,
-    screenshotOutputFolder,
-    globals.screenshotSettings,
-    randomizeArray(indexesToScan), // extract screenshots in random order
-    true
-  );
+  // extractFromTheseFiles(
+  //   finalArray,
+  //   globals.selectedSourceFolder,
+  //   screenshotOutputFolder,
+  //   globals.screenshotSettings,
+  //   randomizeArray(indexesToScan), // extract screenshots in random order
+  //   true
+  // );
 }
 
 import {

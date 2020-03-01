@@ -871,7 +871,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public importFresh(): void {
     this.appState.selectedSourceFolder = this.wizard.selectedSourceFolder;
     this.appState.selectedOutputFolder = this.wizard.selectedOutputFolder;
-    this.importStage = 'importingMeta';
+    //this.importStage = 'importingMeta';
     const importOptions: ImportSettingsObject = {
       clipHeight: this.wizard.clipHeight,
       clipSnippetLength: this.wizard.clipSnippetLength,
