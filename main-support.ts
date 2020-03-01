@@ -665,7 +665,7 @@ export function sendCurrentProgress(current: number, total: number, stage: Impor
 const chokidar = require('chokidar');
 const async = require('async');
 
-const metadataQueue = async.queue(checkForMetadata, 1);
+const metadataQueue = async.queue(checkForMetadata, 8);
 
 let cachedFinalArray = [];
 
