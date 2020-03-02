@@ -712,29 +712,26 @@ export function startFileSystemWatching(inputDir: String, finalArray: ImageEleme
 
   cachedFinalArray = finalArray;
 
-  // File glob for only video files, not in vha-* folder
-  let fileGlob = '**/*{';
-
-  acceptableFiles.forEach((ext, i) => {
-    if (i !== 0) {
-      fileGlob += ',';
-    }
-    fileGlob += '.' + ext;
-  });
-
-  fileGlob += '}';
-
-  console.log(fileGlob);
-
   // One-liner for current directory
-  chokidar.watch(fileGlob, {ignored: '**/vha-**', cwd: inputDir, alwaysStat: true, awaitWriteFinish: true}).on('add', (path, stat) => {
-    // console.log(path);
-    const subPath = ('/' + path.replace(/\\/g, '/')).replace('//', '/');
-    const partialPath = subPath.substring(0, subPath.lastIndexOf('/') + 1);
-    const fileName = subPath.substring(partialPath.lastIndexOf('/') + 1);
-    const fullPath = inputDir + partialPath + fileName;
-    console.log(fullPath);
-    metadataQueue.push({name: fileName, partialPath: partialPath, fullPath: fullPath, stat: stat});
-  }).on('ready', () => { console.log('All files scanned. Watching for changes.'); });
+  let watcher = chokidar.watch('**', {ignored: '**/vha-*/**', cwd: inputDir, alwaysStat: true, awaitWriteFinish: true})
+    .on('add', (path, stat) => {
+
+      const ext = path.substring(path.lastIndexOf('.') + 1);
+      if (path.indexOf('vha-') !== -1 || acceptableFiles.indexOf(ext) === -1) {
+        console.log('ignoring %s', path);
+        return;
+      }
+
+      const subPath = ('/' + path.replace(/\\/g, '/')).replace('//', '/');
+      const partialPath = subPath.substring(0, subPath.lastIndexOf('/') + 1);
+      const fileName = subPath.substring(partialPath.lastIndexOf('/') + 1);
+      const fullPath = inputDir + partialPath + fileName;
+      console.log(fullPath);
+      metadataQueue.push({name: fileName, partialPath: partialPath, fullPath: fullPath, stat: stat});
+    })
+    .on('all', (event, path) => {
+      console.log('%s %s', event, path);
+    })
+    .on('ready', () => { console.log('All files scanned. Watching for changes.'); });
 
 }
