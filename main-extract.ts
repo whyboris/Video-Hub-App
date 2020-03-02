@@ -192,6 +192,12 @@ const extractFirstFrameArgs = (
 
 const async = require('async');
 const thumbQueue = async.queue(nextExtaction, 1);
+let thumbsDone = 0;
+
+thumbQueue.drain(() => {
+  thumbsDone = 0;
+  sendCurrentProgress(1, 1, 'done'); // indicates 100%
+});
 
 export function queueThumbExtraction(element: ImageElement) {
   thumbQueue.push(element);
@@ -273,7 +279,8 @@ export function extractThumbnails(
   const screenshotHeight: number = screenshotSettings.height;            // -- number in px how tall each screenshot should be
   const snippetLength: number =    screenshotSettings.clipSnippetLength; // -- length of each snippet in the clip
 
-    sendCurrentProgress(1, thumbQueue.length, 'importingScreenshots');
+    sendCurrentProgress(thumbsDone, thumbsDone + thumbQueue.length() + 1, 'importingScreenshots');
+    thumbsDone++;
 
     const pathToVideo: string = path.join(videoFolderPath, currentElement.partialPath, currentElement.fileName);
 
