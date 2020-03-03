@@ -283,7 +283,7 @@ function openThisDamnFile(pathToVhaFile: string) {
         lastSavedFinalObject.inputDir = globals.selectedOutputFolder;
       }
 
-      startFileSystemWatching(lastSavedFinalObject.inputDir, lastSavedFinalObject.images);
+      startFileSystemWatching(lastSavedFinalObject.inputDir, lastSavedFinalObject.images, false);
 
       let changedRootFolder = false;
       let rootFolderLive = true;
@@ -740,7 +740,7 @@ ipc.on('start-the-import', (event, options: ImportSettingsObject, videoFilesWith
 
     sendFinalResultHome([]);
 
-    startFileSystemWatching(globals.selectedSourceFolder, []);
+    startFileSystemWatching(globals.selectedSourceFolder, [], false);
 
   }
 

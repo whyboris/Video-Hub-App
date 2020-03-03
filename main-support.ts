@@ -22,6 +22,7 @@ import { FinalObject, ImageElement, NewImageElement, ScreenshotSettings } from '
 import { ResolutionString } from './src/app/pipes/resolution-filter.service';
 import { Stats } from 'fs';
 import { queueThumbExtraction } from './main-extract';
+import { elementEventFullName } from '@angular/compiler/src/view_compiler/view_compiler';
 
 interface ResolutionMeta {
   label: ResolutionString;
@@ -675,6 +676,8 @@ function sendNewVideoMetadata(imageElement: ImageElement) {
     'newVideoMeta',
     imageElement
   );
+  imageElement.index = cachedFinalArray.length;
+  cachedFinalArray.push(imageElement);
   const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
 
   if (!hasAllThumbs(imageElement.hash, screenshotOutputFolder, globals.screenshotSettings.clipSnippets > 0 )) {
@@ -695,7 +698,9 @@ export function checkForMetadata(file, callback) {
     if (found) {
       return callback();
     }
-    extractMetadataAsync(file.fullPath, globals.screenshotSettings, NewImageElement(), file.stat)
+    const newElement = NewImageElement();
+    newElement.hash = hash;
+    extractMetadataAsync(file.fullPath, globals.screenshotSettings, newElement, file.stat)
       .then((imageElement) => {
         imageElement.cleanName = cleanUpFileName(file.name);
         imageElement.fileName = file.name;
@@ -708,9 +713,12 @@ export function checkForMetadata(file, callback) {
   });
 }
 
-export function startFileSystemWatching(inputDir: String, finalArray: ImageElement[]) {
+let deepScan = false;
+
+export function startFileSystemWatching(inputDir: String, finalArray: ImageElement[], initalDeepScan: boolean) {
 
   cachedFinalArray = finalArray;
+  deepScan = initalDeepScan; // Hash files instead of just path compare
 
   // One-liner for current directory
   let watcher = chokidar.watch('**', {ignored: '**/vha-*/**', cwd: inputDir, alwaysStat: true, awaitWriteFinish: true})
@@ -727,11 +735,14 @@ export function startFileSystemWatching(inputDir: String, finalArray: ImageEleme
       const fileName = subPath.substring(partialPath.lastIndexOf('/') + 1);
       const fullPath = inputDir + partialPath + fileName;
       console.log(fullPath);
-      metadataQueue.push({name: fileName, partialPath: partialPath, fullPath: fullPath, stat: stat});
+      metadataQueue.push({name: fileName, partialPath: partialPath, fullPath: fullPath, stat: stat, deepScan: deepScan});
     })
     .on('all', (event, path) => {
       console.log('%s %s', event, path);
     })
-    .on('ready', () => { console.log('All files scanned. Watching for changes.'); });
+    .on('ready', () => {
+      console.log('All files scanned. Watching for changes.');
+      deepScan = false;
+    });
 
 }
