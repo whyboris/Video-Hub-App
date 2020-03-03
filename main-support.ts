@@ -752,7 +752,7 @@ export function startFileSystemWatching(inputDir: String, finalArray: ImageEleme
       }
 
       const subPath = ('/' + path.replace(/\\/g, '/')).replace('//', '/');
-      const partialPath = subPath.substring(0, subPath.lastIndexOf('/') + 1);
+      const partialPath = subPath.substring(0, subPath.lastIndexOf('/'));
       const fileName = subPath.substring(partialPath.lastIndexOf('/') + 1);
       const fullPath = inputDir + partialPath + fileName;
       console.log(fullPath);
