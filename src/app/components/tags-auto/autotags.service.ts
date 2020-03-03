@@ -10,8 +10,8 @@ export interface WordAndFreq {
   prefix: string; // filled in inside alphabetPrefixPipe
 }
 
-// Strip out: {}()[] as well as 'for', 'her', 'the', 'him', 'and', '-', & ','
-export const autoFileTagsRegex = /{|}|\(|\)|\[|\]|\b(for|her|the|him|and)\b|,|-/gi;
+// Used to strip out: all non-words, e.g. {}()[]-,.
+export const autoFileTagsRegex: RegExp = /\b(\w+)\b/g;
 
 @Injectable()
 export class AutoTagsService {
@@ -84,7 +84,7 @@ export class AutoTagsService {
    */
   private storeFinalArrayInMemory(finalArray: ImageElement[]): void {
     finalArray.forEach((element) => {
-      const cleanedFileName: string = element.cleanName.toLowerCase().replace(autoFileTagsRegex, '');
+      const cleanedFileName: string = (element.cleanName.toLowerCase().match(autoFileTagsRegex) || []).join(' ');
 
       this.onlyFileNames.push(cleanedFileName);
       this.addString(cleanedFileName);
