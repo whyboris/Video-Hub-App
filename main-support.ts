@@ -538,14 +538,18 @@ function extractMetadataAsync(
         imageElement.duration = duration;
         imageElement.fileSize = fileStat.size;
         imageElement.mtime = fileStat.mtimeMs;
-        if (imageElement.hash === '') {
-          imageElement.hash = hashFile(filePath);
-        }
         imageElement.height = origHeight;
         imageElement.width = origWidth;
         imageElement.screens = computeNumberOfScreenshots(screenshotSettings, duration);
 
-        resolve(imageElement);
+        if (imageElement.hash === '') {
+          hashFileAsync(filePath).then((hash) => {
+            imageElement.hash = hash;
+            resolve(imageElement);
+          });
+        } else {
+          resolve(imageElement);
+        }
       }
     });
   });
@@ -688,9 +692,9 @@ function sendNewVideoMetadata(imageElement: ImageElement) {
 export function checkForMetadata(file, callback) {
   console.log('checking metadata for %s', file.fullPath);
   let found = false;
-  hashFileAsync(file.fullPath).then((hash) => {
+  if (!deepScan) {
     cachedFinalArray.forEach((element) => {
-      if (element.hash === hash) {
+      if (element.partialPath === file.partialPath && element.fileName === file.name) {
         found = true;
       }
     });
@@ -698,19 +702,36 @@ export function checkForMetadata(file, callback) {
     if (found) {
       return callback();
     }
-    const newElement = NewImageElement();
-    newElement.hash = hash;
-    extractMetadataAsync(file.fullPath, globals.screenshotSettings, newElement, file.stat)
-      .then((imageElement) => {
-        imageElement.cleanName = cleanUpFileName(file.name);
-        imageElement.fileName = file.name;
-        imageElement.partialPath = file.partialPath;
-        sendNewVideoMetadata(imageElement);
-        callback();
-      }, () => {
-        callback(); // error, just continue
+    createElement(file, '', callback);
+  } else {
+    hashFileAsync(file.fullPath).then((hash) => {
+      cachedFinalArray.forEach((element) => {
+        if (element.hash === hash) {
+          found = true;
+        }
       });
-  });
+      console.log('found: %s', found);
+      if (found) {
+        return callback();
+      }
+      createElement(file, hash, callback);
+    });
+  }
+}
+
+function createElement(file, hash, callback) {
+  const newElement = NewImageElement();
+  newElement.hash = hash;
+  extractMetadataAsync(file.fullPath, globals.screenshotSettings, newElement, file.stat)
+    .then((imageElement) => {
+      imageElement.cleanName = cleanUpFileName(file.name);
+      imageElement.fileName = file.name;
+      imageElement.partialPath = file.partialPath;
+      sendNewVideoMetadata(imageElement);
+      callback();
+    }, () => {
+      callback(); // error, just continue
+    });
 }
 
 let deepScan = false;
@@ -737,9 +758,9 @@ export function startFileSystemWatching(inputDir: String, finalArray: ImageEleme
       console.log(fullPath);
       metadataQueue.push({name: fileName, partialPath: partialPath, fullPath: fullPath, stat: stat, deepScan: deepScan});
     })
-    .on('all', (event, path) => {
-      console.log('%s %s', event, path);
-    })
+    // .on('all', (event, path) => {
+    //   console.log('%s %s', event, path);
+    // })
     .on('ready', () => {
       console.log('All files scanned. Watching for changes.');
       deepScan = false;
