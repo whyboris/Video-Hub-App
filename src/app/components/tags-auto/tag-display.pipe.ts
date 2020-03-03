@@ -36,8 +36,8 @@ export class TagsDisplayPipe implements PipeTransform {
     }
 
     if (autoFileTags) {
-      const cleanedFileName: string = video.cleanName.toLowerCase().replace(autoFileTagsRegex, '');
-      cleanedFileName.split(' ').forEach(word => {
+      const cleanedFileNameAsArray: string[] = video.cleanName.toLowerCase().match(autoFileTagsRegex) || [];
+      cleanedFileNameAsArray.forEach(word => {
         if (word.length >= 3) { // TODO - fix hardcoding ?
           tags.push({name: word, colour: Colors.autoFileTags, removable: false});
         }
