@@ -67,10 +67,11 @@ export class SheetComponent implements OnInit {
   @Input() showMeta: boolean;
   @Input() star: StarRating;
 
+  pathToFilmstripJpg: string;
+  pathToVideoFile: string;
   percentOffset: number = 0;
-  fullFilePath = '';
-  thumbnailsToDisplay = 4;
   starRatingHack: StarRating;
+  thumbnailsToDisplay = 4;
 
   constructor(
     public manualTagsService: ManualTagsService,
@@ -79,7 +80,8 @@ export class SheetComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.fullFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
+    this.pathToFilmstripJpg = this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
+    this.pathToVideoFile = path.join(this.selectedSourceFolder, this.video.partialPath, this.video.fileName);
     this.percentOffset = (100 / (this.video.screens - 1));
     this.starRatingHack = this.star;
   }
@@ -136,8 +138,7 @@ export class SheetComponent implements OnInit {
   }
 
   copyToClipboard(): void {
-    const fullPath = path.join(this.selectedSourceFolder, this.video.partialPath, this.video.fileName);
-    navigator.clipboard.writeText(fullPath);
+    navigator.clipboard.writeText(this.pathToVideoFile);
   }
 
   /**
