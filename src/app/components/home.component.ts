@@ -288,6 +288,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   deletePipeHack: boolean = false; // to force deletePipe to update
 
+  // crappy hack to remember where to navigate to when in folder view and returning back to root
+  folderNavigationScrollOffset: number = 0;
+
   // ========================================================================
   // Please add new variables below if they don't fit into any other section
   // ------------------------------------------------------------------------
@@ -1081,12 +1084,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Handle clicking on FOLDER in gallery, or the folder icon in breadcrumbs
+   * Handle clicking on FOLDER in gallery, or the folder icon in breadcrumbs, or the `UP` folder
    * @param filter
    */
   handleFolderIconClicked(filter: string): void {
+    if (this.folderNavigationScrollOffset === 0) {
+      this.folderNavigationScrollOffset = this.virtualScroller.viewPortInfo.scrollStartPosition;
+    }
+
     this.folderViewNavigationPath = filter;
-    this.scrollToTop();
+
+    this.scrollAppropriately(filter);
   }
 
   /**
@@ -1096,6 +1104,31 @@ export class HomeComponent implements OnInit, AfterViewInit {
   handleBbreadcrumbClicked(idx: number): void {
     this.folderViewNavigationPath = this.folderViewNavigationPath.split('/').slice(0, idx + 1).join('/');
     this.scrollToTop();
+  }
+
+  /**
+   * Scroll appropriately after navigating back to root folder
+   *
+   * Rather hacky thing, but works in the basic case
+   * Fails if user enters folder, changes some search or sort filter, and navigates back
+   */
+  scrollAppropriately(filter: string) {
+    if (filter === '') {
+      // TODO -- change `1` to `0` once the bug is fixed:
+      // https://github.com/rintoj/ngx-virtual-scroller/issues/420
+      this.virtualScroller.scrollToPosition(this.folderNavigationScrollOffset, 1);
+      this.folderNavigationScrollOffset = 0;
+    } else {
+      this.scrollToTop();
+    }
+  }
+
+  /**
+   * Go back to root and scroll to last-seen location
+   */
+  breadcrumbHomeIconClick(): void {
+    this.folderViewNavigationPath = '';
+    this.scrollAppropriately('');
   }
 
   /**
