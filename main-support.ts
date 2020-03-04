@@ -195,9 +195,11 @@ export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: stri
 
 /**
  * Format .pls file and write to hard drive
- * @param playlist
+ * @param savePath -- location to save the temp.pls file
+ * @param playlist -- array of ImageElements
+ * @param done     -- callback
  */
-export function createDotPlsFile(playlist: ImageElement[], done): void {
+export function createDotPlsFile(savePath: string, playlist: ImageElement[], done): void {
 
   const writeArray: string[] = [];
 
@@ -220,7 +222,7 @@ export function createDotPlsFile(playlist: ImageElement[], done): void {
 
   const singleString: string = writeArray.join('\n');
 
-  fs.writeFile('./temp.pls', singleString, 'utf8', done);
+  fs.writeFile(savePath, singleString, 'utf8', done);
 
 }
 
