@@ -1114,10 +1114,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   scrollAppropriately(filter: string) {
     if (filter === '') {
-      // TODO -- change `1` to `0` once the bug is fixed:
-      // https://github.com/rintoj/ngx-virtual-scroller/issues/420
-      this.virtualScroller.scrollToPosition(this.folderNavigationScrollOffset, 1);
-      this.folderNavigationScrollOffset = 0;
+      setTimeout(() => {
+        this.virtualScroller.scrollToPosition(this.folderNavigationScrollOffset, 0);
+        this.folderNavigationScrollOffset = 0;
+      }, 1);
     } else {
       this.scrollToTop();
     }
