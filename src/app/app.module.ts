@@ -18,8 +18,9 @@ import { ElectronService } from './providers/electron.service';
 import { FilePathService } from './components/views/file-path.service';
 import { HomeComponent } from './components/home.component';
 import { ManualTagsService } from './components/tags-manual/manual-tags.service';
+import { PipeSideEffectService } from './pipes/pipe-side-effect.service';
 import { ResolutionFilterService } from './pipes/resolution-filter.service';
-import { ShowLimitService } from './pipes/show-limit.service';
+import { SimilarityService } from './pipes/similarity.service';
 import { StarFilterService } from './pipes/star-filter.service';
 import { WordFrequencyService } from './pipes/word-frequency.service';
 
@@ -36,7 +37,6 @@ import { IconComponent } from './components/icon/icon.component';
 import { MetaComponent } from './components/meta/meta.component';
 import { PreviewComponent } from './components/views/thumbnail/preview.component';
 import { SheetComponent } from './components/sheet/sheet.component';
-import { SimilarityService } from './pipes/similarity.service';
 import { SliderFilterComponent } from './components/slider-filter/slider-filter.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { SvgDefinitionsComponent } from './components/icon/svg-definitions.component';
@@ -47,6 +47,7 @@ import { ViewTagsComponent } from './components/tags-manual/view-tags.component'
 // Pipes
 import { AlphabetPrefixPipe } from './pipes/alphabet-prefix.pipe';
 import { CountPipe } from './pipes/count.pipe';
+import { DeleteFilePipe } from './pipes/delete-file.pipe';
 import { DuplicateFinderPipe } from './pipes/duplicateFinder.pipe';
 import { FileSearchPipe } from './pipes/file-search.pipe';
 import { FileSizePipe } from './pipes/file-size.pipe';
@@ -57,8 +58,9 @@ import { LengthFilterPipe } from './pipes/length-filter.pipe';
 import { LengthPipe } from './pipes/length.pipe';
 import { MagicSearchPipe } from './pipes/magic-search.pipe';
 import { ManualTagSortPipe } from './pipes/manual-tags-sort.pipe';
+import { PlaylistPipe } from './pipes/playlist.pipe';
 import { ResolutionFilterPipe } from './pipes/resolution-filter.pipe';
-import { ReturnZeroPipe } from './pipes/returnZero.pipe';
+import { ReturnZeroPipe } from './pipes/return-zero.pipe';
 import { SimilarityPipe } from './pipes/similarity.pipe';
 import { SortingPipe } from './pipes/sorting.pipe';
 import { StarFilterPipe } from './pipes/star-filter.pipe';
@@ -76,6 +78,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     AppComponent,
     ClipComponent,
     CountPipe,
+    DeleteFilePipe,
     DetailsComponent,
     DonutComponent,
     DuplicateFinderPipe,
@@ -94,6 +97,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     MagicSearchPipe,
     ManualTagSortPipe,
     MetaComponent,
+    PlaylistPipe,
     PreviewComponent,
     ResolutionFilterPipe,
     ReturnZeroPipe,
@@ -125,13 +129,11 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
   providers: [
     AutoTagsSaveService,
     AutoTagsService,
-    DuplicateFinderPipe,
     ElectronService,
     FilePathService,
-    FileSearchPipe,
     ManualTagsService,
+    PipeSideEffectService,
     ResolutionFilterService,
-    ShowLimitService,
     SimilarityService,
     SortingPipe,
     StarFilterService,

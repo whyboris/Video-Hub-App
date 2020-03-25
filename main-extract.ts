@@ -239,6 +239,7 @@ const extractFirstFrameArgs = (
  * @param screenshotFolder   -- path to folder where .jpg files will be saved
  * @param screenshotSettings -- ScreenshotSettings object
  * @param elementsToScan     -- array of indexes of elements in finalArray for which to extract screenshots
+ * @param deepScan           -- spend 50% more time trying to extracts screenshots
  */
 export function extractFromTheseFiles(
   theFinalArray: ImageElement[],
@@ -246,6 +247,7 @@ export function extractFromTheseFiles(
   screenshotFolder: string,
   screenshotSettings: ScreenshotSettings,
   elementsToScan: number[],
+  deepScan: boolean
 ): void {
 
   const clipHeight: number =       screenshotSettings.clipHeight;        // -- number in px how tall each clip should be
@@ -281,7 +283,7 @@ export function extractFromTheseFiles(
       const clipThumbSavePath: string = screenshotFolder + '/clips/' +      fileHash + '.jpg';
 
       const maxRunTime: ExtractionDurations = setExtractionDurations(
-        sourceHeight, numOfScreens, screenshotHeight, clipSnippets, snippetLength, clipHeight
+        sourceHeight, numOfScreens, screenshotHeight, clipSnippets, snippetLength, clipHeight, deepScan
       );
 
       checkFileExists(pathToVideo)                                                            // (1)
@@ -432,6 +434,7 @@ interface ExtractionDurations {
  * @param clipSnippets
  * @param snippetLength
  * @param clipHeight
+ * @param deepScan -- whether to spend 50% more time extracting screenshots
  */
 function setExtractionDurations(
   sourceHeight: number,
@@ -440,6 +443,7 @@ function setExtractionDurations(
   clipSnippets: number,
   snippetLength: number,
   clipHeight: number,
+  deepScan: boolean
 ): ExtractionDurations {
 
   // screenshot heights range from 144px to 432px
@@ -455,11 +459,13 @@ function setExtractionDurations(
 
   const sourceFactor = sourceHeight === 0 ? 1 : sourceHeight / 720; // may be better as a square rather than linear
 
+  const multiplier = deepScan ? 1 : 1.5;
+
   return {                                                                            // for me:
-    thumb:     350 * sourceFactor * thumbHeightFactor,                                // never above 300ms
-    filmstrip: 350 * sourceFactor * numOfScreens * thumbHeightFactor,                 // rarely above 15s, but 4K 30screens took 50s
-    clip:     1000 * sourceFactor * clipSnippets * snippetLength * clipHeightFactor,  // barely ever above 15s
-    clipThumb: 150 * sourceFactor * clipHeightFactor,                                 // never above 100ms
+    thumb:     350 * multiplier * sourceFactor * thumbHeightFactor,                                // never above 300ms
+    filmstrip: 350 * multiplier * sourceFactor * numOfScreens * thumbHeightFactor,                 // rarely above 15s, but 4K 30screens took 50s
+    clip:     1000 * multiplier * sourceFactor * clipSnippets * snippetLength * clipHeightFactor,  // barely ever above 15s
+    clipThumb: 150 * multiplier * sourceFactor * clipHeightFactor,                                 // never above 100ms
   };
 }
 

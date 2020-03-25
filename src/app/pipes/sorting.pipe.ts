@@ -1,5 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { ImageElement, StarRating } from '../../../interfaces/final-object.interface';
+import { randomizeArray } from '../../../utility';
 
 export type SortType = 'default'
                      | 'hash' // only used by the duplicateFinderPipe
@@ -33,7 +34,12 @@ export class SortingPipe implements PipeTransform {
    * @param property
    * @param decreasing -- boolean to tell whether `ascending` or `descending`
    */
-  sortFunctionLol(x: ImageElement, y: ImageElement, property: string, decreasing: boolean): number {
+  sortFunctionLol(
+    x: ImageElement,
+    y: ImageElement,
+    property: string,
+    decreasing: boolean
+  ): number {
     // up button first
     if (x.fileName === '*UP*') {
       return -1;
@@ -96,7 +102,12 @@ export class SortingPipe implements PipeTransform {
    * @param forceSortUpdateHack - hack to force the sorting update
    * @param skip                - whether to sort or return as is (needed for DUPLICATE SEARCH)
    */
-  transform(galleryArray: ImageElement[], sortingType: SortType, forceSortUpdateHack: number, skip: boolean): ImageElement[] {
+  transform(
+    galleryArray: ImageElement[],
+    sortingType: SortType,
+    forceSortUpdateHack: number,
+    skip: boolean
+  ): ImageElement[] {
 
     // console.log('SORTING RUNNING');
     // console.log(sortingType);
@@ -110,26 +121,9 @@ export class SortingPipe implements PipeTransform {
         return []; // else `galleryArray[0] errors out!
       }
 
-      let currentIndex = (galleryArray[0].fileName === '*UP*' ? 1 : 0); // skip 'up button' if present
-      let temporaryValue;
-      let randomIndex;
+      const currentIndex = (galleryArray[0].fileName === '*UP*' ? 1 : 0); // skip 'up button' if present
 
-      const newArray = [...galleryArray];
-
-      // While there remain elements to shuffle...
-      while (currentIndex !== galleryArray.length) {
-        // Pick a remaining element...
-        randomIndex = currentIndex + Math.floor(Math.random() * (galleryArray.length - currentIndex));
-
-        // And swap it with the current element.
-        temporaryValue = newArray[currentIndex];
-        newArray[currentIndex] = newArray[randomIndex];
-        newArray[randomIndex] = temporaryValue;
-
-        currentIndex += 1;
-      }
-      // console.log('VIEW SHUFFLED');
-      return newArray;
+      return randomizeArray(galleryArray, currentIndex);
 
     } else if (sortingType === 'alphabetAsc') {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {

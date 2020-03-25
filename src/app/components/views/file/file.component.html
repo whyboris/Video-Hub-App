@@ -26,7 +26,7 @@
         class="length"
         [ngClass]="{ 'meta-dark-mode': darkMode }"
       >
-        {{ video.duration | lengthPipe : true : true : true }}
+        {{ video.duration | lengthPipe : 'folder' }}
       </div>
 
     </ng-container>

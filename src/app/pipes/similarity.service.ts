@@ -13,7 +13,7 @@ export class SimilarityService {
   /**
    * Reset the map to empty and set the new filename to compare to
    */
-  public restartWith(filename: string) {
+  public restartWith(filename: string): void {
     // lowercase everything, remove `the`, ` - `, and trim space if `the` was the first word
     const cleanedFileName = filename.toLowerCase().replace(/the /g, ' ').replace(/ - /g, ' ').trim();
     this.fileNameElements = cleanedFileName.split(' ');

@@ -648,7 +648,7 @@
       class="breadcrumbs"
       @breadcrumbsAppear
     >
-      <app-icon class="breadcrumb-folder-icon" [icon]="'icon-folder-blank'" (click)="folderViewNavigationPath = ''"></app-icon>
+      <app-icon class="breadcrumb-folder-icon" [icon]="'icon-folder-blank'" (click)="breadcrumbHomeIconClick()"></app-icon>
       <span
         *ngFor="let item of folderViewNavigationPath.split('/'); index as idx"
         (click)="handleBbreadcrumbClicked(idx)"
@@ -967,7 +967,7 @@
 
       <!-- total found -->
       <div class="filtering-total">
-        <span>{{ currResults.total | number:'.0' }} {{ 'SIDEBAR.found' | translate }}</span>
+        <span>{{ currResults | number:'.0' }} {{ 'SIDEBAR.found' | translate }}</span>
       </div>
 
       <!-- word cloud -->
@@ -1040,29 +1040,31 @@
 
       [items]="finalArray
 
+                | deleteFilePipe: deletePipeHack
+
                 | returnZeroPipe: (appState.currentView === 'showClips' && currentScreenshotSettings.clipSnippets === 0)
 
-                | fileSearchPipe: filters[0].array : filters[0].bool : true  : 0 : false
+                | fileSearchPipe: filters[0].array : filters[0].bool : true  : 'folder' : false
 
-                | fileSearchPipe: filters[1].array : filters[1].bool : false : 0 : false
+                | fileSearchPipe: filters[1].array : filters[1].bool : false : 'folder' : false
 
-                | fileSearchPipe: filters[2].array : filters[2].bool : true  : 1 : false
+                | fileSearchPipe: filters[2].array : filters[2].bool : true  : 'file' : false
 
-                | fileSearchPipe: filters[3].array : filters[3].bool : false : 1 : false
+                | fileSearchPipe: filters[3].array : filters[3].bool : false : 'file' : false
 
-                | fileSearchPipe: filters[4].array : filters[4].bool : true  : 1 : true
+                | fileSearchPipe: filters[4].array : filters[4].bool : true  : 'file' : true
 
-                | fileSearchPipe: filters[5].array : filters[5].bool : true  : 2 : false
+                | fileSearchPipe: filters[5].array : filters[5].bool : true  : 'tag' : false
                                   : settingsButtons['manualTags'].toggled
                                   : settingsButtons['autoFileTags'].toggled
                                   : settingsButtons['autoFolderTags'].toggled
 
-                | fileSearchPipe: filters[6].array : filters[6].bool : false : 2 : false
+                | fileSearchPipe: filters[6].array : filters[6].bool : false : 'tag' : false
                                   : settingsButtons['manualTags'].toggled
                                   : settingsButtons['autoFileTags'].toggled
                                   : settingsButtons['autoFolderTags'].toggled
 
-                | fileSearchPipe: filters[7].array : filters[7].bool : true  : 2 : true
+                | fileSearchPipe: filters[7].array : filters[7].bool : true  : 'tag' : true
                                   : settingsButtons['manualTags'].toggled
                                   : settingsButtons['autoFileTags'].toggled
                                   : settingsButtons['autoFolderTags'].toggled
@@ -1109,7 +1111,9 @@
                 | sortingPipe: sortType : shuffleTheViewNow : (   settingsButtons['duplicateLength'].toggled
                                                                || settingsButtons['duplicateSize'].toggled
                                                                || settingsButtons['duplicateHash'].toggled
-                                                               || (sortType === 'default' && fuzzySearchString.length > 2))"
+                                                               || (sortType === 'default' && fuzzySearchString.length > 2))
+
+                | playlistPipe"
     >
 
     <!--
@@ -1308,7 +1312,7 @@
     </virtual-scroller>
 
     <div
-      *ngIf="currResults.total === 0"
+      *ngIf="currResults === 0"
       class="no-results"
       [ngStyle]="{ 'padding-left': settingsButtons['hideSidebar'].toggled ? 0 : '190px' }"
     >

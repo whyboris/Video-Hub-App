@@ -5,9 +5,9 @@ import { PipeSideEffectService } from './pipe-side-effect.service';
 import { ImageElement } from '../../../interfaces/final-object.interface';
 
 @Pipe({
-  name: 'countPipe'
+  name: 'playlistPipe'
 })
-export class CountPipe implements PipeTransform {
+export class PlaylistPipe implements PipeTransform {
 
   constructor(
     public pipeSideEffectService: PipeSideEffectService
@@ -19,7 +19,7 @@ export class CountPipe implements PipeTransform {
    */
   transform(finalArray: ImageElement[]): ImageElement[] {
 
-    this.pipeSideEffectService.showResults(finalArray.length);
+    this.pipeSideEffectService.saveCurrentResults(finalArray);
 
     return finalArray;
   }

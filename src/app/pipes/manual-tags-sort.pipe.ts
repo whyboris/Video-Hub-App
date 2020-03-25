@@ -21,23 +21,20 @@ export class ManualTagSortPipe implements PipeTransform {
   transform(allTags: string[], filterString: string, sortByFrequency: boolean, forceUpdateHack: boolean): string[] {
 
     if (filterString !== '') {
-      allTags = allTags.filter(tag => tag.includes(filterString));
+      allTags = allTags.filter(tag => (tag.toLowerCase()).includes(filterString.toLowerCase()));
     }
 
     let sortedTags: string[];
 
     if (sortByFrequency) {
-
-      // console.log('SORTING BY FREQUENCY !!!');
-
       sortedTags = allTags.sort((a, b): any => {
         return this.manualTagService.tagsMap.get(a) < this.manualTagService.tagsMap.get(b) ? 1 : -1;
-      }).slice();
+      });
     } else {
       sortedTags = allTags.sort();
     }
 
-    return sortedTags;
+    return sortedTags.slice(); // return shallow copy else the view does not update when adding new tags in details view
   }
 
 }

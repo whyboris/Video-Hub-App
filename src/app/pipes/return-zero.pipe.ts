@@ -7,8 +7,6 @@ import { ImageElement } from '../../../interfaces/final-object.interface';
 })
 export class ReturnZeroPipe implements PipeTransform {
 
-  constructor() { }
-
   /**
    * Return only items that match search string
    * @param finalArray

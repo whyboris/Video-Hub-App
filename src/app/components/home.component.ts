@@ -10,9 +10,9 @@ import { AutoTagsSaveService } from './tags-auto/tags-save.service';
 import { ElectronService } from '../providers/electron.service';
 import { ManualTagsService } from './tags-manual/manual-tags.service';
 import { ResolutionFilterService, ResolutionString } from '../pipes/resolution-filter.service';
-import { ShowLimitService } from '../pipes/show-limit.service';
+import { PipeSideEffectService } from '../pipes/pipe-side-effect.service';
 import { StarFilterService } from '../pipes/star-filter.service';
-import { WordFrequencyService } from '../pipes/word-frequency.service';
+import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency.service';
 
 // Interfaces
 import { DefaultScreenEmission } from './sheet/sheet.component';
@@ -263,8 +263,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   magicSearchString = '';
   fuzzySearchString = '';
 
-  wordFreqArr: any;
-  currResults: any = { showing: 0, total: 0 };
+  wordFreqArr: WordFreqAndHeight[];
+  currResults: number;
 
   findMostSimilar: string; // for finding similar files to this one
   showSimilar: boolean = false; // to toggle the similarity pipe
@@ -285,6 +285,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
   timeExtractionRemaining;
 
   folderNotConnectedErrorShowing: boolean = false;
+
+  deletePipeHack: boolean = false; // to force deletePipe to update
+
+  // crappy hack to remember where to navigate to when in folder view and returning back to root
+  folderNavigationScrollOffset: number = 0;
 
   // ========================================================================
   // Please add new variables below if they don't fit into any other section
@@ -465,7 +470,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     public electronService: ElectronService,
     public manualTagsService: ManualTagsService,
     public resolutionFilterService: ResolutionFilterService,
-    public showLimitService: ShowLimitService,
+    public pipeSideEffectService: PipeSideEffectService,
     public starFilterService: StarFilterService,
     public tagsSaveService: AutoTagsSaveService,
     public translate: TranslateService,
@@ -494,7 +499,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.cloneDefaultButtonSetting();
 
     setTimeout(() => {
-      this.wordFrequencyService.finalMapBehaviorSubject.subscribe((value) => {
+      this.wordFrequencyService.finalMapBehaviorSubject.subscribe((value: WordFreqAndHeight[]) => {
         this.wordFreqArr = value;
         // this.cd.detectChanges();
       });
@@ -506,7 +511,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.starRatingFreqArr = value;
         // this.cd.detectChanges();
       });
-      this.showLimitService.searchResults.subscribe((value) => {
+      this.pipeSideEffectService.searchResults.subscribe((value) => {
         this.currResults = value;
         this.cd.detectChanges();
         this.debounceUpdateMax(10);
@@ -733,6 +738,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // This happens when the computer is about to SHUT DOWN
     this.electronService.ipcRenderer.on('pleaseShutDownASAP', (event) => {
       this.initiateClose();
+    });
+
+    // gets called if `trash` successfully removed the file
+    this.electronService.ipcRenderer.on('file-deleted', (event, element: ImageElement) => {
+      // spot check it's the same element
+      // just in case the message comes back after user has switched to view another hub
+      if (element.fileName === this.finalArray[element.index].fileName) {
+        this.finalArray[element.index].deleted = true;
+        this.deletePipeHack = !this.deletePipeHack;
+        this.finalArrayNeedsSaving = true;
+        this.cd.detectChanges();
+      }
     });
 
     this.justStarted();
@@ -1067,12 +1084,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Handle clicking on FOLDER in gallery, or the folder icon in breadcrumbs
+   * Handle clicking on FOLDER in gallery, or the folder icon in breadcrumbs, or the `UP` folder
    * @param filter
    */
   handleFolderIconClicked(filter: string): void {
+    if (this.folderNavigationScrollOffset === 0) {
+      this.folderNavigationScrollOffset = this.virtualScroller.viewPortInfo.scrollStartPosition;
+    }
+
     this.folderViewNavigationPath = filter;
-    this.scrollToTop();
+
+    this.scrollAppropriately(filter);
   }
 
   /**
@@ -1082,6 +1104,31 @@ export class HomeComponent implements OnInit, AfterViewInit {
   handleBbreadcrumbClicked(idx: number): void {
     this.folderViewNavigationPath = this.folderViewNavigationPath.split('/').slice(0, idx + 1).join('/');
     this.scrollToTop();
+  }
+
+  /**
+   * Scroll appropriately after navigating back to root folder
+   *
+   * Rather hacky thing, but works in the basic case
+   * Fails if user enters folder, changes some search or sort filter, and navigates back
+   */
+  scrollAppropriately(filter: string) {
+    if (filter === '') {
+      setTimeout(() => {
+        this.virtualScroller.scrollToPosition(this.folderNavigationScrollOffset, 0);
+        this.folderNavigationScrollOffset = 0;
+      }, 1);
+    } else {
+      this.scrollToTop();
+    }
+  }
+
+  /**
+   * Go back to root and scroll to last-seen location
+   */
+  breadcrumbHomeIconClick(): void {
+    this.folderViewNavigationPath = '';
+    this.scrollAppropriately('');
   }
 
   /**
@@ -1288,6 +1335,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.rescanDirectory();
     } else if (uniqueKey === 'regenerateLibrary') {
       this.regenerateLibrary();
+    } else if (uniqueKey == 'playPlaylist') {
+      this.electronService.ipcRenderer.send('please-create-playlist', this.pipeSideEffectService.galleryShowing);
     } else if (uniqueKey === 'showTagTray') {
       if (this.settingsButtons.showRelatedVideosTray.toggled) {
         this.settingsButtons.showRelatedVideosTray.toggled = false;
@@ -1562,6 +1611,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   onEnterKey(value: string, origin: number): void {
     const trimmed = value.trim();
+
+    if (origin === 6) {
+      // the `tags include` search
+      this.tagTypeAhead = '';
+    }
+
     if (trimmed) {
       // don't include duplicates
       if (!this.filters[origin].array.includes(trimmed)) {
@@ -1850,8 +1905,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Deletes a file (moves to recycling bin / trash)
    */
   deleteThisFile(item: ImageElement): void {
-    console.log('DELETING !!!');
-    console.log(item);
     this.electronService.ipcRenderer.send('delete-video-file', item);
   }
 

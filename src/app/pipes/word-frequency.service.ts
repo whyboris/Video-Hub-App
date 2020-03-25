@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 
 import { autoFileTagsRegex } from '../components/tags-auto/autotags.service';
 
-interface WordFreqAndHeight {
+export interface WordFreqAndHeight {
   word: string;
   freq: number;
   height?: number;
@@ -14,14 +14,14 @@ interface WordFreqAndHeight {
 export class WordFrequencyService {
 
   wordMap: Map<string, number> = new Map();
-  finalMapBehaviorSubject = new BehaviorSubject([]);
+  finalMapBehaviorSubject: BehaviorSubject<WordFreqAndHeight[]> = new BehaviorSubject([]);
 
   constructor() { }
 
   /**
    * Reset the map to empty
    */
-  public resetMap() {
+  public resetMap(): void {
     this.wordMap = new Map();
   }
 
@@ -32,11 +32,10 @@ export class WordFrequencyService {
    * @param filename
    */
   public addString(filename: string): void {
-    filename = filename.replace(autoFileTagsRegex, '');
-    const wordArray = filename.split(' ');
+    const wordArray: string[] = filename.toLowerCase().match(autoFileTagsRegex) || [];
     wordArray.forEach(word => {
-      if (!(word.length < 3)) {
-        this.addWord(word.toLowerCase());
+      if (word.length >= 3) {
+        this.addWord(word);
       }
     });
   }
@@ -54,7 +53,7 @@ export class WordFrequencyService {
   }
 
   /**
-   * Remove all elements with 3 or fewer occurences
+   * Remove all elements with 2 or fewer occurences
    */
   public cleanMap(): void {
     this.wordMap.forEach((value, key) => {
@@ -69,7 +68,7 @@ export class WordFrequencyService {
    * remove it from the map,
    * and return it with its frequency as an object
    */
-  private getMostFrequent(total: number) {
+  private getMostFrequent(total: number): WordFreqAndHeight {
     let currLargestFreq = 0;
     let currLargestWord = '';
 

@@ -7,6 +7,15 @@
   width: 50%;
 }
 
+.folder-item-fullsize {
+  background-color: black;
+  background-size: cover;
+  height: 100%;
+  overflow: hidden;
+  position: absolute;
+  width: 100%;
+}
+
 .folder {
   border: 3px solid white;
   border-radius: 10px;

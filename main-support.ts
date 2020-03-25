@@ -109,14 +109,16 @@ export function insertTemporaryFields(imagesArray: ImageElement[]): ImageElement
 }
 
 /**
- * Generate the file size formatted as XXXmb or X.Xgb
+ * Generate the file size formatted as ### MB or #.# GB
+ * THIS CODE DUPLICATES THE CODE IN `file-size.pipe.ts`
  * @param fileSize
  */
 function getFileSizeDisplay(sizeInBytes: number): string {
   if (sizeInBytes) {
     const rounded = Math.round(sizeInBytes / 1000000);
-    // tslint:disable-next-line:max-line-length
-    return (rounded > 999 ? Math.round(rounded / 100) / 10 + 'gb' : rounded + 'mb');
+    return (rounded > 999
+              ? (rounded / 1000).toFixed(1) + ' GB'
+              : rounded + ' MB');
   } else {
     return '';
   }
@@ -171,6 +173,8 @@ export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: stri
 
   finalObject.images = stripOutTemporaryFields(finalObject.images);
 
+  finalObject.images = finalObject.images.filter(element => !element.deleted);
+
   const json = JSON.stringify(finalObject);
 
   // backup current file
@@ -187,6 +191,39 @@ export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: stri
 
   // Restore the inputDir in case we removed it
   finalObject.inputDir = inputDir;
+}
+
+/**
+ * Format .pls file and write to hard drive
+ * @param savePath -- location to save the temp.pls file
+ * @param playlist -- array of ImageElements
+ * @param done     -- callback
+ */
+export function createDotPlsFile(savePath: string, playlist: ImageElement[], done): void {
+
+  const writeArray: string[] = [];
+
+  writeArray.push('[playlist]');
+  writeArray.push('NumberOfEntries=' + playlist.length);
+
+  for (let i = 0; i < playlist.length; i++) {
+
+    const fullPath: string = path.join(
+      globals.selectedSourceFolder,
+      playlist[i].partialPath,
+      playlist[i].fileName
+    );
+
+    writeArray.push('File' + (i + 1) + '=' + fullPath );
+    writeArray.push('Title' + (i + 1) + '=' + playlist[i].cleanName);
+  }
+
+  writeArray.push(''); // empty line at the end requested by VLC Wiki
+
+  const singleString: string = writeArray.join('\n');
+
+  fs.writeFile(savePath, singleString, 'utf8', done);
+
 }
 
 /**
@@ -207,9 +244,9 @@ function stripOutTemporaryFields(imagesArray: ImageElement[]): ImageElement[] {
 /**
  * Clean up the displayed file name
  * (1) remove extension
- * (2) replace underscores with spaces
- * (3) replace periods with spaces
- * (4) tripple & double spaces become single spaces
+ * (2) replace underscores with spaces                "_"   => " "
+ * (3) replace periods with spaces                    "."   => " "
+ * (4) tripple & double spaces become single spaces   "   " => " "
  * @param original {string}
  * @return {string}
  */
@@ -391,9 +428,27 @@ export function extractAllMetadata(
  * @param metadata  the ffProbe metadata object
  */
 function getBestStream(metadata) {
-  return metadata.streams.reduce(function (a, b) {
-    return a.width > b.width ? a : b;
-  });
+  try {
+    return metadata.streams.reduce((a, b) => a.width > b.width ? a : b);
+  } catch (e) {
+    // if metadata.streams is an empty array or something else is wrong with it
+    // return an empty object so later calls to `stream.width` or `stream.height` do not throw exceptions
+    return {};
+  }
+}
+
+/**
+ * Return the duration from file by parsing metadata
+ * @param metadata
+ */
+function getFileDuration(metadata): number {
+  if (metadata && metadata.streams && metadata.streams[0] && metadata.streams[0].duration ) {
+    return metadata.streams[0].duration;
+  } else if (metadata && metadata.format && metadata.format.duration ) {
+    return metadata.format.duration;
+  } else {
+    return 0;
+  }
 }
 
 /**
@@ -417,7 +472,7 @@ function extractMetadataForThisONEFile(
     } else {
       const metadata = JSON.parse(data);
       const stream = getBestStream(metadata);
-      const fileDuration = metadata.streams[0].duration || metadata.format.duration;
+      const fileDuration: number = getFileDuration(metadata);
 
       const duration = Math.round(fileDuration) || 0;
       const origWidth = stream.width || 0; // ffprobe does not detect it on some MKV streams
