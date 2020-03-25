@@ -36,10 +36,10 @@ As principais dependências utilizadas:
 
 | Library     | Version | Date        | Comment |
 | -------     | ------- | ----        | ------- |
-| Angular     | v8.2.3  | August 2019 |         |
-| Angular-CLI | v8.2.3  | August 2019 |         |
-| Electron    | v6.0.6  | August 2019 | (internally uses Node v12.4.0 and Chromium 76) |
-| Electron Builder | v21.2.0 | August 2019 |     |
+| Angular     | v9.0.1  | February 2020 |         |
+| Angular-CLI | v9.0.2  | February 2020 |         |
+| Electron    | v8.0.1  | February 2020 | (internally uses Node v12.13.0 and Chromium 80) |
+| Electron Builder | v22.3.2 | February 2020 |     |
 
 O programa funcionar com as últimas versões do Node e NPM (Junho de 2019). Note que você vai precisar instalar o [Angular CLI](https://cli.angular.io) para rodar o projeto (`npm install -g @angular/cli`).
 

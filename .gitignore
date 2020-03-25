@@ -1,47 +1,14 @@
-# See http://help.github.com/ignore-files/ for more about ignoring files.
+/node_modules
 
-# compiled output
 /dist
 /release
 /tmp
 /out-tsc
 /app-builds
-main.js
-main-extract.js
-main-filenames.js
-main-globals.js
-main-rescan.js
-main-support.js
-utility.js
-src/**/*.js
+
+*.js
 *.js.map
-face/*.js
+*.log
 
-# TS to JS
-/interfaces/*.js
-
-# dependencies
-/node_modules
-
-# IDEs and editors
-/.idea
-.project
-.classpath
-.c9/
-*.launch
-.settings/
-*.sublime-workspace
-
-# IDE - VSCode
-.vscode/*
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
-
-# misc
-npm-debug.log
-
-# System Files
 .DS_Store
 Thumbs.db

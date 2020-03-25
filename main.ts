@@ -23,7 +23,7 @@ let systemMessages = English.SYSTEM;
 // ***************************** BUILD TOGGLE *********************************************
 // ========================================================================================
 const demo = false;
-globals.version = '2.1.0';
+globals.version = '2.2.0';
 // ========================================================================================
 
 
@@ -502,9 +502,11 @@ ipc.on('please-create-playlist', (event, playlist: ImageElement[]) => {
     return element.cleanName !== '*FOLDER*';
   });
 
+  const savePath: string = path.join(pathToAppData, 'video-hub-app-2', 'temp.pls');
+
   if (cleanPlaylist.length) {
-    createDotPlsFile(cleanPlaylist, () => {
-      shell.openItem(path.normalize('./temp.pls'));
+    createDotPlsFile(savePath, cleanPlaylist, () => {
+      shell.openItem(savePath);
     });
   }
 

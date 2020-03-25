@@ -195,9 +195,11 @@ export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: stri
 
 /**
  * Format .pls file and write to hard drive
- * @param playlist
+ * @param savePath -- location to save the temp.pls file
+ * @param playlist -- array of ImageElements
+ * @param done     -- callback
  */
-export function createDotPlsFile(playlist: ImageElement[], done): void {
+export function createDotPlsFile(savePath: string, playlist: ImageElement[], done): void {
 
   const writeArray: string[] = [];
 
@@ -220,7 +222,7 @@ export function createDotPlsFile(playlist: ImageElement[], done): void {
 
   const singleString: string = writeArray.join('\n');
 
-  fs.writeFile('./temp.pls', singleString, 'utf8', done);
+  fs.writeFile(savePath, singleString, 'utf8', done);
 
 }
 
@@ -439,15 +441,13 @@ function getBestStream(metadata) {
  * Return the duration from file by parsing metadata
  * @param metadata
  */
-function getFileDuration(metadata) {
-  try {
+function getFileDuration(metadata): number {
+  if (metadata && metadata.streams && metadata.streams[0] && metadata.streams[0].duration ) {
     return metadata.streams[0].duration;
-  } catch (e1) {
-    try {
-      return metadata.format.duration;
-    } catch (e2) {
-      return 0;
-    }
+  } else if (metadata && metadata.format && metadata.format.duration ) {
+    return metadata.format.duration;
+  } else {
+    return 0;
   }
 }
 
@@ -472,7 +472,7 @@ function extractMetadataForThisONEFile(
     } else {
       const metadata = JSON.parse(data);
       const stream = getBestStream(metadata);
-      const fileDuration = getFileDuration(metadata);
+      const fileDuration: number = getFileDuration(metadata);
 
       const duration = Math.round(fileDuration) || 0;
       const origWidth = stream.width || 0; // ffprobe does not detect it on some MKV streams
