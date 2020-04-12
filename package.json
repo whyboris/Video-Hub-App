@@ -46,9 +46,6 @@
     "ngx-virtual-scroller": "4.0.2",
     "trash": "6.1.1"
   },
-  "optionalDependencies": {
-    "osx-tag": "0.4.1"
-  },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.901.0",
     "@angular/animations": "9.1.0",

@@ -20,14 +20,6 @@ const hasher = require('crypto').createHash;
 
 const exec = require('child_process').exec;
 
-let tag = undefined;
-
-try {
-  tag = require('osx-tag');
-} catch (e) {
-  console.log('osx-tag will not be used');
-}
-
 const ffprobePath = require('@ffprobe-installer/ffprobe').path.replace('app.asar', 'app.asar.unpacked');
 
 import { acceptableFiles } from './main-filenames';
@@ -505,25 +497,45 @@ function extractMetadataForThisONEFile(
       imageElement.screens = computeNumberOfScreenshots(screenshotSettings, duration);
 
       // !!!! WARNING !!!!!! NOT A PURE FUNCTION ANY MORE !!!!!!!!!!!!!!!
-      if (codeRunningOnMac && tag !== undefined) {
-        tag.getTags(filePath, (tagErr: any, tags: string[]) => {
-          if (tagErr) {
-            console.log('tags error!!!');
-            extractMetaCallback(imageElement);
-          }
-          console.log('tags found:');
-          console.log(tags);
-          if (tags.length) {
-            imageElement.tags = tags;
-          }
-          extractMetaCallback(imageElement);
-        });
+      if (codeRunningOnMac) {
+
+        const foundTags: string[] = readTags(filePath);
+        console.log('tags:', foundTags);
+
+        if (foundTags && foundTags.length) {
+          imageElement.tags = foundTags;
+        }
+        extractMetaCallback(imageElement);
       } else {
         extractMetaCallback(imageElement);
       }
 
     }
   });
+}
+
+function readTags(filename): string[] {
+
+  console.log('reading', filename);
+
+  const cmdArr = ['mdls', '-raw', '-name', 'kMDItemUserTags', '"' + filename + '"'];
+  const cmd = cmdArr.join(' ');
+
+  let foundTags: string[] = undefined;
+
+  exec(cmd, function (error, stdout, stderr) {
+    if (error) { console.error(error); }
+    if (stderr) { console.log(stderr); }
+    if (stdout) {
+      const tagz: string[] = stdout.toString().split(',');
+      console.log('Tags in file "' + filename + '": ' + tagz);
+
+      foundTags = tagz;
+    }
+
+  });
+
+  return foundTags;
 }
 
 // ===========================================================================================
