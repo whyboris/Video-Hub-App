@@ -20,7 +20,13 @@ const hasher = require('crypto').createHash;
 
 const exec = require('child_process').exec;
 
-const tag = require('osx-tag');
+let tag = undefined;
+
+try {
+  tag = require('osx-tag');
+} catch (e) {
+  console.log('osx-tag will not be used');
+}
 
 const ffprobePath = require('@ffprobe-installer/ffprobe').path.replace('app.asar', 'app.asar.unpacked');
 
@@ -499,7 +505,7 @@ function extractMetadataForThisONEFile(
       imageElement.screens = computeNumberOfScreenshots(screenshotSettings, duration);
 
       // !!!! WARNING !!!!!! NOT A PURE FUNCTION ANY MORE !!!!!!!!!!!!!!!
-      if (codeRunningOnMac) {
+      if (codeRunningOnMac && tag !== undefined) {
         tag.getTags(filePath, (tagErr: any, tags: string[]) => {
           if (tagErr) {
             console.log('tags error!!!');
