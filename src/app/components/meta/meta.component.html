@@ -2,13 +2,42 @@
   class="meta"
   [ngStyle]="{ 'max-width': maxWidth + 'px' }"
 >
-  <span
-    [ngClass]="{ 'larger-font': largerFont }"
-    [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
-    class="title"
-  >
-    {{ video.cleanName }}
-  </span>
+  <div class="video-name">
+    <span
+      [ngClass]="{ 'larger-font': largerFont }"
+      [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
+      *ngIf="!renamingNow"
+      class="title"
+    >
+      {{ video.cleanName }}
+    </span>
+    <button
+      *ngIf="!renamingNow"
+      class="button-renameFile"
+      (click)="openRename()"
+      >
+      {{ 'RIGHTCLICK.renameFile' | translate }}
+    </button>
+
+    <app-rename-file
+    class="rename-video"
+    *ngIf="renamingNow"
+    [selectedSourceFolder]="selectedSourceFolder"
+    [currentRightClickedItem]="video"
+    [macVersion]="macVersion"
+    [darkMode]="darkMode"
+    [fontSize]="12">
+    </app-rename-file>
+
+    <button
+    class="button-renameFile"
+    *ngIf="renamingNow"
+    (click)="closeRename()"
+    >
+      {{ "SYSTEM.cancel" | translate | uppercase }}
+    </button>
+  </div>
+
   <span
     class="fileSize"
     [ngClass]="{ darkModeText: darkMode }"

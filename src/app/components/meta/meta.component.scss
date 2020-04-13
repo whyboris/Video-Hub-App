@@ -10,6 +10,7 @@
   height: 180px;
   overflow: hidden; // will hide tags that don't fit in 2 lines
   padding: 0 0 0 20px;
+  position: relative;
   vertical-align: top;
 }
 
@@ -76,4 +77,28 @@
   outline: none;
   padding: 0;
   width: 42px;
+}
+
+.video-name{
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.button-renameFile{
+  margin-left: 10px;
+  border: 1px solid $gray-30;
+  border-radius: 10px;
+  cursor: pointer;
+  max-height: 20px;
+  min-width: 100px;
+  outline: none;
+  padding: 0 10px;
+
+  &:hover {
+    background: $gray-10;
+  }
+}
+
+.rename-video{
+  overflow: hidden;
 }
