@@ -70,6 +70,7 @@ import { TagMatchPipe } from './components/tags-auto/tag-match.pipe';
 import { TagsDisplayPipe } from './components/tags-auto/tag-display.pipe';
 import { WordFrequencyPipe } from './pipes/word-frequency.pipe';
 import { WrapperPipe } from './pipes/wrapper.pipe';
+import { RenameFileComponent } from './components/rename-file/rename-file.component';
 
 @NgModule({
   declarations: [
@@ -117,6 +118,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     ViewTagsComponent,
     WordFrequencyPipe,
     WrapperPipe,
+    RenameFileComponent,
   ],
   imports: [
     AppRoutingModule,
