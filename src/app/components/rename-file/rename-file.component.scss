@@ -4,68 +4,53 @@
   position: relative;
 }
 
-.renameFile-input {
-  background: transparent;
-  border: 0;
-  border-bottom: 1px solid $gray-40;
-  box-sizing: border-box;
-  font-size: 16px;
-  left: 40px;
-  outline: none;
-  padding: 6px 6px 6px 2px;
-  padding-bottom: 0;
-  top: 170px;
-  width: 90%;
+.input{
+  display: flex;
+  flex-wrap: nowrap;
 }
 
-.extension-hack {
-  font-size: 16px;
-  left: 43px;
-  pointer-events: none;
-  top: 175px;
-
-  & .hidden {
-    opacity: 0;
-  }
-
-  & .extension {
-    display: inline-block;
-    font-size: 12px;
-    opacity: 0.5;
-    transform: translate(-3px, 1.5px);
-  }
+.darkModeOn {
+  color: white;
 }
 
-
-.renameErrMsg {
-  color: red;
-  font-size: 14px;
-  position: absolute;
-  right: 157px;
-  text-align: right;
-  top: 227px;
+.darkMode {
+  background: $gray-60;
+  border: 1px solid $gray-70;
+  border-bottom: 1px solid $gray-50;
+  border-top: 1px solid $gray-80;
 }
 
-.wizard-button {
+button{
   background: $gray-15;
   border: 1px solid $gray-30;
   border-radius: 10px;
   cursor: pointer;
-  margin: 15px;
-  max-height: 50px;
-  max-width: 300px;
+  height: 20px;
+  margin: 20px 0 10px calc(50% - 100px);
+  max-height: 30px;
+  max-width: 200px;
   min-width: 190px;
   outline: none;
-  padding: 10px;
+
+  &:hover {
+    background: $gray-10;
+  }
+}
+
+.button-rename {
+  border-radius: 5px;
+  margin: 0;
+  min-width: 100px;
+  right: 40px;
+  top: 216px;
+}
+
+.wizard-button {
   transition: 300ms;
   transition-property: background-color, box-shadow, color;
 
   &:enabled {
     box-shadow: 1px 2px 4px rgba(0,0,0,0.5);
-  }
-
-  &:hover {
-    background: $gray-10;
   }
 
   &:disabled {
@@ -80,21 +65,17 @@
   }
 }
 
-.button-rename {
-  border-radius: 5px;
-  margin: 0;
-  min-width: 100px;
-  right: 40px;
-  top: 216px;
+.input-renameFile {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid $gray-40;
+  box-sizing: border-box;
+  outline: none;
+  padding: 6px 6px 6px 2px;
+  padding-bottom: 0;
 }
 
-.darkModeOn {
-  color: white;
-}
-
-.darkMode {
-  background: $gray-60;
-  border: 1px solid $gray-70;
-  border-bottom: 1px solid $gray-50;
-  border-top: 1px solid $gray-80;
+.renameErrMsg {
+  color: red;
+  font-size: 14px;
 }
