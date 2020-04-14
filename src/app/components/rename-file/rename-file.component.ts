@@ -44,6 +44,16 @@ export class RenameFileComponent implements OnInit {
     setTimeout(() => {
       this.renameFileInput.nativeElement.focus();
     }, 0);
+
+    // Getting the error message to display
+    this.electronService.ipcRenderer.on(
+      'renameFileResponse', (event, index: number, success: boolean, renameTo: string, oldFileName: string, errMsg?: string) => {
+      if (success) {
+      } else {
+        this.renameErrMsg = errMsg;
+        this.cd.detectChanges();
+      }
+    });
   }
 
   /**
