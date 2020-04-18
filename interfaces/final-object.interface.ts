@@ -2,6 +2,9 @@ import { ResolutionString } from '../src/app/pipes/resolution-filter.service';
 
 export type StarRating = 0.5 | 1.5 | 2.5 | 3.5 | 4.5 | 5.5;
 
+// must be heights from true `16:9` resolutions AND divisible by 8
+type AllowedScreenshotHeights = 144 | 216 | 288 | 360 | 432 | 504;
+
 export interface FinalObject {
   addTags?: string[];           // tags to add
   hubName: string;              // the name of the hub -- for recently-opened
@@ -68,11 +71,10 @@ export function NewImageElement(): ImageElement {
 }
 
 export interface ScreenshotSettings {
-  clipHeight: number;          // currently only these are allowed '144', '216', '288', '360', '432', '504'
+  clipHeight: AllowedScreenshotHeights;
   clipSnippetLength: number;
   clipSnippets: number;        // the number of video snippets in every clip; 0 == no clip extracted
   fixed: boolean;
-  height: number;              // currently only these are allowed '144', '216', '288', '360', '432', '504'
-                               // must be heights from true `16:9` resolutions AND divisible by 8
+  height: AllowedScreenshotHeights;
   n: number;
 }
