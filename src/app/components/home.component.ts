@@ -1357,7 +1357,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (this.settingsButtons.showRelatedVideosTray.toggled) {
         this.settingsButtons.showRelatedVideosTray.toggled = false;
       }
-      this.settingsButtons.showTagTray.toggled = !this.settingsButtons.showTagTray.toggled;
+      if (this.settingsButtons.showTagTray.toggled) {
+        this.closeTagsTray();
+      } else {
+        this.settingsButtons.showTagTray.toggled = true;
+      }
     } else if (uniqueKey === 'showRelatedVideosTray') {
       if (this.settingsButtons.showTagTray.toggled) {
         this.settingsButtons.showTagTray.toggled = false;
@@ -2299,6 +2303,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.settingsButtons.manualTags.toggled = !this.settingsButtons.manualTags.toggled;
       this.cd.detectChanges();
       this.settingsButtons.manualTags.toggled = !this.settingsButtons.manualTags.toggled;
+    }
+  }
+
+  /**
+   * Close the manual tags tray at the bottom
+   * exit batch mode if it is active
+   */
+  closeTagsTray(): void {
+    this.settingsButtons['showTagTray'].toggled = false;
+    if (this.batchTaggingMode) {
+      this.toggleBatchTaggingMode();
     }
   }
 

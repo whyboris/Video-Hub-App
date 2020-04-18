@@ -1390,7 +1390,7 @@
   @modalAnimation
 >
   <div
-    (click)="settingsButtons['showTagTray'].toggled = false"
+    (click)="closeTagsTray()"
     class="close-bottom-tray"
     title="{{ 'TAGS.closeTagTray' | translate }}"
   >
@@ -1427,17 +1427,20 @@
   <ng-template #batchModeExplainer>
     <div class="tag-tray-menu-left">
       <span class="manual-tag-tray-label">
-        Click videos to select. Click any tag in the tray to add to selected videos.
+        Click videos to select
+      </span>
+      <span class="manual-tag-tray-label" style="line-height: 24px">
+        Click any tag in the tray to add the tag to all selected videos
       </span>
     </div>
   </ng-template>
 
   <button
-    class="button-toggle-batch-mode"
-    [ngClass]="{ 'batch-mode-active': batchTaggingMode }"
+    class="wizard-button wizard-button-small button-toggle-batch-mode"
+    [ngClass]="{ 'edit-mode-active': batchTaggingMode }"
     (click)="toggleBatchTaggingMode()"
   >
-    TOGGLE BATCH MODE
+    Batch mode
   </button>
 
   <app-view-tags-component
