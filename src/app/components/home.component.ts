@@ -16,7 +16,7 @@ import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency
 
 // Interfaces
 import { DefaultScreenEmission } from './sheet/sheet.component';
-import { FinalObject, ImageElement, ScreenshotSettings } from '../../../interfaces/final-object.interface';
+import { FinalObject, ImageElement, ScreenshotSettings, AllowedScreenshotHeight } from '../../../interfaces/final-object.interface';
 import { HistoryItem } from '../../../interfaces/history-item.interface';
 import { ImportSettingsObject } from '../../../interfaces/import.interface';
 import { ImportStage } from '../../../main-support';
@@ -1690,8 +1690,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Called on screenshot size dropdown select
    * @param pxHeightForImport - string of number of pixels for the height of each screenshot
    */
-  selectScreenshotSize(pxHeightForImport: string): void {
-    const height = parseInt(pxHeightForImport, 10);
+  selectScreenshotSize(pxHeightForImport: '144' | '216' | '288' | '360' | '432' | '504'): void {
+    const height: AllowedScreenshotHeight = parseInt(pxHeightForImport, 10) as AllowedScreenshotHeight;
     this.wizard.screenshotSizeForImport = height;
   }
 
@@ -1699,8 +1699,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Called on screenshot size dropdown select
    * @param pxHeightForImport - string of number of pixels for the height of each screenshot
    */
-  selectClipSize(pxHeightForImport: string): void {
-    const height = parseInt(pxHeightForImport, 10);
+  selectClipSize(pxHeightForImport: '144' | '216' | '288' | '360' | '432' | '504'): void {
+    const height: AllowedScreenshotHeight = parseInt(pxHeightForImport, 10) as AllowedScreenshotHeight;
     this.wizard.clipHeight = height;
   }
 
