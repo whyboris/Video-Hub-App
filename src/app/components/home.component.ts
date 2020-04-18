@@ -2287,12 +2287,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
             tag: tag
           });
         }
-        element.selected = false;
+        // element.selected = false; // this should be done when toggling the button off instead!
+        // in case the user wants to add more than one tag to the same selection !!!
       }
     });
 
-    this.deletePipeHack = !this.deletePipeHack; // force redraw of the whole view (so the tags update next to each video)
-    this.cd.detectChanges();
+    if (this.appState.currentView === 'showDetails') {
+      // details view shows tags but they don't update without some code that forces a refresh :(
+      // hack-y code simply hides manual tags and then shows them again
+      this.settingsButtons.manualTags.toggled = !this.settingsButtons.manualTags.toggled;
+      this.cd.detectChanges();
+      this.settingsButtons.manualTags.toggled = !this.settingsButtons.manualTags.toggled;
+    }
   }
 
 }
