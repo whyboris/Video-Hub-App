@@ -65,8 +65,6 @@ export const SettingsButtonsGroups: string[][] = [
   [
     'manualTags',
     'showTagTray',
-    'tagFrequencySort',
-    'batchTagging'
   ],
   [
     'hoverScrub',
@@ -378,14 +376,6 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     title: 'BUTTONS.manualTagsHint',
     toggled: true
   },
-  'batchTagging': {
-    description: 'BUTTONS.batchTagsDescription',
-    hidden: false, // CHANGE BEFORE PR MERGE
-    iconName: 'icon-tag-manual',
-    moreInfo: 'BUTTONS.batchTagsMoreInfo',
-    title: 'BUTTONS.batchTagsHint',
-    toggled: true // CHANGE BEFORE PR MERGE
-  },
   'muteClips': {
     description: 'BUTTONS.muteClipsDescription',
     hidden: true,
@@ -644,7 +634,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     title: 'BUTTONS.tagExclusionHint',
     toggled: false
   },
-  'tagFrequencySort': {
+  'tagFrequencySort': { // was once in the ribbon, now it's removed and never appears in settings, toggled only from tag tray
     description: 'BUTTONS.tagFrequencySortDescription',
     hidden: true,
     iconName: 'icon-tag-frequency',

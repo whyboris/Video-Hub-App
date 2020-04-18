@@ -291,6 +291,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // crappy hack to remember where to navigate to when in folder view and returning back to root
   folderNavigationScrollOffset: number = 0;
 
+  batchTaggingMode = false; // when batch tagging is enabled
+
   // ========================================================================
   // Please add new variables below if they don't fit into any other section
   // ------------------------------------------------------------------------
@@ -933,7 +935,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   public handleClick(eventObject: { mouseEvent: MouseEvent, thumbIndex?: number }, item: ImageElement) {
 
-    if (this.settingsButtons['batchTagging'].toggled) {
+    if (this.batchTaggingMode) {
       item.selected = !item.selected;
 
       return;
@@ -1045,7 +1047,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   handleTagWordClicked(filter: string, event?): void {
 
-    if (this.settingsButtons['batchTagging'].toggled) {
+    if (this.batchTaggingMode) {
       console.log('batch tagging!');
       console.log(filter);
       this.addTagToManyVideos(filter);
@@ -2287,8 +2289,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
             tag: tag
           });
         }
-        // element.selected = false; // this should be done when toggling the button off instead!
-        // in case the user wants to add more than one tag to the same selection !!!
+
       }
     });
 
@@ -2299,6 +2300,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.cd.detectChanges();
       this.settingsButtons.manualTags.toggled = !this.settingsButtons.manualTags.toggled;
     }
+  }
+
+  /**
+   * Toggle between batch tag edit mode and normal mode
+   */
+  toggleBatchTaggingMode(): void {
+    if (this.batchTaggingMode) {
+      this.finalArray.forEach((element: ImageElement) => {
+        element.selected = false;
+      });
+    }
+    this.batchTaggingMode = !this.batchTaggingMode
   }
 
 }

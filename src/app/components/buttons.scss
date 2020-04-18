@@ -164,3 +164,14 @@ button {
   opacity: 0.5;
   pointer-events: none;
 }
+
+// Batch tag editing mode
+.button-toggle-batch-mode {
+  bottom: 20px;
+  left: 20px;
+  position: absolute;
+}
+
+.batch-mode-active {
+  border: 1px solid red;
+}

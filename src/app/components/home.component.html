@@ -1394,35 +1394,51 @@
     class="close-bottom-tray"
     title="{{ 'TAGS.closeTagTray' | translate }}"
   >
-  <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
-</div>
+    <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
+  </div>
 
-<div class="tag-tray-menu-left">
-  <span class="manual-tag-tray-label">
-    {{ 'TAGS.presentTags' | translate }}:
-  </span>
-  <button
-    (click)="settingsButtons['tagFrequencySort'].toggled = !settingsButtons['tagFrequencySort'].toggled"
-    class="tag-sort-by-toggle"
-  >
-    {{ (settingsButtons['tagFrequencySort'].toggled ? 'TAGS.sortByFrequency'
-                                                    : 'TAGS.sortAlphabetical') | translate }}
-  </button>
-  <button
-    (click)="manualTagShowFrequency = !manualTagShowFrequency"
-    class="show-frequency"
-  >
-    {{ (manualTagShowFrequency ? 'TAGS.showingFrequency'
-                               : 'TAGS.hidingFrequency') | translate }}
-  </button>
-  <input
-    (keyup.esc)="manualTagFilterString = ''"
-    [(ngModel)]="manualTagFilterString"
-    class="filter-general manual-tag-tray-filter"
-    placeholder="{{ 'TAGS.filterTags' | translate }}"
-  >
+  <div class="tag-tray-menu-left" *ngIf="!batchTaggingMode; else batchModeExplainer">
+    <span class="manual-tag-tray-label">
+      {{ 'TAGS.presentTags' | translate }}:
+    </span>
+    <button
+      (click)="settingsButtons['tagFrequencySort'].toggled = !settingsButtons['tagFrequencySort'].toggled"
+      class="tag-sort-by-toggle"
+    >
+      {{ (settingsButtons['tagFrequencySort'].toggled ? 'TAGS.sortByFrequency'
+                                                      : 'TAGS.sortAlphabetical') | translate }}
+    </button>
+    <button
+      (click)="manualTagShowFrequency = !manualTagShowFrequency"
+      class="show-frequency"
+    >
+      {{ (manualTagShowFrequency ? 'TAGS.showingFrequency'
+                                : 'TAGS.hidingFrequency') | translate }}
+    </button>
+    <input
+      (keyup.esc)="manualTagFilterString = ''"
+      [(ngModel)]="manualTagFilterString"
+      class="filter-general manual-tag-tray-filter"
+      placeholder="{{ 'TAGS.filterTags' | translate }}"
+    >
 
-</div>
+  </div>
+
+  <ng-template #batchModeExplainer>
+    <div class="tag-tray-menu-left">
+      <span class="manual-tag-tray-label">
+        Click videos to select. Click any tag in the tray to add to selected videos.
+      </span>
+    </div>
+  </ng-template>
+
+  <button
+    class="button-toggle-batch-mode"
+    [ngClass]="{ 'batch-mode-active': batchTaggingMode }"
+    (click)="toggleBatchTaggingMode()"
+  >
+    TOGGLE BATCH MODE
+  </button>
 
   <app-view-tags-component
     class="all-the-tags"
