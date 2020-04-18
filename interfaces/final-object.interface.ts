@@ -36,7 +36,7 @@ export interface ImageElement {
   // Stripped out and not saved in the VHA file
   // ------------------------------------------------------------------------
   deleted?: boolean;             // toggled after a successful delete of file; removed before saving .vha file
-  selected?: boolean;            //
+  selected?: boolean;            // for batch-tagging of videos
   durationDisplay: string;       // displayed duration in X:XX:XX format
   fileSizeDisplay: string;       // displayed as XXXmb or X.Xgb
   index: number;                 // for the `default` sort order

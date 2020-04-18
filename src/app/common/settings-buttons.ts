@@ -65,7 +65,8 @@ export const SettingsButtonsGroups: string[][] = [
   [
     'manualTags',
     'showTagTray',
-    'tagFrequencySort'
+    'tagFrequencySort',
+    'batchTagging'
   ],
   [
     'hoverScrub',
@@ -376,6 +377,14 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     settingsHeading: 'SETTINGS.manualTags',
     title: 'BUTTONS.manualTagsHint',
     toggled: true
+  },
+  'batchTagging': {
+    description: 'BUTTONS.batchTagsDescription',
+    hidden: false, // CHANGE BEFORE PR MERGE
+    iconName: 'icon-tag-manual',
+    moreInfo: 'BUTTONS.batchTagsMoreInfo',
+    title: 'BUTTONS.batchTagsHint',
+    toggled: true // CHANGE BEFORE PR MERGE
   },
   'muteClips': {
     description: 'BUTTONS.muteClipsDescription',

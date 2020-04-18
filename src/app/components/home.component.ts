@@ -933,6 +933,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   public handleClick(eventObject: { mouseEvent: MouseEvent, thumbIndex?: number }, item: ImageElement) {
 
+    if (this.settingsButtons['batchTagging'].toggled) {
+      item.selected = !item.selected;
+
+      return;
+    }
+
     // ctrl/cmd + click for thumbnail sheet
     if (eventObject.mouseEvent.ctrlKey === true || eventObject.mouseEvent.metaKey) {
       this.openThumbnailSheet(item);
@@ -1035,9 +1041,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   /**
    * Add filter to FILE search when word in file is clicked
-   * @param filter
+   * @param filter - particular tag clicked
    */
   handleTagWordClicked(filter: string, event?): void {
+
+    if (this.settingsButtons['batchTagging'].toggled) {
+      console.log('batch tagging!');
+      console.log(filter);
+      this.addTagToManyVideos(filter);
+      return;
+    }
+
     this.showSidebar();
     if (event && event.shiftKey) { // Shift click to exclude
       if (!this.settingsButtons['tagExclusion'].toggled) {
@@ -2258,6 +2272,27 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const iqr = q3 - q1;
 
     return Math.min((q3 + iqr * 3), max);
+  }
+
+  addTagToManyVideos(tag: string): void {
+    this.finalArray.forEach((element: ImageElement) => {
+      if (element.selected) {
+        if (!element.tags || !element.tags.includes(tag)) {
+
+          this.manualTagsService.addTag(tag); // only updates the count in the tray, nothing else!
+
+          this.editFinalArrayTag({
+            type: 'add',
+            index: element.index,
+            tag: tag
+          });
+        }
+        element.selected = false;
+      }
+    });
+
+    this.deletePipeHack = !this.deletePipeHack; // force redraw of the whole view (so the tags update next to each video)
+    this.cd.detectChanges();
   }
 
 }
