@@ -297,7 +297,7 @@
   }
 
   .manual-tag-tray-label {
-    margin-top: 18px;
+    margin-top: 16px;
   }
 
   .tag-sort-by-toggle,
@@ -305,7 +305,7 @@
     background: none;
     border: none;
     color: $gray-70;
-    margin-top: 11px;
+    margin-top: 14px;
     padding-right: 0;
 
     &:hover {
@@ -315,7 +315,7 @@
 
   .all-the-tags {
     overflow-y: scroll;
-    padding: 15px 15px;
+    padding: 12px 15px;
     width: 100%;
 
     @include scrollBarShown;

@@ -21,6 +21,12 @@
   >
   </div>
 
+  <app-icon
+    *ngIf="video.selected"
+    class="selected"
+    [icon]="'icon-show-more-info'"
+  ></app-icon>
+
   <span
     *ngIf="showMeta"
     [ngClass]="{ 'larger-font': largerFont }"

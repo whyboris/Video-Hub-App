@@ -51,3 +51,25 @@
     color: $gray-50;
   }
 }
+
+.wizard-button-small {
+  display: inline-block;
+  margin: 5px;
+  min-width: auto;
+  padding: 5px 10px;
+  white-space: nowrap;
+  width: auto;
+}
+
+.edit-mode-active {
+  background-color: $pretty-red;
+  border: 1px solid $dark-red;
+  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0) !important;
+  transform: translateY(1px);
+  transition-duration: 50ms;
+  transition-property: background-color, border;
+
+  &:hover {
+    background-color: $pretty-red-lighter;
+  }
+}

@@ -13,6 +13,7 @@ import { ImageElement } from '../../../../../interfaces/final-object.interface';
       '../clip-and-preview.scss',
       '../time-and-rez.scss',
       './preview.component.scss',
+      '../selected.scss'
     ],
   animations: [ textAppear,
                 metaAppear ]
