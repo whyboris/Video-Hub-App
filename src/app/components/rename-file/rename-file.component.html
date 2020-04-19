@@ -1,7 +1,7 @@
 <div
   [ngClass]="{ renameDark: darkMode }"
   class="renameFile"
-  >
+>
 
   <div class="input">
     <input
@@ -13,27 +13,31 @@
     [disabled]="nodeRenamingFile"
     class="input-renameFile"
     type="text"
-    >
+  >
     <!-- in the mac the font sizes are not aligned properly and the extension shows up overlapping -->
-    <span *ngIf="!macVersion" class="extension-hack" [ngClass]="{ darkModeOn: darkMode }" >
+    <span
+      *ngIf="!macVersion"
+      class="extension-hack"
+      [ngClass]="{ darkModeOn: darkMode }"
+    >
       <span class="extension" *ngIf="renamingWIP.length > 0">.{{ renamingExtension }}</span>
     </span>
   </div>
 
   <span *ngIf="renameErrMsg !== ''" class="renameErrMsg">
-  {{ renameErrMsg | translate }}
+    {{ renameErrMsg | translate }}
   </span>
 
   <button
-  [disabled]="
-        (renamingWIP + '.' + renamingExtension) === currentRightClickedItem.fileName
-      || nodeRenamingFile
-      || renamingWIP.length === 0
-    "
-  class="wizard-button"
-  (click)="attemptToRename()"
+    [disabled]="
+          (renamingWIP + '.' + renamingExtension) === currentRightClickedItem.fileName
+        || nodeRenamingFile
+        || renamingWIP.length === 0
+      "
+    class="wizard-button"
+    (click)="attemptToRename()"
   >
-  {{ 'RIGHTCLICK.renameButton' | translate }}
+    {{ 'RIGHTCLICK.renameButton' | translate }}
   </button>
 
 </div>

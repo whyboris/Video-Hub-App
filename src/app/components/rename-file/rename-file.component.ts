@@ -1,18 +1,6 @@
 import { Component, ChangeDetectorRef, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 
-// Services
 import { ElectronService } from '../../providers/electron.service';
-
-// Interfaces
-import { ImageElement } from '../../../../interfaces/final-object.interface';
-
-// Constants
-import { SettingsButtons } from '../../common/settings-buttons';
-
-// Animations
-import {
-  donutAppear,
-} from '../../common/animations';
 
 @Component({
   selector: 'app-rename-file',
