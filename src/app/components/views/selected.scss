@@ -1,8 +1,10 @@
 .selected {
+  background-color: #00000066; // alpha
+  border-radius: 25px;
   fill: white;
   height: 50px;
-  left: calc(50% - 25px);
+  left: 12px;
   position: absolute;
-  top: calc(50% - 25px);
+  top: 12px;
   width: 50px;
 }
