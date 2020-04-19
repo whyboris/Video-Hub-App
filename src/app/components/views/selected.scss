@@ -7,4 +7,5 @@
   position: absolute;
   top: 12px;
   width: 50px;
+  z-index: 1; // needed in clip view
 }
