@@ -1048,8 +1048,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   handleTagWordClicked(filter: string, event?): void {
 
     if (this.batchTaggingMode) {
-      console.log('batch tagging!');
-      console.log(filter);
       this.addTagToManyVideos(filter);
       return;
     }
