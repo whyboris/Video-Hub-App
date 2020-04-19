@@ -183,14 +183,14 @@
     @modalAnimation
   >
 
-  <div
-    (click)="closeRename()"
-    [ngClass]="{ closeRenameDark: settingsButtons['darkMode'].toggled }"
-    class="close-settings closeRename"
-    title="{{ 'RIGHTCLICK.cancelRename' | translate }}"
-  >
-    <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
-  </div>
+    <div
+      (click)="closeRename()"
+      [ngClass]="{ closeRenameDark: settingsButtons['darkMode'].toggled }"
+      class="close-settings closeRename"
+      title="{{ 'RIGHTCLICK.cancelRename' | translate }}"
+    >
+      <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
+    </div>
 
     <span class="renameHeading">{{ 'RIGHTCLICK.renameTitle' | translate }}</span>
 
@@ -209,36 +209,13 @@
     <span class="renameFrom">{{ 'RIGHTCLICK.renameFrom' | translate }}</span>
     <span class="renameTo">{{ 'RIGHTCLICK.renameTo' | translate }}</span>
 
-    <input
-      #renameFileInput
-      (keyup.enter)="attemptToRename()"
-      [(ngModel)]="renamingWIP"
-      [ngClass]="{ darkModeOn: settingsButtons['darkMode'].toggled }"
-      [disabled]="nodeRenamingFile"
-      class="renameFile"
-      type="text"
-    >
-    <!-- in the mac the font sizes are not aligned properly and the extension shows up overlapping -->
-    <span *ngIf="!macVersion" class="extension-hack" [ngClass]="{ darkModeOn: settingsButtons['darkMode'].toggled }" >
-      <span class="hidden">{{ renamingWIP }}</span>
-      <span class="extension" *ngIf="renamingWIP.length > 0">.{{ renamingExtension }}</span>
-    </span>
-
-    <span *ngIf="renameErrMsg !== ''" class="renameErrMsg" @donutAppear>
-      {{ renameErrMsg | translate }}
-    </span>
-
-    <button
-      [disabled]="
-            (renamingWIP + '.' + renamingExtension) === currentRightClickedItem.fileName
-          || nodeRenamingFile
-          || renamingWIP.length === 0
-        "
-      class="wizard-button button-rename"
-      (click)="attemptToRename()"
-    >
-      {{ 'RIGHTCLICK.renameButton' | translate }}
-    </button>
+    <app-rename-file
+    *ngIf="renamingNow"
+    [selectedSourceFolder]="appState.selectedSourceFolder"
+    [currentRightClickedItem]="currentRightClickedItem"
+    [macVersion]="macVersion"
+    [fontSize]="18"
+    [darkMode]="settingsButtons['darkMode'].toggled"></app-rename-file>
 
   </div>
 
@@ -1261,6 +1238,8 @@
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
           [imgHeight]="previewHeight"
+          [macVersion]="macVersion"
+          [selectedSourceFolder]="appState.selectedSourceFolder"
 
           [star]="item.stars"
 

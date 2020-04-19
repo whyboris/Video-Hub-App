@@ -793,7 +793,7 @@ ipc.on('load-this-vha-file', (event, pathToVhaFile: string, savableProperties: S
 
 });
 
-ipc.on('try-to-rename-this-file', (event, sourceFolder: string, relPath: string, file: string, renameTo: string): void => {
+ipc.on('try-to-rename-this-file', (event, sourceFolder: string, relPath: string, file: string, renameTo: string, index: number): void => {
   console.log('renaming file:');
 
   const original: string = path.join(sourceFolder, relPath, file);
@@ -826,7 +826,7 @@ ipc.on('try-to-rename-this-file', (event, sourceFolder: string, relPath: string,
     }
   }
 
-  globals.angularApp.sender.send('renameFileResponse', success, errMsg);
+  globals.angularApp.sender.send('renameFileResponse', index, success, renameTo, file, errMsg);
 });
 
 // ========================================================================================

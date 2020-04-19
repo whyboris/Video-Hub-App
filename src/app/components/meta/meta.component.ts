@@ -1,7 +1,9 @@
-import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectorRef, ViewChild, ElementRef, HostListener } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
+// Services
 import { ManualTagsService } from '../tags-manual/manual-tags.service';
+import { ElectronService } from '../../providers/electron.service';
 
 import { StarRating, ImageElement } from '../../../../interfaces/final-object.interface';
 import { YearEmission } from '../views/details/details.component';
@@ -36,28 +38,46 @@ export class MetaComponent implements OnInit {
   @Input() darkMode: boolean;
   @Input() imgHeight: number;
   @Input() largerFont: boolean;
+  @Input() macVersion: boolean;
+  @Input() maxWidth: number;
   @Input() showMeta: boolean;
   @Input() star: StarRating;
   @Input() showManualTags: boolean;
   @Input() showAutoFileTags: boolean;
   @Input() showAutoFolderTags: boolean;
-  @Input() maxWidth: number;
+  @Input() selectedSourceFolder: string;
 
   starRatingHack: StarRating;
   yearHack: number;
 
+  renamingNow: boolean = false;
   tagViewUpdateHack: boolean = false;
+  text: String;
 
   constructor(
     private cd: ChangeDetectorRef,
+    public electronService: ElectronService,
+    private elementRef: ElementRef,
     public manualTagsService: ManualTagsService,
     public sanitizer: DomSanitizer
-  ) { }
-
+  ) {
+    this.text = 'no clicks yet';
+   }
 
   ngOnInit() {
     this.starRatingHack = this.star;
     this.yearHack = this.video.year;
+
+    // Rename file response
+    this.electronService.ipcRenderer.on(
+      'renameFileResponse', (event, index: number, success: boolean, renameTo: string, oldFileName: string, errMsg?: string) => {
+
+      if (success) {
+        this.closeRename();
+      } else {
+        this.cd.detectChanges();
+      }
+    });
   }
 
   addThisTag(tag: string) {
@@ -154,4 +174,20 @@ export class MetaComponent implements OnInit {
     }
   }
 
+  /**
+   * Close the rename dialog
+   */
+  closeRename(){
+    this.renamingNow = false;
+    this.cd.detectChanges();
+  }
+
+  /**
+   * Close the rename dialog
+   */
+  openRename(){
+    console.log('OPENING!!')
+    this.renamingNow = true;
+    this.cd.detectChanges();
+  }
 }
