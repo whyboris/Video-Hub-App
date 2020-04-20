@@ -2,48 +2,26 @@
   class="meta"
   [ngStyle]="{ 'max-width': maxWidth + 'px' }"
 >
-  <div class="video-name">
 
 <!-- RENAME FILE SECTION -->
-
-    <span
+  <div class="video-name">
+    <input
+      *ngIf="!renamingNow"
+      class="meta-title"
       [ngClass]="{ 'larger-font': largerFont }"
-      [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
-      *ngIf="!renamingNow"
-      class="title"
+      [ngStyle]="{
+          color: darkMode ? '#BBBBBB' : '#000000',
+          width: renamingWIP.length + 2 + 'ch'
+        }"
+      [(ngModel)]="renamingWIP"
+      type="text"
+      (blur)="tryRenamingFile($event)"
+      (keydown.enter)="tryRenamingFile($event)"
+      (keydown.esc)="resetTitle($event)"
     >
-      {{ video.cleanName }}
-    </span>
-
-    <button
-      *ngIf="!renamingNow"
-      class="button-renameFile"
-      (click)="openRename()"
-      >
-      {{ 'RIGHTCLICK.renameFile' | translate }}
-    </button>
-
-    <app-rename-file
-      class="rename-video"
-      *ngIf="renamingNow"
-      [selectedSourceFolder]="selectedSourceFolder"
-      [currentRightClickedItem]="video"
-      [macVersion]="macVersion"
-      [darkMode]="darkMode"
-    >
-    </app-rename-file>
-
-    <button
-      class="button-renameFile"
-      *ngIf="renamingNow"
-      (click)="closeRename()"
-    >
-      {{ "SYSTEM.cancel" | translate | uppercase }}
-    </button>
   </div>
 
 <!-- META DATA SECTION -->
-
   <span
     class="fileSize"
     [ngClass]="{ darkModeText: darkMode }"

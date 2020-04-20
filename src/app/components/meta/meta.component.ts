@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectorRef, ViewChild, ElementRef, HostListener } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 // Services
@@ -54,6 +54,8 @@ export class MetaComponent implements OnInit {
   tagViewUpdateHack: boolean = false;
   text: String;
 
+  renamingWIP: string = '';
+
   constructor(
     private cd: ChangeDetectorRef,
     public electronService: ElectronService,
@@ -67,6 +69,8 @@ export class MetaComponent implements OnInit {
   ngOnInit() {
     this.starRatingHack = this.star;
     this.yearHack = this.video.year;
+
+    this.renamingWIP = this.video.cleanName;
 
     // Rename file response
     this.electronService.ipcRenderer.on(
@@ -177,17 +181,32 @@ export class MetaComponent implements OnInit {
   /**
    * Close the rename dialog
    */
-  closeRename(){
+  closeRename() {
     this.renamingNow = false;
     this.cd.detectChanges();
   }
 
   /**
+   * Try renaming file
+   * happens on `Enter` / `Return` key press or on 'blur' (focus out)
+   */
+  tryRenamingFile(event) {
+    event.target.blur();
+    console.log('trying to rename');
+  }
+
+  /**
    * Close the rename dialog
    */
-  openRename(){
+  openRename() {
     console.log('OPENING!!')
     this.renamingNow = true;
     this.cd.detectChanges();
+  }
+
+  resetTitle(event): void {
+    console.log(event);
+    event.target.blur();
+    this.renamingWIP = this.video.cleanName;
   }
 }
