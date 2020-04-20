@@ -210,12 +210,12 @@
     <span class="renameTo">{{ 'RIGHTCLICK.renameTo' | translate }}</span>
 
     <app-rename-file
-    *ngIf="renamingNow"
-    [selectedSourceFolder]="appState.selectedSourceFolder"
-    [currentRightClickedItem]="currentRightClickedItem"
-    [macVersion]="macVersion"
-    [fontSize]="18"
-    [darkMode]="settingsButtons['darkMode'].toggled"></app-rename-file>
+      *ngIf="renamingNow"
+      [selectedSourceFolder]="appState.selectedSourceFolder"
+      [currentRightClickedItem]="currentRightClickedItem"
+      [macVersion]="macVersion"
+      [darkMode]="settingsButtons['darkMode'].toggled"
+    ></app-rename-file>
 
   </div>
 

@@ -3,6 +3,9 @@
   [ngStyle]="{ 'max-width': maxWidth + 'px' }"
 >
   <div class="video-name">
+
+<!-- RENAME FILE SECTION -->
+
     <span
       [ngClass]="{ 'larger-font': largerFont }"
       [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
@@ -11,6 +14,7 @@
     >
       {{ video.cleanName }}
     </span>
+
     <button
       *ngIf="!renamingNow"
       class="button-renameFile"
@@ -20,23 +24,25 @@
     </button>
 
     <app-rename-file
-    class="rename-video"
-    *ngIf="renamingNow"
-    [selectedSourceFolder]="selectedSourceFolder"
-    [currentRightClickedItem]="video"
-    [macVersion]="macVersion"
-    [darkMode]="darkMode"
-    [fontSize]="12">
+      class="rename-video"
+      *ngIf="renamingNow"
+      [selectedSourceFolder]="selectedSourceFolder"
+      [currentRightClickedItem]="video"
+      [macVersion]="macVersion"
+      [darkMode]="darkMode"
+    >
     </app-rename-file>
 
     <button
-    class="button-renameFile"
-    *ngIf="renamingNow"
-    (click)="closeRename()"
+      class="button-renameFile"
+      *ngIf="renamingNow"
+      (click)="closeRename()"
     >
       {{ "SYSTEM.cancel" | translate | uppercase }}
     </button>
   </div>
+
+<!-- META DATA SECTION -->
 
   <span
     class="fileSize"

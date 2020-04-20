@@ -5,7 +5,11 @@ import { ElectronService } from '../../providers/electron.service';
 @Component({
   selector: 'app-rename-file',
   templateUrl: './rename-file.component.html',
-  styleUrls: ['./rename-file.component.scss']
+  styleUrls: [
+    '../rightclick.scss',
+    '../wizard-button.scss',
+    './rename-file.component.scss'
+  ]
 })
 export class RenameFileComponent implements OnInit {
   @ViewChild('renameFileInput', { static: false }) renameFileInput: ElementRef;
@@ -14,7 +18,6 @@ export class RenameFileComponent implements OnInit {
   @Input() currentRightClickedItem: any;
   @Input() macVersion: boolean;
   @Input() darkMode: boolean;
-  @Input() fontSize: number;
 
   renamingWIP: string;
   renamingExtension: string;
