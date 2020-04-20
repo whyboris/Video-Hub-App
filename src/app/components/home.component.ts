@@ -323,7 +323,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       switch (event.key) {
 
-        case ('a'):
+        case ('b'):
           this.toggleButton('hideSidebar');
           break;
 
@@ -384,11 +384,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
           break;
 
         case ('q'):
-          event.preventDefault();
-          event.stopPropagation();
-          this.initiateClose();
-          break;
-
         case ('w'):
           event.preventDefault();
           event.stopPropagation();
