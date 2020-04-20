@@ -25,6 +25,7 @@
   <span
     class="fileSize"
     [ngClass]="{ darkModeText: darkMode }"
+    *ngIf="renamingWIP === video.cleanName; else renamingText"
   >
     {{ video.durationDisplay }}
 
@@ -49,6 +50,17 @@
       >
 
   </span>
+
+  <ng-template
+    #renamingText
+  >
+    <span
+      class="fileSize renaming-message"
+      [ngClass]="{ 'renaming-message-dark-mode': darkMode }"
+    >
+      Renaming file. Press "esc" key to cancel renaming.
+    </span>
+  </ng-template>
 
   <span class="fileSize" *ngIf="video.timesPlayed">
     {{ 'TAGS.timesPlayed' | translate }}: {{ video.timesPlayed }}
