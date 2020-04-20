@@ -38,7 +38,7 @@ export const defaultImgsPerRow: RowNumbers = {
   showClips: 4,
 };
 
-export let AppState: AppStateInterface = {
+export let AppState: AppStateInterface = { // AppState is saved into `settings.json` so it persists
   currentVhaFile: '',     // full path to the .vha file
   currentSort: 'default',
   currentView: 'showThumbnails',

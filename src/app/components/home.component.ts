@@ -16,7 +16,7 @@ import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency
 
 // Interfaces
 import { DefaultScreenEmission } from './sheet/sheet.component';
-import { FinalObject, ImageElement, ScreenshotSettings } from '../../../interfaces/final-object.interface';
+import { FinalObject, ImageElement, ScreenshotSettings, AllowedScreenshotHeight } from '../../../interfaces/final-object.interface';
 import { HistoryItem } from '../../../interfaces/history-item.interface';
 import { ImportSettingsObject } from '../../../interfaces/import.interface';
 import { ImportStage } from '../../../main-support';
@@ -290,6 +290,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   // crappy hack to remember where to navigate to when in folder view and returning back to root
   folderNavigationScrollOffset: number = 0;
+
+  batchTaggingMode = false; // when batch tagging is enabled
 
   // ========================================================================
   // Please add new variables below if they don't fit into any other section
@@ -933,6 +935,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   public handleClick(eventObject: { mouseEvent: MouseEvent, thumbIndex?: number }, item: ImageElement) {
 
+    if (this.batchTaggingMode) {
+      item.selected = !item.selected;
+
+      return;
+    }
+
     // ctrl/cmd + click for thumbnail sheet
     if (eventObject.mouseEvent.ctrlKey === true || eventObject.mouseEvent.metaKey) {
       this.openThumbnailSheet(item);
@@ -1035,9 +1043,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   /**
    * Add filter to FILE search when word in file is clicked
-   * @param filter
+   * @param filter - particular tag clicked
    */
   handleTagWordClicked(filter: string, event?): void {
+
+    if (this.batchTaggingMode) {
+      this.addTagToManyVideos(filter);
+      return;
+    }
+
     this.showSidebar();
     if (event && event.shiftKey) { // Shift click to exclude
       if (!this.settingsButtons['tagExclusion'].toggled) {
@@ -1341,7 +1355,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (this.settingsButtons.showRelatedVideosTray.toggled) {
         this.settingsButtons.showRelatedVideosTray.toggled = false;
       }
-      this.settingsButtons.showTagTray.toggled = !this.settingsButtons.showTagTray.toggled;
+      if (this.settingsButtons.showTagTray.toggled) {
+        this.closeTagsTray();
+      } else {
+        this.settingsButtons.showTagTray.toggled = true;
+      }
     } else if (uniqueKey === 'showRelatedVideosTray') {
       if (this.settingsButtons.showTagTray.toggled) {
         this.settingsButtons.showTagTray.toggled = false;
@@ -1670,8 +1688,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Called on screenshot size dropdown select
    * @param pxHeightForImport - string of number of pixels for the height of each screenshot
    */
-  selectScreenshotSize(pxHeightForImport: string): void {
-    const height = parseInt(pxHeightForImport, 10);
+  selectScreenshotSize(pxHeightForImport: '144' | '216' | '288' | '360' | '432' | '504'): void {
+    const height: AllowedScreenshotHeight = parseInt(pxHeightForImport, 10) as AllowedScreenshotHeight;
     this.wizard.screenshotSizeForImport = height;
   }
 
@@ -1679,8 +1697,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Called on screenshot size dropdown select
    * @param pxHeightForImport - string of number of pixels for the height of each screenshot
    */
-  selectClipSize(pxHeightForImport: string): void {
-    const height = parseInt(pxHeightForImport, 10);
+  selectClipSize(pxHeightForImport: '144' | '216' | '288' | '360' | '432' | '504'): void {
+    const height: AllowedScreenshotHeight = parseInt(pxHeightForImport, 10) as AllowedScreenshotHeight;
     this.wizard.clipHeight = height;
   }
 
@@ -2258,6 +2276,55 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const iqr = q3 - q1;
 
     return Math.min((q3 + iqr * 3), max);
+  }
+
+  addTagToManyVideos(tag: string): void {
+    this.finalArray.forEach((element: ImageElement) => {
+      if (element.selected) {
+        if (!element.tags || !element.tags.includes(tag)) {
+
+          this.manualTagsService.addTag(tag); // only updates the count in the tray, nothing else!
+
+          this.editFinalArrayTag({
+            type: 'add',
+            index: element.index,
+            tag: tag
+          });
+        }
+
+      }
+    });
+
+    if (this.appState.currentView === 'showDetails') {
+      // details view shows tags but they don't update without some code that forces a refresh :(
+      // hack-y code simply hides manual tags and then shows them again
+      this.settingsButtons.manualTags.toggled = !this.settingsButtons.manualTags.toggled;
+      this.cd.detectChanges();
+      this.settingsButtons.manualTags.toggled = !this.settingsButtons.manualTags.toggled;
+    }
+  }
+
+  /**
+   * Close the manual tags tray at the bottom
+   * exit batch mode if it is active
+   */
+  closeTagsTray(): void {
+    this.settingsButtons['showTagTray'].toggled = false;
+    if (this.batchTaggingMode) {
+      this.toggleBatchTaggingMode();
+    }
+  }
+
+  /**
+   * Toggle between batch tag edit mode and normal mode
+   */
+  toggleBatchTaggingMode(): void {
+    if (this.batchTaggingMode) {
+      this.finalArray.forEach((element: ImageElement) => {
+        element.selected = false;
+      });
+    }
+    this.batchTaggingMode = !this.batchTaggingMode
   }
 
 }
