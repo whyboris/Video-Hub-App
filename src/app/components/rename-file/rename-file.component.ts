@@ -42,15 +42,12 @@ export class RenameFileComponent implements OnInit {
     this.electronService.ipcRenderer.on(
       'renameFileResponse', (event, index: number, success: boolean, renameTo: string, oldFileName: string, errMsg?: string) => {
 
-      this.nodeRenamingFile = false;
-
-      if (success) {
-        console.log('yay!');
-      } else {
-        console.log('ERROR', errMsg);
+      // just in case, make sure the message came back for the current file
+      if (this.currentRightClickedItem.index === index && !success) {
+        this.nodeRenamingFile = false;
         this.renameErrMsg = errMsg;
         this.cd.detectChanges();
-      }
+      } // if success, the `home.component` closes this component, no need to do anything else
     });
   }
 
