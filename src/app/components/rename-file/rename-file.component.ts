@@ -1,6 +1,7 @@
 import { Component, ChangeDetectorRef, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 
 import { ElectronService } from '../../providers/electron.service';
+import { FilePathService } from '../views/file-path.service';
 
 import { ImageElement } from '../../../../interfaces/final-object.interface';
 
@@ -28,11 +29,13 @@ export class RenameFileComponent implements OnInit {
 
   constructor(
     public cd: ChangeDetectorRef,
-    public electronService: ElectronService
+    public electronService: ElectronService,
+    public filePathService: FilePathService,
   ) { }
 
   ngOnInit(): void {
-    this.openRenameFileModal();
+    this.renamingWIP = this.filePathService.getFileNameWithoutExtension(this.currentRightClickedItem.fileName);
+    this.renamingExtension = this.filePathService.getFileNameExtension(this.currentRightClickedItem.fileName);
 
     setTimeout(() => {
       this.renameFileInput.nativeElement.focus();
@@ -49,20 +52,6 @@ export class RenameFileComponent implements OnInit {
         this.cd.detectChanges();
       } // if success, the `home.component` closes this component, no need to do anything else
     });
-  }
-
-  /**
-   * Click rename file button, prepares all the name and extension
-   */
-  openRenameFileModal(): void {
-    const item: ImageElement = this.currentRightClickedItem;
-
-    // .slice() creates a copy
-    const fileName = item.fileName.slice().substr(0, item.fileName.lastIndexOf('.'));
-    const extension = item.fileName.slice().split('.').pop();
-
-    this.renamingWIP = fileName;
-    this.renamingExtension = extension;
   }
 
   /**
