@@ -50,7 +50,6 @@ export class MetaComponent implements OnInit {
   starRatingHack: StarRating;
   yearHack: number;
 
-  renamingNow: boolean = false;
   tagViewUpdateHack: boolean = false;
   text: String;
 
@@ -59,7 +58,6 @@ export class MetaComponent implements OnInit {
   constructor(
     private cd: ChangeDetectorRef,
     public electronService: ElectronService,
-    private elementRef: ElementRef,
     public manualTagsService: ManualTagsService,
     public sanitizer: DomSanitizer
   ) {
@@ -77,8 +75,9 @@ export class MetaComponent implements OnInit {
       'renameFileResponse', (event, index: number, success: boolean, renameTo: string, oldFileName: string, errMsg?: string) => {
 
       if (success) {
-        this.closeRename();
+        console.log('yay inside META!');
       } else {
+        console.log('err inside META!', errMsg);
         this.cd.detectChanges();
       }
     });
@@ -179,29 +178,12 @@ export class MetaComponent implements OnInit {
   }
 
   /**
-   * Close the rename dialog
-   */
-  closeRename() {
-    this.renamingNow = false;
-    this.cd.detectChanges();
-  }
-
-  /**
    * Try renaming file
    * happens on `Enter` / `Return` key press or on 'blur' (focus out)
    */
   tryRenamingFile(event) {
     event.target.blur();
     console.log('trying to rename');
-  }
-
-  /**
-   * Close the rename dialog
-   */
-  openRename() {
-    console.log('OPENING!!')
-    this.renamingNow = true;
-    this.cd.detectChanges();
   }
 
   resetTitle(event): void {

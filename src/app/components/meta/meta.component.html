@@ -5,12 +5,12 @@
 
 <!-- RENAME FILE SECTION -->
   <input
-    *ngIf="!renamingNow"
     class="meta-title"
     [ngClass]="{ 'larger-font': largerFont }"
     [ngStyle]="{
         color: darkMode ? '#DDDDDD' : '#000000',
-        width: renamingWIP.length + 2 + 'ch'
+        width: renamingWIP.length + 2 + 'ch',
+        'max-width': maxWidth - 20 + 'px'
       }"
     [(ngModel)]="renamingWIP"
     type="text"

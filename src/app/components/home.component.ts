@@ -213,11 +213,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   currentRightClickedItem: ImageElement;
   itemToRename: ImageElement;
-  nodeRenamingFile: boolean = false;
-  renameErrMsg: string = '';
   renamingExtension: string;
   renamingNow: boolean = false;
-  renamingWIP: string;           // ngModel for renaming file
   rightClickPosition: any = { x: 0, y: 0 };
   rightClickShowing: boolean = false;
 
@@ -548,15 +545,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.electronService.ipcRenderer.on(
       'renameFileResponse', (event, index: number, success: boolean, renameTo: string, oldFileName: string, errMsg?: string) => {
 
-      this.nodeRenamingFile = false;
-
       if (success) {
         // UPDATE THE FINAL ARRAY !!!
         this.replaceFileNameInFinalArray(renameTo, oldFileName, index);
         this.closeRename();
-      } else {
-        this.renameErrMsg = errMsg;
-        this.cd.detectChanges();
       }
     });
 
@@ -1933,18 +1925,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Opens rename file modal, prepares all the name and extension
    */
   openRenameFileModal(): void {
-    // prepare file name without extension:
-    this.renameErrMsg = '';
-    const item = this.currentRightClickedItem;
-
-    // .slice() creates a copy
-    const fileName = item.fileName.slice().substr(0, item.fileName.lastIndexOf('.'));
-    const extension = item.fileName.slice().split('.').pop();
-
-    this.renamingWIP = fileName;
-    this.renamingExtension = extension;
-
-    this.itemToRename = item;
+    this.itemToRename = this.currentRightClickedItem;
     this.renamingNow = true;
   }
 
