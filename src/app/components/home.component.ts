@@ -547,6 +547,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       if (success) {
         // UPDATE THE FINAL ARRAY !!!
+        console.log('home handles renaming success!');
         this.replaceFileNameInFinalArray(renameTo, oldFileName, index);
         this.closeRename();
       }

@@ -2,6 +2,8 @@ import { Component, ChangeDetectorRef, OnInit, Input, ElementRef, ViewChild } fr
 
 import { ElectronService } from '../../providers/electron.service';
 
+import { ImageElement } from '../../../../interfaces/final-object.interface';
+
 @Component({
   selector: 'app-rename-file',
   templateUrl: './rename-file.component.html',
@@ -15,7 +17,7 @@ export class RenameFileComponent implements OnInit {
   @ViewChild('renameFileInput', { static: false }) renameFileInput: ElementRef;
 
   @Input() selectedSourceFolder: string;
-  @Input() currentRightClickedItem: any;
+  @Input() currentRightClickedItem: ImageElement;
   @Input() macVersion: boolean;
   @Input() darkMode: boolean;
 
@@ -56,7 +58,7 @@ export class RenameFileComponent implements OnInit {
    * Click rename file button, prepares all the name and extension
    */
   openRenameFileModal(): void {
-    const item = this.currentRightClickedItem;
+    const item: ImageElement = this.currentRightClickedItem;
 
     // .slice() creates a copy
     const fileName = item.fileName.slice().substr(0, item.fileName.lastIndexOf('.'));
