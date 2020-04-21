@@ -4,22 +4,20 @@
 >
 
 <!-- RENAME FILE SECTION -->
-  <div class="video-name">
-    <input
-      *ngIf="!renamingNow"
-      class="meta-title"
-      [ngClass]="{ 'larger-font': largerFont }"
-      [ngStyle]="{
-          color: darkMode ? '#DDDDDD' : '#000000',
-          width: renamingWIP.length + 2 + 'ch'
-        }"
-      [(ngModel)]="renamingWIP"
-      type="text"
-      (blur)="tryRenamingFile($event)"
-      (keydown.enter)="tryRenamingFile($event)"
-      (keydown.esc)="resetTitle($event)"
-    >
-  </div>
+  <input
+    *ngIf="!renamingNow"
+    class="meta-title"
+    [ngClass]="{ 'larger-font': largerFont }"
+    [ngStyle]="{
+        color: darkMode ? '#DDDDDD' : '#000000',
+        width: renamingWIP.length + 2 + 'ch'
+      }"
+    [(ngModel)]="renamingWIP"
+    type="text"
+    (blur)="tryRenamingFile($event)"
+    (keydown.enter)="tryRenamingFile($event)"
+    (keydown.esc)="resetTitle($event)"
+  >
 
 <!-- META DATA SECTION -->
   <span
