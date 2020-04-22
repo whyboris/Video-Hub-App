@@ -10,7 +10,6 @@
   height: 180px;
   overflow: hidden; // will hide tags that don't fit in 2 lines
   padding: 0 0 0 20px;
-  position: relative;
   vertical-align: top;
 }
 
@@ -46,6 +45,28 @@
   opacity: 0.8;
 }
 
+.meta-title {
+  background: transparent;
+  border: 0;
+  outline: none;
+}
+
+.renaming-message {
+  color: $dark-blue;
+}
+
+.renaming-message-dark-mode {
+  color: $light-blue;
+}
+
+.renaming-error {
+  color: $dark-red;
+}
+
+.renaming-error-dark-mode {
+  color: $pretty-red;
+}
+
 .larger-font {
   font-size: 16px;
   margin-top: 4px;
@@ -77,28 +98,4 @@
   outline: none;
   padding: 0;
   width: 42px;
-}
-
-.video-name{
-  display: flex;
-  flex-wrap: nowrap;
-}
-
-.button-renameFile{
-  margin-left: 10px;
-  border: 1px solid $gray-30;
-  border-radius: 10px;
-  cursor: pointer;
-  max-height: 20px;
-  min-width: 100px;
-  outline: none;
-  padding: 0 10px;
-
-  &:hover {
-    background: $gray-10;
-  }
-}
-
-.rename-video{
-  overflow: hidden;
 }

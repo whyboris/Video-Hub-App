@@ -1,32 +1,26 @@
 import { Component, ChangeDetectorRef, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 
-// Services
 import { ElectronService } from '../../providers/electron.service';
+import { FilePathService } from '../views/file-path.service';
 
-// Interfaces
 import { ImageElement } from '../../../../interfaces/final-object.interface';
-
-// Constants
-import { SettingsButtons } from '../../common/settings-buttons';
-
-// Animations
-import {
-  donutAppear,
-} from '../../common/animations';
 
 @Component({
   selector: 'app-rename-file',
   templateUrl: './rename-file.component.html',
-  styleUrls: ['./rename-file.component.scss']
+  styleUrls: [
+    '../rightclick.scss',
+    '../wizard-button.scss',
+    './rename-file.component.scss'
+  ]
 })
 export class RenameFileComponent implements OnInit {
   @ViewChild('renameFileInput', { static: false }) renameFileInput: ElementRef;
 
   @Input() selectedSourceFolder: string;
-  @Input() currentRightClickedItem: any;
+  @Input() currentRightClickedItem: ImageElement;
   @Input() macVersion: boolean;
   @Input() darkMode: boolean;
-  @Input() fontSize: number;
 
   renamingWIP: string;
   renamingExtension: string;
@@ -35,11 +29,13 @@ export class RenameFileComponent implements OnInit {
 
   constructor(
     public cd: ChangeDetectorRef,
-    public electronService: ElectronService
+    public electronService: ElectronService,
+    public filePathService: FilePathService,
   ) { }
 
   ngOnInit(): void {
-    this.openRenameFileModal();
+    this.renamingWIP = this.filePathService.getFileNameWithoutExtension(this.currentRightClickedItem.fileName);
+    this.renamingExtension = this.filePathService.getFileNameExtension(this.currentRightClickedItem.fileName);
 
     setTimeout(() => {
       this.renameFileInput.nativeElement.focus();
@@ -48,26 +44,14 @@ export class RenameFileComponent implements OnInit {
     // Getting the error message to display
     this.electronService.ipcRenderer.on(
       'renameFileResponse', (event, index: number, success: boolean, renameTo: string, oldFileName: string, errMsg?: string) => {
-      if (success) {
-      } else {
+
+      // just in case, make sure the message came back for the current file
+      if (this.currentRightClickedItem.index === index && !success) {
+        this.nodeRenamingFile = false;
         this.renameErrMsg = errMsg;
         this.cd.detectChanges();
-      }
+      } // if success, the `home.component` closes this component, no need to do anything else
     });
-  }
-
-  /**
-   * Click rename file button, prepares all the name and extension
-   */
-  openRenameFileModal(): void {
-    const item = this.currentRightClickedItem;
-
-    // .slice() creates a copy
-    const fileName = item.fileName.slice().substr(0, item.fileName.lastIndexOf('.'));
-    const extension = item.fileName.slice().split('.').pop();
-
-    this.renamingWIP = fileName;
-    this.renamingExtension = extension;
   }
 
   /**
