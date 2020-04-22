@@ -66,8 +66,9 @@
   >
     <span
       class="fileSize renaming-message renaming-error"
+      [ngClass]="{ 'renaming-error-dark-mode': darkMode }"
     >
-      File was not renamed. Some error occurred.
+      {{ 'SYSTEM.fileRenameError' | translate }}
     </span>
   </ng-template>
 

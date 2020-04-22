@@ -55,12 +55,16 @@
   color: $dark-blue;
 }
 
+.renaming-message-dark-mode {
+  color: $light-blue;
+}
+
 .renaming-error {
   color: $dark-red;
 }
 
-.renaming-message-dark-mode {
-  color: $light-blue;
+.renaming-error-dark-mode {
+  color: $pretty-red;
 }
 
 .larger-font {
