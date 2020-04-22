@@ -38,7 +38,6 @@ export class MetaComponent implements OnInit {
   @Input() darkMode: boolean;
   @Input() imgHeight: number;
   @Input() largerFont: boolean;
-  @Input() macVersion: boolean;
   @Input() maxWidth: number;
   @Input() showMeta: boolean;
   @Input() star: StarRating;

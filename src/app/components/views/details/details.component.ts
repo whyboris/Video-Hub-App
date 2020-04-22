@@ -54,7 +54,6 @@ export class DetailsComponent implements OnInit {
   @Input() hubName: string;
   @Input() imgHeight: number;
   @Input() largerFont: boolean;
-  @Input() macVersion: boolean;
   @Input() returnToFirstScreenshot: boolean;
   @Input() selectedSourceFolder: string;
   @Input() showMeta: boolean;
