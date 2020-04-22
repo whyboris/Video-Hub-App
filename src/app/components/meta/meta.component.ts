@@ -51,10 +51,9 @@ export class MetaComponent implements OnInit {
   yearHack: number;
 
   tagViewUpdateHack: boolean = false;
-  text: String;
 
   renamingWIP: string = '';
-  renameErrMsg: string = '';
+  renameError: boolean = false;
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -62,9 +61,7 @@ export class MetaComponent implements OnInit {
     public filePathService: FilePathService,
     public manualTagsService: ManualTagsService,
     public sanitizer: DomSanitizer
-  ) {
-    this.text = 'no clicks yet';
-   }
+  ) { }
 
   ngOnInit() {
     this.starRatingHack = this.star;
@@ -76,16 +73,15 @@ export class MetaComponent implements OnInit {
     this.electronService.ipcRenderer.on(
       'renameFileResponse', (event, index: number, success: boolean, renameTo: string, oldFileName: string, errMsg?: string) => {
 
-      if (this.video.index === index) {
-        console.log('this message meant for THIS VIDEO !!!!');
+      if (this.video.index === index) { // make sure the message is about current component's video
+        if (success) {
+          this.renameError = false;
+        } else {
+          this.renameError = true;
+          this.cd.detectChanges();
+        }
       }
 
-      if (success) {
-        console.log('yay inside META!');
-      } else {
-        console.log('err inside META!', errMsg);
-        this.cd.detectChanges();
-      }
     });
   }
 
@@ -146,7 +142,11 @@ export class MetaComponent implements OnInit {
    * @param event key press on the <input>
    */
   preventUnwantedKeypress(event: any): void {
-    if (event.key === '.' || event.key === 'e') {
+    if (event.key === '.'
+     || event.key === 'e'
+     || event.key === '-'
+     || event.key === '+'
+    ) {
       event.preventDefault();
     }
   }
@@ -173,7 +173,7 @@ export class MetaComponent implements OnInit {
    * Auto-fill the year if it's not present
    * @param event
    */
-  autoFillYear($event: any) {
+  autoFillYear() {
     if (!this.yearHack) {
       this.yearHack = 2000;
       this.setYear(2000);
@@ -187,50 +187,15 @@ export class MetaComponent implements OnInit {
    * Try renaming file
    * happens on `Enter` / `Return` key press
    */
-  tryRenamingFile(event) {
-    console.log(1);
-    console.log(event);
-    // event.target.blur(); // add back later after rename is successful !?
-    console.log('trying to rename');
-    console.log(this.renamingWIP);
-    this.attemptToRename();
-  }
-
-  /**
-   * Reset file to original name
-   * happens on `Esc` key or `blur` event (focus out: via click, `tab` key, view switch, etc)
-   */
-  resetTitle(event): void {
-    console.log(0);
-    console.log(event);
-    event.target.blur();
-    this.renamingWIP = this.video.cleanName;
-    event.stopPropagation();
-  }
-
-
-  /**
-   * Attempt to rename file
-   * check for simple errors locally
-   * ask Node to perform rename after
-   */
-  attemptToRename() {
-    // this.nodeRenamingFile = true;
-    // this.renameErrMsg = '';
+  tryRenamingFile() {
+    this.renameError = false;
 
     const sourceFolder = this.selectedSourceFolder;
     const relativeFilePath = this.video.partialPath;
     const originalFile = this.video.fileName;
     const newFileName = this.renamingWIP + '.' + this.filePathService.getFileNameExtension(this.video.fileName);
-    // check if different first !!!
-    if (originalFile === newFileName) {
-      this.renameErrMsg = 'RIGHTCLICK.errorMustBeDifferent';
-      // this.nodeRenamingFile = false;
-    } else if (this.renamingWIP.length === 0) {
-      this.renameErrMsg = 'RIGHTCLICK.errorMustNotBeEmpty';
-      // this.nodeRenamingFile = false;
-    } else {
-      // try renaming
+
+    if (originalFile !== newFileName && this.renamingWIP.length !== 0) {
       this.electronService.ipcRenderer.send(
         'try-to-rename-this-file',
         sourceFolder,
@@ -241,4 +206,16 @@ export class MetaComponent implements OnInit {
       );
     }
   }
+
+  /**
+   * Reset file to original name
+   * happens on `Esc` key or `blur` event (focus out: via click, `tab` key, view switch, etc)
+   */
+  resetTitle(event): void {
+    event.target.blur();
+    this.renamingWIP = this.video.cleanName;
+    event.stopPropagation();
+    this.renameError = false
+  }
+
 }

@@ -16,7 +16,7 @@
     type="text"
     (blur)="resetTitle($event)"
     (keydown.esc)="resetTitle($event)"
-    (keydown.enter)="tryRenamingFile($event)"
+    (keydown.enter)="tryRenamingFile()"
   >
 
 <!-- META DATA SECTION -->
@@ -34,7 +34,7 @@
     | <input
         #yearInput
         (change)="validateYear($event)"
-        (click)="autoFillYear($event)"
+        (click)="autoFillYear()"
         (keydown)="preventUnwantedKeypress($event)"
         (keyup.enter)="validateYear($event)"
         (keyup.esc)="validateYear($event)"
@@ -53,10 +53,21 @@
     #renamingText
   >
     <span
+      *ngIf="!renameError; else renameErrText"
       class="fileSize renaming-message"
       [ngClass]="{ 'renaming-message-dark-mode': darkMode }"
     >
       {{ 'SYSTEM.pressEscToStopRenaming' | translate }}
+    </span>
+  </ng-template>
+
+  <ng-template
+    #renameErrText
+  >
+    <span
+      class="fileSize renaming-message renaming-error"
+    >
+      File was not renamed. Some error occurred.
     </span>
   </ng-template>
 
@@ -114,10 +125,10 @@
 
   <app-view-tags-component
     [tags]="video | tagDisplayPipe
-                       : showManualTags
-                       : showAutoFileTags
-                       : showAutoFolderTags
-                       : tagViewUpdateHack"
+                    : showManualTags
+                    : showAutoFileTags
+                    : showAutoFolderTags
+                    : tagViewUpdateHack"
     [darkMode]="darkMode"
     (tagClicked)="filterThisTag($event)"
     (removeTagEmit)="removeThisTag($event)"
