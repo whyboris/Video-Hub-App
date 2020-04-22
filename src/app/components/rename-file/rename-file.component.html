@@ -1,0 +1,42 @@
+<div
+  [ngClass]="{ renameDark: darkMode }"
+>
+
+  <div class="input">
+    <input
+      #renameFileInput
+      (keyup.enter)="attemptToRename()"
+      [(ngModel)]="renamingWIP"
+      [ngClass]="{ darkModeOn: darkMode }"
+      [disabled]="nodeRenamingFile"
+      class="renameFile"
+      type="text"
+    >
+    <!-- in the mac the font sizes are not aligned properly and the extension shows up overlapping -->
+    <span
+      *ngIf="!macVersion"
+      class="extension-hack"
+      [ngClass]="{ darkModeOn: darkMode }"
+    >
+      <span class="hidden">{{ renamingWIP }}</span>
+      <span class="extension" *ngIf="renamingWIP.length > 0">.{{ renamingExtension }}</span>
+    </span>
+  </div>
+
+  <span *ngIf="renameErrMsg !== ''" class="renameErrMsg">
+    {{ renameErrMsg | translate }}
+  </span>
+
+  <button
+    [disabled]="
+          (renamingWIP + '.' + renamingExtension) === currentRightClickedItem.fileName
+        || nodeRenamingFile
+        || renamingWIP.length === 0
+      "
+    class="wizard-button button-rename"
+    (click)="attemptToRename()"
+  >
+    {{ 'RIGHTCLICK.renameButton' | translate }}
+  </button>
+
+</div>

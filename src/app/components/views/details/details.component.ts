@@ -55,6 +55,7 @@ export class DetailsComponent implements OnInit {
   @Input() imgHeight: number;
   @Input() largerFont: boolean;
   @Input() returnToFirstScreenshot: boolean;
+  @Input() selectedSourceFolder: string;
   @Input() showMeta: boolean;
   @Input() star: StarRating;
   @Input() showManualTags: boolean;

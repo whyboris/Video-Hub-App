@@ -111,7 +111,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   @ViewChild('magicSearch', { static: false }) magicSearch: ElementRef;
   @ViewChild('fuzzySearch', { static: false }) fuzzySearch: ElementRef;
-  @ViewChild('renameFileInput', { static: false }) renameFileInput: ElementRef;
   @ViewChild('searchRef', { static: false }) searchRef: ElementRef;
   @ViewChild('sortFilterElement', { static: false }) sortFilterElement: ElementRef;
 
@@ -214,11 +213,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   currentRightClickedItem: ImageElement;
   itemToRename: ImageElement;
-  nodeRenamingFile: boolean = false;
-  renameErrMsg: string = '';
   renamingExtension: string;
   renamingNow: boolean = false;
-  renamingWIP: string;           // ngModel for renaming file
   rightClickPosition: any = { x: 0, y: 0 };
   rightClickShowing: boolean = false;
 
@@ -324,7 +320,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       switch (event.key) {
 
-        case ('a'):
+        case ('b'):
           this.toggleButton('hideSidebar');
           break;
 
@@ -385,11 +381,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
           break;
 
         case ('q'):
-          event.preventDefault();
-          event.stopPropagation();
-          this.initiateClose();
-          break;
-
         case ('w'):
           event.preventDefault();
           event.stopPropagation();
@@ -551,16 +542,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     // Rename file response
-    this.electronService.ipcRenderer.on('renameFileResponse', (event, success: boolean, errMsg?: string) => {
-      this.nodeRenamingFile = false;
+    this.electronService.ipcRenderer.on(
+      'renameFileResponse', (event, index: number, success: boolean, renameTo: string, oldFileName: string, errMsg?: string) => {
 
       if (success) {
-        // UPDATE THE FINAL ARRAY !!!
-        this.replaceFileNameInFinalArray();
+        // Update the final array, close rename dialog if open
+        // the error messaging is handled by `rename-file.component` or `meta.component` if it happens
+        this.replaceFileNameInFinalArray(renameTo, oldFileName, index);
         this.closeRename();
-      } else {
-        this.renameErrMsg = errMsg;
-        this.cd.detectChanges();
       }
     });
 
@@ -1349,7 +1338,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.rescanDirectory();
     } else if (uniqueKey === 'regenerateLibrary') {
       this.regenerateLibrary();
-    } else if (uniqueKey == 'playPlaylist') {
+    } else if (uniqueKey === 'playPlaylist') {
       this.electronService.ipcRenderer.send('please-create-playlist', this.pipeSideEffectService.galleryShowing);
     } else if (uniqueKey === 'showTagTray') {
       if (this.settingsButtons.showRelatedVideosTray.toggled) {
@@ -1927,33 +1916,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Opens rename file modal, prepares all the name and extension
-   */
-  openRenameFileModal(): void {
-    // prepare file name without extension:
-    this.renameErrMsg = '';
-    const item = this.currentRightClickedItem;
-
-    // .slice() creates a copy
-    const fileName = item.fileName.slice().substr(0, item.fileName.lastIndexOf('.'));
-    const extension = item.fileName.slice().split('.').pop();
-
-    this.renamingWIP = fileName;
-    this.renamingExtension = extension;
-
-    this.itemToRename = item;
-    this.renamingNow = true;
-
-    setTimeout(() => {
-      this.renameFileInput.nativeElement.focus();
-    }, 0);
-  }
-
-  /**
    * Close the thumbnail sheet
    */
   closeSheetOverlay() {
     this.sheetOverlayShowing = false;
+  }
+
+  /**
+   * Opens rename file modal, prepares all the name and extension
+   */
+  openRenameFileModal(): void {
+    this.itemToRename = this.currentRightClickedItem;
+    this.renamingNow = true;
   }
 
   /**
@@ -1965,49 +1939,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Attempt to rename file
-   * check for simple errors locally
-   * ask Node to perform rename after
-   */
-  attemptToRename() {
-    this.nodeRenamingFile = true;
-    this.renameErrMsg = '';
-
-    const sourceFolder = this.appState.selectedSourceFolder;
-    const relativeFilePath = this.currentRightClickedItem.partialPath;
-    const originalFile = this.currentRightClickedItem.fileName;
-    const newFileName = this.renamingWIP + '.' + this.renamingExtension;
-    // check if different first !!!
-    if (originalFile === newFileName) {
-      this.renameErrMsg = 'RIGHTCLICK.errorMustBeDifferent';
-      this.nodeRenamingFile = false;
-    } else if (this.renamingWIP.length === 0) {
-      this.renameErrMsg = 'RIGHTCLICK.errorMustNotBeEmpty';
-      this.nodeRenamingFile = false;
-    } else {
-      // try renaming
-      this.electronService.ipcRenderer.send(
-        'try-to-rename-this-file',
-        sourceFolder,
-        relativeFilePath,
-        originalFile,
-        newFileName
-      );
-    }
-  }
-
-  /**
    * Searches through the `finalArray` and updates the file name and display name
    * Should not error out if two files have the same name
    */
-  replaceFileNameInFinalArray(): void {
-    const oldFileName = this.currentRightClickedItem.fileName;
+  replaceFileNameInFinalArray(renameTo: string, oldFileName: string, index: number): void {
 
-    const i = this.itemToRename.index;
-
-    if (this.finalArray[i].fileName === oldFileName) {
-      this.finalArray[i].fileName = this.renamingWIP + '.' + this.renamingExtension;
-      this.finalArray[i].cleanName = this.renamingWIP;
+    if (this.finalArray[index].fileName === oldFileName) {
+      this.finalArray[index].fileName = renameTo;
+      this.finalArray[index].cleanName = renameTo.slice().substr(0, renameTo.lastIndexOf('.'));
     }
 
     this.finalArrayNeedsSaving = true;
