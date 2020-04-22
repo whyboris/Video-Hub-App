@@ -546,8 +546,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       'renameFileResponse', (event, index: number, success: boolean, renameTo: string, oldFileName: string, errMsg?: string) => {
 
       if (success) {
-        // UPDATE THE FINAL ARRAY !!!
-        console.log('home handles renaming success!');
+        // Update the final array, close rename dialog if open
+        // the error messaging is handled by `rename-file.component` or `meta.component` if it happens
         this.replaceFileNameInFinalArray(renameTo, oldFileName, index);
         this.closeRename();
       }
