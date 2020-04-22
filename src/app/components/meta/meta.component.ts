@@ -1,9 +1,9 @@
 import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
-// Services
-import { ManualTagsService } from '../tags-manual/manual-tags.service';
 import { ElectronService } from '../../providers/electron.service';
+import { FilePathService } from '../views/file-path.service';
+import { ManualTagsService } from '../tags-manual/manual-tags.service';
 
 import { StarRating, ImageElement } from '../../../../interfaces/final-object.interface';
 import { YearEmission } from '../views/details/details.component';
@@ -54,10 +54,12 @@ export class MetaComponent implements OnInit {
   text: String;
 
   renamingWIP: string = '';
+  renameErrMsg: string = '';
 
   constructor(
     private cd: ChangeDetectorRef,
     public electronService: ElectronService,
+    public filePathService: FilePathService,
     public manualTagsService: ManualTagsService,
     public sanitizer: DomSanitizer
   ) {
@@ -68,11 +70,15 @@ export class MetaComponent implements OnInit {
     this.starRatingHack = this.star;
     this.yearHack = this.video.year;
 
-    this.renamingWIP = this.video.cleanName;
+    this.renamingWIP = this.video.cleanName; // or should this be video.fileName (without extension!?)
 
     // Rename file response
     this.electronService.ipcRenderer.on(
       'renameFileResponse', (event, index: number, success: boolean, renameTo: string, oldFileName: string, errMsg?: string) => {
+
+      if (this.video.index === index) {
+        console.log('this message meant for THIS VIDEO !!!!');
+      }
 
       if (success) {
         console.log('yay inside META!');
@@ -179,16 +185,60 @@ export class MetaComponent implements OnInit {
 
   /**
    * Try renaming file
-   * happens on `Enter` / `Return` key press or on 'blur' (focus out)
+   * happens on `Enter` / `Return` key press
    */
   tryRenamingFile(event) {
-    event.target.blur();
+    console.log(1);
+    console.log(event);
+    // event.target.blur(); // add back later after rename is successful !?
     console.log('trying to rename');
+    console.log(this.renamingWIP);
+    this.attemptToRename();
   }
 
+  /**
+   * Reset file to original name
+   * happens on `Esc` key or `blur` event (focus out: via click, `tab` key, view switch, etc)
+   */
   resetTitle(event): void {
+    console.log(0);
     console.log(event);
     event.target.blur();
     this.renamingWIP = this.video.cleanName;
+    event.stopPropagation();
+  }
+
+
+  /**
+   * Attempt to rename file
+   * check for simple errors locally
+   * ask Node to perform rename after
+   */
+  attemptToRename() {
+    // this.nodeRenamingFile = true;
+    // this.renameErrMsg = '';
+
+    const sourceFolder = this.selectedSourceFolder;
+    const relativeFilePath = this.video.partialPath;
+    const originalFile = this.video.fileName;
+    const newFileName = this.renamingWIP + '.' + this.filePathService.getFileNameExtension(this.video.fileName);
+    // check if different first !!!
+    if (originalFile === newFileName) {
+      this.renameErrMsg = 'RIGHTCLICK.errorMustBeDifferent';
+      // this.nodeRenamingFile = false;
+    } else if (this.renamingWIP.length === 0) {
+      this.renameErrMsg = 'RIGHTCLICK.errorMustNotBeEmpty';
+      // this.nodeRenamingFile = false;
+    } else {
+      // try renaming
+      this.electronService.ipcRenderer.send(
+        'try-to-rename-this-file',
+        sourceFolder,
+        relativeFilePath,
+        originalFile,
+        newFileName,
+        this.video.index
+      );
+    }
   }
 }

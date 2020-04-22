@@ -14,9 +14,9 @@
       }"
     [(ngModel)]="renamingWIP"
     type="text"
-    (blur)="tryRenamingFile($event)"
-    (keydown.enter)="tryRenamingFile($event)"
+    (blur)="resetTitle($event)"
     (keydown.esc)="resetTitle($event)"
+    (keydown.enter)="tryRenamingFile($event)"
   >
 
 <!-- META DATA SECTION -->

@@ -324,7 +324,7 @@
     "hubAlreadyExists": "Hub already exists with this name",
     "noSuchFileFound": "No such file found:",
     "pleaseChangeName": "Please change the hub name above",
-    "pressEscToStopRenaming": "Renaming file. Press 'esc' key to cancel renaming.",
+    "pressEscToStopRenaming": "Renaming file. Press 'enter' to rename, 'esc' to cancel",
     "selectDefaultPlayer": "Please select your preferred video player",
     "selectPreviousHub": "Please select a previously-saved Video Hub file",
     "selectRootFolder": "Select Source Video Folder",
