@@ -13,6 +13,7 @@
     class="search-or-tag-general tag"
     [ngStyle]="{ background: tag.colour }"
     (click)="tagClick(tag, $event)"
+    cdkDrag
   >
     {{ tag.name }}
   </span>
