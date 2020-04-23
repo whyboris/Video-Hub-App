@@ -772,6 +772,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param galleryItem   item in the gallery over which jpg was dropped
    */
   droppedSomethingOverVideo(event, galleryItem: ImageElement) {
+
+    if (this.batchTaggingMode) {
+      console.log('Tag dropped:', event.dataTransfer.getData('text'));
+      console.log(galleryItem);
+      return;
+    }
+
     const pathToNewImage: string = event.dataTransfer.files[0].path.toLowerCase();
     if (
       (

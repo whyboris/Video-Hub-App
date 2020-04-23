@@ -26,8 +26,9 @@ export class ViewTagsComponent {
 
   }
 
-  @Input() displayFrequency: boolean;
   @Input() darkMode: boolean;
+  @Input() displayFrequency: boolean;
+  @Input() draggable: boolean;
 
   @Output() tagClicked = new EventEmitter<object>();
   @Output() removeTagEmit = new EventEmitter<string>();
@@ -60,6 +61,11 @@ export class ViewTagsComponent {
     });
 
     return hackList;
+  }
+
+  dragStart(event: any): void {
+    event.dataTransfer.setData('text/plain', event.target.innerText);
+    console.log(event.dataTransfer);
   }
 
 }

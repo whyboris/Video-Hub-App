@@ -1425,6 +1425,7 @@
 
   <app-view-tags-component
     class="all-the-tags"
+    [draggable]="batchTaggingMode"
     [displayFrequency]="manualTagShowFrequency"
     [tags]="manualTagsService.tagsList | manualTagSortPipe
                                        : manualTagFilterString
