@@ -773,9 +773,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   droppedSomethingOverVideo(event, galleryItem: ImageElement) {
 
-    if (this.batchTaggingMode) {
-      console.log('Tag dropped:', event.dataTransfer.getData('text'));
-      console.log(galleryItem);
+    // this occurs when a tag is dropped on a video from the tag tray
+    if (event.dataTransfer.getData('text')) {
+      // tag previously set by `dragStart` in `view-tags.component`
+      const tag: string = event.dataTransfer.getData('text');
+
+      this.addTagToThisElement(tag, galleryItem);
+
       return;
     }
 
@@ -2227,17 +2231,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   addTagToManyVideos(tag: string): void {
     this.finalArray.forEach((element: ImageElement) => {
       if (element.selected) {
-        if (!element.tags || !element.tags.includes(tag)) {
-
-          this.manualTagsService.addTag(tag); // only updates the count in the tray, nothing else!
-
-          this.editFinalArrayTag({
-            type: 'add',
-            index: element.index,
-            tag: tag
-          });
-        }
-
+        this.addTagToThisElement(tag, element);
       }
     });
 
@@ -2247,6 +2241,25 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.settingsButtons.manualTags.toggled = !this.settingsButtons.manualTags.toggled;
       this.cd.detectChanges();
       this.settingsButtons.manualTags.toggled = !this.settingsButtons.manualTags.toggled;
+    }
+  }
+
+  /**
+   * Add a tag to some element
+   * Also updates the tag count in `manualTagsService`
+   * @param tag
+   * @param element
+   */
+  addTagToThisElement(tag: string, element: ImageElement): void {
+    if (!element.tags || !element.tags.includes(tag)) {
+
+      this.manualTagsService.addTag(tag); // only updates the count in the tray, nothing else!
+
+      this.editFinalArrayTag({
+        type: 'add',
+        index: element.index,
+        tag: tag
+      });
     }
   }
 

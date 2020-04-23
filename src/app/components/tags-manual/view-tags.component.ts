@@ -63,9 +63,11 @@ export class ViewTagsComponent {
     return hackList;
   }
 
+  /**
+   * Set the dataTransfer with the current tag - to drop over video
+   */
   dragStart(event: any): void {
     event.dataTransfer.setData('text/plain', event.target.innerText);
-    console.log(event.dataTransfer);
   }
 
 }
