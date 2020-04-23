@@ -243,6 +243,7 @@ function stripOutTemporaryFields(imagesArray: ImageElement[]): ImageElement[] {
     delete(element.index);
     delete(element.resBucket);
     delete(element.resolution);
+    delete(element.selected);
   });
   return imagesArray;
 }

@@ -25,7 +25,10 @@ export interface YearEmission {
 @Component({
   selector: 'app-details-item',
   templateUrl: './details.component.html',
-  styleUrls: [ './details.component.scss' ]
+  styleUrls: [
+      './details.component.scss',
+      '../selected.scss'
+    ]
 })
 export class DetailsComponent implements OnInit {
 

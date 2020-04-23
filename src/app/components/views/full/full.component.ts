@@ -10,7 +10,10 @@ import { ImageElement } from '../../../../../interfaces/final-object.interface';
 @Component({
   selector: 'app-full-item',
   templateUrl: './full.component.html',
-  styleUrls: ['../film-and-full.scss'],
+  styleUrls: [
+      '../film-and-full.scss',
+      '../selected.scss'
+    ],
   animations: [ textAppear,
                 metaAppear ]
 })
