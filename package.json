@@ -42,7 +42,7 @@
     "@ffmpeg-installer/ffmpeg": "1.0.20",
     "@ffprobe-installer/ffprobe": "1.0.12",
     "@ngx-translate/core": "12.1.2",
-    "fuse.js": "3.4.6",
+    "fuse.js": "5.2.3",
     "ngx-virtual-scroller": "4.0.3",
     "trash": "6.1.1"
   },
