@@ -29,8 +29,12 @@ export class TagsDisplayPipe implements PipeTransform {
 
     if (manualTags) {
       if (video.tags) {
-        video.tags.forEach(tag => {
-          tags.push({name: tag, colour: Colors.manualTags, removable: true});
+        video.tags.sort().forEach(tag => {
+          tags.push({
+            name: tag,
+            colour: Colors.manualTags,
+            removable: true
+          });
         });
       }
     }
@@ -39,7 +43,11 @@ export class TagsDisplayPipe implements PipeTransform {
       const cleanedFileNameAsArray: string[] = video.cleanName.toLowerCase().match(autoFileTagsRegex) || [];
       cleanedFileNameAsArray.forEach(word => {
         if (word.length >= 3) { // TODO - fix hardcoding ?
-          tags.push({name: word, colour: Colors.autoFileTags, removable: false});
+          tags.push({
+            name: word,
+            colour: Colors.autoFileTags,
+            removable: false
+          });
         }
       });
     }
@@ -48,7 +56,11 @@ export class TagsDisplayPipe implements PipeTransform {
       const cleanedFileName: string = video.partialPath.toLowerCase().replace('.', '');
       cleanedFileName.split('/').forEach(word => {
         if (word.length >= 3) { // TODO - fix hardcoding ?
-          tags.push({name: word, colour: Colors.autoFolderTags, removable: false});
+          tags.push({
+            name: word,
+            colour: Colors.autoFolderTags,
+            removable: false
+          });
         }
       });
     }

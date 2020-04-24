@@ -15,40 +15,42 @@ export class ViewTagsComponent {
 
   @Input()
   set tags(tags: Tag[] | string[]) {
-
     if ((typeof tags[0]) === 'string') {
-      this._tags = this.stringToTagObject(<string[]>tags);
+      this._tags = this.stringToTagObject(<string[]>tags); // happens only in tag tray
     } else {
-      this._tags = <Tag[]>tags;
+      this._tags = <Tag[]>tags; // happens in details & meta view
     }
-
-    // console.log('HAPPEN HAPPEN');
-
   }
 
-  @Input() displayFrequency: boolean;
   @Input() darkMode: boolean;
+  @Input() displayFrequency: boolean;
+  @Input() draggable: boolean;
 
-  @Output() tagClicked = new EventEmitter<object>();
   @Output() removeTagEmit = new EventEmitter<string>();
+  @Output() tagClicked = new EventEmitter<object>();
 
   constructor(
     public tagService: ManualTagsService
   ) { }
 
+  /**
+   * Emit to parent component a tag has been clicked
+   */
   tagClick(tag: Tag, event: Event): void {
     this.tagClicked.emit({ tag, event });
   }
 
+  /**
+   * Emit to parent component that a tag should be removed
+   */
   removeTag(tag: string): void {
-    // console.log('remove tag clicked');
     this.removeTagEmit.emit(tag);
   }
 
+  /**
+   * Create tag objects from a string[]
+   */
   stringToTagObject(tagList: string[]): Tag[] {
-
-    // console.log('running stringToTagObject');
-
     const hackList: Tag[] = [];
 
     tagList.forEach((tag) => {
@@ -60,6 +62,13 @@ export class ViewTagsComponent {
     });
 
     return hackList;
+  }
+
+  /**
+   * Set the dataTransfer with the current tag - to drop over video
+   */
+  dragStart(event: any): void {
+    event.dataTransfer.setData('text/plain', event.target.innerText);
   }
 
 }
