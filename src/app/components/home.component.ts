@@ -780,6 +780,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       this.addTagToThisElement(tag, galleryItem);
 
+      this.ifShowDetailsViewRefreshTags();
+
       return;
     }
 
@@ -2235,13 +2237,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     });
 
-    if (this.appState.currentView === 'showDetails') {
-      // details view shows tags but they don't update without some code that forces a refresh :(
-      // hack-y code simply hides manual tags and then shows them again
-      this.settingsButtons.manualTags.toggled = !this.settingsButtons.manualTags.toggled;
-      this.cd.detectChanges();
-      this.settingsButtons.manualTags.toggled = !this.settingsButtons.manualTags.toggled;
-    }
+    this.ifShowDetailsViewRefreshTags();
   }
 
   /**
@@ -2260,6 +2256,20 @@ export class HomeComponent implements OnInit, AfterViewInit {
         index: element.index,
         tag: tag
       });
+    }
+  }
+
+  /**
+   * If current view is `showDetails` refresh all showing tags
+   * hack to make newly-added tags appear next to videos
+   */
+  ifShowDetailsViewRefreshTags(): void {
+    if (this.appState.currentView === 'showDetails') {
+      // details view shows tags but they don't update without some code that forces a refresh :(
+      // hack-y code simply hides manual tags and then shows them again
+      this.settingsButtons.manualTags.toggled = !this.settingsButtons.manualTags.toggled;
+      this.cd.detectChanges();
+      this.settingsButtons.manualTags.toggled = !this.settingsButtons.manualTags.toggled;
     }
   }
 
