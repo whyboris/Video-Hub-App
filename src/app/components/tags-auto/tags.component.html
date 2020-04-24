@@ -106,7 +106,7 @@
 
     <button
       (click)="addThisTag()"
-      class="wizard-button"
+      class="wizard-button wizard-button-small"
     >
       {{ 'TAGS.add' | translate }}
     </button>
@@ -131,8 +131,8 @@
 
   <div class="small-rez-hidden">
     <button
-      class="wizard-button"
-      [ngClass]="{ editModeActive: editMode }"
+      class="wizard-button wizard-button-small"
+      [ngClass]="{ 'edit-mode-active': editMode }"
       (click)="startEditMode()"
     >
       {{ 'TAGS.delete' | translate }}

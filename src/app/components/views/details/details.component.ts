@@ -25,7 +25,10 @@ export interface YearEmission {
 @Component({
   selector: 'app-details-item',
   templateUrl: './details.component.html',
-  styleUrls: [ './details.component.scss' ]
+  styleUrls: [
+      './details.component.scss',
+      '../selected.scss'
+    ]
 })
 export class DetailsComponent implements OnInit {
 
@@ -52,6 +55,7 @@ export class DetailsComponent implements OnInit {
   @Input() imgHeight: number;
   @Input() largerFont: boolean;
   @Input() returnToFirstScreenshot: boolean;
+  @Input() selectedSourceFolder: string;
   @Input() showMeta: boolean;
   @Input() star: StarRating;
   @Input() showManualTags: boolean;

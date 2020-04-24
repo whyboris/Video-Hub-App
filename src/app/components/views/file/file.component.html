@@ -46,6 +46,12 @@
 
   <ng-template #fileViewDiv>
 
+    <app-icon
+      *ngIf="video.selected"
+      class="selected-file-view"
+      [icon]="'icon-show-more-info'"
+    ></app-icon>
+
     <div
       *ngIf="showMeta"
       [ngClass]="{ 'meta-dark-mode': darkMode }"

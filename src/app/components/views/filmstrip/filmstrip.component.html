@@ -20,6 +20,12 @@
     <span *ngIf="showMeta" class="rez">{{ video.resolution }}</span>
   </div>
 
+  <app-icon
+    *ngIf="video.selected"
+    class="selected"
+    [icon]="'icon-show-more-info'"
+  ></app-icon>
+
   <span
     *ngIf="showMeta"
     [ngClass]="{ 'larger-font': largerFont }"

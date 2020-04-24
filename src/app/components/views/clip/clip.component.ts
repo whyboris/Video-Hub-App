@@ -14,6 +14,7 @@ import { metaAppear, textAppear } from '../../../common/animations';
       '../clip-and-preview.scss',
       '../time-and-rez.scss',
       './clip.component.scss',
+      '../selected.scss'
     ],
   animations: [ textAppear,
                 metaAppear ]

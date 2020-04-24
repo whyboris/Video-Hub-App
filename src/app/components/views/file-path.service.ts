@@ -25,4 +25,20 @@ export class FilePathService {
 
   }
 
+  /**
+   * return file name without extension
+   * e.g. `video.mp4` => `video`
+   */
+  public getFileNameWithoutExtension(fileName: string): string {
+    return fileName.slice().substr(0, fileName.lastIndexOf('.'));
+  };
+
+  /**
+   * return extension without file name
+   * e.g. `video.mp4` => `.mp4`
+   */
+  public getFileNameExtension(fileName: string): string {
+    return fileName.slice().split('.').pop();
+  };
+
 }

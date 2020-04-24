@@ -19,6 +19,11 @@
         'background-position-x': percentOffset + '%'
       }"
   >
+    <app-icon
+      *ngIf="video.selected"
+      class="selected"
+      [icon]="'icon-show-more-info'"
+    ></app-icon>
   </div>
 
   <app-meta-item
@@ -37,6 +42,7 @@
 
     [darkMode]="darkMode"
     [largerFont]="largerFont"
+    [selectedSourceFolder]="selectedSourceFolder"
     [showMeta]="showMeta"
     [showManualTags]="showManualTags"
     [showAutoFileTags]="showAutoFileTags"

@@ -45,6 +45,28 @@
   opacity: 0.8;
 }
 
+.meta-title {
+  background: transparent;
+  border: 0;
+  outline: none;
+}
+
+.renaming-message {
+  color: $dark-blue;
+}
+
+.renaming-message-dark-mode {
+  color: $light-blue;
+}
+
+.renaming-error {
+  color: $dark-red;
+}
+
+.renaming-error-dark-mode {
+  color: $pretty-red;
+}
+
 .larger-font {
   font-size: 16px;
   margin-top: 4px;
