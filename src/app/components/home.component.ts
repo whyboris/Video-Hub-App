@@ -772,6 +772,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param galleryItem   item in the gallery over which jpg was dropped
    */
   droppedSomethingOverVideo(event, galleryItem: ImageElement) {
+
+    // this occurs when a tag is dropped on a video from the tag tray
+    if (event.dataTransfer.getData('text')) {
+      // tag previously set by `dragStart` in `view-tags.component`
+      const tag: string = event.dataTransfer.getData('text');
+
+      this.addTagToThisElement(tag, galleryItem);
+
+      this.ifShowDetailsViewRefreshTags();
+
+      return;
+    }
+
     const pathToNewImage: string = event.dataTransfer.files[0].path.toLowerCase();
     if (
       (
@@ -2220,20 +2233,37 @@ export class HomeComponent implements OnInit, AfterViewInit {
   addTagToManyVideos(tag: string): void {
     this.finalArray.forEach((element: ImageElement) => {
       if (element.selected) {
-        if (!element.tags || !element.tags.includes(tag)) {
-
-          this.manualTagsService.addTag(tag); // only updates the count in the tray, nothing else!
-
-          this.editFinalArrayTag({
-            type: 'add',
-            index: element.index,
-            tag: tag
-          });
-        }
-
+        this.addTagToThisElement(tag, element);
       }
     });
 
+    this.ifShowDetailsViewRefreshTags();
+  }
+
+  /**
+   * Add a tag to some element
+   * Also updates the tag count in `manualTagsService`
+   * @param tag
+   * @param element
+   */
+  addTagToThisElement(tag: string, element: ImageElement): void {
+    if (!element.tags || !element.tags.includes(tag)) {
+
+      this.manualTagsService.addTag(tag); // only updates the count in the tray, nothing else!
+
+      this.editFinalArrayTag({
+        type: 'add',
+        index: element.index,
+        tag: tag
+      });
+    }
+  }
+
+  /**
+   * If current view is `showDetails` refresh all showing tags
+   * hack to make newly-added tags appear next to videos
+   */
+  ifShowDetailsViewRefreshTags(): void {
     if (this.appState.currentView === 'showDetails') {
       // details view shows tags but they don't update without some code that forces a refresh :(
       // hack-y code simply hides manual tags and then shows them again

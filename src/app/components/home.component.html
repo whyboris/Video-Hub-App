@@ -1156,6 +1156,8 @@
           (videoClick)="handleClick($event, item)"
           (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
 
+          (drop)="droppedSomethingOverVideo($event, item)"
+
           [video]="item"
 
           [elHeight]="previewHeight + textPaddingHeight"
@@ -1182,6 +1184,8 @@
           (videoClick)="handleClick($event, item)"
           (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
 
+          (drop)="droppedSomethingOverVideo($event, item)"
+
           [video]="item"
 
           [elHeight]="previewHeight + textPaddingHeight"
@@ -1207,6 +1211,8 @@
           (click)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick({ mouseEvent: $event }, item)"
           (contextmenu)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event, item)"
 
+          (drop)="droppedSomethingOverVideo($event, item)"
+
           [video]="item"
 
           [darkMode]="settingsButtons['darkMode'].toggled"
@@ -1230,6 +1236,8 @@
           (editFinalArrayTag)="editFinalArrayTag($event)"
           (editFinalArrayYear)="editFinalArrayYear($event)"
           (filterTag)="handleTagWordClicked($event.tag.name, $event.event)"
+
+          (drop)="droppedSomethingOverVideo($event, item)"
 
           [video]="item"
 
@@ -1267,6 +1275,8 @@
           (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
 
           (sheetClick)="this.openThumbnailSheet(item)"
+
+          (drop)="droppedSomethingOverVideo($event, item)"
 
           [video]="item"
 
@@ -1425,6 +1435,7 @@
 
   <app-view-tags-component
     class="all-the-tags"
+    [draggable]="true"
     [displayFrequency]="manualTagShowFrequency"
     [tags]="manualTagsService.tagsList | manualTagSortPipe
                                        : manualTagFilterString
