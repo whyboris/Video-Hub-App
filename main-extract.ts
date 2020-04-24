@@ -446,7 +446,7 @@ function setExtractionDurations(
   deepScan: boolean
 ): ExtractionDurations {
 
-  // screenshot heights range from 144px to 432px
+  // screenshot heights range from 144px to 504px
   // we'll call 144 the baseline and increase duration based on this
   // number of pixels grows ~ as square of height, so we square below
   // this means at highest resolution we multyply by 9 the time we wait

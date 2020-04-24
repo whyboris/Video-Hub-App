@@ -5,8 +5,11 @@ import { ImageElement } from '../../../../../interfaces/final-object.interface';
 @Component({
   selector: 'app-file-item',
   templateUrl: './file.component.html',
-  styleUrls: ['./file.component.scss',
-              '../../../fonts/icons.scss']
+  styleUrls: [
+      './file.component.scss',
+      '../../../fonts/icons.scss',
+      '../selected.scss'
+    ]
 })
 export class FileComponent {
 

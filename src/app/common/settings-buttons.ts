@@ -66,7 +66,6 @@ export const SettingsButtonsGroups: string[][] = [
   [
     'manualTags',
     'showTagTray',
-    'tagFrequencySort'
   ],
   [
     'hoverScrub',
@@ -644,7 +643,7 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     title: 'BUTTONS.tagExclusionHint',
     toggled: false
   },
-  'tagFrequencySort': {
+  'tagFrequencySort': { // was once in the ribbon, now it's removed and never appears in settings, toggled only from tag tray
     description: 'BUTTONS.tagFrequencySortDescription',
     hidden: true,
     iconName: 'icon-tag-frequency',

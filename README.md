@@ -38,10 +38,10 @@ Main dependencies in use:
 
 | Library     | Version | Date        | Comment |
 | -------     | ------- | ----        | ------- |
-| Angular     | v9.0.1  | February 2020 |         |
-| Angular-CLI | v9.0.2  | February 2020 |         |
-| Electron    | v8.0.1  | February 2020 | (internally uses Node v12.13.0 and Chromium 80) |
-| Electron Builder | v22.3.2 | February 2020 |     |
+| Angular     | v9.1.0  | April 2020  |         |
+| Angular-CLI | v9.1.0  | April 2020  |         |
+| Electron    | v8.2.0  | April 2020  | (internally uses Node v12.13.0 and Chromium 80) |
+| Electron Builder | v22.4.1 | April 2020 |     |
 
 - **Node**: likely any version of node (v10 or above) should work, but I recommend to use the same version as _Electron_ uses internally.
 - **Angular CLI**: you'll need to install the [Angular CLI](https://cli.angular.io) to run the project (`npm install -g @angular/cli`).

@@ -183,14 +183,14 @@
     @modalAnimation
   >
 
-  <div
-    (click)="closeRename()"
-    [ngClass]="{ closeRenameDark: settingsButtons['darkMode'].toggled }"
-    class="close-settings closeRename"
-    title="{{ 'RIGHTCLICK.cancelRename' | translate }}"
-  >
-    <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
-  </div>
+    <div
+      (click)="closeRename()"
+      [ngClass]="{ closeRenameDark: settingsButtons['darkMode'].toggled }"
+      class="close-settings closeRename"
+      title="{{ 'RIGHTCLICK.cancelRename' | translate }}"
+    >
+      <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
+    </div>
 
     <span class="renameHeading">{{ 'RIGHTCLICK.renameTitle' | translate }}</span>
 
@@ -209,36 +209,13 @@
     <span class="renameFrom">{{ 'RIGHTCLICK.renameFrom' | translate }}</span>
     <span class="renameTo">{{ 'RIGHTCLICK.renameTo' | translate }}</span>
 
-    <input
-      #renameFileInput
-      (keyup.enter)="attemptToRename()"
-      [(ngModel)]="renamingWIP"
-      [ngClass]="{ darkModeOn: settingsButtons['darkMode'].toggled }"
-      [disabled]="nodeRenamingFile"
-      class="renameFile"
-      type="text"
-    >
-    <!-- in the mac the font sizes are not aligned properly and the extension shows up overlapping -->
-    <span *ngIf="!macVersion" class="extension-hack" [ngClass]="{ darkModeOn: settingsButtons['darkMode'].toggled }" >
-      <span class="hidden">{{ renamingWIP }}</span>
-      <span class="extension" *ngIf="renamingWIP.length > 0">.{{ renamingExtension }}</span>
-    </span>
-
-    <span *ngIf="renameErrMsg !== ''" class="renameErrMsg" @donutAppear>
-      {{ renameErrMsg | translate }}
-    </span>
-
-    <button
-      [disabled]="
-            (renamingWIP + '.' + renamingExtension) === currentRightClickedItem.fileName
-          || nodeRenamingFile
-          || renamingWIP.length === 0
-        "
-      class="wizard-button button-rename"
-      (click)="attemptToRename()"
-    >
-      {{ 'RIGHTCLICK.renameButton' | translate }}
-    </button>
+    <app-rename-file
+      *ngIf="renamingNow"
+      [selectedSourceFolder]="appState.selectedSourceFolder"
+      [currentRightClickedItem]="currentRightClickedItem"
+      [macVersion]="macVersion"
+      [darkMode]="settingsButtons['darkMode'].toggled"
+    ></app-rename-file>
 
   </div>
 
@@ -509,9 +486,11 @@
         <li class="listElement"><em class="shortcut-key">d</em> - {{ 'SHORTCUTS.toggleDarkMode' | translate }}</li>
         <li class="listElement"><em class="shortcut-key">t</em> - {{ 'SHORTCUTS.toggleAutoTags' | translate }}</li>
         <li class="listElement"><em class="shortcut-key">i</em> - {{ 'SHORTCUTS.toggleFileName' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">a</em> - {{ 'SHORTCUTS.toggleSearchBar' | translate }}</li>
+        <li class="listElement"><em class="shortcut-key">b</em> - {{ 'SHORTCUTS.toggleSearchBar' | translate }}</li>
         <li class="listElement"><em class="shortcut-key">h</em> - {{ 'SHORTCUTS.toggleMinimalMode' | translate }}</li>
         <li class="listElement"><em class="shortcut-key">n</em> - {{ 'SHORTCUTS.toggleWizard' | translate }}</li>
+        <li class="listElement"><em class="shortcut-key">w</em> - {{ 'SHORTCUTS.quit' | translate }}</li>
+        <li class="listElement"><em class="shortcut-key">q</em> - {{ 'SHORTCUTS.quit' | translate }}</li>
       </ul>
 
     </div>
@@ -1179,6 +1158,8 @@
           (videoClick)="handleClick($event, item)"
           (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
 
+          (drop)="droppedSomethingOverVideo($event, item)"
+
           [video]="item"
 
           [elHeight]="previewHeight + textPaddingHeight"
@@ -1206,6 +1187,8 @@
           (videoClick)="handleClick($event, item)"
           (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
 
+          (drop)="droppedSomethingOverVideo($event, item)"
+
           [video]="item"
 
           [elHeight]="previewHeight + textPaddingHeight"
@@ -1231,6 +1214,8 @@
           (click)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick({ mouseEvent: $event }, item)"
           (contextmenu)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event, item)"
 
+          (drop)="droppedSomethingOverVideo($event, item)"
+
           [video]="item"
 
           [darkMode]="settingsButtons['darkMode'].toggled"
@@ -1255,6 +1240,8 @@
           (editFinalArrayYear)="editFinalArrayYear($event)"
           (filterTag)="handleTagWordClicked($event.tag.name, $event.event)"
 
+          (drop)="droppedSomethingOverVideo($event, item)"
+
           [video]="item"
 
           [maxWidth]="detailsMaxWidth"
@@ -1264,6 +1251,7 @@
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
           [imgHeight]="previewHeight"
+          [selectedSourceFolder]="appState.selectedSourceFolder"
 
           [star]="item.stars"
 
@@ -1291,6 +1279,8 @@
           (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
 
           (sheetClick)="this.openThumbnailSheet(item)"
+
+          (drop)="droppedSomethingOverVideo($event, item)"
 
           [video]="item"
 
@@ -1366,7 +1356,7 @@
     (videoClick)="handleClick($event, item)"
     (contextmenu)="rightMouseClicked($event, item)"
 
-    [elHeight]="previewHeightRelated + textPaddingHeight"
+    [elHeight]="previewHeightRelated + 50"
     [elWidth]="previewWidthRelated"
     [folderPath]="appState.selectedOutputFolder"
     [hubName]="appState.hubName"
@@ -1394,42 +1384,62 @@
   @modalAnimation
 >
   <div
-    (click)="settingsButtons['showTagTray'].toggled = false"
+    (click)="closeTagsTray()"
     class="close-bottom-tray"
     title="{{ 'TAGS.closeTagTray' | translate }}"
   >
-  <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
-</div>
+    <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
+  </div>
 
-<div class="tag-tray-menu-left">
-  <span class="manual-tag-tray-label">
-    {{ 'TAGS.presentTags' | translate }}:
-  </span>
-  <button
-    (click)="settingsButtons['tagFrequencySort'].toggled = !settingsButtons['tagFrequencySort'].toggled"
-    class="tag-sort-by-toggle"
-  >
-    {{ (settingsButtons['tagFrequencySort'].toggled ? 'TAGS.sortByFrequency'
-                                                    : 'TAGS.sortAlphabetical') | translate }}
-  </button>
-  <button
-    (click)="manualTagShowFrequency = !manualTagShowFrequency"
-    class="show-frequency"
-  >
-    {{ (manualTagShowFrequency ? 'TAGS.showingFrequency'
-                               : 'TAGS.hidingFrequency') | translate }}
-  </button>
-  <input
-    (keyup.esc)="manualTagFilterString = ''"
-    [(ngModel)]="manualTagFilterString"
-    class="filter-general manual-tag-tray-filter"
-    placeholder="{{ 'TAGS.filterTags' | translate }}"
-  >
+  <div class="tag-tray-menu-left" *ngIf="!batchTaggingMode; else batchModeExplainer">
+    <span class="manual-tag-tray-label">
+      {{ 'TAGS.presentTags' | translate }}:
+    </span>
+    <button
+      (click)="settingsButtons['tagFrequencySort'].toggled = !settingsButtons['tagFrequencySort'].toggled"
+      class="tag-sort-by-toggle"
+    >
+      {{ (settingsButtons['tagFrequencySort'].toggled ? 'TAGS.sortByFrequency'
+                                                      : 'TAGS.sortAlphabetical') | translate }}
+    </button>
+    <button
+      (click)="manualTagShowFrequency = !manualTagShowFrequency"
+      class="show-frequency"
+    >
+      {{ (manualTagShowFrequency ? 'TAGS.showingFrequency'
+                                : 'TAGS.hidingFrequency') | translate }}
+    </button>
+    <input
+      (keyup.esc)="manualTagFilterString = ''"
+      [(ngModel)]="manualTagFilterString"
+      class="filter-general manual-tag-tray-filter"
+      placeholder="{{ 'TAGS.filterTags' | translate }}"
+    >
 
-</div>
+  </div>
+
+  <ng-template #batchModeExplainer>
+    <div class="tag-tray-menu-left">
+      <span class="manual-tag-tray-label">
+        {{ 'TAGS.clickVideoToSelect' | translate }}
+      </span>
+      <span class="manual-tag-tray-label" style="line-height: 24px">
+        {{ 'TAGS.clickTagToAdd' | translate }}
+      </span>
+    </div>
+  </ng-template>
+
+  <button
+    class="wizard-button wizard-button-small button-toggle-batch-mode"
+    [ngClass]="{ 'edit-mode-active': batchTaggingMode }"
+    (click)="toggleBatchTaggingMode()"
+  >
+    {{ 'TAGS.batchModeButton' | translate }}
+  </button>
 
   <app-view-tags-component
     class="all-the-tags"
+    [draggable]="true"
     [displayFrequency]="manualTagShowFrequency"
     [tags]="manualTagsService.tagsList | manualTagSortPipe
                                        : manualTagFilterString
@@ -1688,6 +1698,7 @@
       <option value="288" selected="selected">288px</option>
       <option value="360">360px</option>
       <option value="432">432px</option>
+      <option value="504">504px</option>
     </select>
 
     <span
@@ -1781,6 +1792,7 @@
         <option value="288">288px</option>
         <option value="360">360px</option>
         <option value="432">432px</option>
+        <option value="504">504px</option>
       </select>
 
       <span

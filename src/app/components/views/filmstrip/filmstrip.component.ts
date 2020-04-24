@@ -10,8 +10,11 @@ import { ImageElement } from '../../../../../interfaces/final-object.interface';
 @Component({
   selector: 'app-filmstrip-item',
   templateUrl: './filmstrip.component.html',
-  styleUrls: ['../film-and-full.scss',
-              '../time-and-rez.scss' ],
+  styleUrls: [
+      '../film-and-full.scss',
+      '../time-and-rez.scss',
+      '../selected.scss'
+    ],
   animations: [ textAppear,
                 metaAppear ]
 })

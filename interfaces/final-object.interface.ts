@@ -2,6 +2,9 @@ import { ResolutionString } from '../src/app/pipes/resolution-filter.service';
 
 export type StarRating = 0.5 | 1.5 | 2.5 | 3.5 | 4.5 | 5.5;
 
+// must be heights from true `16:9` resolutions AND divisible by 8
+export type AllowedScreenshotHeight = 144 | 216 | 288 | 360 | 432 | 504;
+
 export interface FinalObject {
   addTags?: string[];           // tags to add
   hubName: string;              // the name of the hub -- for recently-opened
@@ -19,7 +22,7 @@ export interface ImageElement {
   fileName: string;              // full file name with extension - for opening the file
   fileSize: number;              // file size in bytes
   hash: string;                  // used for detecting changed files and as a screenshot identifier
-  height: number;                // height of the video (px)
+  height: AllowedScreenshotHeight; // height of the video (px)
   mtime: number;                 // file modification time
   partialPath: string;           // for opening the file, just prepend the `inputDir` (starts with "/", is "/fldr1/fldr2", or can be "")
   screens: number;               // number of screenshots for this file
@@ -40,7 +43,8 @@ export interface ImageElement {
   fileSizeDisplay: string;       // displayed as XXXmb or X.Xgb
   index: number;                 // for the `default` sort order
   resBucket: number;             // the resolution category the video falls into (for faster sorting)
-  resolution: ResolutionString;  // e.g. `720`, `1080`, `SD`, `HD`
+  resolution: ResolutionString;  // e.g. `720`, `1080`, `SD`, `HD`, etc
+  selected?: boolean;            // for batch-tagging of videos
 }
 
 // Use this to create a new ImageElement if needed
@@ -53,7 +57,7 @@ export function NewImageElement(): ImageElement {
     fileSize: 0,
     fileSizeDisplay: '',
     hash: '',
-    height: 0,
+    height: 144,
     index: 0,
     mtime: 0,
     partialPath: '',
@@ -67,10 +71,10 @@ export function NewImageElement(): ImageElement {
 }
 
 export interface ScreenshotSettings {
-  clipHeight: number;          // currently only these are allowed '144', '216', '288', '360', '432'
+  clipHeight: AllowedScreenshotHeight;
   clipSnippetLength: number;
   clipSnippets: number;        // the number of video snippets in every clip; 0 == no clip extracted
   fixed: boolean;
-  height: number;              // currently only these are allowed '144', '216', '288', '360', '432'
+  height: AllowedScreenshotHeight;
   n: number;
 }
