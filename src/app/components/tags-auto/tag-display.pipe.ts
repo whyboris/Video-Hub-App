@@ -29,7 +29,7 @@ export class TagsDisplayPipe implements PipeTransform {
 
     if (manualTags) {
       if (video.tags) {
-        video.tags.forEach(tag => {
+        video.tags.sort().forEach(tag => {
           tags.push({name: tag, colour: Colors.manualTags, removable: true});
         });
       }
