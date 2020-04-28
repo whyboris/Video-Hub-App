@@ -46,6 +46,8 @@ export class DetailsComponent implements OnInit {
 
   @Input() maxWidth: number;
 
+  @Input() showTwoColumns: boolean;
+
   @Input() darkMode: boolean;
   @Input() elHeight: number;
   @Input() elWidth: number;

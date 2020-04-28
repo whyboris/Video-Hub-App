@@ -3,6 +3,7 @@ export type SupportedView = 'showThumbnails'
   | 'showFilmstrip'
   | 'showFullView'
   | 'showDetails'
+  | 'showDetails2'
   | 'showFiles'
   | 'showClips';
 
@@ -11,6 +12,7 @@ export const allSupportedViews: SupportedView[] = [
   'showFilmstrip',
   'showFullView',
   'showDetails',
+  'showDetails2',
   'showFiles',
   'showClips',
 ];

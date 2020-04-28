@@ -474,8 +474,9 @@
         <li class="listElement"><em class="shortcut-key">2</em> - {{ 'SHORTCUTS.showFilm' | translate }}</li>
         <li class="listElement"><em class="shortcut-key">3</em> - {{ 'SHORTCUTS.showFull' | translate }}</li>
         <li class="listElement"><em class="shortcut-key">4</em> - {{ 'SHORTCUTS.showDetail' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">5</em> - {{ 'SHORTCUTS.showFile' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">6</em> - {{ 'SHORTCUTS.showClip' | translate }}</li>
+        <li class="listElement"><em class="shortcut-key">5</em> - {{ 'SHORTCUTS.showDetail2' | translate }}</li>
+        <li class="listElement"><em class="shortcut-key">6</em> - {{ 'SHORTCUTS.showFile' | translate }}</li>
+        <li class="listElement"><em class="shortcut-key">7</em> - {{ 'SHORTCUTS.showClip' | translate }}</li>
         <li class="listElement"><em class="shortcut-key">f</em> - {{ 'SHORTCUTS.focusOnFile' | translate }}</li>
         <li class="listElement"><em class="shortcut-key">g</em> - {{ 'SHORTCUTS.focusOnMagic' | translate }}</li>
         <li class="listElement"><em class="shortcut-key">r</em> - {{ 'SHORTCUTS.focusOnFuzzy' | translate }}</li>
@@ -1225,7 +1226,7 @@
 
       <!-- ==================================== DETAILS / META ==================================== -->
 
-      <ng-container *ngIf="appState.currentView === 'showDetails'">
+      <ng-container *ngIf="appState.currentView === 'showDetails' || appState.currentView === 'showDetails2'">
         <app-details-item
           *ngFor="let item of scroll.viewPortItems"
 
@@ -1241,7 +1242,9 @@
 
           [video]="item"
 
-          [maxWidth]="detailsMaxWidth"
+          [showTwoColumns]="appState.currentView === 'showDetails2'"
+
+          [maxWidth]="galleryWidth - 40"
 
           [elHeight]="previewHeight + textPaddingHeight"
           [elWidth]="previewWidth"
@@ -1261,7 +1264,7 @@
           [showManualTags]="settingsButtons['manualTags'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
 
-          style="display: block"
+          [ngStyle]="{ display: appState.currentView === 'showDetails' ? 'block' : 'inline-block' }"
         ></app-details-item>
       </ng-container>
 

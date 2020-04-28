@@ -293,7 +293,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // Please add new variables below if they don't fit into any other section
   // ------------------------------------------------------------------------
 
-  detailsMaxWidth: number = 1000; // used to keep track of max width for details in details view
   tagTypeAhead: string = '';
   folderViewNavigationPath: string = '';
 
@@ -345,10 +344,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
           break;
 
         case ('5'):
-          this.toggleButton('showFiles');
+          this.toggleButton('showDetails2');
           break;
 
         case ('6'):
+          this.toggleButton('showFiles');
+          break;
+
+        case ('7'):
           this.toggleButton('showClips');
           break;
 
@@ -1248,6 +1251,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   toggleAllViewsButtonsOff(): void {
     this.settingsButtons['showClips'].toggled = false;
     this.settingsButtons['showDetails'].toggled = false;
+    this.settingsButtons['showDetails2'].toggled = false;
     this.settingsButtons['showFiles'].toggled = false;
     this.settingsButtons['showFilmstrip'].toggled = false;
     this.settingsButtons['showFullView'].toggled = false;
@@ -1533,7 +1537,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Increase preview size
    */
   public increaseSize(): void {
-    if (this.appState.currentView === 'showDetails') {
+    if (this.appState.currentView === 'showDetails' || this.appState.currentView === 'showDetails2') {
       if (this.currentImgsPerRow > 2) {
         this.currentImgsPerRow--;
       }
@@ -1555,13 +1559,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.appState.currentView === 'showClips'
       || this.appState.currentView === 'showThumbnails'
       || this.appState.currentView === 'showDetails'
+      || this.appState.currentView === 'showDetails2'
     ) {
       const margin: number = (this.settingsButtons['compactView'].toggled ? 4 : 40);
       this.previewWidth = (this.galleryWidth / this.currentImgsPerRow) - margin;
-
-      // used in details view only
-      this.detailsMaxWidth = this.galleryWidth - this.previewWidth - 40; // 40px is just an estimate here
-
     } else if (
       this.appState.currentView === 'showFilmstrip'
       || this.appState.currentView === 'showFullView'
