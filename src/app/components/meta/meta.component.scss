@@ -99,3 +99,10 @@
   padding: 0;
   width: 42px;
 }
+
+.view-tags-holder {
+  @include scrollBar;
+  display: block;
+  height: 58px;
+  overflow-y: auto;
+}
