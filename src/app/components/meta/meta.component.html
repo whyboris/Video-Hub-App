@@ -1,6 +1,6 @@
 <div
   class="meta"
-  [ngStyle]="{ 'max-width': maxWidth + 'px' }"
+  [ngStyle]="{ 'width': maxWidth + 'px' }"
 >
 
 <!-- RENAME FILE SECTION -->
@@ -73,11 +73,6 @@
     </span>
   </ng-template>
 
-<!-- Times played -->
-  <span class="fileSize" *ngIf="video.timesPlayed">
-    {{ 'TAGS.timesPlayed' | translate }}: {{ video.timesPlayed }}
-  </span>
-
 <!-- Star rating -->
   <button
     (click)="setStarRating(1.5)"
@@ -119,6 +114,11 @@
   >
     <app-icon [icon]="'icon-star'"></app-icon>
   </button>
+
+<!-- Times played -->
+<span class="fileSize times-played" *ngIf="video.timesPlayed">
+  {{ 'TAGS.timesPlayed' | translate }}: {{ video.timesPlayed }}
+</span>
 
 <!-- Add tags / view tags -->
   <app-add-tag-component
