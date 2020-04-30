@@ -1285,7 +1285,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Restore the image height for the particular view
    */
   restoreViewSize(view: string): void {
-    this.currentImgsPerRow = this.imgsPerRow[view];
+    this.currentImgsPerRow = this.imgsPerRow[view] || 5; // showDetails2 view does not exist when upgrading to 2.2.3
   }
 
   /**
