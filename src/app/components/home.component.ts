@@ -2269,7 +2269,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * hack to make newly-added tags appear next to videos
    */
   ifShowDetailsViewRefreshTags(): void {
-    if (this.appState.currentView === 'showDetails') {
+    if (   this.appState.currentView === 'showDetails'
+        || this.appState.currentView === 'showDetails2') {
       // details view shows tags but they don't update without some code that forces a refresh :(
       // hack-y code simply hides manual tags and then shows them again
       this.settingsButtons.manualTags.toggled = !this.settingsButtons.manualTags.toggled;
