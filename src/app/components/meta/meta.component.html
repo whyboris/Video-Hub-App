@@ -1,6 +1,9 @@
 <div
   class="meta"
-  [ngStyle]="{ 'width': maxWidth + 'px' }"
+  [ngStyle]="{
+    'min-height': imgHeight + 'px',
+    'width': maxWidth + 'px'
+   }"
 >
 
 <!-- RENAME FILE SECTION -->
@@ -138,6 +141,7 @@
     (tagClicked)="filterThisTag($event)"
     (removeTagEmit)="removeThisTag($event)"
     class="view-tags-holder"
+    [ngStyle]="{ 'min-height': imgHeight - 100 + 'px' }"
   ></app-view-tags-component>
 
 </div>
