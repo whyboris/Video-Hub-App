@@ -1537,8 +1537,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Increase preview size
    */
   public increaseSize(): void {
-    if (this.appState.currentView === 'showDetails' || this.appState.currentView === 'showDetails2') {
+    if (this.appState.currentView === 'showDetails') {
       if (this.currentImgsPerRow > 2) {
+        this.currentImgsPerRow--;
+      }
+    } else if (this.appState.currentView === 'showDetails2') {
+      if (this.currentImgsPerRow > 3) {
         this.currentImgsPerRow--;
       }
     } else if (this.currentImgsPerRow > 1) {
