@@ -24,6 +24,7 @@ export const SettingsButtonsGroups: string[][] = [
     'starFilter',
     'sortOrder',
     'sortOptionAlphabetical',
+    'sortOptionTags',
     'sortOptionTime',
     'sortOptionSize',
     'sortOptionTimesPlayed',
@@ -44,7 +45,6 @@ export const SettingsButtonsGroups: string[][] = [
     'showFilmstrip',
     'showFullView',
     'showDetails',
-    'showDetails2',
     'showFiles',
     'showClips',
   ],
@@ -447,13 +447,6 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     title: 'BUTTONS.showDetailsHint',
     toggled: false
   },
-  'showDetails2': {
-    description: 'BUTTONS.showDetails2Description',
-    hidden: false,
-    iconName: 'icon-show-details-2',
-    title: 'BUTTONS.showDetails2Hint',
-    toggled: false
-  },
   'showFiles': {
     description: 'BUTTONS.showFilesDescription',
     hidden: false,
@@ -586,6 +579,14 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     moreInfo: 'BUTTONS.sortOptionStarMoreInfo',
     title: '',
     toggled: false,
+  },
+  'sortOptionTags': {
+    description: 'BUTTONS.sortOptionTagsDescription',
+    hidden: false,
+    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
+    moreInfo: 'BUTTONS.sortOptionTagsMoreInfo',
+    title: '',
+    toggled: true,
   },
   'sortOptionTime': {
     description: 'BUTTONS.sortOptionTimeDescription',
