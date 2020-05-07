@@ -195,6 +195,7 @@
     "buttonStyle": "Button style",
     "changeAppZoom": "Change the app zoom level",
     "changeLanguage": "Change language",
+    "checkNewVersion": "check for new version",
     "chooseVideoPlayer": "change",
     "clipsHeading": "Clips view",
     "closeRelatedTray": "Close related tray",
@@ -207,6 +208,7 @@
     "hideTopBar": "Hide top bar",
     "manualTags": "Manual tag settings",
     "miscView": "Layout",
+    "newVersionExists": "new version available",
     "noClipsExtracted": "No clips extracted for this hub",
     "noResultsFound": "No results found",
     "otherSettings": "Create a new hub",
@@ -227,8 +229,10 @@
     "tabView": "View settings",
     "thumbnailHeading": "Thumbnails view",
     "variousSettings": "Various settings",
+    "versionError": "cannot check for new version at this time",
     "viewSettings": "More views",
     "wordCloud": "Word cloud & recently opened files",
+    "youHaveLatest": "you have the latest version",
     "zoom": "Zoom"
   },
   "SHORTCUTS": {

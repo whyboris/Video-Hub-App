@@ -62,6 +62,7 @@ h3 {
 }
 
 .app-version {
+  margin-bottom: 40px;
   pointer-events: none;
   position: relative;
   text-align: right;
@@ -73,6 +74,30 @@ h3 {
   span {
     color: $gray-40;
     font-size: 12px;
+  }
+
+  .version-message {
+    bottom: -25px;
+    font-size: 12px;
+    position: absolute;
+    right: 30px;
+  }
+
+  .you-have-latest {
+    color: $pretty-blue;
+  }
+
+  .version-error {
+    color: $gray-40;
+  }
+
+  .check-new-version {
+    cursor: pointer;
+    pointer-events: all;
+
+    &:hover {
+      color: $pretty-blue;
+    }
   }
 }
 

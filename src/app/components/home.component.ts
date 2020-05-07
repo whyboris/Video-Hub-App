@@ -1,4 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 import * as path from 'path';
 
@@ -289,6 +290,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   batchTaggingMode = false; // when batch tagging is enabled
 
+  latestVersionAvailable: string;
+
   // ========================================================================
   // Please add new variables below if they don't fit into any other section
   // ------------------------------------------------------------------------
@@ -462,6 +465,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   constructor(
+    private http: HttpClient,
     public cd: ChangeDetectorRef,
     public electronService: ElectronService,
     public manualTagsService: ManualTagsService,
@@ -2300,6 +2304,27 @@ export class HomeComponent implements OnInit, AfterViewInit {
       });
     }
     this.batchTaggingMode = !this.batchTaggingMode
+  }
+
+  /**
+   * Check whether new version of the app is available
+   */
+  checkForNewVersion(): void {
+    this.http.get('https://my.videohubapp.com/version.php').subscribe(
+      (version: string) => {
+        this.latestVersionAvailable = version;
+      },
+      (err: any) => {
+        this.latestVersionAvailable = 'error';
+      }
+    );
+  }
+
+  /**
+   * Open browser to `my.videohubapp.com`
+   */
+  goDownloadNewVersion(): void {
+    this.electronService.ipcRenderer.send('pleaseOpenUrl', 'https://my.videohubapp.com');
   }
 
 }

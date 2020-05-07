@@ -445,6 +445,38 @@
         <div class="app-version">
           <span>v{{ versionNumber }} {{ demo ? ' DEMO - limited to 50 video files' : '' }}</span>
           <img width="30px" height="30px" src="./assets/logo.png">
+
+          <ng-container
+            [ngSwitch]="this.latestVersionAvailable"
+          >
+            <div
+              *ngSwitchCase="undefined"
+              class="version-message check-new-version"
+              (click)="checkForNewVersion()"
+            >
+              {{ 'SETTINGS.checkNewVersion' | translate }}
+            </div>
+            <div
+              *ngSwitchCase="versionNumber"
+              class="version-message you-have-latest"
+            >
+              {{ 'SETTINGS.youHaveLatest' | translate }}
+            </div>
+            <div
+              *ngSwitchCase="'error'"
+              class="version-message version-error"
+            >
+              {{ 'SETTINGS.versionError' | translate }}
+            </div>
+            <div
+              *ngSwitchDefault
+              class="version-message check-new-version you-have-latest"
+              (click)="goDownloadNewVersion()"
+            >
+              {{ 'SETTINGS.newVersionExists' | translate }}
+            </div>
+          </ng-container>
+
         </div>
 
       </div>
