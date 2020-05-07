@@ -183,14 +183,14 @@
     @modalAnimation
   >
 
-    <div
-      (click)="closeRename()"
-      [ngClass]="{ closeRenameDark: settingsButtons['darkMode'].toggled }"
-      class="close-settings closeRename"
-      title="{{ 'RIGHTCLICK.cancelRename' | translate }}"
-    >
-      <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
-    </div>
+  <div
+    (click)="closeRename()"
+    [ngClass]="{ closeRenameDark: settingsButtons['darkMode'].toggled }"
+    class="close-settings closeRename"
+    title="{{ 'RIGHTCLICK.cancelRename' | translate }}"
+  >
+    <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
+  </div>
 
     <span class="renameHeading">{{ 'RIGHTCLICK.renameTitle' | translate }}</span>
 
@@ -209,13 +209,36 @@
     <span class="renameFrom">{{ 'RIGHTCLICK.renameFrom' | translate }}</span>
     <span class="renameTo">{{ 'RIGHTCLICK.renameTo' | translate }}</span>
 
-    <app-rename-file
-      *ngIf="renamingNow"
-      [selectedSourceFolder]="appState.selectedSourceFolder"
-      [currentRightClickedItem]="currentRightClickedItem"
-      [macVersion]="macVersion"
-      [darkMode]="settingsButtons['darkMode'].toggled"
-    ></app-rename-file>
+    <input
+      #renameFileInput
+      (keyup.enter)="attemptToRename()"
+      [(ngModel)]="renamingWIP"
+      [ngClass]="{ darkModeOn: settingsButtons['darkMode'].toggled }"
+      [disabled]="nodeRenamingFile"
+      class="renameFile"
+      type="text"
+    >
+    <!-- in the mac the font sizes are not aligned properly and the extension shows up overlapping -->
+    <span *ngIf="!macVersion" class="extension-hack" [ngClass]="{ darkModeOn: settingsButtons['darkMode'].toggled }" >
+      <span class="hidden">{{ renamingWIP }}</span>
+      <span class="extension" *ngIf="renamingWIP.length > 0">.{{ renamingExtension }}</span>
+    </span>
+
+    <span *ngIf="renameErrMsg !== ''" class="renameErrMsg" @donutAppear>
+      {{ renameErrMsg | translate }}
+    </span>
+
+    <button
+      [disabled]="
+            (renamingWIP + '.' + renamingExtension) === currentRightClickedItem.fileName
+          || nodeRenamingFile
+          || renamingWIP.length === 0
+        "
+      class="wizard-button button-rename"
+      (click)="attemptToRename()"
+    >
+      {{ 'RIGHTCLICK.renameButton' | translate }}
+    </button>
 
   </div>
 
@@ -474,9 +497,8 @@
         <li class="listElement"><em class="shortcut-key">2</em> - {{ 'SHORTCUTS.showFilm' | translate }}</li>
         <li class="listElement"><em class="shortcut-key">3</em> - {{ 'SHORTCUTS.showFull' | translate }}</li>
         <li class="listElement"><em class="shortcut-key">4</em> - {{ 'SHORTCUTS.showDetail' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">5</em> - {{ 'SHORTCUTS.showDetail2' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">6</em> - {{ 'SHORTCUTS.showFile' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">7</em> - {{ 'SHORTCUTS.showClip' | translate }}</li>
+        <li class="listElement"><em class="shortcut-key">5</em> - {{ 'SHORTCUTS.showFile' | translate }}</li>
+        <li class="listElement"><em class="shortcut-key">6</em> - {{ 'SHORTCUTS.showClip' | translate }}</li>
         <li class="listElement"><em class="shortcut-key">f</em> - {{ 'SHORTCUTS.focusOnFile' | translate }}</li>
         <li class="listElement"><em class="shortcut-key">g</em> - {{ 'SHORTCUTS.focusOnMagic' | translate }}</li>
         <li class="listElement"><em class="shortcut-key">r</em> - {{ 'SHORTCUTS.focusOnFuzzy' | translate }}</li>
@@ -487,11 +509,9 @@
         <li class="listElement"><em class="shortcut-key">d</em> - {{ 'SHORTCUTS.toggleDarkMode' | translate }}</li>
         <li class="listElement"><em class="shortcut-key">t</em> - {{ 'SHORTCUTS.toggleAutoTags' | translate }}</li>
         <li class="listElement"><em class="shortcut-key">i</em> - {{ 'SHORTCUTS.toggleFileName' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">b</em> - {{ 'SHORTCUTS.toggleSearchBar' | translate }}</li>
+        <li class="listElement"><em class="shortcut-key">a</em> - {{ 'SHORTCUTS.toggleSearchBar' | translate }}</li>
         <li class="listElement"><em class="shortcut-key">h</em> - {{ 'SHORTCUTS.toggleMinimalMode' | translate }}</li>
         <li class="listElement"><em class="shortcut-key">n</em> - {{ 'SHORTCUTS.toggleWizard' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">w</em> - {{ 'SHORTCUTS.quit' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">q</em> - {{ 'SHORTCUTS.quit' | translate }}</li>
       </ul>
 
     </div>
@@ -903,7 +923,13 @@
           <option *ngIf="settingsButtons['sortOptionAlphabetical'].toggled" value="alphabetDesc">
             &#x25BC; {{ 'SIDEBAR.sortAlphabetical' | translate }}
           </option>
-          <option *ngIf="settingsButtons['sortOptionTime'].toggled" value="timeAsc">
+		  <option *ngIf="settingsButtons['sortOptionTags'].toggled" value="tagsAsc">
+            &#x25B2; {{ 'SIDEBAR.sortTags' | translate }}
+          </option>
+          <option *ngIf="settingsButtons['sortOptionTags'].toggled" value="tagsDesc">
+            &#x25BC; {{ 'SIDEBAR.sortTags' | translate }}
+          </option>
+		  <option *ngIf="settingsButtons['sortOptionTime'].toggled" value="timeAsc">
             &#x25B2; {{ 'SIDEBAR.sortTime' | translate }}
           </option>
           <option *ngIf="settingsButtons['sortOptionTime'].toggled" value="timeDesc">
@@ -1157,8 +1183,6 @@
           (videoClick)="handleClick($event, item)"
           (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
 
-          (drop)="droppedSomethingOverVideo($event, item)"
-
           [video]="item"
 
           [elHeight]="previewHeight + textPaddingHeight"
@@ -1185,8 +1209,6 @@
           (videoClick)="handleClick($event, item)"
           (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
 
-          (drop)="droppedSomethingOverVideo($event, item)"
-
           [video]="item"
 
           [elHeight]="previewHeight + textPaddingHeight"
@@ -1212,8 +1234,6 @@
           (click)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick({ mouseEvent: $event }, item)"
           (contextmenu)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event, item)"
 
-          (drop)="droppedSomethingOverVideo($event, item)"
-
           [video]="item"
 
           [darkMode]="settingsButtons['darkMode'].toggled"
@@ -1226,7 +1246,7 @@
 
       <!-- ==================================== DETAILS / META ==================================== -->
 
-      <ng-container *ngIf="appState.currentView === 'showDetails' || appState.currentView === 'showDetails2'">
+      <ng-container *ngIf="appState.currentView === 'showDetails'">
         <app-details-item
           *ngFor="let item of scroll.viewPortItems"
 
@@ -1238,20 +1258,15 @@
           (editFinalArrayYear)="editFinalArrayYear($event)"
           (filterTag)="handleTagWordClicked($event.tag.name, $event.event)"
 
-          (drop)="droppedSomethingOverVideo($event, item)"
-
           [video]="item"
 
-          [showTwoColumns]="appState.currentView === 'showDetails2'"
+          [maxWidth]="detailsMaxWidth"
 
-          [maxWidth]="galleryWidth - 40"
-
-          [elHeight]="previewHeight"
+          [elHeight]="previewHeight + textPaddingHeight"
           [elWidth]="previewWidth"
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
           [imgHeight]="previewHeight"
-          [selectedSourceFolder]="appState.selectedSourceFolder"
 
           [star]="item.stars"
 
@@ -1264,7 +1279,7 @@
           [showManualTags]="settingsButtons['manualTags'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
 
-          [ngStyle]="{ display: appState.currentView === 'showDetails' ? 'block' : 'inline-block' }"
+          style="display: block"
         ></app-details-item>
       </ng-container>
 
@@ -1278,8 +1293,6 @@
           (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
 
           (sheetClick)="this.openThumbnailSheet(item)"
-
-          (drop)="droppedSomethingOverVideo($event, item)"
 
           [video]="item"
 
@@ -1438,7 +1451,6 @@
 
   <app-view-tags-component
     class="all-the-tags"
-    [draggable]="true"
     [displayFrequency]="manualTagShowFrequency"
     [tags]="manualTagsService.tagsList | manualTagSortPipe
                                        : manualTagFilterString
