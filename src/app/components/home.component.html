@@ -939,6 +939,12 @@
           <option *ngIf="settingsButtons['sortOptionModified'].toggled" value="modifiedDesc">
             &#x25BC; {{ 'SIDEBAR.sortModified' | translate }}
           </option>
+          <option *ngIf="settingsButtons['sortOptionTags'].toggled" value="tagsAsc">
+            &#x25B2; {{ 'SIDEBAR.sortTags' | translate }}
+          </option>
+          <option *ngIf="settingsButtons['sortOptionTags'].toggled" value="tagsDesc">
+            &#x25BC; {{ 'SIDEBAR.sortTags' | translate }}
+          </option>
           <option value="random">
             {{ 'SIDEBAR.sortRandom' | translate }}
           </option>

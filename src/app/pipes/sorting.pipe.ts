@@ -3,9 +3,9 @@ import { ImageElement, StarRating } from '../../../interfaces/final-object.inter
 import { randomizeArray } from '../../../utility';
 
 export type SortType = 'default'
-                     | 'hash' // only used by the duplicateFinderPipe
                      | 'alphabetAsc'
                      | 'alphabetDesc'
+                     | 'hash' // only used by the duplicateFinderPipe
                      | 'modifiedAsc'
                      | 'modifiedDesc'
                      | 'random'
@@ -13,12 +13,14 @@ export type SortType = 'default'
                      | 'sizeDesc'
                      | 'starAsc'
                      | 'starDesc'
+                     | 'tagsAsc'
+                     | 'tagsDesc'
                      | 'timeAsc'
                      | 'timeDesc'
-                     | 'yearAsc'
-                     | 'yearDesc'
                      | 'timesPlayedAsc'
-                     | 'timesPlayedDesc';
+                     | 'timesPlayedDesc'
+                     | 'yearAsc'
+                     | 'yearDesc';
 
 @Pipe({
   name: 'sortingPipe'
@@ -51,6 +53,16 @@ export class SortingPipe implements PipeTransform {
       if (x.fileName < y.fileName) {
         return decreasing ? -1 : 1;
       } if (x.fileName > y.fileName) {
+        return decreasing ? 1 : -1;
+      } else {
+        return 0;
+      }
+    }
+
+    if (property === 'tags') {
+      if ((x.tags || []).length < (y.tags || []).length) {
+        return decreasing ? -1 : 1;
+      } if ((x.tags || []).length > (y.tags || []).length) {
         return decreasing ? 1 : -1;
       } else {
         return 0;
@@ -184,6 +196,14 @@ export class SortingPipe implements PipeTransform {
     } else if (sortingType === 'hash') {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'hash', true);
+      });
+    } else if (sortingType === 'tagsAsc') {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
+        return this.sortFunctionLol(x, y, 'tags', true);
+      });
+    } else if (sortingType === 'tagsDesc') {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
+        return this.sortFunctionLol(x, y, 'tags', false);
       });
     } else {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
