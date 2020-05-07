@@ -2324,7 +2324,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Open browser to `my.videohubapp.com`
    */
   goDownloadNewVersion(): void {
-    this.electronService.ipcRenderer.send('pleaseOpenUrl', 'https://my.videohubapp.com');
+    if (this.demo) {
+      this.electronService.ipcRenderer.send('pleaseOpenUrl', 'https://videohubapp.com');
+    } else {
+      this.electronService.ipcRenderer.send('pleaseOpenUrl', 'https://my.videohubapp.com');
+    }
   }
 
 }
