@@ -443,10 +443,18 @@ function getBestStream(metadata) {
  * @param metadata
  */
 function getFileDuration(metadata): number {
-  if (metadata && metadata.streams && metadata.streams[0] && metadata.streams[0].duration ) {
+  if (     metadata
+        && metadata.streams
+        && metadata.streams[0]
+        && metadata.streams[0].duration
+  ) {
     return metadata.streams[0].duration;
-  } else if (metadata && metadata.format && metadata.format.duration ) {
-    return metadata.format.duration;
+
+  } else if (metadata
+          && metadata.format
+          && metadata.format.duration
+  ) {
+    return   metadata.format.duration;
   } else {
     return 0;
   }

@@ -1,4 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 import * as path from 'path';
 
@@ -289,6 +290,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   batchTaggingMode = false; // when batch tagging is enabled
 
+  latestVersionAvailable: string;
+
   // ========================================================================
   // Please add new variables below if they don't fit into any other section
   // ------------------------------------------------------------------------
@@ -462,6 +465,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   constructor(
+    private http: HttpClient,
     public cd: ChangeDetectorRef,
     public electronService: ElectronService,
     public manualTagsService: ManualTagsService,
@@ -1285,7 +1289,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Restore the image height for the particular view
    */
   restoreViewSize(view: string): void {
-    this.currentImgsPerRow = this.imgsPerRow[view];
+    this.currentImgsPerRow = this.imgsPerRow[view] || 5; // showDetails2 view does not exist when upgrading to 2.2.3
   }
 
   /**
@@ -2269,7 +2273,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * hack to make newly-added tags appear next to videos
    */
   ifShowDetailsViewRefreshTags(): void {
-    if (this.appState.currentView === 'showDetails') {
+    if (   this.appState.currentView === 'showDetails'
+        || this.appState.currentView === 'showDetails2') {
       // details view shows tags but they don't update without some code that forces a refresh :(
       // hack-y code simply hides manual tags and then shows them again
       this.settingsButtons.manualTags.toggled = !this.settingsButtons.manualTags.toggled;
@@ -2299,6 +2304,31 @@ export class HomeComponent implements OnInit, AfterViewInit {
       });
     }
     this.batchTaggingMode = !this.batchTaggingMode
+  }
+
+  /**
+   * Check whether new version of the app is available
+   */
+  checkForNewVersion(): void {
+    this.http.get('https://my.videohubapp.com/version.php').subscribe(
+      (version: string) => {
+        this.latestVersionAvailable = version;
+      },
+      (err: any) => {
+        this.latestVersionAvailable = 'error';
+      }
+    );
+  }
+
+  /**
+   * Open browser to `my.videohubapp.com`
+   */
+  goDownloadNewVersion(): void {
+    if (this.demo) {
+      this.electronService.ipcRenderer.send('pleaseOpenUrl', 'https://videohubapp.com');
+    } else {
+      this.electronService.ipcRenderer.send('pleaseOpenUrl', 'https://my.videohubapp.com');
+    }
   }
 
 }
