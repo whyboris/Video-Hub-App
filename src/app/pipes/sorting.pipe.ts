@@ -9,6 +9,8 @@ export type SortType = 'default'
                      | 'modifiedAsc'
                      | 'modifiedDesc'
                      | 'random'
+                     | 'tagsAsc'
+                     | 'tagsDesc'
                      | 'sizeAsc'
                      | 'sizeDesc'
                      | 'starAsc'
@@ -52,6 +54,16 @@ export class SortingPipe implements PipeTransform {
         return decreasing ? -1 : 1;
       } if (x.fileName > y.fileName) {
         return decreasing ? 1 : -1;
+      } else {
+        return 0;
+      }
+    }
+
+    if (property === 'tags') {
+      if ((x.tags || []).length < (y.tags || []).length) {
+        return -1;
+      } if ((x.tags || []).length > (y.tags || []).length) {
+        return decreasing ? -1 : 1;
       } else {
         return 0;
       }
@@ -125,6 +137,14 @@ export class SortingPipe implements PipeTransform {
 
       return randomizeArray(galleryArray, currentIndex);
 
+    } else if (sortingType === 'tagsAsc') {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
+        return this.sortFunctionLol(x, y, 'tags', true);
+      });
+    } else if (sortingType === 'tagsDesc') {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
+        return this.sortFunctionLol(x, y, 'tags', false);
+      });
     } else if (sortingType === 'alphabetAsc') {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'alphabetical', true);
