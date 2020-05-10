@@ -5,7 +5,7 @@ import { ManualTagsService } from '../../tags-manual/manual-tags.service';
 import { FilePathService } from '../file-path.service';
 
 import { StarRating, ImageElement } from '../../../../../interfaces/final-object.interface';
-import { TagEmission } from '../../../../../interfaces/shared-interfaces';
+import { TagEmission, VideoClickEmit, RightClickEmit, TagEmit } from '../../../../../interfaces/shared-interfaces';
 
 export interface StarEmission {
   index: number;
@@ -32,10 +32,10 @@ export class DetailsComponent implements OnInit {
   @Output() editFinalArrayStars = new EventEmitter<StarEmission>();
   @Output() editFinalArrayTag = new EventEmitter<TagEmission>();
   @Output() editFinalArrayYear = new EventEmitter<YearEmission>();
-  @Output() filterTag = new EventEmitter<object>();
+  @Output() filterTag = new EventEmitter<TagEmit>();
 
-  @Output() videoClick = new EventEmitter<object>();
-  @Output() rightClick = new EventEmitter<object>();
+  @Output() videoClick = new EventEmitter<VideoClickEmit>();
+  @Output() rightClick = new EventEmitter<RightClickEmit>();
 
   @Input() video: ImageElement;
 

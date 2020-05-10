@@ -1,3 +1,5 @@
+import { ImageElement } from "./final-object.interface";
+
 // Let's make these identical to settings buttons!
 export type SupportedView = 'showThumbnails'
   | 'showFilmstrip'
@@ -16,6 +18,16 @@ export const allSupportedViews: SupportedView[] = [
   'showFiles',
   'showClips',
 ];
+
+// Mouse click events
+export interface VideoClickEmit {
+  mouseEvent: Event;
+}
+
+export interface RightClickEmit {
+  mouseEvent: Event;
+  item: ImageElement;
+}
 
 // Tags stuffs
 export interface Tag {
