@@ -37,12 +37,14 @@ import { FilmstripComponent } from './components/views/filmstrip/filmstrip.compo
 import { FullViewComponent } from './components/views/full/full.component';
 import { IconComponent } from './components/icon/icon.component';
 import { MetaComponent } from './components/meta/meta.component';
-import { ThumbnailComponent } from './components/views/thumbnail/thumbnail.component';
+import { RenameFileComponent } from './components/rename-file/rename-file.component';
 import { SheetComponent } from './components/sheet/sheet.component';
+import { ShortcutsComponent } from './components/shortcuts/shortcuts.component';
 import { SliderFilterComponent } from './components/slider-filter/slider-filter.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { SvgDefinitionsComponent } from './components/icon/svg-definitions.component';
 import { TagsComponent } from './components/tags-auto/tags.component';
+import { ThumbnailComponent } from './components/views/thumbnail/thumbnail.component';
 import { TopComponent } from './components/top/top.component';
 import { ViewTagsComponent } from './components/tags-manual/view-tags.component';
 
@@ -72,7 +74,6 @@ import { TagMatchPipe } from './components/tags-auto/tag-match.pipe';
 import { TagsDisplayPipe } from './components/tags-auto/tag-display.pipe';
 import { WordFrequencyPipe } from './pipes/word-frequency.pipe';
 import { WrapperPipe } from './pipes/wrapper.pipe';
-import { RenameFileComponent } from './components/rename-file/rename-file.component';
 
 @NgModule({
   declarations: [
@@ -101,10 +102,11 @@ import { RenameFileComponent } from './components/rename-file/rename-file.compon
     ManualTagSortPipe,
     MetaComponent,
     PlaylistPipe,
-    ThumbnailComponent,
+    RenameFileComponent,
     ResolutionFilterPipe,
     ReturnZeroPipe,
     SheetComponent,
+    ShortcutsComponent,
     SimilarityPipe,
     SliderFilterComponent,
     SortingPipe,
@@ -116,11 +118,11 @@ import { RenameFileComponent } from './components/rename-file/rename-file.compon
     TagMatchPipe,
     TagsComponent,
     TagsDisplayPipe,
+    ThumbnailComponent,
     TopComponent,
     ViewTagsComponent,
     WordFrequencyPipe,
     WrapperPipe,
-    RenameFileComponent,
   ],
   imports: [
     AppRoutingModule,
