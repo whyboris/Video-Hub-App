@@ -1150,7 +1150,7 @@
       <!-- ==================================== THUMBNAILS ==================================== -->
 
       <ng-container *ngIf="appState.currentView === 'showThumbnails'">
-        <app-gallery-item
+        <app-thumbnail
           *ngFor="let item of scroll.viewPortItems"
 
           (videoClick)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
@@ -1183,7 +1183,7 @@
                       'px',
               width: previewWidth
             }"
-        ></app-gallery-item>
+        ></app-thumbnail>
       </ng-container>
 
       <!-- ==================================== FILMSTRIP ==================================== -->
@@ -1387,7 +1387,7 @@
     </span>
   </div>
 
-  <app-gallery-item
+  <app-thumbnail
     *ngFor="let item of finalArray | similarityPipe: true : currentPlayingFile | slice:0:7 "
 
     (videoClick)="handleClick($event, item)"
@@ -1408,7 +1408,7 @@
     [showMeta]="settingsButtons['showMoreInfo'].toggled"
 
     style="display: inline-block; margin-bottom: 50px"
-  ></app-gallery-item>
+  ></app-thumbnail>
 
 </div>
 

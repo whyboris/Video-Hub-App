@@ -24,12 +24,12 @@ import { ImportStage } from '../../../main-support';
 import { SavableProperties } from '../../../interfaces/savable-properties.interface';
 import { SettingsObject } from '../../../interfaces/settings-object.interface';
 import { SortType } from '../pipes/sorting.pipe';
-import { TagEmission, StarEmission, YearEmission } from './views/details/details.component';
+import { StarEmission, YearEmission } from './views/details/details.component';
 import { WizardOptions } from '../../../interfaces/wizard-options.interface';
 
 // Constants, etc
 import { AppState, SupportedLanguage, defaultImgsPerRow, RowNumbers } from '../common/app-state';
-import { allSupportedViews, SupportedView } from '../../../interfaces/shared-interfaces';
+import { allSupportedViews, SupportedView, TagEmission } from '../../../interfaces/shared-interfaces';
 import { Filters, filterKeyToIndex, FilterKeyNames } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, SettingsMetaGroup } from '../common/settings-buttons';
 import { globals } from '../../../main-globals';

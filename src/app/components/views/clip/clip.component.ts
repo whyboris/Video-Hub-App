@@ -4,6 +4,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { FilePathService } from '../file-path.service';
 
 import { ImageElement } from '../../../../../interfaces/final-object.interface';
+import { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/shared-interfaces';
 
 import { metaAppear, textAppear } from '../../../common/animations';
 
@@ -21,9 +22,9 @@ import { metaAppear, textAppear } from '../../../common/animations';
 })
 export class ClipComponent implements OnInit {
 
-  @Output() videoClick = new EventEmitter<object>();
-  @Output() rightClick = new EventEmitter<object>();
-  @Output() sheetClick = new EventEmitter<object>();
+  @Output() rightClick = new EventEmitter<RightClickEmit>();
+  @Output() sheetClick = new EventEmitter<any>(); // does not emit data of any kind
+  @Output() videoClick = new EventEmitter<VideoClickEmit>();
 
   @Input() video: ImageElement;
 
