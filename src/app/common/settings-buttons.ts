@@ -145,7 +145,7 @@ export const SettingsMetaGroupLabels: string[] = [
   'SETTINGS.otherSettings',
 ];
 
-export let SettingsButtons: { [s: string]: SettingsButton } = {
+export const SettingsButtons: { [s: string]: SettingsButton } = {
   'autoFileTags': {
     description: 'BUTTONS.autoFileTagsDescription',
     hidden: true,

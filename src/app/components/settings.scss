@@ -132,18 +132,6 @@ h3 {
   transition: 370ms;
 }
 
-.settings-buttons-group {
-  float: left;
-  margin-bottom: 10px; // if ever app width is too small, buttons spill over; this pushes them below cutoff
-  margin-right: 8px;
-  max-height: 23px;
-  z-index: 2;
-
-  &:empty {
-    display: none;
-  }
-}
-
 .buttonSpacer {
   display: inline-block;
   height: 10px;
