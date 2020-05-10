@@ -7,18 +7,18 @@ import { metaAppear, textAppear } from '../../../common/animations';
 import { ImageElement } from '../../../../../interfaces/final-object.interface';
 
 @Component({
-  selector: 'app-gallery-item',
-  templateUrl: './preview.component.html',
+  selector: 'app-thumbnail',
+  templateUrl: './thumbnail.component.html',
   styleUrls: [
       '../clip-and-preview.scss',
       '../time-and-rez.scss',
-      './preview.component.scss',
+      './thumbnail.component.scss',
       '../selected.scss'
     ],
   animations: [ textAppear,
                 metaAppear ]
 })
-export class PreviewComponent implements OnInit, OnDestroy {
+export class ThumbnailComponent implements OnInit, OnDestroy {
 
   @ViewChild('filmstripHolder', { static: false }) filmstripHolder: ElementRef;
 

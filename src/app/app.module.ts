@@ -37,7 +37,7 @@ import { FilmstripComponent } from './components/views/filmstrip/filmstrip.compo
 import { FullViewComponent } from './components/views/full/full.component';
 import { IconComponent } from './components/icon/icon.component';
 import { MetaComponent } from './components/meta/meta.component';
-import { PreviewComponent } from './components/views/thumbnail/preview.component';
+import { ThumbnailComponent } from './components/views/thumbnail/thumbnail.component';
 import { SheetComponent } from './components/sheet/sheet.component';
 import { SliderFilterComponent } from './components/slider-filter/slider-filter.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
@@ -101,7 +101,7 @@ import { RenameFileComponent } from './components/rename-file/rename-file.compon
     ManualTagSortPipe,
     MetaComponent,
     PlaylistPipe,
-    PreviewComponent,
+    ThumbnailComponent,
     ResolutionFilterPipe,
     ReturnZeroPipe,
     SheetComponent,
