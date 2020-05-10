@@ -5,12 +5,7 @@ import { ManualTagsService } from '../../tags-manual/manual-tags.service';
 import { FilePathService } from '../file-path.service';
 
 import { StarRating, ImageElement } from '../../../../../interfaces/final-object.interface';
-
-export interface TagEmission {
-  index: number;
-  tag: string;
-  type: 'add' | 'remove';
-}
+import { TagEmission } from '../../../../../interfaces/shared-interfaces';
 
 export interface StarEmission {
   index: number;

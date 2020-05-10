@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ManualTagsService } from './manual-tags.service';
-import { Tag } from '../tags-auto/tag-display.pipe';
+import { Tag, TagEmit } from '../../../../interfaces/shared-interfaces';
 
 @Component({
   selector: 'app-view-tags-component',
@@ -27,7 +27,7 @@ export class ViewTagsComponent {
   @Input() draggable: boolean;
 
   @Output() removeTagEmit = new EventEmitter<string>();
-  @Output() tagClicked = new EventEmitter<object>();
+  @Output() tagClicked = new EventEmitter<TagEmit>();
 
   constructor(
     public tagService: ManualTagsService

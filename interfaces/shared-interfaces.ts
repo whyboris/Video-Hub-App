@@ -16,3 +16,21 @@ export const allSupportedViews: SupportedView[] = [
   'showFiles',
   'showClips',
 ];
+
+// Tags stuffs
+export interface Tag {
+  name: string;
+  colour: string;
+  removable: boolean;
+}
+
+export interface TagEmit {
+  tag: Tag;
+  event: Event;
+};
+
+export interface TagEmission {
+  index: number;
+  tag: string;
+  type: 'add' | 'remove';
+}
