@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { buttonAnimation } from '../../common/animations';
 
 @Component({
@@ -10,7 +10,7 @@ import { buttonAnimation } from '../../common/animations';
   ],
   animations: [buttonAnimation]
 })
-export class RibbonComponent implements OnInit {
+export class RibbonComponent {
 
   @Output() toggleButton = new EventEmitter<string>();
 
@@ -19,7 +19,5 @@ export class RibbonComponent implements OnInit {
   @Input() settingsButtonsGroups;
 
   constructor() { }
-
-  ngOnInit(): void { }
 
 }

@@ -42,6 +42,7 @@ import { RibbonComponent } from './components/ribbon/ribbon.component';
 import { SheetComponent } from './components/sheet/sheet.component';
 import { ShortcutsComponent } from './components/shortcuts/shortcuts.component';
 import { SliderFilterComponent } from './components/slider-filter/slider-filter.component';
+import { SortOrderComponent } from './components/sort-order/sort-order.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { SvgDefinitionsComponent } from './components/icon/svg-definitions.component';
 import { TagsComponent } from './components/tags-auto/tags.component';
@@ -111,6 +112,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     ShortcutsComponent,
     SimilarityPipe,
     SliderFilterComponent,
+    SortOrderComponent,
     SortingPipe,
     StarFilterPipe,
     StatisticsComponent,
