@@ -272,9 +272,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   sortType: SortType = 'default';
 
-  manualTagFilterString: string = '';
-  manualTagShowFrequency: boolean = true;
-
   durationOutlierCutoff: number = 0; // for the duration filter to cut off outliers
 
   // time remaining calculator !!!

@@ -45,6 +45,7 @@ import { SliderFilterComponent } from './components/slider-filter/slider-filter.
 import { SortOrderComponent } from './components/sort-order/sort-order.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { SvgDefinitionsComponent } from './components/icon/svg-definitions.component';
+import { TagTrayComponent } from './components/tag-tray/tag-tray.component';
 import { TagsComponent } from './components/tags-auto/tags.component';
 import { ThumbnailComponent } from './components/views/thumbnail/thumbnail.component';
 import { TopComponent } from './components/top/top.component';
@@ -120,6 +121,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     TagFilterPipe,
     TagFrequencyPipe,
     TagMatchPipe,
+    TagTrayComponent,
     TagsComponent,
     TagsDisplayPipe,
     ThumbnailComponent,
