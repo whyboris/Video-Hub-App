@@ -29,6 +29,7 @@ import { WordFrequencyService } from './pipes/word-frequency.service';
 // Components
 import { AddTagComponent } from './components/tags-manual/add-tag.component';
 import { AppComponent } from './app.component';
+import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
 import { ClipComponent } from './components/views/clip/clip.component';
 import { DetailsComponent } from './components/views/details/details.component';
 import { DonutComponent } from './components/donut/donut.component';
@@ -39,6 +40,8 @@ import { IconComponent } from './components/icon/icon.component';
 import { MetaComponent } from './components/meta/meta.component';
 import { RenameFileComponent } from './components/rename-file/rename-file.component';
 import { RibbonComponent } from './components/ribbon/ribbon.component';
+import { SearchBoxesComponent } from './components/search-boxes/search-boxes.component';
+import { SettingsComponent } from './components/settings/settings.component';
 import { SheetComponent } from './components/sheet/sheet.component';
 import { ShortcutsComponent } from './components/shortcuts/shortcuts.component';
 import { SliderFilterComponent } from './components/slider-filter/slider-filter.component';
@@ -48,6 +51,7 @@ import { SvgDefinitionsComponent } from './components/icon/svg-definitions.compo
 import { TagTrayComponent } from './components/tag-tray/tag-tray.component';
 import { TagsComponent } from './components/tags-auto/tags.component';
 import { ThumbnailComponent } from './components/views/thumbnail/thumbnail.component';
+import { TitleBarComponent } from './components/title-bar/title-bar.component';
 import { TopComponent } from './components/top/top.component';
 import { ViewTagsComponent } from './components/tags-manual/view-tags.component';
 import { WizardComponent } from './components/wizard/wizard.component';
@@ -84,6 +88,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     AddTagComponent,
     AlphabetPrefixPipe,
     AppComponent,
+    BreadcrumbsComponent,
     ClipComponent,
     CountPipe,
     DeleteFilePipe,
@@ -110,6 +115,8 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     ResolutionFilterPipe,
     ReturnZeroPipe,
     RibbonComponent,
+    SearchBoxesComponent,
+    SettingsComponent,
     SheetComponent,
     ShortcutsComponent,
     SimilarityPipe,
@@ -126,6 +133,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     TagsComponent,
     TagsDisplayPipe,
     ThumbnailComponent,
+    TitleBarComponent,
     TopComponent,
     ViewTagsComponent,
     WizardComponent,

@@ -61,34 +61,6 @@
   width: 100vw;
 }
 
-.titleBar {
-  background-color: $gray-40;
-  border-bottom: 1px solid $gray-60;
-  height: 20px;
-  position: relative;
-  transition: 300ms;
-  width: 100%;
-  z-index: 9999;
-
-  img {
-    position: relative;
-    top: 1px;
-  }
-}
-
-.draggable {
-  -webkit-app-region: drag;
-  color: $gray-70;
-  font-size: 12px;
-  overflow: hidden;
-  position: absolute;
-  text-align: center;
-  top: 4px;
-  transition: 300ms;
-  white-space: nowrap;
-  width: calc(100vw - 70px);
-}
-
 .top-of-buttons {
   background-image: linear-gradient(to bottom, $gray-10 0%, $gray-20 100%);
   border-bottom: 1px solid $gray-30;
@@ -371,4 +343,8 @@
   top: 20px;
   width: 100%;
   z-index: 100;
+}
+
+.gallery-showing-breadcrumbs {
+  margin-top: 30px;
 }

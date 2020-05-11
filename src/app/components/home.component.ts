@@ -53,8 +53,6 @@ const Ukrainian = require('../../../i18n/uk.json');
 
 // Animations
 import {
-  breadcrumbWordAppear,
-  breadcrumbsAppear,
   buttonAnimation,
   donutAppear,
   filterItemAppear,
@@ -77,8 +75,6 @@ import {
   templateUrl: './home.component.html',
   styleUrls: [
     './layout.scss',
-    './breadcrumbs.scss',
-    './top-buttons.scss',
     './settings.scss',
     './buttons.scss',
     './search.scss',
@@ -90,8 +86,6 @@ import {
     './rightclick.scss'
   ],
   animations: [
-    breadcrumbsAppear,
-    breadcrumbWordAppear,
     buttonAnimation,
     donutAppear,
     filterItemAppear,
@@ -398,7 +392,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         case ('h'):
           this.toggleButton('hideTop');
           this.toggleButton('hideSidebar');
-          this.toggleSettingsMenu();
+          this.toggleRibbon();
           this.toggleButton('showMoreInfo');
           break;
 
@@ -1662,9 +1656,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Show or hide the settings menu
+   * Show or hide the ribbon
    */
-  toggleSettingsMenu(): void {
+  toggleRibbon(): void {
     this.appState.menuHidden = !this.appState.menuHidden;
   }
 
@@ -2147,26 +2141,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param text     input text to check type-ahead
    * @param compute  whether or not to perform the lookup
    */
-  checkTagTypeahead(text: string, compute: boolean) {
-    if (compute) {
-      this.tagTypeAhead = this.manualTagsService.getTypeahead(text);
-    }
+  checkTagTypeahead(text: string) {
+    this.tagTypeAhead = this.manualTagsService.getTypeahead(text);
   }
 
   /**
    * Add tag to search when pressing tab
    * !!! but only when on the tag search field !!!
-   * @param $event
-   * @param execute
    * @param origin -- the `j` in the template, just pass it on to the `onEnterKey`
    */
-  typeaheadTabPressed($event, execute: boolean, origin: number): void {
-    if (execute) {
-      if (this.tagTypeAhead !== '') {
-        this.onEnterKey(this.tagTypeAhead, origin);
-        this.tagTypeAhead = '';
-        $event.preventDefault();
-      }
+  typeaheadTabPressed(origin: number): void {
+    if (this.tagTypeAhead !== '') {
+      this.onEnterKey(this.tagTypeAhead, origin);
+      this.tagTypeAhead = '';
     }
   }
 

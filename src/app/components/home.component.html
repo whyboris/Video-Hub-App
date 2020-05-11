@@ -1,59 +1,18 @@
 <div class="window">
 
-  <div
-    class="titleBar"
-    [ngClass]="{ 'dark-mode-override': settingsButtons['darkMode'].toggled }"
-  >
-    <div
-      class="draggable"
-      [ngStyle]="{
-          left: macVersion ? '65px' : '5px',
-          'text-align': macVersion ? 'center' : 'left'
-        }"
-    >
-      <img width="16px" height="16px" class="top-logo" src="./assets/logo.png">
-      <span
-        class="heading-title"
-        [ngStyle]="{ 'color': settingsButtons['darkMode'].toggled ? '#AAAAAA' : '#111111' }"
-      >
-        Video Hub App 2
-        <b>{{ demo ? ' demo - limited to 50 video files ' : '' }}</b>
-        {{ importStage !== 'done' ? ' - ' + progressString + ' - ' : ' - ' }}
-        {{ appState.hubName }}
-        {{ rootFolderLive ? '' : '(' + ('STATISTICS.folderNotLive' | translate) + ')' }}
-      </span>
-    </div>
-    <div
-      (click)="initiateMinimize()"
-      [ngClass]="{
-          'winBtn': !macVersion,
-          'macBtn': macVersion
-        }"
-      class="minimizeButton"
-    >
-      <app-icon class="window-button" [icon]="'icon-minus'"></app-icon>
-    </div>
-    <div
-      (click)="initiateMaximize()"
-      [ngClass]="{
-          'winBtn': !macVersion,
-          'macBtn': macVersion
-        }"
-      class="maximizeButton"
-    >
-      <app-icon class="window-button" [icon]="'icon-maximize'"></app-icon>
-    </div>
-    <div
-      (click)="initiateClose()"
-      [ngClass]="{
-          'winBtn': !macVersion,
-          'macBtn': macVersion
-        }"
-      class="closeButton"
-    >
-      <app-icon class="window-button" [icon]="'icon-close'"></app-icon>
-    </div>
-  </div>
+  <app-title-bar
+    (initiateClose)="initiateClose()"
+    (initiateMaximize)="initiateMaximize()"
+    (initiateMinimize)="initiateMinimize()"
+
+    [appState]="appState"
+    [demo]="demo"
+    [importStage]="importStage"
+    [macVersion]="macVersion"
+    [progressString]="progressString"
+    [rootFolderLive]="rootFolderLive"
+    [settingsButtons]="settingsButtons"
+  ></app-title-bar>
 
   <div
     *ngIf="flickerReduceOverlay === true"
@@ -242,7 +201,7 @@
   <!-- ===========   SETTINGS / OPTIONS MODAL   =========== -->
   <!-- ==================================================== -->
 
-  <!-- TABS -->
+  <!-- Clickable tabs -->
 
   <div
     *ngIf="settingsModalOpen"
@@ -250,23 +209,23 @@
     @modalAnimation
   >
     <button (click)="showSettingsGroup(0)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 0 }">
-      {{ 'SETTINGS.tabFilter' | translate }}
+      {{ 'SETTINGS.tabFilter'    | translate }}
     </button>
     <button (click)="showSettingsGroup(1)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 1 }">
-      {{ 'SETTINGS.tabView' | translate }}
+      {{ 'SETTINGS.tabView'      | translate }}
     </button>
     <button (click)="showSettingsGroup(2)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 2 }">
-      {{ 'SETTINGS.tabMain' | translate }}
+      {{ 'SETTINGS.tabMain'      | translate }}
     </button>
     <button (click)="showSettingsGroup(3)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 3 }">
       {{ 'SETTINGS.tabShortcuts' | translate }}
     </button>
     <button (click)="showSettingsGroup(4)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 4 }">
-      {{ 'SETTINGS.statistics' | translate }}
+      {{ 'SETTINGS.statistics'   | translate }}
     </button>
   </div>
 
-  <!-- MODAL -->
+  <!-- Modal with all settings -->
 
   <div
     *ngIf="settingsModalOpen"
@@ -288,200 +247,27 @@
 
     <!-- BUTTONS -->
 
-    <div [id]=i *ngFor="let group of settingsMetaGroup; index as i">
-      <div *ngIf="settingToShow == i">
+    <app-settings
+      (changeLanguage)="changeLanguage($event)"
+      (checkForNewVersion)="checkForNewVersion()"
+      (chooseDefaultVideoPlayer)="chooseDefaultVideoPlayer()"
+      (decreaseZoomLevel)="decreaseZoomLevel()"
+      (goDownloadNewVersion)="goDownloadNewVersion()"
+      (increaseZoomLevel)="increaseZoomLevel()"
+      (openOnlineHelp)="openOnlineHelp()"
+      (resetZoomLevel)="resetZoomLevel()"
+      (toggleButton)="toggleButton($event)"
+      (toggleHideButton)="toggleHideButton($event)"
 
-        <span
-          class="setting-heading"
-          style="border-top: 0"
-        >
-          {{ settingsMetaGroupLabels[i] | translate }}
-        </span>
-
-        <div *ngFor="let buttonKey of group">
-          <div *ngIf="buttonKey !== 'break'; else insertBreak">
-            <div
-              class="searchButtonsSettings"
-            >
-
-              <span class="setting-heading" *ngIf="settingsButtons[buttonKey]['settingsHeading']">
-                {{ settingsButtons[buttonKey]['settingsHeading'] | translate }}
-              </span>
-
-              <div
-                class="buttonDescription"
-              >
-                <button
-                  (click)="toggleButton(buttonKey)"
-                  [ngClass]="{
-                      defaultSettingsButton:        !settingsButtons['flatIcons'].toggled,
-                      defaultSettingsButtonToggled: !settingsButtons['flatIcons'].toggled && settingsButtons[buttonKey].toggled,
-                      flatSettingsButton:           settingsButtons['flatIcons'].toggled,
-                      flatSettingsButtonToggled:    settingsButtons['flatIcons'].toggled && settingsButtons[buttonKey].toggled
-                    }"
-                  title="{{ settingsButtons[buttonKey].title | translate }}"
-                >
-                  <app-icon class="icon" [icon]="settingsButtons[buttonKey].iconName"></app-icon>
-                </button>
-
-                <span
-                  *ngIf="settingsButtons[buttonKey].iconName !== 'icon-checkmark'"
-                  (click)="toggleHideButton(buttonKey)"
-                  class="eyeIconContainer icon {{ settingsButtons[buttonKey].hidden ? 'eye-closed' : 'eye-open' }}"
-                  title="{{ 'SETTINGS.showHideText' | translate }}"
-                ></span>
-
-                <span
-                  class="buttonDescriptionText"
-                >
-                  {{ settingsButtons[buttonKey].description | translate }}
-
-                  <span
-                    *ngIf="settingsButtons[buttonKey].moreInfo"
-                    class="more-info"
-                  >
-                    i
-                  </span>
-                  <span class="tooltip-text">
-                    {{ settingsButtons[buttonKey].moreInfo | translate }}
-                  </span>
-
-                </span>
-
-              </div>
-
-            </div>
-          </div>
-
-          <ng-template #insertBreak>
-            <br>
-          </ng-template>
-        </div>
-      </div>
-
-      <div class="misc-settings" *ngIf="settingToShow == 2 && i == 2">
-
-        <div class="player-settings">{{ 'SETTINGS.preferredPlayer' | translate }}</div>
-
-        <div class="player-current-chosen">
-          {{ appState.preferredVideoPlayer ? appState.preferredVideoPlayer : ('SETTINGS.systemDefault' | translate) }}
-
-          <button
-            class="defaultSettingsButton player-settings-button"
-            (click)="chooseDefaultVideoPlayer()"
-          >
-            {{ 'SETTINGS.chooseVideoPlayer' | translate }}
-          </button>
-
-          <button
-            class="defaultSettingsButton player-settings-button"
-            *ngIf="appState.preferredVideoPlayer"
-            (click)="appState.preferredVideoPlayer = ''"
-          >
-            {{ 'SETTINGS.restorePlayer' | translate }}
-          </button>
-
-        </div>
-
-        <span class="setting-heading">{{ 'SETTINGS.changeAppZoom' | translate }}</span>
-
-        <div class="zoom-buttons">
-          <button
-            (click)="decreaseZoomLevel()"
-            [ngClass]="{
-              defaultSettingsButton: !settingsButtons['flatIcons'].toggled,
-              flatSettingsButton:    settingsButtons['flatIcons'].toggled
-            }"
-          >
-            <app-icon [icon]="'icon-minus'"></app-icon>
-          </button>
-          <button
-            (click)="resetZoomLevel()"
-            [ngClass]="{
-              defaultSettingsButton: !settingsButtons['flatIcons'].toggled,
-              flatSettingsButton:    settingsButtons['flatIcons'].toggled
-            }"
-            style="margin: 0 10px; max-width: initial; padding: 0 15px;"
-            >
-              <span>{{ 'SETTINGS.resetZoom' | translate }}</span>
-          </button>
-          <button
-            (click)="increaseZoomLevel()"
-            [ngClass]="{
-              defaultSettingsButton: !settingsButtons['flatIcons'].toggled,
-              flatSettingsButton:    settingsButtons['flatIcons'].toggled
-            }"
-          >
-            <app-icon [icon]="'icon-plus'"></app-icon>
-          </button>
-        </div>
-
-        <span class="setting-heading">{{ 'SETTINGS.changeLanguage' | translate }}</span>
-
-        <div style="margin: 20px">
-          <select (change)="changeLanguage($event.target.value)" class="language-drop-down">
-            <option value="en" [selected]="appState.language == 'en'">English</option>
-            <option value="ja" [selected]="appState.language == 'ja'">日本語</option><!-- Japanese -->
-            <option value="de" [selected]="appState.language == 'de'">Deutsche</option>
-            <option value="fr" [selected]="appState.language == 'fr'">Française</option>
-            <option value="es" [selected]="appState.language == 'es'">Espanhol</option>
-            <option value="it" [selected]="appState.language == 'it'">Italiana</option>
-            <option value="pt" [selected]="appState.language == 'pt'">Português</option>
-            <option value="ru" [selected]="appState.language == 'ru'">Русский</option>
-            <option value="bn" [selected]="appState.language == 'bn'">বাংলা</option><!-- Bengali -->
-            <option value="hi" [selected]="appState.language == 'hi'">हिंदी</option><!-- Hindi -->
-            <option value="zh" [selected]="appState.language == 'zh'">中文</option><!-- Chinese -->
-            <option value="ko" [selected]="appState.language == 'ko'">한국어</option><!-- Korean -->
-            <option value="ms" [selected]="appState.language == 'ms'">Melayu</option><!-- Malay -->
-            <option value="ar" [selected]="appState.language == 'ar'">العربية</option><!-- Arabic -->
-            <option value="uk" [selected]="appState.language == 'uk'">Українська</option><!-- Ukrainian -->
-          </select>
-        </div>
-
-        <div class="credits-and-help" (click)="openOnlineHelp()">
-          {{ 'SETTINGS.FAQ' | translate }}
-        </div>
-
-        <div class="app-version">
-          <span>v{{ versionNumber }} {{ demo ? ' DEMO - limited to 50 video files' : '' }}</span>
-          <img width="30px" height="30px" src="./assets/logo.png">
-
-          <ng-container
-            [ngSwitch]="this.latestVersionAvailable"
-          >
-            <div
-              *ngSwitchCase="undefined"
-              class="version-message check-new-version"
-              (click)="checkForNewVersion()"
-            >
-              {{ 'SETTINGS.checkNewVersion' | translate }}
-            </div>
-            <div
-              *ngSwitchCase="versionNumber"
-              class="version-message you-have-latest"
-            >
-              {{ 'SETTINGS.youHaveLatest' | translate }}
-            </div>
-            <div
-              *ngSwitchCase="'error'"
-              class="version-message version-error"
-            >
-              {{ 'SETTINGS.versionError' | translate }}
-            </div>
-            <div
-              *ngSwitchDefault
-              class="version-message check-new-version you-have-latest"
-              (click)="goDownloadNewVersion()"
-            >
-              {{ 'SETTINGS.newVersionExists' | translate }}
-            </div>
-          </ng-container>
-
-        </div>
-
-      </div>
-
-    </div>
+      [appState]="appState"
+      [demo]="demo"
+      [latestVersionAvailable]="latestVersionAvailable"
+      [settingToShow]="settingToShow"
+      [settingsButtons]="settingsButtons"
+      [settingsMetaGroupLabels]="settingsMetaGroupLabels"
+      [settingsMetaGroup]="settingsMetaGroup"
+      [versionNumber]="versionNumber"
+    ></app-settings>
 
     <!-- ===========   KEYBOARD SHORTCUTS    =========== -->
 
@@ -506,7 +292,9 @@
 
     </div>
 
-  </div> <!-- END OF SETTINGS MODAL -->
+  </div>
+
+  <!-- END OF SETTINGS MODAL ------------------------------------------------------------------- -->
 
   <header
     *ngIf="!settingsButtons['hideTop'].toggled"
@@ -535,7 +323,7 @@
   >
 
     <!-- ============================================== -->
-    <!-- =============     ALL SETTINGS     =========== -->
+    <!-- =============        RIBBON        =========== -->
     <!-- ============================================== -->
 
     <div
@@ -567,7 +355,7 @@
     </div>
 
     <div
-      (click)="toggleSettingsMenu()"
+      (click)="toggleRibbon()"
       class="hiding-settings-menu"
       [ngClass]="{
           flipped: !appState.menuHidden,
@@ -578,28 +366,14 @@
     </div>
 
     <!-- BREADCRUMBS -->
-    <div
-      *ngIf="settingsButtons['showFolders'].toggled && (appState.currentView === 'showThumbnails' ||
-                                                        appState.currentView === 'showFiles' ||
-                                                        appState.currentView === 'showClips')"
-      [ngClass]="{
-          'breadcrumbs-full-width': settingsButtons['hideSidebar'].toggled,
-          'breadcrumbs-dark-mode': settingsButtons['darkMode'].toggled
-        }"
-      class="breadcrumbs"
-      @breadcrumbsAppear
-    >
-      <app-icon class="breadcrumb-folder-icon" [icon]="'icon-folder-blank'" (click)="breadcrumbHomeIconClick()"></app-icon>
-      <span
-        *ngFor="let item of folderViewNavigationPath.split('/'); index as idx"
-        (click)="handleBbreadcrumbClicked(idx)"
-        class="breadcrumb-folder-word"
-        @breadcrumbWordAppear
-      >
-        {{ item }}
-      </span>
+    <app-breadcrumbs
+      (breadcrumbHomeIconClick)="breadcrumbHomeIconClick()"
+      (handleBbreadcrumbClicked)="handleBbreadcrumbClicked($event)"
 
-    </div>
+      [appState]="appState"
+      [folderViewNavigationPath]="folderViewNavigationPath"
+      [settingsButtons]="settingsButtons"
+    ></app-breadcrumbs>
 
     <!-- ============================================== -->
     <!-- ===========         SIDEBAR        =========== -->
@@ -607,17 +381,18 @@
 
     <div
       [ngClass]="{
-                    'sidebar-hidden': settingsButtons['hideSidebar'].toggled,
-                    'sidebar-dark-mode': settingsButtons['darkMode'].toggled
-      }"
+          'sidebar-hidden': settingsButtons['hideSidebar'].toggled,
+          'sidebar-dark-mode': settingsButtons['darkMode'].toggled
+        }"
       [ngStyle]="{
-                    'height': 'calc(100vh - ' + (
-                                                  (settingsButtons['hideTop'].toggled                 ?  53 : 98)
-                                                + (appState.menuHidden                                ? -32 : 0)
-                                                + ((settingsButtons['showRelatedVideosTray'].toggled
-                                                 || settingsButtons['showTagTray'].toggled)           ? 160 : 0)
-                                                                                                                ) + 'px)'
-                 }"
+          'height': 'calc(100vh - '
+                      + (
+                          (settingsButtons['hideTop'].toggled                 ?  53 : 98)
+                        + (appState.menuHidden                                ? -32 :  0)
+                        + ((   settingsButtons['showRelatedVideosTray'].toggled
+                            || settingsButtons['showTagTray'].toggled)        ? 160 :  0)
+                                                                                          ) + 'px)'
+        }"
       class="sidebar"
       #searchRef
     >
@@ -629,58 +404,17 @@
       </div>
 
       <!-- SEARCH BOXES -->
-      <ng-container *ngFor="let filter of filters; index as j">
-        <div
-          *ngIf="settingsButtons[filter.uniqueKey].toggled"
-          class="filterContainer"
-          @filterItemAppear
-        >
+      <app-search-boxes
+        (checkTagTypeahead)="checkTagTypeahead($event)"
+        (onBackspace)="onBackspace($event.word, $event.index)"
+        (onEnterKey)="onEnterKey($event.word, $event.index)"
+        (removeThisFilter)="removeThisFilter($event.item, $event.origin)"
+        (typeaheadTabPressed)="typeaheadTabPressed($event)"
 
-          <app-icon class="input-icon" [icon]="settingsButtons[filter.uniqueKey].iconName"></app-icon>
-          <input
-            id="{{ filter.uniqueKey }}"
-            (keyup.enter)="onEnterKey(filter.string, j)"
-            (keydown.backspace)="onBackspace(filter.string, j)"
-            (keydown.escape)="filter.string = ''"
-            [(ngModel)]="filter.string"
-            (keydown.Tab)="typeaheadTabPressed($event, filter.uniqueKey === 'tagIntersection', j)"
-            (ngModelChange)="checkTagTypeahead($event, filter.uniqueKey === 'tagIntersection')"
-            [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
-            class="filter-general input-filter"
-            placeholder="{{ filter.placeholder | translate }}"
-            type="text"
-          >
-
-          <span
-            *ngIf="filter.uniqueKey === 'tagIntersection'"
-            class="tag-type-ahead-on-home"
-          >{{ tagTypeAhead }}</span>
-
-          <div class="filteredWords">
-            <ng-container *ngIf="filter.array.length > 0">
-              <ng-container
-                *ngFor="let string of filter.array; index as i"
-              >
-                <span
-                  *ngIf="i > 0"
-                  [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? '#CCCCCC' : 'black' }"
-                  class="conjunction"
-                >
-                  {{ filter.conjunction | translate }}
-                </span>
-                <span
-                  (click)="removeThisFilter(i, j)"
-                  [ngStyle]="{ background: filter.color }"
-                  class="search-or-tag-general search-word"
-                >
-                  {{ string }}
-                </span>
-              </ng-container>
-            </ng-container>
-          </div>
-
-        </div>
-      </ng-container>
+        [filters]="filters"
+        [settingsButtons]="settingsButtons"
+        [tagTypeAhead]="tagTypeAhead"
+      ></app-search-boxes>
       <!-- end of regular search inputs -->
 
       <!-- magic search -->
@@ -741,7 +475,7 @@
       <!-- end of magic search -->
 
       <!-- durationFilter -->
-      <div *ngIf="settingsButtons['durationFilter'].toggled" class="resolutionFilterContainer">
+      <div *ngIf="settingsButtons['durationFilter'].toggled">
 
         <app-slider-filter
           (newSliderFilterSelected)="newLengthFilterSelected($event)"
@@ -755,7 +489,7 @@
       </div>
 
       <!-- resolution filter & its frequency histogram -->
-      <div *ngIf="settingsButtons['resolutionFilter'].toggled" class="resolutionFilterContainer">
+      <div *ngIf="settingsButtons['resolutionFilter'].toggled">
         <div class="frequencyGraphContainer">
           <ng-container *ngFor="let resolution of resolutionFreqArr; index as i">
             <div
@@ -783,7 +517,7 @@
       </div>
 
       <!-- star filter & its frequency histogram -->
-      <div *ngIf="settingsButtons['starFilter'].toggled" class="resolutionFilterContainer">
+      <div *ngIf="settingsButtons['starFilter'].toggled">
         <div class="frequencyGraphContainerStar">
           <ng-container *ngFor="let starRating of starRatingFreqArr; index as i">
             <div

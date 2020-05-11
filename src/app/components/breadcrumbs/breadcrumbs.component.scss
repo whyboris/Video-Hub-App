@@ -1,4 +1,4 @@
-@import "variables";
+@import "../variables";
 
 .breadcrumbs {
   background: $gray-10;
@@ -36,10 +36,6 @@
       fill: $dark-blue;
     }
   }
-}
-
-.gallery-showing-breadcrumbs {
-  margin-top: 30px;
 }
 
 .breadcrumbs-full-width {
