@@ -86,7 +86,6 @@ import {
     '../fonts/icons.scss',
     './gallery.scss',
     './wizard-button.scss',
-    './wizard.scss',
     './resolution.scss',
     './rightclick.scss'
   ],

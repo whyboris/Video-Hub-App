@@ -13,7 +13,6 @@ import { historyItemRemove, slowFadeIn } from '../../common/animations';
     '../settings.scss',
     '../buttons.scss',
     '../search-input.scss',
-    '../wizard.scss',
     '../wizard-button.scss',
     './wizard.component.scss'
   ],
@@ -44,7 +43,7 @@ export class WizardComponent {
 
   constructor() { }
 
-    /**
+  /**
    * Only allow characters and numbers for hub name
    * @param event key press event
    */

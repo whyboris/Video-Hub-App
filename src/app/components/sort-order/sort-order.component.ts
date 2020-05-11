@@ -7,7 +7,6 @@ import { filterItemAppear } from '../../common/animations';
   templateUrl: './sort-order.component.html',
   styleUrls: [
     '../settings.scss',
-    '../wizard.scss',
     './sort-order.component.scss'
   ],
   animations: [filterItemAppear]
@@ -19,9 +18,5 @@ export class SortOrderComponent {
   @Input() settingsButtons;
 
   constructor() { }
-
-  selectFilterOrder(type: SortType): void {
-    this.sortTypeChange.emit(type);
-  }
 
 }

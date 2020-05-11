@@ -1,0 +1,313 @@
+@import "../variables.scss";
+
+.wizard {
+  background: $gray-10;
+  height: calc(100vh - 50px);
+  overflow-x: hidden;
+  overflow-y: scroll;
+  padding-top: 30px;
+  position: fixed;
+  top: 20px; // accounts for draggable region
+  width: 100%;
+  z-index: 30;
+
+  h1 {
+    color: $gray-60;
+    font-size: 14px;
+  }
+
+  span {
+    display: block;
+    font-size: 12px;
+  }
+
+  .clip-check-box {
+    cursor: pointer;
+    height: 14px;
+    margin: 10px 5px 8px 12px;
+    transform: translate(0, 3px);
+    width: 20px;
+  }
+
+  .close-wizard {
+    cursor: pointer;
+    float: right;
+    position: sticky;
+    right: 15px;
+    top: 0;
+    transition-duration: 300ms;
+
+    &:hover {
+      color: $dark-red;
+      transition-duration: 300ms;
+    }
+  }
+
+  .left-side {
+    box-sizing: border-box;
+    float: left;
+    margin: 50px;
+    min-height: 250px;
+    min-width: 200px;
+    width: calc(40vw - 100px);
+  }
+
+  .right-side {
+    border-left: 1px solid $gray-20;
+    // box-sizing: border-box;
+    float: left;
+    min-height: calc(100vh - 180px);
+    min-width: 300px;
+    padding: 50px;
+    // max-width: 60vw;
+    width: calc(50vw - 100px);
+  }
+
+  .steps {
+    background-color: $gray-20;
+    border-radius: 9px;
+    box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.07);
+    color: $white;
+    font-size: 9px;
+    height: 18px;
+    line-height: 18px;
+    pointer-events: none;
+    position: absolute;
+    text-align: center;
+    transform: translate(-24px, 24px);
+    transition: 300ms;
+    width: 18px;
+  }
+
+  .fulfilled {
+    background-color: $pretty-green;
+  }
+
+  .current-step {
+    background-color: $pretty-green;
+    padding-right: 8px;
+    transition: 300ms;
+
+    &:after {
+      animation: triangleSlide 0.5s forwards;
+      border: solid transparent;
+      border-left-color: $pretty-green;
+      border-width: 7px;
+      content: " ";
+      height: 0;
+      left: 12px;
+      margin-top: -7px;
+      opacity: 0;
+      pointer-events: none;
+      position: absolute;
+      top: 50%;
+      width: 0;
+    }
+  }
+
+  @keyframes triangleSlide {
+    100% {
+      opacity: 1;
+      transform: translate(11px, 0);
+    }
+  }
+
+  .description {
+    color: $gray-50;
+    margin-bottom: 10px;
+    pointer-events: none;
+  }
+
+  .clear-history {
+    color: $gray-50;
+    cursor: pointer;
+    font-style: italic;
+    margin: 20px 0 0 20px;
+
+    &:hover {
+      color: $pretty-red;
+    }
+  }
+
+  .recently-opened-wizard {
+    color: $gray-70;
+    display: block;
+    font-size: 12px;
+    margin: 0 0 20px 0;
+
+    ul {
+      margin: 15px 0 0 20px;
+      padding: 0;
+
+      li {
+        cursor: pointer;
+        list-style: none;
+        margin-bottom: 12px;
+        word-wrap: break-word;
+
+        .history-name {
+          display: inline-block !important;
+          font-size: 14px !important;
+          transform: translate(-9px, -5px);
+          transition: 300ms;
+          transition-property: color;
+        }
+
+        &:hover {
+          .history-name {
+            color: $pretty-blue;
+            text-shadow: 0px 0px 5px rgba(255, 255, 255, 1);
+            transition: 300ms;
+            transition-property: color;
+          }
+        }
+
+        .clear-history-item {
+          cursor: not-allowed;
+          opacity: 0.15;
+          position: absolute;
+          transform: translate(-32px, 3px);
+          width: 15px;
+
+          &:hover {
+            fill: $pretty-red;
+            opacity: 1;
+            pointer-events: all;
+
+            &+img {
+              &+span {
+                // really hacky way to select the `span`
+                // following the `.clear-history-item`
+                // which happens to be after `img`
+                color: $pretty-red;
+                text-decoration: line-through;
+              }
+            }
+
+          }
+
+          &:before {
+            font-size: 12px;
+          }
+        }
+
+        span {
+          font-style: italic;
+          padding-left: 10px;
+        }
+      }
+    }
+  }
+
+  .screenshot-preview {
+    align-items: center;
+    background-color: $wizard-screenshot;
+    border: 1px solid $gray-50;
+    display: flex;
+    font-size: 12px;
+    justify-content: center;
+    position: absolute;
+    text-align: center;
+    transform: translate(280px, -56px);
+    transition: 300ms;
+    transition-property: width, height;
+  }
+
+  .path {
+    color: black;
+    margin-left: 26px;
+    min-height: 20px;
+    pointer-events: none;
+  }
+
+  .recent {
+    color: $gray-50;
+    font-style: normal !important;
+    margin-left: 0;
+    padding-top: 5px;
+  }
+
+  .step-description {
+    color: $gray-60;
+    margin-left: 16px;
+    min-height: 20px;
+    pointer-events: none;
+  }
+
+  .step-four-text {
+    color: black;
+    display: inline;
+    margin-left: 0;
+    min-height: 20px;
+    pointer-events: none;
+  }
+
+  .emphasis-number {
+    display: inline;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .size-dropdown {
+    margin: 10px 14px 14px;
+
+    &:not([disabled]) {
+      cursor: pointer;
+    }
+  }
+
+  @include scrollBarHidden;
+}
+
+.hub-name-input {
+  margin-left: 15px;
+  margin-top: 16px;
+  padding-left: 5px;
+}
+
+.history-icon {
+  transform: translate(-7px, 1px);
+  width: 18px;
+}
+
+.gradient-to-indicate-scrolling {
+  background-image: linear-gradient(rgba(230, 230, 230, 0), $gray-10);
+  bottom: 0;
+  display: block;
+  height: 100px;
+  pointer-events: none;
+  position: fixed;
+  width: 100vw;
+  z-index: 30;
+}
+
+@media (max-width: 760px) {
+  .wizard {
+    margin: 0;
+
+    @include scrollBarShown;
+  }
+
+  .left-side {
+    min-height: initial !important;
+    width: calc(100vw - 100px) !important;
+  }
+
+  .right-side {
+    border-left: 0 !important;
+    border-top: 1px solid $gray-20;
+    margin-bottom: 100px;
+    margin-left: 20px;
+    min-height: initial !important;
+    min-width: calc(100vw - 150px) !important;
+    width: calc(100vw - 150px) !important;
+
+    & > * {
+      transform: translate(-20px, 0);
+    }
+
+    & .steps {
+      transform: translate(-48px, 24px);
+    }
+  }
+}

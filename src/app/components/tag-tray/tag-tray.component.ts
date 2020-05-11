@@ -8,7 +8,6 @@ import { modalAnimation } from '../../common/animations';
   templateUrl: './tag-tray.component.html',
   styleUrls: [
     '../layout.scss',
-    '../wizard.scss',
     '../settings.scss',
     '../search-input.scss',
     '../wizard-button.scss',
