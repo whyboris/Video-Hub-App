@@ -75,7 +75,6 @@ import {
   templateUrl: './home.component.html',
   styleUrls: [
     './layout.scss',
-    './top-buttons.scss',
     './settings.scss',
     './buttons.scss',
     './search.scss',

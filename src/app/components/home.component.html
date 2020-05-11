@@ -1,59 +1,18 @@
 <div class="window">
 
-  <div
-    class="titleBar"
-    [ngClass]="{ 'dark-mode-override': settingsButtons['darkMode'].toggled }"
-  >
-    <div
-      class="draggable"
-      [ngStyle]="{
-          left: macVersion ? '65px' : '5px',
-          'text-align': macVersion ? 'center' : 'left'
-        }"
-    >
-      <img width="16px" height="16px" class="top-logo" src="./assets/logo.png">
-      <span
-        class="heading-title"
-        [ngStyle]="{ 'color': settingsButtons['darkMode'].toggled ? '#AAAAAA' : '#111111' }"
-      >
-        Video Hub App 2
-        <b>{{ demo ? ' demo - limited to 50 video files ' : '' }}</b>
-        {{ importStage !== 'done' ? ' - ' + progressString + ' - ' : ' - ' }}
-        {{ appState.hubName }}
-        {{ rootFolderLive ? '' : '(' + ('STATISTICS.folderNotLive' | translate) + ')' }}
-      </span>
-    </div>
-    <div
-      (click)="initiateMinimize()"
-      [ngClass]="{
-          'winBtn': !macVersion,
-          'macBtn': macVersion
-        }"
-      class="minimizeButton"
-    >
-      <app-icon class="window-button" [icon]="'icon-minus'"></app-icon>
-    </div>
-    <div
-      (click)="initiateMaximize()"
-      [ngClass]="{
-          'winBtn': !macVersion,
-          'macBtn': macVersion
-        }"
-      class="maximizeButton"
-    >
-      <app-icon class="window-button" [icon]="'icon-maximize'"></app-icon>
-    </div>
-    <div
-      (click)="initiateClose()"
-      [ngClass]="{
-          'winBtn': !macVersion,
-          'macBtn': macVersion
-        }"
-      class="closeButton"
-    >
-      <app-icon class="window-button" [icon]="'icon-close'"></app-icon>
-    </div>
-  </div>
+  <app-title-bar
+    (initiateClose)="initiateClose()"
+    (initiateMaximize)="initiateMaximize()"
+    (initiateMinimize)="initiateMinimize()"
+
+    [appState]="appState"
+    [demo]="demo"
+    [importStage]="importStage"
+    [macVersion]="macVersion"
+    [progressString]="progressString"
+    [rootFolderLive]="rootFolderLive"
+    [settingsButtons]="settingsButtons"
+  ></app-title-bar>
 
   <div
     *ngIf="flickerReduceOverlay === true"

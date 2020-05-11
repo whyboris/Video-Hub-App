@@ -50,6 +50,7 @@ import { SvgDefinitionsComponent } from './components/icon/svg-definitions.compo
 import { TagTrayComponent } from './components/tag-tray/tag-tray.component';
 import { TagsComponent } from './components/tags-auto/tags.component';
 import { ThumbnailComponent } from './components/views/thumbnail/thumbnail.component';
+import { TitleBarComponent } from './components/title-bar/title-bar.component';
 import { TopComponent } from './components/top/top.component';
 import { ViewTagsComponent } from './components/tags-manual/view-tags.component';
 import { WizardComponent } from './components/wizard/wizard.component';
@@ -130,6 +131,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     TagsComponent,
     TagsDisplayPipe,
     ThumbnailComponent,
+    TitleBarComponent,
     TopComponent,
     ViewTagsComponent,
     WizardComponent,
