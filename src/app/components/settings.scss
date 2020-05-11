@@ -132,18 +132,6 @@ h3 {
   transition: 370ms;
 }
 
-.settings-buttons-group {
-  float: left;
-  margin-bottom: 10px; // if ever app width is too small, buttons spill over; this pushes them below cutoff
-  margin-right: 8px;
-  max-height: 23px;
-  z-index: 2;
-
-  &:empty {
-    display: none;
-  }
-}
-
 .buttonSpacer {
   display: inline-block;
   height: 10px;
@@ -256,7 +244,7 @@ h3 {
   width: 50px;
 }
 
-.shortcutMenu {
+.shortcut-menu {
   font-size: 14px;
   margin: 40px 30px;
 }
@@ -366,39 +354,6 @@ input[type="radio"]:checked:before {
 .sort-dropdown-dark-mode {
   background: black;
   color: white;
-}
-
-.shortcut-key {
-  background: $white;
-  border: 1px solid $gray-50;
-  border-radius: 3px;
-  box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
-  color: black;
-  display: inline-block;
-  font-style: normal;
-  margin-right: 6px;
-  padding: 3px 5px 3px 5px;
-  text-align: center;
-  width: 16px;
-}
-
-.modifier-key {
-  line-height: 20px;
-  margin: 0 4px;
-  margin-right: initial;
-  padding: 3px 10px;
-  width: initial;
-}
-
-.listElement {
-  line-height: 20px;
-  list-style: none;
-  margin: 0 0 16px 0;
-  padding: 0;
-}
-
-.without-numbers {
-  padding-inline-start: 34px;
 }
 
 .zoom-buttons {

@@ -485,52 +485,15 @@
 
     <!-- ===========   KEYBOARD SHORTCUTS    =========== -->
 
-    <div *ngIf="settingToShow == 3" class="shortcutMenu">
+    <div *ngIf="settingToShow == 3" class="shortcut-menu">
 
-      <span style="display: block; margin-bottom: 15px;">{{ 'SHORTCUTS.hold' | translate }}<em class="shortcut-key modifier-key">Ctrl</em>
-        <ng-container *ngIf="macVersion">
-          {{ 'SHORTCUTS.or' | translate }} <em class="shortcut-key modifier-key">Command</em>
-        </ng-container>
-          {{ 'SHORTCUTS.andClickAnyFile' | translate }}
-      </span>
-
-      <span>{{ 'SHORTCUTS.hold' | translate }}<em class="shortcut-key modifier-key">Ctrl</em>
-        <ng-container *ngIf="macVersion">
-          {{ 'SHORTCUTS.or' | translate }} <em class="shortcut-key modifier-key">Command</em>
-        </ng-container>
-          {{ 'SHORTCUTS.andPress' | translate }}:
-      </span>
-
-      <ul class="without-numbers">
-        <li class="listElement"><em class="shortcut-key">1</em> - {{ 'SHORTCUTS.showThumb' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">2</em> - {{ 'SHORTCUTS.showFilm' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">3</em> - {{ 'SHORTCUTS.showFull' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">4</em> - {{ 'SHORTCUTS.showDetail' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">5</em> - {{ 'SHORTCUTS.showDetail2' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">6</em> - {{ 'SHORTCUTS.showFile' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">7</em> - {{ 'SHORTCUTS.showClip' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">f</em> - {{ 'SHORTCUTS.focusOnFile' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">g</em> - {{ 'SHORTCUTS.focusOnMagic' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">r</em> - {{ 'SHORTCUTS.focusOnFuzzy' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">z</em> - {{ 'SHORTCUTS.makeSmaller' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">x</em> - {{ 'SHORTCUTS.makeLarger' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">s</em> - {{ 'SHORTCUTS.shuffle' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">o</em> - {{ 'SHORTCUTS.toggleSettings' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">d</em> - {{ 'SHORTCUTS.toggleDarkMode' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">t</em> - {{ 'SHORTCUTS.toggleAutoTags' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">i</em> - {{ 'SHORTCUTS.toggleFileName' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">b</em> - {{ 'SHORTCUTS.toggleSearchBar' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">h</em> - {{ 'SHORTCUTS.toggleMinimalMode' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">n</em> - {{ 'SHORTCUTS.toggleWizard' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">w</em> - {{ 'SHORTCUTS.quit' | translate }}</li>
-        <li class="listElement"><em class="shortcut-key">q</em> - {{ 'SHORTCUTS.quit' | translate }}</li>
-      </ul>
+      <app-shortcuts [macVersion]="macVersion"></app-shortcuts>
 
     </div>
 
     <!-- HUB STATISTICS -->
 
-    <div *ngIf="settingToShow == 4" class="shortcutMenu">
+    <div *ngIf="settingToShow == 4" class="shortcut-menu">
 
       <app-statistics
         [finalArray]="finalArray"
@@ -583,47 +546,13 @@
       }"
     >
 
-      <!-- ALL THE BUTTONS-->
-      <ng-container *ngFor="let btnGroup of settingsButtonsGroups; index as i">
-        <div
-          class="settings-buttons-group"
-        ><ng-container
-            *ngFor="let buttonKey of btnGroup"
-          ><!--
-         --><button
-              *ngIf="!settingsButtons[buttonKey].hidden && settingsButtons[buttonKey].iconName !== 'icon-checkmark'"
-              (click)="toggleButton(buttonKey)"
-              [ngClass]="{
-                  defaultSettingsButton:             !settingsButtons['flatIcons'].toggled,
-
-                  defaultSettingsButtonToggled:      !settingsButtons['flatIcons'].toggled
-                                                  && settingsButtons[buttonKey].toggled,
-
-                  defaultSettingsButtonDark:         !settingsButtons['flatIcons'].toggled
-                                                  && settingsButtons['darkMode'].toggled,
-
-                  defaultSettingsButtonDarkToggled:  !settingsButtons['flatIcons'].toggled
-                                                  && settingsButtons['darkMode'].toggled
-                                                  && settingsButtons[buttonKey].toggled,
-
-                  flatSettingsButton:                settingsButtons['flatIcons'].toggled,
-
-                  flatSettingsButtonToggled:         settingsButtons['flatIcons'].toggled
-                                                  && settingsButtons[buttonKey].toggled,
-
-                  disabledButton:                    (settingsButtons[buttonKey].iconName === 'icon-minus'
-                                                  || settingsButtons[buttonKey].iconName === 'icon-plus')
-                                                  && appState.currentView === 'showFiles'
-                }"
-              title="{{ settingsButtons[buttonKey].title | translate }}"
-              @buttonAnimation
-            >
-              <app-icon class="icon" [icon]="settingsButtons[buttonKey].iconName"></app-icon>
-            </button><!--
-        --></ng-container><!--
-        --><!--
-      --></div>
-      </ng-container>
+      <!-- ALL THE BUTTONS IN THE RIBBON -->
+      <app-ribbon
+        (toggleButton)="toggleButton($event)"
+        [appState]="appState"
+        [settingsButtonsGroups]="settingsButtonsGroups"
+        [settingsButtons]="settingsButtons"
+      ></app-ribbon>
 
       <!-- GEAR BUTTON -->
       <div
@@ -910,78 +839,10 @@
 
       <!-- SORT ORDER -->
 
-      <div
-        class='sort-filter'
-        *ngIf="settingsButtons['sortOrder'].toggled"
-        [ngClass]="{
-            'temp-disabled': (   settingsButtons['duplicateLength'].toggled
-                              || settingsButtons['duplicateSize'].toggled
-                              || settingsButtons['duplicateHash'].toggled)
-          }"
-        @filterItemAppear
-      >
-        <select
-          (change)="selectFilterOrder($event.target.value)"
-          #sortFilterElement
-          class="size-dropdown language-drop-down sort-dropdown"
-          [ngClass]="{ 'sort-dropdown-dark-mode': settingsButtons['darkMode'].toggled }"
-        >
-          <option value="default" selected="selected">
-            {{ 'SIDEBAR.sortDefault' | translate }}
-          </option>
-          <option *ngIf="settingsButtons['sortOptionAlphabetical'].toggled" value="alphabetAsc">
-            &#x25B2; {{ 'SIDEBAR.sortAlphabetical' | translate }}
-          </option>
-          <option *ngIf="settingsButtons['sortOptionAlphabetical'].toggled" value="alphabetDesc">
-            &#x25BC; {{ 'SIDEBAR.sortAlphabetical' | translate }}
-          </option>
-          <option *ngIf="settingsButtons['sortOptionTime'].toggled" value="timeAsc">
-            &#x25B2; {{ 'SIDEBAR.sortTime' | translate }}
-          </option>
-          <option *ngIf="settingsButtons['sortOptionTime'].toggled" value="timeDesc">
-            &#x25BC; {{ 'SIDEBAR.sortTime' | translate }}
-          </option>
-          <option *ngIf="settingsButtons['sortOptionSize'].toggled" value="sizeAsc">
-            &#x25B2; {{ 'SIDEBAR.sortSize' | translate }}
-          </option>
-          <option *ngIf="settingsButtons['sortOptionSize'].toggled" value="sizeDesc">
-            &#x25BC; {{ 'SIDEBAR.sortSize' | translate }}
-          </option>
-          <option *ngIf="settingsButtons['sortOptionTimesPlayed'].toggled" value="timesPlayedAsc">
-            &#x25B2; {{ 'SIDEBAR.sortTimesPlayed' | translate }}
-          </option>
-          <option *ngIf="settingsButtons['sortOptionTimesPlayed'].toggled" value="timesPlayedDesc">
-            &#x25BC; {{ 'SIDEBAR.sortTimesPlayed' | translate }}
-          </option>
-          <option *ngIf="settingsButtons['sortOptionStar'].toggled" value="starAsc">
-            &#x25B2; {{ 'SIDEBAR.sortStar' | translate }}
-          </option>
-          <option *ngIf="settingsButtons['sortOptionStar'].toggled" value="starDesc">
-            &#x25BC; {{ 'SIDEBAR.sortStar' | translate }}
-          </option>
-          <option *ngIf="settingsButtons['sortOptionYear'].toggled" value="yearAsc">
-            &#x25B2; {{ 'SIDEBAR.sortYear' | translate }}
-          </option>
-          <option *ngIf="settingsButtons['sortOptionYear'].toggled" value="yearDesc">
-            &#x25BC; {{ 'SIDEBAR.sortYear' | translate }}
-          </option>
-          <option *ngIf="settingsButtons['sortOptionModified'].toggled" value="modifiedAsc">
-            &#x25B2; {{ 'SIDEBAR.sortModified' | translate }}
-          </option>
-          <option *ngIf="settingsButtons['sortOptionModified'].toggled" value="modifiedDesc">
-            &#x25BC; {{ 'SIDEBAR.sortModified' | translate }}
-          </option>
-          <option *ngIf="settingsButtons['sortOptionTags'].toggled" value="tagsAsc">
-            &#x25B2; {{ 'SIDEBAR.sortTags' | translate }}
-          </option>
-          <option *ngIf="settingsButtons['sortOptionTags'].toggled" value="tagsDesc">
-            &#x25BC; {{ 'SIDEBAR.sortTags' | translate }}
-          </option>
-          <option value="random">
-            {{ 'SIDEBAR.sortRandom' | translate }}
-          </option>
-        </select>
-      </div>
+      <app-sort-order
+        (sortTypeChange)="selectFilterOrder($event)"
+        [settingsButtons]="settingsButtons"
+      ></app-sort-order>
 
       <!-- total found -->
       <div class="filtering-total">
@@ -1388,7 +1249,8 @@
   </div>
 
   <app-thumbnail
-    *ngFor="let item of finalArray | similarityPipe: true : currentPlayingFile | slice:0:7 "
+    *ngFor="let item of finalArray | similarityPipe: true : currentPlayingFile
+                                   | slice: 0 : 7 "
 
     (videoClick)="handleClick($event, item)"
     (contextmenu)="rightMouseClicked($event, item)"
@@ -1414,77 +1276,13 @@
 
 <!-- TAGS BOTTOM TRAY -->
 
-<div
-  *ngIf="settingsButtons['showTagTray'].toggled"
-  class="bottom-tray manual-tag-tray"
-  [ngClass]="{ 'bottom-tray-dark': settingsButtons['darkMode'].toggled }"
-  @modalAnimation
->
-  <div
-    (click)="closeTagsTray()"
-    class="close-bottom-tray"
-    title="{{ 'TAGS.closeTagTray' | translate }}"
-  >
-    <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
-  </div>
-
-  <div class="tag-tray-menu-left" *ngIf="!batchTaggingMode; else batchModeExplainer">
-    <span class="manual-tag-tray-label">
-      {{ 'TAGS.presentTags' | translate }}:
-    </span>
-    <button
-      (click)="settingsButtons['tagFrequencySort'].toggled = !settingsButtons['tagFrequencySort'].toggled"
-      class="tag-sort-by-toggle"
-    >
-      {{ (settingsButtons['tagFrequencySort'].toggled ? 'TAGS.sortByFrequency'
-                                                      : 'TAGS.sortAlphabetical') | translate }}
-    </button>
-    <button
-      (click)="manualTagShowFrequency = !manualTagShowFrequency"
-      class="show-frequency"
-    >
-      {{ (manualTagShowFrequency ? 'TAGS.showingFrequency'
-                                : 'TAGS.hidingFrequency') | translate }}
-    </button>
-    <input
-      (keyup.esc)="manualTagFilterString = ''"
-      [(ngModel)]="manualTagFilterString"
-      class="filter-general manual-tag-tray-filter"
-      placeholder="{{ 'TAGS.filterTags' | translate }}"
-    >
-
-  </div>
-
-  <ng-template #batchModeExplainer>
-    <div class="tag-tray-menu-left">
-      <span class="manual-tag-tray-label">
-        {{ 'TAGS.clickVideoToSelect' | translate }}
-      </span>
-      <span class="manual-tag-tray-label" style="line-height: 24px">
-        {{ 'TAGS.clickTagToAdd' | translate }}
-      </span>
-    </div>
-  </ng-template>
-
-  <button
-    class="wizard-button wizard-button-small button-toggle-batch-mode"
-    [ngClass]="{ 'edit-mode-active': batchTaggingMode }"
-    (click)="toggleBatchTaggingMode()"
-  >
-    {{ 'TAGS.batchModeButton' | translate }}
-  </button>
-
-  <app-view-tags-component
-    class="all-the-tags"
-    [draggable]="true"
-    [displayFrequency]="manualTagShowFrequency"
-    [tags]="manualTagsService.tagsList | manualTagSortPipe
-                                       : manualTagFilterString
-                                       : settingsButtons['tagFrequencySort'].toggled
-                                       : manualTagsService.pipeToggleHack"
-    (tagClicked)="handleTagWordClicked($event.tag.name, $event.event)"
-  ></app-view-tags-component>
-</div>
+<app-tag-tray
+  (closeTagsTray)="closeTagsTray()"
+  (toggleBatchTaggingMode)="toggleBatchTaggingMode()"
+  (handleTagWordClicked)="handleTagWordClicked($event.tag.name, $event.event)"
+  [batchTaggingMode]="batchTaggingMode"
+  [settingsButtons]="settingsButtons"
+></app-tag-tray>
 
 <!-- IMPORT MODAL  -->
 
@@ -1513,360 +1311,29 @@
 <!-- ================    WIZARD    ================ -->
 <!-- ============================================== -->
 
-<div *ngIf="wizard.showWizard" class="wizard" @myWizardAnimation>
+<app-wizard
+  *ngIf="wizard.showWizard"
+  @myWizardAnimation
 
-  <div *ngIf="canCloseWizard" (click)="hideWizard()" class="closeWizard" title="{{ 'WIZARD.closeButton' | translate }}">
-    <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
-  </div>
+  (clearRecentlyViewedHistory)="clearRecentlyViewedHistory()"
+  (hideWizard)="hideWizard()"
+  (importFresh)="importFresh()"
+  (loadFromFile)="loadFromFile()"
+  (openFromHistory)="openFromHistory($event)"
+  (removeFromHistory)="removeFromHistory($event)"
+  (selectClipSize)="selectClipSize($event)"
+  (selectLengthOfClipSnippets)="selectLengthOfClipSnippets($event)"
+  (selectNumOfClipSnippets)="selectNumOfClipSnippets($event)"
+  (selectNumOfScreens)="selectNumOfScreens($event)"
+  (selectOutputDirectory)="selectOutputDirectory()"
+  (selectScreenshotSize)="selectScreenshotSize($event)"
+  (selectSourceDirectory)="selectSourceDirectory()"
+  (setScreensPerVideo)="setScreensPerVideo($event)"
 
-  <div class="gradient-to-indicate-scrolling"></div>
-
-  <div class="left-side" @slowFadeIn>
-
-    <h2>{{ 'WIZARD.openPrevious' | translate }}</h2>
-
-    <button class="wizard-button" (click)="loadFromFile()" title="{{ 'WIZARD.openPreviouslySaved' | translate }}">
-      {{ 'WIZARD.loadFromFile' | translate }}
-    </button>
-
-    <div class="recently-opened-wizard" *ngIf="(vhaFileHistory || {}).length > 0" @historyItemRemove>
-
-      <h3>{{ 'WIZARD.recentlyOpened' | translate }}</h3>
-
-      <ul>
-        <li *ngFor="let historyItem of vhaFileHistory; index as i" (click)="openFromHistory(i)" @historyItemRemove>
-          <div
-            class="clear-history-item"
-            (click)="removeFromHistory($event, i)"
-            title="{{ 'WIZARD.removeFromHistory' | translate }}"
-          >
-            <app-icon
-              [icon]="'icon-close'"
-            ></app-icon>
-          </div>
-          <img class="history-icon" src="./assets/logo.png">
-          <span class="history-name">{{ historyItem.hubName }}</span>
-          <br>
-          <span class="path recent" [innerHtml]="historyItem.vhaFilePath | folderArrowsPipe"></span>
-        </li>
-      </ul>
-
-      <span class="clear-history" (click)="clearRecentlyViewedHistory()">{{ 'WIZARD.clearRecent' | translate }}</span>
-    </div>
-
-  </div>
-
-  <div class="right-side" @slowFadeIn>
-
-    <h2>{{ 'WIZARD.importNew' | translate }}</h2>
-
-    <div
-      [ngClass]="{
-          'current-step': wizard.futureHubName === '',
-          'fulfilled': wizard.futureHubName !== ''
-        }"
-      class="steps"
-    >
-      1
-    </div>
-    <input
-      [(ngModel)]="wizard.futureHubName"
-      (keypress)="validateHubName($event)"
-      class="filter-general input-filter hub-name-input"
-    >
-    <span class="step-description">
-      {{ 'WIZARD.nameYourHub' | translate }}
-    </span>
-
-    <div
-      [ngClass]="{
-          'current-step': wizard.futureHubName !== '' && wizard.selectedSourceFolder === '',
-          'fulfilled': wizard.selectedSourceFolder !== ''
-        }"
-      class="steps"
-    >
-      2
-    </div>
-    <button
-      class="wizard-button"
-      (click)="selectSourceDirectory()"
-      [disabled]="wizard.futureHubName === ''"
-      title="{{ 'WIZARD.selectFolderWithVideo' | translate }}"
-    >
-      {{ (wizard.selectedSourceFolder === '' ? 'WIZARD.select' : 'WIZARD.change') | translate }}
-      {{ 'WIZARD.videoDirectory' | translate }}
-    </button>
-
-    <span class="step-description">
-      {{ 'WIZARD.importingFrom' | translate }}
-    </span>
-    <span class="path" [innerHtml]="wizard.selectedSourceFolder | folderArrowsPipe">
-    </span>
-    <span class="step-description" [ngStyle]="{ opacity: wizard.totalNumberOfFiles === -1 ? 0 : 1 }">
-      <!-- don't use *ngIf on this element, else it disappears and changes height of section -->
-      {{ 'WIZARD.found' | translate }}
-      <span class="emphasis-number">
-        {{ wizard.totalNumberOfFiles | number }}
-      </span>
-      {{ 'WIZARD.videos' | translate }}
-      {{ (wizard.totalNumberOfFiles > 50 && demo ? 'WIZARD.demoVersion' : '') | translate }}
-    </span>
-
-    <div
-      [ngClass]="{ 'fulfilled': wizard.selectedOutputFolder !== '' }"
-      class="steps"
-    >
-      3
-    </div>
-    <button
-      class="wizard-button"
-      (click)="selectOutputDirectory()"
-      [disabled]="wizard.selectedSourceFolder === '' || wizard.futureHubName === ''"
-      title="{{ 'WIZARD.selectWhereFilesStored' | translate }}"
-    >
-      {{ (wizard.selectedOutputFolder === '' ? 'WIZARD.select' : 'WIZARD.change') | translate }}
-      {{ 'WIZARD.hubDirectory' | translate }}
-    </button>
-
-    <span class="step-description">
-      {{ 'WIZARD.savingTo' | translate }}
-    </span>
-    <span class="path" [innerHtml]="wizard.selectedOutputFolder | folderArrowsPipe">
-    </span>
-
-    <div
-      [ngClass]="{ 'fulfilled': wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder !== '' }"
-      class="steps"
-    >
-      4
-    </div>
-
-    <div
-      class="ss-num-selection"
-      style="margin-top: 20px"
-      [ngClass]="{ 'dim-row': !wizard.screensPerVideo
-                            || wizard.selectedOutputFolder === ''
-                            || wizard.selectedSourceFolder === ''
-                            || wizard.futureHubName === ''
-      }"
-    >
-
-      <input
-        type="radio"
-        name="ss-num-selection"
-        checked
-        (change)="setScreensPerVideo(true)"
-        [disabled]="wizard.selectedOutputFolder === ''
-                 || wizard.selectedSourceFolder === ''
-                 || wizard.futureHubName === ''"
-      >
-      <input
-        (change)="selectNumOfScreens($event.target.value)"
-        type="number"
-        class="size-dropdown language-drop-down num-select"
-        value=10
-        min=3
-        max=30
-        onKeyDown="return false"
-        [disabled]="wizard.selectedOutputFolder === ''
-                 || wizard.selectedSourceFolder === ''
-                 || wizard.futureHubName === ''
-                 || !wizard.screensPerVideo"
-      >
-      {{ 'WIZARD.screenshotsPerVideo' | translate }}
-
-    </div>
-
-    <div
-      class="ss-num-selection"
-      [ngClass]="{ 'dim-row': wizard.screensPerVideo }"
-    >
-
-      <input
-        type="radio"
-        name="ss-num-selection"
-        (change)="setScreensPerVideo(false)"
-        [disabled]="wizard.selectedOutputFolder === ''
-                 || wizard.selectedSourceFolder === ''
-                 || wizard.futureHubName === ''"
-      >
-      {{ 'WIZARD.oneScreenshotEvery' | translate }}
-      <input
-        (change)="selectNumOfScreens($event.target.value)"
-        type="number"
-        class="size-dropdown language-drop-down num-select"
-        value=5
-        min=1
-        max=20
-        onKeyDown="return false"
-        [disabled]="wizard.selectedOutputFolder === ''
-                 || wizard.selectedSourceFolder === ''
-                 || wizard.futureHubName === ''
-                 || wizard.screensPerVideo"
-      >
-      {{ 'WIZARD.minutes' | translate }}
-
-    </div>
-
-    <div
-      *ngIf="wizard.selectedOutputFolder !== ''"
-      class="screenshot-preview"
-      [ngStyle]="{
-          width: ((wizard.screenshotSizeForImport) * (16 / 9)) + 'px',
-          height: wizard.screenshotSizeForImport + 'px'
-        }"
-    >
-      {{ 'WIZARD.imported' | translate }}
-      <br>
-      {{ 'WIZARD.screenshot' | translate }}
-      <br>
-      {{ 'WIZARD.size' | translate }}
-    </div>
-
-    <select
-      (change)="selectScreenshotSize($event.target.value)"
-      class="size-dropdown language-drop-down"
-      [disabled]="wizard.selectedOutputFolder === ''
-               || wizard.selectedSourceFolder === ''
-               || wizard.futureHubName === ''"
-    >
-      <option value="144">144px</option>
-      <option value="216">216px</option>
-      <option value="288" selected="selected">288px</option>
-      <option value="360">360px</option>
-      <option value="432">432px</option>
-      <option value="504">504px</option>
-    </select>
-
-    <span
-      class="step-four-text"
-      [ngClass]="{ 'dim-row': !(wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder !== '') }"
-    >
-      {{ 'WIZARD.sizeOfScreenshots' | translate }}
-    </span>
-
-    <!-- STEP 5 -->
-
-    <div
-      [ngClass]="{ 'fulfilled': wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder !== '' }"
-      class="steps"
-      style="transform: translate(-24px, 11px);"
-    >
-      5
-    </div>
-
-    <div [ngClass]="{ 'dim-row': !wizard.extractClips }" style="max-width: 267px;">
-
-      <input
-        type="checkbox"
-        [(ngModel)]="wizard.extractClips"
-        class="clip-check-box"
-        [disabled]="wizard.selectedOutputFolder === ''
-                || wizard.selectedSourceFolder === ''
-                || wizard.futureHubName === ''"
-      >
-
-      <span class="step-four-text">
-        {{ 'WIZARD.extractClips' | translate }}
-      </span>
-
-      <input
-        (change)="selectNumOfClipSnippets($event.target.value)"
-        type="number"
-        class="size-dropdown language-drop-down num-select"
-        value=5
-        min=3
-        max=15
-        onKeyDown="return false"
-        [disabled]="wizard.selectedOutputFolder === ''
-                || wizard.selectedSourceFolder === ''
-                || wizard.futureHubName === ''
-                || !wizard.extractClips"
-      >
-
-      <span class="step-four-text">
-        {{ 'WIZARD.clipSnippets' | translate }}
-      </span>
-
-    </div>
-
-
-    <div [ngClass]="{ 'dim-row': !wizard.extractClips }" style="margin: 5px 0 0 38px">
-
-      <span class="step-four-text">
-        {{ 'WIZARD.eachSnippet' | translate }}
-      </span>
-
-      <input
-        (change)="selectLengthOfClipSnippets($event.target.value)"
-        type="number"
-        class="size-dropdown language-drop-down num-select"
-        value=1
-        min=1
-        max=5
-        onKeyDown="return false"
-        [disabled]="wizard.selectedOutputFolder === ''
-                || wizard.selectedSourceFolder === ''
-                || wizard.futureHubName === ''
-                || !wizard.extractClips"
-      >
-
-      <span class="step-four-text">
-        {{ 'WIZARD.secondsLong' | translate }}
-      </span>
-
-    </div>
-
-    <div [ngClass]="{ 'dim-row': !wizard.extractClips }">
-
-      <select
-        (change)="selectClipSize($event.target.value)"
-        class="size-dropdown language-drop-down"
-        [disabled]="!wizard.extractClips"
-      >
-        <option value="144" selected="selected">144px</option>
-        <option value="216">216px</option>
-        <option value="288">288px</option>
-        <option value="360">360px</option>
-        <option value="432">432px</option>
-        <option value="504">504px</option>
-      </select>
-
-      <span
-        class="step-four-text"
-        [ngClass]="{ 'dim-row': !(wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder !== '') }"
-      >
-        {{ 'WIZARD.sizeOfClips' | translate }}
-      </span>
-
-    </div>
-
-    <!-- STEP 6 -->
-
-    <div
-      style="margin-top: 30px;"
-      [ngClass]="{
-        'current-step': wizard.selectedOutputFolder !== ''
-                     && wizard.selectedSourceFolder !== ''
-      }"
-      class="steps"
-    >
-      6
-    </div>
-
-    <button
-      style="margin-top: 45px;"
-      class="wizard-button start-import"
-      [disabled]="wizard.selectedOutputFolder === ''
-               || wizard.selectedSourceFolder === ''
-               || importStage !== 'done'
-               || wizard.futureHubName === ''
-               || wizard.totalNumberOfFiles === 0"
-      (click)="importFresh()"
-    >
-      {{ 'WIZARD.createVideoHub' | translate }}
-    </button>
-
-  </div>
-
-</div>
+  [demo]="demo"
+  [importStage]="importStage"
+  [wizard]="wizard"
+  [vhaFileHistory]="vhaFileHistory"
+  [canCloseWizard]="canCloseWizard"
+>
+</app-wizard>
