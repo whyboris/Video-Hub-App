@@ -50,6 +50,7 @@ import { TagsComponent } from './components/tags-auto/tags.component';
 import { ThumbnailComponent } from './components/views/thumbnail/thumbnail.component';
 import { TopComponent } from './components/top/top.component';
 import { ViewTagsComponent } from './components/tags-manual/view-tags.component';
+import { WizardComponent } from './components/wizard/wizard.component';
 
 // Pipes
 import { AlphabetPrefixPipe } from './pipes/alphabet-prefix.pipe';
@@ -127,6 +128,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     ThumbnailComponent,
     TopComponent,
     ViewTagsComponent,
+    WizardComponent,
     WordFrequencyPipe,
     WrapperPipe,
   ],

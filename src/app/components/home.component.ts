@@ -820,24 +820,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Only allow characters and numbers for hub name
-   * @param event key press event
-   */
-  public validateHubName(event: any): boolean {
-    const keyCode = event.charCode;
-    if (keyCode === 32) {
-      return true;
-    } else if (48 <= keyCode && keyCode <= 57) {
-      return true;
-    } else if (65 <= keyCode && keyCode <= 90) {
-      return true;
-    } else if (97 <= keyCode && keyCode <= 122) {
-      return true;
-    }
-    return false;
-  }
-
-  /**
    * Summon a dialog to open a default video player
    */
   public chooseDefaultVideoPlayer(): void {
@@ -1204,8 +1186,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param index - index of the file from `vhaFileHistory`
    */
   openFromHistory(index: number): void {
-    // console.log('trying to open ' + index);
-    // console.log(this.vhaFileHistory[index]);
     this.loadThisVhaFile(this.vhaFileHistory[index].vhaFilePath);
   }
 
@@ -1213,10 +1193,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Handle click from html to open a recently-opened VHA file
    * @param index - index of the file from `vhaFileHistory`
    */
-  removeFromHistory(event: Event, index: number): void {
-    event.stopPropagation();
-    // console.log('trying to remove ' + index);
-    // console.log(this.vhaFileHistory[index]);
+  removeFromHistory(index: number): void {
     this.vhaFileHistory.splice(index, 1);
   }
 
