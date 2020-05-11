@@ -53,8 +53,6 @@ const Ukrainian = require('../../../i18n/uk.json');
 
 // Animations
 import {
-  breadcrumbWordAppear,
-  breadcrumbsAppear,
   buttonAnimation,
   donutAppear,
   filterItemAppear,
@@ -77,7 +75,6 @@ import {
   templateUrl: './home.component.html',
   styleUrls: [
     './layout.scss',
-    './breadcrumbs.scss',
     './top-buttons.scss',
     './settings.scss',
     './buttons.scss',
@@ -90,8 +87,6 @@ import {
     './rightclick.scss'
   ],
   animations: [
-    breadcrumbsAppear,
-    breadcrumbWordAppear,
     buttonAnimation,
     donutAppear,
     filterItemAppear,
@@ -398,7 +393,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         case ('h'):
           this.toggleButton('hideTop');
           this.toggleButton('hideSidebar');
-          this.toggleSettingsMenu();
+          this.toggleRibbon();
           this.toggleButton('showMoreInfo');
           break;
 
@@ -1662,9 +1657,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Show or hide the settings menu
+   * Show or hide the ribbon
    */
-  toggleSettingsMenu(): void {
+  toggleRibbon(): void {
     this.appState.menuHidden = !this.appState.menuHidden;
   }
 

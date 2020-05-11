@@ -242,7 +242,7 @@
   <!-- ===========   SETTINGS / OPTIONS MODAL   =========== -->
   <!-- ==================================================== -->
 
-  <!-- TABS -->
+  <!-- Clickable tabs -->
 
   <div
     *ngIf="settingsModalOpen"
@@ -250,23 +250,23 @@
     @modalAnimation
   >
     <button (click)="showSettingsGroup(0)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 0 }">
-      {{ 'SETTINGS.tabFilter' | translate }}
+      {{ 'SETTINGS.tabFilter'    | translate }}
     </button>
     <button (click)="showSettingsGroup(1)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 1 }">
-      {{ 'SETTINGS.tabView' | translate }}
+      {{ 'SETTINGS.tabView'      | translate }}
     </button>
     <button (click)="showSettingsGroup(2)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 2 }">
-      {{ 'SETTINGS.tabMain' | translate }}
+      {{ 'SETTINGS.tabMain'      | translate }}
     </button>
     <button (click)="showSettingsGroup(3)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 3 }">
       {{ 'SETTINGS.tabShortcuts' | translate }}
     </button>
     <button (click)="showSettingsGroup(4)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 4 }">
-      {{ 'SETTINGS.statistics' | translate }}
+      {{ 'SETTINGS.statistics'   | translate }}
     </button>
   </div>
 
-  <!-- MODAL -->
+  <!-- Modal with all settings -->
 
   <div
     *ngIf="settingsModalOpen"
@@ -333,7 +333,9 @@
 
     </div>
 
-  </div> <!-- END OF SETTINGS MODAL -->
+  </div>
+
+  <!-- END OF SETTINGS MODAL ------------------------------------------------------------------- -->
 
   <header
     *ngIf="!settingsButtons['hideTop'].toggled"
@@ -362,7 +364,7 @@
   >
 
     <!-- ============================================== -->
-    <!-- =============     ALL SETTINGS     =========== -->
+    <!-- =============        RIBBON        =========== -->
     <!-- ============================================== -->
 
     <div
@@ -394,7 +396,7 @@
     </div>
 
     <div
-      (click)="toggleSettingsMenu()"
+      (click)="toggleRibbon()"
       class="hiding-settings-menu"
       [ngClass]="{
           flipped: !appState.menuHidden,
@@ -405,28 +407,14 @@
     </div>
 
     <!-- BREADCRUMBS -->
-    <div
-      *ngIf="settingsButtons['showFolders'].toggled && (appState.currentView === 'showThumbnails' ||
-                                                        appState.currentView === 'showFiles' ||
-                                                        appState.currentView === 'showClips')"
-      [ngClass]="{
-          'breadcrumbs-full-width': settingsButtons['hideSidebar'].toggled,
-          'breadcrumbs-dark-mode': settingsButtons['darkMode'].toggled
-        }"
-      class="breadcrumbs"
-      @breadcrumbsAppear
-    >
-      <app-icon class="breadcrumb-folder-icon" [icon]="'icon-folder-blank'" (click)="breadcrumbHomeIconClick()"></app-icon>
-      <span
-        *ngFor="let item of folderViewNavigationPath.split('/'); index as idx"
-        (click)="handleBbreadcrumbClicked(idx)"
-        class="breadcrumb-folder-word"
-        @breadcrumbWordAppear
-      >
-        {{ item }}
-      </span>
+    <app-breadcrumbs
+      (breadcrumbHomeIconClick)="breadcrumbHomeIconClick()"
+      (handleBbreadcrumbClicked)="handleBbreadcrumbClicked($event)"
 
-    </div>
+      [appState]="appState"
+      [folderViewNavigationPath]="folderViewNavigationPath"
+      [settingsButtons]="settingsButtons"
+    ></app-breadcrumbs>
 
     <!-- ============================================== -->
     <!-- ===========         SIDEBAR        =========== -->

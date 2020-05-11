@@ -29,6 +29,7 @@ import { WordFrequencyService } from './pipes/word-frequency.service';
 // Components
 import { AddTagComponent } from './components/tags-manual/add-tag.component';
 import { AppComponent } from './app.component';
+import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
 import { ClipComponent } from './components/views/clip/clip.component';
 import { DetailsComponent } from './components/views/details/details.component';
 import { DonutComponent } from './components/donut/donut.component';
@@ -85,6 +86,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     AddTagComponent,
     AlphabetPrefixPipe,
     AppComponent,
+    BreadcrumbsComponent,
     ClipComponent,
     CountPipe,
     DeleteFilePipe,
