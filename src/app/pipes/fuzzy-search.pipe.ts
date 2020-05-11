@@ -2,15 +2,14 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { ImageElement } from '../../../interfaces/final-object.interface';
 
-// import Fuse from 'fuse.js';
-import * as Fuse from 'fuse.js';
+import Fuse from 'fuse.js';
 
 @Pipe({
   name: 'fuzzySearchPipe'
 })
 export class FuzzySearchPipe implements PipeTransform {
 
-  options: Fuse.FuseOptions<ImageElement> = {
+  options = {
     threshold: 0.4, // 0 => perfect match, 1 => match anything
     shouldSort: true, // note we disable sorting when fuzzySearchPipe is engaged (searchString > 2)
     minMatchCharLength: 2,
@@ -29,7 +28,7 @@ export class FuzzySearchPipe implements PipeTransform {
     } else {
       const fuse = new Fuse(finalArray, this.options);
 
-      return <ImageElement[]>fuse.search(searchString);
+      return fuse.search(searchString).map((element) => element.item);
     }
   }
 

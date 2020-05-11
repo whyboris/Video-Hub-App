@@ -1,0 +1,53 @@
+<ng-container *ngFor="let filter of filters; index as j">
+  <div
+    *ngIf="settingsButtons[filter.uniqueKey].toggled"
+    class="filter-container"
+    @filterItemAppear
+  >
+
+    <app-icon class="input-icon" [icon]="settingsButtons[filter.uniqueKey].iconName"></app-icon>
+
+    <input
+      id="{{ filter.uniqueKey }}"
+      (keyup.enter)="onEnterKey.emit({ word: filter.string, index: j })"
+      (keydown.backspace)="onBackspace.emit({ word: filter.string, index: j })"
+      (keydown.escape)="filter.string = ''"
+      [(ngModel)]="filter.string"
+      (keydown.Tab)="handleTabPress($event, filter.uniqueKey === 'tagIntersection', j, filter.string)"
+      (ngModelChange)="handleInputChange($event, filter.uniqueKey === 'tagIntersection')"
+      [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
+      class="filter-general input-filter"
+      placeholder="{{ filter.placeholder | translate }}"
+      type="text"
+    >
+
+    <span
+      *ngIf="filter.uniqueKey === 'tagIntersection' && filter.string !== ''"
+      class="tag-type-ahead-on-home"
+    >{{ tagTypeAhead }}</span>
+
+    <div class="filteredWords">
+      <ng-container *ngIf="filter.array.length > 0">
+        <ng-container
+          *ngFor="let string of filter.array; index as i"
+        >
+          <span
+            *ngIf="i > 0"
+            [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? '#CCCCCC' : 'black' }"
+            class="conjunction"
+          >
+            {{ filter.conjunction | translate }}
+          </span>
+          <span
+            (click)="removeThisFilter.emit({ item: i, origin: j })"
+            [ngStyle]="{ background: filter.color }"
+            class="search-or-tag-general search-word"
+          >
+            {{ string }}
+          </span>
+        </ng-container>
+      </ng-container>
+    </div>
+
+  </div>
+</ng-container>

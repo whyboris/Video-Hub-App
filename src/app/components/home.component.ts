@@ -1,4 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 import * as path from 'path';
 
@@ -23,12 +24,12 @@ import { ImportStage } from '../../../main-support';
 import { SavableProperties } from '../../../interfaces/savable-properties.interface';
 import { SettingsObject } from '../../../interfaces/settings-object.interface';
 import { SortType } from '../pipes/sorting.pipe';
-import { TagEmission, StarEmission, YearEmission } from './views/details/details.component';
+import { StarEmission, YearEmission } from './views/details/details.component';
 import { WizardOptions } from '../../../interfaces/wizard-options.interface';
 
 // Constants, etc
 import { AppState, SupportedLanguage, defaultImgsPerRow, RowNumbers } from '../common/app-state';
-import { allSupportedViews, SupportedView } from '../../../interfaces/shared-interfaces';
+import { allSupportedViews, SupportedView, TagEmission } from '../../../interfaces/shared-interfaces';
 import { Filters, filterKeyToIndex, FilterKeyNames } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, SettingsMetaGroup } from '../common/settings-buttons';
 import { globals } from '../../../main-globals';
@@ -52,8 +53,6 @@ const Ukrainian = require('../../../i18n/uk.json');
 
 // Animations
 import {
-  breadcrumbWordAppear,
-  breadcrumbsAppear,
   buttonAnimation,
   donutAppear,
   filterItemAppear,
@@ -76,8 +75,6 @@ import {
   templateUrl: './home.component.html',
   styleUrls: [
     './layout.scss',
-    './breadcrumbs.scss',
-    './top-buttons.scss',
     './settings.scss',
     './buttons.scss',
     './search.scss',
@@ -85,13 +82,10 @@ import {
     '../fonts/icons.scss',
     './gallery.scss',
     './wizard-button.scss',
-    './wizard.scss',
     './resolution.scss',
     './rightclick.scss'
   ],
   animations: [
-    breadcrumbsAppear,
-    breadcrumbWordAppear,
     buttonAnimation,
     donutAppear,
     filterItemAppear,
@@ -271,9 +265,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   sortType: SortType = 'default';
 
-  manualTagFilterString: string = '';
-  manualTagShowFrequency: boolean = true;
-
   durationOutlierCutoff: number = 0; // for the duration filter to cut off outliers
 
   // time remaining calculator !!!
@@ -289,11 +280,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   batchTaggingMode = false; // when batch tagging is enabled
 
+  latestVersionAvailable: string;
+
   // ========================================================================
   // Please add new variables below if they don't fit into any other section
   // ------------------------------------------------------------------------
 
-  detailsMaxWidth: number = 1000; // used to keep track of max width for details in details view
   tagTypeAhead: string = '';
   folderViewNavigationPath: string = '';
 
@@ -345,10 +337,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
           break;
 
         case ('5'):
-          this.toggleButton('showFiles');
+          this.toggleButton('showDetails2');
           break;
 
         case ('6'):
+          this.toggleButton('showFiles');
+          break;
+
+        case ('7'):
           this.toggleButton('showClips');
           break;
 
@@ -396,7 +392,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         case ('h'):
           this.toggleButton('hideTop');
           this.toggleButton('hideSidebar');
-          this.toggleSettingsMenu();
+          this.toggleRibbon();
           this.toggleButton('showMoreInfo');
           break;
 
@@ -459,6 +455,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   constructor(
+    private http: HttpClient,
     public cd: ChangeDetectorRef,
     public electronService: ElectronService,
     public manualTagsService: ManualTagsService,
@@ -813,24 +810,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.virtualScroller.refresh();
       this.computePreviewWidth();
     }, delay);
-  }
-
-  /**
-   * Only allow characters and numbers for hub name
-   * @param event key press event
-   */
-  public validateHubName(event: any): boolean {
-    const keyCode = event.charCode;
-    if (keyCode === 32) {
-      return true;
-    } else if (48 <= keyCode && keyCode <= 57) {
-      return true;
-    } else if (65 <= keyCode && keyCode <= 90) {
-      return true;
-    } else if (97 <= keyCode && keyCode <= 122) {
-      return true;
-    }
-    return false;
   }
 
   /**
@@ -1200,8 +1179,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param index - index of the file from `vhaFileHistory`
    */
   openFromHistory(index: number): void {
-    // console.log('trying to open ' + index);
-    // console.log(this.vhaFileHistory[index]);
     this.loadThisVhaFile(this.vhaFileHistory[index].vhaFilePath);
   }
 
@@ -1209,10 +1186,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Handle click from html to open a recently-opened VHA file
    * @param index - index of the file from `vhaFileHistory`
    */
-  removeFromHistory(event: Event, index: number): void {
-    event.stopPropagation();
-    // console.log('trying to remove ' + index);
-    // console.log(this.vhaFileHistory[index]);
+  removeFromHistory(index: number): void {
     this.vhaFileHistory.splice(index, 1);
   }
 
@@ -1248,6 +1222,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   toggleAllViewsButtonsOff(): void {
     this.settingsButtons['showClips'].toggled = false;
     this.settingsButtons['showDetails'].toggled = false;
+    this.settingsButtons['showDetails2'].toggled = false;
     this.settingsButtons['showFiles'].toggled = false;
     this.settingsButtons['showFilmstrip'].toggled = false;
     this.settingsButtons['showFullView'].toggled = false;
@@ -1281,7 +1256,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Restore the image height for the particular view
    */
   restoreViewSize(view: string): void {
-    this.currentImgsPerRow = this.imgsPerRow[view];
+    this.currentImgsPerRow = this.imgsPerRow[view] || 5; // showDetails2 view does not exist when upgrading to 2.2.3
   }
 
   /**
@@ -1537,6 +1512,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (this.currentImgsPerRow > 2) {
         this.currentImgsPerRow--;
       }
+    } else if (this.appState.currentView === 'showDetails2') {
+      if (this.currentImgsPerRow > 3) {
+        this.currentImgsPerRow--;
+      }
     } else if (this.currentImgsPerRow > 1) {
       this.currentImgsPerRow--;
     }
@@ -1555,13 +1534,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.appState.currentView === 'showClips'
       || this.appState.currentView === 'showThumbnails'
       || this.appState.currentView === 'showDetails'
+      || this.appState.currentView === 'showDetails2'
     ) {
       const margin: number = (this.settingsButtons['compactView'].toggled ? 4 : 40);
       this.previewWidth = (this.galleryWidth / this.currentImgsPerRow) - margin;
-
-      // used in details view only
-      this.detailsMaxWidth = this.galleryWidth - this.previewWidth - 40; // 40px is just an estimate here
-
     } else if (
       this.appState.currentView === 'showFilmstrip'
       || this.appState.currentView === 'showFullView'
@@ -1680,9 +1656,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Show or hide the settings menu
+   * Show or hide the ribbon
    */
-  toggleSettingsMenu(): void {
+  toggleRibbon(): void {
     this.appState.menuHidden = !this.appState.menuHidden;
   }
 
@@ -2165,26 +2141,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param text     input text to check type-ahead
    * @param compute  whether or not to perform the lookup
    */
-  checkTagTypeahead(text: string, compute: boolean) {
-    if (compute) {
-      this.tagTypeAhead = this.manualTagsService.getTypeahead(text);
-    }
+  checkTagTypeahead(text: string) {
+    this.tagTypeAhead = this.manualTagsService.getTypeahead(text);
   }
 
   /**
    * Add tag to search when pressing tab
    * !!! but only when on the tag search field !!!
-   * @param $event
-   * @param execute
    * @param origin -- the `j` in the template, just pass it on to the `onEnterKey`
    */
-  typeaheadTabPressed($event, execute: boolean, origin: number): void {
-    if (execute) {
-      if (this.tagTypeAhead !== '') {
-        this.onEnterKey(this.tagTypeAhead, origin);
-        this.tagTypeAhead = '';
-        $event.preventDefault();
-      }
+  typeaheadTabPressed(origin: number): void {
+    if (this.tagTypeAhead !== '') {
+      this.onEnterKey(this.tagTypeAhead, origin);
+      this.tagTypeAhead = '';
     }
   }
 
@@ -2264,7 +2233,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * hack to make newly-added tags appear next to videos
    */
   ifShowDetailsViewRefreshTags(): void {
-    if (this.appState.currentView === 'showDetails') {
+    if (   this.appState.currentView === 'showDetails'
+        || this.appState.currentView === 'showDetails2') {
       // details view shows tags but they don't update without some code that forces a refresh :(
       // hack-y code simply hides manual tags and then shows them again
       this.settingsButtons.manualTags.toggled = !this.settingsButtons.manualTags.toggled;
@@ -2294,6 +2264,31 @@ export class HomeComponent implements OnInit, AfterViewInit {
       });
     }
     this.batchTaggingMode = !this.batchTaggingMode
+  }
+
+  /**
+   * Check whether new version of the app is available
+   */
+  checkForNewVersion(): void {
+    this.http.get('https://my.videohubapp.com/version.php').subscribe(
+      (version: string) => {
+        this.latestVersionAvailable = version;
+      },
+      (err: any) => {
+        this.latestVersionAvailable = 'error';
+      }
+    );
+  }
+
+  /**
+   * Open browser to `my.videohubapp.com`
+   */
+  goDownloadNewVersion(): void {
+    if (this.demo) {
+      this.electronService.ipcRenderer.send('pleaseOpenUrl', 'https://videohubapp.com');
+    } else {
+      this.electronService.ipcRenderer.send('pleaseOpenUrl', 'https://my.videohubapp.com');
+    }
   }
 
 }

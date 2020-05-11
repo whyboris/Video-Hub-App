@@ -61,34 +61,6 @@
   width: 100vw;
 }
 
-.titleBar {
-  background-color: $gray-40;
-  border-bottom: 1px solid $gray-60;
-  height: 20px;
-  position: relative;
-  transition: 300ms;
-  width: 100%;
-  z-index: 9999;
-
-  img {
-    position: relative;
-    top: 1px;
-  }
-}
-
-.draggable {
-  -webkit-app-region: drag;
-  color: $gray-70;
-  font-size: 12px;
-  overflow: hidden;
-  position: absolute;
-  text-align: center;
-  top: 4px;
-  transition: 300ms;
-  white-space: nowrap;
-  width: calc(100vw - 70px);
-}
-
 .top-of-buttons {
   background-image: linear-gradient(to bottom, $gray-10 0%, $gray-20 100%);
   border-bottom: 1px solid $gray-30;
@@ -283,59 +255,6 @@
   position: relative;
 }
 
-.manual-tag-tray {
-  box-sizing: border-box;
-  height: 170px;
-
-  .manual-tag-tray-label,
-  .tag-sort-by-toggle,
-  .show-frequency {
-    display: block;
-    font-size: 12px;
-    text-align: right;
-    width: 166px;
-  }
-
-  .manual-tag-tray-label {
-    margin-top: 16px;
-  }
-
-  .tag-sort-by-toggle,
-  .show-frequency {
-    background: none;
-    border: none;
-    color: $gray-70;
-    margin-top: 14px;
-    padding-right: 0;
-
-    &:hover {
-      color: $pretty-blue;
-    }
-  }
-
-  .all-the-tags {
-    overflow-y: scroll;
-    padding: 12px 15px;
-    width: 100%;
-
-    @include scrollBarShown;
-  }
-
-  // added on top of .filter-general
-  .manual-tag-tray-filter {
-    border-color: $gray-80;
-    font-size: 15px;
-    padding: 6px 6px 0;
-    position: absolute;
-    right:0;
-    width: 155px;
-
-    &::placeholder {
-      color: $gray-80;
-    }
-  }
-}
-
 .bottom-tray-dark {
   background: black;
   border-top: 1px solid $gray-80;
@@ -398,10 +317,6 @@
   width: 100%;
 }
 
-.sort-filter {
-  height: 64px; // to make the animation be smooth
-}
-
 .temp-disabled {
   opacity: 0.3;
   pointer-events: none;
@@ -417,4 +332,19 @@
   position: fixed;
   top: 220px;
   z-index: 501;
+}
+
+.disabled-overlay {
+  background: rgba(0, 0, 0, 0.2);
+  height: 100vh;
+  left: 0;
+  pointer-events: none;
+  position: fixed;
+  top: 20px;
+  width: 100%;
+  z-index: 100;
+}
+
+.gallery-showing-breadcrumbs {
+  margin-top: 30px;
 }

@@ -1,6 +1,10 @@
 <div
-  [ngStyle]="{ height: elHeight + 'px' }"
+  [ngStyle]="{
+      height: elHeight + 'px',
+      width: maxWidth / (showTwoColumns ? 2 : 1) + 'px'
+    }"
   class="filmstrip-container"
+  [ngClass]="{ 'side-by-side': showTwoColumns }"
 >
 
   <div
@@ -38,7 +42,7 @@
 
     [star]="this.star"
 
-    [maxWidth]="maxWidth"
+    [maxWidth]="maxWidth / (showTwoColumns ? 2 : 1) - elWidth"
 
     [darkMode]="darkMode"
     [largerFont]="largerFont"

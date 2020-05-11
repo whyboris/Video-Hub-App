@@ -26,6 +26,7 @@ export interface RowNumbers {
   showFilmstrip: number;
   showFullView: number;
   showDetails: number;
+  showDetails2: number;
   showClips: number;
 }
 
@@ -35,6 +36,7 @@ export const defaultImgsPerRow: RowNumbers = {
   showFilmstrip: 5,
   showFullView: 5,
   showDetails: 4,
+  showDetails2: 4,
   showClips: 4,
 };
 
