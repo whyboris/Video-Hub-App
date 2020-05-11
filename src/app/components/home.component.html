@@ -381,17 +381,18 @@
 
     <div
       [ngClass]="{
-                    'sidebar-hidden': settingsButtons['hideSidebar'].toggled,
-                    'sidebar-dark-mode': settingsButtons['darkMode'].toggled
-      }"
+          'sidebar-hidden': settingsButtons['hideSidebar'].toggled,
+          'sidebar-dark-mode': settingsButtons['darkMode'].toggled
+        }"
       [ngStyle]="{
-                    'height': 'calc(100vh - ' + (
-                                                  (settingsButtons['hideTop'].toggled                 ?  53 : 98)
-                                                + (appState.menuHidden                                ? -32 : 0)
-                                                + ((settingsButtons['showRelatedVideosTray'].toggled
-                                                 || settingsButtons['showTagTray'].toggled)           ? 160 : 0)
-                                                                                                                ) + 'px)'
-                 }"
+          'height': 'calc(100vh - '
+                      + (
+                          (settingsButtons['hideTop'].toggled                 ?  53 : 98)
+                        + (appState.menuHidden                                ? -32 :  0)
+                        + ((   settingsButtons['showRelatedVideosTray'].toggled
+                            || settingsButtons['showTagTray'].toggled)        ? 160 :  0)
+                                                                                          ) + 'px)'
+        }"
       class="sidebar"
       #searchRef
     >
@@ -403,58 +404,17 @@
       </div>
 
       <!-- SEARCH BOXES -->
-      <ng-container *ngFor="let filter of filters; index as j">
-        <div
-          *ngIf="settingsButtons[filter.uniqueKey].toggled"
-          class="filterContainer"
-          @filterItemAppear
-        >
+      <app-search-boxes
+        (checkTagTypeahead)="checkTagTypeahead($event)"
+        (onBackspace)="onBackspace($event.word, $event.index)"
+        (onEnterKey)="onEnterKey($event.word, $event.index)"
+        (removeThisFilter)="removeThisFilter($event.item, $event.origin)"
+        (typeaheadTabPressed)="typeaheadTabPressed($event)"
 
-          <app-icon class="input-icon" [icon]="settingsButtons[filter.uniqueKey].iconName"></app-icon>
-          <input
-            id="{{ filter.uniqueKey }}"
-            (keyup.enter)="onEnterKey(filter.string, j)"
-            (keydown.backspace)="onBackspace(filter.string, j)"
-            (keydown.escape)="filter.string = ''"
-            [(ngModel)]="filter.string"
-            (keydown.Tab)="typeaheadTabPressed($event, filter.uniqueKey === 'tagIntersection', j)"
-            (ngModelChange)="checkTagTypeahead($event, filter.uniqueKey === 'tagIntersection')"
-            [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
-            class="filter-general input-filter"
-            placeholder="{{ filter.placeholder | translate }}"
-            type="text"
-          >
-
-          <span
-            *ngIf="filter.uniqueKey === 'tagIntersection'"
-            class="tag-type-ahead-on-home"
-          >{{ tagTypeAhead }}</span>
-
-          <div class="filteredWords">
-            <ng-container *ngIf="filter.array.length > 0">
-              <ng-container
-                *ngFor="let string of filter.array; index as i"
-              >
-                <span
-                  *ngIf="i > 0"
-                  [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? '#CCCCCC' : 'black' }"
-                  class="conjunction"
-                >
-                  {{ filter.conjunction | translate }}
-                </span>
-                <span
-                  (click)="removeThisFilter(i, j)"
-                  [ngStyle]="{ background: filter.color }"
-                  class="search-or-tag-general search-word"
-                >
-                  {{ string }}
-                </span>
-              </ng-container>
-            </ng-container>
-          </div>
-
-        </div>
-      </ng-container>
+        [filters]="filters"
+        [settingsButtons]="settingsButtons"
+        [tagTypeAhead]="tagTypeAhead"
+      ></app-search-boxes>
       <!-- end of regular search inputs -->
 
       <!-- magic search -->
@@ -515,7 +475,7 @@
       <!-- end of magic search -->
 
       <!-- durationFilter -->
-      <div *ngIf="settingsButtons['durationFilter'].toggled" class="resolutionFilterContainer">
+      <div *ngIf="settingsButtons['durationFilter'].toggled">
 
         <app-slider-filter
           (newSliderFilterSelected)="newLengthFilterSelected($event)"
@@ -529,7 +489,7 @@
       </div>
 
       <!-- resolution filter & its frequency histogram -->
-      <div *ngIf="settingsButtons['resolutionFilter'].toggled" class="resolutionFilterContainer">
+      <div *ngIf="settingsButtons['resolutionFilter'].toggled">
         <div class="frequencyGraphContainer">
           <ng-container *ngFor="let resolution of resolutionFreqArr; index as i">
             <div
@@ -557,7 +517,7 @@
       </div>
 
       <!-- star filter & its frequency histogram -->
-      <div *ngIf="settingsButtons['starFilter'].toggled" class="resolutionFilterContainer">
+      <div *ngIf="settingsButtons['starFilter'].toggled">
         <div class="frequencyGraphContainerStar">
           <ng-container *ngFor="let starRating of starRatingFreqArr; index as i">
             <div

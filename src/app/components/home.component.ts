@@ -2141,26 +2141,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param text     input text to check type-ahead
    * @param compute  whether or not to perform the lookup
    */
-  checkTagTypeahead(text: string, compute: boolean) {
-    if (compute) {
-      this.tagTypeAhead = this.manualTagsService.getTypeahead(text);
-    }
+  checkTagTypeahead(text: string) {
+    this.tagTypeAhead = this.manualTagsService.getTypeahead(text);
   }
 
   /**
    * Add tag to search when pressing tab
    * !!! but only when on the tag search field !!!
-   * @param $event
-   * @param execute
    * @param origin -- the `j` in the template, just pass it on to the `onEnterKey`
    */
-  typeaheadTabPressed($event, execute: boolean, origin: number): void {
-    if (execute) {
-      if (this.tagTypeAhead !== '') {
-        this.onEnterKey(this.tagTypeAhead, origin);
-        this.tagTypeAhead = '';
-        $event.preventDefault();
-      }
+  typeaheadTabPressed(origin: number): void {
+    if (this.tagTypeAhead !== '') {
+      this.onEnterKey(this.tagTypeAhead, origin);
+      this.tagTypeAhead = '';
     }
   }
 
