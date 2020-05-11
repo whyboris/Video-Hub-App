@@ -22,19 +22,19 @@ import { historyItemRemove, slowFadeIn } from '../../common/animations';
 export class WizardComponent {
 
   @Output() clearRecentlyViewedHistory = new EventEmitter<any>();
-  @Output() hideWizard = new EventEmitter<any>();
-  @Output() importFresh = new EventEmitter<any>();
-  @Output() loadFromFile = new EventEmitter<any>();
-  @Output() openFromHistory = new EventEmitter<number>();
-  @Output() removeFromHistory = new EventEmitter<number>();
-  @Output() selectClipSize = new EventEmitter<string>();
+  @Output() hideWizard                 = new EventEmitter<any>();
+  @Output() importFresh                = new EventEmitter<any>();
+  @Output() loadFromFile               = new EventEmitter<any>();
+  @Output() openFromHistory            = new EventEmitter<number>();
+  @Output() removeFromHistory          = new EventEmitter<number>();
+  @Output() selectClipSize             = new EventEmitter<string>();
   @Output() selectLengthOfClipSnippets = new EventEmitter<string>();
-  @Output() selectNumOfClipSnippets = new EventEmitter<string>();
-  @Output() selectNumOfScreens = new EventEmitter<string>();
-  @Output() selectOutputDirectory = new EventEmitter<any>();
-  @Output() selectScreenshotSize = new EventEmitter<string>();
-  @Output() selectSourceDirectory = new EventEmitter<any>();
-  @Output() setScreensPerVideo = new EventEmitter<boolean>();
+  @Output() selectNumOfClipSnippets    = new EventEmitter<string>();
+  @Output() selectNumOfScreens         = new EventEmitter<string>();
+  @Output() selectOutputDirectory      = new EventEmitter<any>();
+  @Output() selectScreenshotSize       = new EventEmitter<string>();
+  @Output() selectSourceDirectory      = new EventEmitter<any>();
+  @Output() setScreensPerVideo         = new EventEmitter<boolean>();
 
   @Input() canCloseWizard: boolean;
   @Input() demo: boolean;
