@@ -152,7 +152,7 @@ h3 {
   z-index: 2;
 }
 
-.searchButtonsSettings,
+.search-buttons-settings,
 .galleryButtonsSettings {
   left: 25px;
   max-width: calc(100% - 30px);
@@ -185,7 +185,7 @@ h3 {
   text-align: center;
 }
 
-.buttonDescription {
+.button-description {
   display: block;
   margin-bottom: 12px;
   max-height: 41px;
@@ -197,7 +197,7 @@ h3 {
   }
 }
 
-.buttonDescriptionText {
+.button-description-text {
   -webkit-box-orient: vertical !important;
   color: $black;
   display: -webkit-box !important;

@@ -39,6 +39,7 @@ import { IconComponent } from './components/icon/icon.component';
 import { MetaComponent } from './components/meta/meta.component';
 import { RenameFileComponent } from './components/rename-file/rename-file.component';
 import { RibbonComponent } from './components/ribbon/ribbon.component';
+import { SettingsComponent } from './components/settings/settings.component';
 import { SheetComponent } from './components/sheet/sheet.component';
 import { ShortcutsComponent } from './components/shortcuts/shortcuts.component';
 import { SliderFilterComponent } from './components/slider-filter/slider-filter.component';
@@ -110,6 +111,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     ResolutionFilterPipe,
     ReturnZeroPipe,
     RibbonComponent,
+    SettingsComponent,
     SheetComponent,
     ShortcutsComponent,
     SimilarityPipe,

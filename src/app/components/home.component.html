@@ -288,200 +288,27 @@
 
     <!-- BUTTONS -->
 
-    <div [id]=i *ngFor="let group of settingsMetaGroup; index as i">
-      <div *ngIf="settingToShow == i">
+    <app-settings
+      (changeLanguage)="changeLanguage($event)"
+      (checkForNewVersion)="checkForNewVersion()"
+      (chooseDefaultVideoPlayer)="chooseDefaultVideoPlayer()"
+      (decreaseZoomLevel)="decreaseZoomLevel()"
+      (goDownloadNewVersion)="goDownloadNewVersion()"
+      (increaseZoomLevel)="increaseZoomLevel()"
+      (openOnlineHelp)="openOnlineHelp()"
+      (resetZoomLevel)="resetZoomLevel()"
+      (toggleButton)="toggleButton($event)"
+      (toggleHideButton)="toggleHideButton($event)"
 
-        <span
-          class="setting-heading"
-          style="border-top: 0"
-        >
-          {{ settingsMetaGroupLabels[i] | translate }}
-        </span>
-
-        <div *ngFor="let buttonKey of group">
-          <div *ngIf="buttonKey !== 'break'; else insertBreak">
-            <div
-              class="searchButtonsSettings"
-            >
-
-              <span class="setting-heading" *ngIf="settingsButtons[buttonKey]['settingsHeading']">
-                {{ settingsButtons[buttonKey]['settingsHeading'] | translate }}
-              </span>
-
-              <div
-                class="buttonDescription"
-              >
-                <button
-                  (click)="toggleButton(buttonKey)"
-                  [ngClass]="{
-                      defaultSettingsButton:        !settingsButtons['flatIcons'].toggled,
-                      defaultSettingsButtonToggled: !settingsButtons['flatIcons'].toggled && settingsButtons[buttonKey].toggled,
-                      flatSettingsButton:           settingsButtons['flatIcons'].toggled,
-                      flatSettingsButtonToggled:    settingsButtons['flatIcons'].toggled && settingsButtons[buttonKey].toggled
-                    }"
-                  title="{{ settingsButtons[buttonKey].title | translate }}"
-                >
-                  <app-icon class="icon" [icon]="settingsButtons[buttonKey].iconName"></app-icon>
-                </button>
-
-                <span
-                  *ngIf="settingsButtons[buttonKey].iconName !== 'icon-checkmark'"
-                  (click)="toggleHideButton(buttonKey)"
-                  class="eyeIconContainer icon {{ settingsButtons[buttonKey].hidden ? 'eye-closed' : 'eye-open' }}"
-                  title="{{ 'SETTINGS.showHideText' | translate }}"
-                ></span>
-
-                <span
-                  class="buttonDescriptionText"
-                >
-                  {{ settingsButtons[buttonKey].description | translate }}
-
-                  <span
-                    *ngIf="settingsButtons[buttonKey].moreInfo"
-                    class="more-info"
-                  >
-                    i
-                  </span>
-                  <span class="tooltip-text">
-                    {{ settingsButtons[buttonKey].moreInfo | translate }}
-                  </span>
-
-                </span>
-
-              </div>
-
-            </div>
-          </div>
-
-          <ng-template #insertBreak>
-            <br>
-          </ng-template>
-        </div>
-      </div>
-
-      <div class="misc-settings" *ngIf="settingToShow == 2 && i == 2">
-
-        <div class="player-settings">{{ 'SETTINGS.preferredPlayer' | translate }}</div>
-
-        <div class="player-current-chosen">
-          {{ appState.preferredVideoPlayer ? appState.preferredVideoPlayer : ('SETTINGS.systemDefault' | translate) }}
-
-          <button
-            class="defaultSettingsButton player-settings-button"
-            (click)="chooseDefaultVideoPlayer()"
-          >
-            {{ 'SETTINGS.chooseVideoPlayer' | translate }}
-          </button>
-
-          <button
-            class="defaultSettingsButton player-settings-button"
-            *ngIf="appState.preferredVideoPlayer"
-            (click)="appState.preferredVideoPlayer = ''"
-          >
-            {{ 'SETTINGS.restorePlayer' | translate }}
-          </button>
-
-        </div>
-
-        <span class="setting-heading">{{ 'SETTINGS.changeAppZoom' | translate }}</span>
-
-        <div class="zoom-buttons">
-          <button
-            (click)="decreaseZoomLevel()"
-            [ngClass]="{
-              defaultSettingsButton: !settingsButtons['flatIcons'].toggled,
-              flatSettingsButton:    settingsButtons['flatIcons'].toggled
-            }"
-          >
-            <app-icon [icon]="'icon-minus'"></app-icon>
-          </button>
-          <button
-            (click)="resetZoomLevel()"
-            [ngClass]="{
-              defaultSettingsButton: !settingsButtons['flatIcons'].toggled,
-              flatSettingsButton:    settingsButtons['flatIcons'].toggled
-            }"
-            style="margin: 0 10px; max-width: initial; padding: 0 15px;"
-            >
-              <span>{{ 'SETTINGS.resetZoom' | translate }}</span>
-          </button>
-          <button
-            (click)="increaseZoomLevel()"
-            [ngClass]="{
-              defaultSettingsButton: !settingsButtons['flatIcons'].toggled,
-              flatSettingsButton:    settingsButtons['flatIcons'].toggled
-            }"
-          >
-            <app-icon [icon]="'icon-plus'"></app-icon>
-          </button>
-        </div>
-
-        <span class="setting-heading">{{ 'SETTINGS.changeLanguage' | translate }}</span>
-
-        <div style="margin: 20px">
-          <select (change)="changeLanguage($event.target.value)" class="language-drop-down">
-            <option value="en" [selected]="appState.language == 'en'">English</option>
-            <option value="ja" [selected]="appState.language == 'ja'">日本語</option><!-- Japanese -->
-            <option value="de" [selected]="appState.language == 'de'">Deutsche</option>
-            <option value="fr" [selected]="appState.language == 'fr'">Française</option>
-            <option value="es" [selected]="appState.language == 'es'">Espanhol</option>
-            <option value="it" [selected]="appState.language == 'it'">Italiana</option>
-            <option value="pt" [selected]="appState.language == 'pt'">Português</option>
-            <option value="ru" [selected]="appState.language == 'ru'">Русский</option>
-            <option value="bn" [selected]="appState.language == 'bn'">বাংলা</option><!-- Bengali -->
-            <option value="hi" [selected]="appState.language == 'hi'">हिंदी</option><!-- Hindi -->
-            <option value="zh" [selected]="appState.language == 'zh'">中文</option><!-- Chinese -->
-            <option value="ko" [selected]="appState.language == 'ko'">한국어</option><!-- Korean -->
-            <option value="ms" [selected]="appState.language == 'ms'">Melayu</option><!-- Malay -->
-            <option value="ar" [selected]="appState.language == 'ar'">العربية</option><!-- Arabic -->
-            <option value="uk" [selected]="appState.language == 'uk'">Українська</option><!-- Ukrainian -->
-          </select>
-        </div>
-
-        <div class="credits-and-help" (click)="openOnlineHelp()">
-          {{ 'SETTINGS.FAQ' | translate }}
-        </div>
-
-        <div class="app-version">
-          <span>v{{ versionNumber }} {{ demo ? ' DEMO - limited to 50 video files' : '' }}</span>
-          <img width="30px" height="30px" src="./assets/logo.png">
-
-          <ng-container
-            [ngSwitch]="this.latestVersionAvailable"
-          >
-            <div
-              *ngSwitchCase="undefined"
-              class="version-message check-new-version"
-              (click)="checkForNewVersion()"
-            >
-              {{ 'SETTINGS.checkNewVersion' | translate }}
-            </div>
-            <div
-              *ngSwitchCase="versionNumber"
-              class="version-message you-have-latest"
-            >
-              {{ 'SETTINGS.youHaveLatest' | translate }}
-            </div>
-            <div
-              *ngSwitchCase="'error'"
-              class="version-message version-error"
-            >
-              {{ 'SETTINGS.versionError' | translate }}
-            </div>
-            <div
-              *ngSwitchDefault
-              class="version-message check-new-version you-have-latest"
-              (click)="goDownloadNewVersion()"
-            >
-              {{ 'SETTINGS.newVersionExists' | translate }}
-            </div>
-          </ng-container>
-
-        </div>
-
-      </div>
-
-    </div>
+      [appState]="appState"
+      [demo]="demo"
+      [latestVersionAvailable]="latestVersionAvailable"
+      [settingToShow]="settingToShow"
+      [settingsButtons]="settingsButtons"
+      [settingsMetaGroupLabels]="settingsMetaGroupLabels"
+      [settingsMetaGroup]="settingsMetaGroup"
+      [versionNumber]="versionNumber"
+    ></app-settings>
 
     <!-- ===========   KEYBOARD SHORTCUTS    =========== -->
 
