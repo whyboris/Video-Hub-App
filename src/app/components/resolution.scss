@@ -18,13 +18,13 @@ $frequency-bar: $pretty-blue;
 }
 
 .frequency-graph-container,
-.frequency-graph-containerStar {
+.frequency-graph-container-star {
   height: 20px;
   position: relative;
   transform: translate(13px, 15px);
 }
 
-.frequency-graph-containerStar {
+.frequency-graph-container-star {
   transform: translate(3px, 15px);
 }
 

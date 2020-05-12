@@ -48,6 +48,7 @@ import { SheetComponent } from './components/sheet/sheet.component';
 import { ShortcutsComponent } from './components/shortcuts/shortcuts.component';
 import { SliderFilterComponent } from './components/slider-filter/slider-filter.component';
 import { SortOrderComponent } from './components/sort-order/sort-order.component';
+import { StarFilterComponent } from './components/star-filter/star-filter.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { SvgDefinitionsComponent } from './components/icon/svg-definitions.component';
 import { TagTrayComponent } from './components/tag-tray/tag-tray.component';
@@ -127,6 +128,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     SliderFilterComponent,
     SortOrderComponent,
     SortingPipe,
+    StarFilterComponent,
     StarFilterPipe,
     StatisticsComponent,
     SvgDefinitionsComponent,
