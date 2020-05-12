@@ -47,6 +47,7 @@ import { SearchBoxesComponent } from './components/search-boxes/search-boxes.com
 import { SettingsComponent } from './components/settings/settings.component';
 import { SheetComponent } from './components/sheet/sheet.component';
 import { ShortcutsComponent } from './components/shortcuts/shortcuts.component';
+import { SimilarTrayComponent } from './components/similar-tray/similar-tray.component';
 import { SliderFilterComponent } from './components/slider-filter/slider-filter.component';
 import { SortOrderComponent } from './components/sort-order/sort-order.component';
 import { StarFilterComponent } from './components/star-filter/star-filter.component';
@@ -126,6 +127,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     SettingsComponent,
     SheetComponent,
     ShortcutsComponent,
+    SimilarTrayComponent,
     SimilarityPipe,
     SliderFilterComponent,
     SortOrderComponent,
