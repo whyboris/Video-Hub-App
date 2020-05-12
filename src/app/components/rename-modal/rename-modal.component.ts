@@ -22,6 +22,4 @@ export class RenameModalComponent {
 
   constructor() { }
 
-  ngOnInit(): void {}
-
 }

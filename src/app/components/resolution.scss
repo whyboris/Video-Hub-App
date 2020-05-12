@@ -17,14 +17,14 @@ $frequency-bar: $pretty-blue;
   width: 4px;
 }
 
-.frequencyGraphContainer,
-.frequencyGraphContainerStar {
+.frequency-graph-container,
+.frequency-graph-containerStar {
   height: 20px;
   position: relative;
   transform: translate(13px, 15px);
 }
 
-.frequencyGraphContainerStar {
+.frequency-graph-containerStar {
   transform: translate(3px, 15px);
 }
 
@@ -45,7 +45,7 @@ $frequency-bar: $pretty-blue;
   width: 14.5px;
 }
 
-.frequencySliders {
+.frequency-sliders {
   position: relative;
   width: 100%;
 }

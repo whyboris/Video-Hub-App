@@ -137,7 +137,6 @@
   </app-thumbnail-sheet>
 
   <!-- ===========    RENAMING MODAL    =========== -->
-
   <app-rename-modal
     *ngIf="renamingNow"
     [ngClass]="{ 'rename-dark': settingsButtons['darkMode'].toggled }"
@@ -154,7 +153,7 @@
     [renamingNow]="renamingNow"
   ></app-rename-modal>
 
-  <!-- what's this? -->
+  <!-- ===========    AUTO-GENERATED TAGS MODAL    =========== -->
   <div
     *ngIf="settingsButtons['showTags'].toggled"
     class="settings-modal"
@@ -376,11 +375,12 @@
 
       <div class="filtering-total">
         {{ appState.numOfFolders | number }}
-        {{ (appState.numOfFolders === 1 ? 'SIDEBAR.totalFolders' : 'SIDEBAR.totalFoldersPlural') | translate }}<br>
+        {{ (appState.numOfFolders === 1 ? 'SIDEBAR.totalFolders' : 'SIDEBAR.totalFoldersPlural') | translate }}
+        <br>
         {{ finalArray.length | number }} {{ 'SIDEBAR.videos' | translate }}
       </div>
 
-      <!-- SEARCH BOXES -->
+      <!-- Regular search boxes / filters -->
       <app-search-boxes
         (checkTagTypeahead)="checkTagTypeahead($event)"
         (onBackspace)="onBackspace($event.word, $event.index)"
@@ -392,7 +392,6 @@
         [settingsButtons]="settingsButtons"
         [tagTypeAhead]="tagTypeAhead"
       ></app-search-boxes>
-      <!-- end of regular search inputs -->
 
       <!-- magic search -->
       <div *ngIf="settingsButtons['magic'].toggled" @filterItemAppear>
@@ -420,8 +419,6 @@
           </span>
         </div>
       </div>
-      <!-- end of magic search -->
-
 
       <!-- fuzzy search -->
       <div *ngIf="settingsButtons['fuzzy'].toggled" @filterItemAppear>
@@ -449,7 +446,6 @@
           </span>
         </div>
       </div>
-      <!-- end of magic search -->
 
       <!-- durationFilter -->
       <div *ngIf="settingsButtons['durationFilter'].toggled">
@@ -466,36 +462,19 @@
       </div>
 
       <!-- resolution filter & its frequency histogram -->
-      <div *ngIf="settingsButtons['resolutionFilter'].toggled">
-        <div class="frequencyGraphContainer">
-          <ng-container *ngFor="let resolution of resolutionFreqArr; index as i">
-            <div
-              [ngClass]="{ resDisabled: (i < freqLeftBound) || (i >= freqRightBound) }"
-              [ngStyle]="{ height: resolution + '%' }"
-              class="frequency-bar"
-            >
-            </div>
-            <div
-              [ngClass]="{ resDisabled: (i < freqLeftBound) || (i >= freqRightBound) }"
-              class="resolutionName"
-            >
-              {{ resolutionNames[i] }}
-            </div>
-          </ng-container>
-        </div>
+      <app-resolution-filter
+        (newResFilterSelected)="newResFilterSelected($event)"
 
-        <app-slider-filter
-          (newSliderFilterSelected)="newResFilterSelected($event)"
-          [darkMode]="settingsButtons['darkMode'].toggled"
-          [maximumValue]="4"
-          [minimumValue]="0"
-          [steps]="4"
-        ></app-slider-filter>
-      </div>
+        [freqLeftBound]="freqLeftBound"
+        [freqRightBound]="freqRightBound"
+        [resolutionFreqArr]="resolutionFreqArr"
+        [resolutionNames]="resolutionNames"
+        [settingsButtons]="settingsButtons"
+      ></app-resolution-filter>
 
       <!-- star filter & its frequency histogram -->
       <div *ngIf="settingsButtons['starFilter'].toggled">
-        <div class="frequencyGraphContainerStar">
+        <div class="frequency-graph-containerStar">
           <ng-container *ngFor="let starRating of starRatingFreqArr; index as i">
             <div
               [ngClass]="{ resDisabled: (i < starLeftBound) || (i >= starRightBound) }"
