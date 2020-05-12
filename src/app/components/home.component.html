@@ -20,6 +20,7 @@
     @slowFadeOut
   ></div>
 
+  <!-- Progress indicator - "Donut" -->
   <div *ngIf="importStage === 'importingScreenshots'" class="cancel-progress" @donutAppear>
     <span
       (click)="cancelCurrentImport()"
@@ -64,6 +65,7 @@
   >
   </div>
 
+  <!-- "Root folder is not connected" 1500ms popup when running scan on a disconnected HUB -->
   <div
     *ngIf="folderNotConnectedErrorShowing"
     class="folder-not-connected-error"
@@ -135,49 +137,23 @@
   </app-thumbnail-sheet>
 
   <!-- ===========    RENAMING MODAL    =========== -->
-  <div
+  <app-rename-modal
     *ngIf="renamingNow"
-    [ngClass]="{ renameDark: settingsButtons['darkMode'].toggled }"
+    [ngClass]="{ 'rename-dark': settingsButtons['darkMode'].toggled }"
     class="rename-popup"
     @modalAnimation
-  >
 
-    <div
-      (click)="closeRename()"
-      [ngClass]="{ closeRenameDark: settingsButtons['darkMode'].toggled }"
-      class="close-settings closeRename"
-      title="{{ 'RIGHTCLICK.cancelRename' | translate }}"
-    >
-      <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
-    </div>
+    (closeRename)="closeRename()"
 
-    <span class="renameHeading">{{ 'RIGHTCLICK.renameTitle' | translate }}</span>
+    [appState]="appState"
+    [macVersion]="macVersion"
+    [settingsButtons]="settingsButtons"
+    [itemToRename]="itemToRename"
+    [currentRightClickedItem]="currentRightClickedItem"
+    [renamingNow]="renamingNow"
+  ></app-rename-modal>
 
-    <app-filmstrip-item
-      [darkMode]="settingsButtons['darkMode'].toggled"
-      [elHeight]="150"
-      [folderPath]="appState.selectedOutputFolder"
-      [hoverScrub]="true"
-      [hubName]="appState.hubName"
-      [imgHeight]="100"
-      [largerFont]="true"
-      [showMeta]="true"
-      [video]="itemToRename"
-    ></app-filmstrip-item>
-
-    <span class="renameFrom">{{ 'RIGHTCLICK.renameFrom' | translate }}</span>
-    <span class="renameTo">{{ 'RIGHTCLICK.renameTo' | translate }}</span>
-
-    <app-rename-file
-      *ngIf="renamingNow"
-      [selectedSourceFolder]="appState.selectedSourceFolder"
-      [currentRightClickedItem]="currentRightClickedItem"
-      [macVersion]="macVersion"
-      [darkMode]="settingsButtons['darkMode'].toggled"
-    ></app-rename-file>
-
-  </div>
-
+  <!-- ===========    AUTO-GENERATED TAGS MODAL    =========== -->
   <div
     *ngIf="settingsButtons['showTags'].toggled"
     class="settings-modal"
@@ -399,11 +375,12 @@
 
       <div class="filtering-total">
         {{ appState.numOfFolders | number }}
-        {{ (appState.numOfFolders === 1 ? 'SIDEBAR.totalFolders' : 'SIDEBAR.totalFoldersPlural') | translate }}<br>
+        {{ (appState.numOfFolders === 1 ? 'SIDEBAR.totalFolders' : 'SIDEBAR.totalFoldersPlural') | translate }}
+        <br>
         {{ finalArray.length | number }} {{ 'SIDEBAR.videos' | translate }}
       </div>
 
-      <!-- SEARCH BOXES -->
+      <!-- Regular search boxes / filters -->
       <app-search-boxes
         (checkTagTypeahead)="checkTagTypeahead($event)"
         (onBackspace)="onBackspace($event.word, $event.index)"
@@ -415,7 +392,6 @@
         [settingsButtons]="settingsButtons"
         [tagTypeAhead]="tagTypeAhead"
       ></app-search-boxes>
-      <!-- end of regular search inputs -->
 
       <!-- magic search -->
       <div *ngIf="settingsButtons['magic'].toggled" @filterItemAppear>
@@ -443,8 +419,6 @@
           </span>
         </div>
       </div>
-      <!-- end of magic search -->
-
 
       <!-- fuzzy search -->
       <div *ngIf="settingsButtons['fuzzy'].toggled" @filterItemAppear>
@@ -472,7 +446,6 @@
           </span>
         </div>
       </div>
-      <!-- end of magic search -->
 
       <!-- durationFilter -->
       <div *ngIf="settingsButtons['durationFilter'].toggled">
@@ -489,61 +462,26 @@
       </div>
 
       <!-- resolution filter & its frequency histogram -->
-      <div *ngIf="settingsButtons['resolutionFilter'].toggled">
-        <div class="frequencyGraphContainer">
-          <ng-container *ngFor="let resolution of resolutionFreqArr; index as i">
-            <div
-              [ngClass]="{ resDisabled: (i < freqLeftBound) || (i >= freqRightBound) }"
-              [ngStyle]="{ height: resolution + '%' }"
-              class="frequency-bar"
-            >
-            </div>
-            <div
-              [ngClass]="{ resDisabled: (i < freqLeftBound) || (i >= freqRightBound) }"
-              class="resolutionName"
-            >
-              {{ resolutionNames[i] }}
-            </div>
-          </ng-container>
-        </div>
+      <app-resolution-filter
+        (newResFilterSelected)="newResFilterSelected($event)"
 
-        <app-slider-filter
-          (newSliderFilterSelected)="newResFilterSelected($event)"
-          [darkMode]="settingsButtons['darkMode'].toggled"
-          [maximumValue]="4"
-          [minimumValue]="0"
-          [steps]="4"
-        ></app-slider-filter>
-      </div>
+        [freqLeftBound]="freqLeftBound"
+        [freqRightBound]="freqRightBound"
+        [resolutionFreqArr]="resolutionFreqArr"
+        [resolutionNames]="resolutionNames"
+        [settingsButtons]="settingsButtons"
+      ></app-resolution-filter>
 
       <!-- star filter & its frequency histogram -->
-      <div *ngIf="settingsButtons['starFilter'].toggled">
-        <div class="frequencyGraphContainerStar">
-          <ng-container *ngFor="let starRating of starRatingFreqArr; index as i">
-            <div
-              [ngClass]="{ resDisabled: (i < starLeftBound) || (i >= starRightBound) }"
-              [ngStyle]="{ height: starRating + '%' }"
-              class="frequency-bar-star"
-            >
-            </div>
-            <div
-              [ngClass]="{ resDisabled: (i < starLeftBound) || (i >= starRightBound) }"
-              class="starFilterLabel"
-            >
-              {{ starRatingNames[i] }}
-            </div>
-          </ng-container>
-        </div>
+      <app-star-filter
+        (newStarFilterSelected)="newStarFilterSelected($event)"
 
-        <app-slider-filter
-          [darkMode]="settingsButtons['darkMode'].toggled"
-          [maximumValue]="6"
-          [minimumValue]="0"
-          [steps]="6"
-          (newSliderFilterSelected)="newStarFilterSelected($event)"
-        ></app-slider-filter>
-
-      </div>
+        [settingsButtons]="settingsButtons"
+        [starRatingFreqArr]="starRatingFreqArr"
+        [starLeftBound]="starLeftBound"
+        [starRightBound]="starRightBound"
+        [starRatingNames]="starRatingNames"
+      ></app-star-filter>
 
       <!-- Lev Distance -->
       <div class="lev-distance" *ngIf="showSimilar">
@@ -572,7 +510,6 @@
       </div>
 
       <!-- SORT ORDER -->
-
       <app-sort-order
         (sortTypeChange)="selectFilterOrder($event)"
         [settingsButtons]="settingsButtons"
@@ -595,28 +532,12 @@
         </ng-container>
       </div>
 
-      <div
-        *ngIf="settingsButtons['showRecent'].toggled"
-        [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? '#aaaaaa' : '#333333' }"
-        class="recently-opened"
-      >
-        <span class="recently-opened-label">
-          {{ 'SIDEBAR.recentlyOpened' | translate }}
-        </span>
-        <ul>
-          <ng-container
-            *ngFor="let historyItem of vhaFileHistory; index as i"
-          >
-            <li
-              *ngIf="i !== 0"
-              (click)="openFromHistory(i)"
-              class="sidebar-recently-opened"
-            >
-              {{ historyItem.hubName }}
-            </li>
-          </ng-container>
-        </ul>
-      </div>
+      <!-- Recently opened -->
+      <app-recently-opened
+        (openFromHistory)="openFromHistory($event)"
+        [settingsButtons]="settingsButtons"
+        [vhaFileHistory]="vhaFileHistory"
+      ></app-recently-opened>
 
     </div> <!-- closing the SIDEBAR -->
 
@@ -955,61 +876,19 @@
 </div> <!-- end of window -->
 
 <!-- MOST SIMILAR BOTTOM TRAY -->
+<app-similar-tray
+  (handleClick)="handleClick($event.expectedEvent, $event.item)"
+  (rightMouseClicked)="rightMouseClicked($event.mouseEvent, $event.item)"
 
-<div
-  *ngIf="settingsButtons['showRelatedVideosTray'].toggled"
-  class="bottom-tray most-similar-tray"
-  [ngClass]="{ 'bottom-tray-dark': settingsButtons['darkMode'].toggled }"
-  @modalAnimation
->
-
-  <div
-    (click)="settingsButtons['showRelatedVideosTray'].toggled = false"
-    class="close-bottom-tray"
-    title="{{ 'SETTINGS.closeRelatedTray' | translate }}"
-  >
-    <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
-  </div>
-
-  <div
-    *ngIf="!this.settingsButtons['hideSidebar'].toggled"
-    class="most-similar-comment"
-    @similarResultsText
-  >
-    {{ 'TAGS.showingMostSimilar' | translate }}
-    <span class="most-siilar-filename">
-      {{ currentPlayingFile }}
-    </span>
-  </div>
-
-  <app-thumbnail
-    *ngFor="let item of finalArray | similarityPipe: true : currentPlayingFile
-                                   | slice: 0 : 7 "
-
-    (videoClick)="handleClick($event, item)"
-    (contextmenu)="rightMouseClicked($event, item)"
-
-    [elHeight]="previewHeightRelated + 50"
-    [elWidth]="previewWidthRelated"
-    [folderPath]="appState.selectedOutputFolder"
-    [hubName]="appState.hubName"
-    [imgHeight]="previewHeightRelated"
-
-    [video]="item"
-
-    [darkMode]="settingsButtons['darkMode'].toggled"
-    [hoverScrub]="settingsButtons['hoverScrub'].toggled"
-    [largerFont]="settingsButtons['fontSizeLarger'].toggled"
-    [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
-    [showMeta]="settingsButtons['showMoreInfo'].toggled"
-
-    style="display: inline-block; margin-bottom: 50px"
-  ></app-thumbnail>
-
-</div>
+  [appState]="appState"
+  [currentPlayingFile]="currentPlayingFile"
+  [finalArray]="finalArray"
+  [previewHeightRelated]="previewHeightRelated"
+  [previewWidthRelated]="previewWidthRelated"
+  [settingsButtons]="settingsButtons"
+></app-similar-tray>
 
 <!-- TAGS BOTTOM TRAY -->
-
 <app-tag-tray
   (closeTagsTray)="closeTagsTray()"
   (toggleBatchTaggingMode)="toggleBatchTaggingMode()"
@@ -1019,7 +898,6 @@
 ></app-tag-tray>
 
 <!-- IMPORT MODAL  -->
-
 <div
   *ngIf="importStage === 'importingMeta'"
   class="progress-modal"

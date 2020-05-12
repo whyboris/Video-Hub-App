@@ -1,0 +1,19 @@
+<div
+  *ngIf="settingsButtons['showRecent'].toggled"
+  [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? '#aaaaaa' : '#333333' }"
+  class="recently-opened"
+>
+  <span class="recently-opened-label">
+    {{ 'SIDEBAR.recentlyOpened' | translate }}
+  </span>
+  <ul>
+    <li
+      *ngFor="let historyItem of vhaFileHistory; index as i"
+      [hidden]="i === 0"
+      (click)="openFromHistory.emit(i)"
+      class="recently-opened-item"
+    >
+      {{ historyItem.hubName }}
+    </li>
+  </ul>
+</div>

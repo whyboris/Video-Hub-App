@@ -277,36 +277,6 @@
   }
 }
 
-.most-similar-tray {
-  box-sizing: border-box;
-  // height - must be same as the hardcoded value in <virtual-scroller> height property
-  //          & close to the .sidebar <div> `ngStyle` height property
-  height: 170px;
-  padding-top: 0;
-
-  .most-similar-comment {
-    color: $gray-70;
-    display: inline-block;
-    font-size: 12px;
-    margin-left: 20px;
-    margin-top: 20px;
-    vertical-align: top;
-    width: 170px;
-  }
-
-  .most-siilar-filename {
-    display: block;
-    font-size: 14px;
-    margin-top: 15px;
-  }
-}
-
-.no-clips-message {
-  display: block;
-  margin: 100px 0 0;
-  text-align: center;
-}
-
 .no-results {
   box-sizing: border-box;
   position: absolute;

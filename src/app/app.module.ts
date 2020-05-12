@@ -38,14 +38,19 @@ import { FilmstripComponent } from './components/views/filmstrip/filmstrip.compo
 import { FullViewComponent } from './components/views/full/full.component';
 import { IconComponent } from './components/icon/icon.component';
 import { MetaComponent } from './components/meta/meta.component';
+import { RecentlyOpenedComponent } from './components/recently-opened/recently-opened.component';
 import { RenameFileComponent } from './components/rename-file/rename-file.component';
+import { RenameModalComponent } from './components/rename-modal/rename-modal.component';
+import { ResolutionFilterComponent } from './components/resolution-filter/resolution-filter.component';
 import { RibbonComponent } from './components/ribbon/ribbon.component';
 import { SearchBoxesComponent } from './components/search-boxes/search-boxes.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { SheetComponent } from './components/sheet/sheet.component';
 import { ShortcutsComponent } from './components/shortcuts/shortcuts.component';
+import { SimilarTrayComponent } from './components/similar-tray/similar-tray.component';
 import { SliderFilterComponent } from './components/slider-filter/slider-filter.component';
 import { SortOrderComponent } from './components/sort-order/sort-order.component';
+import { StarFilterComponent } from './components/star-filter/star-filter.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { SvgDefinitionsComponent } from './components/icon/svg-definitions.component';
 import { TagTrayComponent } from './components/tag-tray/tag-tray.component';
@@ -111,7 +116,10 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     ManualTagSortPipe,
     MetaComponent,
     PlaylistPipe,
+    RecentlyOpenedComponent,
     RenameFileComponent,
+    RenameModalComponent,
+    ResolutionFilterComponent,
     ResolutionFilterPipe,
     ReturnZeroPipe,
     RibbonComponent,
@@ -119,10 +127,12 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     SettingsComponent,
     SheetComponent,
     ShortcutsComponent,
+    SimilarTrayComponent,
     SimilarityPipe,
     SliderFilterComponent,
     SortOrderComponent,
     SortingPipe,
+    StarFilterComponent,
     StarFilterPipe,
     StatisticsComponent,
     SvgDefinitionsComponent,
