@@ -1,6 +1,6 @@
 @import "../variables";
 
-.renameFile {
+.rename-file {
   background: transparent;
   border: 0;
   border-bottom: 1px solid $gray-40;
@@ -15,7 +15,7 @@
   width: 90%;
 }
 
-.renameErrMsg {
+.rename-err-msg {
   color: red;
   font-size: 14px;
   position: absolute;
