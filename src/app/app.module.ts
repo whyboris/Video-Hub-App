@@ -38,6 +38,7 @@ import { FilmstripComponent } from './components/views/filmstrip/filmstrip.compo
 import { FullViewComponent } from './components/views/full/full.component';
 import { IconComponent } from './components/icon/icon.component';
 import { MetaComponent } from './components/meta/meta.component';
+import { RecentlyOpenedComponent } from './components/recently-opened/recently-opened.component';
 import { RenameFileComponent } from './components/rename-file/rename-file.component';
 import { RenameModalComponent } from './components/rename-modal/rename-modal.component';
 import { ResolutionFilterComponent } from './components/resolution-filter/resolution-filter.component';
@@ -114,6 +115,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     ManualTagSortPipe,
     MetaComponent,
     PlaylistPipe,
+    RecentlyOpenedComponent,
     RenameFileComponent,
     RenameModalComponent,
     ResolutionFilterComponent,

@@ -510,7 +510,6 @@
       </div>
 
       <!-- SORT ORDER -->
-
       <app-sort-order
         (sortTypeChange)="selectFilterOrder($event)"
         [settingsButtons]="settingsButtons"
@@ -533,28 +532,12 @@
         </ng-container>
       </div>
 
-      <div
-        *ngIf="settingsButtons['showRecent'].toggled"
-        [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? '#aaaaaa' : '#333333' }"
-        class="recently-opened"
-      >
-        <span class="recently-opened-label">
-          {{ 'SIDEBAR.recentlyOpened' | translate }}
-        </span>
-        <ul>
-          <ng-container
-            *ngFor="let historyItem of vhaFileHistory; index as i"
-          >
-            <li
-              *ngIf="i !== 0"
-              (click)="openFromHistory(i)"
-              class="sidebar-recently-opened"
-            >
-              {{ historyItem.hubName }}
-            </li>
-          </ng-container>
-        </ul>
-      </div>
+      <!-- Recently opened -->
+      <app-recently-opened
+        (openFromHistory)="openFromHistory($event)"
+        [settingsButtons]="settingsButtons"
+        [vhaFileHistory]="vhaFileHistory"
+      ></app-recently-opened>
 
     </div> <!-- closing the SIDEBAR -->
 
