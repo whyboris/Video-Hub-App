@@ -30,7 +30,7 @@ export interface RowNumbers {
   showClips: number;
 }
 
-export const defaultImgsPerRow: RowNumbers = {
+export const DefaultImagesPerRow: RowNumbers = {
   thumbnailSheet: 5,
   showThumbnails: 5,
   showFilmstrip: 5,
@@ -40,13 +40,13 @@ export const defaultImgsPerRow: RowNumbers = {
   showClips: 4,
 };
 
-export let AppState: AppStateInterface = { // AppState is saved into `settings.json` so it persists
-  currentVhaFile: '',     // full path to the .vha file
+export const AppState: AppStateInterface = { // AppState is saved into `settings.json` so it persists
+  currentVhaFile: '',  // full path to the .vha2 file -- TODO: rename to `currentVhaFilePath` in VHA3
   currentSort: 'default',
   currentView: 'showThumbnails',
   currentZoomLevel: 1,
   hubName: '',
-  imgsPerRow: defaultImgsPerRow,         // gallery/filmstrip height
+  imgsPerRow: DefaultImagesPerRow,
   language: 'en',
   menuHidden: false,
   numOfFolders: 0,
