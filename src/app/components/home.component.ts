@@ -146,7 +146,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   appMaximized = false;
   settingsModalOpen = false;
-  finalArrayNeedsSaving: boolean = false; // if ever a file was renamed, re-save the .vha file
+  finalArrayNeedsSaving: boolean = false; // if ever a file was renamed, or tag added, re-save the .vha2 file
   flickerReduceOverlay = true;
   isFirstRunEver = false;
   rootFolderLive: boolean = true; // set to `false` when loading hub but video folder is not connected
@@ -209,7 +209,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   itemToRename: ImageElement;
   renamingExtension: string;
   renamingNow: boolean = false;
-  rightClickPosition: any = { x: 0, y: 0 };
+  rightClickPosition: { x: number, y: number } = { x: 0, y: 0 };
   rightClickShowing: boolean = false;
 
   // ========================================================================
@@ -254,14 +254,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
   fuzzySearchString = '';
 
   wordFreqArr: WordFreqAndHeight[];
-  currResults: number;
+  numberOfVideosFound: number; // after applying all search filters
 
   findMostSimilar: string; // for finding similar files to this one
   showSimilar: boolean = false; // to toggle the similarity pipe
 
   shuffleTheViewNow = 0; // dummy number to force re-shuffle current view
-
-  hubNameToRemember = ''; // don't remember what this variable is for
 
   sortType: SortType = 'default';
 
@@ -501,8 +499,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.starRatingFreqArr = value;
         // this.cd.detectChanges();
       });
-      this.pipeSideEffectService.searchResults.subscribe((value) => {
-        this.currResults = value;
+      this.pipeSideEffectService.searchResults.subscribe((value: number) => {
+        this.numberOfVideosFound = value;
         this.cd.detectChanges();
         this.debounceUpdateMax(10);
       });
@@ -639,7 +637,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.extractionPercent = 1;
         this.importStage = 'done';
         this.electronService.ipcRenderer.send('allow-sleep');
-        this.appState.hubName = this.hubNameToRemember; // could this cause bugs ??? TODO: investigate!
       }
       this.cd.detectChanges();
     });
@@ -659,7 +656,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.rootFolderLive = rootFolderLive;
       this.finalArrayNeedsSaving = changedRootFolder;
       this.appState.currentVhaFile = pathToFile;
-      this.hubNameToRemember = finalObject.hubName;
       this.appState.hubName = finalObject.hubName;
       this.appState.numOfFolders = finalObject.numOfFolders;
       this.appState.selectedOutputFolder = outputFolderPath;

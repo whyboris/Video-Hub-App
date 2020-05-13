@@ -517,7 +517,7 @@
 
       <!-- total found -->
       <div class="filtering-total">
-        <span>{{ currResults | number:'.0' }} {{ 'SIDEBAR.found' | translate }}</span>
+        <span>{{ numberOfVideosFound | number:'.0' }} {{ 'SIDEBAR.found' | translate }}</span>
       </div>
 
       <!-- word cloud -->
@@ -859,7 +859,7 @@
     </virtual-scroller>
 
     <div
-      *ngIf="currResults === 0"
+      *ngIf="numberOfVideosFound === 0"
       class="no-results"
       [ngStyle]="{ 'padding-left': settingsButtons['hideSidebar'].toggled ? 0 : '190px' }"
     >
