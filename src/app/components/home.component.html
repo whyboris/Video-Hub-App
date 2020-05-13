@@ -184,19 +184,19 @@
     class="all-settings-tabs"
     @modalAnimation
   >
-    <button (click)="showSettingsGroup(0)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 0 }">
+    <button (click)="settingToShow = 0" [ngClass]="{ 'active-tab': settingToShow === 0 }">
       {{ 'SETTINGS.tabFilter'    | translate }}
     </button>
-    <button (click)="showSettingsGroup(1)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 1 }">
+    <button (click)="settingToShow = 1" [ngClass]="{ 'active-tab': settingToShow === 1 }">
       {{ 'SETTINGS.tabView'      | translate }}
     </button>
-    <button (click)="showSettingsGroup(2)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 2 }">
+    <button (click)="settingToShow = 2" [ngClass]="{ 'active-tab': settingToShow === 2 }">
       {{ 'SETTINGS.tabMain'      | translate }}
     </button>
-    <button (click)="showSettingsGroup(3)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 3 }">
+    <button (click)="settingToShow = 3" [ngClass]="{ 'active-tab': settingToShow === 3 }">
       {{ 'SETTINGS.tabShortcuts' | translate }}
     </button>
-    <button (click)="showSettingsGroup(4)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 4 }">
+    <button (click)="settingToShow = 4" [ngClass]="{ 'active-tab': settingToShow === 4 }">
       {{ 'SETTINGS.statistics'   | translate }}
     </button>
   </div>

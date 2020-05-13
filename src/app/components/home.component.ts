@@ -150,6 +150,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   flickerReduceOverlay = true;
   isFirstRunEver = false;
   rootFolderLive: boolean = true; // set to `false` when loading hub but video folder is not connected
+  folderNotConnectedErrorShowing: boolean = false; // temporary pop-over when updating from disconnected folder
 
   // ========================================================================
   // Import / extraction progress
@@ -243,7 +244,24 @@ export class HomeComponent implements OnInit, AfterViewInit {
   };
 
   // ========================================================================
-  // UNSORTED -- TODO -- CLEAN UP !!!
+  // currently only used for the statistics page
+  // && to prevent clip view from showing when no clips extracted
+  // defaults set here ONLY because when starting the app in clip view
+  // the app would show error in console log:
+  //   `Cannot read property 'clipSnippets' of undefined`
+  // ------------------------------------------------------------------------
+
+  currentScreenshotSettings: ScreenshotSettings = {
+    clipHeight: 144,
+    clipSnippetLength: 1,
+    clipSnippets: 0,
+    fixed: true,
+    height: 432,
+    n: 3,
+  };
+
+  // ========================================================================
+  // Miscellaneous variables
   // ------------------------------------------------------------------------
 
   currentPlayingFile = '';
@@ -265,41 +283,22 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   durationOutlierCutoff: number = 0; // for the duration filter to cut off outliers
 
-  // time remaining calculator !!!
-  timeExtractionStarted;
-  timeExtractionRemaining;
-
-  folderNotConnectedErrorShowing: boolean = false;
+  timeExtractionStarted;   // time remaining calculator
+  timeExtractionRemaining; // time remaining calculator
 
   deletePipeHack: boolean = false; // to force deletePipe to update
 
-  // crappy hack to remember where to navigate to when in folder view and returning back to root
-  folderNavigationScrollOffset: number = 0;
+  folderNavigationScrollOffset: number = 0; // when in folder view and returning back to root
+  folderViewNavigationPath: string = '';
 
   batchTaggingMode = false; // when batch tagging is enabled
 
   latestVersionAvailable: string;
 
-  // ========================================================================
-  // Please add new variables below if they don't fit into any other section
-  // ------------------------------------------------------------------------
-
   tagTypeAhead: string = '';
-  folderViewNavigationPath: string = '';
 
-  currentScreenshotSettings: ScreenshotSettings = {
-    clipHeight: 144,
-    clipSnippetLength: 1,
-    clipSnippets: 0,
-    fixed: true,
-    height: 432,
-    n: 3,
-  }; // currently only used for the statistics page
-  // && to prevent clip view from showing when no clips extracted
-  // defaults set here ONLY because when starting the app in clip view
-  // the app would show error in console log:
-  //   `Cannot read property 'clipSnippets' of undefined`
-
+  // ========================================================================
+  // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
   // ========================================================================
 
   // Listen for key presses
@@ -741,6 +740,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.computePreviewWidth(); // so that fullView knows its size // TODO -- check if still needed!
+
     // this is required, otherwise when user drops the file, it opens as plaintext
     document.ondragover = document.ondrop = (ev) => {
       ev.preventDefault();
@@ -780,16 +780,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     const pathToNewImage: string = event.dataTransfer.files[0].path.toLowerCase();
     if (
-      (
-        pathToNewImage.endsWith('.jpg')
-        || pathToNewImage.endsWith('.jpeg')
-        || pathToNewImage.endsWith('.png')
-      )
-      && galleryItem.cleanName !== '*FOLDER*'
+        (
+             pathToNewImage.endsWith('.jpg')
+          || pathToNewImage.endsWith('.jpeg')
+          || pathToNewImage.endsWith('.png')
+        )
+        && galleryItem.cleanName !== '*FOLDER*'
     ) {
-      this.electronService.ipcRenderer.send(
-        'replace-thumbnail', pathToNewImage, galleryItem
-      );
+      this.electronService.ipcRenderer.send('replace-thumbnail', pathToNewImage, galleryItem);
     }
   }
 
@@ -1378,10 +1376,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } else {
       this.cd.detectChanges();
     }
-  }
-
-  public showSettingsGroup(group: number): void {
-    this.settingToShow = group;
   }
 
   /**
