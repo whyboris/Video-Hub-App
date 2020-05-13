@@ -710,7 +710,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.electronService.ipcRenderer.on('pleaseOpenWizard', (event, firstRun) => {
       // Correlated with the first time ever starting the app !!!
       // Can happen when no settings present
-      // Can happen when trying to open a .vha file that no longer exists
+      // Can happen when trying to open a .vha2 file that no longer exists
       if (firstRun) {
         this.firstRunLogic();
       }
@@ -1521,7 +1521,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.galleryWidth = document.getElementById('scrollDiv').getBoundingClientRect().width - 14;
 
     if (
-      this.appState.currentView === 'showClips'
+         this.appState.currentView === 'showClips'
       || this.appState.currentView === 'showThumbnails'
       || this.appState.currentView === 'showDetails'
       || this.appState.currentView === 'showDetails2'
@@ -1529,7 +1529,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       const margin: number = (this.settingsButtons['compactView'].toggled ? 4 : 40);
       this.previewWidth = (this.galleryWidth / this.currentImgsPerRow) - margin;
     } else if (
-      this.appState.currentView === 'showFilmstrip'
+         this.appState.currentView === 'showFilmstrip'
       || this.appState.currentView === 'showFullView'
     ) {
       this.previewWidth = ((this.galleryWidth - 30) / this.currentImgsPerRow);
