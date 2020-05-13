@@ -37,11 +37,11 @@ export class TopComponent {
   public folderNameArray: Array<string>;
   public fileNameArray: Array<string>;
 
-  public folderWordClicked(item): void {
+  public folderWordClicked(item: string): void {
     this.onFolderWordClicked.emit(item.trim());
   }
 
-  public fileWordClicked(item): void {
+  public fileWordClicked(item: string): void {
     // Strip away any of: {}()[].,
     const regex = /{|}|\(|\)|\[|\]|\.|\,/g;
     item = item.replace(regex, '');

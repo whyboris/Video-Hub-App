@@ -1,6 +1,6 @@
 {
   "name": "video-hub-app-2",
-  "version": "2.2.0",
+  "version": "2.2.3",
   "description": "Video Hub App 2 - browse, search, preview your videos",
   "homepage": "http://www.videohubapp.com",
   "author": {
@@ -48,7 +48,7 @@
     "@ngx-translate/core": "12.1.2",
     "@tensorflow/tfjs-node": "1.5.2",
     "face-api.js": "0.22.1",
-    "fuse.js": "3.4.6",
+    "fuse.js": "5.2.3",
     "ngx-virtual-scroller": "4.0.3",
     "sharp": "0.24.0",
     "trash": "6.1.1"

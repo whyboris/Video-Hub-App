@@ -1,0 +1,71 @@
+<div
+  *ngIf="settingsButtons['showTagTray'].toggled"
+  class="bottom-tray manual-tag-tray"
+  [ngClass]="{ 'bottom-tray-dark': settingsButtons['darkMode'].toggled }"
+  @modalAnimation
+>
+  <div
+    (click)="closeTagsTray.emit()"
+    class="close-bottom-tray"
+    title="{{ 'TAGS.closeTagTray' | translate }}"
+  >
+    <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
+  </div>
+
+  <div class="tag-tray-menu-left" *ngIf="!batchTaggingMode; else batchModeExplainer">
+    <span class="manual-tag-tray-label">
+      {{ 'TAGS.presentTags' | translate }}:
+    </span>
+    <button
+      (click)="settingsButtons['tagFrequencySort'].toggled = !settingsButtons['tagFrequencySort'].toggled"
+      class="tag-sort-by-toggle"
+    >
+      {{ (settingsButtons['tagFrequencySort'].toggled ? 'TAGS.sortByFrequency'
+                                                      : 'TAGS.sortAlphabetical') | translate }}
+    </button>
+    <button
+      (click)="manualTagShowFrequency = !manualTagShowFrequency"
+      class="show-frequency"
+    >
+      {{ (manualTagShowFrequency ? 'TAGS.showingFrequency'
+                                : 'TAGS.hidingFrequency') | translate }}
+    </button>
+    <input
+      (keyup.esc)="manualTagFilterString = ''"
+      [(ngModel)]="manualTagFilterString"
+      class="filter-general manual-tag-tray-filter"
+      placeholder="{{ 'TAGS.filterTags' | translate }}"
+    >
+
+  </div>
+
+  <ng-template #batchModeExplainer>
+    <div class="tag-tray-menu-left">
+      <span class="manual-tag-tray-label">
+        {{ 'TAGS.clickVideoToSelect' | translate }}
+      </span>
+      <span class="manual-tag-tray-label" style="line-height: 24px">
+        {{ 'TAGS.clickTagToAdd' | translate }}
+      </span>
+    </div>
+  </ng-template>
+
+  <button
+    class="wizard-button wizard-button-small button-toggle-batch-mode"
+    [ngClass]="{ 'edit-mode-active': batchTaggingMode }"
+    (click)="toggleBatchTaggingMode.emit()"
+  >
+    {{ 'TAGS.batchModeButton' | translate }}
+  </button>
+
+  <app-view-tags-component
+    class="all-the-tags"
+    [draggable]="true"
+    [displayFrequency]="manualTagShowFrequency"
+    [tags]="manualTagsService.tagsList | manualTagSortPipe
+                                       : manualTagFilterString
+                                       : settingsButtons['tagFrequencySort'].toggled
+                                       : manualTagsService.pipeToggleHack"
+    (tagClicked)="handleTagWordClicked.emit($event)"
+  ></app-view-tags-component>
+</div>

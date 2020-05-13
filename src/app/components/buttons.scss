@@ -165,10 +165,3 @@ button {
   pointer-events: none;
 }
 
-// Batch tag editing mode
-.button-toggle-batch-mode {
-  bottom: 8px;
-  color: black !important; // else in dark-mode color changes
-  left: 9px;
-  position: absolute;
-}

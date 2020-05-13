@@ -65,51 +65,14 @@
   z-index: 30;
 }
 
-.renameDark {
+.rename-dark {
   background: $gray-90;
 }
 
-.renameHeading {
-  color: $gray-50;
-  font-size: 16px;
-  left: 40px;
-  position: absolute;
-  top: 16px;
-}
-
-.renameFrom,
-.renameTo {
-  color: $gray-50;
-  display: block;
-  font-size: 12px;
-  left: 0px;
-  position: absolute;
-  text-align: right;
-  width: 38px;
-}
-
-.renameFrom {
-  top: 149px;
-}
-
-.renameTo {
-  top: 180px;
-}
-
-.darkModeOn {
+.dark-mode-on {
   color: white;
 }
 
 .disable-mouse-clicks {
   pointer-events: auto;
-}
-
-.closeRename {
-  position: absolute;
-  right: 8px;
-  top: 19px;
-}
-
-.closeRenameDark {
-  color: white;
 }

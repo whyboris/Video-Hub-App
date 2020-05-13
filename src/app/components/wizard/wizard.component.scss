@@ -1,4 +1,4 @@
-@import "variables";
+@import "../variables.scss";
 
 .wizard {
   background: $gray-10;
@@ -29,7 +29,7 @@
     width: 20px;
   }
 
-  .closeWizard {
+  .close-wizard {
     cursor: pointer;
     float: right;
     position: sticky;
@@ -249,23 +249,14 @@
   }
 
   .size-dropdown {
+    margin: 10px 14px 14px;
+
     &:not([disabled]) {
       cursor: pointer;
     }
-    margin: 10px 14px 14px;
   }
 
   @include scrollBarHidden;
-}
-
-.disabled-overlay {
-  background: rgba(0, 0, 0, 0.2);
-  height: 100vh;
-  left: 0;
-  position: fixed;
-  top: 20px;
-  width: 100%;
-  z-index: 100;
 }
 
 .hub-name-input {
@@ -277,6 +268,17 @@
 .history-icon {
   transform: translate(-7px, 1px);
   width: 18px;
+}
+
+.gradient-to-indicate-scrolling {
+  background-image: linear-gradient(rgba(230, 230, 230, 0), $gray-10);
+  bottom: 0;
+  display: block;
+  height: 100px;
+  pointer-events: none;
+  position: fixed;
+  width: 100vw;
+  z-index: 30;
 }
 
 @media (max-width: 760px) {
@@ -308,15 +310,4 @@
       transform: translate(-48px, 24px);
     }
   }
-}
-
-.gradient-to-indicate-scrolling {
-  background-image: linear-gradient(rgba(230, 230, 230, 0), $gray-10);
-  bottom: 0;
-  display: block;
-  height: 100px;
-  pointer-events: none;
-  position: fixed;
-  width: 100vw;
-  z-index: 30;
 }

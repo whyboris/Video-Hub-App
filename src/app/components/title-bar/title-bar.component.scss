@@ -1,4 +1,32 @@
-@import "variables";
+@import "../variables";
+
+.title-bar {
+  background-color: $gray-40;
+  border-bottom: 1px solid $gray-60;
+  height: 20px;
+  position: relative;
+  transition: 300ms;
+  width: 100%;
+  z-index: 9999;
+
+  img {
+    position: relative;
+    top: 1px;
+  }
+}
+
+.draggable {
+  -webkit-app-region: drag;
+  color: $gray-70;
+  font-size: 12px;
+  overflow: hidden;
+  position: absolute;
+  text-align: center;
+  top: 4px;
+  transition: 300ms;
+  white-space: nowrap;
+  width: calc(100vw - 70px);
+}
 
 .window-button {
   display: inline-block;
@@ -14,7 +42,7 @@
   transform: translate(0, -3px);
 }
 
-.winBtn {
+.windows-button {
   cursor: pointer;
   fill: $gray-80;
   position: fixed;
@@ -43,7 +71,7 @@
   }
 }
 
-.macBtn {
+.mac-button {
   border-radius: 50%;
   box-sizing: border-box;
   cursor: pointer;
@@ -90,14 +118,14 @@
   }
 }
 
-.dark-mode-override { // needs to be after titleBar and winBtn and draggable
+.dark-mode-override { // needs to be after titleBar and windows-button and draggable
   background: $gray-85;
 
   & .draggable {
     fill: $gray-50;
   }
 
-  & .winBtn {
+  & .windows-button {
     fill: $gray-30;
 
     &:hover {
