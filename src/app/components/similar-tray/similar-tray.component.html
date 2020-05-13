@@ -1,0 +1,51 @@
+<div
+  *ngIf="settingsButtons['showRelatedVideosTray'].toggled"
+  class="bottom-tray most-similar-tray"
+  [ngClass]="{ 'bottom-tray-dark': settingsButtons['darkMode'].toggled }"
+  @modalAnimation
+>
+
+  <div
+    (click)="settingsButtons['showRelatedVideosTray'].toggled = false"
+    class="close-bottom-tray"
+    title="{{ 'SETTINGS.closeRelatedTray' | translate }}"
+  >
+    <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
+  </div>
+
+  <div
+    *ngIf="!this.settingsButtons['hideSidebar'].toggled"
+    class="most-similar-comment"
+    @similarResultsText
+  >
+    {{ 'TAGS.showingMostSimilar' | translate }}
+    <span class="most-siilar-filename">
+      {{ currentPlayingFile }}
+    </span>
+  </div>
+
+  <app-thumbnail
+    *ngFor="let item of finalArray | similarityPipe: true : currentPlayingFile
+                                   | slice: 0 : 8 "
+
+    (videoClick)="handleClick.emit({ expectedEvent: $event, item: item })"
+    (contextmenu)="rightMouseClicked.emit({ mouseEvent: $event, item: item })"
+
+    [elHeight]="previewHeightRelated + 50"
+    [elWidth]="previewWidthRelated"
+    [folderPath]="appState.selectedOutputFolder"
+    [hubName]="appState.hubName"
+    [imgHeight]="previewHeightRelated"
+
+    [video]="item"
+
+    [darkMode]="settingsButtons['darkMode'].toggled"
+    [hoverScrub]="settingsButtons['hoverScrub'].toggled"
+    [largerFont]="settingsButtons['fontSizeLarger'].toggled"
+    [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
+    [showMeta]="settingsButtons['showMoreInfo'].toggled"
+
+    style="display: inline-block; margin-bottom: 50px"
+  ></app-thumbnail>
+
+</div>
