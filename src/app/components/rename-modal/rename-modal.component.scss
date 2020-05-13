@@ -1,0 +1,38 @@
+@import "../variables.scss";
+
+.rename-heading {
+  color: $gray-50;
+  font-size: 16px;
+  left: 40px;
+  position: absolute;
+  top: 16px;
+}
+
+.rename-from,
+.rename-to {
+  color: $gray-50;
+  display: block;
+  font-size: 12px;
+  left: 0px;
+  position: absolute;
+  text-align: right;
+  width: 38px;
+}
+
+.rename-from {
+  top: 149px;
+}
+
+.rename-to {
+  top: 180px;
+}
+
+.close-rename {
+  position: absolute;
+  right: 8px;
+  top: 19px;
+}
+
+.close-rename-dark {
+  color: white;
+}

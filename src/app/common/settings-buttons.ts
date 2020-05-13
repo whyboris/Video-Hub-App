@@ -30,6 +30,7 @@ export const SettingsButtonsGroups: string[][] = [
     'sortOptionStar',
     'sortOptionYear',
     'sortOptionModified',
+    'sortOptionTags'
   ],
   [
     'duplicateLength',
@@ -44,6 +45,7 @@ export const SettingsButtonsGroups: string[][] = [
     'showFilmstrip',
     'showFullView',
     'showDetails',
+    'showDetails2',
     'showFiles',
     'showClips',
   ],
@@ -143,7 +145,7 @@ export const SettingsMetaGroupLabels: string[] = [
   'SETTINGS.otherSettings',
 ];
 
-export let SettingsButtons: { [s: string]: SettingsButton } = {
+export const SettingsButtons: { [s: string]: SettingsButton } = {
   'autoFileTags': {
     description: 'BUTTONS.autoFileTagsDescription',
     hidden: true,
@@ -446,6 +448,13 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     title: 'BUTTONS.showDetailsHint',
     toggled: false
   },
+  'showDetails2': {
+    description: 'BUTTONS.showDetails2Description',
+    hidden: false,
+    iconName: 'icon-show-details-2',
+    title: 'BUTTONS.showDetails2Hint',
+    toggled: false
+  },
   'showFiles': {
     description: 'BUTTONS.showFilesDescription',
     hidden: false,
@@ -602,6 +611,14 @@ export let SettingsButtons: { [s: string]: SettingsButton } = {
     moreInfo: 'BUTTONS.sortOptionYearMoreInfo',
     title: '',
     toggled: false
+  },
+  'sortOptionTags': {
+    description: 'BUTTONS.sortOptionTagsDescription',
+    hidden: false,
+    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
+    moreInfo: 'BUTTONS.sortOptionTagsMoreInfo',
+    title: '',
+    toggled: false,
   },
   'sortOrder': {
     description: 'BUTTONS.sortOrderDescription',

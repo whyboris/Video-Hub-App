@@ -6,13 +6,8 @@ import { FilePathService } from '../views/file-path.service';
 import { ManualTagsService } from '../tags-manual/manual-tags.service';
 
 import { StarRating, ImageElement } from '../../../../interfaces/final-object.interface';
+import { TagEmit, TagEmission } from '../../../../interfaces/shared-interfaces';
 import { YearEmission } from '../views/details/details.component';
-
-export interface TagEmission {
-  index: number;
-  tag: string;
-  type: 'add' | 'remove';
-}
 
 export interface StarEmission {
   index: number;
@@ -31,7 +26,7 @@ export class MetaComponent implements OnInit {
   @Output() editFinalArrayStars = new EventEmitter<StarEmission>();
   @Output() editFinalArrayTag = new EventEmitter<TagEmission>();
   @Output() editFinalArrayYear = new EventEmitter<YearEmission>();
-  @Output() filterTag = new EventEmitter<object>();
+  @Output() filterTag = new EventEmitter<TagEmit>();
 
   @Input() video: ImageElement;
 
@@ -99,7 +94,7 @@ export class MetaComponent implements OnInit {
     this.tagViewUpdateHack = !this.tagViewUpdateHack;
   }
 
-  filterThisTag(event: object) {
+  filterThisTag(event: TagEmit) {
     this.filterTag.emit(event);
   }
 
