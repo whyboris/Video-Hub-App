@@ -28,7 +28,7 @@ import { StarEmission, YearEmission } from './views/details/details.component';
 import { WizardOptions } from '../../../interfaces/wizard-options.interface';
 
 // Constants, etc
-import { AppState, SupportedLanguage, defaultImgsPerRow, RowNumbers } from '../common/app-state';
+import { AppState, SupportedLanguage, DefaultImagesPerRow, RowNumbers } from '../common/app-state';
 import { allSupportedViews, SupportedView, TagEmission } from '../../../interfaces/shared-interfaces';
 import { Filters, filterKeyToIndex, FilterKeyNames } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, SettingsMetaGroup } from '../common/settings-buttons';
@@ -168,7 +168,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   currentImgsPerRow: number = 5;
   galleryWidth: number;
-  imgsPerRow: RowNumbers = defaultImgsPerRow;
+  imgsPerRow: RowNumbers = DefaultImagesPerRow;
   previewHeight: number = 144;
   previewHeightRelated: number = 144;   // For the Related Videos tab:
   previewWidth: number;
@@ -1782,7 +1782,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.appState.currentZoomLevel = 1;             // TODO -- remove whole block -- not needed any more !?!?!?!??!?! -----------------!
       }
       if (!settingsObject.appState.imgsPerRow) {
-        this.appState.imgsPerRow = defaultImgsPerRow;
+        this.appState.imgsPerRow = DefaultImagesPerRow;
       }
     }
     this.sortType = this.appState.currentSort;
