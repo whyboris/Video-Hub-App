@@ -30,7 +30,8 @@ export const SettingsButtonsGroups: string[][] = [
     'sortOptionStar',
     'sortOptionYear',
     'sortOptionModified',
-    'sortOptionTags'
+    'sortOptionTags',
+    'sortOptionAspectRatio'
   ],
   [
     'duplicateLength',
@@ -617,6 +618,14 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
     hidden: false,
     iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     moreInfo: 'BUTTONS.sortOptionTagsMoreInfo',
+    title: '',
+    toggled: false,
+  },
+  'sortOptionAspectRatio': {
+    description: 'BUTTONS.sortOptionAspectRatioDescription',
+    hidden: false,
+    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
+    moreInfo: 'BUTTONS.sortOptionAspectRatioMoreInfo',
     title: '',
     toggled: false,
   },
