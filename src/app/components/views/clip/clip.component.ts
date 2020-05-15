@@ -35,6 +35,8 @@ export class ClipComponent implements OnInit {
   @Input() elWidth: number;
   @Input() folderPath: string;
   @Input() forceMute: boolean;
+  @Input() defaultThumbnailMode: boolean;
+  @Input() returnToFirstScreenshot: boolean;
   @Input() hubName: string;
   @Input() imgHeight: number;
   @Input() largerFont: boolean;
@@ -47,6 +49,7 @@ export class ClipComponent implements OnInit {
   noError = true;
   pathToVideo: string = '';
   poster: string;
+  posterFolderType: any = 'clips';
 
   constructor(
     public filePathService: FilePathService,
@@ -69,21 +72,34 @@ export class ClipComponent implements OnInit {
     this.appInFocus = true;
   }
 
+  stopPreview(event): any {
+    if (this.defaultThumbnailMode && this.returnToFirstScreenshot) {
+      event.target.load(); // Reload original thumbnail
+    } else {
+      event.target.pause();
+    }
+  }
+
   ngOnInit() {
+
+    if (this.defaultThumbnailMode) {
+      this.posterFolderType = 'thumbnails';
+    }
+
     // multiple hashes?
     if (this.video.hash.indexOf(':') !== -1) {
       const hashes = this.video.hash.split(':');
 
       hashes.slice(0, 4).forEach((hash) => {
         this.folderThumbPaths.push( this.filePathService.createFilePath(this.folderPath, this.hubName, 'clips', hash, true));
-        this.folderPosterPaths.push(this.filePathService.createFilePath(this.folderPath, this.hubName, 'clips', hash));
+        this.folderPosterPaths.push(this.filePathService.createFilePath(this.folderPath, this.hubName, this.posterFolderType, hash));
       });
     } else {
       if (this.video.hash === undefined) {
         this.noError = false;
       }
       this.pathToVideo = this.filePathService.createFilePath(this.folderPath, this.hubName, 'clips', this.video.hash, true);
-      this.poster =      this.filePathService.createFilePath(this.folderPath, this.hubName, 'clips', this.video.hash);
+      this.poster =      this.filePathService.createFilePath(this.folderPath, this.hubName, this.posterFolderType, this.video.hash);
 
       this.folderThumbPaths.push(this.pathToVideo);
       this.folderPosterPaths.push(this.poster);

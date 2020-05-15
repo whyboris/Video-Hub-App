@@ -76,6 +76,7 @@ export const SettingsButtonsGroups: string[][] = [
   [
     'muteClips',
     'autoplayClips',
+    'clipsThumbnail',
   ],
   [
     'makeSmaller',
@@ -174,6 +175,14 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
     hidden: false,
     iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     title: 'BUTTONS.clearHistoryHint',
+    toggled: false
+  },
+  'clipsThumbnail': {
+    description: 'BUTTONS.clipsThumbnailDescription',
+    hidden: true,
+    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
+    moreInfo: 'BUTTONS.clipsThumbnailMoreInfo',
+    title: 'BUTTONS.clipsThumbnailHint',
     toggled: false
   },
   'showDeleteOption': {
