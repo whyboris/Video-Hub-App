@@ -144,6 +144,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // App state / UI state
   // ------------------------------------------------------------------------
 
+  isClosing = false;
   appMaximized = false;
   settingsModalOpen = false;
   finalArrayNeedsSaving: boolean = false; // if ever a file was renamed, or tag added, re-save the .vha2 file
@@ -535,6 +536,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.cd.detectChanges();
     });
 
+    // Closing of Window was issued by Electron
+    this.electronService.remote.getCurrentWindow().on('close', () => {
+      // Check to see if this was not originally triggered by Title-Bar to avoid double saving of settings
+      if (!this.isClosing) {
+        this.initiateClose();
+      }
+    });
+
     // Rename file response
     this.electronService.ipcRenderer.on(
       'renameFileResponse', (event, index: number, success: boolean, renameTo: string, oldFileName: string, errMsg?: string) => {
@@ -879,6 +888,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public initiateClose(): void {
+    this.isClosing = true;
     this.savePreviousViewSize();
     this.appState.imgsPerRow = this.imgsPerRow;
     this.electronService.ipcRenderer.send('close-window', this.getSettingsForSave(), this.saveVhaIfNeeded());

@@ -648,10 +648,18 @@ ipc.on('close-window', (event, settingsToSave: SettingsObject, savableProperties
       writeVhaFileToDisk(lastSavedFinalObject, globals.currentlyOpenVhaFile, () => {
         // file writing done !!!
         console.log('.vha2 file written before closing !!!');
-        BrowserWindow.getFocusedWindow().close();
+        try {
+          BrowserWindow.getFocusedWindow().close();
+        } catch (e) {
+          // Window was already closed
+        }
       });
     } else {
-      BrowserWindow.getFocusedWindow().close();
+      try {
+        BrowserWindow.getFocusedWindow().close();
+      } catch (e) {
+        // Window was already closed
+      }
     }
   });
 });
