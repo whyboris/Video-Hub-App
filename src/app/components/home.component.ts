@@ -269,8 +269,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   currentPlayingFolder = '';
   fullPathToCurrentFile = '';
 
-  magicSearchString = '';
   fuzzySearchString = '';
+  magicSearchString = '';
+  regexSearchString = '';
 
   wordFreqArr: WordFreqAndHeight[];
   numberOfVideosFound: number; // after applying all search filters
