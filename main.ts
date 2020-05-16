@@ -629,7 +629,7 @@ ipc.on('choose-output', (event) => {
 ipc.on('close-window', (event, settingsToSave: SettingsObject, savableProperties: SavableProperties) => {
 
   // save window size and position
-  settingsToSave.windowSizeAndPosition = win.getBounds();
+  settingsToSave.windowSizeAndPosition = win.getContentBounds();
 
   const json = JSON.stringify(settingsToSave);
 
