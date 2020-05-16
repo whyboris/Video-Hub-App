@@ -31,11 +31,14 @@
                 }"
               title="{{ settingsButtons[buttonKey].title | translate }}"
             >
-              <app-icon class="icon" [icon]="settingsButtons[buttonKey].iconName"></app-icon>
+              <app-icon
+                class="icon"
+                [icon]="settingsButtons[buttonKey].iconName ? settingsButtons[buttonKey].iconName : 'icon-default-button'"
+              ></app-icon>
             </button>
 
             <span
-              *ngIf="settingsButtons[buttonKey].iconName !== 'icon-checkmark'"
+              *ngIf="settingsButtons[buttonKey].iconName"
               (click)="toggleHideButton.emit(buttonKey)"
               class="eyeIconContainer icon {{ settingsButtons[buttonKey].hidden ? 'eye-closed' : 'eye-open' }}"
               title="{{ 'SETTINGS.showHideText' | translate }}"

@@ -5,7 +5,7 @@
       *ngFor="let buttonKey of btnGroup"
     ><!--
    --><button
-        *ngIf="!settingsButtons[buttonKey].hidden && settingsButtons[buttonKey].iconName !== 'icon-checkmark'"
+        *ngIf="!settingsButtons[buttonKey].hidden && settingsButtons[buttonKey].iconName"
         (click)="toggleButton.emit(buttonKey)"
         [ngClass]="{
             defaultSettingsButton:             !settingsButtons['flatIcons'].toggled,
