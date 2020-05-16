@@ -1,11 +1,16 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 import { ImageElement } from '../../../interfaces/final-object.interface';
+import { PipeSideEffectService } from './pipe-side-effect.service';
 
 @Pipe({
   name: 'regexSearchPipe'
 })
 export class RegexSearchPipe implements PipeTransform {
+
+  constructor(
+    public pipeSideEffectService: PipeSideEffectService
+  ) {}
 
   /**
    * Return only items that match the regex
@@ -21,8 +26,10 @@ export class RegexSearchPipe implements PipeTransform {
 
       try {
         re = RegExp(regexString, 'i');
+        this.pipeSideEffectService.regexPipeError(false);
       } catch {
         re = RegExp('');
+        this.pipeSideEffectService.regexPipeError(true);
       }
 
       return finalArray.filter(item => {

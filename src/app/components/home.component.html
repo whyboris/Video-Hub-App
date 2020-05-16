@@ -441,6 +441,8 @@
             (click)="regexSearchString = ''"
             [ngStyle]="{ background: '#aaffaa' }"
             class="search-or-tag-general search-word"
+            [attr.title]="regexError ? ( 'SIDEBAR.invalidRegex' | translate ) : ''"
+            [ngClass]="{ 'regex-error': regexError }"
           >
             {{ regexSearchString }}
           </span>
