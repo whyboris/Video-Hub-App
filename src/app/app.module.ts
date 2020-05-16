@@ -76,6 +76,7 @@ import { LengthPipe } from './pipes/length.pipe';
 import { MagicSearchPipe } from './pipes/magic-search.pipe';
 import { ManualTagSortPipe } from './pipes/manual-tags-sort.pipe';
 import { PlaylistPipe } from './pipes/playlist.pipe';
+import { RegexSearchPipe } from './pipes/regex-search.pipe';
 import { ResolutionFilterPipe } from './pipes/resolution-filter.pipe';
 import { ReturnZeroPipe } from './pipes/return-zero.pipe';
 import { SimilarityPipe } from './pipes/similarity.pipe';
@@ -117,6 +118,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     MetaComponent,
     PlaylistPipe,
     RecentlyOpenedComponent,
+    RegexSearchPipe,
     RenameFileComponent,
     RenameModalComponent,
     ResolutionFilterComponent,

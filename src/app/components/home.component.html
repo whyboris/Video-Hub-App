@@ -420,6 +420,35 @@
         </div>
       </div>
 
+      <!-- regex search -->
+      <div *ngIf="settingsButtons['regex'].toggled" @filterItemAppear>
+        <app-icon class="input-icon" [icon]="settingsButtons['regex'].iconName"></app-icon>
+        <input
+          #regexSearch
+          (keydown.escape)="regexSearchString = ''"
+          [(ngModel)]="regexSearchString"
+          [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
+          type="text"
+          class="filter-general input-filter"
+          placeholder="{{ 'SIDEBAR.regex' | translate }}"
+        >
+
+        <div
+          class="filteredWords"
+        >
+          <span
+            *ngIf="regexSearchString !== ''"
+            (click)="regexSearchString = ''"
+            [ngStyle]="{ background: '#aaffaa' }"
+            class="search-or-tag-general search-word"
+            [attr.title]="regexError ? ( 'SIDEBAR.invalidRegex' | translate ) : ''"
+            [ngClass]="{ 'regex-error': regexError }"
+          >
+            {{ regexSearchString }}
+          </span>
+        </div>
+      </div>
+
       <!-- fuzzy search -->
       <div *ngIf="settingsButtons['fuzzy'].toggled" @filterItemAppear>
         <app-icon class="input-icon" [icon]="settingsButtons['fuzzy'].iconName"></app-icon>
@@ -604,6 +633,8 @@
                                   : settingsButtons['autoFolderTags'].toggled
 
                 | magicSearchPipe: magicSearchString
+
+                | regexSearchPipe: regexSearchString
 
                 | fuzzySearchPipe: fuzzySearchString
 

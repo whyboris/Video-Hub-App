@@ -13,6 +13,8 @@ export class PipeSideEffectService {
 
   searchResults: BehaviorSubject<number> = new BehaviorSubject(0);
 
+  regexError: BehaviorSubject<boolean> = new BehaviorSubject(false);
+
   /**
    * Update the searchResults BehaviorSubject (to show total number of videos showing in gallery)
    * @param total
@@ -24,6 +26,14 @@ export class PipeSideEffectService {
       this.searchResults.next(this.cachedTotal);
     }
 
+  }
+
+  /**
+   * If pipe has an
+   * @param error
+   */
+  regexPipeError(error: boolean) {
+    this.regexError.next(error);
   }
 
   /**

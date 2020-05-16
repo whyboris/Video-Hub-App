@@ -16,6 +16,7 @@ export const SettingsButtonsGroups: string[][] = [
     'tagIntersection',
     'tagExclusion',
     'magic',
+    'regex',
     'fuzzy',
   ],
   [
@@ -355,6 +356,14 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
     moreInfo: 'BUTTONS.magicMoreInfo',
     title: 'BUTTONS.magicHint',
     toggled: true
+  },
+  'regex': {
+    description: 'BUTTONS.regexDescription',
+    hidden: true,
+    iconName: 'icon-regex',
+    moreInfo: 'BUTTONS.regexMoreInfo',
+    title: 'BUTTONS.regexHint',
+    toggled: false
   },
   'fuzzy': {
     description: 'BUTTONS.fuzzyDescription',

@@ -269,8 +269,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   currentPlayingFolder = '';
   fullPathToCurrentFile = '';
 
-  magicSearchString = '';
   fuzzySearchString = '';
+  magicSearchString = '';
+  regexSearchString = '';
+  regexError = false; // handle pipe-side-effect BehaviorSubject
 
   wordFreqArr: WordFreqAndHeight[];
   numberOfVideosFound: number; // after applying all search filters
@@ -489,20 +491,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.wordFrequencyService.finalMapBehaviorSubject.subscribe((value: WordFreqAndHeight[]) => {
         this.wordFreqArr = value;
-        // this.cd.detectChanges();
       });
       this.resolutionFilterService.finalResolutionMapBehaviorSubject.subscribe((value) => {
         this.resolutionFreqArr = value;
-        // this.cd.detectChanges();
       });
       this.starFilterService.finalStarMapBehaviorSubject.subscribe((value) => {
         this.starRatingFreqArr = value;
-        // this.cd.detectChanges();
       });
       this.pipeSideEffectService.searchResults.subscribe((value: number) => {
         this.numberOfVideosFound = value;
-        this.cd.detectChanges();
-        this.debounceUpdateMax(10);
+      });
+      this.pipeSideEffectService.regexError.subscribe((value: boolean) => {
+        this.regexError = value;
       });
 
       // -- DEMO CONTENT -- hasn't been updated in over 1 year
@@ -801,7 +801,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Low-tech debounced scroll handler
+   * Low-tech debounced window resize
    * @param msDelay - number of milliseconds to debounce; if absent sets to 250ms
    */
   public debounceUpdateMax(msDelay?: number): void {
