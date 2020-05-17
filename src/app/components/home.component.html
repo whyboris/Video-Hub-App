@@ -723,10 +723,10 @@
 
           style="display: inline-block"
           [ngStyle]="{
-              height: previewHeight +
-                      textPaddingHeight +
-                      (settingsButtons['compactView'].toggled ? 0 : 20) +
-                      'px',
+              height:   previewHeight
+                      + textPaddingHeight
+                      + (settingsButtons['compactView'].toggled ? 0 : 20)
+                      + 'px',
               width: previewWidth
             }"
         ></app-thumbnail>
