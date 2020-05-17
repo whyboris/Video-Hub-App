@@ -494,9 +494,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
       });
       this.resolutionFilterService.finalResolutionMapBehaviorSubject.subscribe((value) => {
         this.resolutionFreqArr = value;
+        this.cd.detectChanges(); // prevent `ExpressionChangedAfterItHasBeenCheckedError`
       });
       this.starFilterService.finalStarMapBehaviorSubject.subscribe((value) => {
         this.starRatingFreqArr = value;
+        this.cd.detectChanges(); // prevent `ExpressionChangedAfterItHasBeenCheckedError`
       });
       this.pipeSideEffectService.searchResults.subscribe((value: number) => {
         this.numberOfVideosFound = value;
