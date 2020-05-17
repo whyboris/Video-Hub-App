@@ -28,7 +28,7 @@ import { StarEmission, YearEmission } from './views/details/details.component';
 import { WizardOptions } from '../../../interfaces/wizard-options.interface';
 
 // Constants, etc
-import { AppState, SupportedLanguage, defaultImgsPerRow, RowNumbers } from '../common/app-state';
+import { AppState, SupportedLanguage, DefaultImagesPerRow, RowNumbers } from '../common/app-state';
 import { allSupportedViews, SupportedView, TagEmission } from '../../../interfaces/shared-interfaces';
 import { Filters, filterKeyToIndex, FilterKeyNames } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, SettingsMetaGroup } from '../common/settings-buttons';
@@ -144,12 +144,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // App state / UI state
   // ------------------------------------------------------------------------
 
+  isClosing = false;
   appMaximized = false;
   settingsModalOpen = false;
-  finalArrayNeedsSaving: boolean = false; // if ever a file was renamed, re-save the .vha file
+  finalArrayNeedsSaving: boolean = false; // if ever a file was renamed, or tag added, re-save the .vha2 file
   flickerReduceOverlay = true;
   isFirstRunEver = false;
   rootFolderLive: boolean = true; // set to `false` when loading hub but video folder is not connected
+  folderNotConnectedErrorShowing: boolean = false; // temporary pop-over when updating from disconnected folder
 
   // ========================================================================
   // Import / extraction progress
@@ -168,7 +170,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   currentImgsPerRow: number = 5;
   galleryWidth: number;
-  imgsPerRow: RowNumbers = defaultImgsPerRow;
+  imgsPerRow: RowNumbers = DefaultImagesPerRow;
   previewHeight: number = 144;
   previewHeightRelated: number = 144;   // For the Related Videos tab:
   previewWidth: number;
@@ -209,7 +211,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   itemToRename: ImageElement;
   renamingExtension: string;
   renamingNow: boolean = false;
-  rightClickPosition: any = { x: 0, y: 0 };
+  rightClickPosition: { x: number, y: number } = { x: 0, y: 0 };
   rightClickShowing: boolean = false;
 
   // ========================================================================
@@ -243,51 +245,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
   };
 
   // ========================================================================
-  // UNSORTED -- TODO -- CLEAN UP !!!
+  // currently only used for the statistics page
+  // && to prevent clip view from showing when no clips extracted
+  // defaults set here ONLY because when starting the app in clip view
+  // the app would show error in console log:
+  //   `Cannot read property 'clipSnippets' of undefined`
   // ------------------------------------------------------------------------
-
-  currentPlayingFile = '';
-  currentPlayingFolder = '';
-  fullPathToCurrentFile = '';
-
-  magicSearchString = '';
-  fuzzySearchString = '';
-
-  wordFreqArr: WordFreqAndHeight[];
-  currResults: number;
-
-  findMostSimilar: string; // for finding similar files to this one
-  showSimilar: boolean = false; // to toggle the similarity pipe
-
-  shuffleTheViewNow = 0; // dummy number to force re-shuffle current view
-
-  hubNameToRemember = ''; // don't remember what this variable is for
-
-  sortType: SortType = 'default';
-
-  durationOutlierCutoff: number = 0; // for the duration filter to cut off outliers
-
-  // time remaining calculator !!!
-  timeExtractionStarted;
-  timeExtractionRemaining;
-
-  folderNotConnectedErrorShowing: boolean = false;
-
-  deletePipeHack: boolean = false; // to force deletePipe to update
-
-  // crappy hack to remember where to navigate to when in folder view and returning back to root
-  folderNavigationScrollOffset: number = 0;
-
-  batchTaggingMode = false; // when batch tagging is enabled
-
-  latestVersionAvailable: string;
-
-  // ========================================================================
-  // Please add new variables below if they don't fit into any other section
-  // ------------------------------------------------------------------------
-
-  tagTypeAhead: string = '';
-  folderViewNavigationPath: string = '';
 
   currentScreenshotSettings: ScreenshotSettings = {
     clipHeight: 144,
@@ -296,12 +259,49 @@ export class HomeComponent implements OnInit, AfterViewInit {
     fixed: true,
     height: 432,
     n: 3,
-  }; // currently only used for the statistics page
-  // && to prevent clip view from showing when no clips extracted
-  // defaults set here ONLY because when starting the app in clip view
-  // the app would show error in console log:
-  //   `Cannot read property 'clipSnippets' of undefined`
+  };
 
+  // ========================================================================
+  // Miscellaneous variables
+  // ------------------------------------------------------------------------
+
+  currentPlayingFile = '';
+  currentPlayingFolder = '';
+  fullPathToCurrentFile = '';
+
+  fuzzySearchString = '';
+  magicSearchString = '';
+  regexSearchString = '';
+  regexError = false; // handle pipe-side-effect BehaviorSubject
+
+  wordFreqArr: WordFreqAndHeight[];
+  numberOfVideosFound: number; // after applying all search filters
+
+  findMostSimilar: string; // for finding similar files to this one
+  showSimilar: boolean = false; // to toggle the similarity pipe
+
+  shuffleTheViewNow = 0; // dummy number to force re-shuffle current view
+
+  sortType: SortType = 'default';
+
+  durationOutlierCutoff: number = 0; // for the duration filter to cut off outliers
+
+  timeExtractionStarted;   // time remaining calculator
+  timeExtractionRemaining; // time remaining calculator
+
+  deletePipeHack: boolean = false; // to force deletePipe to update
+
+  folderNavigationScrollOffset: number = 0; // when in folder view and returning back to root
+  folderViewNavigationPath: string = '';
+
+  batchTaggingMode = false; // when batch tagging is enabled
+
+  latestVersionAvailable: string;
+
+  tagTypeAhead: string = '';
+
+  // ========================================================================
+  // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
   // ========================================================================
 
   // Listen for key presses
@@ -491,20 +491,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.wordFrequencyService.finalMapBehaviorSubject.subscribe((value: WordFreqAndHeight[]) => {
         this.wordFreqArr = value;
-        // this.cd.detectChanges();
       });
       this.resolutionFilterService.finalResolutionMapBehaviorSubject.subscribe((value) => {
         this.resolutionFreqArr = value;
-        // this.cd.detectChanges();
       });
       this.starFilterService.finalStarMapBehaviorSubject.subscribe((value) => {
         this.starRatingFreqArr = value;
-        // this.cd.detectChanges();
       });
-      this.pipeSideEffectService.searchResults.subscribe((value) => {
-        this.currResults = value;
-        this.cd.detectChanges();
-        this.debounceUpdateMax(10);
+      this.pipeSideEffectService.searchResults.subscribe((value: number) => {
+        this.numberOfVideosFound = value;
+      });
+      this.pipeSideEffectService.regexError.subscribe((value: boolean) => {
+        this.regexError = value;
       });
 
       // -- DEMO CONTENT -- hasn't been updated in over 1 year
@@ -536,6 +534,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
 
       this.cd.detectChanges();
+    });
+
+    // Closing of Window was issued by Electron
+    this.electronService.remote.getCurrentWindow().on('close', () => {
+      // Check to see if this was not originally triggered by Title-Bar to avoid double saving of settings
+      if (!this.isClosing) {
+        this.initiateClose();
+      }
     });
 
     // Rename file response
@@ -639,7 +645,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.extractionPercent = 1;
         this.importStage = 'done';
         this.electronService.ipcRenderer.send('allow-sleep');
-        this.appState.hubName = this.hubNameToRemember; // could this cause bugs ??? TODO: investigate!
       }
       this.cd.detectChanges();
     });
@@ -659,7 +664,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.rootFolderLive = rootFolderLive;
       this.finalArrayNeedsSaving = changedRootFolder;
       this.appState.currentVhaFile = pathToFile;
-      this.hubNameToRemember = finalObject.hubName;
       this.appState.hubName = finalObject.hubName;
       this.appState.numOfFolders = finalObject.numOfFolders;
       this.appState.selectedOutputFolder = outputFolderPath;
@@ -715,7 +719,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.electronService.ipcRenderer.on('pleaseOpenWizard', (event, firstRun) => {
       // Correlated with the first time ever starting the app !!!
       // Can happen when no settings present
-      // Can happen when trying to open a .vha file that no longer exists
+      // Can happen when trying to open a .vha2 file that no longer exists
       if (firstRun) {
         this.firstRunLogic();
       }
@@ -745,6 +749,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.computePreviewWidth(); // so that fullView knows its size // TODO -- check if still needed!
+
     // this is required, otherwise when user drops the file, it opens as plaintext
     document.ondragover = document.ondrop = (ev) => {
       ev.preventDefault();
@@ -784,21 +789,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     const pathToNewImage: string = event.dataTransfer.files[0].path.toLowerCase();
     if (
-      (
-        pathToNewImage.endsWith('.jpg')
-        || pathToNewImage.endsWith('.jpeg')
-        || pathToNewImage.endsWith('.png')
-      )
-      && galleryItem.cleanName !== '*FOLDER*'
+        (
+             pathToNewImage.endsWith('.jpg')
+          || pathToNewImage.endsWith('.jpeg')
+          || pathToNewImage.endsWith('.png')
+        )
+        && galleryItem.cleanName !== '*FOLDER*'
     ) {
-      this.electronService.ipcRenderer.send(
-        'replace-thumbnail', pathToNewImage, galleryItem
-      );
+      this.electronService.ipcRenderer.send('replace-thumbnail', pathToNewImage, galleryItem);
     }
   }
 
   /**
-   * Low-tech debounced scroll handler
+   * Low-tech debounced window resize
    * @param msDelay - number of milliseconds to debounce; if absent sets to 250ms
    */
   public debounceUpdateMax(msDelay?: number): void {
@@ -885,6 +888,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public initiateClose(): void {
+    this.isClosing = true;
     this.savePreviousViewSize();
     this.appState.imgsPerRow = this.imgsPerRow;
     this.electronService.ipcRenderer.send('close-window', this.getSettingsForSave(), this.saveVhaIfNeeded());
@@ -1384,10 +1388,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public showSettingsGroup(group: number): void {
-    this.settingToShow = group;
-  }
-
   /**
    * scroll to the top of the gallery
    */
@@ -1531,7 +1531,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.galleryWidth = document.getElementById('scrollDiv').getBoundingClientRect().width - 14;
 
     if (
-      this.appState.currentView === 'showClips'
+         this.appState.currentView === 'showClips'
       || this.appState.currentView === 'showThumbnails'
       || this.appState.currentView === 'showDetails'
       || this.appState.currentView === 'showDetails2'
@@ -1539,7 +1539,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       const margin: number = (this.settingsButtons['compactView'].toggled ? 4 : 40);
       this.previewWidth = (this.galleryWidth / this.currentImgsPerRow) - margin;
     } else if (
-      this.appState.currentView === 'showFilmstrip'
+         this.appState.currentView === 'showFilmstrip'
       || this.appState.currentView === 'showFullView'
     ) {
       this.previewWidth = ((this.galleryWidth - 30) / this.currentImgsPerRow);
@@ -1782,7 +1782,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.appState.currentZoomLevel = 1;             // TODO -- remove whole block -- not needed any more !?!?!?!??!?! -----------------!
       }
       if (!settingsObject.appState.imgsPerRow) {
-        this.appState.imgsPerRow = defaultImgsPerRow;
+        this.appState.imgsPerRow = DefaultImagesPerRow;
       }
     }
     this.sortType = this.appState.currentSort;
