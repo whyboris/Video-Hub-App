@@ -20,7 +20,7 @@ export class SidebarHeightPipe implements PipeTransform {
     return (
         (menuHidden                             ? -32 :  0)
       + (hideTop                                ?  53 : 98)
-      + ((showRelatedVideosTray || showTagTray) ? 160 :  0)
+      + ((showRelatedVideosTray || showTagTray) ? 170 :  0)
       ).toString();
 
   }
