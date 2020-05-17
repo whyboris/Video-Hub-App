@@ -16,6 +16,7 @@ export const SettingsButtonsGroups: string[][] = [
     'tagIntersection',
     'tagExclusion',
     'magic',
+    'regex',
     'fuzzy',
   ],
   [
@@ -30,7 +31,8 @@ export const SettingsButtonsGroups: string[][] = [
     'sortOptionStar',
     'sortOptionYear',
     'sortOptionModified',
-    'sortOptionTags'
+    'sortOptionTags',
+    'sortOptionAspectRatio'
   ],
   [
     'duplicateLength',
@@ -76,6 +78,7 @@ export const SettingsButtonsGroups: string[][] = [
   [
     'muteClips',
     'autoplayClips',
+    'clipsThumbnail',
   ],
   [
     'makeSmaller',
@@ -172,14 +175,19 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
   'clearHistory': {
     description: 'BUTTONS.clearHistoryDescription',
     hidden: false,
-    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     title: 'BUTTONS.clearHistoryHint',
+    toggled: false
+  },
+  'clipsThumbnail': {
+    description: 'BUTTONS.clipsThumbnailDescription',
+    hidden: true,
+    moreInfo: 'BUTTONS.clipsThumbnailMoreInfo',
+    title: 'BUTTONS.clipsThumbnailHint',
     toggled: false
   },
   'showDeleteOption': {
     description: 'BUTTONS.showDeleteButtonDescription',
     hidden: true,
-    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     moreInfo: 'BUTTONS.showDeleteButtonMoreInfo',
     title: 'BUTTONS.showDeleteButton',
     toggled: false
@@ -203,7 +211,6 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
   'duplicateLength': {
     description: 'BUTTONS.duplicateLengthDescription',
     hidden: true,
-    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     moreInfo: 'BUTTONS.duplicateLengthMoreInfo',
     settingsHeading: 'SETTINGS.duplicateLength',
     title: 'BUTTONS.duplicateLengthHint',
@@ -212,7 +219,6 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
   'duplicateSize': {
     description: 'BUTTONS.duplicateSizeDescription',
     hidden: true,
-    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     moreInfo: 'BUTTONS.duplicateSizeMoreInfo',
     title: 'BUTTONS.duplicateSizeHint',
     toggled: false
@@ -220,7 +226,6 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
   'duplicateHash': {
     description: 'BUTTONS.duplicateHashDescription',
     hidden: true,
-    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     title: 'BUTTONS.duplicateHashHint',
     moreInfo: 'BUTTONS.duplicateHashMoreInfo',
     toggled: false
@@ -269,7 +274,6 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
   'flatIcons': {
     description: 'BUTTONS.flatIconsDescription',
     hidden: false,
-    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     settingsHeading: 'SETTINGS.buttonStyle',
     title: 'BUTTONS.flatIconsHint',
     toggled: false
@@ -346,6 +350,14 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
     title: 'BUTTONS.magicHint',
     toggled: true
   },
+  'regex': {
+    description: 'BUTTONS.regexDescription',
+    hidden: true,
+    iconName: 'icon-regex',
+    moreInfo: 'BUTTONS.regexMoreInfo',
+    title: 'BUTTONS.regexHint',
+    toggled: false
+  },
   'fuzzy': {
     description: 'BUTTONS.fuzzyDescription',
     hidden: false,
@@ -397,7 +409,6 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
   'regenerateLibrary': {
     description: 'BUTTONS.regenerateLibraryDescription',
     hidden: false,
-    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     title: 'BUTTONS.regenerateLibraryHint',
     toggled: false
   },
@@ -413,7 +424,6 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
   'resetSettings': {
     description: 'BUTTONS.resetSettingsDescription',
     hidden: false,
-    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     settingsHeading: 'SETTINGS.variousSettings',
     title: 'BUTTONS.resetSettingsHint',
     toggled: false
@@ -558,7 +568,6 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
   'sortOptionAlphabetical': {
     description: 'BUTTONS.sortOptionAlphabeticalDescription',
     hidden: false,
-    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     moreInfo: 'BUTTONS.sortOptionAlphabeticalMoreInfo',
     settingsHeading: 'BUTTONS.sortOptionsHeading',
     title: '',
@@ -567,7 +576,6 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
   'sortOptionModified': {
     description: 'BUTTONS.sortOptionModifiedDescription',
     hidden: false,
-    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     moreInfo: 'BUTTONS.sortOptionModifiedMoreInfo',
     title: '',
     toggled: false,
@@ -575,7 +583,6 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
   'sortOptionSize': {
     description: 'BUTTONS.sortOptionSizeDescription',
     hidden: false,
-    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     moreInfo: 'BUTTONS.sortOptionSizeMoreInfo',
     title: '',
     toggled: true,
@@ -583,7 +590,6 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
   'sortOptionStar': {
     description: 'BUTTONS.sortOptionStarDescription',
     hidden: false,
-    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     moreInfo: 'BUTTONS.sortOptionStarMoreInfo',
     title: '',
     toggled: false,
@@ -591,7 +597,6 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
   'sortOptionTime': {
     description: 'BUTTONS.sortOptionTimeDescription',
     hidden: false,
-    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     moreInfo: 'BUTTONS.sortOptionTimeMoreInfo',
     title: '',
     toggled: true,
@@ -599,7 +604,6 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
   'sortOptionTimesPlayed': {
     description: 'BUTTONS.sortOptionTimesPlayedDescription',
     hidden: false,
-    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     moreInfo: 'BUTTONS.sortOptionTimesPlayedMoreInfo',
     title: '',
     toggled: false,
@@ -607,7 +611,6 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
   'sortOptionYear': {
     description: 'BUTTONS.sortOptionYearDescription',
     hidden: false,
-    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     moreInfo: 'BUTTONS.sortOptionYearMoreInfo',
     title: '',
     toggled: false
@@ -615,8 +618,14 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
   'sortOptionTags': {
     description: 'BUTTONS.sortOptionTagsDescription',
     hidden: false,
-    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     moreInfo: 'BUTTONS.sortOptionTagsMoreInfo',
+    title: '',
+    toggled: false,
+  },
+  'sortOptionAspectRatio': {
+    description: 'BUTTONS.sortOptionAspectRatioDescription',
+    hidden: false,
+    moreInfo: 'BUTTONS.sortOptionAspectRatioMoreInfo',
     title: '',
     toggled: false,
   },
@@ -639,7 +648,6 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
   'startWizard': {
     description: 'BUTTONS.startWizardDescription',
     hidden: false,
-    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     title: 'BUTTONS.startWizardHint',
     toggled: false
   },
@@ -677,7 +685,6 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
   'verifyThumbnails': {
     description: 'BUTTONS.verifyThumbnailsDescription',
     hidden: false,
-    iconName: 'icon-checkmark', // this specific icon makes the button only appear in the Settings menu (not in ribbon)
     moreInfo: 'BUTTONS.verifyThumbnailsMoreInfo',
     title: 'BUTTONS.verifyThumbnailsHint',
     toggled: false

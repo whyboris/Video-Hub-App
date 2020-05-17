@@ -28,7 +28,7 @@
           class="mini-video-thumb {{ 'folder-preview-' + idx }}"
           [volume]="forceMute ? 0 : 1"
           onmouseover="this.play().catch((err) => {this.load()})"
-          onmouseout="this.pause()"
+          (mouseout)="stopPreview($event)"
           loop
         ></video>
       </ng-container>
@@ -104,7 +104,7 @@
       class="screencap"
       [volume]="forceMute ? 0 : 1"
       onmouseover="this.play().catch((err) => {this.load()})"
-      onmouseout="this.pause()"
+      (mouseout)="stopPreview($event)"
       loop
     ></video>
 

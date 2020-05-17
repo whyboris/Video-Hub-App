@@ -289,32 +289,37 @@
         type="checkbox"
         [(ngModel)]="wizard.extractClips"
         class="clip-check-box"
+        style="vertical-align: top;"
         [disabled]="wizard.selectedOutputFolder === ''
                  || wizard.selectedSourceFolder === ''
                  || wizard.futureHubName === ''"
       >
 
-      <span class="step-four-text">
-        {{ 'WIZARD.extractClips' | translate }}
-      </span>
+      <div class="clip-option-block">
 
-      <input
-        (change)="selectNumOfClipSnippets.emit($event.target.value)"
-        type="number"
-        class="size-dropdown language-drop-down num-select"
-        value=5
-        min=3
-        max=15
-        onKeyDown="return false"
-        [disabled]="wizard.selectedOutputFolder === ''
-                 || wizard.selectedSourceFolder === ''
-                 || wizard.futureHubName === ''
-                 || !wizard.extractClips"
-      >
+        <span class="step-four-text">
+          {{ 'WIZARD.extractClips' | translate }}
+        </span>
 
-      <span class="step-four-text">
-        {{ 'WIZARD.clipSnippets' | translate }}
-      </span>
+        <input
+          (change)="selectNumOfClipSnippets.emit($event.target.value)"
+          type="number"
+          class="size-dropdown language-drop-down num-select"
+          value=5
+          min=3
+          max=15
+          onKeyDown="return false"
+          [disabled]="wizard.selectedOutputFolder === ''
+                   || wizard.selectedSourceFolder === ''
+                   || wizard.futureHubName === ''
+                   || !wizard.extractClips"
+        >
+
+        <span class="step-four-text">
+          {{ 'WIZARD.clipSnippets' | translate }}
+        </span>
+
+      </div>
 
     </div>
 

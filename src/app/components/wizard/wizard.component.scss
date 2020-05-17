@@ -281,6 +281,11 @@
   z-index: 30;
 }
 
+.clip-option-block {
+  display: inline-block;
+  max-width: 210px;
+}
+
 @media (max-width: 760px) {
   .wizard {
     margin: 0;

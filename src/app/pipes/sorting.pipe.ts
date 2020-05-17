@@ -5,6 +5,8 @@ import { randomizeArray } from '../../../utility';
 export type SortType = 'default'
                      | 'alphabetAsc'
                      | 'alphabetDesc'
+                     | 'aspectRatioAsc'
+                     | 'aspectRatioDesc'
                      | 'hash' // only used by the duplicateFinderPipe
                      | 'modifiedAsc'
                      | 'modifiedDesc'
@@ -96,6 +98,19 @@ export class SortingPipe implements PipeTransform {
       } else {
         return (  y.stars === <StarRating><unknown>0.5 ? 0        : y.stars)
                - (x.stars === <StarRating><unknown>0.5 ? 0        : x.stars);
+      }
+    }
+
+    if (property === 'aspectRatio') {
+      var xAspectRatio = x.width / x.height;
+      var yAspectRatio = y.width / y.height;
+
+      if (xAspectRatio < yAspectRatio) {
+        if (decreasing) { return 1 } else { return -1;}
+      } if (xAspectRatio > yAspectRatio) {
+        if (decreasing) { return -1 } else { return 1;}
+      } else {
+        return 0;
       }
     }
 
@@ -204,6 +219,14 @@ export class SortingPipe implements PipeTransform {
     } else if (sortingType === 'tagsDesc') {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'tags', false);
+      });
+    } else if (sortingType === 'aspectRatioAsc') {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
+        return this.sortFunctionLol(x, y, 'aspectRatio', false);
+      });
+    } else if (sortingType === 'aspectRatioDesc') {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
+        return this.sortFunctionLol(x, y, 'aspectRatio', true);
       });
     } else {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
