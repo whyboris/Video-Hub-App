@@ -79,6 +79,7 @@ import { PlaylistPipe } from './pipes/playlist.pipe';
 import { RegexSearchPipe } from './pipes/regex-search.pipe';
 import { ResolutionFilterPipe } from './pipes/resolution-filter.pipe';
 import { ReturnZeroPipe } from './pipes/return-zero.pipe';
+import { SidebarHeightPipe } from './pipes/sidebar-height.pipe';
 import { SimilarityPipe } from './pipes/similarity.pipe';
 import { SortingPipe } from './pipes/sorting.pipe';
 import { StarFilterPipe } from './pipes/star-filter.pipe';
@@ -129,6 +130,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     SettingsComponent,
     SheetComponent,
     ShortcutsComponent,
+    SidebarHeightPipe,
     SimilarTrayComponent,
     SimilarityPipe,
     SliderFilterComponent,

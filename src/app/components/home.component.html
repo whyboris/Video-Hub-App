@@ -356,20 +356,19 @@
     <!-- ============================================== -->
 
     <div
+      class="sidebar"
       [ngClass]="{
           'sidebar-hidden': settingsButtons['hideSidebar'].toggled,
           'sidebar-dark-mode': settingsButtons['darkMode'].toggled
         }"
       [ngStyle]="{
-          'height': 'calc(100vh - '
-                      + (
-                          (settingsButtons['hideTop'].toggled                 ?  53 : 98)
-                        + (appState.menuHidden                                ? -32 :  0)
-                        + ((   settingsButtons['showRelatedVideosTray'].toggled
-                            || settingsButtons['showTagTray'].toggled)        ? 160 :  0)
-                                                                                          ) + 'px)'
+          'height': 'calc(100vh - ' + (
+                        appState.menuHidden | sidebarHeightPipe
+                          : settingsButtons['hideTop'].toggled
+                          : settingsButtons['showRelatedVideosTray'].toggled
+                          : settingsButtons['showTagTray'].toggled
+                      ) + 'px)'
         }"
-      class="sidebar"
       #searchRef
     >
 
@@ -580,12 +579,12 @@
       class="gallery-container"
 
       [ngStyle]="{
-          'height': 'calc(100vh - ' + (
-                                          (settingsButtons['hideTop'].toggled                 ?  53 : 98)
-                                        + (appState.menuHidden                                ? -32 : 0)
-                                        + ((settingsButtons['showRelatedVideosTray'].toggled
-                                         || settingsButtons['showTagTray'].toggled)           ? 170 : 0)
-                                                                                                          ) + 'px)'
+        'height': 'calc(100vh - ' + (
+                      appState.menuHidden | sidebarHeightPipe
+                        : settingsButtons['hideTop'].toggled
+                        : settingsButtons['showRelatedVideosTray'].toggled
+                        : settingsButtons['showTagTray'].toggled
+                    ) + 'px)'
         }"
 
       [enableUnequalChildrenSizes]="appState.currentView === 'showFullView'"
@@ -724,10 +723,10 @@
 
           style="display: inline-block"
           [ngStyle]="{
-              height: previewHeight +
-                      textPaddingHeight +
-                      (settingsButtons['compactView'].toggled ? 0 : 20) +
-                      'px',
+              height:   previewHeight
+                      + textPaddingHeight
+                      + (settingsButtons['compactView'].toggled ? 0 : 20)
+                      + 'px',
               width: previewWidth
             }"
         ></app-thumbnail>
