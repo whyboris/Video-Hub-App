@@ -10,7 +10,7 @@ This software is available for $3.50 through [videohubapp.com](https://videohuba
 
 $3.50 of every sale goes to the [_cost-effective_](https://www.givewell.org/charities/top-charities) charity [Against Malaria Foundation](https://www.againstmalaria.com/).
 
-![Video Hub App](https://videohubapp.com/images/4.jpg)
+![video-hub-app](https://user-images.githubusercontent.com/17264277/82097107-3ed91700-96d0-11ea-8679-87fa3e07cd0b.jpg)
 
 ## About
 

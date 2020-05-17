@@ -65,6 +65,12 @@
     <option *ngIf="settingsButtons['sortOptionTags'].toggled" value="tagsDesc">
       &#x25BC; {{ 'SIDEBAR.sortTags' | translate }}
     </option>
+    <option *ngIf="settingsButtons['sortOptionAspectRatio'].toggled" value="aspectRatioAsc">
+      &#x25B2; {{ 'SIDEBAR.sortAspectRatio' | translate }}
+    </option>
+    <option *ngIf="settingsButtons['sortOptionAspectRatio'].toggled" value="aspectRatioDesc">
+      &#x25BC; {{ 'SIDEBAR.sortAspectRatio' | translate }}
+    </option>
     <option value="random">
       {{ 'SIDEBAR.sortRandom' | translate }}
     </option>

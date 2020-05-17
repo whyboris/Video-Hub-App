@@ -184,19 +184,19 @@
     class="all-settings-tabs"
     @modalAnimation
   >
-    <button (click)="showSettingsGroup(0)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 0 }">
+    <button (click)="settingToShow = 0" [ngClass]="{ 'active-tab': settingToShow === 0 }">
       {{ 'SETTINGS.tabFilter'    | translate }}
     </button>
-    <button (click)="showSettingsGroup(1)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 1 }">
+    <button (click)="settingToShow = 1" [ngClass]="{ 'active-tab': settingToShow === 1 }">
       {{ 'SETTINGS.tabView'      | translate }}
     </button>
-    <button (click)="showSettingsGroup(2)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 2 }">
+    <button (click)="settingToShow = 2" [ngClass]="{ 'active-tab': settingToShow === 2 }">
       {{ 'SETTINGS.tabMain'      | translate }}
     </button>
-    <button (click)="showSettingsGroup(3)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 3 }">
+    <button (click)="settingToShow = 3" [ngClass]="{ 'active-tab': settingToShow === 3 }">
       {{ 'SETTINGS.tabShortcuts' | translate }}
     </button>
-    <button (click)="showSettingsGroup(4)" class="meta-group-button" [ngClass]="{ 'meta-group-selected': settingToShow == 4 }">
+    <button (click)="settingToShow = 4" [ngClass]="{ 'active-tab': settingToShow === 4 }">
       {{ 'SETTINGS.statistics'   | translate }}
     </button>
   </div>
@@ -356,20 +356,19 @@
     <!-- ============================================== -->
 
     <div
+      class="sidebar"
       [ngClass]="{
           'sidebar-hidden': settingsButtons['hideSidebar'].toggled,
           'sidebar-dark-mode': settingsButtons['darkMode'].toggled
         }"
       [ngStyle]="{
-          'height': 'calc(100vh - '
-                      + (
-                          (settingsButtons['hideTop'].toggled                 ?  53 : 98)
-                        + (appState.menuHidden                                ? -32 :  0)
-                        + ((   settingsButtons['showRelatedVideosTray'].toggled
-                            || settingsButtons['showTagTray'].toggled)        ? 160 :  0)
-                                                                                          ) + 'px)'
+          'height': 'calc(100vh - ' + (
+                        appState.menuHidden | sidebarHeightPipe
+                          : settingsButtons['hideTop'].toggled
+                          : settingsButtons['showRelatedVideosTray'].toggled
+                          : settingsButtons['showTagTray'].toggled
+                      ) + 'px)'
         }"
-      class="sidebar"
       #searchRef
     >
 
@@ -416,6 +415,35 @@
             class="search-or-tag-general search-word"
           >
             {{ magicSearchString }}
+          </span>
+        </div>
+      </div>
+
+      <!-- regex search -->
+      <div *ngIf="settingsButtons['regex'].toggled" @filterItemAppear>
+        <app-icon class="input-icon" [icon]="settingsButtons['regex'].iconName"></app-icon>
+        <input
+          #regexSearch
+          (keydown.escape)="regexSearchString = ''"
+          [(ngModel)]="regexSearchString"
+          [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
+          type="text"
+          class="filter-general input-filter"
+          placeholder="{{ 'SIDEBAR.regex' | translate }}"
+        >
+
+        <div
+          class="filteredWords"
+        >
+          <span
+            *ngIf="regexSearchString !== ''"
+            (click)="regexSearchString = ''"
+            [ngStyle]="{ background: '#aaffaa' }"
+            class="search-or-tag-general search-word"
+            [attr.title]="regexError ? ( 'SIDEBAR.invalidRegex' | translate ) : ''"
+            [ngClass]="{ 'regex-error': regexError }"
+          >
+            {{ regexSearchString }}
           </span>
         </div>
       </div>
@@ -517,7 +545,7 @@
 
       <!-- total found -->
       <div class="filtering-total">
-        <span>{{ currResults | number:'.0' }} {{ 'SIDEBAR.found' | translate }}</span>
+        <span>{{ numberOfVideosFound | number:'.0' }} {{ 'SIDEBAR.found' | translate }}</span>
       </div>
 
       <!-- word cloud -->
@@ -553,12 +581,12 @@
       class="gallery-container"
 
       [ngStyle]="{
-          'height': 'calc(100vh - ' + (
-                                          (settingsButtons['hideTop'].toggled                 ?  53 : 98)
-                                        + (appState.menuHidden                                ? -32 : 0)
-                                        + ((settingsButtons['showRelatedVideosTray'].toggled
-                                         || settingsButtons['showTagTray'].toggled)           ? 170 : 0)
-                                                                                                          ) + 'px)'
+        'height': 'calc(100vh - ' + (
+                      appState.menuHidden | sidebarHeightPipe
+                        : settingsButtons['hideTop'].toggled
+                        : settingsButtons['showRelatedVideosTray'].toggled
+                        : settingsButtons['showTagTray'].toggled
+                    ) + 'px)'
         }"
 
       [enableUnequalChildrenSizes]="appState.currentView === 'showFullView'"
@@ -606,6 +634,8 @@
                                   : settingsButtons['autoFolderTags'].toggled
 
                 | magicSearchPipe: magicSearchString
+
+                | regexSearchPipe: regexSearchString
 
                 | fuzzySearchPipe: fuzzySearchString
 
@@ -696,10 +726,10 @@
 
           style="display: inline-block"
           [ngStyle]="{
-              height: previewHeight +
-                      textPaddingHeight +
-                      (settingsButtons['compactView'].toggled ? 0 : 20) +
-                      'px'
+              height:   previewHeight
+                      + textPaddingHeight
+                      + (settingsButtons['compactView'].toggled ? 0 : 20)
+                      + 'px'
             }"
         ></app-thumbnail>
       </ng-container>
@@ -852,6 +882,8 @@
           [compactView]="settingsButtons['compactView'].toggled"
           [darkMode]="settingsButtons['darkMode'].toggled"
           [forceMute]="settingsButtons['muteClips'].toggled"
+          [defaultThumbnailMode]="settingsButtons['clipsThumbnail'].toggled"
+          [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
 
@@ -864,7 +896,7 @@
     </virtual-scroller>
 
     <div
-      *ngIf="currResults === 0"
+      *ngIf="numberOfVideosFound === 0"
       class="no-results"
       [ngStyle]="{ 'padding-left': settingsButtons['hideSidebar'].toggled ? 0 : '190px' }"
     >
