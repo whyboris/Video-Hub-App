@@ -500,6 +500,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       });
       this.pipeSideEffectService.searchResults.subscribe((value: number) => {
         this.numberOfVideosFound = value;
+        this.cd.detectChanges(); // prevent `ExpressionChangedAfterItHasBeenCheckedError`
       });
       this.pipeSideEffectService.regexError.subscribe((value: boolean) => {
         this.regexError = value;
