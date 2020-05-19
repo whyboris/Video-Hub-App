@@ -186,19 +186,13 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
     title: 'BUTTONS.clipsThumbnailHint',
     toggled: false
   },
-  'showDeleteOption': {
-    description: 'BUTTONS.showDeleteButtonDescription',
-    hidden: true,
-    moreInfo: 'BUTTONS.showDeleteButtonMoreInfo',
-    title: 'BUTTONS.showDeleteButton',
-    toggled: false
-  },
-  'playPlaylist': {
-    description: 'BUTTONS.playlistButtonDescription',
-    hidden: true,
-    iconName: 'icon-video-blank',
-    moreInfo: 'BUTTONS.playlistButtonMoreInfo',
-    title: 'BUTTONS.playlistButton',
+  'compactView': {
+    description: 'BUTTONS.compactViewDescription',
+    hidden: false,
+    iconName: 'icon-compact-view',
+    moreInfo: 'BUTTONS.compactViewMoreInfo',
+    settingsHeading: 'SETTINGS.miscView',
+    title: 'BUTTONS.compactViewHint',
     toggled: false
   },
   'darkMode': {
@@ -207,6 +201,13 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-darken',
     settingsHeading: 'SETTINGS.darkMode',
     title: 'BUTTONS.darkModeHint',
+    toggled: false
+  },
+  'duplicateHash': {
+    description: 'BUTTONS.duplicateHashDescription',
+    hidden: true,
+    moreInfo: 'BUTTONS.duplicateHashMoreInfo',
+    title: 'BUTTONS.duplicateHashHint',
     toggled: false
   },
   'duplicateLength': {
@@ -224,13 +225,6 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
     title: 'BUTTONS.duplicateSizeHint',
     toggled: false
   },
-  'duplicateHash': {
-    description: 'BUTTONS.duplicateHashDescription',
-    hidden: true,
-    title: 'BUTTONS.duplicateHashHint',
-    moreInfo: 'BUTTONS.duplicateHashMoreInfo',
-    toggled: false
-  },
   'durationFilter': {
     description: 'BUTTONS.durationFilterDescription',
     hidden: false,
@@ -242,33 +236,33 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'exclude': {
     description: 'BUTTONS.excludeDescription',
-    moreInfo: 'BUTTONS.excludeMoreInfo',
     hidden: true,
     iconName: 'icon-video-x',
+    moreInfo: 'BUTTONS.excludeMoreInfo',
     title: 'BUTTONS.excludeHint',
     toggled: false
   },
   'extendedWordCloud': {
     description: 'BUTTONS.extendedWordCloudDescription',
-    moreInfo: 'BUTTONS.extendedWordCloudMoreInfo',
     hidden: true,
     iconName: 'icon-cloud-plus',
+    moreInfo: 'BUTTONS.extendedWordCloudMoreInfo',
     title: 'BUTTONS.extendedWordCloudHint',
     toggled: false
   },
   'fileIntersection': {
     description: 'BUTTONS.fileDescription',
-    moreInfo: 'BUTTONS.fileMoreInfo',
     hidden: false,
     iconName: 'icon-video-minus',
+    moreInfo: 'BUTTONS.fileMoreInfo',
     title: 'BUTTONS.fileHint',
     toggled: true
   },
   'fileUnion': {
     description: 'BUTTONS.fileUnionDescription',
-    moreInfo: 'BUTTONS.fileUnionMoreInfo',
     hidden: true,
     iconName: 'icon-video-plus',
+    moreInfo: 'BUTTONS.fileUnionMoreInfo',
     title: 'BUTTONS.fileUnionHint',
     toggled: false
   },
@@ -281,17 +275,17 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'folderIntersection': {
     description: 'BUTTONS.folderDescription',
-    moreInfo: 'BUTTONS.folderMoreInfo',
     hidden: false,
     iconName: 'icon-folder-minus',
+    moreInfo: 'BUTTONS.folderMoreInfo',
     title: 'BUTTONS.folderHint',
     toggled: true
   },
   'folderUnion': {
     description: 'BUTTONS.folderUnionDescription',
-    moreInfo: 'BUTTONS.folderUnionMoreInfo',
     hidden: true,
     iconName: 'icon-folder-plus',
+    moreInfo: 'BUTTONS.folderUnionMoreInfo',
     settingsHeading: 'SETTINGS.searchFilters',
     title: 'BUTTONS.folderUnionHint',
     toggled: false
@@ -302,6 +296,14 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-larger-font',
     title: 'BUTTONS.fontSizeLargerHint',
     toggled: false
+  },
+  'fuzzy': {
+    description: 'BUTTONS.fuzzyDescription',
+    hidden: false,
+    iconName: 'icon-show-similar',
+    moreInfo: 'BUTTONS.fuzzyMoreInfo',
+    title: 'BUTTONS.fuzzyHint',
+    toggled: true
   },
   'hideSidebar': {
     description: 'BUTTONS.hideSidebarDescription',
@@ -320,20 +322,12 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'hoverScrub': {
     description: 'BUTTONS.hoverScrubDescription',
-    moreInfo: 'BUTTONS.hoverScrubMoreInfo',
     hidden: true,
     iconName: 'icon-toggle-scrub',
+    moreInfo: 'BUTTONS.hoverScrubMoreInfo',
     settingsHeading: 'SETTINGS.thumbnailHeading',
     title: 'BUTTONS.hoverScrubHint',
     toggled: true
-  },
-  'thumbAutoAdvance': {
-    description: 'BUTTONS.thumbAutoAdvanceDescription',
-    moreInfo: 'BUTTONS.thumbAutoAdvanceMoreInfo',
-    hidden: true,
-    iconName: 'icon-toggle-auto-scrub',
-    title: 'BUTTONS.thumbAutoAdvanceHint',
-    toggled: false
   },
   'importNewFiles': {
     description: 'BUTTONS.importNewFilesDescription',
@@ -349,22 +343,6 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-looking-glass',
     moreInfo: 'BUTTONS.magicMoreInfo',
     title: 'BUTTONS.magicHint',
-    toggled: true
-  },
-  'regex': {
-    description: 'BUTTONS.regexDescription',
-    hidden: true,
-    iconName: 'icon-regex',
-    moreInfo: 'BUTTONS.regexMoreInfo',
-    title: 'BUTTONS.regexHint',
-    toggled: false
-  },
-  'fuzzy': {
-    description: 'BUTTONS.fuzzyDescription',
-    hidden: false,
-    iconName: 'icon-show-similar',
-    moreInfo: 'BUTTONS.fuzzyMoreInfo',
-    title: 'BUTTONS.fuzzyHint',
     toggled: true
   },
   'makeLarger': {
@@ -407,10 +385,26 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
     title: 'BUTTONS.openAtTimestampHint',
     toggled: false
   },
+  'playPlaylist': {
+    description: 'BUTTONS.playlistButtonDescription',
+    hidden: true,
+    iconName: 'icon-video-blank',
+    moreInfo: 'BUTTONS.playlistButtonMoreInfo',
+    title: 'BUTTONS.playlistButton',
+    toggled: false
+  },
   'regenerateLibrary': {
     description: 'BUTTONS.regenerateLibraryDescription',
     hidden: false,
     title: 'BUTTONS.regenerateLibraryHint',
+    toggled: false
+  },
+  'regex': {
+    description: 'BUTTONS.regexDescription',
+    hidden: true,
+    iconName: 'icon-regex',
+    moreInfo: 'BUTTONS.regexMoreInfo',
+    title: 'BUTTONS.regexHint',
     toggled: false
   },
   'rescanDirectory': {
@@ -439,9 +433,9 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'returnToFirstScreenshot': {
     description: 'BUTTONS.returnToFirstScreenshotDescription',
-    moreInfo: 'BUTTONS.returnToFirstScreenshotMoreInfo',
     hidden: true,
     iconName: 'icon-toggle-scrub-return',
+    moreInfo: 'BUTTONS.returnToFirstScreenshotMoreInfo',
     title: 'BUTTONS.returnToFirstScreenshotHint',
     toggled: true
   },
@@ -450,6 +444,13 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
     hidden: false,
     iconName: 'icon-video-blank',
     title: 'BUTTONS.showClipsHint',
+    toggled: false
+  },
+  'showDeleteOption': {
+    description: 'BUTTONS.showDeleteButtonDescription',
+    hidden: true,
+    moreInfo: 'BUTTONS.showDeleteButtonMoreInfo',
+    title: 'BUTTONS.showDeleteButton',
     toggled: false
   },
   'showDetails': {
@@ -482,10 +483,10 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'showFolders': {
     description: 'BUTTONS.showFoldersDescription',
-    moreInfo: 'BUTTONS.showFoldersMoreInfo',
     hidden: false,
-    settingsHeading: 'SETTINGS.viewSettings',
     iconName: 'icon-folder-blank',
+    moreInfo: 'BUTTONS.showFoldersMoreInfo',
+    settingsHeading: 'SETTINGS.viewSettings',
     title: 'BUTTONS.showFoldersHint',
     toggled: false
   },
@@ -499,9 +500,9 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'showFreq': {
     description: 'BUTTONS.showFreqDescription',
-    moreInfo: 'BUTTONS.showFreqMoreInfo',
     hidden: false,
     iconName: 'icon-cloud',
+    moreInfo: 'BUTTONS.showFreqMoreInfo',
     settingsHeading: 'SETTINGS.wordCloud',
     title: 'BUTTONS.showFreqHint',
     toggled: false
@@ -520,15 +521,6 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
     title: 'BUTTONS.showMoreInfoHint',
     toggled: true
   },
-  'compactView': {
-    description: 'BUTTONS.compactViewDescription',
-    settingsHeading: 'SETTINGS.miscView',
-    hidden: false,
-    iconName: 'icon-compact-view',
-    moreInfo: 'BUTTONS.compactViewMoreInfo',
-    title: 'BUTTONS.compactViewHint',
-    toggled: false
-  },
   'showRecent': {
     description: 'BUTTONS.showRecentDescription',
     hidden: false,
@@ -538,9 +530,9 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'showRelatedVideosTray': {
     description: 'BUTTONS.relatedTrayDescription',
-    moreInfo: 'BUTTONS.relatedTrayMoreInfo',
     hidden: false,
     iconName: 'icon-show-similar',
+    moreInfo: 'BUTTONS.relatedTrayMoreInfo',
     title: 'BUTTONS.relatedTrayHint',
     toggled: false
   },
@@ -582,45 +574,31 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
     title: '',
     toggled: false
   },
+  'sortOptionAspectRatio': {
+    description: 'BUTTONS.sortOptionAspectRatioDescription',
+    hidden: false,
+    moreInfo: 'BUTTONS.sortOptionAspectRatioMoreInfo',
+    title: '',
+    toggled: false
+  },
   'sortOptionModified': {
     description: 'BUTTONS.sortOptionModifiedDescription',
     hidden: false,
     moreInfo: 'BUTTONS.sortOptionModifiedMoreInfo',
     title: '',
-    toggled: false,
+    toggled: false
   },
   'sortOptionSize': {
     description: 'BUTTONS.sortOptionSizeDescription',
     hidden: false,
     moreInfo: 'BUTTONS.sortOptionSizeMoreInfo',
     title: '',
-    toggled: true,
+    toggled: true
   },
   'sortOptionStar': {
     description: 'BUTTONS.sortOptionStarDescription',
     hidden: false,
     moreInfo: 'BUTTONS.sortOptionStarMoreInfo',
-    title: '',
-    toggled: false,
-  },
-  'sortOptionTime': {
-    description: 'BUTTONS.sortOptionTimeDescription',
-    hidden: false,
-    moreInfo: 'BUTTONS.sortOptionTimeMoreInfo',
-    title: '',
-    toggled: true,
-  },
-  'sortOptionTimesPlayed': {
-    description: 'BUTTONS.sortOptionTimesPlayedDescription',
-    hidden: false,
-    moreInfo: 'BUTTONS.sortOptionTimesPlayedMoreInfo',
-    title: '',
-    toggled: false,
-  },
-  'sortOptionYear': {
-    description: 'BUTTONS.sortOptionYearDescription',
-    hidden: false,
-    moreInfo: 'BUTTONS.sortOptionYearMoreInfo',
     title: '',
     toggled: false
   },
@@ -629,14 +607,28 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
     hidden: false,
     moreInfo: 'BUTTONS.sortOptionTagsMoreInfo',
     title: '',
-    toggled: false,
+    toggled: false
   },
-  'sortOptionAspectRatio': {
-    description: 'BUTTONS.sortOptionAspectRatioDescription',
+  'sortOptionTime': {
+    description: 'BUTTONS.sortOptionTimeDescription',
     hidden: false,
-    moreInfo: 'BUTTONS.sortOptionAspectRatioMoreInfo',
+    moreInfo: 'BUTTONS.sortOptionTimeMoreInfo',
     title: '',
-    toggled: false,
+    toggled: true
+  },
+  'sortOptionTimesPlayed': {
+    description: 'BUTTONS.sortOptionTimesPlayedDescription',
+    hidden: false,
+    moreInfo: 'BUTTONS.sortOptionTimesPlayedMoreInfo',
+    title: '',
+    toggled: false
+  },
+  'sortOptionYear': {
+    description: 'BUTTONS.sortOptionYearDescription',
+    hidden: false,
+    moreInfo: 'BUTTONS.sortOptionYearMoreInfo',
+    title: '',
+    toggled: false
   },
   'sortOrder': {
     description: 'BUTTONS.sortOrderDescription',
@@ -662,9 +654,9 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'tagExclusion': {
     description: 'BUTTONS.tagExclusionDescription',
-    moreInfo: 'BUTTONS.tagExclusionMoreInfo',
     hidden: true,
     iconName: 'icon-tag-x',
+    moreInfo: 'BUTTONS.tagExclusionMoreInfo',
     title: 'BUTTONS.tagExclusionHint',
     toggled: false
   },
@@ -677,18 +669,26 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
   },
   'tagIntersection': {
     description: 'BUTTONS.tagIntersectionDescription',
-    moreInfo: 'BUTTONS.tagIntersectionMoreInfo',
     hidden: true,
     iconName: 'icon-tag-minus',
+    moreInfo: 'BUTTONS.tagIntersectionMoreInfo',
     title: 'BUTTONS.tagIntersectionHint',
     toggled: false
   },
   'tagUnion': {
     description: 'BUTTONS.tagUnionDescription',
-    moreInfo: 'BUTTONS.tagUnionMoreInfo',
     hidden: true,
     iconName: 'icon-tag-plus',
+    moreInfo: 'BUTTONS.tagUnionMoreInfo',
     title: 'BUTTONS.tagUnionHint',
+    toggled: false
+  },
+  'thumbAutoAdvance': {
+    description: 'BUTTONS.thumbAutoAdvanceDescription',
+    hidden: true,
+    iconName: 'icon-toggle-auto-scrub',
+    moreInfo: 'BUTTONS.thumbAutoAdvanceMoreInfo',
+    title: 'BUTTONS.thumbAutoAdvanceHint',
     toggled: false
   },
   'verifyThumbnails': {
@@ -698,4 +698,4 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
     title: 'BUTTONS.verifyThumbnailsHint',
     toggled: false
   }
-};
+}
