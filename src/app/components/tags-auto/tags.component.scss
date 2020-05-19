@@ -112,16 +112,6 @@ ul {
   width: 140px;
 }
 
-// inherits styles from 'wizard-button.scss'
-.wizard-button {
-  display: inline-block;
-  margin: 5px;
-  min-width: auto;
-  padding: 5px 10px;
-  white-space: nowrap;
-  width: auto;
-}
-
 .num-found {
   bottom: 15px;
   color: $gray-50;
@@ -134,19 +124,6 @@ ul {
 .align-left {
   margin-left: 5px;
   text-align: left;
-}
-
-.editModeActive {
-  background-color: $pretty-red;
-  border: 1px solid $dark-red;
-  box-shadow: 0px 0px 0px rgba(0, 0, 0, 0) !important;
-  transform: translateY(1px);
-  transition-duration: 50ms;
-  transition-property: background-color, border;
-
-  &:hover {
-    background-color: $pretty-red-lighter;
-  }
 }
 
 .icon-lol {

@@ -26,7 +26,7 @@
         class="length"
         [ngClass]="{ 'meta-dark-mode': darkMode }"
       >
-        {{ video.duration | lengthPipe : true : true : true }}
+        {{ video.duration | lengthPipe : 'folder' }}
       </div>
 
     </ng-container>
@@ -45,6 +45,12 @@
   <!-- INDIVIDUAL FILE BLOCK -->
 
   <ng-template #fileViewDiv>
+
+    <app-icon
+      *ngIf="video.selected"
+      class="selected-file-view"
+      [icon]="'icon-show-more-info'"
+    ></app-icon>
 
     <div
       *ngIf="showMeta"

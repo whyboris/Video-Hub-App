@@ -52,7 +52,7 @@
     <div class="copy-to-clipboard">
       <app-icon [icon]="'icon-clipboard'"></app-icon>
     </div>
-    <span [innerHtml]="selectedSourceFolder + video.partialPath + '/' + video.fileName | folderArrowsPipe"></span>
+    <span [innerHtml]="pathToVideoFile | folderArrowsPipe"></span>
   </div>
 
   <ng-container
@@ -73,7 +73,7 @@
         (click)="openVideoAtTime.emit({ mouseEvent: $event, thumbIndex: i })"
         [ngStyle]="{
             height: '100%',
-            'background-image': 'url(' + fullFilePath + ')',
+            'background-image': 'url(' + pathToFilmstripJpg + ')',
             'background-position-x': (percentOffset * i) + '%'
           }"
       >

@@ -1,0 +1,65 @@
+@import '../variables.scss';
+
+.manual-tag-tray {
+  box-sizing: border-box;
+  height: 170px;
+
+  button {
+    outline: none;
+  }
+
+  .manual-tag-tray-label,
+  .tag-sort-by-toggle,
+  .show-frequency {
+    display: block;
+    font-size: 12px;
+    text-align: right;
+    width: 166px;
+  }
+
+  .manual-tag-tray-label {
+    margin-top: 16px;
+  }
+
+  .tag-sort-by-toggle,
+  .show-frequency {
+    background: none;
+    border: none;
+    color: $gray-70;
+    margin-top: 14px;
+    padding-right: 0;
+
+    &:hover {
+      color: $pretty-blue;
+    }
+  }
+
+  .all-the-tags {
+    overflow-y: scroll;
+    padding: 12px 15px;
+    width: 100%;
+
+    @include scrollBarShown;
+  }
+
+  // added on top of .filter-general
+  .manual-tag-tray-filter {
+    border-color: $gray-80;
+    font-size: 15px;
+    padding: 6px 6px 0;
+    position: absolute;
+    right:0;
+    width: 155px;
+
+    &::placeholder {
+      color: $gray-80;
+    }
+  }
+}
+
+.button-toggle-batch-mode {
+  bottom: 8px;
+  color: black !important; // else in dark-mode color changes
+  left: 9px;
+  position: absolute;
+}

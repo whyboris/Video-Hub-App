@@ -1,23 +1,18 @@
 {
   "productName": "Video Hub App 2",
   "appId": "com.videohubapp.videohubapp2",
-  "copyright": "Copyright © 2019 Boris Yakubchik",
+  "copyright": "Copyright © 2020 Boris Yakubchik",
   "directories": {
     "output": "release/"
   },
   "files": [
     "**/*",
     "!**/*.ts",
-    "!*.code-workspace",
     "!LICENSE.md",
     "!package.json",
     "!package-lock.json",
     "!src/",
-    "!e2e/",
-    "!hooks/",
     "!angular.json",
-    "!_config.yml",
-    "!karma.conf.js",
     "!tsconfig.json",
     "!tslint.json"
   ],

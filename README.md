@@ -10,7 +10,7 @@ This software is available for $3.50 through [videohubapp.com](https://videohuba
 
 $3.50 of every sale goes to the [_cost-effective_](https://www.givewell.org/charities/top-charities) charity [Against Malaria Foundation](https://www.againstmalaria.com/).
 
-![Video Hub App](https://videohubapp.com/images/4.jpg)
+![video-hub-app](https://user-images.githubusercontent.com/17264277/82097107-3ed91700-96d0-11ea-8679-87fa3e07cd0b.jpg)
 
 ## About
 
@@ -38,13 +38,13 @@ Main dependencies in use:
 
 | Library     | Version | Date        | Comment |
 | -------     | ------- | ----        | ------- |
-| Angular     | v9.0.1  | February 2020 |         |
-| Angular-CLI | v9.0.2  | February 2020 |         |
-| Electron    | v8.0.1  | February 2020 | (internally uses Node v12.13.0 and Chromium 80) |
-| Electron Builder | v22.3.2 | February 2020 |     |
+| Angular     | v9.1.7  | May 2020  |         |
+| Angular-CLI | v9.1.6  | May 2020  |         |
+| Electron    | v8.3.0  | May 2020  | (internally uses Node v12.13.0 and Chromium 80) |
+| Electron Builder | v22.6.0 | May 2020 |     |
 
 - **Node**: likely any version of node (v10 or above) should work, but I recommend to use the same version as _Electron_ uses internally.
-- **Angular CLI**: you'll need to install the [Angular CLI](https://cli.angular.io) to run the project (`npm install -g @angular/cli`).
+- **Angular CLI**: you may need to install the [Angular CLI](https://cli.angular.io) to run the project (`npm install -g @angular/cli`).
 
 ## Thank you
 

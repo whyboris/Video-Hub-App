@@ -1,11 +1,10 @@
 .filmstrip-container {
   display: inline-block;
   margin: 20px 20px 0;
-  min-height: 170px;
+  min-height: 180px;
   overflow: hidden;
   transition: 300ms;
   transition-property: height;
-  width: calc(100% - 40px);
 }
 
 .video-box {
@@ -15,4 +14,8 @@
   display: inline-block;
   overflow: hidden;
   position: relative;
+}
+
+.side-by-side {
+  margin: 20px 0 0 20px; // no right margin
 }

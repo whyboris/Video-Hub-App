@@ -1,0 +1,407 @@
+<div class="wizard">
+
+  <div
+    *ngIf="canCloseWizard"
+    (click)="hideWizard.emit()"
+    class="close-wizard"
+    title="{{ 'WIZARD.closeButton' | translate }}"
+  >
+    <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
+  </div>
+
+  <div class="gradient-to-indicate-scrolling"></div>
+
+  <!-- LEFT SIDE =============================================================================== -->
+
+  <div class="left-side" @slowFadeIn>
+
+    <h2>{{ 'WIZARD.openPrevious' | translate }}</h2>
+
+    <button
+      class="wizard-button"
+      (click)="loadFromFile.emit()"
+      title="{{ 'WIZARD.openPreviouslySaved' | translate }}"
+    >
+      {{ 'WIZARD.loadFromFile' | translate }}
+    </button>
+
+    <div
+      class="recently-opened-wizard"
+      *ngIf="(vhaFileHistory || {}).length > 0"
+      @historyItemRemove
+    >
+
+      <h3>{{ 'WIZARD.recentlyOpened' | translate }}</h3>
+
+      <ul>
+        <li
+          *ngFor="let historyItem of vhaFileHistory; index as i"
+          (click)="openFromHistory.emit(i)"
+          @historyItemRemove
+        >
+          <div
+            class="clear-history-item"
+            (click)="removeHistoryItem($event, i)"
+            title="{{ 'WIZARD.removeFromHistory' | translate }}"
+          >
+            <app-icon
+              [icon]="'icon-close'"
+            ></app-icon>
+          </div>
+          <img class="history-icon" src="./assets/logo.png">
+          <span
+            class="history-name"
+          >{{ historyItem.hubName }}</span>
+          <br>
+          <span class="path recent" [innerHtml]="historyItem.vhaFilePath | folderArrowsPipe"></span>
+        </li>
+      </ul>
+
+      <span
+        class="clear-history"
+        (click)="clearRecentlyViewedHistory.emit()"
+      >{{ 'WIZARD.clearRecent' | translate }}</span>
+    </div>
+
+  </div>
+
+  <!-- RIGHT SIDE ============================================================================== -->
+
+  <div class="right-side" @slowFadeIn>
+
+    <h2>{{ 'WIZARD.importNew' | translate }}</h2>
+
+    <!-- STEP 1 -------------------------------------------------------------------------------- -->
+
+    <div
+      [ngClass]="{
+          'current-step': wizard.futureHubName === '',
+          'fulfilled': wizard.futureHubName !== ''
+        }"
+      class="steps"
+    >
+      1
+    </div>
+    <input
+      [(ngModel)]="wizard.futureHubName"
+      (keypress)="validateHubName($event)"
+      class="filter-general input-filter hub-name-input"
+    >
+    <span class="step-description">
+      {{ 'WIZARD.nameYourHub' | translate }}
+    </span>
+
+    <!-- STEP 2 -------------------------------------------------------------------------------- -->
+
+    <div
+      [ngClass]="{
+          'current-step': wizard.futureHubName !== '' && wizard.selectedSourceFolder === '',
+          'fulfilled': wizard.selectedSourceFolder !== ''
+        }"
+      class="steps"
+    >
+      2
+    </div>
+    <button
+      class="wizard-button"
+      (click)="selectSourceDirectory.emit()"
+      [disabled]="wizard.futureHubName === ''"
+      title="{{ 'WIZARD.selectFolderWithVideo' | translate }}"
+    >
+      {{ (wizard.selectedSourceFolder === '' ? 'WIZARD.select' : 'WIZARD.change') | translate }}
+      {{ 'WIZARD.videoDirectory' | translate }}
+    </button>
+
+    <span class="step-description">
+      {{ 'WIZARD.importingFrom' | translate }}
+    </span>
+    <span class="path" [innerHtml]="wizard.selectedSourceFolder | folderArrowsPipe">
+    </span>
+    <span
+      class="step-description"
+      [ngStyle]="{ opacity: wizard.totalNumberOfFiles === -1 ? 0 : 1 }"
+    >
+      <!-- don't use *ngIf on this element because then it disappears and changes height of section -->
+      {{ 'WIZARD.found' | translate }}
+      <span class="emphasis-number">
+        {{ wizard.totalNumberOfFiles | number }}
+      </span>
+      {{ 'WIZARD.videos' | translate }}
+      {{ (wizard.totalNumberOfFiles > 50 && demo ? 'WIZARD.demoVersion' : '') | translate }}
+    </span>
+
+    <!-- STEP 3 -------------------------------------------------------------------------------- -->
+
+    <div
+      [ngClass]="{ 'fulfilled': wizard.selectedOutputFolder !== '' }"
+      class="steps"
+    >
+      3
+    </div>
+    <button
+      class="wizard-button"
+      (click)="selectOutputDirectory.emit()"
+      [disabled]="wizard.selectedSourceFolder === '' || wizard.futureHubName === ''"
+      title="{{ 'WIZARD.selectWhereFilesStored' | translate }}"
+    >
+      {{ (wizard.selectedOutputFolder === '' ? 'WIZARD.select' : 'WIZARD.change') | translate }}
+      {{ 'WIZARD.hubDirectory' | translate }}
+    </button>
+
+    <span class="step-description">
+      {{ 'WIZARD.savingTo' | translate }}
+    </span>
+    <span class="path" [innerHtml]="wizard.selectedOutputFolder | folderArrowsPipe">
+    </span>
+
+    <!-- STEP 4 -------------------------------------------------------------------------------- -->
+
+    <div
+      [ngClass]="{
+          'fulfilled': wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder !== ''
+        }"
+      class="steps"
+    >
+      4
+    </div>
+
+    <div
+      class="ss-num-selection"
+      style="margin-top: 20px"
+      [ngClass]="{ 'dim-row': !wizard.screensPerVideo
+                             || wizard.selectedOutputFolder === ''
+                             || wizard.selectedSourceFolder === ''
+                             || wizard.futureHubName === ''
+      }"
+    >
+
+      <input
+        type="radio"
+        name="ss-num-selection"
+        checked
+        (change)="setScreensPerVideo.emit(true)"
+        [disabled]="wizard.selectedOutputFolder === ''
+                 || wizard.selectedSourceFolder === ''
+                 || wizard.futureHubName === ''"
+      >
+      <input
+        (change)="selectNumOfScreens.emit($event.target.value)"
+        type="number"
+        class="size-dropdown language-drop-down num-select"
+        value=10
+        min=3
+        max=30
+        onKeyDown="return false"
+        [disabled]="wizard.selectedOutputFolder === ''
+                 || wizard.selectedSourceFolder === ''
+                 || wizard.futureHubName === ''
+                 || !wizard.screensPerVideo"
+      >
+      {{ 'WIZARD.screenshotsPerVideo' | translate }}
+
+    </div>
+
+    <div
+      class="ss-num-selection"
+      [ngClass]="{ 'dim-row': wizard.screensPerVideo }"
+    >
+
+      <input
+        type="radio"
+        name="ss-num-selection"
+        (change)="setScreensPerVideo.emit(false)"
+        [disabled]="wizard.selectedOutputFolder === ''
+                 || wizard.selectedSourceFolder === ''
+                 || wizard.futureHubName === ''"
+      >
+      {{ 'WIZARD.oneScreenshotEvery' | translate }}
+      <input
+        (change)="selectNumOfScreens.emit($event.target.value)"
+        type="number"
+        class="size-dropdown language-drop-down num-select"
+        value=5
+        min=1
+        max=20
+        onKeyDown="return false"
+        [disabled]="wizard.selectedOutputFolder === ''
+                 || wizard.selectedSourceFolder === ''
+                 || wizard.futureHubName === ''
+                 || wizard.screensPerVideo"
+      >
+      {{ 'WIZARD.minutes' | translate }}
+
+    </div>
+
+    <div
+      *ngIf="wizard.selectedOutputFolder !== ''"
+      class="screenshot-preview"
+      [ngStyle]="{
+          width: ((wizard.screenshotSizeForImport) * (16 / 9)) + 'px',
+          height: wizard.screenshotSizeForImport + 'px'
+        }"
+    >
+      {{ 'WIZARD.imported' | translate }}
+      <br>
+      {{ 'WIZARD.screenshot' | translate }}
+      <br>
+      {{ 'WIZARD.size' | translate }}
+    </div>
+
+    <select
+      (change)="selectScreenshotSize.emit($event.target.value)"
+      class="size-dropdown language-drop-down"
+      [disabled]="wizard.selectedOutputFolder === ''
+               || wizard.selectedSourceFolder === ''
+               || wizard.futureHubName === ''"
+    >
+      <option value="144">144px</option>
+      <option value="216">216px</option>
+      <option value="288" selected="selected">288px</option>
+      <option value="360">360px</option>
+      <option value="432">432px</option>
+      <option value="504">504px</option>
+    </select>
+
+    <span
+      class="step-four-text"
+      [ngClass]="{
+          'dim-row': !(wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder !== '')
+        }"
+    >
+      {{ 'WIZARD.sizeOfScreenshots' | translate }}
+    </span>
+
+    <!-- STEP 5 -------------------------------------------------------------------------------- -->
+
+    <div
+      [ngClass]="{
+          'fulfilled': wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder !== ''
+        }"
+      class="steps"
+      style="transform: translate(-24px, 11px);"
+    >
+      5
+    </div>
+
+    <div [ngClass]="{ 'dim-row': !wizard.extractClips }" style="max-width: 267px;">
+
+      <input
+        type="checkbox"
+        [(ngModel)]="wizard.extractClips"
+        class="clip-check-box"
+        style="vertical-align: top;"
+        [disabled]="wizard.selectedOutputFolder === ''
+                 || wizard.selectedSourceFolder === ''
+                 || wizard.futureHubName === ''"
+      >
+
+      <div class="clip-option-block">
+
+        <span class="step-four-text">
+          {{ 'WIZARD.extractClips' | translate }}
+        </span>
+
+        <input
+          (change)="selectNumOfClipSnippets.emit($event.target.value)"
+          type="number"
+          class="size-dropdown language-drop-down num-select"
+          value=5
+          min=3
+          max=15
+          onKeyDown="return false"
+          [disabled]="wizard.selectedOutputFolder === ''
+                   || wizard.selectedSourceFolder === ''
+                   || wizard.futureHubName === ''
+                   || !wizard.extractClips"
+        >
+
+        <span class="step-four-text">
+          {{ 'WIZARD.clipSnippets' | translate }}
+        </span>
+
+      </div>
+
+    </div>
+
+
+    <div [ngClass]="{ 'dim-row': !wizard.extractClips }" style="margin: 5px 0 0 38px">
+
+      <span class="step-four-text">
+        {{ 'WIZARD.eachSnippet' | translate }}
+      </span>
+
+      <input
+        (change)="selectLengthOfClipSnippets.emit($event.target.value)"
+        type="number"
+        class="size-dropdown language-drop-down num-select"
+        value=1
+        min=1
+        max=5
+        onKeyDown="return false"
+        [disabled]="wizard.selectedOutputFolder === ''
+                 || wizard.selectedSourceFolder === ''
+                 || wizard.futureHubName === ''
+                 || !wizard.extractClips"
+      >
+
+      <span class="step-four-text">
+        {{ 'WIZARD.secondsLong' | translate }}
+      </span>
+
+    </div>
+
+    <div [ngClass]="{ 'dim-row': !wizard.extractClips }">
+
+      <select
+        (change)="selectClipSize.emit($event.target.value)"
+        class="size-dropdown language-drop-down"
+        [disabled]="!wizard.extractClips"
+      >
+        <option value="144" selected="selected">144px</option>
+        <option value="216">216px</option>
+        <option value="288">288px</option>
+        <option value="360">360px</option>
+        <option value="432">432px</option>
+        <option value="504">504px</option>
+      </select>
+
+      <span
+        class="step-four-text"
+        [ngClass]="{
+            'dim-row': !(wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder !== '')
+          }"
+      >
+        {{ 'WIZARD.sizeOfClips' | translate }}
+      </span>
+
+    </div>
+
+    <!-- STEP 6 -------------------------------------------------------------------------------- -->
+
+    <div
+      style="margin-top: 30px;"
+      [ngClass]="{
+        'current-step': wizard.selectedOutputFolder !== ''
+                     && wizard.selectedSourceFolder !== ''
+      }"
+      class="steps"
+    >
+      6
+    </div>
+
+    <button
+      style="margin-top: 45px;"
+      class="wizard-button start-import"
+      [disabled]="wizard.selectedOutputFolder === ''
+               || wizard.selectedSourceFolder === ''
+               || importStage !== 'done'
+               || wizard.futureHubName === ''
+               || wizard.totalNumberOfFiles === 0"
+      (click)="importFresh.emit()"
+    >
+      {{ 'WIZARD.createVideoHub' | translate }}
+    </button>
+
+  </div>
+
+</div>

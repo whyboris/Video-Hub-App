@@ -1,0 +1,21 @@
+.selected {
+  background-color: #00000066; // alpha
+  border-radius: 25px;
+  fill: white;
+  height: 50px;
+  left: 12px;
+  position: absolute;
+  top: 12px;
+  width: 50px;
+  z-index: 1; // needed in clip view
+}
+
+.selected-file-view {
+  display: block;
+  fill: white;
+  height: 24px;
+  left: -21px;
+  position: absolute;
+  top: -1px;
+  width: 24px;
+}

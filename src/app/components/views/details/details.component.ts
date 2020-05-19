@@ -5,12 +5,7 @@ import { ManualTagsService } from '../../tags-manual/manual-tags.service';
 import { FilePathService } from '../file-path.service';
 
 import { StarRating, ImageElement } from '../../../../../interfaces/final-object.interface';
-
-export interface TagEmission {
-  index: number;
-  tag: string;
-  type: 'add' | 'remove';
-}
+import { TagEmission, VideoClickEmit, RightClickEmit, TagEmit } from '../../../../../interfaces/shared-interfaces';
 
 export interface StarEmission {
   index: number;
@@ -25,7 +20,10 @@ export interface YearEmission {
 @Component({
   selector: 'app-details-item',
   templateUrl: './details.component.html',
-  styleUrls: [ './details.component.scss' ]
+  styleUrls: [
+      './details.component.scss',
+      '../selected.scss'
+    ]
 })
 export class DetailsComponent implements OnInit {
 
@@ -34,14 +32,16 @@ export class DetailsComponent implements OnInit {
   @Output() editFinalArrayStars = new EventEmitter<StarEmission>();
   @Output() editFinalArrayTag = new EventEmitter<TagEmission>();
   @Output() editFinalArrayYear = new EventEmitter<YearEmission>();
-  @Output() filterTag = new EventEmitter<object>();
+  @Output() filterTag = new EventEmitter<TagEmit>();
 
-  @Output() videoClick = new EventEmitter<object>();
-  @Output() rightClick = new EventEmitter<object>();
+  @Output() videoClick = new EventEmitter<VideoClickEmit>();
+  @Output() rightClick = new EventEmitter<RightClickEmit>();
 
   @Input() video: ImageElement;
 
   @Input() maxWidth: number;
+
+  @Input() showTwoColumns: boolean;
 
   @Input() darkMode: boolean;
   @Input() elHeight: number;
@@ -52,6 +52,7 @@ export class DetailsComponent implements OnInit {
   @Input() imgHeight: number;
   @Input() largerFont: boolean;
   @Input() returnToFirstScreenshot: boolean;
+  @Input() selectedSourceFolder: string;
   @Input() showMeta: boolean;
   @Input() star: StarRating;
   @Input() showManualTags: boolean;

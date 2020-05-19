@@ -5,25 +5,27 @@ import { FilePathService } from '../file-path.service';
 import { metaAppear, textAppear } from '../../../common/animations';
 
 import { ImageElement } from '../../../../../interfaces/final-object.interface';
+import { VideoClickEmit, RightClickEmit } from '../../../../../interfaces/shared-interfaces';
 
 @Component({
-  selector: 'app-gallery-item',
-  templateUrl: './preview.component.html',
+  selector: 'app-thumbnail',
+  templateUrl: './thumbnail.component.html',
   styleUrls: [
       '../clip-and-preview.scss',
       '../time-and-rez.scss',
-      './preview.component.scss',
+      './thumbnail.component.scss',
+      '../selected.scss'
     ],
   animations: [ textAppear,
                 metaAppear ]
 })
-export class PreviewComponent implements OnInit, OnDestroy {
+export class ThumbnailComponent implements OnInit, OnDestroy {
 
   @ViewChild('filmstripHolder', { static: false }) filmstripHolder: ElementRef;
 
-  @Output() videoClick = new EventEmitter<object>();
-  @Output() sheetClick = new EventEmitter<object>();
-  @Output() rightClick = new EventEmitter<object>();
+  @Output() rightClick = new EventEmitter<RightClickEmit>();
+  @Output() sheetClick = new EventEmitter<any>(); // does not emit data of any kind
+  @Output() videoClick = new EventEmitter<VideoClickEmit>();
 
   @Input() video: ImageElement;
 

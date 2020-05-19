@@ -23,7 +23,7 @@ let systemMessages = English.SYSTEM;
 // ***************************** BUILD TOGGLE *********************************************
 // ========================================================================================
 const demo = false;
-globals.version = '2.1.0';
+globals.version = '2.2.3';
 // ========================================================================================
 
 
@@ -504,9 +504,11 @@ ipc.on('please-create-playlist', (event, playlist: ImageElement[]) => {
     return element.cleanName !== '*FOLDER*';
   });
 
+  const savePath: string = path.join(pathToAppData, 'video-hub-app-2', 'temp.pls');
+
   if (cleanPlaylist.length) {
-    createDotPlsFile(cleanPlaylist, () => {
-      shell.openItem(path.normalize('./temp.pls'));
+    createDotPlsFile(savePath, cleanPlaylist, () => {
+      shell.openItem(savePath);
     });
   }
 
@@ -629,7 +631,7 @@ ipc.on('choose-output', (event) => {
 ipc.on('close-window', (event, settingsToSave: SettingsObject, savableProperties: SavableProperties) => {
 
   // save window size and position
-  settingsToSave.windowSizeAndPosition = win.getBounds();
+  settingsToSave.windowSizeAndPosition = win.getContentBounds();
 
   const json = JSON.stringify(settingsToSave);
 
@@ -648,10 +650,18 @@ ipc.on('close-window', (event, settingsToSave: SettingsObject, savableProperties
       writeVhaFileToDisk(lastSavedFinalObject, globals.currentlyOpenVhaFile, () => {
         // file writing done !!!
         console.log('.vha2 file written before closing !!!');
-        BrowserWindow.getFocusedWindow().close();
+        try {
+          BrowserWindow.getFocusedWindow().close();
+        } catch (e) {
+          // Window was already closed
+        }
       });
     } else {
-      BrowserWindow.getFocusedWindow().close();
+      try {
+        BrowserWindow.getFocusedWindow().close();
+      } catch (e) {
+        // Window was already closed
+      }
     }
   });
 });
@@ -797,7 +807,7 @@ ipc.on('load-this-vha-file', (event, pathToVhaFile: string, savableProperties: S
 
 });
 
-ipc.on('try-to-rename-this-file', (event, sourceFolder: string, relPath: string, file: string, renameTo: string): void => {
+ipc.on('try-to-rename-this-file', (event, sourceFolder: string, relPath: string, file: string, renameTo: string, index: number): void => {
   console.log('renaming file:');
 
   const original: string = path.join(sourceFolder, relPath, file);
@@ -830,7 +840,7 @@ ipc.on('try-to-rename-this-file', (event, sourceFolder: string, relPath: string,
     }
   }
 
-  globals.angularApp.sender.send('renameFileResponse', success, errMsg);
+  globals.angularApp.sender.send('renameFileResponse', index, success, renameTo, file, errMsg);
 });
 
 // ========================================================================================
