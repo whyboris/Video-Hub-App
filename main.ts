@@ -279,19 +279,25 @@ function openThisDamnFile(pathToVhaFile: string) {
       globals.selectedOutputFolder = path.parse(pathToVhaFile).dir;
 
       // use relative paths
-      if (lastSavedFinalObject.inputDir === '') {
-        lastSavedFinalObject.inputDir = globals.selectedOutputFolder;
+      // if (lastSavedFinalObject.inputDirs.size === 0) {
+      //   lastSavedFinalObject.inputDirs.set(0, globals.selectedOutputFolder);
+      // }
+
+      if (lastSavedFinalObject.version === 2 && !lastSavedFinalObject.inputDirs) {
+        console.log('OLD VERSION FILE !!!');
+        lastSavedFinalObject.inputDirs = {};
+        lastSavedFinalObject.inputDirs[0] = (lastSavedFinalObject as any).inputDir;
       }
 
       let changedRootFolder = false;
       let rootFolderLive = true;
 
       // check root folder exists
-      if (!fs.existsSync(lastSavedFinalObject.inputDir)) {
+      if (!fs.existsSync(lastSavedFinalObject.inputDirs[0])) {
         // see if the user wants to change the root folder
         const buttonIndex: number = dialog.showMessageBoxSync(win, {
           message: systemMessages.videoFolderNotFound,
-          detail: lastSavedFinalObject.inputDir,
+          detail: lastSavedFinalObject.inputDirs[0],
           buttons: [
             systemMessages.selectRootFolder, // 0
             systemMessages.continueAnyway,   // 1
@@ -311,7 +317,7 @@ function openThisDamnFile(pathToVhaFile: string) {
 
           if (inputDirPath) {
             // update the root folder
-            lastSavedFinalObject.inputDir = inputDirPath;
+            lastSavedFinalObject.inputDirs[0] = inputDirPath;
             changedRootFolder = true;
           } else {
             // show the wizard instead
@@ -342,7 +348,7 @@ function openThisDamnFile(pathToVhaFile: string) {
 
       lastSavedFinalObject.images = insertTemporaryFields(lastSavedFinalObject.images);
 
-      console.log(globals.selectedSourceFolder + ' - videos location');
+      console.log(globals.selectedSourceFolder[0] + ' - videos location');
       console.log(globals.selectedOutputFolder + ' - output location');
 
       globals.angularApp.sender.send(
@@ -382,7 +388,7 @@ function getHtmlPath(anyOsPath: string): string {
 function setGlobalsFromVhaFile(vhaFileContents: FinalObject) {
   globals.hubName = vhaFileContents.hubName;
   globals.screenshotSettings = vhaFileContents.screenshotSettings;
-  globals.selectedSourceFolder = vhaFileContents.inputDir;
+  globals.selectedSourceFolder = vhaFileContents.inputDirs;
 }
 
 // ========================================================================================
@@ -516,7 +522,7 @@ ipc.on('please-create-playlist', (event, playlist: ImageElement[]) => {
  * Delete file from computer (send to recycling bin / trash)
  */
 ipc.on('delete-video-file', (event, item: ImageElement): void => {
-  const fileToDelete = path.join(globals.selectedSourceFolder, item.partialPath, item.fileName);
+  const fileToDelete = path.join(globals.selectedSourceFolder[0], item.partialPath, item.fileName);
 
   (async () => {
     await trash(fileToDelete);
@@ -607,7 +613,7 @@ ipc.on('choose-input', (event) => {
 
 /**
  * Summon system modal to choose OUTPUT directory
- * where the final .vha file, vha-folder, and all screenshots will be saved
+ * where the final .vha2 file, vha-folder, and all screenshots will be saved
  */
 ipc.on('choose-output', (event) => {
   dialog.showOpenDialog(win, {
@@ -740,7 +746,7 @@ ipc.on('start-the-import', (event, options: ImportSettingsObject, videoFilesWith
 
     extractAllMetadata(
       videoFilesWithPaths,
-      globals.selectedSourceFolder,
+      globals.selectedSourceFolder[0],
       globals.screenshotSettings,
       0,
       sendFinalResultHome         // callback for when metdata is done extracting
@@ -857,7 +863,7 @@ function sendFinalResultHome(theFinalArray: ImageElement[]): void {
   const finalObject: FinalObject = {
     version: globals.vhaFileVersion,
     hubName: globals.hubName,
-    inputDir: globals.selectedSourceFolder,
+    inputDirs: globals.selectedSourceFolder,
     numOfFolders: countFoldersInFinalArray(myFinalArray),
     screenshotSettings: globals.screenshotSettings,
     images: myFinalArray,
@@ -890,7 +896,7 @@ function sendFinalResultHome(theFinalArray: ImageElement[]): void {
 
     extractFromTheseFiles(
       myFinalArray,
-      globals.selectedSourceFolder,
+      globals.selectedSourceFolder[0],
       screenshotOutputFolder,
       globals.screenshotSettings,
       indexesToScan,
@@ -913,7 +919,7 @@ function sendFinalResultHome(theFinalArray: ImageElement[]): void {
 ipc.on('only-import-new-files', (event, currentAngularFinalArray: ImageElement[]) => {
   const currentVideoFolder = globals.selectedSourceFolder;
   globals.cancelCurrentImport = false;
-  importOnlyNewFiles(currentAngularFinalArray, currentVideoFolder);
+  importOnlyNewFiles(currentAngularFinalArray, currentVideoFolder[0]);
 });
 
 /**
@@ -926,7 +932,7 @@ ipc.on('only-import-new-files', (event, currentAngularFinalArray: ImageElement[]
 ipc.on('rescan-current-directory', (event, currentAngularFinalArray: ImageElement[]) => {
   const currentVideoFolder = globals.selectedSourceFolder;
   globals.cancelCurrentImport = false;
-  reScanCurrentDirectory(currentAngularFinalArray, currentVideoFolder);
+  reScanCurrentDirectory(currentAngularFinalArray, currentVideoFolder[0]);
 });
 
 /**
@@ -957,7 +963,7 @@ function verifyThumbnails() {
 
   extractFromTheseFiles(
     lastSavedFinalObject.images,
-    globals.selectedSourceFolder,
+    globals.selectedSourceFolder[0],
     screenshotOutputFolder,
     globals.screenshotSettings,
     randomizeArray(indexesToScan), // extract screenshots in random order
@@ -1043,7 +1049,7 @@ function importOnlyNewFiles(angularFinalArray: ImageElement[], currentVideoFolde
 ipc.on('regenerate-library', (event, currentAngularFinalArray: ImageElement[]) => {
   const currentVideoFolder = globals.selectedSourceFolder;
   globals.cancelCurrentImport = false;
-  regenerateMetadata(currentAngularFinalArray, currentVideoFolder);
+  regenerateMetadata(currentAngularFinalArray, currentVideoFolder[0]);
 });
 
 /**

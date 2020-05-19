@@ -52,7 +52,7 @@ export const AppState: AppStateInterface = { // AppState is saved into `settings
   numOfFolders: 0,
   preferredVideoPlayer: '',
   selectedOutputFolder: '',
-  selectedSourceFolder: ''
+  selectedSourceFolder: {}
 };
 
 export interface AppStateInterface {
@@ -67,5 +67,5 @@ export interface AppStateInterface {
   numOfFolders: number;
   preferredVideoPlayer: string;
   selectedOutputFolder: string;
-  selectedSourceFolder: string;
+  selectedSourceFolder: Record<number, string>;
 }

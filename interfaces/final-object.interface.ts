@@ -9,7 +9,8 @@ export interface FinalObject {
   addTags?: string[];           // tags to add
   hubName: string;              // the name of the hub -- for recently-opened
   images: ImageElement[];       // see below
-  inputDir: string;             // later may support array of many input directories
+  // inputDir: string;             // later may support array of many input directories
+  inputDirs: Record<number, string>; // map the `inputSource` number to input directory (replaces `inputDir`)
   numOfFolders: number;         // number of folders
   removeTags?: string[];        // tags to remove
   screenshotSettings: ScreenshotSettings;
@@ -23,6 +24,7 @@ export interface ImageElement {
   fileSize: number;              // file size in bytes
   hash: string;                  // used for detecting changed files and as a screenshot identifier
   height: AllowedScreenshotHeight; // height of the video (px)
+  inputSource: number;           // corresponding to `inputDirs`
   mtime: number;                 // file modification time
   partialPath: string;           // for opening the file, just prepend the `inputDir` (starts with "/", is "/fldr1/fldr2", or can be "")
   screens: number;               // number of screenshots for this file
@@ -59,6 +61,7 @@ export function NewImageElement(): ImageElement {
     hash: '',
     height: 144,
     index: 0,
+    inputSource: 0,
     mtime: 0,
     partialPath: '',
     resBucket: 0,

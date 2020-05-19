@@ -21,7 +21,6 @@
   }
 }
 
-
 .stats-heading {
   color: $gray-70;
   display: block;
@@ -55,6 +54,15 @@
   padding-bottom: 5px;
   padding-top: 20px;
   text-align: center;
+}
+
+.input-sources {
+  display: table;
+  margin: 0 auto;
+
+  .input-folder {
+    text-align: left;
+  }
 }
 
 @media (max-width: 900px) {

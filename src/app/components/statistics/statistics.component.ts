@@ -1,6 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
 
 import { ImageElement, ScreenshotSettings } from '../../../../interfaces/final-object.interface';
+
+import { ElectronService } from '../../providers/electron.service';
 
 @Component({
   selector: 'app-statistics',
@@ -11,6 +13,7 @@ export class StatisticsComponent implements OnInit {
 
   @Input() finalArray: ImageElement[];
   @Input() hubName: string;
+  @Input() inputFolders: Record<number, string>;
   @Input() numFolders: number;
   @Input() pathToVhaFile: string;
   @Input() screenshotSettings: ScreenshotSettings;
@@ -28,7 +31,10 @@ export class StatisticsComponent implements OnInit {
   totalSize: number = 0;
   avgSize: number;
 
-  constructor() { }
+  constructor(
+    public cd: ChangeDetectorRef,
+    public electronService: ElectronService
+  ) { }
 
   ngOnInit() {
     this.finalArray.forEach((element: ImageElement): void => {
@@ -45,6 +51,20 @@ export class StatisticsComponent implements OnInit {
 
     this.avgLength = Math.round(this.totalLength / this.totalFiles);
     this.avgSize = Math.round(this.totalSize / this.totalFiles);
+
+    this.electronService.ipcRenderer.on('inputFolderChosen', (event, filePath, stuff) => {
+      console.log('chosen!!!');
+      this.inputFolders[Object.keys(this.inputFolders).length] = filePath;
+      console.log(filePath);
+      console.log(stuff);
+      this.cd.detectChanges();
+    });
+  }
+
+  addAnotherFolder() {
+    console.log('hi');
+    console.log(this.inputFolders);
+    this.electronService.ipcRenderer.send('choose-input', 'lol');
   }
 
 }
