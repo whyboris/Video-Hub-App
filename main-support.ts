@@ -177,18 +177,23 @@ export function countFoldersInFinalArray(imagesArray: ImageElement[]): number {
  * @param done          -- function to execute when done writing the file
  */
 export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: string, done): void {
-  const inputDir = finalObject.inputDir;
+  const inputDir = finalObject.inputDirs;
 
   // check for relative paths
-  if (finalObject.inputDir === path.parse(pathToTheFile).dir) {
-    finalObject.inputDir = '';
+  if (finalObject.inputDirs[0] === path.parse(pathToTheFile).dir) {
+    finalObject.inputDirs[0] = '';
   }
 
   finalObject.images = stripOutTemporaryFields(finalObject.images);
 
   finalObject.images = finalObject.images.filter(element => !element.deleted);
 
+  console.log('about ta save !!!');
+  console.log(finalObject);
+
   const json = JSON.stringify(finalObject);
+
+  console.log(json);
 
   // backup current file
   try {
@@ -203,7 +208,7 @@ export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: stri
   // TODO ? CATCH ERRORS ?
 
   // Restore the inputDir in case we removed it
-  finalObject.inputDir = inputDir;
+  finalObject.inputDirs = inputDir;
 }
 
 /**
@@ -222,7 +227,7 @@ export function createDotPlsFile(savePath: string, playlist: ImageElement[], don
   for (let i = 0; i < playlist.length; i++) {
 
     const fullPath: string = path.join(
-      globals.selectedSourceFolder,
+      globals.selectedSourceFolder[0],
       playlist[i].partialPath,
       playlist[i].fileName
     );
@@ -770,7 +775,7 @@ export function startFileSystemWatching(inputDir: String, finalArray: ImageEleme
     })
     // .on('all', (event, path) => {
     //   console.log('%s %s', event, path);
-    // })
+    // /*})*/
     .on('ready', () => {
       console.log('All files scanned. Watching for changes.');
       deepScan = false;

@@ -237,7 +237,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     screensPerVideo: true,
     screenshotSizeForImport: 288,
     selectedOutputFolder: '',
-    selectedSourceFolder: '',
+    selectedSourceFolder: {},
     showWizard: false,
     ssConstant: 10,
     ssVariable: 5,
@@ -532,7 +532,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.wizard.listOfFiles = listOfFiles;
 
       if (listOfFiles.length > 0) {
-        this.wizard.selectedSourceFolder = filePath;
+        this.wizard.selectedSourceFolder[0] = filePath;
         this.wizard.selectedOutputFolder = filePath;
       }
 
@@ -670,10 +670,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.appState.hubName = finalObject.hubName;
       this.appState.numOfFolders = finalObject.numOfFolders;
       this.appState.selectedOutputFolder = outputFolderPath;
-      this.appState.selectedSourceFolder = finalObject.inputDir;
+      this.appState.selectedSourceFolder = finalObject.inputDirs;
+
+      console.log('input dirs', finalObject.inputDirs);
 
       // Update history of opened files
-      this.updateVhaFileHistory(pathToFile, finalObject.inputDir, finalObject.hubName);
+      this.updateVhaFileHistory(pathToFile, finalObject.hubName);
 
       this.folderViewNavigationPath = '';
 
@@ -911,11 +913,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * completely depends on global variable `finalArrayNeedsSaving`
    */
   public saveVhaIfNeeded(): SavableProperties {
+
+    console.log('checking if need to update .vha2 file');
+    console.log(this.appState.selectedOutputFolder);
+
     if (this.finalArrayNeedsSaving || this.tagsSaveService.needToSave()) {
       const propsToReturn: SavableProperties = {
         addTags: this.tagsSaveService.getAddTags(),
         removeTags: this.tagsSaveService.getRemoveTags(),
-        images: this.finalArray
+        images: this.finalArray,
+        inputSources: this.appState.selectedSourceFolder,
+        // TODO -- rename `selectedSourceFolder` and make sure to update `finalArrayNeedsSaving` when inputSources changes
       };
       return propsToReturn;
     } else {
@@ -931,6 +939,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param item        - ImageElement
    */
   public handleClick(eventObject: { mouseEvent: MouseEvent, thumbIndex?: number }, item: ImageElement) {
+
+    console.log(this.appState.selectedSourceFolder);
 
     if (this.batchTaggingMode) {
       item.selected = !item.selected;
@@ -963,7 +973,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.currentPlayingFolder = clickedElement.partialPath;
     this.currentPlayingFile = clickedElement.cleanName;
     const fullPath = path.join(
-      this.appState.selectedSourceFolder,
+      this.appState.selectedSourceFolder[0],
       clickedElement.partialPath,
       clickedElement.fileName
     );
@@ -1166,11 +1176,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Add this file to the recently opened list
    * @param file full path to file name
    */
-  updateVhaFileHistory(pathToVhaFile: string, pathToVideos: string, hubName: string): void {
+  updateVhaFileHistory(pathToVhaFile: string, hubName: string): void {
 
     const newHistoryItem = {
       vhaFilePath: pathToVhaFile,
-      videoFolderPath: pathToVideos,
       hubName: (hubName || 'untitled')
     };
 
@@ -1421,7 +1430,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       screensPerVideo: true,
       screenshotSizeForImport: 288, // default
       selectedOutputFolder: '',
-      selectedSourceFolder: '',
+      selectedSourceFolder: {},
       showWizard: true,
       ssConstant: 10,
       ssVariable: 10,
@@ -1869,7 +1878,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   openContainingFolderNow(): void {
     this.fullPathToCurrentFile = path.join(
-      this.appState.selectedSourceFolder,
+      this.appState.selectedSourceFolder[0],
       this.currentRightClickedItem.partialPath,
       this.currentRightClickedItem.fileName
     );

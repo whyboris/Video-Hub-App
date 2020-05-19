@@ -11,7 +11,7 @@ export interface WizardOptions {
   screensPerVideo: boolean;   // true = N screenshots per video; false = 1 screenshot every N minutes
   screenshotSizeForImport: AllowedScreenshotHeight;
   selectedOutputFolder: string;
-  selectedSourceFolder: string;
+  selectedSourceFolder: Record<number, string>;
   showWizard: boolean;
   ssConstant: number;
   ssVariable: number;
