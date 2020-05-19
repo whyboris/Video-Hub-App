@@ -16,9 +16,11 @@ export class FileSizePipe implements PipeTransform {
 
       return (excludeParen ? '' : '(')
            + (
-              rounded > 999
-                ? (rounded / 1000).toFixed(1) + ' GB'
-                : rounded                     + ' MB'
+              rounded > 999000
+                ? (rounded / 1000000).toFixed(1) + ' TB'
+                : rounded > 999
+                  ? (rounded / 1000).toFixed(1)  + ' GB'
+                  : rounded                      + ' MB'
               )
            + (excludeParen ? '' : ')');
     } else {
