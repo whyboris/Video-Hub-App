@@ -37,6 +37,9 @@ export class StatisticsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
+    console.log(this.inputFolders);
+
     this.finalArray.forEach((element: ImageElement): void => {
       this.shortest = Math.min(element.duration, this.shortest);
       this.longest = Math.max(element.duration, this.longest);
@@ -64,7 +67,7 @@ export class StatisticsComponent implements OnInit {
       });
 
       if (!pathAlreadyExists) {
-        this.inputFolders[Object.keys(this.inputFolders).length] = filePath;
+        this.inputFolders[this.pickNextIndex(this.inputFolders)] = filePath;
         console.log(filePath);
         console.log(stuff);
         this.cd.detectChanges();
@@ -73,10 +76,34 @@ export class StatisticsComponent implements OnInit {
     });
   }
 
+  /**
+   * Determine and return the next index for inputSource
+   * Simply the next integer larger than the largest currently used index
+   * @param inputSource
+   */
+  pickNextIndex(inputSource: Record<number, string>) {
+    const indexesAsStrings: string[] = Object.keys(inputSource);
+    const indexesAsNumbers: number[] = indexesAsStrings.map((item: string) => parseInt(item, 10) );
+
+    return Math.max(...indexesAsNumbers) + 1;
+  }
+
+  /**
+   * Summon system modal to select folder
+   */
   addAnotherFolder() {
-    console.log('hi');
-    console.log(this.inputFolders);
     this.electronService.ipcRenderer.send('choose-input', 'lol');
+  }
+
+  /**
+   * Delete an item source
+   * @param itemSourceKey
+   */
+  deleteInputSource(itemSourceKey: number) {
+    console.log(itemSourceKey);
+    console.log(this.inputFolders);
+    delete this.inputFolders[itemSourceKey];
+    console.log(this.inputFolders);
   }
 
 }

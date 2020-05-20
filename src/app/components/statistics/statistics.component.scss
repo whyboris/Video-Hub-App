@@ -65,6 +65,14 @@
   }
 }
 
+.delete-input-folder {
+  color: $pretty-red;
+  cursor: pointer;
+  font-weight: bold;
+  position: absolute;
+  transform: translate(-60px, -14px);
+}
+
 @media (max-width: 900px) {
   .table-container {
     flex-direction: column;

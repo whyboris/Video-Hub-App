@@ -12,11 +12,13 @@
   <!-- <span class="stats-heading folder" [innerHtml]="videoFolder[0] | folderArrowsPipe"></span> -->
 
   <div class="input-sources">
-    <span
-      class="stats-heading folder input-folder"
-      *ngFor="let item of videoFolder | keyvalue"
-      [innerHtml]="item.value | folderArrowsPipe"
-    ></span>
+    <ng-container *ngFor="let item of videoFolder | keyvalue">
+      <span
+        class="stats-heading folder input-folder"
+        [innerHtml]="item.value | folderArrowsPipe"
+      ></span>
+      <span class="delete-input-folder" (click)="deleteInputSource(item.key)">DELETE</span>
+    </ng-container>
   </div>
 
   <button (click)="addAnotherFolder()">CLICK!</button>
