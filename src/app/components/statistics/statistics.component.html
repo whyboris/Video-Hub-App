@@ -17,7 +17,13 @@
         class="stats-heading folder input-folder"
         [innerHtml]="item.value | folderArrowsPipe"
       ></span>
-      <span class="delete-input-folder" (click)="deleteInputSource(item.key)">DELETE</span>
+      <span
+        *ngIf="(objectKeys(videoFolder).length > 1)"
+        class="delete-input-folder"
+        (click)="deleteInputSource(item.key)"
+      >
+        DELETE
+      </span>
     </ng-container>
   </div>
 

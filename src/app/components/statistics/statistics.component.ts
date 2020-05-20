@@ -31,6 +31,8 @@ export class StatisticsComponent implements OnInit {
   totalSize: number = 0;
   avgSize: number;
 
+  objectKeys = Object.keys; // to use in template
+
   constructor(
     public cd: ChangeDetectorRef,
     public electronService: ElectronService
@@ -83,7 +85,7 @@ export class StatisticsComponent implements OnInit {
    */
   pickNextIndex(inputSource: Record<number, string>) {
     const indexesAsStrings: string[] = Object.keys(inputSource);
-    const indexesAsNumbers: number[] = indexesAsStrings.map((item: string) => parseInt(item, 10) );
+    const indexesAsNumbers: number[] = indexesAsStrings.map((item: string) => parseInt(item, 10));
 
     return Math.max(...indexesAsNumbers) + 1;
   }
