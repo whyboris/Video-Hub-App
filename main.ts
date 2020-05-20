@@ -291,12 +291,12 @@ function openThisDamnFile(pathToVhaFile: string) {
 
       console.log('about to start watching for files');
 
-      Object.keys(lastSavedFinalObject.inputDirs).forEach((key) => {
+      Object.keys(lastSavedFinalObject.inputDirs).forEach((key: string) => {
 
-        console.log(key);
+        console.log(key); // type: string!
         console.log(lastSavedFinalObject.inputDirs[key]);
 
-        startFileSystemWatching(lastSavedFinalObject.inputDirs[key], lastSavedFinalObject.images, false);
+        startFileSystemWatching(lastSavedFinalObject.inputDirs[key], parseInt(key), lastSavedFinalObject.images, false);
       });
 
 
@@ -765,7 +765,19 @@ ipc.on('start-the-import', (event, options: ImportSettingsObject, videoFilesWith
 
     sendFinalResultHome([]);
 
-    startFileSystemWatching(globals.selectedSourceFolder[0], [], false);
+    startFileSystemWatching(globals.selectedSourceFolder[0], 0, [], false);
+
+    // Currently not needed -- start import happens on wizard and wizard currently only allows for ONE source folder
+
+    // Object.keys(globals.selectedSourceFolder).forEach((key) => {
+
+    //   console.log(key);
+    //   console.log(globals.selectedSourceFolder[key]);
+    //   console.log(typeof(key));
+
+    //   startFileSystemWatching(globals.selectedSourceFolder[key], parseInt(key), [], false);
+    // });
+
 
   }
 

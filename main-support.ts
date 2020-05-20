@@ -704,7 +704,7 @@ function sendNewVideoMetadata(imageElement: ImageElement) {
   }
 }
 
-export function checkForMetadata(file, callback) {
+export function checkForMetadata(file: tempMetadataQueueObject, callback) {
   console.log('checking metadata for %s', file.fullPath);
   let found = false;
   if (!deepScan) {
@@ -734,7 +734,7 @@ export function checkForMetadata(file, callback) {
   }
 }
 
-function createElement(file, hash, callback) {
+function createElement(file: tempMetadataQueueObject, hash, callback) {
   const newElement = NewImageElement();
   newElement.hash = hash;
   extractMetadataAsync(file.fullPath, globals.screenshotSettings, newElement, file.stat)
@@ -742,6 +742,7 @@ function createElement(file, hash, callback) {
       imageElement.cleanName = cleanUpFileName(file.name);
       imageElement.fileName = file.name;
       imageElement.partialPath = file.partialPath;
+      imageElement.inputSource = file.inputSource;
       sendNewVideoMetadata(imageElement);
       callback();
     }, () => {
@@ -751,7 +752,14 @@ function createElement(file, hash, callback) {
 
 let deepScan = false;
 
-export function startFileSystemWatching(inputDir: String, finalArray: ImageElement[], initalDeepScan: boolean) {
+/**
+ *
+ * @param inputDir
+ * @param inputSource -- the number corresponding to the `inputSource` in ImageElement -- must be set!
+ * @param finalArray
+ * @param initalDeepScan
+ */
+export function startFileSystemWatching(inputDir: String, inputSource: number, finalArray: ImageElement[], initalDeepScan: boolean) {
 
   cachedFinalArray = finalArray;
   deepScan = initalDeepScan; // Hash files instead of just path compare
@@ -771,7 +779,14 @@ export function startFileSystemWatching(inputDir: String, finalArray: ImageEleme
       const fileName = subPath.substring(subPath.lastIndexOf('/') + 1);
       const fullPath = inputDir + partialPath + '/' + fileName;
       console.log(fullPath);
-      metadataQueue.push({name: fileName, partialPath: partialPath, fullPath: fullPath, stat: stat, deepScan: deepScan});
+      metadataQueue.push({
+        deepScan: deepScan,
+        fullPath: fullPath,
+        inputSource: inputSource,
+        name: fileName,
+        partialPath: partialPath,
+        stat: stat,
+      });
     })
     // .on('all', (event, path) => {
     //   console.log('%s %s', event, path);
@@ -781,4 +796,14 @@ export function startFileSystemWatching(inputDir: String, finalArray: ImageEleme
       deepScan = false;
     });
 
+}
+
+
+interface tempMetadataQueueObject {
+  deepScan: boolean;
+  fullPath: string;
+  inputSource: number;
+  name: string;
+  partialPath: string;
+  stat: Stats;
 }

@@ -913,10 +913,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * completely depends on global variable `finalArrayNeedsSaving`
    */
   public saveVhaIfNeeded(): SavableProperties {
-
-    console.log('checking if need to update .vha2 file');
-    console.log(this.appState.selectedOutputFolder);
-
     if (this.finalArrayNeedsSaving || this.tagsSaveService.needToSave()) {
       const propsToReturn: SavableProperties = {
         addTags: this.tagsSaveService.getAddTags(),
@@ -940,7 +936,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   public handleClick(eventObject: { mouseEvent: MouseEvent, thumbIndex?: number }, item: ImageElement) {
 
-    console.log(this.appState.selectedSourceFolder);
+    console.log(item);
 
     if (this.batchTaggingMode) {
       item.selected = !item.selected;
@@ -952,7 +948,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if (eventObject.mouseEvent.ctrlKey === true || eventObject.mouseEvent.metaKey) {
       this.openThumbnailSheet(item);
     } else {
-      this.openVideo(item.index, eventObject.thumbIndex);
+      this.openVideo(item.index, eventObject.thumbIndex, item.inputSource);
     }
   }
 
@@ -962,8 +958,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
    *
    * @param index                 unique ID of the video
    * @param clickedThumbnailIndex an index of the thumbnail clicked
+   * @param inputSource           what the input source is
    */
-  public openVideo(index: number, clickedThumbnailIndex?: number): void {
+  public openVideo(index: number, clickedThumbnailIndex?: number, inputSource: number): void {
     // update number of times played
     this.finalArray[index].timesPlayed ? this.finalArray[index].timesPlayed++ : this.finalArray[index].timesPlayed = 1;
     this.finalArrayNeedsSaving = true;
@@ -973,7 +970,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.currentPlayingFolder = clickedElement.partialPath;
     this.currentPlayingFile = clickedElement.cleanName;
     const fullPath = path.join(
-      this.appState.selectedSourceFolder[0],
+      this.appState.selectedSourceFolder[inputSource],
       clickedElement.partialPath,
       clickedElement.fileName
     );
