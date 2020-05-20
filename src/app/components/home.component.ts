@@ -948,7 +948,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if (eventObject.mouseEvent.ctrlKey === true || eventObject.mouseEvent.metaKey) {
       this.openThumbnailSheet(item);
     } else {
-      this.openVideo(item.index, eventObject.thumbIndex, item.inputSource);
+      this.openVideo(item.index, item.inputSource, eventObject.thumbIndex);
     }
   }
 
@@ -957,10 +957,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * or with their preferred media player, if chosen
    *
    * @param index                 unique ID of the video
-   * @param clickedThumbnailIndex an index of the thumbnail clicked
    * @param inputSource           what the input source is
+   * @param clickedThumbnailIndex an index of the thumbnail clicked
    */
-  public openVideo(index: number, clickedThumbnailIndex?: number, inputSource: number): void {
+  public openVideo(index: number, inputSource: number, clickedThumbnailIndex?: number): void {
     // update number of times played
     this.finalArray[index].timesPlayed ? this.finalArray[index].timesPlayed++ : this.finalArray[index].timesPlayed = 1;
     this.finalArrayNeedsSaving = true;
@@ -1875,7 +1875,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   openContainingFolderNow(): void {
     this.fullPathToCurrentFile = path.join(
-      this.appState.selectedSourceFolder[0],
+      this.appState.selectedSourceFolder[0], // TODO -- fix method to allow for any of the source folders!
       this.currentRightClickedItem.partialPath,
       this.currentRightClickedItem.fileName
     );
