@@ -54,10 +54,22 @@ export class StatisticsComponent implements OnInit {
 
     this.electronService.ipcRenderer.on('inputFolderChosen', (event, filePath, stuff) => {
       console.log('chosen!!!');
-      this.inputFolders[Object.keys(this.inputFolders).length] = filePath;
-      console.log(filePath);
-      console.log(stuff);
-      this.cd.detectChanges();
+
+      let pathAlreadyExists = false;
+
+      Object.keys(this.inputFolders).forEach((key: string) => {
+        if (this.inputFolders[key] === filePath) {
+          pathAlreadyExists = true;
+        }
+      });
+
+      if (!pathAlreadyExists) {
+        this.inputFolders[Object.keys(this.inputFolders).length] = filePath;
+        console.log(filePath);
+        console.log(stuff);
+        this.cd.detectChanges();
+      }
+
     });
   }
 

@@ -947,7 +947,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // ctrl/cmd + click for thumbnail sheet
     if (eventObject.mouseEvent.ctrlKey === true || eventObject.mouseEvent.metaKey) {
       this.openThumbnailSheet(item);
-    } else {
+    } else if (this.rootFolderLive) {
       this.openVideo(item.index, item.inputSource, eventObject.thumbIndex);
     }
   }
@@ -976,7 +976,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     );
     this.fullPathToCurrentFile = fullPath;
 
-    if (this.rootFolderLive && this.appState.preferredVideoPlayer) {
+    if (this.appState.preferredVideoPlayer) {
       const time: number = clickedThumbnailIndex
         ? clickedElement.duration / (clickedElement.screens + 1) * ((clickedThumbnailIndex) + 1)
         : 0;
@@ -984,7 +984,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       const execPath: string = this.appState.preferredVideoPlayer;
 
       this.electronService.ipcRenderer.send('openThisFileWithFlags', execPath, fullPath, this.getVideoPlayerArgs(execPath, time));
-    } else if (this.rootFolderLive) {
+    } else {
       this.electronService.ipcRenderer.send('openThisFile', fullPath);
     }
   }
