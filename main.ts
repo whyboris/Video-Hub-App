@@ -1,35 +1,81 @@
-import { app, BrowserWindow, screen, TouchBar } from 'electron';
+import { globals } from './main-globals';
+// =================================================================================================
+// ----------------------------------------- BUILD TOGGLE ------------------------------------------
+// -------------------------------------------------------------------------------------------------
+const demo = false;
+globals.version = '2.2.3';   // update `package.json` version to `#.#.#-demo` when building the demo
+// =================================================================================================
+
 import * as path from 'path';
 import * as url from 'url';
 
+const fs = require('fs');
 const trash = require('trash');
 
-const { systemPreferences } = require('electron');
+import { app, BrowserWindow, screen, TouchBar } from 'electron';
+const dialog = require('electron').dialog;
 const electron = require('electron');
+const ipc = require('electron').ipcMain;
+const shell = require('electron').shell;
 const { powerSaveBlocker } = require('electron');
+const { systemPreferences } = require('electron');
 
-import { globals } from './main-globals';
+// Methods
+import {
+  alphabetizeFinalArray,
+  countFoldersInFinalArray,
+  createDotPlsFile,
+  extractAllMetadata,
+  getVideoPathsAndNames,
+  insertTemporaryFields,
+  missingThumbsIndex,
+  sendCurrentProgress,
+  startFileSystemWatching,
+  writeVhaFileToDisk
+} from './main-support';
+
+import {
+  findAndImportNewFiles,
+  regenerateLibrary,
+  rescanAddAndDelete,
+} from './main-rescan';
+
+import { replaceThumbnailWithNewImage } from './main-extract';
+import { allSupportedViews, SupportedView } from './interfaces/shared-interfaces';
+import { randomizeArray } from './utility';
+
+// Interfaces
+import {
+  AllowedScreenshotHeight,
+  FinalObject,
+  ImageElement,
+  InputSources
+} from './interfaces/final-object.interface';
+import { SavableProperties } from './interfaces/savable-properties.interface';
+import { SettingsObject } from './interfaces/settings-object.interface';
+import { WizardOptions } from './interfaces/wizard-options.interface';
+
+// Variables
+let lastSavedFinalObject: FinalObject; // hack for saving the `vha2` file again later
 
 const codeRunningOnMac: boolean = process.platform === 'darwin';
 
-// System messages - import ENGLISH as default
-// on Angular load, we'll receive and replace these with the appropriate translations
-// translations received via `system-messages-updated`
 const English = require('./i18n/en.json');
-let systemMessages = English.SYSTEM;
+let systemMessages = English.SYSTEM; // Set English as default; update via `system-messages-updated`
 
+let screenWidth;
+let screenHeight;
 
-// ========================================================================================
-// ***************************** BUILD TOGGLE *********************************************
-// ========================================================================================
-const demo = false;
-globals.version = '2.2.3';
-// ========================================================================================
+// TODO: CLEAN UP
+let macFirstRun = true; // to detect if it's the first time Mac is opening the file or something like that
+let userWantedToOpen: string = null; // find a better pattern for handling this functionality
 
+// =================================================================================================
 
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
 let win, serve;
+let myWindow = null;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
 globals.debug = args.some(val => val === '--debug');
@@ -37,12 +83,6 @@ globals.debug = args.some(val => val === '--debug');
 if (globals.debug) {
   console.log('Debug mode enabled!');
 }
-
-// MY IMPORTANT IMPORT !!!!
-const dialog = require('electron').dialog;
-
-let userWantedToOpen: string = null;
-let myWindow = null;
 
 // TODO -- maybe clean up the `userWantedToOpen` with whatever pattern recommended by Electron
 // For windows -- when loading the app the first time
@@ -80,9 +120,6 @@ if (!gotTheLock) {
     }
   });
 }
-
-let screenWidth;
-let screenHeight;
 
 function createWindow() {
   const desktopSize = screen.getPrimaryDisplay().workAreaSize;
@@ -149,10 +186,6 @@ function createWindow() {
   // win.setMenu(null);
 }
 
-// variable to detect if it's the first time mac is opening the file
-// or something like that
-let macFirstRun = true;
-
 try {
 
   // OPEN FILE ON MAC FROM FILE DOUBLE CLICK
@@ -208,40 +241,9 @@ if (codeRunningOnMac) {
   );
 }
 
-
-// ========================================================================================
-// My imports
-// ========================================================================================
-
-const fs = require('fs');
-
-const ipc = require('electron').ipcMain;
-const shell = require('electron').shell;
-
-// ========================================================================================
-// My variables
-// ========================================================================================
-
-import {
-  alphabetizeFinalArray,
-  countFoldersInFinalArray,
-  createDotPlsFile,
-  extractAllMetadata,
-  getVideoPathsAndNames,
-  insertTemporaryFields,
-  missingThumbsIndex,
-  sendCurrentProgress,
-  writeVhaFileToDisk,
-  startFileSystemWatching
-} from './main-support';
-
-import { replaceThumbnailWithNewImage } from './main-extract';
-
-import { FinalObject, ImageElement, AllowedScreenshotHeight, InputSources } from './interfaces/final-object.interface';
-import { SavableProperties } from './interfaces/savable-properties.interface';
-import { SettingsObject } from './interfaces/settings-object.interface';
-
-let lastSavedFinalObject: FinalObject; // hack for saving the `vha2` file again later
+// =================================================================================================
+// Methods
+// -------------------------------------------------------------------------------------------------
 
 /**
  * Load the .vha2 file and send it to app
@@ -296,7 +298,9 @@ function openThisDamnFile(pathToVhaFile: string) {
         console.log(lastSavedFinalObject.inputDirs[key]);
 
         console.log(' SYSTEM WATCHIND DISABLED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-        // startFileSystemWatching(lastSavedFinalObject.inputDirs[key].path, parseInt(key), lastSavedFinalObject.images, false);
+        if (lastSavedFinalObject.inputDirs[key].watch) {
+          // startFileSystemWatching(lastSavedFinalObject.inputDirs[key].path, parseInt(key), lastSavedFinalObject.images, false);
+        }
       });
 
 
@@ -701,7 +705,7 @@ ipc.on('system-messages-updated', (event, newSystemMessages): void => {
   systemMessages = newSystemMessages;
 });
 
-interface ImportSettingsObject {
+interface ImportSettingsObject { // temporary interface for the below code only `start-the-import`
   clipHeight: AllowedScreenshotHeight;
   clipSnippetLength: number;
   clipSnippets: number;
@@ -1030,12 +1034,6 @@ function verifyThumbnails(finalArray: ImageElement[]) {
   // );
 }
 
-import {
-  findAndImportNewFiles,
-  regenerateLibrary,
-  rescanAddAndDelete,
-} from './main-rescan';
-
 /**
  * Begins rescan procedure compared to what the app has currently
  *
@@ -1157,6 +1155,10 @@ function tellUserDirDoesNotExist(currentVideoFolder: string) {
 }
 
 
+// =========================================================================================================================================
+//     TOUCH BAR
+// -----------------------------------------------------------------------------------------------------------------------------------------
+
 ipc.on('app-to-touchBar', (event, changesFromApp) => {
   if (codeRunningOnMac) {
     if (allSupportedViews.includes(<SupportedView>changesFromApp)) {
@@ -1173,11 +1175,6 @@ ipc.on('app-to-touchBar', (event, changesFromApp) => {
   }
 });
 
-import { allSupportedViews, SupportedView } from './interfaces/shared-interfaces';
-import { randomizeArray } from './utility';
-import { acceptableFiles } from './main-filenames';
-import { WizardOptions } from './interfaces/wizard-options.interface';
-
 const nativeImage = require('electron').nativeImage;
 const resourcePath = serve ? path.join(__dirname, 'src/assets/icons/mac/touch-bar/') : path.join(process.resourcesPath, 'assets/');
 const {
@@ -1187,11 +1184,11 @@ const {
 
 // touchBar variables
 let touchBar,
-  segmentedFolderControl,
-  segmentedViewControl,
-  segmentedPopover,
-  segmentedAnotherViewsControl,
-  zoomSegmented;
+    segmentedAnotherViewsControl,
+    segmentedFolderControl,
+    segmentedPopover,
+    segmentedViewControl,
+    zoomSegmented;
 
 /**
  * Void function for creating touchBar for MAC OS X
