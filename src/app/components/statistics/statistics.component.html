@@ -15,7 +15,7 @@
     <ng-container *ngFor="let item of videoFolder | keyvalue; trackBy: trackByFn">
       <span
         class="stats-heading folder input-folder"
-        [innerHtml]="item.value | folderArrowsPipe"
+        [innerHtml]="item.value.path | folderArrowsPipe"
       ></span>
       <span
         *ngIf="(objectKeys(videoFolder).length > 1)"
@@ -24,6 +24,10 @@
       >
         DELETE
       </span>
+      <label class="switch">
+        <input type="checkbox" [(ngModel)]="item.value.watch">
+        <span class="slider round"></span>
+      </label>
     </ng-container>
   </div>
 

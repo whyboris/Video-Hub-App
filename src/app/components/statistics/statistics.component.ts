@@ -7,7 +7,10 @@ import { ElectronService } from '../../providers/electron.service';
 @Component({
   selector: 'app-statistics',
   templateUrl: './statistics.component.html',
-  styleUrls: ['./statistics.component.scss']
+  styleUrls: [
+    './statistics.component.scss',
+    './toggle.scss'
+  ]
 })
 export class StatisticsComponent implements OnInit {
 
@@ -63,13 +66,13 @@ export class StatisticsComponent implements OnInit {
       let pathAlreadyExists = false;
 
       Object.keys(this.inputFolders).forEach((key: string) => {
-        if (this.inputFolders[key] === filePath) {
+        if (this.inputFolders[key].path === filePath) {
           pathAlreadyExists = true;
         }
       });
 
       if (!pathAlreadyExists) {
-        this.inputFolders[this.pickNextIndex(this.inputFolders)] = filePath;
+        this.inputFolders[this.pickNextIndex(this.inputFolders)] = { path: filePath, watch: false };
         console.log(filePath);
         console.log(stuff);
       }
