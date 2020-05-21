@@ -168,7 +168,7 @@
     <div
       class="ss-num-selection"
       style="margin-top: 20px"
-      [ngClass]="{ 'dim-row': !wizard.screensPerVideo
+      [ngClass]="{ 'dim-row': !wizard.isFixedNumberOfScreenshots
                              || wizard.selectedOutputFolder === ''
                              || wizard.selectedSourceFolder[0].path === ''
                              || wizard.futureHubName === ''
@@ -195,7 +195,7 @@
         [disabled]="wizard.selectedOutputFolder === ''
                  || wizard.selectedSourceFolder[0].path === ''
                  || wizard.futureHubName === ''
-                 || !wizard.screensPerVideo"
+                 || !wizard.isFixedNumberOfScreenshots"
       >
       {{ 'WIZARD.screenshotsPerVideo' | translate }}
 
@@ -203,7 +203,7 @@
 
     <div
       class="ss-num-selection"
-      [ngClass]="{ 'dim-row': wizard.screensPerVideo }"
+      [ngClass]="{ 'dim-row': wizard.isFixedNumberOfScreenshots }"
     >
 
       <input
@@ -226,7 +226,7 @@
         [disabled]="wizard.selectedOutputFolder === ''
                  || wizard.selectedSourceFolder[0].path === ''
                  || wizard.futureHubName === ''
-                 || wizard.screensPerVideo"
+                 || wizard.isFixedNumberOfScreenshots"
       >
       {{ 'WIZARD.minutes' | translate }}
 

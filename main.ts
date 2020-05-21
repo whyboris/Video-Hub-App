@@ -741,7 +741,7 @@ ipc.on('start-the-import', (event, wizard: WizardOptions, videoFilesWithPaths: I
 
     // determine number of screenshots
     let numOfScreenshots: number = 0;
-    if (wizard.screensPerVideo) {
+    if (wizard.isFixedNumberOfScreenshots) {
       numOfScreenshots = wizard.ssConstant;
     } else {
       numOfScreenshots = wizard.ssVariable;
@@ -750,7 +750,7 @@ ipc.on('start-the-import', (event, wizard: WizardOptions, videoFilesWithPaths: I
       clipHeight: wizard.clipHeight,
       clipSnippetLength: wizard.clipSnippetLength,
       clipSnippets: wizard.extractClips ? wizard.clipSnippets : 0,
-      fixed: wizard.screensPerVideo,
+      fixed: wizard.isFixedNumberOfScreenshots,
       height: wizard.screenshotSizeForImport,
       n: numOfScreenshots,
     };

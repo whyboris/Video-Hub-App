@@ -233,7 +233,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     extractClips: false,
     futureHubName: '',
     listOfFiles: [],
-    screensPerVideo: true,
+    isFixedNumberOfScreenshots: true,
     screenshotSizeForImport: 288,
     selectedOutputFolder: '',
     selectedSourceFolder: { 0: { path: '', watch: false }},
@@ -1412,7 +1412,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       extractClips: false,
       futureHubName: '',
       listOfFiles: [],
-      screensPerVideo: true,
+      isFixedNumberOfScreenshots: true,
       screenshotSizeForImport: 288, // default
       selectedOutputFolder: '',
       selectedSourceFolder: { 0: { path: '', watch: false }},
@@ -1691,7 +1691,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param screens - string of number of screenshots per video
    */
   selectNumOfScreens(screens: string): void {
-    if (this.wizard.screensPerVideo) {
+    if (this.wizard.isFixedNumberOfScreenshots) {
       this.wizard.ssConstant = parseFloat(screens);
     } else {
       this.wizard.ssVariable = parseFloat(screens);
@@ -1715,13 +1715,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Sets the `screensPerVideo` boolean
+   * Sets the `isFixedNumberOfScreenshots` boolean
    * true = N screenshots per video
    * false = 1 screenshot per N minutes
    * @param bool boolean
    */
   setScreensPerVideo(bool: boolean): void {
-    this.wizard.screensPerVideo = bool;
+    this.wizard.isFixedNumberOfScreenshots = bool;
   }
 
   // ---- HANDLE EXTRACTING AND RESTORING SETTINGS ON OPEN AND BEFORE CLOSE ------

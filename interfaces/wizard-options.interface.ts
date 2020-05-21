@@ -8,7 +8,7 @@ export interface WizardOptions {
   extractClips: boolean;      // only used for UI, `clipSnippets` must be 0 to not extract clips
   futureHubName: string;
   listOfFiles: ImageElement[];
-  screensPerVideo: boolean;   // true = N screenshots per video; false = 1 screenshot every N minutes
+  isFixedNumberOfScreenshots: boolean;   // true = N screenshots per video; false = 1 screenshot every N minutes
   screenshotSizeForImport: AllowedScreenshotHeight;
   selectedOutputFolder: string;
   selectedSourceFolder: InputSources;
