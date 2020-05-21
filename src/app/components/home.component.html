@@ -966,19 +966,13 @@
   (loadFromFile)="loadFromFile()"
   (openFromHistory)="openFromHistory($event)"
   (removeFromHistory)="removeFromHistory($event)"
-  (selectClipSize)="selectClipSize($event)"
-  (selectLengthOfClipSnippets)="selectLengthOfClipSnippets($event)"
-  (selectNumOfClipSnippets)="selectNumOfClipSnippets($event)"
-  (selectNumOfScreens)="selectNumOfScreens($event)"
   (selectOutputDirectory)="selectOutputDirectory()"
-  (selectScreenshotSize)="selectScreenshotSize($event)"
   (selectSourceDirectory)="selectSourceDirectory()"
-  (setScreensPerVideo)="setScreensPerVideo($event)"
 
+  [canCloseWizard]="canCloseWizard"
   [demo]="demo"
   [importStage]="importStage"
-  [wizard]="wizard"
   [vhaFileHistory]="vhaFileHistory"
-  [canCloseWizard]="canCloseWizard"
+  [wizard]="wizard"
 >
 </app-wizard>

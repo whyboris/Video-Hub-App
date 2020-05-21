@@ -1,8 +1,9 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
-import { WizardOptions } from '../../../../interfaces/wizard-options.interface';
+import { AllowedScreenshotHeight } from '../../../../interfaces/final-object.interface';
 import { HistoryItem } from '../../../../interfaces/history-item.interface';
 import { ImportStage } from '../../../../main-support';
+import { WizardOptions } from '../../../../interfaces/wizard-options.interface';
 
 import { historyItemRemove, slowFadeIn } from '../../common/animations';
 
@@ -26,14 +27,8 @@ export class WizardComponent {
   @Output() loadFromFile               = new EventEmitter<any>();
   @Output() openFromHistory            = new EventEmitter<number>();
   @Output() removeFromHistory          = new EventEmitter<number>();
-  @Output() selectClipSize             = new EventEmitter<string>();
-  @Output() selectLengthOfClipSnippets = new EventEmitter<string>();
-  @Output() selectNumOfClipSnippets    = new EventEmitter<string>();
-  @Output() selectNumOfScreens         = new EventEmitter<string>();
   @Output() selectOutputDirectory      = new EventEmitter<any>();
-  @Output() selectScreenshotSize       = new EventEmitter<string>();
   @Output() selectSourceDirectory      = new EventEmitter<any>();
-  @Output() setScreensPerVideo         = new EventEmitter<boolean>();
 
   @Input() canCloseWizard: boolean;
   @Input() demo: boolean;
@@ -64,6 +59,62 @@ export class WizardComponent {
   removeHistoryItem(event: Event, item: number) {
     event.stopPropagation();
     this.removeFromHistory.emit(item);
+  }
+
+  /**
+   * Called on screenshot size dropdown select
+   * @param pxHeightForImport - string of number of pixels for the height of each screenshot
+   */
+  selectScreenshotSize(pxHeightForImport: '144' | '216' | '288' | '360' | '432' | '504'): void {
+    const height: AllowedScreenshotHeight = parseInt(pxHeightForImport, 10) as AllowedScreenshotHeight;
+    this.wizard.screenshotSizeForImport = height;
+  }
+
+  /**
+   * Called on screenshot size dropdown select
+   * @param pxHeightForImport - string of number of pixels for the height of each screenshot
+   */
+  selectClipSize(pxHeightForImport: '144' | '216' | '288' | '360' | '432' | '504'): void {
+    const height: AllowedScreenshotHeight = parseInt(pxHeightForImport, 10) as AllowedScreenshotHeight;
+    this.wizard.clipHeight = height;
+  }
+
+  /**
+   * Called on screenshot size dropdown select
+   * @param screens - string of number of screenshots per video
+   */
+  selectNumOfScreens(screens: string): void {
+    if (this.wizard.isFixedNumberOfScreenshots) {
+      this.wizard.ssConstant = parseFloat(screens);
+    } else {
+      this.wizard.ssVariable = parseFloat(screens);
+    }
+  }
+
+  /**
+   * Called on screenshot options selection HTML
+   * @param screens - string of number of snipppets per clip
+   */
+  selectNumOfClipSnippets(screens: string): void {
+    this.wizard.clipSnippets = parseFloat(screens);
+  }
+
+  /**
+   * Called on screenshot options selection HTML
+   * @param length - string of number of seconds per snippet in each clip
+   */
+  selectLengthOfClipSnippets(length: string): void {
+    this.wizard.clipSnippetLength = parseFloat(length);
+  }
+
+  /**
+   * Sets the `isFixedNumberOfScreenshots` boolean
+   * true = N screenshots per video
+   * false = 1 screenshot per N minutes
+   * @param bool boolean
+   */
+  setScreensPerVideo(bool: boolean): void {
+    this.wizard.isFixedNumberOfScreenshots = bool;
   }
 
 }

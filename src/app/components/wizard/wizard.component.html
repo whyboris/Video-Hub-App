@@ -179,13 +179,13 @@
         type="radio"
         name="ss-num-selection"
         checked
-        (change)="setScreensPerVideo.emit(true)"
+        (change)="setScreensPerVideo(true)"
         [disabled]="wizard.selectedOutputFolder === ''
                  || wizard.selectedSourceFolder[0].path === ''
                  || wizard.futureHubName === ''"
       >
       <input
-        (change)="selectNumOfScreens.emit($event.target.value)"
+        (change)="selectNumOfScreens($event.target.value)"
         type="number"
         class="size-dropdown language-drop-down num-select"
         value=10
@@ -209,14 +209,14 @@
       <input
         type="radio"
         name="ss-num-selection"
-        (change)="setScreensPerVideo.emit(false)"
+        (change)="setScreensPerVideo(false)"
         [disabled]="wizard.selectedOutputFolder === ''
                  || wizard.selectedSourceFolder[0].path === ''
                  || wizard.futureHubName === ''"
       >
       {{ 'WIZARD.oneScreenshotEvery' | translate }}
       <input
-        (change)="selectNumOfScreens.emit($event.target.value)"
+        (change)="selectNumOfScreens($event.target.value)"
         type="number"
         class="size-dropdown language-drop-down num-select"
         value=5
@@ -248,7 +248,7 @@
     </div>
 
     <select
-      (change)="selectScreenshotSize.emit($event.target.value)"
+      (change)="selectScreenshotSize($event.target.value)"
       class="size-dropdown language-drop-down"
       [disabled]="wizard.selectedOutputFolder === ''
                || wizard.selectedSourceFolder[0].path === ''
@@ -302,7 +302,7 @@
         </span>
 
         <input
-          (change)="selectNumOfClipSnippets.emit($event.target.value)"
+          (change)="selectNumOfClipSnippets($event.target.value)"
           type="number"
           class="size-dropdown language-drop-down num-select"
           value=5
@@ -331,7 +331,7 @@
       </span>
 
       <input
-        (change)="selectLengthOfClipSnippets.emit($event.target.value)"
+        (change)="selectLengthOfClipSnippets($event.target.value)"
         type="number"
         class="size-dropdown language-drop-down num-select"
         value=1
@@ -353,7 +353,7 @@
     <div [ngClass]="{ 'dim-row': !wizard.extractClips }">
 
       <select
-        (change)="selectClipSize.emit($event.target.value)"
+        (change)="selectClipSize($event.target.value)"
         class="size-dropdown language-drop-down"
         [disabled]="!wizard.extractClips"
       >

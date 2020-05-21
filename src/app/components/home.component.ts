@@ -1668,62 +1668,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.appState.menuHidden = !this.appState.menuHidden;
   }
 
-  /**
-   * Called on screenshot size dropdown select
-   * @param pxHeightForImport - string of number of pixels for the height of each screenshot
-   */
-  selectScreenshotSize(pxHeightForImport: '144' | '216' | '288' | '360' | '432' | '504'): void {
-    const height: AllowedScreenshotHeight = parseInt(pxHeightForImport, 10) as AllowedScreenshotHeight;
-    this.wizard.screenshotSizeForImport = height;
-  }
-
-  /**
-   * Called on screenshot size dropdown select
-   * @param pxHeightForImport - string of number of pixels for the height of each screenshot
-   */
-  selectClipSize(pxHeightForImport: '144' | '216' | '288' | '360' | '432' | '504'): void {
-    const height: AllowedScreenshotHeight = parseInt(pxHeightForImport, 10) as AllowedScreenshotHeight;
-    this.wizard.clipHeight = height;
-  }
-
-  /**
-   * Called on screenshot size dropdown select
-   * @param screens - string of number of screenshots per video
-   */
-  selectNumOfScreens(screens: string): void {
-    if (this.wizard.isFixedNumberOfScreenshots) {
-      this.wizard.ssConstant = parseFloat(screens);
-    } else {
-      this.wizard.ssVariable = parseFloat(screens);
-    }
-  }
-
-  /**
-   * Called on screenshot options selection HTML
-   * @param screens - string of number of snipppets per clip
-   */
-  selectNumOfClipSnippets(screens: string): void {
-    this.wizard.clipSnippets = parseFloat(screens);
-  }
-
-  /**
-   * Called on screenshot options selection HTML
-   * @param length - string of number of seconds per snippet in each clip
-   */
-  selectLengthOfClipSnippets(length: string): void {
-    this.wizard.clipSnippetLength = parseFloat(length);
-  }
-
-  /**
-   * Sets the `isFixedNumberOfScreenshots` boolean
-   * true = N screenshots per video
-   * false = 1 screenshot per N minutes
-   * @param bool boolean
-   */
-  setScreensPerVideo(bool: boolean): void {
-    this.wizard.isFixedNumberOfScreenshots = bool;
-  }
-
   // ---- HANDLE EXTRACTING AND RESTORING SETTINGS ON OPEN AND BEFORE CLOSE ------
 
   /**
