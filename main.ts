@@ -60,11 +60,15 @@ let lastSavedFinalObject: FinalObject; // hack for saving the `vha2` file again 
 
 const codeRunningOnMac: boolean = process.platform === 'darwin';
 
+const pathToAppData = app.getPath('appData');
+
 const English = require('./i18n/en.json');
 let systemMessages = English.SYSTEM; // Set English as default; update via `system-messages-updated`
 
 let screenWidth;
 let screenHeight;
+
+let preventSleepId: number;
 
 // TODO: CLEAN UP
 let macFirstRun = true; // to detect if it's the first time Mac is opening the file or something like that
@@ -410,8 +414,6 @@ function setGlobalsFromVhaFile(vhaFileContents: FinalObject) {
 // Methods that interact with Angular
 // ========================================================================================
 
-const pathToAppData = app.getPath('appData');
-
 /**
  * Just started -- hello -- send over the settings or open wizard
  */
@@ -592,9 +594,6 @@ ipc.on('minimize-window', (event) => {
   }
 });
 
-
-let preventSleepId: number;
-
 /**
  * Minimize the window
  */
@@ -705,41 +704,16 @@ ipc.on('system-messages-updated', (event, newSystemMessages): void => {
   systemMessages = newSystemMessages;
 });
 
-interface ImportSettingsObject { // temporary interface for the below code only `start-the-import`
-  clipHeight: AllowedScreenshotHeight;
-  clipSnippetLength: number;
-  clipSnippets: number;
-  exportFolderPath: string;
-  hubName: string;
-  imgHeight: AllowedScreenshotHeight;
-  screensPerVideo: boolean; // true = N screenshots per video; false = 1 screenshot every N minutes
-  ssConstant: number;
-  ssVariable: number;
-  videoDirPath: InputSources;
-}
-
 /**
  * Start extracting the screenshots into a chosen output folder from a chosen input folder
  */
 ipc.on('start-the-import', (event, wizard: WizardOptions, videoFilesWithPaths: ImageElement[]) => {
 
-  const options: ImportSettingsObject = {
-    clipHeight: wizard.clipHeight,
-    clipSnippetLength: wizard.clipSnippetLength,
-    clipSnippets: wizard.extractClips ? wizard.clipSnippets : 0,
-    exportFolderPath: wizard.selectedOutputFolder,
-    hubName: (wizard.futureHubName || 'untitled'),
-    imgHeight: wizard.screenshotSizeForImport,
-    screensPerVideo: wizard.screensPerVideo,
-    ssConstant: wizard.ssConstant,
-    ssVariable: wizard.ssVariable,
-    videoDirPath: wizard.selectedSourceFolder
-  };
-
-  const outDir: string = options.exportFolderPath;
+  const hubName = wizard.futureHubName;
+  const outDir: string = wizard.selectedOutputFolder;
 
   // make sure no hub name under the same name exists
-  if (fs.existsSync(path.join(outDir, options.hubName + '.vha2'))) {
+  if (fs.existsSync(path.join(outDir, hubName + '.vha2'))) {
 
     dialog.showMessageBox(win, {
       message: systemMessages.hubAlreadyExists +
@@ -752,32 +726,32 @@ ipc.on('start-the-import', (event, wizard: WizardOptions, videoFilesWithPaths: I
   } else {
 
     // create the folder `vha-hubName` inside the output directory
-    if (!fs.existsSync(path.join(outDir, 'vha-' + options.hubName))) {
+    if (!fs.existsSync(path.join(outDir, 'vha-' + hubName))) {
       console.log('vha-hubName folder did not exist, creating');
-      fs.mkdirSync(path.join(outDir, 'vha-' + options.hubName));
-      fs.mkdirSync(path.join(outDir, 'vha-' + options.hubName + '/filmstrips'));
-      fs.mkdirSync(path.join(outDir, 'vha-' + options.hubName + '/thumbnails'));
-      fs.mkdirSync(path.join(outDir, 'vha-' + options.hubName + '/clips'));
+      fs.mkdirSync(path.join(outDir, 'vha-' + hubName));
+      fs.mkdirSync(path.join(outDir, 'vha-' + hubName + '/filmstrips'));
+      fs.mkdirSync(path.join(outDir, 'vha-' + hubName + '/thumbnails'));
+      fs.mkdirSync(path.join(outDir, 'vha-' + hubName + '/clips'));
     }
 
     globals.cancelCurrentImport = false;
-    globals.hubName = options.hubName;
-    globals.selectedOutputFolder = options.exportFolderPath;
-    globals.selectedSourceFolder = options.videoDirPath;
+    globals.hubName = hubName;
+    globals.selectedOutputFolder = outDir;
+    globals.selectedSourceFolder = wizard.selectedSourceFolder;
 
     // determine number of screenshots
     let numOfScreenshots: number = 0;
-    if (options.screensPerVideo) {
-      numOfScreenshots = options.ssConstant;
+    if (wizard.screensPerVideo) {
+      numOfScreenshots = wizard.ssConstant;
     } else {
-      numOfScreenshots = options.ssVariable;
+      numOfScreenshots = wizard.ssVariable;
     }
     globals.screenshotSettings = {
-      clipHeight: options.clipHeight,
-      clipSnippetLength: options.clipSnippetLength,
-      clipSnippets: options.clipSnippets,
-      fixed: options.screensPerVideo,
-      height: options.imgHeight,
+      clipHeight: wizard.clipHeight,
+      clipSnippetLength: wizard.clipSnippetLength,
+      clipSnippets: wizard.extractClips ? wizard.clipSnippets : 0,
+      fixed: wizard.screensPerVideo,
+      height: wizard.screenshotSizeForImport,
       n: numOfScreenshots,
     };
 
