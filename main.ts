@@ -284,8 +284,8 @@ function openThisDamnFile(pathToVhaFile: string) {
 
       if (lastSavedFinalObject.version === 2 && !lastSavedFinalObject.inputDirs) {
         console.log('OLD VERSION FILE !!!');
-        lastSavedFinalObject.inputDirs = {};
-        lastSavedFinalObject.inputDirs[0] = (lastSavedFinalObject as any).inputDir;
+        lastSavedFinalObject.inputDirs = { 0: { path: '', watch: false } };
+        lastSavedFinalObject.inputDirs[0].path = (lastSavedFinalObject as any).inputDir;
       }
 
       console.log('about to start watching for files');
@@ -295,7 +295,8 @@ function openThisDamnFile(pathToVhaFile: string) {
         console.log(key); // type: string!
         console.log(lastSavedFinalObject.inputDirs[key]);
 
-        startFileSystemWatching(lastSavedFinalObject.inputDirs[key], parseInt(key), lastSavedFinalObject.images, false);
+        console.log(' SYSTEM WATCHIND DISABLED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
+        // startFileSystemWatching(lastSavedFinalObject.inputDirs[key].path, parseInt(key), lastSavedFinalObject.images, false);
       });
 
 
@@ -303,11 +304,11 @@ function openThisDamnFile(pathToVhaFile: string) {
       let rootFolderLive = true;
 
       // check root folder exists
-      if (!fs.existsSync(lastSavedFinalObject.inputDirs[0])) {
+      if (!fs.existsSync(lastSavedFinalObject.inputDirs[0].path)) {
         // see if the user wants to change the root folder
         const buttonIndex: number = dialog.showMessageBoxSync(win, {
           message: systemMessages.videoFolderNotFound,
-          detail: lastSavedFinalObject.inputDirs[0],
+          detail: lastSavedFinalObject.inputDirs[0].path,
           buttons: [
             systemMessages.selectRootFolder, // 0
             systemMessages.continueAnyway,   // 1
@@ -327,7 +328,7 @@ function openThisDamnFile(pathToVhaFile: string) {
 
           if (inputDirPath) {
             // update the root folder
-            lastSavedFinalObject.inputDirs[0] = inputDirPath;
+            lastSavedFinalObject.inputDirs[0].path = inputDirPath;
             changedRootFolder = true;
           } else {
             // show the wizard instead
@@ -358,7 +359,7 @@ function openThisDamnFile(pathToVhaFile: string) {
 
       lastSavedFinalObject.images = insertTemporaryFields(lastSavedFinalObject.images);
 
-      console.log(globals.selectedSourceFolder[0] + ' - videos location');
+      console.log(globals.selectedSourceFolder[0].path + ' - videos location');
       console.log(globals.selectedOutputFolder + ' - output location');
 
       globals.angularApp.sender.send(
@@ -532,7 +533,7 @@ ipc.on('please-create-playlist', (event, playlist: ImageElement[]) => {
  * Delete file from computer (send to recycling bin / trash)
  */
 ipc.on('delete-video-file', (event, item: ImageElement): void => {
-  const fileToDelete = path.join(globals.selectedSourceFolder[0], item.partialPath, item.fileName);
+  const fileToDelete = path.join(globals.selectedSourceFolder[0].path, item.partialPath, item.fileName);
 
   (async () => {
     await trash(fileToDelete);
@@ -790,7 +791,7 @@ ipc.on('start-the-import', (event, wizard: WizardOptions, videoFilesWithPaths: I
 
     sendFinalResultHome([]);
 
-    startFileSystemWatching(globals.selectedSourceFolder[0], 0, [], false);
+    startFileSystemWatching(globals.selectedSourceFolder[0].path, 0, [], false);
 
     // Currently not needed -- start import happens on wizard and wizard currently only allows for ONE source folder
 
@@ -974,7 +975,7 @@ function sendFinalResultHome(theFinalArray: ImageElement[]): void {
 ipc.on('only-import-new-files', (event, currentAngularFinalArray: ImageElement[]) => {
   const currentVideoFolder = globals.selectedSourceFolder;
   globals.cancelCurrentImport = false;
-  importOnlyNewFiles(currentAngularFinalArray, currentVideoFolder[0]);
+  importOnlyNewFiles(currentAngularFinalArray, currentVideoFolder[0].path);
 });
 
 /**
@@ -987,7 +988,7 @@ ipc.on('only-import-new-files', (event, currentAngularFinalArray: ImageElement[]
 ipc.on('rescan-current-directory', (event, currentAngularFinalArray: ImageElement[]) => {
   const currentVideoFolder = globals.selectedSourceFolder;
   globals.cancelCurrentImport = false;
-  reScanCurrentDirectory(currentAngularFinalArray, currentVideoFolder[0]);
+  reScanCurrentDirectory(currentAngularFinalArray, currentVideoFolder[0].path);
 });
 
 /**
@@ -1107,7 +1108,7 @@ function importOnlyNewFiles(angularFinalArray: ImageElement[], currentVideoFolde
 ipc.on('regenerate-library', (event, currentAngularFinalArray: ImageElement[]) => {
   const currentVideoFolder = globals.selectedSourceFolder;
   globals.cancelCurrentImport = false;
-  regenerateMetadata(currentAngularFinalArray, currentVideoFolder[0]);
+  regenerateMetadata(currentAngularFinalArray, currentVideoFolder[0].path);
 });
 
 /**

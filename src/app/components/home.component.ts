@@ -236,7 +236,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     screensPerVideo: true,
     screenshotSizeForImport: 288,
     selectedOutputFolder: '',
-    selectedSourceFolder: {},
+    selectedSourceFolder: { 0: { path: '', watch: false }},
     showWizard: false,
     ssConstant: 10,
     ssVariable: 5,
@@ -531,7 +531,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.wizard.listOfFiles = listOfFiles;
 
       if (listOfFiles.length > 0) {
-        this.wizard.selectedSourceFolder[0] = filePath;
+        this.wizard.selectedSourceFolder[0].path = filePath;
         this.wizard.selectedOutputFolder = filePath;
       }
 
@@ -958,7 +958,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.currentPlayingFolder = clickedElement.partialPath;
     this.currentPlayingFile = clickedElement.cleanName;
     const fullPath = path.join(
-      this.appState.selectedSourceFolder[inputSource],
+      this.appState.selectedSourceFolder[inputSource].path,
       clickedElement.partialPath,
       clickedElement.fileName
     );
@@ -1415,7 +1415,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       screensPerVideo: true,
       screenshotSizeForImport: 288, // default
       selectedOutputFolder: '',
-      selectedSourceFolder: {},
+      selectedSourceFolder: { 0: { path: '', watch: false }},
       showWizard: true,
       ssConstant: 10,
       ssVariable: 10,
@@ -1863,7 +1863,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   openContainingFolderNow(): void {
     this.fullPathToCurrentFile = path.join(
-      this.appState.selectedSourceFolder[0], // TODO -- fix method to allow for any of the source folders!
+      this.appState.selectedSourceFolder[0].path, // TODO -- fix method to allow for any of the source folders!
       this.currentRightClickedItem.partialPath,
       this.currentRightClickedItem.fileName
     );

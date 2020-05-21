@@ -208,7 +208,7 @@ function nextExtaction(element: ImageElement, callback) {
 
   extractThumbnails(
     element,
-    globals.selectedSourceFolder[0],
+    globals.selectedSourceFolder[0].path,
     screenshotOutputFolder,
     globals.screenshotSettings,
     true,

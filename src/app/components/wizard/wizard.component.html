@@ -95,8 +95,8 @@
 
     <div
       [ngClass]="{
-          'current-step': wizard.futureHubName !== '' && wizard.selectedSourceFolder === '',
-          'fulfilled': wizard.selectedSourceFolder !== ''
+          'current-step': wizard.futureHubName !== '' && wizard.selectedSourceFolder[0].path === '',
+          'fulfilled': wizard.selectedSourceFolder[0].path !== ''
         }"
       class="steps"
     >
@@ -108,14 +108,14 @@
       [disabled]="wizard.futureHubName === ''"
       title="{{ 'WIZARD.selectFolderWithVideo' | translate }}"
     >
-      {{ (wizard.selectedSourceFolder === '' ? 'WIZARD.select' : 'WIZARD.change') | translate }}
+      {{ (wizard.selectedSourceFolder[0].path === '' ? 'WIZARD.select' : 'WIZARD.change') | translate }}
       {{ 'WIZARD.videoDirectory' | translate }}
     </button>
 
     <span class="step-description">
       {{ 'WIZARD.importingFrom' | translate }}
     </span>
-    <span class="path" [innerHtml]="wizard.selectedSourceFolder | folderArrowsPipe">
+    <span class="path" [innerHtml]="wizard.selectedSourceFolder[0].path | folderArrowsPipe">
     </span>
     <span
       class="step-description"
@@ -141,7 +141,7 @@
     <button
       class="wizard-button"
       (click)="selectOutputDirectory.emit()"
-      [disabled]="wizard.selectedSourceFolder === '' || wizard.futureHubName === ''"
+      [disabled]="wizard.selectedSourceFolder[0].path === '' || wizard.futureHubName === ''"
       title="{{ 'WIZARD.selectWhereFilesStored' | translate }}"
     >
       {{ (wizard.selectedOutputFolder === '' ? 'WIZARD.select' : 'WIZARD.change') | translate }}
@@ -158,7 +158,7 @@
 
     <div
       [ngClass]="{
-          'fulfilled': wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder !== ''
+          'fulfilled': wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder[0].path !== ''
         }"
       class="steps"
     >
@@ -170,7 +170,7 @@
       style="margin-top: 20px"
       [ngClass]="{ 'dim-row': !wizard.screensPerVideo
                              || wizard.selectedOutputFolder === ''
-                             || wizard.selectedSourceFolder === ''
+                             || wizard.selectedSourceFolder[0].path === ''
                              || wizard.futureHubName === ''
       }"
     >
@@ -181,7 +181,7 @@
         checked
         (change)="setScreensPerVideo.emit(true)"
         [disabled]="wizard.selectedOutputFolder === ''
-                 || wizard.selectedSourceFolder === ''
+                 || wizard.selectedSourceFolder[0].path === ''
                  || wizard.futureHubName === ''"
       >
       <input
@@ -193,7 +193,7 @@
         max=30
         onKeyDown="return false"
         [disabled]="wizard.selectedOutputFolder === ''
-                 || wizard.selectedSourceFolder === ''
+                 || wizard.selectedSourceFolder[0].path === ''
                  || wizard.futureHubName === ''
                  || !wizard.screensPerVideo"
       >
@@ -211,7 +211,7 @@
         name="ss-num-selection"
         (change)="setScreensPerVideo.emit(false)"
         [disabled]="wizard.selectedOutputFolder === ''
-                 || wizard.selectedSourceFolder === ''
+                 || wizard.selectedSourceFolder[0].path === ''
                  || wizard.futureHubName === ''"
       >
       {{ 'WIZARD.oneScreenshotEvery' | translate }}
@@ -224,7 +224,7 @@
         max=20
         onKeyDown="return false"
         [disabled]="wizard.selectedOutputFolder === ''
-                 || wizard.selectedSourceFolder === ''
+                 || wizard.selectedSourceFolder[0].path === ''
                  || wizard.futureHubName === ''
                  || wizard.screensPerVideo"
       >
@@ -251,7 +251,7 @@
       (change)="selectScreenshotSize.emit($event.target.value)"
       class="size-dropdown language-drop-down"
       [disabled]="wizard.selectedOutputFolder === ''
-               || wizard.selectedSourceFolder === ''
+               || wizard.selectedSourceFolder[0].path === ''
                || wizard.futureHubName === ''"
     >
       <option value="144">144px</option>
@@ -265,7 +265,7 @@
     <span
       class="step-four-text"
       [ngClass]="{
-          'dim-row': !(wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder !== '')
+          'dim-row': !(wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder[0].path !== '')
         }"
     >
       {{ 'WIZARD.sizeOfScreenshots' | translate }}
@@ -275,7 +275,7 @@
 
     <div
       [ngClass]="{
-          'fulfilled': wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder !== ''
+          'fulfilled': wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder[0].path !== ''
         }"
       class="steps"
       style="transform: translate(-24px, 11px);"
@@ -291,7 +291,7 @@
         class="clip-check-box"
         style="vertical-align: top;"
         [disabled]="wizard.selectedOutputFolder === ''
-                 || wizard.selectedSourceFolder === ''
+                 || wizard.selectedSourceFolder[0].path === ''
                  || wizard.futureHubName === ''"
       >
 
@@ -310,7 +310,7 @@
           max=15
           onKeyDown="return false"
           [disabled]="wizard.selectedOutputFolder === ''
-                   || wizard.selectedSourceFolder === ''
+                   || wizard.selectedSourceFolder[0].path === ''
                    || wizard.futureHubName === ''
                    || !wizard.extractClips"
         >
@@ -339,7 +339,7 @@
         max=5
         onKeyDown="return false"
         [disabled]="wizard.selectedOutputFolder === ''
-                 || wizard.selectedSourceFolder === ''
+                 || wizard.selectedSourceFolder[0].path === ''
                  || wizard.futureHubName === ''
                  || !wizard.extractClips"
       >
@@ -368,7 +368,7 @@
       <span
         class="step-four-text"
         [ngClass]="{
-            'dim-row': !(wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder !== '')
+            'dim-row': !(wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder[0].path !== '')
           }"
       >
         {{ 'WIZARD.sizeOfClips' | translate }}
@@ -382,7 +382,7 @@
       style="margin-top: 30px;"
       [ngClass]="{
         'current-step': wizard.selectedOutputFolder !== ''
-                     && wizard.selectedSourceFolder !== ''
+                     && wizard.selectedSourceFolder[0].path !== ''
       }"
       class="steps"
     >
@@ -393,7 +393,7 @@
       style="margin-top: 45px;"
       class="wizard-button start-import"
       [disabled]="wizard.selectedOutputFolder === ''
-               || wizard.selectedSourceFolder === ''
+               || wizard.selectedSourceFolder[0].path === ''
                || importStage !== 'done'
                || wizard.futureHubName === ''
                || wizard.totalNumberOfFiles === 0"

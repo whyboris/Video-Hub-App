@@ -179,8 +179,8 @@ export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: stri
   const inputDir = finalObject.inputDirs;
 
   // check for relative paths
-  if (finalObject.inputDirs[0] === path.parse(pathToTheFile).dir) {
-    finalObject.inputDirs[0] = '';
+  if (finalObject.inputDirs[0].path === path.parse(pathToTheFile).dir) {
+    finalObject.inputDirs[0].path = '';
   }
 
   finalObject.images = stripOutTemporaryFields(finalObject.images);
@@ -226,7 +226,7 @@ export function createDotPlsFile(savePath: string, playlist: ImageElement[], don
   for (let i = 0; i < playlist.length; i++) {
 
     const fullPath: string = path.join(
-      globals.selectedSourceFolder[0],
+      globals.selectedSourceFolder[0].path,
       playlist[i].partialPath,
       playlist[i].fileName
     );
