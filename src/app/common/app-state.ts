@@ -1,5 +1,6 @@
 import { SortType } from '../pipes/sorting.pipe';
 import { SupportedView } from '../../../interfaces/shared-interfaces';
+import { InputSources } from '../../../interfaces/final-object.interface';
 
 // Please conform the supported languages exactly to the first two characters from here:
 // https://github.com/electron/electron/blob/master/docs/api/locales.md
@@ -67,5 +68,5 @@ export interface AppStateInterface {
   numOfFolders: number;
   preferredVideoPlayer: string;
   selectedOutputFolder: string;
-  selectedSourceFolder: Record<number, string>;
+  selectedSourceFolder: InputSources;
 }

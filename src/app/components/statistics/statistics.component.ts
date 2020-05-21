@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
 
-import { ImageElement, ScreenshotSettings } from '../../../../interfaces/final-object.interface';
+import { ImageElement, ScreenshotSettings, InputSources } from '../../../../interfaces/final-object.interface';
 
 import { ElectronService } from '../../providers/electron.service';
 
@@ -13,7 +13,7 @@ export class StatisticsComponent implements OnInit {
 
   @Input() finalArray: ImageElement[];
   @Input() hubName: string;
-  @Input() inputFolders: Record<number, string>;
+  @Input() inputFolders: InputSources;
   @Input() numFolders: number;
   @Input() pathToVhaFile: string;
   @Input() screenshotSettings: ScreenshotSettings;
@@ -72,7 +72,6 @@ export class StatisticsComponent implements OnInit {
         this.inputFolders[this.pickNextIndex(this.inputFolders)] = filePath;
         console.log(filePath);
         console.log(stuff);
-        this.cd.detectChanges();
       }
 
     });
@@ -83,7 +82,7 @@ export class StatisticsComponent implements OnInit {
    * Simply the next integer larger than the largest currently used index
    * @param inputSource
    */
-  pickNextIndex(inputSource: Record<number, string>) {
+  pickNextIndex(inputSource: InputSources) {
     const indexesAsStrings: string[] = Object.keys(inputSource);
     const indexesAsNumbers: number[] = indexesAsStrings.map((item: string) => parseInt(item, 10));
 
@@ -106,6 +105,10 @@ export class StatisticsComponent implements OnInit {
     console.log(this.inputFolders);
     delete this.inputFolders[itemSourceKey];
     console.log(this.inputFolders);
+  }
+
+  trackByFn(index, item) {
+    return(item.key);
   }
 
 }

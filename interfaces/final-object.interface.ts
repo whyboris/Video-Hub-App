@@ -5,12 +5,14 @@ export type StarRating = 0.5 | 1.5 | 2.5 | 3.5 | 4.5 | 5.5;
 // must be heights from true `16:9` resolutions AND divisible by 8
 export type AllowedScreenshotHeight = 144 | 216 | 288 | 360 | 432 | 504;
 
+export type InputSources = Record<number, string>;
+
 export interface FinalObject {
   addTags?: string[];           // tags to add
   hubName: string;              // the name of the hub -- for recently-opened
   images: ImageElement[];       // see below
-  // inputDir: string;             // later may support array of many input directories
-  inputDirs: Record<number, string>; // map the `inputSource` number to input directory (replaces `inputDir`)
+  // inputDir: string;          // later may support array of many input directories
+  inputDirs: InputSources;      // map the `inputSource` number to input directory (replaces `inputDir`)
   numOfFolders: number;         // number of folders
   removeTags?: string[];        // tags to remove
   screenshotSettings: ScreenshotSettings;

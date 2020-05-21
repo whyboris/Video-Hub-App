@@ -12,7 +12,7 @@
   <!-- <span class="stats-heading folder" [innerHtml]="videoFolder[0] | folderArrowsPipe"></span> -->
 
   <div class="input-sources">
-    <ng-container *ngFor="let item of videoFolder | keyvalue">
+    <ng-container *ngFor="let item of videoFolder | keyvalue; trackBy: trackByFn">
       <span
         class="stats-heading folder input-folder"
         [innerHtml]="item.value | folderArrowsPipe"

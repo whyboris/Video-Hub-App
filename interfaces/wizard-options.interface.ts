@@ -1,4 +1,4 @@
-import { ImageElement, AllowedScreenshotHeight } from './final-object.interface';
+import { ImageElement, AllowedScreenshotHeight, InputSources } from './final-object.interface';
 
 // meant to keep the full state of the Wizard settings chosen
 export interface WizardOptions {
@@ -11,7 +11,7 @@ export interface WizardOptions {
   screensPerVideo: boolean;   // true = N screenshots per video; false = 1 screenshot every N minutes
   screenshotSizeForImport: AllowedScreenshotHeight;
   selectedOutputFolder: string;
-  selectedSourceFolder: Record<number, string>;
+  selectedSourceFolder: InputSources;
   showWizard: boolean;
   ssConstant: number;
   ssVariable: number;

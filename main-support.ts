@@ -22,7 +22,6 @@ import { FinalObject, ImageElement, NewImageElement, ScreenshotSettings } from '
 import { ResolutionString } from './src/app/pipes/resolution-filter.service';
 import { Stats } from 'fs';
 import { queueThumbExtraction } from './main-extract';
-import { elementEventFullName } from '@angular/compiler/src/view_compiler/view_compiler';
 
 interface ResolutionMeta {
   label: ResolutionString;
@@ -687,7 +686,7 @@ const async = require('async');
 
 const metadataQueue = async.queue(checkForMetadata, 8);
 
-let cachedFinalArray = [];
+let cachedFinalArray: ImageElement[] = [];
 
 function sendNewVideoMetadata(imageElement: ImageElement) {
   imageElement = insertTemporaryFieldsSingle(imageElement);
@@ -765,7 +764,12 @@ export function startFileSystemWatching(inputDir: String, inputSource: number, f
   deepScan = initalDeepScan; // Hash files instead of just path compare
 
   // One-liner for current directory
-  let watcher = chokidar.watch('**', {ignored: '**/vha-*/**', cwd: inputDir, alwaysStat: true, awaitWriteFinish: true})
+  const watcher = chokidar.watch('**', {
+                                          ignored: '**/vha-*/**',
+                                          cwd: inputDir,
+                                          alwaysStat: true,
+                                          awaitWriteFinish: true
+                                        })
     .on('add', (path, stat) => {
 
       const ext = path.substring(path.lastIndexOf('.') + 1);

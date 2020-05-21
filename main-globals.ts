@@ -1,4 +1,4 @@
-import { ScreenshotSettings } from './interfaces/final-object.interface';
+import { ScreenshotSettings, InputSources } from './interfaces/final-object.interface';
 
 export const globals: Globals = {
   angularApp: null,            // reference used to send messages back to Angular App
@@ -29,7 +29,7 @@ interface Globals {
   hubName: string;
   screenshotSettings: ScreenshotSettings;
   selectedOutputFolder: string;
-  selectedSourceFolder: Record<number, string>;
+  selectedSourceFolder: InputSources;
   version: string;
   vhaFileVersion: number;
   winRef: any;
