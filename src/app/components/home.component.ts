@@ -19,7 +19,6 @@ import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency
 import { DefaultScreenEmission } from './sheet/sheet.component';
 import { FinalObject, ImageElement, ScreenshotSettings, AllowedScreenshotHeight } from '../../../interfaces/final-object.interface';
 import { HistoryItem } from '../../../interfaces/history-item.interface';
-import { ImportSettingsObject } from '../../../interfaces/import.interface';
 import { ImportStage } from '../../../main-support';
 import { SavableProperties } from '../../../interfaces/savable-properties.interface';
 import { SettingsObject } from '../../../interfaces/settings-object.interface';
@@ -866,19 +865,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.appState.selectedSourceFolder = this.wizard.selectedSourceFolder;
     this.appState.selectedOutputFolder = this.wizard.selectedOutputFolder;
     //this.importStage = 'importingMeta';
-    const importOptions: ImportSettingsObject = {
-      clipHeight: this.wizard.clipHeight,
-      clipSnippetLength: this.wizard.clipSnippetLength,
-      clipSnippets: this.wizard.extractClips ? this.wizard.clipSnippets : 0,
-      exportFolderPath: this.wizard.selectedOutputFolder,
-      hubName: (this.wizard.futureHubName || 'untitled'),
-      imgHeight: this.wizard.screenshotSizeForImport,
-      screensPerVideo: this.wizard.screensPerVideo,
-      ssConstant: this.wizard.ssConstant,
-      ssVariable: this.wizard.ssVariable,
-      videoDirPath: this.wizard.selectedSourceFolder
-    };
-    this.electronService.ipcRenderer.send('start-the-import', importOptions, this.wizard.listOfFiles);
+
+    this.electronService.ipcRenderer.send('start-the-import', this.wizard, this.wizard.listOfFiles);
   }
 
   public cancelCurrentImport(): void {

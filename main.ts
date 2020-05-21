@@ -237,8 +237,7 @@ import {
 
 import { replaceThumbnailWithNewImage } from './main-extract';
 
-import { FinalObject, ImageElement } from './interfaces/final-object.interface';
-import { ImportSettingsObject } from './interfaces/import.interface';
+import { FinalObject, ImageElement, AllowedScreenshotHeight, InputSources } from './interfaces/final-object.interface';
 import { SavableProperties } from './interfaces/savable-properties.interface';
 import { SettingsObject } from './interfaces/settings-object.interface';
 
@@ -701,10 +700,36 @@ ipc.on('system-messages-updated', (event, newSystemMessages): void => {
   systemMessages = newSystemMessages;
 });
 
+interface ImportSettingsObject {
+  clipHeight: AllowedScreenshotHeight;
+  clipSnippetLength: number;
+  clipSnippets: number;
+  exportFolderPath: string;
+  hubName: string;
+  imgHeight: AllowedScreenshotHeight;
+  screensPerVideo: boolean; // true = N screenshots per video; false = 1 screenshot every N minutes
+  ssConstant: number;
+  ssVariable: number;
+  videoDirPath: InputSources;
+}
+
 /**
  * Start extracting the screenshots into a chosen output folder from a chosen input folder
  */
-ipc.on('start-the-import', (event, options: ImportSettingsObject, videoFilesWithPaths: ImageElement[]) => {
+ipc.on('start-the-import', (event, wizard: WizardOptions, videoFilesWithPaths: ImageElement[]) => {
+
+  const options: ImportSettingsObject = {
+    clipHeight: wizard.clipHeight,
+    clipSnippetLength: wizard.clipSnippetLength,
+    clipSnippets: wizard.extractClips ? wizard.clipSnippets : 0,
+    exportFolderPath: wizard.selectedOutputFolder,
+    hubName: (wizard.futureHubName || 'untitled'),
+    imgHeight: wizard.screenshotSizeForImport,
+    screensPerVideo: wizard.screensPerVideo,
+    ssConstant: wizard.ssConstant,
+    ssVariable: wizard.ssVariable,
+    videoDirPath: wizard.selectedSourceFolder
+  };
 
   const outDir: string = options.exportFolderPath;
 
@@ -1150,6 +1175,7 @@ ipc.on('app-to-touchBar', (event, changesFromApp) => {
 import { allSupportedViews, SupportedView } from './interfaces/shared-interfaces';
 import { randomizeArray } from './utility';
 import { acceptableFiles } from './main-filenames';
+import { WizardOptions } from './interfaces/wizard-options.interface';
 
 const nativeImage = require('electron').nativeImage;
 const resourcePath = serve ? path.join(__dirname, 'src/assets/icons/mac/touch-bar/') : path.join(process.resourcesPath, 'assets/');
