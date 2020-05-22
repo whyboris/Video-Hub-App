@@ -25,7 +25,7 @@ export class SettingsComponent {
   @Input() appState;
   @Input() demo;
   @Input() latestVersionAvailable;
-  @Input() settingToShow;
+  @Input() settingTabToShow;
   @Input() settingsButtons;
   @Input() settingsMetaGroup;
   @Input() settingsMetaGroupLabels;

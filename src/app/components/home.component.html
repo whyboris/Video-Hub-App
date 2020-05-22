@@ -184,19 +184,19 @@
     class="all-settings-tabs"
     @modalAnimation
   >
-    <button (click)="settingToShow = 0" [ngClass]="{ 'active-tab': settingToShow === 0 }">
+    <button (click)="settingTabToShow = 0" [ngClass]="{ 'active-tab': settingTabToShow === 0 }">
       {{ 'SETTINGS.tabFilter'    | translate }}
     </button>
-    <button (click)="settingToShow = 1" [ngClass]="{ 'active-tab': settingToShow === 1 }">
+    <button (click)="settingTabToShow = 1" [ngClass]="{ 'active-tab': settingTabToShow === 1 }">
       {{ 'SETTINGS.tabView'      | translate }}
     </button>
-    <button (click)="settingToShow = 2" [ngClass]="{ 'active-tab': settingToShow === 2 }">
+    <button (click)="settingTabToShow = 2" [ngClass]="{ 'active-tab': settingTabToShow === 2 }">
       {{ 'SETTINGS.tabMain'      | translate }}
     </button>
-    <button (click)="settingToShow = 3" [ngClass]="{ 'active-tab': settingToShow === 3 }">
+    <button (click)="settingTabToShow = 3" [ngClass]="{ 'active-tab': settingTabToShow === 3 }">
       {{ 'SETTINGS.tabShortcuts' | translate }}
     </button>
-    <button (click)="settingToShow = 4" [ngClass]="{ 'active-tab': settingToShow === 4 }">
+    <button (click)="settingTabToShow = 4" [ngClass]="{ 'active-tab': settingTabToShow === 4 }">
       {{ 'SETTINGS.statistics'   | translate }}
     </button>
   </div>
@@ -238,7 +238,7 @@
       [appState]="appState"
       [demo]="demo"
       [latestVersionAvailable]="latestVersionAvailable"
-      [settingToShow]="settingToShow"
+      [settingTabToShow]="settingTabToShow"
       [settingsButtons]="settingsButtons"
       [settingsMetaGroupLabels]="settingsMetaGroupLabels"
       [settingsMetaGroup]="settingsMetaGroup"
@@ -247,7 +247,7 @@
 
     <!-- ===========   KEYBOARD SHORTCUTS    =========== -->
 
-    <div *ngIf="settingToShow == 3" class="shortcut-menu">
+    <div *ngIf="settingTabToShow == 3" class="shortcut-menu">
 
       <app-shortcuts [macVersion]="macVersion"></app-shortcuts>
 
@@ -255,7 +255,7 @@
 
     <!-- HUB STATISTICS -->
 
-    <div *ngIf="settingToShow == 4" class="shortcut-menu">
+    <div *ngIf="settingTabToShow == 4" class="shortcut-menu">
 
       <app-statistics
         [finalArray]="finalArray"

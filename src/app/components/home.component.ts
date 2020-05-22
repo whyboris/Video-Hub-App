@@ -30,9 +30,9 @@ import { WizardOptions } from '../../../interfaces/wizard-options.interface';
 // Constants, etc
 import { AppState, SupportedLanguage, DefaultImagesPerRow, RowNumbers } from '../common/app-state';
 import { Filters, filterKeyToIndex, FilterKeyNames } from '../common/filters';
+import { GLOBALS } from '../../../main-globals';
 import { LanguageLookup } from '../common/languages';
 import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, SettingsMetaGroup } from '../common/settings-buttons';
-import { GLOBALS } from '../../../main-globals';
 
 // Animations
 import {
@@ -99,7 +99,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   settingsButtonsGroups = SettingsButtonsGroups;
   settingsMetaGroup = SettingsMetaGroup;
   settingsMetaGroupLabels = SettingsMetaGroupLabels;
-  settingToShow = 0;
+  settingTabToShow = 0;
 
   filters = Filters;
 
@@ -1195,7 +1195,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Show or hide settings
    */
   toggleSettings(): void {
-    this.settingToShow = 2;
+    this.settingTabToShow = 2;
     this.settingsModalOpen = !this.settingsModalOpen;
   }
 

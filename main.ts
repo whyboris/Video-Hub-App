@@ -1,6 +1,6 @@
 import { GLOBALS } from './main-globals';
 // =================================================================================================
-// ----------------------------------------- BUILD TOGGLE ------------------------------------------
+// -------------------------------------     BUILD TOGGLE     --------------------------------------
 // -------------------------------------------------------------------------------------------------
 const demo = false;
 GLOBALS.version = '2.2.3';   // update `package.json` version to `#.#.#-demo` when building the demo
@@ -71,7 +71,7 @@ let screenHeight;
 let preventSleepId: number;
 
 // TODO: CLEAN UP
-let macFirstRun = true; // to detect if it's the first time Mac is opening the file or something like that
+let macFirstRun = true; // detect if it's the 1st time Mac is opening the file or something like that
 let userWantedToOpen: string = null; // find a better pattern for handling this functionality
 
 // =================================================================================================
