@@ -15,6 +15,34 @@ export type CustomShortcutAction = 'focusOnFile'
 })
 export class ShortcutsService {
 
+  regularShortcuts: SettingsButtonKey[] = [
+    'showThumbnails',
+    'showFilmstrip',
+    'showFullView',
+    'showDetails',
+    'showDetails2',
+    'showFiles',
+    'showClips',
+    'hideSidebar',
+    'darkMode',
+    'showMoreInfo',
+    'shuffleGalleryNow',
+    'makeLarger',
+    'makeSmaller',
+  ];
+
+  customShortcuts: CustomShortcutAction[] = [
+    'focusOnFile',
+    'focusOnMagic',
+    'toggleMinimalMode',
+    'startWizard',
+    'toggleSettings',
+    'quit',
+    'fuzzySearch',
+    'showAutoTags',
+    'quit',
+  ]
+
   keyboardShortcuts: Map<string, SettingsButtonKey> = new Map([
     ['1', 'showThumbnails'],
     ['2', 'showFilmstrip'],
@@ -43,6 +71,7 @@ export class ShortcutsService {
     ['w', 'quit'],
   ]);
 
+  // combine both -- used for rendering template
   actionToKeyMap: Map<SettingsButtonKey | CustomShortcutAction, string> = new Map([
     ['darkMode', 'd'],
     ['focusOnFile', 'f'],
@@ -71,7 +100,29 @@ export class ShortcutsService {
   constructor() { }
 
   do(): void {
-    this.actionToKeyMap.set('darkMode', 'X');
+    this.setNewKeyBinding('x', 'darkMode');
+  }
+
+
+  setNewKeyBinding(key: string, action: (SettingsButtonKey | CustomShortcutAction)): void {
+
+    if (this.actionToKeyMap.has(action)) {
+      this.actionToKeyMap.delete(action);
+    }
+
+    if (this.keyboardShortcuts.has(key)) {
+      this.keyboardShortcuts.delete(key);
+    } else if (this.keyboardShortcutsCustom.has(key)) {
+      this.keyboardShortcutsCustom.delete(key);
+    }
+
+    if (this.customShortcuts.includes(<CustomShortcutAction>action)) {
+      this.keyboardShortcutsCustom.set(key, <CustomShortcutAction>action);
+      this.actionToKeyMap.set(action, key);
+    } else if (this.regularShortcuts.includes(<SettingsButtonKey>action)) {
+      this.keyboardShortcuts.set(key, <SettingsButtonKey>action);
+      this.actionToKeyMap.set(action, key);
+    }
 
   }
 

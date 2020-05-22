@@ -17,12 +17,12 @@
 
   <div
     class="shortcut-item"
-    *ngFor="let item of tempThingy"
+    *ngFor="let item of shortcutsInOrder"
     [ngClass]="{
-        separator: item === 'startWizard'
-                || item === 'showClips'
-                || item === 'fuzzySearch'
-                || item === 'shuffleGalleryNow'
+        'space-after':     item === 'showClips'
+                        || item === 'fuzzySearch'
+                        || item === 'shuffleGalleryNow'
+                        || item === 'startWizard'
       }"
   >
     <em class="shortcut-key clickable">{{ shortcutService.actionToKeyMap.get(item) }}</em> -
