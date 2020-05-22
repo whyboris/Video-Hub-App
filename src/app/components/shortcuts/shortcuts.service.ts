@@ -71,7 +71,8 @@ export class ShortcutsService {
   constructor() { }
 
   do(): void {
-    console.log('hi!!');
+    this.actionToKeyMap.set('darkMode', 'X');
+
   }
 
 }

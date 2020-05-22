@@ -319,7 +319,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
           case ('quit'):
             event.preventDefault();
             event.stopPropagation();
-            this.initiateClose();
+            console.log('quit disabled');
+            // this.initiateClose();
             break;
 
           case ('startWizard'):
