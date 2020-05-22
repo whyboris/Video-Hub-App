@@ -38,6 +38,10 @@
   width: initial;
 }
 
+.clickable {
+  cursor: pointer;
+}
+
 @media (max-width: 700px) {
   .shortcut-container {
     flex-wrap: nowrap;

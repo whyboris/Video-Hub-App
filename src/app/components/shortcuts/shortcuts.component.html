@@ -14,26 +14,11 @@
 </span>
 
 <div class="shortcut-container">
-  <div class="shortcut-item" (click)="do()"><em class="shortcut-key">1</em> - {{ 'SHORTCUTS.showThumbnails' | translate }}</div>
-  <div class="shortcut-item"><em class="shortcut-key">2</em> - {{ 'SHORTCUTS.showFilmstrip' | translate }}</div>
-  <div class="shortcut-item"><em class="shortcut-key">3</em> - {{ 'SHORTCUTS.showFullView' | translate }}</div>
-  <div class="shortcut-item"><em class="shortcut-key">4</em> - {{ 'SHORTCUTS.showDetails' | translate }}</div>
-  <div class="shortcut-item"><em class="shortcut-key">5</em> - {{ 'SHORTCUTS.showDetails2' | translate }}</div>
-  <div class="shortcut-item"><em class="shortcut-key">6</em> - {{ 'SHORTCUTS.showFiles' | translate }}</div>
-  <div class="shortcut-item"><em class="shortcut-key">7</em> - {{ 'SHORTCUTS.showClips' | translate }}</div>
-  <div class="shortcut-item"><em class="shortcut-key">f</em> - {{ 'SHORTCUTS.focusOnFile' | translate }}</div>
-  <div class="shortcut-item"><em class="shortcut-key">g</em> - {{ 'SHORTCUTS.focusOnMagic' | translate }}</div>
-  <div class="shortcut-item"><em class="shortcut-key">r</em> - {{ 'SHORTCUTS.fuzzySearch' | translate }}</div>
-  <div class="shortcut-item"><em class="shortcut-key">z</em> - {{ 'SHORTCUTS.makeSmaller' | translate }}</div>
-  <div class="shortcut-item"><em class="shortcut-key">x</em> - {{ 'SHORTCUTS.makeLarger' | translate }}</div>
-  <div class="shortcut-item"><em class="shortcut-key">s</em> - {{ 'SHORTCUTS.shuffleGalleryNow' | translate }}</div>
-  <div class="shortcut-item"><em class="shortcut-key">o</em> - {{ 'SHORTCUTS.toggleSettings' | translate }}</div>
-  <div class="shortcut-item"><em class="shortcut-key">d</em> - {{ 'SHORTCUTS.darkMode' | translate }}</div>
-  <div class="shortcut-item"><em class="shortcut-key">t</em> - {{ 'SHORTCUTS.showAutoTags' | translate }}</div>
-  <div class="shortcut-item"><em class="shortcut-key">i</em> - {{ 'SHORTCUTS.showMoreInfo' | translate }}</div>
-  <div class="shortcut-item"><em class="shortcut-key">b</em> - {{ 'SHORTCUTS.hideSidebar' | translate }}</div>
-  <div class="shortcut-item"><em class="shortcut-key">h</em> - {{ 'SHORTCUTS.toggleMinimalMode' | translate }}</div>
-  <div class="shortcut-item"><em class="shortcut-key">n</em> - {{ 'SHORTCUTS.startWizard' | translate }}</div>
+
+  <div class="shortcut-item" *ngFor="let item of tempThingy">
+    <em class="shortcut-key clickable">{{ shortcutService.actionToKeyMap.get(item) }}</em> -
+    {{ 'SHORTCUTS.' + item | translate }}
+  </div>
 
   <!-- System reserved -->
   <div class="shortcut-item"><em class="shortcut-key">w</em> - {{ 'SHORTCUTS.quit' | translate }}</div>

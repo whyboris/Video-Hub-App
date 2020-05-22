@@ -32,8 +32,8 @@ export class ShortcutsComponent {
     'hideSidebar', // b
     'toggleMinimalMode', // h
     'startWizard', // n
-    'quit', // w
-    'quit', // q
+    // 'quit', // w - hardcoded in template
+    // 'quit', // q - hardcoded in template
   ]
 
   constructor(

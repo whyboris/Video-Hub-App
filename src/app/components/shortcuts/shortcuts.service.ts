@@ -43,6 +43,31 @@ export class ShortcutsService {
     ['w', 'quit'],
   ]);
 
+  actionToKeyMap: Map<SettingsButtonKey | CustomShortcutAction, string> = new Map([
+    ['darkMode', 'd'],
+    ['focusOnFile', 'f'],
+    ['focusOnMagic', 'g'],
+    ['fuzzySearch', 'r'],
+    ['hideSidebar', 'b'],
+    ['makeLarger', 'x'],
+    ['makeSmaller', 'z'],
+    // ['quit', 'q'], // hardcoded in template
+    // ['quit', 'w'], // hardcoded in template
+    ['showAutoTags', 't'],
+    ['showClips', '7'],
+    ['showDetails', '4'],
+    ['showDetails2', '5'],
+    ['showFiles', '6'],
+    ['showFilmstrip', '2'],
+    ['showFullView', '3'],
+    ['showMoreInfo', 'i'],
+    ['showThumbnails', '1'],
+    ['shuffleGalleryNow', 's'],
+    ['startWizard', 'n'],
+    ['toggleMinimalMode', 'h'],
+    ['toggleSettings', 'o'],
+  ])
+
   constructor() { }
 
   do(): void {
