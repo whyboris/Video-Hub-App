@@ -10,14 +10,15 @@ import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
 import { AutoTagsSaveService } from './tags-auto/tags-save.service';
 import { ElectronService } from '../providers/electron.service';
 import { ManualTagsService } from './tags-manual/manual-tags.service';
-import { ResolutionFilterService, ResolutionString } from '../pipes/resolution-filter.service';
 import { PipeSideEffectService } from '../pipes/pipe-side-effect.service';
+import { ResolutionFilterService, ResolutionString } from '../pipes/resolution-filter.service';
 import { StarFilterService } from '../pipes/star-filter.service';
 import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency.service';
 
 // Interfaces
+import { AllSupportedViews, SupportedView, TagEmission } from '../../../interfaces/shared-interfaces';
 import { DefaultScreenEmission } from './sheet/sheet.component';
-import { FinalObject, ImageElement, ScreenshotSettings, AllowedScreenshotHeight } from '../../../interfaces/final-object.interface';
+import { FinalObject, ImageElement, ScreenshotSettings } from '../../../interfaces/final-object.interface';
 import { HistoryItem } from '../../../interfaces/history-item.interface';
 import { ImportStage } from '../../../main-support';
 import { SavableProperties } from '../../../interfaces/savable-properties.interface';
@@ -28,8 +29,8 @@ import { WizardOptions } from '../../../interfaces/wizard-options.interface';
 
 // Constants, etc
 import { AppState, SupportedLanguage, DefaultImagesPerRow, RowNumbers } from '../common/app-state';
-import { allSupportedViews, SupportedView, TagEmission } from '../../../interfaces/shared-interfaces';
 import { Filters, filterKeyToIndex, FilterKeyNames } from '../common/filters';
+import { LanguageLookup } from '../common/languages';
 import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, SettingsMetaGroup } from '../common/settings-buttons';
 import { globals } from '../../../main-globals';
 
@@ -49,7 +50,6 @@ import {
   slowFadeOut,
   topAnimation
 } from '../common/animations';
-import { LanguageLookup } from '../common/languages';
 
 // import { DemoContent } from '../../../assets/demo-content';
 
@@ -1260,7 +1260,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   toggleButton(uniqueKey: string | SupportedView, fromIpc = false): void {
     // ======== View buttons ================
-    if (allSupportedViews.includes(<SupportedView>uniqueKey)) {
+    if (AllSupportedViews.includes(<SupportedView>uniqueKey)) {
       this.savePreviousViewSize();
       this.toggleAllViewsButtonsOff();
       this.toggleButtonTrue(uniqueKey);

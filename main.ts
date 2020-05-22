@@ -41,7 +41,7 @@ import {
 } from './main-rescan';
 
 import { replaceThumbnailWithNewImage } from './main-extract';
-import { allSupportedViews, SupportedView } from './interfaces/shared-interfaces';
+import { AllSupportedViews, SupportedView } from './interfaces/shared-interfaces';
 import { randomizeArray } from './utility';
 
 // Interfaces
@@ -1135,8 +1135,8 @@ function tellUserDirDoesNotExist(currentVideoFolder: string) {
 
 ipc.on('app-to-touchBar', (event, changesFromApp) => {
   if (codeRunningOnMac) {
-    if (allSupportedViews.includes(<SupportedView>changesFromApp)) {
-      segmentedViewControl.selectedIndex = allSupportedViews.indexOf(changesFromApp);
+    if (AllSupportedViews.includes(<SupportedView>changesFromApp)) {
+      segmentedViewControl.selectedIndex = AllSupportedViews.indexOf(changesFromApp);
     } else if (changesFromApp === 'showFreq') {
       segmentedFolderControl.selectedIndex = 0;
     } else if (changesFromApp === 'showRecent') {
@@ -1237,7 +1237,7 @@ function createTouchBar() {
       },
     ],
     change: selectedIndex => {
-      globals.angularApp.sender.send('touchBar-to-app', allSupportedViews[selectedIndex]);
+      globals.angularApp.sender.send('touchBar-to-app', AllSupportedViews[selectedIndex]);
     }
   });
 
