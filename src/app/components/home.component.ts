@@ -32,7 +32,7 @@ import { AppState, SupportedLanguage, DefaultImagesPerRow, RowNumbers } from '..
 import { Filters, filterKeyToIndex, FilterKeyNames } from '../common/filters';
 import { GLOBALS } from '../../../main-globals';
 import { LanguageLookup } from '../common/languages';
-import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, SettingsMetaGroup } from '../common/settings-buttons';
+import { SettingsButtons, SettingsButtonsGroups } from '../common/settings-buttons';
 
 // Animations
 import {
@@ -94,11 +94,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild(VirtualScrollerComponent, { static: false })
   virtualScroller: VirtualScrollerComponent;
 
-  defaultSettingsButtons = {};
+  defaultSettingsButtons = JSON.parse(JSON.stringify(SettingsButtons));
   settingsButtons = SettingsButtons;
   settingsButtonsGroups = SettingsButtonsGroups;
-  settingsMetaGroup = SettingsMetaGroup;
-  settingsMetaGroupLabels = SettingsMetaGroupLabels;
   settingTabToShow = 0;
 
   filters = Filters;
@@ -468,8 +466,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     //     this.extractionPercent = 1;
     //   }
     // }, 2000);
-
-    this.cloneDefaultButtonSetting();
 
     setTimeout(() => {
       this.wordFrequencyService.finalMapBehaviorSubject.subscribe((value: WordFreqAndHeight[]) => {
@@ -1696,14 +1692,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Restore settings to their default values
    */
   resetSettingsToDefault(): void {
-    this.settingsButtons = JSON.parse(JSON.stringify(this.defaultSettingsButtons));
-  }
-
-  /**
-   * Clone default settings in case user wants to reset them later
-   */
-  cloneDefaultButtonSetting(): void {
-    this.defaultSettingsButtons = JSON.parse(JSON.stringify(this.settingsButtons));
+    this.settingsButtons = JSON.parse(JSON.stringify(this.defaultSettingsButtons)); // JSON hack to allow resetting more than once
+    this.toggleButton('showThumbnails');
   }
 
   /**
