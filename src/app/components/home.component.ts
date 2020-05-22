@@ -32,7 +32,7 @@ import { AppState, SupportedLanguage, DefaultImagesPerRow, RowNumbers } from '..
 import { Filters, filterKeyToIndex, FilterKeyNames } from '../common/filters';
 import { GLOBALS } from '../../../main-globals';
 import { LanguageLookup } from '../common/languages';
-import { SettingsButtons, SettingsButtonsGroups } from '../common/settings-buttons';
+import { SettingsButtons, SettingsButtonsGroups, SettingsButtonKey, SettingsButtonsType } from '../common/settings-buttons';
 
 // Animations
 import {
@@ -95,7 +95,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   virtualScroller: VirtualScrollerComponent;
 
   defaultSettingsButtons = JSON.parse(JSON.stringify(SettingsButtons));
-  settingsButtons = SettingsButtons;
+  settingsButtons: SettingsButtonsType = SettingsButtons;
   settingsButtonsGroups = SettingsButtonsGroups;
   settingTabToShow = 0;
 
@@ -555,7 +555,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.electronService.webFrame.clearCache();
     });
 
-    this.electronService.ipcRenderer.on('touchBar-to-app', (event, changesFromTouchBar: string) => {
+    this.electronService.ipcRenderer.on('touchBar-to-app', (event, changesFromTouchBar: SettingsButtonKey | SupportedView) => {
       if (changesFromTouchBar) {
         this.toggleButton(changesFromTouchBar, true);
       }
@@ -1254,7 +1254,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param   uniqueKey   the uniqueKey string of the button
    * @param   fromIpc     boolean value indicate, call from IPC
    */
-  toggleButton(uniqueKey: string | SupportedView, fromIpc = false): void {
+  toggleButton(uniqueKey: SettingsButtonKey | SupportedView, fromIpc = false): void {
     // ======== View buttons ================
     if (AllSupportedViews.includes(<SupportedView>uniqueKey)) {
       this.savePreviousViewSize();
@@ -1314,8 +1314,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.verifyThumbnails();
     } else if (uniqueKey === 'rescanDirectory') {
       this.rescanDirectory();
-    } else if (uniqueKey === 'regenerateLibrary') {
-      this.regenerateLibrary();
     } else if (uniqueKey === 'playPlaylist') {
       this.electronService.ipcRenderer.send('please-create-playlist', this.pipeSideEffectService.galleryShowing);
     } else if (uniqueKey === 'showTagTray') {
@@ -1450,20 +1448,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.toggleSettings();
       }
       this.electronService.ipcRenderer.send('rescan-current-directory', this.finalArray);
-    } else {
-      this.notifyRootFolderNotLive();
-    }
-  }
-
-  /**
-   * Regenerate the library
-   */
-  public regenerateLibrary(): void {
-    if (this.rootFolderLive) {
-      this.progressNum1 = 0;
-      this.importStage = 'importingMeta';
-      this.toggleSettings();
-      this.electronService.ipcRenderer.send('regenerate-library', this.finalArray);
     } else {
       this.notifyRootFolderNotLive();
     }
@@ -1659,9 +1643,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const buttonSettings = {};
 
     this.grabAllSettingsKeys().forEach(element => {
-      buttonSettings[element] = {};
-      buttonSettings[element].toggled = this.settingsButtons[element].toggled;
-      buttonSettings[element].hidden = this.settingsButtons[element].hidden;
+      buttonSettings[element] = {
+        toggled: this.settingsButtons[element].toggled,
+        hidden: this.settingsButtons[element].hidden,
+      };
     });
 
     // console.log(buttonSettings);
@@ -1675,8 +1660,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   /**
    * Return all keys from the settings-buttons
    */
-  grabAllSettingsKeys(): string[] {
-    const objectKeys: string[] = [];
+  grabAllSettingsKeys(): SettingsButtonKey[] {
+    const objectKeys: SettingsButtonKey[] = [];
 
     this.settingsButtonsGroups.forEach(element => {
       element.forEach(key => {

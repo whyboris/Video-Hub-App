@@ -924,6 +924,7 @@
   (closeTagsTray)="closeTagsTray()"
   (toggleBatchTaggingMode)="toggleBatchTaggingMode()"
   (handleTagWordClicked)="handleTagWordClicked($event.tag.name, $event.event)"
+  [appState]="appState"
   [batchTaggingMode]="batchTaggingMode"
   [settingsButtons]="settingsButtons"
 ></app-tag-tray>
