@@ -1,6 +1,6 @@
 import { ScreenshotSettings, InputSources } from './interfaces/final-object.interface';
 
-export const globals: Globals = {
+export const GLOBALS: Globals = {
   angularApp: null,            // reference used to send messages back to Angular App
   cancelCurrentImport: false,
   currentlyOpenVhaFile: '',    // OFFICAL DECREE IN NODE WHICH FILE IS CURRENTLY OPEN !!!

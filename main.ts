@@ -1,9 +1,9 @@
-import { globals } from './main-globals';
+import { GLOBALS } from './main-globals';
 // =================================================================================================
 // ----------------------------------------- BUILD TOGGLE ------------------------------------------
 // -------------------------------------------------------------------------------------------------
 const demo = false;
-globals.version = '2.2.3';   // update `package.json` version to `#.#.#-demo` when building the demo
+GLOBALS.version = '2.2.3';   // update `package.json` version to `#.#.#-demo` when building the demo
 // =================================================================================================
 
 import * as path from 'path';
@@ -82,9 +82,9 @@ let win, serve;
 let myWindow = null;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
-globals.debug = args.some(val => val === '--debug');
+GLOBALS.debug = args.some(val => val === '--debug');
 
-if (globals.debug) {
+if (GLOBALS.debug) {
   console.log('Debug mode enabled!');
 }
 
@@ -175,7 +175,7 @@ function createWindow() {
   // Watch for computer powerMonitor
   // https://electronjs.org/docs/api/power-monitor
   electron.powerMonitor.on('shutdown', () => {
-    globals.angularApp.sender.send('pleaseShutDownASAP');
+    GLOBALS.angularApp.sender.send('pleaseShutDownASAP');
   });
 
   // Emitted when the window is closed.
@@ -273,19 +273,19 @@ function openThisDamnFile(pathToVhaFile: string) {
         detail: pathToVhaFile,
         buttons: ['OK']
       });
-      globals.angularApp.sender.send('pleaseOpenWizard');
+      GLOBALS.angularApp.sender.send('pleaseOpenWizard');
 
     } else {
 
-      globals.currentlyOpenVhaFile = pathToVhaFile;
+      GLOBALS.currentlyOpenVhaFile = pathToVhaFile;
       lastSavedFinalObject = JSON.parse(data);
       console.log('opened vha file version: ' + lastSavedFinalObject.version);
 
       // path to folder where the VHA file is
-      globals.selectedOutputFolder = path.parse(pathToVhaFile).dir;
+      GLOBALS.selectedOutputFolder = path.parse(pathToVhaFile).dir;
       // use relative paths
       // if (lastSavedFinalObject.inputDirs.size === 0) {
-      //   lastSavedFinalObject.inputDirs.set(0, globals.selectedOutputFolder);
+      //   lastSavedFinalObject.inputDirs.set(0, GLOBALS.selectedOutputFolder);
       // }
 
       if (lastSavedFinalObject.version === 2 && !lastSavedFinalObject.inputDirs) {
@@ -341,7 +341,7 @@ function openThisDamnFile(pathToVhaFile: string) {
           } else {
             // show the wizard instead
             lastSavedFinalObject = null;
-            globals.angularApp.sender.send('pleaseOpenWizard');
+            GLOBALS.angularApp.sender.send('pleaseOpenWizard');
             return;
           }
 
@@ -355,7 +355,7 @@ function openThisDamnFile(pathToVhaFile: string) {
           console.log('CANCEL');
           // show the wizard instead
           lastSavedFinalObject = null;
-          globals.angularApp.sender.send('pleaseOpenWizard');
+          GLOBALS.angularApp.sender.send('pleaseOpenWizard');
           return;
         }
 
@@ -367,14 +367,14 @@ function openThisDamnFile(pathToVhaFile: string) {
 
       lastSavedFinalObject.images = insertTemporaryFields(lastSavedFinalObject.images);
 
-      console.log(globals.selectedSourceFolder[0].path + ' - videos location');
-      console.log(globals.selectedOutputFolder + ' - output location');
+      console.log(GLOBALS.selectedSourceFolder[0].path + ' - videos location');
+      console.log(GLOBALS.selectedOutputFolder + ' - output location');
 
-      globals.angularApp.sender.send(
+      GLOBALS.angularApp.sender.send(
         'finalObjectReturning',
         lastSavedFinalObject,
         pathToVhaFile,
-        getHtmlPath(globals.selectedOutputFolder),
+        getHtmlPath(GLOBALS.selectedOutputFolder),
         changedRootFolder,
         rootFolderLive
       );
@@ -405,9 +405,9 @@ function getHtmlPath(anyOsPath: string): string {
  * @param vhaFileContents
  */
 function setGlobalsFromVhaFile(vhaFileContents: FinalObject) {
-  globals.hubName = vhaFileContents.hubName;
-  globals.screenshotSettings = vhaFileContents.screenshotSettings;
-  globals.selectedSourceFolder = vhaFileContents.inputDirs;
+  GLOBALS.hubName = vhaFileContents.hubName;
+  GLOBALS.screenshotSettings = vhaFileContents.screenshotSettings;
+  GLOBALS.selectedSourceFolder = vhaFileContents.inputDirs;
 }
 
 // ========================================================================================
@@ -418,8 +418,8 @@ function setGlobalsFromVhaFile(vhaFileContents: FinalObject) {
  * Just started -- hello -- send over the settings or open wizard
  */
 ipc.on('just-started', (event) => {
-  globals.angularApp = event;
-  globals.winRef = win;
+  GLOBALS.angularApp = event;
+  GLOBALS.winRef = win;
 
   if (codeRunningOnMac) {
     tellElectronDarkModeChange(systemPreferences.getEffectiveAppearance());
@@ -539,7 +539,7 @@ ipc.on('please-create-playlist', (event, playlist: ImageElement[]) => {
  * Delete file from computer (send to recycling bin / trash)
  */
 ipc.on('delete-video-file', (event, item: ImageElement): void => {
-  const fileToDelete = path.join(globals.selectedSourceFolder[0].path, item.partialPath, item.fileName);
+  const fileToDelete = path.join(GLOBALS.selectedSourceFolder[0].path, item.partialPath, item.fileName);
 
   (async () => {
     await trash(fileToDelete);
@@ -558,11 +558,11 @@ ipc.on('delete-video-file', (event, item: ImageElement): void => {
  * Method to replace thumbnail of a particular item
  */
 ipc.on('replace-thumbnail', (event, pathToIncomingJpg: string, item: ImageElement) => {
-  const fileToReplace: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName, 'thumbnails', item.hash + '.jpg');
+  const fileToReplace: string = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName, 'thumbnails', item.hash + '.jpg');
 
 
   if (fs.existsSync(fileToReplace)) {
-    const height: number = globals.screenshotSettings.height;
+    const height: number = GLOBALS.screenshotSettings.height;
 
     replaceThumbnailWithNewImage(fileToReplace, pathToIncomingJpg, height)
       .then(success => {
@@ -665,7 +665,7 @@ ipc.on('close-window', (event, settingsToSave: SettingsObject, savableProperties
       lastSavedFinalObject.addTags = savableProperties.addTags;
       lastSavedFinalObject.removeTags = savableProperties.removeTags;
       lastSavedFinalObject.images = savableProperties.images;
-      writeVhaFileToDisk(lastSavedFinalObject, globals.currentlyOpenVhaFile, () => {
+      writeVhaFileToDisk(lastSavedFinalObject, GLOBALS.currentlyOpenVhaFile, () => {
         // file writing done !!!
         console.log('.vha2 file written before closing !!!');
         try {
@@ -689,14 +689,14 @@ ipc.on('close-window', (event, settingsToSave: SettingsObject, savableProperties
  * @param mode
  */
 function tellElectronDarkModeChange(mode: string) {
-  globals.angularApp.sender.send('osDarkModeChange', mode);
+  GLOBALS.angularApp.sender.send('osDarkModeChange', mode);
 }
 
 /**
  * Interrupt current import process
  */
 ipc.on('cancel-current-import', (event): void => {
-  globals.cancelCurrentImport = true;
+  GLOBALS.cancelCurrentImport = true;
 });
 
 ipc.on('system-messages-updated', (event, newSystemMessages): void => {
@@ -734,10 +734,10 @@ ipc.on('start-the-import', (event, wizard: WizardOptions, videoFilesWithPaths: I
       fs.mkdirSync(path.join(outDir, 'vha-' + hubName + '/clips'));
     }
 
-    globals.cancelCurrentImport = false;
-    globals.hubName = hubName;
-    globals.selectedOutputFolder = outDir;
-    globals.selectedSourceFolder = wizard.selectedSourceFolder;
+    GLOBALS.cancelCurrentImport = false;
+    GLOBALS.hubName = hubName;
+    GLOBALS.selectedOutputFolder = outDir;
+    GLOBALS.selectedSourceFolder = wizard.selectedSourceFolder;
 
     // determine number of screenshots
     let numOfScreenshots: number = 0;
@@ -746,7 +746,7 @@ ipc.on('start-the-import', (event, wizard: WizardOptions, videoFilesWithPaths: I
     } else {
       numOfScreenshots = wizard.ssVariable;
     }
-    globals.screenshotSettings = {
+    GLOBALS.screenshotSettings = {
       clipHeight: wizard.clipHeight,
       clipSnippetLength: wizard.clipSnippetLength,
       clipSnippets: wizard.extractClips ? wizard.clipSnippets : 0,
@@ -761,25 +761,25 @@ ipc.on('start-the-import', (event, wizard: WizardOptions, videoFilesWithPaths: I
 
     // extractAllMetadata(
     //   videoFilesWithPaths,
-    //   globals.selectedSourceFolder,
-    //   globals.screenshotSettings,
+    //   GLOBALS.selectedSourceFolder,
+    //   GLOBALS.screenshotSettings,
     //   0,
     //   sendFinalResultHome         // callback for when metdata is done extracting
     // );
 
     sendFinalResultHome([]);
 
-    startFileSystemWatching(globals.selectedSourceFolder[0].path, 0, [], false);
+    startFileSystemWatching(GLOBALS.selectedSourceFolder[0].path, 0, [], false);
 
     // Currently not needed -- start import happens on wizard and wizard currently only allows for ONE source folder
 
-    // Object.keys(globals.selectedSourceFolder).forEach((key) => {
+    // Object.keys(GLOBALS.selectedSourceFolder).forEach((key) => {
 
     //   console.log(key);
-    //   console.log(globals.selectedSourceFolder[key]);
+    //   console.log(GLOBALS.selectedSourceFolder[key]);
     //   console.log(typeof(key));
 
-    //   startFileSystemWatching(globals.selectedSourceFolder[key], parseInt(key), [], false);
+    //   startFileSystemWatching(GLOBALS.selectedSourceFolder[key], parseInt(key), [], false);
     // });
 
 
@@ -827,7 +827,7 @@ ipc.on('load-this-vha-file', (event, pathToVhaFile: string, savableProperties: S
     lastSavedFinalObject.images = savableProperties.images;
     lastSavedFinalObject.inputDirs = savableProperties.inputSources;
 
-    writeVhaFileToDisk(lastSavedFinalObject, globals.currentlyOpenVhaFile, () => {
+    writeVhaFileToDisk(lastSavedFinalObject, GLOBALS.currentlyOpenVhaFile, () => {
       // file writing done !!!
       console.log('.vha file written !!!');
       userWantedToOpen = pathToVhaFile;
@@ -874,7 +874,7 @@ ipc.on('try-to-rename-this-file', (event, sourceFolder: string, relPath: string,
     }
   }
 
-  globals.angularApp.sender.send('renameFileResponse', index, success, renameTo, file, errMsg);
+  GLOBALS.angularApp.sender.send('renameFileResponse', index, success, renameTo, file, errMsg);
 });
 
 // ========================================================================================
@@ -895,44 +895,44 @@ function sendFinalResultHome(theFinalArray: ImageElement[]): void {
   const myFinalArray: ImageElement[] = alphabetizeFinalArray(theFinalArray);
 
   const finalObject: FinalObject = {
-    version: globals.vhaFileVersion,
-    hubName: globals.hubName,
-    inputDirs: globals.selectedSourceFolder,
+    version: GLOBALS.vhaFileVersion,
+    hubName: GLOBALS.hubName,
+    inputDirs: GLOBALS.selectedSourceFolder,
     numOfFolders: countFoldersInFinalArray(myFinalArray),
-    screenshotSettings: globals.screenshotSettings,
+    screenshotSettings: GLOBALS.screenshotSettings,
     images: myFinalArray,
   };
 
   lastSavedFinalObject = finalObject;
 
-  const pathToTheFile = path.join(globals.selectedOutputFolder, globals.hubName + '.vha2');
+  const pathToTheFile = path.join(GLOBALS.selectedOutputFolder, GLOBALS.hubName + '.vha2');
 
   writeVhaFileToDisk(finalObject, pathToTheFile, () => {
 
-    globals.currentlyOpenVhaFile = pathToTheFile;
+    GLOBALS.currentlyOpenVhaFile = pathToTheFile;
 
     finalObject.images = insertTemporaryFields(finalObject.images);
 
-    globals.angularApp.sender.send(
+    GLOBALS.angularApp.sender.send(
       'finalObjectReturning',
       finalObject,
       pathToTheFile,
-      getHtmlPath(globals.selectedOutputFolder)
+      getHtmlPath(GLOBALS.selectedOutputFolder)
     );
 
-    const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
+    const screenshotOutputFolder: string = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName);
 
     const indexesToScan: number[] = missingThumbsIndex(
       myFinalArray,
       screenshotOutputFolder,
-      globals.screenshotSettings.clipSnippets > 0 // convert number to appropriate boolean
+      GLOBALS.screenshotSettings.clipSnippets > 0 // convert number to appropriate boolean
     );
 
     // extractFromTheseFiles(
     //   myFinalArray,
-    //   globals.selectedSourceFolder,
+    //   GLOBALS.selectedSourceFolder,
     //   screenshotOutputFolder,
-    //   globals.screenshotSettings,
+    //   GLOBALS.screenshotSettings,
     //   indexesToScan,
     //   false
     // );
@@ -951,8 +951,8 @@ function sendFinalResultHome(theFinalArray: ImageElement[]): void {
  * because the user may have renamed files from within the app!
  */
 ipc.on('only-import-new-files', (event, currentAngularFinalArray: ImageElement[]) => {
-  const currentVideoFolder = globals.selectedSourceFolder;
-  globals.cancelCurrentImport = false;
+  const currentVideoFolder = GLOBALS.selectedSourceFolder;
+  GLOBALS.cancelCurrentImport = false;
   importOnlyNewFiles(currentAngularFinalArray, currentVideoFolder[0].path);
 });
 
@@ -964,8 +964,8 @@ ipc.on('only-import-new-files', (event, currentAngularFinalArray: ImageElement[]
  * because the user may have renamed files from within the app!
  */
 ipc.on('rescan-current-directory', (event, currentAngularFinalArray: ImageElement[]) => {
-  const currentVideoFolder = globals.selectedSourceFolder;
-  globals.cancelCurrentImport = false;
+  const currentVideoFolder = GLOBALS.selectedSourceFolder;
+  GLOBALS.cancelCurrentImport = false;
   reScanCurrentDirectory(currentAngularFinalArray, currentVideoFolder[0].path);
 });
 
@@ -974,7 +974,7 @@ ipc.on('rescan-current-directory', (event, currentAngularFinalArray: ImageElemen
  * Excellent for continuing the screenshot import if it was ever cancelled
  */
 ipc.on('verify-thumbnails', (event, finalArray) => {
-  globals.cancelCurrentImport = false;
+  GLOBALS.cancelCurrentImport = false;
   verifyThumbnails(finalArray);
 });
 
@@ -987,12 +987,12 @@ ipc.on('verify-thumbnails', (event, finalArray) => {
  */
 function verifyThumbnails(finalArray: ImageElement[]) {
   // resume extracting any missing thumbnails
-  const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
+  const screenshotOutputFolder: string = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName);
 
   const indexesToScan: number[] = missingThumbsIndex(
     finalArray,
     screenshotOutputFolder,
-    globals.screenshotSettings.clipSnippets > 0
+    GLOBALS.screenshotSettings.clipSnippets > 0
   );
 
   console.log(finalArray);
@@ -1000,9 +1000,9 @@ function verifyThumbnails(finalArray: ImageElement[]) {
 
   // extractFromTheseFiles(
   //   finalArray,
-  //   globals.selectedSourceFolder,
+  //   GLOBALS.selectedSourceFolder,
   //   screenshotOutputFolder,
-  //   globals.screenshotSettings,
+  //   GLOBALS.screenshotSettings,
   //   randomizeArray(indexesToScan), // extract screenshots in random order
   //   true
   // );
@@ -1012,7 +1012,7 @@ function verifyThumbnails(finalArray: ImageElement[]) {
  * Begins rescan procedure compared to what the app has currently
  *
  * @param angularFinalArray  - ImageElment[] from Angular (might have renamed files)
- * @param currentVideoFolder - source folder where videos are located (globals.selectedSourceFolder)
+ * @param currentVideoFolder - source folder where videos are located (GLOBALS.selectedSourceFolder)
  */
 function reScanCurrentDirectory(angularFinalArray: ImageElement[], currentVideoFolder: string) {
 
@@ -1024,13 +1024,13 @@ function reScanCurrentDirectory(angularFinalArray: ImageElement[], currentVideoF
       videosOnHD = videosOnHD.slice(0, 50);
     }
 
-    const folderToDeleteFrom = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
+    const folderToDeleteFrom = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName);
 
     rescanAddAndDelete(
       angularFinalArray,
       videosOnHD,
       currentVideoFolder,
-      globals.screenshotSettings,
+      GLOBALS.screenshotSettings,
       folderToDeleteFrom,
       sendFinalResultHome           // callback for when `extractAllMetadata` is called
     );
@@ -1044,7 +1044,7 @@ function reScanCurrentDirectory(angularFinalArray: ImageElement[], currentVideoF
  * Begin scanning for new files and importing them
  *
  * @param angularFinalArray  - ImageElment[] from Angular (might have renamed files)
- * @param currentVideoFolder - source folder where videos are located (globals.selectedSourceFolder)
+ * @param currentVideoFolder - source folder where videos are located (GLOBALS.selectedSourceFolder)
  */
 function importOnlyNewFiles(angularFinalArray: ImageElement[], currentVideoFolder: string) {
 
@@ -1060,7 +1060,7 @@ function importOnlyNewFiles(angularFinalArray: ImageElement[], currentVideoFolde
       angularFinalArray,
       videosOnHD,
       currentVideoFolder,
-      globals.screenshotSettings,
+      GLOBALS.screenshotSettings,
       sendFinalResultHome           // callback for when `extractAllMetadata` is called
     );
 
@@ -1078,8 +1078,8 @@ function importOnlyNewFiles(angularFinalArray: ImageElement[], currentVideoFolde
  * Initiate regenerating the library
  */
 ipc.on('regenerate-library', (event, currentAngularFinalArray: ImageElement[]) => {
-  const currentVideoFolder = globals.selectedSourceFolder;
-  globals.cancelCurrentImport = false;
+  const currentVideoFolder = GLOBALS.selectedSourceFolder;
+  GLOBALS.cancelCurrentImport = false;
   regenerateMetadata(currentAngularFinalArray, currentVideoFolder[0].path);
 });
 
@@ -1088,7 +1088,7 @@ ipc.on('regenerate-library', (event, currentAngularFinalArray: ImageElement[]) =
  * Useful when new metadata is added eg.
  *
  * @param angularFinalArray  - ImageElment[] from Angular (might have renamed files)
- * @param currentVideoFolder - source folder where videos are located (globals.selectedSourceFolder)
+ * @param currentVideoFolder - source folder where videos are located (GLOBALS.selectedSourceFolder)
  */
 function regenerateMetadata(angularFinalArray: ImageElement[], currentVideoFolder: string) {
 
@@ -1100,13 +1100,13 @@ function regenerateMetadata(angularFinalArray: ImageElement[], currentVideoFolde
       videosOnHD = videosOnHD.slice(0, 50);
     }
 
-    const folderToDeleteFrom = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
+    const folderToDeleteFrom = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName);
 
     regenerateLibrary(
       angularFinalArray,
       videosOnHD,
       currentVideoFolder,
-      globals.screenshotSettings,
+      GLOBALS.screenshotSettings,
       folderToDeleteFrom,
       sendFinalResultHome           // callback for when `extractAllMetadata` is called
     );
@@ -1189,9 +1189,9 @@ function createTouchBar() {
     ],
     change: selectedIndex => {
       if (selectedIndex === 0) {
-        globals.angularApp.sender.send('touchBar-to-app', 'showFreq');
+        GLOBALS.angularApp.sender.send('touchBar-to-app', 'showFreq');
       } else {
-        globals.angularApp.sender.send('touchBar-to-app', 'showRecent');
+        GLOBALS.angularApp.sender.send('touchBar-to-app', 'showRecent');
       }
     }
   });
@@ -1237,7 +1237,7 @@ function createTouchBar() {
       },
     ],
     change: selectedIndex => {
-      globals.angularApp.sender.send('touchBar-to-app', AllSupportedViews[selectedIndex]);
+      GLOBALS.angularApp.sender.send('touchBar-to-app', AllSupportedViews[selectedIndex]);
     }
   });
 
@@ -1271,9 +1271,9 @@ function createTouchBar() {
     ],
     change: selectedIndex => {
       if (selectedIndex === 0) {
-        globals.angularApp.sender.send('touchBar-to-app', 'compactView');
+        GLOBALS.angularApp.sender.send('touchBar-to-app', 'compactView');
       } else {
-        globals.angularApp.sender.send('touchBar-to-app', 'showMoreInfo');
+        GLOBALS.angularApp.sender.send('touchBar-to-app', 'showMoreInfo');
       }
     }
   });
@@ -1287,9 +1287,9 @@ function createTouchBar() {
     ],
     change: selectedIndex => {
       if (selectedIndex === 0) {
-        globals.angularApp.sender.send('touchBar-to-app', 'makeSmaller');
+        GLOBALS.angularApp.sender.send('touchBar-to-app', 'makeSmaller');
       } else {
-        globals.angularApp.sender.send('touchBar-to-app', 'makeLarger');
+        GLOBALS.angularApp.sender.send('touchBar-to-app', 'makeLarger');
       }
     }
   });

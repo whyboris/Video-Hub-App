@@ -17,7 +17,7 @@ const exec = require('child_process').exec;
 const ffprobePath = require('@ffprobe-installer/ffprobe').path.replace('app.asar', 'app.asar.unpacked');
 
 import { acceptableFiles } from './main-filenames';
-import { globals } from './main-globals';
+import { GLOBALS } from './main-globals';
 import { FinalObject, ImageElement, NewImageElement, ScreenshotSettings } from './interfaces/final-object.interface';
 import { ResolutionString } from './src/app/pipes/resolution-filter.service';
 import { Stats } from 'fs';
@@ -226,7 +226,7 @@ export function createDotPlsFile(savePath: string, playlist: ImageElement[], don
   for (let i = 0; i < playlist.length; i++) {
 
     const fullPath: string = path.join(
-      globals.selectedSourceFolder[0].path,
+      GLOBALS.selectedSourceFolder[0].path,
       playlist[i].partialPath,
       playlist[i].fileName
     );
@@ -673,11 +673,11 @@ export function hashFileAsync(pathToFile: string): Promise<string> {
  * @param stage ImportStage
  */
 export function sendCurrentProgress(current: number, total: number, stage: ImportStage): void {
-  globals.angularApp.sender.send('processingProgress', current, total, stage);
+  GLOBALS.angularApp.sender.send('processingProgress', current, total, stage);
   if (stage !== 'done') {
-    globals.winRef.setProgressBar(current / total);
+    GLOBALS.winRef.setProgressBar(current / total);
   } else {
-    globals.winRef.setProgressBar(-1);
+    GLOBALS.winRef.setProgressBar(-1);
   }
 }
 
@@ -690,15 +690,15 @@ let cachedFinalArray: ImageElement[] = [];
 
 function sendNewVideoMetadata(imageElement: ImageElement) {
   imageElement = insertTemporaryFieldsSingle(imageElement);
-  globals.angularApp.sender.send(
+  GLOBALS.angularApp.sender.send(
     'newVideoMeta',
     imageElement
   );
   imageElement.index = cachedFinalArray.length;
   cachedFinalArray.push(imageElement);
-  const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
+  const screenshotOutputFolder: string = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName);
 
-  if (!hasAllThumbs(imageElement.hash, screenshotOutputFolder, globals.screenshotSettings.clipSnippets > 0 )) {
+  if (!hasAllThumbs(imageElement.hash, screenshotOutputFolder, GLOBALS.screenshotSettings.clipSnippets > 0 )) {
     queueThumbExtraction(imageElement);
   }
 }
@@ -736,7 +736,7 @@ export function checkForMetadata(file: tempMetadataQueueObject, callback) {
 function createElement(file: tempMetadataQueueObject, hash, callback) {
   const newElement = NewImageElement();
   newElement.hash = hash;
-  extractMetadataAsync(file.fullPath, globals.screenshotSettings, newElement, file.stat)
+  extractMetadataAsync(file.fullPath, GLOBALS.screenshotSettings, newElement, file.stat)
     .then((imageElement) => {
       imageElement.cleanName = cleanUpFileName(file.name);
       imageElement.fileName = file.name;

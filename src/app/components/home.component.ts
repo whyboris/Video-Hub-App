@@ -32,7 +32,7 @@ import { AppState, SupportedLanguage, DefaultImagesPerRow, RowNumbers } from '..
 import { Filters, filterKeyToIndex, FilterKeyNames } from '../common/filters';
 import { LanguageLookup } from '../common/languages';
 import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, SettingsMetaGroup } from '../common/settings-buttons';
-import { globals } from '../../../main-globals';
+import { GLOBALS } from '../../../main-globals';
 
 // Animations
 import {
@@ -111,11 +111,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // ========================================================================================
   demo = false;
   macVersion = false;
-  // !!! make sure to update the `globals.version` and the `package.json` version numbers !!!
+  // !!! make sure to update the `GLOBALS.version` and the `package.json` version numbers !!!
   // webDemo = false;
   // ========================================================================================
 
-  versionNumber = globals.version;
+  versionNumber = GLOBALS.version;
 
   public finalArray: ImageElement[] = [];
 

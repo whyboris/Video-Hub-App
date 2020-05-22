@@ -7,7 +7,7 @@
  *
  * All functions are PURE
  * The only exception is `extractFromTheseFiles`
- * which checks the global variable `globals.cancelCurrentImport`
+ * which checks the global variable `GLOBALS.cancelCurrentImport`
  * in case it needs to stop running (user interrupt)
  *
  * Huge thank you to cal2195 for the code contribution
@@ -30,7 +30,7 @@ const spawn = require('child_process').spawn;
 
 const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path.replace('app.asar', 'app.asar.unpacked');
 
-import { globals } from './main-globals';
+import { GLOBALS } from './main-globals';
 import { sendCurrentProgress } from './main-support';
 import { ImageElement, ScreenshotSettings } from './interfaces/final-object.interface';
 
@@ -204,13 +204,13 @@ export function queueThumbExtraction(element: ImageElement) {
 }
 
 function nextExtaction(element: ImageElement, callback) {
-  const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
+  const screenshotOutputFolder: string = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName);
 
   extractThumbnails(
     element,
-    globals.selectedSourceFolder[0].path,
+    GLOBALS.selectedSourceFolder[0].path,
     screenshotOutputFolder,
-    globals.screenshotSettings,
+    GLOBALS.screenshotSettings,
     true,
     callback);
 }
@@ -218,7 +218,7 @@ function nextExtaction(element: ImageElement, callback) {
 /**
  * Start extracting screenshots now that metadata has been retreived and sent over to the app
  *
- * DANGEROUSLY DEPENDS ON a global variable `globals.cancelCurrentImport`
+ * DANGEROUSLY DEPENDS ON a global variable `GLOBALS.cancelCurrentImport`
  * that can get toggled while scanning all screenshots
  *
  * Extract following this order. Each stage returns a boolean
@@ -549,12 +549,12 @@ function spawn_ffmpeg_and_run(
     // Note from past Cal to future Cal:
     // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
     ffmpeg_process.stdout.on('data', data => {
-      if (globals.debug) {
+      if (GLOBALS.debug) {
         console.log(data);
       }
     });
     ffmpeg_process.stderr.on('data', data => {
-      if (globals.debug) {
+      if (GLOBALS.debug) {
         console.log('grep stderr: ' + data);
       }
     });

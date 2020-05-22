@@ -67,7 +67,7 @@ const checkAllScreensExist__DISABLED = (
       // Note from past Cal to future Cal:
       // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
       ffmpeg_process.stdout.on('data', data => {
-        if (globals.debug) {
+        if (GLOBALS.debug) {
           console.log(data);
           if (data.match(corruptRegex)) {
             // skip this file
@@ -77,7 +77,7 @@ const checkAllScreensExist__DISABLED = (
         }
       });
       ffmpeg_process.stderr.on('data', data => {
-        if (globals.debug) {
+        if (GLOBALS.debug) {
           console.log('grep stderr: ' + data);
           if (data.match(corruptRegex)) {
             console.log(pathToVideo + ' was corrupt, skipping!');
