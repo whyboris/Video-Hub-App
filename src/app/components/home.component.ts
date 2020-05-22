@@ -301,6 +301,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
     ['z', 'makeSmaller'],
   ]);
 
+  keyboardShortcutsCustom: Map<string, string> = new Map([
+    ['f', 'findInFiles'],
+    ['g', 'magicSearch'],
+    ['h', 'hideEverything'],
+    ['n', 'startWizard'],
+    ['o', 'toggleSettings'],
+    ['q', 'quit'],
+    ['r', 'fuzzySearch'],
+    ['t', 'showAutoTags'],
+    ['w', 'quit'],
+  ]);
+
   // Listen for key presses
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -311,43 +323,42 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       if (this.keyboardShortcuts.has(key)) {
         this.toggleButton(this.keyboardShortcuts.get(key))
-      } else {
+      } else if (this.keyboardShortcutsCustom.has(key)) {
 
-        switch (key) {
+        switch (this.keyboardShortcutsCustom.get(key)) {
 
-          case ('o'):
+          case ('toggleSettings'):
             if (this.wizard.showWizard === false) {
               this.toggleSettings();
             }
             break;
 
-          case ('t'):
+          case ('showAutoTags'):
             if (!this.wizard.showWizard) {
               this.toggleButton('showTags');
             }
             break;
 
-          case ('q'):
-          case ('w'):
+          case ('quit'):
             event.preventDefault();
             event.stopPropagation();
             this.initiateClose();
             break;
 
-          case ('n'):
+          case ('startWizard'):
             this.startWizard();
             this.settingsModalOpen = false;
             this.settingsButtons['showTags'].toggled = false;
             break;
 
-          case ('h'):
+          case ('hideEverything'):
             this.toggleButton('hideTop');
             this.toggleButton('hideSidebar');
             this.toggleRibbon();
             this.toggleButton('showMoreInfo');
             break;
 
-          case ('f'):
+          case ('findInFiles'):
             if (this.settingsButtons['fileIntersection'].toggled === false) {
               this.settingsButtons['fileIntersection'].toggled = true;
             }
@@ -359,7 +370,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
             }, 1);
             break;
 
-          case ('g'):
+          case ('magicSearch'):
             if (!this.settingsButtons['magic'].toggled) {
               this.settingsButtons['magic'].toggled = true;
             }
@@ -369,7 +380,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
             }, 1);
             break;
 
-          case ('r'):
+          case ('fuzzySearch'):
             if (!this.settingsButtons['fuzzy'].toggled) {
               this.settingsButtons['fuzzy'].toggled = true;
             }
