@@ -314,3 +314,10 @@
 .gallery-showing-breadcrumbs {
   margin-top: 30px;
 }
+
+@media (max-width: 900px) {
+  .settings-modal {
+    left: 30px;
+    width: calc(100% - 45px);
+  }
+}

@@ -12,6 +12,7 @@ import { ElectronService } from '../providers/electron.service';
 import { ManualTagsService } from './tags-manual/manual-tags.service';
 import { PipeSideEffectService } from '../pipes/pipe-side-effect.service';
 import { ResolutionFilterService, ResolutionString } from '../pipes/resolution-filter.service';
+import { ShortcutsService } from './shortcuts/shortcuts.service';
 import { StarFilterService } from '../pipes/star-filter.service';
 import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency.service';
 
@@ -285,33 +286,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
   // ========================================================================
 
-  keyboardShortcuts: Map<string, SettingsButtonKey> = new Map([
-    ['1', 'showThumbnails'],
-    ['2', 'showFilmstrip'],
-    ['3', 'showFullView'],
-    ['4', 'showDetails'],
-    ['5', 'showDetails2'],
-    ['6', 'showFiles'],
-    ['7', 'showClips'],
-    ['b', 'hideSidebar'],
-    ['d', 'darkMode'],
-    ['i', 'showMoreInfo'],
-    ['s', 'shuffleGalleryNow'],
-    ['x', 'makeLarger'],
-    ['z', 'makeSmaller'],
-  ]);
 
-  keyboardShortcutsCustom: Map<string, string> = new Map([
-    ['f', 'findInFiles'],
-    ['g', 'magicSearch'],
-    ['h', 'hideEverything'],
-    ['n', 'startWizard'],
-    ['o', 'toggleSettings'],
-    ['q', 'quit'],
-    ['r', 'fuzzySearch'],
-    ['t', 'showAutoTags'],
-    ['w', 'quit'],
-  ]);
 
   // Listen for key presses
   @HostListener('document:keydown', ['$event'])
@@ -321,11 +296,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       const key: string = event.key;
 
-      if (this.keyboardShortcuts.has(key)) {
-        this.toggleButton(this.keyboardShortcuts.get(key))
-      } else if (this.keyboardShortcutsCustom.has(key)) {
+      if (this.shortcutService.keyboardShortcuts.has(key)) {
 
-        switch (this.keyboardShortcutsCustom.get(key)) {
+        this.toggleButton(this.shortcutService.keyboardShortcuts.get(key));
+
+      } else if (this.shortcutService.keyboardShortcutsCustom.has(key)) {
+
+        switch (this.shortcutService.keyboardShortcutsCustom.get(key)) {
 
           case ('toggleSettings'):
             if (this.wizard.showWizard === false) {
@@ -351,14 +328,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
             this.settingsButtons['showTags'].toggled = false;
             break;
 
-          case ('hideEverything'):
+          case ('toggleMinimalMode'):
             this.toggleButton('hideTop');
             this.toggleButton('hideSidebar');
             this.toggleRibbon();
             this.toggleButton('showMoreInfo');
             break;
 
-          case ('findInFiles'):
+          case ('focusOnFile'):
             if (this.settingsButtons['fileIntersection'].toggled === false) {
               this.settingsButtons['fileIntersection'].toggled = true;
             }
@@ -370,7 +347,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
             }, 1);
             break;
 
-          case ('magicSearch'):
+          case ('focusOnMagic'):
             if (!this.settingsButtons['magic'].toggled) {
               this.settingsButtons['magic'].toggled = true;
             }
@@ -424,8 +401,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     public cd: ChangeDetectorRef,
     public electronService: ElectronService,
     public manualTagsService: ManualTagsService,
-    public resolutionFilterService: ResolutionFilterService,
     public pipeSideEffectService: PipeSideEffectService,
+    public resolutionFilterService: ResolutionFilterService,
+    public shortcutService: ShortcutsService,
     public starFilterService: StarFilterService,
     public tagsSaveService: AutoTagsSaveService,
     public translate: TranslateService,
