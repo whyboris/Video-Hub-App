@@ -285,130 +285,103 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
   // ========================================================================
 
+  keyboardShortcuts: Map<string, SettingsButtonKey> = new Map([
+    ['1', 'showThumbnails'],
+    ['2', 'showFilmstrip'],
+    ['3', 'showFullView'],
+    ['4', 'showDetails'],
+    ['5', 'showDetails2'],
+    ['6', 'showFiles'],
+    ['7', 'showClips'],
+    ['b', 'hideSidebar'],
+    ['d', 'darkMode'],
+    ['i', 'showMoreInfo'],
+    ['s', 'shuffleGalleryNow'],
+    ['x', 'makeLarger'],
+    ['z', 'makeSmaller'],
+  ]);
+
   // Listen for key presses
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     // .metaKey is for mac `command` button
     if (event.ctrlKey === true || event.metaKey) {
 
-      switch (event.key) {
+      const key: string = event.key;
 
-        case ('b'):
-          this.toggleButton('hideSidebar');
-          break;
+      if (this.keyboardShortcuts.has(key)) {
+        this.toggleButton(this.keyboardShortcuts.get(key))
+      } else {
 
-        case ('i'):
-          this.toggleButton('showMoreInfo');
-          break;
+        switch (key) {
 
-        case ('1'):
-          this.toggleButton('showThumbnails');
-          break;
-
-        case ('2'):
-          this.toggleButton('showFilmstrip');
-          break;
-
-        case ('3'):
-          this.toggleButton('showFullView');
-          break;
-
-        case ('4'):
-          this.toggleButton('showDetails');
-          break;
-
-        case ('5'):
-          this.toggleButton('showDetails2');
-          break;
-
-        case ('6'):
-          this.toggleButton('showFiles');
-          break;
-
-        case ('7'):
-          this.toggleButton('showClips');
-          break;
-
-        case ('s'):
-          this.toggleButton('shuffleGalleryNow');
-          break;
-
-        case ('d'):
-          this.toggleButton('darkMode');
-          break;
-
-        case ('z'):
-          this.toggleButton('makeSmaller');
-          break;
-
-        case ('x'):
-          this.toggleButton('makeLarger');
-          break;
-
-        case ('o'):
-          if (this.wizard.showWizard === false) {
-            this.toggleSettings();
-          }
-          break;
-
-        case ('t'):
-          if (!this.wizard.showWizard) {
-            this.toggleButton('showTags');
-          }
-          break;
-
-        case ('q'):
-        case ('w'):
-          event.preventDefault();
-          event.stopPropagation();
-          this.initiateClose();
-          break;
-
-        case ('n'):
-          this.startWizard();
-          this.settingsModalOpen = false;
-          this.settingsButtons['showTags'].toggled = false;
-          break;
-
-        case ('h'):
-          this.toggleButton('hideTop');
-          this.toggleButton('hideSidebar');
-          this.toggleRibbon();
-          this.toggleButton('showMoreInfo');
-          break;
-
-        case ('f'):
-          if (this.settingsButtons['fileIntersection'].toggled === false) {
-            this.settingsButtons['fileIntersection'].toggled = true;
-          }
-          this.showSidebar();
-          setTimeout(() => {
-            if (this.searchRef.nativeElement.querySelector('#fileIntersection')) {
-              this.searchRef.nativeElement.querySelector('#fileIntersection').focus();
+          case ('o'):
+            if (this.wizard.showWizard === false) {
+              this.toggleSettings();
             }
-          }, 1);
-          break;
+            break;
 
-        case ('g'):
-          if (!this.settingsButtons['magic'].toggled) {
-            this.settingsButtons['magic'].toggled = true;
-          }
-          this.showSidebar();
-          setTimeout(() => {
-            this.magicSearch.nativeElement.focus();
-          }, 1);
-          break;
+          case ('t'):
+            if (!this.wizard.showWizard) {
+              this.toggleButton('showTags');
+            }
+            break;
 
-        case ('r'):
-          if (!this.settingsButtons['fuzzy'].toggled) {
-            this.settingsButtons['fuzzy'].toggled = true;
-          }
-          this.showSidebar();
-          setTimeout(() => {
-            this.fuzzySearch.nativeElement.focus();
-          }, 1);
-          break;
+          case ('q'):
+          case ('w'):
+            event.preventDefault();
+            event.stopPropagation();
+            this.initiateClose();
+            break;
+
+          case ('n'):
+            this.startWizard();
+            this.settingsModalOpen = false;
+            this.settingsButtons['showTags'].toggled = false;
+            break;
+
+          case ('h'):
+            this.toggleButton('hideTop');
+            this.toggleButton('hideSidebar');
+            this.toggleRibbon();
+            this.toggleButton('showMoreInfo');
+            break;
+
+          case ('f'):
+            if (this.settingsButtons['fileIntersection'].toggled === false) {
+              this.settingsButtons['fileIntersection'].toggled = true;
+            }
+            this.showSidebar();
+            setTimeout(() => {
+              if (this.searchRef.nativeElement.querySelector('#fileIntersection')) {
+                this.searchRef.nativeElement.querySelector('#fileIntersection').focus();
+              }
+            }, 1);
+            break;
+
+          case ('g'):
+            if (!this.settingsButtons['magic'].toggled) {
+              this.settingsButtons['magic'].toggled = true;
+            }
+            this.showSidebar();
+            setTimeout(() => {
+              this.magicSearch.nativeElement.focus();
+            }, 1);
+            break;
+
+          case ('r'):
+            if (!this.settingsButtons['fuzzy'].toggled) {
+              this.settingsButtons['fuzzy'].toggled = true;
+            }
+            this.showSidebar();
+            setTimeout(() => {
+              this.fuzzySearch.nativeElement.focus();
+            }, 1);
+            break;
+        }
+
       }
+
 
     } else if (event.key === 'Escape' && this.wizard.showWizard === true && this.canCloseWizard === true) {
       this.wizard.showWizard = false;
