@@ -95,8 +95,18 @@ export class ShortcutsService {
 
   constructor() { }
 
-  do(): void {
-    this.setNewKeyBinding('x', 'darkMode');
+  /**
+   * Restore user's preferred keys
+   * @param keyToAction
+   */
+  initializeFromSaved(keyToAction: Object): void {
+    this.actionToKeyMap.clear();
+    this.keyToActionMap.clear();
+
+    for (let [key, value] of Object.entries(keyToAction)) {
+      this.actionToKeyMap.set(value, <any>key);
+      this.keyToActionMap.set(<any>key, value);
+    }
   }
 
   /**

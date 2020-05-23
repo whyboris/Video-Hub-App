@@ -53,7 +53,6 @@ export class ShortcutsComponent {
   ) { }
 
   changeThisShortcut(shortcutToChange: SettingsButtonKey | CustomShortcutAction): void {
-    console.log(shortcutToChange);
     this.shortcutToChange = shortcutToChange;
     this.isReadyToReceiveKey = true;
   }

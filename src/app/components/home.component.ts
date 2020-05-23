@@ -296,19 +296,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
       const key: string = event.key;
 
       if (this.shortcutService.keyToActionMap.has(key)) {
-
         const shortcutAction: SettingsButtonKey | CustomShortcutAction = this.shortcutService.keyToActionMap.get(key);
 
-        if (this.shortcutService.regularShortcuts.includes(<SettingsButtonKey>shortcutAction)) {
-
-          this.toggleButton(<SettingsButtonKey>shortcutAction);
-
+        if (this.shortcutService.regularShortcuts.includes(shortcutAction as SettingsButtonKey)) {
+          this.toggleButton(shortcutAction as SettingsButtonKey);
         } else {
-
-          this.handleCustomShortcutAction(shortcutAction);
-
+          this.handleCustomShortcutAction(shortcutAction as CustomShortcutAction);
         }
-
       }
 
     } else if (event.key === 'Escape' && this.wizard.showWizard === true && this.canCloseWizard === true) {
@@ -599,6 +593,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       } else {
         this.wizard.showWizard = true;
         this.flickerReduceOverlay = false;
+      }
+      if (settingsObject.shortcuts) {
+        this.shortcutService.initializeFromSaved(settingsObject.shortcuts);
       }
     });
 
@@ -1174,8 +1171,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       case ('quit'):
         event.preventDefault();
         event.stopPropagation();
-        console.log('quit disabled');
-        // this.initiateClose();
+        this.initiateClose();
         break;
 
       case ('startWizard'):
@@ -1615,7 +1611,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Prepare and return the settings object for saving
    * happens right before closing the app !!!
    */
-  getSettingsForSave(): any {
+  getSettingsForSave(): SettingsObject {
 
     const buttonSettings = {};
 
@@ -1630,7 +1626,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     return {
       appState: this.appState,
       buttonSettings: buttonSettings,
+      shortcuts: this.shortcutService.keyToActionMap,
       vhaFileHistory: this.vhaFileHistory,
+      windowSizeAndPosition: undefined, // is added in `cose-window` in `main.ts`
     };
   }
 
