@@ -43,7 +43,8 @@ export class ShortcutsService {
     'quit',
   ]
 
-  keyboardShortcuts: Map<string, SettingsButtonKey> = new Map([
+  // the mapping used in `home.component` in `handleKeyboardEvent`
+  keyToActionMap: Map<string, SettingsButtonKey | CustomShortcutAction> = new Map([
     ['1', 'showThumbnails'],
     ['2', 'showFilmstrip'],
     ['3', 'showFullView'],
@@ -57,21 +58,18 @@ export class ShortcutsService {
     ['s', 'shuffleGalleryNow'],
     ['x', 'makeLarger'],
     ['z', 'makeSmaller'],
-  ]);
-
-  keyboardShortcutsCustom: Map<string, CustomShortcutAction> = new Map([
     ['f', 'focusOnFile'],
     ['g', 'focusOnMagic'],
     ['h', 'toggleMinimalMode'],
     ['n', 'startWizard'],
     ['o', 'toggleSettings'],
-    ['q', 'quit'],
+    ['q', 'quit'], // cannot be changed
     ['r', 'fuzzySearch'],
     ['t', 'showAutoTags'],
-    ['w', 'quit'],
+    ['w', 'quit'], // cannot be changed
   ]);
 
-  // combine both -- used for rendering template
+  // used in template to show key-shortcut connection (excludes quit: `q` and `w`)
   actionToKeyMap: Map<SettingsButtonKey | CustomShortcutAction, string> = new Map([
     ['darkMode', 'd'],
     ['focusOnFile', 'f'],
@@ -80,8 +78,6 @@ export class ShortcutsService {
     ['hideSidebar', 'b'],
     ['makeLarger', 'x'],
     ['makeSmaller', 'z'],
-    // ['quit', 'q'], // hardcoded in template
-    // ['quit', 'w'], // hardcoded in template
     ['showAutoTags', 't'],
     ['showClips', '7'],
     ['showDetails', '4'],
@@ -103,26 +99,28 @@ export class ShortcutsService {
     this.setNewKeyBinding('x', 'darkMode');
   }
 
-
+  /**
+   * Create new key binding
+   * removes old key binding too
+   */
   setNewKeyBinding(key: string, action: (SettingsButtonKey | CustomShortcutAction)): void {
 
-    if (this.actionToKeyMap.has(action)) {
-      this.actionToKeyMap.delete(action);
+    if (!key.match(/^[0-9a-z]/)) { // only allow alphanumeric
+      return;
     }
 
-    if (this.keyboardShortcuts.has(key)) {
-      this.keyboardShortcuts.delete(key);
-    } else if (this.keyboardShortcutsCustom.has(key)) {
-      this.keyboardShortcutsCustom.delete(key);
+    if (key === 'w' || key === 'q') { // prevent system changing default close shortcut
+      return;
     }
 
-    if (this.customShortcuts.includes(<CustomShortcutAction>action)) {
-      this.keyboardShortcutsCustom.set(key, <CustomShortcutAction>action);
-      this.actionToKeyMap.set(action, key);
-    } else if (this.regularShortcuts.includes(<SettingsButtonKey>action)) {
-      this.keyboardShortcuts.set(key, <SettingsButtonKey>action);
-      this.actionToKeyMap.set(action, key);
-    }
+    const oldKey = this.actionToKeyMap.get(action);
+    const oldAction = this.keyToActionMap.get(key);
+
+    this.keyToActionMap.set(key, action);
+    this.actionToKeyMap.set(action, key);
+
+    this.keyToActionMap.delete(oldKey);
+    this.actionToKeyMap.delete(oldAction);
 
   }
 

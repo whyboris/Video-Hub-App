@@ -12,7 +12,7 @@ import { ElectronService } from '../providers/electron.service';
 import { ManualTagsService } from './tags-manual/manual-tags.service';
 import { PipeSideEffectService } from '../pipes/pipe-side-effect.service';
 import { ResolutionFilterService, ResolutionString } from '../pipes/resolution-filter.service';
-import { ShortcutsService } from './shortcuts/shortcuts.service';
+import { ShortcutsService, CustomShortcutAction } from './shortcuts/shortcuts.service';
 import { StarFilterService } from '../pipes/star-filter.service';
 import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency.service';
 
@@ -296,81 +296,86 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       const key: string = event.key;
 
-      if (this.shortcutService.keyboardShortcuts.has(key)) {
+      if (this.shortcutService.keyToActionMap.has(key)) {
 
-        this.toggleButton(this.shortcutService.keyboardShortcuts.get(key));
+        const shortcutAction: SettingsButtonKey | CustomShortcutAction = this.shortcutService.keyToActionMap.get(key);
 
-      } else if (this.shortcutService.keyboardShortcutsCustom.has(key)) {
+        if (this.shortcutService.regularShortcuts.includes(<SettingsButtonKey>shortcutAction)) {
 
-        switch (this.shortcutService.keyboardShortcutsCustom.get(key)) {
+          this.toggleButton(<SettingsButtonKey>this.shortcutService.keyToActionMap.get(key));
 
-          case ('toggleSettings'):
-            if (this.wizard.showWizard === false) {
-              this.toggleSettings();
-            }
-            break;
+        } else {
 
-          case ('showAutoTags'):
-            if (!this.wizard.showWizard) {
-              this.toggleButton('showTags');
-            }
-            break;
+          switch (shortcutAction) {
 
-          case ('quit'):
-            event.preventDefault();
-            event.stopPropagation();
-            console.log('quit disabled');
-            // this.initiateClose();
-            break;
-
-          case ('startWizard'):
-            this.startWizard();
-            this.settingsModalOpen = false;
-            this.settingsButtons['showTags'].toggled = false;
-            break;
-
-          case ('toggleMinimalMode'):
-            this.toggleButton('hideTop');
-            this.toggleButton('hideSidebar');
-            this.toggleRibbon();
-            this.toggleButton('showMoreInfo');
-            break;
-
-          case ('focusOnFile'):
-            if (this.settingsButtons['fileIntersection'].toggled === false) {
-              this.settingsButtons['fileIntersection'].toggled = true;
-            }
-            this.showSidebar();
-            setTimeout(() => {
-              if (this.searchRef.nativeElement.querySelector('#fileIntersection')) {
-                this.searchRef.nativeElement.querySelector('#fileIntersection').focus();
+            case ('toggleSettings'):
+              if (this.wizard.showWizard === false) {
+                this.toggleSettings();
               }
-            }, 1);
-            break;
+              break;
 
-          case ('focusOnMagic'):
-            if (!this.settingsButtons['magic'].toggled) {
-              this.settingsButtons['magic'].toggled = true;
-            }
-            this.showSidebar();
-            setTimeout(() => {
-              this.magicSearch.nativeElement.focus();
-            }, 1);
-            break;
+            case ('showAutoTags'):
+              if (!this.wizard.showWizard) {
+                this.toggleButton('showTags');
+              }
+              break;
 
-          case ('fuzzySearch'):
-            if (!this.settingsButtons['fuzzy'].toggled) {
-              this.settingsButtons['fuzzy'].toggled = true;
-            }
-            this.showSidebar();
-            setTimeout(() => {
-              this.fuzzySearch.nativeElement.focus();
-            }, 1);
-            break;
+            case ('quit'):
+              event.preventDefault();
+              event.stopPropagation();
+              console.log('quit disabled');
+              // this.initiateClose();
+              break;
+
+            case ('startWizard'):
+              this.startWizard();
+              this.settingsModalOpen = false;
+              this.settingsButtons['showTags'].toggled = false;
+              break;
+
+            case ('toggleMinimalMode'):
+              this.toggleButton('hideTop');
+              this.toggleButton('hideSidebar');
+              this.toggleRibbon();
+              this.toggleButton('showMoreInfo');
+              break;
+
+            case ('focusOnFile'):
+              if (this.settingsButtons['fileIntersection'].toggled === false) {
+                this.settingsButtons['fileIntersection'].toggled = true;
+              }
+              this.showSidebar();
+              setTimeout(() => {
+                if (this.searchRef.nativeElement.querySelector('#fileIntersection')) {
+                  this.searchRef.nativeElement.querySelector('#fileIntersection').focus();
+                }
+              }, 1);
+              break;
+
+            case ('focusOnMagic'):
+              if (!this.settingsButtons['magic'].toggled) {
+                this.settingsButtons['magic'].toggled = true;
+              }
+              this.showSidebar();
+              setTimeout(() => {
+                this.magicSearch.nativeElement.focus();
+              }, 1);
+              break;
+
+            case ('fuzzySearch'):
+              if (!this.settingsButtons['fuzzy'].toggled) {
+                this.settingsButtons['fuzzy'].toggled = true;
+              }
+              this.showSidebar();
+              setTimeout(() => {
+                this.fuzzySearch.nativeElement.focus();
+              }, 1);
+              break;
+          }
+
         }
 
       }
-
 
     } else if (event.key === 'Escape' && this.wizard.showWizard === true && this.canCloseWizard === true) {
       this.wizard.showWizard = false;

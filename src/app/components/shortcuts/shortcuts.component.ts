@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, HostListener } from '@angular/core';
 import { ShortcutsService, CustomShortcutAction } from './shortcuts.service';
 import { SettingsButtonKey } from '../../common/settings-buttons';
 
@@ -10,6 +10,18 @@ import { SettingsButtonKey } from '../../common/settings-buttons';
 export class ShortcutsComponent {
 
   @Input() macVersion: boolean;
+
+  isReadyToReceiveKey: boolean = false;
+  shortcutToChange: SettingsButtonKey | CustomShortcutAction;
+
+  @HostListener('window:keydown', ['$event'])
+  handleThisEvent(event: KeyboardEvent) {
+    if (this.isReadyToReceiveKey) {
+      this.shortcutService.setNewKeyBinding(event.key, this.shortcutToChange);
+      this.isReadyToReceiveKey = false;
+      this.shortcutToChange = undefined;
+    }
+  }
 
   shortcutsInOrder: (SettingsButtonKey | CustomShortcutAction)[] = [
     'showThumbnails',    // 1
@@ -40,9 +52,10 @@ export class ShortcutsComponent {
     public shortcutService: ShortcutsService
   ) { }
 
-  do(): void {
-    console.log('hi');
-    this.shortcutService.do();
+  changeThisShortcut(shortcutToChange: SettingsButtonKey | CustomShortcutAction): void {
+    console.log(shortcutToChange);
+    this.shortcutToChange = shortcutToChange;
+    this.isReadyToReceiveKey = true;
   }
 
 }

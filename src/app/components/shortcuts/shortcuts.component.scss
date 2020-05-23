@@ -42,6 +42,14 @@
   cursor: pointer;
 }
 
+.selected-for-change {
+  box-shadow: 0 0 5px 2px $pretty-blue;
+}
+
+.empty {
+  color: white;
+}
+
 .space-after {
   margin-bottom: 50px;
 }
