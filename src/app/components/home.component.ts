@@ -287,7 +287,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // ========================================================================
 
 
-
   // Listen for key presses
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
@@ -302,76 +301,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
         if (this.shortcutService.regularShortcuts.includes(<SettingsButtonKey>shortcutAction)) {
 
-          this.toggleButton(<SettingsButtonKey>this.shortcutService.keyToActionMap.get(key));
+          this.toggleButton(<SettingsButtonKey>shortcutAction);
 
         } else {
 
-          switch (shortcutAction) {
-
-            case ('toggleSettings'):
-              if (this.wizard.showWizard === false) {
-                this.toggleSettings();
-              }
-              break;
-
-            case ('showAutoTags'):
-              if (!this.wizard.showWizard) {
-                this.toggleButton('showTags');
-              }
-              break;
-
-            case ('quit'):
-              event.preventDefault();
-              event.stopPropagation();
-              console.log('quit disabled');
-              // this.initiateClose();
-              break;
-
-            case ('startWizard'):
-              this.startWizard();
-              this.settingsModalOpen = false;
-              this.settingsButtons['showTags'].toggled = false;
-              break;
-
-            case ('toggleMinimalMode'):
-              this.toggleButton('hideTop');
-              this.toggleButton('hideSidebar');
-              this.toggleRibbon();
-              this.toggleButton('showMoreInfo');
-              break;
-
-            case ('focusOnFile'):
-              if (this.settingsButtons['fileIntersection'].toggled === false) {
-                this.settingsButtons['fileIntersection'].toggled = true;
-              }
-              this.showSidebar();
-              setTimeout(() => {
-                if (this.searchRef.nativeElement.querySelector('#fileIntersection')) {
-                  this.searchRef.nativeElement.querySelector('#fileIntersection').focus();
-                }
-              }, 1);
-              break;
-
-            case ('focusOnMagic'):
-              if (!this.settingsButtons['magic'].toggled) {
-                this.settingsButtons['magic'].toggled = true;
-              }
-              this.showSidebar();
-              setTimeout(() => {
-                this.magicSearch.nativeElement.focus();
-              }, 1);
-              break;
-
-            case ('fuzzySearch'):
-              if (!this.settingsButtons['fuzzy'].toggled) {
-                this.settingsButtons['fuzzy'].toggled = true;
-              }
-              this.showSidebar();
-              setTimeout(() => {
-                this.fuzzySearch.nativeElement.focus();
-              }, 1);
-              break;
-          }
+          this.handleCustomShortcutAction(shortcutAction);
 
         }
 
@@ -1215,6 +1149,81 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   restoreViewSize(view: string): void {
     this.currentImgsPerRow = this.imgsPerRow[view] || 5; // showDetails2 view does not exist when upgrading to 2.2.3
+  }
+
+  /**
+   * Handle custom shortcut action
+   * summoned via `handleKeyboardEvent`
+   * @param shortcutAction
+   */
+  handleCustomShortcutAction(shortcutAction: CustomShortcutAction): void {
+    switch (shortcutAction) {
+
+      case ('toggleSettings'):
+        if (this.wizard.showWizard === false) {
+          this.toggleSettings();
+        }
+        break;
+
+      case ('showAutoTags'):
+        if (!this.wizard.showWizard) {
+          this.toggleButton('showTags');
+        }
+        break;
+
+      case ('quit'):
+        event.preventDefault();
+        event.stopPropagation();
+        console.log('quit disabled');
+        // this.initiateClose();
+        break;
+
+      case ('startWizard'):
+        this.startWizard();
+        this.settingsModalOpen = false;
+        this.settingsButtons['showTags'].toggled = false;
+        break;
+
+      case ('toggleMinimalMode'):
+        this.toggleButton('hideTop');
+        this.toggleButton('hideSidebar');
+        this.toggleRibbon();
+        this.toggleButton('showMoreInfo');
+        break;
+
+      case ('focusOnFile'):
+        if (this.settingsButtons['fileIntersection'].toggled === false) {
+          this.settingsButtons['fileIntersection'].toggled = true;
+        }
+        this.showSidebar();
+        setTimeout(() => {
+          if (this.searchRef.nativeElement.querySelector('#fileIntersection')) {
+            this.searchRef.nativeElement.querySelector('#fileIntersection').focus();
+          }
+        }, 1);
+        break;
+
+      case ('focusOnMagic'):
+        if (!this.settingsButtons['magic'].toggled) {
+          this.settingsButtons['magic'].toggled = true;
+        }
+        this.showSidebar();
+        setTimeout(() => {
+          this.magicSearch.nativeElement.focus();
+        }, 1);
+        break;
+
+      case ('fuzzySearch'):
+        if (!this.settingsButtons['fuzzy'].toggled) {
+          this.settingsButtons['fuzzy'].toggled = true;
+        }
+        this.showSidebar();
+        setTimeout(() => {
+          this.fuzzySearch.nativeElement.focus();
+        }, 1);
+        break;
+    }
+
   }
 
   /**
