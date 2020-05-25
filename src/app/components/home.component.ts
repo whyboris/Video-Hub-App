@@ -17,10 +17,10 @@ import { StarFilterService } from '../pipes/star-filter.service';
 import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency.service';
 
 // Interfaces
-import { AllSupportedViews, SupportedView, TagEmission } from '../../../interfaces/shared-interfaces';
+import { AllSupportedViews, SupportedView, TagEmission, HistoryItem } from '../../../interfaces/shared-interfaces';
 import { DefaultScreenEmission } from './sheet/sheet.component';
 import { FinalObject, ImageElement, ScreenshotSettings } from '../../../interfaces/final-object.interface';
-import { HistoryItem } from '../../../interfaces/history-item.interface';
+
 import { ImportStage } from '../../../main-support';
 import { SettingsObject } from '../../../interfaces/settings-object.interface';
 import { SortType } from '../pipes/sorting.pipe';

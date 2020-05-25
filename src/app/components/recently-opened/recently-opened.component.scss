@@ -34,3 +34,8 @@
     }
   }
 }
+
+.current-open {
+  color: $pretty-blue;
+  pointer-events: none;
+}

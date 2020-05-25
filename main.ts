@@ -46,10 +46,8 @@ import { randomizeArray } from './utility';
 
 // Interfaces
 import {
-  AllowedScreenshotHeight,
   FinalObject,
-  ImageElement,
-  InputSources
+  ImageElement
 } from './interfaces/final-object.interface';
 import { SettingsObject } from './interfaces/settings-object.interface';
 import { WizardOptions } from './interfaces/wizard-options.interface';
@@ -294,7 +292,7 @@ function openThisDamnFile(pathToVhaFile: string) {
         console.log(key); // type: string!
         console.log(finalObjectFromFile.inputDirs[key]);
 
-        console.log(' SYSTEM WATCHIND DISABLED !!!!!!!!!!!!!!!!!!!!!!!!!!!');
+        console.log(' SYSTEM WATCHING DISABLED !!!!!!!!!!!!!!!!!!!!!!!!!!!');
         if (finalObjectFromFile.inputDirs[key].watch) {
           // startFileSystemWatching(finalObjectFromFile.inputDirs[key].path, parseInt(key), finalObjectFromFile.images, false);
         }

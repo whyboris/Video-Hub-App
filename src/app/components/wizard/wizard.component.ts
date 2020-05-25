@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import { AllowedScreenshotHeight } from '../../../../interfaces/final-object.interface';
-import { HistoryItem } from '../../../../interfaces/history-item.interface';
+import { HistoryItem } from '../../../../interfaces/shared-interfaces';
 import { ImportStage } from '../../../../main-support';
 import { WizardOptions } from '../../../../interfaces/wizard-options.interface';
 

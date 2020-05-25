@@ -1,7 +1,7 @@
 import { AppStateInterface } from '../src/app/common/app-state';
 import { CustomShortcutAction } from '../src/app/components/shortcuts/shortcuts.service';
-import { HistoryItem } from './history-item.interface';
 import { SettingsButtonKey } from '../src/app/common/settings-buttons';
+import { HistoryItem } from './shared-interfaces';
 
 export interface SettingsObject {
   appState: AppStateInterface;

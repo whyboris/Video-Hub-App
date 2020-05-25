@@ -47,3 +47,8 @@ export interface TagEmission {
   tag: string;
   type: 'add' | 'remove';
 }
+
+export interface HistoryItem {
+  vhaFilePath: string;
+  hubName: string;
+}
