@@ -532,15 +532,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
       finalObject: FinalObject,
       pathToFile: string,
       outputFolderPath: string,
-      changedRootFolder: boolean = false,
-      rootFolderLive: boolean = true,
     ) => {
 
       this.currentScreenshotSettings = finalObject.screenshotSettings;
 
-      this.rootFolderLive = rootFolderLive; // TODO -- do away with this once many root folders supported
+      this.rootFolderLive = true; // TODO -- do away with this once many root folders supported
+      this.finalArrayNeedsSaving = false; // TODO -- remove; used to be for hadling root folder change
 
-      this.finalArrayNeedsSaving = changedRootFolder;
       this.appState.currentVhaFile = pathToFile;
       this.appState.selectedOutputFolder = outputFolderPath;
 

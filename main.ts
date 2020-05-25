@@ -298,8 +298,6 @@ function openThisDamnFile(pathToVhaFile: string) {
         }
       });
 
-      let changedRootFolder = false;
-      let rootFolderLive = true;
 
       setGlobalsFromVhaFile(finalObjectFromFile); // sets source folder ETC
 
@@ -312,9 +310,7 @@ function openThisDamnFile(pathToVhaFile: string) {
         'finalObjectReturning',
         finalObjectFromFile,
         pathToVhaFile,
-        getHtmlPath(GLOBALS.selectedOutputFolder),
-        changedRootFolder,
-        rootFolderLive
+        getHtmlPath(GLOBALS.selectedOutputFolder)
       );
     }
   });
