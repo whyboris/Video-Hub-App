@@ -69,8 +69,6 @@ let preventSleepId: number;
 let macFirstRun = true; // detect if it's the 1st time Mac is opening the file or something like that
 let userWantedToOpen: string = null; // find a better pattern for handling this functionality
 
-let lastSavedFinalObject: FinalObject; // hack for saving the `vha2` file again later
-
 // =================================================================================================
 
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
@@ -275,101 +273,46 @@ function openThisDamnFile(pathToVhaFile: string) {
     } else {
 
       GLOBALS.currentlyOpenVhaFile = pathToVhaFile;
-      lastSavedFinalObject = JSON.parse(data);
-      console.log('opened vha file version: ' + lastSavedFinalObject.version);
+
+      const finalObjectFromFile = JSON.parse(data);
+
+      console.log('opened vha file version: ' + finalObjectFromFile.version);
 
       // path to folder where the VHA file is
       GLOBALS.selectedOutputFolder = path.parse(pathToVhaFile).dir;
-      // use relative paths
-      // if (lastSavedFinalObject.inputDirs.size === 0) {
-      //   lastSavedFinalObject.inputDirs.set(0, GLOBALS.selectedOutputFolder);
-      // }
 
-      if (lastSavedFinalObject.version === 2 && !lastSavedFinalObject.inputDirs) {
+      if (finalObjectFromFile.version === 2 && !finalObjectFromFile.inputDirs) {
         console.log('OLD VERSION FILE !!!');
-        lastSavedFinalObject.inputDirs = { 0: { path: '', watch: false } };
-        lastSavedFinalObject.inputDirs[0].path = (lastSavedFinalObject as any).inputDir;
+        finalObjectFromFile.inputDirs = { 0: { path: '', watch: false } };
+        finalObjectFromFile.inputDirs[0].path = (finalObjectFromFile as any).inputDir;
       }
 
-      console.log('about to start watching for files');
+      console.log('about to start watching for files ?');
 
-      Object.keys(lastSavedFinalObject.inputDirs).forEach((key: string) => {
+      Object.keys(finalObjectFromFile.inputDirs).forEach((key: string) => {
 
         console.log(key); // type: string!
-        console.log(lastSavedFinalObject.inputDirs[key]);
+        console.log(finalObjectFromFile.inputDirs[key]);
 
-        console.log(' SYSTEM WATCHIND DISABLED !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!');
-        if (lastSavedFinalObject.inputDirs[key].watch) {
-          // startFileSystemWatching(lastSavedFinalObject.inputDirs[key].path, parseInt(key), lastSavedFinalObject.images, false);
+        console.log(' SYSTEM WATCHIND DISABLED !!!!!!!!!!!!!!!!!!!!!!!!!!!');
+        if (finalObjectFromFile.inputDirs[key].watch) {
+          // startFileSystemWatching(finalObjectFromFile.inputDirs[key].path, parseInt(key), finalObjectFromFile.images, false);
         }
       });
-
 
       let changedRootFolder = false;
       let rootFolderLive = true;
 
-      // check root folder exists
-      if (!fs.existsSync(lastSavedFinalObject.inputDirs[0].path)) {
-        // see if the user wants to change the root folder
-        const buttonIndex: number = dialog.showMessageBoxSync(win, {
-          message: systemMessages.videoFolderNotFound,
-          detail: lastSavedFinalObject.inputDirs[0].path,
-          buttons: [
-            systemMessages.selectRootFolder, // 0
-            systemMessages.continueAnyway,   // 1
-            systemMessages.cancel            // 2
-          ]
-        });
+      setGlobalsFromVhaFile(finalObjectFromFile); // sets source folder ETC
 
-        // Select Root Folder
-        if (buttonIndex === 0) {
-          // select the new root folder
-          const pathsArray: any = dialog.showOpenDialogSync(win, {
-            //                      ^^^^^^^^^^^^^^^^^^ returns `string[]`
-            properties: ['openDirectory']
-          });
-
-          const inputDirPath: string = pathsArray[0];
-
-          if (inputDirPath) {
-            // update the root folder
-            lastSavedFinalObject.inputDirs[0].path = inputDirPath;
-            changedRootFolder = true;
-          } else {
-            // show the wizard instead
-            lastSavedFinalObject = null;
-            GLOBALS.angularApp.sender.send('pleaseOpenWizard');
-            return;
-          }
-
-          // Continue anyway
-        } else if (buttonIndex === 1) {
-          console.log('PROCEED ANYWAY');
-          rootFolderLive = false;
-
-          // Cancel
-        } else if (buttonIndex === 2) {
-          console.log('CANCEL');
-          // show the wizard instead
-          lastSavedFinalObject = null;
-          GLOBALS.angularApp.sender.send('pleaseOpenWizard');
-          return;
-        }
-
-        console.log('THIS SHOULD NOT RUN UNTIL MODAL CLICKED !!!');
-
-      }
-
-      setGlobalsFromVhaFile(lastSavedFinalObject); // sets source folder ETC
-
-      lastSavedFinalObject.images = insertTemporaryFields(lastSavedFinalObject.images);
+      finalObjectFromFile.images = insertTemporaryFields(finalObjectFromFile.images);
 
       console.log(GLOBALS.selectedSourceFolder[0].path + ' - videos location');
       console.log(GLOBALS.selectedOutputFolder + ' - output location');
 
       GLOBALS.angularApp.sender.send(
         'finalObjectReturning',
-        lastSavedFinalObject,
+        finalObjectFromFile,
         pathToVhaFile,
         getHtmlPath(GLOBALS.selectedOutputFolder),
         changedRootFolder,
@@ -884,8 +827,7 @@ ipc.on('try-to-rename-this-file', (event, sourceFolder: string, relPath: string,
  * Writes the vha file and sends contents back to Angular App
  * Starts the process to extract all the images
  *
- * METHOD NOT A PURE FUNCTION !!!
- * INTERACTS with `lastSavedFinalObject`
+ * TODO -- make into a pure function !?
  *
  * @param theFinalArray -- `finalArray` with all the metadata filled in
  */
@@ -903,8 +845,6 @@ function sendFinalResultHome(theFinalArray: ImageElement[]): void {
     screenshotSettings: GLOBALS.screenshotSettings,
     version: GLOBALS.vhaFileVersion,
   };
-
-  lastSavedFinalObject = finalObject;
 
   const pathToTheFile = path.join(GLOBALS.selectedOutputFolder, GLOBALS.hubName + '.vha2');
 
