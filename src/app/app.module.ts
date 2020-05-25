@@ -87,7 +87,7 @@ import { TagFilterPipe } from './components/tags-auto/tag-filter.pipe';
 import { TagFrequencyPipe } from './components/tags-auto/tag-frequency.pipe';
 import { TagMatchPipe } from './components/tags-auto/tag-match.pipe';
 import { TagsDisplayPipe } from './components/tags-auto/tag-display.pipe';
-import { WordFrequencyPipe } from './pipes/word-frequency.pipe';
+import { TagExtractorPipe } from './pipes/tag-extractor.pipe';
 import { WrapperPipe } from './pipes/wrapper.pipe';
 
 @NgModule({
@@ -151,7 +151,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     TopComponent,
     ViewTagsComponent,
     WizardComponent,
-    WordFrequencyPipe,
+    TagExtractorPipe,
     WrapperPipe,
   ],
   imports: [

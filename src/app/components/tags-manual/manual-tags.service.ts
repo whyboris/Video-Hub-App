@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 
-import { ImageElement } from '../../../../interfaces/final-object.interface';
-
 @Injectable()
 export class ManualTagsService {
 
@@ -62,24 +60,6 @@ export class ManualTagsService {
     }
 
     return mostLikely;
-  }
-
-  /**
-   * Generate the tagsList and tagsMap the first time a hub is opened
-   * @param allFiles - ImageElement array
-   */
-  populateManualTagsService(allFiles: ImageElement[]): void {
-    allFiles.forEach((element: ImageElement): void => {
-      if (element.tags) {
-        element.tags.forEach((tag: string): void => {
-          this.addTag(tag);
-        });
-      }
-    });
-
-    // console.log('done populating manual tags:');
-    // console.log(this.tagsList);
-    // console.log(this.tagsMap);
   }
 
   forceTagSortPipeUpdate(): void {

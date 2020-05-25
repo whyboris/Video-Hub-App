@@ -1,20 +1,24 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 import { WordFrequencyService } from './word-frequency.service';
+import { ManualTagsService } from '../components/tags-manual/manual-tags.service';
 
 import { ImageElement } from '../../../interfaces/final-object.interface';
 
 @Pipe({
-  name: 'wordFrequencyPipe'
+  name: 'tagExtractorPipe'
 })
-export class WordFrequencyPipe implements PipeTransform {
+export class TagExtractorPipe implements PipeTransform {
 
   constructor(
-    public wordFrequencyService: WordFrequencyService
+    public wordFrequencyService: WordFrequencyService,
+    public manualTagsService: ManualTagsService
   ) { }
 
   /**
-   * Return only items that match search string
+   * Does not actually transform the input Array.
+   * Instead, Iterates through the ImageElement[] to take action on tags
+   * Returns identical ImageElement[] as input
    * @param finalArray
    * @param render              whether to calculate the wordFrequency
    * @param numberOfTags        number of tags to generate for the word cloud
@@ -33,13 +37,17 @@ export class WordFrequencyPipe implements PipeTransform {
 
     if (render && finalArray.length > 0) {
 
-      // console.log('Word frequency pipe RUNNING !!!');
+      // console.log('Tag Extractor pipe RUNNING !!!');
 
       this.wordFrequencyService.resetMap();
+      this.manualTagsService.removeAllTags();
 
       finalArray.forEach(element => {
         if (showManualTags && element.tags) {
           this.wordFrequencyService.addString(element.tags.join(' '));
+          element.tags.forEach(tag => {
+            this.manualTagsService.addTag(tag);
+          });
         }
         if (showAutoFileTags) {
           this.wordFrequencyService.addString(element.cleanName);
