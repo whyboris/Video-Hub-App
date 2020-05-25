@@ -377,7 +377,7 @@ ipc.on('just-started', (event) => {
         && savedSettings.windowSizeAndPosition.y < screenHeight - 200) {
         win.setBounds(savedSettings.windowSizeAndPosition);
       } else {
-        win.setBounds({x: 0, y: 0, width: screenWidth, height: screenHeight});
+        win.setBounds({ x: 0, y: 0, width: screenWidth, height: screenHeight });
       }
 
       // Reference: https://github.com/electron/electron/blob/master/docs/api/locales.md
@@ -412,10 +412,15 @@ ipc.on('select-default-video-player', (event) => {
   console.log('asking for default video player');
   dialog.showOpenDialog(win, {
     title: systemMessages.selectDefaultPlayer,
-    filters: [{
-      name: 'Executable', // TODO: i18n fixme
-      extensions: ['exe', 'app']
-    }],
+    filters: [
+      {
+        name: 'Executable', // TODO: i18n fixme
+        extensions: ['exe', 'app']
+      }, {
+        name: 'All files', // TODO: i18n fixme
+        extensions: ['*']
+      }
+    ],
     properties: ['openFile']
   }).then(result => {
     const executablePath: string = result.filePaths[0];
