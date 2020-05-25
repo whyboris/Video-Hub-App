@@ -6,9 +6,9 @@ import { SettingsButtonKey } from '../src/app/common/settings-buttons';
 export interface SettingsObject {
   appState: AppStateInterface;
   buttonSettings: any;
+  shortcuts: Map<string, SettingsButtonKey | CustomShortcutAction>;
   vhaFileHistory: HistoryItem[];
   windowSizeAndPosition: WinBounds;
-  shortcuts: Map<string, SettingsButtonKey | CustomShortcutAction>;
 }
 
 interface WinBounds {

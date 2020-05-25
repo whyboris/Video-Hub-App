@@ -23,6 +23,7 @@ export class ShortcutsComponent {
     }
   }
 
+  // Do not alphabetize!
   shortcutsInOrder: (SettingsButtonKey | CustomShortcutAction)[] = [
     'showThumbnails',    // 1
     'showFilmstrip',     // 2
@@ -31,12 +32,15 @@ export class ShortcutsComponent {
     'showDetails2',      // 5
     'showFiles',         // 6
     'showClips',         // 7 - space after
+
     'focusOnFile',       // f
     'focusOnMagic',      // g
     'fuzzySearch',       // r - space after
+
     'makeSmaller',       // z
     'makeLarger',        // x
     'shuffleGalleryNow', // s - space after
+
     'toggleSettings',    // o
     'darkMode',          // d
     'showAutoTags',      // t
@@ -44,6 +48,7 @@ export class ShortcutsComponent {
     'hideSidebar',       // b
     'toggleMinimalMode', // h
     'startWizard',       // n - space after
+
     // 'quit',           // w - hardcoded in template
     // 'quit',           // q - hardcoded in template
   ]

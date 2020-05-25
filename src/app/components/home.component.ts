@@ -22,7 +22,6 @@ import { DefaultScreenEmission } from './sheet/sheet.component';
 import { FinalObject, ImageElement, ScreenshotSettings } from '../../../interfaces/final-object.interface';
 import { HistoryItem } from '../../../interfaces/history-item.interface';
 import { ImportStage } from '../../../main-support';
-import { SavableProperties } from '../../../interfaces/savable-properties.interface';
 import { SettingsObject } from '../../../interfaces/settings-object.interface';
 import { SortType } from '../pipes/sorting.pipe';
 import { StarEmission, YearEmission } from './views/details/details.component';
@@ -339,7 +338,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     public resolutionFilterService: ResolutionFilterService,
     public shortcutService: ShortcutsService,
     public starFilterService: StarFilterService,
-    public tagsSaveService: AutoTagsSaveService,
+    public autoTagsSaveService: AutoTagsSaveService,
     public translate: TranslateService,
     public wordFrequencyService: WordFrequencyService
   ) { }
@@ -539,12 +538,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       this.currentScreenshotSettings = finalObject.screenshotSettings;
 
-      this.rootFolderLive = rootFolderLive;
+      this.rootFolderLive = rootFolderLive; // TODO -- do away with this once many root folders supported
+
       this.finalArrayNeedsSaving = changedRootFolder;
       this.appState.currentVhaFile = pathToFile;
+      this.appState.selectedOutputFolder = outputFolderPath;
+
       this.appState.hubName = finalObject.hubName;
       this.appState.numOfFolders = finalObject.numOfFolders;
-      this.appState.selectedOutputFolder = outputFolderPath;
       this.appState.selectedSourceFolder = finalObject.inputDirs;
 
       console.log('input dirs', finalObject.inputDirs);
@@ -651,9 +652,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         const fullPath: string = ev.dataTransfer.files[0].path;
         ev.preventDefault();
         if (fullPath.endsWith('.vha2')) {
-          this.electronService.ipcRenderer.send(
-            'load-this-vha-file', fullPath, this.saveVhaIfNeeded()
-          );
+          this.loadThisVhaFile(fullPath);
         }
       }
     };
@@ -725,7 +724,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public loadThisVhaFile(fullPath: string): void {
-    this.electronService.ipcRenderer.send('load-this-vha-file', fullPath, this.saveVhaIfNeeded());
+    this.electronService.ipcRenderer.send('load-this-vha-file', fullPath, this.getFinalObjectForSaving());
   }
 
   public loadFromFile(): void {
@@ -772,21 +771,25 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.isClosing = true;
     this.savePreviousViewSize();
     this.appState.imgsPerRow = this.imgsPerRow;
-    this.electronService.ipcRenderer.send('close-window', this.getSettingsForSave(), this.saveVhaIfNeeded());
+    this.electronService.ipcRenderer.send('close-window', this.getSettingsForSave(), this.getFinalObjectForSaving());
   }
 
   /**
    * Returns the finalArray if needed, otherwise returns `null`
-   * completely depends on global variable `finalArrayNeedsSaving`
+   * completely depends on global variable `finalArrayNeedsSaving` or if any tags were added/removed in auto-tag-service
    */
-  public saveVhaIfNeeded(): SavableProperties {
-    if (this.finalArrayNeedsSaving || this.tagsSaveService.needToSave()) {
-      const propsToReturn: SavableProperties = {
-        addTags: this.tagsSaveService.getAddTags(),
-        removeTags: this.tagsSaveService.getRemoveTags(),
+  public getFinalObjectForSaving(): FinalObject {
+    if (this.finalArrayNeedsSaving || this.autoTagsSaveService.needToSave()) {
+      const propsToReturn: FinalObject = {
+        addTags: this.autoTagsSaveService.getAddTags(),
+        hubName: this.appState.hubName,
         images: this.finalArray,
-        inputSources: this.appState.selectedSourceFolder,
-        // TODO -- rename `selectedSourceFolder` and make sure to update `finalArrayNeedsSaving` when inputSources changes
+        // TODO -- rename `selectedSourceFolder` and make sure to update `finalArrayNeedsSaving` when inputDirs changes
+        inputDirs: this.appState.selectedSourceFolder,
+        numOfFolders: this.appState.numOfFolders,
+        removeTags: this.autoTagsSaveService.getRemoveTags(),
+        screenshotSettings: this.currentScreenshotSettings,
+        version: 3,
       };
       return propsToReturn;
     } else {
@@ -1839,7 +1842,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param removeTags
    */
   setTags(addTags: string[], removeTags: string[]): void {
-    this.tagsSaveService.restoreSavedTags(
+    this.autoTagsSaveService.restoreSavedTags(
       addTags ? addTags : [],
       removeTags ? removeTags : []
     );

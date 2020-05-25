@@ -13,15 +13,15 @@ export interface SourceFolder {
 export type InputSources = Record<number, SourceFolder>;
 
 export interface FinalObject {
-  addTags?: string[];           // tags to add
-  hubName: string;              // the name of the hub -- for recently-opened
-  images: ImageElement[];       // see below
-  // inputDir: string;          // later may support array of many input directories
-  inputDirs: InputSources;      // map the `inputSource` number to input directory (replaces `inputDir`)
-  numOfFolders: number;         // number of folders
-  removeTags?: string[];        // tags to remove
+  addTags: string[];             // tags to add
+  hubName: string;               // the name of the hub -- for recently-opened
+  images: ImageElement[];
+  // inputDir: string;           // became `inputDirs` in VHA3
+  inputDirs: InputSources;       // map the `inputSource` number to input directory (replaces `inputDir`)
+  numOfFolders: number;          // number of folders - is always re-counted when app starts
+  removeTags: string[];          // tags to remove
   screenshotSettings: ScreenshotSettings;
-  version: number;              // version of this vha file
+  version: number;               // version of this vha file
 }
 
 export interface ImageElement {

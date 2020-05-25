@@ -51,17 +51,12 @@ import {
   ImageElement,
   InputSources
 } from './interfaces/final-object.interface';
-import { SavableProperties } from './interfaces/savable-properties.interface';
 import { SettingsObject } from './interfaces/settings-object.interface';
 import { WizardOptions } from './interfaces/wizard-options.interface';
 
 // Variables
-let lastSavedFinalObject: FinalObject; // hack for saving the `vha2` file again later
-
-const codeRunningOnMac: boolean = process.platform === 'darwin';
-
 const pathToAppData = app.getPath('appData');
-
+const codeRunningOnMac: boolean = process.platform === 'darwin';
 const English = require('./i18n/en.json');
 let systemMessages = English.SYSTEM; // Set English as default; update via `system-messages-updated`
 
@@ -73,6 +68,8 @@ let preventSleepId: number;
 // TODO: CLEAN UP
 let macFirstRun = true; // detect if it's the 1st time Mac is opening the file or something like that
 let userWantedToOpen: string = null; // find a better pattern for handling this functionality
+
+let lastSavedFinalObject: FinalObject; // hack for saving the `vha2` file again later
 
 // =================================================================================================
 
@@ -90,9 +87,9 @@ if (GLOBALS.debug) {
 
 // TODO -- maybe clean up the `userWantedToOpen` with whatever pattern recommended by Electron
 // For windows -- when loading the app the first time
-if (process.argv[1]) {
+if (args[0]) {
   if (!serve) {
-    userWantedToOpen = process.argv[1];
+    userWantedToOpen = args[0];
   }
 }
 
@@ -646,7 +643,7 @@ ipc.on('choose-output', (event) => {
 /**
  * Close the window / quit / exit the app
  */
-ipc.on('close-window', (event, settingsToSave: SettingsObject, savableProperties: SavableProperties) => {
+ipc.on('close-window', (event, settingsToSave: SettingsObject, finalObjectToSave: FinalObject) => {
 
   // save window size and position
   settingsToSave.windowSizeAndPosition = win.getContentBounds();
@@ -671,19 +668,16 @@ ipc.on('close-window', (event, settingsToSave: SettingsObject, savableProperties
 
   // TODO -- catch bug if user closes before selecting the output folder ?!??
   fs.writeFile(path.join(pathToAppData, 'video-hub-app-2', 'settings.json'), json, 'utf8', () => {
-    if (savableProperties !== null) {
-      lastSavedFinalObject.addTags = savableProperties.addTags;
-      lastSavedFinalObject.removeTags = savableProperties.removeTags;
-      lastSavedFinalObject.images = savableProperties.images;
-      writeVhaFileToDisk(lastSavedFinalObject, GLOBALS.currentlyOpenVhaFile, () => {
-        // file writing done !!!
-        console.log('.vha2 file written before closing !!!');
+    if (finalObjectToSave !== null) {
+
+      writeVhaFileToDisk(finalObjectToSave, GLOBALS.currentlyOpenVhaFile, () => {
         try {
           BrowserWindow.getFocusedWindow().close();
         } catch (e) {
           // Window was already closed
         }
       });
+
     } else {
       try {
         BrowserWindow.getFocusedWindow().close();
@@ -828,21 +822,16 @@ ipc.on('system-open-file-through-modal', (event, somethingElse) => {
 /**
  * Import this .vha file
  */
-ipc.on('load-this-vha-file', (event, pathToVhaFile: string, savableProperties: SavableProperties) => {
+ipc.on('load-this-vha-file', (event, pathToVhaFile: string, finalObjectToSave: FinalObject) => {
 
-  if (savableProperties !== null) {
+  if (finalObjectToSave !== null) {
 
-    lastSavedFinalObject.addTags = savableProperties.addTags;
-    lastSavedFinalObject.removeTags = savableProperties.removeTags;
-    lastSavedFinalObject.images = savableProperties.images;
-    lastSavedFinalObject.inputDirs = savableProperties.inputSources;
-
-    writeVhaFileToDisk(lastSavedFinalObject, GLOBALS.currentlyOpenVhaFile, () => {
-      // file writing done !!!
-      console.log('.vha file written !!!');
+    writeVhaFileToDisk(finalObjectToSave, GLOBALS.currentlyOpenVhaFile, () => {
+      console.log('.vha2 file saved before opening another');
       userWantedToOpen = pathToVhaFile;
       openThisDamnFile(pathToVhaFile);
     });
+
   } else {
     // TODO -- streamline this variable and openThisDamnFileFunction
     userWantedToOpen = pathToVhaFile;
@@ -905,12 +894,14 @@ function sendFinalResultHome(theFinalArray: ImageElement[]): void {
   const myFinalArray: ImageElement[] = alphabetizeFinalArray(theFinalArray);
 
   const finalObject: FinalObject = {
-    version: GLOBALS.vhaFileVersion,
+    addTags: [], // ERROR ????
     hubName: GLOBALS.hubName,
+    images: myFinalArray,
     inputDirs: GLOBALS.selectedSourceFolder,
     numOfFolders: countFoldersInFinalArray(myFinalArray),
+    removeTags: [], // ERROR ????
     screenshotSettings: GLOBALS.screenshotSettings,
-    images: myFinalArray,
+    version: GLOBALS.vhaFileVersion,
   };
 
   lastSavedFinalObject = finalObject;
@@ -1143,6 +1134,19 @@ function tellUserDirDoesNotExist(currentVideoFolder: string) {
 //     TOUCH BAR
 // -----------------------------------------------------------------------------------------------------------------------------------------
 
+const nativeImage = require('electron').nativeImage;
+const { TouchBarPopover, TouchBarSegmentedControl } = TouchBar;
+const resourcePath = serve
+                     ? path.join(__dirname, 'src/assets/icons/mac/touch-bar/')
+                     : path.join(process.resourcesPath, 'assets/');
+
+let touchBar,
+    segmentedAnotherViewsControl,
+    segmentedFolderControl,
+    segmentedPopover,
+    segmentedViewControl,
+    zoomSegmented;
+
 ipc.on('app-to-touchBar', (event, changesFromApp) => {
   if (codeRunningOnMac) {
     if (AllSupportedViews.includes(<SupportedView>changesFromApp)) {
@@ -1158,21 +1162,6 @@ ipc.on('app-to-touchBar', (event, changesFromApp) => {
     }
   }
 });
-
-const nativeImage = require('electron').nativeImage;
-const resourcePath = serve ? path.join(__dirname, 'src/assets/icons/mac/touch-bar/') : path.join(process.resourcesPath, 'assets/');
-const {
-  TouchBarPopover,
-  TouchBarSegmentedControl
-} = TouchBar;
-
-// touchBar variables
-let touchBar,
-    segmentedAnotherViewsControl,
-    segmentedFolderControl,
-    segmentedPopover,
-    segmentedViewControl,
-    zoomSegmented;
 
 /**
  * Void function for creating touchBar for MAC OS X
