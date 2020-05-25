@@ -391,7 +391,7 @@ ipc.on('just-started', (event) => {
 /**
  * Open a particular video file clicked inside Angular
  */
-ipc.on('openThisFile', (event, fullFilePath) => {
+ipc.on('open-media-file', (event, fullFilePath) => {
   shell.openItem(path.normalize(fullFilePath)); // normalize because on windows, the path sometimes is mixing `\` and `/`
 });
 
@@ -400,7 +400,7 @@ const spawn = require('child_process').spawn;
 /**
  * Open a particular video file clicked inside Angular
  */
-ipc.on('openThisFileWithFlags', (event, executablePath, fullFilePath: string, argz: string[]) => {
+ipc.on('open-media-file-at-timestamp', (event, executablePath, fullFilePath: string, argz: string[]) => {
   const allArgs: string[] = [];
   allArgs.push(path.normalize(fullFilePath));
   allArgs.push(...argz);
@@ -436,14 +436,14 @@ ipc.on('select-default-video-player', (event) => {
 /**
  * Open the explorer to the relevant file
  */
-ipc.on('openInExplorer', (event, fullPath: string) => {
+ipc.on('open-in-explorer', (event, fullPath: string) => {
   shell.showItemInFolder(fullPath);
 });
 
 /**
  * Open a URL in system's default browser
  */
-ipc.on('pleaseOpenUrl', (event, urlToOpen: string): void => {
+ipc.on('please-open-url', (event, urlToOpen: string): void => {
   shell.openExternal(urlToOpen, {activate: true});
 });
 

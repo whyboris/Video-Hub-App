@@ -853,9 +853,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       const execPath: string = this.appState.preferredVideoPlayer;
 
-      this.electronService.ipcRenderer.send('openThisFileWithFlags', execPath, fullPath, this.getVideoPlayerArgs(execPath, time));
+      this.electronService.ipcRenderer.send('open-media-file-at-timestamp', execPath, fullPath, this.getVideoPlayerArgs(execPath, time));
     } else {
-      this.electronService.ipcRenderer.send('openThisFile', fullPath);
+      this.electronService.ipcRenderer.send('open-media-file', fullPath);
     }
   }
 
@@ -888,7 +888,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public openOnlineHelp(): void {
-    this.electronService.ipcRenderer.send('pleaseOpenUrl', 'https://www.videohubapp.com');
+    this.electronService.ipcRenderer.send('please-open-url', 'https://www.videohubapp.com');
   }
 
   public increaseZoomLevel(): void {
@@ -1023,7 +1023,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Open folder that contains the (current) clicked file
    */
   openInExplorer(): void {
-    this.electronService.ipcRenderer.send('openInExplorer', this.fullPathToCurrentFile);
+    this.electronService.ipcRenderer.send('open-in-explorer', this.fullPathToCurrentFile);
   }
 
   /**
@@ -2098,9 +2098,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   goDownloadNewVersion(): void {
     if (this.demo) {
-      this.electronService.ipcRenderer.send('pleaseOpenUrl', 'https://videohubapp.com');
+      this.electronService.ipcRenderer.send('please-open-url', 'https://videohubapp.com');
     } else {
-      this.electronService.ipcRenderer.send('pleaseOpenUrl', 'https://my.videohubapp.com');
+      this.electronService.ipcRenderer.send('please-open-url', 'https://my.videohubapp.com');
     }
   }
 
