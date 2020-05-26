@@ -760,9 +760,9 @@ ipc.on('try-to-rename-this-file', (event, sourceFolder: string, relPath: string,
   GLOBALS.angularApp.sender.send('renameFileResponse', index, success, renameTo, file, errMsg);
 });
 
-// ===========================================================================================
-// RESCAN - electron messages
-// -------------------------------------------------------------------------------------------
+// =========================================================================================================================================
+// RESCAN - electron messages                                                                                             ARCHIVED FOR NOW -
+// -----------------------------------------------------------------------------------------------------------------------------------------
 
 /**
  * Initiate scanning for new files and importing them
@@ -796,10 +796,6 @@ ipc.on('verify-thumbnails', (event, finalArray) => {
   GLOBALS.cancelCurrentImport = false;
   verifyThumbnails(finalArray);
 });
-
-// ===========================================================================================
-// RESCAN - methods
-// -------------------------------------------------------------------------------------------
 
 /**
  * Scan for missing thumbnails and generate them
@@ -935,18 +931,10 @@ function createTouchBar() {
     mode: 'multiple',
     selectedIndex: -1,
     segments: [
-      {
-        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-cloud.png')).resize({
-          width: 22,
-          height: 16
-        })
-      },
-      {
-        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-recent-history.png')).resize({
-          width: 18,
-          height: 18
-        })
-      }
+      { icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-cloud.png'))
+                         .resize({ width: 22, height: 16 })},
+      { icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-recent-history.png'))
+                         .resize({ width: 18, height: 18 }) }
     ],
     change: selectedIndex => {
       if (selectedIndex === 0) {
@@ -960,42 +948,18 @@ function createTouchBar() {
   // segmentedControl for views
   segmentedViewControl = new TouchBarSegmentedControl({
     segments: [
-      {
-        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-thumbnails.png')).resize({
-          width: 15,
-          height: 15
-        })
-      },
-      {
-        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-filmstrip.png')).resize({
-          width: 20,
-          height: 15
-        })
-      },
-      {
-        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-full-view.png')).resize({
-          width: 15,
-          height: 15
-        })
-      },
-      {
-        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-details.png')).resize({
-          width: 15,
-          height: 15
-        })
-      },
-      {
-        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-filenames.png')).resize({
-          width: 15,
-          height: 15
-        })
-      },
-      {
-        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-video-blank.png')).resize({
-          width: 15,
-          height: 15
-        })
-      },
+      { icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-thumbnails.png'))
+                         .resize({ width: 15, height: 15 })},
+      { icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-filmstrip.png'))
+                         .resize({ width: 20, height: 15 })},
+      { icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-full-view.png'))
+                         .resize({ width: 15, height: 15 })},
+      { icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-details.png'))
+                         .resize({ width: 15, height: 15 })},
+      { icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-filenames.png'))
+                         .resize({ width: 15, height: 15 })},
+      { icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-video-blank.png'))
+                         .resize({ width: 15, height: 15 })},
     ],
     change: selectedIndex => {
       GLOBALS.angularApp.sender.send('touchBar-to-app', AllSupportedViews[selectedIndex]);
@@ -1017,18 +981,10 @@ function createTouchBar() {
     mode: 'multiple',
     selectedIndex: -1,
     segments: [
-      {
-        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-compat-view.png')).resize({
-          width: 16,
-          height: 16
-        })
-      },
-      {
-        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-more-info.png')).resize({
-          width: 18,
-          height: 20
-        })
-      },
+      { icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-compat-view.png'))
+                         .resize({ width: 16, height: 16 })},
+      { icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-more-info.png'))
+                         .resize({ width: 18, height: 20 })},
     ],
     change: selectedIndex => {
       if (selectedIndex === 0) {
