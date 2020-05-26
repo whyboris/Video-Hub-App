@@ -71,6 +71,8 @@ let userWantedToOpen: string = null; // find a better pattern for handling this 
 
 // =================================================================================================
 
+const spawn = require('child_process').spawn;
+
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
 let win, serve;
@@ -219,10 +221,7 @@ try {
     }
   });
 
-} catch (e) {
-  // Catch Error
-  // throw e;
-}
+} catch {}
 
 if (codeRunningOnMac) {
   systemPreferences.subscribeNotification(
@@ -288,6 +287,11 @@ function openThisDamnFile(pathToVhaFile: string) {
   });
 }
 
+/**
+ * Send final object to Angular; uses `GLOBALS` as input!
+ * @param finalObject
+ * @param globals
+ */
 function sendFinalObjectToAngular(finalObject: FinalObject, globals: VhaGlobals): void {
 
   finalObject.images = insertTemporaryFields(finalObject.images);
@@ -300,6 +304,10 @@ function sendFinalObjectToAngular(finalObject: FinalObject, globals: VhaGlobals)
   );
 }
 
+/**
+ * If .vha2 version 2, upgrade `inputDir` into `inputDirs`
+ * @param finalObject
+ */
 function upgradeToVersion3(finalObject: FinalObject): void {
 
   if (finalObject.version === 2 && !finalObject.inputDirs) {
@@ -311,7 +319,7 @@ function upgradeToVersion3(finalObject: FinalObject): void {
 }
 
 /**
- * Start watching directories !?!??!?!?!?!
+ * Start watching directories with `chokidar
  * @param finalObject
  */
 function startWatchingDirs(inputDirs: InputSources): void {
@@ -325,12 +333,50 @@ function startWatchingDirs(inputDirs: InputSources): void {
   });
 }
 
+/**
+ * Writes the vha file and sends contents back to Angular App
+ * Starts the process to extract all the images
+ *
+ * TODO -- make into a pure function !?
+ *
+ * @param theFinalArray -- `finalArray` with all the metadata filled in
+ */
+function sendFinalResultHome(theFinalArray: ImageElement[]): void {
+
+  const myFinalArray: ImageElement[] = alphabetizeFinalArray(theFinalArray);
+
+  const finalObject: FinalObject = {
+    addTags: [], // ERROR ????
+    hubName: GLOBALS.hubName,
+    images: myFinalArray,
+    inputDirs: GLOBALS.selectedSourceFolders,
+    numOfFolders: countFoldersInFinalArray(myFinalArray),
+    removeTags: [], // ERROR ????
+    screenshotSettings: GLOBALS.screenshotSettings,
+    version: GLOBALS.vhaFileVersion,
+  };
+
+  const pathToTheFile = path.join(GLOBALS.selectedOutputFolder, GLOBALS.hubName + '.vha2');
+
+  writeVhaFileToDisk(finalObject, pathToTheFile, () => {
+
+    GLOBALS.currentlyOpenVhaFile = pathToTheFile;
+
+    sendFinalObjectToAngular(finalObject, GLOBALS);
+
+    startWatchingDirs(finalObject.inputDirs);
+
+  });
+}
+
+
 // ========================================================================================
-// Methods that interact with Angular
+// Listeners for events from Angular
 // ========================================================================================
 
 /**
- * Just started -- hello -- send over the settings or open wizard
+ * Once Angular loads it sends over the `ready` status
+ * Load up the settings.json and send settings over to Angular
  */
 ipc.on('just-started', (event) => {
   GLOBALS.angularApp = event;
@@ -375,8 +421,6 @@ ipc.on('open-media-file', (event, fullFilePath) => {
   // shell.openPath(path.normalize(fullFilePath)); // Electron 9
 });
 
-const spawn = require('child_process').spawn;
-
 /**
  * Open a particular video file clicked inside Angular
  */
@@ -407,10 +451,7 @@ ipc.on('select-default-video-player', (event) => {
     if (executablePath) {
       event.sender.send('preferred-video-player-returning', executablePath);
     }
-  }).catch(err => {
-    console.log('select default video player: this should not happen!');
-    console.log(err);
-  });
+  }).catch(err => {});
 });
 
 /**
@@ -463,6 +504,7 @@ ipc.on('please-create-playlist', (event, playlist: ImageElement[]) => {
  * Delete file from computer (send to recycling bin / trash)
  */
 ipc.on('delete-video-file', (event, item: ImageElement): void => {
+  console.log('TODO: handle delete based on source folder!');
   const fileToDelete = path.join(GLOBALS.selectedSourceFolders[0].path, item.partialPath, item.fileName);
 
   (async () => {
@@ -484,7 +526,6 @@ ipc.on('delete-video-file', (event, item: ImageElement): void => {
 ipc.on('replace-thumbnail', (event, pathToIncomingJpg: string, item: ImageElement) => {
   const fileToReplace: string = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName, 'thumbnails', item.hash + '.jpg');
 
-
   if (fs.existsSync(fileToReplace)) {
     const height: number = GLOBALS.screenshotSettings.height;
 
@@ -494,9 +535,7 @@ ipc.on('replace-thumbnail', (event, pathToIncomingJpg: string, item: ImageElemen
           event.sender.send('thumbnail-replaced');
         }
       })
-      .catch((err) => {
-        // console.log(err);
-      });
+      .catch((err) => {});
   }
 });
 
@@ -519,13 +558,16 @@ ipc.on('minimize-window', (event) => {
 });
 
 /**
- * Minimize the window
+ * Prevent PC from going to sleep during screenshot extraction
  */
 ipc.on('prevent-sleep', (event) => {
   console.log('preventing sleep lol!');
   preventSleepId = powerSaveBlocker.start('prevent-app-suspension');
 });
 
+/**
+ * Allow PC to go to sleep after screenshots were extracted
+ */
 ipc.on('allow-sleep', (event) => {
   console.log('allowing sleep again');
   powerSaveBlocker.stop(preventSleepId);
@@ -543,10 +585,7 @@ ipc.on('choose-input', (event) => {
     if (inputDirPath) {
       event.sender.send('inputFolderChosen', inputDirPath, getVideoPathsAndNames(inputDirPath));
     }
-  }).catch(err => {
-    console.log('choose-input: this should not happen!');
-    console.log(err);
-  });
+  }).catch(err => {});
 });
 
 /**
@@ -561,10 +600,7 @@ ipc.on('choose-output', (event) => {
     if (outputDirPath) {
       event.sender.send('outputFolderChosen', outputDirPath);
     }
-  }).catch(err => {
-    console.log('choose-output: this should not happen!');
-    console.log(err);
-  });
+  }).catch(err => {});
 });
 
 /**
@@ -600,17 +636,13 @@ ipc.on('close-window', (event, settingsToSave: SettingsObject, finalObjectToSave
       writeVhaFileToDisk(finalObjectToSave, GLOBALS.currentlyOpenVhaFile, () => {
         try {
           BrowserWindow.getFocusedWindow().close();
-        } catch (e) {
-          // Window was already closed
-        }
+        } catch {}
       });
 
     } else {
       try {
         BrowserWindow.getFocusedWindow().close();
-      } catch (e) {
-        // Window was already closed
-      }
+      } catch {}
     }
   });
 });
@@ -716,10 +748,7 @@ ipc.on('system-open-file-through-modal', (event, somethingElse) => {
     if (chosenFile) {
       openThisDamnFile(chosenFile);
     }
-  }).catch(err => {
-    console.log('system open file through modal: this should not happen');
-    console.log(err);
-  });
+  }).catch(err => {});
 });
 
 /**
@@ -775,47 +804,6 @@ ipc.on('try-to-rename-this-file', (event, sourceFolder: string, relPath: string,
 
   GLOBALS.angularApp.sender.send('renameFileResponse', index, success, renameTo, file, errMsg);
 });
-
-// ========================================================================================
-// Methods to extract screenshots, build file list, etc
-// ========================================================================================
-
-/**
- * Writes the vha file and sends contents back to Angular App
- * Starts the process to extract all the images
- *
- * TODO -- make into a pure function !?
- *
- * @param theFinalArray -- `finalArray` with all the metadata filled in
- */
-function sendFinalResultHome(theFinalArray: ImageElement[]): void {
-
-  const myFinalArray: ImageElement[] = alphabetizeFinalArray(theFinalArray);
-
-  const finalObject: FinalObject = {
-    addTags: [], // ERROR ????
-    hubName: GLOBALS.hubName,
-    images: myFinalArray,
-    inputDirs: GLOBALS.selectedSourceFolders,
-    numOfFolders: countFoldersInFinalArray(myFinalArray),
-    removeTags: [], // ERROR ????
-    screenshotSettings: GLOBALS.screenshotSettings,
-    version: GLOBALS.vhaFileVersion,
-  };
-
-  const pathToTheFile = path.join(GLOBALS.selectedOutputFolder, GLOBALS.hubName + '.vha2');
-
-  writeVhaFileToDisk(finalObject, pathToTheFile, () => {
-
-    GLOBALS.currentlyOpenVhaFile = pathToTheFile;
-
-    sendFinalObjectToAngular(finalObject, GLOBALS);
-
-    startWatchingDirs(finalObject.inputDirs);
-
-  });
-}
-
 
 // ===========================================================================================
 // RESCAN - electron messages
@@ -874,7 +862,6 @@ function verifyThumbnails(finalArray: ImageElement[]) {
   console.log(finalArray);
   console.log(indexesToScan);
   console.log('DISABLED WIP');
-
 }
 
 /**
