@@ -1,4 +1,4 @@
-import { GLOBALS } from './main-globals';
+import { GLOBALS, VhaGlobals } from './main-globals';
 // =================================================================================================
 // -------------------------------------     BUILD TOGGLE     --------------------------------------
 // -------------------------------------------------------------------------------------------------
@@ -26,6 +26,7 @@ import {
   countFoldersInFinalArray,
   createDotPlsFile,
   extractAllMetadata,
+  getHtmlPath,
   getVideoPathsAndNames,
   insertTemporaryFields,
   missingThumbsIndex,
@@ -47,7 +48,8 @@ import { randomizeArray } from './utility';
 // Interfaces
 import {
   FinalObject,
-  ImageElement
+  ImageElement,
+  InputSources
 } from './interfaces/final-object.interface';
 import { SettingsObject } from './interfaces/settings-object.interface';
 import { WizardOptions } from './interfaces/wizard-options.interface';
@@ -268,78 +270,59 @@ function openThisDamnFile(pathToVhaFile: string) {
 
     } else {
 
+      const finalObject: FinalObject = JSON.parse(data);
+
+      // set globals from file
       GLOBALS.currentlyOpenVhaFile = pathToVhaFile;
-
-      const finalObjectFromFile = JSON.parse(data);
-
-      console.log('opened vha file version: ' + finalObjectFromFile.version);
-
-      // path to folder where the VHA file is
       GLOBALS.selectedOutputFolder = path.parse(pathToVhaFile).dir;
+      GLOBALS.hubName = finalObject.hubName;
+      GLOBALS.screenshotSettings = finalObject.screenshotSettings;
+      upgradeToVersion3(finalObject); // `inputDir` -> `inputDirs`
+      GLOBALS.selectedSourceFolders = finalObject.inputDirs;
 
-      if (finalObjectFromFile.version === 2 && !finalObjectFromFile.inputDirs) {
-        console.log('OLD VERSION FILE !!!');
-        finalObjectFromFile.inputDirs = { 0: { path: '', watch: false } };
-        finalObjectFromFile.inputDirs[0].path = (finalObjectFromFile as any).inputDir;
-      }
+      sendFinalObjectToAngular(finalObject, GLOBALS);
 
-      console.log('about to start watching for files ?');
+      startWatchingDirs(finalObject.inputDirs); // starts `chokidar`
 
-      Object.keys(finalObjectFromFile.inputDirs).forEach((key: string) => {
-
-        console.log(key); // type: string!
-        console.log(finalObjectFromFile.inputDirs[key]);
-
-        console.log(' SYSTEM WATCHING DISABLED !!!!!!!!!!!!!!!!!!!!!!!!!!!');
-        if (finalObjectFromFile.inputDirs[key].watch) {
-          // startFileSystemWatching(finalObjectFromFile.inputDirs[key].path, parseInt(key), finalObjectFromFile.images, false);
-        }
-      });
-
-
-      setGlobalsFromVhaFile(finalObjectFromFile); // sets source folder ETC
-
-      finalObjectFromFile.images = insertTemporaryFields(finalObjectFromFile.images);
-
-      console.log(GLOBALS.selectedSourceFolder[0].path + ' - videos location');
-      console.log(GLOBALS.selectedOutputFolder + ' - output location');
-
-      GLOBALS.angularApp.sender.send(
-        'finalObjectReturning',
-        finalObjectFromFile,
-        pathToVhaFile,
-        getHtmlPath(GLOBALS.selectedOutputFolder)
-      );
     }
   });
 }
 
-/**
- * Return an HTML string for a path to the `vha` file
- * e.g. `C:\Some folder` becomes `C:/Some%20folder`
- * @param anyOsPath
- */
-function getHtmlPath(anyOsPath: string): string {
-  // Windows was misbehaving
-  // so we normalize the path (just in case) and replace all `\` with `/` in this instance
-  // because at this point Electron will be showing images following the path provided
-  // with the `file:///` protocol -- seems to work
-  const normalizedPath: string = path.normalize(anyOsPath);
-  const forwardSlashes: string = normalizedPath.replace(/\\/g, '/');
-  return forwardSlashes.replace(/ /g, '%20');
+function sendFinalObjectToAngular(finalObject: FinalObject, globals: VhaGlobals): void {
+
+  finalObject.images = insertTemporaryFields(finalObject.images);
+
+  globals.angularApp.sender.send(
+    'finalObjectReturning',
+    finalObject,
+    globals.currentlyOpenVhaFile,
+    getHtmlPath(globals.selectedOutputFolder)
+  );
+}
+
+function upgradeToVersion3(finalObject: FinalObject): void {
+
+  if (finalObject.version === 2 && !finalObject.inputDirs) {
+    console.log('OLD VERSION FILE !!!');
+    finalObject.inputDirs = { 0: { path: '', watch: false } };
+    finalObject.inputDirs[0].path = (finalObject as any).inputDir;
+  }
+
 }
 
 /**
- * Update 3 globals:
- *  - hubName
- *  - screenshotSettings
- *  - selectedSourceFolder
- * @param vhaFileContents
+ * Start watching directories !?!??!?!?!?!
+ * @param finalObject
  */
-function setGlobalsFromVhaFile(vhaFileContents: FinalObject) {
-  GLOBALS.hubName = vhaFileContents.hubName;
-  GLOBALS.screenshotSettings = vhaFileContents.screenshotSettings;
-  GLOBALS.selectedSourceFolder = vhaFileContents.inputDirs;
+function startWatchingDirs(inputDirs: InputSources): void {
+  console.log('about to start watching for files ?');
+
+  Object.keys(inputDirs).forEach((key: string) => {
+    console.log(key, ' : ', inputDirs[key].path);
+    if (inputDirs[key].watch) {
+      startFileSystemWatching(inputDirs[key].path, parseInt(key), [], false);
+    }
+  });
 }
 
 // ========================================================================================
@@ -480,7 +463,7 @@ ipc.on('please-create-playlist', (event, playlist: ImageElement[]) => {
  * Delete file from computer (send to recycling bin / trash)
  */
 ipc.on('delete-video-file', (event, item: ImageElement): void => {
-  const fileToDelete = path.join(GLOBALS.selectedSourceFolder[0].path, item.partialPath, item.fileName);
+  const fileToDelete = path.join(GLOBALS.selectedSourceFolders[0].path, item.partialPath, item.fileName);
 
   (async () => {
     await trash(fileToDelete);
@@ -685,7 +668,7 @@ ipc.on('start-the-import', (event, wizard: WizardOptions, videoFilesWithPaths: I
     GLOBALS.cancelCurrentImport = false;
     GLOBALS.hubName = hubName;
     GLOBALS.selectedOutputFolder = outDir;
-    GLOBALS.selectedSourceFolder = wizard.selectedSourceFolder;
+    GLOBALS.selectedSourceFolders = wizard.selectedSourceFolder;
 
     // determine number of screenshots
     let numOfScreenshots: number = 0;
@@ -707,30 +690,9 @@ ipc.on('start-the-import', (event, wizard: WizardOptions, videoFilesWithPaths: I
       videoFilesWithPaths = videoFilesWithPaths.slice(0, 50);
     }
 
-    // extractAllMetadata(
-    //   videoFilesWithPaths,
-    //   GLOBALS.selectedSourceFolder,
-    //   GLOBALS.screenshotSettings,
-    //   0,
-    //   sendFinalResultHome         // callback for when metdata is done extracting
-    // );
-
     sendFinalResultHome([]);
 
-    startFileSystemWatching(GLOBALS.selectedSourceFolder[0].path, 0, [], false);
-
-    // Currently not needed -- start import happens on wizard and wizard currently only allows for ONE source folder
-
-    // Object.keys(GLOBALS.selectedSourceFolder).forEach((key) => {
-
-    //   console.log(key);
-    //   console.log(GLOBALS.selectedSourceFolder[key]);
-    //   console.log(typeof(key));
-
-    //   startFileSystemWatching(GLOBALS.selectedSourceFolder[key], parseInt(key), [], false);
-    // });
-
-
+    startWatchingDirs(GLOBALS.selectedSourceFolders);
   }
 
 });
@@ -834,7 +796,7 @@ function sendFinalResultHome(theFinalArray: ImageElement[]): void {
     addTags: [], // ERROR ????
     hubName: GLOBALS.hubName,
     images: myFinalArray,
-    inputDirs: GLOBALS.selectedSourceFolder,
+    inputDirs: GLOBALS.selectedSourceFolders,
     numOfFolders: countFoldersInFinalArray(myFinalArray),
     removeTags: [], // ERROR ????
     screenshotSettings: GLOBALS.screenshotSettings,
@@ -847,31 +809,9 @@ function sendFinalResultHome(theFinalArray: ImageElement[]): void {
 
     GLOBALS.currentlyOpenVhaFile = pathToTheFile;
 
-    finalObject.images = insertTemporaryFields(finalObject.images);
+    sendFinalObjectToAngular(finalObject, GLOBALS);
 
-    GLOBALS.angularApp.sender.send(
-      'finalObjectReturning',
-      finalObject,
-      pathToTheFile,
-      getHtmlPath(GLOBALS.selectedOutputFolder)
-    );
-
-    const screenshotOutputFolder: string = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName);
-
-    const indexesToScan: number[] = missingThumbsIndex(
-      myFinalArray,
-      screenshotOutputFolder,
-      GLOBALS.screenshotSettings.clipSnippets > 0 // convert number to appropriate boolean
-    );
-
-    // extractFromTheseFiles(
-    //   myFinalArray,
-    //   GLOBALS.selectedSourceFolder,
-    //   screenshotOutputFolder,
-    //   GLOBALS.screenshotSettings,
-    //   indexesToScan,
-    //   false
-    // );
+    startWatchingDirs(finalObject.inputDirs);
 
   });
 }
@@ -887,7 +827,7 @@ function sendFinalResultHome(theFinalArray: ImageElement[]): void {
  * because the user may have renamed files from within the app!
  */
 ipc.on('only-import-new-files', (event, currentAngularFinalArray: ImageElement[]) => {
-  const currentVideoFolder = GLOBALS.selectedSourceFolder;
+  const currentVideoFolder = GLOBALS.selectedSourceFolders;
   GLOBALS.cancelCurrentImport = false;
   importOnlyNewFiles(currentAngularFinalArray, currentVideoFolder[0].path);
 });
@@ -900,7 +840,7 @@ ipc.on('only-import-new-files', (event, currentAngularFinalArray: ImageElement[]
  * because the user may have renamed files from within the app!
  */
 ipc.on('rescan-current-directory', (event, currentAngularFinalArray: ImageElement[]) => {
-  const currentVideoFolder = GLOBALS.selectedSourceFolder;
+  const currentVideoFolder = GLOBALS.selectedSourceFolders;
   GLOBALS.cancelCurrentImport = false;
   reScanCurrentDirectory(currentAngularFinalArray, currentVideoFolder[0].path);
 });
@@ -933,22 +873,15 @@ function verifyThumbnails(finalArray: ImageElement[]) {
 
   console.log(finalArray);
   console.log(indexesToScan);
+  console.log('DISABLED WIP');
 
-  // extractFromTheseFiles(
-  //   finalArray,
-  //   GLOBALS.selectedSourceFolder,
-  //   screenshotOutputFolder,
-  //   GLOBALS.screenshotSettings,
-  //   randomizeArray(indexesToScan), // extract screenshots in random order
-  //   true
-  // );
 }
 
 /**
  * Begins rescan procedure compared to what the app has currently
  *
  * @param angularFinalArray  - ImageElment[] from Angular (might have renamed files)
- * @param currentVideoFolder - source folder where videos are located (GLOBALS.selectedSourceFolder)
+ * @param currentVideoFolder - source folder where videos are located (GLOBALS.selectedSourceFolders)
  */
 function reScanCurrentDirectory(angularFinalArray: ImageElement[], currentVideoFolder: string) {
 
@@ -980,7 +913,7 @@ function reScanCurrentDirectory(angularFinalArray: ImageElement[], currentVideoF
  * Begin scanning for new files and importing them
  *
  * @param angularFinalArray  - ImageElment[] from Angular (might have renamed files)
- * @param currentVideoFolder - source folder where videos are located (GLOBALS.selectedSourceFolder)
+ * @param currentVideoFolder - source folder where videos are located (GLOBALS.selectedSourceFolders)
  */
 function importOnlyNewFiles(angularFinalArray: ImageElement[], currentVideoFolder: string) {
 
@@ -1005,53 +938,6 @@ function importOnlyNewFiles(angularFinalArray: ImageElement[], currentVideoFolde
   }
 }
 
-
-// ===========================================================================================
-// RESCAN - ARCHIVED
-// -------------------------------------------------------------------------------------------
-
-/**
- * Initiate regenerating the library
- */
-ipc.on('regenerate-library', (event, currentAngularFinalArray: ImageElement[]) => {
-  const currentVideoFolder = GLOBALS.selectedSourceFolder;
-  GLOBALS.cancelCurrentImport = false;
-  regenerateMetadata(currentAngularFinalArray, currentVideoFolder[0].path);
-});
-
-/**
- * Completely regenerate the library and metadata, but preserve thumbnails and user generated metadata
- * Useful when new metadata is added eg.
- *
- * @param angularFinalArray  - ImageElment[] from Angular (might have renamed files)
- * @param currentVideoFolder - source folder where videos are located (GLOBALS.selectedSourceFolder)
- */
-function regenerateMetadata(angularFinalArray: ImageElement[], currentVideoFolder: string) {
-
-  // rescan the source directory
-  if (fs.existsSync(currentVideoFolder)) {
-    let videosOnHD: ImageElement[] = getVideoPathsAndNames(currentVideoFolder);
-
-    if (demo) {
-      videosOnHD = videosOnHD.slice(0, 50);
-    }
-
-    const folderToDeleteFrom = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName);
-
-    regenerateLibrary(
-      angularFinalArray,
-      videosOnHD,
-      currentVideoFolder,
-      GLOBALS.screenshotSettings,
-      folderToDeleteFrom,
-      sendFinalResultHome           // callback for when `extractAllMetadata` is called
-    );
-
-  } else {
-    tellUserDirDoesNotExist(currentVideoFolder);
-  }
-}
-
 /**
  * Cancel current import progress & tell user directory does not exist!
  * @param currentVideoFolder
@@ -1063,7 +949,6 @@ function tellUserDirDoesNotExist(currentVideoFolder: string) {
     buttons: ['OK']
   });
 }
-
 
 // =========================================================================================================================================
 //     TOUCH BAR

@@ -31,6 +31,21 @@ interface ResolutionMeta {
 export type ImportStage = 'importingMeta' | 'importingScreenshots' | 'done';
 
 /**
+ * Return an HTML string for a path to a file
+ * e.g. `C:\Some folder` becomes `C:/Some%20folder`
+ * @param anyOsPath
+ */
+export function getHtmlPath(anyOsPath: string): string {
+  // Windows was misbehaving
+  // so we normalize the path (just in case) and replace all `\` with `/` in this instance
+  // because at this point Electron will be showing images following the path provided
+  // with the `file:///` protocol -- seems to work
+  const normalizedPath: string = path.normalize(anyOsPath);
+  const forwardSlashes: string = normalizedPath.replace(/\\/g, '/');
+  return forwardSlashes.replace(/ /g, '%20');
+}
+
+/**
  * Label the video according to cosest resolution label
  * @param width
  * @param height
@@ -226,7 +241,7 @@ export function createDotPlsFile(savePath: string, playlist: ImageElement[], don
   for (let i = 0; i < playlist.length; i++) {
 
     const fullPath: string = path.join(
-      GLOBALS.selectedSourceFolder[0].path,
+      GLOBALS.selectedSourceFolders[0].path,
       playlist[i].partialPath,
       playlist[i].fileName
     );
