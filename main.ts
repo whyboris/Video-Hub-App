@@ -371,44 +371,116 @@ ipc.on('just-started', (event) => {
 });
 
 /**
- * Open a particular video file clicked inside Angular
+ * Start extracting the screenshots into a chosen output folder from a chosen input folder
  */
-ipc.on('open-media-file', (event, fullFilePath) => {
-  shell.openItem(path.normalize(fullFilePath)); // normalize because on windows, the path sometimes is mixing `\` and `/`
-  // shell.openPath(path.normalize(fullFilePath)); // Electron 9
+ipc.on('start-the-import', (event, wizard: WizardOptions, videoFilesWithPaths: ImageElement[]) => {
+
+  const hubName = wizard.futureHubName;
+  const outDir: string = wizard.selectedOutputFolder;
+
+  // make sure no hub name under the same name exists
+  if (fs.existsSync(path.join(outDir, hubName + '.vha2'))) {
+
+    dialog.showMessageBox(win, {
+      message: systemMessages.hubAlreadyExists +
+        '\n' + systemMessages.pleaseChangeName,
+      buttons: ['OK']
+    });
+
+    event.sender.send('pleaseFixHubName');
+
+  } else {
+
+    // create the folder `vha-hubName` inside the output directory
+    if (!fs.existsSync(path.join(outDir, 'vha-' + hubName))) {
+      console.log('vha-hubName folder did not exist, creating');
+      fs.mkdirSync(path.join(outDir, 'vha-' + hubName));
+      fs.mkdirSync(path.join(outDir, 'vha-' + hubName + '/filmstrips'));
+      fs.mkdirSync(path.join(outDir, 'vha-' + hubName + '/thumbnails'));
+      fs.mkdirSync(path.join(outDir, 'vha-' + hubName + '/clips'));
+    }
+
+    GLOBALS.cancelCurrentImport = false;
+    GLOBALS.hubName = hubName;
+    GLOBALS.selectedOutputFolder = outDir;
+    GLOBALS.selectedSourceFolders = wizard.selectedSourceFolder;
+
+    // determine number of screenshots
+    let numOfScreenshots: number = 0;
+    if (wizard.isFixedNumberOfScreenshots) {
+      numOfScreenshots = wizard.ssConstant;
+    } else {
+      numOfScreenshots = wizard.ssVariable;
+    }
+    GLOBALS.screenshotSettings = {
+      clipHeight: wizard.clipHeight,
+      clipSnippetLength: wizard.clipSnippetLength,
+      clipSnippets: wizard.extractClips ? wizard.clipSnippets : 0,
+      fixed: wizard.isFixedNumberOfScreenshots,
+      height: wizard.screenshotSizeForImport,
+      n: numOfScreenshots,
+    };
+
+    if (demo) {
+      videoFilesWithPaths = videoFilesWithPaths.slice(0, 50);
+    }
+
+    sendFinalResultHome([]);
+  }
+
 });
 
 /**
- * Open a particular video file clicked inside Angular
+ * Notify front-end about OS change in Dark Mode setting
+ * @param mode
  */
-ipc.on('open-media-file-at-timestamp', (event, executablePath, fullFilePath: string, argz: string[]) => {
-  const allArgs: string[] = [];
-  allArgs.push(path.normalize(fullFilePath));
-  allArgs.push(...argz);
-  console.log(allArgs);
-  spawn(path.normalize(executablePath), allArgs);
+function tellElectronDarkModeChange(mode: string) {
+  GLOBALS.angularApp.sender.send('osDarkModeChange', mode);
+}
+
+/**
+ * Interrupt current import process
+ */
+ipc.on('cancel-current-import', (event): void => {
+  GLOBALS.cancelCurrentImport = true;
 });
 
-ipc.on('select-default-video-player', (event) => {
-  console.log('asking for default video player');
-  dialog.showOpenDialog(win, {
-    title: systemMessages.selectDefaultPlayer,
-    filters: [
-      {
-        name: 'Executable', // TODO: i18n fixme
-        extensions: ['exe', 'app']
-      }, {
-        name: 'All files', // TODO: i18n fixme
-        extensions: ['*']
-      }
-    ],
-    properties: ['openFile']
-  }).then(result => {
-    const executablePath: string = result.filePaths[0];
-    if (executablePath) {
-      event.sender.send('preferred-video-player-returning', executablePath);
-    }
-  }).catch(err => {});
+ipc.on('system-messages-updated', (event, newSystemMessages): void => {
+  systemMessages = newSystemMessages;
+});
+
+/**
+ * Un-Maximize the window
+ */
+ipc.on('un-maximize-window', (event) => {
+  if (BrowserWindow.getFocusedWindow()) {
+    BrowserWindow.getFocusedWindow().unmaximize();
+  }
+});
+
+/**
+ * Minimize the window
+ */
+ipc.on('minimize-window', (event) => {
+  if (BrowserWindow.getFocusedWindow()) {
+    BrowserWindow.getFocusedWindow().minimize();
+  }
+});
+
+/**
+ * Prevent PC from going to sleep during screenshot extraction
+ */
+ipc.on('prevent-sleep', (event) => {
+  console.log('preventing sleep');
+  preventSleepId = powerSaveBlocker.start('prevent-app-suspension');
+});
+
+/**
+ * Allow PC to go to sleep after screenshots were extracted
+ */
+ipc.on('allow-sleep', (event) => {
+  console.log('allowing sleep');
+  powerSaveBlocker.stop(preventSleepId);
 });
 
 /**
@@ -435,6 +507,50 @@ ipc.on('maximize-window', (event) => {
 });
 
 /**
+ * Open a particular video file clicked inside Angular
+ */
+ipc.on('open-media-file', (event, fullFilePath) => {
+  shell.openItem(path.normalize(fullFilePath)); // normalize because on windows, the path sometimes is mixing `\` and `/`
+  // shell.openPath(path.normalize(fullFilePath)); // Electron 9
+});
+
+/**
+ * Open a particular video file clicked inside Angular
+ */
+ipc.on('open-media-file-at-timestamp', (event, executablePath, fullFilePath: string, argz: string[]) => {
+  const allArgs: string[] = [];
+  allArgs.push(path.normalize(fullFilePath));
+  allArgs.push(...argz);
+  console.log(allArgs);
+  spawn(path.normalize(executablePath), allArgs);
+});
+
+/**
+ * Select default video player
+ */
+ipc.on('select-default-video-player', (event) => {
+  console.log('asking for default video player');
+  dialog.showOpenDialog(win, {
+    title: systemMessages.selectDefaultPlayer,
+    filters: [
+      {
+        name: 'Executable', // TODO: i18n fixme
+        extensions: ['exe', 'app']
+      }, {
+        name: 'All files', // TODO: i18n fixme
+        extensions: ['*']
+      }
+    ],
+    properties: ['openFile']
+  }).then(result => {
+    const executablePath: string = result.filePaths[0];
+    if (executablePath) {
+      event.sender.send('preferred-video-player-returning', executablePath);
+    }
+  }).catch(err => {});
+});
+
+/**
  * Create and play the playlist
  * 1. filter out *FOLDER*
  * 2. save .pls file
@@ -454,7 +570,6 @@ ipc.on('please-create-playlist', (event, playlist: ImageElement[]) => {
       // shell.openPath(savePath); // Electron 9
     });
   }
-
 });
 
 /**
@@ -494,40 +609,6 @@ ipc.on('replace-thumbnail', (event, pathToIncomingJpg: string, item: ImageElemen
       })
       .catch((err) => {});
   }
-});
-
-/**
- * Un-Maximize the window
- */
-ipc.on('un-maximize-window', (event) => {
-  if (BrowserWindow.getFocusedWindow()) {
-    BrowserWindow.getFocusedWindow().unmaximize();
-  }
-});
-
-/**
- * Minimize the window
- */
-ipc.on('minimize-window', (event) => {
-  if (BrowserWindow.getFocusedWindow()) {
-    BrowserWindow.getFocusedWindow().minimize();
-  }
-});
-
-/**
- * Prevent PC from going to sleep during screenshot extraction
- */
-ipc.on('prevent-sleep', (event) => {
-  console.log('preventing sleep lol!');
-  preventSleepId = powerSaveBlocker.start('prevent-app-suspension');
-});
-
-/**
- * Allow PC to go to sleep after screenshots were extracted
- */
-ipc.on('allow-sleep', (event) => {
-  console.log('allowing sleep again');
-  powerSaveBlocker.stop(preventSleepId);
 });
 
 /**
@@ -605,89 +686,8 @@ ipc.on('close-window', (event, settingsToSave: SettingsObject, finalObjectToSave
 });
 
 /**
- * Notify front-end about OS change in Dark Mode setting
- * @param mode
- */
-function tellElectronDarkModeChange(mode: string) {
-  GLOBALS.angularApp.sender.send('osDarkModeChange', mode);
-}
-
-/**
- * Interrupt current import process
- */
-ipc.on('cancel-current-import', (event): void => {
-  GLOBALS.cancelCurrentImport = true;
-});
-
-ipc.on('system-messages-updated', (event, newSystemMessages): void => {
-  console.log('new translated system messages recieved !!!');
-  systemMessages = newSystemMessages;
-});
-
-/**
- * Start extracting the screenshots into a chosen output folder from a chosen input folder
- */
-ipc.on('start-the-import', (event, wizard: WizardOptions, videoFilesWithPaths: ImageElement[]) => {
-
-  const hubName = wizard.futureHubName;
-  const outDir: string = wizard.selectedOutputFolder;
-
-  // make sure no hub name under the same name exists
-  if (fs.existsSync(path.join(outDir, hubName + '.vha2'))) {
-
-    dialog.showMessageBox(win, {
-      message: systemMessages.hubAlreadyExists +
-        '\n' + systemMessages.pleaseChangeName,
-      buttons: ['OK']
-    });
-
-    event.sender.send('pleaseFixHubName');
-
-  } else {
-
-    // create the folder `vha-hubName` inside the output directory
-    if (!fs.existsSync(path.join(outDir, 'vha-' + hubName))) {
-      console.log('vha-hubName folder did not exist, creating');
-      fs.mkdirSync(path.join(outDir, 'vha-' + hubName));
-      fs.mkdirSync(path.join(outDir, 'vha-' + hubName + '/filmstrips'));
-      fs.mkdirSync(path.join(outDir, 'vha-' + hubName + '/thumbnails'));
-      fs.mkdirSync(path.join(outDir, 'vha-' + hubName + '/clips'));
-    }
-
-    GLOBALS.cancelCurrentImport = false;
-    GLOBALS.hubName = hubName;
-    GLOBALS.selectedOutputFolder = outDir;
-    GLOBALS.selectedSourceFolders = wizard.selectedSourceFolder;
-
-    // determine number of screenshots
-    let numOfScreenshots: number = 0;
-    if (wizard.isFixedNumberOfScreenshots) {
-      numOfScreenshots = wizard.ssConstant;
-    } else {
-      numOfScreenshots = wizard.ssVariable;
-    }
-    GLOBALS.screenshotSettings = {
-      clipHeight: wizard.clipHeight,
-      clipSnippetLength: wizard.clipSnippetLength,
-      clipSnippets: wizard.extractClips ? wizard.clipSnippets : 0,
-      fixed: wizard.isFixedNumberOfScreenshots,
-      height: wizard.screenshotSizeForImport,
-      n: numOfScreenshots,
-    };
-
-    if (demo) {
-      videoFilesWithPaths = videoFilesWithPaths.slice(0, 50);
-    }
-
-    sendFinalResultHome([]);
-  }
-
-});
-
-/**
- * Summon system modal to choose the *.vha file
- * send images object to App
- * send settings object to App
+ * Summon system modal to choose the *.vha2 file
+ * open via `openThisDamnFile` method
  */
 ipc.on('system-open-file-through-modal', (event, somethingElse) => {
   dialog.showOpenDialog(win, {
@@ -721,7 +721,6 @@ ipc.on('load-this-vha-file', (event, pathToVhaFile: string, finalObjectToSave: F
   } else {
     openThisDamnFile(pathToVhaFile);
   }
-
 });
 
 ipc.on('try-to-rename-this-file', (event, sourceFolder: string, relPath: string, file: string, renameTo: string, index: number): void => {
@@ -1021,4 +1020,3 @@ function createTouchBar() {
     ]
   });
 }
-
