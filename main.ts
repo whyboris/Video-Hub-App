@@ -3,7 +3,7 @@ import { GLOBALS } from './main-globals';
 // -------------------------------------     BUILD TOGGLE     --------------------------------------
 // -------------------------------------------------------------------------------------------------
 const demo = false;
-GLOBALS.version = '2.2.3';   // update `package.json` version to `#.#.#-demo` when building the demo
+GLOBALS.version = '3.0.0';   // update `package.json` version to `#.#.#-demo` when building the demo
 // =================================================================================================
 
 import * as path from 'path';
@@ -81,11 +81,10 @@ if (GLOBALS.debug) {
   console.log('Debug mode enabled!');
 }
 
-// TODO -- maybe clean up the `userWantedToOpen` with whatever pattern recommended by Electron
 // For windows -- when loading the app the first time
 if (args[0]) {
   if (!serve) {
-    userWantedToOpen = args[0];
+    userWantedToOpen = args[0]; // TODO -- clean up file-opening code to not use viarable
   }
 }
 
@@ -104,7 +103,6 @@ if (!gotTheLock) {
     // });
 
     if (argv[1]) {
-      userWantedToOpen = argv[1];
       openThisDamnFile(argv[1]);
     }
 
@@ -190,7 +188,6 @@ try {
   app.on('will-finish-launching', () => {
     app.on('open-file', (event, filePath: string) => {
       if (filePath) {
-        userWantedToOpen = filePath;
         if (!macFirstRun) {
           openThisDamnFile(filePath);
         }
@@ -254,6 +251,7 @@ function openThisDamnFile(pathToVhaFile: string) {
   // Override if user opening by double-clicking a file
   if (userWantedToOpen) {
     pathToVhaFile = userWantedToOpen;
+    userWantedToOpen = undefined;
   }
 
   console.log('the app is about to open: ' + pathToVhaFile);
@@ -365,7 +363,7 @@ ipc.on('just-started', (event) => {
       event.sender.send('pleaseOpenWizard', true); // firstRun = true!
     } else {
 
-      const savedSettings = JSON.parse(data);
+      const savedSettings: SettingsObject = JSON.parse(data);
 
       // Restore last windows size and position or full screen if not available
       if (savedSettings.windowSizeAndPosition
@@ -379,7 +377,9 @@ ipc.on('just-started', (event) => {
       // Reference: https://github.com/electron/electron/blob/master/docs/api/locales.md
       const locale: string = app.getLocale();
 
-      event.sender.send('settingsReturning', savedSettings, userWantedToOpen, locale);
+      const vhaFileToOpen: string = savedSettings.appState.currentVhaFile;
+
+      event.sender.send('settingsReturning', savedSettings, vhaFileToOpen, locale);
     }
   });
 });
@@ -389,6 +389,7 @@ ipc.on('just-started', (event) => {
  */
 ipc.on('open-media-file', (event, fullFilePath) => {
   shell.openItem(path.normalize(fullFilePath)); // normalize because on windows, the path sometimes is mixing `\` and `/`
+  // shell.openPath(path.normalize(fullFilePath)); // Electron 9
 });
 
 const spawn = require('child_process').spawn;
@@ -440,7 +441,7 @@ ipc.on('open-in-explorer', (event, fullPath: string) => {
  * Open a URL in system's default browser
  */
 ipc.on('please-open-url', (event, urlToOpen: string): void => {
-  shell.openExternal(urlToOpen, {activate: true});
+  shell.openExternal(urlToOpen, { activate: true });
 });
 
 /**
@@ -469,6 +470,7 @@ ipc.on('please-create-playlist', (event, playlist: ImageElement[]) => {
   if (cleanPlaylist.length) {
     createDotPlsFile(savePath, cleanPlaylist, () => {
       shell.openItem(savePath);
+      // shell.openPath(savePath); // Electron 9
     });
   }
 
@@ -750,9 +752,6 @@ ipc.on('system-open-file-through-modal', (event, somethingElse) => {
     const chosenFile: string = result.filePaths[0];
 
     if (chosenFile) {
-      // console.log('the user has chosen this previously-saved .vha file: ' + chosenFile);
-      // TODO: fix up this stupid pattern of overriding method with variable ?
-      userWantedToOpen = chosenFile;
       openThisDamnFile(chosenFile);
     }
   }).catch(err => {
@@ -770,13 +769,10 @@ ipc.on('load-this-vha-file', (event, pathToVhaFile: string, finalObjectToSave: F
 
     writeVhaFileToDisk(finalObjectToSave, GLOBALS.currentlyOpenVhaFile, () => {
       console.log('.vha2 file saved before opening another');
-      userWantedToOpen = pathToVhaFile;
       openThisDamnFile(pathToVhaFile);
     });
 
   } else {
-    // TODO -- streamline this variable and openThisDamnFileFunction
-    userWantedToOpen = pathToVhaFile;
     openThisDamnFile(pathToVhaFile);
   }
 

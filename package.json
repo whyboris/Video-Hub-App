@@ -1,6 +1,6 @@
 {
   "name": "video-hub-app-2",
-  "version": "2.2.3",
+  "version": "3.0.0",
   "description": "Video Hub App 2 - browse, search, preview your videos",
   "homepage": "http://www.videohubapp.com",
   "author": {
@@ -63,7 +63,7 @@
     "@types/node": "12.12.6",
     "codelyzer": "5.2.2",
     "electron": "8.3.0",
-    "electron-builder": "22.6.0",
+    "electron-builder": "22.6.1",
     "electron-reload": "1.5.0",
     "node-sass": "4.14.1",
     "npm-run-all": "4.1.5",
