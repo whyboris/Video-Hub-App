@@ -31,7 +31,10 @@ import {
   insertTemporaryFields,
   missingThumbsIndex,
   sendCurrentProgress,
+  sendFinalObjectToAngular,
   startFileSystemWatching,
+  startWatchingDirs,
+  upgradeToVersion3,
   writeVhaFileToDisk
 } from './main-support';
 
@@ -281,54 +284,8 @@ function openThisDamnFile(pathToVhaFile: string) {
 
       sendFinalObjectToAngular(finalObject, GLOBALS);
 
-      startWatchingDirs(finalObject.inputDirs); // starts `chokidar`
+      startWatchingDirs(finalObject.inputDirs, false); // starts `chokidar`
 
-    }
-  });
-}
-
-/**
- * Send final object to Angular; uses `GLOBALS` as input!
- * @param finalObject
- * @param globals
- */
-function sendFinalObjectToAngular(finalObject: FinalObject, globals: VhaGlobals): void {
-
-  finalObject.images = insertTemporaryFields(finalObject.images);
-
-  globals.angularApp.sender.send(
-    'finalObjectReturning',
-    finalObject,
-    globals.currentlyOpenVhaFile,
-    getHtmlPath(globals.selectedOutputFolder)
-  );
-}
-
-/**
- * If .vha2 version 2, upgrade `inputDir` into `inputDirs`
- * @param finalObject
- */
-function upgradeToVersion3(finalObject: FinalObject): void {
-
-  if (finalObject.version === 2 && !finalObject.inputDirs) {
-    console.log('OLD VERSION FILE !!!');
-    finalObject.inputDirs = { 0: { path: '', watch: false } };
-    finalObject.inputDirs[0].path = (finalObject as any).inputDir;
-  }
-
-}
-
-/**
- * Start watching directories with `chokidar
- * @param finalObject
- */
-function startWatchingDirs(inputDirs: InputSources): void {
-  console.log('about to start watching for files ?');
-
-  Object.keys(inputDirs).forEach((key: string) => {
-    console.log(key, ' : ', inputDirs[key].path);
-    if (inputDirs[key].watch) {
-      startFileSystemWatching(inputDirs[key].path, parseInt(key), [], false);
     }
   });
 }
@@ -364,7 +321,7 @@ function sendFinalResultHome(theFinalArray: ImageElement[]): void {
 
     sendFinalObjectToAngular(finalObject, GLOBALS);
 
-    startWatchingDirs(finalObject.inputDirs);
+    startWatchingDirs(finalObject.inputDirs, true);
 
   });
 }
@@ -723,8 +680,6 @@ ipc.on('start-the-import', (event, wizard: WizardOptions, videoFilesWithPaths: I
     }
 
     sendFinalResultHome([]);
-
-    startWatchingDirs(GLOBALS.selectedSourceFolders);
   }
 
 });

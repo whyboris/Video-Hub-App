@@ -17,8 +17,8 @@ const exec = require('child_process').exec;
 const ffprobePath = require('@ffprobe-installer/ffprobe').path.replace('app.asar', 'app.asar.unpacked');
 
 import { acceptableFiles } from './main-filenames';
-import { GLOBALS } from './main-globals';
-import { FinalObject, ImageElement, NewImageElement, ScreenshotSettings } from './interfaces/final-object.interface';
+import { GLOBALS, VhaGlobals } from './main-globals';
+import { FinalObject, ImageElement, NewImageElement, ScreenshotSettings, InputSources } from './interfaces/final-object.interface';
 import { ResolutionString } from './src/app/pipes/resolution-filter.service';
 import { Stats } from 'fs';
 import { queueThumbExtraction } from './main-extract';
@@ -825,4 +825,52 @@ interface tempMetadataQueueObject {
   name: string;
   partialPath: string;
   stat: Stats;
+}
+
+
+/**
+ * Send final object to Angular; uses `GLOBALS` as input!
+ * @param finalObject
+ * @param globals
+ */
+export function sendFinalObjectToAngular(finalObject: FinalObject, globals: VhaGlobals): void {
+
+  finalObject.images = insertTemporaryFields(finalObject.images);
+
+  globals.angularApp.sender.send(
+    'finalObjectReturning',
+    finalObject,
+    globals.currentlyOpenVhaFile,
+    getHtmlPath(globals.selectedOutputFolder)
+  );
+}
+
+/**
+ * If .vha2 version 2, upgrade `inputDir` into `inputDirs`
+ * @param finalObject
+ */
+export function upgradeToVersion3(finalObject: FinalObject): void {
+
+  if (finalObject.version === 2 && !finalObject.inputDirs) {
+    console.log('OLD VERSION FILE !!!');
+    finalObject.inputDirs = { 0: { path: '', watch: false } };
+    finalObject.inputDirs[0].path = (finalObject as any).inputDir;
+  }
+
+}
+
+/**
+ * Start watching directories with `chokidar
+ * @param finalObject
+ * @param deepScan - whether to extract files or compare hashes (TODO - rename param!)
+ */
+export function startWatchingDirs(inputDirs: InputSources, deepScan: boolean): void {
+  console.log('about to start watching for files ?');
+
+  Object.keys(inputDirs).forEach((key: string) => {
+    console.log(key, ' : ', inputDirs[key].path);
+    if (deepScan || inputDirs[key].watch) {
+      startFileSystemWatching(inputDirs[key].path, parseInt(key), [], deepScan);
+    }
+  });
 }
