@@ -231,8 +231,16 @@ if (codeRunningOnMac) {
   );
 }
 
+/**
+ * Notify front-end about OS change in Dark Mode setting
+ * @param mode
+ */
+function tellElectronDarkModeChange(mode: string) {
+  GLOBALS.angularApp.sender.send('osDarkModeChange', mode);
+}
+
 // =================================================================================================
-// Methods
+// Open a vha file method
 // -------------------------------------------------------------------------------------------------
 
 /**
@@ -394,29 +402,10 @@ function writeVhaFileAndStartExtraction(): void {
 }
 
 /**
- * Notify front-end about OS change in Dark Mode setting
- * @param mode
- */
-function tellElectronDarkModeChange(mode: string) {
-  GLOBALS.angularApp.sender.send('osDarkModeChange', mode);
-}
-
-/**
- * Interrupt current import process
- */
-ipc.on('cancel-current-import', (event): void => {
-  GLOBALS.cancelCurrentImport = true;
-});
-
-ipc.on('system-messages-updated', (event, newSystemMessages): void => {
-  systemMessages = newSystemMessages;               // TODO -- make sure it works with `main-ipc.ts`
-});
-
-/**
  * Summon system modal to choose the *.vha2 file
  * open via `openThisDamnFile` method
  */
-ipc.on('system-open-file-through-modal', (event, somethingElse) => {
+ipc.on('system-open-file-through-modal', (event, somethingElse) => {  // TODO -- check -- do I need to save vha to disk?
   dialog.showOpenDialog(win, {
     title: systemMessages.selectPreviousHub,
     filters: [{
@@ -434,7 +423,8 @@ ipc.on('system-open-file-through-modal', (event, somethingElse) => {
 });
 
 /**
- * Import this .vha file
+ * Open .vha2 file (from given path)
+ * save current VHA file to disk, if provided
  */
 ipc.on('load-this-vha-file', (event, pathToVhaFile: string, finalObjectToSave: FinalObject) => {
 
@@ -450,3 +440,18 @@ ipc.on('load-this-vha-file', (event, pathToVhaFile: string, finalObjectToSave: F
   }
 });
 
+// =================================================================================================
+
+/**
+ * Interrupt current import process
+ */
+ipc.on('cancel-current-import', (event): void => {
+  GLOBALS.cancelCurrentImport = true;
+});
+
+/**
+ * Update system messaging based on new language
+ */
+ipc.on('system-messages-updated', (event, newSystemMessages): void => {
+  systemMessages = newSystemMessages;               // TODO -- make sure it works with `main-ipc.ts`
+});
