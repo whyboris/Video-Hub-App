@@ -276,11 +276,13 @@ function openThisDamnFile(pathToVhaFile: string) {
   });
 }
 
-// ========================================================================================
+// =================================================================================================
 // Listeners for events from Angular
-// ========================================================================================
+// -------------------------------------------------------------------------------------------------
 
 setUpIpcMessages(ipc, win, pathToAppData, systemMessages);
+
+// -------------------------------------------------------------------------------------------------
 
 /**
  * Once Angular loads it sends over the `ready` status
@@ -407,51 +409,7 @@ ipc.on('cancel-current-import', (event): void => {
 });
 
 ipc.on('system-messages-updated', (event, newSystemMessages): void => {
-  systemMessages = newSystemMessages;
-});
-
-/**
- * Close the window / quit / exit the app
- */
-ipc.on('close-window', (event, settingsToSave: SettingsObject, finalObjectToSave: FinalObject) => {
-
-  // save window size and position
-  settingsToSave.windowSizeAndPosition = win.getContentBounds();
-
-  // convert shortcuts map to object
-  // someday when node stops giving error: Property 'fromEntries' does not exist on type 'ObjectConstructor'
-  // settingsToSave.shortcuts = <any>Object.fromEntries(settingsToSave.shortcuts);
-  // until then: https://gist.github.com/lukehorvat/133e2293ba6ae96a35ba#gistcomment-2600839
-  let obj = Array.from(settingsToSave.shortcuts).reduce((obj, [key, value]) => {
-    obj[key] = value;
-    return obj;
-  }, {});
-  settingsToSave.shortcuts = <any>obj;
-
-  const json = JSON.stringify(settingsToSave);
-
-  try {
-    fs.statSync(path.join(pathToAppData, 'video-hub-app-2'));
-  } catch (e) {
-    fs.mkdirSync(path.join(pathToAppData, 'video-hub-app-2'));
-  }
-
-  // TODO -- catch bug if user closes before selecting the output folder ?!??
-  fs.writeFile(path.join(pathToAppData, 'video-hub-app-2', 'settings.json'), json, 'utf8', () => {
-    if (finalObjectToSave !== null) {
-
-      writeVhaFileToDisk(finalObjectToSave, GLOBALS.currentlyOpenVhaFile, () => {
-        try {
-          BrowserWindow.getFocusedWindow().close();
-        } catch {}
-      });
-
-    } else {
-      try {
-        BrowserWindow.getFocusedWindow().close();
-      } catch {}
-    }
-  });
+  systemMessages = newSystemMessages;               // TODO -- make sure it works with `main-ipc.ts`
 });
 
 /**
@@ -492,41 +450,3 @@ ipc.on('load-this-vha-file', (event, pathToVhaFile: string, finalObjectToSave: F
   }
 });
 
-/**
- * Try to rename the particular file
- */
-ipc.on('try-to-rename-this-file', (event, sourceFolder: string, relPath: string, file: string, renameTo: string, index: number): void => {
-  console.log('renaming file:');
-
-  const original: string = path.join(sourceFolder, relPath, file);
-  const newName: string = path.join(sourceFolder, relPath, renameTo);
-
-  console.log(original);
-  console.log(newName);
-
-  let success = true;
-  let errMsg: string;
-
-  // check if already exists first
-  if (fs.existsSync(newName)) {
-    console.log('some file already EXISTS WITH THAT NAME !!!');
-    success = false;
-    errMsg = 'RIGHCLICK.errorFileNameExists';
-  } else {
-    try {
-      fs.renameSync(original, newName);
-    } catch (err) {
-      success = false;
-      console.log(err);
-      if (err.code === 'ENOENT') {
-        // const pathObj = path.parse(err.path);
-        // console.log(pathObj);
-        errMsg = 'RIGHTCLICK.errorFileNotFound';
-      } else {
-        errMsg = 'RIGHTCLICK.errorSomeError';
-      }
-    }
-  }
-
-  GLOBALS.angularApp.sender.send('renameFileResponse', index, success, renameTo, file, errMsg);
-});

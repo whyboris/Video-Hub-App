@@ -5,7 +5,7 @@ import { ElectronService } from '../../providers/electron.service';
 import { FilePathService } from '../views/file-path.service';
 import { ManualTagsService } from '../tags-manual/manual-tags.service';
 
-import { StarRating, ImageElement } from '../../../../interfaces/final-object.interface';
+import { StarRating, ImageElement, InputSources } from '../../../../interfaces/final-object.interface';
 import { TagEmit, TagEmission } from '../../../../interfaces/shared-interfaces';
 import { YearEmission } from '../views/details/details.component';
 
@@ -39,7 +39,7 @@ export class MetaComponent implements OnInit {
   @Input() showManualTags: boolean;
   @Input() showAutoFileTags: boolean;
   @Input() showAutoFolderTags: boolean;
-  @Input() selectedSourceFolder: string;
+  @Input() selectedSourceFolder: InputSources;
 
   starRatingHack: StarRating;
   yearHack: number;
@@ -65,7 +65,14 @@ export class MetaComponent implements OnInit {
 
     // Rename file response
     this.electronService.ipcRenderer.on(
-      'renameFileResponse', (event, index: number, success: boolean, renameTo: string, oldFileName: string, errMsg?: string) => {
+      'renameFileResponse', (
+          event,
+          index: number,
+          success: boolean,
+          renameTo: string,
+          oldFileName: string,
+          errMsg?: string
+        ) => {
 
       if (this.video.index === index) { // make sure the message is about current component's video
         if (success) {
@@ -184,7 +191,7 @@ export class MetaComponent implements OnInit {
   tryRenamingFile() {
     this.renameError = false;
 
-    const sourceFolder = this.selectedSourceFolder;
+    const sourceFolder = this.selectedSourceFolder[0].path;                       // TODO -- handle every source folder!
     const relativeFilePath = this.video.partialPath;
     const originalFile = this.video.fileName;
     const newFileName = this.renamingWIP + '.' + this.filePathService.getFileNameExtension(this.video.fileName);

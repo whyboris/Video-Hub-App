@@ -3,7 +3,7 @@ import { Component, ChangeDetectorRef, OnInit, Input, ElementRef, ViewChild } fr
 import { ElectronService } from '../../providers/electron.service';
 import { FilePathService } from '../views/file-path.service';
 
-import { ImageElement } from '../../../../interfaces/final-object.interface';
+import { ImageElement, InputSources } from '../../../../interfaces/final-object.interface';
 
 @Component({
   selector: 'app-rename-file',
@@ -17,7 +17,7 @@ import { ImageElement } from '../../../../interfaces/final-object.interface';
 export class RenameFileComponent implements OnInit {
   @ViewChild('renameFileInput', { static: false }) renameFileInput: ElementRef;
 
-  @Input() selectedSourceFolder: string;
+  @Input() selectedSourceFolder: InputSources;
   @Input() currentRightClickedItem: ImageElement;
   @Input() macVersion: boolean;
   @Input() darkMode: boolean;
@@ -43,7 +43,14 @@ export class RenameFileComponent implements OnInit {
 
     // Getting the error message to display
     this.electronService.ipcRenderer.on(
-      'renameFileResponse', (event, index: number, success: boolean, renameTo: string, oldFileName: string, errMsg?: string) => {
+      'renameFileResponse', (
+          event,
+          index: number,
+          success: boolean,
+          renameTo: string,
+          oldFileName: string,
+          errMsg?: string
+        ) => {
 
       // just in case, make sure the message came back for the current file
       if (this.currentRightClickedItem.index === index && !success) {
@@ -63,7 +70,7 @@ export class RenameFileComponent implements OnInit {
     this.nodeRenamingFile = true;
     this.renameErrMsg = '';
 
-    const sourceFolder = this.selectedSourceFolder;
+    const sourceFolder = this.selectedSourceFolder[0].path;                       // TODO -- handle other source folders
     const relativeFilePath = this.currentRightClickedItem.partialPath;
     const originalFile = this.currentRightClickedItem.fileName;
     const newFileName = this.renamingWIP + '.' + this.renamingExtension;

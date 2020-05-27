@@ -416,7 +416,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // Rename file response
     this.electronService.ipcRenderer.on(
-      'renameFileResponse', (event, index: number, success: boolean, renameTo: string, oldFileName: string, errMsg?: string) => {
+      'renameFileResponse', (
+          event,
+          index: number,
+          success: boolean,
+          renameTo: string,
+          oldFileName: string,
+          errMsg?: string
+        ) => {
 
       if (success) {
         // Update the final array, close rename dialog if open
