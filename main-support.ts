@@ -202,12 +202,7 @@ export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: stri
 
   finalObject.images = finalObject.images.filter(element => !element.deleted);
 
-  console.log('about ta save !!!');
-  console.log(finalObject);
-
   const json = JSON.stringify(finalObject);
-
-  console.log(json);
 
   // backup current file
   try {

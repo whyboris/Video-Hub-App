@@ -248,17 +248,12 @@ if (codeRunningOnMac) {
  * @param pathToVhaFile full path to the .vha2 file
  */
 function openThisDamnFile(pathToVhaFile: string) {
+  macFirstRun = false;     // TODO - figure out how to open file when double click first time on Mac
 
-  // TODO ### !!! figure out how to open file when double click first time
-  macFirstRun = false;
-
-  // Override if user opening by double-clicking a file
-  if (userWantedToOpen) {
+  if (userWantedToOpen) {                                          // TODO - clean up messy override
     pathToVhaFile = userWantedToOpen;
     userWantedToOpen = undefined;
   }
-
-  console.log('the app is about to open: ' + pathToVhaFile);
 
   fs.readFile(pathToVhaFile, (err, data) => {
     if (err) {
@@ -285,44 +280,7 @@ function openThisDamnFile(pathToVhaFile: string) {
       sendFinalObjectToAngular(finalObject, GLOBALS);
 
       startWatchingDirs(finalObject.inputDirs, false); // starts `chokidar`
-
     }
-  });
-}
-
-/**
- * Writes the vha file and sends contents back to Angular App
- * Starts the process to extract all the images
- *
- * TODO -- make into a pure function !?
- *
- * @param theFinalArray -- `finalArray` with all the metadata filled in
- */
-function sendFinalResultHome(theFinalArray: ImageElement[]): void {
-
-  const myFinalArray: ImageElement[] = alphabetizeFinalArray(theFinalArray);
-
-  const finalObject: FinalObject = {
-    addTags: [], // ERROR ????
-    hubName: GLOBALS.hubName,
-    images: myFinalArray,
-    inputDirs: GLOBALS.selectedSourceFolders,
-    numOfFolders: countFoldersInFinalArray(myFinalArray),
-    removeTags: [], // ERROR ????
-    screenshotSettings: GLOBALS.screenshotSettings,
-    version: GLOBALS.vhaFileVersion,
-  };
-
-  const pathToTheFile = path.join(GLOBALS.selectedOutputFolder, GLOBALS.hubName + '.vha2');
-
-  writeVhaFileToDisk(finalObject, pathToTheFile, () => {
-
-    GLOBALS.currentlyOpenVhaFile = pathToTheFile;
-
-    sendFinalObjectToAngular(finalObject, GLOBALS);
-
-    startWatchingDirs(finalObject.inputDirs, true);
-
   });
 }
 
@@ -352,20 +310,18 @@ ipc.on('just-started', (event) => {
       event.sender.send('pleaseOpenWizard', true); // firstRun = true!
     } else {
 
-      const savedSettings: SettingsObject = JSON.parse(data);
+      const previouslySavedSettings: SettingsObject = JSON.parse(data);
 
       // Restore last windows size and position or full screen if not available
-      if ( savedSettings.windowSizeAndPosition
-        && savedSettings.windowSizeAndPosition.x < screenWidth - 200
-        && savedSettings.windowSizeAndPosition.y < screenHeight - 200) {
-        win.setBounds(savedSettings.windowSizeAndPosition);
+      if ( previouslySavedSettings.windowSizeAndPosition
+        && previouslySavedSettings.windowSizeAndPosition.x < screenWidth - 200
+        && previouslySavedSettings.windowSizeAndPosition.y < screenHeight - 200) {
+        win.setBounds(previouslySavedSettings.windowSizeAndPosition);
       } else {
         win.setBounds({ x: 0, y: 0, width: screenWidth, height: screenHeight });
       }
 
-      const vhaFileToOpen: string = savedSettings.appState.currentVhaFile;
-
-      event.sender.send('settingsReturning', savedSettings, vhaFileToOpen, locale);
+      event.sender.send('settingsReturning', previouslySavedSettings, locale);
     }
   });
 });
@@ -373,26 +329,20 @@ ipc.on('just-started', (event) => {
 /**
  * Start extracting the screenshots into a chosen output folder from a chosen input folder
  */
-ipc.on('start-the-import', (event, wizard: WizardOptions, videoFilesWithPaths: ImageElement[]) => {
-
+ipc.on('start-the-import', (event, wizard: WizardOptions) => {
   const hubName = wizard.futureHubName;
   const outDir: string = wizard.selectedOutputFolder;
 
-  // make sure no hub name under the same name exists
-  if (fs.existsSync(path.join(outDir, hubName + '.vha2'))) {
-
+  if (fs.existsSync(path.join(outDir, hubName + '.vha2'))) { // make sure no hub name under the same name exists
     dialog.showMessageBox(win, {
       message: systemMessages.hubAlreadyExists +
         '\n' + systemMessages.pleaseChangeName,
       buttons: ['OK']
     });
-
     event.sender.send('pleaseFixHubName');
-
   } else {
 
-    // create the folder `vha-hubName` inside the output directory
-    if (!fs.existsSync(path.join(outDir, 'vha-' + hubName))) {
+    if (!fs.existsSync(path.join(outDir, 'vha-' + hubName))) { // create the folder `vha-hubName` inside the output directory
       console.log('vha-hubName folder did not exist, creating');
       fs.mkdirSync(path.join(outDir, 'vha-' + hubName));
       fs.mkdirSync(path.join(outDir, 'vha-' + hubName + '/filmstrips'));
@@ -404,31 +354,48 @@ ipc.on('start-the-import', (event, wizard: WizardOptions, videoFilesWithPaths: I
     GLOBALS.hubName = hubName;
     GLOBALS.selectedOutputFolder = outDir;
     GLOBALS.selectedSourceFolders = wizard.selectedSourceFolder;
-
-    // determine number of screenshots
-    let numOfScreenshots: number = 0;
-    if (wizard.isFixedNumberOfScreenshots) {
-      numOfScreenshots = wizard.ssConstant;
-    } else {
-      numOfScreenshots = wizard.ssVariable;
-    }
     GLOBALS.screenshotSettings = {
       clipHeight: wizard.clipHeight,
       clipSnippetLength: wizard.clipSnippetLength,
       clipSnippets: wizard.extractClips ? wizard.clipSnippets : 0,
       fixed: wizard.isFixedNumberOfScreenshots,
       height: wizard.screenshotSizeForImport,
-      n: numOfScreenshots,
+      n: wizard.isFixedNumberOfScreenshots ? wizard.ssConstant : wizard.ssVariable,
     };
 
-    if (demo) {
-      videoFilesWithPaths = videoFilesWithPaths.slice(0, 50);
-    }
-
-    sendFinalResultHome([]);
+    writeVhaFileAndStartExtraction();
   }
 
 });
+
+/**
+ * Creates a FinalObject with known data (no ImageElement[])
+ * Writes to disk, sends to Angular, starts watching directories
+ */
+function writeVhaFileAndStartExtraction(): void {
+
+  const finalObject: FinalObject = {
+    addTags: [],
+    hubName: GLOBALS.hubName,
+    images: [],
+    inputDirs: GLOBALS.selectedSourceFolders,
+    numOfFolders: 0,
+    removeTags: [],
+    screenshotSettings: GLOBALS.screenshotSettings,
+    version: GLOBALS.vhaFileVersion,
+  };
+
+  const pathToTheFile = path.join(GLOBALS.selectedOutputFolder, GLOBALS.hubName + '.vha2');
+
+  writeVhaFileToDisk(finalObject, pathToTheFile, () => {
+
+    GLOBALS.currentlyOpenVhaFile = pathToTheFile;
+
+    sendFinalObjectToAngular(finalObject, GLOBALS);
+
+    startWatchingDirs(finalObject.inputDirs, true);
+  });
+}
 
 /**
  * Notify front-end about OS change in Dark Mode setting
@@ -596,7 +563,12 @@ ipc.on('delete-video-file', (event, item: ImageElement): void => {
  * Method to replace thumbnail of a particular item
  */
 ipc.on('replace-thumbnail', (event, pathToIncomingJpg: string, item: ImageElement) => {
-  const fileToReplace: string = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName, 'thumbnails', item.hash + '.jpg');
+  const fileToReplace: string = path.join(
+      GLOBALS.selectedOutputFolder,
+      'vha-' + GLOBALS.hubName,
+      'thumbnails',
+      item.hash + '.jpg'
+    );
 
   if (fs.existsSync(fileToReplace)) {
     const height: number = GLOBALS.screenshotSettings.height;
@@ -621,7 +593,7 @@ ipc.on('choose-input', (event) => {
   }).then(result => {
     const inputDirPath: string = result.filePaths[0];
     if (inputDirPath) {
-      event.sender.send('inputFolderChosen', inputDirPath, getVideoPathsAndNames(inputDirPath));
+      event.sender.send('inputFolderChosen', inputDirPath, 42); // TODO - fix hardcoding number of files found
     }
   }).catch(err => {});
 });
@@ -762,6 +734,42 @@ ipc.on('try-to-rename-this-file', (event, sourceFolder: string, relPath: string,
 // =========================================================================================================================================
 // RESCAN - electron messages                                                                                             ARCHIVED FOR NOW -
 // -----------------------------------------------------------------------------------------------------------------------------------------
+
+/**
+ * ARCHIVED -- will be eliminated when directory watching starts working
+ *
+ * @param theFinalArray -- `finalArray` with all the metadata filled in
+ */
+function sendFinalResultHome(theFinalArray: ImageElement[]): void {
+
+  console.log('THIS METHOD DISABLED !!!');
+  return;
+
+  const myFinalArray: ImageElement[] = alphabetizeFinalArray(theFinalArray);
+
+  const finalObject: FinalObject = {
+    addTags: [], // ERROR ????
+    hubName: GLOBALS.hubName,
+    images: myFinalArray,
+    inputDirs: GLOBALS.selectedSourceFolders,
+    numOfFolders: countFoldersInFinalArray(myFinalArray),
+    removeTags: [], // ERROR ????
+    screenshotSettings: GLOBALS.screenshotSettings,
+    version: GLOBALS.vhaFileVersion,
+  };
+
+  const pathToTheFile = path.join(GLOBALS.selectedOutputFolder, GLOBALS.hubName + '.vha2');
+
+  writeVhaFileToDisk(finalObject, pathToTheFile, () => {
+
+    GLOBALS.currentlyOpenVhaFile = pathToTheFile;
+
+    sendFinalObjectToAngular(finalObject, GLOBALS);
+
+    startWatchingDirs(finalObject.inputDirs, true);
+
+  });
+}
 
 /**
  * Initiate scanning for new files and importing them

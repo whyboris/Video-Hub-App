@@ -214,7 +214,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     clipSnippets: 3,
     extractClips: false,
     futureHubName: '',
-    listOfFiles: [],
     isFixedNumberOfScreenshots: true,
     screenshotSizeForImport: 288,
     selectedOutputFolder: '',
@@ -401,11 +400,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }, 100);
 
     // Returning Input
-    this.electronService.ipcRenderer.on('inputFolderChosen', (event, filePath, listOfFiles) => {
-      this.wizard.totalNumberOfFiles = listOfFiles.length;
-      this.wizard.listOfFiles = listOfFiles;
+    this.electronService.ipcRenderer.on('inputFolderChosen', (event, filePath, numOfFiles) => {
+      this.wizard.totalNumberOfFiles = numOfFiles; // TODO - fix hardcoded incoming value in `main.ts`
 
-      if (listOfFiles.length > 0) {
+      if (numOfFiles > 0) {
         this.wizard.selectedSourceFolder[0].path = filePath;
         this.wizard.selectedOutputFolder = filePath;
       }
@@ -583,7 +581,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.electronService.ipcRenderer.on('settingsReturning', (
       event,
       settingsObject: SettingsObject,
-      userWantedToOpen: string,
       locale: string
     ) => {
       this.vhaFileHistory = (settingsObject.vhaFileHistory || []);
@@ -592,9 +589,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (this.appState.currentZoomLevel !== 1) {
         this.electronService.webFrame.setZoomFactor(this.appState.currentZoomLevel);
       }
-      if (userWantedToOpen) {
-        this.loadThisVhaFile(userWantedToOpen);
-      } else if (settingsObject.appState.currentVhaFile) {
+      if (settingsObject.appState.currentVhaFile) {
         this.loadThisVhaFile(settingsObject.appState.currentVhaFile);
       } else {
         this.wizard.showWizard = true;
@@ -747,9 +742,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public importFresh(): void {
     this.appState.selectedSourceFolder = this.wizard.selectedSourceFolder;
     this.appState.selectedOutputFolder = this.wizard.selectedOutputFolder;
-    //this.importStage = 'importingMeta';
 
-    this.electronService.ipcRenderer.send('start-the-import', this.wizard, this.wizard.listOfFiles);
+    this.electronService.ipcRenderer.send('start-the-import', this.wizard);
   }
 
   public cancelCurrentImport(): void {
@@ -1370,7 +1364,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       clipSnippets: 5,
       extractClips: false,
       futureHubName: '',
-      listOfFiles: [],
       isFixedNumberOfScreenshots: true,
       screenshotSizeForImport: 288, // default
       selectedOutputFolder: '',
@@ -1711,8 +1704,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   setOrRestoreLanguage(chosenLanguage: SupportedLanguage, locale: string): void {
     if (chosenLanguage) {
       this.changeLanguage(chosenLanguage);
-    } else {
+    } else if (<any>locale.substring(0, 2)) {
       this.changeLanguage(<any>locale.substring(0, 2));
+    } else {
+      this.changeLanguage('en');
     }
   }
 
