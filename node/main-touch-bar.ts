@@ -7,7 +7,7 @@ const ipc = require('electron').ipcMain;
 import * as path from 'path';
 import { GLOBALS } from './main-globals';
 
-import { AllSupportedViews, SupportedView } from './interfaces/shared-interfaces';
+import { AllSupportedViews, SupportedView } from '../interfaces/shared-interfaces';
 
 // TODO -- deduplicate the imports code
 const codeRunningOnMac: boolean = process.platform === 'darwin';

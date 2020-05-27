@@ -1,4 +1,4 @@
-import { GLOBALS, VhaGlobals } from './main-globals';
+import { GLOBALS, VhaGlobals } from './node/main-globals';
 // =================================================================================================
 // -------------------------------------     BUILD TOGGLE     --------------------------------------
 // -------------------------------------------------------------------------------------------------
@@ -35,16 +35,16 @@ import {
   startWatchingDirs,
   upgradeToVersion3,
   writeVhaFileToDisk
-} from './main-support';
+} from './node/main-support';
 
 import {
   findAndImportNewFiles,
   regenerateLibrary,
   rescanAddAndDelete,
-} from './main-rescan';
+} from './node/main-rescan';
 
-import { createTouchBar } from './main-touch-bar';
-import { setUpIpcMessages } from './main-ipc';
+import { createTouchBar } from './node/main-touch-bar';
+import { setUpIpcMessages } from './node/main-ipc';
 
 // Interfaces
 import { FinalObject, ImageElement } from './interfaces/final-object.interface';

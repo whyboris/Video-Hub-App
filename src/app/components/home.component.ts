@@ -21,7 +21,7 @@ import { AllSupportedViews, SupportedView, TagEmission, HistoryItem } from '../.
 import { DefaultScreenEmission } from './sheet/sheet.component';
 import { FinalObject, ImageElement, ScreenshotSettings } from '../../../interfaces/final-object.interface';
 
-import { ImportStage } from '../../../main-support';
+import { ImportStage } from '../../../node/main-support';
 import { SettingsObject } from '../../../interfaces/settings-object.interface';
 import { SortType } from '../pipes/sorting.pipe';
 import { StarEmission, YearEmission } from './views/details/details.component';
@@ -30,7 +30,7 @@ import { WizardOptions } from '../../../interfaces/wizard-options.interface';
 // Constants, etc
 import { AppState, SupportedLanguage, DefaultImagesPerRow, RowNumbers } from '../common/app-state';
 import { Filters, filterKeyToIndex, FilterKeyNames } from '../common/filters';
-import { GLOBALS } from '../../../main-globals';
+import { GLOBALS } from '../../../node/main-globals';
 import { LanguageLookup } from '../common/languages';
 import { SettingsButtons, SettingsButtonsGroups, SettingsButtonKey, SettingsButtonsType } from '../common/settings-buttons';
 

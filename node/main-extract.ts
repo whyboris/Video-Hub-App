@@ -32,7 +32,7 @@ const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path.replace('app.asar', 
 
 import { GLOBALS } from './main-globals';
 import { sendCurrentProgress } from './main-support';
-import { ImageElement, ScreenshotSettings } from './interfaces/final-object.interface';
+import { ImageElement, ScreenshotSettings } from '../interfaces/final-object.interface';
 
 
 // ========================================================================================

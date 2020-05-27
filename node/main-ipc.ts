@@ -9,8 +9,8 @@ const trash = require('trash');
 const spawn = require('child_process').spawn;
 
 import { GLOBALS } from './main-globals';
-import { ImageElement, FinalObject } from './interfaces/final-object.interface';
-import { SettingsObject } from './interfaces/settings-object.interface';
+import { ImageElement, FinalObject } from '../interfaces/final-object.interface';
+import { SettingsObject } from '../interfaces/settings-object.interface';
 import { createDotPlsFile, writeVhaFileToDisk } from './main-support';
 import { replaceThumbnailWithNewImage } from './main-extract';
 
@@ -258,7 +258,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
       }
     }
 
-    GLOBALS.angularApp.sender.send('renameFileResponse', index, success, renameTo, file, errMsg);
+    event.sender.send('renameFileResponse', index, success, renameTo, file, errMsg);
   });
 
   /**
