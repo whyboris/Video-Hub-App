@@ -593,7 +593,7 @@ ipc.on('choose-input', (event) => {
   }).then(result => {
     const inputDirPath: string = result.filePaths[0];
     if (inputDirPath) {
-      event.sender.send('inputFolderChosen', inputDirPath, 42); // TODO - fix hardcoding number of files found
+      event.sender.send('inputFolderChosen', inputDirPath);
     }
   }).catch(err => {});
 });

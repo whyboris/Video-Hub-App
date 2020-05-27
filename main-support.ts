@@ -640,7 +640,7 @@ export function hashFile(pathToFile: string): string {
 export function hashFileAsync(pathToFile: string): Promise<string> {
   const sampleSize = 16 * 1024;
   const sampleThreshold = 128 * 1024;
-  const stats = fs.statSync(pathToFile);
+  const stats = fs.statSync(pathToFile);                               // TODO -- change to `fs.stat()` -- async version
   const fileSize = stats.size;
 
   let data: Buffer;
@@ -713,7 +713,7 @@ function sendNewVideoMetadata(imageElement: ImageElement) {
   }
 }
 
-export function checkForMetadata(file: tempMetadataQueueObject, callback) {
+export function checkForMetadata(file: TempMetadataQueueObject, callback) {
   console.log('checking metadata for %s', file.fullPath);
   let found = false;
   if (!deepScan) {
@@ -743,7 +743,7 @@ export function checkForMetadata(file: tempMetadataQueueObject, callback) {
   }
 }
 
-function createElement(file: tempMetadataQueueObject, hash, callback) {
+function createElement(file: TempMetadataQueueObject, hash, callback) {
   const newElement = NewImageElement();
   newElement.hash = hash;
   extractMetadataAsync(file.fullPath, GLOBALS.screenshotSettings, newElement, file.stat)
@@ -769,7 +769,7 @@ let deepScan = false;
  * @param initalDeepScan
  */
 export function startFileSystemWatching(
-  inputDir: String,
+  inputDir: string,
   inputSource: number,
   finalArray: ImageElement[],
   initalDeepScan: boolean
@@ -818,7 +818,7 @@ export function startFileSystemWatching(
 }
 
 
-interface tempMetadataQueueObject {
+interface TempMetadataQueueObject {
   deepScan: boolean;
   fullPath: string;
   inputSource: number;

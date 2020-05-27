@@ -60,9 +60,8 @@ export class StatisticsComponent implements OnInit {
     this.avgLength = Math.round(this.totalLength / this.totalFiles);
     this.avgSize = Math.round(this.totalSize / this.totalFiles);
 
-    this.electronService.ipcRenderer.on('inputFolderChosen', (event, filePath, numOfFiles) => {
-      console.log('chosen!!!');
-      console.log('note the fake number of files found: ', numOfFiles);
+    this.electronService.ipcRenderer.on('inputFolderChosen', (event, filePath) => {
+      console.log('chosen: ', filePath);
 
       let pathAlreadyExists = false;
 
@@ -74,8 +73,6 @@ export class StatisticsComponent implements OnInit {
 
       if (!pathAlreadyExists) {
         this.inputFolders[this.pickNextIndex(this.inputFolders)] = { path: filePath, watch: false };
-        console.log(filePath);
-        console.log(numOfFiles);
       }
 
     });

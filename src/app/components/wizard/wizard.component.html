@@ -117,18 +117,6 @@
     </span>
     <span class="path" [innerHtml]="wizard.selectedSourceFolder[0].path | folderArrowsPipe">
     </span>
-    <span
-      class="step-description"
-      [ngStyle]="{ opacity: wizard.totalNumberOfFiles === -1 ? 0 : 1 }"
-    >
-      <!-- don't use *ngIf on this element because then it disappears and changes height of section -->
-      {{ 'WIZARD.found' | translate }}
-      <span class="emphasis-number">
-        {{ wizard.totalNumberOfFiles | number }}
-      </span>
-      {{ 'WIZARD.videos' | translate }}
-      {{ (wizard.totalNumberOfFiles > 50 && demo ? 'WIZARD.demoVersion' : '') | translate }}
-    </span>
 
     <!-- STEP 3 -------------------------------------------------------------------------------- -->
 
@@ -392,11 +380,12 @@
     <button
       style="margin-top: 45px;"
       class="wizard-button start-import"
-      [disabled]="wizard.selectedOutputFolder === ''
-               || wizard.selectedSourceFolder[0].path === ''
-               || importStage !== 'done'
-               || wizard.futureHubName === ''
-               || wizard.totalNumberOfFiles === 0"
+      [disabled]="
+             wizard.selectedOutputFolder === ''
+          || wizard.selectedSourceFolder[0].path === ''
+          || importStage !== 'done'
+          || wizard.futureHubName === ''
+        "
       (click)="importFresh.emit()"
     >
       {{ 'WIZARD.createVideoHub' | translate }}

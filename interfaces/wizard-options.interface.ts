@@ -14,5 +14,4 @@ export interface WizardOptions {
   showWizard: boolean;
   ssConstant: number;
   ssVariable: number;
-  totalNumberOfFiles: number;
 }

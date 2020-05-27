@@ -221,7 +221,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     showWizard: false,
     ssConstant: 10,
     ssVariable: 5,
-    totalNumberOfFiles: -1,
   };
 
   // ========================================================================
@@ -400,13 +399,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }, 100);
 
     // Returning Input
-    this.electronService.ipcRenderer.on('inputFolderChosen', (event, filePath, numOfFiles) => {
-      this.wizard.totalNumberOfFiles = numOfFiles; // TODO - fix hardcoded incoming value in `main.ts`
-
-      if (numOfFiles > 0) {
-        this.wizard.selectedSourceFolder[0].path = filePath;
-        this.wizard.selectedOutputFolder = filePath;
-      }
+    this.electronService.ipcRenderer.on('inputFolderChosen', (event, filePath) => {
+      this.wizard.selectedSourceFolder[0].path = filePath;
+      this.wizard.selectedOutputFolder = filePath;
 
       this.cd.detectChanges();
     });
@@ -720,7 +715,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * triggers function that grabs settings and sends them back with `settingsReturning`
    */
   public justStarted(): void {
-    this.electronService.ipcRenderer.send('just-started', 'lol');
+    this.electronService.ipcRenderer.send('just-started');
   }
 
   public loadThisVhaFile(fullPath: string): void {
@@ -728,15 +723,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public loadFromFile(): void {
-    this.electronService.ipcRenderer.send('system-open-file-through-modal', 'lol');
+    this.electronService.ipcRenderer.send('system-open-file-through-modal');
   }
 
   public selectSourceDirectory(): void {
-    this.electronService.ipcRenderer.send('choose-input', 'lol');
+    this.electronService.ipcRenderer.send('choose-input');
   }
 
   public selectOutputDirectory(): void {
-    this.electronService.ipcRenderer.send('choose-output', 'lol');
+    this.electronService.ipcRenderer.send('choose-output');
   }
 
   public importFresh(): void {
@@ -753,15 +748,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public initiateMinimize(): void {
-    this.electronService.ipcRenderer.send('minimize-window', 'lol');
+    this.electronService.ipcRenderer.send('minimize-window');
   }
 
   public initiateMaximize(): void {
     if (this.appMaximized === false) {
-      this.electronService.ipcRenderer.send('maximize-window', 'lol');
+      this.electronService.ipcRenderer.send('maximize-window');
       this.appMaximized = true;
     } else {
-      this.electronService.ipcRenderer.send('un-maximize-window', 'lol');
+      this.electronService.ipcRenderer.send('un-maximize-window');
       this.appMaximized = false;
     }
   }
@@ -1371,7 +1366,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       showWizard: true,
       ssConstant: 10,
       ssVariable: 10,
-      totalNumberOfFiles: -1,
     };
     this.toggleSettings();
   }
