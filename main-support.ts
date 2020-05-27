@@ -773,7 +773,12 @@ let deepScan = false;
  * @param finalArray
  * @param initalDeepScan
  */
-export function startFileSystemWatching(inputDir: String, inputSource: number, finalArray: ImageElement[], initalDeepScan: boolean) {
+export function startFileSystemWatching(
+  inputDir: String,
+  inputSource: number,
+  finalArray: ImageElement[],
+  initalDeepScan: boolean
+) {
 
   cachedFinalArray = finalArray;
   deepScan = initalDeepScan; // Hash files instead of just path compare

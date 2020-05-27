@@ -326,7 +326,6 @@ function sendFinalResultHome(theFinalArray: ImageElement[]): void {
   });
 }
 
-
 // ========================================================================================
 // Listeners for events from Angular
 // ========================================================================================
@@ -343,25 +342,26 @@ ipc.on('just-started', (event) => {
     tellElectronDarkModeChange(systemPreferences.getEffectiveAppearance());
   }
 
+  // Reference: https://github.com/electron/electron/blob/master/docs/api/locales.md
+  const locale: string = app.getLocale();
+
   fs.readFile(path.join(pathToAppData, 'video-hub-app-2', 'settings.json'), (err, data) => {
     if (err) {
-      win.setBounds({x: 0, y: 0, width: screenWidth, height: screenHeight});
+      win.setBounds({ x: 0, y: 0, width: screenWidth, height: screenHeight });
+      event.sender.send('set-language-based-off-system-locale', locale);
       event.sender.send('pleaseOpenWizard', true); // firstRun = true!
     } else {
 
       const savedSettings: SettingsObject = JSON.parse(data);
 
       // Restore last windows size and position or full screen if not available
-      if (savedSettings.windowSizeAndPosition
+      if ( savedSettings.windowSizeAndPosition
         && savedSettings.windowSizeAndPosition.x < screenWidth - 200
         && savedSettings.windowSizeAndPosition.y < screenHeight - 200) {
         win.setBounds(savedSettings.windowSizeAndPosition);
       } else {
         win.setBounds({ x: 0, y: 0, width: screenWidth, height: screenHeight });
       }
-
-      // Reference: https://github.com/electron/electron/blob/master/docs/api/locales.md
-      const locale: string = app.getLocale();
 
       const vhaFileToOpen: string = savedSettings.appState.currentVhaFile;
 

@@ -572,6 +572,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.cd.detectChanges();
     });
 
+    // If no previously saved settings exist, this gets sent over
+    this.electronService.ipcRenderer.on('set-language-based-off-system-locale', (event, localeString: string) => {
+      if (localeString) {
+        this.setOrRestoreLanguage(undefined, localeString);
+      }
+    });
+
     // Returning settings
     this.electronService.ipcRenderer.on('settingsReturning', (
       event,
