@@ -6,12 +6,16 @@ import { FilePathService } from '../file-path.service';
 import { metaAppear, textAppear } from '../../../common/animations';
 
 import { ImageElement } from '../../../../../interfaces/final-object.interface';
+import { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/shared-interfaces';
 
 @Component({
   selector: 'app-filmstrip-item',
   templateUrl: './filmstrip.component.html',
-  styleUrls: ['../film-and-full.scss',
-              '../time-and-rez.scss' ],
+  styleUrls: [
+      '../film-and-full.scss',
+      '../time-and-rez.scss',
+      '../selected.scss'
+    ],
   animations: [ textAppear,
                 metaAppear ]
 })
@@ -19,8 +23,8 @@ export class FilmstripComponent implements OnInit {
 
   @ViewChild('filmstripHolder', { static: false }) filmstripHolder: ElementRef;
 
-  @Output() videoClick = new EventEmitter<object>();
-  @Output() rightClick = new EventEmitter<object>();
+  @Output() videoClick = new EventEmitter<VideoClickEmit>();
+  @Output() rightClick = new EventEmitter<RightClickEmit>();
 
   @Input() video: ImageElement;
 

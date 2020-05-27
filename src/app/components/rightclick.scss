@@ -65,103 +65,14 @@
   z-index: 30;
 }
 
-.renameDark {
+.rename-dark {
   background: $gray-90;
 }
 
-.renameHeading {
-  color: $gray-50;
-  font-size: 16px;
-  left: 40px;
-  position: absolute;
-  top: 16px;
-}
-
-.renameFrom,
-.renameTo {
-  color: $gray-50;
-  display: block;
-  font-size: 12px;
-  left: 0px;
-  position: absolute;
-  text-align: right;
-  width: 38px;
-}
-
-.renameFrom {
-  top: 149px;
-}
-
-.renameTo {
-  top: 180px;
-}
-
-.renameFile {
-  background: transparent;
-  border: 0;
-  border-bottom: 1px solid $gray-40;
-  box-sizing: border-box;
-  font-size: 16px;
-  left: 40px;
-  outline: none;
-  padding: 6px 6px 6px 2px;
-  padding-bottom: 0;
-  position: absolute;
-  top: 170px;
-  width: 90%;
-}
-
-.renameErrMsg {
-  color: red;
-  font-size: 14px;
-  position: absolute;
-  right: 157px;
-  text-align: right;
-  top: 227px;
-}
-
-.button-rename {
-  border-radius: 5px;
-  margin: 0;
-  min-width: 100px;
-  position: absolute;
-  right: 40px;
-  top: 216px;
-}
-
-.extension-hack {
-  font-size: 16px;
-  left: 43px;
-  pointer-events: none;
-  position: absolute;
-  top: 175px;
-
-  & .hidden {
-    opacity: 0;
-  }
-
-  & .extension {
-    display: inline-block;
-    font-size: 12px;
-    opacity: 0.5;
-    transform: translate(-3px, 1.5px);
-  }
-}
-
-.darkModeOn {
+.dark-mode-on {
   color: white;
 }
 
 .disable-mouse-clicks {
   pointer-events: auto;
-}
-
-.closeRename {
-  position: absolute;
-  right: 8px;
-  top: 19px;
-}
-
-.closeRenameDark {
-  color: white;
 }

@@ -1,17 +1,32 @@
 <div
   class="meta"
-  [ngStyle]="{ 'max-width': maxWidth + 'px' }"
+  [ngStyle]="{
+    'min-height': imgHeight + 'px',
+    'width': maxWidth + 'px'
+   }"
 >
-  <span
+
+<!-- RENAME FILE SECTION -->
+  <input
+    class="meta-title"
     [ngClass]="{ 'larger-font': largerFont }"
-    [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
-    class="title"
+    [ngStyle]="{
+        color: darkMode ? '#DDDDDD' : '#000000',
+        width: renamingWIP.length + 2 + 'ch',
+        'max-width': maxWidth - 20 + 'px'
+      }"
+    [(ngModel)]="renamingWIP"
+    type="text"
+    (blur)="resetTitle($event)"
+    (keydown.esc)="resetTitle($event)"
+    (keydown.enter)="tryRenamingFile()"
   >
-    {{ video.cleanName }}
-  </span>
+
+<!-- META DATA SECTION -->
   <span
     class="fileSize"
     [ngClass]="{ darkModeText: darkMode }"
+    *ngIf="renamingWIP === video.cleanName; else renamingText"
   >
     {{ video.durationDisplay }}
 
@@ -22,7 +37,7 @@
     | <input
         #yearInput
         (change)="validateYear($event)"
-        (click)="autoFillYear($event)"
+        (click)="autoFillYear()"
         (keydown)="preventUnwantedKeypress($event)"
         (keyup.enter)="validateYear($event)"
         (keyup.esc)="validateYear($event)"
@@ -37,10 +52,31 @@
 
   </span>
 
-  <span class="fileSize" *ngIf="video.timesPlayed">
-    {{ 'TAGS.timesPlayed' | translate }}: {{ video.timesPlayed }}
-  </span>
+<!-- Renaming file messaging - replaces metadata section above -->
+  <ng-template
+    #renamingText
+  >
+    <span
+      *ngIf="!renameError; else renameErrText"
+      class="fileSize renaming-message"
+      [ngClass]="{ 'renaming-message-dark-mode': darkMode }"
+    >
+      {{ 'SYSTEM.pressEscToStopRenaming' | translate }}
+    </span>
+  </ng-template>
 
+  <ng-template
+    #renameErrText
+  >
+    <span
+      class="fileSize renaming-message renaming-error"
+      [ngClass]="{ 'renaming-error-dark-mode': darkMode }"
+    >
+      {{ 'SYSTEM.fileRenameError' | translate }}
+    </span>
+  </ng-template>
+
+<!-- Star rating -->
   <button
     (click)="setStarRating(1.5)"
     class="star-rating"
@@ -82,6 +118,12 @@
     <app-icon [icon]="'icon-star'"></app-icon>
   </button>
 
+<!-- Times played -->
+<span class="fileSize times-played" *ngIf="video.timesPlayed">
+  {{ 'TAGS.timesPlayed' | translate }}: {{ video.timesPlayed }}
+</span>
+
+<!-- Add tags / view tags -->
   <app-add-tag-component
     *ngIf="showManualTags"
     (tag)="addThisTag($event)"
@@ -91,14 +133,15 @@
 
   <app-view-tags-component
     [tags]="video | tagDisplayPipe
-                       : showManualTags
-                       : showAutoFileTags
-                       : showAutoFolderTags
-                       : tagViewUpdateHack"
+                    : showManualTags
+                    : showAutoFileTags
+                    : showAutoFolderTags
+                    : tagViewUpdateHack"
     [darkMode]="darkMode"
     (tagClicked)="filterThisTag($event)"
     (removeTagEmit)="removeThisTag($event)"
-    style="display: block;"
+    class="view-tags-holder"
+    [ngStyle]="{ 'min-height': imgHeight - 100 + 'px' }"
   ></app-view-tags-component>
 
 </div>

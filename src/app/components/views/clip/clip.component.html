@@ -28,7 +28,7 @@
           class="mini-video-thumb {{ 'folder-preview-' + idx }}"
           [volume]="forceMute ? 0 : 1"
           onmouseover="this.play().catch((err) => {this.load()})"
-          onmouseout="this.pause()"
+          (mouseout)="stopPreview($event)"
           loop
         ></video>
       </ng-container>
@@ -85,7 +85,11 @@
     class="video-box"
     [ngStyle]="{ height: imgHeight + 'px' }"
   >
-
+    <app-icon
+      *ngIf="video.selected"
+      class="selected"
+      [icon]="'icon-show-more-info'"
+    ></app-icon>
     <span *ngIf="showMeta" class="time">{{ video.durationDisplay }}</span>
     <span *ngIf="showMeta" class="rez">{{ video.resolution }}</span>
 
@@ -100,7 +104,7 @@
       class="screencap"
       [volume]="forceMute ? 0 : 1"
       onmouseover="this.play().catch((err) => {this.load()})"
-      onmouseout="this.pause()"
+      (mouseout)="stopPreview($event)"
       loop
     ></video>
 

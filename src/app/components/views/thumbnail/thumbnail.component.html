@@ -25,7 +25,7 @@
         }"
       ></div>
 
-      <span *ngIf="showMeta" class="time folder-time">{{ video.duration | lengthPipe : true : true : true }}</span>
+      <span *ngIf="showMeta" class="time folder-time">{{ video.duration | lengthPipe : 'folder' }}</span>
     </div>
 
     <div *ngIf="video.cleanName === '*FOLDER*' && video.fileName !== '*UP*'" class="folder-icon">
@@ -123,6 +123,11 @@
         'background-position-x': percentOffset + '%'
       }"
   >
+    <app-icon
+      *ngIf="video.selected"
+      class="selected"
+      [icon]="'icon-show-more-info'"
+    ></app-icon>
     <span *ngIf="showMeta" class="time">{{ video.durationDisplay }}</span>
     <span *ngIf="showMeta" class="rez">{{ video.resolution }}</span>
   </div>

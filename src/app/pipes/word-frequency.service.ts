@@ -32,11 +32,10 @@ export class WordFrequencyService {
    * @param filename
    */
   public addString(filename: string): void {
-    filename = filename.replace(autoFileTagsRegex, '');
-    const wordArray = filename.split(' ');
+    const wordArray: string[] = filename.toLowerCase().match(autoFileTagsRegex) || [];
     wordArray.forEach(word => {
-      if (!(word.length < 3)) {
-        this.addWord(word.toLowerCase());
+      if (word.length >= 3) {
+        this.addWord(word);
       }
     });
   }
@@ -54,7 +53,7 @@ export class WordFrequencyService {
   }
 
   /**
-   * Remove all elements with 3 or fewer occurences
+   * Remove all elements with 2 or fewer occurences
    */
   public cleanMap(): void {
     this.wordMap.forEach((value, key) => {

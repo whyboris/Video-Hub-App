@@ -1,6 +1,7 @@
 {
   "files.exclude": {
     "*.js": true,
+    "**/*.js": true,
     "**/dist": true,
     "**/node_modules": true,
     "**/release": true,

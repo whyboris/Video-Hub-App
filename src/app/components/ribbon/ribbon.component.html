@@ -1,0 +1,40 @@
+<ng-container *ngFor="let btnGroup of settingsButtonsGroups; index as i">
+  <div
+    class="settings-buttons-group"
+  ><ng-container
+      *ngFor="let buttonKey of btnGroup"
+    ><!--
+   --><button
+        *ngIf="!settingsButtons[buttonKey].hidden && settingsButtons[buttonKey].iconName"
+        (click)="toggleButton.emit(buttonKey)"
+        [ngClass]="{
+            defaultSettingsButton:             !settingsButtons['flatIcons'].toggled,
+
+            defaultSettingsButtonToggled:      !settingsButtons['flatIcons'].toggled
+                                            && settingsButtons[buttonKey].toggled,
+
+            defaultSettingsButtonDark:         !settingsButtons['flatIcons'].toggled
+                                            && settingsButtons['darkMode'].toggled,
+
+            defaultSettingsButtonDarkToggled:  !settingsButtons['flatIcons'].toggled
+                                            && settingsButtons['darkMode'].toggled
+                                            && settingsButtons[buttonKey].toggled,
+
+            flatSettingsButton:                settingsButtons['flatIcons'].toggled,
+
+            flatSettingsButtonToggled:         settingsButtons['flatIcons'].toggled
+                                            && settingsButtons[buttonKey].toggled,
+
+            disabledButton:                    (settingsButtons[buttonKey].iconName === 'icon-minus'
+                                            || settingsButtons[buttonKey].iconName === 'icon-plus')
+                                            && appState.currentView === 'showFiles'
+          }"
+        title="{{ settingsButtons[buttonKey].title | translate }}"
+        @buttonAnimation
+      >
+        <app-icon class="icon" [icon]="settingsButtons[buttonKey].iconName"></app-icon>
+      </button><!--
+  --></ng-container><!--
+  --><!--
+--></div>
+</ng-container>

@@ -7,15 +7,10 @@ import { ManualTagsService } from '../tags-manual/manual-tags.service';
 import { FilePathService } from '../views/file-path.service';
 
 import { StarRating, ImageElement } from '../../../../interfaces/final-object.interface';
-
-import { metaAppear, textAppear, modalAnimation } from '../../common/animations';
+import { TagEmit, TagEmission } from '../../../../interfaces/shared-interfaces';
 import { YearEmission } from '../views/details/details.component';
 
-export interface TagEmission {
-  index: number;
-  tag: string;
-  type: 'add' | 'remove';
-}
+import { metaAppear, textAppear, modalAnimation } from '../../common/animations';
 
 export interface StarEmission {
   index: number;
@@ -46,7 +41,7 @@ export class SheetComponent implements OnInit {
   @Output() editFinalArrayStars = new EventEmitter<StarEmission>();
   @Output() editFinalArrayTag = new EventEmitter<TagEmission>();
   @Output() editFinalArrayYear = new EventEmitter<YearEmission>();
-  @Output() filterTag = new EventEmitter<object>();
+  @Output() filterTag = new EventEmitter<TagEmit>();
   @Output() openVideoAtTime = new EventEmitter<object>();
 
   @Input() video: ImageElement;
@@ -67,10 +62,11 @@ export class SheetComponent implements OnInit {
   @Input() showMeta: boolean;
   @Input() star: StarRating;
 
+  pathToFilmstripJpg: string;
+  pathToVideoFile: string;
   percentOffset: number = 0;
-  fullFilePath = '';
-  thumbnailsToDisplay = 4;
   starRatingHack: StarRating;
+  thumbnailsToDisplay = 4;
 
   constructor(
     public manualTagsService: ManualTagsService,
@@ -79,7 +75,8 @@ export class SheetComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.fullFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
+    this.pathToFilmstripJpg = this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
+    this.pathToVideoFile = path.join(this.selectedSourceFolder, this.video.partialPath, this.video.fileName);
     this.percentOffset = (100 / (this.video.screens - 1));
     this.starRatingHack = this.star;
   }
@@ -136,8 +133,7 @@ export class SheetComponent implements OnInit {
   }
 
   copyToClipboard(): void {
-    const fullPath = path.join(this.selectedSourceFolder, this.video.partialPath, this.video.fileName);
-    navigator.clipboard.writeText(fullPath);
+    navigator.clipboard.writeText(this.pathToVideoFile);
   }
 
   /**

@@ -2,16 +2,16 @@
   (mouseleave)="mouseLeft()"
   (mousemove)="mouseIsMoving($event)"
   (mouseup)="mouseIsUp()"
-  class="frequencySliders"
+  class="frequency-sliders"
 >
 
   <div
-    class="sliderBackTrack"
+    class="slider-back-track"
     [ngClass]="{ darkMode: darkMode }"
   ></div>
 
   <div
-    class="leftSide"
+    class="left-side"
     [ngStyle]="{ width: currentXleft + 'px' }"
     [ngClass]="{ darkMode: darkMode }"
   >
@@ -27,35 +27,31 @@
   </div>
 
   <div
-    class="rightSide"
+    class="right-side"
     [ngStyle]="{ width: currentXright + 'px' }"
     [ngClass]="{ darkMode: darkMode }"
   >
     <div
       (mousedown)="rightSideClick($event)"
       [ngClass]="{
-        isDragging: draggingRight,
-        draggerDarkMode: darkMode
-      }"
+          isDragging: draggingRight,
+          draggerDarkMode: darkMode
+        }"
       class="dragger"
     >
     </div>
   </div>
   <span
     *ngIf="lengthFilter"
-    class="leftLabel"
-    [ngStyle]="{
-      left: ((currentXleft > 35) ? currentXleft - 35 : 0) + 'px'
-    }"
-    >
+    class="left-label"
+    [ngStyle]="{ left: ((currentXleft > 35) ? currentXleft - 35 : 0) + 'px' }"
+  >
     {{ convertToIndex(currentXleft) | wrapperPipe : labelFormatPipe }}
   </span>
   <span
     *ngIf="lengthFilter"
-    class="rightLabel"
-    [ngStyle]="{
-      right: 160 - ((currentXright < 125) ? currentXright + 35 : 160) + 'px'
-    }"
+    class="right-label"
+    [ngStyle]="{ right: 160 - ((currentXright < 125) ? currentXright + 35 : 160) + 'px' }"
   >
     {{ convertToIndex(currentXright) | wrapperPipe : labelFormatPipe }}
   </span>

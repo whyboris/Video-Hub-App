@@ -81,22 +81,22 @@
 
       <tr>
         <td>{{ 'STATISTICS.shortest' | translate }}</td>
-        <td class="rightCol">{{ shortest | lengthPipe : true }}</td>
+        <td class="rightCol">{{ shortest | lengthPipe : 'folder' }}</td>
       </tr>
 
       <tr>
         <td>{{ 'STATISTICS.longest' | translate }}</td>
-        <td class="rightCol">{{ longest | lengthPipe : true : true }}</td>
+        <td class="rightCol">{{ longest | lengthPipe : 'folder' }}</td>
       </tr>
 
       <tr>
         <td>{{ 'STATISTICS.total' | translate : true }}</td>
-        <td class="rightCol">{{ totalLength | lengthPipe : true : true : true }}</td>
+        <td class="rightCol">{{ totalLength | lengthPipe : 'folder' }}</td>
       </tr>
 
       <tr>
         <td>{{ 'STATISTICS.average' | translate }}</td>
-        <td class="rightCol">{{ avgLength | lengthPipe : true }}</td>
+        <td class="rightCol">{{ avgLength | lengthPipe : 'folder' }}</td>
       </tr>
 
       <tr>

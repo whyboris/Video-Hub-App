@@ -14,8 +14,6 @@ export class DeleteFilePipe implements PipeTransform {
    */
   transform(finalArray: ImageElement[], toggleHack: boolean): ImageElement[] {
 
-    console.log('delete pipe running!');
-
     return finalArray.filter(element => !element.deleted);
 
   }

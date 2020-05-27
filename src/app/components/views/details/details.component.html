@@ -1,6 +1,10 @@
 <div
-  [ngStyle]="{ height: elHeight + 'px' }"
+  [ngStyle]="{
+      height: elHeight + 'px',
+      width: maxWidth / (showTwoColumns ? 2 : 1) + 'px'
+    }"
   class="filmstrip-container"
+  [ngClass]="{ 'side-by-side': showTwoColumns }"
 >
 
   <div
@@ -19,6 +23,11 @@
         'background-position-x': percentOffset + '%'
       }"
   >
+    <app-icon
+      *ngIf="video.selected"
+      class="selected"
+      [icon]="'icon-show-more-info'"
+    ></app-icon>
   </div>
 
   <app-meta-item
@@ -33,10 +42,11 @@
 
     [star]="this.star"
 
-    [maxWidth]="maxWidth"
+    [maxWidth]="maxWidth / (showTwoColumns ? 2 : 1) - elWidth"
 
     [darkMode]="darkMode"
     [largerFont]="largerFont"
+    [selectedSourceFolder]="selectedSourceFolder"
     [showMeta]="showMeta"
     [showManualTags]="showManualTags"
     [showAutoFileTags]="showAutoFileTags"

@@ -1,4 +1,5 @@
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 import * as path from 'path';
 
@@ -16,19 +17,19 @@ import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency
 
 // Interfaces
 import { DefaultScreenEmission } from './sheet/sheet.component';
-import { FinalObject, ImageElement, ScreenshotSettings, NewImageElement } from '../../../interfaces/final-object.interface';
+import { FinalObject, ImageElement, ScreenshotSettings, NewImageElement, AllowedScreenshotHeight } from '../../../interfaces/final-object.interface';
 import { HistoryItem } from '../../../interfaces/history-item.interface';
 import { ImportSettingsObject } from '../../../interfaces/import.interface';
 import { ImportStage } from '../../../main-support';
 import { SavableProperties } from '../../../interfaces/savable-properties.interface';
 import { SettingsObject } from '../../../interfaces/settings-object.interface';
 import { SortType } from '../pipes/sorting.pipe';
-import { TagEmission, StarEmission, YearEmission } from './views/details/details.component';
+import { StarEmission, YearEmission } from './views/details/details.component';
 import { WizardOptions } from '../../../interfaces/wizard-options.interface';
 
 // Constants, etc
-import { AppState, SupportedLanguage, defaultImgsPerRow, RowNumbers } from '../common/app-state';
-import { allSupportedViews, SupportedView } from '../../../interfaces/shared-interfaces';
+import { AppState, SupportedLanguage, DefaultImagesPerRow, RowNumbers } from '../common/app-state';
+import { allSupportedViews, SupportedView, TagEmission } from '../../../interfaces/shared-interfaces';
 import { Filters, filterKeyToIndex, FilterKeyNames } from '../common/filters';
 import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, SettingsMetaGroup } from '../common/settings-buttons';
 import { globals } from '../../../main-globals';
@@ -52,8 +53,6 @@ const Ukrainian = require('../../../i18n/uk.json');
 
 // Animations
 import {
-  breadcrumbWordAppear,
-  breadcrumbsAppear,
   buttonAnimation,
   donutAppear,
   filterItemAppear,
@@ -76,8 +75,6 @@ import {
   templateUrl: './home.component.html',
   styleUrls: [
     './layout.scss',
-    './breadcrumbs.scss',
-    './top-buttons.scss',
     './settings.scss',
     './buttons.scss',
     './search.scss',
@@ -85,13 +82,10 @@ import {
     '../fonts/icons.scss',
     './gallery.scss',
     './wizard-button.scss',
-    './wizard.scss',
     './resolution.scss',
     './rightclick.scss'
   ],
   animations: [
-    breadcrumbsAppear,
-    breadcrumbWordAppear,
     buttonAnimation,
     donutAppear,
     filterItemAppear,
@@ -111,7 +105,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   @ViewChild('magicSearch', { static: false }) magicSearch: ElementRef;
   @ViewChild('fuzzySearch', { static: false }) fuzzySearch: ElementRef;
-  @ViewChild('renameFileInput', { static: false }) renameFileInput: ElementRef;
   @ViewChild('searchRef', { static: false }) searchRef: ElementRef;
   @ViewChild('sortFilterElement', { static: false }) sortFilterElement: ElementRef;
 
@@ -151,12 +144,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // App state / UI state
   // ------------------------------------------------------------------------
 
+  isClosing = false;
   appMaximized = false;
   settingsModalOpen = false;
-  finalArrayNeedsSaving: boolean = false; // if ever a file was renamed, re-save the .vha file
+  finalArrayNeedsSaving: boolean = false; // if ever a file was renamed, or tag added, re-save the .vha2 file
   flickerReduceOverlay = true;
   isFirstRunEver = false;
   rootFolderLive: boolean = true; // set to `false` when loading hub but video folder is not connected
+  folderNotConnectedErrorShowing: boolean = false; // temporary pop-over when updating from disconnected folder
 
   // ========================================================================
   // Import / extraction progress
@@ -175,7 +170,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   currentImgsPerRow: number = 5;
   galleryWidth: number;
-  imgsPerRow: RowNumbers = defaultImgsPerRow;
+  imgsPerRow: RowNumbers = DefaultImagesPerRow;
   previewHeight: number = 144;
   previewHeightRelated: number = 144;   // For the Related Videos tab:
   previewWidth: number;
@@ -214,12 +209,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   currentRightClickedItem: ImageElement;
   itemToRename: ImageElement;
-  nodeRenamingFile: boolean = false;
-  renameErrMsg: string = '';
   renamingExtension: string;
   renamingNow: boolean = false;
-  renamingWIP: string;           // ngModel for renaming file
-  rightClickPosition: any = { x: 0, y: 0 };
+  rightClickPosition: { x: number, y: number } = { x: 0, y: 0 };
   rightClickShowing: boolean = false;
 
   // ========================================================================
@@ -253,48 +245,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
   };
 
   // ========================================================================
-  // UNSORTED -- TODO -- CLEAN UP !!!
+  // currently only used for the statistics page
+  // && to prevent clip view from showing when no clips extracted
+  // defaults set here ONLY because when starting the app in clip view
+  // the app would show error in console log:
+  //   `Cannot read property 'clipSnippets' of undefined`
   // ------------------------------------------------------------------------
-
-  currentPlayingFile = '';
-  currentPlayingFolder = '';
-  fullPathToCurrentFile = '';
-
-  magicSearchString = '';
-  fuzzySearchString = '';
-
-  wordFreqArr: WordFreqAndHeight[];
-  currResults: number;
-
-  findMostSimilar: string; // for finding similar files to this one
-  showSimilar: boolean = false; // to toggle the similarity pipe
-
-  shuffleTheViewNow = 0; // dummy number to force re-shuffle current view
-
-  hubNameToRemember = ''; // don't remember what this variable is for
-
-  sortType: SortType = 'default';
-
-  manualTagFilterString: string = '';
-  manualTagShowFrequency: boolean = true;
-
-  durationOutlierCutoff: number = 0; // for the duration filter to cut off outliers
-
-  // time remaining calculator !!!
-  timeExtractionStarted;
-  timeExtractionRemaining;
-
-  folderNotConnectedErrorShowing: boolean = false;
-
-  deletePipeHack: boolean = false; // to force deletePipe to update
-
-  // ========================================================================
-  // Please add new variables below if they don't fit into any other section
-  // ------------------------------------------------------------------------
-
-  detailsMaxWidth: number = 1000; // used to keep track of max width for details in details view
-  tagTypeAhead: string = '';
-  folderViewNavigationPath: string = '';
 
   currentScreenshotSettings: ScreenshotSettings = {
     clipHeight: 144,
@@ -303,12 +259,49 @@ export class HomeComponent implements OnInit, AfterViewInit {
     fixed: true,
     height: 432,
     n: 3,
-  }; // currently only used for the statistics page
-  // && to prevent clip view from showing when no clips extracted
-  // defaults set here ONLY because when starting the app in clip view
-  // the app would show error in console log:
-  //   `Cannot read property 'clipSnippets' of undefined`
+  };
 
+  // ========================================================================
+  // Miscellaneous variables
+  // ------------------------------------------------------------------------
+
+  currentPlayingFile = '';
+  currentPlayingFolder = '';
+  fullPathToCurrentFile = '';
+
+  fuzzySearchString = '';
+  magicSearchString = '';
+  regexSearchString = '';
+  regexError = false; // handle pipe-side-effect BehaviorSubject
+
+  wordFreqArr: WordFreqAndHeight[];
+  numberOfVideosFound: number; // after applying all search filters
+
+  findMostSimilar: string; // for finding similar files to this one
+  showSimilar: boolean = false; // to toggle the similarity pipe
+
+  shuffleTheViewNow = 0; // dummy number to force re-shuffle current view
+
+  sortType: SortType = 'default';
+
+  durationOutlierCutoff: number = 0; // for the duration filter to cut off outliers
+
+  timeExtractionStarted;   // time remaining calculator
+  timeExtractionRemaining; // time remaining calculator
+
+  deletePipeHack: boolean = false; // to force deletePipe to update
+
+  folderNavigationScrollOffset: number = 0; // when in folder view and returning back to root
+  folderViewNavigationPath: string = '';
+
+  batchTaggingMode = false; // when batch tagging is enabled
+
+  latestVersionAvailable: string;
+
+  tagTypeAhead: string = '';
+
+  // ========================================================================
+  // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
   // ========================================================================
 
   // Listen for key presses
@@ -319,7 +312,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       switch (event.key) {
 
-        case ('a'):
+        case ('b'):
           this.toggleButton('hideSidebar');
           break;
 
@@ -344,10 +337,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
           break;
 
         case ('5'):
-          this.toggleButton('showFiles');
+          this.toggleButton('showDetails2');
           break;
 
         case ('6'):
+          this.toggleButton('showFiles');
+          break;
+
+        case ('7'):
           this.toggleButton('showClips');
           break;
 
@@ -380,11 +377,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
           break;
 
         case ('q'):
-          event.preventDefault();
-          event.stopPropagation();
-          this.initiateClose();
-          break;
-
         case ('w'):
           event.preventDefault();
           event.stopPropagation();
@@ -400,7 +392,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         case ('h'):
           this.toggleButton('hideTop');
           this.toggleButton('hideSidebar');
-          this.toggleSettingsMenu();
+          this.toggleRibbon();
           this.toggleButton('showMoreInfo');
           break;
 
@@ -463,6 +455,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   constructor(
+    private http: HttpClient,
     public cd: ChangeDetectorRef,
     public electronService: ElectronService,
     public manualTagsService: ManualTagsService,
@@ -498,20 +491,21 @@ export class HomeComponent implements OnInit, AfterViewInit {
     setTimeout(() => {
       this.wordFrequencyService.finalMapBehaviorSubject.subscribe((value: WordFreqAndHeight[]) => {
         this.wordFreqArr = value;
-        // this.cd.detectChanges();
       });
       this.resolutionFilterService.finalResolutionMapBehaviorSubject.subscribe((value) => {
         this.resolutionFreqArr = value;
-        // this.cd.detectChanges();
+        this.cd.detectChanges(); // prevent `ExpressionChangedAfterItHasBeenCheckedError`
       });
       this.starFilterService.finalStarMapBehaviorSubject.subscribe((value) => {
         this.starRatingFreqArr = value;
-        // this.cd.detectChanges();
+        this.cd.detectChanges(); // prevent `ExpressionChangedAfterItHasBeenCheckedError`
       });
-      this.pipeSideEffectService.searchResults.subscribe((value) => {
-        this.currResults = value;
-        this.cd.detectChanges();
-        this.debounceUpdateMax(10);
+      this.pipeSideEffectService.searchResults.subscribe((value: number) => {
+        this.numberOfVideosFound = value;
+        this.cd.detectChanges(); // prevent `ExpressionChangedAfterItHasBeenCheckedError`
+      });
+      this.pipeSideEffectService.regexError.subscribe((value: boolean) => {
+        this.regexError = value;
       });
 
       // -- DEMO CONTENT -- hasn't been updated in over 1 year
@@ -545,17 +539,23 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.cd.detectChanges();
     });
 
+    // Closing of Window was issued by Electron
+    this.electronService.remote.getCurrentWindow().on('close', () => {
+      // Check to see if this was not originally triggered by Title-Bar to avoid double saving of settings
+      if (!this.isClosing) {
+        this.initiateClose();
+      }
+    });
+
     // Rename file response
-    this.electronService.ipcRenderer.on('renameFileResponse', (event, success: boolean, errMsg?: string) => {
-      this.nodeRenamingFile = false;
+    this.electronService.ipcRenderer.on(
+      'renameFileResponse', (event, index: number, success: boolean, renameTo: string, oldFileName: string, errMsg?: string) => {
 
       if (success) {
-        // UPDATE THE FINAL ARRAY !!!
-        this.replaceFileNameInFinalArray();
+        // Update the final array, close rename dialog if open
+        // the error messaging is handled by `rename-file.component` or `meta.component` if it happens
+        this.replaceFileNameInFinalArray(renameTo, oldFileName, index);
         this.closeRename();
-      } else {
-        this.renameErrMsg = errMsg;
-        this.cd.detectChanges();
       }
     });
 
@@ -648,7 +648,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.extractionPercent = 1;
         this.importStage = 'done';
         this.electronService.ipcRenderer.send('allow-sleep');
-        this.appState.hubName = this.hubNameToRemember; // could this cause bugs ??? TODO: investigate!
       }
       this.cd.detectChanges();
     });
@@ -668,7 +667,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.rootFolderLive = rootFolderLive;
       this.finalArrayNeedsSaving = changedRootFolder;
       this.appState.currentVhaFile = pathToFile;
-      this.hubNameToRemember = finalObject.hubName;
       this.appState.hubName = finalObject.hubName;
       this.appState.numOfFolders = finalObject.numOfFolders;
       this.appState.selectedOutputFolder = outputFolderPath;
@@ -724,7 +722,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.electronService.ipcRenderer.on('pleaseOpenWizard', (event, firstRun) => {
       // Correlated with the first time ever starting the app !!!
       // Can happen when no settings present
-      // Can happen when trying to open a .vha file that no longer exists
+      // Can happen when trying to open a .vha2 file that no longer exists
       if (firstRun) {
         this.firstRunLogic();
       }
@@ -763,6 +761,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   ngAfterViewInit() {
     this.computePreviewWidth(); // so that fullView knows its size // TODO -- check if still needed!
+
     // this is required, otherwise when user drops the file, it opens as plaintext
     document.ondragover = document.ondrop = (ev) => {
       ev.preventDefault();
@@ -787,23 +786,34 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param galleryItem   item in the gallery over which jpg was dropped
    */
   droppedSomethingOverVideo(event, galleryItem: ImageElement) {
+
+    // this occurs when a tag is dropped on a video from the tag tray
+    if (event.dataTransfer.getData('text')) {
+      // tag previously set by `dragStart` in `view-tags.component`
+      const tag: string = event.dataTransfer.getData('text');
+
+      this.addTagToThisElement(tag, galleryItem);
+
+      this.ifShowDetailsViewRefreshTags();
+
+      return;
+    }
+
     const pathToNewImage: string = event.dataTransfer.files[0].path.toLowerCase();
     if (
-      (
-        pathToNewImage.endsWith('.jpg')
-        || pathToNewImage.endsWith('.jpeg')
-        || pathToNewImage.endsWith('.png')
-      )
-      && galleryItem.cleanName !== '*FOLDER*'
+        (
+             pathToNewImage.endsWith('.jpg')
+          || pathToNewImage.endsWith('.jpeg')
+          || pathToNewImage.endsWith('.png')
+        )
+        && galleryItem.cleanName !== '*FOLDER*'
     ) {
-      this.electronService.ipcRenderer.send(
-        'replace-thumbnail', pathToNewImage, galleryItem
-      );
+      this.electronService.ipcRenderer.send('replace-thumbnail', pathToNewImage, galleryItem);
     }
   }
 
   /**
-   * Low-tech debounced scroll handler
+   * Low-tech debounced window resize
    * @param msDelay - number of milliseconds to debounce; if absent sets to 250ms
    */
   public debounceUpdateMax(msDelay?: number): void {
@@ -815,24 +825,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.virtualScroller.refresh();
       this.computePreviewWidth();
     }, delay);
-  }
-
-  /**
-   * Only allow characters and numbers for hub name
-   * @param event key press event
-   */
-  public validateHubName(event: any): boolean {
-    const keyCode = event.charCode;
-    if (keyCode === 32) {
-      return true;
-    } else if (48 <= keyCode && keyCode <= 57) {
-      return true;
-    } else if (65 <= keyCode && keyCode <= 90) {
-      return true;
-    } else if (97 <= keyCode && keyCode <= 122) {
-      return true;
-    }
-    return false;
   }
 
   /**
@@ -908,6 +900,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public initiateClose(): void {
+    this.isClosing = true;
     this.savePreviousViewSize();
     this.appState.imgsPerRow = this.imgsPerRow;
     this.electronService.ipcRenderer.send('close-window', this.getSettingsForSave(), this.saveVhaIfNeeded());
@@ -938,6 +931,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param item        - ImageElement
    */
   public handleClick(eventObject: { mouseEvent: MouseEvent, thumbIndex?: number }, item: ImageElement) {
+
+    if (this.batchTaggingMode) {
+      item.selected = !item.selected;
+
+      return;
+    }
 
     // ctrl/cmd + click for thumbnail sheet
     if (eventObject.mouseEvent.ctrlKey === true || eventObject.mouseEvent.metaKey) {
@@ -1041,9 +1040,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   /**
    * Add filter to FILE search when word in file is clicked
-   * @param filter
+   * @param filter - particular tag clicked
    */
   handleTagWordClicked(filter: string, event?): void {
+
+    if (this.batchTaggingMode) {
+      this.addTagToManyVideos(filter);
+      return;
+    }
+
     this.showSidebar();
     if (event && event.shiftKey) { // Shift click to exclude
       if (!this.settingsButtons['tagExclusion'].toggled) {
@@ -1090,12 +1095,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Handle clicking on FOLDER in gallery, or the folder icon in breadcrumbs
+   * Handle clicking on FOLDER in gallery, or the folder icon in breadcrumbs, or the `UP` folder
    * @param filter
    */
   handleFolderIconClicked(filter: string): void {
+    if (this.folderNavigationScrollOffset === 0) {
+      this.folderNavigationScrollOffset = this.virtualScroller.viewPortInfo.scrollStartPosition;
+    }
+
     this.folderViewNavigationPath = filter;
-    this.scrollToTop();
+
+    this.scrollAppropriately(filter);
   }
 
   /**
@@ -1105,6 +1115,31 @@ export class HomeComponent implements OnInit, AfterViewInit {
   handleBbreadcrumbClicked(idx: number): void {
     this.folderViewNavigationPath = this.folderViewNavigationPath.split('/').slice(0, idx + 1).join('/');
     this.scrollToTop();
+  }
+
+  /**
+   * Scroll appropriately after navigating back to root folder
+   *
+   * Rather hacky thing, but works in the basic case
+   * Fails if user enters folder, changes some search or sort filter, and navigates back
+   */
+  scrollAppropriately(filter: string) {
+    if (filter === '') {
+      setTimeout(() => {
+        this.virtualScroller.scrollToPosition(this.folderNavigationScrollOffset, 0);
+        this.folderNavigationScrollOffset = 0;
+      }, 1);
+    } else {
+      this.scrollToTop();
+    }
+  }
+
+  /**
+   * Go back to root and scroll to last-seen location
+   */
+  breadcrumbHomeIconClick(): void {
+    this.folderViewNavigationPath = '';
+    this.scrollAppropriately('');
   }
 
   /**
@@ -1160,8 +1195,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param index - index of the file from `vhaFileHistory`
    */
   openFromHistory(index: number): void {
-    // console.log('trying to open ' + index);
-    // console.log(this.vhaFileHistory[index]);
     this.loadThisVhaFile(this.vhaFileHistory[index].vhaFilePath);
   }
 
@@ -1169,10 +1202,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Handle click from html to open a recently-opened VHA file
    * @param index - index of the file from `vhaFileHistory`
    */
-  removeFromHistory(event: Event, index: number): void {
-    event.stopPropagation();
-    // console.log('trying to remove ' + index);
-    // console.log(this.vhaFileHistory[index]);
+  removeFromHistory(index: number): void {
     this.vhaFileHistory.splice(index, 1);
   }
 
@@ -1208,6 +1238,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   toggleAllViewsButtonsOff(): void {
     this.settingsButtons['showClips'].toggled = false;
     this.settingsButtons['showDetails'].toggled = false;
+    this.settingsButtons['showDetails2'].toggled = false;
     this.settingsButtons['showFiles'].toggled = false;
     this.settingsButtons['showFilmstrip'].toggled = false;
     this.settingsButtons['showFullView'].toggled = false;
@@ -1241,7 +1272,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Restore the image height for the particular view
    */
   restoreViewSize(view: string): void {
-    this.currentImgsPerRow = this.imgsPerRow[view];
+    this.currentImgsPerRow = this.imgsPerRow[view] || 5; // showDetails2 view does not exist when upgrading to 2.2.3
   }
 
   /**
@@ -1311,13 +1342,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.rescanDirectory();
     } else if (uniqueKey === 'regenerateLibrary') {
       this.regenerateLibrary();
-    } else if (uniqueKey == 'playPlaylist') {
+    } else if (uniqueKey === 'playPlaylist') {
       this.electronService.ipcRenderer.send('please-create-playlist', this.pipeSideEffectService.galleryShowing);
     } else if (uniqueKey === 'showTagTray') {
       if (this.settingsButtons.showRelatedVideosTray.toggled) {
         this.settingsButtons.showRelatedVideosTray.toggled = false;
       }
-      this.settingsButtons.showTagTray.toggled = !this.settingsButtons.showTagTray.toggled;
+      if (this.settingsButtons.showTagTray.toggled) {
+        this.closeTagsTray();
+      } else {
+        this.settingsButtons.showTagTray.toggled = true;
+      }
     } else if (uniqueKey === 'showRelatedVideosTray') {
       if (this.settingsButtons.showTagTray.toggled) {
         this.settingsButtons.showTagTray.toggled = false;
@@ -1363,10 +1398,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } else {
       this.cd.detectChanges();
     }
-  }
-
-  public showSettingsGroup(group: number): void {
-    this.settingToShow = group;
   }
 
   /**
@@ -1493,6 +1524,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (this.currentImgsPerRow > 2) {
         this.currentImgsPerRow--;
       }
+    } else if (this.appState.currentView === 'showDetails2') {
+      if (this.currentImgsPerRow > 3) {
+        this.currentImgsPerRow--;
+      }
     } else if (this.currentImgsPerRow > 1) {
       this.currentImgsPerRow--;
     }
@@ -1508,18 +1543,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.galleryWidth = document.getElementById('scrollDiv').getBoundingClientRect().width - 14;
 
     if (
-      this.appState.currentView === 'showClips'
+         this.appState.currentView === 'showClips'
       || this.appState.currentView === 'showThumbnails'
       || this.appState.currentView === 'showDetails'
+      || this.appState.currentView === 'showDetails2'
     ) {
       const margin: number = (this.settingsButtons['compactView'].toggled ? 4 : 40);
       this.previewWidth = (this.galleryWidth / this.currentImgsPerRow) - margin;
-
-      // used in details view only
-      this.detailsMaxWidth = this.galleryWidth - this.previewWidth - 40; // 40px is just an estimate here
-
     } else if (
-      this.appState.currentView === 'showFilmstrip'
+         this.appState.currentView === 'showFilmstrip'
       || this.appState.currentView === 'showFullView'
     ) {
       this.previewWidth = ((this.galleryWidth - 30) / this.currentImgsPerRow);
@@ -1636,9 +1668,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Show or hide the settings menu
+   * Show or hide the ribbon
    */
-  toggleSettingsMenu(): void {
+  toggleRibbon(): void {
     this.appState.menuHidden = !this.appState.menuHidden;
   }
 
@@ -1646,8 +1678,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Called on screenshot size dropdown select
    * @param pxHeightForImport - string of number of pixels for the height of each screenshot
    */
-  selectScreenshotSize(pxHeightForImport: string): void {
-    const height = parseInt(pxHeightForImport, 10);
+  selectScreenshotSize(pxHeightForImport: '144' | '216' | '288' | '360' | '432' | '504'): void {
+    const height: AllowedScreenshotHeight = parseInt(pxHeightForImport, 10) as AllowedScreenshotHeight;
     this.wizard.screenshotSizeForImport = height;
   }
 
@@ -1655,8 +1687,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Called on screenshot size dropdown select
    * @param pxHeightForImport - string of number of pixels for the height of each screenshot
    */
-  selectClipSize(pxHeightForImport: string): void {
-    const height = parseInt(pxHeightForImport, 10);
+  selectClipSize(pxHeightForImport: '144' | '216' | '288' | '360' | '432' | '504'): void {
+    const height: AllowedScreenshotHeight = parseInt(pxHeightForImport, 10) as AllowedScreenshotHeight;
     this.wizard.clipHeight = height;
   }
 
@@ -1762,7 +1794,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.appState.currentZoomLevel = 1;             // TODO -- remove whole block -- not needed any more !?!?!?!??!?! -----------------!
       }
       if (!settingsObject.appState.imgsPerRow) {
-        this.appState.imgsPerRow = defaultImgsPerRow;
+        this.appState.imgsPerRow = DefaultImagesPerRow;
       }
     }
     this.sortType = this.appState.currentSort;
@@ -1885,33 +1917,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Opens rename file modal, prepares all the name and extension
-   */
-  openRenameFileModal(): void {
-    // prepare file name without extension:
-    this.renameErrMsg = '';
-    const item = this.currentRightClickedItem;
-
-    // .slice() creates a copy
-    const fileName = item.fileName.slice().substr(0, item.fileName.lastIndexOf('.'));
-    const extension = item.fileName.slice().split('.').pop();
-
-    this.renamingWIP = fileName;
-    this.renamingExtension = extension;
-
-    this.itemToRename = item;
-    this.renamingNow = true;
-
-    setTimeout(() => {
-      this.renameFileInput.nativeElement.focus();
-    }, 0);
-  }
-
-  /**
    * Close the thumbnail sheet
    */
   closeSheetOverlay() {
     this.sheetOverlayShowing = false;
+  }
+
+  /**
+   * Opens rename file modal, prepares all the name and extension
+   */
+  openRenameFileModal(): void {
+    this.itemToRename = this.currentRightClickedItem;
+    this.renamingNow = true;
   }
 
   /**
@@ -1923,49 +1940,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Attempt to rename file
-   * check for simple errors locally
-   * ask Node to perform rename after
-   */
-  attemptToRename() {
-    this.nodeRenamingFile = true;
-    this.renameErrMsg = '';
-
-    const sourceFolder = this.appState.selectedSourceFolder;
-    const relativeFilePath = this.currentRightClickedItem.partialPath;
-    const originalFile = this.currentRightClickedItem.fileName;
-    const newFileName = this.renamingWIP + '.' + this.renamingExtension;
-    // check if different first !!!
-    if (originalFile === newFileName) {
-      this.renameErrMsg = 'RIGHTCLICK.errorMustBeDifferent';
-      this.nodeRenamingFile = false;
-    } else if (this.renamingWIP.length === 0) {
-      this.renameErrMsg = 'RIGHTCLICK.errorMustNotBeEmpty';
-      this.nodeRenamingFile = false;
-    } else {
-      // try renaming
-      this.electronService.ipcRenderer.send(
-        'try-to-rename-this-file',
-        sourceFolder,
-        relativeFilePath,
-        originalFile,
-        newFileName
-      );
-    }
-  }
-
-  /**
    * Searches through the `finalArray` and updates the file name and display name
    * Should not error out if two files have the same name
    */
-  replaceFileNameInFinalArray(): void {
-    const oldFileName = this.currentRightClickedItem.fileName;
+  replaceFileNameInFinalArray(renameTo: string, oldFileName: string, index: number): void {
 
-    const i = this.itemToRename.index;
-
-    if (this.finalArray[i].fileName === oldFileName) {
-      this.finalArray[i].fileName = this.renamingWIP + '.' + this.renamingExtension;
-      this.finalArray[i].cleanName = this.renamingWIP;
+    if (this.finalArray[index].fileName === oldFileName) {
+      this.finalArray[index].fileName = renameTo;
+      this.finalArray[index].cleanName = renameTo.slice().substr(0, renameTo.lastIndexOf('.'));
     }
 
     this.finalArrayNeedsSaving = true;
@@ -2171,26 +2153,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param text     input text to check type-ahead
    * @param compute  whether or not to perform the lookup
    */
-  checkTagTypeahead(text: string, compute: boolean) {
-    if (compute) {
-      this.tagTypeAhead = this.manualTagsService.getTypeahead(text);
-    }
+  checkTagTypeahead(text: string) {
+    this.tagTypeAhead = this.manualTagsService.getTypeahead(text);
   }
 
   /**
    * Add tag to search when pressing tab
    * !!! but only when on the tag search field !!!
-   * @param $event
-   * @param execute
    * @param origin -- the `j` in the template, just pass it on to the `onEnterKey`
    */
-  typeaheadTabPressed($event, execute: boolean, origin: number): void {
-    if (execute) {
-      if (this.tagTypeAhead !== '') {
-        this.onEnterKey(this.tagTypeAhead, origin);
-        this.tagTypeAhead = '';
-        $event.preventDefault();
-      }
+  typeaheadTabPressed(origin: number): void {
+    if (this.tagTypeAhead !== '') {
+      this.onEnterKey(this.tagTypeAhead, origin);
+      this.tagTypeAhead = '';
     }
   }
 
@@ -2234,6 +2209,98 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const iqr = q3 - q1;
 
     return Math.min((q3 + iqr * 3), max);
+  }
+
+  addTagToManyVideos(tag: string): void {
+    this.finalArray.forEach((element: ImageElement) => {
+      if (element.selected) {
+        this.addTagToThisElement(tag, element);
+      }
+    });
+
+    this.ifShowDetailsViewRefreshTags();
+  }
+
+  /**
+   * Add a tag to some element
+   * Also updates the tag count in `manualTagsService`
+   * @param tag
+   * @param element
+   */
+  addTagToThisElement(tag: string, element: ImageElement): void {
+    if (!element.tags || !element.tags.includes(tag)) {
+
+      this.manualTagsService.addTag(tag); // only updates the count in the tray, nothing else!
+
+      this.editFinalArrayTag({
+        type: 'add',
+        index: element.index,
+        tag: tag
+      });
+    }
+  }
+
+  /**
+   * If current view is `showDetails` refresh all showing tags
+   * hack to make newly-added tags appear next to videos
+   */
+  ifShowDetailsViewRefreshTags(): void {
+    if (   this.appState.currentView === 'showDetails'
+        || this.appState.currentView === 'showDetails2') {
+      // details view shows tags but they don't update without some code that forces a refresh :(
+      // hack-y code simply hides manual tags and then shows them again
+      this.settingsButtons.manualTags.toggled = !this.settingsButtons.manualTags.toggled;
+      this.cd.detectChanges();
+      this.settingsButtons.manualTags.toggled = !this.settingsButtons.manualTags.toggled;
+    }
+  }
+
+  /**
+   * Close the manual tags tray at the bottom
+   * exit batch mode if it is active
+   */
+  closeTagsTray(): void {
+    this.settingsButtons['showTagTray'].toggled = false;
+    if (this.batchTaggingMode) {
+      this.toggleBatchTaggingMode();
+    }
+  }
+
+  /**
+   * Toggle between batch tag edit mode and normal mode
+   */
+  toggleBatchTaggingMode(): void {
+    if (this.batchTaggingMode) {
+      this.finalArray.forEach((element: ImageElement) => {
+        element.selected = false;
+      });
+    }
+    this.batchTaggingMode = !this.batchTaggingMode
+  }
+
+  /**
+   * Check whether new version of the app is available
+   */
+  checkForNewVersion(): void {
+    this.http.get('https://my.videohubapp.com/version.php').subscribe(
+      (version: string) => {
+        this.latestVersionAvailable = version;
+      },
+      (err: any) => {
+        this.latestVersionAvailable = 'error';
+      }
+    );
+  }
+
+  /**
+   * Open browser to `my.videohubapp.com`
+   */
+  goDownloadNewVersion(): void {
+    if (this.demo) {
+      this.electronService.ipcRenderer.send('pleaseOpenUrl', 'https://videohubapp.com');
+    } else {
+      this.electronService.ipcRenderer.send('pleaseOpenUrl', 'https://my.videohubapp.com');
+    }
   }
 
 }
