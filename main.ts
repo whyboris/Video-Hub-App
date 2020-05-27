@@ -12,7 +12,7 @@ import * as url from 'url';
 const fs = require('fs');
 const trash = require('trash');
 
-import { app, BrowserWindow, screen, TouchBar } from 'electron';
+import { app, BrowserWindow, screen } from 'electron';
 const dialog = require('electron').dialog;
 const electron = require('electron');
 const ipc = require('electron').ipcMain;
@@ -45,8 +45,7 @@ import {
 } from './main-rescan';
 
 import { replaceThumbnailWithNewImage } from './main-extract';
-import { AllSupportedViews, SupportedView } from './interfaces/shared-interfaces';
-import { randomizeArray } from './utility';
+import { createTouchBar } from './main-touch-bar';
 
 // Interfaces
 import {
@@ -164,7 +163,7 @@ function createWindow() {
   }
 
   if (codeRunningOnMac) {
-    createTouchBar();
+    const touchBar = createTouchBar();
     if (touchBar) {
       win.setTouchBar(touchBar);
     }
@@ -892,139 +891,5 @@ function tellUserDirDoesNotExist(currentVideoFolder: string) {
   dialog.showMessageBox(win, {
     message: systemMessages.directory + ' ' + currentVideoFolder + ' ' + systemMessages.doesNotExist,
     buttons: ['OK']
-  });
-}
-
-// =========================================================================================================================================
-//     TOUCH BAR
-// -----------------------------------------------------------------------------------------------------------------------------------------
-
-const nativeImage = require('electron').nativeImage;
-const { TouchBarPopover, TouchBarSegmentedControl } = TouchBar;
-const resourcePath = serve
-                     ? path.join(__dirname, 'src/assets/icons/mac/touch-bar/')
-                     : path.join(process.resourcesPath, 'assets/');
-
-let touchBar,
-    segmentedAnotherViewsControl,
-    segmentedFolderControl,
-    segmentedPopover,
-    segmentedViewControl,
-    zoomSegmented;
-
-ipc.on('app-to-touchBar', (event, changesFromApp) => {
-  if (codeRunningOnMac) {
-    if (AllSupportedViews.includes(<SupportedView>changesFromApp)) {
-      segmentedViewControl.selectedIndex = AllSupportedViews.indexOf(changesFromApp);
-    } else if (changesFromApp === 'showFreq') {
-      segmentedFolderControl.selectedIndex = 0;
-    } else if (changesFromApp === 'showRecent') {
-      segmentedFolderControl.selectedIndex = 1;
-    } else if (changesFromApp === 'compactView') {
-      segmentedAnotherViewsControl.selectedIndex = 0;
-    } else if (changesFromApp === 'showMoreInfo') {
-      segmentedAnotherViewsControl.selectedIndex = 1;
-    }
-  }
-});
-
-/**
- * Void function for creating touchBar for MAC OS X
- */
-function createTouchBar() {
-
-  // recent and freq views
-  segmentedFolderControl = new TouchBarSegmentedControl({
-    mode: 'multiple',
-    selectedIndex: -1,
-    segments: [
-      { icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-cloud.png'))
-                         .resize({ width: 22, height: 16 })},
-      { icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-recent-history.png'))
-                         .resize({ width: 18, height: 18 }) }
-    ],
-    change: selectedIndex => {
-      if (selectedIndex === 0) {
-        GLOBALS.angularApp.sender.send('touchBar-to-app', 'showFreq');
-      } else {
-        GLOBALS.angularApp.sender.send('touchBar-to-app', 'showRecent');
-      }
-    }
-  });
-
-  // segmentedControl for views
-  segmentedViewControl = new TouchBarSegmentedControl({
-    segments: [
-      { icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-thumbnails.png'))
-                         .resize({ width: 15, height: 15 })},
-      { icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-filmstrip.png'))
-                         .resize({ width: 20, height: 15 })},
-      { icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-full-view.png'))
-                         .resize({ width: 15, height: 15 })},
-      { icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-details.png'))
-                         .resize({ width: 15, height: 15 })},
-      { icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-filenames.png'))
-                         .resize({ width: 15, height: 15 })},
-      { icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-video-blank.png'))
-                         .resize({ width: 15, height: 15 })},
-    ],
-    change: selectedIndex => {
-      GLOBALS.angularApp.sender.send('touchBar-to-app', AllSupportedViews[selectedIndex]);
-    }
-  });
-
-  // Popover button for segmentedControl
-  segmentedPopover = new TouchBarPopover({
-    label: 'Views',
-    items: new TouchBar(
-      {
-        items: [segmentedViewControl]
-      }
-    )
-  });
-
-  // Segment with compat view and show more info
-  segmentedAnotherViewsControl = new TouchBarSegmentedControl({
-    mode: 'multiple',
-    selectedIndex: -1,
-    segments: [
-      { icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-compat-view.png'))
-                         .resize({ width: 16, height: 16 })},
-      { icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-more-info.png'))
-                         .resize({ width: 18, height: 20 })},
-    ],
-    change: selectedIndex => {
-      if (selectedIndex === 0) {
-        GLOBALS.angularApp.sender.send('touchBar-to-app', 'compactView');
-      } else {
-        GLOBALS.angularApp.sender.send('touchBar-to-app', 'showMoreInfo');
-      }
-    }
-  });
-
-  // touchBar segment with zoom options
-  zoomSegmented = new TouchBarSegmentedControl({
-    mode: 'buttons',
-    segments: [
-      {label: '-'},
-      {label: '+'}
-    ],
-    change: selectedIndex => {
-      if (selectedIndex === 0) {
-        GLOBALS.angularApp.sender.send('touchBar-to-app', 'makeSmaller');
-      } else {
-        GLOBALS.angularApp.sender.send('touchBar-to-app', 'makeLarger');
-      }
-    }
-  });
-
-  // creating touchBar from existing items
-  touchBar = new TouchBar({
-    items: [
-      segmentedFolderControl,
-      segmentedPopover,
-      segmentedAnotherViewsControl,
-      zoomSegmented
-    ]
   });
 }
