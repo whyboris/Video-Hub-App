@@ -10,7 +10,7 @@ const fs = require('fs');
 
 import { hashFile, extractAllMetadata, sendCurrentProgress } from './main-support';
 
-import { ImageElement, ScreenshotSettings } from './interfaces/final-object.interface';
+import { ImageElement, ScreenshotSettings } from '../interfaces/final-object.interface';
 
 
 /**

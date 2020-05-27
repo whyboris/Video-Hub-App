@@ -5,15 +5,23 @@ export type StarRating = 0.5 | 1.5 | 2.5 | 3.5 | 4.5 | 5.5;
 // must be heights from true `16:9` resolutions AND divisible by 8
 export type AllowedScreenshotHeight = 144 | 216 | 288 | 360 | 432 | 504;
 
+export interface SourceFolder {
+  path: string;
+  watch: boolean;
+}
+
+export type InputSources = Record<number, SourceFolder>;
+
 export interface FinalObject {
-  addTags?: string[];           // tags to add
-  hubName: string;              // the name of the hub -- for recently-opened
-  images: ImageElement[];       // see below
-  inputDir: string;             // later may support array of many input directories
-  numOfFolders: number;         // number of folders
-  removeTags?: string[];        // tags to remove
+  addTags: string[];             // tags to add
+  hubName: string;               // the name of the hub -- for recently-opened
+  images: ImageElement[];
+  // inputDir: string;           // became `inputDirs` in VHA3
+  inputDirs: InputSources;       // map the `inputSource` number to input directory (replaces `inputDir`)
+  numOfFolders: number;          // number of folders - is always re-counted when app starts
+  removeTags: string[];          // tags to remove
   screenshotSettings: ScreenshotSettings;
-  version: number;              // version of this vha file
+  version: number;               // version of this vha file
 }
 
 export interface ImageElement {
@@ -23,6 +31,7 @@ export interface ImageElement {
   fileSize: number;              // file size in bytes
   hash: string;                  // used for detecting changed files and as a screenshot identifier
   height: AllowedScreenshotHeight; // height of the video (px)
+  inputSource: number;           // corresponding to `inputDirs`
   mtime: number;                 // file modification time
   partialPath: string;           // for opening the file, just prepend the `inputDir` (starts with "/", is "/fldr1/fldr2", or can be "")
   screens: number;               // number of screenshots for this file
@@ -59,6 +68,7 @@ export function NewImageElement(): ImageElement {
     hash: '',
     height: 144,
     index: 0,
+    inputSource: 0,
     mtime: 0,
     partialPath: '',
     resBucket: 0,

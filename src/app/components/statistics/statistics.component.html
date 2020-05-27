@@ -9,7 +9,29 @@
   <span class="stats-heading folder" [innerHtml]="pathToVhaFile | folderArrowsPipe"></span>
 
   <span class="stats-heading title">{{ 'STATISTICS.videoFolder' | translate }}</span>
-  <span class="stats-heading folder" [innerHtml]="videoFolder | folderArrowsPipe"></span>
+  <!-- <span class="stats-heading folder" [innerHtml]="videoFolder[0] | folderArrowsPipe"></span> -->
+
+  <div class="input-sources">
+    <ng-container *ngFor="let item of videoFolder | keyvalue; trackBy: trackByFn">
+      <span
+        class="stats-heading folder input-folder"
+        [innerHtml]="item.value.path | folderArrowsPipe"
+      ></span>
+      <span
+        *ngIf="(objectKeys(videoFolder).length > 1)"
+        class="delete-input-folder"
+        (click)="deleteInputSource(item.key)"
+      >
+        DELETE
+      </span>
+      <label class="switch">
+        <input type="checkbox" [(ngModel)]="item.value.watch">
+        <span class="slider round"></span>
+      </label>
+    </ng-container>
+  </div>
+
+  <button (click)="addAnotherFolder()">CLICK!</button>
 
   <div class="table-container">
 

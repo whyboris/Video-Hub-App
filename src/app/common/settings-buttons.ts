@@ -1,12 +1,82 @@
 import { SettingsButton } from './settings-buttons.interface';
 
+export type SettingsButtonKey = 'autoFileTags'
+ | 'autoFolderTags'
+ | 'autoplayClips'
+ | 'clearHistory'
+ | 'clipsThumbnail'
+ | 'compactView'
+ | 'darkMode'
+ | 'duplicateHash'
+ | 'duplicateLength'
+ | 'duplicateSize'
+ | 'durationFilter'
+ | 'exclude'
+ | 'extendedWordCloud'
+ | 'fileIntersection'
+ | 'fileUnion'
+ | 'flatIcons'
+ | 'folderIntersection'
+ | 'folderUnion'
+ | 'fontSizeLarger'
+ | 'fuzzy'
+ | 'hideSidebar'
+ | 'hideTop'
+ | 'hoverScrub'
+ | 'importNewFiles'
+ | 'magic'
+ | 'makeLarger'
+ | 'makeSmaller'
+ | 'manualTags'
+ | 'muteClips'
+ | 'openAtTimestamp'
+ | 'playPlaylist'
+ | 'regex'
+ | 'rescanDirectory'
+ | 'resetSettings'
+ | 'resolutionFilter'
+ | 'returnToFirstScreenshot'
+ | 'showClips'
+ | 'showDeleteOption'
+ | 'showDetails'
+ | 'showDetails2'
+ | 'showFiles'
+ | 'showFilmstrip'
+ | 'showFolders'
+ | 'showFreq'
+ | 'showFullView'
+ | 'showMoreInfo'
+ | 'showRecent'
+ | 'showRelatedVideosTray'
+ | 'showTagTray'
+ | 'showTags'
+ | 'showThumbnails'
+ | 'shuffleGalleryNow'
+ | 'sortOptionAlphabetical'
+ | 'sortOptionAspectRatio'
+ | 'sortOptionModified'
+ | 'sortOptionSize'
+ | 'sortOptionStar'
+ | 'sortOptionTags'
+ | 'sortOptionTime'
+ | 'sortOptionTimesPlayed'
+ | 'sortOptionYear'
+ | 'sortOrder'
+ | 'starFilter'
+ | 'startWizard'
+ | 'tagExclusion'
+ | 'tagIntersection'
+ | 'tagUnion'
+ | 'thumbAutoAdvance'
+ | 'verifyThumbnails';
+
 // Add `SettingsButtons` items here so they show up in the buttons ribbon and in the settings
 // Each array separates buttons into their own button groups visually
-export const SettingsButtonsGroups: string[][] = [
-  [
+export const SettingsButtonsGroups: SettingsButtonKey[][] = [
+  [ // 0
     'hideSidebar',
   ],
-  [
+  [ // 1
     'folderUnion',
     'folderIntersection',
     'fileUnion',
@@ -19,7 +89,7 @@ export const SettingsButtonsGroups: string[][] = [
     'regex',
     'fuzzy',
   ],
-  [
+  [ // 2
     'durationFilter',
     'resolutionFilter',
     'starFilter',
@@ -34,7 +104,7 @@ export const SettingsButtonsGroups: string[][] = [
     'sortOptionTags',
     'sortOptionAspectRatio'
   ],
-  [
+  [ // 3
     'duplicateLength',
     'duplicateSize',
     'duplicateHash',
@@ -42,7 +112,7 @@ export const SettingsButtonsGroups: string[][] = [
     'extendedWordCloud',
     'showRecent'
   ],
-  [
+  [ // 4
     'showThumbnails',
     'showFilmstrip',
     'showFullView',
@@ -51,52 +121,51 @@ export const SettingsButtonsGroups: string[][] = [
     'showFiles',
     'showClips',
   ],
-  [
+  [ // 5
     'compactView',
     'showMoreInfo',
     'fontSizeLarger',
   ],
-  [
+  [ // 6
     'showFolders',
     'showRelatedVideosTray',
     'shuffleGalleryNow',
   ],
-  [
+  [ // 7
     'showTags',
     'autoFileTags',
     'autoFolderTags',
   ],
-  [
+  [ // 8
     'manualTags',
     'showTagTray',
   ],
-  [
+  [ // 9
     'hoverScrub',
     'thumbAutoAdvance',
     'returnToFirstScreenshot',
   ],
-  [
+  [ // 10
     'muteClips',
     'autoplayClips',
     'clipsThumbnail',
   ],
-  [
+  [ // 11
     'makeSmaller',
     'makeLarger',
   ],
-  [
+  [ // 12
     'darkMode',
   ],
-  [
+  [ // 13
     'hideTop',
     'flatIcons'
   ],
-  [
+  [ // 14
     'startWizard',
     'rescanDirectory',
     'importNewFiles',
     'verifyThumbnails',
-    // 'regenerateLibrary', // TODO - maybe enable someday?
     'resetSettings',
     'clearHistory',
     'showDeleteOption',
@@ -105,7 +174,8 @@ export const SettingsButtonsGroups: string[][] = [
   ]
 ];
 
-export const SettingsMetaGroup: any = [
+// Breaks up content into 3 tabs
+export const SettingsMetaGroup: string[][] = [
   [
     ...SettingsButtonsGroups[0],
     'break',
@@ -141,14 +211,16 @@ export const SettingsMetaGroup: any = [
   ],
 ];
 
-// correspond to each group above
+// correspond to each group (tab) above
 export const SettingsMetaGroupLabels: string[] = [
   'SETTINGS.searchAndFilter',
   'SETTINGS.galleryAndView',
   'SETTINGS.otherSettings',
 ];
 
-export const SettingsButtons: { [s: string]: SettingsButton } = {
+export type SettingsButtonsType = { [key in SettingsButtonKey]: SettingsButton };
+
+export const SettingsButtons: SettingsButtonsType = {
   'autoFileTags': {
     description: 'BUTTONS.autoFileTagsDescription',
     hidden: true,
@@ -390,12 +462,6 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-video-blank',
     moreInfo: 'BUTTONS.playlistButtonMoreInfo',
     title: 'BUTTONS.playlistButton',
-    toggled: false
-  },
-  'regenerateLibrary': {
-    description: 'BUTTONS.regenerateLibraryDescription',
-    hidden: false,
-    title: 'BUTTONS.regenerateLibraryHint',
     toggled: false
   },
   'regex': {
@@ -649,13 +715,6 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
     iconName: 'icon-tag-x',
     moreInfo: 'BUTTONS.tagExclusionMoreInfo',
     title: 'BUTTONS.tagExclusionHint',
-    toggled: false
-  },
-  'tagFrequencySort': { // was once in the ribbon, now it's removed and never appears in settings, toggled only from tag tray
-    description: 'BUTTONS.tagFrequencySortDescription',
-    hidden: true,
-    iconName: 'icon-tag-frequency',
-    title: 'BUTTONS.tagFrequencySortHint',
     toggled: false
   },
   'tagIntersection': {

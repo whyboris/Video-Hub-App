@@ -10,18 +10,18 @@ import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
 import { AutoTagsSaveService } from './tags-auto/tags-save.service';
 import { ElectronService } from '../providers/electron.service';
 import { ManualTagsService } from './tags-manual/manual-tags.service';
-import { ResolutionFilterService, ResolutionString } from '../pipes/resolution-filter.service';
 import { PipeSideEffectService } from '../pipes/pipe-side-effect.service';
+import { ResolutionFilterService, ResolutionString } from '../pipes/resolution-filter.service';
+import { ShortcutsService, CustomShortcutAction } from './shortcuts/shortcuts.service';
 import { StarFilterService } from '../pipes/star-filter.service';
 import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency.service';
 
 // Interfaces
+import { AllSupportedViews, SupportedView, TagEmission, HistoryItem } from '../../../interfaces/shared-interfaces';
 import { DefaultScreenEmission } from './sheet/sheet.component';
-import { FinalObject, ImageElement, ScreenshotSettings, NewImageElement, AllowedScreenshotHeight } from '../../../interfaces/final-object.interface';
-import { HistoryItem } from '../../../interfaces/history-item.interface';
-import { ImportSettingsObject } from '../../../interfaces/import.interface';
-import { ImportStage } from '../../../main-support';
-import { SavableProperties } from '../../../interfaces/savable-properties.interface';
+import { FinalObject, ImageElement, ScreenshotSettings } from '../../../interfaces/final-object.interface';
+
+import { ImportStage } from '../../../node/main-support';
 import { SettingsObject } from '../../../interfaces/settings-object.interface';
 import { SortType } from '../pipes/sorting.pipe';
 import { StarEmission, YearEmission } from './views/details/details.component';
@@ -29,27 +29,10 @@ import { WizardOptions } from '../../../interfaces/wizard-options.interface';
 
 // Constants, etc
 import { AppState, SupportedLanguage, DefaultImagesPerRow, RowNumbers } from '../common/app-state';
-import { allSupportedViews, SupportedView, TagEmission } from '../../../interfaces/shared-interfaces';
 import { Filters, filterKeyToIndex, FilterKeyNames } from '../common/filters';
-import { SettingsButtons, SettingsButtonsGroups, SettingsMetaGroupLabels, SettingsMetaGroup } from '../common/settings-buttons';
-import { globals } from '../../../main-globals';
-
-// Languages
-const Arabic = require('../../../i18n/ar.json');
-const Bengali = require('../../../i18n/bn.json');
-const Chinese = require('../../../i18n/zh.json');
-const English = require('../../../i18n/en.json');
-const French = require('../../../i18n/fr.json');
-const German = require('../../../i18n/de.json');
-const Hindi = require('../../../i18n/hi.json');
-const Italian = require('../../../i18n/it.json');
-const Japanese = require('../../../i18n/ja.json');
-const Korean = require('../../../i18n/ko.json');
-const Malay = require('../../../i18n/ms.json');
-const Portuguese = require('../../../i18n/pt.json');
-const Russian = require('../../../i18n/ru.json');
-const Spanish = require('../../../i18n/es.json');
-const Ukrainian = require('../../../i18n/uk.json');
+import { GLOBALS } from '../../../node/main-globals';
+import { LanguageLookup } from '../common/languages';
+import { SettingsButtons, SettingsButtonsGroups, SettingsButtonKey, SettingsButtonsType } from '../common/settings-buttons';
 
 // Animations
 import {
@@ -111,12 +94,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild(VirtualScrollerComponent, { static: false })
   virtualScroller: VirtualScrollerComponent;
 
-  defaultSettingsButtons = {};
-  settingsButtons = SettingsButtons;
+  defaultSettingsButtons = JSON.parse(JSON.stringify(SettingsButtons));
+  settingsButtons: SettingsButtonsType = SettingsButtons;
   settingsButtonsGroups = SettingsButtonsGroups;
-  settingsMetaGroup = SettingsMetaGroup;
-  settingsMetaGroupLabels = SettingsMetaGroupLabels;
-  settingToShow = 0;
+  settingTabToShow = 0;
 
   filters = Filters;
 
@@ -128,11 +109,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // ========================================================================================
   demo = false;
   macVersion = false;
-  // !!! make sure to update the `globals.version` and the `package.json` version numbers !!!
+  // !!! make sure to update the `GLOBALS.version` and the `package.json` version numbers !!!
   // webDemo = false;
   // ========================================================================================
 
-  versionNumber = globals.version;
+  versionNumber = GLOBALS.version;
 
   public finalArray: ImageElement[] = [];
 
@@ -233,15 +214,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     clipSnippets: 3,
     extractClips: false,
     futureHubName: '',
-    listOfFiles: [],
-    screensPerVideo: true,
+    isFixedNumberOfScreenshots: true,
     screenshotSizeForImport: 288,
     selectedOutputFolder: '',
-    selectedSourceFolder: '',
+    selectedSourceFolder: { 0: { path: '', watch: false }},
     showWizard: false,
     ssConstant: 10,
     ssVariable: 5,
-    totalNumberOfFiles: -1,
   };
 
   // ========================================================================
@@ -304,129 +283,23 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
   // ========================================================================
 
+
   // Listen for key presses
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     // .metaKey is for mac `command` button
     if (event.ctrlKey === true || event.metaKey) {
 
-      switch (event.key) {
+      const key: string = event.key;
 
-        case ('b'):
-          this.toggleButton('hideSidebar');
-          break;
+      if (this.shortcutService.keyToActionMap.has(key)) {
+        const shortcutAction: SettingsButtonKey | CustomShortcutAction = this.shortcutService.keyToActionMap.get(key);
 
-        case ('i'):
-          this.toggleButton('showMoreInfo');
-          break;
-
-        case ('1'):
-          this.toggleButton('showThumbnails');
-          break;
-
-        case ('2'):
-          this.toggleButton('showFilmstrip');
-          break;
-
-        case ('3'):
-          this.toggleButton('showFullView');
-          break;
-
-        case ('4'):
-          this.toggleButton('showDetails');
-          break;
-
-        case ('5'):
-          this.toggleButton('showDetails2');
-          break;
-
-        case ('6'):
-          this.toggleButton('showFiles');
-          break;
-
-        case ('7'):
-          this.toggleButton('showClips');
-          break;
-
-        case ('s'):
-          this.toggleButton('shuffleGalleryNow');
-          break;
-
-        case ('d'):
-          this.toggleButton('darkMode');
-          break;
-
-        case ('z'):
-          this.toggleButton('makeSmaller');
-          break;
-
-        case ('x'):
-          this.toggleButton('makeLarger');
-          break;
-
-        case ('o'):
-          if (this.wizard.showWizard === false) {
-            this.toggleSettings();
-          }
-          break;
-
-        case ('t'):
-          if (!this.wizard.showWizard) {
-            this.toggleButton('showTags');
-          }
-          break;
-
-        case ('q'):
-        case ('w'):
-          event.preventDefault();
-          event.stopPropagation();
-          this.initiateClose();
-          break;
-
-        case ('n'):
-          this.startWizard();
-          this.settingsModalOpen = false;
-          this.settingsButtons['showTags'].toggled = false;
-          break;
-
-        case ('h'):
-          this.toggleButton('hideTop');
-          this.toggleButton('hideSidebar');
-          this.toggleRibbon();
-          this.toggleButton('showMoreInfo');
-          break;
-
-        case ('f'):
-          if (this.settingsButtons['fileIntersection'].toggled === false) {
-            this.settingsButtons['fileIntersection'].toggled = true;
-          }
-          this.showSidebar();
-          setTimeout(() => {
-            if (this.searchRef.nativeElement.querySelector('#fileIntersection')) {
-              this.searchRef.nativeElement.querySelector('#fileIntersection').focus();
-            }
-          }, 1);
-          break;
-
-        case ('g'):
-          if (!this.settingsButtons['magic'].toggled) {
-            this.settingsButtons['magic'].toggled = true;
-          }
-          this.showSidebar();
-          setTimeout(() => {
-            this.magicSearch.nativeElement.focus();
-          }, 1);
-          break;
-
-        case ('r'):
-          if (!this.settingsButtons['fuzzy'].toggled) {
-            this.settingsButtons['fuzzy'].toggled = true;
-          }
-          this.showSidebar();
-          setTimeout(() => {
-            this.fuzzySearch.nativeElement.focus();
-          }, 1);
-          break;
+        if (this.shortcutService.regularShortcuts.includes(shortcutAction as SettingsButtonKey)) {
+          this.toggleButton(shortcutAction as SettingsButtonKey);
+        } else {
+          this.handleCustomShortcutAction(shortcutAction as CustomShortcutAction);
+        }
       }
 
     } else if (event.key === 'Escape' && this.wizard.showWizard === true && this.canCloseWizard === true) {
@@ -459,10 +332,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     public cd: ChangeDetectorRef,
     public electronService: ElectronService,
     public manualTagsService: ManualTagsService,
-    public resolutionFilterService: ResolutionFilterService,
     public pipeSideEffectService: PipeSideEffectService,
+    public resolutionFilterService: ResolutionFilterService,
+    public shortcutService: ShortcutsService,
     public starFilterService: StarFilterService,
-    public tagsSaveService: AutoTagsSaveService,
+    public autoTagsSaveService: AutoTagsSaveService,
     public translate: TranslateService,
     public wordFrequencyService: WordFrequencyService
   ) { }
@@ -485,8 +359,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     //     this.extractionPercent = 1;
     //   }
     // }, 2000);
-
-    this.cloneDefaultButtonSetting();
 
     setTimeout(() => {
       this.wordFrequencyService.finalMapBehaviorSubject.subscribe((value: WordFreqAndHeight[]) => {
@@ -527,14 +399,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }, 100);
 
     // Returning Input
-    this.electronService.ipcRenderer.on('inputFolderChosen', (event, filePath, listOfFiles) => {
-      this.wizard.totalNumberOfFiles = listOfFiles.length;
-      this.wizard.listOfFiles = listOfFiles;
-
-      if (listOfFiles.length > 0) {
-        this.wizard.selectedSourceFolder = filePath;
-        this.wizard.selectedOutputFolder = filePath;
-      }
+    this.electronService.ipcRenderer.on('inputFolderChosen', (event, filePath) => {
+      this.wizard.selectedSourceFolder[0].path = filePath;
+      this.wizard.selectedOutputFolder = filePath;
 
       this.cd.detectChanges();
     });
@@ -549,7 +416,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // Rename file response
     this.electronService.ipcRenderer.on(
-      'renameFileResponse', (event, index: number, success: boolean, renameTo: string, oldFileName: string, errMsg?: string) => {
+      'renameFileResponse', (
+          event,
+          index: number,
+          success: boolean,
+          renameTo: string,
+          oldFileName: string,
+          errMsg?: string
+        ) => {
 
       if (success) {
         // Update the final array, close rename dialog if open
@@ -576,7 +450,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.electronService.webFrame.clearCache();
     });
 
-    this.electronService.ipcRenderer.on('touchBar-to-app', (event, changesFromTouchBar: string) => {
+    this.electronService.ipcRenderer.on('touchBar-to-app', (event, changesFromTouchBar: SettingsButtonKey | SupportedView) => {
       if (changesFromTouchBar) {
         this.toggleButton(changesFromTouchBar, true);
       }
@@ -658,22 +532,24 @@ export class HomeComponent implements OnInit, AfterViewInit {
       finalObject: FinalObject,
       pathToFile: string,
       outputFolderPath: string,
-      changedRootFolder: boolean = false,
-      rootFolderLive: boolean = true,
     ) => {
 
       this.currentScreenshotSettings = finalObject.screenshotSettings;
 
-      this.rootFolderLive = rootFolderLive;
-      this.finalArrayNeedsSaving = changedRootFolder;
+      this.rootFolderLive = true; // TODO -- do away with this once many root folders supported
+      this.finalArrayNeedsSaving = false; // TODO -- remove; used to be for hadling root folder change
+
       this.appState.currentVhaFile = pathToFile;
+      this.appState.selectedOutputFolder = outputFolderPath;
+
       this.appState.hubName = finalObject.hubName;
       this.appState.numOfFolders = finalObject.numOfFolders;
-      this.appState.selectedOutputFolder = outputFolderPath;
-      this.appState.selectedSourceFolder = finalObject.inputDir;
+      this.appState.selectedSourceFolder = finalObject.inputDirs;
+
+      console.log('input dirs', finalObject.inputDirs);
 
       // Update history of opened files
-      this.updateVhaFileHistory(pathToFile, finalObject.inputDir, finalObject.hubName);
+      this.updateVhaFileHistory(pathToFile, finalObject.hubName);
 
       this.folderViewNavigationPath = '';
 
@@ -696,11 +572,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.cd.detectChanges();
     });
 
+    // If no previously saved settings exist, this gets sent over
+    this.electronService.ipcRenderer.on('set-language-based-off-system-locale', (event, localeString: string) => {
+      if (localeString) {
+        this.setOrRestoreLanguage(undefined, localeString);
+      }
+    });
+
     // Returning settings
     this.electronService.ipcRenderer.on('settingsReturning', (
       event,
       settingsObject: SettingsObject,
-      userWantedToOpen: string,
       locale: string
     ) => {
       this.vhaFileHistory = (settingsObject.vhaFileHistory || []);
@@ -709,13 +591,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (this.appState.currentZoomLevel !== 1) {
         this.electronService.webFrame.setZoomFactor(this.appState.currentZoomLevel);
       }
-      if (userWantedToOpen) {
-        this.loadThisVhaFile(userWantedToOpen);
-      } else if (settingsObject.appState.currentVhaFile) {
+      if (settingsObject.appState.currentVhaFile) {
         this.loadThisVhaFile(settingsObject.appState.currentVhaFile);
       } else {
         this.wizard.showWizard = true;
         this.flickerReduceOverlay = false;
+      }
+      if (settingsObject.shortcuts) {
+        this.shortcutService.initializeFromSaved(settingsObject.shortcuts);
       }
     });
 
@@ -771,9 +654,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         const fullPath: string = ev.dataTransfer.files[0].path;
         ev.preventDefault();
         if (fullPath.endsWith('.vha2')) {
-          this.electronService.ipcRenderer.send(
-            'load-this-vha-file', fullPath, this.saveVhaIfNeeded()
-          );
+          this.loadThisVhaFile(fullPath);
         }
       }
     };
@@ -841,42 +722,30 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * triggers function that grabs settings and sends them back with `settingsReturning`
    */
   public justStarted(): void {
-    this.electronService.ipcRenderer.send('just-started', 'lol');
+    this.electronService.ipcRenderer.send('just-started');
   }
 
   public loadThisVhaFile(fullPath: string): void {
-    this.electronService.ipcRenderer.send('load-this-vha-file', fullPath, this.saveVhaIfNeeded());
+    this.electronService.ipcRenderer.send('load-this-vha-file', fullPath, this.getFinalObjectForSaving());
   }
 
   public loadFromFile(): void {
-    this.electronService.ipcRenderer.send('system-open-file-through-modal', 'lol');
+    this.electronService.ipcRenderer.send('system-open-file-through-modal');
   }
 
   public selectSourceDirectory(): void {
-    this.electronService.ipcRenderer.send('choose-input', 'lol');
+    this.electronService.ipcRenderer.send('choose-input');
   }
 
   public selectOutputDirectory(): void {
-    this.electronService.ipcRenderer.send('choose-output', 'lol');
+    this.electronService.ipcRenderer.send('choose-output');
   }
 
   public importFresh(): void {
     this.appState.selectedSourceFolder = this.wizard.selectedSourceFolder;
     this.appState.selectedOutputFolder = this.wizard.selectedOutputFolder;
-    //this.importStage = 'importingMeta';
-    const importOptions: ImportSettingsObject = {
-      clipHeight: this.wizard.clipHeight,
-      clipSnippetLength: this.wizard.clipSnippetLength,
-      clipSnippets: this.wizard.extractClips ? this.wizard.clipSnippets : 0,
-      exportFolderPath: this.wizard.selectedOutputFolder,
-      hubName: (this.wizard.futureHubName || 'untitled'),
-      imgHeight: this.wizard.screenshotSizeForImport,
-      screensPerVideo: this.wizard.screensPerVideo,
-      ssConstant: this.wizard.ssConstant,
-      ssVariable: this.wizard.ssVariable,
-      videoDirPath: this.wizard.selectedSourceFolder
-    };
-    this.electronService.ipcRenderer.send('start-the-import', importOptions, this.wizard.listOfFiles);
+
+    this.electronService.ipcRenderer.send('start-the-import', this.wizard);
   }
 
   public cancelCurrentImport(): void {
@@ -886,15 +755,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public initiateMinimize(): void {
-    this.electronService.ipcRenderer.send('minimize-window', 'lol');
+    this.electronService.ipcRenderer.send('minimize-window');
   }
 
   public initiateMaximize(): void {
     if (this.appMaximized === false) {
-      this.electronService.ipcRenderer.send('maximize-window', 'lol');
+      this.electronService.ipcRenderer.send('maximize-window');
       this.appMaximized = true;
     } else {
-      this.electronService.ipcRenderer.send('un-maximize-window', 'lol');
+      this.electronService.ipcRenderer.send('un-maximize-window');
       this.appMaximized = false;
     }
   }
@@ -903,19 +772,25 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.isClosing = true;
     this.savePreviousViewSize();
     this.appState.imgsPerRow = this.imgsPerRow;
-    this.electronService.ipcRenderer.send('close-window', this.getSettingsForSave(), this.saveVhaIfNeeded());
+    this.electronService.ipcRenderer.send('close-window', this.getSettingsForSave(), this.getFinalObjectForSaving());
   }
 
   /**
    * Returns the finalArray if needed, otherwise returns `null`
-   * completely depends on global variable `finalArrayNeedsSaving`
+   * completely depends on global variable `finalArrayNeedsSaving` or if any tags were added/removed in auto-tag-service
    */
-  public saveVhaIfNeeded(): SavableProperties {
-    if (this.finalArrayNeedsSaving || this.tagsSaveService.needToSave()) {
-      const propsToReturn: SavableProperties = {
-        addTags: this.tagsSaveService.getAddTags(),
-        removeTags: this.tagsSaveService.getRemoveTags(),
-        images: this.finalArray
+  public getFinalObjectForSaving(): FinalObject {
+    if (this.finalArrayNeedsSaving || this.autoTagsSaveService.needToSave()) {
+      const propsToReturn: FinalObject = {
+        addTags: this.autoTagsSaveService.getAddTags(),
+        hubName: this.appState.hubName,
+        images: this.finalArray,
+        // TODO -- rename `selectedSourceFolder` and make sure to update `finalArrayNeedsSaving` when inputDirs changes
+        inputDirs: this.appState.selectedSourceFolder,
+        numOfFolders: this.appState.numOfFolders,
+        removeTags: this.autoTagsSaveService.getRemoveTags(),
+        screenshotSettings: this.currentScreenshotSettings,
+        version: 3,
       };
       return propsToReturn;
     } else {
@@ -932,6 +807,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   public handleClick(eventObject: { mouseEvent: MouseEvent, thumbIndex?: number }, item: ImageElement) {
 
+    console.log(item);
+
     if (this.batchTaggingMode) {
       item.selected = !item.selected;
 
@@ -941,8 +818,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // ctrl/cmd + click for thumbnail sheet
     if (eventObject.mouseEvent.ctrlKey === true || eventObject.mouseEvent.metaKey) {
       this.openThumbnailSheet(item);
-    } else {
-      this.openVideo(item.index, eventObject.thumbIndex);
+    } else if (this.rootFolderLive) {
+      this.openVideo(item.index, item.inputSource, eventObject.thumbIndex);
     }
   }
 
@@ -951,9 +828,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * or with their preferred media player, if chosen
    *
    * @param index                 unique ID of the video
+   * @param inputSource           what the input source is
    * @param clickedThumbnailIndex an index of the thumbnail clicked
    */
-  public openVideo(index: number, clickedThumbnailIndex?: number): void {
+  public openVideo(index: number, inputSource: number, clickedThumbnailIndex?: number): void {
     // update number of times played
     this.finalArray[index].timesPlayed ? this.finalArray[index].timesPlayed++ : this.finalArray[index].timesPlayed = 1;
     this.finalArrayNeedsSaving = true;
@@ -963,22 +841,22 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.currentPlayingFolder = clickedElement.partialPath;
     this.currentPlayingFile = clickedElement.cleanName;
     const fullPath = path.join(
-      this.appState.selectedSourceFolder,
+      this.appState.selectedSourceFolder[inputSource].path,
       clickedElement.partialPath,
       clickedElement.fileName
     );
     this.fullPathToCurrentFile = fullPath;
 
-    if (this.rootFolderLive && this.appState.preferredVideoPlayer) {
+    if (this.appState.preferredVideoPlayer) {
       const time: number = clickedThumbnailIndex
         ? clickedElement.duration / (clickedElement.screens + 1) * ((clickedThumbnailIndex) + 1)
         : 0;
 
       const execPath: string = this.appState.preferredVideoPlayer;
 
-      this.electronService.ipcRenderer.send('openThisFileWithFlags', execPath, fullPath, this.getVideoPlayerArgs(execPath, time));
-    } else if (this.rootFolderLive) {
-      this.electronService.ipcRenderer.send('openThisFile', fullPath);
+      this.electronService.ipcRenderer.send('open-media-file-at-timestamp', execPath, fullPath, this.getVideoPlayerArgs(execPath, time));
+    } else {
+      this.electronService.ipcRenderer.send('open-media-file', fullPath);
     }
   }
 
@@ -1011,7 +889,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public openOnlineHelp(): void {
-    this.electronService.ipcRenderer.send('pleaseOpenUrl', 'https://www.videohubapp.com');
+    this.electronService.ipcRenderer.send('please-open-url', 'https://www.videohubapp.com');
   }
 
   public increaseZoomLevel(): void {
@@ -1146,7 +1024,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Open folder that contains the (current) clicked file
    */
   openInExplorer(): void {
-    this.electronService.ipcRenderer.send('openInExplorer', this.fullPathToCurrentFile);
+    this.electronService.ipcRenderer.send('open-in-explorer', this.fullPathToCurrentFile);
   }
 
   /**
@@ -1166,11 +1044,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Add this file to the recently opened list
    * @param file full path to file name
    */
-  updateVhaFileHistory(pathToVhaFile: string, pathToVideos: string, hubName: string): void {
+  updateVhaFileHistory(pathToVhaFile: string, hubName: string): void {
 
     const newHistoryItem = {
       vhaFilePath: pathToVhaFile,
-      videoFolderPath: pathToVideos,
       hubName: (hubName || 'untitled')
     };
 
@@ -1217,7 +1094,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Show or hide settings
    */
   toggleSettings(): void {
-    this.settingToShow = 2;
+    this.settingTabToShow = 2;
     this.settingsModalOpen = !this.settingsModalOpen;
   }
 
@@ -1276,13 +1153,87 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
+   * Handle custom shortcut action
+   * summoned via `handleKeyboardEvent`
+   * @param shortcutAction
+   */
+  handleCustomShortcutAction(shortcutAction: CustomShortcutAction): void {
+    switch (shortcutAction) {
+
+      case ('toggleSettings'):
+        if (this.wizard.showWizard === false) {
+          this.toggleSettings();
+        }
+        break;
+
+      case ('showAutoTags'):
+        if (!this.wizard.showWizard) {
+          this.toggleButton('showTags');
+        }
+        break;
+
+      case ('quit'):
+        event.preventDefault();
+        event.stopPropagation();
+        this.initiateClose();
+        break;
+
+      case ('startWizard'):
+        this.startWizard();
+        this.settingsModalOpen = false;
+        this.settingsButtons['showTags'].toggled = false;
+        break;
+
+      case ('toggleMinimalMode'):
+        this.toggleButton('hideTop');
+        this.toggleButton('hideSidebar');
+        this.toggleRibbon();
+        this.toggleButton('showMoreInfo');
+        break;
+
+      case ('focusOnFile'):
+        if (this.settingsButtons['fileIntersection'].toggled === false) {
+          this.settingsButtons['fileIntersection'].toggled = true;
+        }
+        this.showSidebar();
+        setTimeout(() => {
+          if (this.searchRef.nativeElement.querySelector('#fileIntersection')) {
+            this.searchRef.nativeElement.querySelector('#fileIntersection').focus();
+          }
+        }, 1);
+        break;
+
+      case ('focusOnMagic'):
+        if (!this.settingsButtons['magic'].toggled) {
+          this.settingsButtons['magic'].toggled = true;
+        }
+        this.showSidebar();
+        setTimeout(() => {
+          this.magicSearch.nativeElement.focus();
+        }, 1);
+        break;
+
+      case ('fuzzySearch'):
+        if (!this.settingsButtons['fuzzy'].toggled) {
+          this.settingsButtons['fuzzy'].toggled = true;
+        }
+        this.showSidebar();
+        setTimeout(() => {
+          this.fuzzySearch.nativeElement.focus();
+        }, 1);
+        break;
+    }
+
+  }
+
+  /**
    * Perform appropriate action when a button is clicked
    * @param   uniqueKey   the uniqueKey string of the button
    * @param   fromIpc     boolean value indicate, call from IPC
    */
-  toggleButton(uniqueKey: string | SupportedView, fromIpc = false): void {
+  toggleButton(uniqueKey: SettingsButtonKey | SupportedView, fromIpc = false): void {
     // ======== View buttons ================
-    if (allSupportedViews.includes(<SupportedView>uniqueKey)) {
+    if (AllSupportedViews.includes(<SupportedView>uniqueKey)) {
       this.savePreviousViewSize();
       this.toggleAllViewsButtonsOff();
       this.toggleButtonTrue(uniqueKey);
@@ -1340,8 +1291,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.verifyThumbnails();
     } else if (uniqueKey === 'rescanDirectory') {
       this.rescanDirectory();
-    } else if (uniqueKey === 'regenerateLibrary') {
-      this.regenerateLibrary();
     } else if (uniqueKey === 'playPlaylist') {
       this.electronService.ipcRenderer.send('please-create-playlist', this.pipeSideEffectService.galleryShowing);
     } else if (uniqueKey === 'showTagTray') {
@@ -1417,15 +1366,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
       clipSnippets: 5,
       extractClips: false,
       futureHubName: '',
-      listOfFiles: [],
-      screensPerVideo: true,
+      isFixedNumberOfScreenshots: true,
       screenshotSizeForImport: 288, // default
       selectedOutputFolder: '',
-      selectedSourceFolder: '',
+      selectedSourceFolder: { 0: { path: '', watch: false }},
       showWizard: true,
       ssConstant: 10,
       ssVariable: 10,
-      totalNumberOfFiles: -1,
     };
     this.toggleSettings();
   }
@@ -1476,20 +1423,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.toggleSettings();
       }
       this.electronService.ipcRenderer.send('rescan-current-directory', this.finalArray);
-    } else {
-      this.notifyRootFolderNotLive();
-    }
-  }
-
-  /**
-   * Regenerate the library
-   */
-  public regenerateLibrary(): void {
-    if (this.rootFolderLive) {
-      this.progressNum1 = 0;
-      this.importStage = 'importingMeta';
-      this.toggleSettings();
-      this.electronService.ipcRenderer.send('regenerate-library', this.finalArray);
     } else {
       this.notifyRootFolderNotLive();
     }
@@ -1674,91 +1607,38 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.appState.menuHidden = !this.appState.menuHidden;
   }
 
-  /**
-   * Called on screenshot size dropdown select
-   * @param pxHeightForImport - string of number of pixels for the height of each screenshot
-   */
-  selectScreenshotSize(pxHeightForImport: '144' | '216' | '288' | '360' | '432' | '504'): void {
-    const height: AllowedScreenshotHeight = parseInt(pxHeightForImport, 10) as AllowedScreenshotHeight;
-    this.wizard.screenshotSizeForImport = height;
-  }
-
-  /**
-   * Called on screenshot size dropdown select
-   * @param pxHeightForImport - string of number of pixels for the height of each screenshot
-   */
-  selectClipSize(pxHeightForImport: '144' | '216' | '288' | '360' | '432' | '504'): void {
-    const height: AllowedScreenshotHeight = parseInt(pxHeightForImport, 10) as AllowedScreenshotHeight;
-    this.wizard.clipHeight = height;
-  }
-
-  /**
-   * Called on screenshot size dropdown select
-   * @param screens - string of number of screenshots per video
-   */
-  selectNumOfScreens(screens: string): void {
-    if (this.wizard.screensPerVideo) {
-      this.wizard.ssConstant = parseFloat(screens);
-    } else {
-      this.wizard.ssVariable = parseFloat(screens);
-    }
-  }
-
-  /**
-   * Called on screenshot options selection HTML
-   * @param screens - string of number of snipppets per clip
-   */
-  selectNumOfClipSnippets(screens: string): void {
-    this.wizard.clipSnippets = parseFloat(screens);
-  }
-
-  /**
-   * Called on screenshot options selection HTML
-   * @param length - string of number of seconds per snippet in each clip
-   */
-  selectLengthOfClipSnippets(length: string): void {
-    this.wizard.clipSnippetLength = parseFloat(length);
-  }
-
-  /**
-   * Sets the `screensPerVideo` boolean
-   * true = N screenshots per video
-   * false = 1 screenshot per N minutes
-   * @param bool boolean
-   */
-  setScreensPerVideo(bool: boolean): void {
-    this.wizard.screensPerVideo = bool;
-  }
-
   // ---- HANDLE EXTRACTING AND RESTORING SETTINGS ON OPEN AND BEFORE CLOSE ------
 
   /**
    * Prepare and return the settings object for saving
    * happens right before closing the app !!!
    */
-  getSettingsForSave(): any {
+  getSettingsForSave(): SettingsObject {
 
     const buttonSettings = {};
 
     this.grabAllSettingsKeys().forEach(element => {
-      buttonSettings[element] = {};
-      buttonSettings[element].toggled = this.settingsButtons[element].toggled;
-      buttonSettings[element].hidden = this.settingsButtons[element].hidden;
+      buttonSettings[element] = {
+        toggled: this.settingsButtons[element].toggled,
+        hidden: this.settingsButtons[element].hidden,
+      };
     });
 
     // console.log(buttonSettings);
     return {
       appState: this.appState,
       buttonSettings: buttonSettings,
+      shortcuts: this.shortcutService.keyToActionMap,
       vhaFileHistory: this.vhaFileHistory,
+      windowSizeAndPosition: undefined, // is added in `cose-window` in `main.ts`
     };
   }
 
   /**
    * Return all keys from the settings-buttons
    */
-  grabAllSettingsKeys(): string[] {
-    const objectKeys: string[] = [];
+  grabAllSettingsKeys(): SettingsButtonKey[] {
+    const objectKeys: SettingsButtonKey[] = [];
 
     this.settingsButtonsGroups.forEach(element => {
       element.forEach(key => {
@@ -1774,14 +1654,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Restore settings to their default values
    */
   resetSettingsToDefault(): void {
-    this.settingsButtons = JSON.parse(JSON.stringify(this.defaultSettingsButtons));
-  }
-
-  /**
-   * Clone default settings in case user wants to reset them later
-   */
-  cloneDefaultButtonSetting(): void {
-    this.defaultSettingsButtons = JSON.parse(JSON.stringify(this.settingsButtons));
+    this.settingsButtons = JSON.parse(JSON.stringify(this.defaultSettingsButtons)); // JSON hack to allow resetting more than once
+    this.toggleButton('showThumbnails');
   }
 
   /**
@@ -1831,8 +1705,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   setOrRestoreLanguage(chosenLanguage: SupportedLanguage, locale: string): void {
     if (chosenLanguage) {
       this.changeLanguage(chosenLanguage);
-    } else {
+    } else if (<any>locale.substring(0, 2)) {
       this.changeLanguage(<any>locale.substring(0, 2));
+    } else {
+      this.changeLanguage('en');
     }
   }
 
@@ -1869,7 +1745,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   openContainingFolderNow(): void {
     this.fullPathToCurrentFile = path.join(
-      this.appState.selectedSourceFolder,
+      this.appState.selectedSourceFolder[0].path, // TODO -- fix method to allow for any of the source folders!
       this.currentRightClickedItem.partialPath,
       this.currentRightClickedItem.fileName
     );
@@ -1967,7 +1843,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param removeTags
    */
   setTags(addTags: string[], removeTags: string[]): void {
-    this.tagsSaveService.restoreSavedTags(
+    this.autoTagsSaveService.restoreSavedTags(
       addTags ? addTags : [],
       removeTags ? removeTags : []
     );
@@ -1979,83 +1855,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param language
    */
   changeLanguage(language: SupportedLanguage): void {
-    switch (language) {
-      case 'ru':
-        this.translate.use('ru');
-        this.translate.setTranslation('ru', Russian);
-        this.appState.language = 'ru';
-        break;
-      case 'fr':
-        this.translate.use('fr');
-        this.translate.setTranslation('fr', French);
-        this.appState.language = 'fr';
-        break;
-      case 'pt':
-        this.translate.use('pt');
-        this.translate.setTranslation('pt', Portuguese);
-        this.appState.language = 'pt';
-        break;
-      case 'de':
-        this.translate.use('de');
-        this.translate.setTranslation('de', German);
-        this.appState.language = 'de';
-        break;
-      case 'es':
-        this.translate.use('es');
-        this.translate.setTranslation('es', Spanish);
-        this.appState.language = 'es';
-        break;
-      case 'ar':
-        this.translate.use('ar');
-        this.translate.setTranslation('ar', Arabic);
-        this.appState.language = 'ar';
-        break;
-      case 'bn':
-        this.translate.use('bn');
-        this.translate.setTranslation('bn', Bengali);
-        this.appState.language = 'bn';
-        break;
-      case 'it':
-        this.translate.use('it');
-        this.translate.setTranslation('it', Italian);
-        this.appState.language = 'it';
-        break;
-      case 'hi':
-        this.translate.use('hi');
-        this.translate.setTranslation('hi', Hindi);
-        this.appState.language = 'hi';
-        break;
-      case 'zh':
-        this.translate.use('zh');
-        this.translate.setTranslation('zh', Chinese);
-        this.appState.language = 'zh';
-        break;
-      case 'ja':
-        this.translate.use('ja');
-        this.translate.setTranslation('ja', Japanese);
-        this.appState.language = 'ja';
-        break;
-      case 'ko':
-        this.translate.use('ko');
-        this.translate.setTranslation('ko', Korean);
-        this.appState.language = 'ko';
-        break;
-      case 'ms':
-        this.translate.use('ms');
-        this.translate.setTranslation('ms', Malay);
-        this.appState.language = 'ms';
-        break;
-      case 'uk':
-        this.translate.use('uk');
-        this.translate.setTranslation('uk', Ukrainian);
-        this.appState.language = 'uk';
-        break;
-      default:
-        this.translate.use('en');
-        this.translate.setTranslation('en', English);
-        this.appState.language = 'en';
-        break;
-    }
+    this.translate.use(language);
+    this.translate.setTranslation(language, LanguageLookup[language]);
+    this.appState.language = language;
 
     this.updateSystemMessages();
   }
@@ -2067,8 +1869,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   updateSystemMessages() {
     const newMessages = {};
 
-    for (const key in English.SYSTEM) {
-      if (English.SYSTEM[key]) {
+    for (const key in LanguageLookup['en'].SYSTEM) {
+      if (LanguageLookup['en'].SYSTEM[key]) {
         newMessages[key] = this.translate.instant('SYSTEM.' + key);
       }
     }
@@ -2297,9 +2099,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   goDownloadNewVersion(): void {
     if (this.demo) {
-      this.electronService.ipcRenderer.send('pleaseOpenUrl', 'https://videohubapp.com');
+      this.electronService.ipcRenderer.send('please-open-url', 'https://videohubapp.com');
     } else {
-      this.electronService.ipcRenderer.send('pleaseOpenUrl', 'https://my.videohubapp.com');
+      this.electronService.ipcRenderer.send('please-open-url', 'https://my.videohubapp.com');
     }
   }
 

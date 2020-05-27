@@ -9,7 +9,7 @@ export type SupportedView = 'showThumbnails'
   | 'showFiles'
   | 'showClips';
 
-export const allSupportedViews: SupportedView[] = [
+export const AllSupportedViews: SupportedView[] = [
   'showThumbnails',
   'showFilmstrip',
   'showFullView',
@@ -46,4 +46,9 @@ export interface TagEmission {
   index: number;
   tag: string;
   type: 'add' | 'remove';
+}
+
+export interface HistoryItem {
+  vhaFilePath: string;
+  hubName: string;
 }

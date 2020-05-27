@@ -1,6 +1,6 @@
 {
   "name": "video-hub-app-2",
-  "version": "2.2.3",
+  "version": "3.0.0",
   "description": "Video Hub App 2 - browse, search, preview your videos",
   "homepage": "http://www.videohubapp.com",
   "author": {
@@ -42,8 +42,8 @@
     "@ffmpeg-installer/ffmpeg": "1.0.20",
     "@ffprobe-installer/ffprobe": "1.0.12",
     "@ngx-translate/core": "12.1.2",
-    "async": "^3.2.0",
-    "chokidar": "3.3.1",
+    "async": "3.2.0",
+    "chokidar": "3.4.0",
     "fuse.js": "6.0.0",
     "ngx-virtual-scroller": "4.0.3",
     "trash": "6.1.1"
@@ -63,7 +63,7 @@
     "@types/node": "12.12.6",
     "codelyzer": "5.2.2",
     "electron": "8.3.0",
-    "electron-builder": "22.6.0",
+    "electron-builder": "22.6.1",
     "electron-reload": "1.5.0",
     "node-sass": "4.14.1",
     "npm-run-all": "4.1.5",

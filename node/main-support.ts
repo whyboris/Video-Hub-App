@@ -17,12 +17,11 @@ const exec = require('child_process').exec;
 const ffprobePath = require('@ffprobe-installer/ffprobe').path.replace('app.asar', 'app.asar.unpacked');
 
 import { acceptableFiles } from './main-filenames';
-import { globals } from './main-globals';
-import { FinalObject, ImageElement, NewImageElement, ScreenshotSettings } from './interfaces/final-object.interface';
-import { ResolutionString } from './src/app/pipes/resolution-filter.service';
+import { GLOBALS, VhaGlobals } from './main-globals';
+import { FinalObject, ImageElement, NewImageElement, ScreenshotSettings, InputSources } from '../interfaces/final-object.interface';
+import { ResolutionString } from '../src/app/pipes/resolution-filter.service';
 import { Stats } from 'fs';
-import { queueThumbExtraction } from './main-extract';
-import { elementEventFullName } from '@angular/compiler/src/view_compiler/view_compiler';
+import { startFileSystemWatching } from './main-extract-async';
 
 interface ResolutionMeta {
   label: ResolutionString;
@@ -30,6 +29,21 @@ interface ResolutionMeta {
 }
 
 export type ImportStage = 'importingMeta' | 'importingScreenshots' | 'done';
+
+/**
+ * Return an HTML string for a path to a file
+ * e.g. `C:\Some folder` becomes `C:/Some%20folder`
+ * @param anyOsPath
+ */
+export function getHtmlPath(anyOsPath: string): string {
+  // Windows was misbehaving
+  // so we normalize the path (just in case) and replace all `\` with `/` in this instance
+  // because at this point Electron will be showing images following the path provided
+  // with the `file:///` protocol -- seems to work
+  const normalizedPath: string = path.normalize(anyOsPath);
+  const forwardSlashes: string = normalizedPath.replace(/\\/g, '/');
+  return forwardSlashes.replace(/ /g, '%20');
+}
 
 /**
  * Label the video according to cosest resolution label
@@ -177,11 +191,11 @@ export function countFoldersInFinalArray(imagesArray: ImageElement[]): number {
  * @param done          -- function to execute when done writing the file
  */
 export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: string, done): void {
-  const inputDir = finalObject.inputDir;
+  const inputDir = finalObject.inputDirs;
 
   // check for relative paths
-  if (finalObject.inputDir === path.parse(pathToTheFile).dir) {
-    finalObject.inputDir = '';
+  if (finalObject.inputDirs[0].path === path.parse(pathToTheFile).dir) {
+    finalObject.inputDirs[0].path = '';
   }
 
   finalObject.images = stripOutTemporaryFields(finalObject.images);
@@ -203,7 +217,7 @@ export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: stri
   // TODO ? CATCH ERRORS ?
 
   // Restore the inputDir in case we removed it
-  finalObject.inputDir = inputDir;
+  finalObject.inputDirs = inputDir;
 }
 
 /**
@@ -222,7 +236,7 @@ export function createDotPlsFile(savePath: string, playlist: ImageElement[], don
   for (let i = 0; i < playlist.length; i++) {
 
     const fullPath: string = path.join(
-      globals.selectedSourceFolder,
+      GLOBALS.selectedSourceFolders[0].path,
       playlist[i].partialPath,
       playlist[i].fileName
     );
@@ -264,7 +278,7 @@ function stripOutTemporaryFields(imagesArray: ImageElement[]): ImageElement[] {
  * @param original {string}
  * @return {string}
  */
-function cleanUpFileName(original: string): string {
+export function cleanUpFileName(original: string): string {
   let cleaned = original;
   cleaned = cleaned.split('.').slice(0, -1).join('.');   // (1)
   cleaned = cleaned.split('_').join(' ');                // (2)
@@ -525,7 +539,7 @@ function extractMetadataForThisONEFile(
  * @param imageElement          index in array to update
  * @param callback
  */
-function extractMetadataAsync(
+export function extractMetadataAsync(
   filePath: string,
   screenshotSettings: ScreenshotSettings,
   imageElement: ImageElement,
@@ -626,7 +640,7 @@ export function hashFile(pathToFile: string): string {
 export function hashFileAsync(pathToFile: string): Promise<string> {
   const sampleSize = 16 * 1024;
   const sampleThreshold = 128 * 1024;
-  const stats = fs.statSync(pathToFile);
+  const stats = fs.statSync(pathToFile);                               // TODO -- change to `fs.stat()` -- async version
   const fileSize = stats.size;
 
   let data: Buffer;
@@ -669,111 +683,58 @@ export function hashFileAsync(pathToFile: string): Promise<string> {
  * @param stage ImportStage
  */
 export function sendCurrentProgress(current: number, total: number, stage: ImportStage): void {
-  globals.angularApp.sender.send('processingProgress', current, total, stage);
+  GLOBALS.angularApp.sender.send('processingProgress', current, total, stage);
   if (stage !== 'done') {
-    globals.winRef.setProgressBar(current / total);
+    GLOBALS.winRef.setProgressBar(current / total);
   } else {
-    globals.winRef.setProgressBar(-1);
+    GLOBALS.winRef.setProgressBar(-1);
   }
 }
 
-const chokidar = require('chokidar');
-const async = require('async');
 
-const metadataQueue = async.queue(checkForMetadata, 8);
+/**
+ * Send final object to Angular; uses `GLOBALS` as input!
+ * @param finalObject
+ * @param globals
+ */
+export function sendFinalObjectToAngular(finalObject: FinalObject, globals: VhaGlobals): void {
 
-let cachedFinalArray = [];
+  finalObject.images = insertTemporaryFields(finalObject.images);
 
-function sendNewVideoMetadata(imageElement: ImageElement) {
-  imageElement = insertTemporaryFieldsSingle(imageElement);
   globals.angularApp.sender.send(
-    'newVideoMeta',
-    imageElement
+    'finalObjectReturning',
+    finalObject,
+    globals.currentlyOpenVhaFile,
+    getHtmlPath(globals.selectedOutputFolder)
   );
-  imageElement.index = cachedFinalArray.length;
-  cachedFinalArray.push(imageElement);
-  const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
-
-  if (!hasAllThumbs(imageElement.hash, screenshotOutputFolder, globals.screenshotSettings.clipSnippets > 0 )) {
-    queueThumbExtraction(imageElement);
-  }
 }
 
-export function checkForMetadata(file, callback) {
-  console.log('checking metadata for %s', file.fullPath);
-  let found = false;
-  if (!deepScan) {
-    cachedFinalArray.forEach((element) => {
-      if (element.partialPath === file.partialPath && element.fileName === file.name) {
-        found = true;
-      }
-    });
-    console.log('found: %s', found);
-    if (found) {
-      return callback();
+/**
+ * If .vha2 version 2, upgrade `inputDir` into `inputDirs`
+ * @param finalObject
+ */
+export function upgradeToVersion3(finalObject: FinalObject): void {
+
+  if (finalObject.version === 2 && !finalObject.inputDirs) {
+    console.log('OLD VERSION FILE !!!');
+    finalObject.inputDirs = { 0: { path: '', watch: false } };
+    finalObject.inputDirs[0].path = (finalObject as any).inputDir;
+  }
+
+}
+
+/**
+ * Start watching directories with `chokidar
+ * @param finalObject
+ * @param deepScan - whether to extract files or compare hashes (TODO - rename param!)
+ */
+export function startWatchingDirs(inputDirs: InputSources, deepScan: boolean): void {
+  console.log('about to start watching for files ?');
+
+  Object.keys(inputDirs).forEach((key: string) => {
+    console.log(key, ' : ', inputDirs[key].path);
+    if (deepScan || inputDirs[key].watch) {
+      startFileSystemWatching(inputDirs[key].path, parseInt(key), [], deepScan);
     }
-    createElement(file, '', callback);
-  } else {
-    hashFileAsync(file.fullPath).then((hash) => {
-      cachedFinalArray.forEach((element) => {
-        if (element.hash === hash) {
-          found = true;
-        }
-      });
-      console.log('found: %s', found);
-      if (found) {
-        return callback();
-      }
-      createElement(file, hash, callback);
-    });
-  }
-}
-
-function createElement(file, hash, callback) {
-  const newElement = NewImageElement();
-  newElement.hash = hash;
-  extractMetadataAsync(file.fullPath, globals.screenshotSettings, newElement, file.stat)
-    .then((imageElement) => {
-      imageElement.cleanName = cleanUpFileName(file.name);
-      imageElement.fileName = file.name;
-      imageElement.partialPath = file.partialPath;
-      sendNewVideoMetadata(imageElement);
-      callback();
-    }, () => {
-      callback(); // error, just continue
-    });
-}
-
-let deepScan = false;
-
-export function startFileSystemWatching(inputDir: String, finalArray: ImageElement[], initalDeepScan: boolean) {
-
-  cachedFinalArray = finalArray;
-  deepScan = initalDeepScan; // Hash files instead of just path compare
-
-  // One-liner for current directory
-  let watcher = chokidar.watch('**', {ignored: '**/vha-*/**', cwd: inputDir, alwaysStat: true, awaitWriteFinish: true})
-    .on('add', (path, stat) => {
-
-      const ext = path.substring(path.lastIndexOf('.') + 1);
-      if (path.indexOf('vha-') !== -1 || acceptableFiles.indexOf(ext) === -1) {
-        console.log('ignoring %s', path);
-        return;
-      }
-
-      const subPath = ('/' + path.replace(/\\/g, '/')).replace('//', '/');
-      const partialPath = subPath.substring(0, subPath.lastIndexOf('/'));
-      const fileName = subPath.substring(subPath.lastIndexOf('/') + 1);
-      const fullPath = inputDir + partialPath + '/' + fileName;
-      console.log(fullPath);
-      metadataQueue.push({name: fileName, partialPath: partialPath, fullPath: fullPath, stat: stat, deepScan: deepScan});
-    })
-    // .on('all', (event, path) => {
-    //   console.log('%s %s', event, path);
-    // })
-    .on('ready', () => {
-      console.log('All files scanned. Watching for changes.');
-      deepScan = false;
-    });
-
+  });
 }

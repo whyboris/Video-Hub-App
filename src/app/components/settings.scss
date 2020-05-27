@@ -394,3 +394,11 @@ input[type="radio"]:checked:before {
     z-index: 10;
   }
 }
+
+
+@media (max-width: 900px) {
+  .all-settings-tabs {
+    left: 40px;
+    width: calc(100% - 60px);
+  }
+}

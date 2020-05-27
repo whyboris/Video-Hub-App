@@ -7,7 +7,7 @@
  *
  * All functions are PURE
  * The only exception is `extractFromTheseFiles`
- * which checks the global variable `globals.cancelCurrentImport`
+ * which checks the global variable `GLOBALS.cancelCurrentImport`
  * in case it needs to stop running (user interrupt)
  *
  * Huge thank you to cal2195 for the code contribution
@@ -30,9 +30,9 @@ const spawn = require('child_process').spawn;
 
 const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path.replace('app.asar', 'app.asar.unpacked');
 
-import { globals } from './main-globals';
-import { sendCurrentProgress } from './main-support';
-import { ImageElement, ScreenshotSettings } from './interfaces/final-object.interface';
+import { GLOBALS } from './main-globals';
+
+import { ImageElement, ScreenshotSettings } from '../interfaces/final-object.interface';
 
 
 // ========================================================================================
@@ -190,35 +190,10 @@ const extractFirstFrameArgs = (
 //          Extraction engine
 // ========================================================================================
 
-const async = require('async');
-const thumbQueue = async.queue(nextExtaction, 1);
-let thumbsDone = 0;
-
-thumbQueue.drain(() => {
-  thumbsDone = 0;
-  sendCurrentProgress(1, 1, 'done'); // indicates 100%
-});
-
-export function queueThumbExtraction(element: ImageElement) {
-  thumbQueue.push(element);
-}
-
-function nextExtaction(element: ImageElement, callback) {
-  const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
-
-  extractThumbnails(
-    element,
-    globals.selectedSourceFolder,
-    screenshotOutputFolder,
-    globals.screenshotSettings,
-    true,
-    callback);
-}
-
 /**
  * Start extracting screenshots now that metadata has been retreived and sent over to the app
  *
- * DANGEROUSLY DEPENDS ON a global variable `globals.cancelCurrentImport`
+ * DANGEROUSLY DEPENDS ON a global variable `GLOBALS.cancelCurrentImport`
  * that can get toggled while scanning all screenshots
  *
  * Extract following this order. Each stage returns a boolean
@@ -278,9 +253,6 @@ export function extractThumbnails(
   const clipSnippets: number =     screenshotSettings.clipSnippets;      // -- number of clip snippets to extract; 0 == do not extract clip
   const screenshotHeight: number = screenshotSettings.height;            // -- number in px how tall each screenshot should be
   const snippetLength: number =    screenshotSettings.clipSnippetLength; // -- length of each snippet in the clip
-
-    sendCurrentProgress(thumbsDone, thumbsDone + thumbQueue.length() + 1, 'importingScreenshots');
-    thumbsDone++;
 
     const pathToVideo: string = path.join(videoFolderPath, currentElement.partialPath, currentElement.fileName);
 
@@ -549,12 +521,12 @@ function spawn_ffmpeg_and_run(
     // Note from past Cal to future Cal:
     // ALWAYS READ THE DATA, EVEN IF YOU DO NOTHING WITH IT
     ffmpeg_process.stdout.on('data', data => {
-      if (globals.debug) {
+      if (GLOBALS.debug) {
         console.log(data);
       }
     });
     ffmpeg_process.stderr.on('data', data => {
-      if (globals.debug) {
+      if (GLOBALS.debug) {
         console.log('grep stderr: ' + data);
       }
     });
