@@ -52,9 +52,9 @@ export class SortingPipe implements PipeTransform {
     }
 
     if (property === 'alphabetical') {
-      if (x.fileName < y.fileName) {
+      if (x.fileName.toLowerCase() < y.fileName.toLowerCase()) {
         return decreasing ? -1 : 1;
-      } if (x.fileName > y.fileName) {
+      } if (x.fileName.toLowerCase() > y.fileName.toLowerCase()) {
         return decreasing ? 1 : -1;
       } else {
         return 0;
