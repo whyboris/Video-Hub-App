@@ -17,7 +17,7 @@ import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency
 
 // Interfaces
 import { DefaultScreenEmission } from './sheet/sheet.component';
-import { FinalObject, ImageElement, ScreenshotSettings, AllowedScreenshotHeight } from '../../../interfaces/final-object.interface';
+import { FinalObject, ImageElement, ScreenshotSettings, NewImageElement, AllowedScreenshotHeight } from '../../../interfaces/final-object.interface';
 import { HistoryItem } from '../../../interfaces/history-item.interface';
 import { ImportSettingsObject } from '../../../interfaces/import.interface';
 import { ImportStage } from '../../../main-support';
@@ -747,6 +747,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     });
 
+    this.electronService.ipcRenderer.on('newVideoMeta', (event, element: ImageElement) => {
+      element.index = this.finalArray.length;
+      this.finalArray.push(element);
+      console.log(element);
+      this.finalArray = this.finalArray.slice();
+      this.finalArrayNeedsSaving = true;
+      this.cd.detectChanges();
+    });
+
     this.justStarted();
   }
 
@@ -854,7 +863,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public importFresh(): void {
     this.appState.selectedSourceFolder = this.wizard.selectedSourceFolder;
     this.appState.selectedOutputFolder = this.wizard.selectedOutputFolder;
-    this.importStage = 'importingMeta';
+    //this.importStage = 'importingMeta';
     const importOptions: ImportSettingsObject = {
       clipHeight: this.wizard.clipHeight,
       clipSnippetLength: this.wizard.clipSnippetLength,

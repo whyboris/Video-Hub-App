@@ -20,6 +20,9 @@ import { acceptableFiles } from './main-filenames';
 import { globals } from './main-globals';
 import { FinalObject, ImageElement, NewImageElement, ScreenshotSettings } from './interfaces/final-object.interface';
 import { ResolutionString } from './src/app/pipes/resolution-filter.service';
+import { Stats } from 'fs';
+import { queueThumbExtraction } from './main-extract';
+import { elementEventFullName } from '@angular/compiler/src/view_compiler/view_compiler';
 
 interface ResolutionMeta {
   label: ResolutionString;
@@ -106,6 +109,16 @@ export function insertTemporaryFields(imagesArray: ImageElement[]): ImageElement
   });
 
   return imagesArray;
+}
+
+export function insertTemporaryFieldsSingle(element: ImageElement): ImageElement {
+  // set resolution string & bucket
+  const resolution: ResolutionMeta = labelVideo(element.width, element.height);
+  element.durationDisplay = getDurationDisplay(element.duration);
+  element.fileSizeDisplay = getFileSizeDisplay(element.fileSize);
+  element.resBucket = resolution.bucket;
+  element.resolution = resolution.label;
+  return element;
 }
 
 /**
@@ -504,6 +517,54 @@ function extractMetadataForThisONEFile(
   });
 }
 
+/**
+ * Extracts information about a single file using `ffprobe`
+ * Stores information into the ImageElement and returns it via callback
+ * @param filePath              path to the file
+ * @param screenshotSettings    ScreenshotSettings
+ * @param imageElement          index in array to update
+ * @param callback
+ */
+function extractMetadataAsync(
+  filePath: string,
+  screenshotSettings: ScreenshotSettings,
+  imageElement: ImageElement,
+  fileStat: Stats
+): Promise<ImageElement> {
+  return new Promise((resolve, reject) => {
+    const ffprobeCommand = '"' + ffprobePath + '" -of json -show_streams -show_format -select_streams V "' + filePath + '"';
+    exec(ffprobeCommand, (err, data, stderr) => {
+      if (err) {
+        reject(imageElement);
+      } else {
+        const metadata = JSON.parse(data);
+        const stream = getBestStream(metadata);
+        const fileDuration = getFileDuration(metadata);
+
+        const duration = Math.round(fileDuration) || 0;
+        const origWidth = stream.width || 0; // ffprobe does not detect it on some MKV streams
+        const origHeight = stream.height || 0;
+
+        imageElement.duration = duration;
+        imageElement.fileSize = fileStat.size;
+        imageElement.mtime = fileStat.mtimeMs;
+        imageElement.height = origHeight;
+        imageElement.width = origWidth;
+        imageElement.screens = computeNumberOfScreenshots(screenshotSettings, duration);
+
+        if (imageElement.hash === '') {
+          hashFileAsync(filePath).then((hash) => {
+            imageElement.hash = hash;
+            resolve(imageElement);
+          });
+        } else {
+          resolve(imageElement);
+        }
+      }
+    });
+  });
+}
+
 // ===========================================================================================
 // Other supporting methods
 // ===========================================================================================
@@ -559,6 +620,49 @@ export function hashFile(pathToFile: string): string {
 }
 
 /**
+ * Hash a given file using its size
+ * @param pathToFile  -- path to file
+ */
+export function hashFileAsync(pathToFile: string): Promise<string> {
+  const sampleSize = 16 * 1024;
+  const sampleThreshold = 128 * 1024;
+  const stats = fs.statSync(pathToFile);
+  const fileSize = stats.size;
+
+  let data: Buffer;
+
+  return new Promise((resolve, reject) => {
+    if (fileSize < sampleThreshold) {
+      data = fs.readFile(pathToFile, (err, data) => {
+        if (err) { throw err; }
+        // append the file size to the data
+        const buf = Buffer.concat([data, Buffer.from(fileSize.toString())]);
+        // make the magic happen!
+        const hash = hasher('md5').update(buf.toString('hex')).digest('hex');
+        resolve(hash);
+      }); // too small, just read the whole file
+    } else {
+      data = Buffer.alloc(sampleSize * 3);
+      fs.open(pathToFile, 'r', (err, fd) => {
+        fs.read(fd, data, 0, sampleSize, 0, (err, bytesRead, buffer) => { // read beginning of file
+          fs.read(fd, data, sampleSize, sampleSize, fileSize / 2, (err, bytesRead, buffer) => {
+            fs.read(fd, data, sampleSize * 2, sampleSize, fileSize - sampleSize, (err, bytesRead, buffer) => {
+              fs.close(fd, (err) => {
+                // append the file size to the data
+                const buf = Buffer.concat([data, Buffer.from(fileSize.toString())]);
+                // make the magic happen!
+                const hash = hasher('md5').update(buf.toString('hex')).digest('hex');
+                resolve(hash);
+              });
+            });
+          });
+        });
+      });
+    }
+  });
+}
+
+/**
  * Sends progress to Angular App
  * @param current number
  * @param total number
@@ -571,4 +675,105 @@ export function sendCurrentProgress(current: number, total: number, stage: Impor
   } else {
     globals.winRef.setProgressBar(-1);
   }
+}
+
+const chokidar = require('chokidar');
+const async = require('async');
+
+const metadataQueue = async.queue(checkForMetadata, 8);
+
+let cachedFinalArray = [];
+
+function sendNewVideoMetadata(imageElement: ImageElement) {
+  imageElement = insertTemporaryFieldsSingle(imageElement);
+  globals.angularApp.sender.send(
+    'newVideoMeta',
+    imageElement
+  );
+  imageElement.index = cachedFinalArray.length;
+  cachedFinalArray.push(imageElement);
+  const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
+
+  if (!hasAllThumbs(imageElement.hash, screenshotOutputFolder, globals.screenshotSettings.clipSnippets > 0 )) {
+    queueThumbExtraction(imageElement);
+  }
+}
+
+export function checkForMetadata(file, callback) {
+  console.log('checking metadata for %s', file.fullPath);
+  let found = false;
+  if (!deepScan) {
+    cachedFinalArray.forEach((element) => {
+      if (element.partialPath === file.partialPath && element.fileName === file.name) {
+        found = true;
+      }
+    });
+    console.log('found: %s', found);
+    if (found) {
+      return callback();
+    }
+    createElement(file, '', callback);
+  } else {
+    hashFileAsync(file.fullPath).then((hash) => {
+      cachedFinalArray.forEach((element) => {
+        if (element.hash === hash) {
+          found = true;
+        }
+      });
+      console.log('found: %s', found);
+      if (found) {
+        return callback();
+      }
+      createElement(file, hash, callback);
+    });
+  }
+}
+
+function createElement(file, hash, callback) {
+  const newElement = NewImageElement();
+  newElement.hash = hash;
+  extractMetadataAsync(file.fullPath, globals.screenshotSettings, newElement, file.stat)
+    .then((imageElement) => {
+      imageElement.cleanName = cleanUpFileName(file.name);
+      imageElement.fileName = file.name;
+      imageElement.partialPath = file.partialPath;
+      sendNewVideoMetadata(imageElement);
+      callback();
+    }, () => {
+      callback(); // error, just continue
+    });
+}
+
+let deepScan = false;
+
+export function startFileSystemWatching(inputDir: String, finalArray: ImageElement[], initalDeepScan: boolean) {
+
+  cachedFinalArray = finalArray;
+  deepScan = initalDeepScan; // Hash files instead of just path compare
+
+  // One-liner for current directory
+  let watcher = chokidar.watch('**', {ignored: '**/vha-*/**', cwd: inputDir, alwaysStat: true, awaitWriteFinish: true})
+    .on('add', (path, stat) => {
+
+      const ext = path.substring(path.lastIndexOf('.') + 1);
+      if (path.indexOf('vha-') !== -1 || acceptableFiles.indexOf(ext) === -1) {
+        console.log('ignoring %s', path);
+        return;
+      }
+
+      const subPath = ('/' + path.replace(/\\/g, '/')).replace('//', '/');
+      const partialPath = subPath.substring(0, subPath.lastIndexOf('/'));
+      const fileName = subPath.substring(subPath.lastIndexOf('/') + 1);
+      const fullPath = inputDir + partialPath + '/' + fileName;
+      console.log(fullPath);
+      metadataQueue.push({name: fileName, partialPath: partialPath, fullPath: fullPath, stat: stat, deepScan: deepScan});
+    })
+    // .on('all', (event, path) => {
+    //   console.log('%s %s', event, path);
+    // })
+    .on('ready', () => {
+      console.log('All files scanned. Watching for changes.');
+      deepScan = false;
+    });
+
 }

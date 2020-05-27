@@ -231,10 +231,11 @@ import {
   insertTemporaryFields,
   missingThumbsIndex,
   sendCurrentProgress,
-  writeVhaFileToDisk
+  writeVhaFileToDisk,
+  startFileSystemWatching
 } from './main-support';
 
-import { extractFromTheseFiles, replaceThumbnailWithNewImage } from './main-extract';
+import { replaceThumbnailWithNewImage } from './main-extract';
 
 import { FinalObject, ImageElement } from './interfaces/final-object.interface';
 import { ImportSettingsObject } from './interfaces/import.interface';
@@ -277,11 +278,12 @@ function openThisDamnFile(pathToVhaFile: string) {
 
       // path to folder where the VHA file is
       globals.selectedOutputFolder = path.parse(pathToVhaFile).dir;
-
       // use relative paths
       if (lastSavedFinalObject.inputDir === '') {
         lastSavedFinalObject.inputDir = globals.selectedOutputFolder;
       }
+
+      startFileSystemWatching(lastSavedFinalObject.inputDir, lastSavedFinalObject.images, false);
 
       let changedRootFolder = false;
       let rootFolderLive = true;
@@ -738,13 +740,17 @@ ipc.on('start-the-import', (event, options: ImportSettingsObject, videoFilesWith
       videoFilesWithPaths = videoFilesWithPaths.slice(0, 50);
     }
 
-    extractAllMetadata(
-      videoFilesWithPaths,
-      globals.selectedSourceFolder,
-      globals.screenshotSettings,
-      0,
-      sendFinalResultHome         // callback for when metdata is done extracting
-    );
+    // extractAllMetadata(
+    //   videoFilesWithPaths,
+    //   globals.selectedSourceFolder,
+    //   globals.screenshotSettings,
+    //   0,
+    //   sendFinalResultHome         // callback for when metdata is done extracting
+    // );
+
+    sendFinalResultHome([]);
+
+    startFileSystemWatching(globals.selectedSourceFolder, [], false);
 
   }
 
@@ -888,14 +894,14 @@ function sendFinalResultHome(theFinalArray: ImageElement[]): void {
       globals.screenshotSettings.clipSnippets > 0 // convert number to appropriate boolean
     );
 
-    extractFromTheseFiles(
-      myFinalArray,
-      globals.selectedSourceFolder,
-      screenshotOutputFolder,
-      globals.screenshotSettings,
-      indexesToScan,
-      false
-    );
+    // extractFromTheseFiles(
+    //   myFinalArray,
+    //   globals.selectedSourceFolder,
+    //   screenshotOutputFolder,
+    //   globals.screenshotSettings,
+    //   indexesToScan,
+    //   false
+    // );
 
   });
 }
@@ -933,9 +939,9 @@ ipc.on('rescan-current-directory', (event, currentAngularFinalArray: ImageElemen
  * Initiate verifying all files have thumbnails
  * Excellent for continuing the screenshot import if it was ever cancelled
  */
-ipc.on('verify-thumbnails', (event) => {
+ipc.on('verify-thumbnails', (event, finalArray) => {
   globals.cancelCurrentImport = false;
-  verifyThumbnails();
+  verifyThumbnails(finalArray);
 });
 
 // ===========================================================================================
@@ -945,24 +951,27 @@ ipc.on('verify-thumbnails', (event) => {
 /**
  * Scan for missing thumbnails and generate them
  */
-function verifyThumbnails() {
+function verifyThumbnails(finalArray: ImageElement[]) {
   // resume extracting any missing thumbnails
   const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
 
   const indexesToScan: number[] = missingThumbsIndex(
-    lastSavedFinalObject.images,
+    finalArray,
     screenshotOutputFolder,
     globals.screenshotSettings.clipSnippets > 0
   );
 
-  extractFromTheseFiles(
-    lastSavedFinalObject.images,
-    globals.selectedSourceFolder,
-    screenshotOutputFolder,
-    globals.screenshotSettings,
-    randomizeArray(indexesToScan), // extract screenshots in random order
-    true
-  );
+  console.log(finalArray);
+  console.log(indexesToScan);
+
+  // extractFromTheseFiles(
+  //   finalArray,
+  //   globals.selectedSourceFolder,
+  //   screenshotOutputFolder,
+  //   globals.screenshotSettings,
+  //   randomizeArray(indexesToScan), // extract screenshots in random order
+  //   true
+  // );
 }
 
 import {
@@ -1108,9 +1117,9 @@ ipc.on('app-to-touchBar', (event, changesFromApp) => {
   }
 });
 
-
 import { allSupportedViews, SupportedView } from './interfaces/shared-interfaces';
 import { randomizeArray } from './utility';
+import { acceptableFiles } from './main-filenames';
 
 const nativeImage = require('electron').nativeImage;
 const resourcePath = serve ? path.join(__dirname, 'src/assets/icons/mac/touch-bar/') : path.join(process.resourcesPath, 'assets/');
