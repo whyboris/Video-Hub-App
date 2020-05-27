@@ -31,7 +31,7 @@ const spawn = require('child_process').spawn;
 const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path.replace('app.asar', 'app.asar.unpacked');
 
 import { GLOBALS } from './main-globals';
-import { sendCurrentProgress } from './main-support';
+
 import { ImageElement, ScreenshotSettings } from '../interfaces/final-object.interface';
 
 
@@ -190,31 +190,6 @@ const extractFirstFrameArgs = (
 //          Extraction engine
 // ========================================================================================
 
-const async = require('async');
-const thumbQueue = async.queue(nextExtaction, 1);
-let thumbsDone = 0;
-
-thumbQueue.drain(() => {
-  thumbsDone = 0;
-  sendCurrentProgress(1, 1, 'done'); // indicates 100%
-});
-
-export function queueThumbExtraction(element: ImageElement) {
-  thumbQueue.push(element);
-}
-
-function nextExtaction(element: ImageElement, callback) {
-  const screenshotOutputFolder: string = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName);
-
-  extractThumbnails(
-    element,
-    GLOBALS.selectedSourceFolders[0].path,
-    screenshotOutputFolder,
-    GLOBALS.screenshotSettings,
-    true,
-    callback);
-}
-
 /**
  * Start extracting screenshots now that metadata has been retreived and sent over to the app
  *
@@ -278,9 +253,6 @@ export function extractThumbnails(
   const clipSnippets: number =     screenshotSettings.clipSnippets;      // -- number of clip snippets to extract; 0 == do not extract clip
   const screenshotHeight: number = screenshotSettings.height;            // -- number in px how tall each screenshot should be
   const snippetLength: number =    screenshotSettings.clipSnippetLength; // -- length of each snippet in the clip
-
-    sendCurrentProgress(thumbsDone, thumbsDone + thumbQueue.length() + 1, 'importingScreenshots');
-    thumbsDone++;
 
     const pathToVideo: string = path.join(videoFolderPath, currentElement.partialPath, currentElement.fileName);
 

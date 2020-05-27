@@ -21,7 +21,7 @@ import { GLOBALS, VhaGlobals } from './main-globals';
 import { FinalObject, ImageElement, NewImageElement, ScreenshotSettings, InputSources } from '../interfaces/final-object.interface';
 import { ResolutionString } from '../src/app/pipes/resolution-filter.service';
 import { Stats } from 'fs';
-import { queueThumbExtraction } from './main-extract';
+import { queueThumbExtraction } from './main-extract-async';
 
 interface ResolutionMeta {
   label: ResolutionString;
