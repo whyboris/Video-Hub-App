@@ -21,7 +21,7 @@ import { GLOBALS, VhaGlobals } from './main-globals';
 import { FinalObject, ImageElement, NewImageElement, ScreenshotSettings, InputSources } from '../interfaces/final-object.interface';
 import { ResolutionString } from '../src/app/pipes/resolution-filter.service';
 import { Stats } from 'fs';
-import { queueThumbExtraction } from './main-extract-async';
+import { startFileSystemWatching } from './main-extract-async';
 
 interface ResolutionMeta {
   label: ResolutionString;
@@ -278,7 +278,7 @@ function stripOutTemporaryFields(imagesArray: ImageElement[]): ImageElement[] {
  * @param original {string}
  * @return {string}
  */
-function cleanUpFileName(original: string): string {
+export function cleanUpFileName(original: string): string {
   let cleaned = original;
   cleaned = cleaned.split('.').slice(0, -1).join('.');   // (1)
   cleaned = cleaned.split('_').join(' ');                // (2)
@@ -539,7 +539,7 @@ function extractMetadataForThisONEFile(
  * @param imageElement          index in array to update
  * @param callback
  */
-function extractMetadataAsync(
+export function extractMetadataAsync(
   filePath: string,
   screenshotSettings: ScreenshotSettings,
   imageElement: ImageElement,
@@ -689,142 +689,6 @@ export function sendCurrentProgress(current: number, total: number, stage: Impor
   } else {
     GLOBALS.winRef.setProgressBar(-1);
   }
-}
-
-const chokidar = require('chokidar');
-const async = require('async');
-
-const metadataQueue = async.queue(checkForMetadata, 8);
-
-let cachedFinalArray: ImageElement[] = [];
-
-function sendNewVideoMetadata(imageElement: ImageElement) {
-  imageElement = insertTemporaryFieldsSingle(imageElement);
-  GLOBALS.angularApp.sender.send(
-    'newVideoMeta',
-    imageElement
-  );
-  imageElement.index = cachedFinalArray.length;
-  cachedFinalArray.push(imageElement);
-  const screenshotOutputFolder: string = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName);
-
-  if (!hasAllThumbs(imageElement.hash, screenshotOutputFolder, GLOBALS.screenshotSettings.clipSnippets > 0 )) {
-    queueThumbExtraction(imageElement);
-  }
-}
-
-export function checkForMetadata(file: TempMetadataQueueObject, callback) {
-  console.log('checking metadata for %s', file.fullPath);
-  let found = false;
-  if (!deepScan) {
-    cachedFinalArray.forEach((element) => {
-      if (element.partialPath === file.partialPath && element.fileName === file.name) {
-        found = true;
-      }
-    });
-    console.log('found: %s', found);
-    if (found) {
-      return callback();
-    }
-    createElement(file, '', callback);
-  } else {
-    hashFileAsync(file.fullPath).then((hash) => {
-      cachedFinalArray.forEach((element) => {
-        if (element.hash === hash) {
-          found = true;
-        }
-      });
-      console.log('found: %s', found);
-      if (found) {
-        return callback();
-      }
-      createElement(file, hash, callback);
-    });
-  }
-}
-
-function createElement(file: TempMetadataQueueObject, hash, callback) {
-  const newElement = NewImageElement();
-  newElement.hash = hash;
-  extractMetadataAsync(file.fullPath, GLOBALS.screenshotSettings, newElement, file.stat)
-    .then((imageElement) => {
-      imageElement.cleanName = cleanUpFileName(file.name);
-      imageElement.fileName = file.name;
-      imageElement.partialPath = file.partialPath;
-      imageElement.inputSource = file.inputSource;
-      sendNewVideoMetadata(imageElement);
-      callback();
-    }, () => {
-      callback(); // error, just continue
-    });
-}
-
-let deepScan = false;
-
-/**
- *
- * @param inputDir
- * @param inputSource -- the number corresponding to the `inputSource` in ImageElement -- must be set!
- * @param finalArray
- * @param initalDeepScan
- */
-export function startFileSystemWatching(
-  inputDir: string,
-  inputSource: number,
-  finalArray: ImageElement[],
-  initalDeepScan: boolean
-) {
-
-  cachedFinalArray = finalArray;
-  deepScan = initalDeepScan; // Hash files instead of just path compare
-
-  // One-liner for current directory
-  const watcher = chokidar.watch('**', {
-                                          ignored: '**/vha-*/**',
-                                          cwd: inputDir,
-                                          alwaysStat: true,
-                                          awaitWriteFinish: true
-                                        })
-    .on('add', (path, stat) => {
-
-      const ext = path.substring(path.lastIndexOf('.') + 1);
-      if (path.indexOf('vha-') !== -1 || acceptableFiles.indexOf(ext) === -1) {
-        console.log('ignoring %s', path);
-        return;
-      }
-
-      const subPath = ('/' + path.replace(/\\/g, '/')).replace('//', '/');
-      const partialPath = subPath.substring(0, subPath.lastIndexOf('/'));
-      const fileName = subPath.substring(subPath.lastIndexOf('/') + 1);
-      const fullPath = inputDir + partialPath + '/' + fileName;
-      console.log(fullPath);
-      metadataQueue.push({
-        deepScan: deepScan,
-        fullPath: fullPath,
-        inputSource: inputSource,
-        name: fileName,
-        partialPath: partialPath,
-        stat: stat,
-      });
-    })
-    // .on('all', (event, path) => {
-    //   console.log('%s %s', event, path);
-    // /*})*/
-    .on('ready', () => {
-      console.log('All files scanned. Watching for changes.');
-      deepScan = false;
-    });
-
-}
-
-
-interface TempMetadataQueueObject {
-  deepScan: boolean;
-  fullPath: string;
-  inputSource: number;
-  name: string;
-  partialPath: string;
-  stat: Stats;
 }
 
 

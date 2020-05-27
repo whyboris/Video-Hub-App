@@ -31,7 +31,6 @@ import {
   missingThumbsIndex,
   sendCurrentProgress,
   sendFinalObjectToAngular,
-  startFileSystemWatching,
   startWatchingDirs,
   upgradeToVersion3,
   writeVhaFileToDisk
