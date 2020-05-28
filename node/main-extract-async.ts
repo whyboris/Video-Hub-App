@@ -2,9 +2,9 @@
 // Was originally added to `main-extract.ts` but was moved here for clarity
 
 import { GLOBALS } from './main-globals';
-import { ImageElement, NewImageElement } from '../interfaces/final-object.interface';
+import { ImageElement } from '../interfaces/final-object.interface';
 import { extractThumbnails } from './main-extract';
-import { sendCurrentProgress, insertTemporaryFieldsSingle, hasAllThumbs, hashFileAsync, extractMetadataAsync, cleanUpFileName } from './main-support';
+import { sendCurrentProgress, insertTemporaryFieldsSingle, hasAllThumbs, hashFileAsync, createElement } from './main-support';
 
 import * as path from 'path';
 
@@ -35,7 +35,8 @@ function nextExtaction(element: ImageElement, callback) {
     screenshotOutputFolder,
     GLOBALS.screenshotSettings,
     true,
-    callback);
+    callback
+  );
 }
 
 // =========================================================================================================================================
@@ -52,18 +53,28 @@ const metadataQueue = async.queue(checkForMetadata, 8);
 let cachedFinalArray: ImageElement[] = [];
 let deepScan = false;
 
+export interface TempMetadataQueueObject {
+  deepScan: boolean;
+  fullPath: string;
+  inputSource: number;
+  name: string;
+  partialPath: string;
+  stat: Stats;
+}
+
 /**
  * Send element back to Angular; if any screenshots missing, queue it for extraction
  * @param imageElement
  */
-function sendNewVideoMetadata(imageElement: ImageElement) {
+export function sendNewVideoMetadata(imageElement: ImageElement) {
   imageElement = insertTemporaryFieldsSingle(imageElement);
-  GLOBALS.angularApp.sender.send(
-    'newVideoMeta',
-    imageElement
-  );
+
+  GLOBALS.angularApp.sender.send('newVideoMeta', imageElement);
+
   imageElement.index = cachedFinalArray.length;
+
   cachedFinalArray.push(imageElement);
+
   const screenshotOutputFolder: string = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName);
 
   if (!hasAllThumbs(imageElement.hash, screenshotOutputFolder, GLOBALS.screenshotSettings.clipSnippets > 0 )) {
@@ -104,28 +115,6 @@ export function checkForMetadata(file: TempMetadataQueueObject, callback) {
       createElement(file, hash, callback);
     });
   }
-}
-
-/**
- * Create a new element from metadata
- * @param file
- * @param hash
- * @param callback
- */
-function createElement(file: TempMetadataQueueObject, hash, callback) {
-  const newElement = NewImageElement();
-  newElement.hash = hash;
-  extractMetadataAsync(file.fullPath, GLOBALS.screenshotSettings, newElement, file.stat)
-    .then((imageElement) => {
-      imageElement.cleanName = cleanUpFileName(file.name);
-      imageElement.fileName = file.name;
-      imageElement.partialPath = file.partialPath;
-      imageElement.inputSource = file.inputSource;
-      sendNewVideoMetadata(imageElement);
-      callback();
-    }, () => {
-      callback(); // error, just continue
-    });
 }
 
 /**
@@ -183,13 +172,3 @@ export function startFileSystemWatching(
     });
 
 }
-
-interface TempMetadataQueueObject {
-  deepScan: boolean;
-  fullPath: string;
-  inputSource: number;
-  name: string;
-  partialPath: string;
-  stat: Stats;
-}
-

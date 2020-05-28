@@ -6,22 +6,19 @@
  * the same way each time they run no matter the outside state
  */
 
+import { GLOBALS, VhaGlobals } from './main-globals'; // TODO -- eliminate dependence on `GLOBALS` in this file!
+
 import * as path from 'path';
 
-const fs = require('fs');
-
-const hasher = require('crypto').createHash;
-
 const exec = require('child_process').exec;
-
 const ffprobePath = require('@ffprobe-installer/ffprobe').path.replace('app.asar', 'app.asar.unpacked');
-
-import { acceptableFiles } from './main-filenames';
-import { GLOBALS, VhaGlobals } from './main-globals';
-import { FinalObject, ImageElement, NewImageElement, ScreenshotSettings, InputSources } from '../interfaces/final-object.interface';
-import { ResolutionString } from '../src/app/pipes/resolution-filter.service';
+const fs = require('fs');
+const hasher = require('crypto').createHash;
 import { Stats } from 'fs';
-import { startFileSystemWatching } from './main-extract-async';
+
+import { FinalObject, ImageElement, NewImageElement, ScreenshotSettings, InputSources, ResolutionString } from '../interfaces/final-object.interface';
+import { acceptableFiles } from './main-filenames';
+import { startFileSystemWatching, TempMetadataQueueObject, sendNewVideoMetadata } from './main-extract-async';
 
 interface ResolutionMeta {
   label: ResolutionString;
@@ -674,6 +671,28 @@ export function hashFileAsync(pathToFile: string): Promise<string> {
       });
     }
   });
+}
+
+/**
+ * Create a new element from metadata
+ * @param file
+ * @param hash
+ * @param callback
+ */
+export function createElement(file: TempMetadataQueueObject, hash, callback) {
+  const newElement = NewImageElement();
+  newElement.hash = hash;
+  extractMetadataAsync(file.fullPath, GLOBALS.screenshotSettings, newElement, file.stat)
+    .then((imageElement) => {
+      imageElement.cleanName = cleanUpFileName(file.name);
+      imageElement.fileName = file.name;
+      imageElement.partialPath = file.partialPath;
+      imageElement.inputSource = file.inputSource;
+      sendNewVideoMetadata(imageElement);
+      callback();
+    }, () => {
+      callback(); // error, just continue
+    });
 }
 
 /**

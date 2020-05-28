@@ -11,7 +11,7 @@ import { AutoTagsSaveService } from './tags-auto/tags-save.service';
 import { ElectronService } from '../providers/electron.service';
 import { ManualTagsService } from './tags-manual/manual-tags.service';
 import { PipeSideEffectService } from '../pipes/pipe-side-effect.service';
-import { ResolutionFilterService, ResolutionString } from '../pipes/resolution-filter.service';
+import { ResolutionFilterService } from '../pipes/resolution-filter.service';
 import { ShortcutsService, CustomShortcutAction } from './shortcuts/shortcuts.service';
 import { StarFilterService } from '../pipes/star-filter.service';
 import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency.service';
@@ -19,7 +19,7 @@ import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency
 // Interfaces
 import { AllSupportedViews, SupportedView, TagEmission, HistoryItem } from '../../../interfaces/shared-interfaces';
 import { DefaultScreenEmission } from './sheet/sheet.component';
-import { FinalObject, ImageElement, ScreenshotSettings } from '../../../interfaces/final-object.interface';
+import { FinalObject, ImageElement, ScreenshotSettings, ResolutionString } from '../../../interfaces/final-object.interface';
 
 import { ImportStage } from '../../../node/main-support';
 import { SettingsObject } from '../../../interfaces/settings-object.interface';
