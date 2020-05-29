@@ -18,7 +18,7 @@ import { Stats } from 'fs';
 
 import { FinalObject, ImageElement, NewImageElement, ScreenshotSettings, InputSources, ResolutionString } from '../interfaces/final-object.interface';
 import { acceptableFiles } from './main-filenames';
-import { startFileSystemWatching, TempMetadataQueueObject, sendNewVideoMetadata } from './main-extract-async';
+import { startFileSystemWatching, TempMetadataQueueObject, sendNewVideoMetadata, resetWatchers } from './main-extract-async';
 
 interface ResolutionMeta {
   label: ResolutionString;
@@ -735,25 +735,33 @@ export function sendFinalObjectToAngular(finalObject: FinalObject, globals: VhaG
 export function upgradeToVersion3(finalObject: FinalObject): void {
 
   if (finalObject.version === 2 && !finalObject.inputDirs) {
-    console.log('OLD VERSION FILE !!!');
-    finalObject.inputDirs = { 0: { path: '', watch: false } };
-    finalObject.inputDirs[0].path = (finalObject as any).inputDir;
+    console.log('OLD version file -- converting!');
+    finalObject.inputDirs = {
+      0: {
+        path: (finalObject as any).inputDir,
+        watch: false
+      }
+    };
+    finalObject.version = 3;
   }
-
 }
 
 /**
  * Start watching directories with `chokidar
- * @param finalObject
+ * @param inputDirs
+ * @param currentImages
  * @param deepScan - whether to extract files or compare hashes (TODO - rename param!)
  */
-export function startWatchingDirs(inputDirs: InputSources, deepScan: boolean): void {
+export function startWatchingDirs(inputDirs: InputSources, currentImages: ImageElement[], deepScan: boolean): void {
   console.log('about to start watching for files ?');
+
+  resetWatchers(currentImages);
 
   Object.keys(inputDirs).forEach((key: string) => {
     console.log(key, ' : ', inputDirs[key].path);
-    if (deepScan || inputDirs[key].watch) {
-      startFileSystemWatching(inputDirs[key].path, parseInt(key), [], deepScan);
-    }
+    // if (deepScan || inputDirs[key].watch) {
+      console.log('WATCHING!');
+      startFileSystemWatching(inputDirs[key].path, parseInt(key), deepScan);
+    // }
   });
 }
