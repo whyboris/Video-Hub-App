@@ -239,7 +239,6 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
     hidden: false,
     iconName: 'icon-sort-order',
     moreInfo: 'BUTTONS.sizeFilterMoreInfo',
-    settingsHeading: 'SETTINGS.sortingFilters',
     title: 'BUTTONS.sizeFilterHint',
     toggled: false
   },
