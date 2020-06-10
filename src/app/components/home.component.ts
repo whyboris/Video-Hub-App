@@ -2207,9 +2207,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   setUpSizeFilterValues(finalArray: ImageElement[]): void {
     const fileSizes: number[] = finalArray.map((element) => { return element.fileSize; });
 
-    const cutoff = this.getOutlierCutoff(fileSizes);
-
-    this.sizeOutlierCutoff = Math.floor(cutoff);
+    this.sizeOutlierCutoff = Math.max(...fileSizes);
   }
 
   /**
