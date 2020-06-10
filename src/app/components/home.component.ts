@@ -185,6 +185,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
   lengthRightBound: number = Infinity;
 
   // ========================================================================
+  // Size filter
+  // ------------------------------------------------------------------------
+
+  sizeLeftBound: number = 0;
+  sizeRightBound: number = Infinity;
+
+  // ========================================================================
   // Frequency / histogram
   // ------------------------------------------------------------------------
 
@@ -285,6 +292,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   sortType: SortType = 'default';
 
   durationOutlierCutoff: number = 0; // for the duration filter to cut off outliers
+  sizeOutlierCutoff: number = 0; // for the size filter to cut off outliers
 
   timeExtractionStarted;   // time remaining calculator
   timeExtractionRemaining; // time remaining calculator
@@ -688,6 +696,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.flickerReduceOverlay = false;
 
       this.setUpDurationFilterValues(this.finalArray);
+      this.setUpSizeFilterValues(this.finalArray);
 
       if (this.sortFilterElement) {
         this.sortFilterElement.nativeElement.value = this.sortType;
@@ -2175,12 +2184,32 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
 
+  newSizeFilterSelected(selection: number[]): void{
+
+    this.sizeLeftBound = selection[0];
+
+    if (selection[1] > this.sizeOutlierCutoff - 10) {
+      this.sizeRightBound = Infinity;
+    } else {
+      this.sizeRightBound = selection[1];
+    }
+
+  }
+
   setUpDurationFilterValues(finalArray: ImageElement[]): void {
     const durations: number[] = finalArray.map((element) => { return element.duration; });
 
     const cutoff = this.getOutlierCutoff(durations);
 
     this.durationOutlierCutoff = Math.floor(cutoff);
+  }
+
+  setUpSizeFilterValues(finalArray: ImageElement[]): void {
+    const fileSizes: number[] = finalArray.map((element) => { return element.fileSize; });
+
+    const cutoff = this.getOutlierCutoff(fileSizes);
+
+    this.sizeOutlierCutoff = Math.floor(cutoff);
   }
 
   /**
