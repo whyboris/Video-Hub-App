@@ -24,6 +24,7 @@ export const acceptableFiles = [
   'mxf',
   'ogg',
   'ogm',
+  'ogv',
   'rm',
   'rmvb',
   'ts',
