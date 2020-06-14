@@ -11,7 +11,6 @@ export const acceptableFiles = [
   'hevc',
   'm4a',
   'm4v',
-  'm4v',
   'mkv',
   'mov',
   'mp2',
