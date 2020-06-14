@@ -100,6 +100,7 @@ export const SettingsButtonsGroups: string[][] = [
     'resetSettings',
     'clearHistory',
     'showDeleteOption',
+    'dangerousDelete',
     'playPlaylist',
     'openAtTimestamp'
   ]
@@ -450,6 +451,12 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
     hidden: true,
     moreInfo: 'BUTTONS.showDeleteButtonMoreInfo',
     title: 'BUTTONS.showDeleteButton',
+    toggled: false
+  },
+  'dangerousDelete': {
+    description: 'BUTTONS.dangerousDeleteDescription',
+    hidden: true,
+    title: 'BUTTONS.dangerousDelete',
     toggled: false
   },
   'showDetails': {
