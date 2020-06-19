@@ -31,6 +31,7 @@ export const SettingsButtonsGroups: string[][] = [
     'sortOptionStar',
     'sortOptionYear',
     'sortOptionModified',
+    'sortOptionCreated',
     'sortOptionTags',
     'sortOptionAspectRatio'
   ],
@@ -576,6 +577,13 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.sortOptionModifiedDescription',
     hidden: false,
     moreInfo: 'BUTTONS.sortOptionModifiedMoreInfo',
+    title: '',
+    toggled: false
+  },
+  'sortOptionCreated': {
+    description: 'BUTTONS.sortOptionCreatedDescription',
+    hidden: false,
+    moreInfo: 'BUTTONS.sortOptionCreatedMoreInfo',
     title: '',
     toggled: false
   },
