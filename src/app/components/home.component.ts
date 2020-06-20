@@ -863,7 +863,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       const execPath: string = this.appState.preferredVideoPlayer;
 
-      this.electronService.ipcRenderer.send('open-media-file-at-timestamp', execPath, fullPath, this.getVideoPlayerArgs(execPath, time));
+      this.electronService.ipcRenderer.send('open-media-file-at-timestamp', execPath, fullPath, this.getVideoPlayerArgs(execPath, this.appState.videoPlayerArgs, time));
     } else {
       this.electronService.ipcRenderer.send('open-media-file', fullPath);
     }
@@ -874,24 +874,21 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param playerPath  full path to user's preferred video player
    * @param time        time in seconds
    */
-  public getVideoPlayerArgs(playerPath: string, time: number): string[] {
+  public getVideoPlayerArgs(playerPath: string, playerArgs: string, time: number): string[] {
     // if user doesn't want to open at timestamp, don't!
-    if (!this.settingsButtons['openAtTimestamp'].toggled) {
-      return [];
-    }
+    const argz: string[] = playerArgs ? playerArgs.match(/[^\s"']+|"([^"]*)"/g) : [];
 
-    // else, figure out the correct command line flags
-    const argz: string[] = [];
+    if (this.settingsButtons['openAtTimestamp'].toggled) {
+      if (playerPath.toLowerCase().includes('vlc')) {
+        argz.push('--start-time=' + time.toString()); // in seconds
 
-    if (playerPath.toLowerCase().includes('vlc')) {
-      argz.push('--start-time=' + time.toString()); // in seconds
+      } else if (playerPath.toLowerCase().includes('mpc')) {
+        argz.push('/start');
+        argz.push((1000 * time).toString());          // in milliseconds
 
-    } else if (playerPath.toLowerCase().includes('mpc')) {
-      argz.push('/start');
-      argz.push((1000 * time).toString());          // in milliseconds
-
-    } else if (playerPath.toLowerCase().includes('pot')) {
-      argz.push('/seek=' + time.toString());        // in seconds
+      } else if (playerPath.toLowerCase().includes('pot')) {
+        argz.push('/seek=' + time.toString());        // in seconds
+      }
     }
 
     return argz;
