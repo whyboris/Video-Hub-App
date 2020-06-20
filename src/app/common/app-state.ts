@@ -52,6 +52,7 @@ export const AppState: AppStateInterface = { // AppState is saved into `settings
   menuHidden: false,
   numOfFolders: 0,
   preferredVideoPlayer: '',
+  videoPlayerArgs: '',
   selectedOutputFolder: '',
   selectedSourceFolder: {},
   sortTagsByFrequency: false
@@ -68,6 +69,7 @@ export interface AppStateInterface {
   menuHidden: boolean;
   numOfFolders: number;
   preferredVideoPlayer: string;
+  videoPlayerArgs: string,
   selectedOutputFolder: string;
   selectedSourceFolder: InputSources;
   sortTagsByFrequency: boolean; // when `false` sort tags alphabetically
