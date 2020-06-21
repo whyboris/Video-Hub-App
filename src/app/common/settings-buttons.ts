@@ -21,6 +21,7 @@ export const SettingsButtonsGroups: string[][] = [
   ],
   [
     'durationFilter',
+    'sizeFilter',
     'resolutionFilter',
     'starFilter',
     'sortOrder',
@@ -233,6 +234,14 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
     moreInfo: 'BUTTONS.durationFilterMoreInfo',
     settingsHeading: 'SETTINGS.sortingFilters',
     title: 'BUTTONS.durationFilterHint',
+    toggled: false
+  },
+  'sizeFilter': {
+    description: 'BUTTONS.sizeFilterDescription',
+    hidden: false,
+    iconName: 'icon-sort-order',
+    moreInfo: 'BUTTONS.sizeFilterMoreInfo',
+    title: 'BUTTONS.sizeFilterHint',
     toggled: false
   },
   'exclude': {
