@@ -287,8 +287,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   tagTypeAhead: string = '';
 
-  dangerousDelete: boolean = false;
-
   // ========================================================================
   // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
   // ========================================================================
@@ -1800,8 +1798,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Deletes a file (moves to recycling bin / trash) or dangerously deletes (bypassing trash)
    */
   deleteThisFile(item: ImageElement): void {
-    this.dangerousDelete = this.settingsButtons['dangerousDelete'].toggled;
-    this.electronService.ipcRenderer.send('delete-video-file', item, this.dangerousDelete);
+    const dangerously: boolean = this.settingsButtons['dangerousDelete'].toggled;
+    this.electronService.ipcRenderer.send('delete-video-file', item, dangerously);
   }
 
   /**
