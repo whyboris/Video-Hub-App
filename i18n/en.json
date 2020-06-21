@@ -107,6 +107,8 @@
     "showDeleteButton": "Allow deleting files",
     "showDeleteButtonDescription": "Show 'Delete' option in the right-click menu",
     "showDeleteButtonMoreInfo": "Deleting a file moves it to your computer's trash / recycling bin",
+    "dangerousDelete": "Permanently delete files",
+    "dangerousDeleteDescription": "Dangerously delete bypassing trash / recycling bin",
     "showDetails2Description": "Details view 2",
     "showDetails2Hint": "Details view 2",
     "showDetailsDescription": "Details view",

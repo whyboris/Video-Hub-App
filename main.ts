@@ -513,22 +513,28 @@ ipc.on('please-create-playlist', (event, playlist: ImageElement[]) => {
 });
 
 /**
- * Delete file from computer (send to recycling bin / trash)
+ * Delete file from computer (send to recycling bin / trash) or dangerously delete (bypass trash)
  */
-ipc.on('delete-video-file', (event, item: ImageElement): void => {
+ipc.on('delete-video-file', (event, item: ImageElement, dangerousDelete: boolean): void => {
   const fileToDelete = path.join(globals.selectedSourceFolder, item.partialPath, item.fileName);
 
-  (async () => {
-    await trash(fileToDelete);
-
-    // check if file exists
-    fs.access(fileToDelete, fs.F_OK, (err: any) => {
+  if (dangerousDelete === false) {
+    (async () => {
+      await trash(fileToDelete);
+    })();
+  } else {
+    fs.unlink(fileToDelete, (err) => {
       if (err) {
-        event.sender.send('file-deleted', item);
+        console.log(fileToDelete + ' was NOT deleted');
       }
     });
-
-  })();
+  }
+  // check if file exists
+  fs.access(fileToDelete, fs.F_OK, (err: any) => {
+    if (err) {
+      event.sender.send('file-deleted', item);
+    }
+  });
 });
 
 /**
