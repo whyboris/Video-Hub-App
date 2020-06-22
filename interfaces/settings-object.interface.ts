@@ -5,7 +5,6 @@ export interface SettingsObject {
   appState: AppStateInterface;
   buttonSettings: any;
   vhaFileHistory: HistoryItem[];
-  windowSizeAndPosition: WinBounds;
 }
 
 interface WinBounds {
