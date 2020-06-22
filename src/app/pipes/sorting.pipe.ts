@@ -10,6 +10,8 @@ export type SortType = 'default'
                      | 'hash' // only used by the duplicateFinderPipe
                      | 'modifiedAsc'
                      | 'modifiedDesc'
+                     | 'createdAsc'
+                     | 'createdDesc'
                      | 'random'
                      | 'sizeAsc'
                      | 'sizeDesc'
@@ -207,6 +209,14 @@ export class SortingPipe implements PipeTransform {
     } else if (sortingType === 'modifiedDesc') {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'mtime', false);
+      });
+    } else if (sortingType === 'createdAsc') {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
+        return this.sortFunctionLol(x, y, 'ctime', true);
+      });
+    } else if (sortingType === 'createdDesc') {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
+        return this.sortFunctionLol(x, y, 'ctime', false);
       });
     } else if (sortingType === 'hash') {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {

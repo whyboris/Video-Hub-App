@@ -489,6 +489,20 @@
         ></app-slider-filter>
       </div>
 
+            <!-- sizeFilter -->
+      <div *ngIf="settingsButtons['sizeFilter'].toggled">
+
+        <app-slider-filter
+          (newSliderFilterSelected)="newSizeFilterSelected($event)"
+          [darkMode]="settingsButtons['darkMode'].toggled"
+          [labelFormatPipe]="'fileSizePipe'"
+          [maximumValue]="sizeOutlierCutoff"
+          [minimumValue]="0"
+          [sizeFilter]="true"
+          [steps]="50"
+        ></app-slider-filter>
+      </div>
+
       <!-- resolution filter & its frequency histogram -->
       <app-resolution-filter
         (newResFilterSelected)="newResFilterSelected($event)"
@@ -646,6 +660,10 @@
                 | lengthFilterPipe: settingsButtons['durationFilter'].toggled
                                     : lengthLeftBound
                                     : lengthRightBound
+
+                | fileSizeFilterPipe: settingsButtons['sizeFilter'].toggled
+                                    : sizeLeftBound
+                                    : sizeRightBound
 
                 | resolutionFilterPipe: settingsButtons['resolutionFilter'].toggled
                                         : freqLeftBound

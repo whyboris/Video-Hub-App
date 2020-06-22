@@ -24,6 +24,7 @@ export interface ImageElement {
   hash: string;                  // used for detecting changed files and as a screenshot identifier
   height: AllowedScreenshotHeight; // height of the video (px)
   mtime: number;                 // file modification time
+  ctime: number;                 // file creation time
   partialPath: string;           // for opening the file, just prepend the `inputDir` (starts with "/", is "/fldr1/fldr2", or can be "")
   screens: number;               // number of screenshots for this file
   stars: StarRating;             // star rating 0 = n/a, otherwise 1, 2, 3
@@ -60,6 +61,7 @@ export function NewImageElement(): ImageElement {
     height: 144,
     index: 0,
     mtime: 0,
+    ctime: 0,
     partialPath: '',
     resBucket: 0,
     resolution: '',
