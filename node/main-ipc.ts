@@ -276,9 +276,6 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
    */
   ipc.on('close-window', (event, settingsToSave: SettingsObject, finalObjectToSave: FinalObject) => {
 
-    // save window size and position
-    settingsToSave.windowSizeAndPosition = GLOBALS.winRef.getContentBounds(); // unsure why `win` doesn't work here
-
     // convert shortcuts map to object
     // someday when node stops giving error: Property 'fromEntries' does not exist on type 'ObjectConstructor'
     // settingsToSave.shortcuts = <any>Object.fromEntries(settingsToSave.shortcuts);

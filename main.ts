@@ -12,6 +12,7 @@ import * as url from 'url';
 const fs = require('fs');
 const electron = require('electron');
 import { app, BrowserWindow, screen, dialog, systemPreferences, ipcMain } from 'electron';
+const windowStateKeeper = require('electron-window-state');
 
 // Methods
 import { createTouchBar } from './node/main-touch-bar';
@@ -89,6 +90,10 @@ function createWindow() {
 
   screenWidth = desktopSize.width;
   screenHeight = desktopSize.height;
+  let mainWindowState = windowStateKeeper({
+    defaultWidth: 850,
+    defaultHeight: 850
+  });
 
   // Create the browser window.
   win = new BrowserWindow({
@@ -96,16 +101,17 @@ function createWindow() {
       nodeIntegration: true,
       webSecurity: false  // allow files from hard disk to show up
     },
-    x: screenWidth / 2 - 210,
-    y: screenHeight / 2 - 125,
-    width: 420,
-    height: 250,
+    x: mainWindowState.x,
+    y: mainWindowState.y,
+    width: mainWindowState.width,
+    height: mainWindowState.height,
     center: true,
     minWidth: 420,
     minHeight: 250,
     icon: path.join(__dirname, 'src/assets/icons/png/64x64.png'),
     frame: false  // removes the frame from the window completely
   });
+  mainWindowState.manage(win);
 
   myWindow = win;
 
@@ -284,15 +290,6 @@ ipcMain.on('just-started', (event) => {
     } else {
 
       const previouslySavedSettings: SettingsObject = JSON.parse(data);
-
-      // Restore last windows size and position or full screen if not available
-      if ( previouslySavedSettings.windowSizeAndPosition
-        && previouslySavedSettings.windowSizeAndPosition.x < screenWidth - 200
-        && previouslySavedSettings.windowSizeAndPosition.y < screenHeight - 200) {
-        win.setBounds(previouslySavedSettings.windowSizeAndPosition);
-      } else {
-        win.setBounds({ x: 0, y: 0, width: screenWidth, height: screenHeight });
-      }
 
       event.sender.send('settingsReturning', previouslySavedSettings, locale);
     }
