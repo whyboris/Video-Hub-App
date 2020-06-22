@@ -2,6 +2,7 @@ import { app, BrowserWindow, screen, TouchBar } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 
+const windowStateKeeper = require('electron-window-state');
 const trash = require('trash');
 
 const { systemPreferences } = require('electron');
@@ -89,6 +90,10 @@ function createWindow() {
 
   screenWidth = desktopSize.width;
   screenHeight = desktopSize.height;
+  let mainWindowState = windowStateKeeper({
+    defaultWidth: 420,
+    defaultHeight: 250
+  });
 
   // Create the browser window.
   win = new BrowserWindow({
@@ -96,16 +101,17 @@ function createWindow() {
       nodeIntegration: true,
       webSecurity: false  // allow files from hard disk to show up
     },
-    x: screenWidth / 2 - 210,
-    y: screenHeight / 2 - 125,
-    width: 420,
-    height: 250,
+    x: mainWindowState.x,
+    y: mainWindowState.y,
+    width: mainWindowState.width,
+    height: mainWindowState.height,
     center: true,
     minWidth: 420,
     minHeight: 250,
     icon: path.join(__dirname, 'src/assets/icons/png/64x64.png'),
     frame: false  // removes the frame from the window completely
   });
+  mainWindowState.manage(win);
 
   myWindow = win;
 
@@ -410,15 +416,6 @@ ipc.on('just-started', (event) => {
 
       const savedSettings = JSON.parse(data);
 
-      // Restore last windows size and position or full screen if not available
-      if (savedSettings.windowSizeAndPosition
-        && savedSettings.windowSizeAndPosition.x < screenWidth - 200
-        && savedSettings.windowSizeAndPosition.y < screenHeight - 200) {
-        win.setBounds(savedSettings.windowSizeAndPosition);
-      } else {
-        win.setBounds({x: 0, y: 0, width: screenWidth, height: screenHeight});
-      }
-
       // Reference: https://github.com/electron/electron/blob/master/docs/api/locales.md
       const locale: string = app.getLocale();
 
@@ -633,10 +630,6 @@ ipc.on('choose-output', (event) => {
  * Close the window / quit / exit the app
  */
 ipc.on('close-window', (event, settingsToSave: SettingsObject, savableProperties: SavableProperties) => {
-
-  // save window size and position
-  settingsToSave.windowSizeAndPosition = win.getContentBounds();
-
   const json = JSON.stringify(settingsToSave);
 
   try {
