@@ -2,21 +2,23 @@
 // Was originally added to `main-extract.ts` but was moved here for clarity
 
 import { GLOBALS } from './main-globals';
-import { ImageElement, NewImageElement } from '../interfaces/final-object.interface';
+import { ImageElement } from '../interfaces/final-object.interface';
 import { extractThumbnails } from './main-extract';
-import { sendCurrentProgress, insertTemporaryFieldsSingle, hasAllThumbs, hashFileAsync, extractMetadataAsync, cleanUpFileName } from './main-support';
+import { sendCurrentProgress, insertTemporaryFieldsSingle, hasAllThumbs, hashFileAsync, createElement } from './main-support';
 
 import * as path from 'path';
 
 const async = require('async');
 const thumbQueue = async.queue(nextExtaction, 1);
 
+// ========================================================
 // WARNING - state variable hanging around!
 let thumbsDone = 0;
+// ========================================================
 
 thumbQueue.drain(() => {
   thumbsDone = 0;
-  sendCurrentProgress(1, 1, 'done'); // indicates 100%
+  sendCurrentProgress(1, 1, 'done'); // indicates 100%   TODO - rethink `sendCurrentProgress` since we are using a new system for extraction
 });
 
 export function queueThumbExtraction(element: ImageElement) {
@@ -26,16 +28,17 @@ export function queueThumbExtraction(element: ImageElement) {
 function nextExtaction(element: ImageElement, callback) {
   const screenshotOutputFolder: string = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName);
 
-  sendCurrentProgress(thumbsDone, thumbsDone + thumbQueue.length() + 1, 'importingScreenshots'); // check whether sending data off by 1
-  thumbsDone++;
+  sendCurrentProgress(thumbsDone, thumbsDone + thumbQueue.length() + 1, 'importingScreenshots');      // check whether sending data off by 1
+  thumbsDone++;                                                       // TODO -- rethink the whole `sendCurrentProgress` system from scratch
 
   extractThumbnails(
     element,
-    GLOBALS.selectedSourceFolders[0].path, // HANDLE THIS BETTER !!!
+    GLOBALS.selectedSourceFolders[element.inputSource].path,
     screenshotOutputFolder,
     GLOBALS.screenshotSettings,
     true,
-    callback);
+    callback
+  );
 }
 
 // =========================================================================================================================================
@@ -46,24 +49,40 @@ import { Stats } from 'fs';
 import { acceptableFiles } from './main-filenames';
 
 const chokidar = require('chokidar');
+import { FSWatcher } from 'chokidar'; // probably the correct type for chokidar.watch() object
 
+// ========================================================
 // WARNING - state variables hanging around!
 const metadataQueue = async.queue(checkForMetadata, 8);
-let cachedFinalArray: ImageElement[] = [];
+
+let cachedFinalArray: ImageElement[] = []; // REMEMBER
 let deepScan = false;
+
+let watcherMap: Map<number, FSWatcher> = new Map();
+// ========================================================
+
+export interface TempMetadataQueueObject {
+  deepScan: boolean;
+  fullPath: string;
+  inputSource: number;
+  name: string;
+  partialPath: string;
+  stat: Stats;
+}
 
 /**
  * Send element back to Angular; if any screenshots missing, queue it for extraction
  * @param imageElement
  */
-function sendNewVideoMetadata(imageElement: ImageElement) {
+export function sendNewVideoMetadata(imageElement: ImageElement) {
   imageElement = insertTemporaryFieldsSingle(imageElement);
-  GLOBALS.angularApp.sender.send(
-    'newVideoMeta',
-    imageElement
-  );
+
+  GLOBALS.angularApp.sender.send('newVideoMeta', imageElement);
+
   imageElement.index = cachedFinalArray.length;
+
   cachedFinalArray.push(imageElement);
+
   const screenshotOutputFolder: string = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName);
 
   if (!hasAllThumbs(imageElement.hash, screenshotOutputFolder, GLOBALS.screenshotSettings.clipSnippets > 0 )) {
@@ -77,77 +96,69 @@ function sendNewVideoMetadata(imageElement: ImageElement) {
  * @param callback
  */
 export function checkForMetadata(file: TempMetadataQueueObject, callback) {
+
   console.log('checking metadata for %s', file.fullPath);
   let found = false;
+
   if (!deepScan) {
-    cachedFinalArray.forEach((element) => {
-      if (element.partialPath === file.partialPath && element.fileName === file.name) {
+
+    for (let i = 0; i < cachedFinalArray.length; i++) {
+      const element = cachedFinalArray[i];
+      if (element.partialPath === file.partialPath && element.fileName === file.name) { // consider comparing full path in case source folders overlap
         found = true;
+        break;
       }
-    });
+    }
     console.log('found: %s', found);
+
     if (found) {
       return callback();
     }
+
     createElement(file, '', callback);
+
   } else {
+
     hashFileAsync(file.fullPath).then((hash) => {
-      cachedFinalArray.forEach((element) => {
-        if (element.hash === hash) {
+
+      for (let i = 0; i < cachedFinalArray.length; i++) {
+        if (cachedFinalArray[i].hash === hash) {
           found = true;
+          break;
         }
-      });
+      }
       console.log('found: %s', found);
+
       if (found) {
         return callback();
       }
+
       createElement(file, hash, callback);
+
     });
+
   }
 }
 
 /**
- * Create a new element from metadata
- * @param file
- * @param hash
- * @param callback
- */
-function createElement(file: TempMetadataQueueObject, hash, callback) {
-  const newElement = NewImageElement();
-  newElement.hash = hash;
-  extractMetadataAsync(file.fullPath, GLOBALS.screenshotSettings, newElement, file.stat)
-    .then((imageElement) => {
-      imageElement.cleanName = cleanUpFileName(file.name);
-      imageElement.fileName = file.name;
-      imageElement.partialPath = file.partialPath;
-      imageElement.inputSource = file.inputSource;
-      sendNewVideoMetadata(imageElement);
-      callback();
-    }, () => {
-      callback(); // error, just continue
-    });
-}
-
-/**
- *
+ * Create a new `chokidar` watcher for a directory
  * @param inputDir
  * @param inputSource -- the number corresponding to the `inputSource` in ImageElement -- must be set!
- * @param finalArray
  * @param initalDeepScan
  */
 export function startFileSystemWatching(
   inputDir: string,
   inputSource: number,
-  finalArray: ImageElement[],
   initalDeepScan: boolean
 ) {
 
-  cachedFinalArray = finalArray;
   deepScan = initalDeepScan; // Hash files instead of just path compare
 
+  console.log('starting watcher ', inputSource);
+
   // One-liner for current directory
-  const watcher = chokidar.watch('**', {
-                                          ignored: '**/vha-*/**',
+  const watcher: FSWatcher = chokidar.watch('**', {
+                                          ignored: '**/vha-*/**', // maybe ignore files that start with `._` ? WTF MAC!?
                                           cwd: inputDir,
                                           alwaysStat: true,
                                           awaitWriteFinish: true
@@ -156,7 +167,7 @@ export function startFileSystemWatching(
 
       const ext = path.substring(path.lastIndexOf('.') + 1);
       if (path.indexOf('vha-') !== -1 || acceptableFiles.indexOf(ext) === -1) {
-        console.log('ignoring %s', path);
+        // console.log('ignoring %s', path);
         return;
       }
 
@@ -164,7 +175,9 @@ export function startFileSystemWatching(
       const partialPath = subPath.substring(0, subPath.lastIndexOf('/'));
       const fileName = subPath.substring(subPath.lastIndexOf('/') + 1);
       const fullPath = inputDir + partialPath + '/' + fileName;
+
       console.log(fullPath);
+
       metadataQueue.push({
         deepScan: deepScan,
         fullPath: fullPath,
@@ -182,14 +195,36 @@ export function startFileSystemWatching(
       deepScan = false;
     });
 
+    watcherMap.set(inputSource, watcher);
+
 }
 
-interface TempMetadataQueueObject {
-  deepScan: boolean;
-  fullPath: string;
-  inputSource: number;
-  name: string;
-  partialPath: string;
-  stat: Stats;
+/**
+ * Reset the cachedFinalArray
+ * close out all the wathers
+ * @param finalArray
+ */
+export function resetWatchers(finalArray: ImageElement[]): void {
+
+  // close every old watcher
+  Array.from(watcherMap.keys()).forEach((key: number) => {
+    closeWatcher(key);
+  });
+
+  cachedFinalArray = finalArray;
 }
 
+
+/**
+ * Close the old watcher
+ * happens when opening a new hub (or some other reason)
+ * @param inputSource
+ */
+function closeWatcher(inputSource: number): void {
+  if (watcherMap.has(inputSource)) {
+    console.log('closing ', inputSource);
+    watcherMap.get(inputSource).close().then(() => {
+      console.log(inputSource, ' closed!');
+    });
+  }
+}

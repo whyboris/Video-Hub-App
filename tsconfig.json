@@ -24,7 +24,6 @@
   "include": [
     "i18n",
     "interfaces",
-    "main.ts",
-    "src/**/*"
+    "src/main.ts"
   ]
 }

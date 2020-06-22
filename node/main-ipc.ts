@@ -149,23 +149,33 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
   });
 
   /**
-   * Delete file from computer (send to recycling bin / trash)
+   * Delete file from computer (send to recycling bin / trash) or dangerously delete (bypass trash)
    */
-  ipc.on('delete-video-file', (event, item: ImageElement): void => {
+  ipc.on('delete-video-file', (event, item: ImageElement, dangerousDelete: boolean): void => {
     console.log('TODO: handle delete based on source folder!');
     const fileToDelete = path.join(GLOBALS.selectedSourceFolders[0].path, item.partialPath, item.fileName);
 
-    (async () => {
-      await trash(fileToDelete);
-
-      // check if file exists
-      fs.access(fileToDelete, fs.F_OK, (err: any) => {
+    if (dangerousDelete) {
+      fs.unlink(fileToDelete, (err) => {
         if (err) {
-          event.sender.send('file-deleted', item);
+          console.log(fileToDelete + ' was NOT deleted');
         }
       });
+    } else {
+      (async () => {
+        await trash(fileToDelete);
+      })();
+    }
 
-    })();
+    // TODO --   handle async stuff better -- maybe wait before checking access?
+    console.log('HANDLE ASYNC STUFF CORRECTLY !?');
+    // check if file exists
+    fs.access(fileToDelete, fs.F_OK, (err: any) => {
+      if (err) {
+        event.sender.send('file-deleted', item);
+      }
+    });
+
   });
 
   /**

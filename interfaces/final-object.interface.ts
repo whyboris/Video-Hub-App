@@ -1,9 +1,9 @@
-import { ResolutionString } from '../src/app/pipes/resolution-filter.service';
-
 export type StarRating = 0.5 | 1.5 | 2.5 | 3.5 | 4.5 | 5.5;
 
 // must be heights from true `16:9` resolutions AND divisible by 8
 export type AllowedScreenshotHeight = 144 | 216 | 288 | 360 | 432 | 504;
+
+export type ResolutionString = '' | 'SD' | '720' | '720+' | '1080' | '1080+' | '4K' | '4K+';
 
 export interface SourceFolder {
   path: string;
@@ -33,6 +33,7 @@ export interface ImageElement {
   height: AllowedScreenshotHeight; // height of the video (px)
   inputSource: number;           // corresponding to `inputDirs`
   mtime: number;                 // file modification time
+  ctime: number;                 // file creation time
   partialPath: string;           // for opening the file, just prepend the `inputDir` (starts with "/", is "/fldr1/fldr2", or can be "")
   screens: number;               // number of screenshots for this file
   stars: StarRating;             // star rating 0 = n/a, otherwise 1, 2, 3
@@ -70,6 +71,7 @@ export function NewImageElement(): ImageElement {
     index: 0,
     inputSource: 0,
     mtime: 0,
+    ctime: 0,
     partialPath: '',
     resBucket: 0,
     resolution: '',

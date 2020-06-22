@@ -6,22 +6,19 @@
  * the same way each time they run no matter the outside state
  */
 
+import { GLOBALS, VhaGlobals } from './main-globals'; // TODO -- eliminate dependence on `GLOBALS` in this file!
+
 import * as path from 'path';
 
-const fs = require('fs');
-
-const hasher = require('crypto').createHash;
-
 const exec = require('child_process').exec;
-
 const ffprobePath = require('@ffprobe-installer/ffprobe').path.replace('app.asar', 'app.asar.unpacked');
-
-import { acceptableFiles } from './main-filenames';
-import { GLOBALS, VhaGlobals } from './main-globals';
-import { FinalObject, ImageElement, NewImageElement, ScreenshotSettings, InputSources } from '../interfaces/final-object.interface';
-import { ResolutionString } from '../src/app/pipes/resolution-filter.service';
+const fs = require('fs');
+const hasher = require('crypto').createHash;
 import { Stats } from 'fs';
-import { startFileSystemWatching } from './main-extract-async';
+
+import { FinalObject, ImageElement, NewImageElement, ScreenshotSettings, InputSources, ResolutionString } from '../interfaces/final-object.interface';
+import { acceptableFiles } from './main-filenames';
+import { startFileSystemWatching, TempMetadataQueueObject, sendNewVideoMetadata, resetWatchers } from './main-extract-async';
 
 interface ResolutionMeta {
   label: ResolutionString;
@@ -519,6 +516,7 @@ function extractMetadataForThisONEFile(
       imageElement.duration = duration;
       imageElement.fileSize = stat.size;
       imageElement.mtime = stat.mtimeMs;
+      imageElement.ctime = stat.ctimeMs;
       if (imageElement.hash === '') {
         imageElement.hash = hashFile(filePath);
       }
@@ -677,6 +675,28 @@ export function hashFileAsync(pathToFile: string): Promise<string> {
 }
 
 /**
+ * Create a new element from metadata
+ * @param file
+ * @param hash
+ * @param callback
+ */
+export function createElement(file: TempMetadataQueueObject, hash, callback) {
+  const newElement = NewImageElement();
+  newElement.hash = hash;
+  extractMetadataAsync(file.fullPath, GLOBALS.screenshotSettings, newElement, file.stat)
+    .then((imageElement) => {
+      imageElement.cleanName = cleanUpFileName(file.name);
+      imageElement.fileName = file.name;
+      imageElement.partialPath = file.partialPath;
+      imageElement.inputSource = file.inputSource;
+      sendNewVideoMetadata(imageElement);
+      callback();
+    }, () => {
+      callback(); // error, just continue
+    });
+}
+
+/**
  * Sends progress to Angular App
  * @param current number
  * @param total number
@@ -716,25 +736,33 @@ export function sendFinalObjectToAngular(finalObject: FinalObject, globals: VhaG
 export function upgradeToVersion3(finalObject: FinalObject): void {
 
   if (finalObject.version === 2 && !finalObject.inputDirs) {
-    console.log('OLD VERSION FILE !!!');
-    finalObject.inputDirs = { 0: { path: '', watch: false } };
-    finalObject.inputDirs[0].path = (finalObject as any).inputDir;
+    console.log('OLD version file -- converting!');
+    finalObject.inputDirs = {
+      0: {
+        path: (finalObject as any).inputDir,
+        watch: false
+      }
+    };
+    finalObject.version = 3;
   }
-
 }
 
 /**
  * Start watching directories with `chokidar
- * @param finalObject
+ * @param inputDirs
+ * @param currentImages
  * @param deepScan - whether to extract files or compare hashes (TODO - rename param!)
  */
-export function startWatchingDirs(inputDirs: InputSources, deepScan: boolean): void {
+export function startWatchingDirs(inputDirs: InputSources, currentImages: ImageElement[], deepScan: boolean): void {
   console.log('about to start watching for files ?');
+
+  resetWatchers(currentImages);
 
   Object.keys(inputDirs).forEach((key: string) => {
     console.log(key, ' : ', inputDirs[key].path);
-    if (deepScan || inputDirs[key].watch) {
-      startFileSystemWatching(inputDirs[key].path, parseInt(key), [], deepScan);
-    }
+    // if (deepScan || inputDirs[key].watch) {
+      console.log('WATCHING!');
+      startFileSystemWatching(inputDirs[key].path, parseInt(key), deepScan);
+    // }
   });
 }

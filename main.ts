@@ -1,8 +1,8 @@
-import { GLOBALS, VhaGlobals } from './node/main-globals';
+import { GLOBALS } from './node/main-globals';
 // =================================================================================================
 // -------------------------------------     BUILD TOGGLE     --------------------------------------
 // -------------------------------------------------------------------------------------------------
-const demo = false;
+const demo = false; // TODO: add this back into code
 GLOBALS.version = '3.0.0';   // update `package.json` version to `#.#.#-demo` when building the demo
 // =================================================================================================
 
@@ -10,43 +10,16 @@ import * as path from 'path';
 import * as url from 'url';
 
 const fs = require('fs');
-const trash = require('trash');
-
-import { app, BrowserWindow, screen } from 'electron';
-const dialog = require('electron').dialog;
 const electron = require('electron');
-const ipc = require('electron').ipcMain;
-const shell = require('electron').shell;
-const { systemPreferences } = require('electron');
+import { app, BrowserWindow, screen, dialog, systemPreferences, ipcMain } from 'electron';
 
 // Methods
-import {
-  alphabetizeFinalArray,
-  countFoldersInFinalArray,
-  createDotPlsFile,
-  extractAllMetadata,
-  getHtmlPath,
-  getVideoPathsAndNames,
-  insertTemporaryFields,
-  missingThumbsIndex,
-  sendCurrentProgress,
-  sendFinalObjectToAngular,
-  startWatchingDirs,
-  upgradeToVersion3,
-  writeVhaFileToDisk
-} from './node/main-support';
-
-import {
-  findAndImportNewFiles,
-  regenerateLibrary,
-  rescanAddAndDelete,
-} from './node/main-rescan';
-
 import { createTouchBar } from './node/main-touch-bar';
 import { setUpIpcMessages } from './node/main-ipc';
+import { sendFinalObjectToAngular, startWatchingDirs, upgradeToVersion3, writeVhaFileToDisk } from './node/main-support';
 
 // Interfaces
-import { FinalObject, ImageElement } from './interfaces/final-object.interface';
+import { FinalObject } from './interfaces/final-object.interface';
 import { SettingsObject } from './interfaces/settings-object.interface';
 import { WizardOptions } from './interfaces/wizard-options.interface';
 
@@ -65,19 +38,17 @@ let userWantedToOpen: string = null; // find a better pattern for handling this 
 
 // =================================================================================================
 
-const spawn = require('child_process').spawn;
-
-process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
-
 let win, serve;
 let myWindow = null;
 const args = process.argv.slice(1);
 serve = args.some(val => val === '--serve');
-GLOBALS.debug = args.some(val => val === '--debug');
 
-if (GLOBALS.debug) {
-  console.log('Debug mode enabled!');
-}
+GLOBALS.debug = args.some(val => val === '--debug');
+if (GLOBALS.debug) { console.log('Debug mode enabled!'); }
+
+// =================================================================================================
+
+process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
 // For windows -- when loading the app the first time
 if (args[0]) {
@@ -86,8 +57,7 @@ if (args[0]) {
   }
 }
 
-// OPEN FILE ON WINDOWS FROM FILE DOUBLE CLICK
-const gotTheLock = app.requestSingleInstanceLock();
+const gotTheLock = app.requestSingleInstanceLock(); // Open file on windows from file double click
 
 if (!gotTheLock) {
   app.quit();
@@ -278,7 +248,7 @@ function openThisDamnFile(pathToVhaFile: string) {
 
       sendFinalObjectToAngular(finalObject, GLOBALS);
 
-      startWatchingDirs(finalObject.inputDirs, false); // starts `chokidar`
+      startWatchingDirs(finalObject.inputDirs, finalObject.images, false); // starts `chokidar`
     }
   });
 }
@@ -287,7 +257,7 @@ function openThisDamnFile(pathToVhaFile: string) {
 // Listeners for events from Angular
 // -------------------------------------------------------------------------------------------------
 
-setUpIpcMessages(ipc, win, pathToAppData, systemMessages);
+setUpIpcMessages(ipcMain, win, pathToAppData, systemMessages);
 
 // -------------------------------------------------------------------------------------------------
 
@@ -295,7 +265,7 @@ setUpIpcMessages(ipc, win, pathToAppData, systemMessages);
  * Once Angular loads it sends over the `ready` status
  * Load up the settings.json and send settings over to Angular
  */
-ipc.on('just-started', (event) => {
+ipcMain.on('just-started', (event) => {
   GLOBALS.angularApp = event;
   GLOBALS.winRef = win;
 
@@ -332,7 +302,7 @@ ipc.on('just-started', (event) => {
 /**
  * Start extracting the screenshots into a chosen output folder from a chosen input folder
  */
-ipc.on('start-the-import', (event, wizard: WizardOptions) => {
+ipcMain.on('start-the-import', (event, wizard: WizardOptions) => {
   const hubName = wizard.futureHubName;
   const outDir: string = wizard.selectedOutputFolder;
 
@@ -396,7 +366,7 @@ function writeVhaFileAndStartExtraction(): void {
 
     sendFinalObjectToAngular(finalObject, GLOBALS);
 
-    startWatchingDirs(finalObject.inputDirs, true);
+    startWatchingDirs(finalObject.inputDirs, [], true);
   });
 }
 
@@ -404,7 +374,7 @@ function writeVhaFileAndStartExtraction(): void {
  * Summon system modal to choose the *.vha2 file
  * open via `openThisDamnFile` method
  */
-ipc.on('system-open-file-through-modal', (event, somethingElse) => {  // TODO -- check -- do I need to save vha to disk?
+ipcMain.on('system-open-file-through-modal', (event, somethingElse) => {  // TODO -- check -- do I need to save vha to disk?
   dialog.showOpenDialog(win, {
     title: systemMessages.selectPreviousHub,
     filters: [{
@@ -425,7 +395,7 @@ ipc.on('system-open-file-through-modal', (event, somethingElse) => {  // TODO --
  * Open .vha2 file (from given path)
  * save current VHA file to disk, if provided
  */
-ipc.on('load-this-vha-file', (event, pathToVhaFile: string, finalObjectToSave: FinalObject) => {
+ipcMain.on('load-this-vha-file', (event, pathToVhaFile: string, finalObjectToSave: FinalObject) => {
 
   if (finalObjectToSave !== null) {
 
@@ -444,13 +414,13 @@ ipc.on('load-this-vha-file', (event, pathToVhaFile: string, finalObjectToSave: F
 /**
  * Interrupt current import process
  */
-ipc.on('cancel-current-import', (event): void => {
+ipcMain.on('cancel-current-import', (event): void => {
   GLOBALS.cancelCurrentImport = true;
 });
 
 /**
  * Update system messaging based on new language
  */
-ipc.on('system-messages-updated', (event, newSystemMessages): void => {
+ipcMain.on('system-messages-updated', (event, newSystemMessages): void => {
   systemMessages = newSystemMessages;               // TODO -- make sure it works with `main-ipc.ts`
 });
