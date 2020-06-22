@@ -59,6 +59,12 @@
     <option *ngIf="settingsButtons['sortOptionModified'].toggled" value="modifiedDesc">
       &#x25BC; {{ 'SIDEBAR.sortModified' | translate }}
     </option>
+    <option *ngIf="settingsButtons['sortOptionCreated'].toggled" value="createdAsc">
+      &#x25B2; {{ 'SIDEBAR.sortCreated' | translate }}
+    </option>
+    <option *ngIf="settingsButtons['sortOptionCreated'].toggled" value="createdDesc">
+      &#x25BC; {{ 'SIDEBAR.sortCreated' | translate }}
+    </option>
     <option *ngIf="settingsButtons['sortOptionTags'].toggled" value="tagsAsc">
       &#x25B2; {{ 'SIDEBAR.sortTags' | translate }}
     </option>
