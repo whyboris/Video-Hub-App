@@ -21,6 +21,7 @@ export const SettingsButtonsGroups: string[][] = [
   ],
   [
     'durationFilter',
+    'sizeFilter',
     'resolutionFilter',
     'starFilter',
     'sortOrder',
@@ -31,6 +32,7 @@ export const SettingsButtonsGroups: string[][] = [
     'sortOptionStar',
     'sortOptionYear',
     'sortOptionModified',
+    'sortOptionCreated',
     'sortOptionTags',
     'sortOptionAspectRatio'
   ],
@@ -101,6 +103,7 @@ export const SettingsButtonsGroups: string[][] = [
     'resetSettings',
     'clearHistory',
     'showDeleteOption',
+    'dangerousDelete',
     'playPlaylist',
     'openAtTimestamp'
   ]
@@ -232,6 +235,14 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
     moreInfo: 'BUTTONS.durationFilterMoreInfo',
     settingsHeading: 'SETTINGS.sortingFilters',
     title: 'BUTTONS.durationFilterHint',
+    toggled: false
+  },
+  'sizeFilter': {
+    description: 'BUTTONS.sizeFilterDescription',
+    hidden: false,
+    iconName: 'icon-sort-order',
+    moreInfo: 'BUTTONS.sizeFilterMoreInfo',
+    title: 'BUTTONS.sizeFilterHint',
     toggled: false
   },
   'exclude': {
@@ -453,6 +464,12 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
     title: 'BUTTONS.showDeleteButton',
     toggled: false
   },
+  'dangerousDelete': {
+    description: 'BUTTONS.dangerousDeleteDescription',
+    hidden: true,
+    title: 'BUTTONS.dangerousDelete',
+    toggled: false
+  },
   'showDetails': {
     description: 'BUTTONS.showDetailsDescription',
     hidden: false,
@@ -585,6 +602,13 @@ export const SettingsButtons: { [s: string]: SettingsButton } = {
     description: 'BUTTONS.sortOptionModifiedDescription',
     hidden: false,
     moreInfo: 'BUTTONS.sortOptionModifiedMoreInfo',
+    title: '',
+    toggled: false
+  },
+  'sortOptionCreated': {
+    description: 'BUTTONS.sortOptionCreatedDescription',
+    hidden: false,
+    moreInfo: 'BUTTONS.sortOptionCreatedMoreInfo',
     title: '',
     toggled: false
   },

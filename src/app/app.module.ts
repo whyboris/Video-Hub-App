@@ -72,6 +72,7 @@ import { FolderArrowsPipe } from './pipes/folder-arrows.pipe';
 import { FolderViewPipe } from './pipes/folder-view.pipe';
 import { FuzzySearchPipe } from './pipes/fuzzy-search.pipe';
 import { LengthFilterPipe } from './pipes/length-filter.pipe';
+import { FileSizeFilterPipe } from './pipes/file-size-filter.pipe';
 import { LengthPipe } from './pipes/length.pipe';
 import { MagicSearchPipe } from './pipes/magic-search.pipe';
 import { ManualTagSortPipe } from './pipes/manual-tags-sort.pipe';
@@ -113,6 +114,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     HomeComponent,
     IconComponent,
     LengthFilterPipe,
+    FileSizeFilterPipe,
     LengthPipe,
     MagicSearchPipe,
     ManualTagSortPipe,
