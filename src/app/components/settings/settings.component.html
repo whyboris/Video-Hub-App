@@ -96,6 +96,19 @@
 
     </div>
 
+    <div class="player-settings">
+
+      <input
+        class="filter-general input-filter"
+        [(ngModel)]="appState.videoPlayerArgs"
+        *ngIf="appState.preferredVideoPlayer"
+        placeholder="{{ 'SETTINGS.playerArgs' | translate }}"
+        type="text"
+        style="width: 400px"
+      >
+
+    </div>
+
     <span class="setting-heading">{{ 'SETTINGS.changeAppZoom' | translate }}</span>
 
     <div class="zoom-buttons">
