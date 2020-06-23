@@ -214,6 +214,7 @@
     "changeLanguage": "Change language",
     "checkNewVersion": "check for new version",
     "chooseVideoPlayer": "change",
+    "playerArgs": "Player launch arguments",
     "clipsHeading": "Clips view",
     "closeRelatedTray": "Close related tray",
     "closeSettings": "Close settings",
