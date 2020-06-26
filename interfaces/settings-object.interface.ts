@@ -8,6 +8,7 @@ export interface SettingsObject {
   buttonSettings: any;
   shortcuts: Map<string, SettingsButtonKey | CustomShortcutAction>;
   vhaFileHistory: HistoryItem[];
+  windowSizeAndPosition: any; // TODO -- confirm if I need this
 }
 
 interface WinBounds {

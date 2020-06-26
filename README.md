@@ -38,8 +38,8 @@ Main dependencies in use:
 
 | Library          | Version | Date        | Comment                                                |
 | -------          | ------- | ----        | -------                                                |
-| Angular          |  v9.1.7 | May 2020    |                                                        |
-| Angular-CLI      |  v9.1.6 | May 2020    |                                                        |
+| Angular          | v10.0.0 | June 2020   |                                                        |
+| Angular-CLI      | v10.0.0 | June 2020   |                                                        |
 | Electron         |  v9.0.0 | May 2020    | (internally uses Node `v12.14.1` and Chromium 83)      |
 | Electron Builder | v22.6.1 | May 2020    |                                                        |
 
