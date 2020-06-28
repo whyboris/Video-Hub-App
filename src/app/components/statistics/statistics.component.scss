@@ -83,7 +83,7 @@
 
 .delete-input-folder {
   color: $pretty-red;
-  cursor: pointer;
+  cursor: not-allowed;
   font-weight: bold;
   position: absolute;
   right: calc(100% + 46px);
