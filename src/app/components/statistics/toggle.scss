@@ -2,8 +2,10 @@
 .switch {
   display: inline-block;
   height: 34px;
-  position: relative;
-  transform: translate(-150px, -25px);
+  left: -54px;
+  position: absolute;
+  top: -9px;
+  transform: scale(0.5);
   width: 60px;
 }
 

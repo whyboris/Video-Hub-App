@@ -194,10 +194,10 @@
       {{ 'SETTINGS.tabMain'      | translate }}
     </button>
     <button (click)="settingTabToShow = 3" [ngClass]="{ 'active-tab': settingTabToShow === 3 }">
-      {{ 'SETTINGS.tabShortcuts' | translate }}
+      {{ 'SETTINGS.statistics'   | translate }}
     </button>
     <button (click)="settingTabToShow = 4" [ngClass]="{ 'active-tab': settingTabToShow === 4 }">
-      {{ 'SETTINGS.statistics'   | translate }}
+      {{ 'SETTINGS.tabShortcuts' | translate }}
     </button>
   </div>
 
@@ -243,17 +243,9 @@
       [versionNumber]="versionNumber"
     ></app-settings>
 
-    <!-- ===========   KEYBOARD SHORTCUTS    =========== -->
+    <!-- HUB STATISTICS / Current Hub Settings -->
 
     <div *ngIf="settingTabToShow == 3" class="shortcut-menu">
-
-      <app-shortcuts [macVersion]="macVersion"></app-shortcuts>
-
-    </div>
-
-    <!-- HUB STATISTICS -->
-
-    <div *ngIf="settingTabToShow == 4" class="shortcut-menu">
 
       <app-statistics
         [finalArray]="finalArray"
@@ -264,6 +256,14 @@
         [screenshotSettings]="currentScreenshotSettings"
         [videoFolder]="appState.selectedSourceFolder"
       ></app-statistics>
+
+    </div>
+
+    <!-- KEYBOARD SHORTCUTS -->
+
+    <div *ngIf="settingTabToShow == 4" class="shortcut-menu">
+
+      <app-shortcuts [macVersion]="macVersion"></app-shortcuts>
 
     </div>
 

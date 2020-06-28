@@ -238,7 +238,7 @@
     "settings": "Settings",
     "showHideText": "show / hide icon in the settings bar",
     "sortingFilters": "Filters & sorting options",
-    "statistics": "Statistics",
+    "statistics": "Current hub",
     "systemDefault": "System default",
     "tabFilter": "Search settings",
     "tabMain": "Main settings",
@@ -318,14 +318,15 @@
     "videos": "videos"
   },
   "STATISTICS": {
+    "addFolderToHub": "Add folder to hub",
     "average": "average",
     "clipHeight": "Clip height",
     "doNotExtract": "do not extract",
-    "files": "files",
+    "editFolders": "edit",
     "fileSizes": "File sizes",
+    "files": "files",
     "folderNotLive": "video folder not connected",
     "general": "General",
-    "heading": "Statistics for the current hub:",
     "largest": "largest",
     "longest": "longest",
     "minutes": "minutes",
@@ -335,6 +336,7 @@
     "numOfThumbs": "Number of thumbs",
     "oneEvery": "one every",
     "perVideo": "per video",
+    "removeFolder": "Remove",
     "screenHeight": "Screenshot height",
     "seconds": "seconds",
     "settings": "Extraction settings",
@@ -343,7 +345,8 @@
     "snippetLength": "Clip snippet length",
     "total": "total",
     "videoFolder": "Videos located here:",
-    "videoLengths": "Video lengths"
+    "videoLengths": "Video lengths",
+    "watchFolder": "watch folder"
   },
   "SYSTEM": {
     "cancel": "Cancel",

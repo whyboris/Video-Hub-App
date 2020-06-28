@@ -8,6 +8,7 @@ import { ElectronService } from '../../providers/electron.service';
   selector: 'app-statistics',
   templateUrl: './statistics.component.html',
   styleUrls: [
+    '../wizard-button.scss',
     './statistics.component.scss',
     './toggle.scss'
   ]
@@ -33,6 +34,8 @@ export class StatisticsComponent implements OnInit {
   smallest: number = Infinity;
   totalSize: number = 0;
   avgSize: number;
+
+  removeFoldersMode: boolean = false;
 
   objectKeys = Object.keys; // to use in template
 
@@ -74,6 +77,8 @@ export class StatisticsComponent implements OnInit {
       if (!pathAlreadyExists) {
         this.inputFolders[this.pickNextIndex(this.inputFolders)] = { path: filePath, watch: false };
       }
+
+      this.cd.detectChanges();
 
     });
   }

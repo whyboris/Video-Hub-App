@@ -9,7 +9,7 @@ import { sendCurrentProgress, insertTemporaryFieldsSingle, hasAllThumbs, hashFil
 import * as path from 'path';
 
 const async = require('async');
-const thumbQueue = async.queue(nextExtaction, 1);
+const thumbQueue = async.queue(nextExtraction, 1);
 
 // ========================================================
 // WARNING - state variable hanging around!
@@ -25,7 +25,7 @@ export function queueThumbExtraction(element: ImageElement) {
   thumbQueue.push(element);
 }
 
-function nextExtaction(element: ImageElement, callback) {
+function nextExtraction(element: ImageElement, callback) {
   const screenshotOutputFolder: string = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName);
 
   sendCurrentProgress(thumbsDone, thumbsDone + thumbQueue.length() + 1, 'importingScreenshots');      // check whether sending data off by 1
