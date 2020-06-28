@@ -1,7 +1,7 @@
 {
-  "name": "video-hub-app-2",
+  "name": "video-hub-app-3",
   "version": "3.0.0",
-  "description": "Video Hub App 2 - browse, search, preview your videos",
+  "description": "Video Hub App 3 - browse, search, preview your videos",
   "homepage": "http://www.videohubapp.com",
   "repository": {
     "type": "git",
@@ -23,24 +23,18 @@
   "main": "main.js",
   "license": "MIT",
   "scripts": {
-    "postinstall": "npm run postinstall:electron && electron-builder install-app-deps",
-    "postinstall:web": "node postinstall-web",
-    "postinstall:electron": "node postinstall",
+    "postinstall": "electron-builder install-app-deps",
     "ng": "ng",
-    "start": "npm run postinstall:electron && npm-run-all -p ng:serve electron:serve",
-    "build": "npm run postinstall:electron && npm run electron:serve-tsc && ng build",
+    "start": "npm-run-all -p electron:serve ng:serve",
+    "build": "npm run electron:serve-tsc && ng build --base-href ./",
     "build:dev": "npm run build -- -c dev",
     "build:prod": "npm run build -- -c production",
     "ng:serve": "ng serve",
-    "ng:serve:web": "npm run postinstall:web && ng serve -o",
+    "ng:serve:web": "ng serve -c web -o",
     "electron:serve-tsc": "tsc -p tsconfig-serve.json",
-    "electron:serve": "wait-on http-get://localhost:4200/ && npm run electron:serve-tsc && electron . --serve",
-    "electron:local": "npm run build:prod && electron .",
-    "electron:linux": "npm run build:prod && electron-builder build --linux",
-    "electron:windows": "npm run build:prod && electron-builder build --windows",
-    "electron:mac": "npm run build:prod && electron-builder build --mac",
-    "lint:scss": "stylelint \"./src/**/*.scss\"",
-    "lint:scss:fix": "stylelint \"./src/**/*.scss\" --fix"
+    "electron:serve": "wait-on tcp:4200 && npm run electron:serve-tsc && npx electron . --serve",
+    "electron:local": "npm run build:prod && npx electron .",
+    "electron:build": "npm run build:prod && electron-builder build"
   },
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "1.0.20",
