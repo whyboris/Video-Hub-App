@@ -34,6 +34,12 @@ See [issues](https://github.com/whyboris/Video-Hub-App/issues) for what is in pr
 
 ## Development
 
+How to start:
+
+- `npm install` to install
+- `npm start` to develop
+- `npm electron` to build
+
 Main dependencies in use:
 
 | Library          | Version | Date        | Comment                                           |
