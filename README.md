@@ -36,12 +36,12 @@ See [issues](https://github.com/whyboris/Video-Hub-App/issues) for what is in pr
 
 Main dependencies in use:
 
-| Library          | Version | Date        | Comment                                                |
-| -------          | ------- | ----        | -------                                                |
-| Angular          | v10.0.0 | June 2020   |                                                        |
-| Angular-CLI      | v10.0.0 | June 2020   |                                                        |
-| Electron         |  v9.0.0 | May 2020    | (internally uses Node `v12.14.1` and Chromium 83)      |
-| Electron Builder | v22.6.1 | May 2020    |                                                        |
+| Library          | Version | Date        | Comment                                           |
+| ---------------- | ------- | ----------- | ------------------------------------------------- |
+| Angular          | v10.0.0 | June 2020   |                                                   |
+| Angular-CLI      | v10.0.0 | June 2020   |                                                   |
+| Electron         |  v9.0.0 | June 2020   | (internally uses Node `v12.14.1` and Chromium 83) |
+| Electron Builder | v22.7.0 | June 2020   |                                                   |
 
 - **Node**: I recommend to use the same version as _Electron_ uses internally, but version 10 or above should work.
 - **Angular CLI**: not required but may be useful: [Angular CLI](https://cli.angular.io).
@@ -62,5 +62,6 @@ This software would not be possible without the tremendous work by other people:
  - [chokidar](https://github.com/paulmillr/chokidar)
  - [trash](https://github.com/sindresorhus/trash)
  - [Fuse.js](https://github.com/krisk/Fuse)
+ - [electron-window-state](https://github.com/mawie81/electron-window-state)
 
 Since becoming open source, this software was made better with the awesome contributions by [cal2195](https://github.com/cal2195)

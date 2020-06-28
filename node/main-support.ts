@@ -754,7 +754,9 @@ export function upgradeToVersion3(finalObject: FinalObject): void {
  * @param deepScan - whether to extract files or compare hashes (TODO - rename param!)
  */
 export function startWatchingDirs(inputDirs: InputSources, currentImages: ImageElement[], deepScan: boolean): void {
+  console.log('-----------------------------------');
   console.log('about to start watching for files ?');
+  console.log(currentImages.length);
 
   resetWatchers(currentImages);
 
@@ -762,7 +764,7 @@ export function startWatchingDirs(inputDirs: InputSources, currentImages: ImageE
     console.log(key, ' : ', inputDirs[key].path);
     // if (deepScan || inputDirs[key].watch) {
       console.log('WATCHING!');
-      startFileSystemWatching(inputDirs[key].path, parseInt(key), deepScan);
+      startFileSystemWatching(inputDirs[key].path, parseInt(key, 10), deepScan);
     // }
   });
 }
