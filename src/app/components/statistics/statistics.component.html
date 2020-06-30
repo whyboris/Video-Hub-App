@@ -25,7 +25,11 @@
         {{ 'STATISTICS.watchFolder' | translate }}
       </span>
       <label class="switch">
-        <input type="checkbox" [(ngModel)]="item.value.watch">
+        <input
+          type="checkbox"
+          [(ngModel)]="item.value.watch"
+          (change)="folderWatchStatusChange(item.key, item.value.watch)"
+        >
         <span class="slider round"></span>
       </label>
     </div>
@@ -52,7 +56,7 @@
 
     <table class="stats-table">
       <tr>
-        <td colSpan=2 class="spanBoth">{{ 'STATISTICS.general' | translate }}</td>
+        <td colSpan=2 class="span-both">{{ 'STATISTICS.general' | translate }}</td>
       </tr>
 
       <tr>
@@ -66,7 +70,7 @@
       </tr>
 
       <tr>
-        <td colSpan=2 class="spanBoth" style="padding-top: 68px;">
+        <td colSpan=2 class="span-both" style="padding-top: 68px;">
           {{ 'STATISTICS.settings' | translate }}
         </td>
       </tr>
@@ -81,7 +85,7 @@
         <td class="rightCol">
           {{ screenshotSettings.fixed ? ''                                  : ('STATISTICS.oneEvery' | translate) }}
           {{ screenshotSettings.n }}
-          {{ screenshotSettings.fixed ? ('STATISTICS.perVideo' | translate) : ('STATISTICS.minutes' | translate) }}
+          {{ screenshotSettings.fixed ? ('STATISTICS.perVideo' | translate) : ('STATISTICS.minutes'  | translate) }}
         </td>
       </tr>
 
@@ -113,7 +117,7 @@
 
     <table class="stats-table">
       <tr>
-        <td colSpan=2 class="spanBoth">{{ 'STATISTICS.videoLengths' | translate }}</td>
+        <td colSpan=2 class="span-both">{{ 'STATISTICS.videoLengths' | translate }}</td>
       </tr>
 
       <tr>
@@ -122,22 +126,22 @@
       </tr>
 
       <tr>
-        <td>{{ 'STATISTICS.longest' | translate }}</td>
+        <td>{{ 'STATISTICS.longest'  | translate }}</td>
         <td class="rightCol">{{ longest | lengthPipe : 'folder' }}</td>
       </tr>
 
       <tr>
-        <td>{{ 'STATISTICS.total' | translate : true }}</td>
+        <td>{{ 'STATISTICS.total'    | translate }}</td>
         <td class="rightCol">{{ totalLength | lengthPipe : 'folder' }}</td>
       </tr>
 
       <tr>
-        <td>{{ 'STATISTICS.average' | translate }}</td>
+        <td>{{ 'STATISTICS.average'  | translate }}</td>
         <td class="rightCol">{{ avgLength | lengthPipe : 'folder' }}</td>
       </tr>
 
       <tr>
-        <td colSpan=2 class="spanBoth">{{ 'STATISTICS.fileSizes' | translate }}</td>
+        <td colSpan=2 class="span-both">{{ 'STATISTICS.fileSizes' | translate }}</td>
       </tr>
 
       <tr>
@@ -151,7 +155,7 @@
       </tr>
 
       <tr>
-        <td>{{ 'STATISTICS.total' | translate }}</td>
+        <td>{{ 'STATISTICS.total'   | translate }}</td>
         <td class="rightCol">{{ totalSize | fileSizePipe : true }}</td>
       </tr>
 

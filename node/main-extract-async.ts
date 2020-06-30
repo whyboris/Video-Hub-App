@@ -217,14 +217,33 @@ export function resetWatchers(finalArray: ImageElement[]): void {
 
 /**
  * Close the old watcher
- * happens when opening a new hub (or some other reason)
+ * happens when opening a new hub (or user toggles the `watch` near folder)
  * @param inputSource
  */
-function closeWatcher(inputSource: number): void {
+export function closeWatcher(inputSource: number): void {
+  console.log('stop watching', inputSource);
   if (watcherMap.has(inputSource)) {
     console.log('closing ', inputSource);
     watcherMap.get(inputSource).close().then(() => {
       console.log(inputSource, ' closed!');
     });
   }
+}
+
+/**
+ * Start old watcher
+ * happens when user toggles the `watch` near folder
+ * @param inputSource
+ * @param path
+ */
+export function startWatcher(inputSource: number, path): void {
+  console.log('start watching !!!!', inputSource, path);
+
+  GLOBALS.selectedSourceFolders[inputSource] = {
+    path: path,
+    watch: true,
+  }
+
+  startFileSystemWatching(path, inputSource, true);
+
 }

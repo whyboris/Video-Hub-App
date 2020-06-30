@@ -13,6 +13,7 @@ import { ImageElement, FinalObject } from '../interfaces/final-object.interface'
 import { SettingsObject } from '../interfaces/settings-object.interface';
 import { createDotPlsFile, writeVhaFileToDisk } from './main-support';
 import { replaceThumbnailWithNewImage } from './main-extract';
+import { closeWatcher, startWatcher } from './main-extract-async';
 
 let preventSleepId: number;
 
@@ -215,6 +216,22 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
         event.sender.send('inputFolderChosen', inputDirPath);
       }
     }).catch(err => {});
+  });
+
+  /**
+   * Stop watching a particular folder
+   */
+  ipc.on('stop-watching-folder', (event, watchedFolderIndex: number) => {
+    console.log('stop watching:', watchedFolderIndex);
+    closeWatcher(watchedFolderIndex);
+  });
+
+  /**
+   * Stop watching a particular folder
+   */
+  ipc.on('start-watching-folder', (event, watchedFolderIndex: number, path: string) => {
+    console.log('start watching:', watchedFolderIndex, path);
+    startWatcher(watchedFolderIndex, path);
   });
 
   /**

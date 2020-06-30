@@ -96,10 +96,25 @@ export class StatisticsComponent implements OnInit {
   }
 
   /**
+   * Notify Node of watch status change
+   * toggled via checkbox input in template
+   */
+  folderWatchStatusChange(index: number, shouldWatch: boolean) {
+    console.log(index);
+    console.log(shouldWatch);
+    if (shouldWatch) {
+      console.log(this.inputFolders[index].path);
+      this.tellNodeStartWatching(index, this.inputFolders[index].path);
+    } else {
+      this.tellNodeStopWatching(index);
+    }
+  }
+
+  /**
    * Summon system modal to select folder
    */
   addAnotherFolder() {
-    this.electronService.ipcRenderer.send('choose-input', 'lol');
+    this.electronService.ipcRenderer.send('choose-input');
   }
 
   /**
@@ -108,9 +123,25 @@ export class StatisticsComponent implements OnInit {
    */
   deleteInputSource(itemSourceKey: number) {
     console.log(itemSourceKey);
-    console.log(this.inputFolders);
+    console.log(this.inputFolders[itemSourceKey]);
+    this.tellNodeStopWatching(itemSourceKey);
     delete this.inputFolders[itemSourceKey];
-    console.log(this.inputFolders);
+  }
+
+  /**
+   * Tell node to stop watching a particular folder
+   * @param itemSourceKey from InputSources
+   */
+  tellNodeStopWatching(itemSourceKey: number) {
+    this.electronService.ipcRenderer.send('stop-watching-folder', itemSourceKey);
+  }
+
+  /**
+   * Tell node to start watching a particular folder
+   * @param itemSourceKey from InputSources
+   */
+  tellNodeStartWatching(itemSourceKey: number, path: string) {
+    this.electronService.ipcRenderer.send('start-watching-folder', itemSourceKey, path);
   }
 
   trackByFn(index, item) {
