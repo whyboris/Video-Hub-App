@@ -1301,7 +1301,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } else if (uniqueKey === 'rescanDirectory') {
       this.rescanDirectory();
     } else if (uniqueKey === 'playPlaylist') {
-      this.electronService.ipcRenderer.send('please-create-playlist', this.pipeSideEffectService.galleryShowing);
+      this.electronService.ipcRenderer.send(
+        'please-create-playlist',
+        this.pipeSideEffectService.galleryShowing,
+        this.appState.selectedSourceFolder
+      );
     } else if (uniqueKey === 'showTagTray') {
       if (this.settingsButtons.showRelatedVideosTray.toggled) {
         this.settingsButtons.showRelatedVideosTray.toggled = false;
@@ -1798,8 +1802,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Deletes a file (moves to recycling bin / trash) or dangerously deletes (bypassing trash)
    */
   deleteThisFile(item: ImageElement): void {
+    const base: string = this.appState.selectedSourceFolder[item.inputSource].path;
     const dangerously: boolean = this.settingsButtons['dangerousDelete'].toggled;
-    this.electronService.ipcRenderer.send('delete-video-file', item, dangerously);
+    this.electronService.ipcRenderer.send('delete-video-file', base, item, dangerously);
   }
 
   /**

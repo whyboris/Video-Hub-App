@@ -223,7 +223,7 @@ export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: stri
  * @param playlist -- array of ImageElements
  * @param done     -- callback
  */
-export function createDotPlsFile(savePath: string, playlist: ImageElement[], done): void {
+export function createDotPlsFile(savePath: string, playlist: ImageElement[], sourceFolderMap: InputSources, done): void {
 
   const writeArray: string[] = [];
 
@@ -233,7 +233,7 @@ export function createDotPlsFile(savePath: string, playlist: ImageElement[], don
   for (let i = 0; i < playlist.length; i++) {
 
     const fullPath: string = path.join(
-      GLOBALS.selectedSourceFolders[0].path,
+      sourceFolderMap[i].path,
       playlist[i].partialPath,
       playlist[i].fileName
     );
