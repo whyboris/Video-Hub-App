@@ -68,14 +68,12 @@ let cachedFinalArray: ImageElement[] = []; // REMEMBER
 let cachedMetaExtracted: Map<string, number>; // full paths to videos we have metadata for in Angular
 let cachedHashes: Map<string, number>; // every hash we have in Angular
 
-let deepScan = false;
-
 let watcherMap: Map<number, FSWatcher> = new Map();
 // ========================================================
 
 export interface TempMetadataQueueObject {
-  deepScan: boolean;
   fullPath: string;
+  generateHashes: boolean;
   inputSource: number;
   name: string;
   partialPath: string;
@@ -113,7 +111,7 @@ export function metadataQueueRunner(file: TempMetadataQueueObject, callback) {
 
   let found = false;
 
-  if (!deepScan) {
+  if (!file.generateHashes) {
 
     for (let i = 0; i < cachedFinalArray.length; i++) {
       const element = cachedFinalArray[i];
@@ -157,15 +155,13 @@ export function metadataQueueRunner(file: TempMetadataQueueObject, callback) {
  * Create a new `chokidar` watcher for a directory
  * @param inputDir
  * @param inputSource -- the number corresponding to the `inputSource` in ImageElement -- must be set!
- * @param initalDeepScan
+ * @param extractHashes -- hash files instead of just path compare
  */
 export function startFileSystemWatching(
   inputDir: string,
   inputSource: number,
-  initalDeepScan: boolean
+  extractHashes: boolean
 ) {
-
-  deepScan = initalDeepScan; // Hash files instead of just path compare
 
   console.log('starting watcher ', inputSource);
 
@@ -194,7 +190,7 @@ export function startFileSystemWatching(
       console.log(fullPath);
 
       const newItem: TempMetadataQueueObject = {
-        deepScan: deepScan,
+        generateHashes: extractHashes,
         fullPath: fullPath,
         inputSource: inputSource,
         name: fileName,
@@ -204,12 +200,14 @@ export function startFileSystemWatching(
 
       metadataQueue.push(newItem);
     })
-    // .on('all', (event, filePath) => {
-    //   console.log('%s %s', event, filePath);
-    // /*})*/
+/*
+    .on('all', (event, filePath) => {
+      console.log(event, filePath);
+    })
+*/
     .on('ready', () => {
-      console.log('All files scanned. Watching for changes.');
-      deepScan = false;
+      console.log('All files scanned:', inputSource);
+      console.log('not doing anything else -- NOT watching for changes!?!!');
     });
 
     watcherMap.set(inputSource, watcher);

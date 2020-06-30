@@ -751,9 +751,9 @@ export function upgradeToVersion3(finalObject: FinalObject): void {
  * Start watching directories with `chokidar
  * @param inputDirs
  * @param currentImages
- * @param deepScan - whether to extract files or compare hashes (TODO - rename param!)
+ * @param extractHashes - whether to extract files or compare hashes (TODO - rename param!)
  */
-export function startWatchingDirs(inputDirs: InputSources, currentImages: ImageElement[], deepScan: boolean): void {
+export function startWatchingDirs(inputDirs: InputSources, currentImages: ImageElement[], extractHashes: boolean): void {
   console.log('-----------------------------------');
   console.log('about to start watching for files ?');
   console.log(currentImages.length);
@@ -762,9 +762,9 @@ export function startWatchingDirs(inputDirs: InputSources, currentImages: ImageE
 
   Object.keys(inputDirs).forEach((key: string) => {
     console.log(key, ' : ', inputDirs[key].path);
-    // if (deepScan || inputDirs[key].watch) {
+    // if (extractHashes || inputDirs[key].watch) {
       console.log('WATCHING!');
-      startFileSystemWatching(inputDirs[key].path, parseInt(key, 10), deepScan);
+      startFileSystemWatching(inputDirs[key].path, parseInt(key, 10), extractHashes);
     // }
   });
 }

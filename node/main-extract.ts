@@ -244,15 +244,15 @@ export function extractAll(
   done
 ): void {
 
-  const clipHeight: number =       screenshotSettings.clipHeight;        // -- number in px how tall each clip should be
-  const clipSnippets: number =     screenshotSettings.clipSnippets;      // -- number of clip snippets to extract; 0 == do not extract clip
+  const clipHeight:       number = screenshotSettings.clipHeight;        // -- number in px how tall each clip should be
+  const clipSnippets:     number = screenshotSettings.clipSnippets;      // -- number of clip snippets to extract; 0 == do not extract clip
   const screenshotHeight: number = screenshotSettings.height;            // -- number in px how tall each screenshot should be
-  const snippetLength: number =    screenshotSettings.clipSnippetLength; // -- length of each snippet in the clip
+  const snippetLength:    number = screenshotSettings.clipSnippetLength; // -- length of each snippet in the clip
 
     const pathToVideo: string = path.join(videoFolderPath, currentElement.partialPath, currentElement.fileName);
 
-    const duration: number = currentElement.duration;
-    const fileHash: string = currentElement.hash;
+    const duration:     number = currentElement.duration;
+    const fileHash:     string = currentElement.hash;
     const numOfScreens: number = currentElement.screens;
     const sourceHeight: number = currentElement.height;
 

@@ -122,7 +122,7 @@
     [folderPath]="appState.selectedOutputFolder"
     [hubName]="appState.hubName"
     [imgHeight]="previewHeight"
-    [selectedSourceFolder]="appState.selectedSourceFolder"
+    [selectedSourceFolder]="appState.selectedSourceFolder[sheetItemToDisplay.inputSource].path"
     [star]="sheetItemToDisplay.stars"
 
     [darkMode]="settingsButtons['darkMode'].toggled"
