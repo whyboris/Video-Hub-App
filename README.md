@@ -52,6 +52,8 @@ Main dependencies in use:
 - **Node**: I recommend to use the same version as _Electron_ uses internally, but version 10 or above should work.
 - **Angular CLI**: not required but may be useful: [Angular CLI](https://cli.angular.io).
 
+To help debug a production build of VHA you can use [Debugtron](https://github.com/bytedance/debugtron)
+
 ## Thank you
 
 This software would not be possible without the tremendous work by other people:

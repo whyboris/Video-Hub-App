@@ -3,13 +3,13 @@
 
 import { GLOBALS } from './main-globals';
 import { ImageElement } from '../interfaces/final-object.interface';
-import { extractThumbnails } from './main-extract';
+import { extractAll } from './main-extract';
 import { sendCurrentProgress, insertTemporaryFieldsSingle, hasAllThumbs, hashFileAsync, createElement } from './main-support';
 
 import * as path from 'path';
 
 const async = require('async');
-const thumbQueue = async.queue(nextExtraction, 1);
+const thumbQueue = async.queue(thumbQueueRunner, 1); // 1 is the number of threads
 
 // ========================================================
 // WARNING - state variable hanging around!
@@ -25,19 +25,25 @@ export function queueThumbExtraction(element: ImageElement) {
   thumbQueue.push(element);
 }
 
-function nextExtraction(element: ImageElement, callback) {
+/**
+ * Extraction queue runner
+ * Runs for every element in the `thumbQueue`
+ * @param element -- ImageElement to extract screenshots for
+ * @param done    -- callback to indicate the current extraction finished
+ */
+function thumbQueueRunner(element: ImageElement, done) {
   const screenshotOutputFolder: string = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName);
 
   sendCurrentProgress(thumbsDone, thumbsDone + thumbQueue.length() + 1, 'importingScreenshots');      // check whether sending data off by 1
   thumbsDone++;                                                       // TODO -- rethink the whole `sendCurrentProgress` system from scratch
 
-  extractThumbnails(
+  extractAll(
     element,
     GLOBALS.selectedSourceFolders[element.inputSource].path,
     screenshotOutputFolder,
     GLOBALS.screenshotSettings,
     true,
-    callback
+    done
   );
 }
 
@@ -53,9 +59,15 @@ import { FSWatcher } from 'chokidar'; // probably the correct type for chokidar.
 
 // ========================================================
 // WARNING - state variables hanging around!
-const metadataQueue = async.queue(checkForMetadata, 8);
+const metadataQueue = async.queue(metadataQueueRunner, 8); // 8 is the number of 'threads'
 
 let cachedFinalArray: ImageElement[] = []; // REMEMBER
+
+// Create maps where the value = 1 always.
+// It is faster to check if key exists than searching through an array.
+let cachedMetaExtracted: Map<string, number>; // full paths to videos we have metadata for in Angular
+let cachedHashes: Map<string, number>; // every hash we have in Angular
+
 let deepScan = false;
 
 let watcherMap: Map<number, FSWatcher> = new Map();
@@ -77,7 +89,7 @@ export interface TempMetadataQueueObject {
 export function sendNewVideoMetadata(imageElement: ImageElement) {
   imageElement = insertTemporaryFieldsSingle(imageElement);
 
-  GLOBALS.angularApp.sender.send('newVideoMeta', imageElement);
+  GLOBALS.angularApp.sender.send('new-video-meta', imageElement);
 
   imageElement.index = cachedFinalArray.length;
 
@@ -91,13 +103,14 @@ export function sendNewVideoMetadata(imageElement: ImageElement) {
 }
 
 /**
- * Check if metadata is available
+ * Checks if metadata is available
  * @param file
  * @param callback
  */
-export function checkForMetadata(file: TempMetadataQueueObject, callback) {
+export function metadataQueueRunner(file: TempMetadataQueueObject, callback) {
 
-  console.log('checking metadata for %s', file.fullPath);
+  console.log('checking metadata for', file.fullPath);
+
   let found = false;
 
   if (!deepScan) {
@@ -109,7 +122,7 @@ export function checkForMetadata(file: TempMetadataQueueObject, callback) {
         break;
       }
     }
-    console.log('found: %s', found);
+    console.log('found:', found);
 
     if (found) {
       return callback();
@@ -127,7 +140,7 @@ export function checkForMetadata(file: TempMetadataQueueObject, callback) {
           break;
         }
       }
-      console.log('found: %s', found);
+      console.log('found:', found);
 
       if (found) {
         return callback();
@@ -156,39 +169,43 @@ export function startFileSystemWatching(
 
   console.log('starting watcher ', inputSource);
 
-  // One-liner for current directory
-  const watcher: FSWatcher = chokidar.watch('**', {
-                                          ignored: '**/vha-*/**', // maybe ignore files that start with `._` ? WTF MAC!?
-                                          cwd: inputDir,
-                                          alwaysStat: true,
-                                          awaitWriteFinish: true
-                                        })
-    .on('add', (path, stat) => {
+  const watcherConfig = {
+    ignored: '**/vha-*/**', // maybe ignore files that start with `._` ? WTF MAC!?
+    cwd: inputDir,
+    alwaysStat: true,
+    awaitWriteFinish: true
+  }
 
-      const ext = path.substring(path.lastIndexOf('.') + 1);
-      if (path.indexOf('vha-') !== -1 || acceptableFiles.indexOf(ext) === -1) {
+  // One-liner for current directory
+  const watcher: FSWatcher = chokidar.watch('**', watcherConfig)
+    .on('add', (filePath: string, stat) => {
+
+      const ext = filePath.substring(filePath.lastIndexOf('.') + 1);
+      if (filePath.indexOf('vha-') !== -1 || acceptableFiles.indexOf(ext) === -1) {
         // console.log('ignoring %s', path);
         return;
       }
 
-      const subPath = ('/' + path.replace(/\\/g, '/')).replace('//', '/');
+      const subPath = ('/' + filePath.replace(/\\/g, '/')).replace('//', '/');
       const partialPath = subPath.substring(0, subPath.lastIndexOf('/'));
       const fileName = subPath.substring(subPath.lastIndexOf('/') + 1);
-      const fullPath = inputDir + partialPath + '/' + fileName;
+      const fullPath = path.join(inputDir, partialPath, fileName);
 
       console.log(fullPath);
 
-      metadataQueue.push({
+      const newItem: TempMetadataQueueObject = {
         deepScan: deepScan,
         fullPath: fullPath,
         inputSource: inputSource,
         name: fileName,
         partialPath: partialPath,
         stat: stat,
-      });
+      }
+
+      metadataQueue.push(newItem);
     })
-    // .on('all', (event, path) => {
-    //   console.log('%s %s', event, path);
+    // .on('all', (event, filePath) => {
+    //   console.log('%s %s', event, filePath);
     // /*})*/
     .on('ready', () => {
       console.log('All files scanned. Watching for changes.');
@@ -234,16 +251,16 @@ export function closeWatcher(inputSource: number): void {
  * Start old watcher
  * happens when user toggles the `watch` near folder
  * @param inputSource
- * @param path
+ * @param folderPath
  */
-export function startWatcher(inputSource: number, path): void {
-  console.log('start watching !!!!', inputSource, path);
+export function startWatcher(inputSource: number, folderPath): void {
+  console.log('start watching !!!!', inputSource, folderPath);
 
   GLOBALS.selectedSourceFolders[inputSource] = {
-    path: path,
+    path: folderPath,
     watch: true,
   }
 
-  startFileSystemWatching(path, inputSource, true);
+  startFileSystemWatching(folderPath, inputSource, true);
 
 }

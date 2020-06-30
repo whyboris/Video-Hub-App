@@ -639,7 +639,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     });
 
-    this.electronService.ipcRenderer.on('newVideoMeta', (event, element: ImageElement) => {
+    this.electronService.ipcRenderer.on('new-video-meta', (event, element: ImageElement) => {
       element.index = this.finalArray.length;
       this.finalArray.push(element);
       console.log(element);
