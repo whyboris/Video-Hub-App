@@ -212,7 +212,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
     }).then(result => {
       const inputDirPath: string = result.filePaths[0];
       if (inputDirPath) {
-        event.sender.send('inputFolderChosen', inputDirPath);
+        event.sender.send('input-folder-chosen', inputDirPath);
       }
     }).catch(err => {});
   });
@@ -243,7 +243,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
     }).then(result => {
       const outputDirPath: string = result.filePaths[0];
       if (outputDirPath) {
-        event.sender.send('outputFolderChosen', outputDirPath);
+        event.sender.send('output-folder-chosen', outputDirPath);
       }
     }).catch(err => {});
   });
@@ -284,7 +284,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
       }
     }
 
-    event.sender.send('renameFileResponse', index, success, renameTo, file, errMsg);
+    event.sender.send('rename-file-response', index, success, renameTo, file, errMsg);
   });
 
   /**

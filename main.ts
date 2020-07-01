@@ -140,7 +140,7 @@ function createWindow() {
   // Watch for computer powerMonitor
   // https://electronjs.org/docs/api/power-monitor
   electron.powerMonitor.on('shutdown', () => {
-    GLOBALS.angularApp.sender.send('pleaseShutDownASAP');
+    GLOBALS.angularApp.sender.send('please-shut-down-ASAP');
   });
 
   // Emitted when the window is closed.
@@ -211,7 +211,7 @@ if (codeRunningOnMac) {
  * @param mode
  */
 function tellElectronDarkModeChange(mode: string) {
-  GLOBALS.angularApp.sender.send('osDarkModeChange', mode);
+  GLOBALS.angularApp.sender.send('os-dark-mode-change', mode);
 }
 
 // =================================================================================================
@@ -238,7 +238,7 @@ function openThisDamnFile(pathToVhaFile: string) {
         detail: pathToVhaFile,
         buttons: ['OK']
       });
-      GLOBALS.angularApp.sender.send('pleaseOpenWizard');
+      GLOBALS.angularApp.sender.send('please-open-wizard');
 
     } else {
 
@@ -286,12 +286,12 @@ ipcMain.on('just-started', (event) => {
     if (err) {
       win.setBounds({ x: 0, y: 0, width: screenWidth, height: screenHeight });
       event.sender.send('set-language-based-off-system-locale', locale);
-      event.sender.send('pleaseOpenWizard', true); // firstRun = true!
+      event.sender.send('please-open-wizard', true); // firstRun = true!
     } else {
 
       const previouslySavedSettings: SettingsObject = JSON.parse(data);
 
-      event.sender.send('settingsReturning', previouslySavedSettings, locale);
+      event.sender.send('settings-returning', previouslySavedSettings, locale);
     }
   });
 });
@@ -309,7 +309,7 @@ ipcMain.on('start-the-import', (event, wizard: WizardOptions) => {
         '\n' + systemMessages.pleaseChangeName,
       buttons: ['OK']
     });
-    event.sender.send('pleaseFixHubName');
+    event.sender.send('please-fix-hub-name');
   } else {
 
     if (!fs.existsSync(path.join(outDir, 'vha-' + hubName))) { // create the folder `vha-hubName` inside the output directory

@@ -392,7 +392,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       //                    will need updating if enabled
       // if (this.webDemo) {
       //   const finalObject = DemoContent;
-      //   // should be identical to `finalObjectReturning`
+      //   // should be identical to `final-object-returning`
       //   this.appState.numOfFolders = finalObject.numOfFolders;
       //   this.appState.selectedOutputFolder = 'images';
       //   this.appState.selectedSourceFolder = finalObject.inputDir;
@@ -407,7 +407,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }, 100);
 
     // Returning Input
-    this.electronService.ipcRenderer.on('inputFolderChosen', (event, filePath) => {
+    this.electronService.ipcRenderer.on('input-folder-chosen', (event, filePath) => {
       this.wizard.selectedSourceFolder[0].path = filePath;
       this.wizard.selectedOutputFolder = filePath;
 
@@ -424,7 +424,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // Rename file response
     this.electronService.ipcRenderer.on(
-      'renameFileResponse', (
+      'rename-file-response', (
           event,
           index: number,
           success: boolean,
@@ -442,13 +442,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     // Returning Output
-    this.electronService.ipcRenderer.on('outputFolderChosen', (event, filePath) => {
+    this.electronService.ipcRenderer.on('output-folder-chosen', (event, filePath) => {
       this.wizard.selectedOutputFolder = filePath;
       this.cd.detectChanges();
     });
 
     // Happens if a file with the same hub name already exists in the directory
-    this.electronService.ipcRenderer.on('pleaseFixHubName', (event) => {
+    this.electronService.ipcRenderer.on('please-fix-hub-name', (event) => {
       this.importStage = 'done';
       this.cd.detectChanges();
     });
@@ -477,7 +477,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     // Happens on a Mac when the OS Dark Mode is enabled/disabled
-    this.electronService.ipcRenderer.on('osDarkModeChange', (event, desiredMode: string) => {
+    this.electronService.ipcRenderer.on('os-dark-mode-change', (event, desiredMode: string) => {
 
       const darkModeOn: boolean = this.settingsButtons['darkMode'].toggled;
 
@@ -535,7 +535,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     // Final object returns
-    this.electronService.ipcRenderer.on('finalObjectReturning', (
+    this.electronService.ipcRenderer.on('final-object-returning', (
       event,
       finalObject: FinalObject,
       pathToFile: string,
@@ -589,7 +589,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     // Returning settings
-    this.electronService.ipcRenderer.on('settingsReturning', (
+    this.electronService.ipcRenderer.on('settings-returning', (
       event,
       settingsObject: SettingsObject,
       locale: string
@@ -611,7 +611,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     });
 
-    this.electronService.ipcRenderer.on('pleaseOpenWizard', (event, firstRun) => {
+    this.electronService.ipcRenderer.on('please-open-wizard', (event, firstRun) => {
       // Correlated with the first time ever starting the app !!!
       // Can happen when no settings present
       // Can happen when trying to open a .vha2 file that no longer exists
@@ -623,7 +623,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     // This happens when the computer is about to SHUT DOWN
-    this.electronService.ipcRenderer.on('pleaseShutDownASAP', (event) => {
+    this.electronService.ipcRenderer.on('please-shut-down-ASAP', (event) => {
       this.initiateClose();
     });
 
@@ -728,7 +728,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   /**
    * Send initial `hello` message
-   * triggers function that grabs settings and sends them back with `settingsReturning`
+   * triggers function that grabs settings and sends them back with `settings-returning`
    */
   public justStarted(): void {
     this.electronService.ipcRenderer.send('just-started');
@@ -1758,7 +1758,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   openContainingFolderNow(): void {
     this.fullPathToCurrentFile = path.join(
-      this.appState.selectedSourceFolder[0].path, // TODO -- fix method to allow for any of the source folders!
+      this.appState.selectedSourceFolder[this.currentRightClickedItem.inputSource].path,
       this.currentRightClickedItem.partialPath,
       this.currentRightClickedItem.fileName
     );

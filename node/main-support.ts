@@ -722,7 +722,7 @@ export function sendFinalObjectToAngular(finalObject: FinalObject, globals: VhaG
   finalObject.images = insertTemporaryFields(finalObject.images);
 
   globals.angularApp.sender.send(
-    'finalObjectReturning',
+    'final-object-returning',
     finalObject,
     globals.currentlyOpenVhaFile,
     getHtmlPath(globals.selectedOutputFolder)
