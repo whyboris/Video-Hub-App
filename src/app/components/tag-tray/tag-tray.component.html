@@ -47,6 +47,12 @@
       <span class="manual-tag-tray-label" style="line-height: 24px">
         {{ 'TAGS.clickTagToAdd' | translate }}
       </span>
+      <button
+        class="wizard-button wizard-button-small"
+        (click)="selectAll.emit()"
+      >
+        {{ 'TAGS.selectAllButton' | translate }}
+      </button>
     </div>
   </ng-template>
 
