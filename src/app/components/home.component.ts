@@ -2296,7 +2296,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
         element.selected = false;
       });
     }
-    this.batchTaggingMode = !this.batchTaggingMode
+    this.batchTaggingMode = !this.batchTaggingMode;
+  }
+
+  /**
+   * Select all visible videos for batch tagging
+   */
+  selectAllVisible(): void {
+    this.pipeSideEffectService.selectAll();
   }
 
   /**
