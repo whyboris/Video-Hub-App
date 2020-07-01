@@ -57,6 +57,10 @@ export interface ImageElement {
   selected?: boolean;            // for batch-tagging of videos
 }
 
+export interface ImageElementPlus extends ImageElement {
+  fullPath: string;              // the full path to video file -- used only in node for extracting meta & thumbnails
+}
+
 // Use this to create a new ImageElement if needed
 export function NewImageElement(): ImageElement {
   return {

@@ -2,7 +2,7 @@
 // Was originally added to `main-extract.ts` but was moved here for clarity
 
 import { GLOBALS } from './main-globals';
-import { ImageElement } from '../interfaces/final-object.interface';
+import { ImageElement, ImageElementPlus } from '../interfaces/final-object.interface';
 import { extractAll } from './main-extract';
 import { sendCurrentProgress, insertTemporaryFieldsSingle, hasAllThumbs, hashFileAsync, createElement } from './main-support';
 
@@ -61,12 +61,10 @@ import { FSWatcher } from 'chokidar'; // probably the correct type for chokidar.
 // WARNING - state variables hanging around!
 const metadataQueue = async.queue(metadataQueueRunner, 8); // 8 is the number of 'threads'
 
-let cachedFinalArray: ImageElement[] = []; // REMEMBER
-
 // Create maps where the value = 1 always.
 // It is faster to check if key exists than searching through an array.
-let cachedMetaExtracted: Map<string, number>; // full paths to videos we have metadata for in Angular
-let cachedHashes: Map<string, number>; // every hash we have in Angular
+let cachedMetaExtracted: Map<string, number> = new Map(); // full paths to videos we have metadata for in Angular
+let cachedHashes: Map<string, number> = new Map(); // every hash we have in Angular
 
 let watcherMap: Map<number, FSWatcher> = new Map();
 // ========================================================
@@ -84,15 +82,18 @@ export interface TempMetadataQueueObject {
  * Send element back to Angular; if any screenshots missing, queue it for extraction
  * @param imageElement
  */
-export function sendNewVideoMetadata(imageElement: ImageElement) {
-  imageElement = insertTemporaryFieldsSingle(imageElement);
+export function sendNewVideoMetadata(imageElement: ImageElementPlus) {
 
-  GLOBALS.angularApp.sender.send('new-video-meta', imageElement);
+  cachedMetaExtracted.set(imageElement.fullPath, 1);
+  cachedHashes.set(imageElement.hash, 1);
 
-  imageElement.index = cachedFinalArray.length;
+  delete imageElement.fullPath;
 
-  cachedFinalArray.push(imageElement);
+  const elementForAngular = insertTemporaryFieldsSingle(imageElement);
+  GLOBALS.angularApp.sender.send('new-video-meta', elementForAngular);
 
+
+  // PROBABLY BETTER DONE ELSEWHERE !!!!
   const screenshotOutputFolder: string = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName);
 
   if (!hasAllThumbs(imageElement.hash, screenshotOutputFolder, GLOBALS.screenshotSettings.clipSnippets > 0 )) {
@@ -107,47 +108,27 @@ export function sendNewVideoMetadata(imageElement: ImageElement) {
  */
 export function metadataQueueRunner(file: TempMetadataQueueObject, callback) {
 
-  console.log('checking metadata for', file.fullPath);
-
-  let found = false;
+  console.log('metadata check:', file.fullPath);
 
   if (!file.generateHashes) {
 
-    for (let i = 0; i < cachedFinalArray.length; i++) {
-      const element = cachedFinalArray[i];
-      if (element.partialPath === file.partialPath && element.fileName === file.name) { // consider comparing full path in case source folders overlap
-        found = true;
-        break;
-      }
-    }
-    console.log('found:', found);
-
-    if (found) {
+    if (cachedMetaExtracted.has(file.fullPath)) {
       return callback();
     }
-
+    console.log('not found, creating:');
     createElement(file, '', callback);
 
   } else {
 
     hashFileAsync(file.fullPath).then((hash) => {
 
-      for (let i = 0; i < cachedFinalArray.length; i++) {
-        if (cachedFinalArray[i].hash === hash) {
-          found = true;
-          break;
-        }
-      }
-      console.log('found:', found);
-
-      if (found) {
+      if (cachedHashes.has(hash)) {
         return callback();
       }
-
+      console.log('not found, creating:');
       createElement(file, hash, callback);
 
     });
-
   }
 }
 
@@ -178,7 +159,7 @@ export function startFileSystemWatching(
 
       const ext = filePath.substring(filePath.lastIndexOf('.') + 1);
       if (filePath.indexOf('vha-') !== -1 || acceptableFiles.indexOf(ext) === -1) {
-        // console.log('ignoring %s', path);
+        // console.log('ignoring', path);
         return;
       }
 
@@ -215,8 +196,8 @@ export function startFileSystemWatching(
 }
 
 /**
- * Reset the cachedFinalArray
- * close out all the wathers
+ * Close out all the wathers
+ * reset the cachedHashes & cachedMetadataExtracted
  * @param finalArray
  */
 export function resetWatchers(finalArray: ImageElement[]): void {
@@ -226,7 +207,20 @@ export function resetWatchers(finalArray: ImageElement[]): void {
     closeWatcher(key);
   });
 
-  cachedFinalArray = finalArray;
+  cachedHashes = new Map();
+  cachedMetaExtracted = new Map();
+
+  finalArray.forEach((element: ImageElement) => {
+    const fullPath: string = path.join(
+      GLOBALS.selectedSourceFolders[element.inputSource].path,
+      element.partialPath,
+      element.fileName
+    );
+    console.log(fullPath);
+
+    cachedHashes.set(element.hash, 1);
+    cachedMetaExtracted.set(fullPath, 1);
+  });
 }
 
 

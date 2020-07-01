@@ -16,7 +16,7 @@ const fs = require('fs');
 const hasher = require('crypto').createHash;
 import { Stats } from 'fs';
 
-import { FinalObject, ImageElement, NewImageElement, ScreenshotSettings, InputSources, ResolutionString } from '../interfaces/final-object.interface';
+import { FinalObject, ImageElement, NewImageElement, ScreenshotSettings, InputSources, ResolutionString, ImageElementPlus } from '../interfaces/final-object.interface';
 import { acceptableFiles } from './main-filenames';
 import { startFileSystemWatching, TempMetadataQueueObject, sendNewVideoMetadata, resetWatchers } from './main-extract-async';
 
@@ -684,11 +684,12 @@ export function createElement(file: TempMetadataQueueObject, hash, callback) {
   const newElement = NewImageElement();
   newElement.hash = hash;
   extractMetadataAsync(file.fullPath, GLOBALS.screenshotSettings, newElement, file.stat)
-    .then((imageElement) => {
+    .then((imageElement: ImageElementPlus) => {
       imageElement.cleanName = cleanUpFileName(file.name);
       imageElement.fileName = file.name;
       imageElement.partialPath = file.partialPath;
       imageElement.inputSource = file.inputSource;
+      imageElement.fullPath = file.fullPath; // insert this converting `ImageElement` to `ImageElementPlus`
       sendNewVideoMetadata(imageElement);
       callback();
     }, () => {

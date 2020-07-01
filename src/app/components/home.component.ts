@@ -643,6 +643,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       element.index = this.finalArray.length;
       this.finalArray.push(element);
       console.log(element);
+      // TODO -- see if it's needed -- we don't want 10,000-large array copied 100 times per minute on import
       this.finalArray = this.finalArray.slice();
       this.finalArrayNeedsSaving = true;
       this.cd.detectChanges();
