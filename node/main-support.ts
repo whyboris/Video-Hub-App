@@ -745,6 +745,9 @@ export function upgradeToVersion3(finalObject: FinalObject): void {
       }
     };
     finalObject.version = 3;
+    finalObject.images.forEach((element: ImageElement) => {
+      element.inputSource = 0
+    });
   }
 }
 
