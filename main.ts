@@ -254,7 +254,7 @@ function openThisDamnFile(pathToVhaFile: string) {
 
       sendFinalObjectToAngular(finalObject, GLOBALS);
 
-      startWatchingDirs(finalObject.inputDirs, finalObject.images, false); // starts `chokidar`
+      startWatchingDirs(finalObject.inputDirs, finalObject.images); // starts `chokidar`
     }
   });
 }
@@ -363,7 +363,7 @@ function writeVhaFileAndStartExtraction(): void {
 
     sendFinalObjectToAngular(finalObject, GLOBALS);
 
-    startWatchingDirs(finalObject.inputDirs, [], true);
+    startWatchingDirs(finalObject.inputDirs, []);
   });
 }
 
