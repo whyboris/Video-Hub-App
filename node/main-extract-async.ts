@@ -227,7 +227,6 @@ export function resetWatchers(finalArray: ImageElement[]): void {
   });
 }
 
-
 /**
  * Close the old watcher
  * happens when opening a new hub (or user toggles the `watch` near folder)
@@ -239,6 +238,7 @@ export function closeWatcher(inputSource: number): void {
     console.log('closing ', inputSource);
     watcherMap.get(inputSource).close().then(() => {
       console.log(inputSource, ' closed!');
+      // do nothing
     });
   }
 }

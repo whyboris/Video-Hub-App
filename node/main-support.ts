@@ -734,8 +734,12 @@ export function startWatchingDirs(inputDirs: InputSources, currentImages: ImageE
 
   Object.keys(inputDirs).forEach((key: string) => {
     console.log(key, 'watch = ', inputDirs[key].watch, ' : ', inputDirs[key].path);
-    if (inputDirs[key].watch) {
-      console.log('PERSISTENT WATCHING !!!');
+    if (inputDirs[key].watch || currentImages.length === 0) {
+      if (currentImages.length === 0) {
+        'FIRST SCAN'
+      } else {
+        console.log('PERSISTENT WATCHING !!!');
+      }
       startFileSystemWatching(inputDirs[key].path, parseInt(key, 10), inputDirs[key].watch);
     }
   });

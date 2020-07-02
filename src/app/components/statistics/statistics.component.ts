@@ -77,7 +77,9 @@ export class StatisticsComponent implements OnInit {
       });
 
       if (!pathAlreadyExists) {
-        this.inputFolders[this.pickNextIndex(this.inputFolders)] = { path: filePath, watch: false };
+        const nextIndex: number = this.pickNextIndex(this.inputFolders);
+        this.inputFolders[nextIndex] = { path: filePath, watch: false };
+        this.electronService.ipcRenderer.send('start-watching-folder', nextIndex, filePath);
       }
 
       this.cd.detectChanges();
