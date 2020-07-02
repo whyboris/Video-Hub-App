@@ -63,15 +63,13 @@ const metadataQueue = async.queue(metadataQueueRunner, 8); // 8 is the number of
 
 // Create maps where the value = 1 always.
 // It is faster to check if key exists than searching through an array.
-let cachedMetaExtracted: Map<string, number> = new Map(); // full paths to videos we have metadata for in Angular
-let cachedHashes: Map<string, number> = new Map(); // every hash we have in Angular
+let alreadyInAngular: Map<string, number> = new Map(); // full paths to videos we have metadata for in Angular
 
 let watcherMap: Map<number, FSWatcher> = new Map();
 // ========================================================
 
 export interface TempMetadataQueueObject {
   fullPath: string;
-  generateHashes: boolean;
   inputSource: number;
   name: string;
   partialPath: string;
@@ -84,8 +82,7 @@ export interface TempMetadataQueueObject {
  */
 export function sendNewVideoMetadata(imageElement: ImageElementPlus) {
 
-  cachedMetaExtracted.set(imageElement.fullPath, 1);
-  cachedHashes.set(imageElement.hash, 1);
+  alreadyInAngular.set(imageElement.fullPath, 1);
 
   delete imageElement.fullPath;
 
@@ -102,46 +99,30 @@ export function sendNewVideoMetadata(imageElement: ImageElementPlus) {
 }
 
 /**
- * Checks if metadata is available
- * @param file
+ * Create element if not already present
+ * @param fileInfo - various stat metadata about the file
  * @param callback
  */
-export function metadataQueueRunner(file: TempMetadataQueueObject, callback) {
+export function metadataQueueRunner(fileInfo: TempMetadataQueueObject, callback) {
 
-  console.log('metadata check:', file.fullPath);
+  console.log('metadata check:', fileInfo.fullPath);
 
-  if (!file.generateHashes) {
-
-    if (cachedMetaExtracted.has(file.fullPath)) {
-      return callback();
-    }
-    console.log('not found, creating:');
-    createElement(file, '', callback);
-
-  } else {
-
-    hashFileAsync(file.fullPath).then((hash) => {
-
-      if (cachedHashes.has(hash)) {
-        return callback();
-      }
-      console.log('not found, creating:');
-      createElement(file, hash, callback);
-
-    });
+  if (alreadyInAngular.has(fileInfo.fullPath)) {
+    return callback();
   }
+  console.log('not found, creating:');
+  createElement(fileInfo, '', callback);
+
 }
 
 /**
  * Create a new `chokidar` watcher for a directory
  * @param inputDir
  * @param inputSource -- the number corresponding to the `inputSource` in ImageElement -- must be set!
- * @param extractHashes -- hash files instead of just path compare
  */
 export function startFileSystemWatching(
   inputDir: string,
-  inputSource: number,
-  extractHashes: boolean
+  inputSource: number
 ) {
 
   console.log('starting watcher ', inputSource);
@@ -171,7 +152,6 @@ export function startFileSystemWatching(
       console.log(fullPath);
 
       const newItem: TempMetadataQueueObject = {
-        generateHashes: extractHashes,
         fullPath: fullPath,
         inputSource: inputSource,
         name: fileName,
@@ -197,7 +177,7 @@ export function startFileSystemWatching(
 
 /**
  * Close out all the wathers
- * reset the cachedHashes & cachedMetadataExtracted
+ * reset the alreadyInAngular
  * @param finalArray
  */
 export function resetWatchers(finalArray: ImageElement[]): void {
@@ -207,8 +187,7 @@ export function resetWatchers(finalArray: ImageElement[]): void {
     closeWatcher(key);
   });
 
-  cachedHashes = new Map();
-  cachedMetaExtracted = new Map();
+  alreadyInAngular = new Map();
 
   finalArray.forEach((element: ImageElement) => {
     const fullPath: string = path.join(
@@ -218,8 +197,7 @@ export function resetWatchers(finalArray: ImageElement[]): void {
     );
     console.log(fullPath);
 
-    cachedHashes.set(element.hash, 1);
-    cachedMetaExtracted.set(fullPath, 1);
+    alreadyInAngular.set(fullPath, 1);
   });
 }
 
@@ -253,6 +231,6 @@ export function startWatcher(inputSource: number, folderPath): void {
     watch: true,
   }
 
-  startFileSystemWatching(folderPath, inputSource, true);
+  startFileSystemWatching(folderPath, inputSource);
 
 }
