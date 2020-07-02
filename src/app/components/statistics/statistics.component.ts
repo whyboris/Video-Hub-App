@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 
 import { ImageElement, ScreenshotSettings, InputSources } from '../../../../interfaces/final-object.interface';
 
@@ -14,6 +14,8 @@ import { ElectronService } from '../../providers/electron.service';
   ]
 })
 export class StatisticsComponent implements OnInit {
+
+  @Output() finalArrayNeedsSaving = new EventEmitter<any>();
 
   @Input() finalArray: ImageElement[];
   @Input() hubName: string;
@@ -100,6 +102,7 @@ export class StatisticsComponent implements OnInit {
    * toggled via checkbox input in template
    */
   folderWatchStatusChange(index: number, shouldWatch: boolean) {
+    this.finalArrayNeedsSaving.emit(true);
     console.log(index);
     console.log(shouldWatch);
     if (shouldWatch) {

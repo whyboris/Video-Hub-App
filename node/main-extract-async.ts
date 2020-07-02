@@ -113,19 +113,22 @@ export function metadataQueueRunner(fileInfo: TempMetadataQueueObject, callback)
  * Create a new `chokidar` watcher for a directory
  * @param inputDir
  * @param inputSource -- the number corresponding to the `inputSource` in ImageElement -- must be set!
+ * @param persistent  -- whether to continue watching after the initial scan
  */
 export function startFileSystemWatching(
   inputDir: string,
-  inputSource: number
+  inputSource: number,
+  persistent: boolean
 ) {
 
   console.log('starting watcher ', inputSource);
 
   const watcherConfig = {
-    ignored: '**/vha-*/**', // maybe ignore files that start with `._` ? WTF MAC!?
-    cwd: inputDir,
     alwaysStat: true,
-    awaitWriteFinish: true
+    awaitWriteFinish: true,
+    cwd: inputDir,
+    ignored: '**/vha-*/**', // maybe ignore files that start with `._` ? WTF MAC!?
+    persistent: persistent,
   }
 
   // One-liner for current directory
@@ -161,14 +164,26 @@ export function startFileSystemWatching(
 
       metadataQueue.push(newItem);
     })
+    .on('unlink', (filePath: string) => {
+      console.log(' !!! FILE DELETED:', filePath);
+      console.log('TODO - UPDATE ANGULAR');
+    })
+    .on('unlinkDir', (folderPath: string) => {
+      console.log(' !!!!! DIRECTORY DELETED:', folderPath);
+      console.log('TODO - UPDATE ANGULAR');
+    })
 /*
     .on('all', (event, filePath) => {
       console.log(event, filePath);
     })
 */
     .on('ready', () => {
-      console.log('All files scanned:', inputSource);
-      console.log('not doing anything else -- NOT watching for changes!?!!');
+      console.log('Finished scanning', inputSource);
+      if (persistent) {
+        console.log('^^^^^^^^ - CONTINUING to watch this directory!');
+      } else {
+        console.log('^^^^^^^^ - stopping watching this directory');
+      }
     });
 
     watcherMap.set(inputSource, watcher);
@@ -231,6 +246,6 @@ export function startWatcher(inputSource: number, folderPath): void {
     watch: true,
   }
 
-  startFileSystemWatching(folderPath, inputSource);
+  startFileSystemWatching(folderPath, inputSource, true);
 
 }

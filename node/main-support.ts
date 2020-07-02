@@ -752,7 +752,7 @@ export function upgradeToVersion3(finalObject: FinalObject): void {
  * Start watching directories with `chokidar`
  * Only called when creating a new hub OR opening a hub
  * @param inputDirs
- * @param currentImages
+ * @param currentImages -- if creating a new VHA file, this will be [] empty (and `watch` = false)
  */
 export function startWatchingDirs(inputDirs: InputSources, currentImages: ImageElement[]): void {
   console.log('-----------------------------------');
@@ -762,10 +762,10 @@ export function startWatchingDirs(inputDirs: InputSources, currentImages: ImageE
   resetWatchers(currentImages);
 
   Object.keys(inputDirs).forEach((key: string) => {
-    console.log(key, ' : ', inputDirs[key].path);
-    // if (extractHashes || inputDirs[key].watch) {
-      console.log('WATCHING!');
-      startFileSystemWatching(inputDirs[key].path, parseInt(key, 10));
-    // }
+    console.log(key, 'watch = ', inputDirs[key].watch, ' : ', inputDirs[key].path);
+    if (inputDirs[key].watch) {
+      console.log('PERSISTENT WATCHING !!!');
+      startFileSystemWatching(inputDirs[key].path, parseInt(key, 10), inputDirs[key].watch);
+    }
   });
 }
