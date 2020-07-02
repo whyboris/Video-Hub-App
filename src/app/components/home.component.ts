@@ -410,7 +410,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.electronService.ipcRenderer.on('input-folder-chosen', (event, filePath) => {
       this.wizard.selectedSourceFolder[0].path = filePath;
       this.wizard.selectedOutputFolder = filePath;
+      this.cd.detectChanges();
+    });
 
+    // Returning Output
+    this.electronService.ipcRenderer.on('output-folder-chosen', (event, filePath) => {
+      this.wizard.selectedOutputFolder = filePath;
+      this.cd.detectChanges();
+    });
+
+    // Happens if a file with the same hub name already exists in the directory
+    this.electronService.ipcRenderer.on('please-fix-hub-name', (event) => {
+      this.importStage = 'done';
       this.cd.detectChanges();
     });
 
@@ -439,18 +450,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.replaceFileNameInFinalArray(renameTo, oldFileName, index);
         this.closeRename();
       }
-    });
-
-    // Returning Output
-    this.electronService.ipcRenderer.on('output-folder-chosen', (event, filePath) => {
-      this.wizard.selectedOutputFolder = filePath;
-      this.cd.detectChanges();
-    });
-
-    // Happens if a file with the same hub name already exists in the directory
-    this.electronService.ipcRenderer.on('please-fix-hub-name', (event) => {
-      this.importStage = 'done';
-      this.cd.detectChanges();
     });
 
     // happens when user replaced a thumbnail and process is done
