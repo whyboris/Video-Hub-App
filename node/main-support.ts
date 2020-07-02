@@ -529,53 +529,6 @@ function extractMetadataForThisONEFile(
   });
 }
 
-/**
- * Extracts information about a single file using `ffprobe`
- * Stores information into the ImageElement and returns it via callback
- * @param filePath              path to the file
- * @param screenshotSettings    ScreenshotSettings
- * @param imageElement          index in array to update
- * @param callback
- */
-export function extractMetadataAsync(
-  filePath: string,
-  screenshotSettings: ScreenshotSettings,
-  imageElement: ImageElement,
-  fileStat: Stats
-): Promise<ImageElement> {
-  return new Promise((resolve, reject) => {
-    const ffprobeCommand = '"' + ffprobePath + '" -of json -show_streams -show_format -select_streams V "' + filePath + '"';
-    exec(ffprobeCommand, (err, data, stderr) => {
-      if (err) {
-        reject(imageElement);
-      } else {
-        const metadata = JSON.parse(data);
-        const stream = getBestStream(metadata);
-        const fileDuration = getFileDuration(metadata);
-
-        const duration = Math.round(fileDuration) || 0;
-        const origWidth = stream.width || 0; // ffprobe does not detect it on some MKV streams
-        const origHeight = stream.height || 0;
-
-        imageElement.duration = duration;
-        imageElement.fileSize = fileStat.size;
-        imageElement.mtime = fileStat.mtimeMs;
-        imageElement.height = origHeight;
-        imageElement.width = origWidth;
-        imageElement.screens = computeNumberOfScreenshots(screenshotSettings, duration);
-
-        if (imageElement.hash === '') {
-          hashFileAsync(filePath).then((hash) => {
-            imageElement.hash = hash;
-            resolve(imageElement);
-          });
-        } else {
-          resolve(imageElement);
-        }
-      }
-    });
-  });
-}
 
 // ===========================================================================================
 // Other supporting methods
@@ -698,6 +651,54 @@ export function createElement(file: TempMetadataQueueObject, hash, callback) {
 }
 
 /**
+ * Extracts information about a single file using `ffprobe`
+ * Stores information into the ImageElement and returns it via callback
+ * @param filePath              path to the file
+ * @param screenshotSettings    ScreenshotSettings
+ * @param imageElement          index in array to update
+ * @param callback
+ */
+export function extractMetadataAsync(
+  filePath: string,
+  screenshotSettings: ScreenshotSettings,
+  imageElement: ImageElement,
+  fileStat: Stats
+): Promise<ImageElement> {
+  return new Promise((resolve, reject) => {
+    const ffprobeCommand = '"' + ffprobePath + '" -of json -show_streams -show_format -select_streams V "' + filePath + '"';
+    exec(ffprobeCommand, (err, data, stderr) => {
+      if (err) {
+        reject(imageElement);
+      } else {
+        const metadata = JSON.parse(data);
+        const stream = getBestStream(metadata);
+        const fileDuration = getFileDuration(metadata);
+
+        const duration = Math.round(fileDuration) || 0;
+        const origWidth = stream.width || 0; // ffprobe does not detect it on some MKV streams
+        const origHeight = stream.height || 0;
+
+        imageElement.duration = duration;
+        imageElement.fileSize = fileStat.size;
+        imageElement.mtime = fileStat.mtimeMs;
+        imageElement.height = origHeight;
+        imageElement.width = origWidth;
+        imageElement.screens = computeNumberOfScreenshots(screenshotSettings, duration);
+
+        if (imageElement.hash === '') {
+          hashFileAsync(filePath).then((hash) => {
+            imageElement.hash = hash;
+            resolve(imageElement);
+          });
+        } else {
+          resolve(imageElement);
+        }
+      }
+    });
+  });
+}
+
+/**
  * Sends progress to Angular App
  * @param current number
  * @param total number
@@ -749,12 +750,12 @@ export function upgradeToVersion3(finalObject: FinalObject): void {
 }
 
 /**
- * Start watching directories with `chokidar
+ * Start watching directories with `chokidar`
+ * Only called when creating a new hub OR opening a hub
  * @param inputDirs
  * @param currentImages
- * @param extractHashes - whether to extract files or compare hashes (TODO - rename param!)
  */
-export function startWatchingDirs(inputDirs: InputSources, currentImages: ImageElement[], extractHashes: boolean): void {
+export function startWatchingDirs(inputDirs: InputSources, currentImages: ImageElement[]): void {
   console.log('-----------------------------------');
   console.log('about to start watching for files ?');
   console.log(currentImages.length);
@@ -765,7 +766,7 @@ export function startWatchingDirs(inputDirs: InputSources, currentImages: ImageE
     console.log(key, ' : ', inputDirs[key].path);
     // if (extractHashes || inputDirs[key].watch) {
       console.log('WATCHING!');
-      startFileSystemWatching(inputDirs[key].path, parseInt(key, 10), extractHashes);
+      startFileSystemWatching(inputDirs[key].path, parseInt(key, 10));
     // }
   });
 }
