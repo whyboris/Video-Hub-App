@@ -70,7 +70,7 @@ export class RenameFileComponent implements OnInit {
     this.nodeRenamingFile = true;
     this.renameErrMsg = '';
 
-    const sourceFolder = this.selectedSourceFolder[this.currentRightClickedItem.inputSource].path;                       // TODO -- handle other source folders
+    const sourceFolder = this.selectedSourceFolder[this.currentRightClickedItem.inputSource].path;
     const relativeFilePath = this.currentRightClickedItem.partialPath;
     const originalFile = this.currentRightClickedItem.fileName;
     const newFileName = this.renamingWIP + '.' + this.renamingExtension;
