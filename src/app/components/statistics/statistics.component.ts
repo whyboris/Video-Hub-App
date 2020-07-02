@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 
 import { ImageElement, ScreenshotSettings, InputSources } from '../../../../interfaces/final-object.interface';
 
@@ -8,11 +8,14 @@ import { ElectronService } from '../../providers/electron.service';
   selector: 'app-statistics',
   templateUrl: './statistics.component.html',
   styleUrls: [
+    '../wizard-button.scss',
     './statistics.component.scss',
     './toggle.scss'
   ]
 })
 export class StatisticsComponent implements OnInit {
+
+  @Output() finalArrayNeedsSaving = new EventEmitter<any>();
 
   @Input() finalArray: ImageElement[];
   @Input() hubName: string;
@@ -33,6 +36,8 @@ export class StatisticsComponent implements OnInit {
   smallest: number = Infinity;
   totalSize: number = 0;
   avgSize: number;
+
+  removeFoldersMode: boolean = false;
 
   objectKeys = Object.keys; // to use in template
 
@@ -60,7 +65,7 @@ export class StatisticsComponent implements OnInit {
     this.avgLength = Math.round(this.totalLength / this.totalFiles);
     this.avgSize = Math.round(this.totalSize / this.totalFiles);
 
-    this.electronService.ipcRenderer.on('inputFolderChosen', (event, filePath) => {
+    this.electronService.ipcRenderer.on('input-folder-chosen', (event, filePath) => {
       console.log('chosen: ', filePath);
 
       let pathAlreadyExists = false;
@@ -74,6 +79,8 @@ export class StatisticsComponent implements OnInit {
       if (!pathAlreadyExists) {
         this.inputFolders[this.pickNextIndex(this.inputFolders)] = { path: filePath, watch: false };
       }
+
+      this.cd.detectChanges();
 
     });
   }
@@ -91,10 +98,26 @@ export class StatisticsComponent implements OnInit {
   }
 
   /**
+   * Notify Node of watch status change
+   * toggled via checkbox input in template
+   */
+  folderWatchStatusChange(index: number, shouldWatch: boolean) {
+    this.finalArrayNeedsSaving.emit(true);
+    console.log(index);
+    console.log(shouldWatch);
+    if (shouldWatch) {
+      console.log(this.inputFolders[index].path);
+      this.tellNodeStartWatching(index, this.inputFolders[index].path);
+    } else {
+      this.tellNodeStopWatching(index);
+    }
+  }
+
+  /**
    * Summon system modal to select folder
    */
   addAnotherFolder() {
-    this.electronService.ipcRenderer.send('choose-input', 'lol');
+    this.electronService.ipcRenderer.send('choose-input');
   }
 
   /**
@@ -103,9 +126,25 @@ export class StatisticsComponent implements OnInit {
    */
   deleteInputSource(itemSourceKey: number) {
     console.log(itemSourceKey);
-    console.log(this.inputFolders);
+    console.log(this.inputFolders[itemSourceKey]);
+    this.tellNodeStopWatching(itemSourceKey);
     delete this.inputFolders[itemSourceKey];
-    console.log(this.inputFolders);
+  }
+
+  /**
+   * Tell node to stop watching a particular folder
+   * @param itemSourceKey from InputSources
+   */
+  tellNodeStopWatching(itemSourceKey: number) {
+    this.electronService.ipcRenderer.send('stop-watching-folder', itemSourceKey);
+  }
+
+  /**
+   * Tell node to start watching a particular folder
+   * @param itemSourceKey from InputSources
+   */
+  tellNodeStartWatching(itemSourceKey: number, path: string) {
+    this.electronService.ipcRenderer.send('start-watching-folder', itemSourceKey, path);
   }
 
   trackByFn(index, item) {

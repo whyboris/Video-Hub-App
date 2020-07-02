@@ -65,7 +65,7 @@ export class MetaComponent implements OnInit {
 
     // Rename file response
     this.electronService.ipcRenderer.on(
-      'renameFileResponse', (
+      'rename-file-response', (
           event,
           index: number,
           success: boolean,

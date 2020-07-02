@@ -10,7 +10,7 @@ For abbreviations please choose a 2-letter abbreviation that is on both lists:
 - https://github.com/electron/electron/blob/master/docs/api/locales.md
 - https://cloud.google.com/translate/docs/languages
 
-After generating the `json` you may open a pull request or first integrate it into the app.
+After generating the `json` you may open a [pull request](https://github.com/whyboris/Video-Hub-App/pulls) or first integrate it into the app.
 
 ## Integrating the language into the app
 
@@ -24,34 +24,30 @@ Add the two-letter abbreviation to the _type_, e.g.
 export type SupportedLanguage = 'en' | 'ru' | 'fr';
 ```
 
-### `home.component.html`
+### `settings.component.html`
 
-Add the language to the dropdown in `home.component.html`, e.g.
+Add the language to the dropdown in `settings.component.html`, e.g.
 
 ```html
-  <select (change)="changeLanguage($event.target.value)" class="language-drop-down">
-    <option value="en" [selected]="appState.language == 'en'">English</option>
-    <option value="ru" [selected]="appState.language == 'ru'">Russian</option>
-    <option value="fr" [selected]="appState.language == 'fr'">French</option>
-  </select>
+<option value="en" [selected]="appState.language == 'en'">English</option>
+<option value="ru" [selected]="appState.language == 'ru'">Русский</option>
+<option value="fr" [selected]="appState.language == 'fr'">Française</option>
 ```
 
-### `home.component.ts`
+### `languages.ts`
 
-Import the file into `home.component.ts` with the other imports, e.g.
+Import the file into `languages.ts` with the other imports, e.g.
 
 ```ts
-const English = require('../../../i18n/en.json');
-const French = require('../../../i18n/fr.json');
-const Russian = require('../../../i18n/ru.json)';
+const English    = require('../../../i18n/en.json');
+const Russian    = require('../../../i18n/ru.json');
+const French     = require('../../../i18n/fr.json');
 ```
 
-Add the _case_ to the _switch_ in the `changeLanguage` method, e.g.
+Update the `languageLookup` method, e.g.
 
 ```ts
-  case 'ru':
-    this.translate.use('ru');
-    this.translate.setTranslation('ru', Russian);
-    this.appState.language = 'ru';
-    break;
+  'en': English,
+  'fr': French,
+  'ru': Russian,
 ```

@@ -1,6 +1,6 @@
 {
-  "productName": "Video Hub App 2",
-  "appId": "com.videohubapp.videohubapp2",
+  "productName": "Video Hub App 3",
+  "appId": "com.videohubapp.videohubapp3",
   "copyright": "Copyright © 2020 Boris Yakubchik",
   "directories": {
     "output": "release/"
@@ -55,7 +55,7 @@
   },
   "fileAssociations": {
     "ext": "vha2",
-    "name": "Video Hub App 2 file",
+    "name": "Video Hub App 3 file",
     "role": "Editor"
   }
 }

@@ -43,7 +43,7 @@ export class RenameFileComponent implements OnInit {
 
     // Getting the error message to display
     this.electronService.ipcRenderer.on(
-      'renameFileResponse', (
+      'rename-file-response', (
           event,
           index: number,
           success: boolean,
@@ -70,7 +70,7 @@ export class RenameFileComponent implements OnInit {
     this.nodeRenamingFile = true;
     this.renameErrMsg = '';
 
-    const sourceFolder = this.selectedSourceFolder[0].path;                       // TODO -- handle other source folders
+    const sourceFolder = this.selectedSourceFolder[this.currentRightClickedItem.inputSource].path;
     const relativeFilePath = this.currentRightClickedItem.partialPath;
     const originalFile = this.currentRightClickedItem.fileName;
     const newFileName = this.renamingWIP + '.' + this.renamingExtension;

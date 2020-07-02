@@ -1,7 +1,7 @@
 {
-  "name": "video-hub-app-2",
+  "name": "video-hub-app-3",
   "version": "3.0.0",
-  "description": "Video Hub App 2 - browse, search, preview your videos",
+  "description": "Video Hub App 3 - browse, search, preview your videos",
   "homepage": "http://www.videohubapp.com",
   "repository": {
     "type": "git",
@@ -23,24 +23,15 @@
   "main": "main.js",
   "license": "MIT",
   "scripts": {
-    "postinstall": "npm run postinstall:electron && electron-builder install-app-deps",
-    "postinstall:web": "node postinstall-web",
-    "postinstall:electron": "node postinstall",
-    "ng": "ng",
-    "start": "npm run postinstall:electron && npm-run-all -p ng:serve electron:serve",
-    "build": "npm run postinstall:electron && npm run electron:serve-tsc && ng build",
-    "build:dev": "npm run build -- -c dev",
+    "start": "npm-run-all -p electron:serve ng:serve",
+    "build": "npm run electron:serve-tsc && ng build --base-href ./",
     "build:prod": "npm run build -- -c production",
-    "ng:serve": "ng serve",
-    "ng:serve:web": "npm run postinstall:web && ng serve -o",
+    "electron": "npm run build:prod && electron-builder build",
+    "electron:serve": "wait-on tcp:4200 && npm run electron:serve-tsc && npx electron . --serve",
     "electron:serve-tsc": "tsc -p tsconfig-serve.json",
-    "electron:serve": "wait-on http-get://localhost:4200/ && npm run electron:serve-tsc && electron . --serve",
-    "electron:local": "npm run build:prod && electron .",
-    "electron:linux": "npm run build:prod && electron-builder build --linux",
-    "electron:windows": "npm run build:prod && electron-builder build --windows",
-    "electron:mac": "npm run build:prod && electron-builder build --mac",
-    "lint:scss": "stylelint \"./src/**/*.scss\"",
-    "lint:scss:fix": "stylelint \"./src/**/*.scss\" --fix"
+    "ng": "ng",
+    "ng:serve": "ng serve",
+    "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "1.0.20",
@@ -51,6 +42,7 @@
     "electron-window-state": "5.0.3",
     "fuse.js": "6.0.0",
     "ngx-virtual-scroller": "4.0.3",
+    "path": "0.12.7",
     "trash": "6.1.1"
   },
   "devDependencies": {
@@ -68,7 +60,7 @@
     "@types/node": "12.12.6",
     "codelyzer": "5.2.2",
     "electron": "8.3.0",
-    "electron-builder": "22.6.1",
+    "electron-builder": "22.7.0",
     "electron-reload": "1.5.0",
     "node-sass": "4.14.1",
     "npm-run-all": "4.1.5",

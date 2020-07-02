@@ -6,9 +6,6 @@
  * the clip's first thumbnail
  *
  * All functions are PURE
- * The only exception is `extractFromTheseFiles`
- * which checks the global variable `GLOBALS.cancelCurrentImport`
- * in case it needs to stop running (user interrupt)
  *
  * Huge thank you to cal2195 for the code contribution
  * He implemented the efficient filmstrip and clip extraction!
@@ -191,10 +188,7 @@ const extractFirstFrameArgs = (
 // ========================================================================================
 
 /**
- * Start extracting screenshots now that metadata has been retreived and sent over to the app
- *
- * DANGEROUSLY DEPENDS ON a global variable `GLOBALS.cancelCurrentImport`
- * that can get toggled while scanning all screenshots
+ * Extract thumbnail, filmstrip, and possibly clip
  *
  * Extract following this order. Each stage returns a boolean
  * (^) means RESTART -- go back to (1) with the next item-to-extract on the list
@@ -239,25 +233,26 @@ const extractFirstFrameArgs = (
  * @param screenshotFolder   -- path to folder where .jpg files will be saved
  * @param screenshotSettings -- ScreenshotSettings object
  * @param deepScan           -- spend 50% more time trying to extracts screenshots
+ * @param done               -- execute this method when done extracting
  */
-export function extractThumbnails(
+export function extractAll(
   currentElement: ImageElement,
   videoFolderPath: string,
   screenshotFolder: string,
   screenshotSettings: ScreenshotSettings,
   deepScan: boolean,
-  callback
+  done
 ): void {
 
-  const clipHeight: number =       screenshotSettings.clipHeight;        // -- number in px how tall each clip should be
-  const clipSnippets: number =     screenshotSettings.clipSnippets;      // -- number of clip snippets to extract; 0 == do not extract clip
+  const clipHeight:       number = screenshotSettings.clipHeight;        // -- number in px how tall each clip should be
+  const clipSnippets:     number = screenshotSettings.clipSnippets;      // -- number of clip snippets to extract; 0 == do not extract clip
   const screenshotHeight: number = screenshotSettings.height;            // -- number in px how tall each screenshot should be
-  const snippetLength: number =    screenshotSettings.clipSnippetLength; // -- length of each snippet in the clip
+  const snippetLength:    number = screenshotSettings.clipSnippetLength; // -- length of each snippet in the clip
 
     const pathToVideo: string = path.join(videoFolderPath, currentElement.partialPath, currentElement.fileName);
 
-    const duration: number = currentElement.duration;
-    const fileHash: string = currentElement.hash;
+    const duration:     number = currentElement.duration;
+    const fileHash:     string = currentElement.hash;
     const numOfScreens: number = currentElement.screens;
     const sourceHeight: number = currentElement.height;
 
@@ -368,11 +363,11 @@ export function extractThumbnails(
         if (success) {
           // console.log('======= ALL STEPS SUCCESSFUL ==========');
         }
-        callback();
+        done();
       })
       .catch((err) => {
         // console.log('===> ERROR - RESTARTING: ' + err);
-        callback();
+        done();
       });
 }
 
@@ -506,6 +501,7 @@ function spawn_ffmpeg_and_run(
 
   return new Promise((resolve, reject) => {
 
+    // Uncomment things in this method to check how long extraction takes
     // const t0: number = performance.now();
 
     const ffmpeg_process = spawn(ffmpegPath, args);

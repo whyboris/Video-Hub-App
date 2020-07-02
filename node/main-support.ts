@@ -16,7 +16,7 @@ const fs = require('fs');
 const hasher = require('crypto').createHash;
 import { Stats } from 'fs';
 
-import { FinalObject, ImageElement, NewImageElement, ScreenshotSettings, InputSources, ResolutionString } from '../interfaces/final-object.interface';
+import { FinalObject, ImageElement, NewImageElement, ScreenshotSettings, InputSources, ResolutionString, ImageElementPlus } from '../interfaces/final-object.interface';
 import { acceptableFiles } from './main-filenames';
 import { startFileSystemWatching, TempMetadataQueueObject, sendNewVideoMetadata, resetWatchers } from './main-extract-async';
 
@@ -223,7 +223,7 @@ export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: stri
  * @param playlist -- array of ImageElements
  * @param done     -- callback
  */
-export function createDotPlsFile(savePath: string, playlist: ImageElement[], done): void {
+export function createDotPlsFile(savePath: string, playlist: ImageElement[], sourceFolderMap: InputSources, done): void {
 
   const writeArray: string[] = [];
 
@@ -233,7 +233,7 @@ export function createDotPlsFile(savePath: string, playlist: ImageElement[], don
   for (let i = 0; i < playlist.length; i++) {
 
     const fullPath: string = path.join(
-      GLOBALS.selectedSourceFolders[0].path,
+      sourceFolderMap[i].path,
       playlist[i].partialPath,
       playlist[i].fileName
     );
@@ -529,53 +529,6 @@ function extractMetadataForThisONEFile(
   });
 }
 
-/**
- * Extracts information about a single file using `ffprobe`
- * Stores information into the ImageElement and returns it via callback
- * @param filePath              path to the file
- * @param screenshotSettings    ScreenshotSettings
- * @param imageElement          index in array to update
- * @param callback
- */
-export function extractMetadataAsync(
-  filePath: string,
-  screenshotSettings: ScreenshotSettings,
-  imageElement: ImageElement,
-  fileStat: Stats
-): Promise<ImageElement> {
-  return new Promise((resolve, reject) => {
-    const ffprobeCommand = '"' + ffprobePath + '" -of json -show_streams -show_format -select_streams V "' + filePath + '"';
-    exec(ffprobeCommand, (err, data, stderr) => {
-      if (err) {
-        reject(imageElement);
-      } else {
-        const metadata = JSON.parse(data);
-        const stream = getBestStream(metadata);
-        const fileDuration = getFileDuration(metadata);
-
-        const duration = Math.round(fileDuration) || 0;
-        const origWidth = stream.width || 0; // ffprobe does not detect it on some MKV streams
-        const origHeight = stream.height || 0;
-
-        imageElement.duration = duration;
-        imageElement.fileSize = fileStat.size;
-        imageElement.mtime = fileStat.mtimeMs;
-        imageElement.height = origHeight;
-        imageElement.width = origWidth;
-        imageElement.screens = computeNumberOfScreenshots(screenshotSettings, duration);
-
-        if (imageElement.hash === '') {
-          hashFileAsync(filePath).then((hash) => {
-            imageElement.hash = hash;
-            resolve(imageElement);
-          });
-        } else {
-          resolve(imageElement);
-        }
-      }
-    });
-  });
-}
 
 // ===========================================================================================
 // Other supporting methods
@@ -680,20 +633,68 @@ export function hashFileAsync(pathToFile: string): Promise<string> {
  * @param hash
  * @param callback
  */
-export function createElement(file: TempMetadataQueueObject, hash, callback) {
+export function createElement(file: TempMetadataQueueObject, callback) {
   const newElement = NewImageElement();
-  newElement.hash = hash;
   extractMetadataAsync(file.fullPath, GLOBALS.screenshotSettings, newElement, file.stat)
-    .then((imageElement) => {
+    .then((imageElement: ImageElementPlus) => {
       imageElement.cleanName = cleanUpFileName(file.name);
       imageElement.fileName = file.name;
       imageElement.partialPath = file.partialPath;
       imageElement.inputSource = file.inputSource;
+      imageElement.fullPath = file.fullPath; // insert this converting `ImageElement` to `ImageElementPlus`
       sendNewVideoMetadata(imageElement);
       callback();
     }, () => {
       callback(); // error, just continue
     });
+}
+
+/**
+ * Extracts information about a single file using `ffprobe`
+ * Stores information into the ImageElement and returns it via callback
+ * @param filePath              path to the file
+ * @param screenshotSettings    ScreenshotSettings
+ * @param imageElement          index in array to update
+ * @param callback
+ */
+export function extractMetadataAsync(
+  filePath: string,
+  screenshotSettings: ScreenshotSettings,
+  imageElement: ImageElement,
+  fileStat: Stats
+): Promise<ImageElement> {
+  return new Promise((resolve, reject) => {
+    const ffprobeCommand = '"' + ffprobePath + '" -of json -show_streams -show_format -select_streams V "' + filePath + '"';
+    exec(ffprobeCommand, (err, data, stderr) => {
+      if (err) {
+        reject(imageElement);
+      } else {
+        const metadata = JSON.parse(data);
+        const stream = getBestStream(metadata);
+        const fileDuration = getFileDuration(metadata);
+
+        const duration = Math.round(fileDuration) || 0;
+        const origWidth = stream.width || 0; // ffprobe does not detect it on some MKV streams
+        const origHeight = stream.height || 0;
+
+        imageElement.duration = duration;
+        imageElement.fileSize = fileStat.size;
+        imageElement.mtime = fileStat.mtimeMs;
+        imageElement.height = origHeight;
+        imageElement.width = origWidth;
+        imageElement.screens = computeNumberOfScreenshots(screenshotSettings, duration);
+
+        if (imageElement.hash === '') {
+          hashFileAsync(filePath).then((hash) => {
+            imageElement.hash = hash;
+            resolve(imageElement);
+          });
+        } else {
+          resolve(imageElement);
+        }
+      }
+    });
+  });
 }
 
 /**
@@ -722,7 +723,7 @@ export function sendFinalObjectToAngular(finalObject: FinalObject, globals: VhaG
   finalObject.images = insertTemporaryFields(finalObject.images);
 
   globals.angularApp.sender.send(
-    'finalObjectReturning',
+    'final-object-returning',
     finalObject,
     globals.currentlyOpenVhaFile,
     getHtmlPath(globals.selectedOutputFolder)
@@ -748,21 +749,23 @@ export function upgradeToVersion3(finalObject: FinalObject): void {
 }
 
 /**
- * Start watching directories with `chokidar
+ * Start watching directories with `chokidar`
+ * Only called when creating a new hub OR opening a hub
  * @param inputDirs
- * @param currentImages
- * @param deepScan - whether to extract files or compare hashes (TODO - rename param!)
+ * @param currentImages -- if creating a new VHA file, this will be [] empty (and `watch` = false)
  */
-export function startWatchingDirs(inputDirs: InputSources, currentImages: ImageElement[], deepScan: boolean): void {
+export function startWatchingDirs(inputDirs: InputSources, currentImages: ImageElement[]): void {
+  console.log('-----------------------------------');
   console.log('about to start watching for files ?');
+  console.log(currentImages.length);
 
   resetWatchers(currentImages);
 
   Object.keys(inputDirs).forEach((key: string) => {
-    console.log(key, ' : ', inputDirs[key].path);
-    // if (deepScan || inputDirs[key].watch) {
-      console.log('WATCHING!');
-      startFileSystemWatching(inputDirs[key].path, parseInt(key), deepScan);
-    // }
+    console.log(key, 'watch = ', inputDirs[key].watch, ' : ', inputDirs[key].path);
+    if (inputDirs[key].watch) {
+      console.log('PERSISTENT WATCHING !!!');
+      startFileSystemWatching(inputDirs[key].path, parseInt(key, 10), inputDirs[key].watch);
+    }
   });
 }

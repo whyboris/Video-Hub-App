@@ -34,6 +34,10 @@
   font-weight: bold;
 }
 
+.sources {
+  margin-bottom: 20px;
+}
+
 .hub-name {
   font-size: 20px;
   font-weight: normal;
@@ -49,7 +53,7 @@
   text-align: right;
 }
 
-.spanBoth {
+.span-both {
   font-weight: bold;
   padding-bottom: 5px;
   padding-top: 20px;
@@ -65,12 +69,26 @@
   }
 }
 
+.input-sources-row {
+  display: block;
+  position: relative;
+}
+
+.watch-folder-note {
+  display: block;
+  left: -52px;
+  position: absolute;
+  top: -20px;
+}
+
 .delete-input-folder {
   color: $pretty-red;
-  cursor: pointer;
+  cursor: not-allowed;
   font-weight: bold;
   position: absolute;
-  transform: translate(-60px, -14px);
+  right: calc(100% + 46px);
+  text-align: right;
+  top: 1px;
 }
 
 @media (max-width: 900px) {
@@ -81,4 +99,8 @@
       margin: 10px auto;
     }
   }
+}
+
+.wizard-button {
+  min-width: unset;
 }

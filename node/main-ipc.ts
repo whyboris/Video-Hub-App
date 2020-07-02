@@ -9,10 +9,11 @@ const trash = require('trash');
 const spawn = require('child_process').spawn;
 
 import { GLOBALS } from './main-globals';
-import { ImageElement, FinalObject } from '../interfaces/final-object.interface';
+import { ImageElement, FinalObject, InputSources } from '../interfaces/final-object.interface';
 import { SettingsObject } from '../interfaces/settings-object.interface';
 import { createDotPlsFile, writeVhaFileToDisk } from './main-support';
 import { replaceThumbnailWithNewImage } from './main-extract';
+import { closeWatcher, startWatcher } from './main-extract-async';
 
 let preventSleepId: number;
 
@@ -132,7 +133,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
    * 2. save .pls file
    * 3. ask OS to open the .pls file
    */
-  ipc.on('please-create-playlist', (event, playlist: ImageElement[]) => {
+  ipc.on('please-create-playlist', (event, playlist: ImageElement[], sourceFolderMap: InputSources) => {
 
     const cleanPlaylist: ImageElement[] = playlist.filter((element: ImageElement) => {
       return element.cleanName !== '*FOLDER*';
@@ -141,7 +142,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
     const savePath: string = path.join(pathToAppData, 'video-hub-app-2', 'temp.pls');
 
     if (cleanPlaylist.length) {
-      createDotPlsFile(savePath, cleanPlaylist, () => {
+      createDotPlsFile(savePath, cleanPlaylist, sourceFolderMap, () => {
         shell.openItem(savePath);
         // shell.openPath(savePath); // Electron 9
       });
@@ -151,9 +152,8 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
   /**
    * Delete file from computer (send to recycling bin / trash) or dangerously delete (bypass trash)
    */
-  ipc.on('delete-video-file', (event, item: ImageElement, dangerousDelete: boolean): void => {
-    console.log('TODO: handle delete based on source folder!');
-    const fileToDelete = path.join(GLOBALS.selectedSourceFolders[0].path, item.partialPath, item.fileName);
+  ipc.on('delete-video-file', (event, basePath: string, item: ImageElement, dangerousDelete: boolean): void => {
+    const fileToDelete = path.join(basePath, item.partialPath, item.fileName);
 
     if (dangerousDelete) {
       fs.unlink(fileToDelete, (err) => {
@@ -212,9 +212,25 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
     }).then(result => {
       const inputDirPath: string = result.filePaths[0];
       if (inputDirPath) {
-        event.sender.send('inputFolderChosen', inputDirPath);
+        event.sender.send('input-folder-chosen', inputDirPath);
       }
     }).catch(err => {});
+  });
+
+  /**
+   * Stop watching a particular folder
+   */
+  ipc.on('stop-watching-folder', (event, watchedFolderIndex: number) => {
+    console.log('stop watching:', watchedFolderIndex);
+    closeWatcher(watchedFolderIndex);
+  });
+
+  /**
+   * Stop watching a particular folder
+   */
+  ipc.on('start-watching-folder', (event, watchedFolderIndex: number, path: string) => {
+    console.log('start watching:', watchedFolderIndex, path);
+    startWatcher(watchedFolderIndex, path);
   });
 
   /**
@@ -227,7 +243,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
     }).then(result => {
       const outputDirPath: string = result.filePaths[0];
       if (outputDirPath) {
-        event.sender.send('outputFolderChosen', outputDirPath);
+        event.sender.send('output-folder-chosen', outputDirPath);
       }
     }).catch(err => {});
   });
@@ -268,7 +284,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
       }
     }
 
-    event.sender.send('renameFileResponse', index, success, renameTo, file, errMsg);
+    event.sender.send('rename-file-response', index, success, renameTo, file, errMsg);
   });
 
   /**

@@ -122,7 +122,7 @@
     [folderPath]="appState.selectedOutputFolder"
     [hubName]="appState.hubName"
     [imgHeight]="previewHeight"
-    [selectedSourceFolder]="appState.selectedSourceFolder"
+    [selectedSourceFolder]="appState.selectedSourceFolder[sheetItemToDisplay.inputSource].path"
     [star]="sheetItemToDisplay.stars"
 
     [darkMode]="settingsButtons['darkMode'].toggled"
@@ -185,19 +185,19 @@
     @modalAnimation
   >
     <button (click)="settingTabToShow = 0" [ngClass]="{ 'active-tab': settingTabToShow === 0 }">
-      {{ 'SETTINGS.tabFilter'    | translate }}
+      {{ 'SETTINGS.tabFilter'     | translate }}
     </button>
     <button (click)="settingTabToShow = 1" [ngClass]="{ 'active-tab': settingTabToShow === 1 }">
-      {{ 'SETTINGS.tabView'      | translate }}
+      {{ 'SETTINGS.tabView'       | translate }}
     </button>
     <button (click)="settingTabToShow = 2" [ngClass]="{ 'active-tab': settingTabToShow === 2 }">
-      {{ 'SETTINGS.tabMain'      | translate }}
+      {{ 'SETTINGS.tabMain'       | translate }}
     </button>
     <button (click)="settingTabToShow = 3" [ngClass]="{ 'active-tab': settingTabToShow === 3 }">
-      {{ 'SETTINGS.tabShortcuts' | translate }}
+      {{ 'SETTINGS.tabCurrentHub' | translate }}
     </button>
     <button (click)="settingTabToShow = 4" [ngClass]="{ 'active-tab': settingTabToShow === 4 }">
-      {{ 'SETTINGS.statistics'   | translate }}
+      {{ 'SETTINGS.tabShortcuts'  | translate }}
     </button>
   </div>
 
@@ -243,19 +243,12 @@
       [versionNumber]="versionNumber"
     ></app-settings>
 
-    <!-- ===========   KEYBOARD SHORTCUTS    =========== -->
+    <!-- HUB STATISTICS / Current Hub Settings -->
 
     <div *ngIf="settingTabToShow == 3" class="shortcut-menu">
 
-      <app-shortcuts [macVersion]="macVersion"></app-shortcuts>
-
-    </div>
-
-    <!-- HUB STATISTICS -->
-
-    <div *ngIf="settingTabToShow == 4" class="shortcut-menu">
-
       <app-statistics
+        (finalArrayNeedsSaving)="finalArrayNeedsSaving = true"
         [finalArray]="finalArray"
         [hubName]="appState.hubName"
         [numFolders]="appState.numOfFolders"
@@ -264,6 +257,14 @@
         [screenshotSettings]="currentScreenshotSettings"
         [videoFolder]="appState.selectedSourceFolder"
       ></app-statistics>
+
+    </div>
+
+    <!-- KEYBOARD SHORTCUTS -->
+
+    <div *ngIf="settingTabToShow == 4" class="shortcut-menu">
+
+      <app-shortcuts [macVersion]="macVersion"></app-shortcuts>
 
     </div>
 
