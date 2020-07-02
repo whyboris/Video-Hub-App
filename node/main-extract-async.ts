@@ -4,7 +4,7 @@
 import { GLOBALS } from './main-globals';
 import { ImageElement, ImageElementPlus } from '../interfaces/final-object.interface';
 import { extractAll } from './main-extract';
-import { sendCurrentProgress, insertTemporaryFieldsSingle, hasAllThumbs, hashFileAsync, createElement } from './main-support';
+import { sendCurrentProgress, insertTemporaryFieldsSingle, hasAllThumbs, createElement } from './main-support';
 
 import * as path from 'path';
 
@@ -105,13 +105,7 @@ export function sendNewVideoMetadata(imageElement: ImageElementPlus) {
  */
 export function metadataQueueRunner(fileInfo: TempMetadataQueueObject, callback) {
 
-  console.log('metadata check:', fileInfo.fullPath);
-
-  if (alreadyInAngular.has(fileInfo.fullPath)) {
-    return callback();
-  }
-  console.log('not found, creating:');
-  createElement(fileInfo, '', callback);
+  createElement(fileInfo, callback);
 
 }
 
@@ -139,8 +133,8 @@ export function startFileSystemWatching(
     .on('add', (filePath: string, stat) => {
 
       const ext = filePath.substring(filePath.lastIndexOf('.') + 1);
+
       if (filePath.indexOf('vha-') !== -1 || acceptableFiles.indexOf(ext) === -1) {
-        // console.log('ignoring', path);
         return;
       }
 
@@ -150,6 +144,12 @@ export function startFileSystemWatching(
       const fullPath = path.join(inputDir, partialPath, fileName);
 
       console.log(fullPath);
+
+      if (alreadyInAngular.has(fullPath)) {
+        return;
+      }
+
+      console.log('not found, creating:');
 
       const newItem: TempMetadataQueueObject = {
         fullPath: fullPath,

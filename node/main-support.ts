@@ -633,9 +633,8 @@ export function hashFileAsync(pathToFile: string): Promise<string> {
  * @param hash
  * @param callback
  */
-export function createElement(file: TempMetadataQueueObject, hash, callback) {
+export function createElement(file: TempMetadataQueueObject, callback) {
   const newElement = NewImageElement();
-  newElement.hash = hash;
   extractMetadataAsync(file.fullPath, GLOBALS.screenshotSettings, newElement, file.stat)
     .then((imageElement: ImageElementPlus) => {
       imageElement.cleanName = cleanUpFileName(file.name);
