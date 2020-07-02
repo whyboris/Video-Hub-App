@@ -188,13 +188,6 @@ export function countFoldersInFinalArray(imagesArray: ImageElement[]): number {
  * @param done          -- function to execute when done writing the file
  */
 export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: string, done): void {
-  const inputDir = finalObject.inputDirs;
-
-  // check for relative paths
-  if (finalObject.inputDirs[0].path === path.parse(pathToTheFile).dir) {
-    finalObject.inputDirs[0].path = '';
-  }
-
   finalObject.images = stripOutTemporaryFields(finalObject.images);
 
   finalObject.images = finalObject.images.filter(element => !element.deleted);
@@ -212,9 +205,6 @@ export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: stri
   // write the file
   fs.writeFile(pathToTheFile, json, 'utf8', done);
   // TODO ? CATCH ERRORS ?
-
-  // Restore the inputDir in case we removed it
-  finalObject.inputDirs = inputDir;
 }
 
 /**
@@ -628,28 +618,6 @@ export function hashFileAsync(pathToFile: string): Promise<string> {
 }
 
 /**
- * Create a new element from metadata
- * @param file
- * @param hash
- * @param callback
- */
-export function createElement(file: TempMetadataQueueObject, callback) {
-  const newElement = NewImageElement();
-  extractMetadataAsync(file.fullPath, GLOBALS.screenshotSettings, newElement, file.stat)
-    .then((imageElement: ImageElementPlus) => {
-      imageElement.cleanName = cleanUpFileName(file.name);
-      imageElement.fileName = file.name;
-      imageElement.partialPath = file.partialPath;
-      imageElement.inputSource = file.inputSource;
-      imageElement.fullPath = file.fullPath; // insert this converting `ImageElement` to `ImageElementPlus`
-      sendNewVideoMetadata(imageElement);
-      callback();
-    }, () => {
-      callback(); // error, just continue
-    });
-}
-
-/**
  * Extracts information about a single file using `ffprobe`
  * Stores information into the ImageElement and returns it via callback
  * @param filePath              path to the file
@@ -760,7 +728,7 @@ export function upgradeToVersion3(finalObject: FinalObject): void {
 export function startWatchingDirs(inputDirs: InputSources, currentImages: ImageElement[]): void {
   console.log('-----------------------------------');
   console.log('about to start watching for files ?');
-  console.log(currentImages.length);
+  console.log('number of files:', currentImages.length);
 
   resetWatchers(currentImages);
 

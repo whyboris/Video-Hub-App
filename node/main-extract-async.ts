@@ -2,9 +2,9 @@
 // Was originally added to `main-extract.ts` but was moved here for clarity
 
 import { GLOBALS } from './main-globals';
-import { ImageElement, ImageElementPlus } from '../interfaces/final-object.interface';
+import { ImageElement, ImageElementPlus, NewImageElement } from '../interfaces/final-object.interface';
 import { extractAll } from './main-extract';
-import { sendCurrentProgress, insertTemporaryFieldsSingle, hasAllThumbs, createElement } from './main-support';
+import { sendCurrentProgress, insertTemporaryFieldsSingle, hasAllThumbs, extractMetadataAsync, cleanUpFileName } from './main-support';
 
 import * as path from 'path';
 
@@ -99,13 +99,25 @@ export function sendNewVideoMetadata(imageElement: ImageElementPlus) {
 }
 
 /**
- * Create element if not already present
+ * Create empty element, extract and update metadata, send over to Angular
  * @param fileInfo - various stat metadata about the file
- * @param callback
+ * @param done
  */
-export function metadataQueueRunner(fileInfo: TempMetadataQueueObject, callback) {
+export function metadataQueueRunner(file: TempMetadataQueueObject, done) {
 
-  createElement(fileInfo, callback);
+  const newElement = NewImageElement();
+  extractMetadataAsync(file.fullPath, GLOBALS.screenshotSettings, newElement, file.stat)
+    .then((imageElement: ImageElementPlus) => {
+      imageElement.cleanName = cleanUpFileName(file.name);
+      imageElement.fileName = file.name;
+      imageElement.partialPath = file.partialPath;
+      imageElement.inputSource = file.inputSource;
+      imageElement.fullPath = file.fullPath; // insert this converting `ImageElement` to `ImageElementPlus`
+      sendNewVideoMetadata(imageElement);
+      done();
+    }, () => {
+      done(); // error, just continue
+    });
 
 }
 
@@ -210,7 +222,6 @@ export function resetWatchers(finalArray: ImageElement[]): void {
       element.partialPath,
       element.fileName
     );
-    console.log(fullPath);
 
     alreadyInAngular.set(fullPath, 1);
   });
