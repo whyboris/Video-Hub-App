@@ -145,6 +145,11 @@ export class StatisticsComponent implements OnInit {
     this.electronService.ipcRenderer.send('choose-input');
   }
 
+  reconnectThisFolder(itemSourceKey: number) {
+    console.log(itemSourceKey);
+    console.log('RECONNECT -- NOT IMPLEMENTED -- TODO');
+  }
+
   /**
    * Delete an item source
    * @param itemSourceKey

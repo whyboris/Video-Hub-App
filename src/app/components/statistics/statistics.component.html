@@ -25,14 +25,17 @@
         *ngIf="!removeFoldersMode && !item.value.watch && sourceFolderService.sourceFolderConnected[item.key]"
         class="rescan-input-folder"
         (click)="rescanFolder(item.key)"
+        title="{{ 'STATISTICS.clickToRescan' | translate }}"
       >
         {{ 'STATISTICS.rescanFolder' | translate }}
       </span>
       <span
-        *ngIf="!sourceFolderService.sourceFolderConnected[item.key]"
+        *ngIf="!sourceFolderService.sourceFolderConnected[item.key] && !removeFoldersMode"
         class="input-not-connected"
+        (click)="reconnectThisFolder(item.key)"
+        title="{{ 'STATISTICS.clickToConnect' | translate }}"
       >
-        NOT CONNECTED
+        {{ 'STATISTICS.notConnected' | translate }}
       </span>
 
       <span *ngIf="i === 0 && !removeFoldersMode" class="watch-folder-note">
