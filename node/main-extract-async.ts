@@ -130,6 +130,14 @@ export function metadataQueueRunner(file: TempMetadataQueueObject, done) {
 }
 
 /**
+ * Check if path is to a file system reserved object or folder
+ * @param thingy path to particular file / directory
+ */
+function fileSystemReserved(thingy: string): boolean {
+  return (thingy.startsWith('$') || thingy === 'System Volume Information');                                            // !!! TODO -- check if needed !?!?!
+}
+
+/**
  * Create a new `chokidar` watcher for a particular directory
  * @param inputDir
  * @param inputSource -- the number corresponding to the `inputSource` in ImageElement -- must be set!

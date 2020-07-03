@@ -16,8 +16,8 @@ const fs = require('fs');
 const hasher = require('crypto').createHash;
 import { Stats } from 'fs';
 
-import { FinalObject, ImageElement, ScreenshotSettings, InputSources, ResolutionString, ImageElementPlus, NewImageElement } from '../interfaces/final-object.interface';
-import { startFileSystemWatching, resetWatchers, sendNewVideoMetadata, TempMetadataQueueObject } from './main-extract-async';
+import { FinalObject, ImageElement, ScreenshotSettings, InputSources, ResolutionString } from '../interfaces/final-object.interface';
+import { startFileSystemWatching, resetWatchers } from './main-extract-async';
 
 interface ResolutionMeta {
   label: ResolutionString;
@@ -179,6 +179,22 @@ export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: stri
 }
 
 /**
+ * Strip out all the temporary fields
+ * @param imagesArray
+ */
+function stripOutTemporaryFields(imagesArray: ImageElement[]): ImageElement[] {
+  imagesArray.forEach((element) => {
+    delete(element.durationDisplay);
+    delete(element.fileSizeDisplay);
+    delete(element.index);
+    delete(element.resBucket);
+    delete(element.resolution);
+    delete(element.selected);
+  });
+  return imagesArray;
+}
+
+/**
  * Format .pls file and write to hard drive
  * @param savePath -- location to save the temp.pls file
  * @param playlist -- array of ImageElements
@@ -212,22 +228,6 @@ export function createDotPlsFile(savePath: string, playlist: ImageElement[], sou
 }
 
 /**
- * Strip out all the temporary fields
- * @param imagesArray
- */
-function stripOutTemporaryFields(imagesArray: ImageElement[]): ImageElement[] {
-  imagesArray.forEach((element) => {
-    delete(element.durationDisplay);
-    delete(element.fileSizeDisplay);
-    delete(element.index);
-    delete(element.resBucket);
-    delete(element.resolution);
-    delete(element.selected);
-  });
-  return imagesArray;
-}
-
-/**
  * Clean up the displayed file name
  * (1) remove extension
  * (2) replace underscores with spaces                "_"   => " "
@@ -244,14 +244,6 @@ export function cleanUpFileName(original: string): string {
   cleaned = cleaned.split('   ').join(' ');              // (4)
   cleaned = cleaned.split('  ').join(' ');               // (4)
   return cleaned;
-}
-
-/**
- * Check if path is to a file system reserved object or folder
- * @param thingy path to particular file / directory
- */
-function fileSystemReserved(thingy: string): boolean {
-  return (thingy.startsWith('$') || thingy === 'System Volume Information');                                            // !!! TODO -- check if needed !?!?!
 }
 
 /**
@@ -429,6 +421,8 @@ export function sendCurrentProgress(current: number, total: number, stage: Impor
  */
 export function sendFinalObjectToAngular(finalObject: FinalObject, globals: VhaGlobals): void {
 
+  // finalObject.images = alphabetizeFinalArray(finalObject.images); // TODO -- check -- unsure if needed
+
   finalObject.images = insertTemporaryFields(finalObject.images);
 
   globals.angularApp.sender.send(
@@ -448,10 +442,7 @@ export function sendFinalObjectToAngular(finalObject: FinalObject, globals: VhaG
 export function insertTemporaryFields(imagesArray: ImageElement[]): ImageElement[] {
 
   imagesArray.forEach((element, index) => {
-
     element = insertTemporaryFieldsSingle(element);
-
-    // set index for default sorting
     element.index = index;                              // TODO -- rethink index -- maybe fix here ?
   });
 
