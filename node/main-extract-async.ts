@@ -65,7 +65,7 @@ export function stopThumbExtraction() {
 }
 
 // =========================================================================================================================================
-// Metadata extractin queue runner
+// Metadata extracting queue runner
 // WARNING - state variables hanging around!
 const metadataQueue = async.queue(metadataQueueRunner, 1); // 1 is the number of parallel worker functions
                                                            // ^--- experiment with numbers to see what is fastest (try 8)
@@ -192,10 +192,6 @@ export function startFileSystemWatching(
     .on('unlinkDir', (folderPath: string) => {
       console.log(' !!!!! DIRECTORY DELETED:', folderPath);
       console.log('TODO - UPDATE ANGULAR');
-    })
-    .on('error', (error) => {
-      console.log('!!!!! ERROR !!!!');
-      console.log(error);
     })
 /*
     .on('all', (event, filePath) => {

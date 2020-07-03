@@ -1274,17 +1274,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.clearRecentlyViewedHistory();
     } else if (uniqueKey === 'resetSettings') {
       this.resetSettingsToDefault();
-    // } else if (uniqueKey === 'importNewFiles') {
-    //   this.importNewFiles();
     } else if (uniqueKey === 'showTags') {
       if (this.settingsModalOpen) {
         this.settingsModalOpen = false;
       }
       this.toggleButtonOpposite('showTags');
-    // } else if (uniqueKey === 'verifyThumbnails') {
-    //   this.verifyThumbnails();
-    // } else if (uniqueKey === 'rescanDirectory') {
-    //   this.rescanDirectory();
     } else if (uniqueKey === 'playPlaylist') {
       this.electronService.ipcRenderer.send(
         'please-create-playlist',
@@ -1380,59 +1374,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // Methods for RESCAN
   // ==========================================================================================
 
-  /**
-   * Scan for new files and import them
-   */
-  public importNewFiles(): void {
-    if (this.rootFolderLive) {
-      this.progressNum1 = 0;
-      // this.importStage = 'importingMeta';
-      if (this.settingsModalOpen) {
-        this.toggleSettings();
-      }
-      this.electronService.ipcRenderer.send('only-import-new-files', this.finalArray);
-    } else {
-      this.notifyRootFolderNotLive();
-    }
-  }
-
-  /**
-   * Verify all files have thumbnails
-   */
-  public verifyThumbnails(): void {
-    if (this.rootFolderLive) {
-      this.progressNum1 = 0;
-      this.importStage = 'importingScreenshots';
-      this.toggleSettings();
-      this.electronService.ipcRenderer.send('verify-thumbnails', this.finalArray);
-    } else {
-      this.notifyRootFolderNotLive();
-    }
-  }
-
   public extractMissingThumbnails(): void {
     console.log('trying to extract missing thumbnails');
     this.electronService.ipcRenderer.send('add-missing-thumbnails', this.finalArray, this.currentScreenshotSettings.clipSnippets > 0);
   }
 
   /**
-   * Rescan the current input directory
-   */
-  public rescanDirectory(): void {
-    if (this.rootFolderLive) {
-      this.progressNum1 = 0;
-      // this.importStage = 'importingMeta';
-      if (this.settingsModalOpen) {
-        this.toggleSettings();
-      }
-      this.electronService.ipcRenderer.send('rescan-current-directory', this.finalArray);
-    } else {
-      this.notifyRootFolderNotLive();
-    }
-  }
-
-  /**
-   * Notify user root folder is not live
+   * Notify user root folder is not live                                                            // TODO -- rethink this functionality
    */
   notifyRootFolderNotLive(): void {
     this.folderNotConnectedErrorShowing = true;
