@@ -2,7 +2,6 @@ import { ScreenshotSettings, InputSources } from '../interfaces/final-object.int
 
 export const GLOBALS: VhaGlobals = {
   angularApp: null,            // reference used to send messages back to Angular App
-  cancelCurrentImport: false,
   currentlyOpenVhaFile: '',    // OFFICAL DECREE IN NODE WHICH FILE IS CURRENTLY OPEN !!!
   debug: false,
   hubName: 'untitled',         // in case user doesn't name their hub any name
@@ -23,7 +22,6 @@ export const GLOBALS: VhaGlobals = {
 
 export interface VhaGlobals {
   angularApp: any;
-  cancelCurrentImport: boolean;
   currentlyOpenVhaFile: string;
   debug: boolean;
   hubName: string;

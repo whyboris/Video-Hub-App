@@ -16,16 +16,15 @@ const fs = require('fs');
 const hasher = require('crypto').createHash;
 import { Stats } from 'fs';
 
-import { FinalObject, ImageElement, NewImageElement, ScreenshotSettings, InputSources, ResolutionString, ImageElementPlus } from '../interfaces/final-object.interface';
-import { acceptableFiles } from './main-filenames';
-import { startFileSystemWatching, TempMetadataQueueObject, sendNewVideoMetadata, resetWatchers } from './main-extract-async';
+import { FinalObject, ImageElement, ScreenshotSettings, InputSources, ResolutionString, ImageElementPlus, NewImageElement } from '../interfaces/final-object.interface';
+import { startFileSystemWatching, resetWatchers, sendNewVideoMetadata, TempMetadataQueueObject } from './main-extract-async';
 
 interface ResolutionMeta {
   label: ResolutionString;
   bucket: number;
 }
 
-export type ImportStage = 'importingMeta' | 'importingScreenshots' | 'done';
+export type ImportStage = 'importingScreenshots' | 'done';    // TODO -- rethin import stages?
 
 /**
  * Return an HTML string for a path to a file
@@ -99,40 +98,6 @@ export function alphabetizeFinalArray(imagesArray: ImageElement[]): ImageElement
 }
 
 /**
- * Writes / overwrites:
- *   unique index for default sort
- *   video resolution string
- *   resolution category for resolution filtering
- */
-export function insertTemporaryFields(imagesArray: ImageElement[]): ImageElement[] {
-
-  imagesArray.forEach((element, index) => {
-
-    // set resolution string & bucket
-    const resolution: ResolutionMeta = labelVideo(element.width, element.height);
-    element.durationDisplay = getDurationDisplay(element.duration);
-    element.fileSizeDisplay = getFileSizeDisplay(element.fileSize);
-    element.resBucket = resolution.bucket;
-    element.resolution = resolution.label;
-
-    // set index for default sorting
-    element.index = index;
-  });
-
-  return imagesArray;
-}
-
-export function insertTemporaryFieldsSingle(element: ImageElement): ImageElement {
-  // set resolution string & bucket
-  const resolution: ResolutionMeta = labelVideo(element.width, element.height);
-  element.durationDisplay = getDurationDisplay(element.duration);
-  element.fileSizeDisplay = getFileSizeDisplay(element.fileSize);
-  element.resBucket = resolution.bucket;
-  element.resolution = resolution.label;
-  return element;
-}
-
-/**
  * Generate the file size formatted as ### MB or #.# GB
  * THIS CODE DUPLICATES THE CODE IN `file-size.pipe.ts`
  * @param fileSize
@@ -183,21 +148,20 @@ export function countFoldersInFinalArray(imagesArray: ImageElement[]): number {
 
 /**
  * Write the final object into `vha` file
+ *  -- this correctly alphabetizes all the videos
+ *  -- it adds the correct number of folders in final array
  * @param finalObject   -- finalObject
  * @param pathToFile    -- the path with name of `vha` file to write to disk
  * @param done          -- function to execute when done writing the file
  */
 export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: string, done): void {
-  const inputDir = finalObject.inputDirs;
-
-  // check for relative paths
-  if (finalObject.inputDirs[0].path === path.parse(pathToTheFile).dir) {
-    finalObject.inputDirs[0].path = '';
-  }
-
   finalObject.images = stripOutTemporaryFields(finalObject.images);
 
   finalObject.images = finalObject.images.filter(element => !element.deleted);
+
+  finalObject.images = alphabetizeFinalArray(finalObject.images); // TODO -- rethink if this is needed
+
+  finalObject.numOfFolders = countFoldersInFinalArray(finalObject.images);
 
   const json = JSON.stringify(finalObject);
 
@@ -212,9 +176,6 @@ export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: stri
   // write the file
   fs.writeFile(pathToTheFile, json, 'utf8', done);
   // TODO ? CATCH ERRORS ?
-
-  // Restore the inputDir in case we removed it
-  finalObject.inputDirs = inputDir;
 }
 
 /**
@@ -290,161 +251,7 @@ export function cleanUpFileName(original: string): string {
  * @param thingy path to particular file / directory
  */
 function fileSystemReserved(thingy: string): boolean {
-  return (thingy.startsWith('$') || thingy === 'System Volume Information');
-}
-
-/**
- * walk the path and return array of `ImageElements`
- * @param sourceFolderPath
- */
-export function getVideoPathsAndNames(sourceFolderPath: string): ImageElement[] {
-
-  const finalArray: ImageElement[] = [];
-  let elementIndex = 0;
-  // ignore folders beginning with { '.', '__MACOS', 'vha-' }
-  const folderIgnoreRegex = /^(\.|__MACOS|vha-).*/g;
-  // ignore files beginning with { '.', '_' }
-  const fileIgnoreRegex = /^(\.|_).*/g;
-
-  // Recursively walk through a directory compiling ImageElements
-  const walkSync = (dir, filelist) => {
-    const files = fs.readdirSync(dir, {encoding: 'utf8', withFileTypes: true});
-
-    files.forEach(function (file) {
-      if (!fileSystemReserved(file.name)) {
-        try {
-          // if the item is a _SYMLINK_ or a _DIRECTORY_
-          if (
-            (file.isSymbolicLink() || file.isDirectory())
-            && !file.name.match(folderIgnoreRegex)
-          ) {
-            filelist = walkSync(path.join(dir, file.name), filelist);
-          } else {
-            const extension = file.name.split('.').pop();
-            if (acceptableFiles.includes(extension.toLowerCase()) && !file.name.match(fileIgnoreRegex)) {
-              // before adding, remove the redundant prefix: sourceFolderPath, and convert back slashes into forward slashes
-              // turns out app works best when the partialPath starts with `/` even in cases when video in root folder
-              const partialPath = ('/' + dir.replace(sourceFolderPath, '').replace(/\\/g, '/')).replace('//', '/');
-              // fil finalArray with 3 correct and 5 dummy pieces of data
-              finalArray[elementIndex] = NewImageElement();
-              finalArray[elementIndex].cleanName = cleanUpFileName(file.name);
-              finalArray[elementIndex].fileName = file.name;
-              finalArray[elementIndex].partialPath = partialPath;
-
-              elementIndex++;
-            }
-          }
-        } catch (err) {}
-      }
-    });
-
-    return filelist;
-  };
-
-  walkSync(sourceFolderPath, []);
-
-  return finalArray;
-}
-
-/**
- * Check if thumbnail, flimstrip, and clip is present
- * return boolean
- * @param fileHash           - unique identifier of the file
- * @param screenshotFolder   - path to where thumbnails are
- * @param shouldExtractClips - whether or not to extract clips
- */
-export function hasAllThumbs(
-  fileHash: string,
-  screenshotFolder: string,
-  shouldExtractClips: boolean
-): boolean {
-  return fs.existsSync(path.join(screenshotFolder, '/thumbnails/', fileHash + '.jpg'))
-      && fs.existsSync(path.join(screenshotFolder, '/filmstrips/', fileHash + '.jpg'))
-      && (shouldExtractClips ? fs.existsSync(path.join(screenshotFolder, '/clips/', fileHash + '.mp4')) : true);
-}
-
-/**
- * Generate indexes for any files missing thumbnails
- * @param fullArray          - ImageElement array
- * @param screenshotFolder   - path to where thumbnails are stored
- * @param shouldExtractClips - boolean -- whether user wants to extract clips or not
- */
-export function missingThumbsIndex(
-  fullArray: ImageElement[],
-  screenshotFolder: string,
-  shouldExtractClips: boolean
-): number[] {
-  const indexes: number[] = [];
-  const total: number = fullArray.length;
-  for (let i = 0; i < total; i++) {
-    if (!hasAllThumbs(fullArray[i].hash, screenshotFolder, shouldExtractClips)) {
-      indexes.push(i);
-    }
-  }
-
-  return indexes;
-}
-
-// --------------------------------------------------------------------------------------------
-// -- EXTRACT METADATA --
-// --------------------------------------------------------------------------------------------
-
-/**
- * Extract the meta data & store it in the final array
- * @param theFinalArray   -- ImageElement[] with dummy meta
- * @param videoFolderPath -- the full path to the base folder for video files
- * @param screenshotSettings -- ScreenshotSettings
- * @param metaStartIndex  -- the starting point in finalArray from where to extract metadata
- *                           (should be 0 when first scan, should be index of first element when rescan)
- * @param done            -- callback when done with all metadata extraction
- */
-export function extractAllMetadata(
-  theFinalArray: ImageElement[],
-  videoFolderPath: string,
-  screenshotSettings: ScreenshotSettings,
-  metaStartIndex: number,
-  done: any
-): void {
-
-  const itemTotal = theFinalArray.length;
-  let iterator = metaStartIndex;
-
-  let elementsWithMetadata: ImageElement[] = [];
-
-  if (metaStartIndex !== 0) { // if not a fresh scan
-    elementsWithMetadata = theFinalArray.slice(0, metaStartIndex); // keep those elements that have metadata
-  }
-
-  const extractMetaDataCallback = (element: ImageElement | null): void => {
-
-    if (element !== null) {
-      iterator++;
-      elementsWithMetadata.push(element);
-    }
-
-    if (iterator < itemTotal) {
-
-      sendCurrentProgress(iterator, itemTotal, 'importingMeta');
-
-      const filePathNEW = (path.join(videoFolderPath,
-                                    theFinalArray[iterator].partialPath,
-                                    theFinalArray[iterator].fileName));
-
-      extractMetadataForThisONEFile(
-        filePathNEW,
-        screenshotSettings,
-        theFinalArray[iterator],
-        extractMetaDataCallback
-      );
-
-    } else {
-
-      done(elementsWithMetadata);
-
-    }
-  };
-
-  extractMetaDataCallback(null);
+  return (thingy.startsWith('$') || thingy === 'System Volume Information');                                            // !!! TODO -- check if needed !?!?!
 }
 
 /**
@@ -484,52 +291,6 @@ function getFileDuration(metadata): number {
   }
 }
 
-/**
- * Extracts information about a single file using `ffprobe`
- * Stores information into the ImageElement and returns it via callback
- * @param filePath              path to the file
- * @param screenshotSettings    ScreenshotSettings
- * @param imageElement          index in array to update
- * @param callback
- */
-function extractMetadataForThisONEFile(
-  filePath: string,
-  screenshotSettings: ScreenshotSettings,
-  imageElement: ImageElement,
-  extractMetaCallback: any
-): void {
-  const ffprobeCommand = '"' + ffprobePath + '" -of json -show_streams -show_format -select_streams V "' + filePath + '"';
-  exec(ffprobeCommand, (err, data, stderr) => {
-    if (err) {
-      extractMetaCallback(imageElement);
-    } else {
-      const metadata = JSON.parse(data);
-      const stream = getBestStream(metadata);
-      const fileDuration: number = getFileDuration(metadata);
-
-      const duration = Math.round(fileDuration) || 0;
-      const origWidth = stream.width || 0; // ffprobe does not detect it on some MKV streams
-      const origHeight = stream.height || 0;
-
-      const stat = fs.statSync(filePath);
-
-      imageElement.duration = duration;
-      imageElement.fileSize = stat.size;
-      imageElement.mtime = stat.mtimeMs;
-      imageElement.ctime = stat.ctimeMs;
-      if (imageElement.hash === '') {
-        imageElement.hash = hashFile(filePath);
-      }
-      imageElement.height = origHeight;
-      imageElement.width = origWidth;
-      imageElement.screens = computeNumberOfScreenshots(screenshotSettings, duration);
-
-      extractMetaCallback(imageElement);
-    }
-  });
-}
-
-
 // ===========================================================================================
 // Other supporting methods
 // ===========================================================================================
@@ -552,36 +313,6 @@ function computeNumberOfScreenshots(screenshotSettings: ScreenshotSettings, dura
   }
 
   return total;
-}
-
-/**
- * Hash a given file using its size
- * @param pathToFile  -- path to file
- */
-export function hashFile(pathToFile: string): string {
-  const sampleSize = 16 * 1024;
-  const sampleThreshold = 128 * 1024;
-  const stats = fs.statSync(pathToFile);
-  const fileSize = stats.size;
-
-  let data: Buffer;
-  if (fileSize < sampleThreshold) {
-    data = fs.readFileSync(pathToFile); // too small, just read the whole file
-  } else {
-    data = Buffer.alloc(sampleSize * 3);
-    const fd = fs.openSync(pathToFile, 'r');
-    fs.readSync(fd, data, 0, sampleSize, 0);                                  // read beginning of file
-    fs.readSync(fd, data, sampleSize, sampleSize, fileSize / 2);              // read middle of file
-    fs.readSync(fd, data, sampleSize * 2, sampleSize, fileSize - sampleSize); // read end of file
-    fs.closeSync(fd);  // if you don't close, you get `EMFILE: too many open files` error
-  }
-
-  // append the file size to the data
-  const buf = Buffer.concat([data, Buffer.from(fileSize.toString())]);
-  // make the magic happen!
-  const hash = hasher('md5').update(buf.toString('hex')).digest('hex');
-  return hash;
-
 }
 
 /**
@@ -628,28 +359,6 @@ export function hashFileAsync(pathToFile: string): Promise<string> {
 }
 
 /**
- * Create a new element from metadata
- * @param file
- * @param hash
- * @param callback
- */
-export function createElement(file: TempMetadataQueueObject, callback) {
-  const newElement = NewImageElement();
-  extractMetadataAsync(file.fullPath, GLOBALS.screenshotSettings, newElement, file.stat)
-    .then((imageElement: ImageElementPlus) => {
-      imageElement.cleanName = cleanUpFileName(file.name);
-      imageElement.fileName = file.name;
-      imageElement.partialPath = file.partialPath;
-      imageElement.inputSource = file.inputSource;
-      imageElement.fullPath = file.fullPath; // insert this converting `ImageElement` to `ImageElementPlus`
-      sendNewVideoMetadata(imageElement);
-      callback();
-    }, () => {
-      callback(); // error, just continue
-    });
-}
-
-/**
  * Extracts information about a single file using `ffprobe`
  * Stores information into the ImageElement and returns it via callback
  * @param filePath              path to the file
@@ -677,12 +386,13 @@ export function extractMetadataAsync(
         const origWidth = stream.width || 0; // ffprobe does not detect it on some MKV streams
         const origHeight = stream.height || 0;
 
+        imageElement.ctime = fileStat.ctimeMs;
         imageElement.duration = duration;
         imageElement.fileSize = fileStat.size;
-        imageElement.mtime = fileStat.mtimeMs;
         imageElement.height = origHeight;
-        imageElement.width = origWidth;
+        imageElement.mtime = fileStat.mtimeMs;
         imageElement.screens = computeNumberOfScreenshots(screenshotSettings, duration);
+        imageElement.width = origWidth;
 
         if (imageElement.hash === '') {
           hashFileAsync(filePath).then((hash) => {
@@ -712,7 +422,6 @@ export function sendCurrentProgress(current: number, total: number, stage: Impor
   }
 }
 
-
 /**
  * Send final object to Angular; uses `GLOBALS` as input!
  * @param finalObject
@@ -731,12 +440,44 @@ export function sendFinalObjectToAngular(finalObject: FinalObject, globals: VhaG
 }
 
 /**
- * If .vha2 version 2, upgrade `inputDir` into `inputDirs`
+ * Writes / overwrites:
+ *   unique index for default sort
+ *   video resolution string
+ *   resolution category for resolution filtering
+ */
+export function insertTemporaryFields(imagesArray: ImageElement[]): ImageElement[] {
+
+  imagesArray.forEach((element, index) => {
+
+    element = insertTemporaryFieldsSingle(element);
+
+    // set index for default sorting
+    element.index = index;                              // TODO -- rethink index -- maybe fix here ?
+  });
+
+  return imagesArray;
+}
+
+/**
+ * Insert temporary fields but just for one file
+ */
+export function insertTemporaryFieldsSingle(element: ImageElement): ImageElement {
+  // set resolution string & bucket
+  const resolution: ResolutionMeta = labelVideo(element.width, element.height);
+  element.durationDisplay = getDurationDisplay(element.duration);
+  element.fileSizeDisplay = getFileSizeDisplay(element.fileSize);
+  element.resBucket = resolution.bucket;
+  element.resolution = resolution.label;
+  return element;
+}
+
+/**
+ * If .vha2 version 2, upgrade `inputDir` into `inputDirs` and add `inputSource` into every element
  * @param finalObject
  */
 export function upgradeToVersion3(finalObject: FinalObject): void {
 
-  if (finalObject.version === 2 && !finalObject.inputDirs) {
+  if (finalObject.version === 2) {
     console.log('OLD version file -- converting!');
     finalObject.inputDirs = {
       0: {
@@ -745,6 +486,9 @@ export function upgradeToVersion3(finalObject: FinalObject): void {
       }
     };
     finalObject.version = 3;
+    finalObject.images.forEach((element: ImageElement) => {
+      element.inputSource = 0
+    });
   }
 }
 
@@ -757,14 +501,18 @@ export function upgradeToVersion3(finalObject: FinalObject): void {
 export function startWatchingDirs(inputDirs: InputSources, currentImages: ImageElement[]): void {
   console.log('-----------------------------------');
   console.log('about to start watching for files ?');
-  console.log(currentImages.length);
+  console.log('number of files:', currentImages.length);
 
   resetWatchers(currentImages);
 
   Object.keys(inputDirs).forEach((key: string) => {
     console.log(key, 'watch = ', inputDirs[key].watch, ' : ', inputDirs[key].path);
-    if (inputDirs[key].watch) {
-      console.log('PERSISTENT WATCHING !!!');
+    if (inputDirs[key].watch || currentImages.length === 0) {
+      if (currentImages.length === 0) {
+        'FIRST SCAN'
+      } else {
+        console.log('PERSISTENT WATCHING !!!');
+      }
       startFileSystemWatching(inputDirs[key].path, parseInt(key, 10), inputDirs[key].watch);
     }
   });

@@ -16,6 +16,7 @@ import { ElectronService } from '../../providers/electron.service';
 export class StatisticsComponent implements OnInit {
 
   @Output() finalArrayNeedsSaving = new EventEmitter<any>();
+  @Output() addMissingThumbnailsPlease = new EventEmitter<any>();
 
   @Input() finalArray: ImageElement[];
   @Input() hubName: string;
@@ -77,7 +78,9 @@ export class StatisticsComponent implements OnInit {
       });
 
       if (!pathAlreadyExists) {
-        this.inputFolders[this.pickNextIndex(this.inputFolders)] = { path: filePath, watch: false };
+        const nextIndex: number = this.pickNextIndex(this.inputFolders);
+        this.inputFolders[nextIndex] = { path: filePath, watch: false };
+        this.electronService.ipcRenderer.send('start-watching-folder', nextIndex, filePath, false);
       }
 
       this.cd.detectChanges();
@@ -107,10 +110,30 @@ export class StatisticsComponent implements OnInit {
     console.log(shouldWatch);
     if (shouldWatch) {
       console.log(this.inputFolders[index].path);
-      this.tellNodeStartWatching(index, this.inputFolders[index].path);
+      this.tellNodeStartWatching(index, this.inputFolders[index].path, shouldWatch);
     } else {
       this.tellNodeStopWatching(index);
     }
+  }
+
+  /**
+   * Single scan to add any new videos
+   * @param index
+   */
+  rescanFolder(index: number) {
+    console.log(index);
+    console.log(this.inputFolders[index].path);
+    this.tellNodeStartWatching(index, this.inputFolders[index].path, false);
+    setTimeout(() => {
+      this.cd.detectChanges(); // to update template whether to show "Rescan" or not
+    }, 1);
+  }
+
+  /**
+   * Add any missing thumbnails / continue thumbnail import
+   */
+  addMissingThumbnails() {
+    this.addMissingThumbnailsPlease.emit();
   }
 
   /**
@@ -143,8 +166,8 @@ export class StatisticsComponent implements OnInit {
    * Tell node to start watching a particular folder
    * @param itemSourceKey from InputSources
    */
-  tellNodeStartWatching(itemSourceKey: number, path: string) {
-    this.electronService.ipcRenderer.send('start-watching-folder', itemSourceKey, path);
+  tellNodeStartWatching(itemSourceKey: number, path: string, persistent: boolean) {
+    this.electronService.ipcRenderer.send('start-watching-folder', itemSourceKey, path, persistent);
   }
 
   trackByFn(index, item) {

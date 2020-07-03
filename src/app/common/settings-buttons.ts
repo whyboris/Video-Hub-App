@@ -24,7 +24,6 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'hideSidebar'
  | 'hideTop'
  | 'hoverScrub'
- | 'importNewFiles'
  | 'magic'
  | 'makeLarger'
  | 'makeSmaller'
@@ -33,7 +32,6 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'openAtTimestamp'
  | 'playPlaylist'
  | 'regex'
- | 'rescanDirectory'
  | 'resetSettings'
  | 'resolutionFilter'
  | 'returnToFirstScreenshot'
@@ -70,8 +68,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'tagExclusion'
  | 'tagIntersection'
  | 'tagUnion'
- | 'thumbAutoAdvance'
- | 'verifyThumbnails';
+ | 'thumbAutoAdvance';
 
 // Add `SettingsButtons` items here so they show up in the buttons ribbon and in the settings
 // Each array separates buttons into their own button groups visually
@@ -168,9 +165,6 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
   ],
   [ // 14
     'startWizard',
-    'rescanDirectory',
-    'importNewFiles',
-    'verifyThumbnails',
     'resetSettings',
     'clearHistory',
     'showDeleteOption',
@@ -414,14 +408,6 @@ export const SettingsButtons: SettingsButtonsType = {
     title: 'BUTTONS.hoverScrubHint',
     toggled: true
   },
-  'importNewFiles': {
-    description: 'BUTTONS.importNewFilesDescription',
-    hidden: true,
-    iconName: 'icon-import-new',
-    moreInfo: 'BUTTONS.importNewFilesMoreInfo',
-    title: 'BUTTONS.importNewFilesHint',
-    toggled: false
-  },
   'magic': {
     description: 'BUTTONS.magicDescription',
     hidden: false,
@@ -484,15 +470,6 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-regex',
     moreInfo: 'BUTTONS.regexMoreInfo',
     title: 'BUTTONS.regexHint',
-    toggled: false
-  },
-  'rescanDirectory': {
-    description: 'BUTTONS.rescanDirectoryDescription',
-    hidden: true,
-    iconName: 'icon-import-rescan',
-    moreInfo: 'BUTTONS.rescanDirectoryMoreInfo',
-    settingsHeading: 'SETTINGS.currentHub',
-    title: 'BUTTONS.rescanDirectoryHint',
     toggled: false
   },
   'resetSettings': {
@@ -766,13 +743,6 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-toggle-auto-scrub',
     moreInfo: 'BUTTONS.thumbAutoAdvanceMoreInfo',
     title: 'BUTTONS.thumbAutoAdvanceHint',
-    toggled: false
-  },
-  'verifyThumbnails': {
-    description: 'BUTTONS.verifyThumbnailsDescription',
-    hidden: false,
-    moreInfo: 'BUTTONS.verifyThumbnailsMoreInfo',
-    title: 'BUTTONS.verifyThumbnailsHint',
     toggled: false
   }
 }

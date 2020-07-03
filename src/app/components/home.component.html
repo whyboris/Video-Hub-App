@@ -249,6 +249,7 @@
 
       <app-statistics
         (finalArrayNeedsSaving)="finalArrayNeedsSaving = true"
+        (addMissingThumbnailsPlease)="extractMissingThumbnails()"
         [finalArray]="finalArray"
         [hubName]="appState.hubName"
         [numFolders]="appState.numOfFolders"
@@ -373,8 +374,10 @@
     >
 
       <div class="filtering-total">
-        {{ appState.numOfFolders | number }}
-        {{ (appState.numOfFolders === 1 ? 'SIDEBAR.totalFolders' : 'SIDEBAR.totalFoldersPlural') | translate }}
+        <ng-container *ngIf="appState.numOfFolders !== 0">
+          {{ appState.numOfFolders | number }}
+          {{ (appState.numOfFolders === 1 ? 'SIDEBAR.totalFolders' : 'SIDEBAR.totalFoldersPlural') | translate }}
+        </ng-container>
         <br>
         {{ finalArray.length | number }} {{ 'SIDEBAR.videos' | translate }}
       </div>
@@ -947,28 +950,6 @@
   [batchTaggingMode]="batchTaggingMode"
   [settingsButtons]="settingsButtons"
 ></app-tag-tray>
-
-<!-- IMPORT MODAL  -->
-<div
-  *ngIf="importStage === 'importingMeta'"
-  class="progress-modal"
-  @modalAnimation
->
-  <div class="progress-container">
-    <div class="current-progress" [ngStyle]="{ width: progressPercent * 100 + '%' }"></div>
-  </div>
-
-  <span class="progress-numbers" style="float: left"> {{ 'WIZARD.stage' | translate }} 1 / 2 </span>
-
-  <div class="progress-numbers progress-numbers-center">
-    {{ progressNum1 }} / {{ progressNum2 }}
-  </div>
-
-  <span class="progress-numbers" style="float: right">{{ timeExtractionRemaining > 0 ? (timeExtractionRemaining | lengthPipe) : '' }}</span>
-
-</div>
-
-<div [ngClass]="{ 'disabled-overlay': importStage === 'importingMeta' }"></div>
 
 <!-- ============================================== -->
 <!-- ================    WIZARD    ================ -->

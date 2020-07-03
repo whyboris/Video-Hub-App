@@ -1,28 +1,40 @@
-// Code written by Cal2195
+// async & chokidar Code written by Cal2195
 // Was originally added to `main-extract.ts` but was moved here for clarity
 
-import { GLOBALS } from './main-globals';
-import { ImageElement, ImageElementPlus } from '../interfaces/final-object.interface';
-import { extractAll } from './main-extract';
-import { sendCurrentProgress, insertTemporaryFieldsSingle, hasAllThumbs, createElement } from './main-support';
-
-import * as path from 'path';
-
 const async = require('async');
-const thumbQueue = async.queue(thumbQueueRunner, 1); // 1 is the number of threads
+const chokidar = require('chokidar');
+import * as path from 'path';
+import { FSWatcher } from 'chokidar'; // probably the correct type for chokidar.watch() object
+import { Stats } from 'fs';
 
-// ========================================================
+import { GLOBALS } from './main-globals';
+
+import { ImageElement, ImageElementPlus, NewImageElement } from '../interfaces/final-object.interface';
+import { acceptableFiles } from './main-filenames';
+import { extractAll } from './main-extract';
+import { sendCurrentProgress, insertTemporaryFieldsSingle, extractMetadataAsync, cleanUpFileName } from './main-support';
+
+// =========================================================================================================================================
+// Thum extraction queue runner
 // WARNING - state variable hanging around!
+let thumbQueue; // will be `QueueObject` - https://caolan.github.io/async/v3/docs.html#QueueObject
 let thumbsDone = 0;
 // ========================================================
 
-thumbQueue.drain(() => {
-  thumbsDone = 0;
-  sendCurrentProgress(1, 1, 'done'); // indicates 100%   TODO - rethink `sendCurrentProgress` since we are using a new system for extraction
-});
+startNewQueue();
 
-export function queueThumbExtraction(element: ImageElement) {
-  thumbQueue.push(element);
+/**
+ * Create a new (empty) queue for extracting thumbnails
+ */
+function startNewQueue() {
+  thumbsDone = 0;
+  thumbQueue = async.queue(thumbQueueRunner, 1); // 1 is the number of threads
+
+  thumbQueue.drain(() => {
+    thumbsDone = 0;
+    sendCurrentProgress(1, 1, 'done');              // TODO: reconsider `sendCurrentProgress` since we are using a new system for extraction
+    console.log('thumbnail extraction complete!');
+  });
 }
 
 /**
@@ -47,19 +59,16 @@ function thumbQueueRunner(element: ImageElement, done) {
   );
 }
 
+export function stopThumbExtraction() {
+  thumbQueue.kill();
+  startNewQueue();
+}
+
 // =========================================================================================================================================
-// Code written by Cal2195
-// Was originally added to `main-support.ts` bot was moved here for clarity
-
-import { Stats } from 'fs';
-import { acceptableFiles } from './main-filenames';
-
-const chokidar = require('chokidar');
-import { FSWatcher } from 'chokidar'; // probably the correct type for chokidar.watch() object
-
-// ========================================================
+// Metadata extracting queue runner
 // WARNING - state variables hanging around!
-const metadataQueue = async.queue(metadataQueueRunner, 8); // 8 is the number of 'threads'
+const metadataQueue = async.queue(metadataQueueRunner, 1); // 1 is the number of parallel worker functions
+                                                           // ^--- experiment with numbers to see what is fastest (try 8)
 
 // Create maps where the value = 1 always.
 // It is faster to check if key exists than searching through an array.
@@ -84,33 +93,44 @@ export function sendNewVideoMetadata(imageElement: ImageElementPlus) {
 
   alreadyInAngular.set(imageElement.fullPath, 1);
 
-  delete imageElement.fullPath;
+  delete imageElement.fullPath; // downgrade to `ImageElement` from `ImageElementPlus`
 
   const elementForAngular = insertTemporaryFieldsSingle(imageElement);
   GLOBALS.angularApp.sender.send('new-video-meta', elementForAngular);
-
 
   // PROBABLY BETTER DONE ELSEWHERE !!!!
   const screenshotOutputFolder: string = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName);
 
   if (!hasAllThumbs(imageElement.hash, screenshotOutputFolder, GLOBALS.screenshotSettings.clipSnippets > 0 )) {
-    queueThumbExtraction(imageElement);
+    thumbQueue.push(imageElement);
   }
 }
 
 /**
- * Create element if not already present
+ * Create empty element, extract and update metadata, send over to Angular
  * @param fileInfo - various stat metadata about the file
- * @param callback
+ * @param done
  */
-export function metadataQueueRunner(fileInfo: TempMetadataQueueObject, callback) {
+export function metadataQueueRunner(file: TempMetadataQueueObject, done) {
 
-  createElement(fileInfo, callback);
+  const newElement = NewImageElement();
+  extractMetadataAsync(file.fullPath, GLOBALS.screenshotSettings, newElement, file.stat)
+    .then((imageElement: ImageElementPlus) => {
+      imageElement.cleanName = cleanUpFileName(file.name);
+      imageElement.fileName = file.name;
+      imageElement.fullPath = file.fullPath; // insert this converting `ImageElement` to `ImageElementPlus`
+      imageElement.inputSource = file.inputSource;
+      imageElement.partialPath = file.partialPath;
+      sendNewVideoMetadata(imageElement);
+      done();
+    }, () => {
+      done(); // error, just continue
+    });
 
 }
 
 /**
- * Create a new `chokidar` watcher for a directory
+ * Create a new `chokidar` watcher for a particular directory
  * @param inputDir
  * @param inputSource -- the number corresponding to the `inputSource` in ImageElement -- must be set!
  * @param persistent  -- whether to continue watching after the initial scan
@@ -127,6 +147,7 @@ export function startFileSystemWatching(
     alwaysStat: true,
     awaitWriteFinish: true,
     cwd: inputDir,
+    // usePolling: true, // may be neccessary for watching files over network ??!?!?!??! -- inspect!
     ignored: '**/vha-*/**', // maybe ignore files that start with `._` ? WTF MAC!?
     persistent: persistent,
   }
@@ -210,12 +231,10 @@ export function resetWatchers(finalArray: ImageElement[]): void {
       element.partialPath,
       element.fileName
     );
-    console.log(fullPath);
 
     alreadyInAngular.set(fullPath, 1);
   });
 }
-
 
 /**
  * Close the old watcher
@@ -228,6 +247,7 @@ export function closeWatcher(inputSource: number): void {
     console.log('closing ', inputSource);
     watcherMap.get(inputSource).close().then(() => {
       console.log(inputSource, ' closed!');
+      // do nothing
     });
   }
 }
@@ -238,14 +258,55 @@ export function closeWatcher(inputSource: number): void {
  * @param inputSource
  * @param folderPath
  */
-export function startWatcher(inputSource: number, folderPath): void {
-  console.log('start watching !!!!', inputSource, folderPath);
+export function startWatcher(inputSource: number, folderPath: string, persistent: boolean): void {
+  console.log('start watching !!!!', inputSource, folderPath, persistent);
 
   GLOBALS.selectedSourceFolders[inputSource] = {
     path: folderPath,
-    watch: true,
+    watch: persistent,
   }
 
-  startFileSystemWatching(folderPath, inputSource, true);
+  startFileSystemWatching(folderPath, inputSource, persistent);
 
+}
+
+
+// ============ REGENERATE SCREENSHOTS
+
+const fs = require('fs');
+
+/**
+ * Check if thumbnail, flimstrip, and clip is present
+ * return boolean
+ * @param fileHash           - unique identifier of the file
+ * @param screenshotFolder   - path to where thumbnails are
+ * @param shouldExtractClips - whether or not to extract clips
+ */
+export function hasAllThumbs(
+  fileHash: string,
+  screenshotFolder: string,
+  shouldExtractClips: boolean
+): boolean {
+  return fs.existsSync(path.join(screenshotFolder, '/thumbnails/', fileHash + '.jpg'))
+      && fs.existsSync(path.join(screenshotFolder, '/filmstrips/', fileHash + '.jpg'))
+      && (shouldExtractClips ? fs.existsSync(path.join(screenshotFolder, '/clips/', fileHash + '.mp4')) : true);
+}
+
+/**
+ * Generate indexes for any files missing thumbnails
+ * @param fullArray          - ImageElement array
+ * @param screenshotFolder   - path to where thumbnails are stored
+ * @param shouldExtractClips - boolean -- whether user wants to extract clips or not
+ */
+export function extractAnyMissingThumbs(
+  fullArray: ImageElement[],
+  screenshotFolder: string,
+  shouldExtractClips: boolean
+): void {
+  fullArray.forEach((element: ImageElement) => {
+    if (!hasAllThumbs(element.hash, screenshotFolder, shouldExtractClips)) {
+      console.log('thumb missing -', element.fileName);
+      thumbQueue.push(element);
+    }
+  });
 }

@@ -86,7 +86,17 @@
   cursor: not-allowed;
   font-weight: bold;
   position: absolute;
-  right: calc(100% + 46px);
+  right: calc(100% + 10px);
+  text-align: right;
+  top: 1px;
+}
+
+.rescan-input-folder {
+  color: $pretty-blue;
+  cursor: pointer;
+  font-weight: bold;
+  position: absolute;
+  right: calc(100% + 47px);
   text-align: right;
   top: 1px;
 }
