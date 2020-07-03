@@ -1,5 +1,5 @@
 .time, .rez {
-  bottom: 4px;
+  bottom: 3px;
   color: rgba(255, 255, 255, 0.8);
   font-size: 10px;
   position: absolute;
@@ -11,7 +11,7 @@
 }
 
 .rez {
-  left: 3px;
+  left: 4px;
 }
 
 .sheet-icon {
@@ -32,12 +32,12 @@
 .not-connected {
   background-color: yellow;
   border-radius: 5px;
-  bottom: 4px;
   display: block;
   height: 10px;
-  left: calc(50% - 5px);
+  left: 4px;
   opacity: 0.5;
   position: absolute;
+  top: 4px;
   width: 10px;
   z-index: 2;
 }

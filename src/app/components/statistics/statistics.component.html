@@ -38,7 +38,11 @@
         {{ 'STATISTICS.notConnected' | translate }}
       </span>
 
-      <span *ngIf="i === 0 && !removeFoldersMode" class="watch-folder-note">
+      <span
+        *ngIf="i === 0 && !removeFoldersMode"
+        class="watch-folder-note"
+        title="{{ 'STATISTICS.watchFolderHelpText' | translate }}"
+      >
         {{ 'STATISTICS.watchFolder' | translate }}
       </span>
       <label class="switch" *ngIf="!removeFoldersMode">
@@ -47,7 +51,14 @@
           [(ngModel)]="item.value.watch"
           (change)="folderWatchStatusChange(item.key, item.value.watch)"
         >
-        <span class="slider round"></span>
+        <span
+          title="{{
+                    item.value.watch
+                    ? ('STATISTICS.currentlyWatching' | translate)
+                    : ('STATISTICS.currentlyNotWatching' | translate)
+                  }}"
+          class="slider round"
+        ></span>
       </label>
     </div>
   </div>
