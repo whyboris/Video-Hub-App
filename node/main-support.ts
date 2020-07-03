@@ -406,7 +406,7 @@ export function extractMetadataAsync(
  * @param stage ImportStage
  */
 export function sendCurrentProgress(current: number, total: number, stage: ImportStage): void {
-  GLOBALS.angularApp.sender.send('processingProgress', current, total, stage);
+  GLOBALS.angularApp.sender.send('import-progress-update', current, total, stage);
   if (stage !== 'done') {
     GLOBALS.winRef.setProgressBar(current / total);
   } else {
@@ -497,14 +497,37 @@ export function startWatchingDirs(inputDirs: InputSources, currentImages: ImageE
   resetWatchers(currentImages);
 
   Object.keys(inputDirs).forEach((key: string) => {
-    console.log(key, 'watch = ', inputDirs[key].watch, ' : ', inputDirs[key].path);
-    if (inputDirs[key].watch || currentImages.length === 0) {
-      if (currentImages.length === 0) {
-        'FIRST SCAN'
+
+    const pathToDir: string = inputDirs[key].path;
+
+    console.log(key, 'watch = ', inputDirs[key].watch, ' : ', pathToDir);
+
+
+    // check if directory connected
+    fs.access(pathToDir, fs.constants.W_OK, function(err) {
+
+      if(err){
+
+        console.error('!!!!! DIRECTORY NOT CONNECTED !!!!!');
+        GLOBALS.angularApp.sender.send('directory-not-connected', parseInt(key, 10), pathToDir);
+
       } else {
-        console.log('PERSISTENT WATCHING !!!');
+
+        if (inputDirs[key].watch || currentImages.length === 0) {
+
+          // Temp logging
+          if (currentImages.length === 0) {
+            'FIRST SCAN'
+          } else {
+            console.log('PERSISTENT WATCHING !!!');
+          }
+
+          startFileSystemWatching(pathToDir, parseInt(key, 10), inputDirs[key].watch);
+        }
+
       }
-      startFileSystemWatching(inputDirs[key].path, parseInt(key, 10), inputDirs[key].watch);
-    }
+
+    });
+
   });
 }

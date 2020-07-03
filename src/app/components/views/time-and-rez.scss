@@ -29,3 +29,15 @@
   }
 }
 
+.not-connected {
+  background-color: yellow;
+  border-radius: 5px;
+  bottom: 4px;
+  display: block;
+  height: 10px;
+  left: calc(50% - 5px);
+  opacity: 0.5;
+  position: absolute;
+  width: 10px;
+  z-index: 2;
+}

@@ -101,6 +101,18 @@
   top: 1px;
 }
 
+.input-not-connected {
+  // color: #c0ad3f;
+  cursor: initial;
+  // font-weight: bold;
+  font-style: italic;
+  min-width: 200px;
+  position: absolute;
+  right: calc(100% + 47px);
+  text-align: right;
+  top: 1px;
+}
+
 @media (max-width: 900px) {
   .table-container {
     flex-direction: column;

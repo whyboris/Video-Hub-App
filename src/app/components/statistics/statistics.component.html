@@ -22,12 +22,19 @@
         {{ 'STATISTICS.removeFolder' | translate }}
       </span>
       <span
-        *ngIf="!removeFoldersMode && !item.value.watch"
+        *ngIf="!removeFoldersMode && !item.value.watch && sourceFolderService.sourceFolderConnected[item.key]"
         class="rescan-input-folder"
         (click)="rescanFolder(item.key)"
       >
         {{ 'STATISTICS.rescanFolder' | translate }}
       </span>
+      <span
+        *ngIf="!sourceFolderService.sourceFolderConnected[item.key]"
+        class="input-not-connected"
+      >
+        NOT CONNECTED
+      </span>
+
       <span *ngIf="i === 0 && !removeFoldersMode" class="watch-folder-note">
         {{ 'STATISTICS.watchFolder' | translate }}
       </span>

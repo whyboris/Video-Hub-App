@@ -122,7 +122,7 @@
     [folderPath]="appState.selectedOutputFolder"
     [hubName]="appState.hubName"
     [imgHeight]="previewHeight"
-    [selectedSourceFolder]="appState.selectedSourceFolder[sheetItemToDisplay.inputSource].path"
+    [selectedSourceFolder]="sourceFolderService.selectedSourceFolder[sheetItemToDisplay.inputSource].path"
     [star]="sheetItemToDisplay.stars"
 
     [darkMode]="settingsButtons['darkMode'].toggled"
@@ -253,10 +253,10 @@
         [finalArray]="finalArray"
         [hubName]="appState.hubName"
         [numFolders]="appState.numOfFolders"
-        [inputFolders]="appState.selectedSourceFolder"
+        [inputFolders]="sourceFolderService.selectedSourceFolder"
         [pathToVhaFile]="appState.currentVhaFile"
         [screenshotSettings]="currentScreenshotSettings"
-        [videoFolder]="appState.selectedSourceFolder"
+        [videoFolder]="sourceFolderService.selectedSourceFolder"
       ></app-statistics>
 
     </div>
@@ -728,6 +728,8 @@
 
           [video]="item"
 
+          [connected]="sourceFolderService.sourceFolderConnected[item.inputSource]"
+
           [elHeight]="previewHeight + textPaddingHeight"
           [elWidth]="previewWidth"
           [folderPath]="appState.selectedOutputFolder"
@@ -856,7 +858,7 @@
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
           [imgHeight]="previewHeight"
-          [selectedSourceFolder]="appState.selectedSourceFolder"
+          [selectedSourceFolder]="sourceFolderService.selectedSourceFolder"
 
           [star]="item.stars"
 

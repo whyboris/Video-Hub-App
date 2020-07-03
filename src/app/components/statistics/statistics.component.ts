@@ -1,8 +1,9 @@
 import { Component, Input, OnInit, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 
-import { ImageElement, ScreenshotSettings, InputSources } from '../../../../interfaces/final-object.interface';
-
 import { ElectronService } from '../../providers/electron.service';
+import { SourceFolderService } from './source-folder.service';
+
+import { ImageElement, ScreenshotSettings, InputSources } from '../../../../interfaces/final-object.interface';
 
 @Component({
   selector: 'app-statistics',
@@ -44,7 +45,8 @@ export class StatisticsComponent implements OnInit {
 
   constructor(
     public cd: ChangeDetectorRef,
-    public electronService: ElectronService
+    public electronService: ElectronService,
+    public sourceFolderService: SourceFolderService,
   ) { }
 
   ngOnInit() {
