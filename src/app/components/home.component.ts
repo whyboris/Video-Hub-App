@@ -353,21 +353,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.translate.setDefaultLang('en');
     this.changeLanguage('en');
 
-    // To test the progress bar
-    // setInterval(() => {
-    //   this.importStage = this.importStage === 'importingScreenshots' ? 'importingMeta' : 'importingScreenshots';
-    // }, 3000);
-    // this.importStage = 'importingMeta';
-    // this.importStage = 'importingScreenshots';
-    // this.timeExtractionRemaining = 100;
-    // setInterval(() => {
-    //   this.timeExtractionRemaining = this.timeExtractionRemaining - 2;
-    //   this.extractionPercent = this.extractionPercent + 8;
-    //   if (this.extractionPercent > 99) {
-    //     this.extractionPercent = 1;
-    //   }
-    // }, 2000);
-
     setTimeout(() => {
       this.wordFrequencyService.finalMapBehaviorSubject.subscribe((value: WordFreqAndHeight[]) => {
         this.wordFreqArr = value;
@@ -1289,17 +1274,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.clearRecentlyViewedHistory();
     } else if (uniqueKey === 'resetSettings') {
       this.resetSettingsToDefault();
-    } else if (uniqueKey === 'importNewFiles') {
-      this.importNewFiles();
+    // } else if (uniqueKey === 'importNewFiles') {
+    //   this.importNewFiles();
     } else if (uniqueKey === 'showTags') {
       if (this.settingsModalOpen) {
         this.settingsModalOpen = false;
       }
       this.toggleButtonOpposite('showTags');
-    } else if (uniqueKey === 'verifyThumbnails') {
-      this.verifyThumbnails();
-    } else if (uniqueKey === 'rescanDirectory') {
-      this.rescanDirectory();
+    // } else if (uniqueKey === 'verifyThumbnails') {
+    //   this.verifyThumbnails();
+    // } else if (uniqueKey === 'rescanDirectory') {
+    //   this.rescanDirectory();
     } else if (uniqueKey === 'playPlaylist') {
       this.electronService.ipcRenderer.send(
         'please-create-playlist',
@@ -1401,7 +1386,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public importNewFiles(): void {
     if (this.rootFolderLive) {
       this.progressNum1 = 0;
-      this.importStage = 'importingMeta';
+      // this.importStage = 'importingMeta';
       if (this.settingsModalOpen) {
         this.toggleSettings();
       }
@@ -1425,13 +1410,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
 
+  public extractMissingThumbnails(): void {
+    console.log('trying to extract missing thumbnails');
+    this.electronService.ipcRenderer.send('add-missing-thumbnails', this.finalArray, this.currentScreenshotSettings.clipSnippets > 0);
+  }
+
   /**
    * Rescan the current input directory
    */
   public rescanDirectory(): void {
     if (this.rootFolderLive) {
       this.progressNum1 = 0;
-      this.importStage = 'importingMeta';
+      // this.importStage = 'importingMeta';
       if (this.settingsModalOpen) {
         this.toggleSettings();
       }

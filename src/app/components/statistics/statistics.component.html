@@ -21,10 +21,17 @@
       >
         {{ 'STATISTICS.removeFolder' | translate }}
       </span>
-      <span *ngIf="i === 0" class="watch-folder-note">
+      <span
+        *ngIf="!removeFoldersMode && !item.value.watch"
+        class="rescan-input-folder"
+        (click)="rescanFolder(item.key)"
+      >
+        {{ 'STATISTICS.rescanFolder' | translate }}
+      </span>
+      <span *ngIf="i === 0 && !removeFoldersMode" class="watch-folder-note">
         {{ 'STATISTICS.watchFolder' | translate }}
       </span>
-      <label class="switch">
+      <label class="switch" *ngIf="!removeFoldersMode">
         <input
           type="checkbox"
           [(ngModel)]="item.value.watch"
@@ -42,6 +49,14 @@
     >
       {{ 'STATISTICS.addFolderToHub' | translate }}
     </button>
+
+    <button
+      class="wizard-button"
+      (click)="addMissingThumbnails()"
+    >
+      {{ 'STATISTICS.addMissingThumbnails' | translate }}
+    </button>
+
     <button
       *ngIf="(objectKeys(videoFolder).length > 1)"
       (click)="removeFoldersMode = !removeFoldersMode"

@@ -13,7 +13,7 @@ import { ImageElement, FinalObject, InputSources } from '../interfaces/final-obj
 import { SettingsObject } from '../interfaces/settings-object.interface';
 import { createDotPlsFile, writeVhaFileToDisk } from './main-support';
 import { replaceThumbnailWithNewImage } from './main-extract';
-import { closeWatcher, startWatcher } from './main-extract-async';
+import { closeWatcher, startWatcher, extractAnyMissingThumbs } from './main-extract-async';
 
 let preventSleepId: number;
 
@@ -228,9 +228,14 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
   /**
    * Stop watching a particular folder
    */
-  ipc.on('start-watching-folder', (event, watchedFolderIndex: number, path: string) => {
-    console.log('start watching:', watchedFolderIndex, path);
-    startWatcher(watchedFolderIndex, path);
+  ipc.on('start-watching-folder', (event, watchedFolderIndex: number, path: string, persistent: boolean) => {
+    console.log('start watching:', watchedFolderIndex, path, persistent);
+    startWatcher(watchedFolderIndex, path, persistent);
+  });
+
+  ipc.on('add-missing-thumbnails', (event, finalArray: ImageElement[], extractClips: boolean) => {
+    const screenshotOutputFolder: string = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName);
+    extractAnyMissingThumbs(finalArray, screenshotOutputFolder, extractClips);
   });
 
   /**

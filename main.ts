@@ -23,6 +23,7 @@ import { sendFinalObjectToAngular, startWatchingDirs, upgradeToVersion3, writeVh
 import { FinalObject } from './interfaces/final-object.interface';
 import { SettingsObject } from './interfaces/settings-object.interface';
 import { WizardOptions } from './interfaces/wizard-options.interface';
+import { stopThumbExtraction } from './node/main-extract-async';
 
 // Variables
 const pathToAppData = app.getPath('appData');
@@ -223,6 +224,9 @@ function tellElectronDarkModeChange(mode: string) {
  * @param pathToVhaFile full path to the .vha2 file
  */
 function openThisDamnFile(pathToVhaFile: string) {
+
+  stopThumbExtraction(); // todo -- rename to "reset task runners" and reset all that jazz
+
   macFirstRun = false;     // TODO - figure out how to open file when double click first time on Mac
 
   if (userWantedToOpen) {                                          // TODO - clean up messy override
@@ -249,7 +253,7 @@ function openThisDamnFile(pathToVhaFile: string) {
       GLOBALS.selectedOutputFolder = path.parse(pathToVhaFile).dir;
       GLOBALS.hubName = finalObject.hubName;
       GLOBALS.screenshotSettings = finalObject.screenshotSettings;
-      upgradeToVersion3(finalObject); // `inputDir` -> `inputDirs`
+      upgradeToVersion3(finalObject);
       GLOBALS.selectedSourceFolders = finalObject.inputDirs;
 
       sendFinalObjectToAngular(finalObject, GLOBALS);
@@ -320,7 +324,6 @@ ipcMain.on('start-the-import', (event, wizard: WizardOptions) => {
       fs.mkdirSync(path.join(outDir, 'vha-' + hubName + '/clips'));
     }
 
-    GLOBALS.cancelCurrentImport = false;
     GLOBALS.hubName = hubName;
     GLOBALS.selectedOutputFolder = outDir;
     GLOBALS.selectedSourceFolders = wizard.selectedSourceFolder;
@@ -412,7 +415,7 @@ ipcMain.on('load-this-vha-file', (event, pathToVhaFile: string, finalObjectToSav
  * Interrupt current import process
  */
 ipcMain.on('cancel-current-import', (event): void => {
-  GLOBALS.cancelCurrentImport = true;
+  stopThumbExtraction();
 });
 
 /**
