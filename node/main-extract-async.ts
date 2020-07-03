@@ -318,3 +318,54 @@ export function extractAnyMissingThumbs(
     }
   });
 }
+
+/**
+ * Scan the output directory and delete any file not in `hashesPresent`
+ * @param hashesPresent
+ * @param outputDir
+ */
+export function removeThumbnailsNotInHub(hashesPresent: Map<string, number>, outputDir: string): void {
+
+  const watcherConfig = {
+    awaitWriteFinish: true,
+    cwd: outputDir,
+    persistent: false,
+  }
+
+  const watcher: FSWatcher = chokidar.watch('**', watcherConfig)
+    .on('add', (filePath: string) => {
+
+      const parsedPath = path.parse(filePath);
+
+      const ext = parsedPath.ext.substr(1); // remove the `.` from extension (e.g. `.jpg`)
+
+      if (!['jpg', 'mp4'].includes(ext.toLowerCase())) {
+        return; // non-jpg or non-mp4 file (not from VHA - do not delete!)
+      }
+
+      const fileNameHash = parsedPath.name;
+
+      if (!hashesPresent.has(fileNameHash)) {
+        const fullPath = path.join(outputDir, filePath);
+        deleteThumbQueue.push(fullPath);
+      }
+
+    })
+    .on('ready', () => {
+      watcher.close().then(() => {
+        // do nothing - the watcher is now safely closed
+      });
+    });
+
+}
+
+const deleteThumbQueue = async.queue(deleteThumbQueueRunner, 1);
+
+function deleteThumbQueueRunner(pathToFile: string, done) {
+
+  console.log('deleting:', pathToFile);
+
+  fs.unlink(pathToFile, (err) => {
+    done();
+  });
+}

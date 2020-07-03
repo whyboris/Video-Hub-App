@@ -18,6 +18,7 @@ export class StatisticsComponent implements OnInit {
 
   @Output() finalArrayNeedsSaving = new EventEmitter<any>();
   @Output() addMissingThumbnailsPlease = new EventEmitter<any>();
+  @Output() cleanScreenshotFolderPlease = new EventEmitter<any>();
 
   @Input() finalArray: ImageElement[];
   @Input() hubName: string;
@@ -135,7 +136,7 @@ export class StatisticsComponent implements OnInit {
    * Add any missing thumbnails / continue thumbnail import
    */
   addMissingThumbnails() {
-    this.addMissingThumbnailsPlease.emit();
+    this.addMissingThumbnailsPlease.emit(true);
   }
 
   /**
@@ -159,6 +160,11 @@ export class StatisticsComponent implements OnInit {
     console.log(this.inputFolders[itemSourceKey]);
     this.tellNodeStopWatching(itemSourceKey);
     delete this.inputFolders[itemSourceKey];
+  }
+
+  cleanScreenshotFolder(): void {
+    console.log('cleaning screenshots!');
+    this.cleanScreenshotFolderPlease.emit(true);
   }
 
   /**

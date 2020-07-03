@@ -250,6 +250,7 @@
       <app-statistics
         (finalArrayNeedsSaving)="finalArrayNeedsSaving = true"
         (addMissingThumbnailsPlease)="extractMissingThumbnails()"
+        (cleanScreenshotFolderPlease)="cleanScreenshotFolder()"
         [finalArray]="finalArray"
         [hubName]="appState.hubName"
         [numFolders]="appState.numOfFolders"

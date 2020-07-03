@@ -63,21 +63,7 @@
     </div>
   </div>
 
-  <span class="stats-heading">
-    <button
-      class="wizard-button start-import"
-      (click)="addAnotherFolder()"
-    >
-      {{ 'STATISTICS.addFolderToHub' | translate }}
-    </button>
-
-    <button
-      class="wizard-button"
-      (click)="addMissingThumbnails()"
-    >
-      {{ 'STATISTICS.addMissingThumbnails' | translate }}
-    </button>
-
+  <span class="edit-mode-container">
     <button
       *ngIf="(objectKeys(videoFolder).length > 1)"
       (click)="removeFoldersMode = !removeFoldersMode"
@@ -86,7 +72,33 @@
     >
       {{ 'STATISTICS.editFolders' | translate }}
     </button>
+
+    <span class="edit-mode-more-buttons" *ngIf="removeFoldersMode">
+      <button
+        class="wizard-button start-import"
+        (click)="addAnotherFolder()"
+      >
+        {{ 'STATISTICS.addFolderToHub' | translate }}
+      </button>
+
+      <button
+        class="wizard-button"
+        (click)="addMissingThumbnails()"
+      >
+        {{ 'STATISTICS.addMissingThumbnails' | translate }}
+      </button>
+
+      <button
+        class="wizard-button"
+        (click)="cleanScreenshotFolder()"
+        title="{{ 'STATISTICS.cleanScreenshotsHint' | translate }}"
+      >
+        {{ 'STATISTICS.cleanScreenshots' | translate }}
+      </button>
+    </span>
+
   </span>
+
 
   <div class="table-container">
 

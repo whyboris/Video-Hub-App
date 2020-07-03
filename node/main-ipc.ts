@@ -13,7 +13,7 @@ import { ImageElement, FinalObject, InputSources } from '../interfaces/final-obj
 import { SettingsObject } from '../interfaces/settings-object.interface';
 import { createDotPlsFile, writeVhaFileToDisk } from './main-support';
 import { replaceThumbnailWithNewImage } from './main-extract';
-import { closeWatcher, startWatcher, extractAnyMissingThumbs } from './main-extract-async';
+import { closeWatcher, startWatcher, extractAnyMissingThumbs, removeThumbnailsNotInHub } from './main-extract-async';
 
 let preventSleepId: number;
 
@@ -233,9 +233,26 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
     startWatcher(watchedFolderIndex, path, persistent);
   });
 
+  /**
+   * extract any missing thumbnails
+   */
   ipc.on('add-missing-thumbnails', (event, finalArray: ImageElement[], extractClips: boolean) => {
     const screenshotOutputFolder: string = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName);
     extractAnyMissingThumbs(finalArray, screenshotOutputFolder, extractClips);
+  });
+
+  /**
+   * Remove any thumbnails for files no longer present in the hub
+   */
+  ipc.on('clean-old-thumbnails', (event, finalArray: ImageElement[]) => {
+    const screenshotOutputFolder: string = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName);
+
+    const allHashes: Map<string, number> = new Map();
+
+    finalArray.forEach((element: ImageElement) => {
+      allHashes.set(element.hash, 1);
+    });
+    removeThumbnailsNotInHub(allHashes, screenshotOutputFolder);
   });
 
   /**
