@@ -65,9 +65,6 @@
     "hoverScrubDescription": "Preview on hover",
     "hoverScrubHint": "Enable hover animations",
     "hoverScrubMoreInfo": "Hovering over thumbnails shows preview screenshots",
-    "importNewFilesDescription": "Add new videos",
-    "importNewFilesHint": "Import any new videos",
-    "importNewFilesMoreInfo": "This will add any new videos found in your source folder. It will not remove from the hub any videos no longer in your source folder",
     "magicDescription": "Magic search",
     "magicHint": "Magic search",
     "magicMoreInfo": "Filter which updates the results as you type. It displays all videos that contain the search term and every video inside any folder that contains the search term",
@@ -94,9 +91,6 @@
     "relatedTrayDescription": "Related videos",
     "relatedTrayHint": "Show related",
     "relatedTrayMoreInfo": "Show tray with 5 related videos based on the last video you clicked",
-    "rescanDirectoryDescription": "Any changes (addition, renaming, deletion)",
-    "rescanDirectoryHint": "Import new, remove deleted videos",
-    "rescanDirectoryMoreInfo": "This will add any new videos found in your source folder. It will also remove from the hub videos that are no longer in the source folder",
     "resetSettingsDescription": "Reset settings and buttons to their default values",
     "resetSettingsHint": "Reset settings",
     "resolutionFilterDescription": "Resolution",
@@ -183,10 +177,7 @@
     "tagUnionMoreInfo": "Filter for videos containing any of the search tags",
     "thumbAutoAdvanceDescription": "Cycle on hover",
     "thumbAutoAdvanceHint": "Enable thumbnail auto advance",
-    "thumbAutoAdvanceMoreInfo": "Hovering over thumbnails cycles through screenshots",
-    "verifyThumbnailsDescription": "Add missing thumbnails",
-    "verifyThumbnailsHint": "Verify thumbnails",
-    "verifyThumbnailsMoreInfo": "Generate any missing thumbnails. This is useful if you ever stop the screenshot import process"
+    "thumbAutoAdvanceMoreInfo": "Hovering over thumbnails cycles through screenshots"
   },
   "RIGHTCLICK": {
     "cancelRename": "cancel rename",
@@ -319,6 +310,7 @@
   },
   "STATISTICS": {
     "addFolderToHub": "Add folder to hub",
+    "addMissingThumbnails": "Add missing thumbnails",
     "average": "average",
     "clipHeight": "Clip height",
     "doNotExtract": "do not extract",
@@ -337,6 +329,7 @@
     "oneEvery": "one every",
     "perVideo": "per video",
     "removeFolder": "Remove",
+    "rescanFolder": "Rescan",
     "screenHeight": "Screenshot height",
     "seconds": "seconds",
     "settings": "Extraction settings",
