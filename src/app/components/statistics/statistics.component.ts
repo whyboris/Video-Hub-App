@@ -4,6 +4,7 @@ import { ElectronService } from '../../providers/electron.service';
 import { SourceFolderService } from './source-folder.service';
 
 import { ImageElement, ScreenshotSettings, InputSources } from '../../../../interfaces/final-object.interface';
+import { metaAppear, breadcrumbWordAppear } from '../../common/animations';
 
 @Component({
   selector: 'app-statistics',
@@ -12,7 +13,8 @@ import { ImageElement, ScreenshotSettings, InputSources } from '../../../../inte
     '../wizard-button.scss',
     './statistics.component.scss',
     './toggle.scss'
-  ]
+  ],
+  animations: [metaAppear, breadcrumbWordAppear]
 })
 export class StatisticsComponent implements OnInit {
 

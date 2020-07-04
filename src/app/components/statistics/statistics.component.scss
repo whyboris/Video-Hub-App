@@ -30,19 +30,12 @@
 }
 
 .edit-mode-container {
-  // border: 1px solid red;
   display: block;
-  margin-top: 5px;
-  min-height: 140px;
+  margin-top: 10px;
   text-align: center;
-}
-
-.edit-mode-more-buttons {
-  // border: 1px solid blue;
-  display: block;
 
   button {
-    padding: 5px;
+    transition-duration: 0.5s;
   }
 }
 

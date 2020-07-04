@@ -18,6 +18,7 @@
         *ngIf="(objectKeys(videoFolder).length > 1) && removeFoldersMode"
         class="delete-input-folder"
         (click)="deleteInputSource(item.key)"
+        @breadcrumbWordAppear
       >
         {{ 'STATISTICS.removeFolder' | translate }}
       </span>
@@ -26,6 +27,7 @@
         class="rescan-input-folder"
         (click)="rescanFolder(item.key)"
         title="{{ 'STATISTICS.clickToRescan' | translate }}"
+        @breadcrumbWordAppear
       >
         {{ 'STATISTICS.rescanFolder' | translate }}
       </span>
@@ -34,6 +36,7 @@
         class="input-not-connected"
         (click)="reconnectThisFolder(item.key)"
         title="{{ 'STATISTICS.clickToConnect' | translate }}"
+        @breadcrumbWordAppear
       >
         {{ 'STATISTICS.notConnected' | translate }}
       </span>
@@ -42,10 +45,15 @@
         *ngIf="i === 0 && !removeFoldersMode"
         class="watch-folder-note"
         title="{{ 'STATISTICS.watchFolderHelpText' | translate }}"
+        @metaAppear
       >
         {{ 'STATISTICS.watchFolder' | translate }}
       </span>
-      <label class="switch" *ngIf="!removeFoldersMode">
+      <label
+        class="switch"
+        *ngIf="!removeFoldersMode"
+        @metaAppear
+      >
         <input
           type="checkbox"
           [(ngModel)]="item.value.watch"
@@ -64,6 +72,15 @@
   </div>
 
   <span class="edit-mode-container">
+
+    <button
+      class="wizard-button start-import"
+      (click)="addAnotherFolder()"
+      [ngStyle]="{ opacity: removeFoldersMode ? 1 : 0 }"
+    >
+      {{ 'STATISTICS.addFolderToHub' | translate }}
+    </button>
+
     <button
       *ngIf="(objectKeys(videoFolder).length > 1)"
       (click)="removeFoldersMode = !removeFoldersMode"
@@ -73,29 +90,22 @@
       {{ 'STATISTICS.editFolders' | translate }}
     </button>
 
-    <span class="edit-mode-more-buttons" *ngIf="removeFoldersMode">
-      <button
-        class="wizard-button start-import"
-        (click)="addAnotherFolder()"
-      >
-        {{ 'STATISTICS.addFolderToHub' | translate }}
-      </button>
+    <button
+      class="wizard-button"
+      (click)="addMissingThumbnails()"
+      [ngStyle]="{ opacity: removeFoldersMode ? 1 : 0 }"
+    >
+      {{ 'STATISTICS.addMissingThumbnails' | translate }}
+    </button>
 
-      <button
-        class="wizard-button"
-        (click)="addMissingThumbnails()"
-      >
-        {{ 'STATISTICS.addMissingThumbnails' | translate }}
-      </button>
-
-      <button
-        class="wizard-button"
-        (click)="cleanScreenshotFolder()"
-        title="{{ 'STATISTICS.cleanScreenshotsHint' | translate }}"
-      >
-        {{ 'STATISTICS.cleanScreenshots' | translate }}
-      </button>
-    </span>
+    <button
+      class="wizard-button"
+      (click)="cleanScreenshotFolder()"
+      title="{{ 'STATISTICS.cleanScreenshotsHint' | translate }}"
+      [ngStyle]="{ opacity: removeFoldersMode ? 1 : 0 }"
+    >
+      {{ 'STATISTICS.cleanScreenshots' | translate }}
+    </button>
 
   </span>
 
