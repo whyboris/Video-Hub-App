@@ -1,8 +1,10 @@
 import { Component, Input, OnInit, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 
-import { ImageElement, ScreenshotSettings, InputSources } from '../../../../interfaces/final-object.interface';
-
 import { ElectronService } from '../../providers/electron.service';
+import { SourceFolderService } from './source-folder.service';
+
+import { ImageElement, ScreenshotSettings, InputSources } from '../../../../interfaces/final-object.interface';
+import { metaAppear, breadcrumbWordAppear } from '../../common/animations';
 
 @Component({
   selector: 'app-statistics',
@@ -11,12 +13,14 @@ import { ElectronService } from '../../providers/electron.service';
     '../wizard-button.scss',
     './statistics.component.scss',
     './toggle.scss'
-  ]
+  ],
+  animations: [metaAppear, breadcrumbWordAppear]
 })
 export class StatisticsComponent implements OnInit {
 
   @Output() finalArrayNeedsSaving = new EventEmitter<any>();
   @Output() addMissingThumbnailsPlease = new EventEmitter<any>();
+  @Output() cleanScreenshotFolderPlease = new EventEmitter<any>();
 
   @Input() finalArray: ImageElement[];
   @Input() hubName: string;
@@ -44,7 +48,8 @@ export class StatisticsComponent implements OnInit {
 
   constructor(
     public cd: ChangeDetectorRef,
-    public electronService: ElectronService
+    public electronService: ElectronService,
+    public sourceFolderService: SourceFolderService,
   ) { }
 
   ngOnInit() {
@@ -133,7 +138,7 @@ export class StatisticsComponent implements OnInit {
    * Add any missing thumbnails / continue thumbnail import
    */
   addMissingThumbnails() {
-    this.addMissingThumbnailsPlease.emit();
+    this.addMissingThumbnailsPlease.emit(true);
   }
 
   /**
@@ -141,6 +146,11 @@ export class StatisticsComponent implements OnInit {
    */
   addAnotherFolder() {
     this.electronService.ipcRenderer.send('choose-input');
+  }
+
+  reconnectThisFolder(itemSourceKey: number) {
+    console.log(itemSourceKey);
+    console.log('RECONNECT -- NOT IMPLEMENTED -- TODO');
   }
 
   /**
@@ -152,6 +162,11 @@ export class StatisticsComponent implements OnInit {
     console.log(this.inputFolders[itemSourceKey]);
     this.tellNodeStopWatching(itemSourceKey);
     delete this.inputFolders[itemSourceKey];
+  }
+
+  cleanScreenshotFolder(): void {
+    console.log('cleaning screenshots!');
+    this.cleanScreenshotFolderPlease.emit(true);
   }
 
   /**

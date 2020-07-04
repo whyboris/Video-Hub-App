@@ -628,7 +628,6 @@ export function deleteThumbnails(imageLocation: string, hash: string) {
   });
 }
 
-
 /**
  * Returns true if there's user metadata to copy
  * @param element to check

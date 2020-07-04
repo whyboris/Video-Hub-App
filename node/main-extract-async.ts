@@ -130,6 +130,14 @@ export function metadataQueueRunner(file: TempMetadataQueueObject, done) {
 }
 
 /**
+ * Check if path is to a file system reserved object or folder
+ * @param thingy path to particular file / directory
+ */
+function fileSystemReserved(thingy: string): boolean {
+  return (thingy.startsWith('$') || thingy === 'System Volume Information');                                            // !!! TODO -- check if needed !?!?!
+}
+
+/**
  * Create a new `chokidar` watcher for a particular directory
  * @param inputDir
  * @param inputSource -- the number corresponding to the `inputSource` in ImageElement -- must be set!
@@ -308,5 +316,56 @@ export function extractAnyMissingThumbs(
       console.log('thumb missing -', element.fileName);
       thumbQueue.push(element);
     }
+  });
+}
+
+/**
+ * Scan the output directory and delete any file not in `hashesPresent`
+ * @param hashesPresent
+ * @param outputDir
+ */
+export function removeThumbnailsNotInHub(hashesPresent: Map<string, number>, outputDir: string): void {
+
+  const watcherConfig = {
+    awaitWriteFinish: true,
+    cwd: outputDir,
+    persistent: false,
+  }
+
+  const watcher: FSWatcher = chokidar.watch('**', watcherConfig)
+    .on('add', (filePath: string) => {
+
+      const parsedPath = path.parse(filePath);
+
+      const ext = parsedPath.ext.substr(1); // remove the `.` from extension (e.g. `.jpg`)
+
+      if (!['jpg', 'mp4'].includes(ext.toLowerCase())) {
+        return; // non-jpg or non-mp4 file (not from VHA - do not delete!)
+      }
+
+      const fileNameHash = parsedPath.name;
+
+      if (!hashesPresent.has(fileNameHash)) {
+        const fullPath = path.join(outputDir, filePath);
+        deleteThumbQueue.push(fullPath);
+      }
+
+    })
+    .on('ready', () => {
+      watcher.close().then(() => {
+        // do nothing - the watcher is now safely closed
+      });
+    });
+
+}
+
+const deleteThumbQueue = async.queue(deleteThumbQueueRunner, 1);
+
+function deleteThumbQueueRunner(pathToFile: string, done) {
+
+  console.log('deleting:', pathToFile);
+
+  fs.unlink(pathToFile, (err) => {
+    done();
   });
 }

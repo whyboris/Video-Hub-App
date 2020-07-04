@@ -13,6 +13,7 @@ import { ManualTagsService } from './tags-manual/manual-tags.service';
 import { PipeSideEffectService } from '../pipes/pipe-side-effect.service';
 import { ResolutionFilterService } from '../pipes/resolution-filter.service';
 import { ShortcutsService, CustomShortcutAction } from './shortcuts/shortcuts.service';
+import { SourceFolderService } from './statistics/source-folder.service';
 import { StarFilterService } from '../pipes/star-filter.service';
 import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency.service';
 
@@ -50,8 +51,6 @@ import {
   slowFadeOut,
   topAnimation
 } from '../common/animations';
-
-// import { DemoContent } from '../../../assets/demo-content';
 
 @Component({
   selector: 'app-home',
@@ -337,14 +336,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   constructor(
     private http: HttpClient,
+    public autoTagsSaveService: AutoTagsSaveService,
     public cd: ChangeDetectorRef,
     public electronService: ElectronService,
     public manualTagsService: ManualTagsService,
     public pipeSideEffectService: PipeSideEffectService,
     public resolutionFilterService: ResolutionFilterService,
     public shortcutService: ShortcutsService,
+    public sourceFolderService: SourceFolderService,
     public starFilterService: StarFilterService,
-    public autoTagsSaveService: AutoTagsSaveService,
     public translate: TranslateService,
     public wordFrequencyService: WordFrequencyService
   ) { }
@@ -372,22 +372,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.pipeSideEffectService.regexError.subscribe((value: boolean) => {
         this.regexError = value;
       });
-
-      // -- DEMO CONTENT -- hasn't been updated in over 1 year
-      //                    will need updating if enabled
-      // if (this.webDemo) {
-      //   const finalObject = DemoContent;
-      //   // should be identical to `final-object-returning`
-      //   this.appState.numOfFolders = finalObject.numOfFolders;
-      //   this.appState.selectedOutputFolder = 'images';
-      //   this.appState.selectedSourceFolder = finalObject.inputDir;
-      //   this.canCloseWizard = true;
-      //   this.wizard.showWizard = false;
-      //   this.finalArray = finalObject.images;
-      //   setTimeout(() => {
-      //     this.toggleButton('showThumbnails');
-      //   }, 1000);
-      // }
 
     }, 100);
 
@@ -474,9 +458,21 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     });
 
-    // Progress bar messages
-    // for META EXTRACTION
-    this.electronService.ipcRenderer.on('processingProgress', (
+    // TODO -- update 'source connected' thingy
+    this.electronService.ipcRenderer.on('directory-not-connected', (event, sourceIndex: number, sourcePath: string) => {
+      console.log('FOLDER NOT CONNECTED !!!');
+      console.log(sourceIndex, sourcePath);
+      this.sourceFolderService.sourceFolderConnected[sourceIndex] = false;
+      console.log(this.sourceFolderService.sourceFolderConnected);
+    });
+
+    /**
+     * Update thumbnail extraction progress when node sends update
+     * @param current - the current number that finished extracting
+     * @param total   - the total number of files to be extracted
+     * @param stage
+     */
+    this.electronService.ipcRenderer.on('import-progress-update', (
       event,
       current: number,
       total: number,
@@ -536,7 +532,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       this.appState.hubName = finalObject.hubName;
       this.appState.numOfFolders = finalObject.numOfFolders;
-      this.appState.selectedSourceFolder = finalObject.inputDirs;
+
+      this.sourceFolderService.selectedSourceFolder = finalObject.inputDirs;
+      this.sourceFolderService.resetConnected();
 
       console.log('input dirs', finalObject.inputDirs);
 
@@ -736,7 +734,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public importFresh(): void {
-    this.appState.selectedSourceFolder = this.wizard.selectedSourceFolder;
+    this.sourceFolderService.selectedSourceFolder = this.wizard.selectedSourceFolder;
     this.appState.selectedOutputFolder = this.wizard.selectedOutputFolder;
 
     this.electronService.ipcRenderer.send('start-the-import', this.wizard);
@@ -780,7 +778,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         hubName: this.appState.hubName,
         images: this.finalArray,
         // TODO -- rename `selectedSourceFolder` and make sure to update `finalArrayNeedsSaving` when inputDirs changes
-        inputDirs: this.appState.selectedSourceFolder,
+        inputDirs: this.sourceFolderService.selectedSourceFolder,
         numOfFolders: this.appState.numOfFolders,
         removeTags: this.autoTagsSaveService.getRemoveTags(),
         screenshotSettings: this.currentScreenshotSettings,
@@ -826,6 +824,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param clickedThumbnailIndex an index of the thumbnail clicked
    */
   public openVideo(index: number, inputSource: number, clickedThumbnailIndex?: number): void {
+
+    if (!this.sourceFolderService.sourceFolderConnected[inputSource]) {
+      console.log('not connected!');
+      this.notifyRootFolderNotLive();
+      return;
+    }
+
     // update number of times played
     this.finalArray[index].timesPlayed ? this.finalArray[index].timesPlayed++ : this.finalArray[index].timesPlayed = 1;
     this.finalArrayNeedsSaving = true;
@@ -835,7 +840,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.currentPlayingFolder = clickedElement.partialPath;
     this.currentPlayingFile = clickedElement.cleanName;
     const fullPath = path.join(
-      this.appState.selectedSourceFolder[inputSource].path,
+      this.sourceFolderService.selectedSourceFolder[inputSource].path,
       clickedElement.partialPath,
       clickedElement.fileName
     );
@@ -1283,7 +1288,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.electronService.ipcRenderer.send(
         'please-create-playlist',
         this.pipeSideEffectService.galleryShowing,
-        this.appState.selectedSourceFolder
+        this.sourceFolderService.selectedSourceFolder
       );
     } else if (uniqueKey === 'showTagTray') {
       if (this.settingsButtons.showRelatedVideosTray.toggled) {
@@ -1374,9 +1379,20 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // Methods for RESCAN
   // ==========================================================================================
 
+  /**
+   * Tell node to find and extract all missing thumbnails
+   */
   public extractMissingThumbnails(): void {
     console.log('trying to extract missing thumbnails');
     this.electronService.ipcRenderer.send('add-missing-thumbnails', this.finalArray, this.currentScreenshotSettings.clipSnippets > 0);
+  }
+
+  /**
+   * Tell node to delete all screenshots that are no longer in the hub
+   */
+  public cleanScreenshotFolder(): void {
+    console.log('trying to extract missing thumbnails');
+    this.electronService.ipcRenderer.send('clean-old-thumbnails', this.finalArray);
   }
 
   /**
@@ -1696,7 +1712,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   openContainingFolderNow(): void {
     this.fullPathToCurrentFile = path.join(
-      this.appState.selectedSourceFolder[this.currentRightClickedItem.inputSource].path,
+      this.sourceFolderService.selectedSourceFolder[this.currentRightClickedItem.inputSource].path,
       this.currentRightClickedItem.partialPath,
       this.currentRightClickedItem.fileName
     );
@@ -1740,7 +1756,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Deletes a file (moves to recycling bin / trash) or dangerously deletes (bypassing trash)
    */
   deleteThisFile(item: ImageElement): void {
-    const base: string = this.appState.selectedSourceFolder[item.inputSource].path;
+    const base: string = this.sourceFolderService.selectedSourceFolder[item.inputSource].path;
     const dangerously: boolean = this.settingsButtons['dangerousDelete'].toggled;
     this.electronService.ipcRenderer.send('delete-video-file', base, item, dangerously);
   }

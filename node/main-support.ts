@@ -16,8 +16,8 @@ const fs = require('fs');
 const hasher = require('crypto').createHash;
 import { Stats } from 'fs';
 
-import { FinalObject, ImageElement, ScreenshotSettings, InputSources, ResolutionString, ImageElementPlus, NewImageElement } from '../interfaces/final-object.interface';
-import { startFileSystemWatching, resetWatchers, sendNewVideoMetadata, TempMetadataQueueObject } from './main-extract-async';
+import { FinalObject, ImageElement, ScreenshotSettings, InputSources, ResolutionString } from '../interfaces/final-object.interface';
+import { startFileSystemWatching, resetWatchers } from './main-extract-async';
 
 interface ResolutionMeta {
   label: ResolutionString;
@@ -179,6 +179,22 @@ export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: stri
 }
 
 /**
+ * Strip out all the temporary fields
+ * @param imagesArray
+ */
+function stripOutTemporaryFields(imagesArray: ImageElement[]): ImageElement[] {
+  imagesArray.forEach((element) => {
+    delete(element.durationDisplay);
+    delete(element.fileSizeDisplay);
+    delete(element.index);
+    delete(element.resBucket);
+    delete(element.resolution);
+    delete(element.selected);
+  });
+  return imagesArray;
+}
+
+/**
  * Format .pls file and write to hard drive
  * @param savePath -- location to save the temp.pls file
  * @param playlist -- array of ImageElements
@@ -212,22 +228,6 @@ export function createDotPlsFile(savePath: string, playlist: ImageElement[], sou
 }
 
 /**
- * Strip out all the temporary fields
- * @param imagesArray
- */
-function stripOutTemporaryFields(imagesArray: ImageElement[]): ImageElement[] {
-  imagesArray.forEach((element) => {
-    delete(element.durationDisplay);
-    delete(element.fileSizeDisplay);
-    delete(element.index);
-    delete(element.resBucket);
-    delete(element.resolution);
-    delete(element.selected);
-  });
-  return imagesArray;
-}
-
-/**
  * Clean up the displayed file name
  * (1) remove extension
  * (2) replace underscores with spaces                "_"   => " "
@@ -244,14 +244,6 @@ export function cleanUpFileName(original: string): string {
   cleaned = cleaned.split('   ').join(' ');              // (4)
   cleaned = cleaned.split('  ').join(' ');               // (4)
   return cleaned;
-}
-
-/**
- * Check if path is to a file system reserved object or folder
- * @param thingy path to particular file / directory
- */
-function fileSystemReserved(thingy: string): boolean {
-  return (thingy.startsWith('$') || thingy === 'System Volume Information');                                            // !!! TODO -- check if needed !?!?!
 }
 
 /**
@@ -414,7 +406,7 @@ export function extractMetadataAsync(
  * @param stage ImportStage
  */
 export function sendCurrentProgress(current: number, total: number, stage: ImportStage): void {
-  GLOBALS.angularApp.sender.send('processingProgress', current, total, stage);
+  GLOBALS.angularApp.sender.send('import-progress-update', current, total, stage);
   if (stage !== 'done') {
     GLOBALS.winRef.setProgressBar(current / total);
   } else {
@@ -428,6 +420,8 @@ export function sendCurrentProgress(current: number, total: number, stage: Impor
  * @param globals
  */
 export function sendFinalObjectToAngular(finalObject: FinalObject, globals: VhaGlobals): void {
+
+  // finalObject.images = alphabetizeFinalArray(finalObject.images); // TODO -- check -- unsure if needed
 
   finalObject.images = insertTemporaryFields(finalObject.images);
 
@@ -448,10 +442,7 @@ export function sendFinalObjectToAngular(finalObject: FinalObject, globals: VhaG
 export function insertTemporaryFields(imagesArray: ImageElement[]): ImageElement[] {
 
   imagesArray.forEach((element, index) => {
-
     element = insertTemporaryFieldsSingle(element);
-
-    // set index for default sorting
     element.index = index;                              // TODO -- rethink index -- maybe fix here ?
   });
 
@@ -506,14 +497,37 @@ export function startWatchingDirs(inputDirs: InputSources, currentImages: ImageE
   resetWatchers(currentImages);
 
   Object.keys(inputDirs).forEach((key: string) => {
-    console.log(key, 'watch = ', inputDirs[key].watch, ' : ', inputDirs[key].path);
-    if (inputDirs[key].watch || currentImages.length === 0) {
-      if (currentImages.length === 0) {
-        'FIRST SCAN'
+
+    const pathToDir: string = inputDirs[key].path;
+
+    console.log(key, 'watch = ', inputDirs[key].watch, ' : ', pathToDir);
+
+
+    // check if directory connected
+    fs.access(pathToDir, fs.constants.W_OK, function(err) {
+
+      if(err){
+
+        console.error('!!!!! DIRECTORY NOT CONNECTED !!!!!');
+        GLOBALS.angularApp.sender.send('directory-not-connected', parseInt(key, 10), pathToDir);
+
       } else {
-        console.log('PERSISTENT WATCHING !!!');
+
+        if (inputDirs[key].watch || currentImages.length === 0) {
+
+          // Temp logging
+          if (currentImages.length === 0) {
+            'FIRST SCAN'
+          } else {
+            console.log('PERSISTENT WATCHING !!!');
+          }
+
+          startFileSystemWatching(pathToDir, parseInt(key, 10), inputDirs[key].watch);
+        }
+
       }
-      startFileSystemWatching(inputDirs[key].path, parseInt(key, 10), inputDirs[key].watch);
-    }
+
+    });
+
   });
 }

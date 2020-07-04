@@ -29,6 +29,16 @@
   text-align: center;
 }
 
+.edit-mode-container {
+  display: block;
+  margin-top: 10px;
+  text-align: center;
+
+  button {
+    transition-duration: 0.5s;
+  }
+}
+
 .title {
   color: $black;
   font-weight: bold;
@@ -81,24 +91,33 @@
   top: -20px;
 }
 
+.delete-input-folder,
+.rescan-input-folder,
+.input-not-connected {
+  position: absolute;
+  text-align: right;
+  top: 1px;
+}
+
 .delete-input-folder {
   color: $pretty-red;
   cursor: not-allowed;
   font-weight: bold;
-  position: absolute;
   right: calc(100% + 10px);
-  text-align: right;
-  top: 1px;
 }
 
 .rescan-input-folder {
   color: $pretty-blue;
   cursor: pointer;
   font-weight: bold;
-  position: absolute;
   right: calc(100% + 47px);
-  text-align: right;
-  top: 1px;
+}
+
+.input-not-connected {
+  cursor: pointer;
+  font-style: italic;
+  min-width: 200px;
+  right: calc(100% + 47px);
 }
 
 @media (max-width: 900px) {
