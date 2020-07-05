@@ -485,7 +485,7 @@ export function upgradeToVersion3(finalObject: FinalObject): void {
  * @param inputDirs
  * @param currentImages -- if creating a new VHA file, this will be [] empty (and `watch` = false)
  */
-export function setUpDirectoryWathers(inputDirs: InputSources, currentImages: ImageElement[]): void {
+export function setUpDirectoryWatchers(inputDirs: InputSources, currentImages: ImageElement[]): void {
 
   console.log('---------------------------------');
   console.log(' SETTING UP FILE SYSTEM WATCHERS' );

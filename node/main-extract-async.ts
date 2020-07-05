@@ -129,13 +129,18 @@ export function metadataQueueRunner(file: TempMetadataQueueObject, done) {
 
 }
 
-/**
- * Check if path is to a file system reserved object or folder
- * @param thingy path to particular file / directory
- */
+// =====================================================================================================================
+// TODO -- check if any of these checks are needed now that we use `chokidar`
+//
 function fileSystemReserved(thingy: string): boolean {
-  return (thingy.startsWith('$') || thingy === 'System Volume Information');                                            // !!! TODO -- check if needed !?!?!
+  // ignore folders beginning with { '.', '__MACOS', 'vha-' }
+  const folderIgnoreRegex = /^(\.|__MACOS|vha-).*/g;
+  // ignore files beginning with { '.', '_' }
+  const fileIgnoreRegex = /^(\.|_).*/g;
+
+  return (thingy.startsWith('$') || thingy === 'System Volume Information');
 }
+// =====================================================================================================================
 
 /**
  * Create a new `chokidar` watcher for a particular directory

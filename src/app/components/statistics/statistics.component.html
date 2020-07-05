@@ -76,13 +76,12 @@
     <button
       class="wizard-button start-import"
       (click)="addAnotherFolder()"
-      [ngStyle]="{ opacity: removeFoldersMode ? 1 : 0 }"
+      [ngClass]="{ 'button-hidden': !removeFoldersMode }"
     >
       {{ 'STATISTICS.addFolderToHub' | translate }}
     </button>
 
     <button
-      *ngIf="(objectKeys(videoFolder).length > 1)"
       (click)="removeFoldersMode = !removeFoldersMode"
       class="wizard-button "
       [ngClass]="{ 'edit-mode-active': removeFoldersMode }"
@@ -93,7 +92,7 @@
     <button
       class="wizard-button"
       (click)="addMissingThumbnails()"
-      [ngStyle]="{ opacity: removeFoldersMode ? 1 : 0 }"
+      [ngClass]="{ 'button-hidden': !removeFoldersMode }"
     >
       {{ 'STATISTICS.addMissingThumbnails' | translate }}
     </button>
@@ -102,7 +101,7 @@
       class="wizard-button"
       (click)="cleanScreenshotFolder()"
       title="{{ 'STATISTICS.cleanScreenshotsHint' | translate }}"
-      [ngStyle]="{ opacity: removeFoldersMode ? 1 : 0 }"
+      [ngClass]="{ 'button-hidden': !removeFoldersMode }"
     >
       {{ 'STATISTICS.cleanScreenshots' | translate }}
     </button>

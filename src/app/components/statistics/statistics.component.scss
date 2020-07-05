@@ -37,6 +37,11 @@
   button {
     transition-duration: 0.5s;
   }
+
+  .button-hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
 }
 
 .title {

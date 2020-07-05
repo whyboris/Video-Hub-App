@@ -462,6 +462,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.electronService.ipcRenderer.on('directory-now-connected', (event, sourceIndex: number, sourcePath: string) => {
       console.log('FOLDER NOT CONNECTED !!!');
       console.log(sourceIndex, sourcePath);
+
+      // TODO -- if this error never happens, all is well; remove the `sourcePath` from this method :)
+      if (this.sourceFolderService.selectedSourceFolder[sourceIndex].path !== sourcePath) {
+        console.log('WARNING HUGE ERROR HERE !!!!!! MUST NEVER HAPPEN !!!');
+      }
+
       this.sourceFolderService.sourceFolderConnected[sourceIndex] = true;
       console.log(this.sourceFolderService.sourceFolderConnected);
     });

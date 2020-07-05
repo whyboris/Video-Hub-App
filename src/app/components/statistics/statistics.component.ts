@@ -85,6 +85,7 @@ export class StatisticsComponent implements OnInit {
       if (!pathAlreadyExists) {
         const nextIndex: number = this.pickNextIndex(this.inputFolders);
         this.inputFolders[nextIndex] = { path: filePath, watch: false };
+        this.sourceFolderService.sourceFolderConnected[nextIndex] = true;
         this.electronService.ipcRenderer.send('start-watching-folder', nextIndex, filePath, false);
       }
 
@@ -162,6 +163,7 @@ export class StatisticsComponent implements OnInit {
     console.log(this.inputFolders[itemSourceKey]);
     this.tellNodeStopWatching(itemSourceKey);
     delete this.inputFolders[itemSourceKey];
+    delete this.sourceFolderService.sourceFolderConnected[itemSourceKey];
   }
 
   cleanScreenshotFolder(): void {
