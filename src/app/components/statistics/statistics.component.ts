@@ -204,4 +204,11 @@ export class StatisticsComponent implements OnInit {
     return(item.key);
   }
 
+  animateThis(event){
+    event.srcElement.classList.add('progress-gradient-animation');
+    setTimeout(() => {
+      event.srcElement.classList.remove('progress-gradient-animation');
+    }, 3000);
+  }
+
 }

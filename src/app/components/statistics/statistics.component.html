@@ -26,6 +26,7 @@
         *ngIf="!removeFoldersMode && !item.value.watch && sourceFolderService.sourceFolderConnected[item.key]"
         class="rescan-input-folder"
         (click)="rescanFolder(item.key)"
+        (mouseup)="animateThis($event)"
         title="{{ 'STATISTICS.clickToRescan' | translate }}"
         @breadcrumbWordAppear
       >
@@ -92,6 +93,7 @@
     <button
       class="wizard-button"
       (click)="addMissingThumbnails()"
+      (mouseup)="animateThis($event)"
       [ngClass]="{ 'button-hidden': !removeFoldersMode }"
     >
       {{ 'STATISTICS.addMissingThumbnails' | translate }}
@@ -100,6 +102,7 @@
     <button
       class="wizard-button"
       (click)="cleanScreenshotFolder()"
+      (mouseup)="animateThis($event)"
       title="{{ 'STATISTICS.cleanScreenshotsHint' | translate }}"
       [ngClass]="{ 'button-hidden': !removeFoldersMode }"
     >

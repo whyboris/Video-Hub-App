@@ -139,3 +139,25 @@
 .wizard-button {
   min-width: unset;
 }
+
+.progress-gradient-animation {
+  animation: gradient 3s infinite;
+  background: linear-gradient(90deg, rgba(255,255,255,0) 35%, $pretty-blue 50% , rgba(255,255,255,0) 65%);
+  background-size: 300%;
+  color: $gray-70;
+  pointer-events: none;
+}
+
+@keyframes gradient {
+  0% {
+    background-position-x: 100%;
+  }
+
+  50% {
+    background-position-x: 0%;
+  }
+
+  100% {
+    background-position-x: 100%;
+  }
+}
