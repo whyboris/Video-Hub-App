@@ -28,7 +28,7 @@ export class StatisticsComponent implements OnInit {
   @Input() numFolders: number;
   @Input() pathToVhaFile: string;
   @Input() screenshotSettings: ScreenshotSettings;
-  @Input() videoFolder: string;
+  @Input() videoFolder: InputSources;
 
   totalFiles: number;
 
@@ -92,6 +92,18 @@ export class StatisticsComponent implements OnInit {
       this.cd.detectChanges();
 
     });
+
+    this.electronService.ipcRenderer.on('old-folder-reconnected', (event, sourceIndex: number, newPath: string) => {
+      console.log('NEW FOLDER CHOSEN !!!');
+      console.log(sourceIndex);
+      console.log(newPath);
+      this.inputFolders[sourceIndex] = { path: newPath, watch: false };
+      this.sourceFolderService.sourceFolderConnected[sourceIndex] = true;
+      setTimeout(() => {
+        this.cd.detectChanges();
+      }, 1);
+    });
+
   }
 
   /**
@@ -152,6 +164,7 @@ export class StatisticsComponent implements OnInit {
   reconnectThisFolder(itemSourceKey: number) {
     console.log(itemSourceKey);
     console.log('RECONNECT -- NOT IMPLEMENTED -- TODO');
+    this.electronService.ipcRenderer.send('reconnect-this-folder', itemSourceKey);
   }
 
   /**

@@ -218,6 +218,21 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
   });
 
   /**
+   * Summon system modal to choose NEW input directory for a now-disconnected folder
+   * where all the videos are located
+   */
+  ipc.on('reconnect-this-folder', (event, inputSource: number) => {
+    dialog.showOpenDialog(win, {
+      properties: ['openDirectory']
+    }).then(result => {
+      const inputDirPath: string = result.filePaths[0];
+      if (inputDirPath) {
+        event.sender.send('old-folder-reconnected', inputSource, inputDirPath);
+      }
+    }).catch(err => {});
+  });
+
+  /**
    * Stop watching a particular folder
    */
   ipc.on('stop-watching-folder', (event, watchedFolderIndex: number) => {

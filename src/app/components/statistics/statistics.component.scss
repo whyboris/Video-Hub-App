@@ -78,6 +78,7 @@
 .input-sources {
   display: table;
   margin: 0 auto;
+  max-width: calc(100% - 200px);
 
   .input-folder {
     text-align: left;
