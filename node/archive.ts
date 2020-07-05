@@ -37,7 +37,7 @@ function sendFinalResultHome(theFinalArray: ImageElement[]): void {
 
     sendFinalObjectToAngular(finalObject, GLOBALS);
 
-    startWatchingDirs(finalObject.inputDirs, true);
+    setUpDirectoryWathers(finalObject.inputDirs, true);
 
   });
 }

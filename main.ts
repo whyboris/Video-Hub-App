@@ -17,7 +17,7 @@ const windowStateKeeper = require('electron-window-state');
 // Methods
 import { createTouchBar } from './node/main-touch-bar';
 import { setUpIpcMessages } from './node/main-ipc';
-import { sendFinalObjectToAngular, startWatchingDirs, upgradeToVersion3, writeVhaFileToDisk } from './node/main-support';
+import { sendFinalObjectToAngular, setUpDirectoryWathers, upgradeToVersion3, writeVhaFileToDisk } from './node/main-support';
 
 // Interfaces
 import { FinalObject } from './interfaces/final-object.interface';
@@ -258,7 +258,7 @@ function openThisDamnFile(pathToVhaFile: string) {
 
       sendFinalObjectToAngular(finalObject, GLOBALS);
 
-      startWatchingDirs(finalObject.inputDirs, finalObject.images);
+      setUpDirectoryWathers(finalObject.inputDirs, finalObject.images);
     }
   });
 }
@@ -366,7 +366,7 @@ function writeVhaFileAndStartExtraction(): void {
 
     sendFinalObjectToAngular(finalObject, GLOBALS);
 
-    startWatchingDirs(finalObject.inputDirs, []);
+    setUpDirectoryWathers(finalObject.inputDirs, []);
   });
 }
 
