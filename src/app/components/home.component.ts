@@ -687,7 +687,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   /**
    * Only update the view after enough changes occurred
    * - update after every new element when < 20 elements total
-   * - update every 20 new elements after
+   * - update every 20 new elements after until 100; every 50 thereafter
    * - update at most 1 second after the last element arrived
    */
   public debounceImport(): void {
@@ -695,16 +695,23 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     clearTimeout(this.newVideoImportTimeout);
 
-    if (this.finalArray.length < 20 || this.newVideoImportCounter === 20) {
-      this.newVideoImportCounter = 0;
-      this.finalArray = this.finalArray.slice();
-      this.cd.detectChanges();
+    if (    this.finalArray.length < 20
+        || (this.finalArray.length < 100 && this.newVideoImportCounter === 20)
+        || this.newVideoImportCounter === 50
+    ) {
+      this.resetFinalArrayRef();
     } else {
-      this.newVideoImportTimeout = setTimeout(() => {
-        this.finalArray = this.finalArray.slice();
-        this.cd.detectChanges();
-      }, 1000);
+      this.newVideoImportTimeout = setTimeout(this.resetFinalArrayRef, 2500);
     }
+  }
+
+  /**
+   * Helper method only to be used by `debounceImport()`
+   */
+  private resetFinalArrayRef(): void {
+    this.newVideoImportCounter = 0;
+    this.finalArray = this.finalArray.slice();
+    this.cd.detectChanges();
   }
 
   /**
