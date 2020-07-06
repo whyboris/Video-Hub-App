@@ -118,7 +118,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   vhaFileHistory: HistoryItem[] = [];
 
-  myTimeout = null;
+  windowResizeTimeout = null;
+
+  newVideoImportTimeout = null;
+  newVideoImportCounter: number = 0;
 
   // ========================================================================
   // App state / UI state
@@ -483,6 +486,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       this.finalArray
         .filter((element: ImageElement) => { return element.inputSource == sourceIndex })
+        // notice the loosey-goosey comparison! this is because number  ^^  string comparison happening here!
         .forEach((element: ImageElement) => {
           console.log(element.fileName);
           if (allFilesMap.has(path.join(rootFolder, element.partialPath, element.fileName))) {
@@ -654,12 +658,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     this.electronService.ipcRenderer.on('new-video-meta', (event, element: ImageElement) => {
       element.index = this.finalArray.length;
-      this.finalArray.push(element);
-      console.log(element);
-      // TODO -- see if it's needed -- we don't want 10,000-large array copied 100 times per minute on import
-      this.finalArray = this.finalArray.slice();
+      this.finalArray.push(element); // not enough for view to update; we need `.slice()`
       this.finalArrayNeedsSaving = true;
-      this.cd.detectChanges();
+      this.debounceImport();
     });
 
     this.justStarted();
@@ -681,6 +682,29 @@ export class HomeComponent implements OnInit, AfterViewInit {
         }
       }
     };
+  }
+
+  /**
+   * Only update the view after enough changes occurred
+   * - update after every new element when < 20 elements total
+   * - update every 20 new elements after
+   * - update at most 1 second after the last element arrived
+   */
+  public debounceImport(): void {
+    this.newVideoImportCounter++;
+
+    clearTimeout(this.newVideoImportTimeout);
+
+    if (this.finalArray.length < 20 || this.newVideoImportCounter === 20) {
+      this.newVideoImportCounter = 0;
+      this.finalArray = this.finalArray.slice();
+      this.cd.detectChanges();
+    } else {
+      this.newVideoImportTimeout = setTimeout(() => {
+        this.finalArray = this.finalArray.slice();
+        this.cd.detectChanges();
+      }, 1000);
+    }
   }
 
   /**
@@ -723,8 +747,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public debounceUpdateMax(msDelay?: number): void {
     // console.log('debouncing');
     const delay = msDelay !== undefined ? msDelay : 250;
-    clearTimeout(this.myTimeout);
-    this.myTimeout = setTimeout(() => {
+    clearTimeout(this.windowResizeTimeout);
+    this.windowResizeTimeout = setTimeout(() => {
       // console.log('Virtual scroll refreshed');
       this.virtualScroller.refresh();
       this.computePreviewWidth();
