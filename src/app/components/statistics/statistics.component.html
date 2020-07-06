@@ -9,13 +9,13 @@
   <span class="stats-heading title sources">{{ 'STATISTICS.videoFolder' | translate }}</span>
 
   <div class="input-sources">
-    <div class="input-sources-row" *ngFor="let item of videoFolder | keyvalue; index as i; trackBy: trackByFn">
+    <div class="input-sources-row" *ngFor="let item of inputFolders | keyvalue; index as i; trackBy: trackByFn">
       <span
         class="stats-heading folder input-folder"
         [innerHtml]="item.value.path | folderArrowsPipe"
       ></span>
       <span
-        *ngIf="(objectKeys(videoFolder).length > 1) && removeFoldersMode"
+        *ngIf="(objectKeys(inputFolders).length > 1) && removeFoldersMode"
         class="delete-input-folder"
         (click)="deleteInputSource(item.key)"
         @breadcrumbWordAppear

@@ -75,6 +75,9 @@ const metadataQueue = async.queue(metadataQueueRunner, 1); // 1 is the number of
 let alreadyInAngular: Map<string, number> = new Map(); // full paths to videos we have metadata for in Angular
 
 let watcherMap: Map<number, FSWatcher> = new Map();
+
+let allFoundFilesMap: Map<number, Map<string, 1>> = new Map();
+
 // ========================================================
 
 export interface TempMetadataQueueObject {
@@ -154,6 +157,10 @@ export function startFileSystemWatching(
   persistent: boolean
 ) {
 
+  console.log(typeof(inputSource));
+
+
+
   console.log('starting watcher ', inputSource);
 
   const watcherConfig = {
@@ -181,6 +188,11 @@ export function startFileSystemWatching(
       const fullPath = path.join(inputDir, partialPath, fileName);
 
       console.log(fullPath);
+
+      if (!allFoundFilesMap.has(inputSource)) {
+        allFoundFilesMap.set(inputSource, new Map());
+      }
+      allFoundFilesMap.get(inputSource).set(fullPath, 1);
 
       if (alreadyInAngular.has(fullPath)) {
         return;
@@ -212,12 +224,17 @@ export function startFileSystemWatching(
     })
 */
     .on('ready', () => {
+
       console.log('Finished scanning', inputSource);
+
+      GLOBALS.angularApp.sender.send('all-files-found-in-dir', inputSource, allFoundFilesMap.get(inputSource));
+
       if (persistent) {
         console.log('^^^^^^^^ - CONTINUING to watch this directory!');
       } else {
         console.log('^^^^^^^^ - stopping watching this directory');
       }
+
     });
 
     watcherMap.set(inputSource, watcher);
@@ -237,6 +254,8 @@ export function resetWatchers(finalArray: ImageElement[]): void {
   });
 
   alreadyInAngular = new Map();
+
+  allFoundFilesMap = new Map();
 
   finalArray.forEach((element: ImageElement) => {
     const fullPath: string = path.join(

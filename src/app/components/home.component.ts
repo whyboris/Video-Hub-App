@@ -472,6 +472,31 @@ export class HomeComponent implements OnInit, AfterViewInit {
       console.log(this.sourceFolderService.sourceFolderConnected);
     });
 
+    // WIP -- delete any videos no longer found on the hard drive!
+    this.electronService.ipcRenderer.on('all-files-found-in-dir', (event, sourceIndex: number, allFilesMap: Map<string, 1>) => {
+      console.log('all files returning:');
+      console.log(sourceIndex);
+      console.log(typeof(sourceIndex));
+      console.log(allFilesMap);
+
+      const rootFolder: string = this.sourceFolderService.selectedSourceFolder[sourceIndex].path;
+
+      this.finalArray
+        .filter((element: ImageElement) => { return element.inputSource == sourceIndex })
+        .forEach((element: ImageElement) => {
+          console.log(element.fileName);
+          if (allFilesMap.has(path.join(rootFolder, element.partialPath, element.fileName))) {
+            // everything is OK
+          } else {
+            console.log('deleting');
+            element.deleted = true;
+          }
+        });
+
+      this.deletePipeHack = !this.deletePipeHack;
+
+    });
+
     /**
      * Update thumbnail extraction progress when node sends update
      * @param current - the current number that finished extracting

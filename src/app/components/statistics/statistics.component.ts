@@ -28,7 +28,6 @@ export class StatisticsComponent implements OnInit {
   @Input() numFolders: number;
   @Input() pathToVhaFile: string;
   @Input() screenshotSettings: ScreenshotSettings;
-  @Input() videoFolder: InputSources;
 
   totalFiles: number;
 
@@ -54,7 +53,12 @@ export class StatisticsComponent implements OnInit {
 
   ngOnInit() {
 
+    console.log('booting up!');
+
     console.log(this.inputFolders);
+
+    console.log(this.inputFolders[0]);
+    console.log(this.inputFolders['0']);
 
     this.finalArray.forEach((element: ImageElement): void => {
       this.shortest = Math.min(element.duration, this.shortest);
@@ -140,6 +144,7 @@ export class StatisticsComponent implements OnInit {
    */
   rescanFolder(index: number) {
     console.log(index);
+    console.log(typeof(index));
     console.log(this.inputFolders[index].path);
     this.tellNodeStartWatching(index, this.inputFolders[index].path, false);
     setTimeout(() => {
