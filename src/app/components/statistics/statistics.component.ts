@@ -18,9 +18,10 @@ import { metaAppear, breadcrumbWordAppear } from '../../common/animations';
 })
 export class StatisticsComponent implements OnInit {
 
-  @Output() finalArrayNeedsSaving = new EventEmitter<any>();
   @Output() addMissingThumbnailsPlease = new EventEmitter<any>();
   @Output() cleanScreenshotFolderPlease = new EventEmitter<any>();
+  @Output() deleteInputSourceFiles = new EventEmitter<number>();
+  @Output() finalArrayNeedsSaving = new EventEmitter<any>();
 
   @Input() finalArray: ImageElement[];
   @Input() hubName: string;
@@ -182,6 +183,7 @@ export class StatisticsComponent implements OnInit {
     this.tellNodeStopWatching(itemSourceKey);
     delete this.inputFolders[itemSourceKey];
     delete this.sourceFolderService.sourceFolderConnected[itemSourceKey];
+    this.deleteInputSourceFiles.emit(itemSourceKey);
   }
 
   cleanScreenshotFolder(): void {

@@ -687,8 +687,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   /**
    * Only update the view after enough changes occurred
    * - update after every new element when < 20 elements total
-   * - update every 20 new elements after until 100; every 50 thereafter
-   * - update at most 1 second after the last element arrived
+   * - update every 20 new elements after until 100; every 100 thereafter
+   * - update at most 3 seconds after the last element arrived
    */
   public debounceImport(): void {
     this.newVideoImportCounter++;
@@ -697,11 +697,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     if (    this.finalArray.length < 20
         || (this.finalArray.length < 100 && this.newVideoImportCounter === 20)
-        || this.newVideoImportCounter === 50
+        || this.newVideoImportCounter === 100
     ) {
       this.resetFinalArrayRef();
     } else {
-      this.newVideoImportTimeout = setTimeout(this.resetFinalArrayRef, 2500);
+      this.newVideoImportTimeout = setTimeout(() => {
+        this.resetFinalArrayRef()
+      }, 3000);
     }
   }
 
@@ -712,6 +714,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.newVideoImportCounter = 0;
     this.finalArray = this.finalArray.slice();
     this.cd.detectChanges();
+  }
+
+  /**
+   * Delete from finalArray all the video files with particular source index
+   * @param sourceIndex
+   */
+  deleteInputSourceFiles(sourceIndex: number): void {
+    this.finalArray.forEach((element: ImageElement) => {
+      if (element.inputSource == sourceIndex) { // TODO -- stop the loosey goosey `==` and figure out `string` vs `number`
+        element.deleted = true;
+      }
+    });
+    this.deletePipeHack = !this.deletePipeHack;
   }
 
   /**

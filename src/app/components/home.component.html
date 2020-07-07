@@ -248,9 +248,10 @@
     <div *ngIf="settingTabToShow == 3" class="shortcut-menu">
 
       <app-statistics
-        (finalArrayNeedsSaving)="finalArrayNeedsSaving = true"
         (addMissingThumbnailsPlease)="extractMissingThumbnails()"
         (cleanScreenshotFolderPlease)="cleanScreenshotFolder()"
+        (deleteInputSourceFiles)="deleteInputSourceFiles($event)"
+        (finalArrayNeedsSaving)="finalArrayNeedsSaving = true"
 
         [finalArray]="finalArray"
         [hubName]="appState.hubName"
