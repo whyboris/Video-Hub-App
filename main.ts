@@ -113,6 +113,8 @@ function createWindow() {
   });
   mainWindowState.manage(win);
 
+  require('./command-server')(win.webContents);
+
   myWindow = win;
 
   // Open the DevTools.
@@ -153,6 +155,9 @@ function createWindow() {
 
   // Does not seem to be needed to remove all the Mac taskbar menu items
   // win.setMenu(null);
+
+
+
 }
 
 // variable to detect if it's the first time mac is opening the file

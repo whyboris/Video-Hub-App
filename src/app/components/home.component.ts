@@ -586,6 +586,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.electronService.webFrame.clearCache();
     });
 
+    // happens when user replaced a thumbnail and process is done
+    this.electronService.ipcRenderer.on('command-server', (event, args) => {
+      console.log('command-server', args);
+      if (args['action'] === 'CLEAR_WEBFRAME_CACHE') {
+        this.electronService.webFrame.clearCache();
+      }
+    });
+
     this.electronService.ipcRenderer.on('touchBar-to-app', (event, changesFromTouchBar: string) => {
       if (changesFromTouchBar) {
         this.toggleButton(changesFromTouchBar, true);

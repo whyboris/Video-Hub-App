@@ -17,7 +17,8 @@
     ]
   },
   "include": [
-    "main.ts"
+    "main.ts",
+    "command-server.ts"
   ],
   "exclude": [
     "node_modules",

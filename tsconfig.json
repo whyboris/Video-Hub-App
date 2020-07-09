@@ -25,6 +25,7 @@
     "i18n",
     "interfaces",
     "main.ts",
+    "command-server.ts",
     "src/**/*"
   ]
 }

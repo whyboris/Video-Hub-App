@@ -45,7 +45,8 @@
     "electron-window-state": "5.0.3",
     "fuse.js": "6.0.0",
     "ngx-virtual-scroller": "4.0.3",
-    "trash": "6.1.1"
+    "trash": "6.1.1",
+    "express": "4.16.4"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.901.6",
