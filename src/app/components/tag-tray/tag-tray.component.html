@@ -58,6 +58,14 @@
     {{ 'TAGS.batchModeButton' | translate }}
   </button>
 
+  <button
+    class="wizard-button wizard-button-small button-toggle-batch-mode"
+    *ngIf="batchTaggingMode"
+    (click)="toggleBatchSelectAll.emit()"
+  >
+    {{ 'TAGS.batchModeSelectAll' | translate }}
+  </button>
+
   <app-view-tags-component
     class="all-the-tags"
     [draggable]="true"

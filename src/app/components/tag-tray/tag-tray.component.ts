@@ -19,6 +19,7 @@ export class TagTrayComponent {
 
   @Output() closeTagsTray = new EventEmitter<any>();
   @Output() toggleBatchTaggingMode = new EventEmitter<any>();
+  @Output() toggleBatchSelectAll = new EventEmitter<any>();
   @Output() handleTagWordClicked= new EventEmitter<TagEmit>();
 
   @Input() batchTaggingMode;

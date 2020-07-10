@@ -367,6 +367,7 @@
     "alreadyExists": "tag already exists",
     "any": "any",
     "batchModeButton": "Batch mode",
+    "batchModeSelectAll": "Select all",
     "clickTagToAdd": "Click any tag in the tray to add the tag to all selected videos",
     "clickVideoToSelect": "Click videos to select",
     "closeTagTray": "Close tag tray",

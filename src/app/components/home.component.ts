@@ -303,6 +303,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   folderViewNavigationPath: string = '';
 
   batchTaggingMode = false; // when batch tagging is enabled
+  batchTaggingAllSelected = false;
 
   latestVersionAvailable: string;
 
@@ -2297,6 +2298,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
       });
     }
     this.batchTaggingMode = !this.batchTaggingMode
+  }
+
+  /**
+   * Toggle between batch tag edit mode and normal mode
+   */
+  toggleBatchSelectAll(): void {
+    this.batchTaggingAllSelected = !this.batchTaggingAllSelected;
+    this.finalArray.forEach((element: ImageElement) => {
+      element.selected = this.batchTaggingAllSelected;
+    });
   }
 
   /**
