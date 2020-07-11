@@ -20,12 +20,12 @@
   >
     {{ 'TAGS.showingMostSimilar' | translate }}
     <span class="most-similar-filename">
-      {{ currentRightClickedItemName }}
+      {{ currentClickedItemName }}
     </span>
   </div>
 
   <app-thumbnail
-    *ngFor="let item of finalArray | similarityPipe: true : currentRightClickedItemName
+    *ngFor="let item of finalArray | similarityPipe: true : currentClickedItemName
                                    | slice: 0 : 8 "
 
     (videoClick)="handleClick.emit({ expectedEvent: $event, item: item })"

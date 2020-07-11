@@ -273,7 +273,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // ------------------------------------------------------------------------
 
   currentPlayingFile = '';
-  currentRightClickedItemName = '';
+  currentClickedItemName = '';
   currentPlayingFolder = '';
   fullPathToCurrentFile = '';
 
@@ -1888,25 +1888,25 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   rightMouseClicked(event: MouseEvent, item: ImageElement): void {
-      const winWidth: number = window.innerWidth;
-      const clientX: number = event.clientX;
-      const howFarFromRight: number = winWidth - clientX;
+    const winWidth: number = window.innerWidth;
+    const clientX: number = event.clientX;
+    const howFarFromRight: number = winWidth - clientX;
 
-      // handle top-offset if clicking close to the bottom
-      const winHeight: number = window.innerHeight;
-      const clientY: number = event.clientY;
-      const howFarFromBottom: number = winHeight - clientY;
+    // handle top-offset if clicking close to the bottom
+    const winHeight: number = window.innerHeight;
+    const clientY: number = event.clientY;
+    const howFarFromBottom: number = winHeight - clientY;
 
-      this.rightClickPosition.x = (howFarFromRight < 150) ? clientX - 150 + (howFarFromRight) : clientX;
-      this.rightClickPosition.y = (howFarFromBottom < 190) ? clientY - 190 + (howFarFromBottom) : clientY;
+    this.rightClickPosition.x = (howFarFromRight < 150) ? clientX - 150 + (howFarFromRight) : clientX;
+    this.rightClickPosition.y = (howFarFromBottom < 190) ? clientY - 190 + (howFarFromBottom) : clientY;
 
-      this.currentRightClickedItem = item;
-      this.rightClickShowing = true;
+    this.currentRightClickedItem = item;
+    this.rightClickShowing = true;
 
     }
 
   assignSelectedFile(item: ImageElement): void {
-    this.currentRightClickedItemName = item.cleanName;
+    this.currentClickedItemName = item.cleanName;
   }
 
   /**

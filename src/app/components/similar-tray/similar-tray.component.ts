@@ -18,7 +18,7 @@ export class SimilarTrayComponent {
   @Output() rightMouseClicked = new EventEmitter<RightClickEmit>();
 
   @Input() appState;
-  @Input() currentRightClickedItemName;
+  @Input() currentClickedItemName;
   @Input() finalArray;
   @Input() previewHeightRelated;
   @Input() previewWidthRelated;
