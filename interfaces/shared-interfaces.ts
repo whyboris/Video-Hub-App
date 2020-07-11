@@ -1,4 +1,4 @@
-import { ImageElement } from "./final-object.interface";
+import { ImageElement } from './final-object.interface';
 
 // Let's make these identical to settings buttons!
 export type SupportedView = 'showThumbnails'
@@ -25,6 +25,11 @@ export interface VideoClickEmit {
   thumbIndex?: number;
 }
 
+export interface VideoClickSimilarEmit {
+  mouseEvent: Event;
+  thumbIndex?: number;
+}
+
 export interface RightClickEmit {
   mouseEvent: Event;
   item: ImageElement;
@@ -40,7 +45,7 @@ export interface Tag {
 export interface TagEmit {
   tag: Tag;
   event: Event;
-};
+}
 
 export interface TagEmission {
   index: number;
