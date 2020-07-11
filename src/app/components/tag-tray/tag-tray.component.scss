@@ -63,3 +63,10 @@
   left: 9px;
   position: absolute;
 }
+
+.button-toggle-batch-mode-select-all {
+  bottom: 8px;
+  color: black !important; // else in dark-mode color changes
+  left: 105px;
+  position: absolute;
+}
