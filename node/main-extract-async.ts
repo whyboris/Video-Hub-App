@@ -72,11 +72,12 @@ const metadataQueue = async.queue(metadataQueueRunner, 1); // 1 is the number of
 
 // Create maps where the value = 1 always.
 // It is faster to check if key exists than searching through an array.
-let alreadyInAngular: Map<string, number> = new Map(); // full paths to videos we have metadata for in Angular
+let alreadyInAngular: Map<string, 1> = new Map(); // full paths to videos we have metadata for in Angular
 
-let watcherMap: Map<number, FSWatcher> = new Map();
-
+// These two are together:
+let watcherMap:       Map<number, FSWatcher> = new Map();
 let allFoundFilesMap: Map<number, Map<string, 1>> = new Map();
+// both these numbers     ^^^^^^ match up - they refer to the same `inputSource`
 
 // ========================================================
 
@@ -348,7 +349,7 @@ export function extractAnyMissingThumbs(
  * @param hashesPresent
  * @param outputDir
  */
-export function removeThumbnailsNotInHub(hashesPresent: Map<string, number>, outputDir: string): void {
+export function removeThumbnailsNotInHub(hashesPresent: Map<string, 1>, outputDir: string): void {
 
   const watcherConfig = {
     awaitWriteFinish: true,

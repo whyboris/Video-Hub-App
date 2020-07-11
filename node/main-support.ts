@@ -458,7 +458,8 @@ export function insertTemporaryFieldsSingle(element: ImageElement): ImageElement
 }
 
 /**
- * If .vha2 version 2, upgrade `inputDir` into `inputDirs` and add `inputSource` into every element
+ * If .vha2 version 2, create `inputDirs` from `inputDir` and add `inputSource` into every element
+ * Keep `inputDir` for backwards compatibility - in case user wants to come back to VHA2
  * @param finalObject
  */
 export function upgradeToVersion3(finalObject: FinalObject): void {
@@ -495,10 +496,10 @@ export function setUpDirectoryWatchers(inputDirs: InputSources, currentImages: I
 
   Object.keys(inputDirs).forEach((key: string) => {
 
-    const pathToDir: string = inputDirs[key].path;
+    const pathToDir: string =    inputDirs[key].path;
+    const shouldWatch: boolean = inputDirs[key].watch;
 
-    console.log(key, 'watch = ', inputDirs[key].watch, ' : ', pathToDir);
-
+    console.log(key, 'watch =', shouldWatch, ':', pathToDir);
 
     // check if directory connected
     fs.access(pathToDir, fs.constants.W_OK, function(err) {
@@ -506,7 +507,7 @@ export function setUpDirectoryWatchers(inputDirs: InputSources, currentImages: I
       if (!err) {
         GLOBALS.angularApp.sender.send('directory-now-connected', parseInt(key, 10), pathToDir);
 
-        if (inputDirs[key].watch || currentImages.length === 0) {
+        if (shouldWatch || currentImages.length === 0) {
 
           // Temp logging
           if (currentImages.length === 0) {
@@ -515,7 +516,7 @@ export function setUpDirectoryWatchers(inputDirs: InputSources, currentImages: I
             console.log('PERSISTENT WATCHING !!!');
           }
 
-          startFileSystemWatching(pathToDir, parseInt(key, 10), inputDirs[key].watch);
+          startFileSystemWatching(pathToDir, parseInt(key, 10), shouldWatch);
         }
 
       }

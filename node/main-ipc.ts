@@ -262,7 +262,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
   ipc.on('clean-old-thumbnails', (event, finalArray: ImageElement[]) => {
     const screenshotOutputFolder: string = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName);
 
-    const allHashes: Map<string, number> = new Map();
+    const allHashes: Map<string, 1> = new Map();
 
     finalArray.forEach((element: ImageElement) => {
       allHashes.set(element.hash, 1);
