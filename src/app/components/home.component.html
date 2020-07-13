@@ -248,16 +248,17 @@
     <div *ngIf="settingTabToShow == 3" class="shortcut-menu">
 
       <app-statistics
-        (finalArrayNeedsSaving)="finalArrayNeedsSaving = true"
         (addMissingThumbnailsPlease)="extractMissingThumbnails()"
         (cleanScreenshotFolderPlease)="cleanScreenshotFolder()"
+        (deleteInputSourceFiles)="deleteInputSourceFiles($event)"
+        (finalArrayNeedsSaving)="finalArrayNeedsSaving = true"
+
         [finalArray]="finalArray"
         [hubName]="appState.hubName"
-        [numFolders]="appState.numOfFolders"
         [inputFolders]="sourceFolderService.selectedSourceFolder"
+        [numFolders]="appState.numOfFolders"
         [pathToVhaFile]="appState.currentVhaFile"
         [screenshotSettings]="currentScreenshotSettings"
-        [videoFolder]="sourceFolderService.selectedSourceFolder"
       ></app-statistics>
 
     </div>

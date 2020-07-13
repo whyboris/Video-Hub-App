@@ -37,6 +37,11 @@
   button {
     transition-duration: 0.5s;
   }
+
+  .button-hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
 }
 
 .title {
@@ -73,6 +78,7 @@
 .input-sources {
   display: table;
   margin: 0 auto;
+  max-width: calc(100% - 200px);
 
   .input-folder {
     text-align: left;
@@ -132,4 +138,35 @@
 
 .wizard-button {
   min-width: unset;
+  position: relative;
+}
+
+.number-of-thumbs-deleted {
+  bottom: -26px;
+  color: $pretty-blue;
+  position: absolute;
+  right: 0;
+  width: 100%;
+}
+
+.progress-gradient-animation {
+  animation: gradient 3s infinite;
+  background: linear-gradient(90deg, rgba(255,255,255,0) 35%, $pretty-blue 50% , rgba(255,255,255,0) 65%);
+  background-size: 300%;
+  color: $gray-70;
+  pointer-events: none;
+}
+
+@keyframes gradient {
+  0% {
+    background-position-x: 100%;
+  }
+
+  50% {
+    background-position-x: 0%;
+  }
+
+  100% {
+    background-position-x: 100%;
+  }
 }

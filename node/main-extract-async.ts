@@ -72,9 +72,13 @@ const metadataQueue = async.queue(metadataQueueRunner, 1); // 1 is the number of
 
 // Create maps where the value = 1 always.
 // It is faster to check if key exists than searching through an array.
-let alreadyInAngular: Map<string, number> = new Map(); // full paths to videos we have metadata for in Angular
+let alreadyInAngular: Map<string, 1> = new Map(); // full paths to videos we have metadata for in Angular
 
-let watcherMap: Map<number, FSWatcher> = new Map();
+// These two are together:
+let watcherMap:       Map<number, FSWatcher> = new Map();
+let allFoundFilesMap: Map<number, Map<string, 1>> = new Map();
+// both these numbers     ^^^^^^ match up - they refer to the same `inputSource`
+
 // ========================================================
 
 export interface TempMetadataQueueObject {
@@ -129,13 +133,18 @@ export function metadataQueueRunner(file: TempMetadataQueueObject, done) {
 
 }
 
-/**
- * Check if path is to a file system reserved object or folder
- * @param thingy path to particular file / directory
- */
+// =====================================================================================================================
+// TODO -- check if any of these checks are needed now that we use `chokidar`
+//
 function fileSystemReserved(thingy: string): boolean {
-  return (thingy.startsWith('$') || thingy === 'System Volume Information');                                            // !!! TODO -- check if needed !?!?!
+  // ignore folders beginning with { '.', '__MACOS', 'vha-' }
+  const folderIgnoreRegex = /^(\.|__MACOS|vha-).*/g;
+  // ignore files beginning with { '.', '_' }
+  const fileIgnoreRegex = /^(\.|_).*/g;
+
+  return (thingy.startsWith('$') || thingy === 'System Volume Information');
 }
+// =====================================================================================================================
 
 /**
  * Create a new `chokidar` watcher for a particular directory
@@ -148,6 +157,10 @@ export function startFileSystemWatching(
   inputSource: number,
   persistent: boolean
 ) {
+
+  console.log(typeof(inputSource));
+
+
 
   console.log('starting watcher ', inputSource);
 
@@ -176,6 +189,11 @@ export function startFileSystemWatching(
       const fullPath = path.join(inputDir, partialPath, fileName);
 
       console.log(fullPath);
+
+      if (!allFoundFilesMap.has(inputSource)) {
+        allFoundFilesMap.set(inputSource, new Map());
+      }
+      allFoundFilesMap.get(inputSource).set(fullPath, 1);
 
       if (alreadyInAngular.has(fullPath)) {
         return;
@@ -207,12 +225,17 @@ export function startFileSystemWatching(
     })
 */
     .on('ready', () => {
+
       console.log('Finished scanning', inputSource);
+
+      GLOBALS.angularApp.sender.send('all-files-found-in-dir', inputSource, allFoundFilesMap.get(inputSource));
+
       if (persistent) {
         console.log('^^^^^^^^ - CONTINUING to watch this directory!');
       } else {
         console.log('^^^^^^^^ - stopping watching this directory');
       }
+
     });
 
     watcherMap.set(inputSource, watcher);
@@ -232,6 +255,8 @@ export function resetWatchers(finalArray: ImageElement[]): void {
   });
 
   alreadyInAngular = new Map();
+
+  allFoundFilesMap = new Map();
 
   finalArray.forEach((element: ImageElement) => {
     const fullPath: string = path.join(
@@ -319,12 +344,18 @@ export function extractAnyMissingThumbs(
   });
 }
 
+let numberOfThumbsDeleted: number = 0;
+
 /**
  * Scan the output directory and delete any file not in `hashesPresent`
  * @param hashesPresent
  * @param outputDir
  */
-export function removeThumbnailsNotInHub(hashesPresent: Map<string, number>, outputDir: string): void {
+export function removeThumbnailsNotInHub(hashesPresent: Map<string, 1>, outputDir: string): void {
+
+  numberOfThumbsDeleted = 0;
+
+  deleteThumbQueue.pause();
 
   const watcherConfig = {
     awaitWriteFinish: true,
@@ -348,11 +379,14 @@ export function removeThumbnailsNotInHub(hashesPresent: Map<string, number>, out
       if (!hashesPresent.has(fileNameHash)) {
         const fullPath = path.join(outputDir, filePath);
         deleteThumbQueue.push(fullPath);
+        numberOfThumbsDeleted++;
       }
 
     })
     .on('ready', () => {
       watcher.close().then(() => {
+        deleteThumbQueue.resume();
+        GLOBALS.angularApp.sender.send('number-of-screenshots-deleted', numberOfThumbsDeleted);
         // do nothing - the watcher is now safely closed
       });
     });

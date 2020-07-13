@@ -12,11 +12,11 @@ export class SourceFolderService {
   sourceFolderConnected: InputSourceConnected = {};
 
   /**
-   * Set all source folders to `connected' (for now -- later do the opposite)
+   * Set all source folders to `NOT connected'
    */
   resetConnected(): void {
     Object.keys(this.selectedSourceFolder).forEach((key: string) => {
-      this.sourceFolderConnected[key] = true;
+      this.sourceFolderConnected[key] = false;
     });
     console.log(this.selectedSourceFolder);
     console.log(this.sourceFolderConnected);

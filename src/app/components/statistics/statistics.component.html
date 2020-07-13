@@ -9,13 +9,13 @@
   <span class="stats-heading title sources">{{ 'STATISTICS.videoFolder' | translate }}</span>
 
   <div class="input-sources">
-    <div class="input-sources-row" *ngFor="let item of videoFolder | keyvalue; index as i; trackBy: trackByFn">
+    <div class="input-sources-row" *ngFor="let item of inputFolders | keyvalue; index as i; trackBy: trackByFn">
       <span
         class="stats-heading folder input-folder"
         [innerHtml]="item.value.path | folderArrowsPipe"
       ></span>
       <span
-        *ngIf="(objectKeys(videoFolder).length > 1) && removeFoldersMode"
+        *ngIf="(objectKeys(inputFolders).length > 1) && removeFoldersMode"
         class="delete-input-folder"
         (click)="deleteInputSource(item.key)"
         @breadcrumbWordAppear
@@ -26,6 +26,7 @@
         *ngIf="!removeFoldersMode && !item.value.watch && sourceFolderService.sourceFolderConnected[item.key]"
         class="rescan-input-folder"
         (click)="rescanFolder(item.key)"
+        (mouseup)="animateThis($event)"
         title="{{ 'STATISTICS.clickToRescan' | translate }}"
         @breadcrumbWordAppear
       >
@@ -76,13 +77,12 @@
     <button
       class="wizard-button start-import"
       (click)="addAnotherFolder()"
-      [ngStyle]="{ opacity: removeFoldersMode ? 1 : 0 }"
+      [ngClass]="{ 'button-hidden': !removeFoldersMode }"
     >
       {{ 'STATISTICS.addFolderToHub' | translate }}
     </button>
 
     <button
-      *ngIf="(objectKeys(videoFolder).length > 1)"
       (click)="removeFoldersMode = !removeFoldersMode"
       class="wizard-button "
       [ngClass]="{ 'edit-mode-active': removeFoldersMode }"
@@ -93,7 +93,8 @@
     <button
       class="wizard-button"
       (click)="addMissingThumbnails()"
-      [ngStyle]="{ opacity: removeFoldersMode ? 1 : 0 }"
+      (mouseup)="animateThis($event)"
+      [ngClass]="{ 'button-hidden': !removeFoldersMode }"
     >
       {{ 'STATISTICS.addMissingThumbnails' | translate }}
     </button>
@@ -101,10 +102,16 @@
     <button
       class="wizard-button"
       (click)="cleanScreenshotFolder()"
+      (mouseup)="animateThis($event)"
       title="{{ 'STATISTICS.cleanScreenshotsHint' | translate }}"
-      [ngStyle]="{ opacity: removeFoldersMode ? 1 : 0 }"
+      [ngClass]="{ 'button-hidden': !removeFoldersMode }"
     >
       {{ 'STATISTICS.cleanScreenshots' | translate }}
+
+      <div *ngIf="showNumberDeleted" class="number-of-thumbs-deleted" @metaAppear>
+        Deleted {{ numberOfScreensDeleted | number }} thumbnails
+      </div>
+
     </button>
 
   </span>

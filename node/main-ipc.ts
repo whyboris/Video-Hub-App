@@ -218,6 +218,21 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
   });
 
   /**
+   * Summon system modal to choose NEW input directory for a now-disconnected folder
+   * where all the videos are located
+   */
+  ipc.on('reconnect-this-folder', (event, inputSource: number) => {
+    dialog.showOpenDialog(win, {
+      properties: ['openDirectory']
+    }).then(result => {
+      const inputDirPath: string = result.filePaths[0];
+      if (inputDirPath) {
+        event.sender.send('old-folder-reconnected', inputSource, inputDirPath);
+      }
+    }).catch(err => {});
+  });
+
+  /**
    * Stop watching a particular folder
    */
   ipc.on('stop-watching-folder', (event, watchedFolderIndex: number) => {
@@ -228,9 +243,10 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
   /**
    * Stop watching a particular folder
    */
-  ipc.on('start-watching-folder', (event, watchedFolderIndex: number, path: string, persistent: boolean) => {
+  ipc.on('start-watching-folder', (event, watchedFolderIndex: string, path: string, persistent: boolean) => {
+    // annoyingly it's not a number :     ^^^^^^^^^^^^^^^^^^ -- because object keys are strings :(
     console.log('start watching:', watchedFolderIndex, path, persistent);
-    startWatcher(watchedFolderIndex, path, persistent);
+    startWatcher(parseInt(watchedFolderIndex, 10), path, persistent);
   });
 
   /**
@@ -247,7 +263,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
   ipc.on('clean-old-thumbnails', (event, finalArray: ImageElement[]) => {
     const screenshotOutputFolder: string = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName);
 
-    const allHashes: Map<string, number> = new Map();
+    const allHashes: Map<string, 1> = new Map();
 
     finalArray.forEach((element: ImageElement) => {
       allHashes.set(element.hash, 1);

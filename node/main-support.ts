@@ -224,7 +224,6 @@ export function createDotPlsFile(savePath: string, playlist: ImageElement[], sou
   const singleString: string = writeArray.join('\n');
 
   fs.writeFile(savePath, singleString, 'utf8', done);
-
 }
 
 /**
@@ -266,18 +265,14 @@ function getBestStream(metadata) {
  * @param metadata
  */
 function getFileDuration(metadata): number {
-  if (     metadata
-        && metadata.streams
-        && metadata.streams[0]
-        && metadata.streams[0].duration
-  ) {
+  if (metadata?.streams?.[0]?.duration) {
+
     return metadata.streams[0].duration;
 
-  } else if (metadata
-          && metadata.format
-          && metadata.format.duration
-  ) {
+  } else if (metadata?.format?.duration) {
+
     return   metadata.format.duration;
+
   } else {
     return 0;
   }
@@ -463,7 +458,8 @@ export function insertTemporaryFieldsSingle(element: ImageElement): ImageElement
 }
 
 /**
- * If .vha2 version 2, upgrade `inputDir` into `inputDirs` and add `inputSource` into every element
+ * If .vha2 version 2, create `inputDirs` from `inputDir` and add `inputSource` into every element
+ * Keep `inputDir` for backwards compatibility - in case user wants to come back to VHA2
  * @param finalObject
  */
 export function upgradeToVersion3(finalObject: FinalObject): void {
@@ -484,45 +480,43 @@ export function upgradeToVersion3(finalObject: FinalObject): void {
 }
 
 /**
- * Start watching directories with `chokidar`
  * Only called when creating a new hub OR opening a hub
+ * Notify Angular that a folder is 'connected'
+ * If user wants continuous watching, watching directories with `chokidar`
  * @param inputDirs
  * @param currentImages -- if creating a new VHA file, this will be [] empty (and `watch` = false)
  */
-export function startWatchingDirs(inputDirs: InputSources, currentImages: ImageElement[]): void {
-  console.log('-----------------------------------');
-  console.log('about to start watching for files ?');
-  console.log('number of files:', currentImages.length);
+export function setUpDirectoryWatchers(inputDirs: InputSources, currentImages: ImageElement[]): void {
+
+  console.log('---------------------------------');
+  console.log(' SETTING UP FILE SYSTEM WATCHERS' );
+  console.log('---------------------------------');
 
   resetWatchers(currentImages);
 
   Object.keys(inputDirs).forEach((key: string) => {
 
-    const pathToDir: string = inputDirs[key].path;
+    const pathToDir: string =    inputDirs[key].path;
+    const shouldWatch: boolean = inputDirs[key].watch;
 
-    console.log(key, 'watch = ', inputDirs[key].watch, ' : ', pathToDir);
-
+    console.log(key, 'watch =', shouldWatch, ':', pathToDir);
 
     // check if directory connected
     fs.access(pathToDir, fs.constants.W_OK, function(err) {
 
-      if(err){
+      if (!err) {
+        GLOBALS.angularApp.sender.send('directory-now-connected', parseInt(key, 10), pathToDir);
 
-        console.error('!!!!! DIRECTORY NOT CONNECTED !!!!!');
-        GLOBALS.angularApp.sender.send('directory-not-connected', parseInt(key, 10), pathToDir);
-
-      } else {
-
-        if (inputDirs[key].watch || currentImages.length === 0) {
+        if (shouldWatch || currentImages.length === 0) {
 
           // Temp logging
           if (currentImages.length === 0) {
-            'FIRST SCAN'
+            console.log('FIRST SCAN');
           } else {
             console.log('PERSISTENT WATCHING !!!');
           }
 
-          startFileSystemWatching(pathToDir, parseInt(key, 10), inputDirs[key].watch);
+          startFileSystemWatching(pathToDir, parseInt(key, 10), shouldWatch);
         }
 
       }

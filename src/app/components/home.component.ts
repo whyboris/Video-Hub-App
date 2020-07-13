@@ -118,7 +118,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   vhaFileHistory: HistoryItem[] = [];
 
-  myTimeout = null;
+  windowResizeTimeout = null;
+
+  newVideoImportTimeout = null;
+  newVideoImportCounter: number = 0;
 
   // ========================================================================
   // App state / UI state
@@ -459,11 +462,43 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     // TODO -- update 'source connected' thingy
-    this.electronService.ipcRenderer.on('directory-not-connected', (event, sourceIndex: number, sourcePath: string) => {
+    this.electronService.ipcRenderer.on('directory-now-connected', (event, sourceIndex: number, sourcePath: string) => {
       console.log('FOLDER NOT CONNECTED !!!');
       console.log(sourceIndex, sourcePath);
-      this.sourceFolderService.sourceFolderConnected[sourceIndex] = false;
+
+      // TODO -- if this error never happens, all is well; remove the `sourcePath` from this method :)
+      if (this.sourceFolderService.selectedSourceFolder[sourceIndex].path !== sourcePath) {
+        console.log('WARNING HUGE ERROR HERE !!!!!! MUST NEVER HAPPEN !!!');
+      }
+
+      this.sourceFolderService.sourceFolderConnected[sourceIndex] = true;
       console.log(this.sourceFolderService.sourceFolderConnected);
+    });
+
+    // WIP -- delete any videos no longer found on the hard drive!
+    this.electronService.ipcRenderer.on('all-files-found-in-dir', (event, sourceIndex: number, allFilesMap: Map<string, 1>) => {
+      console.log('all files returning:');
+      console.log(sourceIndex);
+      console.log(typeof(sourceIndex));
+      console.log(allFilesMap);
+
+      const rootFolder: string = this.sourceFolderService.selectedSourceFolder[sourceIndex].path;
+
+      this.finalArray
+        .filter((element: ImageElement) => { return element.inputSource == sourceIndex })
+        // notice the loosey-goosey comparison! this is because number  ^^  string comparison happening here!
+        .forEach((element: ImageElement) => {
+          console.log(element.fileName);
+          if (allFilesMap.has(path.join(rootFolder, element.partialPath, element.fileName))) {
+            // everything is OK
+          } else {
+            console.log('deleting');
+            element.deleted = true;
+          }
+        });
+
+      this.deletePipeHack = !this.deletePipeHack;
+
     });
 
     /**
@@ -623,12 +658,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     this.electronService.ipcRenderer.on('new-video-meta', (event, element: ImageElement) => {
       element.index = this.finalArray.length;
-      this.finalArray.push(element);
-      console.log(element);
-      // TODO -- see if it's needed -- we don't want 10,000-large array copied 100 times per minute on import
-      this.finalArray = this.finalArray.slice();
+      this.finalArray.push(element); // not enough for view to update; we need `.slice()`
       this.finalArrayNeedsSaving = true;
-      this.cd.detectChanges();
+      this.debounceImport();
     });
 
     this.justStarted();
@@ -650,6 +682,51 @@ export class HomeComponent implements OnInit, AfterViewInit {
         }
       }
     };
+  }
+
+  /**
+   * Only update the view after enough changes occurred
+   * - update after every new element when < 20 elements total
+   * - update every 20 new elements after until 100; every 100 thereafter
+   * - update at most 3 seconds after the last element arrived
+   */
+  public debounceImport(): void {
+    this.newVideoImportCounter++;
+
+    clearTimeout(this.newVideoImportTimeout);
+
+    if (    this.finalArray.length < 20
+        || (this.finalArray.length < 100 && this.newVideoImportCounter === 20)
+        || this.newVideoImportCounter === 100
+    ) {
+      this.resetFinalArrayRef();
+    } else {
+      this.newVideoImportTimeout = setTimeout(() => {
+        this.resetFinalArrayRef()
+      }, 3000);
+    }
+  }
+
+  /**
+   * Helper method only to be used by `debounceImport()`
+   */
+  private resetFinalArrayRef(): void {
+    this.newVideoImportCounter = 0;
+    this.finalArray = this.finalArray.slice();
+    this.cd.detectChanges();
+  }
+
+  /**
+   * Delete from finalArray all the video files with particular source index
+   * @param sourceIndex
+   */
+  deleteInputSourceFiles(sourceIndex: number): void {
+    this.finalArray.forEach((element: ImageElement) => {
+      if (element.inputSource == sourceIndex) { // TODO -- stop the loosey goosey `==` and figure out `string` vs `number`
+        element.deleted = true;
+      }
+    });
+    this.deletePipeHack = !this.deletePipeHack;
   }
 
   /**
@@ -692,8 +769,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public debounceUpdateMax(msDelay?: number): void {
     // console.log('debouncing');
     const delay = msDelay !== undefined ? msDelay : 250;
-    clearTimeout(this.myTimeout);
-    this.myTimeout = setTimeout(() => {
+    clearTimeout(this.windowResizeTimeout);
+    this.windowResizeTimeout = setTimeout(() => {
       // console.log('Virtual scroll refreshed');
       this.virtualScroller.refresh();
       this.computePreviewWidth();
@@ -1391,7 +1468,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Tell node to delete all screenshots that are no longer in the hub
    */
   public cleanScreenshotFolder(): void {
-    console.log('trying to extract missing thumbnails');
+    console.log('trying to delete unused screenshots');
     this.electronService.ipcRenderer.send('clean-old-thumbnails', this.finalArray);
   }
 

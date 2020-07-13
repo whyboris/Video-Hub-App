@@ -18,9 +18,10 @@ import { metaAppear, breadcrumbWordAppear } from '../../common/animations';
 })
 export class StatisticsComponent implements OnInit {
 
-  @Output() finalArrayNeedsSaving = new EventEmitter<any>();
   @Output() addMissingThumbnailsPlease = new EventEmitter<any>();
   @Output() cleanScreenshotFolderPlease = new EventEmitter<any>();
+  @Output() deleteInputSourceFiles = new EventEmitter<number>();
+  @Output() finalArrayNeedsSaving = new EventEmitter<any>();
 
   @Input() finalArray: ImageElement[];
   @Input() hubName: string;
@@ -28,7 +29,6 @@ export class StatisticsComponent implements OnInit {
   @Input() numFolders: number;
   @Input() pathToVhaFile: string;
   @Input() screenshotSettings: ScreenshotSettings;
-  @Input() videoFolder: string;
 
   totalFiles: number;
 
@@ -42,6 +42,9 @@ export class StatisticsComponent implements OnInit {
   totalSize: number = 0;
   avgSize: number;
 
+  showNumberDeleted: boolean = false;
+  numberOfScreensDeleted: number = 0;
+
   removeFoldersMode: boolean = false;
 
   objectKeys = Object.keys; // to use in template
@@ -54,7 +57,12 @@ export class StatisticsComponent implements OnInit {
 
   ngOnInit() {
 
+    console.log('booting up!');
+
     console.log(this.inputFolders);
+
+    console.log(this.inputFolders[0]);
+    console.log(this.inputFolders['0']);
 
     this.finalArray.forEach((element: ImageElement): void => {
       this.shortest = Math.min(element.duration, this.shortest);
@@ -85,12 +93,40 @@ export class StatisticsComponent implements OnInit {
       if (!pathAlreadyExists) {
         const nextIndex: number = this.pickNextIndex(this.inputFolders);
         this.inputFolders[nextIndex] = { path: filePath, watch: false };
+        this.sourceFolderService.sourceFolderConnected[nextIndex] = true;
         this.electronService.ipcRenderer.send('start-watching-folder', nextIndex, filePath, false);
       }
 
       this.cd.detectChanges();
 
     });
+
+    this.electronService.ipcRenderer.on('old-folder-reconnected', (event, sourceIndex: number, newPath: string) => {
+      console.log('NEW FOLDER CHOSEN !!!');
+      console.log(sourceIndex);
+      console.log(newPath);
+      this.inputFolders[sourceIndex] = { path: newPath, watch: false };
+      this.sourceFolderService.sourceFolderConnected[sourceIndex] = true;
+      setTimeout(() => {
+        this.cd.detectChanges();
+      }, 1);
+    });
+
+    this.electronService.ipcRenderer.on('number-of-screenshots-deleted', (event, numDeleted: number) => {
+      console.log('deleted', numDeleted, 'screenshots');
+      setTimeout(() => {
+
+        this.numberOfScreensDeleted = numDeleted;
+        this.showNumberDeleted = true;
+        this.cd.detectChanges()
+        setTimeout(() => {
+          this.showNumberDeleted = false;
+          this.cd.detectChanges()
+        }, 3000);
+
+      }, 1000); // make sure it doesn't appear instantly -- feels like an error if it happens to quickly :P
+    });
+
   }
 
   /**
@@ -127,6 +163,7 @@ export class StatisticsComponent implements OnInit {
    */
   rescanFolder(index: number) {
     console.log(index);
+    console.log(typeof(index));
     console.log(this.inputFolders[index].path);
     this.tellNodeStartWatching(index, this.inputFolders[index].path, false);
     setTimeout(() => {
@@ -151,6 +188,7 @@ export class StatisticsComponent implements OnInit {
   reconnectThisFolder(itemSourceKey: number) {
     console.log(itemSourceKey);
     console.log('RECONNECT -- NOT IMPLEMENTED -- TODO');
+    this.electronService.ipcRenderer.send('reconnect-this-folder', itemSourceKey);
   }
 
   /**
@@ -162,6 +200,8 @@ export class StatisticsComponent implements OnInit {
     console.log(this.inputFolders[itemSourceKey]);
     this.tellNodeStopWatching(itemSourceKey);
     delete this.inputFolders[itemSourceKey];
+    delete this.sourceFolderService.sourceFolderConnected[itemSourceKey];
+    this.deleteInputSourceFiles.emit(itemSourceKey);
   }
 
   cleanScreenshotFolder(): void {
@@ -187,6 +227,19 @@ export class StatisticsComponent implements OnInit {
 
   trackByFn(index, item) {
     return(item.key);
+  }
+
+  /**
+   * Show the gradient swipe-back-and-forth-animation for 3 seconds after clicking "rescan"
+   * @param event
+   */
+  animateThis(event) {
+    event.srcElement.classList.add('progress-gradient-animation');
+    setTimeout(() => {
+      if (event.srcElement.classList) { // this might not even be needed it seems
+        event.srcElement.classList.remove('progress-gradient-animation');
+      }
+    }, 3000); // apparently nothing breaks if the component is closed before timeout finishes :)
   }
 
 }
