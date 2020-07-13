@@ -344,12 +344,16 @@ export function extractAnyMissingThumbs(
   });
 }
 
+let numberOfThumbsDeleted: number = 0;
+
 /**
  * Scan the output directory and delete any file not in `hashesPresent`
  * @param hashesPresent
  * @param outputDir
  */
 export function removeThumbnailsNotInHub(hashesPresent: Map<string, 1>, outputDir: string): void {
+
+  numberOfThumbsDeleted = 0;
 
   const watcherConfig = {
     awaitWriteFinish: true,
@@ -373,11 +377,13 @@ export function removeThumbnailsNotInHub(hashesPresent: Map<string, 1>, outputDi
       if (!hashesPresent.has(fileNameHash)) {
         const fullPath = path.join(outputDir, filePath);
         deleteThumbQueue.push(fullPath);
+        numberOfThumbsDeleted++;
       }
 
     })
     .on('ready', () => {
       watcher.close().then(() => {
+        GLOBALS.angularApp.sender.send('number-of-screenshots-deleted', numberOfThumbsDeleted);
         // do nothing - the watcher is now safely closed
       });
     });

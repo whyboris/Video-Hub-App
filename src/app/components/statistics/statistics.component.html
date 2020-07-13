@@ -107,6 +107,11 @@
       [ngClass]="{ 'button-hidden': !removeFoldersMode }"
     >
       {{ 'STATISTICS.cleanScreenshots' | translate }}
+
+      <div *ngIf="showNumberDeleted" class="number-of-thumbs-deleted" @metaAppear>
+        Deleted {{ numberOfScreensDeleted | number }} thumbnails
+      </div>
+
     </button>
 
   </span>

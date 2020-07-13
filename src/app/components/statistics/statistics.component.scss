@@ -138,6 +138,15 @@
 
 .wizard-button {
   min-width: unset;
+  position: relative;
+}
+
+.number-of-thumbs-deleted {
+  bottom: -26px;
+  color: $pretty-blue;
+  position: absolute;
+  right: 0;
+  width: 100%;
 }
 
 .progress-gradient-animation {

@@ -42,6 +42,9 @@ export class StatisticsComponent implements OnInit {
   totalSize: number = 0;
   avgSize: number;
 
+  showNumberDeleted: boolean = false;
+  numberOfScreensDeleted: number = 0;
+
   removeFoldersMode: boolean = false;
 
   objectKeys = Object.keys; // to use in template
@@ -107,6 +110,21 @@ export class StatisticsComponent implements OnInit {
       setTimeout(() => {
         this.cd.detectChanges();
       }, 1);
+    });
+
+    this.electronService.ipcRenderer.on('number-of-screenshots-deleted', (event, numDeleted: number) => {
+      console.log('deleted', numDeleted, 'screenshots');
+      setTimeout(() => {
+
+        this.numberOfScreensDeleted = numDeleted;
+        this.showNumberDeleted = true;
+        this.cd.detectChanges()
+        setTimeout(() => {
+          this.showNumberDeleted = false;
+          this.cd.detectChanges()
+        }, 3000);
+
+      }, 1000); // make sure it doesn't appear instantly -- feels like an error if it happens to quickly :P
     });
 
   }
@@ -211,11 +229,17 @@ export class StatisticsComponent implements OnInit {
     return(item.key);
   }
 
-  animateThis(event){
+  /**
+   * Show the gradient swipe-back-and-forth-animation for 3 seconds after clicking "rescan"
+   * @param event
+   */
+  animateThis(event) {
     event.srcElement.classList.add('progress-gradient-animation');
     setTimeout(() => {
-      event.srcElement.classList.remove('progress-gradient-animation');
-    }, 3000);
+      if (event.srcElement.classList) { // this might not even be needed it seems
+        event.srcElement.classList.remove('progress-gradient-animation');
+      }
+    }, 3000); // apparently nothing breaks if the component is closed before timeout finishes :)
   }
 
 }
