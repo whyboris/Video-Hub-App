@@ -355,6 +355,8 @@ export function removeThumbnailsNotInHub(hashesPresent: Map<string, 1>, outputDi
 
   numberOfThumbsDeleted = 0;
 
+  deleteThumbQueue.pause();
+
   const watcherConfig = {
     awaitWriteFinish: true,
     cwd: outputDir,
@@ -383,6 +385,7 @@ export function removeThumbnailsNotInHub(hashesPresent: Map<string, 1>, outputDi
     })
     .on('ready', () => {
       watcher.close().then(() => {
+        deleteThumbQueue.resume();
         GLOBALS.angularApp.sender.send('number-of-screenshots-deleted', numberOfThumbsDeleted);
         // do nothing - the watcher is now safely closed
       });

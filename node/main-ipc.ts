@@ -243,9 +243,10 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
   /**
    * Stop watching a particular folder
    */
-  ipc.on('start-watching-folder', (event, watchedFolderIndex: number, path: string, persistent: boolean) => {
+  ipc.on('start-watching-folder', (event, watchedFolderIndex: string, path: string, persistent: boolean) => {
+    // annoyingly it's not a number :     ^^^^^^^^^^^^^^^^^^ -- because object keys are strings :(
     console.log('start watching:', watchedFolderIndex, path, persistent);
-    startWatcher(watchedFolderIndex, path, persistent);
+    startWatcher(parseInt(watchedFolderIndex, 10), path, persistent);
   });
 
   /**
