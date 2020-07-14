@@ -135,6 +135,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   versionNumber = globals.version;
 
   public finalArray: ImageElement[] = [];
+  public selectedCount: number;
 
   vhaFileHistory: HistoryItem[] = [];
 
@@ -2305,9 +2306,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   toggleBatchSelectAll(): void {
     this.batchTaggingAllSelected = !this.batchTaggingAllSelected;
+    if (this.batchTaggingAllSelected) {
+      this.pipeSideEffectService.selectAllShowing();
+    } else {
+      this.finalArray.forEach((element: ImageElement) => {
+        element.selected = false;
+      });
+    }
+    this.selectedCount = 0;
     this.finalArray.forEach((element: ImageElement) => {
-      element.selected = this.batchTaggingAllSelected;
+      if (element.selected) { this.selectedCount++; }
     });
+
   }
 
   /**

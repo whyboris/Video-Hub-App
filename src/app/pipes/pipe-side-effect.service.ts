@@ -44,4 +44,9 @@ export class PipeSideEffectService {
     this.galleryShowing = results;
   }
 
+  selectAllShowing() {
+    this.galleryShowing.forEach((element: ImageElement) => {
+      element.selected = true;
+    });
+  }
 }
