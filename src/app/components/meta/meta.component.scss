@@ -102,10 +102,11 @@
 
 .view-tags-holder {
   @include scrollBar;
+  box-sizing: border-box;
   display: block;
-  height: 47px;
+  height: 60px;
   overflow-y: auto;
-  padding-top: 10px;
+  padding-bottom: 2px;
 }
 
 .times-played {
@@ -115,11 +116,14 @@
 }
 
 textarea {
+  @include scrollBar;
   background: transparent;
   border: 0;
   border-left: 1px solid $gray-30;
+  box-sizing: border-box;
   font-family: sans-serif;
   font-size: 12px;
+  margin-top: 5px;
   outline: none;
   padding: 0 5px;
   resize: none;
