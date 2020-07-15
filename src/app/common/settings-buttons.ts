@@ -50,6 +50,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'showTagTray'
  | 'showTags'
  | 'showThumbnails'
+ | 'showVideoNotes'
  | 'shuffleGalleryNow'
  | 'sizeFilter'
  | 'sortOptionAlphabetical'
@@ -141,6 +142,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
   [ // 8
     'manualTags',
     'showTagTray',
+    'showVideoNotes',
   ],
   [ // 9
     'hoverScrub',
@@ -743,6 +745,13 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-toggle-auto-scrub',
     moreInfo: 'BUTTONS.thumbAutoAdvanceMoreInfo',
     title: 'BUTTONS.thumbAutoAdvanceHint',
+    toggled: false
+  },
+  'showVideoNotes': {
+    description: 'BUTTONS.videoNotesDescription',
+    hidden: true,
+    iconName: 'icon-toggle-video-notes',
+    title: 'BUTTONS.videoNotesHint',
     toggled: false
   }
 }

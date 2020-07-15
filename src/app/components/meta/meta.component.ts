@@ -22,6 +22,7 @@ export interface StarEmission {
 export class MetaComponent implements OnInit {
 
   @ViewChild('yearInput', { static: false }) yearInput: ElementRef;
+  @ViewChild('videoNotes', { static: false}) videoNotes: ElementRef;
 
   @Output() editFinalArrayStars = new EventEmitter<StarEmission>();
   @Output() editFinalArrayTag = new EventEmitter<TagEmission>();
@@ -34,12 +35,13 @@ export class MetaComponent implements OnInit {
   @Input() imgHeight: number;
   @Input() largerFont: boolean;
   @Input() maxWidth: number;
-  @Input() showMeta: boolean;
-  @Input() star: StarRating;
-  @Input() showManualTags: boolean;
+  @Input() selectedSourceFolder: InputSources;
   @Input() showAutoFileTags: boolean;
   @Input() showAutoFolderTags: boolean;
-  @Input() selectedSourceFolder: InputSources;
+  @Input() showManualTags: boolean;
+  @Input() showMeta: boolean;
+  @Input() showVideoNotes: boolean;
+  @Input() star: StarRating;
 
   starRatingHack: StarRating;
   yearHack: number;
@@ -217,6 +219,15 @@ export class MetaComponent implements OnInit {
     this.renamingWIP = this.video.cleanName;
     event.stopPropagation();
     this.renameError = false
+  }
+
+  /**
+   * When user clicks outside (that is `onBlur` event) save the currently-written notes to imageElement
+   * @param event
+   */
+  saveVideoNotes(event): void {
+    console.log(this.videoNotes.nativeElement.value);
+    this.video.notes = this.videoNotes.nativeElement.value;
   }
 
 }

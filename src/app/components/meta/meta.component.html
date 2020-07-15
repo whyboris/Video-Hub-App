@@ -118,10 +118,10 @@
     <app-icon [icon]="'icon-star'"></app-icon>
   </button>
 
-<!-- Times played -->
-<span class="fileSize times-played" *ngIf="video.timesPlayed">
-  {{ 'TAGS.timesPlayed' | translate }}: {{ video.timesPlayed }}
-</span>
+  <!-- Times played -->
+  <span class="fileSize times-played" *ngIf="video.timesPlayed">
+    {{ 'TAGS.timesPlayed' | translate }}: {{ video.timesPlayed }}
+  </span>
 
 <!-- Add tags / view tags -->
   <app-add-tag-component
@@ -143,5 +143,14 @@
     class="view-tags-holder"
     [ngStyle]="{ 'min-height': imgHeight - 100 + 'px' }"
   ></app-view-tags-component>
+
+  <textarea
+    #videoNotes
+    *ngIf="showVideoNotes"
+    (blur)="saveVideoNotes($event)"
+    placeholder="notes"
+  >
+    {{ video.notes }}
+  </textarea>
 
 </div>

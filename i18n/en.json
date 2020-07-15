@@ -177,7 +177,9 @@
     "tagUnionMoreInfo": "Filter for videos containing any of the search tags",
     "thumbAutoAdvanceDescription": "Cycle on hover",
     "thumbAutoAdvanceHint": "Enable thumbnail auto advance",
-    "thumbAutoAdvanceMoreInfo": "Hovering over thumbnails cycles through screenshots"
+    "thumbAutoAdvanceMoreInfo": "Hovering over thumbnails cycles through screenshots",
+    "videoNotesDescription": "Show video notes",
+    "videoNotesHint": "Show video notes"
   },
   "RIGHTCLICK": {
     "cancelRename": "cancel rename",

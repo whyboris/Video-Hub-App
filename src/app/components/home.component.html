@@ -133,6 +133,7 @@
     [showAutoFolderTags]="settingsButtons['autoFolderTags'].toggled"
     [showManualTags]="settingsButtons['manualTags'].toggled"
     [showMeta]="settingsButtons['showMoreInfo'].toggled"
+    [showVideoNotes]="settingsButtons['showVideoNotes'].toggled"
   >
   </app-thumbnail-sheet>
 
@@ -872,6 +873,7 @@
           [showAutoFolderTags]="settingsButtons['autoFolderTags'].toggled"
           [showManualTags]="settingsButtons['manualTags'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
+          [showVideoNotes]="settingsButtons['showVideoNotes'].toggled"
 
           [ngStyle]="{ display: appState.currentView === 'showDetails' ? 'block' : 'inline-block' }"
         ></app-details-item>

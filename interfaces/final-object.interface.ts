@@ -43,6 +43,7 @@ export interface ImageElement {
   // OPTIONAL
   // ------------------------------------------------------------------------
   defaultScreen?: number;        // index of default screenshot to show
+  notes?: string;                // any free-form notes a user may want to add to any video
   tags?: string[];               // tags associated with this particular file
   year?: number;                 // optional tag to track the year of the video
   // ========================================================================

@@ -103,7 +103,7 @@
 .view-tags-holder {
   @include scrollBar;
   display: block;
-  height: 87px;
+  height: 47px;
   overflow-y: auto;
   padding-top: 10px;
 }
@@ -112,4 +112,15 @@
   display: inline-block;
   margin: 6px 0 0 6px;
   vertical-align: top;
+}
+
+textarea {
+  background: transparent;
+  border: 0;
+  border-left: 1px solid $gray-30;
+  font-family: sans-serif;
+  outline: none;
+  padding: 0 5px;
+  resize: none;
+  width: 100%;
 }
