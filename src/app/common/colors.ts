@@ -12,4 +12,5 @@ export enum Colors {
   tagUnion =           '#ecbb9d', // like `tagIntersection` but darker
   tagIntersection =    '#f1ceb8', // same as `manual-tag-color` (see variables.scss)
   tagExclusion =       '#FF8888',
+  videoNotes =         '#b1c6fd', // TODO -- pick a better color?
 }

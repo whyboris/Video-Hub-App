@@ -119,8 +119,14 @@ textarea {
   border: 0;
   border-left: 1px solid $gray-30;
   font-family: sans-serif;
+  font-size: 12px;
   outline: none;
   padding: 0 5px;
   resize: none;
   width: 100%;
+}
+
+.notes-dark-mode {
+  border-left: 1px solid $gray-70;
+  color: white;
 }

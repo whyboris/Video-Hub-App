@@ -69,7 +69,8 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'tagExclusion'
  | 'tagIntersection'
  | 'tagUnion'
- | 'thumbAutoAdvance';
+ | 'thumbAutoAdvance'
+ | 'videoNotes';
 
 // Add `SettingsButtons` items here so they show up in the buttons ribbon and in the settings
 // Each array separates buttons into their own button groups visually
@@ -86,6 +87,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'tagUnion',
     'tagIntersection',
     'tagExclusion',
+    'videoNotes',
     'magic',
     'regex',
     'fuzzy',
@@ -345,6 +347,13 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-video-plus',
     moreInfo: 'BUTTONS.fileUnionMoreInfo',
     title: 'BUTTONS.fileUnionHint',
+    toggled: false
+  },
+  'videoNotes': {
+    description: 'BUTTONS.videoNotesDescription',
+    hidden: true,
+    iconName: 'icon-toggle-video-notes',
+    title: 'BUTTONS.videoNotesHint',
     toggled: false
   },
   'flatIcons': {
@@ -748,10 +757,10 @@ export const SettingsButtons: SettingsButtonsType = {
     toggled: false
   },
   'showVideoNotes': {
-    description: 'BUTTONS.videoNotesDescription',
+    description: 'BUTTONS.showVideoNotesDescription',
     hidden: true,
     iconName: 'icon-toggle-video-notes',
-    title: 'BUTTONS.videoNotesHint',
+    title: 'BUTTONS.showVideoNotesHint',
     toggled: false
   }
 }
