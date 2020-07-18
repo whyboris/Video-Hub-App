@@ -160,21 +160,22 @@ export function startFileSystemWatching(
 
   console.log(typeof(inputSource));
 
-
-
-  console.log('starting watcher ', inputSource);
+  console.log('starting watcher ', inputSource, inputDir);
 
   const watcherConfig = {
     alwaysStat: true,
     awaitWriteFinish: true,
     cwd: inputDir,
-    usePolling: true, //neccessary for files over network!
+    disableGlobbing: true,
     ignored: '**/vha-*/**', // maybe ignore files that start with `._` ? WTF MAC!?
     persistent: persistent,
+    usePolling: true, //neccessary for files over network!
   }
 
   // One-liner for current directory
-  const watcher: FSWatcher = chokidar.watch('**', watcherConfig)
+  const watcher: FSWatcher = chokidar.watch(inputDir, watcherConfig);
+
+  watcher
     .on('add', (filePath: string, stat) => {
 
       console.log(filePath);
