@@ -1164,6 +1164,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   clearRecentlyViewedHistory(): void {
     this.vhaFileHistory = [];
+    this.electronService.ipcRenderer.send('clear-recent-documents');
   }
 
   /**

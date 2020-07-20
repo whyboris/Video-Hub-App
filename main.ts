@@ -55,7 +55,7 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 // For windows -- when loading the app the first time
 if (args[0]) {
   if (!serve) {
-    userWantedToOpen = args[0]; // TODO -- clean up file-opening code to not use viarable
+    userWantedToOpen = args[0]; // TODO -- clean up file-opening code to not use variable
   }
 }
 
@@ -245,6 +245,7 @@ function openThisDamnFile(pathToVhaFile: string) {
       GLOBALS.angularApp.sender.send('please-open-wizard');
 
     } else {
+      app.addRecentDocument(pathToVhaFile);
 
       const finalObject: FinalObject = JSON.parse(data);
 
@@ -423,4 +424,11 @@ ipcMain.on('cancel-current-import', (event): void => {
  */
 ipcMain.on('system-messages-updated', (event, newSystemMessages): void => {
   systemMessages = newSystemMessages;               // TODO -- make sure it works with `main-ipc.ts`
+});
+
+/**
+ * Clears recent document history from the jump list
+ */
+ipcMain.on('clear-recent-documents', (event): void => {
+  app.clearRecentDocuments();
 });
