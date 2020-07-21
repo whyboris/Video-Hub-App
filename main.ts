@@ -72,8 +72,8 @@ if (!gotTheLock) {
     //   buttons: ['OK']
     // });
 
-    if (argv[1]) {
-      openThisDamnFile(argv[1]);
+    if (argv.length > 1) {
+      openThisDamnFile(argv[argv.length - 1]);
     }
 
     // Someone tried to run a second instance, we should focus our window.
@@ -424,6 +424,14 @@ ipcMain.on('cancel-current-import', (event): void => {
  */
 ipcMain.on('system-messages-updated', (event, newSystemMessages): void => {
   systemMessages = newSystemMessages;               // TODO -- make sure it works with `main-ipc.ts`
+});
+
+/**
+ * Opens vha file while the app is running. Only works for mac OS.
+ */
+ipcMain.on('open-file', (event, pathToVhaFile) => {
+  event.preventDefault();
+  openThisDamnFile(pathToVhaFile);
 });
 
 /**
