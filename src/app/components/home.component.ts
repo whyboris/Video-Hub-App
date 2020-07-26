@@ -273,6 +273,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // ------------------------------------------------------------------------
 
   currentPlayingFile = '';
+  currentClickedItemName = '';
   currentPlayingFolder = '';
   fullPathToCurrentFile = '';
 
@@ -1901,6 +1902,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     this.currentRightClickedItem = item;
     this.rightClickShowing = true;
+
+    }
+
+  assignSelectedFile(item: ImageElement): void {
+    this.currentClickedItemName = item.cleanName;
   }
 
   /**
@@ -2187,7 +2193,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
 
-  newSizeFilterSelected(selection: number[]): void{
+  newSizeFilterSelected(selection: number[]): void {
 
     this.sizeLeftBound = selection[0];
 
