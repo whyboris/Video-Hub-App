@@ -1,4 +1,4 @@
-import { ImageElement } from "./final-object.interface";
+import { ImageElement } from './final-object.interface';
 
 // Let's make these identical to settings buttons!
 export type SupportedView = 'showThumbnails'
@@ -9,7 +9,7 @@ export type SupportedView = 'showThumbnails'
   | 'showFiles'
   | 'showClips';
 
-export const allSupportedViews: SupportedView[] = [
+export const AllSupportedViews: SupportedView[] = [
   'showThumbnails',
   'showFilmstrip',
   'showFullView',
@@ -21,6 +21,11 @@ export const allSupportedViews: SupportedView[] = [
 
 // Mouse click events
 export interface VideoClickEmit {
+  mouseEvent: Event;
+  thumbIndex?: number;
+}
+
+export interface VideoClickSimilarEmit {
   mouseEvent: Event;
   thumbIndex?: number;
 }
@@ -40,10 +45,15 @@ export interface Tag {
 export interface TagEmit {
   tag: Tag;
   event: Event;
-};
+}
 
 export interface TagEmission {
   index: number;
   tag: string;
   type: 'add' | 'remove';
+}
+
+export interface HistoryItem {
+  vhaFilePath: string;
+  hubName: string;
 }

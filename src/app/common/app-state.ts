@@ -41,8 +41,8 @@ export const DefaultImagesPerRow: RowNumbers = {
 };
 
 export const AppState: AppStateInterface = { // AppState is saved into `settings.json` so it persists
-  currentVhaFile: '',  // full path to the .vha2 file -- TODO: rename to `currentVhaFilePath` in VHA3
   currentSort: 'default',
+  currentVhaFile: '',  // full path to the .vha2 file -- TODO: rename to `currentVhaFilePath` in VHA3
   currentView: 'showThumbnails',
   currentZoomLevel: 1,
   hubName: '',
@@ -52,12 +52,12 @@ export const AppState: AppStateInterface = { // AppState is saved into `settings
   numOfFolders: 0,
   preferredVideoPlayer: '',
   selectedOutputFolder: '',
-  selectedSourceFolder: ''
+  sortTagsByFrequency: false
 };
 
 export interface AppStateInterface {
-  currentVhaFile: string;
   currentSort: SortType;
+  currentVhaFile: string;
   currentView: SupportedView;
   currentZoomLevel: number;
   hubName: string;
@@ -67,5 +67,5 @@ export interface AppStateInterface {
   numOfFolders: number;
   preferredVideoPlayer: string;
   selectedOutputFolder: string;
-  selectedSourceFolder: string;
+  sortTagsByFrequency: boolean; // when `false` sort tags alphabetically
 }

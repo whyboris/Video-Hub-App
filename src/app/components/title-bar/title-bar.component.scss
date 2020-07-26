@@ -22,7 +22,7 @@
   overflow: hidden;
   position: absolute;
   text-align: center;
-  top: 4px;
+  padding-top: 4px;
   transition: 300ms;
   white-space: nowrap;
   width: calc(100vw - 70px);
@@ -50,18 +50,19 @@
   transition-property: fill;
 
   &.closeButton {
-    right: 7px;
-    top: 2px;
+    right: 0;
+    padding-right: 7px;
+    padding-top: 2px;
   }
 
   &.maximizeButton {
     right: 26px;
-    top: 2px;
+    padding-top: 2px;
   }
 
   &.minimizeButton {
     right: 46px;
-    top: 2px;
+    padding-top: 2px;
   }
 
   &:hover {
@@ -78,14 +79,14 @@
   height: 13px;
   padding: 0;
   position: fixed;
-  top: 3.5px;
+  padding-top: 3.5px;
   transition: 400ms;
   width: 13px;
 
   &.closeButton {
     background: $close-button;
     fill: $close-button;
-    left: 7px;
+    padding-left: 7px;
 
     & .window-button {
       transform: translate(-1px, -1px) !important;

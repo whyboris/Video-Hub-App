@@ -5,7 +5,7 @@ import { ManualTagsService } from '../../tags-manual/manual-tags.service';
 import { FilePathService } from '../file-path.service';
 
 import { StarRating, ImageElement } from '../../../../../interfaces/final-object.interface';
-import { TagEmission, VideoClickEmit, RightClickEmit, TagEmit } from '../../../../../interfaces/shared-interfaces';
+import { TagEmission, VideoClickEmit, VideoClickSimilarEmit, RightClickEmit, TagEmit } from '../../../../../interfaces/shared-interfaces';
 
 export interface StarEmission {
   index: number;
@@ -36,6 +36,7 @@ export class DetailsComponent implements OnInit {
 
   @Output() videoClick = new EventEmitter<VideoClickEmit>();
   @Output() rightClick = new EventEmitter<RightClickEmit>();
+  @Output() videoClickSimilar = new EventEmitter<VideoClickSimilarEmit>();
 
   @Input() video: ImageElement;
 
@@ -53,11 +54,12 @@ export class DetailsComponent implements OnInit {
   @Input() largerFont: boolean;
   @Input() returnToFirstScreenshot: boolean;
   @Input() selectedSourceFolder: string;
-  @Input() showMeta: boolean;
-  @Input() star: StarRating;
-  @Input() showManualTags: boolean;
   @Input() showAutoFileTags: boolean;
   @Input() showAutoFolderTags: boolean;
+  @Input() showManualTags: boolean;
+  @Input() showMeta: boolean;
+  @Input() showVideoNotes: boolean;
+  @Input() star: StarRating;
 
   percentOffset: number = 0;
   firstFilePath = '';

@@ -1,5 +1,5 @@
 <div [id]=i *ngFor="let group of settingsMetaGroup; index as i">
-  <div *ngIf="settingToShow == i">
+  <div *ngIf="settingTabToShow == i">
 
     <span
       class="setting-heading"
@@ -72,7 +72,7 @@
     </div>
   </div>
 
-  <div class="misc-settings" *ngIf="settingToShow == 2 && i == 2">
+  <div class="misc-settings" *ngIf="settingTabToShow == 2 && i == 2">
 
     <div class="player-settings">{{ 'SETTINGS.preferredPlayer' | translate }}</div>
 

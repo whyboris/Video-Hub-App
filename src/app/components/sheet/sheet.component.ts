@@ -60,6 +60,7 @@ export class SheetComponent implements OnInit {
   @Input() showAutoFolderTags: boolean;
   @Input() showManualTags: boolean;
   @Input() showMeta: boolean;
+  @Input() showVideoNotes: boolean;
   @Input() star: StarRating;
 
   pathToFilmstripJpg: string;

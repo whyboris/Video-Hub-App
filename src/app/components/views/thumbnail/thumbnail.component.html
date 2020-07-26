@@ -13,6 +13,7 @@
       class="video-box folder"
       (mousemove)="mouseIsMoving($event)"
       (click)="videoClick.emit($event)"
+      (dblclick)="videoClickSimilar.emit($event)"
       [ngStyle]="{ height: imgHeight + 'px' }"
     >
 
@@ -57,6 +58,7 @@
   <div
     class="video-box folder"
     (click)="videoClick.emit($event)"
+    (dblclick)="videoClickSimilar.emit($event)"
     [ngStyle]="{ height: imgHeight + 'px' }"
   >
     <div class="up-icon">
@@ -115,8 +117,11 @@
     (mousemove)="mouseIsMoving($event)"
     (mouseenter)="mouseEntered()"
     (mouseleave)="mouseLeft()"
-    (click)="videoClick.emit({ mouseEvent: $event, thumbIndex: indexToShow })"
+    
     (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
+    (click)="videoClick.emit({ mouseEvent: $event, thumbIndex: indexToShow })"
+    (dblclick)="videoClickSimilar.emit({ mouseEvent: $event, thumbIndex: indexToShow })"
+    
     [ngStyle]="{
         height: imgHeight + 'px',
         'background-image': 'url(' + (hover ? fullFilePath : firstFilePath) + ')',
@@ -130,6 +135,7 @@
     ></app-icon>
     <span *ngIf="showMeta" class="time">{{ video.durationDisplay }}</span>
     <span *ngIf="showMeta" class="rez">{{ video.resolution }}</span>
+    <span *ngIf="!connected" class="not-connected"></span>
   </div>
   <!--
     .sheet-icon needs to be the next sibling of .video-box for hover to work

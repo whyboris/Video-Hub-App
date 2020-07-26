@@ -42,18 +42,6 @@
   }
 }
 
-.progress-numbers {
-  color: $gray-40;
-  font-size: 12px;
-  margin-top: 10px;
-}
-
-.progress-numbers-center {
-  left: 50%;
-  position: absolute;
-  transform: translate(-50%);
-}
-
 // LAYOUT STYLING
 .window {
   height: 100vh;
@@ -293,10 +281,10 @@
   border: 1px solid red;
   border-radius: 15px;
   color: white;
-  left: 220px;
+  left: 200px;
   padding: 10px 20px;
   position: fixed;
-  top: 220px;
+  top: 110px;
   z-index: 501;
 }
 
@@ -313,4 +301,11 @@
 
 .gallery-showing-breadcrumbs {
   margin-top: 30px;
+}
+
+@media (max-width: 900px) {
+  .settings-modal {
+    left: 30px;
+    width: calc(100% - 45px);
+  }
 }

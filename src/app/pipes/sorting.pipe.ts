@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { ImageElement, StarRating } from '../../../interfaces/final-object.interface';
-import { randomizeArray } from '../../../utility';
+import { randomizeArray } from '../../../node/utility';
 
 export type SortType = 'default'
                      | 'alphabetAsc'

@@ -6,14 +6,15 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "lib": [
-      "es2016",
+      "es2020",
       "dom"
     ],
-    "module": "es2015",
+    "module": "esnext",
     "moduleResolution": "node",
     "outDir": "./dist/out-tsc",
+    "removeComments": true,
     "sourceMap": true,
-    "target": "es5",
+    "target": "es2020",
     "typeRoots": [
       "node_modules/@types"
     ]
@@ -24,7 +25,6 @@
   "include": [
     "i18n",
     "interfaces",
-    "main.ts",
-    "src/**/*"
+    "src/main.ts"
   ]
 }

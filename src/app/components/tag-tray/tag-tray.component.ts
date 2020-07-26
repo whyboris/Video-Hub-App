@@ -1,7 +1,11 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+
 import { ManualTagsService } from '../tags-manual/manual-tags.service';
+
+import { AppStateInterface } from '../../common/app-state';
 import { TagEmit } from '../../../../interfaces/shared-interfaces';
 import { modalAnimation } from '../../common/animations';
+import { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
   selector: 'app-tag-tray',
@@ -19,10 +23,12 @@ export class TagTrayComponent {
 
   @Output() closeTagsTray = new EventEmitter<any>();
   @Output() toggleBatchTaggingMode = new EventEmitter<any>();
-  @Output() handleTagWordClicked= new EventEmitter<TagEmit>();
+  @Output() handleTagWordClicked = new EventEmitter<TagEmit>();
+  @Output() selectAll = new EventEmitter<any>();
 
+  @Input() appState: AppStateInterface;
   @Input() batchTaggingMode;
-  @Input() settingsButtons;
+  @Input() settingsButtons: SettingsButtonsType;
 
   manualTagFilterString: string = '';
   manualTagShowFrequency: boolean = true;
