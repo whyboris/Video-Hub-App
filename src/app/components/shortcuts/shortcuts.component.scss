@@ -1,9 +1,18 @@
 @import "../variables";
 
-.listElement {
+.shortcut-container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  margin: 20px 40px 60px;
+  max-height: 700px;
+}
+
+.shortcut-item {
   line-height: 20px;
   list-style: none;
   margin: 0 0 16px 0;
+  min-width: 250px;
   padding: 0;
 }
 
@@ -29,6 +38,25 @@
   width: initial;
 }
 
-.without-numbers {
-  padding-inline-start: 34px;
+.clickable {
+  cursor: pointer;
+}
+
+.selected-for-change {
+  box-shadow: 0 0 5px 2px $pretty-blue;
+}
+
+.empty {
+  color: white;
+}
+
+.space-after {
+  margin-bottom: 50px;
+}
+
+@media (max-width: 700px) {
+  .shortcut-container {
+    flex-wrap: nowrap;
+    max-height: initial;
+  }
 }

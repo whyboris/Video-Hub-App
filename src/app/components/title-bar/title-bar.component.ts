@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
   selector: 'app-title-bar',
@@ -17,7 +18,7 @@ export class TitleBarComponent {
   @Input() macVersion: boolean;
   @Input() progressString;
   @Input() rootFolderLive;
-  @Input() settingsButtons;
+  @Input() settingsButtons: SettingsButtonsType;
 
   constructor() { }
 

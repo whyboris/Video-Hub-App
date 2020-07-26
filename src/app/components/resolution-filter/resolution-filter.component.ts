@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
   selector: 'app-resolution-filter',
@@ -16,7 +17,7 @@ export class ResolutionFilterComponent {
   @Input() freqRightBound;
   @Input() resolutionFreqArr;
   @Input() resolutionNames;
-  @Input() settingsButtons;
+  @Input() settingsButtons: SettingsButtonsType;
 
   constructor() { }
 

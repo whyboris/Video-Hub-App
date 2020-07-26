@@ -1,8 +1,8 @@
-# Video Hub App 2
+# Video Hub App 3
 
-[*Video Hub App 2*](https://videohubapp.com/) is the fastest way to browse and search for videos on your computer. Think of it like YouTube for videos on your computer: browse, search, and preview. Works on Windows, Mac, and Linux!
+[*Video Hub App 3*](https://videohubapp.com/) is the fastest way to browse and search for videos on your computer. Think of it like YouTube for videos on your computer: browse, search, and preview. Works on Windows, Mac, and Linux!
 
-Read in another language: [Português (Brasileiro)](https://github.com/whyboris/Video-Hub-App/blob/master/README.br.md)
+Read in [Português (Brasileiro)](https://github.com/whyboris/Video-Hub-App/blob/master/README.br.md)
 
 ## Download now
 
@@ -22,29 +22,39 @@ This software was built on top of [`angular-electron`](https://github.com/maxime
 
 ## Contributing
 
-I would love to see the improvements you make to this app and am happy to accept pull requests. You can reach out if you'd like to coordinate / collaborate, or just jump to [issues](https://github.com/whyboris/Video-Hub-App/issues) to see what's already getting worked on and to add new suggestions!
+I would love to see the improvements you make to this app and am happy to accept pull requests. You can reach out if you'd like to coordinate / collaborate, or just *jump to [issues](https://github.com/whyboris/Video-Hub-App/issues)* to see what's already getting worked on and to add new suggestions!
 
-Please add a translation if you know another language. It's a process that will take you 5-10 minutes, just [follow the instructions](https://github.com/whyboris/Video-Hub-App/tree/master/i18n)!
+Please consider improving any of the translations, or [add a new translation](https://github.com/whyboris/Video-Hub-App/tree/master/i18n)!
 
 Please consider improving or adding an icon to the app. It's a simple process, just [follow the instructions](https://github.com/whyboris/Video-Hub-App/tree/master/src/app/components/icon)!
 
 ## Upcoming features
 
-A list of upcoming features is [listed on the official website](https://videohubapp.com/future.html). Also see [issues](https://github.com/whyboris/Video-Hub-App/issues) for what is in progress.
+See [issues](https://github.com/whyboris/Video-Hub-App/issues) for what is in progress.
 
 ## Development
 
+⚠ The repository is usually ahead of the publicly [released version](https://github.com/whyboris/Video-Hub-App/releases). Version `3.0.0` code is already on the `main` branch; while it is 🚧 WIP, it has bugs in it.
+
+How to start:
+
+- `npm install` to install
+- `npm start` to develop
+- `npm electron` to build
+
 Main dependencies in use:
 
-| Library     | Version | Date        | Comment |
-| -------     | ------- | ----        | ------- |
-| Angular     | v9.1.7  | May 2020  |         |
-| Angular-CLI | v9.1.6  | May 2020  |         |
-| Electron    | v8.3.0  | May 2020  | (internally uses Node v12.13.0 and Chromium 80) |
-| Electron Builder | v22.6.0 | May 2020 |     |
+| Library          | Version | Date        | Comment                                           |
+| ---------------- | ------- | ----------- | ------------------------------------------------- |
+| Angular          | v10.0.0 | June 2020   |                                                   |
+| Angular-CLI      | v10.0.0 | June 2020   |                                                   |
+| Electron         |  v9.0.0 | June 2020   | (internally uses Node `v12.14.1` and Chromium 83) |
+| Electron Builder | v22.7.0 | June 2020   |                                                   |
 
-- **Node**: likely any version of node (v10 or above) should work, but I recommend to use the same version as _Electron_ uses internally.
-- **Angular CLI**: you may need to install the [Angular CLI](https://cli.angular.io) to run the project (`npm install -g @angular/cli`).
+- **Node**: I recommend to use the same version as _Electron_ uses internally, but version 10 or above should work.
+- **Angular CLI**: not required but may be useful: [Angular CLI](https://cli.angular.io).
+
+To help debug a production build of VHA you can use [Debugtron](https://github.com/bytedance/debugtron)
 
 ## Thank you
 
@@ -58,7 +68,10 @@ This software would not be possible without the tremendous work by other people:
  - [@ffmpeg-installer/ffmpeg](https://www.npmjs.com/package/@ffmpeg-installer/ffmpeg)
  - [@ffprobe-installer/ffprobe](https://www.npmjs.com/package/@ffprobe-installer/ffprobe)
  - [ngx-translate](https://github.com/ngx-translate/core)
+ - [async](https://github.com/caolan/async)
+ - [chokidar](https://github.com/paulmillr/chokidar)
  - [trash](https://github.com/sindresorhus/trash)
  - [Fuse.js](https://github.com/krisk/Fuse)
+ - [electron-window-state](https://github.com/mawie81/electron-window-state)
 
 Since becoming open source, this software was made better with the awesome contributions by [cal2195](https://github.com/cal2195)

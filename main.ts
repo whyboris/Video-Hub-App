@@ -1,59 +1,68 @@
-import { app, BrowserWindow, screen, TouchBar } from 'electron';
+import { GLOBALS } from './node/main-globals';
+// =================================================================================================
+// -------------------------------------     BUILD TOGGLE     --------------------------------------
+// -------------------------------------------------------------------------------------------------
+const demo = false; // TODO: add this back into code
+GLOBALS.version = '3.0.0';   // update `package.json` version to `#.#.#-demo` when building the demo
+// =================================================================================================
+
 import * as path from 'path';
 import * as url from 'url';
 
-const trash = require('trash');
-
-const { systemPreferences } = require('electron');
+const fs = require('fs');
 const electron = require('electron');
-const { powerSaveBlocker } = require('electron');
+import { app, BrowserWindow, screen, dialog, systemPreferences, ipcMain } from 'electron';
+const windowStateKeeper = require('electron-window-state');
 
-import { globals } from './main-globals';
+// Methods
+import { createTouchBar } from './node/main-touch-bar';
+import { setUpIpcMessages } from './node/main-ipc';
+import { sendFinalObjectToAngular, setUpDirectoryWatchers, upgradeToVersion3, writeVhaFileToDisk } from './node/main-support';
+
+// Interfaces
+import { FinalObject } from './interfaces/final-object.interface';
+import { SettingsObject } from './interfaces/settings-object.interface';
+import { WizardOptions } from './interfaces/wizard-options.interface';
+import { stopThumbExtraction } from './node/main-extract-async';
+
+// Variables
+const pathToAppData = app.getPath('appData');
+const pathToPortableApp = process.env.PORTABLE_EXECUTABLE_DIR;
+GLOBALS.settingsPath = pathToPortableApp ? pathToPortableApp : path.join(pathToAppData, 'video-hub-app-2');
 
 const codeRunningOnMac: boolean = process.platform === 'darwin';
-
-// System messages - import ENGLISH as default
-// on Angular load, we'll receive and replace these with the appropriate translations
-// translations received via `system-messages-updated`
 const English = require('./i18n/en.json');
-let systemMessages = English.SYSTEM;
+let systemMessages = English.SYSTEM; // Set English as default; update via `system-messages-updated`
 
+let screenWidth;
+let screenHeight;
 
-// ========================================================================================
-// ***************************** BUILD TOGGLE *********************************************
-// ========================================================================================
-const demo = false;
-globals.version = '2.2.3';
-// ========================================================================================
+// TODO: CLEAN UP
+let macFirstRun = true; // detect if it's the 1st time Mac is opening the file or something like that
+let userWantedToOpen: string = null; // find a better pattern for handling this functionality
 
+// =================================================================================================
+
+let win, serve;
+let myWindow = null;
+const args = process.argv.slice(1);
+serve = args.some(val => val === '--serve');
+
+GLOBALS.debug = args.some(val => val === '--debug');
+if (GLOBALS.debug) { console.log('Debug mode enabled!'); }
+
+// =================================================================================================
 
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
-let win, serve;
-const args = process.argv.slice(1);
-serve = args.some(val => val === '--serve');
-globals.debug = args.some(val => val === '--debug');
-
-if (globals.debug) {
-  console.log('Debug mode enabled!');
-}
-
-// MY IMPORTANT IMPORT !!!!
-const dialog = require('electron').dialog;
-
-let userWantedToOpen: string = null;
-let myWindow = null;
-
-// TODO -- maybe clean up the `userWantedToOpen` with whatever pattern recommended by Electron
 // For windows -- when loading the app the first time
-if (process.argv[1]) {
+if (args[0]) {
   if (!serve) {
-    userWantedToOpen = process.argv[1];
+    userWantedToOpen = args[0]; // TODO -- clean up file-opening code to not use variable
   }
 }
 
-// OPEN FILE ON WINDOWS FROM FILE DOUBLE CLICK
-const gotTheLock = app.requestSingleInstanceLock();
+const gotTheLock = app.requestSingleInstanceLock(); // Open file on windows from file double click
 
 if (!gotTheLock) {
   app.quit();
@@ -66,9 +75,8 @@ if (!gotTheLock) {
     //   buttons: ['OK']
     // });
 
-    if (argv[1]) {
-      userWantedToOpen = argv[1];
-      openThisDamnFile(argv[1]);
+    if (argv.length > 1) {
+      openThisDamnFile(argv[argv.length - 1]);
     }
 
     // Someone tried to run a second instance, we should focus our window.
@@ -81,14 +89,15 @@ if (!gotTheLock) {
   });
 }
 
-let screenWidth;
-let screenHeight;
-
 function createWindow() {
   const desktopSize = screen.getPrimaryDisplay().workAreaSize;
 
   screenWidth = desktopSize.width;
   screenHeight = desktopSize.height;
+  let mainWindowState = windowStateKeeper({
+    defaultWidth: 850,
+    defaultHeight: 850
+  });
 
   // Create the browser window.
   win = new BrowserWindow({
@@ -96,16 +105,17 @@ function createWindow() {
       nodeIntegration: true,
       webSecurity: false  // allow files from hard disk to show up
     },
-    x: screenWidth / 2 - 210,
-    y: screenHeight / 2 - 125,
-    width: 420,
-    height: 250,
+    x: mainWindowState.x,
+    y: mainWindowState.y,
+    width: mainWindowState.width,
+    height: mainWindowState.height,
     center: true,
     minWidth: 420,
     minHeight: 250,
     icon: path.join(__dirname, 'src/assets/icons/png/64x64.png'),
     frame: false  // removes the frame from the window completely
   });
+  mainWindowState.manage(win);
 
   myWindow = win;
 
@@ -125,7 +135,7 @@ function createWindow() {
   }
 
   if (codeRunningOnMac) {
-    createTouchBar();
+    const touchBar = createTouchBar();
     if (touchBar) {
       win.setTouchBar(touchBar);
     }
@@ -134,7 +144,7 @@ function createWindow() {
   // Watch for computer powerMonitor
   // https://electronjs.org/docs/api/power-monitor
   electron.powerMonitor.on('shutdown', () => {
-    globals.angularApp.sender.send('pleaseShutDownASAP');
+    GLOBALS.angularApp.sender.send('please-shut-down-ASAP');
   });
 
   // Emitted when the window is closed.
@@ -149,10 +159,6 @@ function createWindow() {
   // win.setMenu(null);
 }
 
-// variable to detect if it's the first time mac is opening the file
-// or something like that
-let macFirstRun = true;
-
 try {
 
   // OPEN FILE ON MAC FROM FILE DOUBLE CLICK
@@ -160,7 +166,6 @@ try {
   app.on('will-finish-launching', () => {
     app.on('open-file', (event, filePath: string) => {
       if (filePath) {
-        userWantedToOpen = filePath;
         if (!macFirstRun) {
           openThisDamnFile(filePath);
         }
@@ -190,10 +195,7 @@ try {
     }
   });
 
-} catch (e) {
-  // Catch Error
-  // throw e;
-}
+} catch {}
 
 if (codeRunningOnMac) {
   systemPreferences.subscribeNotification(
@@ -208,40 +210,17 @@ if (codeRunningOnMac) {
   );
 }
 
+/**
+ * Notify front-end about OS change in Dark Mode setting
+ * @param mode
+ */
+function tellElectronDarkModeChange(mode: string) {
+  GLOBALS.angularApp.sender.send('os-dark-mode-change', mode);
+}
 
-// ========================================================================================
-// My imports
-// ========================================================================================
-
-const fs = require('fs');
-
-const ipc = require('electron').ipcMain;
-const shell = require('electron').shell;
-
-// ========================================================================================
-// My variables
-// ========================================================================================
-
-import {
-  alphabetizeFinalArray,
-  countFoldersInFinalArray,
-  createDotPlsFile,
-  extractAllMetadata,
-  getVideoPathsAndNames,
-  insertTemporaryFields,
-  missingThumbsIndex,
-  sendCurrentProgress,
-  writeVhaFileToDisk
-} from './main-support';
-
-import { extractFromTheseFiles, replaceThumbnailWithNewImage } from './main-extract';
-
-import { FinalObject, ImageElement } from './interfaces/final-object.interface';
-import { ImportSettingsObject } from './interfaces/import.interface';
-import { SavableProperties } from './interfaces/savable-properties.interface';
-import { SettingsObject } from './interfaces/settings-object.interface';
-
-let lastSavedFinalObject: FinalObject; // hack for saving the `vha2` file again later
+// =================================================================================================
+// Open a vha file method
+// -------------------------------------------------------------------------------------------------
 
 /**
  * Load the .vha2 file and send it to app
@@ -249,15 +228,14 @@ let lastSavedFinalObject: FinalObject; // hack for saving the `vha2` file again 
  */
 function openThisDamnFile(pathToVhaFile: string) {
 
-  // TODO ### !!! figure out how to open file when double click first time
-  macFirstRun = false;
+  stopThumbExtraction(); // todo -- rename to "reset task runners" and reset all that jazz
 
-  // Override if user opening by double-clicking a file
-  if (userWantedToOpen) {
+  macFirstRun = false;     // TODO - figure out how to open file when double click first time on Mac
+
+  if (userWantedToOpen) {                                          // TODO - clean up messy override
     pathToVhaFile = userWantedToOpen;
+    userWantedToOpen = undefined;
   }
-
-  console.log('the app is about to open: ' + pathToVhaFile);
 
   fs.readFile(pathToVhaFile, (err, data) => {
     if (err) {
@@ -267,501 +245,138 @@ function openThisDamnFile(pathToVhaFile: string) {
         detail: pathToVhaFile,
         buttons: ['OK']
       });
-      globals.angularApp.sender.send('pleaseOpenWizard');
+      GLOBALS.angularApp.sender.send('please-open-wizard');
 
     } else {
+      app.addRecentDocument(pathToVhaFile);
 
-      globals.currentlyOpenVhaFile = pathToVhaFile;
-      lastSavedFinalObject = JSON.parse(data);
-      console.log('opened vha file version: ' + lastSavedFinalObject.version);
+      const finalObject: FinalObject = JSON.parse(data);
 
-      // path to folder where the VHA file is
-      globals.selectedOutputFolder = path.parse(pathToVhaFile).dir;
+      // set globals from file
+      GLOBALS.currentlyOpenVhaFile = pathToVhaFile;
+      GLOBALS.selectedOutputFolder = path.parse(pathToVhaFile).dir;
+      GLOBALS.hubName = finalObject.hubName;
+      GLOBALS.screenshotSettings = finalObject.screenshotSettings;
+      upgradeToVersion3(finalObject);
+      GLOBALS.selectedSourceFolders = finalObject.inputDirs;
 
-      // use relative paths
-      if (lastSavedFinalObject.inputDir === '') {
-        lastSavedFinalObject.inputDir = globals.selectedOutputFolder;
-      }
+      sendFinalObjectToAngular(finalObject, GLOBALS);
 
-      let changedRootFolder = false;
-      let rootFolderLive = true;
-
-      // check root folder exists
-      if (!fs.existsSync(lastSavedFinalObject.inputDir)) {
-        // see if the user wants to change the root folder
-        const buttonIndex: number = dialog.showMessageBoxSync(win, {
-          message: systemMessages.videoFolderNotFound,
-          detail: lastSavedFinalObject.inputDir,
-          buttons: [
-            systemMessages.selectRootFolder, // 0
-            systemMessages.continueAnyway,   // 1
-            systemMessages.cancel            // 2
-          ]
-        });
-
-        // Select Root Folder
-        if (buttonIndex === 0) {
-          // select the new root folder
-          const pathsArray: any = dialog.showOpenDialogSync(win, {
-            //                      ^^^^^^^^^^^^^^^^^^ returns `string[]`
-            properties: ['openDirectory']
-          });
-
-          const inputDirPath: string = pathsArray[0];
-
-          if (inputDirPath) {
-            // update the root folder
-            lastSavedFinalObject.inputDir = inputDirPath;
-            changedRootFolder = true;
-          } else {
-            // show the wizard instead
-            lastSavedFinalObject = null;
-            globals.angularApp.sender.send('pleaseOpenWizard');
-            return;
-          }
-
-          // Continue anyway
-        } else if (buttonIndex === 1) {
-          console.log('PROCEED ANYWAY');
-          rootFolderLive = false;
-
-          // Cancel
-        } else if (buttonIndex === 2) {
-          console.log('CANCEL');
-          // show the wizard instead
-          lastSavedFinalObject = null;
-          globals.angularApp.sender.send('pleaseOpenWizard');
-          return;
-        }
-
-        console.log('THIS SHOULD NOT RUN UNTIL MODAL CLICKED !!!');
-
-      }
-
-      setGlobalsFromVhaFile(lastSavedFinalObject); // sets source folder ETC
-
-      lastSavedFinalObject.images = insertTemporaryFields(lastSavedFinalObject.images);
-
-      console.log(globals.selectedSourceFolder + ' - videos location');
-      console.log(globals.selectedOutputFolder + ' - output location');
-
-      globals.angularApp.sender.send(
-        'finalObjectReturning',
-        lastSavedFinalObject,
-        pathToVhaFile,
-        getHtmlPath(globals.selectedOutputFolder),
-        changedRootFolder,
-        rootFolderLive
-      );
+      setUpDirectoryWatchers(finalObject.inputDirs, finalObject.images);
     }
   });
 }
 
-/**
- * Return an HTML string for a path to the `vha` file
- * e.g. `C:\Some folder` becomes `C:/Some%20folder`
- * @param anyOsPath
- */
-function getHtmlPath(anyOsPath: string): string {
-  // Windows was misbehaving
-  // so we normalize the path (just in case) and replace all `\` with `/` in this instance
-  // because at this point Electron will be showing images following the path provided
-  // with the `file:///` protocol -- seems to work
-  const normalizedPath: string = path.normalize(anyOsPath);
-  const forwardSlashes: string = normalizedPath.replace(/\\/g, '/');
-  return forwardSlashes.replace(/ /g, '%20');
-}
+// =================================================================================================
+// Listeners for events from Angular
+// -------------------------------------------------------------------------------------------------
+
+setUpIpcMessages(ipcMain, win, pathToAppData, systemMessages);
 
 /**
- * Update 3 globals:
- *  - hubName
- *  - screenshotSettings
- *  - selectedSourceFolder
- * @param vhaFileContents
+ * Once Angular loads it sends over the `ready` status
+ * Load up the settings.json and send settings over to Angular
  */
-function setGlobalsFromVhaFile(vhaFileContents: FinalObject) {
-  globals.hubName = vhaFileContents.hubName;
-  globals.screenshotSettings = vhaFileContents.screenshotSettings;
-  globals.selectedSourceFolder = vhaFileContents.inputDir;
-}
-
-// ========================================================================================
-// Methods that interact with Angular
-// ========================================================================================
-
-const pathToAppData = app.getPath('appData');
-
-/**
- * Just started -- hello -- send over the settings or open wizard
- */
-ipc.on('just-started', (event) => {
-  globals.angularApp = event;
-  globals.winRef = win;
+ipcMain.on('just-started', (event) => {
+  GLOBALS.angularApp = event;
+  GLOBALS.winRef = win;
 
   if (codeRunningOnMac) {
     tellElectronDarkModeChange(systemPreferences.getEffectiveAppearance());
   }
 
-  fs.readFile(path.join(pathToAppData, 'video-hub-app-2', 'settings.json'), (err, data) => {
+  // Reference: https://github.com/electron/electron/blob/master/docs/api/locales.md
+  const locale: string = app.getLocale();
+
+  fs.readFile(path.join(GLOBALS.settingsPath, 'settings.json'), (err, data) => {
     if (err) {
-      win.setBounds({x: 0, y: 0, width: screenWidth, height: screenHeight});
-      event.sender.send('pleaseOpenWizard', true); // firstRun = true!
+      win.setBounds({ x: 0, y: 0, width: screenWidth, height: screenHeight });
+      event.sender.send('set-language-based-off-system-locale', locale);
+      event.sender.send('please-open-wizard', true); // firstRun = true!
     } else {
 
-      const savedSettings = JSON.parse(data);
+      const previouslySavedSettings: SettingsObject = JSON.parse(data);
 
-      // Restore last windows size and position or full screen if not available
-      if (savedSettings.windowSizeAndPosition
-        && savedSettings.windowSizeAndPosition.x < screenWidth - 200
-        && savedSettings.windowSizeAndPosition.y < screenHeight - 200) {
-        win.setBounds(savedSettings.windowSizeAndPosition);
-      } else {
-        win.setBounds({x: 0, y: 0, width: screenWidth, height: screenHeight});
-      }
-
-      // Reference: https://github.com/electron/electron/blob/master/docs/api/locales.md
-      const locale: string = app.getLocale();
-
-      event.sender.send('settingsReturning', savedSettings, userWantedToOpen, locale);
+      event.sender.send('settings-returning', previouslySavedSettings, locale);
     }
   });
-});
-
-/**
- * Open a particular video file clicked inside Angular
- */
-ipc.on('openThisFile', (event, fullFilePath) => {
-  shell.openItem(path.normalize(fullFilePath)); // normalize because on windows, the path sometimes is mixing `\` and `/`
-});
-
-const spawn = require('child_process').spawn;
-
-/**
- * Open a particular video file clicked inside Angular
- */
-ipc.on('openThisFileWithFlags', (event, executablePath, fullFilePath: string, argz: string[]) => {
-  const allArgs: string[] = [];
-  allArgs.push(path.normalize(fullFilePath));
-  allArgs.push(...argz);
-  console.log(allArgs);
-  spawn(path.normalize(executablePath), allArgs);
-});
-
-ipc.on('select-default-video-player', (event) => {
-  console.log('asking for default video player');
-  dialog.showOpenDialog(win, {
-    title: systemMessages.selectDefaultPlayer,
-    filters: [{
-      name: 'Executable', // TODO: i18n fixme
-      extensions: ['exe', 'app']
-    }],
-    properties: ['openFile']
-  }).then(result => {
-    const executablePath: string = result.filePaths[0];
-    if (executablePath) {
-      event.sender.send('preferred-video-player-returning', executablePath);
-    }
-  }).catch(err => {
-    console.log('select default video player: this should not happen!');
-    console.log(err);
-  });
-});
-
-/**
- * Open the explorer to the relevant file
- */
-ipc.on('openInExplorer', (event, fullPath: string) => {
-  shell.showItemInFolder(fullPath);
-});
-
-/**
- * Open a URL in system's default browser
- */
-ipc.on('pleaseOpenUrl', (event, urlToOpen: string): void => {
-  shell.openExternal(urlToOpen, {activate: true});
-});
-
-/**
- * Maximize the window
- */
-ipc.on('maximize-window', (event) => {
-  if (BrowserWindow.getFocusedWindow()) {
-    BrowserWindow.getFocusedWindow().maximize();
-  }
-});
-
-/**
- * Create and play the playlist
- * 1. filter out *FOLDER*
- * 2. save .pls file
- * 3. ask OS to open the .pls file
- */
-ipc.on('please-create-playlist', (event, playlist: ImageElement[]) => {
-
-  const cleanPlaylist: ImageElement[] = playlist.filter((element: ImageElement) => {
-    return element.cleanName !== '*FOLDER*';
-  });
-
-  const savePath: string = path.join(pathToAppData, 'video-hub-app-2', 'temp.pls');
-
-  if (cleanPlaylist.length) {
-    createDotPlsFile(savePath, cleanPlaylist, () => {
-      shell.openItem(savePath);
-    });
-  }
-
-});
-
-/**
- * Delete file from computer (send to recycling bin / trash) or dangerously delete (bypass trash)
- */
-ipc.on('delete-video-file', (event, item: ImageElement, dangerousDelete: boolean): void => {
-  const fileToDelete = path.join(globals.selectedSourceFolder, item.partialPath, item.fileName);
-
-  if (dangerousDelete === false) {
-    (async () => {
-      await trash(fileToDelete);
-    })();
-  } else {
-    fs.unlink(fileToDelete, (err) => {
-      if (err) {
-        console.log(fileToDelete + ' was NOT deleted');
-      }
-    });
-  }
-  // check if file exists
-  fs.access(fileToDelete, fs.F_OK, (err: any) => {
-    if (err) {
-      event.sender.send('file-deleted', item);
-    }
-  });
-});
-
-/**
- * Method to replace thumbnail of a particular item
- */
-ipc.on('replace-thumbnail', (event, pathToIncomingJpg: string, item: ImageElement) => {
-  const fileToReplace: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName, 'thumbnails', item.hash + '.jpg');
-
-
-  if (fs.existsSync(fileToReplace)) {
-    const height: number = globals.screenshotSettings.height;
-
-    replaceThumbnailWithNewImage(fileToReplace, pathToIncomingJpg, height)
-      .then(success => {
-        if (success) {
-          event.sender.send('thumbnail-replaced');
-        }
-      })
-      .catch((err) => {
-        // console.log(err);
-      });
-  }
-});
-
-/**
- * Un-Maximize the window
- */
-ipc.on('un-maximize-window', (event) => {
-  if (BrowserWindow.getFocusedWindow()) {
-    BrowserWindow.getFocusedWindow().unmaximize();
-  }
-});
-
-/**
- * Minimize the window
- */
-ipc.on('minimize-window', (event) => {
-  if (BrowserWindow.getFocusedWindow()) {
-    BrowserWindow.getFocusedWindow().minimize();
-  }
-});
-
-
-let preventSleepId: number;
-
-/**
- * Minimize the window
- */
-ipc.on('prevent-sleep', (event) => {
-  console.log('preventing sleep lol!');
-  preventSleepId = powerSaveBlocker.start('prevent-app-suspension');
-});
-
-ipc.on('allow-sleep', (event) => {
-  console.log('allowing sleep again');
-  powerSaveBlocker.stop(preventSleepId);
-});
-
-/**
- * Summon system modal to choose INPUT directory
- * where all the videos are located
- */
-ipc.on('choose-input', (event) => {
-  dialog.showOpenDialog(win, {
-    properties: ['openDirectory']
-  }).then(result => {
-    const inputDirPath: string = result.filePaths[0];
-    if (inputDirPath) {
-      event.sender.send('inputFolderChosen', inputDirPath, getVideoPathsAndNames(inputDirPath));
-    }
-  }).catch(err => {
-    console.log('choose-input: this should not happen!');
-    console.log(err);
-  });
-});
-
-/**
- * Summon system modal to choose OUTPUT directory
- * where the final .vha file, vha-folder, and all screenshots will be saved
- */
-ipc.on('choose-output', (event) => {
-  dialog.showOpenDialog(win, {
-    properties: ['openDirectory']
-  }).then(result => {
-    const outputDirPath: string = result.filePaths[0];
-    if (outputDirPath) {
-      event.sender.send('outputFolderChosen', outputDirPath);
-    }
-  }).catch(err => {
-    console.log('choose-output: this should not happen!');
-    console.log(err);
-  });
-});
-
-/**
- * Close the window / quit / exit the app
- */
-ipc.on('close-window', (event, settingsToSave: SettingsObject, savableProperties: SavableProperties) => {
-
-  // save window size and position
-  settingsToSave.windowSizeAndPosition = win.getContentBounds();
-
-  const json = JSON.stringify(settingsToSave);
-
-  try {
-    fs.statSync(path.join(pathToAppData, 'video-hub-app-2'));
-  } catch (e) {
-    fs.mkdirSync(path.join(pathToAppData, 'video-hub-app-2'));
-  }
-
-  // TODO -- catch bug if user closes before selecting the output folder ?!??
-  fs.writeFile(path.join(pathToAppData, 'video-hub-app-2', 'settings.json'), json, 'utf8', () => {
-    if (savableProperties !== null) {
-      lastSavedFinalObject.addTags = savableProperties.addTags;
-      lastSavedFinalObject.removeTags = savableProperties.removeTags;
-      lastSavedFinalObject.images = savableProperties.images;
-      writeVhaFileToDisk(lastSavedFinalObject, globals.currentlyOpenVhaFile, () => {
-        // file writing done !!!
-        console.log('.vha2 file written before closing !!!');
-        try {
-          BrowserWindow.getFocusedWindow().close();
-        } catch (e) {
-          // Window was already closed
-        }
-      });
-    } else {
-      try {
-        BrowserWindow.getFocusedWindow().close();
-      } catch (e) {
-        // Window was already closed
-      }
-    }
-  });
-});
-
-/**
- * Notify front-end about OS change in Dark Mode setting
- * @param mode
- */
-function tellElectronDarkModeChange(mode: string) {
-  globals.angularApp.sender.send('osDarkModeChange', mode);
-}
-
-/**
- * Interrupt current import process
- */
-ipc.on('cancel-current-import', (event): void => {
-  globals.cancelCurrentImport = true;
-});
-
-ipc.on('system-messages-updated', (event, newSystemMessages): void => {
-  console.log('new translated system messages recieved !!!');
-  systemMessages = newSystemMessages;
 });
 
 /**
  * Start extracting the screenshots into a chosen output folder from a chosen input folder
  */
-ipc.on('start-the-import', (event, options: ImportSettingsObject, videoFilesWithPaths: ImageElement[]) => {
+ipcMain.on('start-the-import', (event, wizard: WizardOptions) => {
+  const hubName = wizard.futureHubName;
+  const outDir: string = wizard.selectedOutputFolder;
 
-  const outDir: string = options.exportFolderPath;
-
-  // make sure no hub name under the same name exists
-  if (fs.existsSync(path.join(outDir, options.hubName + '.vha2'))) {
-
+  if (fs.existsSync(path.join(outDir, hubName + '.vha2'))) { // make sure no hub name under the same name exists
     dialog.showMessageBox(win, {
       message: systemMessages.hubAlreadyExists +
         '\n' + systemMessages.pleaseChangeName,
       buttons: ['OK']
     });
-
-    event.sender.send('pleaseFixHubName');
-
+    event.sender.send('please-fix-hub-name');
   } else {
 
-    // create the folder `vha-hubName` inside the output directory
-    if (!fs.existsSync(path.join(outDir, 'vha-' + options.hubName))) {
+    if (!fs.existsSync(path.join(outDir, 'vha-' + hubName))) { // create the folder `vha-hubName` inside the output directory
       console.log('vha-hubName folder did not exist, creating');
-      fs.mkdirSync(path.join(outDir, 'vha-' + options.hubName));
-      fs.mkdirSync(path.join(outDir, 'vha-' + options.hubName + '/filmstrips'));
-      fs.mkdirSync(path.join(outDir, 'vha-' + options.hubName + '/thumbnails'));
-      fs.mkdirSync(path.join(outDir, 'vha-' + options.hubName + '/clips'));
+      fs.mkdirSync(path.join(outDir, 'vha-' + hubName));
+      fs.mkdirSync(path.join(outDir, 'vha-' + hubName + '/filmstrips'));
+      fs.mkdirSync(path.join(outDir, 'vha-' + hubName + '/thumbnails'));
+      fs.mkdirSync(path.join(outDir, 'vha-' + hubName + '/clips'));
     }
 
-    globals.cancelCurrentImport = false;
-    globals.hubName = options.hubName;
-    globals.selectedOutputFolder = options.exportFolderPath;
-    globals.selectedSourceFolder = options.videoDirPath;
-
-    // determine number of screenshots
-    let numOfScreenshots: number = 0;
-    if (options.screensPerVideo) {
-      numOfScreenshots = options.ssConstant;
-    } else {
-      numOfScreenshots = options.ssVariable;
-    }
-    globals.screenshotSettings = {
-      clipHeight: options.clipHeight,
-      clipSnippetLength: options.clipSnippetLength,
-      clipSnippets: options.clipSnippets,
-      fixed: options.screensPerVideo,
-      height: options.imgHeight,
-      n: numOfScreenshots,
+    GLOBALS.hubName = hubName;
+    GLOBALS.selectedOutputFolder = outDir;
+    GLOBALS.selectedSourceFolders = wizard.selectedSourceFolder;
+    GLOBALS.screenshotSettings = {
+      clipHeight: wizard.clipHeight,
+      clipSnippetLength: wizard.clipSnippetLength,
+      clipSnippets: wizard.extractClips ? wizard.clipSnippets : 0,
+      fixed: wizard.isFixedNumberOfScreenshots,
+      height: wizard.screenshotSizeForImport,
+      n: wizard.isFixedNumberOfScreenshots ? wizard.ssConstant : wizard.ssVariable,
     };
 
-    if (demo) {
-      videoFilesWithPaths = videoFilesWithPaths.slice(0, 50);
-    }
-
-    extractAllMetadata(
-      videoFilesWithPaths,
-      globals.selectedSourceFolder,
-      globals.screenshotSettings,
-      0,
-      sendFinalResultHome         // callback for when metdata is done extracting
-    );
-
+    writeVhaFileAndStartExtraction();
   }
 
 });
 
 /**
- * Summon system modal to choose the *.vha file
- * send images object to App
- * send settings object to App
+ * Creates a FinalObject with known data (no ImageElement[])
+ * Writes to disk, sends to Angular, starts watching directories
  */
-ipc.on('system-open-file-through-modal', (event, somethingElse) => {
+function writeVhaFileAndStartExtraction(): void {
+
+  const finalObject: FinalObject = {
+    addTags: [],
+    hubName: GLOBALS.hubName,
+    images: [],
+    inputDirs: GLOBALS.selectedSourceFolders,
+    numOfFolders: 0,
+    removeTags: [],
+    screenshotSettings: GLOBALS.screenshotSettings,
+    version: GLOBALS.vhaFileVersion,
+  };
+
+  const pathToTheFile = path.join(GLOBALS.selectedOutputFolder, GLOBALS.hubName + '.vha2');
+
+  writeVhaFileToDisk(finalObject, pathToTheFile, () => {
+
+    GLOBALS.currentlyOpenVhaFile = pathToTheFile;
+
+    sendFinalObjectToAngular(finalObject, GLOBALS);
+
+    setUpDirectoryWatchers(finalObject.inputDirs, []);
+  });
+}
+
+/**
+ * Summon system modal to choose the *.vha2 file
+ * open via `openThisDamnFile` method
+ */
+ipcMain.on('system-open-file-through-modal', (event, somethingElse) => {  // TODO -- check -- do I need to save vha to disk?
   dialog.showOpenDialog(win, {
     title: systemMessages.selectPreviousHub,
     filters: [{
@@ -773,504 +388,56 @@ ipc.on('system-open-file-through-modal', (event, somethingElse) => {
     const chosenFile: string = result.filePaths[0];
 
     if (chosenFile) {
-      // console.log('the user has chosen this previously-saved .vha file: ' + chosenFile);
-      // TODO: fix up this stupid pattern of overriding method with variable ?
-      userWantedToOpen = chosenFile;
       openThisDamnFile(chosenFile);
     }
-  }).catch(err => {
-    console.log('system open file through modal: this should not happen');
-    console.log(err);
-  });
+  }).catch(err => {});
 });
 
 /**
- * Import this .vha file
+ * Open .vha2 file (from given path)
+ * save current VHA file to disk, if provided
  */
-ipc.on('load-this-vha-file', (event, pathToVhaFile: string, savableProperties: SavableProperties) => {
+ipcMain.on('load-this-vha-file', (event, pathToVhaFile: string, finalObjectToSave: FinalObject) => {
 
-  if (savableProperties !== null) {
-    lastSavedFinalObject.addTags = savableProperties.addTags;
-    lastSavedFinalObject.removeTags = savableProperties.removeTags;
-    lastSavedFinalObject.images = savableProperties.images;
-    writeVhaFileToDisk(lastSavedFinalObject, globals.currentlyOpenVhaFile, () => {
-      // file writing done !!!
-      console.log('.vha file written !!!');
-      userWantedToOpen = pathToVhaFile;
+  if (finalObjectToSave !== null) {
+
+    writeVhaFileToDisk(finalObjectToSave, GLOBALS.currentlyOpenVhaFile, () => {
+      console.log('.vha2 file saved before opening another');
       openThisDamnFile(pathToVhaFile);
     });
+
   } else {
-    // TODO -- streamline this variable and openThisDamnFileFunction
-    userWantedToOpen = pathToVhaFile;
     openThisDamnFile(pathToVhaFile);
   }
-
 });
 
-ipc.on('try-to-rename-this-file', (event, sourceFolder: string, relPath: string, file: string, renameTo: string, index: number): void => {
-  console.log('renaming file:');
-
-  const original: string = path.join(sourceFolder, relPath, file);
-  const newName: string = path.join(sourceFolder, relPath, renameTo);
-
-  console.log(original);
-  console.log(newName);
-
-  let success = true;
-  let errMsg: string;
-
-  // check if already exists first
-  if (fs.existsSync(newName)) {
-    console.log('some file already EXISTS WITH THAT NAME !!!');
-    success = false;
-    errMsg = 'RIGHCLICK.errorFileNameExists';
-  } else {
-    try {
-      fs.renameSync(original, newName);
-    } catch (err) {
-      success = false;
-      console.log(err);
-      if (err.code === 'ENOENT') {
-        // const pathObj = path.parse(err.path);
-        // console.log(pathObj);
-        errMsg = 'RIGHTCLICK.errorFileNotFound';
-      } else {
-        errMsg = 'RIGHTCLICK.errorSomeError';
-      }
-    }
-  }
-
-  globals.angularApp.sender.send('renameFileResponse', index, success, renameTo, file, errMsg);
-});
-
-// ========================================================================================
-// Methods to extract screenshots, build file list, etc
-// ========================================================================================
+// =================================================================================================
 
 /**
- * Writes the vha file and sends contents back to Angular App
- * Starts the process to extract all the images
- *
- * METHOD NOT A PURE FUNCTION !!!
- * INTERACTS with `lastSavedFinalObject`
- *
- * @param theFinalArray -- `finalArray` with all the metadata filled in
+ * Interrupt current import process
  */
-function sendFinalResultHome(theFinalArray: ImageElement[]): void {
-
-  const myFinalArray: ImageElement[] = alphabetizeFinalArray(theFinalArray);
-
-  const finalObject: FinalObject = {
-    version: globals.vhaFileVersion,
-    hubName: globals.hubName,
-    inputDir: globals.selectedSourceFolder,
-    numOfFolders: countFoldersInFinalArray(myFinalArray),
-    screenshotSettings: globals.screenshotSettings,
-    images: myFinalArray,
-  };
-
-  lastSavedFinalObject = finalObject;
-
-  const pathToTheFile = path.join(globals.selectedOutputFolder, globals.hubName + '.vha2');
-
-  writeVhaFileToDisk(finalObject, pathToTheFile, () => {
-
-    globals.currentlyOpenVhaFile = pathToTheFile;
-
-    finalObject.images = insertTemporaryFields(finalObject.images);
-
-    globals.angularApp.sender.send(
-      'finalObjectReturning',
-      finalObject,
-      pathToTheFile,
-      getHtmlPath(globals.selectedOutputFolder)
-    );
-
-    const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
-
-    const indexesToScan: number[] = missingThumbsIndex(
-      myFinalArray,
-      screenshotOutputFolder,
-      globals.screenshotSettings.clipSnippets > 0 // convert number to appropriate boolean
-    );
-
-    extractFromTheseFiles(
-      myFinalArray,
-      globals.selectedSourceFolder,
-      screenshotOutputFolder,
-      globals.screenshotSettings,
-      indexesToScan,
-      false
-    );
-
-  });
-}
-
-
-// ===========================================================================================
-// RESCAN - electron messages
-// -------------------------------------------------------------------------------------------
-
-/**
- * Initiate scanning for new files and importing them
- * Now receives the finalArray from `home.component`
- * because the user may have renamed files from within the app!
- */
-ipc.on('only-import-new-files', (event, currentAngularFinalArray: ImageElement[]) => {
-  const currentVideoFolder = globals.selectedSourceFolder;
-  globals.cancelCurrentImport = false;
-  importOnlyNewFiles(currentAngularFinalArray, currentVideoFolder);
+ipcMain.on('cancel-current-import', (event): void => {
+  stopThumbExtraction();
 });
 
 /**
- * Initiate rescan of the input directory
- * This will import new videos
- * and delete screenshots for videos no longer present in the input folder
- * Now receives the finalArray from `home.component`
- * because the user may have renamed files from within the app!
+ * Update system messaging based on new language
  */
-ipc.on('rescan-current-directory', (event, currentAngularFinalArray: ImageElement[]) => {
-  const currentVideoFolder = globals.selectedSourceFolder;
-  globals.cancelCurrentImport = false;
-  reScanCurrentDirectory(currentAngularFinalArray, currentVideoFolder);
+ipcMain.on('system-messages-updated', (event, newSystemMessages): void => {
+  systemMessages = newSystemMessages;               // TODO -- make sure it works with `main-ipc.ts`
 });
 
 /**
- * Initiate verifying all files have thumbnails
- * Excellent for continuing the screenshot import if it was ever cancelled
+ * Opens vha file while the app is running. Only works for mac OS.
  */
-ipc.on('verify-thumbnails', (event) => {
-  globals.cancelCurrentImport = false;
-  verifyThumbnails();
-});
-
-// ===========================================================================================
-// RESCAN - methods
-// -------------------------------------------------------------------------------------------
-
-/**
- * Scan for missing thumbnails and generate them
- */
-function verifyThumbnails() {
-  // resume extracting any missing thumbnails
-  const screenshotOutputFolder: string = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
-
-  const indexesToScan: number[] = missingThumbsIndex(
-    lastSavedFinalObject.images,
-    screenshotOutputFolder,
-    globals.screenshotSettings.clipSnippets > 0
-  );
-
-  extractFromTheseFiles(
-    lastSavedFinalObject.images,
-    globals.selectedSourceFolder,
-    screenshotOutputFolder,
-    globals.screenshotSettings,
-    randomizeArray(indexesToScan), // extract screenshots in random order
-    true
-  );
-}
-
-import {
-  findAndImportNewFiles,
-  regenerateLibrary,
-  rescanAddAndDelete,
-} from './main-rescan';
-
-/**
- * Begins rescan procedure compared to what the app has currently
- *
- * @param angularFinalArray  - ImageElment[] from Angular (might have renamed files)
- * @param currentVideoFolder - source folder where videos are located (globals.selectedSourceFolder)
- */
-function reScanCurrentDirectory(angularFinalArray: ImageElement[], currentVideoFolder: string) {
-
-  // rescan the source directory
-  if (fs.existsSync(currentVideoFolder)) {
-    let videosOnHD: ImageElement[] = getVideoPathsAndNames(currentVideoFolder);
-
-    if (demo) {
-      videosOnHD = videosOnHD.slice(0, 50);
-    }
-
-    const folderToDeleteFrom = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
-
-    rescanAddAndDelete(
-      angularFinalArray,
-      videosOnHD,
-      currentVideoFolder,
-      globals.screenshotSettings,
-      folderToDeleteFrom,
-      sendFinalResultHome           // callback for when `extractAllMetadata` is called
-    );
-
-  } else {
-    tellUserDirDoesNotExist(currentVideoFolder);
-  }
-}
-
-/**
- * Begin scanning for new files and importing them
- *
- * @param angularFinalArray  - ImageElment[] from Angular (might have renamed files)
- * @param currentVideoFolder - source folder where videos are located (globals.selectedSourceFolder)
- */
-function importOnlyNewFiles(angularFinalArray: ImageElement[], currentVideoFolder: string) {
-
-  // rescan the source directory
-  if (fs.existsSync(currentVideoFolder)) {
-    let videosOnHD: ImageElement[] = getVideoPathsAndNames(currentVideoFolder);
-
-    if (demo) {
-      videosOnHD = videosOnHD.slice(0, 50);
-    }
-
-    findAndImportNewFiles(
-      angularFinalArray,
-      videosOnHD,
-      currentVideoFolder,
-      globals.screenshotSettings,
-      sendFinalResultHome           // callback for when `extractAllMetadata` is called
-    );
-
-  } else {
-    tellUserDirDoesNotExist(currentVideoFolder);
-  }
-}
-
-
-// ===========================================================================================
-// RESCAN - ARCHIVED
-// -------------------------------------------------------------------------------------------
-
-/**
- * Initiate regenerating the library
- */
-ipc.on('regenerate-library', (event, currentAngularFinalArray: ImageElement[]) => {
-  const currentVideoFolder = globals.selectedSourceFolder;
-  globals.cancelCurrentImport = false;
-  regenerateMetadata(currentAngularFinalArray, currentVideoFolder);
+ipcMain.on('open-file', (event, pathToVhaFile) => {
+  event.preventDefault();
+  openThisDamnFile(pathToVhaFile);
 });
 
 /**
- * Completely regenerate the library and metadata, but preserve thumbnails and user generated metadata
- * Useful when new metadata is added eg.
- *
- * @param angularFinalArray  - ImageElment[] from Angular (might have renamed files)
- * @param currentVideoFolder - source folder where videos are located (globals.selectedSourceFolder)
+ * Clears recent document history from the jump list
  */
-function regenerateMetadata(angularFinalArray: ImageElement[], currentVideoFolder: string) {
-
-  // rescan the source directory
-  if (fs.existsSync(currentVideoFolder)) {
-    let videosOnHD: ImageElement[] = getVideoPathsAndNames(currentVideoFolder);
-
-    if (demo) {
-      videosOnHD = videosOnHD.slice(0, 50);
-    }
-
-    const folderToDeleteFrom = path.join(globals.selectedOutputFolder, 'vha-' + globals.hubName);
-
-    regenerateLibrary(
-      angularFinalArray,
-      videosOnHD,
-      currentVideoFolder,
-      globals.screenshotSettings,
-      folderToDeleteFrom,
-      sendFinalResultHome           // callback for when `extractAllMetadata` is called
-    );
-
-  } else {
-    tellUserDirDoesNotExist(currentVideoFolder);
-  }
-}
-
-/**
- * Cancel current import progress & tell user directory does not exist!
- * @param currentVideoFolder
- */
-function tellUserDirDoesNotExist(currentVideoFolder: string) {
-  sendCurrentProgress(1, 1, 'done');
-  dialog.showMessageBox(win, {
-    message: systemMessages.directory + ' ' + currentVideoFolder + ' ' + systemMessages.doesNotExist,
-    buttons: ['OK']
-  });
-}
-
-
-ipc.on('app-to-touchBar', (event, changesFromApp) => {
-  if (codeRunningOnMac) {
-    if (allSupportedViews.includes(<SupportedView>changesFromApp)) {
-      segmentedViewControl.selectedIndex = allSupportedViews.indexOf(changesFromApp);
-    } else if (changesFromApp === 'showFreq') {
-      segmentedFolderControl.selectedIndex = 0;
-    } else if (changesFromApp === 'showRecent') {
-      segmentedFolderControl.selectedIndex = 1;
-    } else if (changesFromApp === 'compactView') {
-      segmentedAnotherViewsControl.selectedIndex = 0;
-    } else if (changesFromApp === 'showMoreInfo') {
-      segmentedAnotherViewsControl.selectedIndex = 1;
-    }
-  }
+ipcMain.on('clear-recent-documents', (event): void => {
+  app.clearRecentDocuments();
 });
-
-
-import { allSupportedViews, SupportedView } from './interfaces/shared-interfaces';
-import { randomizeArray } from './utility';
-
-const nativeImage = require('electron').nativeImage;
-const resourcePath = serve ? path.join(__dirname, 'src/assets/icons/mac/touch-bar/') : path.join(process.resourcesPath, 'assets/');
-const {
-  TouchBarPopover,
-  TouchBarSegmentedControl
-} = TouchBar;
-
-// touchBar variables
-let touchBar,
-  segmentedFolderControl,
-  segmentedViewControl,
-  segmentedPopover,
-  segmentedAnotherViewsControl,
-  zoomSegmented;
-
-/**
- * Void function for creating touchBar for MAC OS X
- */
-function createTouchBar() {
-
-  // recent and freq views
-  segmentedFolderControl = new TouchBarSegmentedControl({
-    mode: 'multiple',
-    selectedIndex: -1,
-    segments: [
-      {
-        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-cloud.png')).resize({
-          width: 22,
-          height: 16
-        })
-      },
-      {
-        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-recent-history.png')).resize({
-          width: 18,
-          height: 18
-        })
-      }
-    ],
-    change: selectedIndex => {
-      if (selectedIndex === 0) {
-        globals.angularApp.sender.send('touchBar-to-app', 'showFreq');
-      } else {
-        globals.angularApp.sender.send('touchBar-to-app', 'showRecent');
-      }
-    }
-  });
-
-  // segmentedControl for views
-  segmentedViewControl = new TouchBarSegmentedControl({
-    segments: [
-      {
-        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-thumbnails.png')).resize({
-          width: 15,
-          height: 15
-        })
-      },
-      {
-        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-filmstrip.png')).resize({
-          width: 20,
-          height: 15
-        })
-      },
-      {
-        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-full-view.png')).resize({
-          width: 15,
-          height: 15
-        })
-      },
-      {
-        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-details.png')).resize({
-          width: 15,
-          height: 15
-        })
-      },
-      {
-        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-filenames.png')).resize({
-          width: 15,
-          height: 15
-        })
-      },
-      {
-        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-video-blank.png')).resize({
-          width: 15,
-          height: 15
-        })
-      },
-    ],
-    change: selectedIndex => {
-      globals.angularApp.sender.send('touchBar-to-app', allSupportedViews[selectedIndex]);
-    }
-  });
-
-  // Popover button for segmentedControl
-  segmentedPopover = new TouchBarPopover({
-    label: 'Views',
-    items: new TouchBar(
-      {
-        items: [segmentedViewControl]
-      }
-    )
-  });
-
-  // Segment with compat view and show more info
-  segmentedAnotherViewsControl = new TouchBarSegmentedControl({
-    mode: 'multiple',
-    selectedIndex: -1,
-    segments: [
-      {
-        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-compat-view.png')).resize({
-          width: 16,
-          height: 16
-        })
-      },
-      {
-        icon: nativeImage.createFromPath(path.join(resourcePath, 'icon-show-more-info.png')).resize({
-          width: 18,
-          height: 20
-        })
-      },
-    ],
-    change: selectedIndex => {
-      if (selectedIndex === 0) {
-        globals.angularApp.sender.send('touchBar-to-app', 'compactView');
-      } else {
-        globals.angularApp.sender.send('touchBar-to-app', 'showMoreInfo');
-      }
-    }
-  });
-
-  // touchBar segment with zoom options
-  zoomSegmented = new TouchBarSegmentedControl({
-    mode: 'buttons',
-    segments: [
-      {label: '-'},
-      {label: '+'}
-    ],
-    change: selectedIndex => {
-      if (selectedIndex === 0) {
-        globals.angularApp.sender.send('touchBar-to-app', 'makeSmaller');
-      } else {
-        globals.angularApp.sender.send('touchBar-to-app', 'makeLarger');
-      }
-    }
-  });
-
-  // creating touchBar from existing items
-  touchBar = new TouchBar({
-    items: [
-      segmentedFolderControl,
-      segmentedPopover,
-      segmentedAnotherViewsControl,
-      zoomSegmented
-    ]
-  });
-}
-

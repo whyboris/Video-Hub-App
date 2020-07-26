@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { SettingsMetaGroup, SettingsMetaGroupLabels, SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
   selector: 'app-settings',
@@ -25,11 +26,12 @@ export class SettingsComponent {
   @Input() appState;
   @Input() demo;
   @Input() latestVersionAvailable;
-  @Input() settingToShow;
-  @Input() settingsButtons;
-  @Input() settingsMetaGroup;
-  @Input() settingsMetaGroupLabels;
+  @Input() settingTabToShow;
+  @Input() settingsButtons: SettingsButtonsType;
   @Input() versionNumber;
+
+  settingsMetaGroup = SettingsMetaGroup;
+  settingsMetaGroupLabels = SettingsMetaGroupLabels;
 
   constructor() { }
 

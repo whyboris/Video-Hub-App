@@ -122,7 +122,7 @@
     [folderPath]="appState.selectedOutputFolder"
     [hubName]="appState.hubName"
     [imgHeight]="previewHeight"
-    [selectedSourceFolder]="appState.selectedSourceFolder"
+    [selectedSourceFolder]="sourceFolderService.selectedSourceFolder[sheetItemToDisplay.inputSource].path"
     [star]="sheetItemToDisplay.stars"
 
     [darkMode]="settingsButtons['darkMode'].toggled"
@@ -133,6 +133,7 @@
     [showAutoFolderTags]="settingsButtons['autoFolderTags'].toggled"
     [showManualTags]="settingsButtons['manualTags'].toggled"
     [showMeta]="settingsButtons['showMoreInfo'].toggled"
+    [showVideoNotes]="settingsButtons['showVideoNotes'].toggled"
   >
   </app-thumbnail-sheet>
 
@@ -184,20 +185,20 @@
     class="all-settings-tabs"
     @modalAnimation
   >
-    <button (click)="settingToShow = 0" [ngClass]="{ 'active-tab': settingToShow === 0 }">
-      {{ 'SETTINGS.tabFilter'    | translate }}
+    <button (click)="settingTabToShow = 0" [ngClass]="{ 'active-tab': settingTabToShow === 0 }">
+      {{ 'SETTINGS.tabFilter'     | translate }}
     </button>
-    <button (click)="settingToShow = 1" [ngClass]="{ 'active-tab': settingToShow === 1 }">
-      {{ 'SETTINGS.tabView'      | translate }}
+    <button (click)="settingTabToShow = 1" [ngClass]="{ 'active-tab': settingTabToShow === 1 }">
+      {{ 'SETTINGS.tabView'       | translate }}
     </button>
-    <button (click)="settingToShow = 2" [ngClass]="{ 'active-tab': settingToShow === 2 }">
-      {{ 'SETTINGS.tabMain'      | translate }}
+    <button (click)="settingTabToShow = 2" [ngClass]="{ 'active-tab': settingTabToShow === 2 }">
+      {{ 'SETTINGS.tabMain'       | translate }}
     </button>
-    <button (click)="settingToShow = 3" [ngClass]="{ 'active-tab': settingToShow === 3 }">
-      {{ 'SETTINGS.tabShortcuts' | translate }}
+    <button (click)="settingTabToShow = 3" [ngClass]="{ 'active-tab': settingTabToShow === 3 }">
+      {{ 'SETTINGS.tabCurrentHub' | translate }}
     </button>
-    <button (click)="settingToShow = 4" [ngClass]="{ 'active-tab': settingToShow === 4 }">
-      {{ 'SETTINGS.statistics'   | translate }}
+    <button (click)="settingTabToShow = 4" [ngClass]="{ 'active-tab': settingTabToShow === 4 }">
+      {{ 'SETTINGS.tabShortcuts'  | translate }}
     </button>
   </div>
 
@@ -238,33 +239,36 @@
       [appState]="appState"
       [demo]="demo"
       [latestVersionAvailable]="latestVersionAvailable"
-      [settingToShow]="settingToShow"
+      [settingTabToShow]="settingTabToShow"
       [settingsButtons]="settingsButtons"
-      [settingsMetaGroupLabels]="settingsMetaGroupLabels"
-      [settingsMetaGroup]="settingsMetaGroup"
       [versionNumber]="versionNumber"
     ></app-settings>
 
-    <!-- ===========   KEYBOARD SHORTCUTS    =========== -->
+    <!-- HUB STATISTICS / Current Hub Settings -->
 
-    <div *ngIf="settingToShow == 3" class="shortcut-menu">
-
-      <app-shortcuts [macVersion]="macVersion"></app-shortcuts>
-
-    </div>
-
-    <!-- HUB STATISTICS -->
-
-    <div *ngIf="settingToShow == 4" class="shortcut-menu">
+    <div *ngIf="settingTabToShow == 3" class="shortcut-menu">
 
       <app-statistics
+        (addMissingThumbnailsPlease)="extractMissingThumbnails()"
+        (cleanScreenshotFolderPlease)="cleanScreenshotFolder()"
+        (deleteInputSourceFiles)="deleteInputSourceFiles($event)"
+        (finalArrayNeedsSaving)="finalArrayNeedsSaving = true"
+
         [finalArray]="finalArray"
         [hubName]="appState.hubName"
+        [inputFolders]="sourceFolderService.selectedSourceFolder"
         [numFolders]="appState.numOfFolders"
         [pathToVhaFile]="appState.currentVhaFile"
         [screenshotSettings]="currentScreenshotSettings"
-        [videoFolder]="appState.selectedSourceFolder"
       ></app-statistics>
+
+    </div>
+
+    <!-- KEYBOARD SHORTCUTS -->
+
+    <div *ngIf="settingTabToShow == 4" class="shortcut-menu">
+
+      <app-shortcuts [macVersion]="macVersion"></app-shortcuts>
 
     </div>
 
@@ -373,8 +377,10 @@
     >
 
       <div class="filtering-total">
-        {{ appState.numOfFolders | number }}
-        {{ (appState.numOfFolders === 1 ? 'SIDEBAR.totalFolders' : 'SIDEBAR.totalFoldersPlural') | translate }}
+        <ng-container *ngIf="appState.numOfFolders !== 0">
+          {{ appState.numOfFolders | number }}
+          {{ (appState.numOfFolders === 1 ? 'SIDEBAR.totalFolders' : 'SIDEBAR.totalFoldersPlural') | translate }}
+        </ng-container>
         <br>
         {{ finalArray.length | number }} {{ 'SIDEBAR.videos' | translate }}
       </div>
@@ -645,6 +651,8 @@
                                   : settingsButtons['autoFileTags'].toggled
                                   : settingsButtons['autoFolderTags'].toggled
 
+                | fileSearchPipe: filters[8].array : filters[8].bool : false : 'notes' : false
+
                 | magicSearchPipe: magicSearchString
 
                 | regexSearchPipe: regexSearchString
@@ -716,14 +724,18 @@
       <ng-container *ngIf="appState.currentView === 'showThumbnails'">
         <app-thumbnail
           *ngFor="let item of scroll.viewPortItems"
-
-          (videoClick)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          
+          (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
           (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
+          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
 
           (sheetClick)="this.openThumbnailSheet(item)"
           (drop)="droppedSomethingOverVideo($event, item)"
 
           [video]="item"
+
+          [connected]="sourceFolderService.sourceFolderConnected[item.inputSource]"
 
           [elHeight]="previewHeight + textPaddingHeight"
           [elWidth]="previewWidth"
@@ -756,8 +768,10 @@
         <app-filmstrip-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (videoClick)="handleClick($event, item)"
-          (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
+          (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
+          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
 
           (drop)="droppedSomethingOverVideo($event, item)"
 
@@ -784,8 +798,10 @@
         <app-full-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (videoClick)="handleClick($event, item)"
-          (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
+          (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
+          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
 
           (drop)="droppedSomethingOverVideo($event, item)"
 
@@ -811,8 +827,10 @@
         <app-file-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (click)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick({ mouseEvent: $event }, item)"
-          (contextmenu)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event, item)"
+          (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
+          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
 
           (drop)="droppedSomethingOverVideo($event, item)"
 
@@ -832,8 +850,10 @@
         <app-details-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (videoClick)="handleClick($event, item)"
-          (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
+          (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
+          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
 
           (editFinalArrayStars)="editFinalArrayStars($event)"
           (editFinalArrayTag)="editFinalArrayTag($event)"
@@ -853,7 +873,7 @@
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
           [imgHeight]="previewHeight"
-          [selectedSourceFolder]="appState.selectedSourceFolder"
+          [selectedSourceFolder]="sourceFolderService.selectedSourceFolder"
 
           [star]="item.stars"
 
@@ -865,6 +885,7 @@
           [showAutoFolderTags]="settingsButtons['autoFolderTags'].toggled"
           [showManualTags]="settingsButtons['manualTags'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
+          [showVideoNotes]="settingsButtons['showVideoNotes'].toggled"
 
           [ngStyle]="{ display: appState.currentView === 'showDetails' ? 'block' : 'inline-block' }"
         ></app-details-item>
@@ -876,8 +897,10 @@
         <app-clip-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (videoClick)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
-          (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
+          (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
+          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
 
           (sheetClick)="this.openThumbnailSheet(item)"
 
@@ -931,7 +954,7 @@
   (rightMouseClicked)="rightMouseClicked($event.mouseEvent, $event.item)"
 
   [appState]="appState"
-  [currentPlayingFile]="currentPlayingFile"
+  [currentClickedItemName]="currentClickedItemName"
   [finalArray]="finalArray"
   [previewHeightRelated]="previewHeightRelated"
   [previewWidthRelated]="previewWidthRelated"
@@ -942,32 +965,12 @@
 <app-tag-tray
   (closeTagsTray)="closeTagsTray()"
   (toggleBatchTaggingMode)="toggleBatchTaggingMode()"
+  (selectAll)="selectAllVisible()"
   (handleTagWordClicked)="handleTagWordClicked($event.tag.name, $event.event)"
+  [appState]="appState"
   [batchTaggingMode]="batchTaggingMode"
   [settingsButtons]="settingsButtons"
 ></app-tag-tray>
-
-<!-- IMPORT MODAL  -->
-<div
-  *ngIf="importStage === 'importingMeta'"
-  class="progress-modal"
-  @modalAnimation
->
-  <div class="progress-container">
-    <div class="current-progress" [ngStyle]="{ width: progressPercent * 100 + '%' }"></div>
-  </div>
-
-  <span class="progress-numbers" style="float: left"> {{ 'WIZARD.stage' | translate }} 1 / 2 </span>
-
-  <div class="progress-numbers progress-numbers-center">
-    {{ progressNum1 }} / {{ progressNum2 }}
-  </div>
-
-  <span class="progress-numbers" style="float: right">{{ timeExtractionRemaining > 0 ? (timeExtractionRemaining | lengthPipe) : '' }}</span>
-
-</div>
-
-<div [ngClass]="{ 'disabled-overlay': importStage === 'importingMeta' }"></div>
 
 <!-- ============================================== -->
 <!-- ================    WIZARD    ================ -->
@@ -983,19 +986,13 @@
   (loadFromFile)="loadFromFile()"
   (openFromHistory)="openFromHistory($event)"
   (removeFromHistory)="removeFromHistory($event)"
-  (selectClipSize)="selectClipSize($event)"
-  (selectLengthOfClipSnippets)="selectLengthOfClipSnippets($event)"
-  (selectNumOfClipSnippets)="selectNumOfClipSnippets($event)"
-  (selectNumOfScreens)="selectNumOfScreens($event)"
   (selectOutputDirectory)="selectOutputDirectory()"
-  (selectScreenshotSize)="selectScreenshotSize($event)"
   (selectSourceDirectory)="selectSourceDirectory()"
-  (setScreensPerVideo)="setScreensPerVideo($event)"
 
+  [canCloseWizard]="canCloseWizard"
   [demo]="demo"
   [importStage]="importStage"
-  [wizard]="wizard"
   [vhaFileHistory]="vhaFileHistory"
-  [canCloseWizard]="canCloseWizard"
+  [wizard]="wizard"
 >
 </app-wizard>

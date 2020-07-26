@@ -29,7 +29,7 @@ export class AutoTagsService {
   cachedHub: string;
 
   constructor(
-    public tagsSaveService: AutoTagsSaveService
+    public autoTagsSaveService: AutoTagsSaveService
   ) { }
 
   /**
@@ -317,10 +317,10 @@ export class AutoTagsService {
 
   /**
    * Add to the map all tags present in the `addTags` array
-   * from the `tagsSaveService`
+   * from the `autoTagsSaveService`
    */
   private loadAddTags(): void {
-    const allAddTags = this.tagsSaveService.getAddTags();
+    const allAddTags = this.autoTagsSaveService.getAddTags();
 
     allAddTags.forEach((tag) => {
       if (tag.includes(' ')) {
@@ -334,10 +334,10 @@ export class AutoTagsService {
 
   /**
    * Remove from map any tags present in the `removeTags` array
-   * from the `tagsSaveService`
+   * from the `autoTagsSaveService`
    */
   private loadRemoveTags(): void {
-    const allRemoveTags = this.tagsSaveService.getRemoveTags();
+    const allRemoveTags = this.autoTagsSaveService.getRemoveTags();
 
     allRemoveTags.forEach((tag) => {
       if (tag.includes(' ')) {

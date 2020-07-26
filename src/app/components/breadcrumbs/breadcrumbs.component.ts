@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { breadcrumbsAppear, breadcrumbWordAppear } from '../../common/animations';
+import { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
   selector: 'app-breadcrumbs',
@@ -13,7 +14,7 @@ export class BreadcrumbsComponent {
   @Output() handleBbreadcrumbClicked = new EventEmitter<number>();
 
   @Input() appState;
-  @Input() settingsButtons;
+  @Input() settingsButtons: SettingsButtonsType;
   @Input() folderViewNavigationPath;
 
   constructor() { }

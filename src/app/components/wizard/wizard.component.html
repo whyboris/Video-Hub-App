@@ -95,8 +95,8 @@
 
     <div
       [ngClass]="{
-          'current-step': wizard.futureHubName !== '' && wizard.selectedSourceFolder === '',
-          'fulfilled': wizard.selectedSourceFolder !== ''
+          'current-step': wizard.futureHubName !== '' && wizard.selectedSourceFolder[0].path === '',
+          'fulfilled': wizard.selectedSourceFolder[0].path !== ''
         }"
       class="steps"
     >
@@ -108,26 +108,14 @@
       [disabled]="wizard.futureHubName === ''"
       title="{{ 'WIZARD.selectFolderWithVideo' | translate }}"
     >
-      {{ (wizard.selectedSourceFolder === '' ? 'WIZARD.select' : 'WIZARD.change') | translate }}
+      {{ (wizard.selectedSourceFolder[0].path === '' ? 'WIZARD.select' : 'WIZARD.change') | translate }}
       {{ 'WIZARD.videoDirectory' | translate }}
     </button>
 
     <span class="step-description">
       {{ 'WIZARD.importingFrom' | translate }}
     </span>
-    <span class="path" [innerHtml]="wizard.selectedSourceFolder | folderArrowsPipe">
-    </span>
-    <span
-      class="step-description"
-      [ngStyle]="{ opacity: wizard.totalNumberOfFiles === -1 ? 0 : 1 }"
-    >
-      <!-- don't use *ngIf on this element because then it disappears and changes height of section -->
-      {{ 'WIZARD.found' | translate }}
-      <span class="emphasis-number">
-        {{ wizard.totalNumberOfFiles | number }}
-      </span>
-      {{ 'WIZARD.videos' | translate }}
-      {{ (wizard.totalNumberOfFiles > 50 && demo ? 'WIZARD.demoVersion' : '') | translate }}
+    <span class="path" [innerHtml]="wizard.selectedSourceFolder[0].path | folderArrowsPipe">
     </span>
 
     <!-- STEP 3 -------------------------------------------------------------------------------- -->
@@ -141,7 +129,7 @@
     <button
       class="wizard-button"
       (click)="selectOutputDirectory.emit()"
-      [disabled]="wizard.selectedSourceFolder === '' || wizard.futureHubName === ''"
+      [disabled]="wizard.selectedSourceFolder[0].path === '' || wizard.futureHubName === ''"
       title="{{ 'WIZARD.selectWhereFilesStored' | translate }}"
     >
       {{ (wizard.selectedOutputFolder === '' ? 'WIZARD.select' : 'WIZARD.change') | translate }}
@@ -158,7 +146,7 @@
 
     <div
       [ngClass]="{
-          'fulfilled': wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder !== ''
+          'fulfilled': wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder[0].path !== ''
         }"
       class="steps"
     >
@@ -168,9 +156,9 @@
     <div
       class="ss-num-selection"
       style="margin-top: 20px"
-      [ngClass]="{ 'dim-row': !wizard.screensPerVideo
+      [ngClass]="{ 'dim-row': !wizard.isFixedNumberOfScreenshots
                              || wizard.selectedOutputFolder === ''
-                             || wizard.selectedSourceFolder === ''
+                             || wizard.selectedSourceFolder[0].path === ''
                              || wizard.futureHubName === ''
       }"
     >
@@ -179,13 +167,13 @@
         type="radio"
         name="ss-num-selection"
         checked
-        (change)="setScreensPerVideo.emit(true)"
+        (change)="setScreensPerVideo(true)"
         [disabled]="wizard.selectedOutputFolder === ''
-                 || wizard.selectedSourceFolder === ''
+                 || wizard.selectedSourceFolder[0].path === ''
                  || wizard.futureHubName === ''"
       >
       <input
-        (change)="selectNumOfScreens.emit($event.target.value)"
+        (change)="selectNumOfScreens($event.target.value)"
         type="number"
         class="size-dropdown language-drop-down num-select"
         value=10
@@ -193,9 +181,9 @@
         max=30
         onKeyDown="return false"
         [disabled]="wizard.selectedOutputFolder === ''
-                 || wizard.selectedSourceFolder === ''
+                 || wizard.selectedSourceFolder[0].path === ''
                  || wizard.futureHubName === ''
-                 || !wizard.screensPerVideo"
+                 || !wizard.isFixedNumberOfScreenshots"
       >
       {{ 'WIZARD.screenshotsPerVideo' | translate }}
 
@@ -203,20 +191,20 @@
 
     <div
       class="ss-num-selection"
-      [ngClass]="{ 'dim-row': wizard.screensPerVideo }"
+      [ngClass]="{ 'dim-row': wizard.isFixedNumberOfScreenshots }"
     >
 
       <input
         type="radio"
         name="ss-num-selection"
-        (change)="setScreensPerVideo.emit(false)"
+        (change)="setScreensPerVideo(false)"
         [disabled]="wizard.selectedOutputFolder === ''
-                 || wizard.selectedSourceFolder === ''
+                 || wizard.selectedSourceFolder[0].path === ''
                  || wizard.futureHubName === ''"
       >
       {{ 'WIZARD.oneScreenshotEvery' | translate }}
       <input
-        (change)="selectNumOfScreens.emit($event.target.value)"
+        (change)="selectNumOfScreens($event.target.value)"
         type="number"
         class="size-dropdown language-drop-down num-select"
         value=5
@@ -224,9 +212,9 @@
         max=20
         onKeyDown="return false"
         [disabled]="wizard.selectedOutputFolder === ''
-                 || wizard.selectedSourceFolder === ''
+                 || wizard.selectedSourceFolder[0].path === ''
                  || wizard.futureHubName === ''
-                 || wizard.screensPerVideo"
+                 || wizard.isFixedNumberOfScreenshots"
       >
       {{ 'WIZARD.minutes' | translate }}
 
@@ -248,10 +236,10 @@
     </div>
 
     <select
-      (change)="selectScreenshotSize.emit($event.target.value)"
+      (change)="selectScreenshotSize($event.target.value)"
       class="size-dropdown language-drop-down"
       [disabled]="wizard.selectedOutputFolder === ''
-               || wizard.selectedSourceFolder === ''
+               || wizard.selectedSourceFolder[0].path === ''
                || wizard.futureHubName === ''"
     >
       <option value="144">144px</option>
@@ -265,7 +253,7 @@
     <span
       class="step-four-text"
       [ngClass]="{
-          'dim-row': !(wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder !== '')
+          'dim-row': !(wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder[0].path !== '')
         }"
     >
       {{ 'WIZARD.sizeOfScreenshots' | translate }}
@@ -275,7 +263,7 @@
 
     <div
       [ngClass]="{
-          'fulfilled': wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder !== ''
+          'fulfilled': wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder[0].path !== ''
         }"
       class="steps"
       style="transform: translate(-24px, 11px);"
@@ -291,7 +279,7 @@
         class="clip-check-box"
         style="vertical-align: top;"
         [disabled]="wizard.selectedOutputFolder === ''
-                 || wizard.selectedSourceFolder === ''
+                 || wizard.selectedSourceFolder[0].path === ''
                  || wizard.futureHubName === ''"
       >
 
@@ -302,7 +290,7 @@
         </span>
 
         <input
-          (change)="selectNumOfClipSnippets.emit($event.target.value)"
+          (change)="selectNumOfClipSnippets($event.target.value)"
           type="number"
           class="size-dropdown language-drop-down num-select"
           value=5
@@ -310,7 +298,7 @@
           max=15
           onKeyDown="return false"
           [disabled]="wizard.selectedOutputFolder === ''
-                   || wizard.selectedSourceFolder === ''
+                   || wizard.selectedSourceFolder[0].path === ''
                    || wizard.futureHubName === ''
                    || !wizard.extractClips"
         >
@@ -331,7 +319,7 @@
       </span>
 
       <input
-        (change)="selectLengthOfClipSnippets.emit($event.target.value)"
+        (change)="selectLengthOfClipSnippets($event.target.value)"
         type="number"
         class="size-dropdown language-drop-down num-select"
         value=1
@@ -339,7 +327,7 @@
         max=5
         onKeyDown="return false"
         [disabled]="wizard.selectedOutputFolder === ''
-                 || wizard.selectedSourceFolder === ''
+                 || wizard.selectedSourceFolder[0].path === ''
                  || wizard.futureHubName === ''
                  || !wizard.extractClips"
       >
@@ -353,7 +341,7 @@
     <div [ngClass]="{ 'dim-row': !wizard.extractClips }">
 
       <select
-        (change)="selectClipSize.emit($event.target.value)"
+        (change)="selectClipSize($event.target.value)"
         class="size-dropdown language-drop-down"
         [disabled]="!wizard.extractClips"
       >
@@ -368,7 +356,7 @@
       <span
         class="step-four-text"
         [ngClass]="{
-            'dim-row': !(wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder !== '')
+            'dim-row': !(wizard.selectedOutputFolder !== '' && wizard.selectedSourceFolder[0].path !== '')
           }"
       >
         {{ 'WIZARD.sizeOfClips' | translate }}
@@ -382,7 +370,7 @@
       style="margin-top: 30px;"
       [ngClass]="{
         'current-step': wizard.selectedOutputFolder !== ''
-                     && wizard.selectedSourceFolder !== ''
+                     && wizard.selectedSourceFolder[0].path !== ''
       }"
       class="steps"
     >
@@ -392,11 +380,12 @@
     <button
       style="margin-top: 45px;"
       class="wizard-button start-import"
-      [disabled]="wizard.selectedOutputFolder === ''
-               || wizard.selectedSourceFolder === ''
-               || importStage !== 'done'
-               || wizard.futureHubName === ''
-               || wizard.totalNumberOfFiles === 0"
+      [disabled]="
+             wizard.selectedOutputFolder === ''
+          || wizard.selectedSourceFolder[0].path === ''
+          || importStage !== 'done'
+          || wizard.futureHubName === ''
+        "
       (click)="importFresh.emit()"
     >
       {{ 'WIZARD.createVideoHub' | translate }}

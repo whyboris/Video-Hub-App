@@ -1,5 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { filterItemAppear } from '../../common/animations';
+import { SettingsButtonsType } from '../../common/settings-buttons';
 
 interface FilterEmit {
   word: string;
@@ -25,7 +26,7 @@ export class SearchBoxesComponent {
   @Output() typeaheadTabPressed = new EventEmitter<number>();
 
   @Input() filters;
-  @Input() settingsButtons;
+  @Input() settingsButtons: SettingsButtonsType;
   @Input() tagTypeAhead;
 
   constructor() { }

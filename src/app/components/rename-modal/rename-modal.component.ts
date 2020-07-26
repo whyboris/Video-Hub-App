@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
   selector: 'app-rename-modal',
@@ -15,7 +16,7 @@ export class RenameModalComponent {
 
   @Input() appState;
   @Input() macVersion;
-  @Input() settingsButtons;
+  @Input() settingsButtons: SettingsButtonsType;
   @Input() itemToRename;
   @Input() currentRightClickedItem;
   @Input() renamingNow;
