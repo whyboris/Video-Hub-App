@@ -942,6 +942,7 @@
 <app-tag-tray
   (closeTagsTray)="closeTagsTray()"
   (toggleBatchTaggingMode)="toggleBatchTaggingMode()"
+  (selectAll)="selectAllVisible()"
   (handleTagWordClicked)="handleTagWordClicked($event.tag.name, $event.event)"
   [batchTaggingMode]="batchTaggingMode"
   [settingsButtons]="settingsButtons"
