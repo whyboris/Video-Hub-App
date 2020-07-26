@@ -41,6 +41,8 @@ let screenHeight;
 let macFirstRun = true; // detect if it's the 1st time Mac is opening the file or something like that
 let userWantedToOpen: string = null; // find a better pattern for handling this functionality
 
+electron.Menu.setApplicationMenu(null);
+
 // =================================================================================================
 
 let win, serve;
@@ -94,7 +96,7 @@ function createWindow() {
 
   screenWidth = desktopSize.width;
   screenHeight = desktopSize.height;
-  let mainWindowState = windowStateKeeper({
+  const mainWindowState = windowStateKeeper({
     defaultWidth: 850,
     defaultHeight: 850
   });
