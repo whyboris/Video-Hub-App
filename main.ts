@@ -55,7 +55,7 @@ process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 // For windows -- when loading the app the first time
 if (args[0]) {
   if (!serve) {
-    userWantedToOpen = args[0]; // TODO -- clean up file-opening code to not use viarable
+    userWantedToOpen = args[0]; // TODO -- clean up file-opening code to not use variable
   }
 }
 
@@ -72,8 +72,8 @@ if (!gotTheLock) {
     //   buttons: ['OK']
     // });
 
-    if (argv[1]) {
-      openThisDamnFile(argv[1]);
+    if (argv.length > 1) {
+      openThisDamnFile(argv[argv.length - 1]);
     }
 
     // Someone tried to run a second instance, we should focus our window.
@@ -245,6 +245,7 @@ function openThisDamnFile(pathToVhaFile: string) {
       GLOBALS.angularApp.sender.send('please-open-wizard');
 
     } else {
+      app.addRecentDocument(pathToVhaFile);
 
       const finalObject: FinalObject = JSON.parse(data);
 
@@ -423,4 +424,19 @@ ipcMain.on('cancel-current-import', (event): void => {
  */
 ipcMain.on('system-messages-updated', (event, newSystemMessages): void => {
   systemMessages = newSystemMessages;               // TODO -- make sure it works with `main-ipc.ts`
+});
+
+/**
+ * Opens vha file while the app is running. Only works for mac OS.
+ */
+ipcMain.on('open-file', (event, pathToVhaFile) => {
+  event.preventDefault();
+  openThisDamnFile(pathToVhaFile);
+});
+
+/**
+ * Clears recent document history from the jump list
+ */
+ipcMain.on('clear-recent-documents', (event): void => {
+  app.clearRecentDocuments();
 });
