@@ -21,7 +21,6 @@
   }
 }
 
-
 .stats-heading {
   color: $gray-70;
   display: block;
@@ -30,9 +29,28 @@
   text-align: center;
 }
 
+.edit-mode-container {
+  display: block;
+  margin-top: 10px;
+  text-align: center;
+
+  button {
+    transition-duration: 0.5s;
+  }
+
+  .button-hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
 .title {
   color: $black;
   font-weight: bold;
+}
+
+.sources {
+  margin-bottom: 20px;
 }
 
 .hub-name {
@@ -50,11 +68,62 @@
   text-align: right;
 }
 
-.spanBoth {
+.span-both {
   font-weight: bold;
   padding-bottom: 5px;
   padding-top: 20px;
   text-align: center;
+}
+
+.input-sources {
+  display: table;
+  margin: 0 auto;
+  max-width: calc(100% - 200px);
+
+  .input-folder {
+    text-align: left;
+  }
+}
+
+.input-sources-row {
+  display: block;
+  position: relative;
+}
+
+.watch-folder-note {
+  display: block;
+  left: -52px;
+  position: absolute;
+  top: -20px;
+}
+
+.delete-input-folder,
+.rescan-input-folder,
+.input-not-connected {
+  position: absolute;
+  text-align: right;
+  top: 1px;
+}
+
+.delete-input-folder {
+  color: $pretty-red;
+  cursor: not-allowed;
+  font-weight: bold;
+  right: calc(100% + 10px);
+}
+
+.rescan-input-folder {
+  color: $pretty-blue;
+  cursor: pointer;
+  font-weight: bold;
+  right: calc(100% + 47px);
+}
+
+.input-not-connected {
+  cursor: pointer;
+  font-style: italic;
+  min-width: 200px;
+  right: calc(100% + 47px);
 }
 
 @media (max-width: 900px) {
@@ -64,5 +133,40 @@
     .stats-table {
       margin: 10px auto;
     }
+  }
+}
+
+.wizard-button {
+  min-width: unset;
+  position: relative;
+}
+
+.number-of-thumbs-deleted {
+  bottom: -26px;
+  color: $pretty-blue;
+  position: absolute;
+  right: 0;
+  width: 100%;
+}
+
+.progress-gradient-animation {
+  animation: gradient 3s infinite;
+  background: linear-gradient(90deg, rgba(255,255,255,0) 35%, $pretty-blue 50% , rgba(255,255,255,0) 65%);
+  background-size: 300%;
+  color: $gray-70;
+  pointer-events: none;
+}
+
+@keyframes gradient {
+  0% {
+    background-position-x: 100%;
+  }
+
+  50% {
+    background-position-x: 0%;
+  }
+
+  100% {
+    background-position-x: 100%;
   }
 }

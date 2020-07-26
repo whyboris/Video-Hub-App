@@ -1,21 +1,127 @@
 <div class="statistics">
 
-  <span class="stats-heading">{{ 'STATISTICS.heading' | translate }}</span>
-
   <span class="stats-heading title hub-name">
     <img class="icon-image" src="./assets/logo.png">
     {{ hubName }}
   </span>
   <span class="stats-heading folder" [innerHtml]="pathToVhaFile | folderArrowsPipe"></span>
 
-  <span class="stats-heading title">{{ 'STATISTICS.videoFolder' | translate }}</span>
-  <span class="stats-heading folder" [innerHtml]="videoFolder | folderArrowsPipe"></span>
+  <span class="stats-heading title sources">{{ 'STATISTICS.videoFolder' | translate }}</span>
+
+  <div class="input-sources">
+    <div class="input-sources-row" *ngFor="let item of inputFolders | keyvalue; index as i; trackBy: trackByFn">
+      <span
+        class="stats-heading folder input-folder"
+        [innerHtml]="item.value.path | folderArrowsPipe"
+      ></span>
+      <span
+        *ngIf="(objectKeys(inputFolders).length > 1) && removeFoldersMode"
+        class="delete-input-folder"
+        (click)="deleteInputSource(item.key)"
+        @breadcrumbWordAppear
+      >
+        {{ 'STATISTICS.removeFolder' | translate }}
+      </span>
+      <span
+        *ngIf="!removeFoldersMode && !item.value.watch && sourceFolderService.sourceFolderConnected[item.key]"
+        class="rescan-input-folder"
+        (click)="rescanFolder(item.key)"
+        (mouseup)="animateThis($event)"
+        title="{{ 'STATISTICS.clickToRescan' | translate }}"
+        @breadcrumbWordAppear
+      >
+        {{ 'STATISTICS.rescanFolder' | translate }}
+      </span>
+      <span
+        *ngIf="!sourceFolderService.sourceFolderConnected[item.key] && !removeFoldersMode"
+        class="input-not-connected"
+        (click)="reconnectThisFolder(item.key)"
+        title="{{ 'STATISTICS.clickToConnect' | translate }}"
+        @breadcrumbWordAppear
+      >
+        {{ 'STATISTICS.notConnected' | translate }}
+      </span>
+
+      <span
+        *ngIf="i === 0 && !removeFoldersMode"
+        class="watch-folder-note"
+        title="{{ 'STATISTICS.watchFolderHelpText' | translate }}"
+        @metaAppear
+      >
+        {{ 'STATISTICS.watchFolder' | translate }}
+      </span>
+      <label
+        class="switch"
+        *ngIf="!removeFoldersMode"
+        @metaAppear
+      >
+        <input
+          type="checkbox"
+          [(ngModel)]="item.value.watch"
+          (change)="folderWatchStatusChange(item.key, item.value.watch)"
+        >
+        <span
+          title="{{
+                    item.value.watch
+                    ? ('STATISTICS.currentlyWatching' | translate)
+                    : ('STATISTICS.currentlyNotWatching' | translate)
+                  }}"
+          class="slider round"
+        ></span>
+      </label>
+    </div>
+  </div>
+
+  <span class="edit-mode-container">
+
+    <button
+      class="wizard-button start-import"
+      (click)="addAnotherFolder()"
+      [ngClass]="{ 'button-hidden': !removeFoldersMode }"
+    >
+      {{ 'STATISTICS.addFolderToHub' | translate }}
+    </button>
+
+    <button
+      (click)="removeFoldersMode = !removeFoldersMode"
+      class="wizard-button "
+      [ngClass]="{ 'edit-mode-active': removeFoldersMode }"
+    >
+      {{ 'STATISTICS.editFolders' | translate }}
+    </button>
+
+    <button
+      class="wizard-button"
+      (click)="addMissingThumbnails()"
+      (mouseup)="animateThis($event)"
+      [ngClass]="{ 'button-hidden': !removeFoldersMode }"
+    >
+      {{ 'STATISTICS.addMissingThumbnails' | translate }}
+    </button>
+
+    <button
+      class="wizard-button"
+      (click)="cleanScreenshotFolder()"
+      (mouseup)="animateThis($event)"
+      title="{{ 'STATISTICS.cleanScreenshotsHint' | translate }}"
+      [ngClass]="{ 'button-hidden': !removeFoldersMode }"
+    >
+      {{ 'STATISTICS.cleanScreenshots' | translate }}
+
+      <div *ngIf="showNumberDeleted" class="number-of-thumbs-deleted" @metaAppear>
+        Deleted {{ numberOfScreensDeleted | number }} thumbnails
+      </div>
+
+    </button>
+
+  </span>
+
 
   <div class="table-container">
 
     <table class="stats-table">
       <tr>
-        <td colSpan=2 class="spanBoth">{{ 'STATISTICS.general' | translate }}</td>
+        <td colSpan=2 class="span-both">{{ 'STATISTICS.general' | translate }}</td>
       </tr>
 
       <tr>
@@ -29,7 +135,7 @@
       </tr>
 
       <tr>
-        <td colSpan=2 class="spanBoth" style="padding-top: 68px;">
+        <td colSpan=2 class="span-both" style="padding-top: 68px;">
           {{ 'STATISTICS.settings' | translate }}
         </td>
       </tr>
@@ -44,7 +150,7 @@
         <td class="rightCol">
           {{ screenshotSettings.fixed ? ''                                  : ('STATISTICS.oneEvery' | translate) }}
           {{ screenshotSettings.n }}
-          {{ screenshotSettings.fixed ? ('STATISTICS.perVideo' | translate) : ('STATISTICS.minutes' | translate) }}
+          {{ screenshotSettings.fixed ? ('STATISTICS.perVideo' | translate) : ('STATISTICS.minutes'  | translate) }}
         </td>
       </tr>
 
@@ -76,7 +182,7 @@
 
     <table class="stats-table">
       <tr>
-        <td colSpan=2 class="spanBoth">{{ 'STATISTICS.videoLengths' | translate }}</td>
+        <td colSpan=2 class="span-both">{{ 'STATISTICS.videoLengths' | translate }}</td>
       </tr>
 
       <tr>
@@ -85,22 +191,22 @@
       </tr>
 
       <tr>
-        <td>{{ 'STATISTICS.longest' | translate }}</td>
+        <td>{{ 'STATISTICS.longest'  | translate }}</td>
         <td class="rightCol">{{ longest | lengthPipe : 'folder' }}</td>
       </tr>
 
       <tr>
-        <td>{{ 'STATISTICS.total' | translate : true }}</td>
+        <td>{{ 'STATISTICS.total'    | translate }}</td>
         <td class="rightCol">{{ totalLength | lengthPipe : 'folder' }}</td>
       </tr>
 
       <tr>
-        <td>{{ 'STATISTICS.average' | translate }}</td>
+        <td>{{ 'STATISTICS.average'  | translate }}</td>
         <td class="rightCol">{{ avgLength | lengthPipe : 'folder' }}</td>
       </tr>
 
       <tr>
-        <td colSpan=2 class="spanBoth">{{ 'STATISTICS.fileSizes' | translate }}</td>
+        <td colSpan=2 class="span-both">{{ 'STATISTICS.fileSizes' | translate }}</td>
       </tr>
 
       <tr>
@@ -114,7 +220,7 @@
       </tr>
 
       <tr>
-        <td>{{ 'STATISTICS.total' | translate }}</td>
+        <td>{{ 'STATISTICS.total'   | translate }}</td>
         <td class="rightCol">{{ totalSize | fileSizePipe : true }}</td>
       </tr>
 

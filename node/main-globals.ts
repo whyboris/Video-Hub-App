@@ -1,15 +1,15 @@
-import { ScreenshotSettings } from './interfaces/final-object.interface';
+import { ScreenshotSettings, InputSources } from '../interfaces/final-object.interface';
 
-export const globals: Globals = {
+export const GLOBALS: VhaGlobals = {
   angularApp: null,            // reference used to send messages back to Angular App
-  cancelCurrentImport: false,
   currentlyOpenVhaFile: '',    // OFFICAL DECREE IN NODE WHICH FILE IS CURRENTLY OPEN !!!
   debug: false,
   hubName: 'untitled',         // in case user doesn't name their hub any name
   selectedOutputFolder: '',
-  selectedSourceFolder: '',
-  version: '2.2.3',            // update it and the `package.json` version in tandem before release!
-  vhaFileVersion: 2,
+  selectedSourceFolders: {},
+  settingsPath: '',            // to differentiate between standard & Windows Portable settings location
+  version: '3.0.0',            // update it and the `package.json` version in tandem before release!
+  vhaFileVersion: 3,
   winRef: null,
   screenshotSettings: {
     clipHeight: 144,           // default clip height
@@ -21,15 +21,15 @@ export const globals: Globals = {
   },
 };
 
-interface Globals {
+export interface VhaGlobals {
   angularApp: any;
-  cancelCurrentImport: boolean;
   currentlyOpenVhaFile: string;
   debug: boolean;
   hubName: string;
   screenshotSettings: ScreenshotSettings;
   selectedOutputFolder: string;
-  selectedSourceFolder: string;
+  selectedSourceFolders: InputSources;
+  settingsPath: string;
   version: string;
   vhaFileVersion: number;
   winRef: any;

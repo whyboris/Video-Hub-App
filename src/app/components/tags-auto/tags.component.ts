@@ -42,7 +42,7 @@ export class TagsComponent implements OnInit, OnDestroy {
 
   constructor(
     public tagsService: AutoTagsService,
-    public tagsSaveService: AutoTagsSaveService
+    public autoTagsSaveService: AutoTagsSaveService
   ) {}
 
   ngOnInit(): void {
@@ -68,7 +68,7 @@ export class TagsComponent implements OnInit, OnDestroy {
     if (this.editMode) {
 
       this.tagsService.removeTag(tag);
-      this.tagsSaveService.addRemoveTag(tag);
+      this.autoTagsSaveService.addRemoveTag(tag);
 
       if (tag.includes(' ')) {
         this.twoWordTags = this.tagsService.getTwoWordTags();
@@ -87,7 +87,7 @@ export class TagsComponent implements OnInit, OnDestroy {
       this.currentAdding = '';
 
     } else if (this.tagsService.canWeAdd(tagToAdd)) {
-      this.tagsSaveService.addAddTag(tagToAdd);
+      this.autoTagsSaveService.addAddTag(tagToAdd);
 
       if (this.currentAdding.includes(' ')) {
         this.twoWordTags = this.tagsService.getTwoWordTags();

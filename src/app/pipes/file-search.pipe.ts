@@ -2,7 +2,7 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { ImageElement } from '../../../interfaces/final-object.interface';
 
-type SearchType = 'folder' | 'file' | 'tag';
+type SearchType = 'folder' | 'file' | 'tag' | 'notes';
 
 @Pipe({
   name: 'fileSearchPipe'
@@ -55,6 +55,8 @@ export class FileSearchPipe implements PipeTransform {
             searchString = item.partialPath;
           } else if (searchType === 'file') {
             searchString = item.fileName;
+          } else if (searchType === 'notes') {
+            searchString = item.notes || '';
           } else if (searchType === 'tag') {
             searchString = '';
             if (manualTags && item.tags) {

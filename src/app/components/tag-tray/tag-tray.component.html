@@ -17,18 +17,18 @@
       {{ 'TAGS.presentTags' | translate }}:
     </span>
     <button
-      (click)="settingsButtons['tagFrequencySort'].toggled = !settingsButtons['tagFrequencySort'].toggled"
+      (click)="appState.sortTagsByFrequency = !appState.sortTagsByFrequency"
       class="tag-sort-by-toggle"
     >
-      {{ (settingsButtons['tagFrequencySort'].toggled ? 'TAGS.sortByFrequency'
-                                                      : 'TAGS.sortAlphabetical') | translate }}
+      {{ (appState.sortTagsByFrequency ? 'TAGS.sortByFrequency'
+                                       : 'TAGS.sortAlphabetical') | translate }}
     </button>
     <button
       (click)="manualTagShowFrequency = !manualTagShowFrequency"
       class="show-frequency"
     >
       {{ (manualTagShowFrequency ? 'TAGS.showingFrequency'
-                                : 'TAGS.hidingFrequency') | translate }}
+                                 : 'TAGS.hidingFrequency') | translate }}
     </button>
     <input
       (keyup.esc)="manualTagFilterString = ''"
@@ -47,6 +47,12 @@
       <span class="manual-tag-tray-label" style="line-height: 24px">
         {{ 'TAGS.clickTagToAdd' | translate }}
       </span>
+      <button
+      class="wizard-button wizard-button-small"
+      (click)="selectAll.emit()"
+    >
+      {{ 'TAGS.selectAllButton' | translate }}
+    </button>
     </div>
   </ng-template>
 
@@ -62,10 +68,9 @@
     class="all-the-tags"
     [draggable]="true"
     [displayFrequency]="manualTagShowFrequency"
-    [tags]="manualTagsService.tagsList | manualTagSortPipe
-                                       : manualTagFilterString
-                                       : settingsButtons['tagFrequencySort'].toggled
-                                       : manualTagsService.pipeToggleHack"
+    [tags]="manualTagsService.tagsList | manualTagSortPipe : manualTagFilterString
+                                                           : appState.sortTagsByFrequency
+                                                           : manualTagsService.pipeToggleHack"
     (tagClicked)="handleTagWordClicked.emit($event)"
   ></app-view-tags-component>
 </div>

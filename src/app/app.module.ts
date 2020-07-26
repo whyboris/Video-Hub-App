@@ -22,7 +22,9 @@ import { HomeComponent } from './components/home.component';
 import { ManualTagsService } from './components/tags-manual/manual-tags.service';
 import { PipeSideEffectService } from './pipes/pipe-side-effect.service';
 import { ResolutionFilterService } from './pipes/resolution-filter.service';
+import { ShortcutsService } from './components/shortcuts/shortcuts.service';
 import { SimilarityService } from './pipes/similarity.service';
+import { SourceFolderService } from './components/statistics/source-folder.service';
 import { StarFilterService } from './pipes/star-filter.service';
 import { WordFrequencyService } from './pipes/word-frequency.service';
 
@@ -173,8 +175,10 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     ManualTagsService,
     PipeSideEffectService,
     ResolutionFilterService,
+    ShortcutsService,
     SimilarityService,
     SortingPipe,
+    SourceFolderService,
     StarFilterService,
     WordFrequencyService,
   ],

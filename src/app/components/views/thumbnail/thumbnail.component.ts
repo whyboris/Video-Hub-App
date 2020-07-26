@@ -5,7 +5,7 @@ import { FilePathService } from '../file-path.service';
 import { metaAppear, textAppear } from '../../../common/animations';
 
 import { ImageElement } from '../../../../../interfaces/final-object.interface';
-import { VideoClickEmit, RightClickEmit } from '../../../../../interfaces/shared-interfaces';
+import { VideoClickEmit, RightClickEmit, VideoClickSimilarEmit } from '../../../../../interfaces/shared-interfaces';
 
 @Component({
   selector: 'app-thumbnail',
@@ -26,10 +26,12 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
   @Output() rightClick = new EventEmitter<RightClickEmit>();
   @Output() sheetClick = new EventEmitter<any>(); // does not emit data of any kind
   @Output() videoClick = new EventEmitter<VideoClickEmit>();
+  @Output() videoClickSimilar = new EventEmitter<VideoClickSimilarEmit>();
 
   @Input() video: ImageElement;
 
   @Input() compactView: boolean;
+  @Input() connected: boolean;
   @Input() darkMode: boolean;
   @Input() elHeight: number;
   @Input() elWidth: number;
