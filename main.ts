@@ -396,6 +396,8 @@ function setGlobalsFromVhaFile(vhaFileContents: FinalObject) {
 // ========================================================================================
 
 const pathToAppData = app.getPath('appData');
+const pathToPortableApp = process.env.PORTABLE_EXECUTABLE_DIR;
+const settingsPath = pathToPortableApp ? pathToPortableApp : path.join(pathToAppData, 'video-hub-app-2');
 
 /**
  * Just started -- hello -- send over the settings or open wizard
@@ -408,7 +410,7 @@ ipc.on('just-started', (event) => {
     tellElectronDarkModeChange(systemPreferences.getEffectiveAppearance());
   }
 
-  fs.readFile(path.join(pathToAppData, 'video-hub-app-2', 'settings.json'), (err, data) => {
+  fs.readFile(path.join(settingsPath, 'settings.json'), (err, data) => {
     if (err) {
       win.setBounds({x: 0, y: 0, width: screenWidth, height: screenHeight});
       event.sender.send('pleaseOpenWizard', true); // firstRun = true!
@@ -499,7 +501,7 @@ ipc.on('please-create-playlist', (event, playlist: ImageElement[]) => {
     return element.cleanName !== '*FOLDER*';
   });
 
-  const savePath: string = path.join(pathToAppData, 'video-hub-app-2', 'temp.pls');
+  const savePath: string = path.join(settingsPath, 'temp.pls');
 
   if (cleanPlaylist.length) {
     createDotPlsFile(savePath, cleanPlaylist, () => {
@@ -633,13 +635,13 @@ ipc.on('close-window', (event, settingsToSave: SettingsObject, savableProperties
   const json = JSON.stringify(settingsToSave);
 
   try {
-    fs.statSync(path.join(pathToAppData, 'video-hub-app-2'));
+    fs.statSync(settingsPath);
   } catch (e) {
-    fs.mkdirSync(path.join(pathToAppData, 'video-hub-app-2'));
+    fs.mkdirSync(settingsPath);
   }
 
   // TODO -- catch bug if user closes before selecting the output folder ?!??
-  fs.writeFile(path.join(pathToAppData, 'video-hub-app-2', 'settings.json'), json, 'utf8', () => {
+  fs.writeFile(path.join(settingsPath, 'settings.json'), json, 'utf8', () => {
     if (savableProperties !== null) {
       lastSavedFinalObject.addTags = savableProperties.addTags;
       lastSavedFinalObject.removeTags = savableProperties.removeTags;
