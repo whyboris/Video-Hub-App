@@ -133,6 +133,7 @@
     [showAutoFolderTags]="settingsButtons['autoFolderTags'].toggled"
     [showManualTags]="settingsButtons['manualTags'].toggled"
     [showMeta]="settingsButtons['showMoreInfo'].toggled"
+    [showVideoNotes]="settingsButtons['showVideoNotes'].toggled"
   >
   </app-thumbnail-sheet>
 
@@ -650,6 +651,8 @@
                                   : settingsButtons['autoFileTags'].toggled
                                   : settingsButtons['autoFolderTags'].toggled
 
+                | fileSearchPipe: filters[8].array : filters[8].bool : false : 'notes' : false
+
                 | magicSearchPipe: magicSearchString
 
                 | regexSearchPipe: regexSearchString
@@ -872,6 +875,7 @@
           [showAutoFolderTags]="settingsButtons['autoFolderTags'].toggled"
           [showManualTags]="settingsButtons['manualTags'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
+          [showVideoNotes]="settingsButtons['showVideoNotes'].toggled"
 
           [ngStyle]="{ display: appState.currentView === 'showDetails' ? 'block' : 'inline-block' }"
         ></app-details-item>

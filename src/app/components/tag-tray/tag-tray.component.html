@@ -62,10 +62,9 @@
     class="all-the-tags"
     [draggable]="true"
     [displayFrequency]="manualTagShowFrequency"
-    [tags]="manualTagsService.tagsList | manualTagSortPipe
-                                       : manualTagFilterString
-                                       : appState.sortTagsByFrequency
-                                       : manualTagsService.pipeToggleHack"
+    [tags]="manualTagsService.tagsList | manualTagSortPipe : manualTagFilterString
+                                                           : appState.sortTagsByFrequency
+                                                           : manualTagsService.pipeToggleHack"
     (tagClicked)="handleTagWordClicked.emit($event)"
   ></app-view-tags-component>
 </div>

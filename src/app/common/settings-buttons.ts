@@ -50,6 +50,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'showTagTray'
  | 'showTags'
  | 'showThumbnails'
+ | 'showVideoNotes'
  | 'shuffleGalleryNow'
  | 'sizeFilter'
  | 'sortOptionAlphabetical'
@@ -68,7 +69,8 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'tagExclusion'
  | 'tagIntersection'
  | 'tagUnion'
- | 'thumbAutoAdvance';
+ | 'thumbAutoAdvance'
+ | 'videoNotes';
 
 // Add `SettingsButtons` items here so they show up in the buttons ribbon and in the settings
 // Each array separates buttons into their own button groups visually
@@ -85,6 +87,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'tagUnion',
     'tagIntersection',
     'tagExclusion',
+    'videoNotes',
     'magic',
     'regex',
     'fuzzy',
@@ -141,6 +144,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
   [ // 8
     'manualTags',
     'showTagTray',
+    'showVideoNotes',
   ],
   [ // 9
     'hoverScrub',
@@ -343,6 +347,13 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-video-plus',
     moreInfo: 'BUTTONS.fileUnionMoreInfo',
     title: 'BUTTONS.fileUnionHint',
+    toggled: false
+  },
+  'videoNotes': {
+    description: 'BUTTONS.videoNotesDescription',
+    hidden: true,
+    iconName: 'icon-toggle-video-notes',
+    title: 'BUTTONS.videoNotesHint',
     toggled: false
   },
   'flatIcons': {
@@ -743,6 +754,13 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-toggle-auto-scrub',
     moreInfo: 'BUTTONS.thumbAutoAdvanceMoreInfo',
     title: 'BUTTONS.thumbAutoAdvanceHint',
+    toggled: false
+  },
+  'showVideoNotes': {
+    description: 'BUTTONS.showVideoNotesDescription',
+    hidden: true,
+    iconName: 'icon-toggle-video-notes',
+    title: 'BUTTONS.showVideoNotesHint',
     toggled: false
   }
 }

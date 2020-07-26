@@ -102,14 +102,35 @@
 
 .view-tags-holder {
   @include scrollBar;
+  box-sizing: border-box;
   display: block;
-  height: 87px;
+  height: 60px;
   overflow-y: auto;
-  padding-top: 10px;
+  padding-bottom: 2px;
 }
 
 .times-played {
   display: inline-block;
   margin: 6px 0 0 6px;
   vertical-align: top;
+}
+
+textarea {
+  @include scrollBar;
+  background: transparent;
+  border: 0;
+  border-left: 1px solid $gray-30;
+  box-sizing: border-box;
+  font-family: sans-serif;
+  font-size: 12px;
+  margin-top: 5px;
+  outline: none;
+  padding: 0 5px;
+  resize: none;
+  width: 100%;
+}
+
+.notes-dark-mode {
+  border-left: 1px solid $gray-70;
+  color: white;
 }

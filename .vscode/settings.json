@@ -1,9 +1,11 @@
 {
   "files.exclude": {
-    "*.js": true,
-    "**/*.js": true,
     "**/dist": true,
     "**/node_modules": true,
     "**/release": true,
+    "interfaces/*.js": true,
+    "main.js": true,
+    "node/*.js": true,
+    "src/**/*.js": true,
   }
 }

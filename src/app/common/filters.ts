@@ -1,9 +1,14 @@
 import { Colors } from './colors';
 
-// array for `fileIntersection`, `fileUnion`, `folderIntersection`, `folderUnion`, and `exclude`
-// string = search string
-// array = array of filters
-// bool = dummy to flip to trigger pipe
+interface FilterObject {
+  uniqueKey: string;
+  string: string;  // search string
+  array: string[]; // container for all search strings
+  bool: boolean;   // dummy to flip the trigger pipe
+  placeholder: string;
+  conjunction: string;
+  color: string;
+}
 
 export const FilterKeyNames: string[] = [
   'folderUnion',
@@ -14,17 +19,8 @@ export const FilterKeyNames: string[] = [
   'tagUnion',
   'tagIntersection',
   'tagExclusion',
+  'videoNotes',
 ];
-
-interface FilterObject {
-  uniqueKey: string;
-  string: string;
-  array: string[]; // container for all search strings
-  bool: boolean;
-  placeholder: string;
-  conjunction: string;
-  color: string;
-}
 
 export let Filters: FilterObject[] = [
   {
@@ -91,6 +87,14 @@ export let Filters: FilterObject[] = [
     placeholder: 'SIDEBAR.tagExclusion',
     conjunction: 'SIDEBAR.or',
     color: Colors.tagExclusion
+  }, {
+    uniqueKey: 'videoNotes',
+    string: '',
+    array: [],
+    bool: true,
+    placeholder: 'SIDEBAR.videoNotes',
+    conjunction: 'SIDEBAR.and',
+    color: Colors.videoNotes
   }
 ];
 
@@ -103,4 +107,5 @@ export const filterKeyToIndex = {
   tagUnion: 5,
   tagIntersection: 6,
   tagExclusion: 7,
+  videoNotes: 8,
 };
