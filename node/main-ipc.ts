@@ -139,7 +139,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
       return element.cleanName !== '*FOLDER*';
     });
 
-    const savePath: string = path.join(pathToAppData, 'video-hub-app-2', 'temp.pls');
+    const savePath: string = path.join(GLOBALS.settingsPath, 'temp.pls');
 
     if (cleanPlaylist.length) {
       createDotPlsFile(savePath, cleanPlaylist, sourceFolderMap, () => {
@@ -349,7 +349,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
     }
 
     // TODO -- catch bug if user closes before selecting the output folder ?!??
-    fs.writeFile(path.join(pathToAppData, 'video-hub-app-2', 'settings.json'), json, 'utf8', () => {
+    fs.writeFile(path.join(GLOBALS.settingsPath, 'settings.json'), json, 'utf8', () => {
       if (finalObjectToSave !== null) {
 
         writeVhaFileToDisk(finalObjectToSave, GLOBALS.currentlyOpenVhaFile, () => {

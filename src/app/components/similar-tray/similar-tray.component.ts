@@ -19,7 +19,7 @@ export class SimilarTrayComponent {
   @Output() rightMouseClicked = new EventEmitter<RightClickEmit>();
 
   @Input() appState;
-  @Input() currentPlayingFile;
+  @Input() currentClickedItemName;
   @Input() finalArray;
   @Input() previewHeightRelated;
   @Input() previewWidthRelated;

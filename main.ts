@@ -27,6 +27,9 @@ import { stopThumbExtraction } from './node/main-extract-async';
 
 // Variables
 const pathToAppData = app.getPath('appData');
+const pathToPortableApp = process.env.PORTABLE_EXECUTABLE_DIR;
+GLOBALS.settingsPath = pathToPortableApp ? pathToPortableApp : path.join(pathToAppData, 'video-hub-app-2');
+
 const codeRunningOnMac: boolean = process.platform === 'darwin';
 const English = require('./i18n/en.json');
 let systemMessages = English.SYSTEM; // Set English as default; update via `system-messages-updated`
@@ -270,8 +273,6 @@ function openThisDamnFile(pathToVhaFile: string) {
 
 setUpIpcMessages(ipcMain, win, pathToAppData, systemMessages);
 
-// -------------------------------------------------------------------------------------------------
-
 /**
  * Once Angular loads it sends over the `ready` status
  * Load up the settings.json and send settings over to Angular
@@ -287,7 +288,7 @@ ipcMain.on('just-started', (event) => {
   // Reference: https://github.com/electron/electron/blob/master/docs/api/locales.md
   const locale: string = app.getLocale();
 
-  fs.readFile(path.join(pathToAppData, 'video-hub-app-2', 'settings.json'), (err, data) => {
+  fs.readFile(path.join(GLOBALS.settingsPath, 'settings.json'), (err, data) => {
     if (err) {
       win.setBounds({ x: 0, y: 0, width: screenWidth, height: screenHeight });
       event.sender.send('set-language-based-off-system-locale', locale);

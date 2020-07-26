@@ -724,9 +724,11 @@
       <ng-container *ngIf="appState.currentView === 'showThumbnails'">
         <app-thumbnail
           *ngFor="let item of scroll.viewPortItems"
-
-          (videoClick)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          
+          (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
           (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
+          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
 
           (sheetClick)="this.openThumbnailSheet(item)"
           (drop)="droppedSomethingOverVideo($event, item)"
@@ -766,8 +768,10 @@
         <app-filmstrip-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (videoClick)="handleClick($event, item)"
-          (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
+          (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
+          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
 
           (drop)="droppedSomethingOverVideo($event, item)"
 
@@ -794,8 +798,10 @@
         <app-full-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (videoClick)="handleClick($event, item)"
-          (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
+          (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
+          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
 
           (drop)="droppedSomethingOverVideo($event, item)"
 
@@ -821,8 +827,10 @@
         <app-file-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (click)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick({ mouseEvent: $event }, item)"
-          (contextmenu)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event, item)"
+          (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
+          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
 
           (drop)="droppedSomethingOverVideo($event, item)"
 
@@ -842,8 +850,10 @@
         <app-details-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (videoClick)="handleClick($event, item)"
-          (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
+          (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
+          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
 
           (editFinalArrayStars)="editFinalArrayStars($event)"
           (editFinalArrayTag)="editFinalArrayTag($event)"
@@ -887,8 +897,10 @@
         <app-clip-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (videoClick)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
-          (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
+          (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
+          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
 
           (sheetClick)="this.openThumbnailSheet(item)"
 
@@ -942,7 +954,7 @@
   (rightMouseClicked)="rightMouseClicked($event.mouseEvent, $event.item)"
 
   [appState]="appState"
-  [currentPlayingFile]="currentPlayingFile"
+  [currentClickedItemName]="currentClickedItemName"
   [finalArray]="finalArray"
   [previewHeightRelated]="previewHeightRelated"
   [previewWidthRelated]="previewWidthRelated"
@@ -953,6 +965,7 @@
 <app-tag-tray
   (closeTagsTray)="closeTagsTray()"
   (toggleBatchTaggingMode)="toggleBatchTaggingMode()"
+  (selectAll)="selectAllVisible()"
   (handleTagWordClicked)="handleTagWordClicked($event.tag.name, $event.event)"
   [appState]="appState"
   [batchTaggingMode]="batchTaggingMode"

@@ -7,6 +7,7 @@ export const GLOBALS: VhaGlobals = {
   hubName: 'untitled',         // in case user doesn't name their hub any name
   selectedOutputFolder: '',
   selectedSourceFolders: {},
+  settingsPath: '',            // to differentiate between standard & Windows Portable settings location
   version: '3.0.0',            // update it and the `package.json` version in tandem before release!
   vhaFileVersion: 3,
   winRef: null,
@@ -28,6 +29,7 @@ export interface VhaGlobals {
   screenshotSettings: ScreenshotSettings;
   selectedOutputFolder: string;
   selectedSourceFolders: InputSources;
+  settingsPath: string;
   version: string;
   vhaFileVersion: number;
   winRef: any;

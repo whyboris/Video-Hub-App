@@ -34,6 +34,8 @@ See [issues](https://github.com/whyboris/Video-Hub-App/issues) for what is in pr
 
 ## Development
 
+⚠ The repository is usually ahead of the publicly [released version](https://github.com/whyboris/Video-Hub-App/releases). Version `3.0.0` code is already on the `master` branch; while it is 🚧 WIP, it has bugs in it.
+
 How to start:
 
 - `npm install` to install
