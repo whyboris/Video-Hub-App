@@ -369,6 +369,7 @@
     "batchModeButton": "Batch mode",
     "clickTagToAdd": "Click any tag in the tray to add the tag to all selected videos",
     "clickVideoToSelect": "Click videos to select",
+    "selectAllButton": "Select all visible",
     "closeTagTray": "Close tag tray",
     "delete": "delete mode",
     "filterList": "Containing",

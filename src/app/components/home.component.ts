@@ -2306,6 +2306,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
+   * Select all visible videos for batch tagging
+   */
+  selectAllVisible(): void {
+    this.pipeSideEffectService.selectAll();
+  }
+
+  /**
    * Check whether new version of the app is available
    */
   checkForNewVersion(): void {

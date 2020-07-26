@@ -29,6 +29,15 @@ export class PipeSideEffectService {
   }
 
   /**
+   * Set all displayed videos to selected
+   */
+  selectAll(): void {
+    this.galleryShowing.forEach((element: ImageElement) => {
+      element.selected = true;
+    });
+  }
+
+  /**
    * If pipe has an
    * @param error
    */
