@@ -31,6 +31,7 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
   @Input() video: ImageElement;
 
   @Input() compactView: boolean;
+  @Input() connected: boolean;
   @Input() darkMode: boolean;
   @Input() elHeight: number;
   @Input() elWidth: number;

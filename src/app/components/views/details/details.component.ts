@@ -54,11 +54,12 @@ export class DetailsComponent implements OnInit {
   @Input() largerFont: boolean;
   @Input() returnToFirstScreenshot: boolean;
   @Input() selectedSourceFolder: string;
-  @Input() showMeta: boolean;
-  @Input() star: StarRating;
-  @Input() showManualTags: boolean;
   @Input() showAutoFileTags: boolean;
   @Input() showAutoFolderTags: boolean;
+  @Input() showManualTags: boolean;
+  @Input() showMeta: boolean;
+  @Input() showVideoNotes: boolean;
+  @Input() star: StarRating;
 
   percentOffset: number = 0;
   firstFilePath = '';

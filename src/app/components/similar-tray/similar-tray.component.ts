@@ -1,6 +1,7 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { modalAnimation, similarResultsText } from '../../common/animations';
 import { RightClickEmit } from '../../../../interfaces/shared-interfaces';
+import { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
   selector: 'app-similar-tray',
@@ -22,7 +23,7 @@ export class SimilarTrayComponent {
   @Input() finalArray;
   @Input() previewHeightRelated;
   @Input() previewWidthRelated;
-  @Input() settingsButtons;
+  @Input() settingsButtons: SettingsButtonsType;
 
   constructor() { }
 

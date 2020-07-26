@@ -9,9 +9,9 @@
   <ul>
     <li
       *ngFor="let historyItem of vhaFileHistory; index as i"
-      [hidden]="i === 0"
       (click)="openFromHistory.emit(i)"
       class="recently-opened-item"
+      [ngClass]="{ 'current-open': i === 0 }"
     >
       {{ historyItem.hubName }}
     </li>

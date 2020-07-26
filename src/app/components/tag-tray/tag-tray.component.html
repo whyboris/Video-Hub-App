@@ -17,18 +17,18 @@
       {{ 'TAGS.presentTags' | translate }}:
     </span>
     <button
-      (click)="settingsButtons['tagFrequencySort'].toggled = !settingsButtons['tagFrequencySort'].toggled"
+      (click)="appState.sortTagsByFrequency = !appState.sortTagsByFrequency"
       class="tag-sort-by-toggle"
     >
-      {{ (settingsButtons['tagFrequencySort'].toggled ? 'TAGS.sortByFrequency'
-                                                      : 'TAGS.sortAlphabetical') | translate }}
+      {{ (appState.sortTagsByFrequency ? 'TAGS.sortByFrequency'
+                                       : 'TAGS.sortAlphabetical') | translate }}
     </button>
     <button
       (click)="manualTagShowFrequency = !manualTagShowFrequency"
       class="show-frequency"
     >
       {{ (manualTagShowFrequency ? 'TAGS.showingFrequency'
-                                : 'TAGS.hidingFrequency') | translate }}
+                                 : 'TAGS.hidingFrequency') | translate }}
     </button>
     <input
       (keyup.esc)="manualTagFilterString = ''"
@@ -68,10 +68,9 @@
     class="all-the-tags"
     [draggable]="true"
     [displayFrequency]="manualTagShowFrequency"
-    [tags]="manualTagsService.tagsList | manualTagSortPipe
-                                       : manualTagFilterString
-                                       : settingsButtons['tagFrequencySort'].toggled
-                                       : manualTagsService.pipeToggleHack"
+    [tags]="manualTagsService.tagsList | manualTagSortPipe : manualTagFilterString
+                                                           : appState.sortTagsByFrequency
+                                                           : manualTagsService.pipeToggleHack"
     (tagClicked)="handleTagWordClicked.emit($event)"
   ></app-view-tags-component>
 </div>

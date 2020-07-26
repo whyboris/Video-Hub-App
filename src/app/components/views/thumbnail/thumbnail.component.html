@@ -135,6 +135,7 @@
     ></app-icon>
     <span *ngIf="showMeta" class="time">{{ video.durationDisplay }}</span>
     <span *ngIf="showMeta" class="rez">{{ video.resolution }}</span>
+    <span *ngIf="!connected" class="not-connected"></span>
   </div>
   <!--
     .sheet-icon needs to be the next sibling of .video-box for hover to work

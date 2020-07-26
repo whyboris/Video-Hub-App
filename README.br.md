@@ -10,7 +10,7 @@ Esse programa é disponível por US$ 3.50 pelo [videohubapp.com](https://videohu
 
 O dinheiro de cada venda é destinado a Fundação Contra a Malaria ([Against Malaria Foundation](https://www.againstmalaria.com/).)
 
-![Video Hub App](https://videohubapp.com/images/4.jpg)
+![video-hub-app](https://user-images.githubusercontent.com/17264277/82097107-3ed91700-96d0-11ea-8679-87fa3e07cd0b.jpg)
 
 ## Sobre
 
@@ -32,16 +32,7 @@ Uma lista das próximas mudanças está [listada no site oficial](https://videoh
 
 ## Desenvolvimento
 
-As principais dependências utilizadas:
-
-| Library     | Version | Date        | Comment |
-| -------     | ------- | ----        | ------- |
-| Angular     | v9.0.1  | February 2020 |         |
-| Angular-CLI | v9.0.2  | February 2020 |         |
-| Electron    | v8.0.1  | February 2020 | (internally uses Node v12.13.0 and Chromium 80) |
-| Electron Builder | v22.3.2 | February 2020 |     |
-
-O programa funcionar com as últimas versões do Node e NPM (Junho de 2019). Note que você vai precisar instalar o [Angular CLI](https://cli.angular.io) para rodar o projeto (`npm install -g @angular/cli`).
+[click](https://github.com/whyboris/Video-Hub-App#development)
 
 ## Obrigado
 
@@ -51,9 +42,13 @@ Esse programa não existiria sem o grande trabalho de outras pessoas:
  - [Electron](https://github.com/electron/electron)
  - [FFmpeg](https://www.ffmpeg.org/)
  - [angular-electron](https://github.com/maximegris/angular-electron)
- - [angular2-virtual-scroll](https://www.npmjs.com/package/angular2-virtual-scroll)
+ - [ngx-virtual-scroller](https://github.com/rintoj/ngx-virtual-scroller)
  - [@ffmpeg-installer/ffmpeg](https://www.npmjs.com/package/@ffmpeg-installer/ffmpeg)
  - [@ffprobe-installer/ffprobe](https://www.npmjs.com/package/@ffprobe-installer/ffprobe)
  - [ngx-translate](https://github.com/ngx-translate/core)
+ - [async](https://github.com/caolan/async)
+ - [chokidar](https://github.com/paulmillr/chokidar)
+ - [trash](https://github.com/sindresorhus/trash)
+ - [Fuse.js](https://github.com/krisk/Fuse)
 
 Desde que se tornou Open Source, esse programa foi melhorado graças as contribuições de [cal2195](https://github.com/cal2195)

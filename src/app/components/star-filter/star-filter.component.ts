@@ -1,4 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
   selector: 'app-star-filter',
@@ -12,7 +13,7 @@ export class StarFilterComponent {
 
   @Output() newStarFilterSelected = new EventEmitter<any>();
 
-  @Input() settingsButtons;
+  @Input() settingsButtons: SettingsButtonsType;
   @Input() starLeftBound;
   @Input() starRatingFreqArr;
   @Input() starRatingNames;

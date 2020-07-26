@@ -1,40 +1,42 @@
 <span style="display: block; margin-bottom: 15px;">
-  {{ 'SHORTCUTS.hold' | translate }}
-  <em class="shortcut-key modifier-key">Ctrl</em>
+  {{ 'SHORTCUTS.hold' | translate }}<em class="shortcut-key modifier-key">Ctrl</em>
   <ng-container *ngIf="macVersion">
-    {{ 'SHORTCUTS.or' | translate }} <em class="shortcut-key modifier-key">Command</em>
+    {{ 'SHORTCUTS.or' | translate }}<em class="shortcut-key modifier-key">Command</em>
   </ng-container>
   {{ 'SHORTCUTS.andClickAnyFile' | translate }}
 </span>
 
 <span>{{ 'SHORTCUTS.hold' | translate }}<em class="shortcut-key modifier-key">Ctrl</em>
   <ng-container *ngIf="macVersion">
-    {{ 'SHORTCUTS.or' | translate }} <em class="shortcut-key modifier-key">Command</em>
+    {{ 'SHORTCUTS.or' | translate }}<em class="shortcut-key modifier-key">Command</em>
   </ng-container>
     {{ 'SHORTCUTS.andPress' | translate }}:
 </span>
 
-<ul class="without-numbers">
-  <li class="listElement"><em class="shortcut-key">1</em> - {{ 'SHORTCUTS.showThumb' | translate }}</li>
-  <li class="listElement"><em class="shortcut-key">2</em> - {{ 'SHORTCUTS.showFilm' | translate }}</li>
-  <li class="listElement"><em class="shortcut-key">3</em> - {{ 'SHORTCUTS.showFull' | translate }}</li>
-  <li class="listElement"><em class="shortcut-key">4</em> - {{ 'SHORTCUTS.showDetail' | translate }}</li>
-  <li class="listElement"><em class="shortcut-key">5</em> - {{ 'SHORTCUTS.showDetail2' | translate }}</li>
-  <li class="listElement"><em class="shortcut-key">6</em> - {{ 'SHORTCUTS.showFile' | translate }}</li>
-  <li class="listElement"><em class="shortcut-key">7</em> - {{ 'SHORTCUTS.showClip' | translate }}</li>
-  <li class="listElement"><em class="shortcut-key">f</em> - {{ 'SHORTCUTS.focusOnFile' | translate }}</li>
-  <li class="listElement"><em class="shortcut-key">g</em> - {{ 'SHORTCUTS.focusOnMagic' | translate }}</li>
-  <li class="listElement"><em class="shortcut-key">r</em> - {{ 'SHORTCUTS.focusOnFuzzy' | translate }}</li>
-  <li class="listElement"><em class="shortcut-key">z</em> - {{ 'SHORTCUTS.makeSmaller' | translate }}</li>
-  <li class="listElement"><em class="shortcut-key">x</em> - {{ 'SHORTCUTS.makeLarger' | translate }}</li>
-  <li class="listElement"><em class="shortcut-key">s</em> - {{ 'SHORTCUTS.shuffle' | translate }}</li>
-  <li class="listElement"><em class="shortcut-key">o</em> - {{ 'SHORTCUTS.toggleSettings' | translate }}</li>
-  <li class="listElement"><em class="shortcut-key">d</em> - {{ 'SHORTCUTS.toggleDarkMode' | translate }}</li>
-  <li class="listElement"><em class="shortcut-key">t</em> - {{ 'SHORTCUTS.toggleAutoTags' | translate }}</li>
-  <li class="listElement"><em class="shortcut-key">i</em> - {{ 'SHORTCUTS.toggleFileName' | translate }}</li>
-  <li class="listElement"><em class="shortcut-key">b</em> - {{ 'SHORTCUTS.toggleSearchBar' | translate }}</li>
-  <li class="listElement"><em class="shortcut-key">h</em> - {{ 'SHORTCUTS.toggleMinimalMode' | translate }}</li>
-  <li class="listElement"><em class="shortcut-key">n</em> - {{ 'SHORTCUTS.toggleWizard' | translate }}</li>
-  <li class="listElement"><em class="shortcut-key">w</em> - {{ 'SHORTCUTS.quit' | translate }}</li>
-  <li class="listElement"><em class="shortcut-key">q</em> - {{ 'SHORTCUTS.quit' | translate }}</li>
-</ul>
+<div class="shortcut-container">
+
+  <div
+    class="shortcut-item"
+    *ngFor="let item of shortcutsInOrder"
+    [ngClass]="{
+        'space-after':     item === 'showClips'
+                        || item === 'fuzzySearch'
+                        || item === 'shuffleGalleryNow'
+                        || item === 'startWizard'
+      }"
+  >
+    <em
+      class="shortcut-key clickable"
+      (click)="changeThisShortcut(item)"
+      [ngClass]="{
+          'selected-for-change': item === shortcutToChange,
+          'empty': !shortcutService.actionToKeyMap.get(item)
+        }"
+    >{{ shortcutService.actionToKeyMap.get(item) || '-' }}</em> -
+    {{ 'SHORTCUTS.' + item | translate }}
+  </div>
+
+  <!-- System reserved -->
+  <div class="shortcut-item"><em class="shortcut-key">w</em> - {{ 'SHORTCUTS.quit' | translate }}</div>
+  <div class="shortcut-item"><em class="shortcut-key">q</em> - {{ 'SHORTCUTS.quit' | translate }}</div>
+</div>
