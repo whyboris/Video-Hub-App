@@ -863,7 +863,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       const execPath: string = this.appState.preferredVideoPlayer;
 
-      const finalArgs: string = this.getVideoPlayerArgs(execPath, time) + (this.appState.videoPlayerArgs ? ' ' + this.appState.videoPlayerArgs : '');
+      const finalArgs: string = `${this.getVideoPlayerArgs(execPath, time)} ${this.appState.videoPlayerArgs}`;
       this.electronService.ipcRenderer.send('open-media-file-at-timestamp', execPath, fullPath, finalArgs);
     } else {
       this.electronService.ipcRenderer.send('open-media-file', fullPath);
@@ -877,7 +877,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   public getVideoPlayerArgs(playerPath: string, time: number): string {
     // if user doesn't want to open at timestamp, don't!
-    let args: string;
+    let args: string = '';
 
     if (this.settingsButtons['openAtTimestamp'].toggled) {
       if (playerPath.toLowerCase().includes('vlc')) {

@@ -94,9 +94,9 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
    * Open a particular video file clicked inside Angular
    */
   ipc.on('open-media-file-at-timestamp', (event, executablePath, fullFilePath: string, args: string) => {
-    const allArgs: string = path.normalize(fullFilePath) + (args ? ' ' + args : '');
-    console.log(allArgs);
-    exec(path.normalize(executablePath) + ' ' + allArgs);
+    const cmdline: string = `"${path.normalize(executablePath)}" "${path.normalize(fullFilePath)}" ${args}`;
+    console.log(cmdline);
+    exec(cmdline);
   });
 
   /**
