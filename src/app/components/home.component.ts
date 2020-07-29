@@ -931,7 +931,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       const execPath: string = this.appState.preferredVideoPlayer;
 
-      this.electronService.ipcRenderer.send('open-media-file-at-timestamp', execPath, fullPath, this.getVideoPlayerArgs(execPath, time));
+      const finalArgs: string = this.getVideoPlayerArgs(execPath, time) + (this.appState.videoPlayerArgs ? ' ' + this.appState.videoPlayerArgs : '');
+      this.electronService.ipcRenderer.send('open-media-file-at-timestamp', execPath, fullPath, finalArgs);
     } else {
       this.electronService.ipcRenderer.send('open-media-file', fullPath);
     }
@@ -942,27 +943,23 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param playerPath  full path to user's preferred video player
    * @param time        time in seconds
    */
-  public getVideoPlayerArgs(playerPath: string, time: number): string[] {
+  public getVideoPlayerArgs(playerPath: string, time: number): string {
     // if user doesn't want to open at timestamp, don't!
-    if (!this.settingsButtons['openAtTimestamp'].toggled) {
-      return [];
+    let args: string;
+
+    if (this.settingsButtons['openAtTimestamp'].toggled) {
+      if (playerPath.toLowerCase().includes('vlc')) {
+        args = '--start-time=' + time.toString();    // in seconds
+
+      } else if (playerPath.toLowerCase().includes('mpc')) {
+        args = '/start ' + (1000 * time).toString(); // in milliseconds
+
+      } else if (playerPath.toLowerCase().includes('pot')) {
+        args = '/seek=' + time.toString();           // in seconds
+      }
     }
 
-    // else, figure out the correct command line flags
-    const argz: string[] = [];
-
-    if (playerPath.toLowerCase().includes('vlc')) {
-      argz.push('--start-time=' + time.toString()); // in seconds
-
-    } else if (playerPath.toLowerCase().includes('mpc')) {
-      argz.push('/start');
-      argz.push((1000 * time).toString());          // in milliseconds
-
-    } else if (playerPath.toLowerCase().includes('pot')) {
-      argz.push('/seek=' + time.toString());        // in seconds
-    }
-
-    return argz;
+    return args;
   }
 
   public openOnlineHelp(): void {
