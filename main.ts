@@ -260,6 +260,8 @@ function openThisDamnFile(pathToVhaFile: string) {
       GLOBALS.hubName = finalObject.hubName;
       GLOBALS.screenshotSettings = finalObject.screenshotSettings;
       upgradeToVersion3(finalObject);
+      console.log('setting inputDirs');
+      console.log(finalObject.inputDirs);
       GLOBALS.selectedSourceFolders = finalObject.inputDirs;
 
       sendFinalObjectToAngular(finalObject, GLOBALS);

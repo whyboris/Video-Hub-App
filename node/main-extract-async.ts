@@ -162,6 +162,8 @@ export function startFileSystemWatching(
 
   console.log('starting watcher ', inputSource, inputDir);
 
+  GLOBALS.angularApp.sender.send('started-watching-this-dir', inputSource);
+
   const watcherConfig = {
     alwaysStat: true,
     awaitWriteFinish: true,
@@ -295,7 +297,7 @@ export function closeWatcher(inputSource: number): void {
  * @param folderPath
  */
 export function startWatcher(inputSource: number, folderPath: string, persistent: boolean): void {
-  console.log('start watching !!!!', inputSource, folderPath, persistent);
+  console.log('start watching !!!!', inputSource, typeof(inputSource), folderPath, persistent);
 
   GLOBALS.selectedSourceFolders[inputSource] = {
     path: folderPath,

@@ -382,6 +382,12 @@
           {{ (appState.numOfFolders === 1 ? 'SIDEBAR.totalFolders' : 'SIDEBAR.totalFoldersPlural') | translate }}
         </ng-container>
         <br>
+        <div
+          *ngIf="!allFinishedScanning"
+          class="scanning-indicator"
+          title="{{ 'SIDEBAR.scanInProgress' | translate }}"
+          @slowFadeOut
+        ></div>
         {{ finalArray.length | number }} {{ 'SIDEBAR.videos' | translate }}
       </div>
 
@@ -724,7 +730,7 @@
       <ng-container *ngIf="appState.currentView === 'showThumbnails'">
         <app-thumbnail
           *ngFor="let item of scroll.viewPortItems"
-          
+
           (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
           (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
           (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
