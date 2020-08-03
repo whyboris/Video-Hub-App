@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import * as path from 'path';
 
+import { BehaviorSubject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
 
@@ -291,6 +292,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   allFinishedScanning: boolean = true;
 
+  inputSorceChosenBehaviorSubject: BehaviorSubject<string> = new BehaviorSubject(undefined);
+
   // ========================================================================
   // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
   // ========================================================================
@@ -382,6 +385,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // Returning Input
     this.electronService.ipcRenderer.on('input-folder-chosen', (event, filePath) => {
+      // if this happens when CURRENT HUB is open
+      this.inputSorceChosenBehaviorSubject.next(filePath);
+      this.inputSorceChosenBehaviorSubject.next(undefined); // allways remove right away
+
+      // if this happens during WIZARD stage
       this.wizard.selectedSourceFolder[0].path = filePath;
       this.wizard.selectedOutputFolder = filePath;
       this.cd.detectChanges();
@@ -503,9 +511,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         // notice the loosey-goosey comparison! this is because number  ^^  string comparison happening here!
         .forEach((element: ImageElement) => {
           console.log(element.fileName);
-          if (allFilesMap.has(path.join(rootFolder, element.partialPath, element.fileName))) {
-            // everything is OK
-          } else {
+          if (!allFilesMap.has(path.join(rootFolder, element.partialPath, element.fileName))) {
             console.log('deleting');
             element.deleted = true;
           }

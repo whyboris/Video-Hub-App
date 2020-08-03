@@ -1,4 +1,6 @@
-import { Component, Input, OnInit, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectorRef, Output, EventEmitter, OnDestroy } from '@angular/core';
+
+import { Observable, Subscription } from 'rxjs';
 
 import { ElectronService } from '../../providers/electron.service';
 import { SourceFolderService } from './source-folder.service';
@@ -16,7 +18,7 @@ import { metaAppear, breadcrumbWordAppear } from '../../common/animations';
   ],
   animations: [metaAppear, breadcrumbWordAppear]
 })
-export class StatisticsComponent implements OnInit {
+export class StatisticsComponent implements OnInit, OnDestroy {
 
   @Output() addMissingThumbnailsPlease = new EventEmitter<any>();
   @Output() cleanScreenshotFolderPlease = new EventEmitter<any>();
@@ -29,6 +31,9 @@ export class StatisticsComponent implements OnInit {
   @Input() numFolders: number;
   @Input() pathToVhaFile: string;
   @Input() screenshotSettings: ScreenshotSettings;
+  @Input() inputFolderChosen: Observable<string>;
+
+  eventSubscription: Subscription;
 
   totalFiles: number;
 
@@ -61,9 +66,6 @@ export class StatisticsComponent implements OnInit {
 
     console.log(this.inputFolders);
 
-    console.log(this.inputFolders[0]);
-    console.log(this.inputFolders['0']);
-
     this.finalArray.forEach((element: ImageElement): void => {
       this.shortest = Math.min(element.duration, this.shortest);
       this.longest = Math.max(element.duration, this.longest);
@@ -79,27 +81,7 @@ export class StatisticsComponent implements OnInit {
     this.avgLength = Math.round(this.totalLength / this.totalFiles);
     this.avgSize = Math.round(this.totalSize / this.totalFiles);
 
-    this.electronService.ipcRenderer.on('input-folder-chosen', (event, filePath) => {
-      console.log('chosen: ', filePath);
-
-      let pathAlreadyExists = false;
-
-      Object.keys(this.inputFolders).forEach((key: string) => {
-        if (this.inputFolders[key].path === filePath) {
-          pathAlreadyExists = true;
-        }
-      });
-
-      if (!pathAlreadyExists) {
-        const nextIndex: number = this.pickNextIndex(this.inputFolders);
-        this.inputFolders[nextIndex] = { path: filePath, watch: false };
-        this.sourceFolderService.sourceFolderConnected[nextIndex] = true;
-        this.electronService.ipcRenderer.send('start-watching-folder', nextIndex, filePath, false);
-      }
-
-      this.cd.detectChanges();
-
-    });
+    this.eventSubscription = this.inputFolderChosen.subscribe((folderPath: string) => this.handleInputFolderChosen(folderPath));
 
     this.electronService.ipcRenderer.on('old-folder-reconnected', (event, sourceIndex: number, newPath: string) => {
       console.log('NEW FOLDER CHOSEN !!!');
@@ -128,6 +110,37 @@ export class StatisticsComponent implements OnInit {
     });
 
   }
+
+  /**
+   * DO STUFF WHEN INPUT FOLDER WAS CHOSEN !!!
+   * @param filePath
+   */
+  handleInputFolderChosen(filePath: string) {
+    console.log('IT WORKS !!!!!');
+    console.log('chosen: ', filePath);
+    if (!filePath) { // first emit from subscription is `undefined`
+      return;
+    }
+
+    let pathAlreadyExists = false;
+
+    Object.keys(this.inputFolders).forEach((key: string) => {
+      if (this.inputFolders[key].path === filePath) {
+        pathAlreadyExists = true;
+      }
+    });
+
+    if (!pathAlreadyExists) {
+      const nextIndex: number = this.pickNextIndex(this.inputFolders);
+      this.inputFolders[nextIndex] = { path: filePath, watch: false };
+      this.sourceFolderService.sourceFolderConnected[nextIndex] = true;
+      this.electronService.ipcRenderer.send('start-watching-folder', nextIndex, filePath, false);
+    }
+
+    this.cd.detectChanges();
+
+  }
+
 
   /**
    * Determine and return the next index for inputSource
@@ -240,6 +253,10 @@ export class StatisticsComponent implements OnInit {
         event.srcElement.classList.remove('progress-gradient-animation');
       }
     }, 3000); // apparently nothing breaks if the component is closed before timeout finishes :)
+  }
+
+  ngOnDestroy() {
+    this.eventSubscription.unsubscribe();
   }
 
 }

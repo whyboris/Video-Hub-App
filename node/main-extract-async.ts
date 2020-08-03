@@ -158,9 +158,9 @@ export function startFileSystemWatching(
   persistent: boolean
 ) {
 
-  console.log(typeof(inputSource));
+  console.log('================================================================');
 
-  console.log('starting watcher ', inputSource, inputDir);
+  console.log('starting watcher ', inputSource, typeof(inputSource), inputDir);
 
   GLOBALS.angularApp.sender.send('started-watching-this-dir', inputSource);
 
@@ -169,21 +169,18 @@ export function startFileSystemWatching(
     awaitWriteFinish: true,
     cwd: inputDir,
     disableGlobbing: true,
-    ignored: '**/vha-*/**', // maybe ignore files that start with `._` ? WTF MAC!?
     persistent: persistent,
-    usePolling: true, //neccessary for files over network!
+    usePolling: true, // neccessary for files over network
   }
 
-  // One-liner for current directory
   const watcher: FSWatcher = chokidar.watch(inputDir, watcherConfig);
 
   watcher
     .on('add', (filePath: string, stat) => {
 
-      console.log(filePath);
-
       const ext = filePath.substring(filePath.lastIndexOf('.') + 1);
 
+      // WARNING - dangerously ignores any path that includes `vha-` anywhere!!!
       if (filePath.indexOf('vha-') !== -1 || acceptableFiles.indexOf(ext) === -1) {
         return;
       }
