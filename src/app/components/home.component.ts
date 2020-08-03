@@ -293,6 +293,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   allFinishedScanning: boolean = true;
 
   inputSorceChosenBehaviorSubject: BehaviorSubject<string> = new BehaviorSubject(undefined);
+  oldFolderReconnectedBehaviorSubject: BehaviorSubject<{source: number, path: string}> = new BehaviorSubject(undefined);
 
   // ========================================================================
   // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
@@ -382,6 +383,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
       });
 
     }, 100);
+
+    this.electronService.ipcRenderer.on('old-folder-reconnected', (event, sourceIndex: number, newPath: string) => {
+      this.oldFolderReconnectedBehaviorSubject.next({ source: sourceIndex, path: newPath });
+      this.oldFolderReconnectedBehaviorSubject.next(undefined);
+    });
 
     // Returning Input
     this.electronService.ipcRenderer.on('input-folder-chosen', (event, filePath) => {

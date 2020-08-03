@@ -31,9 +31,11 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   @Input() numFolders: number;
   @Input() pathToVhaFile: string;
   @Input() screenshotSettings: ScreenshotSettings;
-  @Input() inputFolderChosen: Observable<string>;
 
-  eventSubscription: Subscription;
+  @Input() inputFolderChosen: Observable<string>;
+  @Input() oldFolderReconnected: Observable<{ source: number, path: string }>;
+
+  eventSubscriptionMap: Map<string, Subscription> = new Map();
 
   totalFiles: number;
 
@@ -81,18 +83,15 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     this.avgLength = Math.round(this.totalLength / this.totalFiles);
     this.avgSize = Math.round(this.totalSize / this.totalFiles);
 
-    this.eventSubscription = this.inputFolderChosen.subscribe((folderPath: string) => this.handleInputFolderChosen(folderPath));
+    this.eventSubscriptionMap.set('inputFolder', this.inputFolderChosen.subscribe((folderPath: string) => {
+      this.handleInputFolderChosen(folderPath);
+    }));
 
-    this.electronService.ipcRenderer.on('old-folder-reconnected', (event, sourceIndex: number, newPath: string) => {
-      console.log('NEW FOLDER CHOSEN !!!');
-      console.log(sourceIndex);
-      console.log(newPath);
-      this.inputFolders[sourceIndex] = { path: newPath, watch: false };
-      this.sourceFolderService.sourceFolderConnected[sourceIndex] = true;
-      setTimeout(() => {
-        this.cd.detectChanges();
-      }, 1);
-    });
+    this.eventSubscriptionMap.set('folderReconnect', this.oldFolderReconnected.subscribe((data) => {
+      if (data) {
+        this.handleOldFolderReconnected(data.source, data.path);
+      }
+    }))
 
     this.electronService.ipcRenderer.on('number-of-screenshots-deleted', (event, numDeleted: number) => {
       console.log('deleted', numDeleted, 'screenshots');
@@ -109,6 +108,22 @@ export class StatisticsComponent implements OnInit, OnDestroy {
       }, 1000); // make sure it doesn't appear instantly -- feels like an error if it happens to quickly :P
     });
 
+  }
+
+  /**
+   * Handle when old folder reconnects
+   * @param sourceIndex
+   * @param newPath
+   */
+  handleOldFolderReconnected(sourceIndex: number, newPath: string) {
+    console.log('NEW FOLDER CHOSEN !!!');
+    console.log(sourceIndex);
+    console.log(newPath);
+    this.inputFolders[sourceIndex] = { path: newPath, watch: false };
+    this.sourceFolderService.sourceFolderConnected[sourceIndex] = true;
+    setTimeout(() => {
+      this.cd.detectChanges();
+    }, 1);
   }
 
   /**
@@ -199,8 +214,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   }
 
   reconnectThisFolder(itemSourceKey: number) {
-    console.log(itemSourceKey);
-    console.log('RECONNECT -- NOT IMPLEMENTED -- TODO');
+    console.log('RECONNECT this folder:', itemSourceKey);
     this.electronService.ipcRenderer.send('reconnect-this-folder', itemSourceKey);
   }
 
@@ -255,8 +269,13 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     }, 3000); // apparently nothing breaks if the component is closed before timeout finishes :)
   }
 
+  /**
+   * Unsubscribe from all the electron ipc events
+   */
   ngOnDestroy() {
-    this.eventSubscription.unsubscribe();
+    this.eventSubscriptionMap.forEach((value) => {
+      value.unsubscribe();
+    });
   }
 
 }
