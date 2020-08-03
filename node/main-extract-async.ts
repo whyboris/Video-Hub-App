@@ -368,7 +368,7 @@ export function removeThumbnailsNotInHub(hashesPresent: Map<string, 1>, outputDi
     persistent: false,
   }
 
-  const watcher: FSWatcher = chokidar.watch('**', watcherConfig)
+  const watcher: FSWatcher = chokidar.watch(outputDir, watcherConfig)
     .on('add', (filePath: string) => {
 
       const parsedPath = path.parse(filePath);
