@@ -293,6 +293,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   allFinishedScanning: boolean = true;
 
   inputSorceChosenBehaviorSubject: BehaviorSubject<string> = new BehaviorSubject(undefined);
+  numberScreenshotsDeletedBehaviorSubject: BehaviorSubject<number> = new BehaviorSubject(undefined);
   oldFolderReconnectedBehaviorSubject: BehaviorSubject<{source: number, path: string}> = new BehaviorSubject(undefined);
 
   // ========================================================================
@@ -383,6 +384,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
       });
 
     }, 100);
+
+    this.electronService.ipcRenderer.on('number-of-screenshots-deleted', (event, totalDeleted: number) => {
+      this.numberScreenshotsDeletedBehaviorSubject.next(totalDeleted);
+      this.numberScreenshotsDeletedBehaviorSubject.next(undefined);
+    });
 
     this.electronService.ipcRenderer.on('old-folder-reconnected', (event, sourceIndex: number, newPath: string) => {
       this.oldFolderReconnectedBehaviorSubject.next({ source: sourceIndex, path: newPath });

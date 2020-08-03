@@ -33,6 +33,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   @Input() screenshotSettings: ScreenshotSettings;
 
   @Input() inputFolderChosen: Observable<string>;
+  @Input() numberScreenshotsDeleted: Observable<number>;
   @Input() oldFolderReconnected: Observable<{ source: number, path: string }>;
 
   eventSubscriptionMap: Map<string, Subscription> = new Map();
@@ -63,9 +64,34 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-
     console.log('booting up!');
+    this.computeAverages();
 
+    // IPC subscriptions - come in as BehaviorSubject.asObservable()
+
+    this.eventSubscriptionMap.set('inputFolder', this.inputFolderChosen.subscribe((folderPath: string) => {
+      if (folderPath) { // first emit from subscription is `undefined`
+        this.handleInputFolderChosen(folderPath);
+      }
+    }));
+
+    this.eventSubscriptionMap.set('folderReconnect', this.oldFolderReconnected.subscribe((data) => {
+      if (data) { // first emit from subscription is `undefined`
+        this.handleOldFolderReconnected(data.source, data.path);
+      }
+    }))
+
+    this.eventSubscriptionMap.set('numberOfScreenshotsDeleted', this.numberScreenshotsDeleted.subscribe((deleted: number) => {
+      if (deleted) { // first emit from subscription is `undefined`
+        this.handleScreenshotsDeleted(deleted);
+      }
+    }));
+  }
+
+  /**
+   * After booting up, compute all the totals and averages to display
+   */
+  computeAverages() {
     console.log(this.inputFolders);
 
     this.finalArray.forEach((element: ImageElement): void => {
@@ -82,32 +108,25 @@ export class StatisticsComponent implements OnInit, OnDestroy {
 
     this.avgLength = Math.round(this.totalLength / this.totalFiles);
     this.avgSize = Math.round(this.totalSize / this.totalFiles);
+  }
 
-    this.eventSubscriptionMap.set('inputFolder', this.inputFolderChosen.subscribe((folderPath: string) => {
-      this.handleInputFolderChosen(folderPath);
-    }));
+  /**
+   * Notify user of how many screenshots were deleted
+   * @param numDeleted
+   */
+  handleScreenshotsDeleted(numDeleted: number) {
+    console.log('deleted', numDeleted, 'screenshots');
+    setTimeout(() => {
 
-    this.eventSubscriptionMap.set('folderReconnect', this.oldFolderReconnected.subscribe((data) => {
-      if (data) {
-        this.handleOldFolderReconnected(data.source, data.path);
-      }
-    }))
-
-    this.electronService.ipcRenderer.on('number-of-screenshots-deleted', (event, numDeleted: number) => {
-      console.log('deleted', numDeleted, 'screenshots');
+      this.numberOfScreensDeleted = numDeleted;
+      this.showNumberDeleted = true;
+      this.cd.detectChanges()
       setTimeout(() => {
-
-        this.numberOfScreensDeleted = numDeleted;
-        this.showNumberDeleted = true;
+        this.showNumberDeleted = false;
         this.cd.detectChanges()
-        setTimeout(() => {
-          this.showNumberDeleted = false;
-          this.cd.detectChanges()
-        }, 3000);
+      }, 3000);
 
-      }, 1000); // make sure it doesn't appear instantly -- feels like an error if it happens to quickly :P
-    });
-
+    }, 1000); // make sure it doesn't appear instantly -- feels like an error if it happens to quickly :P
   }
 
   /**
@@ -133,9 +152,6 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   handleInputFolderChosen(filePath: string) {
     console.log('IT WORKS !!!!!');
     console.log('chosen: ', filePath);
-    if (!filePath) { // first emit from subscription is `undefined`
-      return;
-    }
 
     let pathAlreadyExists = false;
 
