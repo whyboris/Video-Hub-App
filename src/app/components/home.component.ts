@@ -85,13 +85,12 @@ import {
 })
 export class HomeComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('magicSearch', { static: false }) magicSearch: ElementRef;
   @ViewChild('fuzzySearch', { static: false }) fuzzySearch: ElementRef;
+  @ViewChild('magicSearch', { static: false }) magicSearch: ElementRef;
   @ViewChild('searchRef', { static: false }) searchRef: ElementRef;
   @ViewChild('sortFilterElement', { static: false }) sortFilterElement: ElementRef;
 
-  @ViewChild(VirtualScrollerComponent, { static: false })
-  virtualScroller: VirtualScrollerComponent;
+  @ViewChild(VirtualScrollerComponent, { static: false }) virtualScroller: VirtualScrollerComponent;
 
   defaultSettingsButtons = JSON.parse(JSON.stringify(SettingsButtons));
   settingsButtons: SettingsButtonsType = SettingsButtons;
@@ -290,6 +289,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   tagTypeAhead: string = '';
 
+  allFinishedScanning: boolean = true;
+
   // ========================================================================
   // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
   // ========================================================================
@@ -476,12 +477,24 @@ export class HomeComponent implements OnInit, AfterViewInit {
       console.log(this.sourceFolderService.sourceFolderConnected);
     });
 
+    this.electronService.ipcRenderer.on('started-watching-this-dir', (event, sourceIndex: number) => {
+      this.allFinishedScanning = false;
+      this.sourceFolderService.addCurrentScanning(sourceIndex);
+    });
+
     // WIP -- delete any videos no longer found on the hard drive!
     this.electronService.ipcRenderer.on('all-files-found-in-dir', (event, sourceIndex: number, allFilesMap: Map<string, 1>) => {
       console.log('all files returning:');
-      console.log(sourceIndex);
-      console.log(typeof(sourceIndex));
+      console.log(sourceIndex, typeof(sourceIndex));
       console.log(allFilesMap);
+
+      this.sourceFolderService.removeCurrentScanning(sourceIndex);
+
+      this.allFinishedScanning = this.sourceFolderService.areAllFinishedScanning();
+      if (this.allFinishedScanning) {
+        console.log('DONE SCANNING !!!!!!!');
+        this.cd.detectChanges();
+      }
 
       const rootFolder: string = this.sourceFolderService.selectedSourceFolder[sourceIndex].path;
 
@@ -725,6 +738,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.finalArray.forEach((element: ImageElement) => {
       if (element.inputSource == sourceIndex) { // TODO -- stop the loosey goosey `==` and figure out `string` vs `number`
         element.deleted = true;
+        this.finalArrayNeedsSaving = true;
       }
     });
     this.deletePipeHack = !this.deletePipeHack;

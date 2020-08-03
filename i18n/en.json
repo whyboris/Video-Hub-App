@@ -293,6 +293,7 @@
     "or": "or",
     "recentlyOpened": "Recently opened hubs:",
     "regex": "regex",
+    "scanInProgress": "Scanning in progress",
     "similarTo": "and similar to:",
     "sortAlphabetical": "Alphabetical",
     "sortAspectRatio": "Aspect ratio",
