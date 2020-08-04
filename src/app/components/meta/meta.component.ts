@@ -193,7 +193,7 @@ export class MetaComponent implements OnInit {
   tryRenamingFile() {
     this.renameError = false;
 
-    const sourceFolder = this.selectedSourceFolder[0].path;                       // TODO -- handle every source folder!
+    const sourceFolder = this.selectedSourceFolder[this.video.inputSource].path;
     const relativeFilePath = this.video.partialPath;
     const originalFile = this.video.fileName;
     const newFileName = this.renamingWIP + '.' + this.filePathService.getFileNameExtension(this.video.fileName);

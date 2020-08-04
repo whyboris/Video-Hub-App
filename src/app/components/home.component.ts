@@ -19,7 +19,7 @@ import { StarFilterService } from '../pipes/star-filter.service';
 import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency.service';
 
 // Interfaces
-import { AllSupportedViews, SupportedView, TagEmission, HistoryItem } from '../../../interfaces/shared-interfaces';
+import { AllSupportedViews, SupportedView, TagEmission, HistoryItem, RenameFileResponse } from '../../../interfaces/shared-interfaces';
 import { DefaultScreenEmission } from './sheet/sheet.component';
 import { FinalObject, ImageElement, ScreenshotSettings, ResolutionString } from '../../../interfaces/final-object.interface';
 
@@ -292,9 +292,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   allFinishedScanning: boolean = true;
 
+  // Behavior Subjects for IPC events:
+
   inputSorceChosenBehaviorSubject: BehaviorSubject<string> = new BehaviorSubject(undefined);
   numberScreenshotsDeletedBehaviorSubject: BehaviorSubject<number> = new BehaviorSubject(undefined);
   oldFolderReconnectedBehaviorSubject: BehaviorSubject<{source: number, path: string}> = new BehaviorSubject(undefined);
+  renameFileResponseBehaviorSubject: BehaviorSubject<RenameFileResponse> = new BehaviorSubject(undefined);
 
   // ========================================================================
   // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
@@ -385,14 +388,38 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     }, 100);
 
+    this.electronService.ipcRenderer.on(
+      'rename-file-response', (
+          event,
+          index: number,
+          success: boolean,
+          renameTo: string,
+          oldFileName: string,
+          errMsg?: string
+        ) => {
+
+          this.renameFileResponseBehaviorSubject.next({
+            index: index,
+            success: success,
+            renameTo: renameTo,
+            oldFileName: oldFileName,
+            errMsg: errMsg,
+          });
+          this.renameFileResponseBehaviorSubject.next(undefined); // allways remove right away
+
+      });
+
+
+    // for statistics.component
     this.electronService.ipcRenderer.on('number-of-screenshots-deleted', (event, totalDeleted: number) => {
       this.numberScreenshotsDeletedBehaviorSubject.next(totalDeleted);
-      this.numberScreenshotsDeletedBehaviorSubject.next(undefined);
+      this.numberScreenshotsDeletedBehaviorSubject.next(undefined); // allways remove right away
     });
 
+    // for statistics.component
     this.electronService.ipcRenderer.on('old-folder-reconnected', (event, sourceIndex: number, newPath: string) => {
       this.oldFolderReconnectedBehaviorSubject.next({ source: sourceIndex, path: newPath });
-      this.oldFolderReconnectedBehaviorSubject.next(undefined);
+      this.oldFolderReconnectedBehaviorSubject.next(undefined); // allways remove right away
     });
 
     // Returning Input

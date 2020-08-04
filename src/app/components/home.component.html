@@ -152,6 +152,10 @@
     [itemToRename]="itemToRename"
     [currentRightClickedItem]="currentRightClickedItem"
     [renamingNow]="renamingNow"
+
+    [basePath]="sourceFolderService.selectedSourceFolder[itemToRename.inputSource].path"
+
+    [renameResponse]="renameFileResponseBehaviorSubject"
   ></app-rename-modal>
 
   <!-- ===========    AUTO-GENERATED TAGS MODAL    =========== -->
