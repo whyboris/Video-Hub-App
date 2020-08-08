@@ -2,12 +2,13 @@ import { Component, Input, Output, OnInit, ElementRef, EventEmitter, ViewChild }
 import { DomSanitizer } from '@angular/platform-browser';
 
 import * as path from 'path';
+import { BehaviorSubject } from 'rxjs';
 
 import { ManualTagsService } from '../tags-manual/manual-tags.service';
 import { FilePathService } from '../views/file-path.service';
 
 import { StarRating, ImageElement } from '../../../../interfaces/final-object.interface';
-import { TagEmit, TagEmission } from '../../../../interfaces/shared-interfaces';
+import { TagEmit, TagEmission, RenameFileResponse } from '../../../../interfaces/shared-interfaces';
 import { YearEmission } from '../views/details/details.component';
 
 import { metaAppear, textAppear, modalAnimation } from '../../common/animations';
@@ -62,6 +63,8 @@ export class SheetComponent implements OnInit {
   @Input() showMeta: boolean;
   @Input() showVideoNotes: boolean;
   @Input() star: StarRating;
+
+  @Input() renameResponse: BehaviorSubject<RenameFileResponse>;
 
   pathToFilmstripJpg: string;
   pathToVideoFile: string;

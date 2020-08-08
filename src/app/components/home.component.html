@@ -134,6 +134,8 @@
     [showManualTags]="settingsButtons['manualTags'].toggled"
     [showMeta]="settingsButtons['showMoreInfo'].toggled"
     [showVideoNotes]="settingsButtons['showVideoNotes'].toggled"
+
+    [renameResponse]="this.renameFileResponseBehaviorSubject"
   >
   </app-thumbnail-sheet>
 
@@ -887,7 +889,7 @@
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
           [imgHeight]="previewHeight"
-          [selectedSourceFolder]="sourceFolderService.selectedSourceFolder"
+          [selectedSourceFolder]="sourceFolderService.selectedSourceFolder[item.inputSource].path"
 
           [star]="item.stars"
 
@@ -900,6 +902,8 @@
           [showManualTags]="settingsButtons['manualTags'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
           [showVideoNotes]="settingsButtons['showVideoNotes'].toggled"
+
+          [renameResponse]="renameFileResponseBehaviorSubject"
 
           [ngStyle]="{ display: appState.currentView === 'showDetails' ? 'block' : 'inline-block' }"
         ></app-details-item>

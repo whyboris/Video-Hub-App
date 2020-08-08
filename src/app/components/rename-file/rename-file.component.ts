@@ -5,7 +5,7 @@ import { Observable, Subscription } from 'rxjs';
 import { ElectronService } from '../../providers/electron.service';
 import { FilePathService } from '../views/file-path.service';
 
-import { ImageElement, InputSources } from '../../../../interfaces/final-object.interface';
+import { ImageElement } from '../../../../interfaces/final-object.interface';
 import { RenameFileResponse } from '../../../../interfaces/shared-interfaces';
 
 @Component({
@@ -48,7 +48,7 @@ export class RenameFileComponent implements OnInit, OnDestroy {
       this.renameFileInput.nativeElement.focus();
     }, 0);
 
-    this.responseSubscription = this.renameResponse.subscribe((data) => {
+    this.responseSubscription = this.renameResponse.subscribe((data: RenameFileResponse) => {
 
       if (data) {
         console.log('WOW !!!');
