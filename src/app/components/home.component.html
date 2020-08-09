@@ -134,6 +134,8 @@
     [showManualTags]="settingsButtons['manualTags'].toggled"
     [showMeta]="settingsButtons['showMoreInfo'].toggled"
     [showVideoNotes]="settingsButtons['showVideoNotes'].toggled"
+
+    [renameResponse]="this.renameFileResponseBehaviorSubject"
   >
   </app-thumbnail-sheet>
 
@@ -152,6 +154,10 @@
     [itemToRename]="itemToRename"
     [currentRightClickedItem]="currentRightClickedItem"
     [renamingNow]="renamingNow"
+
+    [basePath]="sourceFolderService.selectedSourceFolder[itemToRename.inputSource].path"
+
+    [renameResponse]="renameFileResponseBehaviorSubject"
   ></app-rename-modal>
 
   <!-- ===========    AUTO-GENERATED TAGS MODAL    =========== -->
@@ -260,6 +266,10 @@
         [numFolders]="appState.numOfFolders"
         [pathToVhaFile]="appState.currentVhaFile"
         [screenshotSettings]="currentScreenshotSettings"
+
+        [inputFolderChosen]="inputSorceChosenBehaviorSubject.asObservable()"
+        [oldFolderReconnected]="oldFolderReconnectedBehaviorSubject.asObservable()"
+        [numberScreenshotsDeleted]="numberScreenshotsDeletedBehaviorSubject.asObservable()"
       ></app-statistics>
 
     </div>
@@ -879,7 +889,7 @@
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
           [imgHeight]="previewHeight"
-          [selectedSourceFolder]="sourceFolderService.selectedSourceFolder"
+          [selectedSourceFolder]="sourceFolderService.selectedSourceFolder[item.inputSource].path"
 
           [star]="item.stars"
 
@@ -892,6 +902,8 @@
           [showManualTags]="settingsButtons['manualTags'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
           [showVideoNotes]="settingsButtons['showVideoNotes'].toggled"
+
+          [renameResponse]="renameFileResponseBehaviorSubject"
 
           [ngStyle]="{ display: appState.currentView === 'showDetails' ? 'block' : 'inline-block' }"
         ></app-details-item>

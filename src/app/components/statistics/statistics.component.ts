@@ -1,4 +1,6 @@
-import { Component, Input, OnInit, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, ChangeDetectorRef, Output, EventEmitter, OnDestroy } from '@angular/core';
+
+import { Observable, Subscription } from 'rxjs';
 
 import { ElectronService } from '../../providers/electron.service';
 import { SourceFolderService } from './source-folder.service';
@@ -16,7 +18,7 @@ import { metaAppear, breadcrumbWordAppear } from '../../common/animations';
   ],
   animations: [metaAppear, breadcrumbWordAppear]
 })
-export class StatisticsComponent implements OnInit {
+export class StatisticsComponent implements OnInit, OnDestroy {
 
   @Output() addMissingThumbnailsPlease = new EventEmitter<any>();
   @Output() cleanScreenshotFolderPlease = new EventEmitter<any>();
@@ -29,6 +31,12 @@ export class StatisticsComponent implements OnInit {
   @Input() numFolders: number;
   @Input() pathToVhaFile: string;
   @Input() screenshotSettings: ScreenshotSettings;
+
+  @Input() inputFolderChosen: Observable<string>;
+  @Input() numberScreenshotsDeleted: Observable<number>;
+  @Input() oldFolderReconnected: Observable<{ source: number, path: string }>;
+
+  eventSubscriptionMap: Map<string, Subscription> = new Map();
 
   totalFiles: number;
 
@@ -56,13 +64,35 @@ export class StatisticsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
     console.log('booting up!');
+    this.computeAverages();
 
+    // IPC subscriptions - come in as BehaviorSubject.asObservable()
+
+    this.eventSubscriptionMap.set('inputFolder', this.inputFolderChosen.subscribe((folderPath: string) => {
+      if (folderPath) { // first emit from subscription is `undefined`
+        this.handleInputFolderChosen(folderPath);
+      }
+    }));
+
+    this.eventSubscriptionMap.set('folderReconnect', this.oldFolderReconnected.subscribe((data) => {
+      if (data) { // first emit from subscription is `undefined`
+        this.handleOldFolderReconnected(data.source, data.path);
+      }
+    }))
+
+    this.eventSubscriptionMap.set('numberOfScreenshotsDeleted', this.numberScreenshotsDeleted.subscribe((deleted: number) => {
+      if (deleted) { // first emit from subscription is `undefined`
+        this.handleScreenshotsDeleted(deleted);
+      }
+    }));
+  }
+
+  /**
+   * After booting up, compute all the totals and averages to display
+   */
+  computeAverages() {
     console.log(this.inputFolders);
-
-    console.log(this.inputFolders[0]);
-    console.log(this.inputFolders['0']);
 
     this.finalArray.forEach((element: ImageElement): void => {
       this.shortest = Math.min(element.duration, this.shortest);
@@ -78,56 +108,70 @@ export class StatisticsComponent implements OnInit {
 
     this.avgLength = Math.round(this.totalLength / this.totalFiles);
     this.avgSize = Math.round(this.totalSize / this.totalFiles);
+  }
 
-    this.electronService.ipcRenderer.on('input-folder-chosen', (event, filePath) => {
-      console.log('chosen: ', filePath);
+  /**
+   * Notify user of how many screenshots were deleted
+   * @param numDeleted
+   */
+  handleScreenshotsDeleted(numDeleted: number) {
+    console.log('deleted', numDeleted, 'screenshots');
+    setTimeout(() => {
 
-      let pathAlreadyExists = false;
-
-      Object.keys(this.inputFolders).forEach((key: string) => {
-        if (this.inputFolders[key].path === filePath) {
-          pathAlreadyExists = true;
-        }
-      });
-
-      if (!pathAlreadyExists) {
-        const nextIndex: number = this.pickNextIndex(this.inputFolders);
-        this.inputFolders[nextIndex] = { path: filePath, watch: false };
-        this.sourceFolderService.sourceFolderConnected[nextIndex] = true;
-        this.electronService.ipcRenderer.send('start-watching-folder', nextIndex, filePath, false);
-      }
-
-      this.cd.detectChanges();
-
-    });
-
-    this.electronService.ipcRenderer.on('old-folder-reconnected', (event, sourceIndex: number, newPath: string) => {
-      console.log('NEW FOLDER CHOSEN !!!');
-      console.log(sourceIndex);
-      console.log(newPath);
-      this.inputFolders[sourceIndex] = { path: newPath, watch: false };
-      this.sourceFolderService.sourceFolderConnected[sourceIndex] = true;
+      this.numberOfScreensDeleted = numDeleted;
+      this.showNumberDeleted = true;
+      this.cd.detectChanges()
       setTimeout(() => {
-        this.cd.detectChanges();
-      }, 1);
-    });
-
-    this.electronService.ipcRenderer.on('number-of-screenshots-deleted', (event, numDeleted: number) => {
-      console.log('deleted', numDeleted, 'screenshots');
-      setTimeout(() => {
-
-        this.numberOfScreensDeleted = numDeleted;
-        this.showNumberDeleted = true;
+        this.showNumberDeleted = false;
         this.cd.detectChanges()
-        setTimeout(() => {
-          this.showNumberDeleted = false;
-          this.cd.detectChanges()
-        }, 3000);
+      }, 3000);
 
-      }, 1000); // make sure it doesn't appear instantly -- feels like an error if it happens to quickly :P
+    }, 1000); // make sure it doesn't appear instantly -- feels like an error if it happens to quickly :P
+  }
+
+  /**
+   * Handle when old folder reconnects
+   * @param sourceIndex
+   * @param newPath
+   */
+  handleOldFolderReconnected(sourceIndex: number, newPath: string) {
+    console.log('NEW FOLDER CHOSEN !!!');
+    console.log(sourceIndex);
+    console.log(newPath);
+    this.inputFolders[sourceIndex] = { path: newPath, watch: false };
+    this.sourceFolderService.sourceFolderConnected[sourceIndex] = true;
+    setTimeout(() => {
+      this.cd.detectChanges();
+    }, 1);
+  }
+
+  /**
+   * DO STUFF WHEN INPUT FOLDER WAS CHOSEN !!!
+   * @param filePath
+   */
+  handleInputFolderChosen(filePath: string) {
+    console.log('IT WORKS !!!!!');
+    console.log('chosen: ', filePath);
+
+    let pathAlreadyExists = false;
+
+    Object.keys(this.inputFolders).forEach((key: string) => {
+      if (this.inputFolders[key].path === filePath) {
+        pathAlreadyExists = true;
+      }
     });
+
+    if (!pathAlreadyExists) {
+      const nextIndex: number = this.pickNextIndex(this.inputFolders);
+      this.inputFolders[nextIndex] = { path: filePath, watch: false };
+      this.sourceFolderService.sourceFolderConnected[nextIndex] = true;
+      this.electronService.ipcRenderer.send('start-watching-folder', nextIndex, filePath, false);
+    }
+
+    this.cd.detectChanges();
 
   }
+
 
   /**
    * Determine and return the next index for inputSource
@@ -186,8 +230,7 @@ export class StatisticsComponent implements OnInit {
   }
 
   reconnectThisFolder(itemSourceKey: number) {
-    console.log(itemSourceKey);
-    console.log('RECONNECT -- NOT IMPLEMENTED -- TODO');
+    console.log('RECONNECT this folder:', itemSourceKey);
     this.electronService.ipcRenderer.send('reconnect-this-folder', itemSourceKey);
   }
 
@@ -240,6 +283,15 @@ export class StatisticsComponent implements OnInit {
         event.srcElement.classList.remove('progress-gradient-animation');
       }
     }, 3000); // apparently nothing breaks if the component is closed before timeout finishes :)
+  }
+
+  /**
+   * Unsubscribe from all the electron ipc events
+   */
+  ngOnDestroy() {
+    this.eventSubscriptionMap.forEach((value) => {
+      value.unsubscribe();
+    });
   }
 
 }
