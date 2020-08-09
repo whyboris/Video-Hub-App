@@ -1261,6 +1261,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
         }
         break;
 
+      case ('showTagTray'):
+        if (!this.wizard.showWizard) {
+          this.toggleButton('showTagTray');
+        }
+        break;
+
       case ('quit'):
         event.preventDefault();
         event.stopPropagation();

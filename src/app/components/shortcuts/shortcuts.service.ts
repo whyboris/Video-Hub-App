@@ -7,6 +7,7 @@ export type CustomShortcutAction = 'focusOnFile'
   | 'focusOnMagic'
   | 'quit'
   | 'showAutoTags'
+  | 'showTagTray'
   | 'startWizard'
   | 'toggleSettings';
 
@@ -39,6 +40,7 @@ export class ShortcutsService {
     'toggleSettings',
     'quit',
     'fuzzySearch',
+    'showTagTray',
     'showAutoTags',
     'quit',
   ]
@@ -66,6 +68,7 @@ export class ShortcutsService {
     ['q', 'quit'], // cannot be changed
     ['r', 'fuzzySearch'],
     ['t', 'showAutoTags'],
+    ['y', 'showTagTray'],
     ['w', 'quit'], // cannot be changed
   ]);
 
@@ -79,6 +82,7 @@ export class ShortcutsService {
     ['makeLarger', 'x'],
     ['makeSmaller', 'z'],
     ['showAutoTags', 't'],
+    ['showTagTray', 'y'],
     ['showClips', '7'],
     ['showDetails', '4'],
     ['showDetails2', '5'],
