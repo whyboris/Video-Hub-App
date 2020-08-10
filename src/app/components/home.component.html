@@ -149,12 +149,10 @@
     (closeRename)="closeRename()"
 
     [appState]="appState"
+    [basePath]="sourceFolderService.selectedSourceFolder[currentRightClickedItem.inputSource].path"
+    [currentRightClickedItem]="currentRightClickedItem"
     [macVersion]="macVersion"
     [settingsButtons]="settingsButtons"
-
-    [currentRightClickedItem]="currentRightClickedItem"
-
-    [basePath]="sourceFolderService.selectedSourceFolder[currentRightClickedItem.inputSource].path"
 
     [renameResponse]="renameFileResponseBehaviorSubject"
   ></app-rename-modal>

@@ -209,7 +209,7 @@
     "changeLanguage": "Change language",
     "checkNewVersion": "check for new version",
     "chooseVideoPlayer": "change",
-    "playerArgs": "Player launch arguments",
+    "playerArgs": "Player launch arguments:",
     "clipsHeading": "Clips view",
     "closeRelatedTray": "Close related tray",
     "closeSettings": "Close settings",
@@ -273,7 +273,7 @@
     "showThumbnails": "Show thumbnails view",
     "shuffleGalleryNow": "Shuffle current results",
     "startWizard": "Toggle the wizard view",
-    "toggleMinimalMode": "Toggle minimal mode (hiding all panels)",
+    "toggleMinimalMode": "Toggle kiosk/minimal mode (hiding all panels)",
     "toggleSettings": "Toggle settings"
   },
   "SIDEBAR": {
