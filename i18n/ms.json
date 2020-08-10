@@ -313,8 +313,7 @@
     "pleaseChangeName": "Sila tukar nama hub di atas",
     "selectDefaultPlayer": "Sila pilih pemain video pilihan anda",
     "selectPreviousHub": "Sila pilih fail Hub Video yang disimpan sebelumnya",
-    "selectRootFolder": "Pilih Folder Video Sumber",
-    "videoFolderNotFound": "Folder Video Sumber tidak dijumpai:"
+    "selectRootFolder": "Pilih Folder Video Sumber"
   },
   "TAGS": {
     "add": "Tambah",

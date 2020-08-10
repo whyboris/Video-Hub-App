@@ -369,8 +369,7 @@
     "pressEscToStopRenaming": "Renaming file. Press 'enter' to rename, 'esc' to cancel",
     "selectDefaultPlayer": "Please select your preferred video player",
     "selectPreviousHub": "Please select a previously-saved Video Hub file",
-    "selectRootFolder": "Select Source Video Folder",
-    "videoFolderNotFound": "Source Video Folder not found:"
+    "selectRootFolder": "Select Source Video Folder"
   },
   "TAGS": {
     "add": "Add",

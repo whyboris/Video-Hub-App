@@ -313,8 +313,7 @@
     "pleaseChangeName": "Bitte ändern Sie den obigen Hubnamen",
     "selectDefaultPlayer": "Bitte wählen Sie Ihren bevorzugten Videoplayer",
     "selectPreviousHub": "Bitte wählen Sie eine zuvor gespeicherte Video Hub-Datei aus",
-    "selectRootFolder": "Wählen Sie den Quellvideoordner",
-    "videoFolderNotFound": "Quellvideoordner nicht gefunden:"
+    "selectRootFolder": "Wählen Sie den Quellvideoordner"
   },
   "TAGS": {
     "add": "Hinzufügen",
