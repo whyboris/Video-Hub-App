@@ -158,30 +158,29 @@ export function startFileSystemWatching(
   persistent: boolean
 ) {
 
-  console.log(typeof(inputSource));
+  console.log('================================================================');
 
-  console.log('starting watcher ', inputSource, inputDir);
+  console.log('starting watcher ', inputSource, typeof(inputSource), inputDir);
+
+  GLOBALS.angularApp.sender.send('started-watching-this-dir', inputSource);
 
   const watcherConfig = {
     alwaysStat: true,
     awaitWriteFinish: true,
     cwd: inputDir,
     disableGlobbing: true,
-    ignored: '**/vha-*/**', // maybe ignore files that start with `._` ? WTF MAC!?
     persistent: persistent,
-    usePolling: true, //neccessary for files over network!
+    usePolling: true, // neccessary for files over network
   }
 
-  // One-liner for current directory
   const watcher: FSWatcher = chokidar.watch(inputDir, watcherConfig);
 
   watcher
     .on('add', (filePath: string, stat) => {
 
-      console.log(filePath);
-
       const ext = filePath.substring(filePath.lastIndexOf('.') + 1);
 
+      // WARNING - dangerously ignores any path that includes `vha-` anywhere!!!
       if (filePath.indexOf('vha-') !== -1 || acceptableFiles.indexOf(ext) === -1) {
         return;
       }
@@ -295,7 +294,7 @@ export function closeWatcher(inputSource: number): void {
  * @param folderPath
  */
 export function startWatcher(inputSource: number, folderPath: string, persistent: boolean): void {
-  console.log('start watching !!!!', inputSource, folderPath, persistent);
+  console.log('start watching !!!!', inputSource, typeof(inputSource), folderPath, persistent);
 
   GLOBALS.selectedSourceFolders[inputSource] = {
     path: folderPath,
@@ -366,7 +365,7 @@ export function removeThumbnailsNotInHub(hashesPresent: Map<string, 1>, outputDi
     persistent: false,
   }
 
-  const watcher: FSWatcher = chokidar.watch('**', watcherConfig)
+  const watcher: FSWatcher = chokidar.watch(outputDir, watcherConfig)
     .on('add', (filePath: string) => {
 
       const parsedPath = path.parse(filePath);

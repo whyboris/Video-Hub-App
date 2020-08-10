@@ -4,6 +4,32 @@
   user-select: none;
 }
 
+.scanning-indicator {
+  animation: scanning 3s infinite;
+  background: $pretty-green;
+  border-radius: 5px;
+  display: inline-block;
+  height: 10px;
+  width: 10px;
+}
+
+@keyframes scanning {
+  0% {
+    opacity: 100%;
+    transform: scale(1.1);
+  }
+
+  50% {
+    opacity: 30%;
+    transform: scale(0.8);
+  }
+
+  100% {
+    opacity: 100%;
+    transform: scale(1.1);
+  }
+}
+
 .reduceFlicker {
   background: $gray-10;
   height: 100vh;
