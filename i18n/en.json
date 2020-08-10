@@ -262,6 +262,7 @@
     "or": "or",
     "quit": "Close the application",
     "showAutoTags": "Toggle auto-generated tags view",
+    "showTagTray": "Toggle tags tray view",
     "showClips": "Show clips view",
     "showDetails": "Show details view",
     "showDetails2": "Show details view 2",

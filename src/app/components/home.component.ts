@@ -1282,6 +1282,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       case ('toggleMinimalMode'):
         this.toggleButton('hideTop');
         this.toggleButton('hideSidebar');
+        this.toggleButtonOff('showTagTray');
         this.toggleRibbon();
         this.toggleButton('showMoreInfo');
         break;
@@ -1439,6 +1440,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.electronService.ipcRenderer.send('app-to-touchBar', uniqueKey);
     } else {
       this.cd.detectChanges();
+    }
+  }
+
+  public toggleButtonOff(uniqueKey: SettingsButtonKey | SupportedView, fromIpc = false): void {
+    if (this.settingsButtons[uniqueKey].toggled) {
+      this.settingsButtons[uniqueKey].toggled = false;
     }
   }
 
