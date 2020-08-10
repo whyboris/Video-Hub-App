@@ -41,6 +41,8 @@ let screenHeight;
 let macFirstRun = true; // detect if it's the 1st time Mac is opening the file or something like that
 let userWantedToOpen: string = null; // find a better pattern for handling this functionality
 
+electron.Menu.setApplicationMenu(null);
+
 // =================================================================================================
 
 let win, serve;
@@ -94,7 +96,7 @@ function createWindow() {
 
   screenWidth = desktopSize.width;
   screenHeight = desktopSize.height;
-  let mainWindowState = windowStateKeeper({
+  const mainWindowState = windowStateKeeper({
     defaultWidth: 850,
     defaultHeight: 850
   });
@@ -258,6 +260,8 @@ function openThisDamnFile(pathToVhaFile: string) {
       GLOBALS.hubName = finalObject.hubName;
       GLOBALS.screenshotSettings = finalObject.screenshotSettings;
       upgradeToVersion3(finalObject);
+      console.log('setting inputDirs');
+      console.log(finalObject.inputDirs);
       GLOBALS.selectedSourceFolders = finalObject.inputDirs;
 
       sendFinalObjectToAngular(finalObject, GLOBALS);

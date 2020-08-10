@@ -6,7 +6,7 @@ const shell = require('electron').shell;
 import * as path from 'path';
 const fs = require('fs');
 const trash = require('trash');
-const spawn = require('child_process').spawn;
+const exec = require('child_process').exec;
 
 import { GLOBALS } from './main-globals';
 import { ImageElement, FinalObject, InputSources } from '../interfaces/final-object.interface';
@@ -94,12 +94,10 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
   /**
    * Open a particular video file clicked inside Angular
    */
-  ipc.on('open-media-file-at-timestamp', (event, executablePath, fullFilePath: string, argz: string[]) => {
-    const allArgs: string[] = [];
-    allArgs.push(path.normalize(fullFilePath));
-    allArgs.push(...argz);
-    console.log(allArgs);
-    spawn(path.normalize(executablePath), allArgs);
+  ipc.on('open-media-file-at-timestamp', (event, executablePath, fullFilePath: string, args: string) => {
+    const cmdline: string = `"${path.normalize(executablePath)}" "${path.normalize(fullFilePath)}" ${args}`;
+    console.log(cmdline);
+    exec(cmdline);
   });
 
   /**
@@ -305,7 +303,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
     if (fs.existsSync(newName)) {
       console.log('some file already EXISTS WITH THAT NAME !!!');
       success = false;
-      errMsg = 'RIGHCLICK.errorFileNameExists';
+      errMsg = 'RIGHTCLICK.errorFileNameExists';
     } else {
       try {
         fs.renameSync(original, newName);

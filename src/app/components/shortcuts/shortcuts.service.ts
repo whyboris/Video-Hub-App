@@ -7,6 +7,7 @@ export type CustomShortcutAction = 'focusOnFile'
   | 'focusOnMagic'
   | 'quit'
   | 'showAutoTags'
+  | 'showTagTray'
   | 'startWizard'
   | 'toggleSettings';
 
@@ -39,6 +40,7 @@ export class ShortcutsService {
     'toggleSettings',
     'quit',
     'fuzzySearch',
+    'showTagTray',
     'showAutoTags',
     'quit',
   ]
@@ -60,12 +62,13 @@ export class ShortcutsService {
     ['z', 'makeSmaller'],
     ['f', 'focusOnFile'],
     ['g', 'focusOnMagic'],
-    ['h', 'toggleMinimalMode'],
+    ['k', 'toggleMinimalMode'],
     ['n', 'startWizard'],
     ['o', 'toggleSettings'],
     ['q', 'quit'], // cannot be changed
     ['r', 'fuzzySearch'],
     ['t', 'showAutoTags'],
+    ['y', 'showTagTray'],
     ['w', 'quit'], // cannot be changed
   ]);
 
@@ -79,6 +82,7 @@ export class ShortcutsService {
     ['makeLarger', 'x'],
     ['makeSmaller', 'z'],
     ['showAutoTags', 't'],
+    ['showTagTray', 'y'],
     ['showClips', '7'],
     ['showDetails', '4'],
     ['showDetails2', '5'],
@@ -89,7 +93,7 @@ export class ShortcutsService {
     ['showThumbnails', '1'],
     ['shuffleGalleryNow', 's'],
     ['startWizard', 'n'],
-    ['toggleMinimalMode', 'h'],
+    ['toggleMinimalMode', 'k'],
     ['toggleSettings', 'o'],
   ])
 

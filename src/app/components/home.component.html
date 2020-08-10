@@ -134,6 +134,8 @@
     [showManualTags]="settingsButtons['manualTags'].toggled"
     [showMeta]="settingsButtons['showMoreInfo'].toggled"
     [showVideoNotes]="settingsButtons['showVideoNotes'].toggled"
+
+    [renameResponse]="this.renameFileResponseBehaviorSubject"
   >
   </app-thumbnail-sheet>
 
@@ -152,6 +154,10 @@
     [itemToRename]="itemToRename"
     [currentRightClickedItem]="currentRightClickedItem"
     [renamingNow]="renamingNow"
+
+    [basePath]="sourceFolderService.selectedSourceFolder[itemToRename.inputSource].path"
+
+    [renameResponse]="renameFileResponseBehaviorSubject"
   ></app-rename-modal>
 
   <!-- ===========    AUTO-GENERATED TAGS MODAL    =========== -->
@@ -260,6 +266,10 @@
         [numFolders]="appState.numOfFolders"
         [pathToVhaFile]="appState.currentVhaFile"
         [screenshotSettings]="currentScreenshotSettings"
+
+        [inputFolderChosen]="inputSorceChosenBehaviorSubject.asObservable()"
+        [oldFolderReconnected]="oldFolderReconnectedBehaviorSubject.asObservable()"
+        [numberScreenshotsDeleted]="numberScreenshotsDeletedBehaviorSubject.asObservable()"
       ></app-statistics>
 
     </div>
@@ -382,6 +392,12 @@
           {{ (appState.numOfFolders === 1 ? 'SIDEBAR.totalFolders' : 'SIDEBAR.totalFoldersPlural') | translate }}
         </ng-container>
         <br>
+        <div
+          *ngIf="!allFinishedScanning"
+          class="scanning-indicator"
+          title="{{ 'SIDEBAR.scanInProgress' | translate }}"
+          @slowFadeOut
+        ></div>
         {{ finalArray.length | number }} {{ 'SIDEBAR.videos' | translate }}
       </div>
 
@@ -726,7 +742,7 @@
       <ng-container *ngIf="appState.currentView === 'showThumbnails'">
         <app-thumbnail
           *ngFor="let item of scroll.viewPortItems"
-          
+
           (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
           (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
           (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
@@ -877,7 +893,7 @@
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
           [imgHeight]="previewHeight"
-          [selectedSourceFolder]="sourceFolderService.selectedSourceFolder"
+          [selectedSourceFolder]="sourceFolderService.selectedSourceFolder[item.inputSource].path"
 
           [star]="item.stars"
 
@@ -891,6 +907,8 @@
           [showManualTags]="settingsButtons['manualTags'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
           [showVideoNotes]="settingsButtons['showVideoNotes'].toggled"
+
+          [renameResponse]="renameFileResponseBehaviorSubject"
 
           [ngStyle]="{ display: appState.currentView === 'showDetails' ? 'block' : 'inline-block' }"
         ></app-details-item>

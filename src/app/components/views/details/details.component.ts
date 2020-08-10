@@ -1,11 +1,13 @@
 import { Component, Input, OnInit, ElementRef, ViewChild, Output, EventEmitter } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
+import { BehaviorSubject } from 'rxjs';
+
 import { ManualTagsService } from '../../tags-manual/manual-tags.service';
 import { FilePathService } from '../file-path.service';
 
 import { StarRating, ImageElement } from '../../../../../interfaces/final-object.interface';
-import { TagEmission, VideoClickEmit, VideoClickSimilarEmit, RightClickEmit, TagEmit } from '../../../../../interfaces/shared-interfaces';
+import { TagEmission, VideoClickEmit, VideoClickSimilarEmit, RightClickEmit, TagEmit, RenameFileResponse } from '../../../../../interfaces/shared-interfaces';
 
 export interface StarEmission {
   index: number;
@@ -61,6 +63,8 @@ export class DetailsComponent implements OnInit {
   @Input() showMeta: boolean;
   @Input() showVideoNotes: boolean;
   @Input() star: StarRating;
+
+  @Input() renameResponse: BehaviorSubject<RenameFileResponse>;
 
   percentOffset: number = 0;
   firstFilePath = '';

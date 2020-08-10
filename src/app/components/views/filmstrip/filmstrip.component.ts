@@ -42,6 +42,7 @@ export class FilmstripComponent implements OnInit {
 
   fullFilePath: string = '';
   filmXoffset: number = 0;
+  indexToShow: number = 1;
 
   constructor(
     public filePathService: FilePathService,
@@ -59,6 +60,7 @@ export class FilmstripComponent implements OnInit {
       const howManyScreensOutsideCutoff = this.video.screens - Math.floor(containerWidth / imgWidth);
 
       const cursorX = $event.layerX; // cursor's X position inside the filmstrip element
+      this.indexToShow = Math.floor(cursorX * (this.video.screens / containerWidth));
       this.filmXoffset = imgWidth * Math.floor(cursorX / (containerWidth / howManyScreensOutsideCutoff));
     }
   }
