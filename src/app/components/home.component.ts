@@ -1399,6 +1399,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       // ======== Other buttons ========================
     } else if (uniqueKey === 'compactView') {
       this.toggleButtonOpposite(uniqueKey);
+      this.virtualScroller.refresh();
       if (
         this.settingsButtons['showThumbnails'].toggled
         || this.settingsButtons['showClips'].toggled
