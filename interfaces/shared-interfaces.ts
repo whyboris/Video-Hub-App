@@ -57,3 +57,11 @@ export interface HistoryItem {
   vhaFilePath: string;
   hubName: string;
 }
+
+export interface RenameFileResponse {
+  index: number;
+  success: boolean;
+  renameTo: string;
+  oldFileName: string;
+  errMsg?: string;
+}

@@ -7,6 +7,7 @@ import { SettingsMetaGroup, SettingsMetaGroupLabels, SettingsButtonsType } from 
   styleUrls: [
     '../buttons.scss',
     '../settings.scss',
+    '../search-input.scss',
     './settings.component.scss'
   ]
 })

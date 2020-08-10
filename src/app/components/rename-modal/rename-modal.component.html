@@ -26,8 +26,10 @@
 
 <app-rename-file
   *ngIf="renamingNow"
-  [selectedSourceFolder]="appState.selectedSourceFolder"
+  [selectedSourceFolder]="basePath"
   [currentRightClickedItem]="currentRightClickedItem"
   [macVersion]="macVersion"
   [darkMode]="settingsButtons['darkMode'].toggled"
+
+  [renameResponse]="renameResponse.asObservable()"
 ></app-rename-file>

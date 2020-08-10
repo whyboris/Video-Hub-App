@@ -1,9 +1,12 @@
-import { Component, ChangeDetectorRef, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
+import { Component, ChangeDetectorRef, OnInit, Input, ElementRef, ViewChild, OnDestroy } from '@angular/core';
+
+import { Observable, Subscription } from 'rxjs';
 
 import { ElectronService } from '../../providers/electron.service';
 import { FilePathService } from '../views/file-path.service';
 
-import { ImageElement, InputSources } from '../../../../interfaces/final-object.interface';
+import { ImageElement } from '../../../../interfaces/final-object.interface';
+import { RenameFileResponse } from '../../../../interfaces/shared-interfaces';
 
 @Component({
   selector: 'app-rename-file',
@@ -14,18 +17,22 @@ import { ImageElement, InputSources } from '../../../../interfaces/final-object.
     './rename-file.component.scss'
   ]
 })
-export class RenameFileComponent implements OnInit {
+export class RenameFileComponent implements OnInit, OnDestroy {
   @ViewChild('renameFileInput', { static: false }) renameFileInput: ElementRef;
 
-  @Input() selectedSourceFolder: InputSources;
   @Input() currentRightClickedItem: ImageElement;
-  @Input() macVersion: boolean;
   @Input() darkMode: boolean;
+  @Input() macVersion: boolean;
+  @Input() selectedSourceFolder: string;
+
+  @Input() renameResponse: Observable<RenameFileResponse>
 
   renamingWIP: string;
   renamingExtension: string;
   nodeRenamingFile: boolean = false;
   renameErrMsg: string = '';
+
+  responseSubscription: Subscription;
 
   constructor(
     public cd: ChangeDetectorRef,
@@ -41,23 +48,20 @@ export class RenameFileComponent implements OnInit {
       this.renameFileInput.nativeElement.focus();
     }, 0);
 
-    // Getting the error message to display
-    this.electronService.ipcRenderer.on(
-      'rename-file-response', (
-          event,
-          index: number,
-          success: boolean,
-          renameTo: string,
-          oldFileName: string,
-          errMsg?: string
-        ) => {
+    this.responseSubscription = this.renameResponse.subscribe((data: RenameFileResponse) => {
 
-      // just in case, make sure the message came back for the current file
-      if (this.currentRightClickedItem.index === index && !success) {
-        this.nodeRenamingFile = false;
-        this.renameErrMsg = errMsg;
-        this.cd.detectChanges();
-      } // if success, the `home.component` closes this component, no need to do anything else
+      if (data) {
+        console.log('WOW !!!');
+        console.log(data);
+
+        // just in case, make sure the message came back for the current file
+        if (this.currentRightClickedItem.index === data.index && !data.success) {
+          this.nodeRenamingFile = false;
+          this.renameErrMsg = data.errMsg;
+          this.cd.detectChanges();
+        } // if success, the `home.component` closes this component, no need to do anything else
+      }
+
     });
   }
 
@@ -70,10 +74,10 @@ export class RenameFileComponent implements OnInit {
     this.nodeRenamingFile = true;
     this.renameErrMsg = '';
 
-    const sourceFolder = this.selectedSourceFolder[this.currentRightClickedItem.inputSource].path;
-    const relativeFilePath = this.currentRightClickedItem.partialPath;
-    const originalFile = this.currentRightClickedItem.fileName;
-    const newFileName = this.renamingWIP + '.' + this.renamingExtension;
+    const sourceFolder: string = this.selectedSourceFolder;
+    const relativeFilePath: string = this.currentRightClickedItem.partialPath;
+    const originalFile: string = this.currentRightClickedItem.fileName;
+    const newFileName: string = this.renamingWIP + '.' + this.renamingExtension;
     // check if different first !!!
     if (originalFile === newFileName) {
       this.renameErrMsg = 'RIGHTCLICK.errorMustBeDifferent';
@@ -83,6 +87,10 @@ export class RenameFileComponent implements OnInit {
       this.nodeRenamingFile = false;
     } else {
       // try renaming
+
+      console.log(this.selectedSourceFolder);
+      console.log(sourceFolder);
+
       this.electronService.ipcRenderer.send(
         'try-to-rename-this-file',
         sourceFolder,
@@ -92,5 +100,9 @@ export class RenameFileComponent implements OnInit {
         this.currentRightClickedItem.index
       );
     }
+  }
+
+  ngOnDestroy() {
+    this.responseSubscription.unsubscribe();
   }
 }
