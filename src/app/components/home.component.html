@@ -21,7 +21,7 @@
   ></div>
 
   <!-- Progress indicator - "Donut" -->
-  <div *ngIf="importStage === 'importingScreenshots'" class="cancel-progress" @donutAppear>
+  <div *ngIf="importStage === 'importingScreenshots' && !settingsButtons['hideTop'].toggled" class="cancel-progress" @donutAppear>
     <span
       (click)="cancelCurrentImport()"
       [ngClass]="{ 'cancel-progress-dark': settingsButtons['darkMode'].toggled }"
@@ -31,7 +31,7 @@
   </div>
 
   <app-donut
-    *ngIf="importStage === 'importingScreenshots'"
+    *ngIf="importStage === 'importingScreenshots' && !settingsButtons['hideTop'].toggled"
     class="screenShotProgressPercent"
     [percent]="extractionPercent"
     [timeRemaining]="timeExtractionRemaining"
