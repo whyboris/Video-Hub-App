@@ -151,11 +151,10 @@
     [appState]="appState"
     [macVersion]="macVersion"
     [settingsButtons]="settingsButtons"
-    [itemToRename]="itemToRename"
-    [currentRightClickedItem]="currentRightClickedItem"
-    [renamingNow]="renamingNow"
 
-    [basePath]="sourceFolderService.selectedSourceFolder[itemToRename.inputSource].path"
+    [currentRightClickedItem]="currentRightClickedItem"
+
+    [basePath]="sourceFolderService.selectedSourceFolder[currentRightClickedItem.inputSource].path"
 
     [renameResponse]="renameFileResponseBehaviorSubject"
   ></app-rename-modal>

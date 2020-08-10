@@ -21,15 +21,10 @@ export class RenameModalComponent {
   @Output() closeRename = new EventEmitter<any>();
 
   @Input() appState: AppStateInterface;
+  @Input() basePath: string;
+  @Input() currentRightClickedItem: ImageElement;
   @Input() macVersion: boolean;
   @Input() settingsButtons: SettingsButtonsType;
-
-  @Input() basePath: string;
-
-  @Input() itemToRename: ImageElement;                // WHY ARE THESE THE SAME !?!?! - TODO
-  @Input() currentRightClickedItem: ImageElement;     // WHY ARE THESE THE SAME !?!?! - TODO
-
-  @Input() renamingNow: boolean;
 
   @Input() renameResponse: BehaviorSubject<RenameFileResponse>;
 

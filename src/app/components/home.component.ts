@@ -198,7 +198,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // ------------------------------------------------------------------------
 
   currentRightClickedItem: ImageElement;
-  itemToRename: ImageElement;
   renamingExtension: string;
   renamingNow: boolean = false;
   rightClickPosition: { x: number, y: number } = { x: 0, y: 0 };
@@ -1925,7 +1924,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Opens rename file modal, prepares all the name and extension
    */
   openRenameFileModal(): void {
-    this.itemToRename = this.currentRightClickedItem;
     this.renamingNow = true;
   }
 
