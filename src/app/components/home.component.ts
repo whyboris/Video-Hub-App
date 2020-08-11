@@ -1,3 +1,4 @@
+import { CommonDialogService } from './common-dialog/common-dialog.service';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
@@ -351,7 +352,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     public sourceFolderService: SourceFolderService,
     public starFilterService: StarFilterService,
     public translate: TranslateService,
-    public wordFrequencyService: WordFrequencyService
+    public wordFrequencyService: WordFrequencyService,
+    public commonDialogService: CommonDialogService
   ) { }
 
   ngOnInit() {
