@@ -432,6 +432,7 @@
     "sizeToImport": "mb of disk space",
     "stage": "stage",
     "stopImport": "stop",
+    "importInProgress": "Importing in progress",
     "timeToImport": "minutes to import",
     "videoDirectory": "video directory",
     "videos": "videos"

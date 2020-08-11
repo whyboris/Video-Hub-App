@@ -21,7 +21,7 @@
   ></div>
 
   <!-- Progress indicator - "Donut" -->
-  <div *ngIf="importStage === 'importingScreenshots'" class="cancel-progress" @donutAppear>
+  <div *ngIf="importStage === 'importingScreenshots' && !settingsButtons['hideTop'].toggled" class="cancel-progress" @donutAppear>
     <span
       (click)="cancelCurrentImport()"
       [ngClass]="{ 'cancel-progress-dark': settingsButtons['darkMode'].toggled }"
@@ -31,7 +31,7 @@
   </div>
 
   <app-donut
-    *ngIf="importStage === 'importingScreenshots'"
+    *ngIf="importStage === 'importingScreenshots' && !settingsButtons['hideTop'].toggled"
     class="screenShotProgressPercent"
     [percent]="extractionPercent"
     [timeRemaining]="timeExtractionRemaining"
@@ -332,6 +332,8 @@
         [settingsButtons]="settingsButtons"
       ></app-ribbon>
 
+      <div class='right-ribbon-settings'>
+
       <!-- GEAR BUTTON -->
       <div
         (click)="toggleSettings()"
@@ -341,6 +343,13 @@
       >
         <app-icon [icon]="'icon-gear'"></app-icon>
       </div>
+      <div
+        *ngIf="settingsButtons['hideTop'].toggled && importStage === 'importingScreenshots'"
+        class="scanning-indicator"
+        title="{{ 'WIZARD.importInProgress' | translate }}"
+        @slowFadeOut
+      ></div>
+    </div>
 
     </div>
 
