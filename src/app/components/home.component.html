@@ -322,6 +322,8 @@
         [settingsButtons]="settingsButtons"
       ></app-ribbon>
 
+      <div class='right-ribbon-settings'>
+
       <!-- GEAR BUTTON -->
       <div
         (click)="toggleSettings()"
@@ -331,6 +333,13 @@
       >
         <app-icon [icon]="'icon-gear'"></app-icon>
       </div>
+      <div
+        *ngIf="settingsButtons['hideTop'].toggled && importStage === 'importingScreenshots'"
+        class="scanning-indicator"
+        title="{{ 'WIZARD.importInProgress' | translate }}"
+        @slowFadeOut
+      ></div>
+    </div>
 
     </div>
 
