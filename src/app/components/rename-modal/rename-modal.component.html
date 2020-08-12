@@ -18,14 +18,13 @@
   [imgHeight]="100"
   [largerFont]="true"
   [showMeta]="true"
-  [video]="itemToRename"
+  [video]="currentRightClickedItem"
 ></app-filmstrip-item>
 
 <span class="rename-from">{{ 'RIGHTCLICK.renameFrom' | translate }}</span>
 <span class="rename-to">{{ 'RIGHTCLICK.renameTo' | translate }}</span>
 
 <app-rename-file
-  *ngIf="renamingNow"
   [selectedSourceFolder]="basePath"
   [currentRightClickedItem]="currentRightClickedItem"
   [macVersion]="macVersion"

@@ -313,8 +313,7 @@
     "pleaseChangeName": "Будь-ласка, змініть назву концентратора вище",
     "selectDefaultPlayer": "Виберіть бажаний відеоплеєр",
     "selectPreviousHub": "Виберіть раніше збережений файл Video Hub",
-    "selectRootFolder": "Виберіть джерело папки відео",
-    "videoFolderNotFound": "Папка відео не знайдена:"
+    "selectRootFolder": "Виберіть джерело папки відео"
   },
   "TAGS": {
     "add": "Додайте",

@@ -313,8 +313,7 @@
     "pleaseChangeName": "请在上方更改集线器名称",
     "selectDefaultPlayer": "请选择您喜欢的视频播放器",
     "selectPreviousHub": "请选择一个先前保存的Video Hub文件",
-    "selectRootFolder": "选择源视频文件夹",
-    "videoFolderNotFound": "找不到源视频文件夹："
+    "selectRootFolder": "选择源视频文件夹"
   },
   "TAGS": {
     "add": "加",

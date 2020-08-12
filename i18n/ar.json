@@ -313,8 +313,7 @@
     "pleaseChangeName": "يرجى تغيير اسم المحور أعلاه",
     "selectDefaultPlayer": "يرجى اختيار مشغل الفيديو المفضل لديك",
     "selectPreviousHub": "يرجى تحديد ملف Video Hub تم حفظه مسبقًا",
-    "selectRootFolder": "حدد مجلد مصدر الفيديو",
-    "videoFolderNotFound": "لم يتم العثور على مجلد مصدر الفيديو:"
+    "selectRootFolder": "حدد مجلد مصدر الفيديو"
   },
   "TAGS": {
     "add": "إضافة",

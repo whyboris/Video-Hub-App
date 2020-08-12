@@ -313,8 +313,7 @@
     "pleaseChangeName": "Modifica il nome dell'hub sopra",
     "selectDefaultPlayer": "Seleziona il tuo lettore video preferito",
     "selectPreviousHub": "Seleziona un file Hub video salvato in precedenza",
-    "selectRootFolder": "Seleziona cartella video sorgente",
-    "videoFolderNotFound": "Cartella video sorgente non trovata:"
+    "selectRootFolder": "Seleziona cartella video sorgente"
   },
   "TAGS": {
     "add": "Inserisci",

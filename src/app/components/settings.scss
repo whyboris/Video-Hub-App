@@ -30,10 +30,6 @@ h3 {
   }
 }
 
-.right-ribbon-settings {
-  float: right;
-}
-
 .credits-and-help {
   color: $gray-60;
   cursor: pointer;
@@ -398,7 +394,6 @@ input[type="radio"]:checked:before {
     z-index: 10;
   }
 }
-
 
 @media (max-width: 900px) {
   .all-settings-tabs {
