@@ -5,6 +5,7 @@ import { CommonDialogComponent } from './common-dialog.component';
 export interface DialogData {
   content: string;
   title: string;
+  details?: string;
 }
 
 @Injectable()
@@ -12,7 +13,7 @@ export class CommonDialogService {
 
 constructor(public dialog: MatDialog) { }
 
-openDialog(title: string, content: string) {
+openDialog(title: string, content: string, details: string) {
   const dialogRef = this.dialog.open(
     CommonDialogComponent,
     {
@@ -20,7 +21,8 @@ openDialog(title: string, content: string) {
       width: '300px',
       data: {
         content: content,
-        title: title
+        title: title,
+        details: details
       }
     }
   );

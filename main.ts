@@ -241,14 +241,8 @@ function openThisDamnFile(pathToVhaFile: string) {
 
   fs.readFile(pathToVhaFile, (err, data) => {
     if (err) {
-
-      dialog.showMessageBox(win, {
-        message: systemMessages.noSuchFileFound,
-        detail: pathToVhaFile,
-        buttons: ['OK']
-      });
       GLOBALS.angularApp.sender.send('please-open-wizard');
-
+      GLOBALS.angularApp.sender.send('show-msg-dialog', 'Error', systemMessages.noSuchFileFound, pathToVhaFile);
     } else {
       app.addRecentDocument(pathToVhaFile);
 

@@ -401,6 +401,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.cd.detectChanges();
     });
 
+    this.electronService.ipcRenderer.on('show-msg-dialog', (event,  title: string, content: string, details: string ) => {
+      const dialogRef = this.commonDialogService.openDialog(title, content, details);
+    });
+
     // Closing of Window was issued by Electron
     this.electronService.remote.getCurrentWindow().on('close', () => {
       // Check to see if this was not originally triggered by Title-Bar to avoid double saving of settings
