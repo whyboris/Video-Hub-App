@@ -293,7 +293,7 @@
     <app-top-component
       class="top-content-position"
       [darkMode]="settingsButtons['darkMode'].toggled"
-      [fileString]="currentPlayingFile"
+      [fileString]="currentClickedItemName"
       [folderString]="currentPlayingFolder"
       (onFileWordClicked)="handleFileWordClicked($event)"
       (onFolderWordClicked)="handleFolderWordClicked($event)"
@@ -746,7 +746,7 @@
 
           (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
           (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
-          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (doubleClick)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
           (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
 
           (sheetClick)="this.openThumbnailSheet(item)"
@@ -789,7 +789,7 @@
 
           (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
           (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
-          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (doubleClick)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
           (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
 
           (drop)="droppedSomethingOverVideo($event, item)"
@@ -819,7 +819,7 @@
 
           (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
           (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
-          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (doubleClick)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
           (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
 
           (drop)="droppedSomethingOverVideo($event, item)"
@@ -848,7 +848,7 @@
 
           (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
           (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
-          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (doubleClick)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
           (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
 
           (drop)="droppedSomethingOverVideo($event, item)"
@@ -871,7 +871,7 @@
 
           (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
           (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
-          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (doubleClick)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
           (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
 
           (editFinalArrayStars)="editFinalArrayStars($event)"
@@ -920,7 +920,7 @@
 
           (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
           (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
-          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (doubleClick)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
           (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
 
           (sheetClick)="this.openThumbnailSheet(item)"

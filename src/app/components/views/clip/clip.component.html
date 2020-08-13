@@ -15,7 +15,7 @@
       *ngIf="video.fileName !== '*UP*'; else upFolderDiv"
       class="video-box folder"
       (click)="videoClick.emit({ mouseEvent: $event })"
-      (dblclick)="videoClickSimilar.emit({ mouseEvent: $event })"
+      (dblclick)="doubleClick.emit({ mouseEvent: $event })"
       [ngStyle]="{
           height: imgHeight + 'px'
       }"
@@ -55,7 +55,7 @@
       <div
         class="video-box folder"
         (click)="videoClick.emit({ mouseEvent: $event })"
-        (dblclick)="videoClickSimilar.emit({ mouseEvent: $event })"
+        (dblclick)="doubleClick.emit({ mouseEvent: $event })"
         [ngStyle]="{ height: imgHeight + 'px' }"
       >
         <div class="up-icon">
@@ -102,7 +102,7 @@
       [poster]="sanitizer.bypassSecurityTrustUrl(poster)"
       [ngStyle]="{ 'height': imgHeight + 'px' }"
       (click)="videoClick.emit({ mouseEvent: $event })"
-      (dblclick)="videoClickSimilar.emit({ mouseEvent: $event })"
+      (dblclick)="doubleClick.emit({ mouseEvent: $event })"
       (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
       class="screencap"
       [volume]="forceMute ? 0 : 1"
@@ -118,7 +118,7 @@
       [poster]="sanitizer.bypassSecurityTrustUrl(poster)"
       [ngStyle]="{ 'height': imgHeight + 'px' }"
       (click)="videoClick.emit({ mouseEvent: $event })"
-      (dblclick)="videoClickSimilar.emit({ mouseEvent: $event })"
+      (dblclick)="doubleClick.emit({ mouseEvent: $event })"
       (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
       class="screencap"
       [volume]="forceMute ? 0 : 1"

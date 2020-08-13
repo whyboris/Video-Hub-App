@@ -252,7 +252,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // Miscellaneous variables
   // ------------------------------------------------------------------------
 
-  currentPlayingFile = '';
   currentClickedItemName = '';
   currentPlayingFolder = '';
   fullPathToCurrentFile = '';
@@ -974,7 +973,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const clickedElement: ImageElement = this.finalArray[index];
 
     this.currentPlayingFolder = clickedElement.partialPath;
-    this.currentPlayingFile = clickedElement.cleanName;
+    this.currentClickedItemName = clickedElement.cleanName;
     const fullPath = path.join(
       this.sourceFolderService.selectedSourceFolder[inputSource].path,
       clickedElement.partialPath,
@@ -1890,9 +1889,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     this.currentRightClickedItem = item;
     this.rightClickShowing = true;
+  }
 
-    }
-
+  /**
+   * When in double-click mode and a video is clicked - `currentClickedItemName` updated
+   * @param item
+   */
   assignSelectedFile(item: ImageElement): void {
     this.currentClickedItemName = item.cleanName;
   }

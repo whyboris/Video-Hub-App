@@ -13,7 +13,7 @@
       class="video-box folder"
       (mousemove)="mouseIsMoving($event)"
       (click)="videoClick.emit($event)"
-      (dblclick)="videoClickSimilar.emit($event)"
+      (dblclick)="doubleClick.emit($event)"
       [ngStyle]="{ height: imgHeight + 'px' }"
     >
 
@@ -58,7 +58,7 @@
   <div
     class="video-box folder"
     (click)="videoClick.emit($event)"
-    (dblclick)="videoClickSimilar.emit($event)"
+    (dblclick)="doubleClick.emit($event)"
     [ngStyle]="{ height: imgHeight + 'px' }"
   >
     <div class="up-icon">
@@ -117,11 +117,11 @@
     (mousemove)="mouseIsMoving($event)"
     (mouseenter)="mouseEntered()"
     (mouseleave)="mouseLeft()"
-    
+
     (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
     (click)="videoClick.emit({ mouseEvent: $event, thumbIndex: indexToShow })"
-    (dblclick)="videoClickSimilar.emit({ mouseEvent: $event, thumbIndex: indexToShow })"
-    
+    (dblclick)="doubleClick.emit({ mouseEvent: $event, thumbIndex: indexToShow })"
+
     [ngStyle]="{
         height: imgHeight + 'px',
         'background-image': 'url(' + (hover ? fullFilePath : firstFilePath) + ')',

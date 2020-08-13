@@ -25,7 +25,7 @@ export interface VideoClickEmit {
   thumbIndex?: number;
 }
 
-export interface VideoClickSimilarEmit {
+export interface DoubleClickVideoEmit {
   mouseEvent: Event;
   thumbIndex?: number;
 }
