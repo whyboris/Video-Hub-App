@@ -931,13 +931,20 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param eventObject - contains the MouseEvent and the thumbIndex (which thumb was clicked)
    *                                                      only used in the Thumbnail
    * @param item        - ImageElement
+   * @param isDoubleClick - whether it's a double click
    */
-  public handleClick(eventObject: { mouseEvent: MouseEvent, thumbIndex?: number }, item: ImageElement) {
+  public handleClick(eventObject: { mouseEvent: MouseEvent, thumbIndex?: number }, item: ImageElement, isDoubleClick?: boolean) {
 
     console.log(item);
 
     if (this.batchTaggingMode) {
       item.selected = !item.selected;
+
+      return;
+    }
+
+    if (this.settingsButtons.doubleClickMode.toggled && !isDoubleClick) {
+      this.assignSelectedFile(item);
 
       return;
     }
