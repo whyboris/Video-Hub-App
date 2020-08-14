@@ -362,6 +362,7 @@
     "continueAnyway": "Continue Anyway",
     "directory": "Directory",
     "doesNotExist": "does not exist",
+    "error": "Error",
     "fileRenameError": "File was not renamed. Some error occurred.",
     "hubAlreadyExists": "Hub already exists with this name",
     "noSuchFileFound": "File not found:",

@@ -241,7 +241,7 @@ function openThisDamnFile(pathToVhaFile: string) {
 
   fs.readFile(pathToVhaFile, (err, data) => {
     if (err) {
-      GLOBALS.angularApp.sender.send('show-msg-dialog', 'Error', systemMessages.noSuchFileFound, pathToVhaFile);
+      GLOBALS.angularApp.sender.send('show-msg-dialog', systemMessages.error, systemMessages.noSuchFileFound, pathToVhaFile);
       GLOBALS.angularApp.sender.send('please-open-wizard');
     } else {
       app.addRecentDocument(pathToVhaFile);
@@ -308,8 +308,7 @@ ipcMain.on('start-the-import', (event, wizard: WizardOptions) => {
   const outDir: string = wizard.selectedOutputFolder;
 
   if (fs.existsSync(path.join(outDir, hubName + '.vha2'))) { // make sure no hub name under the same name exists
-    const message = systemMessages.hubAlreadyExists + '\n' + systemMessages.pleaseChangeName;
-    GLOBALS.angularApp.sender.send('show-msg-dialog', 'Error', message);
+    event.sender.send('show-msg-dialog', systemMessages.error, systemMessages.hubAlreadyExists, systemMessages.pleaseChangeName);
     event.sender.send('please-fix-hub-name');
   } else {
 
