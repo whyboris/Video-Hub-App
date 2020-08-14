@@ -6,7 +6,7 @@ import { FilePathService } from '../file-path.service';
 import { metaAppear, textAppear } from '../../../common/animations';
 
 import { ImageElement } from '../../../../../interfaces/final-object.interface';
-import { RightClickEmit, VideoClickEmit, DoubleClickVideoEmit } from '../../../../../interfaces/shared-interfaces';
+import { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/shared-interfaces';
 
 @Component({
   selector: 'app-filmstrip-item',
@@ -25,8 +25,6 @@ export class FilmstripComponent implements OnInit {
 
   @Output() videoClick = new EventEmitter<VideoClickEmit>();
   @Output() rightClick = new EventEmitter<RightClickEmit>();
-  @Output() doubleClick = new EventEmitter<DoubleClickVideoEmit>();
-
 
   @Input() video: ImageElement;
 
