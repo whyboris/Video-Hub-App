@@ -1,3 +1,4 @@
+import { CommonDialogService } from './common-dialog/common-dialog.service';
 import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
@@ -358,7 +359,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     public sourceFolderService: SourceFolderService,
     public starFilterService: StarFilterService,
     public translate: TranslateService,
-    public wordFrequencyService: WordFrequencyService
+    public wordFrequencyService: WordFrequencyService,
+    public commonDialogService: CommonDialogService
   ) { }
 
   ngOnInit() {
@@ -442,6 +444,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // Happens if a file with the same hub name already exists in the directory
     this.electronService.ipcRenderer.on('please-fix-hub-name', (event) => {
       this.importStage = 'done';
+      this.cd.detectChanges();
+    });
+
+    this.electronService.ipcRenderer.on('show-msg-dialog', (event,  title: string, content: string, details: string ) => {
+      const dialogRef = this.commonDialogService.openDialog(title, content, details);
       this.cd.detectChanges();
     });
 

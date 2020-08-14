@@ -1,3 +1,4 @@
+import { CommonDialogComponent } from './components/common-dialog/common-dialog.component';
 import 'reflect-metadata';
 import '../polyfills';
 
@@ -12,6 +13,7 @@ import { AppRoutingModule } from './app-routing.module';
 // External
 import { TranslateModule } from '@ngx-translate/core';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
+import {MatDialogModule} from '@angular/material/dialog';
 
 // Services
 import { AutoTagsSaveService } from './components/tags-auto/tags-save.service';
@@ -92,6 +94,7 @@ import { TagMatchPipe } from './components/tags-auto/tag-match.pipe';
 import { TagsDisplayPipe } from './components/tags-auto/tag-display.pipe';
 import { WordFrequencyPipe } from './pipes/word-frequency.pipe';
 import { WrapperPipe } from './pipes/wrapper.pipe';
+import { CommonDialogService } from './components/common-dialog/common-dialog.service';
 
 @NgModule({
   declarations: [
@@ -157,6 +160,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     WizardComponent,
     WordFrequencyPipe,
     WrapperPipe,
+    CommonDialogComponent
   ],
   imports: [
     AppRoutingModule,
@@ -166,6 +170,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     HttpClientModule,
     TranslateModule.forRoot(),
     VirtualScrollerModule,
+    MatDialogModule,
   ],
   providers: [
     AutoTagsSaveService,
@@ -181,6 +186,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     SourceFolderService,
     StarFilterService,
     WordFrequencyService,
+    CommonDialogService
   ],
   bootstrap: [AppComponent]
 })
