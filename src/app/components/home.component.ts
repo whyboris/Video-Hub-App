@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild, NgZone } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import * as path from 'path';
@@ -9,6 +9,7 @@ import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
 
 // Services
 import { AutoTagsSaveService } from './tags-auto/tags-save.service';
+import { CommonDialogService } from './common-dialog/common-dialog.service';
 import { ElectronService } from '../providers/electron.service';
 import { ManualTagsService } from './tags-manual/manual-tags.service';
 import { PipeSideEffectService } from '../pipes/pipe-side-effect.service';
@@ -22,7 +23,6 @@ import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency
 import { AllSupportedViews, SupportedView, TagEmission, HistoryItem, RenameFileResponse } from '../../../interfaces/shared-interfaces';
 import { DefaultScreenEmission } from './sheet/sheet.component';
 import { FinalObject, ImageElement, ScreenshotSettings, ResolutionString } from '../../../interfaces/final-object.interface';
-
 import { ImportStage } from '../../../node/main-support';
 import { SettingsObject } from '../../../interfaces/settings-object.interface';
 import { SortType } from '../pipes/sorting.pipe';
@@ -358,7 +358,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     public sourceFolderService: SourceFolderService,
     public starFilterService: StarFilterService,
     public translate: TranslateService,
-    public wordFrequencyService: WordFrequencyService
+    public wordFrequencyService: WordFrequencyService,
+    public commonDialogService: CommonDialogService,
+    public zone: NgZone,
   ) { }
 
   ngOnInit() {
@@ -443,6 +445,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.electronService.ipcRenderer.on('please-fix-hub-name', (event) => {
       this.importStage = 'done';
       this.cd.detectChanges();
+    });
+
+    this.electronService.ipcRenderer.on('show-msg-dialog', (event,  title: string, content: string, details: string ) => {
+      this.zone.run(() => {
+        this.commonDialogService.openDialog(title, content, details);
+      });
     });
 
     // Closing of Window was issued by Electron
