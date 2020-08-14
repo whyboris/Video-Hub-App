@@ -96,15 +96,14 @@
 
     </div>
 
-    <div class="player-settings">
+    <div *ngIf="appState.preferredVideoPlayer" class="player-settings">
+
+      {{ 'SETTINGS.playerArgs' | translate }}
 
       <input
-        class="filter-general input-filter"
+        class="filter-general input-filter player-args-input"
         [(ngModel)]="appState.videoPlayerArgs"
-        *ngIf="appState.preferredVideoPlayer"
-        placeholder="{{ 'SETTINGS.playerArgs' | translate }}"
         type="text"
-        style="width: 400px"
       >
 
     </div>

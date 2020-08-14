@@ -159,6 +159,12 @@ export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: stri
 
   finalObject.images = finalObject.images.filter(element => !element.deleted);
 
+  // remove any videos that have no reference (unsure how this could happen, but just in case)
+  const allKeys: string[] = Object.keys(finalObject.inputDirs);
+  finalObject.images = finalObject.images.filter(element => {
+    return allKeys.includes(element.inputSource.toString());
+  });
+
   finalObject.images = alphabetizeFinalArray(finalObject.images); // TODO -- rethink if this is needed
 
   finalObject.numOfFolders = countFoldersInFinalArray(finalObject.images);

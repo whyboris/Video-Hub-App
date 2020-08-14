@@ -313,8 +313,7 @@
     "pleaseChangeName": "上記のハブ名を変更してください",
     "selectDefaultPlayer": "ご希望の動画プレーヤーを選択してください",
     "selectPreviousHub": "以前に保存したVideo Hubファイルを選択してください",
-    "selectRootFolder": "ソースビデオフォルダーを選択",
-    "videoFolderNotFound": "ソースビデオフォルダーが見つかりません："
+    "selectRootFolder": "ソースビデオフォルダーを選択"
   },
   "TAGS": {
     "add": "追加",

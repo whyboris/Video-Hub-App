@@ -1,4 +1,10 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
+
+import { BehaviorSubject } from 'rxjs';
+
+import { AppStateInterface } from '../../common/app-state';
+import { ImageElement } from '../../../../interfaces/final-object.interface';
+import { RenameFileResponse } from '../../../../interfaces/shared-interfaces';
 import { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
@@ -14,12 +20,13 @@ export class RenameModalComponent {
 
   @Output() closeRename = new EventEmitter<any>();
 
-  @Input() appState;
-  @Input() macVersion;
+  @Input() appState: AppStateInterface;
+  @Input() basePath: string;
+  @Input() currentRightClickedItem: ImageElement;
+  @Input() macVersion: boolean;
   @Input() settingsButtons: SettingsButtonsType;
-  @Input() itemToRename;
-  @Input() currentRightClickedItem;
-  @Input() renamingNow;
+
+  @Input() renameResponse: BehaviorSubject<RenameFileResponse>;
 
   constructor() { }
 

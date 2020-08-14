@@ -313,8 +313,7 @@
     "pleaseChangeName": "Por favor, cambie el nombre del concentrador arriba",
     "selectDefaultPlayer": "Por favor seleccione su reproductor de video preferido",
     "selectPreviousHub": "Seleccione un archivo Video Hub previamente guardado",
-    "selectRootFolder": "Seleccione la carpeta de video de origen",
-    "videoFolderNotFound": "Carpeta de video de origen no encontrada:"
+    "selectRootFolder": "Seleccione la carpeta de video de origen"
   },
   "TAGS": {
     "add": "Añadir",

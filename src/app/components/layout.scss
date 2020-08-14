@@ -13,6 +13,12 @@
   width: 10px;
 }
 
+.scanning-indicator-right {
+  position: absolute;
+  right: 30px;
+  top: 10px;
+}
+
 @keyframes scanning {
   0% {
     opacity: 100%;
@@ -111,7 +117,7 @@
   box-sizing: border-box;
   height: $settings-height;
   overflow: hidden;
-  padding: 4px 28px 4px 5px;
+  padding: 4px 36px 4px 5px;
   position: absolute;
   transition: 300ms;
   transition-property: background-color;

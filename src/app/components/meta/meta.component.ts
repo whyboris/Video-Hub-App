@@ -1,12 +1,14 @@
-import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectorRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectorRef, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
+
+import { Subscription, Observable } from 'rxjs';
 
 import { ElectronService } from '../../providers/electron.service';
 import { FilePathService } from '../views/file-path.service';
 import { ManualTagsService } from '../tags-manual/manual-tags.service';
 
-import { StarRating, ImageElement, InputSources } from '../../../../interfaces/final-object.interface';
-import { TagEmit, TagEmission } from '../../../../interfaces/shared-interfaces';
+import { StarRating, ImageElement } from '../../../../interfaces/final-object.interface';
+import { TagEmit, TagEmission, RenameFileResponse } from '../../../../interfaces/shared-interfaces';
 import { YearEmission } from '../views/details/details.component';
 
 export interface StarEmission {
@@ -19,7 +21,7 @@ export interface StarEmission {
   templateUrl: './meta.component.html',
   styleUrls: [ './meta.component.scss' ]
 })
-export class MetaComponent implements OnInit {
+export class MetaComponent implements OnInit, OnDestroy {
 
   @ViewChild('yearInput', { static: false }) yearInput: ElementRef;
   @ViewChild('videoNotes', { static: false}) videoNotes: ElementRef;
@@ -35,13 +37,15 @@ export class MetaComponent implements OnInit {
   @Input() imgHeight: number;
   @Input() largerFont: boolean;
   @Input() maxWidth: number;
-  @Input() selectedSourceFolder: InputSources;
+  @Input() selectedSourceFolder: string;
   @Input() showAutoFileTags: boolean;
   @Input() showAutoFolderTags: boolean;
   @Input() showManualTags: boolean;
   @Input() showMeta: boolean;
   @Input() showVideoNotes: boolean;
   @Input() star: StarRating;
+
+  @Input() renameResponse: Observable<RenameFileResponse>
 
   starRatingHack: StarRating;
   yearHack: number;
@@ -50,6 +54,8 @@ export class MetaComponent implements OnInit {
 
   renamingWIP: string = '';
   renameError: boolean = false;
+
+  responseSubscription: Subscription;
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -65,27 +71,22 @@ export class MetaComponent implements OnInit {
 
     this.renamingWIP = this.video.cleanName; // or should this be video.fileName (without extension!?)
 
-    // Rename file response
-    this.electronService.ipcRenderer.on(
-      'rename-file-response', (
-          event,
-          index: number,
-          success: boolean,
-          renameTo: string,
-          oldFileName: string,
-          errMsg?: string
-        ) => {
+    this.responseSubscription = this.renameResponse.subscribe((data: RenameFileResponse) => {
+      if (data) {
+        console.log('WOW');
+        console.log(data);
 
-      if (this.video.index === index) { // make sure the message is about current component's video
-        if (success) {
-          this.renameError = false;
-        } else {
-          this.renameError = true;
-          this.cd.detectChanges();
+        if (this.video.index === data.index) { // make sure the message is about current component's video
+          if (data.success) {
+            this.renameError = false;
+          } else {
+            this.renameError = true;
+            this.cd.detectChanges();
+          }
         }
       }
-
     });
+
   }
 
   addThisTag(tag: string) {
@@ -193,10 +194,12 @@ export class MetaComponent implements OnInit {
   tryRenamingFile() {
     this.renameError = false;
 
-    const sourceFolder = this.selectedSourceFolder[0].path;                       // TODO -- handle every source folder!
+    const sourceFolder = this.selectedSourceFolder;
     const relativeFilePath = this.video.partialPath;
     const originalFile = this.video.fileName;
     const newFileName = this.renamingWIP + '.' + this.filePathService.getFileNameExtension(this.video.fileName);
+
+    console.log(sourceFolder);
 
     if (originalFile !== newFileName && this.renamingWIP.length !== 0) {
       this.electronService.ipcRenderer.send(
@@ -230,4 +233,7 @@ export class MetaComponent implements OnInit {
     this.video.notes = this.videoNotes.nativeElement.value;
   }
 
+  ngOnDestroy(): void {
+    this.responseSubscription.unsubscribe();
+  }
 }

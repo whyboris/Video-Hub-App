@@ -42,11 +42,12 @@ export class ShortcutsComponent {
     'shuffleGalleryNow', // s - space after
 
     'toggleSettings',    // o
-    'darkMode',          // d
+    'hideSidebar',       // b
+    'showTagTray',       // y
+    'toggleMinimalMode', // k
     'showAutoTags',      // t
     'showMoreInfo',      // i
-    'hideSidebar',       // b
-    'toggleMinimalMode', // h
+    'darkMode',          // d
     'startWizard',       // n - space after
 
     // 'quit',           // w - hardcoded in template

@@ -313,8 +313,7 @@
     "pleaseChangeName": "कृपया ऊपर हब नाम बदलें",
     "selectDefaultPlayer": "कृपया अपने पसंदीदा वीडियो प्लेयर का चयन करें",
     "selectPreviousHub": "कृपया पहले से सहेजे गए वीडियो हब फ़ाइल का चयन करें",
-    "selectRootFolder": "स्रोत वीडियो फ़ोल्डर का चयन करें",
-    "videoFolderNotFound": "स्रोत वीडियो फ़ोल्डर नहीं मिला:"
+    "selectRootFolder": "स्रोत वीडियो फ़ोल्डर का चयन करें"
   },
   "TAGS": {
     "add": "जोड़ना",

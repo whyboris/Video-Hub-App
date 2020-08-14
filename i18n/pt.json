@@ -313,8 +313,7 @@
     "pleaseChangeName": "Altere o nome do hub acima",
     "selectDefaultPlayer": "Selecione seu player de vídeo preferido",
     "selectPreviousHub": "Selecione um arquivo do Hub de vídeo salvo anteriormente",
-    "selectRootFolder": "Selecione Pasta de Vídeo de Origem",
-    "videoFolderNotFound": "Pasta de vídeo de origem não encontrada:"
+    "selectRootFolder": "Selecione Pasta de Vídeo de Origem"
   },
   "TAGS": {
     "add": "Adicionar, acrescentar",

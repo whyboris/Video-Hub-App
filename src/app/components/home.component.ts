@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 
 import * as path from 'path';
 
+import { BehaviorSubject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
 import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
 
@@ -18,7 +19,7 @@ import { StarFilterService } from '../pipes/star-filter.service';
 import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency.service';
 
 // Interfaces
-import { AllSupportedViews, SupportedView, TagEmission, HistoryItem } from '../../../interfaces/shared-interfaces';
+import { AllSupportedViews, SupportedView, TagEmission, HistoryItem, RenameFileResponse } from '../../../interfaces/shared-interfaces';
 import { DefaultScreenEmission } from './sheet/sheet.component';
 import { FinalObject, ImageElement, ScreenshotSettings, ResolutionString } from '../../../interfaces/final-object.interface';
 
@@ -197,7 +198,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // ------------------------------------------------------------------------
 
   currentRightClickedItem: ImageElement;
-  itemToRename: ImageElement;
   renamingExtension: string;
   renamingNow: boolean = false;
   rightClickPosition: { x: number, y: number } = { x: 0, y: 0 };
@@ -291,6 +291,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   allFinishedScanning: boolean = true;
 
+  // Behavior Subjects for IPC events:
+
+  inputSorceChosenBehaviorSubject: BehaviorSubject<string> = new BehaviorSubject(undefined);
+  numberScreenshotsDeletedBehaviorSubject: BehaviorSubject<number> = new BehaviorSubject(undefined);
+  oldFolderReconnectedBehaviorSubject: BehaviorSubject<{source: number, path: string}> = new BehaviorSubject(undefined);
+  renameFileResponseBehaviorSubject: BehaviorSubject<RenameFileResponse> = new BehaviorSubject(undefined);
+
   // ========================================================================
   // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
   // ========================================================================
@@ -380,8 +387,47 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     }, 100);
 
+    this.electronService.ipcRenderer.on(
+      'rename-file-response', (
+          event,
+          index: number,
+          success: boolean,
+          renameTo: string,
+          oldFileName: string,
+          errMsg?: string
+        ) => {
+
+          this.renameFileResponseBehaviorSubject.next({
+            index: index,
+            success: success,
+            renameTo: renameTo,
+            oldFileName: oldFileName,
+            errMsg: errMsg,
+          });
+          this.renameFileResponseBehaviorSubject.next(undefined); // allways remove right away
+
+      });
+
+
+    // for statistics.component
+    this.electronService.ipcRenderer.on('number-of-screenshots-deleted', (event, totalDeleted: number) => {
+      this.numberScreenshotsDeletedBehaviorSubject.next(totalDeleted);
+      this.numberScreenshotsDeletedBehaviorSubject.next(undefined); // allways remove right away
+    });
+
+    // for statistics.component
+    this.electronService.ipcRenderer.on('old-folder-reconnected', (event, sourceIndex: number, newPath: string) => {
+      this.oldFolderReconnectedBehaviorSubject.next({ source: sourceIndex, path: newPath });
+      this.oldFolderReconnectedBehaviorSubject.next(undefined); // allways remove right away
+    });
+
     // Returning Input
     this.electronService.ipcRenderer.on('input-folder-chosen', (event, filePath) => {
+      // if this happens when CURRENT HUB is open
+      this.inputSorceChosenBehaviorSubject.next(filePath);
+      this.inputSorceChosenBehaviorSubject.next(undefined); // allways remove right away
+
+      // if this happens during WIZARD stage
       this.wizard.selectedSourceFolder[0].path = filePath;
       this.wizard.selectedOutputFolder = filePath;
       this.cd.detectChanges();
@@ -503,9 +549,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         // notice the loosey-goosey comparison! this is because number  ^^  string comparison happening here!
         .forEach((element: ImageElement) => {
           console.log(element.fileName);
-          if (allFilesMap.has(path.join(rootFolder, element.partialPath, element.fileName))) {
-            // everything is OK
-          } else {
+          if (!allFilesMap.has(path.join(rootFolder, element.partialPath, element.fileName))) {
             console.log('deleting');
             element.deleted = true;
           }
@@ -1261,6 +1305,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
         }
         break;
 
+      case ('showTagTray'):
+        if (!this.wizard.showWizard) {
+          this.toggleButton('showTagTray');
+        }
+        break;
+
       case ('quit'):
         event.preventDefault();
         event.stopPropagation();
@@ -1276,6 +1326,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       case ('toggleMinimalMode'):
         this.toggleButton('hideTop');
         this.toggleButton('hideSidebar');
+        this.toggleButtonOff('showTagTray');
         this.toggleRibbon();
         this.toggleButton('showMoreInfo');
         break;
@@ -1347,6 +1398,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       // ======== Other buttons ========================
     } else if (uniqueKey === 'compactView') {
       this.toggleButtonOpposite(uniqueKey);
+      this.virtualScroller.refresh();
       if (
         this.settingsButtons['showThumbnails'].toggled
         || this.settingsButtons['showClips'].toggled
@@ -1433,6 +1485,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.electronService.ipcRenderer.send('app-to-touchBar', uniqueKey);
     } else {
       this.cd.detectChanges();
+    }
+  }
+
+  public toggleButtonOff(uniqueKey: SettingsButtonKey | SupportedView, fromIpc = false): void {
+    if (this.settingsButtons[uniqueKey].toggled) {
+      this.settingsButtons[uniqueKey].toggled = false;
     }
   }
 
@@ -1867,7 +1925,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Opens rename file modal, prepares all the name and extension
    */
   openRenameFileModal(): void {
-    this.itemToRename = this.currentRightClickedItem;
     this.renamingNow = true;
   }
 

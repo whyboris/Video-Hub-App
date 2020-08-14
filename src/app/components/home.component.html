@@ -21,7 +21,7 @@
   ></div>
 
   <!-- Progress indicator - "Donut" -->
-  <div *ngIf="importStage === 'importingScreenshots'" class="cancel-progress" @donutAppear>
+  <div *ngIf="importStage === 'importingScreenshots' && !settingsButtons['hideTop'].toggled" class="cancel-progress" @donutAppear>
     <span
       (click)="cancelCurrentImport()"
       [ngClass]="{ 'cancel-progress-dark': settingsButtons['darkMode'].toggled }"
@@ -31,7 +31,7 @@
   </div>
 
   <app-donut
-    *ngIf="importStage === 'importingScreenshots'"
+    *ngIf="importStage === 'importingScreenshots' && !settingsButtons['hideTop'].toggled"
     class="screenShotProgressPercent"
     [percent]="extractionPercent"
     [timeRemaining]="timeExtractionRemaining"
@@ -134,6 +134,8 @@
     [showManualTags]="settingsButtons['manualTags'].toggled"
     [showMeta]="settingsButtons['showMoreInfo'].toggled"
     [showVideoNotes]="settingsButtons['showVideoNotes'].toggled"
+
+    [renameResponse]="this.renameFileResponseBehaviorSubject"
   >
   </app-thumbnail-sheet>
 
@@ -147,11 +149,12 @@
     (closeRename)="closeRename()"
 
     [appState]="appState"
+    [basePath]="sourceFolderService.selectedSourceFolder[currentRightClickedItem.inputSource].path"
+    [currentRightClickedItem]="currentRightClickedItem"
     [macVersion]="macVersion"
     [settingsButtons]="settingsButtons"
-    [itemToRename]="itemToRename"
-    [currentRightClickedItem]="currentRightClickedItem"
-    [renamingNow]="renamingNow"
+
+    [renameResponse]="renameFileResponseBehaviorSubject"
   ></app-rename-modal>
 
   <!-- ===========    AUTO-GENERATED TAGS MODAL    =========== -->
@@ -260,6 +263,10 @@
         [numFolders]="appState.numOfFolders"
         [pathToVhaFile]="appState.currentVhaFile"
         [screenshotSettings]="currentScreenshotSettings"
+
+        [inputFolderChosen]="inputSorceChosenBehaviorSubject.asObservable()"
+        [oldFolderReconnected]="oldFolderReconnectedBehaviorSubject.asObservable()"
+        [numberScreenshotsDeleted]="numberScreenshotsDeletedBehaviorSubject.asObservable()"
       ></app-statistics>
 
     </div>
@@ -331,6 +338,12 @@
       >
         <app-icon [icon]="'icon-gear'"></app-icon>
       </div>
+      <div
+        *ngIf="settingsButtons['hideTop'].toggled && importStage === 'importingScreenshots'"
+        class="scanning-indicator scanning-indicator-right"
+        title="{{ 'WIZARD.importInProgress' | translate }}"
+        @slowFadeOut
+      ></div>
 
     </div>
 
@@ -879,7 +892,7 @@
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
           [imgHeight]="previewHeight"
-          [selectedSourceFolder]="sourceFolderService.selectedSourceFolder"
+          [selectedSourceFolder]="sourceFolderService.selectedSourceFolder[item.inputSource].path"
 
           [star]="item.stars"
 
@@ -892,6 +905,8 @@
           [showManualTags]="settingsButtons['manualTags'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
           [showVideoNotes]="settingsButtons['showVideoNotes'].toggled"
+
+          [renameResponse]="renameFileResponseBehaviorSubject"
 
           [ngStyle]="{ display: appState.currentView === 'showDetails' ? 'block' : 'inline-block' }"
         ></app-details-item>

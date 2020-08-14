@@ -303,7 +303,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
     if (fs.existsSync(newName)) {
       console.log('some file already EXISTS WITH THAT NAME !!!');
       success = false;
-      errMsg = 'RIGHCLICK.errorFileNameExists';
+      errMsg = 'RIGHTCLICK.errorFileNameExists';
     } else {
       try {
         fs.renameSync(original, newName);
