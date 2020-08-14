@@ -13,11 +13,12 @@ import { AppRoutingModule } from './app-routing.module';
 // External
 import { TranslateModule } from '@ngx-translate/core';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
-import {MatDialogModule} from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 
 // Services
 import { AutoTagsSaveService } from './components/tags-auto/tags-save.service';
 import { AutoTagsService } from './components/tags-auto/autotags.service';
+import { CommonDialogService } from './components/common-dialog/common-dialog.service';
 import { ElectronService } from './providers/electron.service';
 import { FilePathService } from './components/views/file-path.service';
 import { HomeComponent } from './components/home.component';
@@ -71,12 +72,12 @@ import { CountPipe } from './pipes/count.pipe';
 import { DeleteFilePipe } from './pipes/delete-file.pipe';
 import { DuplicateFinderPipe } from './pipes/duplicateFinder.pipe';
 import { FileSearchPipe } from './pipes/file-search.pipe';
+import { FileSizeFilterPipe } from './pipes/file-size-filter.pipe';
 import { FileSizePipe } from './pipes/file-size.pipe';
 import { FolderArrowsPipe } from './pipes/folder-arrows.pipe';
 import { FolderViewPipe } from './pipes/folder-view.pipe';
 import { FuzzySearchPipe } from './pipes/fuzzy-search.pipe';
 import { LengthFilterPipe } from './pipes/length-filter.pipe';
-import { FileSizeFilterPipe } from './pipes/file-size-filter.pipe';
 import { LengthPipe } from './pipes/length.pipe';
 import { MagicSearchPipe } from './pipes/magic-search.pipe';
 import { ManualTagSortPipe } from './pipes/manual-tags-sort.pipe';
@@ -94,7 +95,6 @@ import { TagMatchPipe } from './components/tags-auto/tag-match.pipe';
 import { TagsDisplayPipe } from './components/tags-auto/tag-display.pipe';
 import { WordFrequencyPipe } from './pipes/word-frequency.pipe';
 import { WrapperPipe } from './pipes/wrapper.pipe';
-import { CommonDialogService } from './components/common-dialog/common-dialog.service';
 
 @NgModule({
   declarations: [
@@ -103,6 +103,7 @@ import { CommonDialogService } from './components/common-dialog/common-dialog.se
     AppComponent,
     BreadcrumbsComponent,
     ClipComponent,
+    CommonDialogComponent,
     CountPipe,
     DeleteFilePipe,
     DetailsComponent,
@@ -110,6 +111,7 @@ import { CommonDialogService } from './components/common-dialog/common-dialog.se
     DuplicateFinderPipe,
     FileComponent,
     FileSearchPipe,
+    FileSizeFilterPipe,
     FileSizePipe,
     FilmstripComponent,
     FolderArrowsPipe,
@@ -119,7 +121,6 @@ import { CommonDialogService } from './components/common-dialog/common-dialog.se
     HomeComponent,
     IconComponent,
     LengthFilterPipe,
-    FileSizeFilterPipe,
     LengthPipe,
     MagicSearchPipe,
     ManualTagSortPipe,
@@ -160,7 +161,6 @@ import { CommonDialogService } from './components/common-dialog/common-dialog.se
     WizardComponent,
     WordFrequencyPipe,
     WrapperPipe,
-    CommonDialogComponent
   ],
   imports: [
     AppRoutingModule,
@@ -168,13 +168,14 @@ import { CommonDialogService } from './components/common-dialog/common-dialog.se
     BrowserModule,
     FormsModule,
     HttpClientModule,
+    MatDialogModule,
     TranslateModule.forRoot(),
     VirtualScrollerModule,
-    MatDialogModule,
   ],
   providers: [
     AutoTagsSaveService,
     AutoTagsService,
+    CommonDialogService,
     ElectronService,
     FilePathService,
     ManualTagsService,
@@ -186,7 +187,6 @@ import { CommonDialogService } from './components/common-dialog/common-dialog.se
     SourceFolderService,
     StarFilterService,
     WordFrequencyService,
-    CommonDialogService
   ],
   bootstrap: [AppComponent]
 })
