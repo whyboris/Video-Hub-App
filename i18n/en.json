@@ -84,6 +84,8 @@
     "playlistButtonMoreInfo": "This creates a .pls file and opens it with your default video player. Playlist will not include files inside folders if 'Show folders' is selected.",
     "regenerateLibraryDescription": "Regenerate all library metadata, except thumbnails and user entered metadata",
     "regenerateLibraryHint": "Regenerate library",
+    "randFolderScreenDesc": "Show random screenshots on Folder view",
+    "randFolderScreen": "Folder random screenshots",
     "regexDescription": "Regex search",
     "regexHint": "Regex search",
     "regexMoreInfo": "Uses case-insensitive RegEx matching against file name",
