@@ -813,10 +813,8 @@
         <app-full-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
-          (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
-          (doubleClick)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
-          (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
+          (videoClick)="handleClick($event, item)"
+          (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
 
           (drop)="droppedSomethingOverVideo($event, item)"
 
