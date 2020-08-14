@@ -11,21 +11,30 @@ export interface DialogData {
 @Injectable()
 export class CommonDialogService {
 
-constructor(public dialog: MatDialog) { }
+  constructor(
+    public dialog: MatDialog
+  ) { }
 
-openDialog(title: string, content: string, details: string) {
-  const dialogRef = this.dialog.open(
-    CommonDialogComponent,
-    {
-      height: '200px',
-      width: '300px',
-      data: {
-        content: content,
-        title: title,
-        details: details
+  /**
+   * Opens a modal popup which can be exited via `Esc` key or clicking outside of it
+   * @param title
+   * @param content
+   * @param details
+   */
+  openDialog(title: string, content: string, details: string) {
+
+    const dialogRef = this.dialog.open(
+      CommonDialogComponent,
+      {
+        data: {
+          content: content,
+          details: details,
+          title: title,
+        }
       }
-    }
-  );
-  return dialogRef.afterClosed();
-}
+    );
+
+    return dialogRef.afterClosed();
+  }
+
 }
