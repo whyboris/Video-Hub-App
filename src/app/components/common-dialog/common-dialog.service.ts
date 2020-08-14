@@ -26,6 +26,6 @@ openDialog(title: string, content: string, details: string) {
       }
     }
   );
-  return dialogRef.afterClosed;
+  return dialogRef.afterClosed();
 }
 }
