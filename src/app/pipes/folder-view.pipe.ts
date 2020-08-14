@@ -65,24 +65,29 @@ export class FolderViewPipe implements PipeTransform {
   extractFourPreviewHashes(files: ImageElement[]): string {
     let hashes: string = '';
     if (files.length > 4 && this.settingsButtons['randomizeFoldersScreenshots'].toggled) {
-      hashes = this.extractRandomPreviewHases(files);
+      hashes = this.extractRandomPreviewHashes(files);
     } else {
-      for (let n = 0; n < 4; n++) {
-        if (files[n]) {
-          hashes += ':' + files[n].hash;
-        } else {
-          break;
-        }
-      }
+      hashes = this.extractFirstFourPreviewHashes(files);
     }
     if (hashes.charAt(0) === ':') {
       hashes = hashes.slice(1);
     }
-
     return hashes;
   }
 
-  extractRandomPreviewHases(files: ImageElement[]): string {
+  extractFirstFourPreviewHashes(files: ImageElement[]): string {
+    let hashes: string = '';
+    for (let n = 0; n < 4; n++) {
+      if (files[n]) {
+        hashes += ':' + files[n].hash;
+      } else {
+        break;
+      }
+    }
+    return hashes;
+  }
+
+  extractRandomPreviewHashes(files: ImageElement[]): string {
     let hashes: string = '';
     for (let index = 0; index < 4; index++) {
       const randomIndex = Math.floor(Math.random() * files.length);
