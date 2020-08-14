@@ -19,7 +19,7 @@ import { StarFilterService } from '../pipes/star-filter.service';
 import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency.service';
 
 // Interfaces
-import { AllSupportedViews, SupportedView, TagEmission, HistoryItem, RenameFileResponse } from '../../../interfaces/shared-interfaces';
+import { AllSupportedViews, SupportedView, TagEmission, HistoryItem, RenameFileResponse, VideoClickEmit } from '../../../interfaces/shared-interfaces';
 import { DefaultScreenEmission } from './sheet/sheet.component';
 import { FinalObject, ImageElement, ScreenshotSettings, ResolutionString } from '../../../interfaces/final-object.interface';
 
@@ -928,12 +928,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   /**
    * Handle clicking on an item in the gallery
    *
-   * @param eventObject - contains the MouseEvent and the thumbIndex (which thumb was clicked)
-   *                                                      only used in the Thumbnail
+   * @param eventObject - VideoClickEmit
    * @param item        - ImageElement
-   * @param isDoubleClick - whether it's a double click
    */
-  public handleClick(eventObject: { mouseEvent: MouseEvent, thumbIndex?: number }, item: ImageElement, isDoubleClick?: boolean) {
+  public handleClick(eventObject: VideoClickEmit, item: ImageElement) {
 
     console.log(item);
 
@@ -943,7 +941,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    if (this.settingsButtons.doubleClickMode.toggled && !isDoubleClick) {
+    if (this.settingsButtons.doubleClickMode.toggled && !eventObject.doubleClick) {
+      // when double-clicking, this runs twice anyway
       this.assignSelectedFile(item);
 
       return;

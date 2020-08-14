@@ -118,9 +118,10 @@
     (mouseenter)="mouseEntered()"
     (mouseleave)="mouseLeft()"
 
+    (click)="   videoClick.emit({ mouseEvent: $event, thumbIndex: indexToShow })"
+    (dblclick)="videoClick.emit({ mouseEvent: $event, thumbIndex: indexToShow, doubleClick: true })"
+
     (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
-    (click)="videoClick.emit({ mouseEvent: $event, thumbIndex: indexToShow })"
-    (dblclick)="doubleClick.emit({ mouseEvent: $event, thumbIndex: indexToShow })"
 
     [ngStyle]="{
         height: imgHeight + 'px',

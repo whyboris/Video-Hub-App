@@ -21,8 +21,9 @@ export const AllSupportedViews: SupportedView[] = [
 
 // Mouse click events
 export interface VideoClickEmit {
-  mouseEvent: Event;
+  mouseEvent: MouseEvent;
   thumbIndex?: number;
+  doubleClick?: boolean;
 }
 
 export interface DoubleClickVideoEmit {
