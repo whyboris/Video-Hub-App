@@ -448,7 +448,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     this.electronService.ipcRenderer.on('show-msg-dialog', (event,  title: string, content: string, details: string ) => {
-      const dialogRef = this.commonDialogService.openDialog(title, content, details);
+      this.commonDialogService.openDialog(title, content, details);
       this.cd.detectChanges();
     });
 
