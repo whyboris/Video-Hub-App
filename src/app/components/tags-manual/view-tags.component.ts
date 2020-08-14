@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
 import { ManualTagsService } from './manual-tags.service';
 import { Tag, TagEmit } from '../../../../interfaces/shared-interfaces';
 
@@ -28,6 +28,8 @@ export class ViewTagsComponent {
 
   @Output() removeTagEmit = new EventEmitter<string>();
   @Output() tagClicked = new EventEmitter<TagEmit>();
+
+  @ViewChild('dragHack', { static: false }) dragHack: ElementRef;
 
   constructor(
     public tagService: ManualTagsService
@@ -66,9 +68,16 @@ export class ViewTagsComponent {
 
   /**
    * Set the dataTransfer with the current tag - to drop over video
+   * @param event - DragEvent
    */
-  dragStart(event: any): void {
-    event.dataTransfer.setData('text/plain', event.target.innerText);
+  dragStart(event: DragEvent): void {
+    event.dataTransfer.setData('text/plain', (event.target as HTMLElement).innerText);
+
+    const quickHack: Element = this.dragHack.nativeElement;
+
+    quickHack.innerHTML = (event.target as HTMLElement).innerText;
+
+    event.dataTransfer.setDragImage(quickHack, event.offsetX * 1.5, 21);
   }
 
 }
