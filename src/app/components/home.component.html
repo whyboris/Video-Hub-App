@@ -725,19 +725,6 @@
                 | playlistPipe"
     >
 
-    <!--
-      TODO:
-        1) maybe move `magicSearchPipe` to just below starFilterPipe !?
-        2) move countPipe to after `folderViewPipe` ?
-    -->
-
-    <!-- 24 above is 20 pixels for element and 4 for the fudge factor -->
-
-    <!-- [childWidth]="200" obove not needed
-            it can only take a number, but if nothing is entered
-            it uses the width of the first child element
-            so I can set 100vw for filmstrip -->
-
       <!-- ==================================== THUMBNAILS ==================================== -->
 
       <ng-container *ngIf="appState.currentView === 'showThumbnails'">
