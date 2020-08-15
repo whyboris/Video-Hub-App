@@ -140,11 +140,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // Import / extraction progress
   // ------------------------------------------------------------------------
 
-  extractionPercent = 1;
+  extractionPercent: number = 1;
   importStage: ImportStage = 'done';
-  progressNum1 = 0;
-  progressNum2 = 100;
-  progressPercent = 0;
   progressString = '';
 
   // ========================================================================
@@ -594,23 +591,26 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
 
       this.importStage = stage;
-      this.progressNum1 = current;
-      this.progressNum2 = total;
-      this.progressPercent = current / total;
-      this.progressString = 'loading - ' + Math.round(current * 100 / total) + '%';
+
+      const percentProgress: number = Math.round(100 * current / total);
+      this.progressString = 'loading - ' + percentProgress + '%';
+
       if (this.importStage === 'importingScreenshots') {
         if (this.isFirstRunEver) {
           this.toggleButton('showThumbnails');
           console.log('SHOULD FIX THE FIRST RUN BUG!!!');
           this.isFirstRunEver = false;
+          this.commonDialogService.openDialog('Welcome', 'Thank you for purchasing Video Hub App!', '');
         }
-        this.extractionPercent = Math.round(100 * current / total);
+        this.extractionPercent = percentProgress;
       }
+
       if (current === total) {
         this.extractionPercent = 1;
         this.importStage = 'done';
         this.electronService.ipcRenderer.send('allow-sleep');
       }
+
       this.cd.detectChanges();
     });
 
