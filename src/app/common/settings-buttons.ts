@@ -8,6 +8,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'compactView'
  | 'dangerousDelete'
  | 'darkMode'
+ | 'doubleClickMode'
  | 'duplicateHash'
  | 'duplicateLength'
  | 'duplicateSize'
@@ -162,6 +163,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
   ],
   [ // 12
     'darkMode',
+    'doubleClickMode',
   ],
   [ // 13
     'hideTop',
@@ -276,6 +278,14 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-darken',
     settingsHeading: 'SETTINGS.darkMode',
     title: 'BUTTONS.darkModeHint',
+    toggled: false
+  },
+  'doubleClickMode': {
+    description: 'BUTTONS.doubleClickModeDescription',
+    hidden: false,
+    iconName: 'icon-double-click',
+    settingsHeading: 'SETTINGS.doubleClickMode',
+    title: 'BUTTONS.doubleClickModeHint',
     toggled: false
   },
   'duplicateHash': {

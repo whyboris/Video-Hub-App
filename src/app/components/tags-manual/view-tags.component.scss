@@ -12,6 +12,15 @@
     z-index: 3;
   }
 
+  .tag-draggable {
+    &:active {
+      transform: scale(1.5);
+      transition-delay: 30ms;
+      transition-duration: 150ms;
+      transition-property: transform;
+    }
+  }
+
   .coverTheX {
     background-color: $gray-20;
     height: 16px;
@@ -63,4 +72,10 @@
     transform: translate(-5px, 0);
     z-index: 1;
   }
+}
+
+.special {
+  background-color: $manual-tag-color;
+  font-size: 15px;
+  padding: 3px 6px 4.5px;
 }

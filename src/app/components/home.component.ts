@@ -20,7 +20,7 @@ import { StarFilterService } from '../pipes/star-filter.service';
 import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency.service';
 
 // Interfaces
-import { AllSupportedViews, SupportedView, TagEmission, HistoryItem, RenameFileResponse } from '../../../interfaces/shared-interfaces';
+import { AllSupportedViews, SupportedView, TagEmission, HistoryItem, RenameFileResponse, VideoClickEmit } from '../../../interfaces/shared-interfaces';
 import { DefaultScreenEmission } from './sheet/sheet.component';
 import { FinalObject, ImageElement, ScreenshotSettings, ResolutionString } from '../../../interfaces/final-object.interface';
 import { ImportStage } from '../../../node/main-support';
@@ -140,11 +140,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // Import / extraction progress
   // ------------------------------------------------------------------------
 
-  extractionPercent = 1;
+  extractionPercent: number = 1;
   importStage: ImportStage = 'done';
-  progressNum1 = 0;
-  progressNum2 = 100;
-  progressPercent = 0;
   progressString = '';
 
   // ========================================================================
@@ -252,7 +249,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // Miscellaneous variables
   // ------------------------------------------------------------------------
 
-  currentPlayingFile = '';
   currentClickedItemName = '';
   currentPlayingFolder = '';
   fullPathToCurrentFile = '';
@@ -595,23 +591,26 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
 
       this.importStage = stage;
-      this.progressNum1 = current;
-      this.progressNum2 = total;
-      this.progressPercent = current / total;
-      this.progressString = 'loading - ' + Math.round(current * 100 / total) + '%';
+
+      const percentProgress: number = Math.round(100 * current / total);
+      this.progressString = 'loading - ' + percentProgress + '%';
+
       if (this.importStage === 'importingScreenshots') {
         if (this.isFirstRunEver) {
           this.toggleButton('showThumbnails');
           console.log('SHOULD FIX THE FIRST RUN BUG!!!');
           this.isFirstRunEver = false;
+          this.commonDialogService.openDialog('Welcome', 'Thank you for purchasing Video Hub App!', '');
         }
-        this.extractionPercent = Math.round(100 * current / total);
+        this.extractionPercent = percentProgress;
       }
+
       if (current === total) {
         this.extractionPercent = 1;
         this.importStage = 'done';
         this.electronService.ipcRenderer.send('allow-sleep');
       }
+
       this.cd.detectChanges();
     });
 
@@ -937,16 +936,23 @@ export class HomeComponent implements OnInit, AfterViewInit {
   /**
    * Handle clicking on an item in the gallery
    *
-   * @param eventObject - contains the MouseEvent and the thumbIndex (which thumb was clicked)
-   *                                                      only used in the Thumbnail
+   * @param eventObject - VideoClickEmit
    * @param item        - ImageElement
+   * @param doubleClick - boolean -- happens only on `app-file-item` -- added as a quick hack
    */
-  public handleClick(eventObject: { mouseEvent: MouseEvent, thumbIndex?: number }, item: ImageElement) {
+  public handleClick(eventObject: VideoClickEmit, item: ImageElement, doubleClick?: boolean) {
 
     console.log(item);
 
     if (this.batchTaggingMode) {
       item.selected = !item.selected;
+
+      return;
+    }
+
+    if (this.settingsButtons.doubleClickMode.toggled && !(eventObject.doubleClick || doubleClick)) {
+      // when double-clicking, this runs twice anyway
+      this.assignSelectedFile(item);
 
       return;
     }
@@ -982,7 +988,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const clickedElement: ImageElement = this.finalArray[index];
 
     this.currentPlayingFolder = clickedElement.partialPath;
-    this.currentPlayingFile = clickedElement.cleanName;
+    this.currentClickedItemName = clickedElement.cleanName;
     const fullPath = path.join(
       this.sourceFolderService.selectedSourceFolder[inputSource].path,
       clickedElement.partialPath,
@@ -1898,9 +1904,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     this.currentRightClickedItem = item;
     this.rightClickShowing = true;
+  }
 
-    }
-
+  /**
+   * When in double-click mode and a video is clicked - `currentClickedItemName` updated
+   * @param item
+   */
   assignSelectedFile(item: ImageElement): void {
     this.currentClickedItemName = item.cleanName;
   }

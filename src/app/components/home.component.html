@@ -293,7 +293,7 @@
     <app-top-component
       class="top-content-position"
       [darkMode]="settingsButtons['darkMode'].toggled"
-      [fileString]="currentPlayingFile"
+      [fileString]="currentClickedItemName"
       [folderString]="currentPlayingFolder"
       (onFileWordClicked)="handleFileWordClicked($event)"
       (onFolderWordClicked)="handleFolderWordClicked($event)"
@@ -725,29 +725,14 @@
                 | playlistPipe"
     >
 
-    <!--
-      TODO:
-        1) maybe move `magicSearchPipe` to just below starFilterPipe !?
-        2) move countPipe to after `folderViewPipe` ?
-    -->
-
-    <!-- 24 above is 20 pixels for element and 4 for the fudge factor -->
-
-    <!-- [childWidth]="200" obove not needed
-            it can only take a number, but if nothing is entered
-            it uses the width of the first child element
-            so I can set 100vw for filmstrip -->
-
       <!-- ==================================== THUMBNAILS ==================================== -->
 
       <ng-container *ngIf="appState.currentView === 'showThumbnails'">
         <app-thumbnail
           *ngFor="let item of scroll.viewPortItems"
 
-          (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
-          (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
-          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
-          (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
+          (videoClick)=" (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (rightClick)=" (item.cleanName === '*FOLDER*') ? doNothing()                               : rightMouseClicked($event.mouseEvent, $event.item)"
 
           (sheetClick)="this.openThumbnailSheet(item)"
           (drop)="droppedSomethingOverVideo($event, item)"
@@ -787,10 +772,8 @@
         <app-filmstrip-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (videoClick)="handleClick($event, item)"
           (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
-          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
-          (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
 
           (drop)="droppedSomethingOverVideo($event, item)"
 
@@ -817,10 +800,8 @@
         <app-full-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
-          (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
-          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
-          (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
+          (videoClick)="handleClick($event, item)"
+          (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
 
           (drop)="droppedSomethingOverVideo($event, item)"
 
@@ -846,10 +827,9 @@
         <app-file-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
-          (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
-          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
-          (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
+          (click)="      (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick({ mouseEvent: $event }, item)"
+          (dblclick)="   (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick({ mouseEvent: $event }, item, true)"
+          (contextmenu)="(item.cleanName === '*FOLDER*') ? doNothing()                               : rightMouseClicked($event, item)"
 
           (drop)="droppedSomethingOverVideo($event, item)"
 
@@ -869,10 +849,8 @@
         <app-details-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
-          (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
-          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
-          (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
+          (videoClick)="handleClick($event, item)"
+          (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
 
           (editFinalArrayStars)="editFinalArrayStars($event)"
           (editFinalArrayTag)="editFinalArrayTag($event)"
@@ -918,10 +896,8 @@
         <app-clip-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
-          (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
-          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
-          (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
+          (videoClick)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing()                               : rightMouseClicked($event.mouseEvent, $event.item)"
 
           (sheetClick)="this.openThumbnailSheet(item)"
 
