@@ -480,7 +480,6 @@ export const SettingsButtons: SettingsButtonsType = {
   'randomizeFoldersScreenshots': {
     description: 'BUTTONS.randFolderScreenDesc',
     hidden: true,
-    iconName: 'icon-image',
     title: 'BUTTONS.randFolderScreen',
     toggled: true
   },
