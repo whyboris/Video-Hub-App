@@ -134,7 +134,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   flickerReduceOverlay = true;
   isFirstRunEver = false;
   rootFolderLive: boolean = true; // set to `false` when loading hub but video folder is not connected
-  folderNotConnectedErrorShowing: boolean = false; // temporary pop-over when updating from disconnected folder
 
   // ========================================================================
   // Import / extraction progress
@@ -977,7 +976,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     if (!this.sourceFolderService.sourceFolderConnected[inputSource]) {
       console.log('not connected!');
-      this.notifyRootFolderNotLive();
+      this.commonDialogService.openSnackbar(this.translate.instant('SETTINGS.rootFolderNotLive'));
+
       return;
     }
 
@@ -1555,16 +1555,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public cleanScreenshotFolder(): void {
     console.log('trying to delete unused screenshots');
     this.electronService.ipcRenderer.send('clean-old-thumbnails', this.finalArray);
-  }
-
-  /**
-   * Notify user root folder is not live                                                            // TODO -- rethink this functionality
-   */
-  notifyRootFolderNotLive(): void {
-    this.folderNotConnectedErrorShowing = true;
-    setTimeout(() => {
-      this.folderNotConnectedErrorShowing = false;
-    }, 1500);
   }
 
   // ==========================================================================================

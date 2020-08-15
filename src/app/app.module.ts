@@ -11,9 +11,10 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 
 // External
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
-import { MatDialogModule } from '@angular/material/dialog';
 
 // Services
 import { AutoTagsSaveService } from './components/tags-auto/tags-save.service';
@@ -169,6 +170,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     FormsModule,
     HttpClientModule,
     MatDialogModule,
+    MatSnackBarModule,
     TranslateModule.forRoot(),
     VirtualScrollerModule,
   ],

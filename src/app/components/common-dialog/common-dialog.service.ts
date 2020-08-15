@@ -1,5 +1,7 @@
-import { MatDialog } from '@angular/material/dialog';
 import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 import { CommonDialogComponent } from './common-dialog.component';
 
 export interface DialogData {
@@ -12,7 +14,8 @@ export interface DialogData {
 export class CommonDialogService {
 
   constructor(
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    public snack: MatSnackBar,
   ) { }
 
   /**
@@ -35,6 +38,16 @@ export class CommonDialogService {
     );
 
     return dialogRef.afterClosed();
+  }
+
+  /**
+   * Show "snack bar" / "toaster" at the bottom center with error message for 1.5 seconds
+   * @param errorMessage
+   */
+  openSnackbar(errorMessage: string) {
+    this.snack.open(errorMessage, '', {
+      duration: 1500,
+    });
   }
 
 }

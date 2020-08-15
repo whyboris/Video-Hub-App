@@ -308,18 +308,6 @@
   pointer-events: none;
 }
 
-.folder-not-connected-error {
-  background: $pretty-red;
-  border: 1px solid red;
-  border-radius: 15px;
-  color: white;
-  left: 200px;
-  padding: 10px 20px;
-  position: fixed;
-  top: 110px;
-  z-index: 501;
-}
-
 .disabled-overlay {
   background: rgba(0, 0, 0, 0.2);
   height: 100vh;
