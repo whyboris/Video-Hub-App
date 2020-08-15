@@ -938,8 +938,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
    *
    * @param eventObject - VideoClickEmit
    * @param item        - ImageElement
+   * @param doubleClick - boolean -- happens only on `app-file-item` -- added as a quick hack
    */
-  public handleClick(eventObject: VideoClickEmit, item: ImageElement) {
+  public handleClick(eventObject: VideoClickEmit, item: ImageElement, doubleClick?: boolean) {
 
     console.log(item);
 
@@ -949,7 +950,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    if (this.settingsButtons.doubleClickMode.toggled && !eventObject.doubleClick) {
+    if (this.settingsButtons.doubleClickMode.toggled && !(eventObject.doubleClick || doubleClick)) {
       // when double-clicking, this runs twice anyway
       this.assignSelectedFile(item);
 
