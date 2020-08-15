@@ -1,6 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 import { ImageElement, StarRating, NewImageElement } from '../../../interfaces/final-object.interface';
+import { SettingsButtonsType, SettingsButtons } from '../common/settings-buttons';
 
 interface FolderProperties {
   byteSize: number;    //                             corresponds to ImageElement `fileSize`
@@ -16,6 +17,7 @@ interface FolderProperties {
 })
 export class FolderViewPipe implements PipeTransform {
 
+  settingsButtons: SettingsButtonsType = SettingsButtons;
   /**
    * Determine folder size, duration, and average star rating (simply sum up / average the relevant ImageElement properties)
    * @param files
@@ -62,7 +64,19 @@ export class FolderViewPipe implements PipeTransform {
    */
   extractFourPreviewHashes(files: ImageElement[]): string {
     let hashes: string = '';
+    if (files.length > 4 && this.settingsButtons['randomizeFoldersScreenshots'].toggled) {
+      hashes = this.extractRandomPreviewHashes(files);
+    } else {
+      hashes = this.extractFirstFourPreviewHashes(files);
+    }
+    if (hashes.charAt(0) === ':') {
+      hashes = hashes.slice(1);
+    }
+    return hashes;
+  }
 
+  extractFirstFourPreviewHashes(files: ImageElement[]): string {
+    let hashes: string = '';
     for (let n = 0; n < 4; n++) {
       if (files[n]) {
         hashes += ':' + files[n].hash;
@@ -70,11 +84,15 @@ export class FolderViewPipe implements PipeTransform {
         break;
       }
     }
+    return hashes;
+  }
 
-    if (hashes.charAt(0) === ':') {
-      hashes = hashes.slice(1);
+  extractRandomPreviewHashes(files: ImageElement[]): string {
+    let hashes: string = '';
+    for (let index = 0; index < 4; index++) {
+      const randomIndex = Math.floor(Math.random() * files.length);
+      hashes += ':' + files.splice(randomIndex, 1)[0].hash;
     }
-
     return hashes;
   }
 

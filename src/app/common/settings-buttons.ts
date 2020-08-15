@@ -32,6 +32,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'muteClips'
  | 'openAtTimestamp'
  | 'playPlaylist'
+ | 'randomizeFoldersScreenshots'
  | 'regex'
  | 'resetSettings'
  | 'resolutionFilter'
@@ -134,6 +135,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
   ],
   [ // 6
     'showFolders',
+    'randomizeFoldersScreenshots',
     'showRelatedVideosTray',
     'shuffleGalleryNow',
   ],
@@ -484,6 +486,12 @@ export const SettingsButtons: SettingsButtonsType = {
     moreInfo: 'BUTTONS.playlistButtonMoreInfo',
     title: 'BUTTONS.playlistButton',
     toggled: false
+  },
+  'randomizeFoldersScreenshots': {
+    description: 'BUTTONS.randFolderScreenDesc',
+    hidden: true,
+    title: 'BUTTONS.randFolderScreen',
+    toggled: true
   },
   'regex': {
     description: 'BUTTONS.regexDescription',
