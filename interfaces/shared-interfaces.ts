@@ -26,11 +26,6 @@ export interface VideoClickEmit {
   doubleClick?: boolean;
 }
 
-export interface DoubleClickVideoEmit {
-  mouseEvent: Event;
-  thumbIndex?: number;
-}
-
 export interface RightClickEmit {
   mouseEvent: Event;
   item: ImageElement;
