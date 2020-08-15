@@ -64,10 +64,12 @@ export class DetailsComponent implements OnInit {
 
   @Input() renameResponse: BehaviorSubject<RenameFileResponse>;
 
-  percentOffset: number = 0;
+  containerWidth: number;
   firstFilePath = '';
   fullFilePath = '';
   hover: boolean;
+  indexToShow: number = 1;
+  percentOffset: number = 0;
 
   constructor(
     public filePathService: FilePathService,
@@ -77,6 +79,7 @@ export class DetailsComponent implements OnInit {
 
   mouseEnter() {
     if (this.hoverScrub) {
+      this.containerWidth = this.filmstripHolder.nativeElement.getBoundingClientRect().width;
       this.hover = true;
     }
   }
@@ -96,9 +99,8 @@ export class DetailsComponent implements OnInit {
   mouseIsMoving($event) {
     if (this.hoverScrub) {
       const cursorX = $event.layerX;
-      const containerWidth = this.filmstripHolder.nativeElement.getBoundingClientRect().width;
-
-      this.percentOffset = (100 / (this.video.screens - 1)) * Math.floor(cursorX / (containerWidth / this.video.screens));
+      this.indexToShow = Math.floor(cursorX * (this.video.screens / this.containerWidth));
+      this.percentOffset = this.indexToShow * (100 / (this.video.screens - 1));
     }
   }
 }
