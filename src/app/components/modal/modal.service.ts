@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
-import { CommonDialogComponent } from './common-dialog.component';
+import { ModalComponent } from './modal.component';
 
 export interface DialogData {
   content: string;
@@ -11,7 +11,7 @@ export interface DialogData {
 }
 
 @Injectable()
-export class CommonDialogService {
+export class ModalService {
 
   constructor(
     public dialog: MatDialog,
@@ -27,7 +27,7 @@ export class CommonDialogService {
   openDialog(title: string, content: string, details: string) {
 
     const dialogRef = this.dialog.open(
-      CommonDialogComponent,
+      ModalComponent,
       {
         data: {
           content: content,

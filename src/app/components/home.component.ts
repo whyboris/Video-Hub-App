@@ -9,7 +9,7 @@ import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
 
 // Services
 import { AutoTagsSaveService } from './tags-auto/tags-save.service';
-import { CommonDialogService } from './common-dialog/common-dialog.service';
+import { ModalService } from './modal/modal.service';
 import { ElectronService } from '../providers/electron.service';
 import { ManualTagsService } from './tags-manual/manual-tags.service';
 import { PipeSideEffectService } from '../pipes/pipe-side-effect.service';
@@ -354,7 +354,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     public starFilterService: StarFilterService,
     public translate: TranslateService,
     public wordFrequencyService: WordFrequencyService,
-    public commonDialogService: CommonDialogService,
+    public modalService: ModalService,
     public zone: NgZone,
   ) { }
 
@@ -444,7 +444,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     this.electronService.ipcRenderer.on('show-msg-dialog', (event,  title: string, content: string, details: string ) => {
       this.zone.run(() => {
-        this.commonDialogService.openDialog(title, content, details);
+        this.modalService.openDialog(title, content, details);
       });
     });
 
@@ -599,7 +599,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.toggleButton('showThumbnails');
           console.log('SHOULD FIX THE FIRST RUN BUG!!!');
           this.isFirstRunEver = false;
-          this.commonDialogService.openDialog('Welcome', 'Thank you for purchasing Video Hub App!', '');
+          this.modalService.openDialog('Welcome', 'Thank you for purchasing Video Hub App!', '');
         }
         this.extractionPercent = percentProgress;
       }
@@ -976,7 +976,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     if (!this.sourceFolderService.sourceFolderConnected[inputSource]) {
       console.log('not connected!');
-      this.commonDialogService.openSnackbar(this.translate.instant('SETTINGS.rootFolderNotLive'));
+      this.modalService.openSnackbar(this.translate.instant('SETTINGS.rootFolderNotLive'));
 
       return;
     }

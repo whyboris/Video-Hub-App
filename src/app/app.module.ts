@@ -1,4 +1,4 @@
-import { CommonDialogComponent } from './components/common-dialog/common-dialog.component';
+import { ModalComponent } from './components/modal/modal.component';
 import 'reflect-metadata';
 import '../polyfills';
 
@@ -19,7 +19,7 @@ import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 // Services
 import { AutoTagsSaveService } from './components/tags-auto/tags-save.service';
 import { AutoTagsService } from './components/tags-auto/autotags.service';
-import { CommonDialogService } from './components/common-dialog/common-dialog.service';
+import { ModalService } from './components/modal/modal.service';
 import { ElectronService } from './providers/electron.service';
 import { FilePathService } from './components/views/file-path.service';
 import { HomeComponent } from './components/home.component';
@@ -104,7 +104,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     AppComponent,
     BreadcrumbsComponent,
     ClipComponent,
-    CommonDialogComponent,
+    ModalComponent,
     CountPipe,
     DeleteFilePipe,
     DetailsComponent,
@@ -177,7 +177,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
   providers: [
     AutoTagsSaveService,
     AutoTagsService,
-    CommonDialogService,
+    ModalService,
     ElectronService,
     FilePathService,
     ManualTagsService,

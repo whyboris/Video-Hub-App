@@ -22,4 +22,10 @@ html, body {
   border-radius: 15px;
   color: white;
   padding: 10px 20px;
+
+  span {
+    display: block;
+    text-align: center;
+    width: 100%;
+  }
 }
