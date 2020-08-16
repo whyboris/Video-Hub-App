@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { ModalComponent } from './modal.component';
+import { WelcomeComponent } from './welcome.component';
 
 export interface DialogData {
   content: string;
@@ -20,6 +21,7 @@ export class ModalService {
 
   /**
    * Opens a modal popup which can be exited via `Esc` key or clicking outside of it
+   * returns a promise you can `.subscribe(() => { ... }` to
    * @param title
    * @param content
    * @param details
@@ -38,6 +40,13 @@ export class ModalService {
     );
 
     return dialogRef.afterClosed();
+  }
+
+  /**
+   * Open the welcome message that tells users how to use the app
+   */
+  openWelcomeMessage() {
+    this.dialog.open(WelcomeComponent);
   }
 
   /**

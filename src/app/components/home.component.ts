@@ -362,6 +362,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.translate.setDefaultLang('en');
     this.changeLanguage('en');
 
+    // this.modalService.openWelcomeMessage(); // WIP
+
     setTimeout(() => {
       this.wordFrequencyService.finalMapBehaviorSubject.subscribe((value: WordFreqAndHeight[]) => {
         this.wordFreqArr = value;
@@ -599,7 +601,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.toggleButton('showThumbnails');
           console.log('SHOULD FIX THE FIRST RUN BUG!!!');
           this.isFirstRunEver = false;
-          this.modalService.openDialog('Welcome', 'Thank you for purchasing Video Hub App!', '');
+          this.modalService.openDialog('Welcome', 'Thank you for purchasing Video Hub App!', '').subscribe(() => {
+            this.modalService.openWelcomeMessage();
+          });
         }
         this.extractionPercent = percentProgress;
       }

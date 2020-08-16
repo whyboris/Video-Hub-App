@@ -65,6 +65,7 @@ import { ThumbnailComponent } from './components/views/thumbnail/thumbnail.compo
 import { TitleBarComponent } from './components/title-bar/title-bar.component';
 import { TopComponent } from './components/top/top.component';
 import { ViewTagsComponent } from './components/tags-manual/view-tags.component';
+import { WelcomeComponent } from './components/modal/welcome.component';
 import { WizardComponent } from './components/wizard/wizard.component';
 
 // Pipes
@@ -159,6 +160,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     TitleBarComponent,
     TopComponent,
     ViewTagsComponent,
+    WelcomeComponent,
     WizardComponent,
     WordFrequencyPipe,
     WrapperPipe,
