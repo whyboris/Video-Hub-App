@@ -65,15 +65,6 @@
   >
   </div>
 
-  <!-- "Root folder is not connected" 1500ms popup when running scan on a disconnected HUB -->
-  <div
-    *ngIf="folderNotConnectedErrorShowing"
-    class="folder-not-connected-error"
-    @modalAnimation
-  >
-    {{ 'SETTINGS.rootFolderNotLive' | translate }}
-  </div>
-
   <!-- ===========   RIGHT CLICK MODAL    =========== -->
   <div
     *ngIf="rightClickShowing"

@@ -9,7 +9,7 @@ import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
 
 // Services
 import { AutoTagsSaveService } from './tags-auto/tags-save.service';
-import { CommonDialogService } from './common-dialog/common-dialog.service';
+import { ModalService } from './modal/modal.service';
 import { ElectronService } from '../providers/electron.service';
 import { ManualTagsService } from './tags-manual/manual-tags.service';
 import { PipeSideEffectService } from '../pipes/pipe-side-effect.service';
@@ -134,7 +134,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   flickerReduceOverlay = true;
   isFirstRunEver = false;
   rootFolderLive: boolean = true; // set to `false` when loading hub but video folder is not connected
-  folderNotConnectedErrorShowing: boolean = false; // temporary pop-over when updating from disconnected folder
 
   // ========================================================================
   // Import / extraction progress
@@ -355,13 +354,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
     public starFilterService: StarFilterService,
     public translate: TranslateService,
     public wordFrequencyService: WordFrequencyService,
-    public commonDialogService: CommonDialogService,
+    public modalService: ModalService,
     public zone: NgZone,
   ) { }
 
   ngOnInit() {
     this.translate.setDefaultLang('en');
     this.changeLanguage('en');
+
+    // this.modalService.openWelcomeMessage(); // WIP
 
     setTimeout(() => {
       this.wordFrequencyService.finalMapBehaviorSubject.subscribe((value: WordFreqAndHeight[]) => {
@@ -445,7 +446,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     this.electronService.ipcRenderer.on('show-msg-dialog', (event,  title: string, content: string, details: string ) => {
       this.zone.run(() => {
-        this.commonDialogService.openDialog(title, content, details);
+        this.modalService.openDialog(title, content, details);
       });
     });
 
@@ -600,7 +601,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.toggleButton('showThumbnails');
           console.log('SHOULD FIX THE FIRST RUN BUG!!!');
           this.isFirstRunEver = false;
-          this.commonDialogService.openDialog('Welcome', 'Thank you for purchasing Video Hub App!', '');
+          this.modalService.openDialog('Welcome', 'Thank you for purchasing Video Hub App!', '').subscribe(() => {
+            this.modalService.openWelcomeMessage();
+          });
         }
         this.extractionPercent = percentProgress;
       }
@@ -977,7 +980,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     if (!this.sourceFolderService.sourceFolderConnected[inputSource]) {
       console.log('not connected!');
-      this.notifyRootFolderNotLive();
+      this.modalService.openSnackbar(this.translate.instant('SETTINGS.rootFolderNotLive'));
+
       return;
     }
 
@@ -1555,16 +1559,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public cleanScreenshotFolder(): void {
     console.log('trying to delete unused screenshots');
     this.electronService.ipcRenderer.send('clean-old-thumbnails', this.finalArray);
-  }
-
-  /**
-   * Notify user root folder is not live                                                            // TODO -- rethink this functionality
-   */
-  notifyRootFolderNotLive(): void {
-    this.folderNotConnectedErrorShowing = true;
-    setTimeout(() => {
-      this.folderNotConnectedErrorShowing = false;
-    }, 1500);
   }
 
   // ==========================================================================================

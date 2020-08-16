@@ -1,4 +1,4 @@
-import { CommonDialogComponent } from './components/common-dialog/common-dialog.component';
+import { ModalComponent } from './components/modal/modal.component';
 import 'reflect-metadata';
 import '../polyfills';
 
@@ -11,14 +11,15 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 
 // External
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
 import { VirtualScrollerModule } from 'ngx-virtual-scroller';
-import { MatDialogModule } from '@angular/material/dialog';
 
 // Services
 import { AutoTagsSaveService } from './components/tags-auto/tags-save.service';
 import { AutoTagsService } from './components/tags-auto/autotags.service';
-import { CommonDialogService } from './components/common-dialog/common-dialog.service';
+import { ModalService } from './components/modal/modal.service';
 import { ElectronService } from './providers/electron.service';
 import { FilePathService } from './components/views/file-path.service';
 import { HomeComponent } from './components/home.component';
@@ -64,6 +65,7 @@ import { ThumbnailComponent } from './components/views/thumbnail/thumbnail.compo
 import { TitleBarComponent } from './components/title-bar/title-bar.component';
 import { TopComponent } from './components/top/top.component';
 import { ViewTagsComponent } from './components/tags-manual/view-tags.component';
+import { WelcomeComponent } from './components/modal/welcome.component';
 import { WizardComponent } from './components/wizard/wizard.component';
 
 // Pipes
@@ -103,7 +105,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     AppComponent,
     BreadcrumbsComponent,
     ClipComponent,
-    CommonDialogComponent,
+    ModalComponent,
     CountPipe,
     DeleteFilePipe,
     DetailsComponent,
@@ -158,6 +160,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     TitleBarComponent,
     TopComponent,
     ViewTagsComponent,
+    WelcomeComponent,
     WizardComponent,
     WordFrequencyPipe,
     WrapperPipe,
@@ -169,13 +172,14 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     FormsModule,
     HttpClientModule,
     MatDialogModule,
+    MatSnackBarModule,
     TranslateModule.forRoot(),
     VirtualScrollerModule,
   ],
   providers: [
     AutoTagsSaveService,
     AutoTagsService,
-    CommonDialogService,
+    ModalService,
     ElectronService,
     FilePathService,
     ManualTagsService,
