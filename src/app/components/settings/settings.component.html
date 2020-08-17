@@ -125,7 +125,7 @@
           class="defaultSettingsButton player-settings-button"
           (click)="editAdditionalExtensions()"
         >
-          {{ editAdditional ? 'cancel': 'edit' | translate }}
+          {{ (editAdditional ? 'SETTINGS.cancelExtensionsEdit': 'SETTINGS.editExtensionsInput') | translate }}
         </button>
 
         <button *ngIf="editAdditional"

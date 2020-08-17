@@ -1,3 +1,6 @@
+import { TranslateService } from '@ngx-translate/core';
+import { ModalService } from './../modal/modal.service';
+import { ElectronService } from './../../providers/electron.service';
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { SettingsMetaGroup, SettingsMetaGroupLabels, SettingsButtonsType } from '../../common/settings-buttons';
 
@@ -36,7 +39,10 @@ export class SettingsComponent implements OnInit{
   additionalInput: string = '';
   editAdditional: boolean = false;
 
-  constructor() {}
+  constructor(
+    private electronService: ElectronService,
+    private modalService: ModalService,
+    private translate: TranslateService) {}
   ngOnInit(): void {
     this.additionalInput = this.appState.addtionalExtensions;
   }
@@ -47,8 +53,24 @@ export class SettingsComponent implements OnInit{
   }
 
   applyAdditionalExtensions() {
-    this.appState.addtionalExtensions = this.additionalInput;
-    this.editAdditional = false;
+    if (this.isAdditionalInputValid()) {
+      this.appState.addtionalExtensions = this.additionalInput;
+      this.electronService.ipcRenderer.send('update-additional-extensions', this.additionalInput);
+      this.editAdditional = false;
+    } else {
+      this.modalService.openSnackbar(this.translate.instant('SETTINGS.extensionsInputError'));
+    }
+
+  }
+
+  private isAdditionalInputValid(): boolean {
+    let valid = true;
+    this.additionalInput.split(',').forEach(element => {
+      if (/[^A-Za-z0-9]/.test(element.trim())) {
+        valid = false;
+      }
+    });
+    return valid;
   }
 
 }
