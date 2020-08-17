@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { SettingsMetaGroup, SettingsMetaGroupLabels, SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
@@ -11,7 +11,7 @@ import { SettingsMetaGroup, SettingsMetaGroupLabels, SettingsButtonsType } from 
     './settings.component.scss'
   ]
 })
-export class SettingsComponent {
+export class SettingsComponent implements OnInit{
 
   @Output() changeLanguage = new EventEmitter<string>();
   @Output() checkForNewVersion = new EventEmitter<any>();
@@ -33,7 +33,22 @@ export class SettingsComponent {
 
   settingsMetaGroup = SettingsMetaGroup;
   settingsMetaGroupLabels = SettingsMetaGroupLabels;
+  additionalInput: string = '';
+  editAdditional: boolean = false;
 
-  constructor() { }
+  constructor() {}
+  ngOnInit(): void {
+    this.additionalInput = this.appState.addtionalExtensions;
+  }
+
+  editAdditionalExtensions() {
+    this.editAdditional = !this.editAdditional;
+    this.additionalInput = this.appState.addtionalExtensions;
+  }
+
+  applyAdditionalExtensions() {
+    this.appState.addtionalExtensions = this.additionalInput;
+    this.editAdditional = false;
+  }
 
 }
