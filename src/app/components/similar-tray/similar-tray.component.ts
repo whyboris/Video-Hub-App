@@ -1,3 +1,4 @@
+import { ImageElementService } from './../../services/image-element.service';
 import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { modalAnimation, similarResultsText } from '../../common/animations';
 import { RightClickEmit } from '../../../../interfaces/shared-interfaces';
@@ -20,11 +21,10 @@ export class SimilarTrayComponent {
 
   @Input() appState;
   @Input() currentClickedItemName;
-  @Input() finalArray;
   @Input() previewHeightRelated;
   @Input() previewWidthRelated;
   @Input() settingsButtons: SettingsButtonsType;
 
-  constructor() { }
+  constructor(public imageElementService: ImageElementService) { }
 
 }

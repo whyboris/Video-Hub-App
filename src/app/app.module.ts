@@ -23,6 +23,7 @@ import { ModalService } from './components/modal/modal.service';
 import { ElectronService } from './providers/electron.service';
 import { FilePathService } from './components/views/file-path.service';
 import { HomeComponent } from './components/home.component';
+import { ImageElementService } from './services/image-element.service';
 import { ManualTagsService } from './components/tags-manual/manual-tags.service';
 import { PipeSideEffectService } from './pipes/pipe-side-effect.service';
 import { ResolutionFilterService } from './pipes/resolution-filter.service';
@@ -163,7 +164,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     WelcomeComponent,
     WizardComponent,
     WordFrequencyPipe,
-    WrapperPipe,
+    WrapperPipe
   ],
   imports: [
     AppRoutingModule,
@@ -191,6 +192,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     SourceFolderService,
     StarFilterService,
     WordFrequencyService,
+    ImageElementService
   ],
   bootstrap: [AppComponent]
 })
