@@ -182,7 +182,7 @@ export function startFileSystemWatching(
 
       // WARNING - dangerously ignores any path that includes `vha-` anywhere!!!
       if (filePath.indexOf('vha-') !== -1 ||
-          (acceptableFiles.indexOf(ext) === -1 && GLOBALS.additionalExtensions.indexOf(ext) === -1)) {
+          ([...acceptableFiles, ...GLOBALS.additionalExtensions].indexOf(ext) === -1)) {
         return;
       }
 
