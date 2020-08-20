@@ -30,7 +30,7 @@
     "duplicateLengthMoreInfo": "Zobrazit všechny soubory se stejnou dobou trvání",
     "duplicateSizeDescription": "Velikost souboru",
     "duplicateSizeHint": "Pravděpodobně identícké na základě velikosti souboru",
-    "duplicateSizeMoreInfo": "Zobrazit všechny soubory, které se navzájem velmi podobají,"
+    "duplicateSizeMoreInfo": "Zobrazit všechny soubory, které se navzájem velmi podobají",
     "durationFilterDescription": "Doba trvání",
     "durationFilterHint": "Filtr doby trvání",
     "durationFilterMoreInfo": "Zobrazit filtr doby trvání",
@@ -190,7 +190,7 @@
   "RIGHTCLICK": {
     "cancelRename": "zrušit přejmenování",
      "delete": "smazat",
-     "errorFileNameExists": "Soubor s tímto názvem souboru již existuje,"
+     "errorFileNameExists": "Soubor s tímto názvem souboru již existuje",
      "errorFileNotFound": "Původní soubor nebyl nalezen",
      "errorMustBeDifferent": "název nového souboru musí být jiný",
      "errorMustNotBeEmpty": "nový název souboru nesmí být prázdný",
@@ -372,7 +372,7 @@
      "hubAlreadyExists": "Knihovna (hub) s tímto jménem již existuje",
      "noSuchFileFound": "Soubor nebyl nalezen:",
      "pleaseChangeName": "Změňte prosím název knihovny (hubu) výše",
-     "pressEscToStopRenaming": "Přejmenování souboru. Stisknutím 'Enter' přejmenujete, 'esc' zrušíte ',
+     "pressEscToStopRenaming": "Přejmenování souboru. Klávesou 'Enter' přejmenujete, 'Esc' zrušíte",
      "selectDefaultPlayer": "Vyberte prosím preferovaný přehrávač videa",
      "selectPreviousHub": "Vyberte prosím dříve uložený soubor knihovny (hub)",
      "selectRootFolder": "Vybrat zdrojovou složku videí"
@@ -385,7 +385,7 @@
      "any": "jakýkoliv",
      "batchModeButton": "Dávkový režim",
      "clickTagToAdd": "Kliknutím na libovolný štítek v liště přidáte štítek do všech vybraných videí",
-     „clickVideoToSelect“: „Vyberte videa kliknutím“,
+     "clickVideoToSelect": "Vyberte videa kliknutím",
      "closeTagTray": "Zavřít panel štítků",
      "delete": "režim mazání",
      "filterList": "Obsahuje",
