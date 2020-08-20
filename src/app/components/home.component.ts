@@ -2032,20 +2032,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param emission - the type, tag, and uniqe ID of the file (hash)
    */
   editFinalArrayTag(emission: TagEmission): void {
-    const position: number = emission.index;
-
-    if (emission.type === 'add') {
-      if (this.imageElementService.imageElements[position].tags) {
-        this.imageElementService.imageElements[position].tags.push(emission.tag);
-      } else {
-        this.imageElementService.imageElements[position].tags = [emission.tag];
-      }
-    } else {
-      this.imageElementService.imageElements[position].tags.
-        splice(this.imageElementService.imageElements[position].tags.indexOf(emission.tag), 1);
-    }
-
-    this.finalArrayNeedsSaving = true;
+    this.imageElementService.HandleEmission(emission);
   }
 
   /**
@@ -2053,9 +2040,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param emission
    */
   editFinalArrayStars(emission: StarEmission): void {
-    const position: number = emission.index;
-    this.imageElementService.imageElements[position].stars = emission.stars;
-    this.finalArrayNeedsSaving = true;
+    this.imageElementService.HandleEmission(emission);
     this.forceStarFilterUpdate = !this.forceStarFilterUpdate;
   }
 
@@ -2064,9 +2049,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param emission
    */
   editFinalArrayYear(emission: YearEmission): void {
-    const position: number = emission.index;
-    this.imageElementService.imageElements[position].year = emission.year;
-    this.finalArrayNeedsSaving = true;
+    this.imageElementService.HandleEmission(emission);
   }
 
   /**
@@ -2074,9 +2057,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param emission
    */
   editDefaultScreenshot(emission: DefaultScreenEmission): void {
-    const position: number = emission.index;
-    this.imageElementService.imageElements[position].defaultScreen = emission.defaultScreen;
-    this.finalArrayNeedsSaving = true;
+    this.imageElementService.HandleEmission(emission);
   }
 
   /**
