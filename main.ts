@@ -17,7 +17,7 @@ const windowStateKeeper = require('electron-window-state');
 // Methods
 import { createTouchBar } from './node/main-touch-bar';
 import { setUpIpcMessages } from './node/main-ipc';
-import { sendFinalObjectToAngular, setUpDirectoryWatchers, upgradeToVersion3, writeVhaFileToDisk } from './node/main-support';
+import { sendFinalObjectToAngular, setUpDirectoryWatchers, upgradeToVersion3, writeVhaFileToDisk, parseAdditionalExtensions } from './node/main-support';
 
 // Interfaces
 import { FinalObject } from './interfaces/final-object.interface';
@@ -294,6 +294,9 @@ ipcMain.on('just-started', (event) => {
     } else {
 
       const previouslySavedSettings: SettingsObject = JSON.parse(data);
+      if (previouslySavedSettings.appState.addtionalExtensions) {
+        GLOBALS.additionalExtensions = parseAdditionalExtensions(previouslySavedSettings.appState.addtionalExtensions);
+      }
 
       event.sender.send('settings-returning', previouslySavedSettings, locale);
     }
@@ -412,6 +415,13 @@ ipcMain.on('load-this-vha-file', (event, pathToVhaFile: string, finalObjectToSav
  */
 ipcMain.on('cancel-current-import', (event): void => {
   stopThumbExtraction();
+});
+
+/**
+ * Update additonal extensions from settings
+ */
+ipcMain.on('update-additional-extensions', (event, newAdditionalExtensions: string): void => {
+  GLOBALS.additionalExtensions = parseAdditionalExtensions(newAdditionalExtensions);
 });
 
 /**

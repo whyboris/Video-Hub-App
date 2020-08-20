@@ -19,6 +19,7 @@ export const GLOBALS: VhaGlobals = {
     height: 288,
     n: 10,
   },
+  additionalExtensions: [],
 };
 
 export interface VhaGlobals {
@@ -33,4 +34,5 @@ export interface VhaGlobals {
   version: string;
   vhaFileVersion: number;
   winRef: any;
+  additionalExtensions: string[];
 }

@@ -416,6 +416,16 @@ export function sendCurrentProgress(current: number, total: number, stage: Impor
 }
 
 /**
+ * Parse additional extension string
+ * @param additionalExtension string
+ */
+export function parseAdditionalExtensions(additionalExtension: string): string[] {
+  return additionalExtension.split(',').map((token => {
+    return token.trim();
+  }));
+}
+
+/**
  * Send final object to Angular; uses `GLOBALS` as input!
  * @param finalObject
  * @param globals

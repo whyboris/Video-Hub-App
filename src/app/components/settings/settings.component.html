@@ -108,6 +108,34 @@
 
     </div>
 
+    <div class="additional-extenstions">{{ 'SETTINGS.additionalExtensions' | translate }}</div>
+
+      <div class="additional-extenstions-setting">
+
+        {{ 'SETTINGS.extensions' | translate }}
+  
+        <input
+          class="filter-general input-filter extensions-input"
+          [(ngModel)]="additionalInput"
+          type="text"
+          [disabled]="!editAdditional"
+        >
+
+        <button
+          class="defaultSettingsButton player-settings-button"
+          (click)="editAdditionalExtensions()"
+        >
+          {{ (editAdditional ? 'SETTINGS.cancelExtensionsEdit': 'SETTINGS.editExtensionsInput') | translate }}
+        </button>
+
+        <button *ngIf="editAdditional"
+          class="defaultSettingsButton player-settings-button"
+          (click)="applyAdditionalExtensions()"
+        >
+          {{ 'SETTINGS.applyAdditionalExtensions' | translate }}
+        </button>
+      </div>
+
     <span class="setting-heading">{{ 'SETTINGS.changeAppZoom' | translate }}</span>
 
     <div class="zoom-buttons">
