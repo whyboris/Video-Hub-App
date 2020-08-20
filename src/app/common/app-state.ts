@@ -7,6 +7,7 @@ export type SupportedLanguage =
   'en'
 | 'ar'
 | 'bn'
+| 'cs'
 | 'de'
 | 'es'
 | 'fr'

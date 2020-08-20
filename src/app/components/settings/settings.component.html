@@ -146,6 +146,7 @@
     <div style="margin: 20px">
       <select (change)="changeLanguage.emit($event.target.value)" class="language-drop-down">
         <option value="en" [selected]="appState.language == 'en'">English</option>
+        <option value="cs" [selected]="appState.language == 'cs'">Česky</option>
         <option value="ja" [selected]="appState.language == 'ja'">日本語</option><!-- Japanese -->
         <option value="de" [selected]="appState.language == 'de'">Deutsche</option>
         <option value="fr" [selected]="appState.language == 'fr'">Française</option>
