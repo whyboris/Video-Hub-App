@@ -1,8 +1,8 @@
 import { TagEmission } from './../../../interfaces/shared-interfaces';
-import { YearEmission, StarEmission } from './../components/views/details/details.component';
+import { YearEmission} from './../components/views/details/details.component';
 import { ImageElement } from './../../../interfaces/final-object.interface';
 import { Injectable } from '@angular/core';
-import { DefaultScreenEmission } from '../components/sheet/sheet.component';
+import { DefaultScreenEmission, StarEmission } from '../components/sheet/sheet.component';
 
 @Injectable({
   providedIn: 'root'
@@ -11,10 +11,11 @@ export class ImageElementService {
 
 public imageElements: ImageElement[] = [];
 public finalArrayNeedsSaving: boolean = false;
+public forceStarFilterUpdate: boolean = true;
 constructor() { }
 
 /**
-   * Update FinalArray with new year tag for some element
+   * Update imageElements with emission of element
    * @param emission
    */
   HandleEmission(emission: YearEmission | StarEmission | TagEmission | DefaultScreenEmission): void {
@@ -23,6 +24,7 @@ constructor() { }
       this.imageElements[position].year = (emission as YearEmission).year;
     } else if ((emission as StarEmission).stars) {
       this.imageElements[position].stars = (emission as StarEmission).stars;
+      this.forceStarFilterUpdate = !this.forceStarFilterUpdate;
     } else if ((emission as DefaultScreenEmission).defaultScreen) {
       this.imageElements[position].defaultScreen = (emission as DefaultScreenEmission).defaultScreen;
     } else {

@@ -20,13 +20,11 @@ import { StarFilterService } from '../pipes/star-filter.service';
 import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency.service';
 
 // Interfaces
-import { AllSupportedViews, SupportedView, TagEmission, HistoryItem, RenameFileResponse, VideoClickEmit } from '../../../interfaces/shared-interfaces';
-import { DefaultScreenEmission } from './sheet/sheet.component';
+import { AllSupportedViews, SupportedView, HistoryItem, RenameFileResponse, VideoClickEmit } from '../../../interfaces/shared-interfaces';
 import { FinalObject, ImageElement, ScreenshotSettings, ResolutionString } from '../../../interfaces/final-object.interface';
 import { ImportStage } from '../../../node/main-support';
 import { SettingsObject } from '../../../interfaces/settings-object.interface';
 import { SortType } from '../pipes/sorting.pipe';
-import { StarEmission, YearEmission } from './views/details/details.component';
 import { WizardOptions } from '../../../interfaces/wizard-options.interface';
 
 // Constants, etc
@@ -185,7 +183,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   starLeftBound: number = 0;
   starRightBound: number = 6;
   starRatingNames: string[] = ['N/A', '1', '2', '3', '4', '5'];
-  forceStarFilterUpdate: boolean = true;
 
   // ========================================================================
   // Right-click / Renaming functionality
@@ -2027,39 +2024,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Add tag to a particular file
-   * @param emission - the type, tag, and uniqe ID of the file (hash)
-   */
-  editFinalArrayTag(emission: TagEmission): void {
-    this.imageElementService.HandleEmission(emission);
-  }
-
-  /**
-   * Update FinalArray with new star rating for some element
-   * @param emission
-   */
-  editFinalArrayStars(emission: StarEmission): void {
-    this.imageElementService.HandleEmission(emission);
-    this.forceStarFilterUpdate = !this.forceStarFilterUpdate;
-  }
-
-  /**
-   * Update FinalArray with new year tag for some element
-   * @param emission
-   */
-  editFinalArrayYear(emission: YearEmission): void {
-    this.imageElementService.HandleEmission(emission);
-  }
-
-  /**
-   * Update FinalArray with the default screenshot for some element
-   * @param emission
-   */
-  editDefaultScreenshot(emission: DefaultScreenEmission): void {
-    this.imageElementService.HandleEmission(emission);
-  }
-
-  /**
    * Select a particular sort order (star rating, number of times played, etc)
    * @param type
    */
@@ -2170,7 +2134,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       this.manualTagsService.addTag(tag); // only updates the count in the tray, nothing else!
 
-      this.editFinalArrayTag({
+      this.imageElementService.HandleEmission({
         type: 'add',
         index: element.index,
         tag: tag

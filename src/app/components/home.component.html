@@ -99,10 +99,6 @@
   <!-- ===========   Thumbnail Sheet Display   =========== -->
   <app-thumbnail-sheet
     *ngIf="sheetOverlayShowing"
-    (editFinalArrayDefaultScreen)="editDefaultScreenshot($event)"
-    (editFinalArrayStars)="editFinalArrayStars($event)"
-    (editFinalArrayTag)="editFinalArrayTag($event)"
-    (editFinalArrayYear)="editFinalArrayYear($event)"
     (filterTag)="handleTagWordClicked($event.tag.name, $event.event)"
     (openVideoAtTime)="handleClick($event, sheetItemToDisplay)"
 
@@ -688,7 +684,7 @@
                 | starFilterPipe: settingsButtons['starFilter'].toggled
                                   : starLeftBound
                                   : starRightBound
-                                  : forceStarFilterUpdate
+                                  : imageElementService.forceStarFilterUpdate
 
                 | similarityPipe: showSimilar : findMostSimilar
 
@@ -840,10 +836,6 @@
 
           (videoClick)="handleClick($event, item)"
           (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
-
-          (editFinalArrayStars)="editFinalArrayStars($event)"
-          (editFinalArrayTag)="editFinalArrayTag($event)"
-          (editFinalArrayYear)="editFinalArrayYear($event)"
           (filterTag)="handleTagWordClicked($event.tag.name, $event.event)"
 
           (drop)="droppedSomethingOverVideo($event, item)"
