@@ -25,7 +25,7 @@
   </div>
 
   <app-thumbnail
-    *ngFor="let item of finalArray | similarityPipe: true : currentClickedItemName
+    *ngFor="let item of imageElementService.imageElements | similarityPipe: true : currentClickedItemName
                                    | slice: 0 : 8 "
 
     (videoClick)="handleClick.emit({ expectedEvent: $event, item: item })"

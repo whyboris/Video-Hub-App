@@ -7,6 +7,7 @@ import { SourceFolderService } from './source-folder.service';
 
 import { ImageElement, ScreenshotSettings, InputSources } from '../../../../interfaces/final-object.interface';
 import { metaAppear, breadcrumbWordAppear } from '../../common/animations';
+import { ImageElementService } from './../../services/image-element.service';
 
 @Component({
   selector: 'app-statistics',
@@ -25,7 +26,6 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   @Output() deleteInputSourceFiles = new EventEmitter<number>();
   @Output() finalArrayNeedsSaving = new EventEmitter<any>();
 
-  @Input() finalArray: ImageElement[];
   @Input() hubName: string;
   @Input() inputFolders: InputSources;
   @Input() numFolders: number;
@@ -61,6 +61,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     public cd: ChangeDetectorRef,
     public electronService: ElectronService,
     public sourceFolderService: SourceFolderService,
+    public imageElementService: ImageElementService
   ) { }
 
   ngOnInit() {
@@ -94,7 +95,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   computeAverages() {
     console.log(this.inputFolders);
 
-    this.finalArray.forEach((element: ImageElement): void => {
+    this.imageElementService.imageElements.forEach((element: ImageElement): void => {
       this.shortest = Math.min(element.duration, this.shortest);
       this.longest = Math.max(element.duration, this.longest);
       this.totalLength += element.duration;
@@ -104,7 +105,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
       this.totalSize += element.fileSize;
     });
 
-    this.totalFiles = this.finalArray.length;
+    this.totalFiles = this.imageElementService.imageElements.length;
 
     this.avgLength = Math.round(this.totalLength / this.totalFiles);
     this.avgSize = Math.round(this.totalSize / this.totalFiles);

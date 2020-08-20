@@ -163,7 +163,6 @@
     </div>
     <app-tags-component
       [hubName]="appState.hubName"
-      [finalArray]="finalArray"
       (tagClicked)="tagClicked($event)"
     ></app-tags-component>
   </div>
@@ -246,9 +245,8 @@
         (addMissingThumbnailsPlease)="extractMissingThumbnails()"
         (cleanScreenshotFolderPlease)="cleanScreenshotFolder()"
         (deleteInputSourceFiles)="deleteInputSourceFiles($event)"
-        (finalArrayNeedsSaving)="finalArrayNeedsSaving = true"
+        (finalArrayNeedsSaving)="imageElementService.finalArrayNeedsSaving = true"
 
-        [finalArray]="finalArray"
         [hubName]="appState.hubName"
         [inputFolders]="sourceFolderService.selectedSourceFolder"
         [numFolders]="appState.numOfFolders"
@@ -392,7 +390,7 @@
           title="{{ 'SIDEBAR.scanInProgress' | translate }}"
           @slowFadeOut
         ></div>
-        {{ finalArray.length | number }} {{ 'SIDEBAR.videos' | translate }}
+        {{ imageElementService.imageElements.length | number }} {{ 'SIDEBAR.videos' | translate }}
       </div>
 
       <!-- Regular search boxes / filters -->
@@ -630,7 +628,7 @@
 
       [bufferAmount]="0"
 
-      [items]="finalArray
+      [items]="imageElementService.imageElements
 
                 | deleteFilePipe: deletePipeHack
 
@@ -943,7 +941,6 @@
 
   [appState]="appState"
   [currentClickedItemName]="currentClickedItemName"
-  [finalArray]="finalArray"
   [previewHeightRelated]="previewHeightRelated"
   [previewWidthRelated]="previewWidthRelated"
   [settingsButtons]="settingsButtons"

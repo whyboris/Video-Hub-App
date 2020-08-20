@@ -52,6 +52,7 @@ import {
   slowFadeOut,
   topAnimation
 } from '../common/animations';
+import { ImageElementService } from '../services/image-element.service';
 
 @Component({
   selector: 'app-home',
@@ -114,8 +115,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   versionNumber = GLOBALS.version;
 
-  public finalArray: ImageElement[] = [];
-
   vhaFileHistory: HistoryItem[] = [];
 
   windowResizeTimeout = null;
@@ -130,7 +129,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   isClosing = false;
   appMaximized = false;
   settingsModalOpen = false;
-  finalArrayNeedsSaving: boolean = false; // if ever a file was renamed, or tag added, re-save the .vha2 file
   flickerReduceOverlay = true;
   isFirstRunEver = false;
   rootFolderLive: boolean = true; // set to `false` when loading hub but video folder is not connected
@@ -346,7 +344,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     public autoTagsSaveService: AutoTagsSaveService,
     public cd: ChangeDetectorRef,
     public electronService: ElectronService,
+    public imageElementService: ImageElementService,
     public manualTagsService: ManualTagsService,
+    public modalService: ModalService,
     public pipeSideEffectService: PipeSideEffectService,
     public resolutionFilterService: ResolutionFilterService,
     public shortcutService: ShortcutsService,
@@ -354,7 +354,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     public starFilterService: StarFilterService,
     public translate: TranslateService,
     public wordFrequencyService: WordFrequencyService,
-    public modalService: ModalService,
     public zone: NgZone,
   ) { }
 
@@ -549,7 +548,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       const rootFolder: string = this.sourceFolderService.selectedSourceFolder[sourceIndex].path;
 
-      this.finalArray
+      this.imageElementService.imageElements
         .filter((element: ImageElement) => { return element.inputSource == sourceIndex })
         // notice the loosey-goosey comparison! this is because number  ^^  string comparison happening here!
         .forEach((element: ImageElement) => {
@@ -628,7 +627,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.currentScreenshotSettings = finalObject.screenshotSettings;
 
       this.rootFolderLive = true; // TODO -- do away with this once many root folders supported
-      this.finalArrayNeedsSaving = false; // TODO -- remove; used to be for hadling root folder change
+      this.imageElementService.finalArrayNeedsSaving = false; // TODO -- remove; used to be for hadling root folder change
 
       this.appState.currentVhaFile = pathToFile;
       this.appState.selectedOutputFolder = outputFolderPath;
@@ -650,14 +649,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.setTags(finalObject.addTags, finalObject.removeTags);
       this.manualTagsService.populateManualTagsService(finalObject.images);
 
-      this.finalArray = this.demo ? finalObject.images.slice(0, 50) : finalObject.images;
+      this.imageElementService.imageElements = this.demo ? finalObject.images.slice(0, 50) : finalObject.images;
 
       this.canCloseWizard = true;
       this.wizard.showWizard = false;
       this.flickerReduceOverlay = false;
 
-      this.setUpDurationFilterValues(this.finalArray);
-      this.setUpSizeFilterValues(this.finalArray);
+      this.setUpDurationFilterValues(this.imageElementService.imageElements);
+      this.setUpSizeFilterValues(this.imageElementService.imageElements);
 
       if (this.sortFilterElement) {
         this.sortFilterElement.nativeElement.value = this.sortType;
@@ -716,18 +715,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.electronService.ipcRenderer.on('file-deleted', (event, element: ImageElement) => {
       // spot check it's the same element
       // just in case the message comes back after user has switched to view another hub
-      if (element.fileName === this.finalArray[element.index].fileName) {
-        this.finalArray[element.index].deleted = true;
+      if (element.fileName === this.imageElementService.imageElements[element.index].fileName) {
+        this.imageElementService.imageElements[element.index].deleted = true;
         this.deletePipeHack = !this.deletePipeHack;
-        this.finalArrayNeedsSaving = true;
+        this.imageElementService.finalArrayNeedsSaving = true;
         this.cd.detectChanges();
       }
     });
 
     this.electronService.ipcRenderer.on('new-video-meta', (event, element: ImageElement) => {
-      element.index = this.finalArray.length;
-      this.finalArray.push(element); // not enough for view to update; we need `.slice()`
-      this.finalArrayNeedsSaving = true;
+      element.index = this.imageElementService.imageElements.length;
+      this.imageElementService.imageElements.push(element); // not enough for view to update; we need `.slice()`
+      this.imageElementService.finalArrayNeedsSaving = true;
       this.debounceImport();
     });
 
@@ -763,8 +762,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     clearTimeout(this.newVideoImportTimeout);
 
-    if (    this.finalArray.length < 20
-        || (this.finalArray.length < 100 && this.newVideoImportCounter === 20)
+    if (    this.imageElementService.imageElements.length < 20
+        || (this.imageElementService.imageElements.length < 100 && this.newVideoImportCounter === 20)
         || this.newVideoImportCounter === 100
     ) {
       this.resetFinalArrayRef();
@@ -780,7 +779,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   private resetFinalArrayRef(): void {
     this.newVideoImportCounter = 0;
-    this.finalArray = this.finalArray.slice();
+    this.imageElementService.imageElements = this.imageElementService.imageElements.slice();
     this.cd.detectChanges();
   }
 
@@ -789,10 +788,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param sourceIndex
    */
   deleteInputSourceFiles(sourceIndex: number): void {
-    this.finalArray.forEach((element: ImageElement) => {
+    this.imageElementService.imageElements.forEach((element: ImageElement) => {
       if (element.inputSource == sourceIndex) { // TODO -- stop the loosey goosey `==` and figure out `string` vs `number`
         element.deleted = true;
-        this.finalArrayNeedsSaving = true;
+        this.imageElementService.finalArrayNeedsSaving = true;
       }
     });
     this.deletePipeHack = !this.deletePipeHack;
@@ -918,11 +917,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * completely depends on global variable `finalArrayNeedsSaving` or if any tags were added/removed in auto-tag-service
    */
   public getFinalObjectForSaving(): FinalObject {
-    if (this.finalArrayNeedsSaving || this.autoTagsSaveService.needToSave()) {
+    if (this.imageElementService.finalArrayNeedsSaving || this.autoTagsSaveService.needToSave()) {
       const propsToReturn: FinalObject = {
         addTags: this.autoTagsSaveService.getAddTags(),
         hubName: this.appState.hubName,
-        images: this.finalArray,
+        images: this.imageElementService.imageElements,
         // TODO -- rename `selectedSourceFolder` and make sure to update `finalArrayNeedsSaving` when inputDirs changes
         inputDirs: this.sourceFolderService.selectedSourceFolder,
         numOfFolders: this.appState.numOfFolders,
@@ -986,10 +985,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
 
     // update number of times played
-    this.finalArray[index].timesPlayed ? this.finalArray[index].timesPlayed++ : this.finalArray[index].timesPlayed = 1;
-    this.finalArrayNeedsSaving = true;
+    this.imageElementService.imageElements[index].timesPlayed ?
+    this.imageElementService.imageElements[index].timesPlayed++ :
+    this.imageElementService.imageElements[index].timesPlayed = 1;
+    this.imageElementService.finalArrayNeedsSaving = true;
 
-    const clickedElement: ImageElement = this.finalArray[index];
+    const clickedElement: ImageElement = this.imageElementService.imageElements[index];
 
     this.currentPlayingFolder = clickedElement.partialPath;
     this.currentClickedItemName = clickedElement.cleanName;
@@ -1550,7 +1551,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   public extractMissingThumbnails(): void {
     console.log('trying to extract missing thumbnails');
-    this.electronService.ipcRenderer.send('add-missing-thumbnails', this.finalArray, this.currentScreenshotSettings.clipSnippets > 0);
+    this.electronService.ipcRenderer.send(
+      'add-missing-thumbnails',
+      this.imageElementService.imageElements,
+      this.currentScreenshotSettings.clipSnippets > 0);
   }
 
   /**
@@ -1558,7 +1562,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   public cleanScreenshotFolder(): void {
     console.log('trying to delete unused screenshots');
-    this.electronService.ipcRenderer.send('clean-old-thumbnails', this.finalArray);
+    this.electronService.ipcRenderer.send('clean-old-thumbnails', this.imageElementService.imageElements);
   }
 
   // ==========================================================================================
@@ -1953,12 +1957,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   replaceFileNameInFinalArray(renameTo: string, oldFileName: string, index: number): void {
 
-    if (this.finalArray[index].fileName === oldFileName) {
-      this.finalArray[index].fileName = renameTo;
-      this.finalArray[index].cleanName = renameTo.slice().substr(0, renameTo.lastIndexOf('.'));
+    if (this.imageElementService.imageElements[index].fileName === oldFileName) {
+      this.imageElementService.imageElements[index].fileName = renameTo;
+      this.imageElementService.imageElements[index].cleanName = renameTo.slice().substr(0, renameTo.lastIndexOf('.'));
     }
 
-    this.finalArrayNeedsSaving = true;
+    this.imageElementService.finalArrayNeedsSaving = true;
   }
 
   /**
@@ -2027,19 +2031,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param emission - the type, tag, and uniqe ID of the file (hash)
    */
   editFinalArrayTag(emission: TagEmission): void {
-    const position: number = emission.index;
-
-    if (emission.type === 'add') {
-      if (this.finalArray[position].tags) {
-        this.finalArray[position].tags.push(emission.tag);
-      } else {
-        this.finalArray[position].tags = [emission.tag];
-      }
-    } else {
-      this.finalArray[position].tags.splice(this.finalArray[position].tags.indexOf(emission.tag), 1);
-    }
-
-    this.finalArrayNeedsSaving = true;
+    this.imageElementService.HandleEmission(emission);
   }
 
   /**
@@ -2047,9 +2039,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param emission
    */
   editFinalArrayStars(emission: StarEmission): void {
-    const position: number = emission.index;
-    this.finalArray[position].stars = emission.stars;
-    this.finalArrayNeedsSaving = true;
+    this.imageElementService.HandleEmission(emission);
     this.forceStarFilterUpdate = !this.forceStarFilterUpdate;
   }
 
@@ -2058,9 +2048,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param emission
    */
   editFinalArrayYear(emission: YearEmission): void {
-    const position: number = emission.index;
-    this.finalArray[position].year = emission.year;
-    this.finalArrayNeedsSaving = true;
+    this.imageElementService.HandleEmission(emission);
   }
 
   /**
@@ -2068,9 +2056,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param emission
    */
   editDefaultScreenshot(emission: DefaultScreenEmission): void {
-    const position: number = emission.index;
-    this.finalArray[position].defaultScreen = emission.defaultScreen;
-    this.finalArrayNeedsSaving = true;
+    this.imageElementService.HandleEmission(emission);
   }
 
   /**
@@ -2164,7 +2150,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   addTagToManyVideos(tag: string): void {
-    this.finalArray.forEach((element: ImageElement) => {
+    this.imageElementService.imageElements.forEach((element: ImageElement) => {
       if (element.selected) {
         this.addTagToThisElement(tag, element);
       }
@@ -2223,7 +2209,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   toggleBatchTaggingMode(): void {
     if (this.batchTaggingMode) {
-      this.finalArray.forEach((element: ImageElement) => {
+      this.imageElementService.imageElements.forEach((element: ImageElement) => {
         element.selected = false;
       });
     }
