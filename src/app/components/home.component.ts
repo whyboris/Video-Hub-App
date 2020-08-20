@@ -129,7 +129,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   isClosing = false;
   appMaximized = false;
   settingsModalOpen = false;
-  finalArrayNeedsSaving: boolean = false; // if ever a file was renamed, or tag added, re-save the .vha2 file
   flickerReduceOverlay = true;
   isFirstRunEver = false;
   rootFolderLive: boolean = true; // set to `false` when loading hub but video folder is not connected
@@ -628,7 +627,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.currentScreenshotSettings = finalObject.screenshotSettings;
 
       this.rootFolderLive = true; // TODO -- do away with this once many root folders supported
-      this.finalArrayNeedsSaving = false; // TODO -- remove; used to be for hadling root folder change
+      this.imageElementService.finalArrayNeedsSaving = false; // TODO -- remove; used to be for hadling root folder change
 
       this.appState.currentVhaFile = pathToFile;
       this.appState.selectedOutputFolder = outputFolderPath;
@@ -719,7 +718,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (element.fileName === this.imageElementService.imageElements[element.index].fileName) {
         this.imageElementService.imageElements[element.index].deleted = true;
         this.deletePipeHack = !this.deletePipeHack;
-        this.finalArrayNeedsSaving = true;
+        this.imageElementService.finalArrayNeedsSaving = true;
         this.cd.detectChanges();
       }
     });
@@ -727,7 +726,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.electronService.ipcRenderer.on('new-video-meta', (event, element: ImageElement) => {
       element.index = this.imageElementService.imageElements.length;
       this.imageElementService.imageElements.push(element); // not enough for view to update; we need `.slice()`
-      this.finalArrayNeedsSaving = true;
+      this.imageElementService.finalArrayNeedsSaving = true;
       this.debounceImport();
     });
 
@@ -792,7 +791,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.imageElementService.imageElements.forEach((element: ImageElement) => {
       if (element.inputSource == sourceIndex) { // TODO -- stop the loosey goosey `==` and figure out `string` vs `number`
         element.deleted = true;
-        this.finalArrayNeedsSaving = true;
+        this.imageElementService.finalArrayNeedsSaving = true;
       }
     });
     this.deletePipeHack = !this.deletePipeHack;
@@ -918,7 +917,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * completely depends on global variable `finalArrayNeedsSaving` or if any tags were added/removed in auto-tag-service
    */
   public getFinalObjectForSaving(): FinalObject {
-    if (this.finalArrayNeedsSaving || this.autoTagsSaveService.needToSave()) {
+    if (this.imageElementService.finalArrayNeedsSaving || this.autoTagsSaveService.needToSave()) {
       const propsToReturn: FinalObject = {
         addTags: this.autoTagsSaveService.getAddTags(),
         hubName: this.appState.hubName,
@@ -989,7 +988,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.imageElementService.imageElements[index].timesPlayed ?
     this.imageElementService.imageElements[index].timesPlayed++ :
     this.imageElementService.imageElements[index].timesPlayed = 1;
-    this.finalArrayNeedsSaving = true;
+    this.imageElementService.finalArrayNeedsSaving = true;
 
     const clickedElement: ImageElement = this.imageElementService.imageElements[index];
 
@@ -1963,7 +1962,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.imageElementService.imageElements[index].cleanName = renameTo.slice().substr(0, renameTo.lastIndexOf('.'));
     }
 
-    this.finalArrayNeedsSaving = true;
+    this.imageElementService.finalArrayNeedsSaving = true;
   }
 
   /**

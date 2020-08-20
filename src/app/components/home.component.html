@@ -245,7 +245,7 @@
         (addMissingThumbnailsPlease)="extractMissingThumbnails()"
         (cleanScreenshotFolderPlease)="cleanScreenshotFolder()"
         (deleteInputSourceFiles)="deleteInputSourceFiles($event)"
-        (finalArrayNeedsSaving)="finalArrayNeedsSaving = true"
+        (finalArrayNeedsSaving)="imageElementService.finalArrayNeedsSaving = true"
 
         [hubName]="appState.hubName"
         [inputFolders]="sourceFolderService.selectedSourceFolder"

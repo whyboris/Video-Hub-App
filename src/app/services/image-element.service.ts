@@ -10,7 +10,7 @@ import { DefaultScreenEmission } from '../components/sheet/sheet.component';
 export class ImageElementService {
 
 public imageElements: ImageElement[] = [];
-private imageElementsNeedSaving: boolean = false;
+public finalArrayNeedsSaving: boolean = false;
 constructor() { }
 
 /**
@@ -28,7 +28,7 @@ constructor() { }
     } else {
       this.handleTagEmission(emission as TagEmission);
     }
-    this.imageElementsNeedSaving = true;
+    this.finalArrayNeedsSaving = true;
   }
 
   private handleTagEmission(emission: TagEmission): void {
@@ -43,10 +43,6 @@ constructor() { }
       this.imageElements[position].tags.
         splice(this.imageElements[position].tags.indexOf(emission.tag), 1);
     }
-  }
-
-  public get finalArrayNeedsSaving(): boolean {
-    return this.imageElementsNeedSaving;
   }
 
 }
