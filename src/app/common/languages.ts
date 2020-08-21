@@ -15,6 +15,7 @@ const Portuguese = require('../../../i18n/pt.json');
 const Russian    = require('../../../i18n/ru.json');
 const Spanish    = require('../../../i18n/es.json');
 const Ukrainian  = require('../../../i18n/uk.json');
+const Vietnamese = require('../../../i18n/vi.json');
 
 export const LanguageLookup: Record<string, any> = {
   'ar': Arabic,
@@ -33,4 +34,5 @@ export const LanguageLookup: Record<string, any> = {
   'ru': Russian,
   'uk': Ukrainian,
   'zh': Chinese,
+  'vi': Vietnamese,
 };
