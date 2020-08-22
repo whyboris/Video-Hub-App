@@ -170,7 +170,7 @@ export function startFileSystemWatching(
     cwd: inputDir,
     disableGlobbing: true,
     persistent: persistent,
-    usePolling: true, // neccessary for files over network
+    usePolling: inputDir.startsWith('//') ? true : false, // neccessary for files over network
   }
 
   const watcher: FSWatcher = chokidar.watch(inputDir, watcherConfig);
