@@ -22,6 +22,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'folderUnion'
  | 'fontSizeLarger'
  | 'fuzzy'
+ | 'hideOffline'
  | 'hideSidebar'
  | 'hideTop'
  | 'hoverScrub'
@@ -99,6 +100,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'sizeFilter',
     'resolutionFilter',
     'starFilter',
+    'hideOffline',
     'sortOrder',
     'sortOptionAlphabetical',
     'sortOptionTime',
@@ -407,6 +409,14 @@ export const SettingsButtons: SettingsButtonsType = {
     title: 'BUTTONS.fuzzyHint',
     toggled: true
   },
+  'hideOffline': {
+    description: 'BUTTONS.hideOfflineDescription',
+    hidden: true,
+    iconName: 'icon-eye-closed',
+    moreInfo: 'BUTTONS.hideOfflineMoreInfo',
+    title: 'BUTTONS.hideOfflineHint',
+    toggled: false
+  },
   'hideSidebar': {
     description: 'BUTTONS.hideSidebarDescription',
     hidden: false,
@@ -476,6 +486,7 @@ export const SettingsButtons: SettingsButtonsType = {
     hidden: true,
     iconName: 'icon-toggle-scrub',
     moreInfo: 'BUTTONS.openAtTimestampMoreInfo',
+    settingsHeading: 'BUTTONS.videoPlayerSettings',
     title: 'BUTTONS.openAtTimestampHint',
     toggled: false
   },

@@ -133,3 +133,9 @@
   background-color: #d4d4d4 !important;
   text-decoration: line-through;
 }
+
+.hiding-offline {
+  background-color: $pretty-red;
+  margin-top: 15px;
+  position: absolute;
+}
