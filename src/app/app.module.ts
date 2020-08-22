@@ -80,6 +80,7 @@ import { FileSizePipe } from './pipes/file-size.pipe';
 import { FolderArrowsPipe } from './pipes/folder-arrows.pipe';
 import { FolderViewPipe } from './pipes/folder-view.pipe';
 import { FuzzySearchPipe } from './pipes/fuzzy-search.pipe';
+import { HideOfflinePipe } from './pipes/hide-offline.pipe';
 import { LengthFilterPipe } from './pipes/length-filter.pipe';
 import { LengthPipe } from './pipes/length.pipe';
 import { MagicSearchPipe } from './pipes/magic-search.pipe';
@@ -106,7 +107,6 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     AppComponent,
     BreadcrumbsComponent,
     ClipComponent,
-    ModalComponent,
     CountPipe,
     DeleteFilePipe,
     DetailsComponent,
@@ -121,6 +121,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     FolderViewPipe,
     FullViewComponent,
     FuzzySearchPipe,
+    HideOfflinePipe,
     HomeComponent,
     IconComponent,
     LengthFilterPipe,
@@ -128,6 +129,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     MagicSearchPipe,
     ManualTagSortPipe,
     MetaComponent,
+    ModalComponent,
     PlaylistPipe,
     RecentlyOpenedComponent,
     RegexSearchPipe,

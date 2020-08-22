@@ -503,7 +503,7 @@
         ></app-slider-filter>
       </div>
 
-            <!-- sizeFilter -->
+      <!-- sizeFilter -->
       <div *ngIf="settingsButtons['sizeFilter'].toggled">
 
         <app-slider-filter
@@ -571,6 +571,14 @@
         [settingsButtons]="settingsButtons"
       ></app-sort-order>
 
+      <div
+        *ngIf="settingsButtons['hideOffline'].toggled"
+        (click)="settingsButtons['hideOffline'].toggled = false"
+        class="search-or-tag-general search-word hiding-offline"
+      >
+        {{ 'SIDEBAR.hidingOffline' | translate }}
+      </div>
+
       <!-- total found -->
       <div class="filtering-total">
         <span>{{ numberOfVideosFound | number:'.0' }} {{ 'SIDEBAR.found' | translate }}</span>
@@ -631,6 +639,8 @@
       [items]="imageElementService.imageElements
 
                 | deleteFilePipe: deletePipeHack
+
+                | hideOfflinePipe: settingsButtons['hideOffline'].toggled
 
                 | returnZeroPipe: (appState.currentView === 'showClips' && currentScreenshotSettings.clipSnippets === 0)
 
