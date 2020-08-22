@@ -84,10 +84,10 @@
     "playlistButton": "Play all",
     "playlistButtonDescription": "Open all current gallery videos as a playlist",
     "playlistButtonMoreInfo": "This creates a .pls file and opens it with your default video player. Playlist will not include files inside folders if 'Show folders' is selected.",
+    "randFolderScreen": "Folder random screenshots",
+    "randFolderScreenDesc": "Show random screenshots on Folder view",
     "regenerateLibraryDescription": "Regenerate all library metadata, except thumbnails and user entered metadata",
     "regenerateLibraryHint": "Regenerate library",
-    "randFolderScreenDesc": "Show random screenshots on Folder view",
-    "randFolderScreen": "Folder random screenshots",
     "regexDescription": "Regex search",
     "regexHint": "Regex search",
     "regexMoreInfo": "Uses case-insensitive RegEx matching against file name",
@@ -147,7 +147,6 @@
     "sortOptionCreatedMoreInfo": "Show the time created order option in the sorting dropdown",
     "sortOptionModifiedDescription": "Date Modified",
     "sortOptionModifiedMoreInfo": "Show the time modified order option in the sorting dropdown",
-    "sortOptionsHeading": "Sorting options in the dropdown",
     "sortOptionSizeDescription": "Size",
     "sortOptionSizeMoreInfo": "Show the size order option in the sorting dropdown",
     "sortOptionStarDescription": "Star",
@@ -160,6 +159,7 @@
     "sortOptionTimesPlayedMoreInfo": "Show the times played order option in the sorting dropdown",
     "sortOptionYearDescription": "Year",
     "sortOptionYearMoreInfo": "Show the year order option in the sorting dropdown. Only affected by the year you manually set in the details view",
+    "sortOptionsHeading": "Sorting options in the dropdown",
     "sortOrderDescription": "Sort order",
     "sortOrderHint": "Sort order",
     "sortOrderMoreInfo": "Show the sort order filter",
@@ -185,7 +185,8 @@
     "thumbAutoAdvanceHint": "Enable thumbnail auto advance",
     "thumbAutoAdvanceMoreInfo": "Hovering over thumbnails cycles through screenshots",
     "videoNotesDescription": "Video descriptions",
-    "videoNotesHint": "Notes search"
+    "videoNotesHint": "Notes search",
+    "videoPlayerSettings": "Video Player Settings"
   },
   "RIGHTCLICK": {
     "cancelRename": "cancel rename",

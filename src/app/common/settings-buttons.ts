@@ -476,6 +476,7 @@ export const SettingsButtons: SettingsButtonsType = {
     hidden: true,
     iconName: 'icon-toggle-scrub',
     moreInfo: 'BUTTONS.openAtTimestampMoreInfo',
+    settingsHeading: 'BUTTONS.videoPlayerSettings',
     title: 'BUTTONS.openAtTimestampHint',
     toggled: false
   },

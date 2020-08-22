@@ -74,7 +74,11 @@
 
   <div class="misc-settings" *ngIf="settingTabToShow == 2 && i == 2">
 
-    <div class="player-settings">{{ 'SETTINGS.preferredPlayer' | translate }}</div>
+    <!-- VIDEO PLAYER SETTINGS -->
+
+    <div class="player-settings">
+      {{ 'SETTINGS.preferredPlayer' | translate }}
+    </div>
 
     <div class="player-current-chosen">
       {{ appState.preferredVideoPlayer ? appState.preferredVideoPlayer : ('SETTINGS.systemDefault' | translate) }}
@@ -96,8 +100,13 @@
 
     </div>
 
-    <div *ngIf="appState.preferredVideoPlayer" class="player-settings">
+    <!-- LAUNCH ARGUMENTS -->
 
+    <div
+      *ngIf="appState.preferredVideoPlayer"
+      class="player-settings player-settings-launch-args"
+      [ngStyle]="{ opacity: appState.videoPlayerArgs ? 1 : '0.7' }"
+    >
       {{ 'SETTINGS.playerArgs' | translate }}
 
       <input
@@ -108,35 +117,49 @@
 
     </div>
 
-    <div class="additional-extenstions">{{ 'SETTINGS.additionalExtensions' | translate }}</div>
+    <!-- EXTENSIONS -->
 
-      <div class="additional-extenstions-setting">
+    <div
+      class="additional-extenstions"
+      [ngStyle]="{ opacity: (additionalInput || editAdditional) ? 1 : '0.7' }"
+    >
+      {{ 'SETTINGS.additionalExtensions' | translate }}
+    </div>
 
-        {{ 'SETTINGS.extensions' | translate }}
-  
-        <input
-          class="filter-general input-filter extensions-input"
-          [(ngModel)]="additionalInput"
-          type="text"
-          [disabled]="!editAdditional"
-        >
+    <div
+      class="additional-extenstions-setting"
+      [ngStyle]="{ opacity: (additionalInput || editAdditional) ? 1 : '0.7' }"
+    >
 
-        <button
-          class="defaultSettingsButton player-settings-button"
-          (click)="editAdditionalExtensions()"
-        >
-          {{ (editAdditional ? 'SETTINGS.cancelExtensionsEdit': 'SETTINGS.editExtensionsInput') | translate }}
-        </button>
+      {{ 'SETTINGS.extensions' | translate }}
 
-        <button *ngIf="editAdditional"
-          class="defaultSettingsButton player-settings-button"
-          (click)="applyAdditionalExtensions()"
-        >
-          {{ 'SETTINGS.applyAdditionalExtensions' | translate }}
-        </button>
-      </div>
+      <input
+        class="filter-general input-filter extensions-input"
+        [(ngModel)]="additionalInput"
+        type="text"
+        [disabled]="!editAdditional"
+      >
 
-    <span class="setting-heading">{{ 'SETTINGS.changeAppZoom' | translate }}</span>
+      <button
+        class="defaultSettingsButton player-settings-button"
+        (click)="editAdditionalExtensions()"
+      >
+        {{ (editAdditional ? 'SETTINGS.cancelExtensionsEdit': 'SETTINGS.editExtensionsInput') | translate }}
+      </button>
+
+      <button *ngIf="editAdditional"
+        class="defaultSettingsButton player-settings-button"
+        (click)="applyAdditionalExtensions()"
+      >
+        {{ 'SETTINGS.applyAdditionalExtensions' | translate }}
+      </button>
+    </div>
+
+    <!-- ZOOM BUTTONS -->
+
+    <span class="setting-heading">
+      {{ 'SETTINGS.changeAppZoom' | translate }}
+    </span>
 
     <div class="zoom-buttons">
       <button
@@ -169,7 +192,9 @@
       </button>
     </div>
 
-    <span class="setting-heading">{{ 'SETTINGS.changeLanguage' | translate }}</span>
+    <span class="setting-heading">
+      {{ 'SETTINGS.changeLanguage' | translate }}
+    </span>
 
     <div style="margin: 20px">
       <select (change)="changeLanguage.emit($event.target.value)" class="language-drop-down">
