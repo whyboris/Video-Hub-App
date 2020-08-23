@@ -7,12 +7,7 @@ import { ManualTagsService } from '../../tags-manual/manual-tags.service';
 import { FilePathService } from '../file-path.service';
 
 import { StarRating, ImageElement } from '../../../../../interfaces/final-object.interface';
-import { TagEmission, VideoClickEmit, RightClickEmit, TagEmit, RenameFileResponse } from '../../../../../interfaces/shared-interfaces';
-
-export interface StarEmission {
-  index: number;
-  stars: StarRating;
-}
+import { VideoClickEmit, RightClickEmit, TagEmit, RenameFileResponse } from '../../../../../interfaces/shared-interfaces';
 
 export interface YearEmission {
   index: number;
@@ -31,11 +26,7 @@ export class DetailsComponent implements OnInit {
 
   @ViewChild('filmstripHolder', { static: false }) filmstripHolder: ElementRef;
 
-  @Output() editFinalArrayStars = new EventEmitter<StarEmission>();
-  @Output() editFinalArrayTag = new EventEmitter<TagEmission>();
-  @Output() editFinalArrayYear = new EventEmitter<YearEmission>();
   @Output() filterTag = new EventEmitter<TagEmit>();
-
   @Output() videoClick = new EventEmitter<VideoClickEmit>();
   @Output() rightClick = new EventEmitter<RightClickEmit>();
 

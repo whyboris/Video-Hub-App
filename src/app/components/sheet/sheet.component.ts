@@ -1,3 +1,4 @@
+import { ImageElementService } from './../../services/image-element.service';
 import { Component, Input, Output, OnInit, ElementRef, EventEmitter, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -8,8 +9,7 @@ import { ManualTagsService } from '../tags-manual/manual-tags.service';
 import { FilePathService } from '../views/file-path.service';
 
 import { StarRating, ImageElement } from '../../../../interfaces/final-object.interface';
-import { TagEmit, TagEmission, RenameFileResponse } from '../../../../interfaces/shared-interfaces';
-import { YearEmission } from '../views/details/details.component';
+import { TagEmit, RenameFileResponse } from '../../../../interfaces/shared-interfaces';
 
 import { metaAppear, textAppear, modalAnimation } from '../../common/animations';
 
@@ -38,10 +38,6 @@ export class SheetComponent implements OnInit {
   @ViewChild('filmstripHolder', {static: false}) filmstripHolder: ElementRef;
   @ViewChild('thumbHolder', {static: false}) thumbHolder: ElementRef;
 
-  @Output() editFinalArrayDefaultScreen = new EventEmitter<DefaultScreenEmission>();
-  @Output() editFinalArrayStars = new EventEmitter<StarEmission>();
-  @Output() editFinalArrayTag = new EventEmitter<TagEmission>();
-  @Output() editFinalArrayYear = new EventEmitter<YearEmission>();
   @Output() filterTag = new EventEmitter<TagEmit>();
   @Output() openVideoAtTime = new EventEmitter<object>();
 
@@ -73,9 +69,10 @@ export class SheetComponent implements OnInit {
   thumbnailsToDisplay = 4;
 
   constructor(
-    public manualTagsService: ManualTagsService,
     public filePathService: FilePathService,
-    public sanitizer: DomSanitizer
+    public imageElementService: ImageElementService,
+    public manualTagsService: ManualTagsService,
+    public sanitizer: DomSanitizer,
   ) { }
 
   ngOnInit() {
@@ -107,7 +104,7 @@ export class SheetComponent implements OnInit {
     } else {
       this.manualTagsService.addTag(tag);
 
-      this.editFinalArrayTag.emit({
+      this.imageElementService.HandleEmission({
         index: this.video.index,
         tag: tag,
         type: 'add'
@@ -118,7 +115,7 @@ export class SheetComponent implements OnInit {
   removeThisTag(tag: string) {
     this.manualTagsService.removeTag(tag);
 
-    this.editFinalArrayTag.emit({
+    this.imageElementService.HandleEmission({
       index: this.video.index,
       tag: tag,
       type: 'remove'
@@ -130,7 +127,7 @@ export class SheetComponent implements OnInit {
       rating = 0.5; // reset to "N/A" (not rated)
     }
     this.starRatingHack = rating; // hack for getting star opacity updated instantly
-    this.editFinalArrayStars.emit({
+    this.imageElementService.HandleEmission({
       index: this.video.index,
       stars: rating
     });
@@ -146,7 +143,7 @@ export class SheetComponent implements OnInit {
   setDefaultScreenshot(event: any, index: number): void {
     event.stopPropagation();
 
-    this.editFinalArrayDefaultScreen.emit({
+    this.imageElementService.HandleEmission({
       index: this.video.index,
       defaultScreen: this.video.defaultScreen === index ? undefined : index
     });
