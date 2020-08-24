@@ -468,7 +468,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (success) {
         // Update the final array, close rename dialog if open
         // the error messaging is handled by `rename-file.component` or `meta.component` if it happens
-        this.replaceFileNameInFinalArray(renameTo, oldFileName, index);
+        this.imageElementService.replaceFileNameInFinalArray(renameTo, oldFileName, index);
         this.closeRename();
       }
     });
@@ -981,11 +981,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    // update number of times played
-    this.imageElementService.imageElements[index].timesPlayed ?
-    this.imageElementService.imageElements[index].timesPlayed++ :
-    this.imageElementService.imageElements[index].timesPlayed = 1;
-    this.imageElementService.finalArrayNeedsSaving = true;
+    this.imageElementService.updateNumberOfTimesPlayed(index);
 
     const clickedElement: ImageElement = this.imageElementService.imageElements[index];
 
@@ -1946,20 +1942,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   closeRename() {
     this.renamingNow = false;
     this.cd.detectChanges();
-  }
-
-  /**
-   * Searches through the `finalArray` and updates the file name and display name
-   * Should not error out if two files have the same name
-   */
-  replaceFileNameInFinalArray(renameTo: string, oldFileName: string, index: number): void {
-
-    if (this.imageElementService.imageElements[index].fileName === oldFileName) {
-      this.imageElementService.imageElements[index].fileName = renameTo;
-      this.imageElementService.imageElements[index].cleanName = renameTo.slice().substr(0, renameTo.lastIndexOf('.'));
-    }
-
-    this.imageElementService.finalArrayNeedsSaving = true;
   }
 
   /**

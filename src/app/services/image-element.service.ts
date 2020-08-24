@@ -33,6 +33,31 @@ constructor() { }
     this.finalArrayNeedsSaving = true;
   }
 
+    /**
+   * Searches through the `finalArray` and updates the file name and display name
+   * Should not error out if two files have the same name
+   */
+  replaceFileNameInFinalArray(renameTo: string, oldFileName: string, index: number): void {
+
+    if (this.imageElements[index].fileName === oldFileName) {
+      this.imageElements[index].fileName = renameTo;
+      this.imageElements[index].cleanName = renameTo.slice().substr(0, renameTo.lastIndexOf('.'));
+    }
+
+    this.finalArrayNeedsSaving = true;
+  }
+
+  /**
+   * update number of times played
+   * @param index
+   */
+  updateNumberOfTimesPlayed(index: number) {
+    this.imageElements[index].timesPlayed ?
+    this.imageElements[index].timesPlayed++ :
+    this.imageElements[index].timesPlayed = 1;
+    this.finalArrayNeedsSaving = true;
+  }
+
   private handleTagEmission(emission: TagEmission): void {
     const position: number = emission.index;
     if (emission.type === 'add') {
