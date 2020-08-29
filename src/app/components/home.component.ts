@@ -980,7 +980,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Open the video with user's default media player
    * or with their preferred media player, if chosen
    *
-   * @param item                  ImageElement
+   * @param item                  clicked ImageElement
    * @param clickedThumbnailIndex an index of the thumbnail clicked
    */
   public openVideo(item: ImageElement, clickedThumbnailIndex?: number): void {
@@ -994,16 +994,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     this.imageElementService.updateNumberOfTimesPlayed(item.index);
 
-    const clickedElement: ImageElement = item;
-
-    this.currentPlayingFolder = clickedElement.partialPath;
-    this.currentClickedItemName = clickedElement.cleanName;
+    this.currentPlayingFolder = item.partialPath;
+    this.currentClickedItemName = item.cleanName;
     const fullPath = this.filePathService.getPathFromImageElement(item);
     this.fullPathToCurrentFile = fullPath;
 
     if (this.appState.preferredVideoPlayer) {
       const time: number = clickedThumbnailIndex
-        ? clickedElement.duration / (clickedElement.screens + 1) * ((clickedThumbnailIndex) + 1)
+        ? item.duration / (item.screens + 1) * ((clickedThumbnailIndex) + 1)
         : 0;
 
       const execPath: string = this.appState.preferredVideoPlayer;
