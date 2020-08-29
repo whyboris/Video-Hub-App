@@ -732,6 +732,9 @@
           (sheetClick)="this.openThumbnailSheet(item)"
           (drop)="droppedSomethingOverVideo($event, item)"
 
+          [draggable]="settingsButtons['dragVideoOutOfApp'].toggled"
+          (dragstart)="draggingVideoFile($event, item)"
+
           [video]="item"
 
           [connected]="sourceFolderService.sourceFolderConnected[item.inputSource]"
@@ -772,6 +775,9 @@
 
           (drop)="droppedSomethingOverVideo($event, item)"
 
+          [draggable]="settingsButtons['dragVideoOutOfApp'].toggled"
+          (dragstart)="draggingVideoFile($event, item)"
+
           [video]="item"
 
           [elHeight]="previewHeight + textPaddingHeight"
@@ -799,6 +805,9 @@
           (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
 
           (drop)="droppedSomethingOverVideo($event, item)"
+
+          [draggable]="settingsButtons['dragVideoOutOfApp'].toggled"
+          (dragstart)="draggingVideoFile($event, item)"
 
           [video]="item"
 
@@ -828,6 +837,9 @@
 
           (drop)="droppedSomethingOverVideo($event, item)"
 
+          [draggable]="settingsButtons['dragVideoOutOfApp'].toggled"
+          (dragstart)="draggingVideoFile($event, item)"
+
           [video]="item"
 
           [darkMode]="settingsButtons['darkMode'].toggled"
@@ -849,6 +861,9 @@
           (filterTag)="handleTagWordClicked($event.tag.name, $event.event)"
 
           (drop)="droppedSomethingOverVideo($event, item)"
+
+          [draggable]="settingsButtons['dragVideoOutOfApp'].toggled"
+          (dragstart)="draggingVideoFile($event, item)"
 
           [video]="item"
 
@@ -893,6 +908,9 @@
           (sheetClick)="this.openThumbnailSheet(item)"
 
           (drop)="droppedSomethingOverVideo($event, item)"
+
+          [draggable]="settingsButtons['dragVideoOutOfApp'].toggled"
+          (dragstart)="draggingVideoFile($event, item)"
 
           [video]="item"
 

@@ -92,6 +92,17 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
   });
 
   /**
+   * Handle dragging a file out of VHA into a video editor (e.g. Vegas or Premiere)
+   */
+  ipc.on('drag-video-out-of-electron', (event, filePath): void => {
+    console.log(filePath);
+    event.sender.startDrag({
+      file: filePath,
+      icon: './src/assets/logo.png'
+    });
+  });
+
+  /**
    * Open a particular video file clicked inside Angular
    */
   ipc.on('open-media-file-at-timestamp', (event, executablePath, fullFilePath: string, args: string) => {

@@ -9,6 +9,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'dangerousDelete'
  | 'darkMode'
  | 'doubleClickMode'
+ | 'dragVideoOutOfApp'
  | 'duplicateHash'
  | 'duplicateLength'
  | 'duplicateSize'
@@ -168,6 +169,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
   [ // 12
     'darkMode',
     'doubleClickMode',
+    'dragVideoOutOfApp',
   ],
   [ // 13
     'hideTop',
@@ -286,10 +288,19 @@ export const SettingsButtons: SettingsButtonsType = {
   },
   'doubleClickMode': {
     description: 'BUTTONS.doubleClickModeDescription',
-    hidden: false,
+    hidden: true,
     iconName: 'icon-double-click',
     settingsHeading: 'SETTINGS.doubleClickMode',
     title: 'BUTTONS.doubleClickModeHint',
+    toggled: false
+  },
+  'dragVideoOutOfApp': {
+    description: 'BUTTONS.dragVideoOutOfAppDescription',
+    hidden: true,
+    iconName: 'icon-double-click',
+    moreInfo: 'BUTTONS.dragVideoOutOfAppMoreInfo',
+    settingsHeading: 'SETTINGS.dragVideoOutOfApp',
+    title: 'BUTTONS.dragVideoOutOfAppHint',
     toggled: false
   },
   'duplicateHash': {
