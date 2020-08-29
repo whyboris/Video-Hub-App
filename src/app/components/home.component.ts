@@ -9,9 +9,10 @@ import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
 
 // Services
 import { AutoTagsSaveService } from './tags-auto/tags-save.service';
-import { ModalService } from './modal/modal.service';
 import { ElectronService } from '../providers/electron.service';
+import { FilePathService } from './views/file-path.service';
 import { ManualTagsService } from './tags-manual/manual-tags.service';
+import { ModalService } from './modal/modal.service';
 import { PipeSideEffectService } from '../pipes/pipe-side-effect.service';
 import { ResolutionFilterService } from '../pipes/resolution-filter.service';
 import { ShortcutsService, CustomShortcutAction } from './shortcuts/shortcuts.service';
@@ -341,6 +342,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     public autoTagsSaveService: AutoTagsSaveService,
     public cd: ChangeDetectorRef,
     public electronService: ElectronService,
+    public filePathService: FilePathService,
     public imageElementService: ImageElementService,
     public manualTagsService: ManualTagsService,
     public modalService: ModalService,
@@ -749,6 +751,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
+   * Tell Electron to drag a file out of the app into the system
+   * Used for dragging videos into video editors like Vgeas and Premiere
+   */
+  draggingVideoFile(event, item: ImageElement): void {
+    event.preventDefault();
+    const fullPath = this.filePathService.getPathFromImageElement(item);
+    this.electronService.ipcRenderer.send('drag-video-out-of-electron', fullPath);
+  }
+
+  /**
    * Only update the view after enough changes occurred
    * - update after every new element when < 20 elements total
    * - update every 20 new elements after until 100; every 100 thereafter
@@ -960,7 +972,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if (eventObject.mouseEvent.ctrlKey === true || eventObject.mouseEvent.metaKey) {
       this.openThumbnailSheet(item);
     } else if (this.rootFolderLive) {
-      this.openVideo(item.index, item.inputSource, eventObject.thumbIndex);
+      this.openVideo(item, eventObject.thumbIndex);
     }
   }
 
@@ -968,30 +980,25 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Open the video with user's default media player
    * or with their preferred media player, if chosen
    *
-   * @param index                 unique ID of the video
-   * @param inputSource           what the input source is
+   * @param item                  ImageElement
    * @param clickedThumbnailIndex an index of the thumbnail clicked
    */
-  public openVideo(index: number, inputSource: number, clickedThumbnailIndex?: number): void {
+  public openVideo(item: ImageElement, clickedThumbnailIndex?: number): void {
 
-    if (!this.sourceFolderService.sourceFolderConnected[inputSource]) {
+    if (!this.sourceFolderService.sourceFolderConnected[item.inputSource]) {
       console.log('not connected!');
       this.modalService.openSnackbar(this.translate.instant('SETTINGS.rootFolderNotLive'));
 
       return;
     }
 
-    this.imageElementService.updateNumberOfTimesPlayed(index);
+    this.imageElementService.updateNumberOfTimesPlayed(item.index);
 
-    const clickedElement: ImageElement = this.imageElementService.imageElements[index];
+    const clickedElement: ImageElement = item;
 
     this.currentPlayingFolder = clickedElement.partialPath;
     this.currentClickedItemName = clickedElement.cleanName;
-    const fullPath = path.join(
-      this.sourceFolderService.selectedSourceFolder[inputSource].path,
-      clickedElement.partialPath,
-      clickedElement.fileName
-    );
+    const fullPath = this.filePathService.getPathFromImageElement(item);
     this.fullPathToCurrentFile = fullPath;
 
     if (this.appState.preferredVideoPlayer) {
@@ -1006,6 +1013,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } else {
       this.electronService.ipcRenderer.send('open-media-file', fullPath);
     }
+  }
+
+  /**
+   * handle right-click and `Open folder`
+   */
+  openContainingFolderNow(): void {
+    this.fullPathToCurrentFile = this.filePathService.getPathFromImageElement(this.currentRightClickedItem);
+    this.openInExplorer();
   }
 
   /**
@@ -1857,20 +1872,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.findMostSimilar = this.currentRightClickedItem.cleanName;
     // console.log(this.findMostSimilar);
     this.showSimilar = true;
-  }
-
-  /**
-   * handle right-click and `Open folder`
-   * Code similar to `openVideo()`
-   */
-  openContainingFolderNow(): void {
-    this.fullPathToCurrentFile = path.join(
-      this.sourceFolderService.selectedSourceFolder[this.currentRightClickedItem.inputSource].path,
-      this.currentRightClickedItem.partialPath,
-      this.currentRightClickedItem.fileName
-    );
-
-    this.openInExplorer();
   }
 
   /**
