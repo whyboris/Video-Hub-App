@@ -20,7 +20,8 @@ export type SupportedLanguage =
 | 'ru'
 | 'zh'
 | 'uk'
-| 'vi';
+| 'vi'
+| 'tr';
 
 export interface RowNumbers {
   thumbnailSheet: number;
