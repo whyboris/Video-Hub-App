@@ -59,6 +59,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'sizeFilter'
  | 'sortOptionAlphabetical'
  | 'sortOptionAspectRatio'
+ | 'sortOptionFolderSize'
  | 'sortOptionCreated'
  | 'sortOptionModified'
  | 'sortOptionSize'
@@ -683,6 +684,13 @@ export const SettingsButtons: SettingsButtonsType = {
     description: 'BUTTONS.sortOptionAspectRatioDescription',
     hidden: false,
     moreInfo: 'BUTTONS.sortOptionAspectRatioMoreInfo',
+    title: '',
+    toggled: false
+  },
+  'sortOptionFolderSize': {
+    description: 'BUTTONS.sortOptionFolderSizeDescription',
+    hidden: false,
+    moreInfo: 'BUTTONS.sortOptionFolderSizeMoreInfo',
     title: '',
     toggled: false
   },

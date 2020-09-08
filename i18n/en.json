@@ -149,6 +149,8 @@
     "sortOptionAlphabeticalMoreInfo": "Show the alphabetical order option in the sorting dropdown",
     "sortOptionAspectRatioDescription": "Aspect Ratio",
     "sortOptionAspectRatioMoreInfo": "Show the aspect ratio order option in the sorting dropdown",
+    "sortOptionFolderSizeDescription": "Folder Size",
+    "sortOptionFolderSizeMoreInfo": "Show the folder size order option in the sorting dropdown",
     "sortOptionCreatedDescription": "Date Created",
     "sortOptionCreatedMoreInfo": "Show the time created order option in the sorting dropdown",
     "sortOptionModifiedDescription": "Date Modified",

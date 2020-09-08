@@ -77,6 +77,12 @@
     <option *ngIf="settingsButtons['sortOptionAspectRatio'].toggled" value="aspectRatioDesc">
       &#x25BC; {{ 'SIDEBAR.sortAspectRatio' | translate }}
     </option>
+    <option *ngIf="settingsButtons['sortOptionFolderSize'].toggled" value="folderSizeAsc">
+      &#x25B2; {{ 'SIDEBAR.sortFolderSize' | translate }}
+    </option>
+    <option *ngIf="settingsButtons['sortOptionFolderSize'].toggled" value="folderSizeDesc">
+      &#x25BC; {{ 'SIDEBAR.sortFolderSize' | translate }}
+    </option>
     <option value="random">
       {{ 'SIDEBAR.sortRandom' | translate }}
     </option>
