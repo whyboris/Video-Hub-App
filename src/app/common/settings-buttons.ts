@@ -113,7 +113,9 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'sortOptionModified',
     'sortOptionCreated',
     'sortOptionTags',
-    'sortOptionAspectRatio'
+    'sortOptionAspectRatio',
+    'sortOptionFolderSize'
+
   ],
   [ // 3
     'duplicateLength',
