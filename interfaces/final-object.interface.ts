@@ -25,7 +25,7 @@ export interface FinalObject {
 }
 
 export interface ImageElement {
-  cleanName: string;             // file name cleaned of dots, underscores,and file extension; for searching
+  cleanName: string;             // file name cleaned of dots, underscores,and file extension; for searching. Can be *FOLDER* sometimes
   duration: number;              // number of seconds - duration of film
   fileName: string;              // full file name with extension - for opening the file
   fileSize: number;              // file size in bytes
@@ -51,7 +51,7 @@ export interface ImageElement {
   // ------------------------------------------------------------------------
   deleted?: boolean;             // toggled after a successful delete of file; removed before saving .vha file
   durationDisplay: string;       // displayed duration in X:XX:XX format
-  fileSizeDisplay: string;       // displayed as XXXmb or X.Xgb
+  fileSizeDisplay: string;       // displayed as XXXmb or X.Xgb -- also co-opted for showing number of files in a *FOLDER*
   index: number;                 // for the `default` sort order
   resBucket: number;             // the resolution category the video falls into (for faster sorting)
   resolution: ResolutionString;  // e.g. `720`, `1080`, `SD`, `HD`, etc
