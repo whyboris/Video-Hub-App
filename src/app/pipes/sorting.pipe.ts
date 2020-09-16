@@ -121,16 +121,14 @@ export class SortingPipe implements PipeTransform {
     if (property === 'folderSize') {
 
       // want non-folders to be considered "less than" a folder so give negative value by default.
-      var numCheck = /^\d+$/;
       var xDisplay = -Infinity;
       var yDisplay = -Infinity;
 
-      // numcheck because a folder will have num videos for this value, videos will have mb or gb characters for size
-      if(numCheck.test(x.fileSizeDisplay)){
+      if(x.cleanName === "*FOLDER*"){
         xDisplay = parseInt(x.fileSizeDisplay, 10);
       }
 
-      if(numCheck.test(y.fileSizeDisplay)){
+      if(y.cleanName === "*FOLDER*"){
         yDisplay = parseInt(y.fileSizeDisplay, 10);
       }
 
