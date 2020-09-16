@@ -7,6 +7,8 @@ export type SortType = 'default'
                      | 'alphabetDesc'
                      | 'aspectRatioAsc'
                      | 'aspectRatioDesc'
+                     | 'folderSizeAsc'
+                     | 'folderSizeDesc'
                      | 'hash' // only used by the duplicateFinderPipe
                      | 'modifiedAsc'
                      | 'modifiedDesc'
@@ -114,6 +116,30 @@ export class SortingPipe implements PipeTransform {
       } else {
         return 0;
       }
+    }
+
+    if (property === 'folderSize') {
+
+      // want non-folders to be considered "less than" a folder so give negative value by default.
+      var xDisplay = -Infinity;
+      var yDisplay = -Infinity;
+
+      if(x.cleanName === "*FOLDER*"){
+        xDisplay = parseInt(x.fileSizeDisplay, 10);
+      }
+
+      if(y.cleanName === "*FOLDER*"){
+        yDisplay = parseInt(y.fileSizeDisplay, 10);
+      }
+
+      if (xDisplay < yDisplay ) {
+        return decreasing ? 1 : -1;
+      } if (xDisplay > yDisplay) {
+        return decreasing ? -1 : 1;
+      } else {
+        return 0;
+      }
+
     }
 
     if (decreasing) {
@@ -238,12 +264,18 @@ export class SortingPipe implements PipeTransform {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'aspectRatio', true);
       });
+    } else if (sortingType === 'folderSizeAsc') {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
+        return this.sortFunctionLol(x, y, 'folderSize', false);
+      });
+    } else if (sortingType === 'folderSizeDesc') {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
+        return this.sortFunctionLol(x, y, 'folderSize', true);
+      });
     } else {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'index', true);
       });
     }
-
   }
-
 }
