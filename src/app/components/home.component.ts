@@ -11,6 +11,7 @@ import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
 import { AutoTagsSaveService } from './tags-auto/tags-save.service';
 import { ElectronService } from '../providers/electron.service';
 import { FilePathService } from './views/file-path.service';
+import { ImageElementService } from '../services/image-element.service';
 import { ManualTagsService } from './tags-manual/manual-tags.service';
 import { ModalService } from './modal/modal.service';
 import { PipeSideEffectService } from '../pipes/pipe-side-effect.service';
@@ -19,6 +20,9 @@ import { ShortcutsService, CustomShortcutAction } from './shortcuts/shortcuts.se
 import { SourceFolderService } from './statistics/source-folder.service';
 import { StarFilterService } from '../pipes/star-filter.service';
 import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency.service';
+
+// Components
+import { SortOrderComponent } from './sort-order/sort-order.component';
 
 // Interfaces
 import { AllSupportedViews, SupportedView, HistoryItem, RenameFileResponse, VideoClickEmit } from '../../../interfaces/shared-interfaces';
@@ -51,7 +55,6 @@ import {
   slowFadeOut,
   topAnimation
 } from '../common/animations';
-import { ImageElementService } from '../services/image-element.service';
 
 @Component({
   selector: 'app-home',
@@ -89,7 +92,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild('fuzzySearch', { static: false }) fuzzySearch: ElementRef;
   @ViewChild('magicSearch', { static: false }) magicSearch: ElementRef;
   @ViewChild('searchRef', { static: false }) searchRef: ElementRef;
-  @ViewChild('sortFilterElement', { static: false }) sortFilterElement: ElementRef;
+
+  @ViewChild(SortOrderComponent) sortOrderRef:SortOrderComponent;
 
   @ViewChild(VirtualScrollerComponent, { static: false }) virtualScroller: VirtualScrollerComponent;
 
@@ -308,7 +312,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         if (this.shortcutService.regularShortcuts.includes(shortcutAction as SettingsButtonKey)) {
           this.toggleButton(shortcutAction as SettingsButtonKey);
         } else {
-          this.handleCustomShortcutAction(shortcutAction as CustomShortcutAction);
+          this.handleCustomShortcutAction(event, shortcutAction as CustomShortcutAction);
         }
       }
 
@@ -657,8 +661,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.setUpDurationFilterValues(this.imageElementService.imageElements);
       this.setUpSizeFilterValues(this.imageElementService.imageElements);
 
-      if (this.sortFilterElement) {
-        this.sortFilterElement.nativeElement.value = this.sortType;
+      if (this.sortOrderRef.sortFilterElement) {
+        this.sortOrderRef.sortFilterElement.nativeElement.value = this.sortType;
       }
 
       this.cd.detectChanges();
@@ -1313,9 +1317,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   /**
    * Handle custom shortcut action
    * summoned via `handleKeyboardEvent`
-   * @param shortcutAction
+   * @param event - keyboard event
+   * @param shortcutAction - CustomShortcutAction
    */
-  handleCustomShortcutAction(shortcutAction: CustomShortcutAction): void {
+  handleCustomShortcutAction(event: KeyboardEvent, shortcutAction: CustomShortcutAction): void {
     switch (shortcutAction) {
 
       case ('toggleSettings'):
@@ -1475,8 +1480,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } else if (uniqueKey === 'sortOrder') {
       this.toggleButtonOpposite(uniqueKey);
       setTimeout(() => {
-        if (this.sortFilterElement) { // just in case, perform check
-          this.sortFilterElement.nativeElement.value = this.sortType;
+        if (this.sortOrderRef.sortFilterElement) { // just in case, perform check
+          this.sortOrderRef.sortFilterElement.nativeElement.value = this.sortType;
         }
       });
     } else if (uniqueKey === 'shuffleGalleryNow') {
@@ -1484,14 +1489,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.shuffleTheViewNow++;
       this.scrollToTop();
       // if sort filter is NOT showin on the sidebar, enable
-      if (!this.sortFilterElement) {
+      if (!this.sortOrderRef.sortFilterElement) {
         this.settingsButtons['sortOrder'].toggled = true;
       }
       // and set the setting-option to `Random' after timeout to update view
       setTimeout(() => {
-        if (this.sortFilterElement) { // just in case, perform check
-          const allOptions = this.sortFilterElement.nativeElement.options;
-          allOptions[allOptions.length - 1].selected = true;
+        if (this.sortOrderRef.sortFilterElement) { // just in case, perform check
+          this.sortOrderRef.sortFilterElement.nativeElement.value = 'random';
         }
       });
     } else {
