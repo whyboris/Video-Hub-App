@@ -1557,16 +1557,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // ==========================================================================================
 
   /**
-   * Tell node to delete all screenshots that are no longer in the hub
-   */
-  public cleanScreenshotFolder(): void {
-    console.log('trying to delete unused screenshots');
-    this.electronService.ipcRenderer.send('clean-old-thumbnails', this.imageElementService.imageElements);
-  }
-
-  // ==========================================================================================
-
-  /**
    * Decrease preview size
    */
   public decreaseSize(): void {
