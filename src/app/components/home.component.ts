@@ -1557,17 +1557,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // ==========================================================================================
 
   /**
-   * Tell node to find and extract all missing thumbnails
-   */
-  public extractMissingThumbnails(): void {
-    console.log('trying to extract missing thumbnails');
-    this.electronService.ipcRenderer.send(
-      'add-missing-thumbnails',
-      this.imageElementService.imageElements,
-      this.currentScreenshotSettings.clipSnippets > 0);
-  }
-
-  /**
    * Tell node to delete all screenshots that are no longer in the hub
    */
   public cleanScreenshotFolder(): void {
