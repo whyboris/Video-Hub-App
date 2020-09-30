@@ -21,8 +21,6 @@ import { ImageElementService } from './../../services/image-element.service';
 })
 export class StatisticsComponent implements OnInit, OnDestroy {
 
-  @Output() addMissingThumbnailsPlease = new EventEmitter<any>();
-  @Output() cleanScreenshotFolderPlease = new EventEmitter<any>();
   @Output() deleteInputSourceFiles = new EventEmitter<number>();
   @Output() finalArrayNeedsSaving = new EventEmitter<any>();
 
@@ -83,7 +81,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     }))
 
     this.eventSubscriptionMap.set('numberOfScreenshotsDeleted', this.numberScreenshotsDeleted.subscribe((deleted: number) => {
-      if (deleted) { // first emit from subscription is `undefined`
+      if (deleted !== undefined) { // first emit from subscription is `undefined`
         this.handleScreenshotsDeleted(deleted);
       }
     }));
@@ -217,10 +215,15 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Add any missing thumbnails / continue thumbnail import
+   * Add any missing thumbnails / resume thumbnail import
+   * Tell node to find and extract all missing thumbnails
    */
   addMissingThumbnails() {
-    this.addMissingThumbnailsPlease.emit(true);
+    console.log('trying to extract missing thumbnails');
+    this.electronService.ipcRenderer.send(
+      'add-missing-thumbnails',
+      this.imageElementService.imageElements,
+      this.screenshotSettings.clipSnippets > 0);
   }
 
   /**
@@ -248,9 +251,12 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     this.deleteInputSourceFiles.emit(itemSourceKey);
   }
 
+  /**
+   * Tell node to delete all screenshots that are no longer in the hub
+   */
   cleanScreenshotFolder(): void {
     console.log('cleaning screenshots!');
-    this.cleanScreenshotFolderPlease.emit(true);
+    this.electronService.ipcRenderer.send('clean-old-thumbnails', this.imageElementService.imageElements);
   }
 
   /**

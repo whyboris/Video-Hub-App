@@ -238,8 +238,6 @@
     <div *ngIf="settingTabToShow == 3" class="shortcut-menu">
 
       <app-statistics
-        (addMissingThumbnailsPlease)="extractMissingThumbnails()"
-        (cleanScreenshotFolderPlease)="cleanScreenshotFolder()"
         (deleteInputSourceFiles)="deleteInputSourceFiles($event)"
         (finalArrayNeedsSaving)="imageElementService.finalArrayNeedsSaving = true"
 
@@ -546,17 +544,34 @@
       </div>
 
       <!-- Duplicates -->
-      <div class="lev-distance" *ngIf="settingsButtons['duplicateLength'].toggled || settingsButtons['duplicateSize'].toggled || settingsButtons['duplicateHash'].toggled">
+      <div
+        class="lev-distance"
+        *ngIf="settingsButtons['duplicateLength'].toggled
+            || settingsButtons['duplicateSize'].toggled
+            || settingsButtons['duplicateHash'].toggled"
+       >
         <span class="lev-description">
           {{ 'SIDEBAR.duplicate' | translate }}
         </span>
-        <span *ngIf="settingsButtons['duplicateLength'].toggled" class="search-or-tag-general search-word on-new-line" (click)="settingsButtons['duplicateLength'].toggled = false">
+        <span
+          *ngIf="settingsButtons['duplicateLength'].toggled"
+          class="search-or-tag-general search-word on-new-line"
+          (click)="settingsButtons['duplicateLength'].toggled = false"
+        >
           {{ 'SIDEBAR.dupeByLength' | translate }}
         </span>
-        <span *ngIf="settingsButtons['duplicateSize'].toggled" class="search-or-tag-general search-word on-new-line" (click)="settingsButtons['duplicateSize'].toggled = false">
+        <span
+          *ngIf="settingsButtons['duplicateSize'].toggled"
+          class="search-or-tag-general search-word on-new-line"
+          (click)="settingsButtons['duplicateSize'].toggled = false"
+        >
           {{ 'SIDEBAR.dupeBySize' | translate }}
         </span>
-        <span *ngIf="settingsButtons['duplicateHash'].toggled" class="search-or-tag-general search-word on-new-line" (click)="settingsButtons['duplicateHash'].toggled = false">
+        <span
+          *ngIf="settingsButtons['duplicateHash'].toggled"
+          class="search-or-tag-general search-word on-new-line"
+          (click)="settingsButtons['duplicateHash'].toggled = false"
+        >
           {{ 'SIDEBAR.dupeByHash' | translate }}
         </span>
       </div>

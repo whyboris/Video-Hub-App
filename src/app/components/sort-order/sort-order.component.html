@@ -9,8 +9,8 @@
   @filterItemAppear
 >
   <select
-    (change)="sortTypeChange.emit($event.target.value)"
     #sortFilterElement
+    (change)="sortTypeChange.emit($event.target.value)"
     class="language-drop-down sort-dropdown"
     [ngClass]="{ 'sort-dropdown-dark-mode': settingsButtons['darkMode'].toggled }"
   >
