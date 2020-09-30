@@ -1,6 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 import { ImageElement, StarRating } from '../../../interfaces/final-object.interface';
 import { randomizeArray } from '../../../node/utility';
+import { orderBy } from 'natural-orderby';
 
 export type SortType = 'default'
                      | 'alphabetAsc'
@@ -181,13 +182,9 @@ export class SortingPipe implements PipeTransform {
       return randomizeArray(galleryArray, currentIndex);
 
     } else if (sortingType === 'alphabetAsc') {
-      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
-        return this.sortFunctionLol(x, y, 'alphabetical', true);
-      });
+        return orderBy(galleryArray, 'fileName', 'asc');
     } else if (sortingType === 'alphabetDesc') {
-      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
-        return this.sortFunctionLol(x, y, 'alphabetical', false);
-      });
+        return orderBy(galleryArray, 'fileName', 'desc');
     } else if (sortingType === 'sizeAsc') {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'fileSize', true);
