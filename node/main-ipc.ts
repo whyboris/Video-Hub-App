@@ -198,17 +198,16 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
         item.hash + '.jpg'
       );
 
-    if (fs.existsSync(fileToReplace)) {
-      const height: number = GLOBALS.screenshotSettings.height;
+    const height: number = GLOBALS.screenshotSettings.height;
 
-      replaceThumbnailWithNewImage(fileToReplace, pathToIncomingJpg, height)
-        .then(success => {
-          if (success) {
-            event.sender.send('thumbnail-replaced');
-          }
-        })
-        .catch((err) => {});
-    }
+    replaceThumbnailWithNewImage(fileToReplace, pathToIncomingJpg, height)
+      .then(success => {
+        if (success) {
+          event.sender.send('thumbnail-replaced');
+        }
+      })
+      .catch((err) => {});
+
   });
 
   /**
