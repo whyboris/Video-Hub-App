@@ -436,11 +436,9 @@ function setExtractionDurations(
  */
 function checkFileExists(pathToFile: string): Promise<boolean> {
   return new Promise((resolve, reject) => {
-    if (fs.existsSync(pathToFile)) {
-      return resolve(true);
-    } else {
-      return resolve(false);
-    }
+    fs.access(pathToFile, fs.constants.F_OK, (err) => {
+      return(resolve(!err));
+    });
   });
 }
 
