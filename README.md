@@ -51,7 +51,7 @@ Main dependencies in use:
 | Electron         |  v9.0.0 | June 2020   | (internally uses Node `v12.14.1` and Chromium 83) |
 | Electron Builder | v22.7.0 | June 2020   |                                                   |
 
-- **Node**: I recommend to use the same version as _Electron_ uses internally, but version 10 or above should work.
+- **Node**: I recommend using the same version as _Electron_ uses internally, but version 10 or above should work.
 - **Angular CLI**: not required but may be useful: [Angular CLI](https://cli.angular.io).
 
 To help debug a production build of VHA you can use [Debugtron](https://github.com/bytedance/debugtron)
