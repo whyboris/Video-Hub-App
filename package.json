@@ -63,7 +63,7 @@
     "@angular/router": "10.0.0",
     "@types/node": "12.12.6",
     "codelyzer": "5.2.2",
-    "electron": "8.3.0",
+    "electron": "8.5.1",
     "electron-builder": "22.7.0",
     "electron-reload": "1.5.0",
     "node-sass": "4.14.1",
