@@ -179,7 +179,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
     // TODO --   handle async stuff better -- maybe wait before checking access?
     console.log('HANDLE ASYNC STUFF CORRECTLY !?');
     // check if file exists
-    fs.access(fileToDelete, fs.F_OK, (err: any) => {
+    fs.access(fileToDelete, fs.constants.F_OK, (err: any) => {
       if (err) {
         event.sender.send('file-deleted', item);
       }
