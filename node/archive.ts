@@ -464,7 +464,7 @@ function extractMetadataForThisONEFile(
       imageElement.duration = duration;
       imageElement.fileSize = stat.size;
       imageElement.mtime = stat.mtimeMs;
-      imageElement.ctime = stat.ctimeMs;
+      imageElement.birthtime = stat.birthtimeMs;
       if (imageElement.hash === '') {
         imageElement.hash = hashFile(filePath);
       }

@@ -7,7 +7,7 @@ interface FolderProperties {
   byteSize: number;    //                             corresponds to ImageElement `fileSize`
   duration: number;    // in seconds,                 corresponds to ImageElement `duration`
   mtime: number; //                                   corresponds to ImageElement `mtime`
-  ctime: number; //                                   corresponds to ImageElement `ctime`
+  birthtime: number; //                                   corresponds to ImageElement `birthtime`
   starAverage: StarRating; // averaged weight of stars rounded to nearest `StarRating`
 }
 
@@ -36,8 +36,8 @@ export class FolderViewPipe implements PipeTransform {
       if (element.mtime > lastUpdated) {
         lastUpdated = element.mtime;
       }
-      if (element.ctime < firstCreated) {
-        firstCreated = element.ctime;
+      if (element.birthtime < firstCreated) {
+        firstCreated = element.birthtime;
       }
       if (element.stars !== 0.5) {
         totalStars += 1;
@@ -52,7 +52,7 @@ export class FolderViewPipe implements PipeTransform {
       byteSize: totalFileSize,
       duration: totalDuration,
       mtime: lastUpdated,
-      ctime: firstCreated,
+      birthtime: firstCreated,
       starAverage: starString,
     };
   }
@@ -217,7 +217,7 @@ export class FolderViewPipe implements PipeTransform {
           folderWithStuff.hash            = this.extractFourPreviewHashes(value),
           folderWithStuff.index           = -1, // always show at the top (but after the `UP` folder) in the default view
           folderWithStuff.mtime           = folderProperties.mtime,
-          folderWithStuff.ctime           = folderProperties.ctime,
+          folderWithStuff.birthtime       = folderProperties.birthtime,
           folderWithStuff.partialPath     = (prefixPath || '/') + key, // must set this for the folder click to register!
           folderWithStuff.stars           = folderProperties.starAverage,
 
