@@ -52,8 +52,8 @@ function thumbQueueRunner(element: ImageElement, done) {
       done();
     })
     .catch(() => {
-      sendCurrentProgress(thumbsDone, thumbsDone + thumbQueue.length() + 1, 'importingScreenshots');      // check whether sending data off by 1
-      thumbsDone++;                                                       // TODO -- rethink the whole `sendCurrentProgress` system from scratch
+      sendCurrentProgress(thumbsDone, thumbsDone + thumbQueue.length() + 1, 'importingScreenshots');  // check whether sending data off by 1
+      thumbsDone++;                                                   // TODO -- rethink the whole `sendCurrentProgress` system from scratch
 
       extractAll(
         element,
