@@ -379,7 +379,7 @@ export function extractMetadataAsync(
         const origWidth = stream.width || 0; // ffprobe does not detect it on some MKV streams
         const origHeight = stream.height || 0;
 
-        imageElement.ctime = fileStat.ctimeMs;
+        imageElement.birthtime = fileStat.birthtimeMs;
         imageElement.duration = duration;
         imageElement.fileSize = fileStat.size;
         imageElement.height = origHeight;

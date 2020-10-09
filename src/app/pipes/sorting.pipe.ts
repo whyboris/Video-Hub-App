@@ -235,11 +235,11 @@ export class SortingPipe implements PipeTransform {
       });
     } else if (sortingType === 'createdAsc') {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
-        return this.sortFunctionLol(x, y, 'ctime', true);
+        return this.sortFunctionLol(x, y, 'birthtime', true);
       });
     } else if (sortingType === 'createdDesc') {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
-        return this.sortFunctionLol(x, y, 'ctime', false);
+        return this.sortFunctionLol(x, y, 'birthtime', false);
       });
     } else if (sortingType === 'hash') {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
