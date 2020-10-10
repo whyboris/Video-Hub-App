@@ -242,13 +242,11 @@ export function createDotPlsFile(savePath: string, playlist: ImageElement[], sou
  * @return {string}
  */
 export function cleanUpFileName(original: string): string {
-  let cleaned = original;
-  cleaned = cleaned.split('.').slice(0, -1).join('.');   // (1)
-  cleaned = cleaned.split('_').join(' ');                // (2)
-  cleaned = cleaned.split('.').join(' ');                // (3)
-  cleaned = cleaned.split('   ').join(' ');              // (4)
-  cleaned = cleaned.split('  ').join(' ');               // (4)
-  return cleaned;
+  return original.split('.').slice(0, -1).join('.')   // (1)
+                 .split('_').join(' ')                // (2)
+                 .split('.').join(' ')                // (3)
+                 .split('   ').join(' ')              // (4)
+                 .split('  ').join(' ');              // (4)
 }
 
 /**
@@ -348,6 +346,7 @@ function hashFileAsync(pathToFile: string): Promise<string> {
           });
         });
       }
+
     });
   });
 }
