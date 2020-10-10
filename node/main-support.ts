@@ -16,7 +16,7 @@ const fs = require('fs');
 const hasher = require('crypto').createHash;
 import { Stats } from 'fs';
 
-import { FinalObject, ImageElement, ScreenshotSettings, InputSources, ResolutionString } from '../interfaces/final-object.interface';
+import { FinalObject, ImageElement, ScreenshotSettings, InputSources, ResolutionString, NewImageElement } from '../interfaces/final-object.interface';
 import { startFileSystemWatching, resetWatchers } from './main-extract-async';
 
 interface ResolutionMeta {
@@ -356,20 +356,18 @@ function hashFileAsync(pathToFile: string): Promise<string> {
  * Stores information into the ImageElement and returns it via callback
  * @param filePath              path to the file
  * @param screenshotSettings    ScreenshotSettings
- * @param imageElement          index in array to update
  * @param callback
  */
 export function extractMetadataAsync(
   filePath: string,
   screenshotSettings: ScreenshotSettings,
-  imageElement: ImageElement,
   fileStat: Stats
 ): Promise<ImageElement> {
   return new Promise((resolve, reject) => {
     const ffprobeCommand = '"' + ffprobePath + '" -of json -show_streams -show_format -select_streams V "' + filePath + '"';
     exec(ffprobeCommand, (err, data, stderr) => {
       if (err) {
-        reject(imageElement);
+        reject();
       } else {
         const metadata = JSON.parse(data);
         const stream = getBestStream(metadata);
@@ -379,6 +377,7 @@ export function extractMetadataAsync(
         const origWidth = stream.width || 0; // ffprobe does not detect it on some MKV streams
         const origHeight = stream.height || 0;
 
+        const imageElement = NewImageElement();
         imageElement.birthtime = fileStat.birthtimeMs;
         imageElement.duration = duration;
         imageElement.fileSize = fileStat.size;

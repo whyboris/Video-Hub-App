@@ -9,7 +9,7 @@ import { Stats } from 'fs';
 
 import { GLOBALS } from './main-globals';
 
-import { ImageElement, ImageElementPlus, NewImageElement } from '../interfaces/final-object.interface';
+import { ImageElement, ImageElementPlus } from '../interfaces/final-object.interface';
 import { acceptableFiles } from './main-filenames';
 import { extractAll } from './main-extract';
 import { sendCurrentProgress, insertTemporaryFieldsSingle, extractMetadataAsync, cleanUpFileName } from './main-support';
@@ -119,8 +119,7 @@ function sendNewVideoMetadata(imageElement: ImageElementPlus) {
  */
 export function metadataQueueRunner(file: TempMetadataQueueObject, done) {
 
-  const newElement = NewImageElement();
-  extractMetadataAsync(file.fullPath, GLOBALS.screenshotSettings, newElement, file.stat)
+  extractMetadataAsync(file.fullPath, GLOBALS.screenshotSettings, file.stat)
     .then((imageElement: ImageElementPlus) => {
       imageElement.cleanName = cleanUpFileName(file.name);
       imageElement.fileName = file.name;
