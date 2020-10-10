@@ -309,45 +309,43 @@ function computeNumberOfScreenshots(screenshotSettings: ScreenshotSettings, dura
 /**
  * Hash a given file using its size
  * @param pathToFile  -- path to file
+ * @param stats -- Stats from `fs.stat(pathToFile)`
  */
-function hashFileAsync(pathToFile: string): Promise<string> {
+function hashFileAsync(pathToFile: string, stats: Stats): Promise<string> {
   return new Promise((resolve, reject) => {
     const sampleSize = 16 * 1024;
     const sampleThreshold = 128 * 1024;
+    const fileSize = stats.size;
+    let data: Buffer;
 
-    fs.stat(pathToFile, (error, stats) => {
-      const fileSize = stats.size;
-      let data: Buffer;
-
-      if (fileSize < sampleThreshold) {
-        data = fs.readFile(pathToFile, (err, data) => {
-          if (err) { throw err; }
-          // append the file size to the data
-          const buf = Buffer.concat([data, Buffer.from(fileSize.toString())]);
-          // make the magic happen!
-          const hash = hasher('md5').update(buf.toString('hex')).digest('hex');
-          resolve(hash);
-        }); // too small, just read the whole file
-      } else {
-        data = Buffer.alloc(sampleSize * 3);
-        fs.open(pathToFile, 'r', (err, fd) => {
-          fs.read(fd, data, 0, sampleSize, 0, (err, bytesRead, buffer) => { // read beginning of file
-            fs.read(fd, data, sampleSize, sampleSize, fileSize / 2, (err, bytesRead, buffer) => {
-              fs.read(fd, data, sampleSize * 2, sampleSize, fileSize - sampleSize, (err, bytesRead, buffer) => {
-                fs.close(fd, (err) => {
-                  // append the file size to the data
-                  const buf = Buffer.concat([data, Buffer.from(fileSize.toString())]);
-                  // make the magic happen!
-                  const hash = hasher('md5').update(buf.toString('hex')).digest('hex');
-                  resolve(hash);
-                });
+    if (fileSize < sampleThreshold) {
+      data = fs.readFile(pathToFile, (err, data) => {
+        if (err) { throw err; }
+        // append the file size to the data
+        const buf = Buffer.concat([data, Buffer.from(fileSize.toString())]);
+        // make the magic happen!
+        const hash = hasher('md5').update(buf.toString('hex')).digest('hex');
+        resolve(hash);
+      }); // too small, just read the whole file
+    } else {
+      data = Buffer.alloc(sampleSize * 3);
+      fs.open(pathToFile, 'r', (err, fd) => {
+        fs.read(fd, data, 0, sampleSize, 0, (err, bytesRead, buffer) => { // read beginning of file
+          fs.read(fd, data, sampleSize, sampleSize, fileSize / 2, (err, bytesRead, buffer) => {
+            fs.read(fd, data, sampleSize * 2, sampleSize, fileSize - sampleSize, (err, bytesRead, buffer) => {
+              fs.close(fd, (err) => {
+                // append the file size to the data
+                const buf = Buffer.concat([data, Buffer.from(fileSize.toString())]);
+                // make the magic happen!
+                const hash = hasher('md5').update(buf.toString('hex')).digest('hex');
+                resolve(hash);
               });
             });
           });
         });
-      }
+      });
+    }
 
-    });
   });
 }
 
@@ -390,7 +388,7 @@ export function extractMetadataAsync(
           imageElement.screens   = computeNumberOfScreenshots(screenshotSettings, duration);
           imageElement.width     = origWidth;
 
-          hashFileAsync(filePath).then((hash) => {
+          hashFileAsync(filePath, fileStat).then((hash) => {
             imageElement.hash = hash;
             resolve(imageElement);
           });
