@@ -361,7 +361,6 @@ function hashFileAsync(pathToFile: string): Promise<string> {
 export function extractMetadataAsync(
   filePath: string,
   screenshotSettings: ScreenshotSettings,
-  fileStat: Stats
 ): Promise<ImageElement> {
   return new Promise((resolve, reject) => {
     const ffprobeCommand = '"' + ffprobePath + '" -of json -show_streams -show_format -select_streams V "' + filePath + '"';
@@ -377,23 +376,27 @@ export function extractMetadataAsync(
         const origWidth = stream.width || 0; // ffprobe does not detect it on some MKV streams
         const origHeight = stream.height || 0;
 
-        const imageElement = NewImageElement();
-        imageElement.birthtime = fileStat.birthtimeMs;
-        imageElement.duration = duration;
-        imageElement.fileSize = fileStat.size;
-        imageElement.height = origHeight;
-        imageElement.mtime = fileStat.mtimeMs;
-        imageElement.screens = computeNumberOfScreenshots(screenshotSettings, duration);
-        imageElement.width = origWidth;
+        fs.stat(filePath, (err, fileStat) => {
+          if (err) {
+            reject();
+          }
 
-        if (imageElement.hash === '') {
+          const imageElement = NewImageElement();
+          imageElement.birthtime = fileStat.birthtimeMs;
+          imageElement.duration  = duration;
+          imageElement.fileSize  = fileStat.size;
+          imageElement.height    = origHeight;
+          imageElement.mtime     = fileStat.mtimeMs;
+          imageElement.screens   = computeNumberOfScreenshots(screenshotSettings, duration);
+          imageElement.width     = origWidth;
+
           hashFileAsync(filePath).then((hash) => {
             imageElement.hash = hash;
             resolve(imageElement);
           });
-        } else {
-          resolve(imageElement);
-        }
+
+        });
+
       }
     });
   });

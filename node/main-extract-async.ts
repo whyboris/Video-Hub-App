@@ -93,7 +93,6 @@ export interface TempMetadataQueueObject {
   inputSource: number;
   name: string;
   partialPath: string;
-  stat: Stats;
 }
 
 /**
@@ -119,7 +118,7 @@ function sendNewVideoMetadata(imageElement: ImageElementPlus) {
  */
 export function metadataQueueRunner(file: TempMetadataQueueObject, done) {
 
-  extractMetadataAsync(file.fullPath, GLOBALS.screenshotSettings, file.stat)
+  extractMetadataAsync(file.fullPath, GLOBALS.screenshotSettings)
     .then((imageElement: ImageElementPlus) => {
       imageElement.cleanName = cleanUpFileName(file.name);
       imageElement.fileName = file.name;
@@ -166,7 +165,6 @@ export function startFileSystemWatching(
   GLOBALS.angularApp.sender.send('started-watching-this-dir', inputSource);
 
   const watcherConfig = {
-    alwaysStat: true,
     cwd: inputDir,
     disableGlobbing: true,
     persistent: persistent,
@@ -176,7 +174,7 @@ export function startFileSystemWatching(
   const watcher: FSWatcher = chokidar.watch(inputDir, watcherConfig);
 
   watcher
-    .on('add', (filePath: string, stat) => {
+    .on('add', (filePath: string) => {
 
       const ext = filePath.substring(filePath.lastIndexOf('.') + 1);
 
@@ -209,7 +207,6 @@ export function startFileSystemWatching(
         inputSource: inputSource,
         name: fileName,
         partialPath: partialPath,
-        stat: stat,
       }
 
       metadataQueue.push(newItem);
