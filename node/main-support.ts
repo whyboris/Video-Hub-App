@@ -312,42 +312,43 @@ function computeNumberOfScreenshots(screenshotSettings: ScreenshotSettings, dura
  * Hash a given file using its size
  * @param pathToFile  -- path to file
  */
-export function hashFileAsync(pathToFile: string): Promise<string> {
-  const sampleSize = 16 * 1024;
-  const sampleThreshold = 128 * 1024;
-  const stats = fs.statSync(pathToFile);                               // TODO -- change to `fs.stat()` -- async version
-  const fileSize = stats.size;
-
-  let data: Buffer;
-
+function hashFileAsync(pathToFile: string): Promise<string> {
   return new Promise((resolve, reject) => {
-    if (fileSize < sampleThreshold) {
-      data = fs.readFile(pathToFile, (err, data) => {
-        if (err) { throw err; }
-        // append the file size to the data
-        const buf = Buffer.concat([data, Buffer.from(fileSize.toString())]);
-        // make the magic happen!
-        const hash = hasher('md5').update(buf.toString('hex')).digest('hex');
-        resolve(hash);
-      }); // too small, just read the whole file
-    } else {
-      data = Buffer.alloc(sampleSize * 3);
-      fs.open(pathToFile, 'r', (err, fd) => {
-        fs.read(fd, data, 0, sampleSize, 0, (err, bytesRead, buffer) => { // read beginning of file
-          fs.read(fd, data, sampleSize, sampleSize, fileSize / 2, (err, bytesRead, buffer) => {
-            fs.read(fd, data, sampleSize * 2, sampleSize, fileSize - sampleSize, (err, bytesRead, buffer) => {
-              fs.close(fd, (err) => {
-                // append the file size to the data
-                const buf = Buffer.concat([data, Buffer.from(fileSize.toString())]);
-                // make the magic happen!
-                const hash = hasher('md5').update(buf.toString('hex')).digest('hex');
-                resolve(hash);
+    const sampleSize = 16 * 1024;
+    const sampleThreshold = 128 * 1024;
+
+    fs.stat(pathToFile, (error, stats) => {
+      const fileSize = stats.size;
+      let data: Buffer;
+
+      if (fileSize < sampleThreshold) {
+        data = fs.readFile(pathToFile, (err, data) => {
+          if (err) { throw err; }
+          // append the file size to the data
+          const buf = Buffer.concat([data, Buffer.from(fileSize.toString())]);
+          // make the magic happen!
+          const hash = hasher('md5').update(buf.toString('hex')).digest('hex');
+          resolve(hash);
+        }); // too small, just read the whole file
+      } else {
+        data = Buffer.alloc(sampleSize * 3);
+        fs.open(pathToFile, 'r', (err, fd) => {
+          fs.read(fd, data, 0, sampleSize, 0, (err, bytesRead, buffer) => { // read beginning of file
+            fs.read(fd, data, sampleSize, sampleSize, fileSize / 2, (err, bytesRead, buffer) => {
+              fs.read(fd, data, sampleSize * 2, sampleSize, fileSize - sampleSize, (err, bytesRead, buffer) => {
+                fs.close(fd, (err) => {
+                  // append the file size to the data
+                  const buf = Buffer.concat([data, Buffer.from(fileSize.toString())]);
+                  // make the magic happen!
+                  const hash = hasher('md5').update(buf.toString('hex')).digest('hex');
+                  resolve(hash);
+                });
               });
             });
           });
         });
-      });
-    }
+      }
+    });
   });
 }
 
