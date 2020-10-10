@@ -168,7 +168,6 @@ export function startFileSystemWatching(
 
   const watcherConfig = {
     alwaysStat: true,
-    awaitWriteFinish: true,
     cwd: inputDir,
     disableGlobbing: true,
     persistent: persistent,
@@ -377,7 +376,6 @@ export function removeThumbnailsNotInHub(hashesPresent: Map<string, 1>, outputDi
   deleteThumbQueue.pause();
 
   const watcherConfig = {
-    awaitWriteFinish: true,
     cwd: outputDir,
     persistent: false,
   }

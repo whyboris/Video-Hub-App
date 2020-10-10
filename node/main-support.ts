@@ -42,7 +42,7 @@ export function getHtmlPath(anyOsPath: string): string {
 }
 
 /**
- * Label the video according to cosest resolution label
+ * Label the video according to closest resolution label
  * @param width
  * @param height
  */
