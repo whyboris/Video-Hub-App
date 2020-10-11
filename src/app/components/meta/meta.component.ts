@@ -1,3 +1,4 @@
+import { ImageElementService } from './../../services/image-element.service';
 import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectorRef, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -8,13 +9,7 @@ import { FilePathService } from '../views/file-path.service';
 import { ManualTagsService } from '../tags-manual/manual-tags.service';
 
 import { StarRating, ImageElement } from '../../../../interfaces/final-object.interface';
-import { TagEmit, TagEmission, RenameFileResponse } from '../../../../interfaces/shared-interfaces';
-import { YearEmission } from '../views/details/details.component';
-
-export interface StarEmission {
-  index: number;
-  stars: StarRating;
-}
+import { TagEmit, RenameFileResponse } from '../../../../interfaces/shared-interfaces';
 
 @Component({
   selector: 'app-meta-item',
@@ -26,13 +21,9 @@ export class MetaComponent implements OnInit, OnDestroy {
   @ViewChild('yearInput', { static: false }) yearInput: ElementRef;
   @ViewChild('videoNotes', { static: false}) videoNotes: ElementRef;
 
-  @Output() editFinalArrayStars = new EventEmitter<StarEmission>();
-  @Output() editFinalArrayTag = new EventEmitter<TagEmission>();
-  @Output() editFinalArrayYear = new EventEmitter<YearEmission>();
   @Output() filterTag = new EventEmitter<TagEmit>();
 
   @Input() video: ImageElement;
-
   @Input() darkMode: boolean;
   @Input() imgHeight: number;
   @Input() largerFont: boolean;
@@ -61,8 +52,9 @@ export class MetaComponent implements OnInit, OnDestroy {
     private cd: ChangeDetectorRef,
     public electronService: ElectronService,
     public filePathService: FilePathService,
+    public imageElementService: ImageElementService,
     public manualTagsService: ManualTagsService,
-    public sanitizer: DomSanitizer
+    public sanitizer: DomSanitizer,
   ) { }
 
   ngOnInit() {
@@ -95,7 +87,7 @@ export class MetaComponent implements OnInit, OnDestroy {
     } else {
       this.manualTagsService.addTag(tag);
 
-      this.editFinalArrayTag.emit({
+      this.imageElementService.HandleEmission({
         index: this.video.index,
         tag: tag,
         type: 'add'
@@ -111,7 +103,7 @@ export class MetaComponent implements OnInit, OnDestroy {
   removeThisTag(tag: string) {
     this.manualTagsService.removeTag(tag);
 
-    this.editFinalArrayTag.emit({
+    this.imageElementService.HandleEmission({
       index: this.video.index,
       tag: tag,
       type: 'remove'
@@ -124,7 +116,7 @@ export class MetaComponent implements OnInit, OnDestroy {
       rating = 0.5; // reset to "N/A" (not rated)
     }
     this.starRatingHack = rating; // hack for getting star opacity updated instantly
-    this.editFinalArrayStars.emit({
+    this.imageElementService.HandleEmission({
       index: this.video.index,
       stars: rating
     });
@@ -135,7 +127,7 @@ export class MetaComponent implements OnInit, OnDestroy {
    * @param year
    */
   setYear(year: number): void {
-    this.editFinalArrayYear.emit({
+    this.imageElementService.HandleEmission({
       index: this.video.index,
       year: year,
     });

@@ -109,11 +109,11 @@ export class WordFrequencyService {
     if (finalResult.length > 0) {
       const largest = finalResult[0].freq;
       const smallest = finalResult[finalResult.length - 1].freq;
-      const scaleFactor = 14 / (largest - smallest);
-      // 14 is the range between 8 and 22 -- smallest and largest I'd like text to be (px).
+      const scaleFactor = 10 / (largest - smallest);
+      // 14 is the range between 12 and 22 -- smallest and largest I'd like text to be (px).
 
       finalResult.forEach((element) => {
-        element.height = 8 + (element.freq - smallest) * scaleFactor;
+        element.height = 12 + (element.freq - smallest) * scaleFactor;
       });
     }
 

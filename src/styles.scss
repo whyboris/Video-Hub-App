@@ -4,3 +4,28 @@ html, body {
   margin: 0;
   padding: 0;
 }
+
+@import '~@angular/cdk/overlay-prebuilt.css';
+
+@import 'app/components/variables';
+
+.mat-dialog-container {
+  background-color: white;
+  border: 1px solid gray;
+  border-radius: 8px !important;
+  box-shadow: 0 10px 20px 10px rgba(0,0,0,0.1);
+}
+
+.mat-simple-snackbar {
+  background: $pretty-red;
+  border: 1px solid red;
+  border-radius: 15px;
+  color: white;
+  padding: 10px 20px;
+
+  span {
+    display: block;
+    text-align: center;
+    width: 100%;
+  }
+}

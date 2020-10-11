@@ -30,9 +30,6 @@
     "excludeDescription": "Імена файлів без",
     "excludeHint": "Виключіть фільтр",
     "excludeMoreInfo": "Фільтр, щоб виключити будь-яке відео, яке містить слово фільтра",
-    "extendedWordCloudDescription": "Слово хмара 100",
-    "extendedWordCloudHint": "Увімкнено розширену хмару слів",
-    "extendedWordCloudMoreInfo": "Показати 100 тегів хмарних слів, коли відображається слово хмара",
     "fileDescription": "Імена файлів з кожним",
     "fileHint": "Пошук відео",
     "fileMoreInfo": "Фільтр для відео, що містять кожне з пошукових слів",
@@ -313,8 +310,7 @@
     "pleaseChangeName": "Будь-ласка, змініть назву концентратора вище",
     "selectDefaultPlayer": "Виберіть бажаний відеоплеєр",
     "selectPreviousHub": "Виберіть раніше збережений файл Video Hub",
-    "selectRootFolder": "Виберіть джерело папки відео",
-    "videoFolderNotFound": "Папка відео не знайдена:"
+    "selectRootFolder": "Виберіть джерело папки відео"
   },
   "TAGS": {
     "add": "Додайте",

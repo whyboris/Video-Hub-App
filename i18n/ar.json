@@ -30,9 +30,6 @@
     "excludeDescription": "أسماء الملفات بدون",
     "excludeHint": "استبعاد مرشح",
     "excludeMoreInfo": "تصفية لاستبعاد أي مقاطع فيديو تحتوي على كلمة المرشح",
-    "extendedWordCloudDescription": "كلمة سحابة 100",
-    "extendedWordCloudHint": "تمكين الموسعة كلمة الغيمة",
-    "extendedWordCloudMoreInfo": "إظهار 100 كلمة سحابة الكلمات عند إظهار سحابة الكلمة",
     "fileDescription": "أسماء الملفات مع كل",
     "fileHint": "بحث فيديو",
     "fileMoreInfo": "تصفية لمقاطع الفيديو التي تحتوي على كل من كلمات البحث",
@@ -313,8 +310,7 @@
     "pleaseChangeName": "يرجى تغيير اسم المحور أعلاه",
     "selectDefaultPlayer": "يرجى اختيار مشغل الفيديو المفضل لديك",
     "selectPreviousHub": "يرجى تحديد ملف Video Hub تم حفظه مسبقًا",
-    "selectRootFolder": "حدد مجلد مصدر الفيديو",
-    "videoFolderNotFound": "لم يتم العثور على مجلد مصدر الفيديو:"
+    "selectRootFolder": "حدد مجلد مصدر الفيديو"
   },
   "TAGS": {
     "add": "إضافة",

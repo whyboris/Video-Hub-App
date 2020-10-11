@@ -30,9 +30,6 @@
     "excludeDescription": "Nama fail tanpa",
     "excludeHint": "Kecualikan penapis",
     "excludeMoreInfo": "Tapis untuk mengecualikan mana-mana video yang mengandungi perkataan penapis",
-    "extendedWordCloudDescription": "Word cloud 100",
-    "extendedWordCloudHint": "Enabled Word Cloud Extended",
-    "extendedWordCloudMoreInfo": "Tunjukkan 100 tag awan perkataan apabila menunjukkan awan perkataan",
     "fileDescription": "Nama fail dengan masing-masing",
     "fileHint": "Carian video",
     "fileMoreInfo": "Penapis untuk video yang mengandungi setiap kata carian",
@@ -313,8 +310,7 @@
     "pleaseChangeName": "Sila tukar nama hub di atas",
     "selectDefaultPlayer": "Sila pilih pemain video pilihan anda",
     "selectPreviousHub": "Sila pilih fail Hub Video yang disimpan sebelumnya",
-    "selectRootFolder": "Pilih Folder Video Sumber",
-    "videoFolderNotFound": "Folder Video Sumber tidak dijumpai:"
+    "selectRootFolder": "Pilih Folder Video Sumber"
   },
   "TAGS": {
     "add": "Tambah",

@@ -345,24 +345,6 @@ input[type="radio"]:checked:before {
   }
 }
 
-.player-settings {
-  font-size: 14px;
-  font-style: italic;
-  margin: -24px 0 10px 84px;
-}
-
-.player-current-chosen {
-  font-size: 14px;
-  margin: 0 10px 30px 84px;
-}
-
-.player-settings-button {
-  margin-left: 20px   !important;
-  max-height: initial !important;
-  max-width: initial  !important;
-  padding: 5px        !important;
-}
-
 .all-settings-tabs {
   left: 210px;
   pointer-events: none;
@@ -394,7 +376,6 @@ input[type="radio"]:checked:before {
     z-index: 10;
   }
 }
-
 
 @media (max-width: 900px) {
   .all-settings-tabs {

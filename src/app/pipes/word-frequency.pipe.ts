@@ -17,7 +17,6 @@ export class WordFrequencyPipe implements PipeTransform {
    * Return only items that match search string
    * @param finalArray
    * @param render              whether to calculate the wordFrequency
-   * @param numberOfTags        number of tags to generate for the word cloud
    * @param showManualTags      boolean
    * @param showAutoFileTags    boolean
    * @param showAutoFolderTags  boolean
@@ -25,7 +24,6 @@ export class WordFrequencyPipe implements PipeTransform {
   transform(
     finalArray: ImageElement[],
     render: boolean,
-    numberOfTags: number,
     showManualTags: boolean,
     showAutoFileTags: boolean,
     showAutoFolderTags: boolean
@@ -51,7 +49,7 @@ export class WordFrequencyPipe implements PipeTransform {
 
       // this.wordFrequencyService.cleanMap();
 
-      this.wordFrequencyService.computeFrequencyArray(finalArray.length, numberOfTags);
+      this.wordFrequencyService.computeFrequencyArray(finalArray.length, 100);
     }
 
     return finalArray;

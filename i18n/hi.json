@@ -30,9 +30,6 @@
     "excludeDescription": "बिना नाम के फाइल",
     "excludeHint": "फ़िल्टर को छोड़ दें",
     "excludeMoreInfo": "फिल्टर शब्द वाले किसी भी वीडियो को बाहर करने के लिए फ़िल्टर करें",
-    "extendedWordCloudDescription": "शब्द मेघ १००",
-    "extendedWordCloudHint": "विस्तारित विस्तारित वर्ड क्लाउड",
-    "extendedWordCloudMoreInfo": "क्लाउड शब्द दिखाते समय 100 शब्द क्लाउड टैग दिखाएं",
     "fileDescription": "प्रत्येक के साथ फ़ाइल नाम",
     "fileHint": "वीडियो खोज",
     "fileMoreInfo": "प्रत्येक खोज शब्दों वाले वीडियो के लिए फ़िल्टर करें",
@@ -313,8 +310,7 @@
     "pleaseChangeName": "कृपया ऊपर हब नाम बदलें",
     "selectDefaultPlayer": "कृपया अपने पसंदीदा वीडियो प्लेयर का चयन करें",
     "selectPreviousHub": "कृपया पहले से सहेजे गए वीडियो हब फ़ाइल का चयन करें",
-    "selectRootFolder": "स्रोत वीडियो फ़ोल्डर का चयन करें",
-    "videoFolderNotFound": "स्रोत वीडियो फ़ोल्डर नहीं मिला:"
+    "selectRootFolder": "स्रोत वीडियो फ़ोल्डर का चयन करें"
   },
   "TAGS": {
     "add": "जोड़ना",

@@ -30,9 +30,6 @@
     "excludeDescription": "Dateinamen ohne",
     "excludeHint": "Filter ausschließen",
     "excludeMoreInfo": "Filtern, um alle Videos auszuschließen, die das Filterwort enthalten",
-    "extendedWordCloudDescription": "Wortwolke 100",
-    "extendedWordCloudHint": "Erweiterte Word Cloud aktiviert",
-    "extendedWordCloudMoreInfo": "Zeigen Sie 100 Wortwolken-Tags an, wenn Sie die Wortwolke anzeigen",
     "fileDescription": "Dateinamen mit jeweils",
     "fileHint": "Videosuche",
     "fileMoreInfo": "Filtern Sie nach Videos, die die einzelnen Suchbegriffe enthalten",
@@ -313,8 +310,7 @@
     "pleaseChangeName": "Bitte ändern Sie den obigen Hubnamen",
     "selectDefaultPlayer": "Bitte wählen Sie Ihren bevorzugten Videoplayer",
     "selectPreviousHub": "Bitte wählen Sie eine zuvor gespeicherte Video Hub-Datei aus",
-    "selectRootFolder": "Wählen Sie den Quellvideoordner",
-    "videoFolderNotFound": "Quellvideoordner nicht gefunden:"
+    "selectRootFolder": "Wählen Sie den Quellvideoordner"
   },
   "TAGS": {
     "add": "Hinzufügen",

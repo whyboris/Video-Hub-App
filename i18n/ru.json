@@ -30,9 +30,6 @@
     "excludeDescription": "Имена файлов без",
     "excludeHint": "Фильтр исключения",
     "excludeMoreInfo": "Фильтр, чтобы исключить любые видео, которые содержат слово фильтра",
-    "extendedWordCloudDescription": "Облако слов 100",
-    "extendedWordCloudHint": "Включено расширенное облако слов",
-    "extendedWordCloudMoreInfo": "Показывать 100 тегов облака слов при отображении облака слов",
     "fileDescription": "Имена файлов с каждым",
     "fileHint": "Поиск видео",
     "fileMoreInfo": "Фильтр для видео, содержащих каждое из поисковых слов",
@@ -313,8 +310,7 @@
     "pleaseChangeName": "Пожалуйста, измените имя концентратора выше",
     "selectDefaultPlayer": "Пожалуйста, выберите предпочитаемый вами видеоплеер",
     "selectPreviousHub": "Пожалуйста, выберите ранее сохраненный файл Video Hub",
-    "selectRootFolder": "Выберите исходную папку видео",
-    "videoFolderNotFound": "Папка с исходным видео не найдена:"
+    "selectRootFolder": "Выберите исходную папку видео"
   },
   "TAGS": {
     "add": "Добавлять",
