@@ -1,20 +1,10 @@
 <div
-  *ngIf="settingsButtons['showRelatedVideosTray'].toggled"
-  class="bottom-tray most-similar-tray"
+  class="most-similar-tray"
   [ngClass]="{ 'bottom-tray-dark': settingsButtons['darkMode'].toggled }"
-  @modalAnimation
 >
 
   <div
-    (click)="settingsButtons['showRelatedVideosTray'].toggled = false"
-    class="close-bottom-tray"
-    title="{{ 'SETTINGS.closeRelatedTray' | translate }}"
-  >
-    <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
-  </div>
-
-  <div
-    *ngIf="!this.settingsButtons['hideSidebar'].toggled"
+    *ngIf="!showRecentNotSimilar && !this.settingsButtons['hideSidebar'].toggled"
     class="most-similar-comment"
     @similarResultsText
   >
@@ -25,8 +15,11 @@
   </div>
 
   <app-thumbnail
-    *ngFor="let item of imageElementService.imageElements | similarityPipe: true : currentClickedItemName
-                                   | slice: 0 : 8 "
+    *ngFor="let item of (showRecentNotSimilar
+                          ?  imageElementService.recentlyPlayed
+                          : (imageElementService.imageElements | similarityPipe: true : currentClickedItemName
+                                                               | slice: 0 : 8 )
+                        )"
 
     (videoClick)="handleClick.emit({ expectedEvent: $event, item: item })"
     (contextmenu)="rightMouseClicked.emit({ mouseEvent: $event, item: item })"
@@ -38,6 +31,8 @@
     [imgHeight]="previewHeightRelated"
 
     [video]="item"
+
+    [connected]="sourceFolderService.sourceFolderConnected[item.inputSource]"
 
     [darkMode]="settingsButtons['darkMode'].toggled"
     [hoverScrub]="settingsButtons['hoverScrub'].toggled"

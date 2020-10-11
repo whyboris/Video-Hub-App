@@ -595,18 +595,6 @@
         <span>{{ numberOfVideosFound | number:'.0' }} {{ 'SIDEBAR.found' | translate }}</span>
       </div>
 
-      <!-- word cloud -->
-      <div *ngIf="settingsButtons['showFreq'].toggled" class="frequency">
-        <ng-container *ngFor="let word of wordFreqArr; index as i">
-          <span
-            [ngStyle]="{'font-size': word.height + 'px' }"
-            (click)="handleFileWordClicked(word.word, $event)"
-          >
-            {{ word.word }}
-          </span>
-        </ng-container>
-      </div>
-
       <!-- Recently opened -->
       <app-recently-opened
         (openFromHistory)="openFromHistory($event)"
@@ -714,7 +702,6 @@
                 | similarityPipe: showSimilar : findMostSimilar
 
                 | wordFrequencyPipe: settingsButtons['showFreq'].toggled
-                                     : (settingsButtons['extendedWordCloud'].toggled ? 100 : 9)
                                      : settingsButtons['manualTags'].toggled
                                      : settingsButtons['autoFileTags'].toggled
                                      : settingsButtons['autoFolderTags'].toggled
@@ -969,33 +956,112 @@
 
 </div> <!-- end of window -->
 
-<!-- MOST SIMILAR BOTTOM TRAY -->
-<app-similar-tray
-  (handleClick)="handleClick($event.expectedEvent, $event.item)"
-  (rightMouseClicked)="rightMouseClicked($event.mouseEvent, $event.item)"
+<!-- BOTTOM TRAY SECTION -->
+<div
+  class="all-settings-tabs bottom-tray-tabs"
+  [ngClass]="{
+    'bottom-tray-tabs-open': settingsButtons['showRelatedVideosTray'].toggled
+                          || settingsButtons['showRecentlyPlayed'].toggled
+                          || settingsButtons['showTagTray'].toggled
+                          || settingsButtons['showFreq'].toggled
+  }"
+>
+  <button
+    *ngIf="                   !settingsButtons['showFreq'].hidden"
+    (click)="                     toggleButton('showFreq')"
+    [ngClass]="{ 'active-tab': settingsButtons['showFreq'].toggled }"
+  >
+    {{ 'SETTINGS.trayCloud'     | translate }}
+  </button>
 
-  [appState]="appState"
-  [currentClickedItemName]="currentClickedItemName"
-  [previewHeightRelated]="previewHeightRelated"
-  [previewWidthRelated]="previewWidthRelated"
-  [settingsButtons]="settingsButtons"
-></app-similar-tray>
+  <button
+    *ngIf="                   !settingsButtons['showTagTray'].hidden"
+    (click)="                     toggleButton('showTagTray')"
+    [ngClass]="{ 'active-tab': settingsButtons['showTagTray'].toggled }"
+  >
+    {{ 'SETTINGS.trayTags'      | translate }}
+  </button>
 
-<!-- TAGS BOTTOM TRAY -->
-<app-tag-tray
-  (closeTagsTray)="closeTagsTray()"
-  (toggleBatchTaggingMode)="toggleBatchTaggingMode()"
-  (selectAll)="selectAllVisible()"
-  (handleTagWordClicked)="handleTagWordClicked($event.tag.name, $event.event)"
-  [appState]="appState"
-  [batchTaggingMode]="batchTaggingMode"
-  [settingsButtons]="settingsButtons"
-></app-tag-tray>
+  <button
+    *ngIf="                   !settingsButtons['showRelatedVideosTray'].hidden"
+    (click)="                     toggleButton('showRelatedVideosTray')"
+    [ngClass]="{ 'active-tab': settingsButtons['showRelatedVideosTray'].toggled }"
+  >
+    {{ 'SETTINGS.traySimilar'   | translate }}
+  </button>
 
-<!-- ============================================== -->
-<!-- ================    WIZARD    ================ -->
-<!-- ============================================== -->
+  <button
+    *ngIf="                   !settingsButtons['showRecentlyPlayed'].hidden"
+    (click)="                     toggleButton('showRecentlyPlayed')"
+    [ngClass]="{ 'active-tab': settingsButtons['showRecentlyPlayed'].toggled }"
+  >
+    {{ 'SETTINGS.recentlyPlayed' | translate }}
+  </button>
+</div>
 
+<div
+  class="bottom-tray"
+  *ngIf="settingsButtons['showRelatedVideosTray'].toggled
+      || settingsButtons['showRecentlyPlayed'].toggled
+      || settingsButtons['showTagTray'].toggled
+      || settingsButtons['showFreq'].toggled"
+>
+
+  <div
+    (click)="toggleAllTrayViewsButtonsOff()"
+    class="close-bottom-tray"
+    title="{{ 'SETTINGS.closeBottomTray' | translate }}"
+  >
+    <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
+  </div>
+
+  <!-- MOST SIMILAR & RECENTLY PLAYED -->
+  <app-similar-tray
+    *ngIf="settingsButtons['showRelatedVideosTray'].toggled
+        || settingsButtons['showRecentlyPlayed'].toggled"
+
+    (handleClick)="handleClick($event.expectedEvent, $event.item)"
+    (rightMouseClicked)="rightMouseClicked($event.mouseEvent, $event.item)"
+
+    [appState]="appState"
+    [currentClickedItemName]="currentClickedItemName"
+    [previewHeightRelated]="previewHeightRelated"
+    [previewWidthRelated]="previewWidthRelated"
+    [settingsButtons]="settingsButtons"
+    [showRecentNotSimilar]="settingsButtons['showRecentlyPlayed'].toggled"
+  ></app-similar-tray>
+
+  <!-- TAGS -->
+  <app-tag-tray
+    *ngIf="settingsButtons['showTagTray'].toggled"
+
+    (handleTagWordClicked)="handleTagWordClicked($event.tag.name, $event.event)"
+    (selectAll)="selectAllVisible()"
+    (toggleBatchTaggingMode)="toggleBatchTaggingMode()"
+
+    [appState]="appState"
+    [batchTaggingMode]="batchTaggingMode"
+    [settingsButtons]="settingsButtons"
+  ></app-tag-tray>
+
+  <!-- WORD CLOUD -->
+  <div
+    *ngIf="settingsButtons['showFreq'].toggled"
+    class="cloud-frequency"
+  >
+    <ng-container *ngFor="let word of wordFreqArr; index as i">
+      <span
+        [ngStyle]="{'font-size': word.height + 'px' }"
+        (click)="handleFileWordClicked(word.word, $event)"
+      >
+        {{ word.word }}
+      </span>
+    </ng-container>
+  </div>
+
+</div>
+
+<!-- WIZARD -->
 <app-wizard
   *ngIf="wizard.showWizard"
   @myWizardAnimation

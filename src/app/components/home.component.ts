@@ -25,12 +25,20 @@ import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency
 import { SortOrderComponent } from './sort-order/sort-order.component';
 
 // Interfaces
-import { AllSupportedViews, SupportedView, HistoryItem, RenameFileResponse, VideoClickEmit } from '../../../interfaces/shared-interfaces';
 import { FinalObject, ImageElement, ScreenshotSettings, ResolutionString } from '../../../interfaces/final-object.interface';
 import { ImportStage } from '../../../node/main-support';
 import { SettingsObject } from '../../../interfaces/settings-object.interface';
 import { SortType } from '../pipes/sorting.pipe';
 import { WizardOptions } from '../../../interfaces/wizard-options.interface';
+import {
+  AllSupportedBottomTrayViews,
+  AllSupportedViews,
+  HistoryItem,
+  RenameFileResponse,
+  SupportedTrayView,
+  SupportedView,
+  VideoClickEmit,
+} from '../../../interfaces/shared-interfaces';
 
 // Constants, etc
 import { AppState, SupportedLanguage, DefaultImagesPerRow, RowNumbers } from '../common/app-state';
@@ -626,6 +634,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       pathToFile: string,
       outputFolderPath: string,
     ) => {
+
+      this.imageElementService.recentlyPlayed = [];
 
       this.currentScreenshotSettings = finalObject.screenshotSettings;
 
@@ -1285,6 +1295,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
+   * Toggles all TRAY views buttons off
+   * A helper function for `toggleBotton`
+   */
+  toggleAllTrayViewsButtonsOff(): void {
+    this.settingsButtons['showFreq'].toggled = false;
+    this.settingsButtons['showRecentlyPlayed'].toggled = false;
+    this.settingsButtons['showRelatedVideosTray'].toggled = false;
+    this.settingsButtons['showTagTray'].toggled = false;
+  }
+
+  /**
    * Helper method for `toggleButton` to set `toggled` boolean true
    * @param uniqueKey
    */
@@ -1401,7 +1422,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param   uniqueKey   the uniqueKey string of the button
    * @param   fromIpc     boolean value indicate, call from IPC
    */
-  toggleButton(uniqueKey: SettingsButtonKey | SupportedView, fromIpc = false): void {
+  toggleButton(uniqueKey: SettingsButtonKey | SupportedView | SupportedTrayView, fromIpc = false): void {
     // ======== View buttons ================
     if (AllSupportedViews.includes(<SupportedView>uniqueKey)) {
       this.savePreviousViewSize();
@@ -1412,6 +1433,22 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.computeTextBufferAmount();
       this.virtualScroller.invalidateAllCachedMeasurements();
       this.scrollToTop();
+
+      // ======== Bottom tray views buttons =========================
+    } else if (AllSupportedBottomTrayViews.includes(<SupportedTrayView>uniqueKey)) {
+      const stateBeforeClick: boolean = this.settingsButtons[uniqueKey].toggled;
+      this.toggleAllTrayViewsButtonsOff();
+      if (this.batchTaggingMode) {
+        this.toggleBatchTaggingMode();
+      }
+      this.settingsButtons[uniqueKey].toggled = !stateBeforeClick;
+
+      if (
+             (uniqueKey === 'showRelatedVideosTray' && this.settingsButtons['showRelatedVideosTray'].toggled)
+          || (uniqueKey === 'showRecentlyPlayed'    && this.settingsButtons['showRecentlyPlayed'].toggled)
+      ) {
+        this.computePreviewWidth();
+      }
 
       // ======== Filter buttons =========================
     } else if (FilterKeyNames.includes(uniqueKey)) {
@@ -1462,21 +1499,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.pipeSideEffectService.galleryShowing,
         this.sourceFolderService.selectedSourceFolder
       );
-    } else if (uniqueKey === 'showTagTray') {
-      if (this.settingsButtons.showRelatedVideosTray.toggled) {
-        this.settingsButtons.showRelatedVideosTray.toggled = false;
-      }
-      if (this.settingsButtons.showTagTray.toggled) {
-        this.closeTagsTray();
-      } else {
-        this.settingsButtons.showTagTray.toggled = true;
-      }
-    } else if (uniqueKey === 'showRelatedVideosTray') {
-      if (this.settingsButtons.showTagTray.toggled) {
-        this.settingsButtons.showTagTray.toggled = false;
-      }
-      this.settingsButtons.showRelatedVideosTray.toggled = !this.settingsButtons.showRelatedVideosTray.toggled;
-      this.computePreviewWidth();
     } else if (uniqueKey === 'sortOrder') {
       this.toggleButtonOpposite(uniqueKey);
       setTimeout(() => {
@@ -1517,7 +1539,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public toggleButtonOff(uniqueKey: SettingsButtonKey | SupportedView, fromIpc = false): void {
+  public toggleButtonOff(uniqueKey: SettingsButtonKey | SupportedView | SupportedTrayView): void {
     if (this.settingsButtons[uniqueKey].toggled) {
       this.settingsButtons[uniqueKey].toggled = false;
     }
@@ -1609,7 +1631,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.previewHeight = this.previewWidth * (9 / 16);
 
     // compute preview dimensions for thumbs in the most similar tab:
-    if (this.settingsButtons['showRelatedVideosTray'].toggled) {
+    if (
+         this.settingsButtons['showRelatedVideosTray'].toggled
+      || this.settingsButtons['showRecentlyPlayed'].toggled
+    ) {
       this.previewWidthRelated = Math.min((this.galleryWidth / 5) - 40, 176);
       this.previewHeightRelated = Math.min(this.previewWidthRelated * (9 / 16), 144);
     }
@@ -2118,17 +2143,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.settingsButtons.manualTags.toggled = !this.settingsButtons.manualTags.toggled;
       this.cd.detectChanges();
       this.settingsButtons.manualTags.toggled = !this.settingsButtons.manualTags.toggled;
-    }
-  }
-
-  /**
-   * Close the manual tags tray at the bottom
-   * exit batch mode if it is active
-   */
-  closeTagsTray(): void {
-    this.settingsButtons['showTagTray'].toggled = false;
-    if (this.batchTaggingMode) {
-      this.toggleBatchTaggingMode();
     }
   }
 
