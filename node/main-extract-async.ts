@@ -167,20 +167,21 @@ export function startFileSystemWatching(
   const watcherConfig = {
     cwd: inputDir,
     disableGlobbing: true,
+    ignored: 'vha-*', // WARNING - dangerously ignores any path that includes `vha-` anywhere!!!
     persistent: persistent,
     usePolling: inputDir.startsWith('//') ? true : false, // neccessary for files over network
   }
 
   const watcher: FSWatcher = chokidar.watch(inputDir, watcherConfig);
 
+  const allAcceptableFiles: string[] = [...acceptableFiles, ...GLOBALS.additionalExtensions];
+
   watcher
     .on('add', (filePath: string) => {
 
       const ext = filePath.substring(filePath.lastIndexOf('.') + 1);
 
-      // WARNING - dangerously ignores any path that includes `vha-` anywhere!!!
-      if (filePath.indexOf('vha-') !== -1 ||
-          ([...acceptableFiles, ...GLOBALS.additionalExtensions].indexOf(ext) === -1)) {
+      if (allAcceptableFiles.indexOf(ext) === -1) {
         return;
       }
 
