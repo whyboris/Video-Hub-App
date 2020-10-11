@@ -997,7 +997,7 @@
   ></app-tag-tray>
 
   <!-- word cloud -->
-  <div *ngIf="settingsButtons['showFreq'].toggled" class="frequency">
+  <div *ngIf="settingsButtons['showFreq'].toggled" class="cloud-frequency">
     <ng-container *ngFor="let word of wordFreqArr; index as i">
       <span
         [ngStyle]="{'font-size': word.height + 'px' }"
