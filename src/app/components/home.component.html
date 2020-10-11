@@ -966,32 +966,32 @@
   }"
 >
   <button
-    *ngIf="!settingsButtons['showFreq'].hidden"
-    (click)="toggleButton('showFreq')"
+    *ngIf="                   !settingsButtons['showFreq'].hidden"
+    (click)="                     toggleButton('showFreq')"
     [ngClass]="{ 'active-tab': settingsButtons['showFreq'].toggled }"
   >
-    {{ 'SETTINGS.trayCloud'   | translate }}
+    {{ 'SETTINGS.trayCloud'     | translate }}
   </button>
 
   <button
-    *ngIf="!settingsButtons['showTagTray'].hidden"
-    (click)="toggleButton('showTagTray')"
+    *ngIf="                   !settingsButtons['showTagTray'].hidden"
+    (click)="                     toggleButton('showTagTray')"
     [ngClass]="{ 'active-tab': settingsButtons['showTagTray'].toggled }"
   >
-    {{ 'SETTINGS.trayTags'    | translate }}
+    {{ 'SETTINGS.trayTags'      | translate }}
   </button>
 
   <button
-    *ngIf="!settingsButtons['showRelatedVideosTray'].hidden"
-    (click)="toggleButton('showRelatedVideosTray')"
+    *ngIf="                   !settingsButtons['showRelatedVideosTray'].hidden"
+    (click)="                     toggleButton('showRelatedVideosTray')"
     [ngClass]="{ 'active-tab': settingsButtons['showRelatedVideosTray'].toggled }"
   >
-    {{ 'SETTINGS.traySimilar' | translate }}
+    {{ 'SETTINGS.traySimilar'   | translate }}
   </button>
 
   <button
-    *ngIf="!settingsButtons['showRecentlyPlayed'].hidden"
-    (click)="toggleButton('showRecentlyPlayed')"
+    *ngIf="                  !settingsButtons['showRecentlyPlayed'].hidden"
+    (click)="                    toggleButton('showRecentlyPlayed')"
     [ngClass]="{ 'active-tab': settingsButtons['showRecentlyPlayed'].toggled }"
   >
     {{ 'SETTINGS.recentlyPlayed' | translate }}

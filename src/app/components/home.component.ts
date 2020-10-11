@@ -1290,6 +1290,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   toggleAllTrayViewsButtonsOff(): void {
     this.settingsButtons['showFreq'].toggled = false;
+    this.settingsButtons['showRecentlyPlayed'].toggled = false;
     this.settingsButtons['showRelatedVideosTray'].toggled = false;
     this.settingsButtons['showTagTray'].toggled = false;
   }
