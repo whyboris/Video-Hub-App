@@ -179,7 +179,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
     // TODO --   handle async stuff better -- maybe wait before checking access?
     console.log('HANDLE ASYNC STUFF CORRECTLY !?');
     // check if file exists
-    fs.access(fileToDelete, fs.F_OK, (err: any) => {
+    fs.access(fileToDelete, fs.constants.F_OK, (err: any) => {
       if (err) {
         event.sender.send('file-deleted', item);
       }
@@ -198,17 +198,16 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
         item.hash + '.jpg'
       );
 
-    if (fs.existsSync(fileToReplace)) {
-      const height: number = GLOBALS.screenshotSettings.height;
+    const height: number = GLOBALS.screenshotSettings.height;
 
-      replaceThumbnailWithNewImage(fileToReplace, pathToIncomingJpg, height)
-        .then(success => {
-          if (success) {
-            event.sender.send('thumbnail-replaced');
-          }
-        })
-        .catch((err) => {});
-    }
+    replaceThumbnailWithNewImage(fileToReplace, pathToIncomingJpg, height)
+      .then(success => {
+        if (success) {
+          event.sender.send('thumbnail-replaced');
+        }
+      })
+      .catch((err) => {});
+
   });
 
   /**

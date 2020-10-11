@@ -9,7 +9,7 @@ import { Stats } from 'fs';
 
 import { GLOBALS } from './main-globals';
 
-import { ImageElement, ImageElementPlus, NewImageElement } from '../interfaces/final-object.interface';
+import { ImageElement, ImageElementPlus } from '../interfaces/final-object.interface';
 import { acceptableFiles } from './main-filenames';
 import { extractAll } from './main-extract';
 import { sendCurrentProgress, insertTemporaryFieldsSingle, extractMetadataAsync, cleanUpFileName } from './main-support';
@@ -45,18 +45,25 @@ function startNewQueue() {
  */
 function thumbQueueRunner(element: ImageElement, done) {
   const screenshotOutputFolder: string = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName);
+  const shouldExtractClips: boolean = GLOBALS.screenshotSettings.clipSnippets > 0;
 
-  sendCurrentProgress(thumbsDone, thumbsDone + thumbQueue.length() + 1, 'importingScreenshots');      // check whether sending data off by 1
-  thumbsDone++;                                                       // TODO -- rethink the whole `sendCurrentProgress` system from scratch
+  hasAllThumbs(element.hash, screenshotOutputFolder, shouldExtractClips)
+    .then(() => {
+      done();
+    })
+    .catch(() => {
+      sendCurrentProgress(thumbsDone, thumbsDone + thumbQueue.length() + 1, 'importingScreenshots');  // check whether sending data off by 1
+      thumbsDone++;                                                   // TODO -- rethink the whole `sendCurrentProgress` system from scratch
 
-  extractAll(
-    element,
-    GLOBALS.selectedSourceFolders[element.inputSource].path,
-    screenshotOutputFolder,
-    GLOBALS.screenshotSettings,
-    true,
-    done
-  );
+      extractAll(
+        element,
+        GLOBALS.selectedSourceFolders[element.inputSource].path,
+        screenshotOutputFolder,
+        GLOBALS.screenshotSettings,
+        true,
+        done
+      );
+    });
 }
 
 export function stopThumbExtraction() {
@@ -86,14 +93,13 @@ export interface TempMetadataQueueObject {
   inputSource: number;
   name: string;
   partialPath: string;
-  stat: Stats;
 }
 
 /**
  * Send element back to Angular; if any screenshots missing, queue it for extraction
  * @param imageElement
  */
-export function sendNewVideoMetadata(imageElement: ImageElementPlus) {
+function sendNewVideoMetadata(imageElement: ImageElementPlus) {
 
   alreadyInAngular.set(imageElement.fullPath, 1);
 
@@ -102,12 +108,7 @@ export function sendNewVideoMetadata(imageElement: ImageElementPlus) {
   const elementForAngular = insertTemporaryFieldsSingle(imageElement);
   GLOBALS.angularApp.sender.send('new-video-meta', elementForAngular);
 
-  // PROBABLY BETTER DONE ELSEWHERE !!!!
-  const screenshotOutputFolder: string = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName);
-
-  if (!hasAllThumbs(imageElement.hash, screenshotOutputFolder, GLOBALS.screenshotSettings.clipSnippets > 0 )) {
-    thumbQueue.push(imageElement);
-  }
+  thumbQueue.push(imageElement);
 }
 
 /**
@@ -117,8 +118,7 @@ export function sendNewVideoMetadata(imageElement: ImageElementPlus) {
  */
 export function metadataQueueRunner(file: TempMetadataQueueObject, done) {
 
-  const newElement = NewImageElement();
-  extractMetadataAsync(file.fullPath, GLOBALS.screenshotSettings, newElement, file.stat)
+  extractMetadataAsync(file.fullPath, GLOBALS.screenshotSettings)
     .then((imageElement: ImageElementPlus) => {
       imageElement.cleanName = cleanUpFileName(file.name);
       imageElement.fileName = file.name;
@@ -165,24 +165,23 @@ export function startFileSystemWatching(
   GLOBALS.angularApp.sender.send('started-watching-this-dir', inputSource);
 
   const watcherConfig = {
-    alwaysStat: true,
-    awaitWriteFinish: true,
     cwd: inputDir,
     disableGlobbing: true,
+    ignored: 'vha-*', // WARNING - dangerously ignores any path that includes `vha-` anywhere!!!
     persistent: persistent,
     usePolling: inputDir.startsWith('//') ? true : false, // neccessary for files over network
   }
 
   const watcher: FSWatcher = chokidar.watch(inputDir, watcherConfig);
 
+  const allAcceptableFiles: string[] = [...acceptableFiles, ...GLOBALS.additionalExtensions];
+
   watcher
-    .on('add', (filePath: string, stat) => {
+    .on('add', (filePath: string) => {
 
       const ext = filePath.substring(filePath.lastIndexOf('.') + 1);
 
-      // WARNING - dangerously ignores any path that includes `vha-` anywhere!!!
-      if (filePath.indexOf('vha-') !== -1 ||
-          ([...acceptableFiles, ...GLOBALS.additionalExtensions].indexOf(ext) === -1)) {
+      if (allAcceptableFiles.indexOf(ext) === -1) {
         return;
       }
 
@@ -209,7 +208,6 @@ export function startFileSystemWatching(
         inputSource: inputSource,
         name: fileName,
         partialPath: partialPath,
-        stat: stat,
       }
 
       metadataQueue.push(newItem);
@@ -318,14 +316,31 @@ const fs = require('fs');
  * @param screenshotFolder   - path to where thumbnails are
  * @param shouldExtractClips - whether or not to extract clips
  */
-export function hasAllThumbs(
+function hasAllThumbs(
   fileHash: string,
   screenshotFolder: string,
   shouldExtractClips: boolean
-): boolean {
-  return fs.existsSync(path.join(screenshotFolder, '/thumbnails/', fileHash + '.jpg'))
-      && fs.existsSync(path.join(screenshotFolder, '/filmstrips/', fileHash + '.jpg'))
-      && (shouldExtractClips ? fs.existsSync(path.join(screenshotFolder, '/clips/', fileHash + '.mp4')) : true);
+): Promise<boolean> {
+  return new Promise((resolve, reject) => {
+
+    const thumb: string =     path.join(screenshotFolder, '/thumbnails/', fileHash + '.jpg');
+    const filmstrip: string = path.join(screenshotFolder, '/filmstrips/', fileHash + '.jpg');
+    const clip: string =      path.join(screenshotFolder, '/clips/',      fileHash + '.mp4');
+
+    Promise.all([
+      fs.promises.access(thumb, fs.constants.F_OK),
+      fs.promises.access(filmstrip, fs.constants.F_OK),
+      shouldExtractClips
+        ? fs.promises.access(clip, fs.constants.F_OK)
+        : 'ok'
+    ])
+      .then(() => {
+        resolve();
+      })
+      .catch(() => {
+        reject();
+      });
+  });
 }
 
 /**
@@ -340,10 +355,7 @@ export function extractAnyMissingThumbs(
   shouldExtractClips: boolean
 ): void {
   fullArray.forEach((element: ImageElement) => {
-    if (!hasAllThumbs(element.hash, screenshotFolder, shouldExtractClips)) {
-      console.log('thumb missing -', element.fileName);
-      thumbQueue.push(element);
-    }
+    thumbQueue.push(element);
   });
 }
 
@@ -361,7 +373,6 @@ export function removeThumbnailsNotInHub(hashesPresent: Map<string, 1>, outputDi
   deleteThumbQueue.pause();
 
   const watcherConfig = {
-    awaitWriteFinish: true,
     cwd: outputDir,
     persistent: false,
   }
