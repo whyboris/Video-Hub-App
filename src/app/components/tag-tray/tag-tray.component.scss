@@ -1,7 +1,7 @@
 @import '../variables.scss';
 
 .manual-tag-tray {
-  box-sizing: border-box;
+  display: flex;
   height: 170px;
 
   button {

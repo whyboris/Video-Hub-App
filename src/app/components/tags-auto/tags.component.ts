@@ -3,9 +3,8 @@ import { Component, EventEmitter, Input, Output, OnDestroy, ViewChild, ElementRe
 import { AutoTagsService, WordAndFreq } from './autotags.service';
 import { AutoTagsSaveService } from './tags-save.service';
 
-import { ImageElement } from '../../../../interfaces/final-object.interface';
-
 import { slowFadeIn, donutAppear } from '../../common/animations';
+import { ImageElementService } from './../../services/image-element.service';
 
 @Component({
   selector: 'app-tags-component',
@@ -18,7 +17,6 @@ import { slowFadeIn, donutAppear } from '../../common/animations';
 })
 export class TagsComponent implements OnInit, OnDestroy {
 
-  @Input() finalArray: ImageElement[];
   @Input() hubName: string; // if hubName changes, tagsService will recalculate, otherwise it will show cached
 
   @Output() tagClicked = new EventEmitter<string>();
@@ -42,7 +40,8 @@ export class TagsComponent implements OnInit, OnDestroy {
 
   constructor(
     public tagsService: AutoTagsService,
-    public autoTagsSaveService: AutoTagsSaveService
+    public autoTagsSaveService: AutoTagsSaveService,
+    public imageElemetService: ImageElementService
   ) {}
 
   ngOnInit(): void {
@@ -55,7 +54,7 @@ export class TagsComponent implements OnInit, OnDestroy {
       this.filterInput.nativeElement.focus();
     }, 350);
 
-    this.tagsService.generateAllTags(this.finalArray, this.hubName);
+    this.tagsService.generateAllTags(this.imageElemetService.imageElements, this.hubName);
 
     this.oneWordTags = this.tagsService.getOneWordTags();
     this.twoWordTags = this.tagsService.getTwoWordTags();

@@ -74,7 +74,11 @@
 
   <div class="misc-settings" *ngIf="settingTabToShow == 2 && i == 2">
 
-    <div class="player-settings">{{ 'SETTINGS.preferredPlayer' | translate }}</div>
+    <!-- VIDEO PLAYER SETTINGS -->
+
+    <div class="player-settings">
+      {{ 'SETTINGS.preferredPlayer' | translate }}
+    </div>
 
     <div class="player-current-chosen">
       {{ appState.preferredVideoPlayer ? appState.preferredVideoPlayer : ('SETTINGS.systemDefault' | translate) }}
@@ -96,20 +100,66 @@
 
     </div>
 
-    <div class="player-settings">
+    <!-- LAUNCH ARGUMENTS -->
+
+    <div
+      *ngIf="appState.preferredVideoPlayer"
+      class="player-settings player-settings-launch-args"
+      [ngStyle]="{ opacity: appState.videoPlayerArgs ? 1 : '0.7' }"
+    >
+      {{ 'SETTINGS.playerArgs' | translate }}
 
       <input
-        class="filter-general input-filter"
+        class="filter-general input-filter player-args-input"
         [(ngModel)]="appState.videoPlayerArgs"
-        *ngIf="appState.preferredVideoPlayer"
-        placeholder="{{ 'SETTINGS.playerArgs' | translate }}"
         type="text"
-        style="width: 400px"
       >
 
     </div>
 
-    <span class="setting-heading">{{ 'SETTINGS.changeAppZoom' | translate }}</span>
+    <!-- EXTENSIONS -->
+
+    <div
+      class="additional-extenstions"
+      [ngStyle]="{ opacity: (additionalInput || editAdditional) ? 1 : '0.7' }"
+    >
+      {{ 'SETTINGS.additionalExtensions' | translate }}
+    </div>
+
+    <div
+      class="additional-extenstions-setting"
+      [ngStyle]="{ opacity: (additionalInput || editAdditional) ? 1 : '0.7' }"
+    >
+
+      {{ 'SETTINGS.extensions' | translate }}
+
+      <input
+        class="filter-general input-filter extensions-input"
+        [(ngModel)]="additionalInput"
+        type="text"
+        [disabled]="!editAdditional"
+      >
+
+      <button
+        class="defaultSettingsButton player-settings-button"
+        (click)="editAdditionalExtensions()"
+      >
+        {{ (editAdditional ? 'SETTINGS.cancelExtensionsEdit': 'SETTINGS.editExtensionsInput') | translate }}
+      </button>
+
+      <button *ngIf="editAdditional"
+        class="defaultSettingsButton player-settings-button"
+        (click)="applyAdditionalExtensions()"
+      >
+        {{ 'SETTINGS.applyAdditionalExtensions' | translate }}
+      </button>
+    </div>
+
+    <!-- ZOOM BUTTONS -->
+
+    <span class="setting-heading">
+      {{ 'SETTINGS.changeAppZoom' | translate }}
+    </span>
 
     <div class="zoom-buttons">
       <button
@@ -142,11 +192,14 @@
       </button>
     </div>
 
-    <span class="setting-heading">{{ 'SETTINGS.changeLanguage' | translate }}</span>
+    <span class="setting-heading">
+      {{ 'SETTINGS.changeLanguage' | translate }}
+    </span>
 
     <div style="margin: 20px">
       <select (change)="changeLanguage.emit($event.target.value)" class="language-drop-down">
         <option value="en" [selected]="appState.language == 'en'">English</option>
+        <option value="cs" [selected]="appState.language == 'cs'">Česky</option>
         <option value="ja" [selected]="appState.language == 'ja'">日本語</option><!-- Japanese -->
         <option value="de" [selected]="appState.language == 'de'">Deutsche</option>
         <option value="fr" [selected]="appState.language == 'fr'">Française</option>
@@ -154,6 +207,8 @@
         <option value="it" [selected]="appState.language == 'it'">Italiana</option>
         <option value="pt" [selected]="appState.language == 'pt'">Português</option>
         <option value="ru" [selected]="appState.language == 'ru'">Русский</option>
+        <option value="tr" [selected]="appState.language == 'tr'">Türkçe</option><!-- Turkish -->
+        <option value="vi" [selected]="appState.language == 'vi'">Tiếng Việt</option><!-- Vietnamese -->
         <option value="bn" [selected]="appState.language == 'bn'">বাংলা</option><!-- Bengali -->
         <option value="hi" [selected]="appState.language == 'hi'">हिंदी</option><!-- Hindi -->
         <option value="zh" [selected]="appState.language == 'zh'">中文</option><!-- Chinese -->

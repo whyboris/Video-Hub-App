@@ -8,12 +8,13 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'compactView'
  | 'dangerousDelete'
  | 'darkMode'
+ | 'doubleClickMode'
+ | 'dragVideoOutOfApp'
  | 'duplicateHash'
  | 'duplicateLength'
  | 'duplicateSize'
  | 'durationFilter'
  | 'exclude'
- | 'extendedWordCloud'
  | 'fileIntersection'
  | 'fileUnion'
  | 'flatIcons'
@@ -21,6 +22,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'folderUnion'
  | 'fontSizeLarger'
  | 'fuzzy'
+ | 'hideOffline'
  | 'hideSidebar'
  | 'hideTop'
  | 'hoverScrub'
@@ -31,6 +33,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'muteClips'
  | 'openAtTimestamp'
  | 'playPlaylist'
+ | 'randomizeFoldersScreenshots'
  | 'regex'
  | 'resetSettings'
  | 'resolutionFilter'
@@ -46,6 +49,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'showFullView'
  | 'showMoreInfo'
  | 'showRecent'
+ | 'showRecentlyPlayed'
  | 'showRelatedVideosTray'
  | 'showTagTray'
  | 'showTags'
@@ -55,6 +59,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'sizeFilter'
  | 'sortOptionAlphabetical'
  | 'sortOptionAspectRatio'
+ | 'sortOptionFolderSize'
  | 'sortOptionCreated'
  | 'sortOptionModified'
  | 'sortOptionSize'
@@ -97,6 +102,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'sizeFilter',
     'resolutionFilter',
     'starFilter',
+    'hideOffline',
     'sortOrder',
     'sortOptionAlphabetical',
     'sortOptionTime',
@@ -107,14 +113,14 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'sortOptionModified',
     'sortOptionCreated',
     'sortOptionTags',
-    'sortOptionAspectRatio'
+    'sortOptionAspectRatio',
+    'sortOptionFolderSize'
+
   ],
   [ // 3
     'duplicateLength',
     'duplicateSize',
     'duplicateHash',
-    'showFreq',
-    'extendedWordCloud',
     'showRecent'
   ],
   [ // 4
@@ -127,47 +133,55 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'showClips',
   ],
   [ // 5
+    'showFreq',
+    'showTagTray',
+    'showRelatedVideosTray',
+    'showRecentlyPlayed'
+  ],
+  [ // 6
     'compactView',
     'showMoreInfo',
     'fontSizeLarger',
   ],
-  [ // 6
+  [ // 7
     'showFolders',
-    'showRelatedVideosTray',
+    'randomizeFoldersScreenshots',
     'shuffleGalleryNow',
   ],
-  [ // 7
+  [ // 8
     'showTags',
     'autoFileTags',
     'autoFolderTags',
   ],
-  [ // 8
+  [ // 9
     'manualTags',
-    'showTagTray',
+
     'showVideoNotes',
   ],
-  [ // 9
+  [ // 10
     'hoverScrub',
     'thumbAutoAdvance',
     'returnToFirstScreenshot',
   ],
-  [ // 10
+  [ // 11
     'muteClips',
     'autoplayClips',
     'clipsThumbnail',
   ],
-  [ // 11
+  [ // 12
     'makeSmaller',
     'makeLarger',
   ],
-  [ // 12
-    'darkMode',
-  ],
   [ // 13
+    'darkMode',
+    'doubleClickMode',
+    'dragVideoOutOfApp',
+  ],
+  [ // 14
     'hideTop',
     'flatIcons'
   ],
-  [ // 14
+  [ // 15
     'startWizard',
     'resetSettings',
     'clearHistory',
@@ -209,9 +223,11 @@ export const SettingsMetaGroup: string[][] = [
     ...SettingsButtonsGroups[12],
     'break',
     ...SettingsButtonsGroups[13],
+    'break',
+    ...SettingsButtonsGroups[14],
   ],
   [
-    ...SettingsButtonsGroups[14],
+    ...SettingsButtonsGroups[15],
   ],
 ];
 
@@ -278,6 +294,23 @@ export const SettingsButtons: SettingsButtonsType = {
     title: 'BUTTONS.darkModeHint',
     toggled: false
   },
+  'doubleClickMode': {
+    description: 'BUTTONS.doubleClickModeDescription',
+    hidden: true,
+    iconName: 'icon-double-click',
+    settingsHeading: 'SETTINGS.doubleClickMode',
+    title: 'BUTTONS.doubleClickModeHint',
+    toggled: false
+  },
+  'dragVideoOutOfApp': {
+    description: 'BUTTONS.dragVideoOutOfAppDescription',
+    hidden: true,
+    iconName: 'icon-double-click',
+    moreInfo: 'BUTTONS.dragVideoOutOfAppMoreInfo',
+    settingsHeading: 'SETTINGS.dragVideoOutOfApp',
+    title: 'BUTTONS.dragVideoOutOfAppHint',
+    toggled: false
+  },
   'duplicateHash': {
     description: 'BUTTONS.duplicateHashDescription',
     hidden: true,
@@ -323,14 +356,6 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-video-x',
     moreInfo: 'BUTTONS.excludeMoreInfo',
     title: 'BUTTONS.excludeHint',
-    toggled: false
-  },
-  'extendedWordCloud': {
-    description: 'BUTTONS.extendedWordCloudDescription',
-    hidden: true,
-    iconName: 'icon-cloud-plus',
-    moreInfo: 'BUTTONS.extendedWordCloudMoreInfo',
-    title: 'BUTTONS.extendedWordCloudHint',
     toggled: false
   },
   'fileIntersection': {
@@ -394,6 +419,14 @@ export const SettingsButtons: SettingsButtonsType = {
     moreInfo: 'BUTTONS.fuzzyMoreInfo',
     title: 'BUTTONS.fuzzyHint',
     toggled: true
+  },
+  'hideOffline': {
+    description: 'BUTTONS.hideOfflineDescription',
+    hidden: true,
+    iconName: 'icon-eye-closed',
+    moreInfo: 'BUTTONS.hideOfflineMoreInfo',
+    title: 'BUTTONS.hideOfflineHint',
+    toggled: false
   },
   'hideSidebar': {
     description: 'BUTTONS.hideSidebarDescription',
@@ -464,6 +497,7 @@ export const SettingsButtons: SettingsButtonsType = {
     hidden: true,
     iconName: 'icon-toggle-scrub',
     moreInfo: 'BUTTONS.openAtTimestampMoreInfo',
+    settingsHeading: 'BUTTONS.videoPlayerSettings',
     title: 'BUTTONS.openAtTimestampHint',
     toggled: false
   },
@@ -474,6 +508,12 @@ export const SettingsButtons: SettingsButtonsType = {
     moreInfo: 'BUTTONS.playlistButtonMoreInfo',
     title: 'BUTTONS.playlistButton',
     toggled: false
+  },
+  'randomizeFoldersScreenshots': {
+    description: 'BUTTONS.randFolderScreenDesc',
+    hidden: true,
+    title: 'BUTTONS.randFolderScreen',
+    toggled: true
   },
   'regex': {
     description: 'BUTTONS.regexDescription',
@@ -590,7 +630,15 @@ export const SettingsButtons: SettingsButtonsType = {
     description: 'BUTTONS.showRecentDescription',
     hidden: false,
     iconName: 'icon-recent-history',
+    settingsHeading: 'SETTINGS.showRecent',
     title: 'BUTTONS.showRecentHint',
+    toggled: false
+  },
+  'showRecentlyPlayed': {
+    description: 'BUTTONS.showRecentPlayed',
+    hidden: false,
+    iconName: 'icon-recent-history',
+    title: 'BUTTONS.showRecentPlayed',
     toggled: false
   },
   'showRelatedVideosTray': {
@@ -643,6 +691,13 @@ export const SettingsButtons: SettingsButtonsType = {
     description: 'BUTTONS.sortOptionAspectRatioDescription',
     hidden: false,
     moreInfo: 'BUTTONS.sortOptionAspectRatioMoreInfo',
+    title: '',
+    toggled: false
+  },
+  'sortOptionFolderSize': {
+    description: 'BUTTONS.sortOptionFolderSizeDescription',
+    hidden: false,
+    moreInfo: 'BUTTONS.sortOptionFolderSizeMoreInfo',
     title: '',
     toggled: false
   },

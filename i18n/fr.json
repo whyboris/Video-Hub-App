@@ -33,9 +33,6 @@
     "excludeDescription": "Noms de fichiers sans",
     "excludeHint": "Filtre d'exclusion",
     "excludeMoreInfo": "Filtre pour exclure les vidéos contenant le mot filtre",
-    "extendedWordCloudDescription": "Nuage de mots 100",
-    "extendedWordCloudHint": "Activé Cloud Word étendu",
-    "extendedWordCloudMoreInfo": "Afficher 100 étiquettes de nuage de mots lors de l'affichage du nuage de mots",
     "fileDescription": "Noms de fichiers avec chacun",
     "fileHint": "Recherche vidéo",
     "fileMoreInfo": "Filtrer les vidéos contenant chacun des mots de recherche",
@@ -319,8 +316,7 @@
     "pleaseChangeName": "Veuillez changer le nom du hub ci-dessus",
     "selectDefaultPlayer": "Veuillez sélectionner votre lecteur vidéo préféré",
     "selectPreviousHub": "Veuillez sélectionner un fichier de concentrateur vidéo préalablement enregistré.",
-    "selectRootFolder": "Sélectionner le dossier vidéo source",
-    "videoFolderNotFound": "Dossier vidéo source non trouvé:"
+    "selectRootFolder": "Sélectionner le dossier vidéo source"
   },
   "TAGS": {
     "add": "Ajouter",

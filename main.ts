@@ -17,7 +17,7 @@ const windowStateKeeper = require('electron-window-state');
 // Methods
 import { createTouchBar } from './node/main-touch-bar';
 import { setUpIpcMessages } from './node/main-ipc';
-import { sendFinalObjectToAngular, setUpDirectoryWatchers, upgradeToVersion3, writeVhaFileToDisk } from './node/main-support';
+import { sendFinalObjectToAngular, setUpDirectoryWatchers, upgradeToVersion3, writeVhaFileToDisk, parseAdditionalExtensions } from './node/main-support';
 
 // Interfaces
 import { FinalObject } from './interfaces/final-object.interface';
@@ -241,14 +241,8 @@ function openThisDamnFile(pathToVhaFile: string) {
 
   fs.readFile(pathToVhaFile, (err, data) => {
     if (err) {
-
-      dialog.showMessageBox(win, {
-        message: systemMessages.noSuchFileFound,
-        detail: pathToVhaFile,
-        buttons: ['OK']
-      });
+      GLOBALS.angularApp.sender.send('show-msg-dialog', systemMessages.error, systemMessages.noSuchFileFound, pathToVhaFile);
       GLOBALS.angularApp.sender.send('please-open-wizard');
-
     } else {
       app.addRecentDocument(pathToVhaFile);
 
@@ -300,6 +294,9 @@ ipcMain.on('just-started', (event) => {
     } else {
 
       const previouslySavedSettings: SettingsObject = JSON.parse(data);
+      if (previouslySavedSettings.appState.addtionalExtensions) {
+        GLOBALS.additionalExtensions = parseAdditionalExtensions(previouslySavedSettings.appState.addtionalExtensions);
+      }
 
       event.sender.send('settings-returning', previouslySavedSettings, locale);
     }
@@ -314,11 +311,7 @@ ipcMain.on('start-the-import', (event, wizard: WizardOptions) => {
   const outDir: string = wizard.selectedOutputFolder;
 
   if (fs.existsSync(path.join(outDir, hubName + '.vha2'))) { // make sure no hub name under the same name exists
-    dialog.showMessageBox(win, {
-      message: systemMessages.hubAlreadyExists +
-        '\n' + systemMessages.pleaseChangeName,
-      buttons: ['OK']
-    });
+    event.sender.send('show-msg-dialog', systemMessages.error, systemMessages.hubAlreadyExists, systemMessages.pleaseChangeName);
     event.sender.send('please-fix-hub-name');
   } else {
 
@@ -422,6 +415,13 @@ ipcMain.on('load-this-vha-file', (event, pathToVhaFile: string, finalObjectToSav
  */
 ipcMain.on('cancel-current-import', (event): void => {
   stopThumbExtraction();
+});
+
+/**
+ * Update additonal extensions from settings
+ */
+ipcMain.on('update-additional-extensions', (event, newAdditionalExtensions: string): void => {
+  GLOBALS.additionalExtensions = parseAdditionalExtensions(newAdditionalExtensions);
 });
 
 /**

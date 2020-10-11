@@ -30,9 +30,6 @@
     "excludeDescription": "Nombres de archivos sin",
     "excludeHint": "Excluir filtro",
     "excludeMoreInfo": "Filtrar para excluir cualquier video que contenga la palabra de filtro",
-    "extendedWordCloudDescription": "Nube de palabras 100",
-    "extendedWordCloudHint": "Nube de Word Extendida Habilitada",
-    "extendedWordCloudMoreInfo": "Mostrar 100 etiquetas de nube de palabras al mostrar la nube de palabras",
     "fileDescription": "Nombres de archivo con cada",
     "fileHint": "Búsqueda de video",
     "fileMoreInfo": "Filtrar por videos que contengan cada una de las palabras de búsqueda",
@@ -313,8 +310,7 @@
     "pleaseChangeName": "Por favor, cambie el nombre del concentrador arriba",
     "selectDefaultPlayer": "Por favor seleccione su reproductor de video preferido",
     "selectPreviousHub": "Seleccione un archivo Video Hub previamente guardado",
-    "selectRootFolder": "Seleccione la carpeta de video de origen",
-    "videoFolderNotFound": "Carpeta de video de origen no encontrada:"
+    "selectRootFolder": "Seleccione la carpeta de video de origen"
   },
   "TAGS": {
     "add": "Añadir",
