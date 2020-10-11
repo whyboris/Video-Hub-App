@@ -26,7 +26,7 @@
 
   <app-thumbnail
     *ngFor="let item of imageElementService.imageElements | similarityPipe: true : currentClickedItemName
-                                   | slice: 0 : 8 "
+                                                          | slice: 0 : 8 "
 
     (videoClick)="handleClick.emit({ expectedEvent: $event, item: item })"
     (contextmenu)="rightMouseClicked.emit({ mouseEvent: $event, item: item })"
@@ -38,6 +38,8 @@
     [imgHeight]="previewHeightRelated"
 
     [video]="item"
+
+    [connected]="sourceFolderService.sourceFolderConnected[item.inputSource]"
 
     [darkMode]="settingsButtons['darkMode'].toggled"
     [hoverScrub]="settingsButtons['hoverScrub'].toggled"
