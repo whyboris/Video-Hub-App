@@ -120,7 +120,6 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'duplicateLength',
     'duplicateSize',
     'duplicateHash',
-    'showFreq',
     'showRecent'
   ],
   [ // 4
@@ -133,50 +132,54 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'showClips',
   ],
   [ // 5
+    'showFreq',
+    'showTagTray',
+    'showRelatedVideosTray',
+  ],
+  [ // 6
     'compactView',
     'showMoreInfo',
     'fontSizeLarger',
   ],
-  [ // 6
+  [ // 7
     'showFolders',
     'randomizeFoldersScreenshots',
-    'showRelatedVideosTray',
     'shuffleGalleryNow',
   ],
-  [ // 7
+  [ // 8
     'showTags',
     'autoFileTags',
     'autoFolderTags',
   ],
-  [ // 8
+  [ // 9
     'manualTags',
-    'showTagTray',
+
     'showVideoNotes',
   ],
-  [ // 9
+  [ // 10
     'hoverScrub',
     'thumbAutoAdvance',
     'returnToFirstScreenshot',
   ],
-  [ // 10
+  [ // 11
     'muteClips',
     'autoplayClips',
     'clipsThumbnail',
   ],
-  [ // 11
+  [ // 12
     'makeSmaller',
     'makeLarger',
   ],
-  [ // 12
+  [ // 13
     'darkMode',
     'doubleClickMode',
     'dragVideoOutOfApp',
   ],
-  [ // 13
+  [ // 14
     'hideTop',
     'flatIcons'
   ],
-  [ // 14
+  [ // 15
     'startWizard',
     'resetSettings',
     'clearHistory',
@@ -218,9 +221,11 @@ export const SettingsMetaGroup: string[][] = [
     ...SettingsButtonsGroups[12],
     'break',
     ...SettingsButtonsGroups[13],
+    'break',
+    ...SettingsButtonsGroups[14],
   ],
   [
-    ...SettingsButtonsGroups[14],
+    ...SettingsButtonsGroups[15],
   ],
 ];
 
@@ -623,6 +628,7 @@ export const SettingsButtons: SettingsButtonsType = {
     description: 'BUTTONS.showRecentDescription',
     hidden: false,
     iconName: 'icon-recent-history',
+    settingsHeading: 'SETTINGS.showRecent',
     title: 'BUTTONS.showRecentHint',
     toggled: false
   },
