@@ -595,18 +595,6 @@
         <span>{{ numberOfVideosFound | number:'.0' }} {{ 'SIDEBAR.found' | translate }}</span>
       </div>
 
-      <!-- word cloud -->
-      <div *ngIf="settingsButtons['showFreq'].toggled" class="frequency">
-        <ng-container *ngFor="let word of wordFreqArr; index as i">
-          <span
-            [ngStyle]="{'font-size': word.height + 'px' }"
-            (click)="handleFileWordClicked(word.word, $event)"
-          >
-            {{ word.word }}
-          </span>
-        </ng-container>
-      </div>
-
       <!-- Recently opened -->
       <app-recently-opened
         (openFromHistory)="openFromHistory($event)"
@@ -714,7 +702,6 @@
                 | similarityPipe: showSimilar : findMostSimilar
 
                 | wordFrequencyPipe: settingsButtons['showFreq'].toggled
-                                     : (settingsButtons['extendedWordCloud'].toggled ? 100 : 9)
                                      : settingsButtons['manualTags'].toggled
                                      : settingsButtons['autoFileTags'].toggled
                                      : settingsButtons['autoFolderTags'].toggled
@@ -969,28 +956,59 @@
 
 </div> <!-- end of window -->
 
-<!-- MOST SIMILAR BOTTOM TRAY -->
-<app-similar-tray
-  (handleClick)="handleClick($event.expectedEvent, $event.item)"
-  (rightMouseClicked)="rightMouseClicked($event.mouseEvent, $event.item)"
+<div
+  class="bottom-tray"
+  [ngClass]="{
+    'bottom-tray-open': settingsButtons['showRelatedVideosTray'].toggled
+                     || settingsButtons['showTagTray'].toggled
+                     || settingsButtons['showFreq'].toggled
+  }"
+>
+  <!-- MOST SIMILAR BOTTOM TRAY -->
+  <app-similar-tray
+    *ngIf="settingsButtons['showRelatedVideosTray'].toggled"
 
-  [appState]="appState"
-  [currentClickedItemName]="currentClickedItemName"
-  [previewHeightRelated]="previewHeightRelated"
-  [previewWidthRelated]="previewWidthRelated"
-  [settingsButtons]="settingsButtons"
-></app-similar-tray>
+    (handleClick)="handleClick($event.expectedEvent, $event.item)"
+    (rightMouseClicked)="rightMouseClicked($event.mouseEvent, $event.item)"
 
-<!-- TAGS BOTTOM TRAY -->
-<app-tag-tray
-  (closeTagsTray)="closeTagsTray()"
-  (toggleBatchTaggingMode)="toggleBatchTaggingMode()"
-  (selectAll)="selectAllVisible()"
-  (handleTagWordClicked)="handleTagWordClicked($event.tag.name, $event.event)"
-  [appState]="appState"
-  [batchTaggingMode]="batchTaggingMode"
-  [settingsButtons]="settingsButtons"
-></app-tag-tray>
+    [appState]="appState"
+    [currentClickedItemName]="currentClickedItemName"
+    [previewHeightRelated]="previewHeightRelated"
+    [previewWidthRelated]="previewWidthRelated"
+    [settingsButtons]="settingsButtons"
+
+    @modalAnimation
+  ></app-similar-tray>
+
+  <!-- TAGS BOTTOM TRAY -->
+  <app-tag-tray
+    *ngIf="settingsButtons['showTagTray'].toggled"
+
+    (closeTagsTray)="closeTagsTray()"
+    (handleTagWordClicked)="handleTagWordClicked($event.tag.name, $event.event)"
+    (selectAll)="selectAllVisible()"
+    (toggleBatchTaggingMode)="toggleBatchTaggingMode()"
+
+    [appState]="appState"
+    [batchTaggingMode]="batchTaggingMode"
+    [settingsButtons]="settingsButtons"
+
+    @modalAnimation
+  ></app-tag-tray>
+
+  <!-- word cloud -->
+  <div *ngIf="settingsButtons['showFreq'].toggled" class="frequency">
+    <ng-container *ngFor="let word of wordFreqArr; index as i">
+      <span
+        [ngStyle]="{'font-size': word.height + 'px' }"
+        (click)="handleFileWordClicked(word.word, $event)"
+      >
+        {{ word.word }}
+      </span>
+    </ng-container>
+  </div>
+
+</div>
 
 <!-- ============================================== -->
 <!-- ================    WIZARD    ================ -->

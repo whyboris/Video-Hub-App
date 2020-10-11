@@ -1,8 +1,6 @@
 <div
-  *ngIf="settingsButtons['showTagTray'].toggled"
   class="bottom-tray manual-tag-tray"
   [ngClass]="{ 'bottom-tray-dark': settingsButtons['darkMode'].toggled }"
-  @modalAnimation
 >
   <div
     (click)="closeTagsTray.emit()"

@@ -15,7 +15,6 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'duplicateSize'
  | 'durationFilter'
  | 'exclude'
- | 'extendedWordCloud'
  | 'fileIntersection'
  | 'fileUnion'
  | 'flatIcons'
@@ -122,7 +121,6 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'duplicateSize',
     'duplicateHash',
     'showFreq',
-    'extendedWordCloud',
     'showRecent'
   ],
   [ // 4
@@ -351,14 +349,6 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-video-x',
     moreInfo: 'BUTTONS.excludeMoreInfo',
     title: 'BUTTONS.excludeHint',
-    toggled: false
-  },
-  'extendedWordCloud': {
-    description: 'BUTTONS.extendedWordCloudDescription',
-    hidden: true,
-    iconName: 'icon-cloud-plus',
-    moreInfo: 'BUTTONS.extendedWordCloudMoreInfo',
-    title: 'BUTTONS.extendedWordCloudHint',
     toggled: false
   },
   'fileIntersection': {

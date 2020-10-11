@@ -248,6 +248,7 @@
   background: $gray-10;
   border-top: 1px solid $gray-50;
   bottom: 0;
+  box-sizing: border-box;
   display: flex;
   left: 0;
   position: fixed;
@@ -263,6 +264,12 @@
     top: 5px;
     z-index: 10;
   }
+}
+
+.bottom-tray-open {
+  height: 170px;
+  // height - must be same as the hardcoded value in <virtual-scroller> height property
+  //          & close to the .sidebar <div> `ngStyle` height property
 }
 
 .tag-tray-menu-left {

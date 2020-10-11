@@ -2,8 +2,6 @@
 
 .most-similar-tray {
   box-sizing: border-box;
-  // height - must be same as the hardcoded value in <virtual-scroller> height property
-  //          & close to the .sidebar <div> `ngStyle` height property
   height: 170px;
   padding-top: 0;
 
