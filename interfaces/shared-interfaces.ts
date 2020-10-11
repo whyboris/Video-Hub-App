@@ -19,6 +19,17 @@ export const AllSupportedViews: SupportedView[] = [
   'showClips',
 ];
 
+export type SupportedTrayView = 'showFreq'
+                              | 'showRelatedVideosTray'
+                              | 'showTagTray';
+
+
+export const AllSupportedBottomTrayViews: SupportedTrayView[] = [
+  'showFreq',
+  'showRelatedVideosTray',
+  'showTagTray',
+];
+
 // Mouse click events
 export interface VideoClickEmit {
   mouseEvent: MouseEvent;

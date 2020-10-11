@@ -964,6 +964,15 @@
                      || settingsButtons['showFreq'].toggled
   }"
 >
+
+  <div
+    (click)="toggleAllTrayViewsButtonsOff()"
+    class="close-bottom-tray"
+    title="{{ 'SETTINGS.closeBottomTray' | translate }}"
+  >
+    <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
+  </div>
+
   <!-- MOST SIMILAR BOTTOM TRAY -->
   <app-similar-tray
     *ngIf="settingsButtons['showRelatedVideosTray'].toggled"
@@ -984,7 +993,6 @@
   <app-tag-tray
     *ngIf="settingsButtons['showTagTray'].toggled"
 
-    (closeTagsTray)="closeTagsTray()"
     (handleTagWordClicked)="handleTagWordClicked($event.tag.name, $event.event)"
     (selectAll)="selectAllVisible()"
     (toggleBatchTaggingMode)="toggleBatchTaggingMode()"

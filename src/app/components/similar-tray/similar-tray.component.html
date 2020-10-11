@@ -4,14 +4,6 @@
 >
 
   <div
-    (click)="settingsButtons['showRelatedVideosTray'].toggled = false"
-    class="close-bottom-tray"
-    title="{{ 'SETTINGS.closeRelatedTray' | translate }}"
-  >
-    <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
-  </div>
-
-  <div
     *ngIf="!this.settingsButtons['hideSidebar'].toggled"
     class="most-similar-comment"
     @similarResultsText
