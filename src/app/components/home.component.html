@@ -958,11 +958,9 @@
 
 <div
   class="bottom-tray"
-  [ngClass]="{
-    'bottom-tray-open': settingsButtons['showRelatedVideosTray'].toggled
-                     || settingsButtons['showTagTray'].toggled
-                     || settingsButtons['showFreq'].toggled
-  }"
+  *ngIf="settingsButtons['showRelatedVideosTray'].toggled
+      || settingsButtons['showTagTray'].toggled
+      || settingsButtons['showFreq'].toggled"
 >
 
   <div
@@ -985,8 +983,6 @@
     [previewHeightRelated]="previewHeightRelated"
     [previewWidthRelated]="previewWidthRelated"
     [settingsButtons]="settingsButtons"
-
-
   ></app-similar-tray>
 
   <!-- TAGS BOTTOM TRAY -->
@@ -1000,12 +996,13 @@
     [appState]="appState"
     [batchTaggingMode]="batchTaggingMode"
     [settingsButtons]="settingsButtons"
-
-
   ></app-tag-tray>
 
   <!-- word cloud -->
-  <div *ngIf="settingsButtons['showFreq'].toggled" class="cloud-frequency">
+  <div
+    *ngIf="settingsButtons['showFreq'].toggled"
+    class="cloud-frequency"
+  >
     <ng-container *ngFor="let word of wordFreqArr; index as i">
       <span
         [ngStyle]="{'font-size': word.height + 'px' }"
