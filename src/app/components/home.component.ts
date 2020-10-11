@@ -1443,7 +1443,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
       this.settingsButtons[uniqueKey].toggled = !stateBeforeClick;
 
-      if (uniqueKey === 'showRelatedVideosTray' && this.settingsButtons['showRelatedVideosTray'].toggled) {
+      if (
+             (uniqueKey === 'showRelatedVideosTray' && this.settingsButtons['showRelatedVideosTray'].toggled)
+          || (uniqueKey === 'showRecentlyPlayed'    && this.settingsButtons['showRecentlyPlayed'].toggled)
+      ) {
         this.computePreviewWidth();
       }
 
@@ -1628,7 +1631,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.previewHeight = this.previewWidth * (9 / 16);
 
     // compute preview dimensions for thumbs in the most similar tab:
-    if (this.settingsButtons['showRelatedVideosTray'].toggled) {
+    if (
+         this.settingsButtons['showRelatedVideosTray'].toggled
+      || this.settingsButtons['showRecentlyPlayed'].toggled
+    ) {
       this.previewWidthRelated = Math.min((this.galleryWidth / 5) - 40, 176);
       this.previewHeightRelated = Math.min(this.previewWidthRelated * (9 / 16), 144);
     }

@@ -991,8 +991,8 @@
   </button>
 
   <button
-    *ngIf="                  !settingsButtons['showRecentlyPlayed'].hidden"
-    (click)="                    toggleButton('showRecentlyPlayed')"
+    *ngIf="                   !settingsButtons['showRecentlyPlayed'].hidden"
+    (click)="                     toggleButton('showRecentlyPlayed')"
     [ngClass]="{ 'active-tab': settingsButtons['showRecentlyPlayed'].toggled }"
   >
     {{ 'SETTINGS.recentlyPlayed' | translate }}

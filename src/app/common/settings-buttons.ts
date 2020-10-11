@@ -638,7 +638,7 @@ export const SettingsButtons: SettingsButtonsType = {
     description: 'BUTTONS.showRecentPlayed',
     hidden: false,
     iconName: 'icon-recent-history',
-    title: 'BUTTONS.showRecent',
+    title: 'BUTTONS.showRecentPlayed',
     toggled: false
   },
   'showRelatedVideosTray': {
