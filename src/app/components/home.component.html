@@ -965,22 +965,27 @@
   }"
 >
   <button
-    (click)="toggleButton('showRelatedVideosTray')"
-    [ngClass]="{ 'active-tab': settingsButtons['showRelatedVideosTray'].toggled }"
+    *ngIf="!settingsButtons['showFreq'].hidden"
+    (click)="toggleButton('showFreq')"
+    [ngClass]="{ 'active-tab': settingsButtons['showFreq'].toggled }"
   >
-    {{ 'SETTINGS.traySimilar' | translate }}
+    {{ 'SETTINGS.trayCloud'   | translate }}
   </button>
+
   <button
+    *ngIf="!settingsButtons['showTagTray'].hidden"
     (click)="toggleButton('showTagTray')"
     [ngClass]="{ 'active-tab': settingsButtons['showTagTray'].toggled }"
   >
     {{ 'SETTINGS.trayTags'    | translate }}
   </button>
+
   <button
-    (click)="toggleButton('showFreq')"
-    [ngClass]="{ 'active-tab': settingsButtons['showFreq'].toggled }"
+    *ngIf="!settingsButtons['showRelatedVideosTray'].hidden"
+    (click)="toggleButton('showRelatedVideosTray')"
+    [ngClass]="{ 'active-tab': settingsButtons['showRelatedVideosTray'].toggled }"
   >
-    {{ 'SETTINGS.trayCloud'   | translate }}
+    {{ 'SETTINGS.traySimilar' | translate }}
   </button>
 </div>
 
