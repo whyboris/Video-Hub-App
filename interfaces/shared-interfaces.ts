@@ -1,33 +1,34 @@
 import { ImageElement } from './final-object.interface';
 
-// Let's make these identical to settings buttons!
+// Identical to settings buttons
 export type SupportedView = 'showThumbnails'
-  | 'showFilmstrip'
-  | 'showFullView'
-  | 'showDetails'
-  | 'showDetails2'
-  | 'showFiles'
-  | 'showClips';
+                          | 'showFilmstrip'
+                          | 'showFullView'
+                          | 'showDetails'
+                          | 'showDetails2'
+                          | 'showFiles'
+                          | 'showClips';
 
 export const AllSupportedViews: SupportedView[] = [
-  'showThumbnails',
-  'showFilmstrip',
-  'showFullView',
-  'showDetails',
-  'showDetails2',
-  'showFiles',
-  'showClips',
+                            'showThumbnails',
+                            'showFilmstrip',
+                            'showFullView',
+                            'showDetails',
+                            'showDetails2',
+                            'showFiles',
+                            'showClips',
 ];
 
 export type SupportedTrayView = 'showFreq'
+                              | 'showRecentlyPlayed'
                               | 'showRelatedVideosTray'
                               | 'showTagTray';
 
-
 export const AllSupportedBottomTrayViews: SupportedTrayView[] = [
-  'showFreq',
-  'showRelatedVideosTray',
-  'showTagTray',
+                                'showFreq',
+                                'showRecentlyPlayed',
+                                'showRelatedVideosTray',
+                                'showTagTray',
 ];
 
 // Mouse click events

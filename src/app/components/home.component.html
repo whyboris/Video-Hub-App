@@ -960,6 +960,7 @@
   class="all-settings-tabs bottom-tray-tabs"
   [ngClass]="{
     'bottom-tray-tabs-open': settingsButtons['showRelatedVideosTray'].toggled
+                          || settingsButtons['showRecentlyPlayed'].toggled
                           || settingsButtons['showTagTray'].toggled
                           || settingsButtons['showFreq'].toggled
   }"
@@ -987,11 +988,20 @@
   >
     {{ 'SETTINGS.traySimilar' | translate }}
   </button>
+
+  <button
+    *ngIf="!settingsButtons['showRecentlyPlayed'].hidden"
+    (click)="toggleButton('showRecentlyPlayed')"
+    [ngClass]="{ 'active-tab': settingsButtons['showRecentlyPlayed'].toggled }"
+  >
+    {{ 'SETTINGS.recentlyPlayed' | translate }}
+  </button>
 </div>
 
 <div
   class="bottom-tray"
   *ngIf="settingsButtons['showRelatedVideosTray'].toggled
+      || settingsButtons['showRecentlyPlayed'].toggled
       || settingsButtons['showTagTray'].toggled
       || settingsButtons['showFreq'].toggled"
 >

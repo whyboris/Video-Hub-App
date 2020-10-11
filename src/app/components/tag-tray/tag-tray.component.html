@@ -3,9 +3,6 @@
   [ngClass]="{ 'bottom-tray-dark': settingsButtons['darkMode'].toggled }"
 >
   <div class="tag-tray-menu-left" *ngIf="!batchTaggingMode; else batchModeExplainer">
-    <span class="manual-tag-tray-label">
-      {{ 'TAGS.presentTags' | translate }}:
-    </span>
     <button
       (click)="appState.sortTagsByFrequency = !appState.sortTagsByFrequency"
       class="tag-sort-by-toggle"

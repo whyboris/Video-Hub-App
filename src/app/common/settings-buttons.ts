@@ -49,6 +49,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'showFullView'
  | 'showMoreInfo'
  | 'showRecent'
+ | 'showRecentlyPlayed'
  | 'showRelatedVideosTray'
  | 'showTagTray'
  | 'showTags'
@@ -135,6 +136,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'showFreq',
     'showTagTray',
     'showRelatedVideosTray',
+    'showRecentlyPlayed'
   ],
   [ // 6
     'compactView',
@@ -630,6 +632,13 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-recent-history',
     settingsHeading: 'SETTINGS.showRecent',
     title: 'BUTTONS.showRecentHint',
+    toggled: false
+  },
+  'showRecentlyPlayed': {
+    description: 'BUTTONS.showRecentPlayed',
+    hidden: false,
+    iconName: 'icon-recent-history',
+    title: 'BUTTONS.showRecent',
     toggled: false
   },
   'showRelatedVideosTray': {
