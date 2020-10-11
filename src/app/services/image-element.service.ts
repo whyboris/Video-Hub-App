@@ -55,12 +55,30 @@ constructor() { }
    */
   updateNumberOfTimesPlayed(index: number) {
 
-    this.recentlyPlayed.push(this.imageElements[index]);
+    this.updateRecentlyPlayed(index);
 
     this.imageElements[index].timesPlayed ?
     this.imageElements[index].timesPlayed++ :
     this.imageElements[index].timesPlayed = 1;
     this.finalArrayNeedsSaving = true;
+  }
+
+  /**
+   * Update recently played
+   *  - remove duplicates
+   *  - trim to at most 7
+   * @param index
+   */
+  updateRecentlyPlayed(index: number) {
+    this.recentlyPlayed = [
+      this.imageElements[index],
+      ...(this.recentlyPlayed.filter((element: ImageElement) => {
+        return element.hash !== this.imageElements[index].hash;
+      }))
+    ];
+    if (this.recentlyPlayed.length > 7) {
+      this.recentlyPlayed.length = 7;
+    }
   }
 
   private handleTagEmission(emission: TagEmission): void {

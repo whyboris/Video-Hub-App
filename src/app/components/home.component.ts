@@ -25,12 +25,20 @@ import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency
 import { SortOrderComponent } from './sort-order/sort-order.component';
 
 // Interfaces
-import { AllSupportedViews, SupportedView, HistoryItem, RenameFileResponse, VideoClickEmit, SupportedTrayView, AllSupportedBottomTrayViews } from '../../../interfaces/shared-interfaces';
 import { FinalObject, ImageElement, ScreenshotSettings, ResolutionString } from '../../../interfaces/final-object.interface';
 import { ImportStage } from '../../../node/main-support';
 import { SettingsObject } from '../../../interfaces/settings-object.interface';
 import { SortType } from '../pipes/sorting.pipe';
 import { WizardOptions } from '../../../interfaces/wizard-options.interface';
+import {
+  AllSupportedBottomTrayViews,
+  AllSupportedViews,
+  HistoryItem,
+  RenameFileResponse,
+  SupportedTrayView,
+  SupportedView,
+  VideoClickEmit,
+} from '../../../interfaces/shared-interfaces';
 
 // Constants, etc
 import { AppState, SupportedLanguage, DefaultImagesPerRow, RowNumbers } from '../common/app-state';
@@ -626,6 +634,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       pathToFile: string,
       outputFolderPath: string,
     ) => {
+
+      this.imageElementService.recentlyPlayed = [];
 
       this.currentScreenshotSettings = finalObject.screenshotSettings;
 
@@ -1526,7 +1536,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
 
-  public toggleButtonOff(uniqueKey: SettingsButtonKey | SupportedView | SupportedTrayView, fromIpc = false): void {
+  public toggleButtonOff(uniqueKey: SettingsButtonKey | SupportedView | SupportedTrayView): void {
     if (this.settingsButtons[uniqueKey].toggled) {
       this.settingsButtons[uniqueKey].toggled = false;
     }
