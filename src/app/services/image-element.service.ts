@@ -9,9 +9,11 @@ import { DefaultScreenEmission, StarEmission } from '../components/sheet/sheet.c
 })
 export class ImageElementService {
 
-public imageElements: ImageElement[] = [];
 public finalArrayNeedsSaving: boolean = false;
 public forceStarFilterUpdate: boolean = true;
+public imageElements: ImageElement[] = [];
+public recentlyPlayed: ImageElement[] = [];
+
 constructor() { }
 
 /**
@@ -52,6 +54,9 @@ constructor() { }
    * @param index
    */
   updateNumberOfTimesPlayed(index: number) {
+
+    this.recentlyPlayed.push(this.imageElements[index]);
+
     this.imageElements[index].timesPlayed ?
     this.imageElements[index].timesPlayed++ :
     this.imageElements[index].timesPlayed = 1;

@@ -27,6 +27,7 @@ export class SimilarTrayComponent {
   @Input() previewHeightRelated;
   @Input() previewWidthRelated;
   @Input() settingsButtons: SettingsButtonsType;
+  @Input() showRecentNotSimilar;
 
   constructor(
     public imageElementService: ImageElementService,

@@ -956,6 +956,7 @@
 
 </div> <!-- end of window -->
 
+<!-- BOTTOM TRAY SECTION -->
 <div
   class="all-settings-tabs bottom-tray-tabs"
   [ngClass]="{
@@ -1014,9 +1015,10 @@
     <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
   </div>
 
-  <!-- MOST SIMILAR BOTTOM TRAY -->
+  <!-- MOST SIMILAR & RECENTLY PLAYED -->
   <app-similar-tray
-    *ngIf="settingsButtons['showRelatedVideosTray'].toggled"
+    *ngIf="settingsButtons['showRelatedVideosTray'].toggled
+        || settingsButtons['showRecentlyPlayed'].toggled"
 
     (handleClick)="handleClick($event.expectedEvent, $event.item)"
     (rightMouseClicked)="rightMouseClicked($event.mouseEvent, $event.item)"
@@ -1026,9 +1028,10 @@
     [previewHeightRelated]="previewHeightRelated"
     [previewWidthRelated]="previewWidthRelated"
     [settingsButtons]="settingsButtons"
+    [showRecentNotSimilar]="settingsButtons['showRecentlyPlayed'].toggled"
   ></app-similar-tray>
 
-  <!-- TAGS BOTTOM TRAY -->
+  <!-- TAGS -->
   <app-tag-tray
     *ngIf="settingsButtons['showTagTray'].toggled"
 
@@ -1041,7 +1044,7 @@
     [settingsButtons]="settingsButtons"
   ></app-tag-tray>
 
-  <!-- word cloud -->
+  <!-- WORD CLOUD -->
   <div
     *ngIf="settingsButtons['showFreq'].toggled"
     class="cloud-frequency"
@@ -1058,10 +1061,7 @@
 
 </div>
 
-<!-- ============================================== -->
-<!-- ================    WIZARD    ================ -->
-<!-- ============================================== -->
-
+<!-- WIZARD -->
 <app-wizard
   *ngIf="wizard.showWizard"
   @myWizardAnimation

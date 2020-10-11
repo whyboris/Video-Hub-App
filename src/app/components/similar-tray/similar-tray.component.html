@@ -4,7 +4,7 @@
 >
 
   <div
-    *ngIf="!this.settingsButtons['hideSidebar'].toggled"
+    *ngIf="!showRecentNotSimilar && !this.settingsButtons['hideSidebar'].toggled"
     class="most-similar-comment"
     @similarResultsText
   >
@@ -15,8 +15,11 @@
   </div>
 
   <app-thumbnail
-    *ngFor="let item of imageElementService.imageElements | similarityPipe: true : currentClickedItemName
-                                                          | slice: 0 : 8 "
+    *ngFor="let item of (showRecentNotSimilar
+                          ?  imageElementService.recentlyPlayed
+                          : (imageElementService.imageElements | similarityPipe: true : currentClickedItemName
+                                                               | slice: 0 : 8 )
+                        )"
 
     (videoClick)="handleClick.emit({ expectedEvent: $event, item: item })"
     (contextmenu)="rightMouseClicked.emit({ mouseEvent: $event, item: item })"
