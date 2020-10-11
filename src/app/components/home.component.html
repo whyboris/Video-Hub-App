@@ -957,6 +957,34 @@
 </div> <!-- end of window -->
 
 <div
+  class="all-settings-tabs bottom-tray-tabs"
+  [ngClass]="{
+    'bottom-tray-tabs-open': settingsButtons['showRelatedVideosTray'].toggled
+                          || settingsButtons['showTagTray'].toggled
+                          || settingsButtons['showFreq'].toggled
+  }"
+>
+  <button
+    (click)="toggleButton('showRelatedVideosTray')"
+    [ngClass]="{ 'active-tab': settingsButtons['showRelatedVideosTray'].toggled }"
+  >
+    {{ 'SETTINGS.traySimilar' | translate }}
+  </button>
+  <button
+    (click)="toggleButton('showTagTray')"
+    [ngClass]="{ 'active-tab': settingsButtons['showTagTray'].toggled }"
+  >
+    {{ 'SETTINGS.trayTags'    | translate }}
+  </button>
+  <button
+    (click)="toggleButton('showFreq')"
+    [ngClass]="{ 'active-tab': settingsButtons['showFreq'].toggled }"
+  >
+    {{ 'SETTINGS.trayCloud'   | translate }}
+  </button>
+</div>
+
+<div
   class="bottom-tray"
   *ngIf="settingsButtons['showRelatedVideosTray'].toggled
       || settingsButtons['showTagTray'].toggled

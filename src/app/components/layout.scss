@@ -269,6 +269,16 @@
   }
 }
 
+.bottom-tray-tabs {
+  bottom: 0;
+  left: 20px !important;
+  top: initial !important;
+}
+
+.bottom-tray-tabs-open {
+  bottom: 170px;
+}
+
 .tag-tray-menu-left {
   margin-right: 10px;
   padding-left: 5px;
