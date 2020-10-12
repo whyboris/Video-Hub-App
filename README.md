@@ -6,9 +6,9 @@ Read in [Português (Brasileiro)](https://github.com/whyboris/Video-Hub-App/blob
 
 ## Download Now
 
-This software is available for $3.50 through [videohubapp.com](https://videohubapp.com/download.html)
+This software is available for $5.00 through [videohubapp.com](https://videohubapp.com/download.html)
 
-$3.50 of every sale goes to the [_cost-effective_](https://www.givewell.org/charities/top-charities) charity of [Against Malaria Foundation](https://www.againstmalaria.com/).
+$3.50 of every sale goes to the [_cost-effective_](https://www.givewell.org/charities/top-charities) charity [Against Malaria Foundation](https://www.againstmalaria.com/).
 
 ![video-hub-app](https://user-images.githubusercontent.com/17264277/82097107-3ed91700-96d0-11ea-8679-87fa3e07cd0b.jpg)
 
@@ -50,8 +50,9 @@ Main dependencies in use:
 | Angular-CLI      | v10.0.0 | June 2020   |                                                   |
 | Electron         |  v9.0.0 | June 2020   | (internally uses Node `v12.14.1` and Chromium 83) |
 | Electron Builder | v22.7.0 | June 2020   |                                                   |
-|
-- **Node**: I recommend to use the same version as _Electron_ uses internally, but version 10 or above should work.
+
+- **Node**: I recommend using the same version as _Electron_ uses internally, but version 10 or above should work.
+
 - **Angular CLI**: not required but may be useful: [Angular CLI](https://cli.angular.io).
 
 To help debug a production build of VHA you can use [Debugtron](https://github.com/bytedance/debugtron)

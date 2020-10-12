@@ -15,7 +15,6 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'duplicateSize'
  | 'durationFilter'
  | 'exclude'
- | 'extendedWordCloud'
  | 'fileIntersection'
  | 'fileUnion'
  | 'flatIcons'
@@ -50,6 +49,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'showFullView'
  | 'showMoreInfo'
  | 'showRecent'
+ | 'showRecentlyPlayed'
  | 'showRelatedVideosTray'
  | 'showTagTray'
  | 'showTags'
@@ -121,8 +121,6 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'duplicateLength',
     'duplicateSize',
     'duplicateHash',
-    'showFreq',
-    'extendedWordCloud',
     'showRecent'
   ],
   [ // 4
@@ -135,50 +133,55 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'showClips',
   ],
   [ // 5
+    'showFreq',
+    'showTagTray',
+    'showRelatedVideosTray',
+    'showRecentlyPlayed'
+  ],
+  [ // 6
     'compactView',
     'showMoreInfo',
     'fontSizeLarger',
   ],
-  [ // 6
+  [ // 7
     'showFolders',
     'randomizeFoldersScreenshots',
-    'showRelatedVideosTray',
     'shuffleGalleryNow',
   ],
-  [ // 7
+  [ // 8
     'showTags',
     'autoFileTags',
     'autoFolderTags',
   ],
-  [ // 8
+  [ // 9
     'manualTags',
-    'showTagTray',
+
     'showVideoNotes',
   ],
-  [ // 9
+  [ // 10
     'hoverScrub',
     'thumbAutoAdvance',
     'returnToFirstScreenshot',
   ],
-  [ // 10
+  [ // 11
     'muteClips',
     'autoplayClips',
     'clipsThumbnail',
   ],
-  [ // 11
+  [ // 12
     'makeSmaller',
     'makeLarger',
   ],
-  [ // 12
+  [ // 13
     'darkMode',
     'doubleClickMode',
     'dragVideoOutOfApp',
   ],
-  [ // 13
+  [ // 14
     'hideTop',
     'flatIcons'
   ],
-  [ // 14
+  [ // 15
     'startWizard',
     'resetSettings',
     'clearHistory',
@@ -220,9 +223,11 @@ export const SettingsMetaGroup: string[][] = [
     ...SettingsButtonsGroups[12],
     'break',
     ...SettingsButtonsGroups[13],
+    'break',
+    ...SettingsButtonsGroups[14],
   ],
   [
-    ...SettingsButtonsGroups[14],
+    ...SettingsButtonsGroups[15],
   ],
 ];
 
@@ -351,14 +356,6 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-video-x',
     moreInfo: 'BUTTONS.excludeMoreInfo',
     title: 'BUTTONS.excludeHint',
-    toggled: false
-  },
-  'extendedWordCloud': {
-    description: 'BUTTONS.extendedWordCloudDescription',
-    hidden: true,
-    iconName: 'icon-cloud-plus',
-    moreInfo: 'BUTTONS.extendedWordCloudMoreInfo',
-    title: 'BUTTONS.extendedWordCloudHint',
     toggled: false
   },
   'fileIntersection': {
@@ -633,7 +630,15 @@ export const SettingsButtons: SettingsButtonsType = {
     description: 'BUTTONS.showRecentDescription',
     hidden: false,
     iconName: 'icon-recent-history',
+    settingsHeading: 'SETTINGS.showRecent',
     title: 'BUTTONS.showRecentHint',
+    toggled: false
+  },
+  'showRecentlyPlayed': {
+    description: 'BUTTONS.showRecentPlayed',
+    hidden: false,
+    iconName: 'icon-recent-history',
+    title: 'BUTTONS.showRecentPlayed',
     toggled: false
   },
   'showRelatedVideosTray': {
