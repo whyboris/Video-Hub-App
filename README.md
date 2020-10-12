@@ -4,7 +4,7 @@
 
 Read in [Português (Brasileiro)](https://github.com/whyboris/Video-Hub-App/blob/master/README.br.md)
 
-## Download now
+## Download Now
 
 This software is available for $5.00 through [videohubapp.com](https://videohubapp.com/download.html)
 
@@ -14,7 +14,7 @@ $3.50 of every sale goes to the [_cost-effective_](https://www.givewell.org/char
 
 ## About
 
-*Video Hub App* was created by [Boris Yakubchik](https://videohubapp.com/about.html). It uses _Angular_ and _Electron_.
+*Video Hub App* was created by [Boris Yakubchik](https://videohubapp.com/about.html). It uses the frameworks _Angular_ and _Electron_.
 
 ## License
 
@@ -52,9 +52,12 @@ Main dependencies in use:
 | Electron Builder | v22.7.0 | June 2020   |                                                   |
 
 - **Node**: I recommend using the same version as _Electron_ uses internally, but version 10 or above should work.
+
 - **Angular CLI**: not required but may be useful: [Angular CLI](https://cli.angular.io).
 
 To help debug a production build of VHA you can use [Debugtron](https://github.com/bytedance/debugtron)
+
+---
 
 ## Thank you
 
