@@ -7,6 +7,7 @@ import { SourceFolderService } from './source-folder.service';
 
 import { ImageElement, ScreenshotSettings, InputSources } from '../../../../interfaces/final-object.interface';
 import { metaAppear, breadcrumbWordAppear } from '../../common/animations';
+import { ImageElementService } from './../../services/image-element.service';
 
 @Component({
   selector: 'app-statistics',
@@ -20,12 +21,9 @@ import { metaAppear, breadcrumbWordAppear } from '../../common/animations';
 })
 export class StatisticsComponent implements OnInit, OnDestroy {
 
-  @Output() addMissingThumbnailsPlease = new EventEmitter<any>();
-  @Output() cleanScreenshotFolderPlease = new EventEmitter<any>();
   @Output() deleteInputSourceFiles = new EventEmitter<number>();
   @Output() finalArrayNeedsSaving = new EventEmitter<any>();
 
-  @Input() finalArray: ImageElement[];
   @Input() hubName: string;
   @Input() inputFolders: InputSources;
   @Input() numFolders: number;
@@ -61,6 +59,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     public cd: ChangeDetectorRef,
     public electronService: ElectronService,
     public sourceFolderService: SourceFolderService,
+    public imageElementService: ImageElementService
   ) { }
 
   ngOnInit() {
@@ -82,7 +81,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     }))
 
     this.eventSubscriptionMap.set('numberOfScreenshotsDeleted', this.numberScreenshotsDeleted.subscribe((deleted: number) => {
-      if (deleted) { // first emit from subscription is `undefined`
+      if (deleted !== undefined) { // first emit from subscription is `undefined`
         this.handleScreenshotsDeleted(deleted);
       }
     }));
@@ -94,7 +93,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   computeAverages() {
     console.log(this.inputFolders);
 
-    this.finalArray.forEach((element: ImageElement): void => {
+    this.imageElementService.imageElements.forEach((element: ImageElement): void => {
       this.shortest = Math.min(element.duration, this.shortest);
       this.longest = Math.max(element.duration, this.longest);
       this.totalLength += element.duration;
@@ -104,7 +103,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
       this.totalSize += element.fileSize;
     });
 
-    this.totalFiles = this.finalArray.length;
+    this.totalFiles = this.imageElementService.imageElements.length;
 
     this.avgLength = Math.round(this.totalLength / this.totalFiles);
     this.avgSize = Math.round(this.totalSize / this.totalFiles);
@@ -216,10 +215,15 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Add any missing thumbnails / continue thumbnail import
+   * Add any missing thumbnails / resume thumbnail import
+   * Tell node to find and extract all missing thumbnails
    */
   addMissingThumbnails() {
-    this.addMissingThumbnailsPlease.emit(true);
+    console.log('trying to extract missing thumbnails');
+    this.electronService.ipcRenderer.send(
+      'add-missing-thumbnails',
+      this.imageElementService.imageElements,
+      this.screenshotSettings.clipSnippets > 0);
   }
 
   /**
@@ -247,9 +251,12 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     this.deleteInputSourceFiles.emit(itemSourceKey);
   }
 
+  /**
+   * Tell node to delete all screenshots that are no longer in the hub
+   */
   cleanScreenshotFolder(): void {
     console.log('cleaning screenshots!');
-    this.cleanScreenshotFolderPlease.emit(true);
+    this.electronService.ipcRenderer.send('clean-old-thumbnails', this.imageElementService.imageElements);
   }
 
   /**

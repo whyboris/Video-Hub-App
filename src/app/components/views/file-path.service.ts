@@ -2,12 +2,24 @@ import { Injectable } from '@angular/core';
 
 import * as path from 'path';
 
+import { SourceFolderService } from '../statistics/source-folder.service';
+
+import { ImageElement } from '../../../../interfaces/final-object.interface';
+
 type FolderType = 'thumbnails' | 'filmstrips' | 'clips' | 'faces' | 'facestrips';
 
 @Injectable()
 export class FilePathService {
 
-  constructor() { }
+  replaceMap: any = {
+    ' ': '%20',
+    '(': '%28',
+    ')': '%29',
+  }
+
+  constructor(
+    public sourceFolderService: SourceFolderService,
+  ) { }
 
   /**
    * Build the browser-friendly path based on the input (only `/` and `%20`), prepend with `file://`
@@ -17,19 +29,22 @@ export class FilePathService {
    * @param hash       - file hash
    * @param video      - boolean -- if true then extension is `.mp4`
    */
-  public createFilePath(folderPath: string, hubName: string, subfolder: FolderType, hash: string, video?: boolean): string {
-
+  createFilePath(folderPath: string, hubName: string, subfolder: FolderType, hash: string, video?: boolean): string {
     return 'file://' + path.normalize(path.join(
-      folderPath, 'vha-' + hubName.replace(/ /g, '%20'), subfolder, hash + (video ? '.mp4' : '.jpg')
-    )).replace(/\\/g, '/');
-
+      folderPath,
+      'vha-' + hubName,
+      subfolder,
+      hash + (video ? '.mp4' : '.jpg')
+    )).replace(/\\/g, '/')
+      .replace(/[ \(\)]/g, (match) => { return this.replaceMap[match] })
+      //         ^^^^^ replace the ` ` (space) as well as parentheses `(` and `)` with URL encoding from the `replaceMap`
   }
 
   /**
    * return file name without extension
    * e.g. `video.mp4` => `video`
    */
-  public getFileNameWithoutExtension(fileName: string): string {
+  getFileNameWithoutExtension(fileName: string): string {
     return fileName.slice().substr(0, fileName.lastIndexOf('.'));
   };
 
@@ -37,8 +52,19 @@ export class FilePathService {
    * return extension without file name
    * e.g. `video.mp4` => `.mp4`
    */
-  public getFileNameExtension(fileName: string): string {
+  getFileNameExtension(fileName: string): string {
     return fileName.slice().split('.').pop();
   };
+
+  /**
+   * Return full filesystem path to video file
+   */
+  getPathFromImageElement(item: ImageElement): string {
+    return path.join(
+      this.sourceFolderService.selectedSourceFolder[item.inputSource].path,
+      item.partialPath,
+      item.fileName
+    );
+  }
 
 }

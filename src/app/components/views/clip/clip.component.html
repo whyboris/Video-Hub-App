@@ -14,8 +14,8 @@
       #filmstripHolder
       *ngIf="video.fileName !== '*UP*'; else upFolderDiv"
       class="video-box folder"
-      (click)="videoClick.emit({ mouseEvent: $event })"
-      (dblclick)="videoClickSimilar.emit({ mouseEvent: $event })"
+      (click)="   videoClick.emit({ mouseEvent: $event })"
+      (dblclick)="videoClick.emit({ mouseEvent: $event, doubleClick: true })"
       [ngStyle]="{
           height: imgHeight + 'px'
       }"
@@ -54,8 +54,8 @@
     <ng-template #upFolderDiv>
       <div
         class="video-box folder"
-        (click)="videoClick.emit({ mouseEvent: $event })"
-        (dblclick)="videoClickSimilar.emit({ mouseEvent: $event })"
+        (click)="   videoClick.emit({ mouseEvent: $event })"
+        (dblclick)="videoClick.emit({ mouseEvent: $event, doubleClick: true })"
         [ngStyle]="{ height: imgHeight + 'px' }"
       >
         <div class="up-icon">
@@ -101,8 +101,8 @@
       [src]="pathToVideo"
       [poster]="sanitizer.bypassSecurityTrustUrl(poster)"
       [ngStyle]="{ 'height': imgHeight + 'px' }"
-      (click)="videoClick.emit({ mouseEvent: $event })"
-      (dblclick)="videoClickSimilar.emit({ mouseEvent: $event })"
+      (click)="   videoClick.emit({ mouseEvent: $event })"
+      (dblclick)="videoClick.emit({ mouseEvent: $event, doubleClick: true })"
       (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
       class="screencap"
       [volume]="forceMute ? 0 : 1"
@@ -117,8 +117,8 @@
       [src]="pathToVideo"
       [poster]="sanitizer.bypassSecurityTrustUrl(poster)"
       [ngStyle]="{ 'height': imgHeight + 'px' }"
-      (click)="videoClick.emit({ mouseEvent: $event })"
-      (dblclick)="videoClickSimilar.emit({ mouseEvent: $event })"
+      (click)="   videoClick.emit({ mouseEvent: $event })"
+      (dblclick)="videoClick.emit({ mouseEvent: $event, doubleClick: true })"
       (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
       class="screencap"
       [volume]="forceMute ? 0 : 1"

@@ -30,9 +30,6 @@
     "excludeDescription": "ফাইল নাম ছাড়া",
     "excludeHint": "ফিল্টার বাদ দিন",
     "excludeMoreInfo": "ফিল্টার শব্দটি ধারণ করে এমন কোনও ভিডিও বাদ দিতে ফিল্টার করুন",
-    "extendedWordCloudDescription": "শব্দ মেঘ 100",
-    "extendedWordCloudHint": "সক্ষম বর্ধিত ওয়ার্ড ক্লাউড",
-    "extendedWordCloudMoreInfo": "ক্লাউড শব্দটি দেখানোর সময় 100 শব্দের ক্লাউড ট্যাগগুলি দেখান",
     "fileDescription": "প্রত্যেকের সাথে ফাইলের নাম",
     "fileHint": "ভিডিও অনুসন্ধান",
     "fileMoreInfo": "প্রতিটি অনুসন্ধান শব্দ যুক্ত ভিডিওর জন্য ফিল্টার",
@@ -313,8 +310,7 @@
     "pleaseChangeName": "উপরে হাব নাম পরিবর্তন করুন",
     "selectDefaultPlayer": "আপনার পছন্দসই ভিডিও প্লেয়ার নির্বাচন করুন",
     "selectPreviousHub": "পূর্বে সংরক্ষিত ভিডিও হাব ফাইলটি নির্বাচন করুন",
-    "selectRootFolder": "উত্স ভিডিও ফোল্ডারটি নির্বাচন করুন",
-    "videoFolderNotFound": "উত্স ভিডিও ফোল্ডারটি পাওয়া যায় নি:"
+    "selectRootFolder": "উত্স ভিডিও ফোল্ডারটি নির্বাচন করুন"
   },
   "TAGS": {
     "add": "যোগ",

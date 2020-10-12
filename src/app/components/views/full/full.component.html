@@ -9,8 +9,8 @@
 
   <div
     *ngFor="let row of rowOffsets; index as idx"
-    (click)="videoClick.emit({ mouseEvent: $event })"
-    (dblclick)="videoClickSimilar.emit({ mouseEvent: $event })"  
+    (click)="   videoClick.emit({ mouseEvent: $event })"
+    (dblclick)="videoClick.emit({ mouseEvent: $event, doubleClick: true })"
     (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
     class="filmstrip-container"
     [ngStyle]="{

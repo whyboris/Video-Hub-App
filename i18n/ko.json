@@ -30,9 +30,6 @@
     "excludeDescription": "파일이름 제외",
     "excludeHint": "제외하는 필터",
     "excludeMoreInfo": "단어가 포함된 동영상을 제외하는 필터",
-    "extendedWordCloudDescription": "워드 클라우드 100",
-    "extendedWordCloudHint": "확장된 워드 클라우드 사용",
-    "extendedWordCloudMoreInfo": "워드 클라우드를 표시할 때 100개의 태그를 표시",
     "fileDescription": "각각의 파일 이름",
     "fileHint": "동영상 검색",
     "fileMoreInfo": "각각의 검색 단어가 포함된 동영상 필터",
@@ -325,8 +322,7 @@
     "pleaseChangeName": "Hub 이름을 변경하세요.",
     "selectDefaultPlayer": "기본으로 사용할 동영상 플레이어를 선택하세요.",
     "selectPreviousHub": "이전에 저장된 동영상 Hub 파일을 선택하세요.",
-    "selectRootFolder": "원본 동영상 폴더 선택",
-    "videoFolderNotFound": "원본 동영상 폴더를 찾을 수 없음:"
+    "selectRootFolder": "원본 동영상 폴더 선택"
   },
   "TAGS": {
     "add": "추가",

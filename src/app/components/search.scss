@@ -87,14 +87,20 @@
   font-size: 10px;
 }
 
-.frequency {
-  color: $gray-50;
-  margin-top: 20px;
+.cloud-frequency {
+  color: $gray-90;
+  line-height: 26px;
+  padding: 20px;
 
   span {
     cursor: pointer;
     margin: 0 4px;
+
+    &:hover {
+      color: $pretty-blue;
+    }
   }
+
 }
 
 .tag-type-ahead-on-home {
@@ -132,4 +138,10 @@
 .regex-error {
   background-color: #d4d4d4 !important;
   text-decoration: line-through;
+}
+
+.hiding-offline {
+  background-color: $pretty-red;
+  margin-top: 15px;
+  position: absolute;
 }

@@ -21,7 +21,7 @@
   ></div>
 
   <!-- Progress indicator - "Donut" -->
-  <div *ngIf="importStage === 'importingScreenshots'" class="cancel-progress" @donutAppear>
+  <div *ngIf="importStage === 'importingScreenshots' && !settingsButtons['hideTop'].toggled" class="cancel-progress" @donutAppear>
     <span
       (click)="cancelCurrentImport()"
       [ngClass]="{ 'cancel-progress-dark': settingsButtons['darkMode'].toggled }"
@@ -31,7 +31,7 @@
   </div>
 
   <app-donut
-    *ngIf="importStage === 'importingScreenshots'"
+    *ngIf="importStage === 'importingScreenshots' && !settingsButtons['hideTop'].toggled"
     class="screenShotProgressPercent"
     [percent]="extractionPercent"
     [timeRemaining]="timeExtractionRemaining"
@@ -63,15 +63,6 @@
     (contextmenu)="closeSheetOverlay()"
     @overlayAppear
   >
-  </div>
-
-  <!-- "Root folder is not connected" 1500ms popup when running scan on a disconnected HUB -->
-  <div
-    *ngIf="folderNotConnectedErrorShowing"
-    class="folder-not-connected-error"
-    @modalAnimation
-  >
-    {{ 'SETTINGS.rootFolderNotLive' | translate }}
   </div>
 
   <!-- ===========   RIGHT CLICK MODAL    =========== -->
@@ -108,10 +99,6 @@
   <!-- ===========   Thumbnail Sheet Display   =========== -->
   <app-thumbnail-sheet
     *ngIf="sheetOverlayShowing"
-    (editFinalArrayDefaultScreen)="editDefaultScreenshot($event)"
-    (editFinalArrayStars)="editFinalArrayStars($event)"
-    (editFinalArrayTag)="editFinalArrayTag($event)"
-    (editFinalArrayYear)="editFinalArrayYear($event)"
     (filterTag)="handleTagWordClicked($event.tag.name, $event.event)"
     (openVideoAtTime)="handleClick($event, sheetItemToDisplay)"
 
@@ -149,13 +136,10 @@
     (closeRename)="closeRename()"
 
     [appState]="appState"
+    [basePath]="sourceFolderService.selectedSourceFolder[currentRightClickedItem.inputSource].path"
+    [currentRightClickedItem]="currentRightClickedItem"
     [macVersion]="macVersion"
     [settingsButtons]="settingsButtons"
-    [itemToRename]="itemToRename"
-    [currentRightClickedItem]="currentRightClickedItem"
-    [renamingNow]="renamingNow"
-
-    [basePath]="sourceFolderService.selectedSourceFolder[itemToRename.inputSource].path"
 
     [renameResponse]="renameFileResponseBehaviorSubject"
   ></app-rename-modal>
@@ -175,7 +159,6 @@
     </div>
     <app-tags-component
       [hubName]="appState.hubName"
-      [finalArray]="finalArray"
       (tagClicked)="tagClicked($event)"
     ></app-tags-component>
   </div>
@@ -255,12 +238,9 @@
     <div *ngIf="settingTabToShow == 3" class="shortcut-menu">
 
       <app-statistics
-        (addMissingThumbnailsPlease)="extractMissingThumbnails()"
-        (cleanScreenshotFolderPlease)="cleanScreenshotFolder()"
         (deleteInputSourceFiles)="deleteInputSourceFiles($event)"
-        (finalArrayNeedsSaving)="finalArrayNeedsSaving = true"
+        (finalArrayNeedsSaving)="imageElementService.finalArrayNeedsSaving = true"
 
-        [finalArray]="finalArray"
         [hubName]="appState.hubName"
         [inputFolders]="sourceFolderService.selectedSourceFolder"
         [numFolders]="appState.numOfFolders"
@@ -296,7 +276,7 @@
     <app-top-component
       class="top-content-position"
       [darkMode]="settingsButtons['darkMode'].toggled"
-      [fileString]="currentPlayingFile"
+      [fileString]="currentClickedItemName"
       [folderString]="currentPlayingFolder"
       (onFileWordClicked)="handleFileWordClicked($event)"
       (onFolderWordClicked)="handleFolderWordClicked($event)"
@@ -341,6 +321,12 @@
       >
         <app-icon [icon]="'icon-gear'"></app-icon>
       </div>
+      <div
+        *ngIf="settingsButtons['hideTop'].toggled && importStage === 'importingScreenshots'"
+        class="scanning-indicator scanning-indicator-right"
+        title="{{ 'WIZARD.importInProgress' | translate }}"
+        @slowFadeOut
+      ></div>
 
     </div>
 
@@ -398,7 +384,7 @@
           title="{{ 'SIDEBAR.scanInProgress' | translate }}"
           @slowFadeOut
         ></div>
-        {{ finalArray.length | number }} {{ 'SIDEBAR.videos' | translate }}
+        {{ imageElementService.imageElements.length | number }} {{ 'SIDEBAR.videos' | translate }}
       </div>
 
       <!-- Regular search boxes / filters -->
@@ -511,7 +497,7 @@
         ></app-slider-filter>
       </div>
 
-            <!-- sizeFilter -->
+      <!-- sizeFilter -->
       <div *ngIf="settingsButtons['sizeFilter'].toggled">
 
         <app-slider-filter
@@ -558,17 +544,34 @@
       </div>
 
       <!-- Duplicates -->
-      <div class="lev-distance" *ngIf="settingsButtons['duplicateLength'].toggled || settingsButtons['duplicateSize'].toggled || settingsButtons['duplicateHash'].toggled">
+      <div
+        class="lev-distance"
+        *ngIf="settingsButtons['duplicateLength'].toggled
+            || settingsButtons['duplicateSize'].toggled
+            || settingsButtons['duplicateHash'].toggled"
+       >
         <span class="lev-description">
           {{ 'SIDEBAR.duplicate' | translate }}
         </span>
-        <span *ngIf="settingsButtons['duplicateLength'].toggled" class="search-or-tag-general search-word on-new-line" (click)="settingsButtons['duplicateLength'].toggled = false">
+        <span
+          *ngIf="settingsButtons['duplicateLength'].toggled"
+          class="search-or-tag-general search-word on-new-line"
+          (click)="settingsButtons['duplicateLength'].toggled = false"
+        >
           {{ 'SIDEBAR.dupeByLength' | translate }}
         </span>
-        <span *ngIf="settingsButtons['duplicateSize'].toggled" class="search-or-tag-general search-word on-new-line" (click)="settingsButtons['duplicateSize'].toggled = false">
+        <span
+          *ngIf="settingsButtons['duplicateSize'].toggled"
+          class="search-or-tag-general search-word on-new-line"
+          (click)="settingsButtons['duplicateSize'].toggled = false"
+        >
           {{ 'SIDEBAR.dupeBySize' | translate }}
         </span>
-        <span *ngIf="settingsButtons['duplicateHash'].toggled" class="search-or-tag-general search-word on-new-line" (click)="settingsButtons['duplicateHash'].toggled = false">
+        <span
+          *ngIf="settingsButtons['duplicateHash'].toggled"
+          class="search-or-tag-general search-word on-new-line"
+          (click)="settingsButtons['duplicateHash'].toggled = false"
+        >
           {{ 'SIDEBAR.dupeByHash' | translate }}
         </span>
       </div>
@@ -579,21 +582,17 @@
         [settingsButtons]="settingsButtons"
       ></app-sort-order>
 
+      <div
+        *ngIf="settingsButtons['hideOffline'].toggled"
+        (click)="settingsButtons['hideOffline'].toggled = false"
+        class="search-or-tag-general search-word hiding-offline"
+      >
+        {{ 'SIDEBAR.hidingOffline' | translate }}
+      </div>
+
       <!-- total found -->
       <div class="filtering-total">
         <span>{{ numberOfVideosFound | number:'.0' }} {{ 'SIDEBAR.found' | translate }}</span>
-      </div>
-
-      <!-- word cloud -->
-      <div *ngIf="settingsButtons['showFreq'].toggled" class="frequency">
-        <ng-container *ngFor="let word of wordFreqArr; index as i">
-          <span
-            [ngStyle]="{'font-size': word.height + 'px' }"
-            (click)="handleFileWordClicked(word.word, $event)"
-          >
-            {{ word.word }}
-          </span>
-        </ng-container>
       </div>
 
       <!-- Recently opened -->
@@ -638,9 +637,11 @@
 
       [bufferAmount]="0"
 
-      [items]="finalArray
+      [items]="imageElementService.imageElements
 
                 | deleteFilePipe: deletePipeHack
+
+                | hideOfflinePipe: settingsButtons['hideOffline'].toggled
 
                 | returnZeroPipe: (appState.currentView === 'showClips' && currentScreenshotSettings.clipSnippets === 0)
 
@@ -698,12 +699,11 @@
                 | starFilterPipe: settingsButtons['starFilter'].toggled
                                   : starLeftBound
                                   : starRightBound
-                                  : forceStarFilterUpdate
+                                  : imageElementService.forceStarFilterUpdate
 
                 | similarityPipe: showSimilar : findMostSimilar
 
                 | wordFrequencyPipe: settingsButtons['showFreq'].toggled
-                                     : (settingsButtons['extendedWordCloud'].toggled ? 100 : 9)
                                      : settingsButtons['manualTags'].toggled
                                      : settingsButtons['autoFileTags'].toggled
                                      : settingsButtons['autoFolderTags'].toggled
@@ -724,32 +724,20 @@
                 | playlistPipe"
     >
 
-    <!--
-      TODO:
-        1) maybe move `magicSearchPipe` to just below starFilterPipe !?
-        2) move countPipe to after `folderViewPipe` ?
-    -->
-
-    <!-- 24 above is 20 pixels for element and 4 for the fudge factor -->
-
-    <!-- [childWidth]="200" obove not needed
-            it can only take a number, but if nothing is entered
-            it uses the width of the first child element
-            so I can set 100vw for filmstrip -->
-
       <!-- ==================================== THUMBNAILS ==================================== -->
 
       <ng-container *ngIf="appState.currentView === 'showThumbnails'">
         <app-thumbnail
           *ngFor="let item of scroll.viewPortItems"
 
-          (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
-          (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
-          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
-          (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
+          (videoClick)=" (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (rightClick)=" (item.cleanName === '*FOLDER*') ? doNothing()                               : rightMouseClicked($event.mouseEvent, $event.item)"
 
           (sheetClick)="this.openThumbnailSheet(item)"
           (drop)="droppedSomethingOverVideo($event, item)"
+
+          [draggable]="settingsButtons['dragVideoOutOfApp'].toggled"
+          (dragstart)="draggingVideoFile($event, item)"
 
           [video]="item"
 
@@ -786,12 +774,13 @@
         <app-filmstrip-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (videoClick)="handleClick($event, item)"
           (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
-          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
-          (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
 
           (drop)="droppedSomethingOverVideo($event, item)"
+
+          [draggable]="settingsButtons['dragVideoOutOfApp'].toggled"
+          (dragstart)="draggingVideoFile($event, item)"
 
           [video]="item"
 
@@ -817,12 +806,13 @@
         <app-full-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
-          (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
-          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
-          (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
+          (videoClick)="handleClick($event, item)"
+          (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
 
           (drop)="droppedSomethingOverVideo($event, item)"
+
+          [draggable]="settingsButtons['dragVideoOutOfApp'].toggled"
+          (dragstart)="draggingVideoFile($event, item)"
 
           [video]="item"
 
@@ -846,12 +836,14 @@
         <app-file-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
-          (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
-          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
-          (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
+          (click)="      (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick({ mouseEvent: $event }, item)"
+          (dblclick)="   (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick({ mouseEvent: $event }, item, true)"
+          (contextmenu)="(item.cleanName === '*FOLDER*') ? doNothing()                               : rightMouseClicked($event, item)"
 
           (drop)="droppedSomethingOverVideo($event, item)"
+
+          [draggable]="settingsButtons['dragVideoOutOfApp'].toggled"
+          (dragstart)="draggingVideoFile($event, item)"
 
           [video]="item"
 
@@ -869,17 +861,14 @@
         <app-details-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
-          (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
-          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
-          (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
-
-          (editFinalArrayStars)="editFinalArrayStars($event)"
-          (editFinalArrayTag)="editFinalArrayTag($event)"
-          (editFinalArrayYear)="editFinalArrayYear($event)"
+          (videoClick)="handleClick($event, item)"
+          (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
           (filterTag)="handleTagWordClicked($event.tag.name, $event.event)"
 
           (drop)="droppedSomethingOverVideo($event, item)"
+
+          [draggable]="settingsButtons['dragVideoOutOfApp'].toggled"
+          (dragstart)="draggingVideoFile($event, item)"
 
           [video]="item"
 
@@ -920,14 +909,15 @@
         <app-clip-item
           *ngFor="let item of scroll.viewPortItems"
 
-          (videoClick)="settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
-          (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
-          (videoClickSimilar)="!settingsButtons['showRelatedVideosTray'].toggled ? doNothing() : (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
-          (click)="(item.cleanName === '*FOLDER*') ? doNothing() : assignSelectedFile(item)"
+          (videoClick)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
+          (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing()                               : rightMouseClicked($event.mouseEvent, $event.item)"
 
           (sheetClick)="this.openThumbnailSheet(item)"
 
           (drop)="droppedSomethingOverVideo($event, item)"
+
+          [draggable]="settingsButtons['dragVideoOutOfApp'].toggled"
+          (dragstart)="draggingVideoFile($event, item)"
 
           [video]="item"
 
@@ -971,34 +961,112 @@
 
 </div> <!-- end of window -->
 
-<!-- MOST SIMILAR BOTTOM TRAY -->
-<app-similar-tray
-  (handleClick)="handleClick($event.expectedEvent, $event.item)"
-  (rightMouseClicked)="rightMouseClicked($event.mouseEvent, $event.item)"
+<!-- BOTTOM TRAY SECTION -->
+<div
+  class="all-settings-tabs bottom-tray-tabs"
+  [ngClass]="{
+    'bottom-tray-tabs-open': settingsButtons['showRelatedVideosTray'].toggled
+                          || settingsButtons['showRecentlyPlayed'].toggled
+                          || settingsButtons['showTagTray'].toggled
+                          || settingsButtons['showFreq'].toggled
+  }"
+>
+  <button
+    *ngIf="                   !settingsButtons['showFreq'].hidden"
+    (click)="                     toggleButton('showFreq')"
+    [ngClass]="{ 'active-tab': settingsButtons['showFreq'].toggled }"
+  >
+    {{ 'SETTINGS.trayCloud'     | translate }}
+  </button>
 
-  [appState]="appState"
-  [currentClickedItemName]="currentClickedItemName"
-  [finalArray]="finalArray"
-  [previewHeightRelated]="previewHeightRelated"
-  [previewWidthRelated]="previewWidthRelated"
-  [settingsButtons]="settingsButtons"
-></app-similar-tray>
+  <button
+    *ngIf="                   !settingsButtons['showTagTray'].hidden"
+    (click)="                     toggleButton('showTagTray')"
+    [ngClass]="{ 'active-tab': settingsButtons['showTagTray'].toggled }"
+  >
+    {{ 'SETTINGS.trayTags'      | translate }}
+  </button>
 
-<!-- TAGS BOTTOM TRAY -->
-<app-tag-tray
-  (closeTagsTray)="closeTagsTray()"
-  (toggleBatchTaggingMode)="toggleBatchTaggingMode()"
-  (selectAll)="selectAllVisible()"
-  (handleTagWordClicked)="handleTagWordClicked($event.tag.name, $event.event)"
-  [appState]="appState"
-  [batchTaggingMode]="batchTaggingMode"
-  [settingsButtons]="settingsButtons"
-></app-tag-tray>
+  <button
+    *ngIf="                   !settingsButtons['showRelatedVideosTray'].hidden"
+    (click)="                     toggleButton('showRelatedVideosTray')"
+    [ngClass]="{ 'active-tab': settingsButtons['showRelatedVideosTray'].toggled }"
+  >
+    {{ 'SETTINGS.traySimilar'   | translate }}
+  </button>
 
-<!-- ============================================== -->
-<!-- ================    WIZARD    ================ -->
-<!-- ============================================== -->
+  <button
+    *ngIf="                   !settingsButtons['showRecentlyPlayed'].hidden"
+    (click)="                     toggleButton('showRecentlyPlayed')"
+    [ngClass]="{ 'active-tab': settingsButtons['showRecentlyPlayed'].toggled }"
+  >
+    {{ 'SETTINGS.recentlyPlayed' | translate }}
+  </button>
+</div>
 
+<div
+  class="bottom-tray"
+  *ngIf="settingsButtons['showRelatedVideosTray'].toggled
+      || settingsButtons['showRecentlyPlayed'].toggled
+      || settingsButtons['showTagTray'].toggled
+      || settingsButtons['showFreq'].toggled"
+>
+
+  <div
+    (click)="toggleAllTrayViewsButtonsOff()"
+    class="close-bottom-tray"
+    title="{{ 'SETTINGS.closeBottomTray' | translate }}"
+  >
+    <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
+  </div>
+
+  <!-- MOST SIMILAR & RECENTLY PLAYED -->
+  <app-similar-tray
+    *ngIf="settingsButtons['showRelatedVideosTray'].toggled
+        || settingsButtons['showRecentlyPlayed'].toggled"
+
+    (handleClick)="handleClick($event.expectedEvent, $event.item)"
+    (rightMouseClicked)="rightMouseClicked($event.mouseEvent, $event.item)"
+
+    [appState]="appState"
+    [currentClickedItemName]="currentClickedItemName"
+    [previewHeightRelated]="previewHeightRelated"
+    [previewWidthRelated]="previewWidthRelated"
+    [settingsButtons]="settingsButtons"
+    [showRecentNotSimilar]="settingsButtons['showRecentlyPlayed'].toggled"
+  ></app-similar-tray>
+
+  <!-- TAGS -->
+  <app-tag-tray
+    *ngIf="settingsButtons['showTagTray'].toggled"
+
+    (handleTagWordClicked)="handleTagWordClicked($event.tag.name, $event.event)"
+    (selectAll)="selectAllVisible()"
+    (toggleBatchTaggingMode)="toggleBatchTaggingMode()"
+
+    [appState]="appState"
+    [batchTaggingMode]="batchTaggingMode"
+    [settingsButtons]="settingsButtons"
+  ></app-tag-tray>
+
+  <!-- WORD CLOUD -->
+  <div
+    *ngIf="settingsButtons['showFreq'].toggled"
+    class="cloud-frequency"
+  >
+    <ng-container *ngFor="let word of wordFreqArr; index as i">
+      <span
+        [ngStyle]="{'font-size': word.height + 'px' }"
+        (click)="handleFileWordClicked(word.word, $event)"
+      >
+        {{ word.word }}
+      </span>
+    </ng-container>
+  </div>
+
+</div>
+
+<!-- WIZARD -->
 <app-wizard
   *ngIf="wizard.showWizard"
   @myWizardAnimation

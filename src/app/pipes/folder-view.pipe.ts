@@ -1,12 +1,13 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 import { ImageElement, StarRating, NewImageElement } from '../../../interfaces/final-object.interface';
+import { SettingsButtonsType, SettingsButtons } from '../common/settings-buttons';
 
 interface FolderProperties {
   byteSize: number;    //                             corresponds to ImageElement `fileSize`
   duration: number;    // in seconds,                 corresponds to ImageElement `duration`
   mtime: number; //                                   corresponds to ImageElement `mtime`
-  ctime: number; //                                   corresponds to ImageElement `ctime`
+  birthtime: number; //                                   corresponds to ImageElement `birthtime`
   starAverage: StarRating; // averaged weight of stars rounded to nearest `StarRating`
 }
 
@@ -16,6 +17,7 @@ interface FolderProperties {
 })
 export class FolderViewPipe implements PipeTransform {
 
+  settingsButtons: SettingsButtonsType = SettingsButtons;
   /**
    * Determine folder size, duration, and average star rating (simply sum up / average the relevant ImageElement properties)
    * @param files
@@ -34,8 +36,8 @@ export class FolderViewPipe implements PipeTransform {
       if (element.mtime > lastUpdated) {
         lastUpdated = element.mtime;
       }
-      if (element.ctime < firstCreated) {
-        firstCreated = element.ctime;
+      if (element.birthtime < firstCreated) {
+        firstCreated = element.birthtime;
       }
       if (element.stars !== 0.5) {
         totalStars += 1;
@@ -50,7 +52,7 @@ export class FolderViewPipe implements PipeTransform {
       byteSize: totalFileSize,
       duration: totalDuration,
       mtime: lastUpdated,
-      ctime: firstCreated,
+      birthtime: firstCreated,
       starAverage: starString,
     };
   }
@@ -62,7 +64,19 @@ export class FolderViewPipe implements PipeTransform {
    */
   extractFourPreviewHashes(files: ImageElement[]): string {
     let hashes: string = '';
+    if (files.length > 4 && this.settingsButtons['randomizeFoldersScreenshots'].toggled) {
+      hashes = this.extractRandomPreviewHashes(files);
+    } else {
+      hashes = this.extractFirstFourPreviewHashes(files);
+    }
+    if (hashes.charAt(0) === ':') {
+      hashes = hashes.slice(1);
+    }
+    return hashes;
+  }
 
+  extractFirstFourPreviewHashes(files: ImageElement[]): string {
+    let hashes: string = '';
     for (let n = 0; n < 4; n++) {
       if (files[n]) {
         hashes += ':' + files[n].hash;
@@ -70,11 +84,15 @@ export class FolderViewPipe implements PipeTransform {
         break;
       }
     }
+    return hashes;
+  }
 
-    if (hashes.charAt(0) === ':') {
-      hashes = hashes.slice(1);
+  extractRandomPreviewHashes(files: ImageElement[]): string {
+    let hashes: string = '';
+    for (let index = 0; index < 4; index++) {
+      const randomIndex = Math.floor(Math.random() * files.length);
+      hashes += ':' + files.splice(randomIndex, 1)[0].hash;
     }
-
     return hashes;
   }
 
@@ -199,7 +217,7 @@ export class FolderViewPipe implements PipeTransform {
           folderWithStuff.hash            = this.extractFourPreviewHashes(value),
           folderWithStuff.index           = -1, // always show at the top (but after the `UP` folder) in the default view
           folderWithStuff.mtime           = folderProperties.mtime,
-          folderWithStuff.ctime           = folderProperties.ctime,
+          folderWithStuff.birthtime       = folderProperties.birthtime,
           folderWithStuff.partialPath     = (prefixPath || '/') + key, // must set this for the folder click to register!
           folderWithStuff.stars           = folderProperties.starAverage,
 

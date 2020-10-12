@@ -11,6 +11,7 @@
   </span>
   <span
     class="search-or-tag-general tag"
+    [ngClass]="{ 'tag-draggable': draggable }"
     [ngStyle]="{ background: tag.colour }"
     (click)="tagClick(tag, $event)"
     [draggable]='draggable'
@@ -33,4 +34,10 @@
     (click)="removeTag(tag.name)"
   >
   </app-icon>
+</div>
+
+<div *ngIf="draggable" style="transform: translate(-100px, -100px)">
+  <span #dragHack class="search-or-tag-general tag special">
+    hack tag
+  </span>
 </div>

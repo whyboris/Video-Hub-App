@@ -12,8 +12,8 @@
       *ngIf="video.fileName !== '*UP*'; else upFolderDiv"
       class="video-box folder"
       (mousemove)="mouseIsMoving($event)"
-      (click)="videoClick.emit($event)"
-      (dblclick)="videoClickSimilar.emit($event)"
+      (click)="   videoClick.emit($event)"
+      (dblclick)="videoClick.emit($event)"
       [ngStyle]="{ height: imgHeight + 'px' }"
     >
 
@@ -57,8 +57,8 @@
 
   <div
     class="video-box folder"
-    (click)="videoClick.emit($event)"
-    (dblclick)="videoClickSimilar.emit($event)"
+    (click)="   videoClick.emit($event)"
+    (dblclick)="videoClick.emit($event)"
     [ngStyle]="{ height: imgHeight + 'px' }"
   >
     <div class="up-icon">
@@ -117,11 +117,12 @@
     (mousemove)="mouseIsMoving($event)"
     (mouseenter)="mouseEntered()"
     (mouseleave)="mouseLeft()"
-    
+
+    (click)="   videoClick.emit({ mouseEvent: $event, thumbIndex: indexToShow })"
+    (dblclick)="videoClick.emit({ mouseEvent: $event, thumbIndex: indexToShow, doubleClick: true })"
+
     (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
-    (click)="videoClick.emit({ mouseEvent: $event, thumbIndex: indexToShow })"
-    (dblclick)="videoClickSimilar.emit({ mouseEvent: $event, thumbIndex: indexToShow })"
-    
+
     [ngStyle]="{
         height: imgHeight + 'px',
         'background-image': 'url(' + (hover ? fullFilePath : firstFilePath) + ')',
