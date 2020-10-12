@@ -303,6 +303,12 @@ function computeNumberOfScreenshots(screenshotSettings: ScreenshotSettings, dura
     total = 3; // minimum 3 screenshots!
   }
 
+  const screenWidth: number = screenshotSettings.height * (16 / 9);
+
+  if (total * screenWidth > 65535) {
+    total = Math.floor(65535 / screenWidth);
+  }
+
   return total;
 }
 

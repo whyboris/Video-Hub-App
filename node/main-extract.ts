@@ -72,7 +72,7 @@ const extractSingleFrameArgs = (
  *
  * @param pathToVideo          -- full path to the video file
  * @param duration             -- duration of clip
- * @param screenshotHeight     -- height of screenshot in pixels (defaul is 100)
+ * @param screenshotHeight     -- height of screenshot in pixels
  * @param numberOfScreenshots  -- number of screenshots to extract
  * @param savePath             -- full path to file name and extension
  */
