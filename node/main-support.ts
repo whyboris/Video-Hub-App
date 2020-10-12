@@ -216,7 +216,7 @@ export function createDotPlsFile(savePath: string, playlist: ImageElement[], sou
   for (let i = 0; i < playlist.length; i++) {
 
     const fullPath: string = path.join(
-      sourceFolderMap[i].path,
+      sourceFolderMap[playlist[i].inputSource].path,
       playlist[i].partialPath,
       playlist[i].fileName
     );
@@ -301,6 +301,12 @@ function computeNumberOfScreenshots(screenshotSettings: ScreenshotSettings, dura
 
   if (total < 3) {
     total = 3; // minimum 3 screenshots!
+  }
+
+  const screenWidth: number = screenshotSettings.height * (16 / 9);
+
+  if (total * screenWidth > 65535) {
+    total = Math.floor(65535 / screenWidth);
   }
 
   return total;

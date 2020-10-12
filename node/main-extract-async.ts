@@ -179,7 +179,7 @@ export function startFileSystemWatching(
   watcher
     .on('add', (filePath: string) => {
 
-      const ext = filePath.substring(filePath.lastIndexOf('.') + 1);
+      const ext = filePath.substring(filePath.lastIndexOf('.') + 1).toLowerCase();
 
       if (allAcceptableFiles.indexOf(ext) === -1) {
         return;
