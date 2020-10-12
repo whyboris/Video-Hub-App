@@ -216,7 +216,7 @@ export function createDotPlsFile(savePath: string, playlist: ImageElement[], sou
   for (let i = 0; i < playlist.length; i++) {
 
     const fullPath: string = path.join(
-      sourceFolderMap[i].path,
+      sourceFolderMap[playlist[i].inputSource].path,
       playlist[i].partialPath,
       playlist[i].fileName
     );
