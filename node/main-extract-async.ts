@@ -134,16 +134,8 @@ export function metadataQueueRunner(file: TempMetadataQueueObject, done) {
 }
 
 // =====================================================================================================================
-// TODO -- check if any of these checks are needed now that we use `chokidar`
-//
-function fileSystemReserved(thingy: string): boolean {
-  // ignore folders beginning with { '.', '__MACOS', 'vha-' }
-  const folderIgnoreRegex = /^(\.|__MACOS|vha-).*/g;
-  // ignore files beginning with { '.', '_' }
-  const fileIgnoreRegex = /^(\.|_).*/g;
-
-  return (thingy.startsWith('$') || thingy === 'System Volume Information');
-}
+// WIP SECTION
+const { performance } = require('perf_hooks');
 // =====================================================================================================================
 
 /**
@@ -157,6 +149,8 @@ export function startFileSystemWatching(
   inputSource: number,
   persistent: boolean
 ) {
+
+  const t0 = performance.now();
 
   console.log('================================================================');
 
@@ -236,6 +230,9 @@ export function startFileSystemWatching(
       } else {
         console.log('^^^^^^^^ - stopping watching this directory');
       }
+
+      const t1 = performance.now();
+      console.log("Chokidar took " + Math.round((t1 - t0) / 100) / 10 + " seconds.");
 
     });
 
