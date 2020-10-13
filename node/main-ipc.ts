@@ -261,8 +261,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
    * extract any missing thumbnails
    */
   ipc.on('add-missing-thumbnails', (event, finalArray: ImageElement[], extractClips: boolean) => {
-    const screenshotOutputFolder: string = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName);
-    extractAnyMissingThumbs(finalArray, screenshotOutputFolder, extractClips);
+    extractAnyMissingThumbs(finalArray);
   });
 
   /**

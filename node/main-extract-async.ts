@@ -341,16 +341,10 @@ function hasAllThumbs(
 }
 
 /**
- * Generate indexes for any files missing thumbnails
+ * Send all `imageElements` to the `thumbQueue`
  * @param fullArray          - ImageElement array
- * @param screenshotFolder   - path to where thumbnails are stored
- * @param shouldExtractClips - boolean -- whether user wants to extract clips or not
  */
-export function extractAnyMissingThumbs(
-  fullArray: ImageElement[],
-  screenshotFolder: string,
-  shouldExtractClips: boolean
-): void {
+export function extractAnyMissingThumbs(fullArray: ImageElement[]): void {
   fullArray.forEach((element: ImageElement) => {
     thumbQueue.push(element);
   });
