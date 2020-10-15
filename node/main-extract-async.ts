@@ -5,7 +5,6 @@ const async = require('async');
 const chokidar = require('chokidar');
 import * as path from 'path';
 import { FSWatcher } from 'chokidar'; // probably the correct type for chokidar.watch() object
-import { Stats } from 'fs';
 
 import { GLOBALS } from './main-globals';
 
@@ -21,6 +20,8 @@ let thumbQueue; // will be `QueueObject` - https://caolan.github.io/async/v3/doc
 let thumbsDone = 0;
 // ========================================================
 
+let metaDone = 0;
+
 startNewQueue();
 
 /**
@@ -30,7 +31,16 @@ function startNewQueue() {
   thumbsDone = 0;
   thumbQueue = async.queue(thumbQueueRunner, 1); // 1 is the number of threads
 
+  metaDone = 0;
+
+  metaExtractionStartTime = 0;
+  thumbExtractionStartTime = 0;
+
   thumbQueue.drain(() => {
+
+    const t1 = performance.now();
+    console.log("THUMB QUEUE took " + Math.round((t1 - thumbExtractionStartTime) / 100) / 10 + " seconds.");
+
     thumbsDone = 0;
     sendCurrentProgress(1, 1, 'done');              // TODO: reconsider `sendCurrentProgress` since we are using a new system for extraction
     console.log('thumbnail extraction complete!');
@@ -77,6 +87,14 @@ export function stopThumbExtraction() {
 const metadataQueue = async.queue(metadataQueueRunner, 1); // 1 is the number of parallel worker functions
                                                            // ^--- experiment with numbers to see what is fastest (try 8)
 
+metadataQueue.drain(() => {
+
+  thumbQueue.resume();
+
+  const t1 = performance.now();
+  console.log("META QUEUE took " + Math.round((t1 - metaExtractionStartTime) / 100) / 10 + " seconds.");
+});
+
 // Create maps where the value = 1 always.
 // It is faster to check if key exists than searching through an array.
 let alreadyInAngular: Map<string, 1> = new Map(); // full paths to videos we have metadata for in Angular
@@ -108,6 +126,10 @@ function sendNewVideoMetadata(imageElement: ImageElementPlus) {
   const elementForAngular = insertTemporaryFieldsSingle(imageElement);
   GLOBALS.angularApp.sender.send('new-video-meta', elementForAngular);
 
+  if (thumbExtractionStartTime === 0) {
+    thumbExtractionStartTime = performance.now();
+  }
+
   thumbQueue.push(imageElement);
 }
 
@@ -117,6 +139,13 @@ function sendNewVideoMetadata(imageElement: ImageElementPlus) {
  * @param done
  */
 export function metadataQueueRunner(file: TempMetadataQueueObject, done) {
+
+  if (metaExtractionStartTime === 0) {
+    metaExtractionStartTime = performance.now();
+  }
+
+  sendCurrentProgress(metaDone, metaDone + metadataQueue.length() + 1, 'importingScreenshots');
+  metaDone++;
 
   extractMetadataAsync(file.fullPath, GLOBALS.screenshotSettings)
     .then((imageElement: ImageElementPlus) => {
@@ -136,6 +165,9 @@ export function metadataQueueRunner(file: TempMetadataQueueObject, done) {
 // =====================================================================================================================
 // WIP SECTION
 const { performance } = require('perf_hooks');
+
+let metaExtractionStartTime = 0;
+let thumbExtractionStartTime = 0;
 // =====================================================================================================================
 
 /**
@@ -170,6 +202,9 @@ export function startFileSystemWatching(
 
   const allAcceptableFiles: string[] = [...acceptableFiles, ...GLOBALS.additionalExtensions];
 
+  metadataQueue.pause();
+  thumbQueue.pause();
+
   watcher
     .on('add', (filePath: string) => {
 
@@ -184,7 +219,7 @@ export function startFileSystemWatching(
       const fileName = subPath.substring(subPath.lastIndexOf('/') + 1);
       const fullPath = path.join(inputDir, partialPath, fileName);
 
-      console.log(fullPath);
+      // console.log(fullPath);
 
       if (!allFoundFilesMap.has(inputSource)) {
         allFoundFilesMap.set(inputSource, new Map());
@@ -195,7 +230,7 @@ export function startFileSystemWatching(
         return;
       }
 
-      console.log('not found, creating:');
+      // console.log('not found, creating:');
 
       const newItem: TempMetadataQueueObject = {
         fullPath: fullPath,
@@ -220,6 +255,8 @@ export function startFileSystemWatching(
     })
 */
     .on('ready', () => {
+
+      metadataQueue.resume();
 
       console.log('Finished scanning', inputSource);
 
