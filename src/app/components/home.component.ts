@@ -578,7 +578,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
      * Update thumbnail extraction progress when node sends update
      * @param current - the current number that finished extracting
      * @param total   - the total number of files to be extracted
-     * @param stage
+     * @param stage   - `ImportStage` type
      */
     this.electronService.ipcRenderer.on('import-progress-update', (
       event,
@@ -586,6 +586,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       total: number,
       stage: ImportStage
     ) => {
+
+      this.importStage = stage;
+
+      if (this.isFirstRunEver) {
+        this.showFirstRunMessage();
+      }
 
       if (current === 1) {
         this.timeExtractionStarted = new Date().getTime();
@@ -600,29 +606,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
         }
       }
 
-      this.importStage = stage;
-
       const percentProgress: number = Math.round(100 * current / total);
       this.progressString = 'loading - ' + percentProgress + '%';
+      this.extractionPercent = percentProgress;
 
-      if (this.importStage === 'importingScreenshots') {
-        if (this.isFirstRunEver) {
-          this.toggleButton('showThumbnails');
-          console.log('SHOULD FIX THE FIRST RUN BUG!!!');
-          this.isFirstRunEver = false;
-          this.modalService.openDialog('Welcome', 'Thank you for purchasing Video Hub App!', '').subscribe(() => {
-            this.modalService.openWelcomeMessage();
-          });
-        }
-        this.extractionPercent = percentProgress;
-      }
-
-      if (current === total) {
-        this.extractionPercent = 1;
-        this.importStage = 'done';
-      }
-
-      this.cd.detectChanges();
+      this.cd.detectChanges(); // seems needed to update the donut
     });
 
     // Final object returns
@@ -906,8 +894,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public cancelCurrentImport(): void {
-    this.importStage = 'done';
     this.electronService.ipcRenderer.send('cancel-current-import');
+    setTimeout(() => {
+      this.importStage = 'done';
+      this.cd.detectChanges();
+    }, 10); // just in case delay
   }
 
   public initiateMinimize(): void {
@@ -2184,6 +2175,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } else {
       this.electronService.ipcRenderer.send('please-open-url', 'https://my.videohubapp.com');
     }
+  }
+
+  showFirstRunMessage(): void {
+    console.log('SHOULD FIX THE FIRST RUN BUG!!!');
+    this.toggleButton('showThumbnails');
+    this.isFirstRunEver = false;
+    this.modalService.openDialog('Welcome', 'Thank you for purchasing Video Hub App!', '').subscribe(() => {
+      this.modalService.openWelcomeMessage();
+    });
   }
 
 }

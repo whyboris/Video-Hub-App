@@ -110,7 +110,7 @@ export function resetAllQueues() {
     console.log("THUMB QUEUE took " + Math.round((t1 - thumbExtractionStartTime) / 100) / 10 + " seconds.");
 
     thumbsDone = 0;
-    sendCurrentProgress(1, 1, 'done');              // TODO: reconsider `sendCurrentProgress` since we are using a new system for extraction
+    sendCurrentProgress(1, 1, 'done');
     console.log('thumbnail extraction complete!');
     allowSleep();
   });
@@ -139,8 +139,8 @@ function thumbQueueRunner(element: ImageElement, done) {
       done();
     })
     .catch(() => {
-      sendCurrentProgress(thumbsDone, thumbsDone + thumbQueue.length() + 1, 'importingScreenshots');  // check whether sending data off by 1
-      thumbsDone++;                                                   // TODO -- rethink the whole `sendCurrentProgress` system from scratch
+      sendCurrentProgress(thumbsDone, thumbsDone + thumbQueue.length() + 1, 'importingScreenshots');  // TODO check whether sending data off by 1
+      thumbsDone++;
 
       extractAll(
         element,
@@ -184,7 +184,7 @@ export function metadataQueueRunner(file: TempMetadataQueueObject, done) {
     metaExtractionStartTime = performance.now();
   }
 
-  sendCurrentProgress(metaDone, metaDone + metadataQueue.length() + 1, 'importingScreenshots');
+  sendCurrentProgress(metaDone, metaDone + metadataQueue.length() + 1, 'importingMeta');
   metaDone++;
 
   extractMetadataAsync(file.fullPath, GLOBALS.screenshotSettings)
