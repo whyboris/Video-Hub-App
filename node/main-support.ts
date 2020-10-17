@@ -24,7 +24,7 @@ interface ResolutionMeta {
   bucket: number;
 }
 
-export type ImportStage = 'importingScreenshots' | 'done';    // TODO -- rethin import stages?
+export type ImportStage = 'importingScreenshots' | 'done';    // TODO -- rethink import stages?
 
 /**
  * Return an HTML string for a path to a file
