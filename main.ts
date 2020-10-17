@@ -23,7 +23,7 @@ import { sendFinalObjectToAngular, setUpDirectoryWatchers, upgradeToVersion3, wr
 import { FinalObject } from './interfaces/final-object.interface';
 import { SettingsObject } from './interfaces/settings-object.interface';
 import { WizardOptions } from './interfaces/wizard-options.interface';
-import { resetAllQueues } from './node/main-extract-async';
+import { preventSleep, resetAllQueues } from './node/main-extract-async';
 
 // Variables
 const pathToAppData = app.getPath('appData');
@@ -307,6 +307,9 @@ ipcMain.on('just-started', (event) => {
  * Start extracting the screenshots into a chosen output folder from a chosen input folder
  */
 ipcMain.on('start-the-import', (event, wizard: WizardOptions) => {
+
+  preventSleep();
+
   const hubName = wizard.futureHubName;
   const outDir: string = wizard.selectedOutputFolder;
 
@@ -414,6 +417,7 @@ ipcMain.on('load-this-vha-file', (event, pathToVhaFile: string, finalObjectToSav
  * Interrupt current import process
  */
 ipcMain.on('cancel-current-import', (event): void => {
+  GLOBALS.winRef.setProgressBar(-1);
   resetAllQueues();
 });
 

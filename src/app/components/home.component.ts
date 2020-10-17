@@ -620,7 +620,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (current === total) {
         this.extractionPercent = 1;
         this.importStage = 'done';
-        this.electronService.ipcRenderer.send('allow-sleep');
       }
 
       this.cd.detectChanges();
@@ -903,13 +902,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public importFresh(): void {
     this.sourceFolderService.selectedSourceFolder = this.wizard.selectedSourceFolder;
     this.appState.selectedOutputFolder = this.wizard.selectedOutputFolder;
-    this.electronService.ipcRenderer.send('prevent-sleep');
     this.electronService.ipcRenderer.send('start-the-import', this.wizard);
   }
 
   public cancelCurrentImport(): void {
     this.importStage = 'done';
-    this.electronService.ipcRenderer.send('allow-sleep');
     this.electronService.ipcRenderer.send('cancel-current-import');
   }
 

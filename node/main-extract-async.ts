@@ -1,6 +1,7 @@
 // async & chokidar Code written by Cal2195
 // Was originally added to `main-extract.ts` but was moved here for clarity
 
+const { powerSaveBlocker } = require('electron');
 const async = require('async');
 const chokidar = require('chokidar');
 import * as path from 'path';
@@ -25,20 +26,20 @@ export interface TempMetadataQueueObject {
 const { performance } = require('perf_hooks');
 
 // =====================================================================================================================
-// WARNING - state variable hanging around!
+// The three queues will be `QueueObject` - https://caolan.github.io/async/v3/docs.html#QueueObject
 
 // meta queue
-let metadataQueue
+let metadataQueue;      // QueueObject
 let metaDone = 0;
 let metaExtractionStartTime = 0;
 
 // thumb queue
-let thumbQueue; // will be `QueueObject` - https://caolan.github.io/async/v3/docs.html#QueueObject
+let thumbQueue;         // QueueObject
 let thumbsDone = 0;
 let thumbExtractionStartTime = 0;
 
 // delete queue
-let deleteThumbQueue;
+let deleteThumbQueue;   // QueueObject
 let numberOfThumbsDeleted: number = 0;
 
 // =====================================================================================================================
@@ -54,6 +55,11 @@ let allFoundFilesMap: Map<number, Map<string, 1>> = new Map();
 
 // =====================================================================================================================
 
+// Miscellaneous
+let preventSleepIds: number[] = []; // prevent and allow sleep
+
+// =====================================================================================================================
+
 resetAllQueues();
 
 /**
@@ -63,6 +69,8 @@ resetAllQueues();
  *  - Delet queue
  */
 export function resetAllQueues() {
+
+  allowSleep();
 
   // kill all previeous
   if (thumbQueue && typeof thumbQueue.kill === "function") {
@@ -104,6 +112,7 @@ export function resetAllQueues() {
     thumbsDone = 0;
     sendCurrentProgress(1, 1, 'done');              // TODO: reconsider `sendCurrentProgress` since we are using a new system for extraction
     console.log('thumbnail extraction complete!');
+    allowSleep();
   });
 
   // Delete queue ======================================================================================================
@@ -400,6 +409,7 @@ function hasAllThumbs(
  * @param fullArray          - ImageElement array
  */
 export function extractAnyMissingThumbs(fullArray: ImageElement[]): void {
+  preventSleep();
   fullArray.forEach((element: ImageElement) => {
     thumbQueue.push(element);
   });
@@ -461,3 +471,24 @@ function deleteThumbQueueRunner(pathToFile: string, done) {
     done();
   });
 }
+
+/**
+ * Prevent PC from going to sleep during screenshot extraction
+ */
+export function preventSleep() {
+  console.log('preventing sleep');
+  preventSleepIds.push(powerSaveBlocker.start('prevent-app-suspension'));
+};
+
+/**
+ * Allow PC to go to sleep after screenshots were extracted
+ */
+function allowSleep() {
+  console.log('allowing sleep');
+  if (preventSleepIds.length) {
+    preventSleepIds.forEach((id: number) => {
+      powerSaveBlocker.stop(id);
+    });
+  }
+  preventSleepIds = [];
+};

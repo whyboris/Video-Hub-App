@@ -1,5 +1,4 @@
 import { BrowserWindow } from 'electron';
-const { powerSaveBlocker } = require('electron');
 const dialog = require('electron').dialog;
 const shell = require('electron').shell;
 
@@ -14,8 +13,6 @@ import { SettingsObject } from '../interfaces/settings-object.interface';
 import { createDotPlsFile, writeVhaFileToDisk } from './main-support';
 import { replaceThumbnailWithNewImage } from './main-extract';
 import { closeWatcher, startWatcher, extractAnyMissingThumbs, removeThumbnailsNotInHub } from './main-extract-async';
-
-let preventSleepId: number;
 
 /**
  * Set up the listeners
@@ -42,22 +39,6 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
     if (BrowserWindow.getFocusedWindow()) {
       BrowserWindow.getFocusedWindow().minimize();
     }
-  });
-
-  /**
-   * Prevent PC from going to sleep during screenshot extraction
-   */
-  ipc.on('prevent-sleep', (event) => {
-    console.log('preventing sleep');
-    preventSleepId = powerSaveBlocker.start('prevent-app-suspension');
-  });
-
-  /**
-   * Allow PC to go to sleep after screenshots were extracted
-   */
-  ipc.on('allow-sleep', (event) => {
-    console.log('allowing sleep');
-    powerSaveBlocker.stop(preventSleepId);
   });
 
   /**
