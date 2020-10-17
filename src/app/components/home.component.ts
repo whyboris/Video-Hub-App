@@ -589,7 +589,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       if (current === 1) {
         this.timeExtractionStarted = new Date().getTime();
-        this.electronService.ipcRenderer.send('prevent-sleep');
       }
 
       if (current > 3) {
@@ -904,7 +903,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public importFresh(): void {
     this.sourceFolderService.selectedSourceFolder = this.wizard.selectedSourceFolder;
     this.appState.selectedOutputFolder = this.wizard.selectedOutputFolder;
-
+    this.electronService.ipcRenderer.send('prevent-sleep');
     this.electronService.ipcRenderer.send('start-the-import', this.wizard);
   }
 
