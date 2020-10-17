@@ -406,22 +406,24 @@ export function extractAnyMissingThumbs(fullArray: ImageElement[]): void {
 }
 
 /**
- * Scan the output directory and delete any file not in `hashesPresent`
+ * !!! WARNING !!! THIS FUNCTION WILL DELETE STUFF !!!
+ *
+ * Scan the provided directory and delete any file not in `hashesPresent`
  * @param hashesPresent
- * @param outputDir
+ * @param directory
  */
-export function removeThumbnailsNotInHub(hashesPresent: Map<string, 1>, outputDir: string): void {
+export function removeThumbnailsNotInHub(hashesPresent: Map<string, 1>, directory: string): void {
 
   numberOfThumbsDeleted = 0;
 
   deleteThumbQueue.pause();
 
   const watcherConfig = {
-    cwd: outputDir,
+    cwd: directory,
     persistent: false,
   }
 
-  const watcher: FSWatcher = chokidar.watch(outputDir, watcherConfig)
+  const watcher: FSWatcher = chokidar.watch(directory, watcherConfig)
     .on('add', (filePath: string) => {
 
       const parsedPath = path.parse(filePath);
@@ -435,7 +437,7 @@ export function removeThumbnailsNotInHub(hashesPresent: Map<string, 1>, outputDi
       const fileNameHash = parsedPath.name;
 
       if (!hashesPresent.has(fileNameHash)) {
-        const fullPath = path.join(outputDir, filePath);
+        const fullPath = path.join(directory, filePath);
         deleteThumbQueue.push(fullPath);
         numberOfThumbsDeleted++;
       }
@@ -446,7 +448,7 @@ export function removeThumbnailsNotInHub(hashesPresent: Map<string, 1>, outputDi
         deleteThumbQueue.resume();
         if (numberOfThumbsDeleted === 0) {
           GLOBALS.angularApp.sender.send('number-of-screenshots-deleted', 0);
-        } // else only send message aftre the delete queue is finished
+        } // else only send message after the delete queue is finished
       });
     });
 

@@ -268,14 +268,16 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
    * Remove any thumbnails for files no longer present in the hub
    */
   ipc.on('clean-old-thumbnails', (event, finalArray: ImageElement[]) => {
+    // !!! WARNING
     const screenshotOutputFolder: string = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName);
+    // !! ^^^^^^^^^^^^^^^^^^^^^^ - make sure this points to the folder with screenshots only!
 
     const allHashes: Map<string, 1> = new Map();
 
     finalArray.forEach((element: ImageElement) => {
       allHashes.set(element.hash, 1);
     });
-    removeThumbnailsNotInHub(allHashes, screenshotOutputFolder);
+    removeThumbnailsNotInHub(allHashes, screenshotOutputFolder); // WARNING !!! this function will delete stuff
   });
 
   /**
