@@ -420,6 +420,12 @@
     "starRating": "Star rating",
     "timesPlayed": "Times played"
   },
+  "WELCOME": {
+    "explore": "Please explore other settings. There are many features that are not enabled by default.",
+    "settings": "To access settings, please click on the gear on top-right.",
+    "tabs": "To add more folders to your hub, update screenshots, add new videos, and more, please go to the fourth tab ('Current hub') in settings and click 'Edit folders'.",
+    "welcome": "Welcome to"
+  },
   "WIZARD": {
     "change": "Change",
     "clearRecent": "clear all recent history ",

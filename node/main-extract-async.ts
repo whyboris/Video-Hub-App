@@ -1,11 +1,12 @@
 // async & chokidar Code written by Cal2195
 // Was originally added to `main-extract.ts` but was moved here for clarity
 
+const { powerSaveBlocker } = require('electron');
 const async = require('async');
 const chokidar = require('chokidar');
 import * as path from 'path';
 import { FSWatcher } from 'chokidar'; // probably the correct type for chokidar.watch() object
-import { Stats } from 'fs';
+const fs = require('fs');
 
 import { GLOBALS } from './main-globals';
 
@@ -14,26 +15,112 @@ import { acceptableFiles } from './main-filenames';
 import { extractAll } from './main-extract';
 import { sendCurrentProgress, insertTemporaryFieldsSingle, extractMetadataAsync, cleanUpFileName } from './main-support';
 
-// =========================================================================================================================================
-// Thum extraction queue runner
-// WARNING - state variable hanging around!
-let thumbQueue; // will be `QueueObject` - https://caolan.github.io/async/v3/docs.html#QueueObject
-let thumbsDone = 0;
-// ========================================================
+export interface TempMetadataQueueObject {
+  fullPath: string;
+  inputSource: number;
+  name: string;
+  partialPath: string;
+}
 
-startNewQueue();
+// ONLY FOR LOGGING
+const { performance } = require('perf_hooks');
+
+// =====================================================================================================================
+// The three queues will be `QueueObject` - https://caolan.github.io/async/v3/docs.html#QueueObject
+
+// meta queue
+let metadataQueue;      // QueueObject
+let metaDone = 0;
+let metaExtractionStartTime = 0;
+
+// thumb queue
+let thumbQueue;         // QueueObject
+let thumbsDone = 0;
+let thumbExtractionStartTime = 0;
+
+// delete queue
+let deleteThumbQueue;   // QueueObject
+let numberOfThumbsDeleted: number = 0;
+
+// =====================================================================================================================
+
+// Create maps where the value = 1 always.
+// It is faster to check if key exists than searching through an array.
+let alreadyInAngular: Map<string, 1> = new Map(); // full paths to videos we have metadata for in Angular
+
+// These two are together:
+let watcherMap:       Map<number, FSWatcher> = new Map();
+let allFoundFilesMap: Map<number, Map<string, 1>> = new Map();
+// both these numbers     ^^^^^^ match up - they refer to the same `inputSource`
+
+// =====================================================================================================================
+
+// Miscellaneous
+let preventSleepIds: number[] = []; // prevent and allow sleep
+
+// =====================================================================================================================
+
+resetAllQueues();
 
 /**
- * Create a new (empty) queue for extracting thumbnails
+ * Reset all three queues:
+ *  - Meta queue
+ *  - Thumb queue
+ *  - Delet queue
  */
-function startNewQueue() {
+export function resetAllQueues() {
+
+  allowSleep();
+
+  // kill all previeous
+  if (thumbQueue && typeof thumbQueue.kill === "function") {
+    thumbQueue.kill();
+  }
+  if (metadataQueue && typeof metadataQueue.kill === "function") {
+    metadataQueue.kill();
+  }
+  if (deleteThumbQueue && typeof deleteThumbQueue.kill === "function") {
+    deleteThumbQueue.kill();
+  }
+
+  // Meta queue ========================================================================================================
+  metaDone = 0;
+  metaExtractionStartTime = 0;
+
+  metadataQueue = async.queue(metadataQueueRunner, 1); // 1 is the number of parallel worker functions
+                                                       // ^--- experiment with numbers to see what is fastest (try 8)
+
+  metadataQueue.drain(() => {
+
+    thumbQueue.resume();
+
+    const t1 = performance.now();
+    console.log("META QUEUE took " + Math.round((t1 - metaExtractionStartTime) / 100) / 10 + " seconds.");
+  });
+
+  // Thumbs queue ======================================================================================================
   thumbsDone = 0;
+  thumbExtractionStartTime = 0;
+
   thumbQueue = async.queue(thumbQueueRunner, 1); // 1 is the number of threads
 
   thumbQueue.drain(() => {
+
+    const t1 = performance.now();
+    console.log("THUMB QUEUE took " + Math.round((t1 - thumbExtractionStartTime) / 100) / 10 + " seconds.");
+
     thumbsDone = 0;
-    sendCurrentProgress(1, 1, 'done');              // TODO: reconsider `sendCurrentProgress` since we are using a new system for extraction
+    sendCurrentProgress(1, 1, 'done');
     console.log('thumbnail extraction complete!');
+    allowSleep();
+  });
+
+  // Delete queue ======================================================================================================
+  deleteThumbQueue = async.queue(deleteThumbQueueRunner, 1);
+
+  deleteThumbQueue.drain(() => {
+    console.log('all screenshots now deleted');
+    GLOBALS.angularApp.sender.send('number-of-screenshots-deleted', numberOfThumbsDeleted);
   });
 }
 
@@ -52,8 +139,8 @@ function thumbQueueRunner(element: ImageElement, done) {
       done();
     })
     .catch(() => {
-      sendCurrentProgress(thumbsDone, thumbsDone + thumbQueue.length() + 1, 'importingScreenshots');  // check whether sending data off by 1
-      thumbsDone++;                                                   // TODO -- rethink the whole `sendCurrentProgress` system from scratch
+      sendCurrentProgress(thumbsDone, thumbsDone + thumbQueue.length() + 1, 'importingScreenshots');  // TODO check whether sending data off by 1
+      thumbsDone++;
 
       extractAll(
         element,
@@ -64,35 +151,6 @@ function thumbQueueRunner(element: ImageElement, done) {
         done
       );
     });
-}
-
-export function stopThumbExtraction() {
-  thumbQueue.kill();
-  startNewQueue();
-}
-
-// =========================================================================================================================================
-// Metadata extracting queue runner
-// WARNING - state variables hanging around!
-const metadataQueue = async.queue(metadataQueueRunner, 1); // 1 is the number of parallel worker functions
-                                                           // ^--- experiment with numbers to see what is fastest (try 8)
-
-// Create maps where the value = 1 always.
-// It is faster to check if key exists than searching through an array.
-let alreadyInAngular: Map<string, 1> = new Map(); // full paths to videos we have metadata for in Angular
-
-// These two are together:
-let watcherMap:       Map<number, FSWatcher> = new Map();
-let allFoundFilesMap: Map<number, Map<string, 1>> = new Map();
-// both these numbers     ^^^^^^ match up - they refer to the same `inputSource`
-
-// ========================================================
-
-export interface TempMetadataQueueObject {
-  fullPath: string;
-  inputSource: number;
-  name: string;
-  partialPath: string;
 }
 
 /**
@@ -108,6 +166,10 @@ function sendNewVideoMetadata(imageElement: ImageElementPlus) {
   const elementForAngular = insertTemporaryFieldsSingle(imageElement);
   GLOBALS.angularApp.sender.send('new-video-meta', elementForAngular);
 
+  if (thumbExtractionStartTime === 0) {
+    thumbExtractionStartTime = performance.now();
+  }
+
   thumbQueue.push(imageElement);
 }
 
@@ -117,6 +179,13 @@ function sendNewVideoMetadata(imageElement: ImageElementPlus) {
  * @param done
  */
 export function metadataQueueRunner(file: TempMetadataQueueObject, done) {
+
+  if (metaExtractionStartTime === 0) {
+    metaExtractionStartTime = performance.now();
+  }
+
+  sendCurrentProgress(metaDone, metaDone + metadataQueue.length() + 1, 'importingMeta');
+  metaDone++;
 
   extractMetadataAsync(file.fullPath, GLOBALS.screenshotSettings)
     .then((imageElement: ImageElementPlus) => {
@@ -133,19 +202,6 @@ export function metadataQueueRunner(file: TempMetadataQueueObject, done) {
 
 }
 
-// =====================================================================================================================
-// TODO -- check if any of these checks are needed now that we use `chokidar`
-//
-function fileSystemReserved(thingy: string): boolean {
-  // ignore folders beginning with { '.', '__MACOS', 'vha-' }
-  const folderIgnoreRegex = /^(\.|__MACOS|vha-).*/g;
-  // ignore files beginning with { '.', '_' }
-  const fileIgnoreRegex = /^(\.|_).*/g;
-
-  return (thingy.startsWith('$') || thingy === 'System Volume Information');
-}
-// =====================================================================================================================
-
 /**
  * Create a new `chokidar` watcher for a particular directory
  * @param inputDir
@@ -157,6 +213,8 @@ export function startFileSystemWatching(
   inputSource: number,
   persistent: boolean
 ) {
+
+  const t0 = performance.now();
 
   console.log('================================================================');
 
@@ -176,6 +234,9 @@ export function startFileSystemWatching(
 
   const allAcceptableFiles: string[] = [...acceptableFiles, ...GLOBALS.additionalExtensions];
 
+  metadataQueue.pause();
+  thumbQueue.pause();
+
   watcher
     .on('add', (filePath: string) => {
 
@@ -190,7 +251,7 @@ export function startFileSystemWatching(
       const fileName = subPath.substring(subPath.lastIndexOf('/') + 1);
       const fullPath = path.join(inputDir, partialPath, fileName);
 
-      console.log(fullPath);
+      // console.log(fullPath);
 
       if (!allFoundFilesMap.has(inputSource)) {
         allFoundFilesMap.set(inputSource, new Map());
@@ -201,7 +262,7 @@ export function startFileSystemWatching(
         return;
       }
 
-      console.log('not found, creating:');
+      // console.log('not found, creating:');
 
       const newItem: TempMetadataQueueObject = {
         fullPath: fullPath,
@@ -227,6 +288,8 @@ export function startFileSystemWatching(
 */
     .on('ready', () => {
 
+      metadataQueue.resume();
+
       console.log('Finished scanning', inputSource);
 
       GLOBALS.angularApp.sender.send('all-files-found-in-dir', inputSource, allFoundFilesMap.get(inputSource));
@@ -236,6 +299,9 @@ export function startFileSystemWatching(
       } else {
         console.log('^^^^^^^^ - stopping watching this directory');
       }
+
+      const t1 = performance.now();
+      console.log("Chokidar took " + Math.round((t1 - t0) / 100) / 10 + " seconds.");
 
     });
 
@@ -304,11 +370,6 @@ export function startWatcher(inputSource: number, folderPath: string, persistent
 
 }
 
-
-// ============ REGENERATE SCREENSHOTS
-
-const fs = require('fs');
-
 /**
  * Check if thumbnail, flimstrip, and clip is present
  * return boolean
@@ -344,40 +405,35 @@ function hasAllThumbs(
 }
 
 /**
- * Generate indexes for any files missing thumbnails
+ * Send all `imageElements` to the `thumbQueue`
  * @param fullArray          - ImageElement array
- * @param screenshotFolder   - path to where thumbnails are stored
- * @param shouldExtractClips - boolean -- whether user wants to extract clips or not
  */
-export function extractAnyMissingThumbs(
-  fullArray: ImageElement[],
-  screenshotFolder: string,
-  shouldExtractClips: boolean
-): void {
+export function extractAnyMissingThumbs(fullArray: ImageElement[]): void {
+  preventSleep();
   fullArray.forEach((element: ImageElement) => {
     thumbQueue.push(element);
   });
 }
 
-let numberOfThumbsDeleted: number = 0;
-
 /**
- * Scan the output directory and delete any file not in `hashesPresent`
+ * !!! WARNING !!! THIS FUNCTION WILL DELETE STUFF !!!
+ *
+ * Scan the provided directory and delete any file not in `hashesPresent`
  * @param hashesPresent
- * @param outputDir
+ * @param directory
  */
-export function removeThumbnailsNotInHub(hashesPresent: Map<string, 1>, outputDir: string): void {
+export function removeThumbnailsNotInHub(hashesPresent: Map<string, 1>, directory: string): void {
 
   numberOfThumbsDeleted = 0;
 
   deleteThumbQueue.pause();
 
   const watcherConfig = {
-    cwd: outputDir,
+    cwd: directory,
     persistent: false,
   }
 
-  const watcher: FSWatcher = chokidar.watch(outputDir, watcherConfig)
+  const watcher: FSWatcher = chokidar.watch(directory, watcherConfig)
     .on('add', (filePath: string) => {
 
       const parsedPath = path.parse(filePath);
@@ -391,7 +447,7 @@ export function removeThumbnailsNotInHub(hashesPresent: Map<string, 1>, outputDi
       const fileNameHash = parsedPath.name;
 
       if (!hashesPresent.has(fileNameHash)) {
-        const fullPath = path.join(outputDir, filePath);
+        const fullPath = path.join(directory, filePath);
         deleteThumbQueue.push(fullPath);
         numberOfThumbsDeleted++;
       }
@@ -400,20 +456,39 @@ export function removeThumbnailsNotInHub(hashesPresent: Map<string, 1>, outputDi
     .on('ready', () => {
       watcher.close().then(() => {
         deleteThumbQueue.resume();
-        GLOBALS.angularApp.sender.send('number-of-screenshots-deleted', numberOfThumbsDeleted);
-        // do nothing - the watcher is now safely closed
+        if (numberOfThumbsDeleted === 0) {
+          GLOBALS.angularApp.sender.send('number-of-screenshots-deleted', 0);
+        } // else only send message after the delete queue is finished
       });
     });
 
 }
 
-const deleteThumbQueue = async.queue(deleteThumbQueueRunner, 1);
-
 function deleteThumbQueueRunner(pathToFile: string, done) {
-
   console.log('deleting:', pathToFile);
 
   fs.unlink(pathToFile, (err) => {
     done();
   });
 }
+
+/**
+ * Prevent PC from going to sleep during screenshot extraction
+ */
+export function preventSleep() {
+  console.log('preventing sleep');
+  preventSleepIds.push(powerSaveBlocker.start('prevent-app-suspension'));
+};
+
+/**
+ * Allow PC to go to sleep after screenshots were extracted
+ */
+function allowSleep() {
+  console.log('allowing sleep');
+  if (preventSleepIds.length) {
+    preventSleepIds.forEach((id: number) => {
+      powerSaveBlocker.stop(id);
+    });
+  }
+  preventSleepIds = [];
+};
