@@ -372,7 +372,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.translate.setDefaultLang('en');
     this.changeLanguage('en');
 
-    // this.modalService.openWelcomeMessage(); // WIP
+    this.modalService.openWelcomeMessage(); // WIP
 
     setTimeout(() => {
       this.wordFrequencyService.finalMapBehaviorSubject.subscribe((value: WordFreqAndHeight[]) => {
