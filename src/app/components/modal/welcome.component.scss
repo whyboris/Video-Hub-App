@@ -1,1 +1,205 @@
+h1,
+.intro,
+.outro {
+  text-align: center;
+}
 
+.intro {
+  margin-bottom: 50px;
+}
+
+.outro {
+  margin-top: 50px;
+}
+
+.welcome-image {
+  display: flex;
+  justify-content: space-around;
+  margin: 30px 0;
+
+  p {
+    line-height: 26px;
+    max-width: 50%;
+    padding: 20px;
+  }
+
+  svg {
+    filter: drop-shadow(0 10px 20px rgba(0,0,0,0.1));
+    max-width: 500px;
+    width: 40%;
+  }
+}
+
+.reverse {
+  flex-direction: row-reverse;
+}
+
+.welcome-svg {
+  .st0 {
+    fill: #999999;
+    stroke: #000000;
+    stroke-miterlimit: 10;
+  }
+
+  .st1 {
+    fill: #d4d4d4;
+    stroke: #000000;
+    stroke-miterlimit: 10;
+  }
+
+  .st2 {
+    fill: #d8d8d8;
+    stroke: #000000;
+    stroke-miterlimit: 10;
+  }
+
+  .st3 {
+    fill: #c9c9c9;
+    stroke: #000000;
+    stroke-miterlimit: 10;
+  }
+
+  .st4 {
+    fill: #595959;
+  }
+
+  .st5 {
+    fill: #828282;
+  }
+
+  .st6 {
+    fill: #ffffff;
+    stroke: #000000;
+    stroke-miterlimit: 10;
+  }
+
+  .st7 {
+    fill: none;
+    stroke: #000000;
+    stroke-miterlimit: 10;
+  }
+
+  .st8 {
+    fill: #757575;
+    stroke: #000000;
+    stroke-miterlimit: 10;
+  }
+
+  .st9 {
+    display: none;
+  }
+
+  .st10 {
+    display: inline;
+  }
+
+  .st11 {
+    fill: #dddddd;
+  }
+
+  .st12 {
+    display: inline;
+    fill: #e8e8e8;
+    stroke: #000000;
+    stroke-miterlimit: 10;
+  }
+
+  .st13 {
+    display: inline;
+    fill: #e8e8e8;
+  }
+
+  .st14 {
+    fill: none;
+  }
+
+  .st15 {
+    fill: #729aff;
+    stroke: white;
+    stroke-linejoin: round;
+    stroke-width: 7px;
+  }
+}
+
+.welcome-svg-2 {
+  .st0 {
+    fill: #999999;
+    stroke: #000000;
+    stroke-miterlimit: 10;
+  }
+
+  .st1 {
+    fill: #d4d4d4;
+    stroke: #000000;
+    stroke-miterlimit: 10;
+  }
+
+  .st2 {
+    fill: #d8d8d8;
+    stroke: #000000;
+    stroke-miterlimit: 10;
+  }
+
+  .st3 {
+    fill: #c9c9c9;
+    stroke: #000000;
+    stroke-miterlimit: 10;
+  }
+
+  .st4 {
+    fill: #595959;
+  }
+
+  .st5 {
+    fill: #828282;
+  }
+
+  .st6 {
+    fill: #ffffff;
+    stroke: #000000;
+    stroke-miterlimit: 10;
+  }
+
+  .st7 {
+    fill: none;
+    stroke: #000000;
+    stroke-miterlimit: 10;
+  }
+
+  .st8 {
+    fill: #757575;
+    stroke: #000000;
+    stroke-miterlimit: 10;
+  }
+
+  .st9 {
+    fill: #dddddd;
+  }
+
+  .st10 {
+    fill: #e8e8e8;
+    stroke: #000000;
+    stroke-miterlimit: 10;
+  }
+
+  .st11 {
+    fill: #e8e8e8;
+  }
+
+  .st12 {
+    fill: none;
+  }
+
+  .st13 {
+    fill: #729aff;
+    stroke: white;
+    stroke-linejoin: round;
+    stroke-width: 7px;
+  }
+
+  .st14 {
+    fill: #c6c6c6;
+    stroke: #000000;
+    stroke-miterlimit: 10;
+  }
+}
