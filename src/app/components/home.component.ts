@@ -422,8 +422,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.electronService.ipcRenderer.on(
       'rename-folder-response', (
           event,
-          index: number,
           success: boolean,
+          index: number,
           renameTo: string,
           sourceFolder: string,
           errMsg?: string
