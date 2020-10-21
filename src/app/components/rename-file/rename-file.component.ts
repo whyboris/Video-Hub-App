@@ -41,7 +41,12 @@ export class RenameFileComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.renamingWIP = this.filePathService.getFileNameWithoutExtension(this.currentRightClickedItem.fileName);
+    if (this.currentRightClickedItem.cleanName === '*FOLDER*'){
+      this.renamingWIP = this.currentRightClickedItem.fileName;
+    }
+    else{
+      this.renamingWIP = this.filePathService.getFileNameWithoutExtension(this.currentRightClickedItem.fileName);
+    }
     this.renamingExtension = this.filePathService.getFileNameExtension(this.currentRightClickedItem.fileName);
 
     setTimeout(() => {
@@ -97,6 +102,41 @@ export class RenameFileComponent implements OnInit, OnDestroy {
         relativeFilePath,
         originalFile,
         newFileName,
+        this.currentRightClickedItem.index
+      );
+    }
+  }
+
+  attemptToRenameFoler(){
+    //calling try-to-rename-folder to update folder and then re-scan
+
+    this.nodeRenamingFile = true;
+    this.renameErrMsg = '';
+    const sourceFolder: string = this.selectedSourceFolder;
+    const relativeFilePath: string = this.selectedSourceFolder.substring(this.selectedSourceFolder.lastIndexOf("/"),this.selectedSourceFolder.length );
+    const originalFile: string = this.selectedSourceFolder;
+    const baseFolder = this.selectedSourceFolder.substring(0, this.selectedSourceFolder.lastIndexOf("/"));
+    const newFolder = baseFolder+ '/' +  this.renamingWIP;
+    console.log(newFolder,originalFile)
+    // check if different first !!!
+    console.log(sourceFolder)
+    if (originalFile === newFolder) {
+      this.renameErrMsg = 'RIGHTCLICK.errorMustBeDifferent';
+      this.nodeRenamingFile = false;
+    } else if (this.renamingWIP.length === 0) {
+      this.renameErrMsg = 'RIGHTCLICK.errorMustNotBeEmpty';
+      this.nodeRenamingFile = false;
+    } else {
+      // try renaming
+
+      console.log(this.selectedSourceFolder);
+      console.log(sourceFolder);
+
+      this.electronService.ipcRenderer.send(
+        'try-to-rename-this-folder',
+        baseFolder,
+        relativeFilePath,
+        this.renamingWIP,
         this.currentRightClickedItem.index
       );
     }

@@ -316,6 +316,45 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
   });
 
   /**
+   * Try to rename the folder
+   */
+  ipc.on('try-to-rename-this-folder', (event, sourceFolder: string, relPath: string, renameTo: string, index: number): void => {
+    console.log('renaming folder:');
+
+    const original: string = path.join(sourceFolder, relPath);
+    const newName: string = path.join(sourceFolder, renameTo);
+
+    console.log(original);
+    console.log(newName);
+
+    let success = true;
+    let errMsg: string;
+
+    // check if already exists first
+    if (fs.existsSync(newName)) {
+      console.log('some file already EXISTS WITH THAT NAME !!!');
+      success = false;
+      errMsg = 'RIGHTCLICK.errorFileNameExists';
+    } else {
+      try {
+        fs.renameSync(original, newName);
+      } catch (err) {
+        success = false;
+        console.log(err);
+        if (err.code === 'ENOENT') {
+          // const pathObj = path.parse(err.path);
+          // console.log(pathObj);
+          errMsg = 'RIGHTCLICK.errorFileNotFound';
+        } else {
+          errMsg = 'RIGHTCLICK.errorSomeError';
+        }
+      }
+    }
+
+    event.sender.send('rename-folder-response', index, success, renameTo, errMsg);
+  });
+
+  /**
    * Close the window / quit / exit the app
    */
   ipc.on('close-window', (event, settingsToSave: SettingsObject, finalObjectToSave: FinalObject) => {

@@ -47,6 +47,7 @@ export class FilmstripComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    console.log(this.video)
     this.fullFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
   }
 

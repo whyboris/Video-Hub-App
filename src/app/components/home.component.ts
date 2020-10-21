@@ -1890,7 +1890,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.currentRightClickedItem = item;
     this.rightClickShowing = true;
   }
-
+  ok(){
+    console.log("ok")
+  }
   /**
    * When in double-click mode and a video is clicked - `currentClickedItemName` updated
    * @param item

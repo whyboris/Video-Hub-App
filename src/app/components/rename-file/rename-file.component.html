@@ -19,7 +19,8 @@
       [ngClass]="{ 'dark-mode-on': darkMode }"
     >
       <span class="hidden">{{ renamingWIP }}</span>
-      <span class="extension" *ngIf="renamingWIP.length > 0">.{{ renamingExtension }}</span>
+      <span class="extension"
+        *ngIf="renamingWIP.length > 0 && currentRightClickedItem.cleanName !== '*FOLDER*'">.{{ renamingExtension }}</span>
     </span>
   </div>
 
@@ -27,16 +28,24 @@
     {{ renameErrMsg | translate }}
   </span>
 
-  <button
-    [disabled]="
-          (renamingWIP + '.' + renamingExtension) === currentRightClickedItem.fileName
-        || nodeRenamingFile
-        || renamingWIP.length === 0
-      "
-    class="wizard-button button-rename"
-    (click)="attemptToRename()"
-  >
+  <button *ngIf="currentRightClickedItem.cleanName !== '*FOLDER*' else submitFolder"
+          [disabled]="
+                      (renamingWIP + '.' + renamingExtension) === currentRightClickedItem.fileName
+                      || nodeRenamingFile
+                      || renamingWIP.length === 0
+                      "
+          class="wizard-button button-rename"
+          (click)="attemptToRename()">
     {{ 'RIGHTCLICK.renameButton' | translate }}
   </button>
+
+  <ng-template #submitFolder>
+    <button
+      [disabled]="renamingWIP=== currentRightClickedItem.fileName||nodeRenamingFile || renamingWIP.length === 0"
+      class="wizard-button button-rename"
+      (click)="attemptToRenameFoler()">
+      {{ 'RIGHTCLICK.renameButton' | translate }}
+    </button>
+  </ng-template>
 
 </div>
