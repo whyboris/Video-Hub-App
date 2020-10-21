@@ -369,8 +369,8 @@ export function startWatcher(inputSource: number, folderPath: string, persistent
     watch: persistent,
   }
 
+  preventSleep();
   startFileSystemWatching(folderPath, inputSource, persistent);
-
 }
 
 /**
