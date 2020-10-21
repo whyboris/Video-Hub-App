@@ -417,28 +417,28 @@ export class HomeComponent implements OnInit, AfterViewInit {
           });
           this.renameFileResponseBehaviorSubject.next(undefined); // allways remove right away
 
-      });
+    });
 
-      this.electronService.ipcRenderer.on(
-        'rename-folder-response', (
-            event,
-            index: number,
-            success: boolean,
-            renameTo: string,
-            sourceFolder: string,
-            errMsg?: string
-          ) => {
+    this.electronService.ipcRenderer.on(
+      'rename-folder-response', (
+          event,
+          index: number,
+          success: boolean,
+          renameTo: string,
+          sourceFolder: string,
+          errMsg?: string
+        ) => {
 
-            this.renameFolderresponseBehaviorSubject.next({
-              index: index,
-              success: success,
-              renameTo: renameTo,
-              sourceFolder:sourceFolder,
-              errMsg: errMsg,
-            });
-            this.renameFolderresponseBehaviorSubject.next(undefined); // allways remove right away
+          this.renameFolderresponseBehaviorSubject.next({
+            index: index,
+            success: success,
+            renameTo: renameTo,
+            sourceFolder:sourceFolder,
+            errMsg: errMsg,
+          });
+          this.renameFolderresponseBehaviorSubject.next(undefined); // allways remove right away
 
-        });
+    });
 
 
 

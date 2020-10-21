@@ -34,7 +34,7 @@ export class RenameFileComponent implements OnInit, OnDestroy {
   renameErrMsg: string = '';
 
   responseSubscription: Subscription;
-  folderResponseSubscription:Subscription;
+  folderResponseSubscription: Subscription;
 
   constructor(
     public cd: ChangeDetectorRef,
@@ -43,10 +43,10 @@ export class RenameFileComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    if (this.currentRightClickedItem.cleanName === '*FOLDER*'){
+    if (this.currentRightClickedItem.cleanName === '*FOLDER*') {
       this.renamingWIP = this.currentRightClickedItem.fileName;
     }
-    else{
+    else {
       this.renamingWIP = this.filePathService.getFileNameWithoutExtension(this.currentRightClickedItem.fileName);
     }
     this.renamingExtension = this.filePathService.getFileNameExtension(this.currentRightClickedItem.fileName);
@@ -111,13 +111,13 @@ export class RenameFileComponent implements OnInit, OnDestroy {
     }
   }
 
-  attemptToRenameFoler(){
+  attemptToRenameFoler() {
     //calling try-to-rename-folder to update folder and then re-scan
 
     this.nodeRenamingFile = true;
     this.renameErrMsg = '';
-    const sourceFolder: string = this.selectedSourceFolder+this.currentRightClickedItem.partialPath;
-    const renameTo: string = sourceFolder.substring(0,sourceFolder.lastIndexOf("/"))+"/"+this.renamingWIP;
+    const sourceFolder: string = this.selectedSourceFolder + this.currentRightClickedItem.partialPath;
+    const renameTo: string = sourceFolder.substring(0, sourceFolder.lastIndexOf("/")) + "/" + this.renamingWIP;
 
     if (sourceFolder === renameTo) {
       this.renameErrMsg = 'RIGHTCLICK.errorMustBeDifferent';
@@ -135,7 +135,7 @@ export class RenameFileComponent implements OnInit, OnDestroy {
       );
     }
   }
-  renameFolderResponseSubscription(){
+  renameFolderResponseSubscription() {
     this.folderResponseSubscription = this.renameFolderResponse.subscribe((data: RenameFolderResponse) => {
 
       if (data) {
