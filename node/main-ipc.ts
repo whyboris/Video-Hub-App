@@ -332,7 +332,6 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
 
     // check if already exists first
     if (fs.existsSync(newName)) {
-      console.log('some file already EXISTS WITH THAT NAME !!!');
       success = false;
       errMsg = 'RIGHTCLICK.errorFileNameExists';
     } else {

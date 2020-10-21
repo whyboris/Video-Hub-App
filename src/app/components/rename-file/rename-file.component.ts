@@ -56,11 +56,9 @@ export class RenameFileComponent implements OnInit, OnDestroy {
     }, 0);
 
     this.responseSubscription = this.renameResponse.subscribe((data: RenameFileResponse) => {
-
       if (data) {
         console.log('WOW !!!');
         console.log(data);
-
         // just in case, make sure the message came back for the current file
         if (this.currentRightClickedItem.index === data.index && !data.success) {
           this.nodeRenamingFile = false;
@@ -68,23 +66,18 @@ export class RenameFileComponent implements OnInit, OnDestroy {
           this.cd.detectChanges();
         } // if success, the `home.component` closes this component, no need to do anything else
       }
-
     });
 
     this.folderResponseSubscription = this.renameFolderResponse.subscribe((data: RenameFolderResponse) => {
-
       if (data) {
-        // just in case, make sure the message came back for the current file
         if (this.currentRightClickedItem.index === data.index && !data.success) {
           //folder rename done.
           console.log("folder rename")
           this.nodeRenamingFile = false;
           this.renameErrMsg = data.errMsg;
           this.cd.detectChanges();
-
         } // if success, the `home.component` closes this component, no need to do anything else
       }
-
     });
   }
 
