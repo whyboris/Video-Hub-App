@@ -73,3 +73,11 @@ export interface RenameFileResponse {
   oldFileName: string;
   errMsg?: string;
 }
+
+export interface RenameFolderResponse {
+  index: number;
+  success: boolean;
+  renameTo: string;
+  sourceFolder: string;
+  errMsg?: string;
+}

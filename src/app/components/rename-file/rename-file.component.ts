@@ -6,7 +6,7 @@ import { ElectronService } from '../../providers/electron.service';
 import { FilePathService } from '../views/file-path.service';
 
 import { ImageElement } from '../../../../interfaces/final-object.interface';
-import { RenameFileResponse } from '../../../../interfaces/shared-interfaces';
+import { RenameFileResponse, RenameFolderResponse } from '../../../../interfaces/shared-interfaces';
 
 @Component({
   selector: 'app-rename-file',
@@ -25,7 +25,8 @@ export class RenameFileComponent implements OnInit, OnDestroy {
   @Input() macVersion: boolean;
   @Input() selectedSourceFolder: string;
 
-  @Input() renameResponse: Observable<RenameFileResponse>
+  @Input() renameResponse: Observable<RenameFileResponse>;
+  @Input() renameFolderResponse: Observable<RenameFolderResponse>;
 
   renamingWIP: string;
   renamingExtension: string;
@@ -33,6 +34,7 @@ export class RenameFileComponent implements OnInit, OnDestroy {
   renameErrMsg: string = '';
 
   responseSubscription: Subscription;
+  folderResponseSubscription:Subscription;
 
   constructor(
     public cd: ChangeDetectorRef,
@@ -68,6 +70,8 @@ export class RenameFileComponent implements OnInit, OnDestroy {
       }
 
     });
+
+    this.renameFolderResponseSubscription()
   }
 
   /**
@@ -112,36 +116,42 @@ export class RenameFileComponent implements OnInit, OnDestroy {
 
     this.nodeRenamingFile = true;
     this.renameErrMsg = '';
-    const sourceFolder: string = this.selectedSourceFolder;
-    const relativeFilePath: string = this.selectedSourceFolder.substring(this.selectedSourceFolder.lastIndexOf("/"),this.selectedSourceFolder.length );
-    const originalFile: string = this.selectedSourceFolder;
-    const baseFolder = this.selectedSourceFolder.substring(0, this.selectedSourceFolder.lastIndexOf("/"));
-    const newFolder = baseFolder+ '/' +  this.renamingWIP;
-    console.log(newFolder,originalFile)
-    // check if different first !!!
-    console.log(sourceFolder)
-    if (originalFile === newFolder) {
+    const sourceFolder: string = this.selectedSourceFolder+this.currentRightClickedItem.partialPath;
+    const renameTo: string = sourceFolder.substring(0,sourceFolder.lastIndexOf("/"))+"/"+this.renamingWIP;
+
+    if (sourceFolder === renameTo) {
       this.renameErrMsg = 'RIGHTCLICK.errorMustBeDifferent';
       this.nodeRenamingFile = false;
     } else if (this.renamingWIP.length === 0) {
       this.renameErrMsg = 'RIGHTCLICK.errorMustNotBeEmpty';
       this.nodeRenamingFile = false;
     } else {
-      // try renaming
-
-      console.log(this.selectedSourceFolder);
-      console.log(sourceFolder);
-
       this.electronService.ipcRenderer.send(
         'try-to-rename-this-folder',
-        baseFolder,
-        relativeFilePath,
+        sourceFolder,
+        renameTo,
         this.renamingWIP,
         this.currentRightClickedItem.index
       );
     }
   }
+  renameFolderResponseSubscription(){
+    this.folderResponseSubscription = this.renameFolderResponse.subscribe((data: RenameFolderResponse) => {
 
+      if (data) {
+        console.log('WOW !!!');
+        console.log(data);
+
+        // just in case, make sure the message came back for the current file
+        if (this.currentRightClickedItem.index === data.index && !data.success) {
+          this.nodeRenamingFile = false;
+          this.renameErrMsg = data.errMsg;
+          this.cd.detectChanges();
+        } // if success, the `home.component` closes this component, no need to do anything else
+      }
+
+    });
+  }
   ngOnDestroy() {
     this.responseSubscription.unsubscribe();
   }

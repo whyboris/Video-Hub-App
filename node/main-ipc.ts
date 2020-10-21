@@ -318,11 +318,11 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
   /**
    * Try to rename the folder
    */
-  ipc.on('try-to-rename-this-folder', (event, sourceFolder: string, relPath: string, renameTo: string, index: number): void => {
+  ipc.on('try-to-rename-this-folder', (event, sourceFolder: string, renameTo: string, file:string,index:number): void => {
     console.log('renaming folder:');
 
-    const original: string = path.join(sourceFolder, relPath);
-    const newName: string = path.join(sourceFolder, renameTo);
+    const original: string = path.join(sourceFolder);
+    const newName: string = path.join(renameTo);
 
     console.log(original);
     console.log(newName);
@@ -351,7 +351,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
       }
     }
 
-    event.sender.send('rename-folder-response', index, success, renameTo, errMsg);
+    event.sender.send('rename-folder-response', success, sourceFolder,renameTo,index, errMsg);
   });
 
   /**
