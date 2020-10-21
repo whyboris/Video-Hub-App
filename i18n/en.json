@@ -235,6 +235,7 @@
     "extensions": "Extensions:",
     "extensionsInputError": "Extensions input is invalid: insert extensions with seperating comma",
     "FAQ": "Click here for help, documentation, FAQ, or to report a bug",
+    "fileNotFound": "File not found",
     "galleryAndView": "Gallery",
     "hideTopBar": "Hide top bar",
     "manualTags": "Manual tag settings",

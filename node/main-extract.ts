@@ -436,7 +436,7 @@ function setExtractionDurations(
  */
 function checkFileExists(pathToFile: string): Promise<boolean> {
   return new Promise((resolve, reject) => {
-    fs.access(pathToFile, fs.constants.F_OK, (err) => {
+    fs.access(pathToFile, fs.constants.F_OK, (err: any) => {
       return(resolve(!err));
     });
   });

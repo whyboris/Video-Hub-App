@@ -68,8 +68,29 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
    * Open a particular video file clicked inside Angular
    */
   ipc.on('open-media-file', (event, fullFilePath) => {
-    shell.openItem(path.normalize(fullFilePath)); // normalize because on windows, the path sometimes is mixing `\` and `/`
-    // shell.openPath(path.normalize(fullFilePath)); // Electron 9
+    fs.access(fullFilePath, fs.constants.F_OK, (err: any) => {
+      if (!err) {
+        shell.openItem(path.normalize(fullFilePath)); // normalize because on windows, the path sometimes is mixing `\` and `/`
+        // shell.openPath(path.normalize(fullFilePath)); // Electron 9
+      } else {
+        event.sender.send('file-not-found');
+      }
+    });
+  });
+
+  /**
+   * Open a particular video file clicked inside Angular at particular timestamp
+   */
+  ipc.on('open-media-file-at-timestamp', (event, executablePath, fullFilePath: string, args: string) => {
+    fs.access(fullFilePath, fs.constants.F_OK, (err: any) => {
+      if (!err) {
+        const cmdline: string = `"${path.normalize(executablePath)}" "${path.normalize(fullFilePath)}" ${args}`;
+        console.log(cmdline);
+        exec(cmdline);
+      } else {
+        event.sender.send('file-not-found');
+      }
+    });
   });
 
   /**
@@ -81,15 +102,6 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
       file: filePath,
       icon: './src/assets/logo.png'
     });
-  });
-
-  /**
-   * Open a particular video file clicked inside Angular
-   */
-  ipc.on('open-media-file-at-timestamp', (event, executablePath, fullFilePath: string, args: string) => {
-    const cmdline: string = `"${path.normalize(executablePath)}" "${path.normalize(fullFilePath)}" ${args}`;
-    console.log(cmdline);
-    exec(cmdline);
   });
 
   /**
