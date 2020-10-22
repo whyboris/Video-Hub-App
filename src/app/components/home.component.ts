@@ -2189,9 +2189,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     console.log('SHOULD FIX THE FIRST RUN BUG!!!');
     this.toggleButton('showThumbnails');
     this.isFirstRunEver = false;
-    this.modalService.openDialog('Welcome', 'Thank you for purchasing Video Hub App!', '').subscribe(() => {
-      this.modalService.openWelcomeMessage();
-    });
+    this.modalService.openWelcomeMessage();
   }
 
 }

@@ -685,7 +685,7 @@ export const SettingsButtons: SettingsButtonsType = {
     moreInfo: 'BUTTONS.sortOptionAlphabeticalMoreInfo',
     settingsHeading: 'BUTTONS.sortOptionsHeading',
     title: '',
-    toggled: false
+    toggled: true
   },
   'sortOptionAspectRatio': {
     description: 'BUTTONS.sortOptionAspectRatioDescription',
@@ -706,7 +706,7 @@ export const SettingsButtons: SettingsButtonsType = {
     hidden: false,
     moreInfo: 'BUTTONS.sortOptionModifiedMoreInfo',
     title: '',
-    toggled: false
+    toggled: true
   },
   'sortOptionCreated': {
     description: 'BUTTONS.sortOptionCreatedDescription',
@@ -763,7 +763,7 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-sort-order',
     moreInfo: 'BUTTONS.sortOrderMoreInfo',
     title: 'BUTTONS.sortOrderHint',
-    toggled: false
+    toggled: true
   },
   'starFilter': {
     description: 'BUTTONS.starFilterDescription',
