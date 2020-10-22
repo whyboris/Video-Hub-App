@@ -40,7 +40,7 @@ How to start:
 
 - `npm install` to install
 - `npm start` to develop
-- `npm electron` to build
+- `npm run electron` to build
 
 Main dependencies in use:
 

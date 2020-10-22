@@ -336,7 +336,16 @@ input[type="radio"]:checked:before {
 .zoom-buttons {
   margin: 20px;
 
+  button:first-child {
+    border-radius: 50% !important;
+  }
+
+  button:last-child {
+    border-radius: 50% !important;
+  }
+
   button {
+    border-radius: 10px;
     display: inline-block;
     font-size: 16px;
     min-height: 36px;
