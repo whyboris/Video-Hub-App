@@ -133,19 +133,19 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'showClips',
   ],
   [ // 5
+    'showFolders',
+    'randomizeFoldersScreenshots',
+  ],
+  [ // 6
     'showFreq',
     'showTagTray',
     'showRelatedVideosTray',
     'showRecentlyPlayed'
   ],
-  [ // 6
+  [ // 7
     'compactView',
     'showMoreInfo',
     'fontSizeLarger',
-  ],
-  [ // 7
-    'showFolders',
-    'randomizeFoldersScreenshots',
     'shuffleGalleryNow',
   ],
   [ // 8
@@ -599,7 +599,7 @@ export const SettingsButtons: SettingsButtonsType = {
     hidden: false,
     iconName: 'icon-folder-blank',
     moreInfo: 'BUTTONS.showFoldersMoreInfo',
-    settingsHeading: 'SETTINGS.viewSettings',
+    settingsHeading: 'SETTINGS.folderView',
     title: 'BUTTONS.showFoldersHint',
     toggled: false
   },

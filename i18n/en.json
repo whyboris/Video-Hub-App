@@ -236,6 +236,7 @@
     "extensionsInputError": "Extensions input is invalid: insert extensions with seperating comma",
     "FAQ": "Click here for help, documentation, FAQ, or to report a bug",
     "fileNotFound": "File not found",
+    "folderView": "Folder view",
     "galleryAndView": "Gallery",
     "hideTopBar": "Hide top bar",
     "manualTags": "Manual tag settings",
@@ -268,7 +269,6 @@
     "trayTags": "Tags",
     "variousSettings": "Various settings",
     "versionError": "cannot check for new version at this time",
-    "viewSettings": "More views",
     "wordCloud": "Bottom tray",
     "youHaveLatest": "you have the latest version",
     "zoom": "Zoom"
