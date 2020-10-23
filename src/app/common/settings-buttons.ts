@@ -58,6 +58,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'shuffleGalleryNow'
  | 'sizeFilter'
  | 'sortOptionAlphabetical'
+ | 'sortOptionAlphabetical2'
  | 'sortOptionAspectRatio'
  | 'sortOptionFolderSize'
  | 'sortOptionCreated'
@@ -105,6 +106,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'sortOrder',
     'hideOffline',
     'sortOptionAlphabetical',
+    'sortOptionAlphabetical2',
     'sortOptionTime',
     'sortOptionSize',
     'sortOptionTimesPlayed',
@@ -686,6 +688,13 @@ export const SettingsButtons: SettingsButtonsType = {
     settingsHeading: 'BUTTONS.sortOptionsHeading',
     title: '',
     toggled: true
+  },
+  'sortOptionAlphabetical2': {
+    description: 'BUTTONS.sortOptionAlphabeticalDescription2',
+    hidden: false,
+    moreInfo: 'BUTTONS.sortOptionAlphabeticalMoreInfo2',
+    title: '',
+    toggled: false
   },
   'sortOptionAspectRatio': {
     description: 'BUTTONS.sortOptionAspectRatioDescription',
