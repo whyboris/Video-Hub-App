@@ -183,6 +183,9 @@ export class SortingPipe implements PipeTransform {
 
       return randomizeArray(galleryArray, currentIndex);
 
+    } else if (sortingType === 'default') {
+      return galleryArray; // sorting order set via `alphabetizeFinalArray` in `main-support.ts`
+      // no need to `.slice()` as all other sorting types do it
     } else if (sortingType === 'alphabetAsc') {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'alphabetical', true);
