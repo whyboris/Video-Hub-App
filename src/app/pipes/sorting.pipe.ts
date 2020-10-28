@@ -6,6 +6,8 @@ import { orderBy } from 'natural-orderby';
 export type SortType = 'default'
                      | 'alphabetAsc'
                      | 'alphabetDesc'
+                     | 'alphabetAsc2'
+                     | 'alphabetDesc2'
                      | 'aspectRatioAsc'
                      | 'aspectRatioDesc'
                      | 'folderSizeAsc'
@@ -181,9 +183,20 @@ export class SortingPipe implements PipeTransform {
 
       return randomizeArray(galleryArray, currentIndex);
 
+    } else if (sortingType === 'default') {
+      return galleryArray; // sorting order set via `alphabetizeFinalArray` in `main-support.ts`
+      // no need to `.slice()` as all other sorting types do it
     } else if (sortingType === 'alphabetAsc') {
-        return orderBy(galleryArray, 'fileName', 'asc');
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
+        return this.sortFunctionLol(x, y, 'alphabetical', true);
+      });
     } else if (sortingType === 'alphabetDesc') {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
+        return this.sortFunctionLol(x, y, 'alphabetical', false);
+      });
+    } else if (sortingType === 'alphabetAsc2') {
+        return orderBy(galleryArray, 'fileName', 'asc');
+    } else if (sortingType === 'alphabetDesc2') {
         return orderBy(galleryArray, 'fileName', 'desc');
     } else if (sortingType === 'sizeAsc') {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {

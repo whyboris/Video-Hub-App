@@ -372,7 +372,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.translate.setDefaultLang('en');
     this.changeLanguage('en');
 
-    this.modalService.openWelcomeMessage(); // WIP
+    // this.modalService.openWelcomeMessage(); // WIP
 
     setTimeout(() => {
       this.wordFrequencyService.finalMapBehaviorSubject.subscribe((value: WordFreqAndHeight[]) => {
@@ -454,10 +454,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.cd.detectChanges();
     });
 
+    // Generic messaging from Node
     this.electronService.ipcRenderer.on('show-msg-dialog', (event,  title: string, content: string, details: string ) => {
       this.zone.run(() => {
         this.modalService.openDialog(title, content, details);
       });
+    });
+
+    // When clicking to open a file and it turns out no longer present there
+    this.electronService.ipcRenderer.on('file-not-found', (event) => {
+      this.zone.run(() => {
+        this.modalService.openSnackbar(this.translate.instant('SETTINGS.fileNotFound'));
+      })
     });
 
     // Closing of Window was issued by Electron
@@ -2181,9 +2189,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     console.log('SHOULD FIX THE FIRST RUN BUG!!!');
     this.toggleButton('showThumbnails');
     this.isFirstRunEver = false;
-    this.modalService.openDialog('Welcome', 'Thank you for purchasing Video Hub App!', '').subscribe(() => {
-      this.modalService.openWelcomeMessage();
-    });
+    this.modalService.openWelcomeMessage();
   }
 
 }

@@ -222,12 +222,15 @@ export function startFileSystemWatching(
 
   GLOBALS.angularApp.sender.send('started-watching-this-dir', inputSource);
 
+  const isNetworkAddress: boolean =    inputDir.startsWith('//')
+                                    || inputDir.startsWith('\\');
+
   const watcherConfig = {
     cwd: inputDir,
     disableGlobbing: true,
     ignored: 'vha-*', // WARNING - dangerously ignores any path that includes `vha-` anywhere!!!
     persistent: persistent,
-    usePolling: inputDir.startsWith('//') ? true : false, // neccessary for files over network
+    usePolling: isNetworkAddress ? true : false,
   }
 
   const watcher: FSWatcher = chokidar.watch(inputDir, watcherConfig);
@@ -366,8 +369,8 @@ export function startWatcher(inputSource: number, folderPath: string, persistent
     watch: persistent,
   }
 
+  preventSleep();
   startFileSystemWatching(folderPath, inputSource, persistent);
-
 }
 
 /**

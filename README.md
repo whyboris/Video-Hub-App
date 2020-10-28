@@ -40,7 +40,7 @@ How to start:
 
 - `npm install` to install
 - `npm start` to develop
-- `npm electron` to build
+- `npm run electron` to build
 
 Main dependencies in use:
 
@@ -76,5 +76,7 @@ This software would not be possible without the tremendous work by other people:
  - [trash](https://github.com/sindresorhus/trash)
  - [Fuse.js](https://github.com/krisk/Fuse)
  - [electron-window-state](https://github.com/mawie81/electron-window-state)
+
+This software uses libraries from the FFmpeg project under the LGPLv2.1 with binaries from [here](https://github.com/kribblo/node-ffmpeg-installer#the-binaries)
 
 Since becoming open source, this software was made better with the awesome contributions by [cal2195](https://github.com/cal2195)

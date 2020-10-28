@@ -485,7 +485,6 @@ export function insertTemporaryFieldsSingle(element: ImageElement): ImageElement
  * @param finalObject
  */
 export function upgradeToVersion3(finalObject: FinalObject): void {
-
   if (finalObject.version === 2) {
     console.log('OLD version file -- converting!');
     finalObject.inputDirs = {
@@ -524,7 +523,7 @@ export function setUpDirectoryWatchers(inputDirs: InputSources, currentImages: I
     console.log(key, 'watch =', shouldWatch, ':', pathToDir);
 
     // check if directory connected
-    fs.access(pathToDir, fs.constants.W_OK, function(err) {
+    fs.access(pathToDir, fs.constants.W_OK, (err: any) => {
 
       if (!err) {
         GLOBALS.angularApp.sender.send('directory-now-connected', parseInt(key, 10), pathToDir);
