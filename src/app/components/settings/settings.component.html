@@ -214,6 +214,7 @@
         <option value="zh" [selected]="appState.language == 'zh'">中文</option><!-- Chinese -->
         <option value="ko" [selected]="appState.language == 'ko'">한국어</option><!-- Korean -->
         <option value="ms" [selected]="appState.language == 'ms'">Melayu</option><!-- Malay -->
+        <option value="nl" [selected]="appState.language == 'nl'">Nederlands</option>
         <option value="ar" [selected]="appState.language == 'ar'">العربية</option><!-- Arabic -->
         <option value="uk" [selected]="appState.language == 'uk'">Українська</option><!-- Ukrainian -->
       </select>
@@ -221,6 +222,10 @@
 
     <div class="credits-and-help" (click)="openOnlineHelp.emit()">
       {{ 'SETTINGS.FAQ' | translate }}
+    </div>
+
+    <div class="credits-and-help" style="margin-top: 12px; pointer-events: none">
+      This software uses libraries from the FFmpeg project under the LGPLv2.1
     </div>
 
     <div class="app-version">

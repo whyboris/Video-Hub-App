@@ -23,6 +23,12 @@
     <option *ngIf="settingsButtons['sortOptionAlphabetical'].toggled" value="alphabetDesc">
       &#x25BC; {{ 'SIDEBAR.sortAlphabetical' | translate }}
     </option>
+    <option *ngIf="settingsButtons['sortOptionAlphabetical2'].toggled" value="alphabetAsc2">
+      &#x25B2; {{ 'SIDEBAR.sortAlphabetical2' | translate }}
+    </option>
+    <option *ngIf="settingsButtons['sortOptionAlphabetical2'].toggled" value="alphabetDesc2">
+      &#x25BC; {{ 'SIDEBAR.sortAlphabetical2' | translate }}
+    </option>
     <option *ngIf="settingsButtons['sortOptionTime'].toggled" value="timeAsc">
       &#x25B2; {{ 'SIDEBAR.sortTime' | translate }}
     </option>

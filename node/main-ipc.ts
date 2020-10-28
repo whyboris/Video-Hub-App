@@ -1,5 +1,4 @@
 import { BrowserWindow } from 'electron';
-const { powerSaveBlocker } = require('electron');
 const dialog = require('electron').dialog;
 const shell = require('electron').shell;
 
@@ -14,8 +13,6 @@ import { SettingsObject } from '../interfaces/settings-object.interface';
 import { createDotPlsFile, writeVhaFileToDisk } from './main-support';
 import { replaceThumbnailWithNewImage } from './main-extract';
 import { closeWatcher, startWatcher, extractAnyMissingThumbs, removeThumbnailsNotInHub } from './main-extract-async';
-
-let preventSleepId: number;
 
 /**
  * Set up the listeners
@@ -45,22 +42,6 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
   });
 
   /**
-   * Prevent PC from going to sleep during screenshot extraction
-   */
-  ipc.on('prevent-sleep', (event) => {
-    console.log('preventing sleep');
-    preventSleepId = powerSaveBlocker.start('prevent-app-suspension');
-  });
-
-  /**
-   * Allow PC to go to sleep after screenshots were extracted
-   */
-  ipc.on('allow-sleep', (event) => {
-    console.log('allowing sleep');
-    powerSaveBlocker.stop(preventSleepId);
-  });
-
-  /**
    * Open the explorer to the relevant file
    */
   ipc.on('open-in-explorer', (event, fullPath: string) => {
@@ -87,8 +68,29 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
    * Open a particular video file clicked inside Angular
    */
   ipc.on('open-media-file', (event, fullFilePath) => {
-    shell.openItem(path.normalize(fullFilePath)); // normalize because on windows, the path sometimes is mixing `\` and `/`
-    // shell.openPath(path.normalize(fullFilePath)); // Electron 9
+    fs.access(fullFilePath, fs.constants.F_OK, (err: any) => {
+      if (!err) {
+        shell.openItem(path.normalize(fullFilePath)); // normalize because on windows, the path sometimes is mixing `\` and `/`
+        // shell.openPath(path.normalize(fullFilePath)); // Electron 9
+      } else {
+        event.sender.send('file-not-found');
+      }
+    });
+  });
+
+  /**
+   * Open a particular video file clicked inside Angular at particular timestamp
+   */
+  ipc.on('open-media-file-at-timestamp', (event, executablePath, fullFilePath: string, args: string) => {
+    fs.access(fullFilePath, fs.constants.F_OK, (err: any) => {
+      if (!err) {
+        const cmdline: string = `"${path.normalize(executablePath)}" "${path.normalize(fullFilePath)}" ${args}`;
+        console.log(cmdline);
+        exec(cmdline);
+      } else {
+        event.sender.send('file-not-found');
+      }
+    });
   });
 
   /**
@@ -100,15 +102,6 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
       file: filePath,
       icon: './src/assets/logo.png'
     });
-  });
-
-  /**
-   * Open a particular video file clicked inside Angular
-   */
-  ipc.on('open-media-file-at-timestamp', (event, executablePath, fullFilePath: string, args: string) => {
-    const cmdline: string = `"${path.normalize(executablePath)}" "${path.normalize(fullFilePath)}" ${args}`;
-    console.log(cmdline);
-    exec(cmdline);
   });
 
   /**
@@ -261,22 +254,23 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
    * extract any missing thumbnails
    */
   ipc.on('add-missing-thumbnails', (event, finalArray: ImageElement[], extractClips: boolean) => {
-    const screenshotOutputFolder: string = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName);
-    extractAnyMissingThumbs(finalArray, screenshotOutputFolder, extractClips);
+    extractAnyMissingThumbs(finalArray);
   });
 
   /**
    * Remove any thumbnails for files no longer present in the hub
    */
   ipc.on('clean-old-thumbnails', (event, finalArray: ImageElement[]) => {
+    // !!! WARNING
     const screenshotOutputFolder: string = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName);
+    // !! ^^^^^^^^^^^^^^^^^^^^^^ - make sure this points to the folder with screenshots only!
 
     const allHashes: Map<string, 1> = new Map();
 
     finalArray.forEach((element: ImageElement) => {
       allHashes.set(element.hash, 1);
     });
-    removeThumbnailsNotInHub(allHashes, screenshotOutputFolder);
+    removeThumbnailsNotInHub(allHashes, screenshotOutputFolder); // WARNING !!! this function will delete stuff
   });
 
   /**

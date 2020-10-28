@@ -72,7 +72,7 @@ const extractSingleFrameArgs = (
  *
  * @param pathToVideo          -- full path to the video file
  * @param duration             -- duration of clip
- * @param screenshotHeight     -- height of screenshot in pixels (defaul is 100)
+ * @param screenshotHeight     -- height of screenshot in pixels
  * @param numberOfScreenshots  -- number of screenshots to extract
  * @param savePath             -- full path to file name and extension
  */
@@ -436,7 +436,7 @@ function setExtractionDurations(
  */
 function checkFileExists(pathToFile: string): Promise<boolean> {
   return new Promise((resolve, reject) => {
-    fs.access(pathToFile, fs.constants.F_OK, (err) => {
+    fs.access(pathToFile, fs.constants.F_OK, (err: any) => {
       return(resolve(!err));
     });
   });
