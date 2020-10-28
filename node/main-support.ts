@@ -34,7 +34,7 @@ interface ResolutionMeta {
   bucket: number;
 }
 
-export type ImportStage = 'importingScreenshots' | 'done';    // TODO -- rethin import stages?
+export type ImportStage = 'importingMeta' | 'importingScreenshots' | 'done';
 
 /**
  * Return an HTML string for a path to a file
@@ -226,7 +226,7 @@ export function createDotPlsFile(savePath: string, playlist: ImageElement[], sou
   for (let i = 0; i < playlist.length; i++) {
 
     const fullPath: string = path.join(
-      sourceFolderMap[i].path,
+      sourceFolderMap[playlist[i].inputSource].path,
       playlist[i].partialPath,
       playlist[i].fileName
     );
@@ -311,6 +311,12 @@ function computeNumberOfScreenshots(screenshotSettings: ScreenshotSettings, dura
 
   if (total < 3) {
     total = 3; // minimum 3 screenshots!
+  }
+
+  const screenWidth: number = screenshotSettings.height * (16 / 9);
+
+  if (total * screenWidth > 65535) {
+    total = Math.floor(65535 / screenWidth);
   }
 
   return total;
@@ -530,7 +536,6 @@ export function insertTemporaryFieldsSingle(element: ImageElement): ImageElement
  * @param finalObject
  */
 export function upgradeToVersion3(finalObject: FinalObject): void {
-
   if (finalObject.version === 2) {
     console.log('OLD version file -- converting!');
     finalObject.inputDirs = {
@@ -569,7 +574,7 @@ export function setUpDirectoryWatchers(inputDirs: InputSources, currentImages: I
     console.log(key, 'watch =', shouldWatch, ':', pathToDir);
 
     // check if directory connected
-    fs.access(pathToDir, fs.constants.W_OK, function(err) {
+    fs.access(pathToDir, fs.constants.W_OK, (err: any) => {
 
       if (!err) {
         GLOBALS.angularApp.sender.send('directory-now-connected', parseInt(key, 10), pathToDir);
