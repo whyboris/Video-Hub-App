@@ -59,6 +59,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'shuffleGalleryNow'
  | 'sizeFilter'
  | 'sortOptionAlphabetical'
+ | 'sortOptionAlphabetical2'
  | 'sortOptionAspectRatio'
  | 'sortOptionCreated'
  | 'sortOptionFolderSize'
@@ -103,9 +104,10 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'sizeFilter',
     'resolutionFilter',
     'starFilter',
-    'hideOffline',
     'sortOrder',
+    'hideOffline',
     'sortOptionAlphabetical',
+    'sortOptionAlphabetical2',
     'sortOptionTime',
     'sortOptionSize',
     'sortOptionTimesPlayed',
@@ -134,21 +136,20 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'showClips',
   ],
   [ // 5
+    'showFolders',
+    'showFaces',
+    'randomizeFoldersScreenshots',
+  ],
+  [ // 6
     'showFreq',
     'showTagTray',
     'showRelatedVideosTray',
     'showRecentlyPlayed'
   ],
-  [ // 6
+  [ // 7
     'compactView',
     'showMoreInfo',
     'fontSizeLarger',
-  ],
-  [ // 7
-    'showFolders',
-    'showFaces',
-    'showRelatedVideosTray',
-    'randomizeFoldersScreenshots',
     'shuffleGalleryNow',
   ],
   [ // 8
@@ -602,7 +603,7 @@ export const SettingsButtons: SettingsButtonsType = {
     hidden: false,
     iconName: 'icon-folder-blank',
     moreInfo: 'BUTTONS.showFoldersMoreInfo',
-    settingsHeading: 'SETTINGS.viewSettings',
+    settingsHeading: 'SETTINGS.folderView',
     title: 'BUTTONS.showFoldersHint',
     toggled: false
   },
@@ -696,6 +697,13 @@ export const SettingsButtons: SettingsButtonsType = {
     moreInfo: 'BUTTONS.sortOptionAlphabeticalMoreInfo',
     settingsHeading: 'BUTTONS.sortOptionsHeading',
     title: '',
+    toggled: true
+  },
+  'sortOptionAlphabetical2': {
+    description: 'BUTTONS.sortOptionAlphabeticalDescription2',
+    hidden: false,
+    moreInfo: 'BUTTONS.sortOptionAlphabeticalMoreInfo2',
+    title: '',
     toggled: false
   },
   'sortOptionAspectRatio': {
@@ -717,7 +725,7 @@ export const SettingsButtons: SettingsButtonsType = {
     hidden: false,
     moreInfo: 'BUTTONS.sortOptionModifiedMoreInfo',
     title: '',
-    toggled: false
+    toggled: true
   },
   'sortOptionCreated': {
     description: 'BUTTONS.sortOptionCreatedDescription',
@@ -774,7 +782,7 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-sort-order',
     moreInfo: 'BUTTONS.sortOrderMoreInfo',
     title: 'BUTTONS.sortOrderHint',
-    toggled: false
+    toggled: true
   },
   'starFilter': {
     description: 'BUTTONS.starFilterDescription',

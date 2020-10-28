@@ -148,6 +148,8 @@
     "sizeFilterMoreInfo": "Show the size filter",
     "sortOptionAlphabeticalDescription": "Alphabetical",
     "sortOptionAlphabeticalMoreInfo": "Show the alphabetical order option in the sorting dropdown",
+    "sortOptionAlphabeticalDescription2": "Alphabetical 2",
+    "sortOptionAlphabeticalMoreInfo2": "Slower but more-correct ordering",
     "sortOptionAspectRatioDescription": "Aspect Ratio",
     "sortOptionAspectRatioMoreInfo": "Show the aspect ratio order option in the sorting dropdown",
     "sortOptionCreatedDescription": "Date Created",
@@ -238,6 +240,8 @@
     "extensions": "Extensions:",
     "extensionsInputError": "Extensions input is invalid: insert extensions with seperating comma",
     "FAQ": "Click here for help, documentation, FAQ, or to report a bug",
+    "fileNotFound": "File not found",
+    "folderView": "Folder view",
     "galleryAndView": "Gallery",
     "hideTopBar": "Hide top bar",
     "manualTags": "Manual tag settings",
@@ -270,7 +274,6 @@
     "trayTags": "Tags",
     "variousSettings": "Various settings",
     "versionError": "cannot check for new version at this time",
-    "viewSettings": "More views",
     "wordCloud": "Bottom tray",
     "youHaveLatest": "you have the latest version",
     "zoom": "Zoom"
@@ -325,6 +328,7 @@
     "scanInProgress": "Scanning in progress",
     "similarTo": "and similar to:",
     "sortAlphabetical": "Alphabetical",
+    "sortAlphabetical2": "Alphabetical 2",
     "sortAspectRatio": "Aspect ratio",
     "sortCreated": "Date Created",
     "sortDefault": "Default",
@@ -422,6 +426,12 @@
     "sortByFrequency": "Sorting by frequency",
     "starRating": "Star rating",
     "timesPlayed": "Times played"
+  },
+  "WELCOME": {
+    "explore": "Please explore other settings. There are many features that are not enabled by default.",
+    "settings": "To access settings, please click on the gear on top-right.",
+    "tabs": "To add more folders to your hub, update screenshots, add new videos, and more, please go to the fourth tab ('Current hub') in settings and click 'Edit folders'.",
+    "welcome": "Welcome to"
   },
   "WIZARD": {
     "change": "Change",
