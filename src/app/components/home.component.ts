@@ -1489,10 +1489,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
       this.toggleButtonOpposite('showTags');
     } else if (uniqueKey === 'playPlaylist') {
+      const execPath: string = this.appState.preferredVideoPlayer;
       this.electronService.ipcRenderer.send(
         'please-create-playlist',
         this.pipeSideEffectService.galleryShowing,
-        this.sourceFolderService.selectedSourceFolder
+        this.sourceFolderService.selectedSourceFolder,
+        execPath
       );
     } else if (uniqueKey === 'sortOrder') {
       this.toggleButtonOpposite(uniqueKey);

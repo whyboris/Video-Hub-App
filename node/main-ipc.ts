@@ -135,7 +135,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
    * 2. save .pls file
    * 3. ask OS to open the .pls file
    */
-  ipc.on('please-create-playlist', (event, playlist: ImageElement[], sourceFolderMap: InputSources) => {
+  ipc.on('please-create-playlist', (event, playlist: ImageElement[], sourceFolderMap: InputSources, execPath: string) => {
 
     const cleanPlaylist: ImageElement[] = playlist.filter((element: ImageElement) => {
       return element.cleanName !== '*FOLDER*';
@@ -145,8 +145,15 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
 
     if (cleanPlaylist.length) {
       createDotPlsFile(savePath, cleanPlaylist, sourceFolderMap, () => {
-        shell.openItem(savePath);
-        // shell.openPath(savePath); // Electron 9
+
+        if (execPath) { // if `preferredVideoPlayer` is sent
+          const cmdline: string = `"${path.normalize(execPath)}" "${path.normalize(savePath)}"`;
+          console.log(cmdline);
+          exec(cmdline);
+        } else {
+          shell.openItem(savePath);
+          // shell.openPath(savePath); // Electron 9
+        }
       });
     }
   });
