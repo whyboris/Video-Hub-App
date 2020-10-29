@@ -126,7 +126,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
       if (executablePath) {
         event.sender.send('preferred-video-player-returning', executablePath);
       }
-    }).catch(err => {});
+    }).catch(err => { });
   });
 
   /**
@@ -192,11 +192,11 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
    */
   ipc.on('replace-thumbnail', (event, pathToIncomingJpg: string, item: ImageElement) => {
     const fileToReplace: string = path.join(
-        GLOBALS.selectedOutputFolder,
-        'vha-' + GLOBALS.hubName,
-        'thumbnails',
-        item.hash + '.jpg'
-      );
+      GLOBALS.selectedOutputFolder,
+      'vha-' + GLOBALS.hubName,
+      'thumbnails',
+      item.hash + '.jpg'
+    );
 
     const height: number = GLOBALS.screenshotSettings.height;
 
@@ -206,7 +206,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
           event.sender.send('thumbnail-replaced');
         }
       })
-      .catch((err) => {});
+      .catch((err) => { });
 
   });
 
@@ -222,7 +222,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
       if (inputDirPath) {
         event.sender.send('input-folder-chosen', inputDirPath);
       }
-    }).catch(err => {});
+    }).catch(err => { });
   });
 
   /**
@@ -237,7 +237,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
       if (inputDirPath) {
         event.sender.send('old-folder-reconnected', inputSource, inputDirPath);
       }
-    }).catch(err => {});
+    }).catch(err => { });
   });
 
   /**
@@ -292,7 +292,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
       if (outputDirPath) {
         event.sender.send('output-folder-chosen', outputDirPath);
       }
-    }).catch(err => {});
+    }).catch(err => { });
   });
 
   /**
@@ -335,6 +335,44 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
   });
 
   /**
+   * Try to rename the folder
+   */
+  ipc.on('try-to-rename-this-folder', (event, sourceFolder: string, renameTo: string, file: string, index: number): void => {
+    console.log('renaming folder:');
+
+    const original: string = path.join(sourceFolder);
+    const newName: string = path.join(renameTo);
+
+    console.log(original);
+    console.log(newName);
+
+    let success = true;
+    let errMsg: string;
+
+    // check if already exists first
+    if (fs.existsSync(newName)) {
+      success = false;
+      errMsg = 'RIGHTCLICK.errorFileNameExists';
+    } else {
+      try {
+        fs.renameSync(original, newName);
+      } catch (err) {
+        success = false;
+        console.log(err);
+        if (err.code === 'ENOENT') {
+          // const pathObj = path.parse(err.path);
+          // console.log(pathObj);
+          errMsg = 'RIGHTCLICK.errorFileNotFound';
+        } else {
+          errMsg = 'RIGHTCLICK.errorSomeError';
+        }
+      }
+    }
+
+    event.sender.send('rename-folder-response', success, sourceFolder, renameTo, index, errMsg);
+  });
+
+  /**
    * Close the window / quit / exit the app
    */
   ipc.on('close-window', (event, settingsToSave: SettingsObject, finalObjectToSave: FinalObject) => {
@@ -364,13 +402,13 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
         writeVhaFileToDisk(finalObjectToSave, GLOBALS.currentlyOpenVhaFile, () => {
           try {
             BrowserWindow.getFocusedWindow().close();
-          } catch {}
+          } catch { }
         });
 
       } else {
         try {
           BrowserWindow.getFocusedWindow().close();
-        } catch {}
+        } catch { }
       }
     });
   });

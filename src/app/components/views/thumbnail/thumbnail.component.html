@@ -14,6 +14,7 @@
       (mousemove)="mouseIsMoving($event)"
       (click)="   videoClick.emit($event)"
       (dblclick)="videoClick.emit($event)"
+      (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
       [ngStyle]="{ height: imgHeight + 'px' }"
     >
 

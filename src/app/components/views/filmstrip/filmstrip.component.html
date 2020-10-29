@@ -33,7 +33,7 @@
     [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
     class="title"
   >
-    {{ video.cleanName }}
+    {{ video.cleanName==="*FOLDER*" ? video.fileName : video.cleanName }}
     <div class="fileSize" *ngIf="showMeta">
       ({{ video.fileSizeDisplay }})
     </div>

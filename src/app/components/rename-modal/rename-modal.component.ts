@@ -4,7 +4,7 @@ import { BehaviorSubject } from 'rxjs';
 
 import { AppStateInterface } from '../../common/app-state';
 import { ImageElement } from '../../../../interfaces/final-object.interface';
-import { RenameFileResponse } from '../../../../interfaces/shared-interfaces';
+import { RenameFileResponse, RenameFolderResponse } from '../../../../interfaces/shared-interfaces';
 import { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
@@ -27,6 +27,7 @@ export class RenameModalComponent {
   @Input() settingsButtons: SettingsButtonsType;
 
   @Input() renameResponse: BehaviorSubject<RenameFileResponse>;
+  @Input() renameFolderResponse: BehaviorSubject<RenameFolderResponse>;
 
   constructor() { }
 

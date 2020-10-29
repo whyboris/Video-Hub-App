@@ -6,7 +6,7 @@ import { ElectronService } from '../../providers/electron.service';
 import { FilePathService } from '../views/file-path.service';
 
 import { ImageElement } from '../../../../interfaces/final-object.interface';
-import { RenameFileResponse } from '../../../../interfaces/shared-interfaces';
+import { RenameFileResponse, RenameFolderResponse } from '../../../../interfaces/shared-interfaces';
 
 @Component({
   selector: 'app-rename-file',
@@ -25,7 +25,8 @@ export class RenameFileComponent implements OnInit, OnDestroy {
   @Input() macVersion: boolean;
   @Input() selectedSourceFolder: string;
 
-  @Input() renameResponse: Observable<RenameFileResponse>
+  @Input() renameResponse: Observable<RenameFileResponse>;
+  @Input() renameFolderResponse: Observable<RenameFolderResponse>;
 
   renamingWIP: string;
   renamingExtension: string;
@@ -33,6 +34,7 @@ export class RenameFileComponent implements OnInit, OnDestroy {
   renameErrMsg: string = '';
 
   responseSubscription: Subscription;
+  folderResponseSubscription: Subscription;
 
   constructor(
     public cd: ChangeDetectorRef,
@@ -41,7 +43,12 @@ export class RenameFileComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.renamingWIP = this.filePathService.getFileNameWithoutExtension(this.currentRightClickedItem.fileName);
+    if (this.currentRightClickedItem.cleanName === '*FOLDER*') {
+      this.renamingWIP = this.currentRightClickedItem.fileName;
+    }
+    else {
+      this.renamingWIP = this.filePathService.getFileNameWithoutExtension(this.currentRightClickedItem.fileName);
+    }
     this.renamingExtension = this.filePathService.getFileNameExtension(this.currentRightClickedItem.fileName);
 
     setTimeout(() => {
@@ -49,11 +56,9 @@ export class RenameFileComponent implements OnInit, OnDestroy {
     }, 0);
 
     this.responseSubscription = this.renameResponse.subscribe((data: RenameFileResponse) => {
-
       if (data) {
         console.log('WOW !!!');
         console.log(data);
-
         // just in case, make sure the message came back for the current file
         if (this.currentRightClickedItem.index === data.index && !data.success) {
           this.nodeRenamingFile = false;
@@ -61,7 +66,18 @@ export class RenameFileComponent implements OnInit, OnDestroy {
           this.cd.detectChanges();
         } // if success, the `home.component` closes this component, no need to do anything else
       }
+    });
 
+    this.folderResponseSubscription = this.renameFolderResponse.subscribe((data: RenameFolderResponse) => {
+      if (data) {
+        if (this.currentRightClickedItem.index === data.index && !data.success) {
+          //folder rename done.
+          console.log("folder rename")
+          this.nodeRenamingFile = false;
+          this.renameErrMsg = data.errMsg;
+          this.cd.detectChanges();
+        } // if success, the `home.component` closes this component, no need to do anything else
+      }
     });
   }
 
@@ -102,7 +118,33 @@ export class RenameFileComponent implements OnInit, OnDestroy {
     }
   }
 
+  attemptToRenameFoler() {
+    //calling try-to-rename-folder to update folder and then re-scan
+
+    this.nodeRenamingFile = true;
+    this.renameErrMsg = '';
+    const sourceFolder: string = this.selectedSourceFolder + this.currentRightClickedItem.partialPath;
+    const renameTo: string = sourceFolder.substring(0, sourceFolder.lastIndexOf("/")) + "/" + this.renamingWIP;
+
+    if (sourceFolder === renameTo) {
+      this.renameErrMsg = 'RIGHTCLICK.errorMustBeDifferent';
+      this.nodeRenamingFile = false;
+    } else if (this.renamingWIP.length === 0) {
+      this.renameErrMsg = 'RIGHTCLICK.errorMustNotBeEmpty';
+      this.nodeRenamingFile = false;
+    } else {
+      this.electronService.ipcRenderer.send(
+        'try-to-rename-this-folder',
+        sourceFolder,
+        renameTo,
+        this.renamingWIP,
+        this.currentRightClickedItem.index
+      );
+    }
+  }
+
   ngOnDestroy() {
     this.responseSubscription.unsubscribe();
+    this.folderResponseSubscription.unsubscribe();
   }
 }

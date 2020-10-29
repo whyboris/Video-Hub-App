@@ -35,6 +35,7 @@ import {
   AllSupportedViews,
   HistoryItem,
   RenameFileResponse,
+  RenameFolderResponse,
   SupportedTrayView,
   SupportedView,
   VideoClickEmit,
@@ -300,6 +301,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   numberScreenshotsDeletedBehaviorSubject: BehaviorSubject<number> = new BehaviorSubject(undefined);
   oldFolderReconnectedBehaviorSubject: BehaviorSubject<{source: number, path: string}> = new BehaviorSubject(undefined);
   renameFileResponseBehaviorSubject: BehaviorSubject<RenameFileResponse> = new BehaviorSubject(undefined);
+  renameFolderresponseBehaviorSubject:BehaviorSubject<RenameFolderResponse> = new BehaviorSubject(undefined);
 
   // ========================================================================
   // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
@@ -415,7 +417,29 @@ export class HomeComponent implements OnInit, AfterViewInit {
           });
           this.renameFileResponseBehaviorSubject.next(undefined); // allways remove right away
 
-      });
+    });
+
+    this.electronService.ipcRenderer.on(
+      'rename-folder-response', (
+          event,
+          success: boolean,
+          index: number,
+          renameTo: string,
+          sourceFolder: string,
+          errMsg?: string
+        ) => {
+
+          this.renameFolderresponseBehaviorSubject.next({
+            index: index,
+            success: success,
+            renameTo: renameTo,
+            sourceFolder:sourceFolder,
+            errMsg: errMsg,
+          });
+          this.renameFolderresponseBehaviorSubject.next(undefined); // allways remove right away
+
+    });
+
 
 
     // for statistics.component
@@ -1900,7 +1924,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.currentRightClickedItem = item;
     this.rightClickShowing = true;
   }
-
+  ok(){
+    console.log("ok")
+  }
   /**
    * When in double-click mode and a video is clicked - `currentClickedItemName` updated
    * @param item
