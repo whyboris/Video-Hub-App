@@ -369,8 +369,12 @@
           'height': 'calc(100vh - ' + (
                         appState.menuHidden | sidebarHeightPipe
                           : settingsButtons['hideTop'].toggled
-                          : settingsButtons['showRelatedVideosTray'].toggled
-                          : settingsButtons['showTagTray'].toggled
+                          : (
+                                 settingsButtons['showRelatedVideosTray'].toggled
+                              || settingsButtons['showRecentlyPlayed'].toggled
+                              || settingsButtons['showTagTray'].toggled
+                              || settingsButtons['showFreq'].toggled
+                            )
                       ) + 'px)'
         }"
       #searchRef
@@ -618,12 +622,16 @@
       class="gallery-container"
 
       [ngStyle]="{
-        'height': 'calc(100vh - ' + (
-                      appState.menuHidden | sidebarHeightPipe
-                        : settingsButtons['hideTop'].toggled
-                        : settingsButtons['showRelatedVideosTray'].toggled
-                        : settingsButtons['showTagTray'].toggled
-                    ) + 'px)'
+          'height': 'calc(100vh - ' + (
+                        appState.menuHidden | sidebarHeightPipe
+                          : settingsButtons['hideTop'].toggled
+                          : (
+                                 settingsButtons['showRelatedVideosTray'].toggled
+                              || settingsButtons['showRecentlyPlayed'].toggled
+                              || settingsButtons['showTagTray'].toggled
+                              || settingsButtons['showFreq'].toggled
+                            )
+                      ) + 'px)'
         }"
 
       [enableUnequalChildrenSizes]="appState.currentView === 'showFullView'"
