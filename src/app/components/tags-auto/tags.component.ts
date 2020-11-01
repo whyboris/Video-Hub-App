@@ -62,6 +62,7 @@ export class TagsComponent implements OnInit, OnDestroy {
 
   /**
    * Emit string to home component to search for this string
+   * if in `editMode` update tags accordingly
    */
   tagWasClicked(tag: string): void {
     if (this.editMode) {
