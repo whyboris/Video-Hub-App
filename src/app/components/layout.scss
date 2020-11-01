@@ -308,6 +308,18 @@
   }
 }
 
+.bottom-tray-tabs-dark {
+  button {
+    background: black !important;
+    border: 1px solid #333333 !important;
+    color: white;
+  }
+
+  .active-tab {
+    border-bottom: 1px solid black !important;
+  }
+}
+
 .no-results {
   box-sizing: border-box;
   position: absolute;

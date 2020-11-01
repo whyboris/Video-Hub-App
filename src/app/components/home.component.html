@@ -972,6 +972,7 @@
 <div
   class="all-settings-tabs bottom-tray-tabs"
   [ngClass]="{
+    'bottom-tray-tabs-dark': settingsButtons['darkMode'].toggled,
     'bottom-tray-tabs-open': settingsButtons['showRelatedVideosTray'].toggled
                           || settingsButtons['showRecentlyPlayed'].toggled
                           || settingsButtons['showTagTray'].toggled
@@ -1013,6 +1014,7 @@
 
 <div
   class="bottom-tray"
+  [ngClass]="{ 'bottom-tray-dark': settingsButtons['darkMode'].toggled }"
   *ngIf="settingsButtons['showRelatedVideosTray'].toggled
       || settingsButtons['showRecentlyPlayed'].toggled
       || settingsButtons['showTagTray'].toggled

@@ -1,6 +1,5 @@
 <div
   class="manual-tag-tray"
-  [ngClass]="{ 'bottom-tray-dark': settingsButtons['darkMode'].toggled }"
 >
   <div class="tag-tray-menu-left" *ngIf="!batchTaggingMode; else batchModeExplainer">
     <button
@@ -45,7 +44,11 @@
 
   <button
     class="wizard-button wizard-button-small button-toggle-batch-mode"
-    [ngClass]="{ 'edit-mode-active': batchTaggingMode }"
+    [ngClass]="{
+      'button-toggle-batch-mode-dark': settingsButtons['darkMode'].toggled,
+      'button-toggle-batch-mode-dark-active': settingsButtons['darkMode'].toggled && batchTaggingMode,
+      'edit-mode-active': batchTaggingMode
+    }"
     (click)="toggleBatchTaggingMode.emit()"
   >
     {{ 'TAGS.batchModeButton' | translate }}

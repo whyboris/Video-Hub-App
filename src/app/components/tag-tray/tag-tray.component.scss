@@ -63,3 +63,13 @@
   left: 9px;
   position: absolute;
 }
+
+.button-toggle-batch-mode-dark {
+  background: #333333;
+  color: white !important;
+}
+
+.button-toggle-batch-mode-dark-active {
+  background: $pretty-red;
+  color: black !important;
+}
