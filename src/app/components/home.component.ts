@@ -1269,8 +1269,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.wizard.showWizard = false;
   }
 
-  tagClicked(event: string): void {
-    this.filters[3].array = []; // clear search array
+  /**
+   * Handle auto-generated tag clicked: add it to file search filter
+   * @param event
+   */
+  autoTagClicked(event: string): void {
+    if (!this.settingsButtons['autoFileTags'].toggled) {
+      this.settingsButtons['autoFileTags'].toggled = true;
+    }
     this.handleTagWordClicked(event);
     this.toggleButton('showTags'); // close the modal
   }
