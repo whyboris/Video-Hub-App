@@ -55,6 +55,14 @@
       color: $gray-80;
     }
   }
+
+  .manual-tag-tray-filter-dark {
+    color: white;
+
+    &::placeholder {
+      color: $gray-20;
+    }
+  }
 }
 
 .button-toggle-batch-mode {
@@ -67,9 +75,27 @@
 .button-toggle-batch-mode-dark {
   background: #333333;
   color: white !important;
+
+  &:hover {
+    background: #555555;
+  }
 }
 
 .button-toggle-batch-mode-dark-active {
   background: $pretty-red;
   color: black !important;
+
+  &:hover {
+    background-color: $pretty-red-lighter;
+  }
+}
+
+.select-all-dark {
+  background: #333333;
+  border: 1px solid #888888;
+  color: white;
+
+  &:hover {
+    background: #555555;
+  }
 }
