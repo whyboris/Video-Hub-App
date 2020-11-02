@@ -1,4 +1,7 @@
 <div class="columns-container">
+
+  <!-- Below two elements are identical except for `oneWordTags` vs `twoWordTags` -->
+
   <ul class="column">
     <li
       *ngFor="let item of oneWordTags | tagFrequencyPipe: minimumFrequency
@@ -19,17 +22,15 @@
         {{ item.word }}<!--
    --></span>
       <!-- using opacity instead of *ngIf because creation of hundreds of elements is slow -->
-      <app-icon
+      <span
+        class="delete-tag-hack"
         [ngStyle]="{ opacity: editMode ? 1 : 0 }"
-        [icon]="'icon-close'"
-        class="icon-lol"
-      ></app-icon>
+      >x</span>
     </li>
   </ul>
 
   <ul class="column">
     <li
-      class="capitalize"
       *ngFor="let item of twoWordTags | tagFrequencyPipe: minimumFrequency
                                       | tagFilterPipe: currentFiltering
                                       | alphabetPrefixPipe"
@@ -48,14 +49,15 @@
         {{ item.word }}<!--
    --></span>
       <!-- using opacity instead of *ngIf because creation of hundreds of elements is slow -->
-      <app-icon
+      <span
+        class="delete-tag-hack"
         [ngStyle]="{ opacity: editMode ? 1 : 0 }"
-        class="icon-lol"
-        [icon]="'icon-close'"
-      ></app-icon>
+      >x</span>
     </li>
   </ul>
 </div>
+
+<!-- Bottom tray for edeting & searching tags -->
 
 <div
   *ngIf="showEdit"

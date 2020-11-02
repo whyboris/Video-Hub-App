@@ -49,10 +49,6 @@ ul {
   width: 20px;
 }
 
-.capitalize {
-  text-transform: capitalize;
-}
-
 .prefix {
   color: $gray-30;
   cursor: default;
@@ -126,13 +122,13 @@ ul {
   text-align: left;
 }
 
-.icon-lol {
-  fill: $pretty-red;
+.delete-tag-hack {
+  color: $pretty-red;
+  font-size: 12px;
   position: absolute;
-  transform: translate(3px, 1px);
+  transform: translate(8px, 1px);
   transition-duration: 300ms;
   transition-property: opacity;
-  width: 15px;
 }
 
 .strikethrough {
