@@ -7,8 +7,8 @@
     <virtual-scroller
       #scrollOne
       class="virt-scroll"
-      [items]="oneWordTags | tagFrequencyPipe: minimumFrequency
-                           | tagFilterPipe: currentFiltering
+      [items]="oneWordTags | tagFrequencyPipe : minimumFrequency
+                           | tagFilterPipe : currentFiltering
                            | alphabetPrefixPipe"
     >
       <li
@@ -41,8 +41,8 @@
     <virtual-scroller
       #scrollTwo
       class="virt-scroll"
-      [items]="twoWordTags | tagFrequencyPipe: minimumFrequency
-                           | tagFilterPipe: currentFiltering
+      [items]="twoWordTags | tagFrequencyPipe : minimumFrequency
+                           | tagFilterPipe : currentFiltering
                            | alphabetPrefixPipe"
     >
 
