@@ -64,24 +64,26 @@ export class AutoTagsService {
           const t3 = performance.now();
           console.log("long 1 " + (t3 - t2) + " milliseconds."); // 4 seconds
 
-          // THIS TAKES 4 SECONDS
-          // function is pure -- ready to migrate into web worker!
-          this.twoWordFreqMap = this.cleanTwoWordMap(potentialTwoWordMap, this.onlyFileNames);
+          // THIS TAKES 4 SECONDS before `.then` is executed
+          this.doWebWorkerProcessing(potentialTwoWordMap).then((data) => {
+            console.log('WEB WORKER FINISHED');
 
-          const t4 = performance.now();
-          console.log("long 2 " + (t4 - t3) + " milliseconds."); // 4 seconds
+            this.twoWordFreqMap = data;
 
-          this.cleanTwoWordMapBelowCutoff();
+            this.cleanTwoWordMapBelowCutoff();
 
-          this.cleanOneWordMapUsingTwoWordMap();
+            this.cleanOneWordMapUsingTwoWordMap();
 
-          this.trimMap(this.oneWordFreqMap, 5);
-          this.trimMap(this.twoWordFreqMap, 3);
+            this.trimMap(this.oneWordFreqMap, 5);
+            this.trimMap(this.twoWordFreqMap, 3);
 
-          this.loadAddTags();
-          this.loadRemoveTags();
+            this.loadAddTags();
+            this.loadRemoveTags();
 
-          res(true);
+            res(true);
+
+          });
+
         }, 1);
 
       } else {
@@ -90,6 +92,30 @@ export class AutoTagsService {
 
     });
 
+  }
+
+  /**
+   * Outsource `cleanTwoWordMap` process to the web worker to prevent locking up the UI
+   * @param potentialTwoWordMap
+   */
+  private doWebWorkerProcessing(potentialTwoWordMap): Promise<Map<string, number>> {
+    return new Promise((resolve, reject) => {
+      if (typeof Worker !== 'undefined') {
+        const worker = new Worker('./tags.worker', { type: 'module' });
+
+        worker.onmessage = (message) => {
+          resolve(message.data);
+        };
+
+        worker.postMessage({
+          potentialTwoWordMap: potentialTwoWordMap,
+          onlyFileNames: this.onlyFileNames,
+        });
+
+      } else {
+        console.log('ERROR !!!!!!!!!!!!!!! WORKER CAN NOT START !!!');
+      }
+    });
   }
 
   /**
@@ -185,31 +211,6 @@ export class AutoTagsService {
       }
 
     });
-  }
-
-  /**
-   * Create the `twoWordFreqMap` by using the `potentialTwoWordMap` word map
-   * Recount actual occurrences
-   */
-  private cleanTwoWordMap(potentialTwoWordMap: Map<string, number>, onlyFileNames: string[]): Map<string, number> {     // PURE FUNCTION !!!
-
-    const twoWordFreqMap: Map<string, number> = new Map();
-
-    potentialTwoWordMap.forEach((val: number, key: string) => {
-
-      if (val > 3) { // set a variable here instead!
-        let newCounter: number = 0;
-
-        for (let i = 0; i < onlyFileNames.length; i++) {
-          if (onlyFileNames[i].includes(key)) {
-            newCounter++;
-            twoWordFreqMap.set(key, newCounter);
-          }
-        }
-      }
-    });
-
-    return twoWordFreqMap;
   }
 
   /**
