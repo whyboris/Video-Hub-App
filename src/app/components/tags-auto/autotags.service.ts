@@ -17,7 +17,6 @@ export const autoFileTagsRegex: RegExp = /\b(\w+)\b/g;
 export class AutoTagsService {
 
   oneWordFreqMap: Map<string, number> = new Map();
-  potentialTwoWordMap: Map<string, number> = new Map();
   twoWordFreqMap: Map<string, number> = new Map();
 
   onlyFileNames: string[] = [];         // array with just clean file names toLowerCase
@@ -53,11 +52,26 @@ export class AutoTagsService {
 
           this.cleanOneWordFreqMap(); // only to have items Math.max(oneWordMinInstances, twoWordMinInstances)
 
+          const t2 = performance.now();
+
+          // THIS TAKES 4 SECONDS
+          const potentialTwoWordMap: Map<string, number> = new Map();
+
           this.oneWordFreqMap.forEach((val: number, key: string) => {
-            this.findTwoWords(key);
+            this.findTwoWords(potentialTwoWordMap, key);
           });
 
-          this.cleanTwoWordMap();
+          const t3 = performance.now();
+          console.log("long 1 " + (t3 - t2) + " milliseconds."); // 4 seconds
+
+          // THIS TAKES 4 SECONDS
+          // function is pure -- ready to migrate into web worker!
+          this.twoWordFreqMap = this.cleanTwoWordMap(potentialTwoWordMap, this.onlyFileNames);
+
+          const t4 = performance.now();
+          console.log("long 2 " + (t4 - t3) + " milliseconds."); // 4 seconds
+
+          this.cleanTwoWordMapBelowCutoff();
 
           this.cleanOneWordMapUsingTwoWordMap();
 
@@ -83,7 +97,6 @@ export class AutoTagsService {
    */
   private resetState(): void {
     this.oneWordFreqMap = new Map();
-    this.potentialTwoWordMap = new Map();
     this.twoWordFreqMap = new Map();
     this.onlyFileNames = [];
   }
@@ -145,7 +158,7 @@ export class AutoTagsService {
    * If on the list, add the two-word string to `potentialTwoWordMap`
    * @param singleWord
    */
-  private findTwoWords(singleWord: string): void {
+  private findTwoWords(potentialTwoWordMap: Map<string, number>, singleWord: string): void {
 
     const filesContainingTheSingleWord: string[] = [];
 
@@ -165,46 +178,50 @@ export class AutoTagsService {
       if (this.oneWordFreqMap.has(nextWord)) {
         const twoWordPair = singleWord + ' ' + nextWord;
 
-        let currentOccurrences = this.potentialTwoWordMap.get(twoWordPair) || 0;
+        let currentOccurrences = potentialTwoWordMap.get(twoWordPair) || 0;
         currentOccurrences++;
 
-        this.potentialTwoWordMap.set(twoWordPair, currentOccurrences);
+        potentialTwoWordMap.set(twoWordPair, currentOccurrences);
       }
 
     });
-
   }
 
   /**
    * Create the `twoWordFreqMap` by using the `potentialTwoWordMap` word map
    * Recount actual occurrences
    */
-  private cleanTwoWordMap(): void {
+  private cleanTwoWordMap(potentialTwoWordMap: Map<string, number>, onlyFileNames: string[]): Map<string, number> {     // PURE FUNCTION !!!
 
-    this.potentialTwoWordMap.forEach((val: number, key: string) => {
+    const twoWordFreqMap: Map<string, number> = new Map();
+
+    potentialTwoWordMap.forEach((val: number, key: string) => {
 
       if (val > 3) { // set a variable here instead!
         let newCounter: number = 0;
 
-        for (let i = 0; i < this.onlyFileNames.length; i++) {
-          if (this.onlyFileNames[i].includes(key)) {
+        for (let i = 0; i < onlyFileNames.length; i++) {
+          if (onlyFileNames[i].includes(key)) {
             newCounter++;
-            this.twoWordFreqMap.set(key, newCounter);
+            twoWordFreqMap.set(key, newCounter);
           }
         }
       }
     });
 
-    this.twoWordFreqMap.forEach((val: number, key: string) => {
+    return twoWordFreqMap;
+  }
 
+  /**
+   * Remove any elements from the map below the cutoff
+   */
+  private cleanTwoWordMapBelowCutoff(): void {
+    this.twoWordFreqMap.forEach((val: number, key: string) => {
       if (val <= this.twoWordMinInstances) {
         this.twoWordFreqMap.delete(key);
       }
-
     });
-
   }
-
 
   /**
    * clean up the one word map to not include anything that is in the list of two-word tags
