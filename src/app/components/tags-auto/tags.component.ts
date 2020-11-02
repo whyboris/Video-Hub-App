@@ -23,8 +23,8 @@ export class TagsComponent implements OnInit, OnDestroy {
 
   @ViewChild('filterInput', { static: false }) filterInput: ElementRef;
 
-  oneWordTags: WordAndFreq[];
-  twoWordTags: WordAndFreq[];
+  oneWordTags: WordAndFreq[] = [];
+  twoWordTags: WordAndFreq[] = [];
 
   editMode: boolean = false;
 
@@ -51,17 +51,21 @@ export class TagsComponent implements OnInit, OnDestroy {
     }, 300);
 
     setTimeout(() => {
-      this.filterInput.nativeElement.focus();
+      if (this.filterInput) { // in case user already closed the modal
+        this.filterInput.nativeElement.focus();
+      }
     }, 350);
 
-    this.tagsService.generateAllTags(this.imageElemetService.imageElements, this.hubName);
+    this.tagsService.generateAllTags(this.imageElemetService.imageElements, this.hubName).then(() => {
+      this.oneWordTags = this.tagsService.getOneWordTags();
+      this.twoWordTags = this.tagsService.getTwoWordTags();
+    });
 
-    this.oneWordTags = this.tagsService.getOneWordTags();
-    this.twoWordTags = this.tagsService.getTwoWordTags();
   }
 
   /**
    * Emit string to home component to search for this string
+   * if in `editMode` update tags accordingly
    */
   tagWasClicked(tag: string): void {
     if (this.editMode) {

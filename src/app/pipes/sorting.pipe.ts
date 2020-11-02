@@ -195,9 +195,21 @@ export class SortingPipe implements PipeTransform {
         return this.sortFunctionLol(x, y, 'alphabetical', false);
       });
     } else if (sortingType === 'alphabetAsc2') {
+      if (galleryArray.length && galleryArray[0].fileName === '*UP*') {
+        const tempGallery: ImageElement[] = galleryArray.slice();
+        const tempUp: ImageElement = tempGallery.shift(); // remove the first element (*UP*)
+        return [tempUp, ...orderBy(tempGallery, 'fileName', 'asc')];
+      } else {
         return orderBy(galleryArray, 'fileName', 'asc');
+      }
     } else if (sortingType === 'alphabetDesc2') {
+      if (galleryArray.length && galleryArray[0].fileName === '*UP*') {
+        const tempGallery: ImageElement[] = galleryArray.slice();
+        const tempUp: ImageElement = tempGallery.shift(); // remove the first element (*UP*)
+        return [tempUp, ...orderBy(tempGallery, 'fileName', 'desc')];
+      } else {
         return orderBy(galleryArray, 'fileName', 'desc');
+      }
     } else if (sortingType === 'sizeAsc') {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'fileSize', true);
