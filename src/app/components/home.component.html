@@ -649,44 +649,44 @@
 
       [items]="imageElementService.imageElements
 
-                | deleteFilePipe: deletePipeHack
+                | deleteFilePipe : deletePipeHack
 
-                | hideOfflinePipe: settingsButtons['hideOffline'].toggled
+                | hideOfflinePipe : settingsButtons['hideOffline'].toggled
 
-                | returnZeroPipe: (appState.currentView === 'showClips' && currentScreenshotSettings.clipSnippets === 0)
+                | returnZeroPipe : (appState.currentView === 'showClips' && currentScreenshotSettings.clipSnippets === 0)
 
-                | fileSearchPipe: filters[0].array : filters[0].bool : true  : 'folder' : false
+                | fileSearchPipe : filters[0].array : filters[0].bool : true  : 'folder' : false
 
-                | fileSearchPipe: filters[1].array : filters[1].bool : false : 'folder' : false
+                | fileSearchPipe : filters[1].array : filters[1].bool : false : 'folder' : false
 
-                | fileSearchPipe: filters[2].array : filters[2].bool : true  : 'file' : false
+                | fileSearchPipe : filters[2].array : filters[2].bool : true  : 'file'   : false
 
-                | fileSearchPipe: filters[3].array : filters[3].bool : false : 'file' : false
+                | fileSearchPipe : filters[3].array : filters[3].bool : false : 'file'   : false
 
-                | fileSearchPipe: filters[4].array : filters[4].bool : true  : 'file' : true
+                | fileSearchPipe : filters[4].array : filters[4].bool : true  : 'file'   : true
 
-                | fileSearchPipe: filters[5].array : filters[5].bool : true  : 'tag' : false
-                                  : settingsButtons['manualTags'].toggled
-                                  : settingsButtons['autoFileTags'].toggled
-                                  : settingsButtons['autoFolderTags'].toggled
+                | fileSearchPipe : filters[5].array : filters[5].bool : true  : 'tag'    : false
+                                 : settingsButtons['manualTags'].toggled
+                                 : settingsButtons['autoFileTags'].toggled
+                                 : settingsButtons['autoFolderTags'].toggled
 
-                | fileSearchPipe: filters[6].array : filters[6].bool : false : 'tag' : false
-                                  : settingsButtons['manualTags'].toggled
-                                  : settingsButtons['autoFileTags'].toggled
-                                  : settingsButtons['autoFolderTags'].toggled
+                | fileSearchPipe : filters[6].array : filters[6].bool : false : 'tag'    : false
+                                 : settingsButtons['manualTags'].toggled
+                                 : settingsButtons['autoFileTags'].toggled
+                                 : settingsButtons['autoFolderTags'].toggled
 
-                | fileSearchPipe: filters[7].array : filters[7].bool : true  : 'tag' : true
-                                  : settingsButtons['manualTags'].toggled
-                                  : settingsButtons['autoFileTags'].toggled
-                                  : settingsButtons['autoFolderTags'].toggled
+                | fileSearchPipe : filters[7].array : filters[7].bool : true  : 'tag'    : true
+                                 : settingsButtons['manualTags'].toggled
+                                 : settingsButtons['autoFileTags'].toggled
+                                 : settingsButtons['autoFolderTags'].toggled
 
-                | fileSearchPipe: filters[8].array : filters[8].bool : false : 'notes' : false
+                | fileSearchPipe : filters[8].array : filters[8].bool : false : 'notes'  : false
 
-                | magicSearchPipe: magicSearchString
+                | magicSearchPipe : magicSearchString
 
-                | regexSearchPipe: regexSearchString
+                | regexSearchPipe : regexSearchString
 
-                | fuzzySearchPipe: fuzzySearchString
+                | fuzzySearchPipe : fuzzySearchString
 
                 | duplicateFinderPipe : settingsButtons['duplicateLength'].toggled : 'length'
 
@@ -694,42 +694,42 @@
 
                 | duplicateFinderPipe : settingsButtons['duplicateHash'].toggled : 'hash'
 
-                | lengthFilterPipe: settingsButtons['durationFilter'].toggled
+                | lengthFilterPipe : settingsButtons['durationFilter'].toggled
                                     : lengthLeftBound
                                     : lengthRightBound
 
-                | fileSizeFilterPipe: settingsButtons['sizeFilter'].toggled
-                                    : sizeLeftBound
-                                    : sizeRightBound
+                | fileSizeFilterPipe : settingsButtons['sizeFilter'].toggled
+                                     : sizeLeftBound
+                                     : sizeRightBound
 
-                | resolutionFilterPipe: settingsButtons['resolutionFilter'].toggled
-                                        : freqLeftBound
-                                        : freqRightBound
+                | resolutionFilterPipe : settingsButtons['resolutionFilter'].toggled
+                                       : freqLeftBound
+                                       : freqRightBound
 
-                | starFilterPipe: settingsButtons['starFilter'].toggled
-                                  : starLeftBound
-                                  : starRightBound
-                                  : imageElementService.forceStarFilterUpdate
+                | starFilterPipe : settingsButtons['starFilter'].toggled
+                                 : starLeftBound
+                                 : starRightBound
+                                 : imageElementService.forceStarFilterUpdate
 
-                | similarityPipe: showSimilar : findMostSimilar
+                | similarityPipe : showSimilar : findMostSimilar
 
-                | wordFrequencyPipe: settingsButtons['showFreq'].toggled
-                                     : settingsButtons['manualTags'].toggled
-                                     : settingsButtons['autoFileTags'].toggled
-                                     : settingsButtons['autoFolderTags'].toggled
+                | wordFrequencyPipe : settingsButtons['showFreq'].toggled
+                                    : settingsButtons['manualTags'].toggled
+                                    : settingsButtons['autoFileTags'].toggled
+                                    : settingsButtons['autoFolderTags'].toggled
 
                 | countPipe
 
-                | folderViewPipe: (settingsButtons['showFolders'].toggled)
-                                  && (appState.currentView === 'showThumbnails' ||
-                                      appState.currentView === 'showFiles' ||
-                                      appState.currentView === 'showClips')
-                                  : folderViewNavigationPath
+                | folderViewPipe : (settingsButtons['showFolders'].toggled)
+                                   && (   appState.currentView === 'showThumbnails'
+                                       || appState.currentView === 'showFiles'
+                                       || appState.currentView === 'showClips')
+                                 : folderViewNavigationPath
 
-                | sortingPipe: sortType : shuffleTheViewNow : (   settingsButtons['duplicateLength'].toggled
-                                                               || settingsButtons['duplicateSize'].toggled
-                                                               || settingsButtons['duplicateHash'].toggled
-                                                               || (sortType === 'default' && fuzzySearchString.length > 2))
+                | sortingPipe : sortType : shuffleTheViewNow : (   settingsButtons['duplicateLength'].toggled
+                                                                || settingsButtons['duplicateSize'].toggled
+                                                                || settingsButtons['duplicateHash'].toggled
+                                                                || (sortType === 'default' && fuzzySearchString.length > 2))
 
                 | playlistPipe"
     >
