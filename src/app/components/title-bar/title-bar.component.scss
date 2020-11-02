@@ -19,10 +19,10 @@
   -webkit-app-region: drag;
   color: $gray-70;
   font-size: 12px;
+  margin-top: 4px;
   overflow: hidden;
   position: absolute;
   text-align: center;
-  padding-top: 4px;
   transition: 300ms;
   white-space: nowrap;
   width: calc(100vw - 70px);
@@ -50,19 +50,19 @@
   transition-property: fill;
 
   &.closeButton {
-    right: 0;
     padding-right: 7px;
     padding-top: 2px;
+    right: 0;
   }
 
   &.maximizeButton {
-    right: 26px;
     padding-top: 2px;
+    right: 26px;
   }
 
   &.minimizeButton {
-    right: 46px;
     padding-top: 2px;
+    right: 46px;
   }
 
   &:hover {
@@ -78,8 +78,8 @@
   cursor: pointer;
   height: 13px;
   padding: 0;
-  position: fixed;
   padding-top: 3.5px;
+  position: fixed;
   transition: 400ms;
   width: 13px;
 

@@ -16,8 +16,8 @@
   <app-thumbnail
     *ngFor="let item of (showRecentNotSimilar
                           ?  imageElementService.recentlyPlayed
-                          : (imageElementService.imageElements | similarityPipe: true : currentClickedItemName
-                                                               | slice: 0 : 8 )
+                          : (imageElementService.imageElements | similarityPipe : true : currentClickedItemName
+                                                               | slice : 0 : 8 )
                         )"
 
     (videoClick)="handleClick.emit({ expectedEvent: $event, item: item })"

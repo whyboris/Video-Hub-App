@@ -36,34 +36,45 @@ export class AutoTagsService {
    * Go through the whole process of generating the 1-word and 2-word arrays
    * @param finalArray - ImageElement[] of all files from app
    */
-  public generateAllTags(finalArray: ImageElement[], hubName): void {
+  public generateAllTags(finalArray: ImageElement[], hubName: string): Promise<boolean> {
 
-    if (this.cachedHub !== hubName) {
+    return new Promise((res, rej) => {
 
-      this.resetState();
+      if (this.cachedHub !== hubName) {
 
-      this.cachedHub = hubName;
+        this.resetState();
 
-      this.storeFinalArrayInMemory(finalArray);
+        this.cachedHub = hubName;
 
-      this.cleanOneWordFreqMap(); // only to have items Math.max(oneWordMinInstances, twoWordMinInstances)
+        // When hub has thousands of videos, the startup may freeze the UI
+        // setTimeout decreases the freezing
+        setTimeout(() => {
+          this.storeFinalArrayInMemory(finalArray);
 
-      this.oneWordFreqMap.forEach((val: number, key: string) => {
-        this.findTwoWords(key);
-      });
+          this.cleanOneWordFreqMap(); // only to have items Math.max(oneWordMinInstances, twoWordMinInstances)
 
-      this.cleanTwoWordMap();
+          this.oneWordFreqMap.forEach((val: number, key: string) => {
+            this.findTwoWords(key);
+          });
 
-      this.cleanOneWordMapUsingTwoWordMap();
+          this.cleanTwoWordMap();
 
-      this.trimMap(this.oneWordFreqMap, 5);
-      this.trimMap(this.twoWordFreqMap, 3);
+          this.cleanOneWordMapUsingTwoWordMap();
 
-      this.loadAddTags();
+          this.trimMap(this.oneWordFreqMap, 5);
+          this.trimMap(this.twoWordFreqMap, 3);
 
-      this.loadRemoveTags();
+          this.loadAddTags();
+          this.loadRemoveTags();
 
-    }
+          res(true);
+        }, 1);
+
+      } else {
+        res(true);
+      }
+
+    });
 
   }
 
