@@ -3,7 +3,7 @@ import { Component, EventEmitter, Input, Output, OnDestroy, ViewChild, ElementRe
 import { AutoTagsService, WordAndFreq } from './autotags.service';
 import { AutoTagsSaveService } from './tags-save.service';
 
-import { slowFadeIn, donutAppear } from '../../common/animations';
+import { slowFadeIn, donutAppear, metaAppear } from '../../common/animations';
 import { ImageElementService } from './../../services/image-element.service';
 
 @Component({
@@ -13,7 +13,7 @@ import { ImageElementService } from './../../services/image-element.service';
               '../../fonts/icons.scss',
               '../wizard-button.scss',
               'tags.component.scss'],
-  animations: [slowFadeIn, donutAppear]
+  animations: [slowFadeIn, donutAppear, metaAppear]
 })
 export class TagsComponent implements OnInit, OnDestroy {
 
@@ -29,6 +29,8 @@ export class TagsComponent implements OnInit, OnDestroy {
   editMode: boolean = false;
 
   showEdit: boolean = false;
+
+  loading: boolean = true;
 
   currentAdding: string = '';
   currentFiltering: string = '';
@@ -46,17 +48,19 @@ export class TagsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    setTimeout(() => {
-      this.showEdit = true;
-    }, 300);
-
-    setTimeout(() => {
-      if (this.filterInput) { // in case user already closed the modal
-        this.filterInput.nativeElement.focus();
-      }
-    }, 350);
-
     this.tagsService.generateAllTags(this.imageElemetService.imageElements, this.hubName).then(() => {
+
+      setTimeout(() => {
+        this.showEdit = true;
+      }, 300);
+
+      setTimeout(() => {
+        if (this.filterInput) { // in case user already closed the modal
+          this.filterInput.nativeElement.focus();
+        }
+      }, 350);
+
+      this.loading = false;
       this.oneWordTags = this.tagsService.getOneWordTags();
       this.twoWordTags = this.tagsService.getTwoWordTags();
     });
