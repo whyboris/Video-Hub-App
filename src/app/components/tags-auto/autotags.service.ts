@@ -49,18 +49,13 @@ export class AutoTagsService {
 
         this.cleanOneWordFreqMap(); // only to have items Math.max(oneWordMinInstances, twoWordMinInstances)
 
-        // THIS TAKES 4 SECONDS before `.then` is executed
-        this.doFirstWebWorkerProcessing(this.onlyFileNames, this.oneWordFreqMap).then((data1) => {
-          const potentialTwoWordMap: Map<string, number> = data1;
+        this.getPotentialTwoWordMap(this.onlyFileNames, this.oneWordFreqMap).then((potentialTwoWordMap) => {
 
-          // THIS TAKES 4 SECONDS before `.then` is executed
-          this.doWebWorkerProcessing(potentialTwoWordMap).then((data2) => {
-            console.log('WEB WORKER FINISHED');
+          this.getTwoWordFreqMap(potentialTwoWordMap).then((twoWordFreqMap) => {
 
-            this.twoWordFreqMap = data2;
+            this.twoWordFreqMap = twoWordFreqMap;
 
             this.cleanTwoWordMapBelowCutoff();
-
             this.cleanOneWordMapUsingTwoWordMap();
 
             this.trimMap(this.oneWordFreqMap, 5);
@@ -83,7 +78,13 @@ export class AutoTagsService {
 
   }
 
-  private doFirstWebWorkerProcessing(
+  /**
+   * Outsource the CPU-intensive work to a web worker to prevent locking up the UI
+   * With 10,000 videos takes about 4 seconds
+   *
+   * @returns `potentialTwoWordMap` -- requires further cleaning
+   */
+  private getPotentialTwoWordMap(
     onlyFileNames: string[],
     oneWordFreqMap: Map<string, number>
   ): Promise<Map<string, number>> {
@@ -111,10 +112,13 @@ export class AutoTagsService {
   }
 
   /**
-   * Outsource `cleanTwoWordMap` process to the web worker to prevent locking up the UI
+   * Outsource the CPU-intensive work to a web worker to prevent locking up the UI
+   * With 10,000 videos takes about 4 seconds
+   * performs `cleanTwoWordMap`
    * @param potentialTwoWordMap
    */
-  private doWebWorkerProcessing(potentialTwoWordMap): Promise<Map<string, number>> {
+  private getTwoWordFreqMap(potentialTwoWordMap: Map<string, number>): Promise<Map<string, number>> {
+
     return new Promise((resolve, reject) => {
       if (typeof Worker !== 'undefined') {
         const worker = new Worker('./tags.worker', { type: 'module' });
@@ -133,6 +137,7 @@ export class AutoTagsService {
         console.log('ERROR !!!!!!!!!!!!!!! WORKER CAN NOT START !!!');
       }
     });
+
   }
 
   /**

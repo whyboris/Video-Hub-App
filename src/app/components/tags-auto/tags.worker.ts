@@ -3,12 +3,15 @@
 addEventListener('message', received);
 
 function received(message: any): void {
+
   if (message.data.task === 1) {
-    console.log('task1');
-    postMessage(firstTask(message.data.onlyFileNames, message.data.oneWordFreqMap));
+    // console.log('task1');
+    postMessage(getPotentialTwoWordTags(message.data.onlyFileNames, message.data.oneWordFreqMap));
+
   } else if (message.data.task === 2) {
-    console.log('task2');
-    postMessage(cleanTwoWordMap(message.data.potentialTwoWordMap, message.data.onlyFileNames));
+    // console.log('task2');
+    postMessage(getCleanTwoWordMap(message.data.potentialTwoWordMap, message.data.onlyFileNames));
+
   }
 };
 
@@ -18,7 +21,7 @@ function received(message: any): void {
  *
  *    Takes 4 seconds with 10,000 entries
  */
-function cleanTwoWordMap(
+function getCleanTwoWordMap(
   potentialTwoWordMap: Map<string, number>,
   onlyFileNames: string[]
 ): Map<string, number> {
@@ -42,8 +45,12 @@ function cleanTwoWordMap(
   return twoWordFreqMap;
 }
 
-
-function firstTask(
+/**
+ * Find potential two-word tags based on single word tags
+ * @param onlyFileNames
+ * @param oneWordFreqMap
+ */
+function getPotentialTwoWordTags(
   onlyFileNames: string[],
   oneWordFreqMap: Map<string, number>
 ): Map<string, number> {
@@ -64,7 +71,11 @@ function firstTask(
 /**
  * Given a single word from tag list, look up following word
  * If on the list, add the two-word string to `potentialTwoWordMap`
+ *
+ * @param potentialTwoWordMap
  * @param singleWord
+ * @param onlyFileNames
+ * @param oneWordFreqMap
  */
 function findTwoWords(
   potentialTwoWordMap: Map<string, number>, // THIS VARIABLE GETS UPDATED !!!
