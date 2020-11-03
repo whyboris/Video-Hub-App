@@ -82,7 +82,10 @@ export class AutoTagsService {
    * Outsource the CPU-intensive work to a web worker to prevent locking up the UI
    * With 10,000 videos takes about 4 seconds
    *
-   * @returns `potentialTwoWordMap` -- requires further cleaning
+   * return `potentialTwoWordMap` -- requires further cleaning
+   *
+   * @param onlyFileNames
+   * @param oneWordFreqMap
    */
   private getPotentialTwoWordMap(
     onlyFileNames: string[],
@@ -90,24 +93,20 @@ export class AutoTagsService {
   ): Promise<Map<string, number>> {
 
     return new Promise((resolve, reject) => {
-      if (typeof Worker !== 'undefined') {
-        const worker = new Worker('./tags.worker', { type: 'module' });
+      // it is implied that `Worker` is supported
+      const worker = new Worker('./tags.worker', { type: 'module' });
 
-        worker.onmessage = (message) => {
-          resolve(message.data);
-        };
+      worker.onmessage = (message) => {
+        resolve(message.data);
+      };
 
-        worker.postMessage({
-          task: 1,
-          onlyFileNames: onlyFileNames,
-          oneWordFreqMap: oneWordFreqMap,
-        });
+      worker.postMessage({
+        task: 1,
+        onlyFileNames: onlyFileNames,
+        oneWordFreqMap: oneWordFreqMap,
+      });
 
-      } else {
-        console.log('ERROR !!!!!!!!!!!!!!! WORKER CAN NOT START !!!');
-      }
     });
-
 
   }
 
@@ -120,22 +119,18 @@ export class AutoTagsService {
   private getTwoWordFreqMap(potentialTwoWordMap: Map<string, number>): Promise<Map<string, number>> {
 
     return new Promise((resolve, reject) => {
-      if (typeof Worker !== 'undefined') {
-        const worker = new Worker('./tags.worker', { type: 'module' });
+      // it is implied that `Worker` is supported
+      const worker = new Worker('./tags.worker', { type: 'module' });
 
-        worker.onmessage = (message) => {
-          resolve(message.data);
-        };
+      worker.onmessage = (message) => {
+        resolve(message.data);
+      };
 
-        worker.postMessage({
-          task: 2,
-          potentialTwoWordMap: potentialTwoWordMap,
-          onlyFileNames: this.onlyFileNames,
-        });
-
-      } else {
-        console.log('ERROR !!!!!!!!!!!!!!! WORKER CAN NOT START !!!');
-      }
+      worker.postMessage({
+        task: 2,
+        potentialTwoWordMap: potentialTwoWordMap,
+        onlyFileNames: this.onlyFileNames,
+      });
     });
 
   }
