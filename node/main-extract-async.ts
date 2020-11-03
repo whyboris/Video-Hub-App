@@ -301,6 +301,7 @@ export function startFileSystemWatching(
         console.log('^^^^^^^^ - CONTINUING to watch this directory!');
       } else {
         console.log('^^^^^^^^ - stopping watching this directory');
+        watcher.close(); // chokidar seems to disregard `persistent` when `fsevents` is not enabled
       }
 
       const t1 = performance.now();
