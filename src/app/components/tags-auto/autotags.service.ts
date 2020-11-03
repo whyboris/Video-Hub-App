@@ -37,7 +37,7 @@ export class AutoTagsService {
    */
   public generateAllTags(finalArray: ImageElement[], hubName: string): Promise<boolean> {
 
-    return new Promise((res, rej) => {
+    return new Promise((resolve, reject) => {
 
       if (this.cachedHub !== hubName) {
 
@@ -64,73 +64,16 @@ export class AutoTagsService {
             this.loadAddTags();
             this.loadRemoveTags();
 
-            res(true);
+            resolve();
 
           });
 
         });
 
       } else {
-        res(true);
+        resolve();
       }
 
-    });
-
-  }
-
-  /**
-   * Outsource the CPU-intensive work to a web worker to prevent locking up the UI
-   * With 10,000 videos takes about 4 seconds
-   *
-   * return `potentialTwoWordMap` -- requires further cleaning
-   *
-   * @param onlyFileNames
-   * @param oneWordFreqMap
-   */
-  private getPotentialTwoWordMap(
-    onlyFileNames: string[],
-    oneWordFreqMap: Map<string, number>
-  ): Promise<Map<string, number>> {
-
-    return new Promise((resolve, reject) => {
-      // it is implied that `Worker` is supported
-      const worker = new Worker('./tags.worker', { type: 'module' });
-
-      worker.onmessage = (message) => {
-        resolve(message.data);
-      };
-
-      worker.postMessage({
-        task: 1,
-        onlyFileNames: onlyFileNames,
-        oneWordFreqMap: oneWordFreqMap,
-      });
-
-    });
-
-  }
-
-  /**
-   * Outsource the CPU-intensive work to a web worker to prevent locking up the UI
-   * With 10,000 videos takes about 4 seconds
-   * performs `cleanTwoWordMap`
-   * @param potentialTwoWordMap
-   */
-  private getTwoWordFreqMap(potentialTwoWordMap: Map<string, number>): Promise<Map<string, number>> {
-
-    return new Promise((resolve, reject) => {
-      // it is implied that `Worker` is supported
-      const worker = new Worker('./tags.worker', { type: 'module' });
-
-      worker.onmessage = (message) => {
-        resolve(message.data);
-      };
-
-      worker.postMessage({
-        task: 2,
-        potentialTwoWordMap: potentialTwoWordMap,
-        onlyFileNames: this.onlyFileNames,
-      });
     });
 
   }
@@ -374,5 +317,65 @@ export class AutoTagsService {
     }
   }
 
+  // ===============================================================================================
+  //                                        web worker section
+  // -----------------------------------------------------------------------------------------------
+
+  /**
+   * Outsource the CPU-intensive work to a web worker to prevent locking up the UI
+   * With 10,000 videos takes about 4 seconds
+   *
+   * return `potentialTwoWordMap` -- requires further cleaning
+   *
+   * @param onlyFileNames
+   * @param oneWordFreqMap
+   */
+  private getPotentialTwoWordMap(
+    onlyFileNames: string[],
+    oneWordFreqMap: Map<string, number>
+  ): Promise<Map<string, number>> {
+
+    return new Promise((resolve, reject) => {
+      // it is implied that `Worker` is supported
+      const worker = new Worker('./tags.worker', { type: 'module' });
+
+      worker.onmessage = (message) => {
+        resolve(message.data);
+      };
+
+      worker.postMessage({
+        task: 1,
+        onlyFileNames: onlyFileNames,
+        oneWordFreqMap: oneWordFreqMap,
+      });
+
+    });
+
+  }
+
+  /**
+   * Outsource the CPU-intensive work to a web worker to prevent locking up the UI
+   * With 10,000 videos takes about 4 seconds
+   * performs `cleanTwoWordMap`
+   * @param potentialTwoWordMap
+   */
+  private getTwoWordFreqMap(potentialTwoWordMap: Map<string, number>): Promise<Map<string, number>> {
+
+    return new Promise((resolve, reject) => {
+      // it is implied that `Worker` is supported
+      const worker = new Worker('./tags.worker', { type: 'module' });
+
+      worker.onmessage = (message) => {
+        resolve(message.data);
+      };
+
+      worker.postMessage({
+        task: 2,
+        potentialTwoWordMap: potentialTwoWordMap,
+        onlyFileNames: this.onlyFileNames,
+      });
+    });
+
+  }
 
 }
