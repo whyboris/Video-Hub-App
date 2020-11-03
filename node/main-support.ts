@@ -136,7 +136,7 @@ function getDurationDisplay(numOfSec: number): string {
 /**
  * Count the number of unique folders in the final array
  */
-export function countFoldersInFinalArray(imagesArray: ImageElement[]): number {
+function countFoldersInFinalArray(imagesArray: ImageElement[]): number {
   const finalArrayFolderMap: Map<string, number> = new Map;
   imagesArray.forEach((element: ImageElement) => {
     if (!finalArrayFolderMap.has(element.partialPath)) {
@@ -144,6 +144,33 @@ export function countFoldersInFinalArray(imagesArray: ImageElement[]): number {
     }
   });
   return finalArrayFolderMap.size;
+}
+
+/**
+ * Mark element as `deleted` (to remove as duplicate) if the previous element is identical
+ * Unsure how duplicates can creep in to `ImageElement[]`, but at least they will be removed
+ *
+ *  !!! WARNING - currently does not merge the `tags` arrays (or other stuff)
+ *  !!!           so tags and metadata could be lost :(
+ *
+ * @param imagesArray
+ */
+function markDuplicatesAsDeleted(imagesArray: ImageElement[]): ImageElement[] {
+
+  let currentElement: ImageElement = NewImageElement();
+
+  imagesArray.forEach((element: ImageElement) => {
+    if (
+         element.inputSource === currentElement.inputSource
+      && element.fileName    === currentElement.fileName
+      && element.partialPath === currentElement.partialPath
+    ) {
+      element.deleted = true;
+    }
+    currentElement = element;
+  });
+
+  return imagesArray;
 }
 
 /**
@@ -157,8 +184,6 @@ export function countFoldersInFinalArray(imagesArray: ImageElement[]): number {
 export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: string, done): void {
   finalObject.images = stripOutTemporaryFields(finalObject.images);
 
-  finalObject.images = finalObject.images.filter(element => !element.deleted);
-
   // remove any videos that have no reference (unsure how this could happen, but just in case)
   const allKeys: string[] = Object.keys(finalObject.inputDirs);
   finalObject.images = finalObject.images.filter(element => {
@@ -166,6 +191,10 @@ export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: stri
   });
 
   finalObject.images = alphabetizeFinalArray(finalObject.images); // TODO -- rethink if this is needed
+
+  finalObject.images = markDuplicatesAsDeleted(finalObject.images);
+
+  finalObject.images = finalObject.images.filter(element => !element.deleted);
 
   finalObject.numOfFolders = countFoldersInFinalArray(finalObject.images);
 
