@@ -49,34 +49,29 @@ export class AutoTagsService {
 
         this.cleanOneWordFreqMap(); // only to have items Math.max(oneWordMinInstances, twoWordMinInstances)
 
-        // =========================================================================================
-        // must move this below block to web worker too:
-        const t2 = performance.now();
-
-        // THIS TAKES 4 SECONDS
-        const potentialTwoWordMap: Map<string, number> = this.doFirstWebWorkerProcessing(this.onlyFileNames, this.oneWordFreqMap);
-
-        const t3 = performance.now();
-        console.log("long 1 " + (t3 - t2) + " milliseconds."); // 4 seconds
-        // =========================================================================================
-
         // THIS TAKES 4 SECONDS before `.then` is executed
-        this.doWebWorkerProcessing(potentialTwoWordMap).then((data) => {
-          console.log('WEB WORKER FINISHED');
+        this.doFirstWebWorkerProcessing(this.onlyFileNames, this.oneWordFreqMap).then((data1) => {
+          const potentialTwoWordMap: Map<string, number> = data1;
 
-          this.twoWordFreqMap = data;
+          // THIS TAKES 4 SECONDS before `.then` is executed
+          this.doWebWorkerProcessing(potentialTwoWordMap).then((data2) => {
+            console.log('WEB WORKER FINISHED');
 
-          this.cleanTwoWordMapBelowCutoff();
+            this.twoWordFreqMap = data2;
 
-          this.cleanOneWordMapUsingTwoWordMap();
+            this.cleanTwoWordMapBelowCutoff();
 
-          this.trimMap(this.oneWordFreqMap, 5);
-          this.trimMap(this.twoWordFreqMap, 3);
+            this.cleanOneWordMapUsingTwoWordMap();
 
-          this.loadAddTags();
-          this.loadRemoveTags();
+            this.trimMap(this.oneWordFreqMap, 5);
+            this.trimMap(this.twoWordFreqMap, 3);
 
-          res(true);
+            this.loadAddTags();
+            this.loadRemoveTags();
+
+            res(true);
+
+          });
 
         });
 
@@ -91,20 +86,28 @@ export class AutoTagsService {
   private doFirstWebWorkerProcessing(
     onlyFileNames: string[],
     oneWordFreqMap: Map<string, number>
-  ): Map<string, number> {
+  ): Promise<Map<string, number>> {
 
-    const potentialTwoWordMap: Map<string, number> = new Map();
+    return new Promise((resolve, reject) => {
+      if (typeof Worker !== 'undefined') {
+        const worker = new Worker('./tags.worker', { type: 'module' });
 
-    oneWordFreqMap.forEach((val: number, key: string) => {
-      this.findTwoWords(
-        potentialTwoWordMap,
-        key,
-        onlyFileNames,
-        oneWordFreqMap
-      );
+        worker.onmessage = (message) => {
+          resolve(message.data);
+        };
+
+        worker.postMessage({
+          task: 1,
+          onlyFileNames: onlyFileNames,
+          oneWordFreqMap: oneWordFreqMap,
+        });
+
+      } else {
+        console.log('ERROR !!!!!!!!!!!!!!! WORKER CAN NOT START !!!');
+      }
     });
 
-    return potentialTwoWordMap;
+
   }
 
   /**
@@ -121,6 +124,7 @@ export class AutoTagsService {
         };
 
         worker.postMessage({
+          task: 2,
           potentialTwoWordMap: potentialTwoWordMap,
           onlyFileNames: this.onlyFileNames,
         });
@@ -189,45 +193,6 @@ export class AutoTagsService {
       if (value <= Math.max(this.twoWordMinInstances, this.oneWordMinInstances)) {
         this.oneWordFreqMap.delete(key);
       }
-    });
-  }
-
-  /**
-   * Given a single word from tag list, look up following word
-   * If on the list, add the two-word string to `potentialTwoWordMap`
-   * @param singleWord
-   */
-  private findTwoWords(
-    potentialTwoWordMap: Map<string, number>, // THIS VARIABLE GETS UPDATED !!!
-    singleWord: string,
-    onlyFileNames: string[],
-    oneWordFreqMap: Map<string, number>
-  ): void {
-
-    const filesContainingTheSingleWord: string[] = [];
-
-    onlyFileNames.forEach((fileName) => {
-      if (fileName.includes(singleWord)) {
-        filesContainingTheSingleWord.push(fileName);
-      }
-    });
-
-    filesContainingTheSingleWord.forEach((fileName) => {
-
-      const filenameWordArray: string[] = fileName.split(' ');
-
-      const numberIndex: number = filenameWordArray.indexOf(singleWord);
-      const nextWord: string = filenameWordArray[numberIndex + 1];
-
-      if (oneWordFreqMap.has(nextWord)) {
-        const twoWordPair = singleWord + ' ' + nextWord;
-
-        let currentOccurrences = potentialTwoWordMap.get(twoWordPair) || 0;
-        currentOccurrences++;
-
-        potentialTwoWordMap.set(twoWordPair, currentOccurrences);
-      }
-
     });
   }
 

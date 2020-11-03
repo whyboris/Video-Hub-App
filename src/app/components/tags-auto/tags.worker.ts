@@ -3,7 +3,13 @@
 addEventListener('message', received);
 
 function received(message: any): void {
-  postMessage(cleanTwoWordMap(message.data.potentialTwoWordMap, message.data.onlyFileNames));
+  if (message.data.task === 1) {
+    console.log('task1');
+    postMessage(firstTask(message.data.onlyFileNames, message.data.oneWordFreqMap));
+  } else if (message.data.task === 2) {
+    console.log('task2');
+    postMessage(cleanTwoWordMap(message.data.potentialTwoWordMap, message.data.onlyFileNames));
+  }
 };
 
 /**
@@ -34,4 +40,62 @@ function cleanTwoWordMap(
   });
 
   return twoWordFreqMap;
+}
+
+
+function firstTask(
+  onlyFileNames: string[],
+  oneWordFreqMap: Map<string, number>
+): Map<string, number> {
+  const potentialTwoWordMap: Map<string, number> = new Map();
+
+  oneWordFreqMap.forEach((val: number, key: string) => {
+    findTwoWords(
+      potentialTwoWordMap,
+      key,
+      onlyFileNames,
+      oneWordFreqMap
+    );
+  });
+
+  return potentialTwoWordMap;
+}
+
+/**
+ * Given a single word from tag list, look up following word
+ * If on the list, add the two-word string to `potentialTwoWordMap`
+ * @param singleWord
+ */
+function findTwoWords(
+  potentialTwoWordMap: Map<string, number>, // THIS VARIABLE GETS UPDATED !!!
+  singleWord: string,
+  onlyFileNames: string[],
+  oneWordFreqMap: Map<string, number>
+): void {
+
+  const filesContainingTheSingleWord: string[] = [];
+
+  onlyFileNames.forEach((fileName) => {
+    if (fileName.includes(singleWord)) {
+      filesContainingTheSingleWord.push(fileName);
+    }
+  });
+
+  filesContainingTheSingleWord.forEach((fileName) => {
+
+    const filenameWordArray: string[] = fileName.split(' ');
+
+    const numberIndex: number = filenameWordArray.indexOf(singleWord);
+    const nextWord: string = filenameWordArray[numberIndex + 1];
+
+    if (oneWordFreqMap.has(nextWord)) {
+      const twoWordPair = singleWord + ' ' + nextWord;
+
+      let currentOccurrences = potentialTwoWordMap.get(twoWordPair) || 0;
+      currentOccurrences++;
+
+      potentialTwoWordMap.set(twoWordPair, currentOccurrences);
+    }
+
+  });
 }
