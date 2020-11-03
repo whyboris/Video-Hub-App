@@ -567,6 +567,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       const rootFolder: string = this.sourceFolderService.selectedSourceFolder[sourceIndex].path;
 
+      let somethingDeleted: boolean = false;
+
       this.imageElementService.imageElements
         .filter((element: ImageElement) => { return element.inputSource == sourceIndex })
         // notice the loosey-goosey comparison! this is because number  ^^  string comparison happening here!
@@ -575,10 +577,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
           if (!allFilesMap.has(path.join(rootFolder, element.partialPath, element.fileName))) {
             console.log('deleting');
             element.deleted = true;
+            somethingDeleted = true;
           }
         });
 
-      this.deletePipeHack = !this.deletePipeHack;
+      if (somethingDeleted) {
+        this.deletePipeHack = !this.deletePipeHack;
+      }
 
     });
 
