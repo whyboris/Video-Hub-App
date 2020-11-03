@@ -17,7 +17,6 @@ export const autoFileTagsRegex: RegExp = /\b(\w+)\b/g;
 export class AutoTagsService {
 
   oneWordFreqMap: Map<string, number> = new Map();
-  potentialTwoWordMap: Map<string, number> = new Map();
   twoWordFreqMap: Map<string, number> = new Map();
 
   onlyFileNames: string[] = [];         // array with just clean file names toLowerCase
@@ -38,7 +37,7 @@ export class AutoTagsService {
    */
   public generateAllTags(finalArray: ImageElement[], hubName: string): Promise<boolean> {
 
-    return new Promise((res, rej) => {
+    return new Promise((resolve, reject) => {
 
       if (this.cachedHub !== hubName) {
 
@@ -46,32 +45,33 @@ export class AutoTagsService {
 
         this.cachedHub = hubName;
 
-        // When hub has thousands of videos, the startup may freeze the UI
-        // setTimeout decreases the freezing
-        setTimeout(() => {
-          this.storeFinalArrayInMemory(finalArray);
+        this.storeFinalArrayInMemory(finalArray);
 
-          this.cleanOneWordFreqMap(); // only to have items Math.max(oneWordMinInstances, twoWordMinInstances)
+        this.cleanOneWordFreqMap(); // only to have items Math.max(oneWordMinInstances, twoWordMinInstances)
 
-          this.oneWordFreqMap.forEach((val: number, key: string) => {
-            this.findTwoWords(key);
+        this.getPotentialTwoWordMap(this.onlyFileNames, this.oneWordFreqMap).then((potentialTwoWordMap) => {
+
+          this.getTwoWordFreqMap(potentialTwoWordMap).then((twoWordFreqMap) => {
+
+            this.twoWordFreqMap = twoWordFreqMap;
+
+            this.cleanTwoWordMapBelowCutoff();
+            this.cleanOneWordMapUsingTwoWordMap();
+
+            this.trimMap(this.oneWordFreqMap, 5);
+            this.trimMap(this.twoWordFreqMap, 3);
+
+            this.loadAddTags();
+            this.loadRemoveTags();
+
+            resolve();
+
           });
 
-          this.cleanTwoWordMap();
-
-          this.cleanOneWordMapUsingTwoWordMap();
-
-          this.trimMap(this.oneWordFreqMap, 5);
-          this.trimMap(this.twoWordFreqMap, 3);
-
-          this.loadAddTags();
-          this.loadRemoveTags();
-
-          res(true);
-        }, 1);
+        });
 
       } else {
-        res(true);
+        resolve();
       }
 
     });
@@ -83,7 +83,6 @@ export class AutoTagsService {
    */
   private resetState(): void {
     this.oneWordFreqMap = new Map();
-    this.potentialTwoWordMap = new Map();
     this.twoWordFreqMap = new Map();
     this.onlyFileNames = [];
   }
@@ -141,70 +140,15 @@ export class AutoTagsService {
   }
 
   /**
-   * Given a single word from tag list, look up following word
-   * If on the list, add the two-word string to `potentialTwoWordMap`
-   * @param singleWord
+   * Remove any elements from the map below the cutoff
    */
-  private findTwoWords(singleWord: string): void {
-
-    const filesContainingTheSingleWord: string[] = [];
-
-    this.onlyFileNames.forEach((fileName) => {
-      if (fileName.includes(singleWord)) {
-        filesContainingTheSingleWord.push(fileName);
-      }
-    });
-
-    filesContainingTheSingleWord.forEach((fileName) => {
-
-      const filenameWordArray: string[] = fileName.split(' ');
-
-      const numberIndex: number = filenameWordArray.indexOf(singleWord);
-      const nextWord: string = filenameWordArray[numberIndex + 1];
-
-      if (this.oneWordFreqMap.has(nextWord)) {
-        const twoWordPair = singleWord + ' ' + nextWord;
-
-        let currentOccurrences = this.potentialTwoWordMap.get(twoWordPair) || 0;
-        currentOccurrences++;
-
-        this.potentialTwoWordMap.set(twoWordPair, currentOccurrences);
-      }
-
-    });
-
-  }
-
-  /**
-   * Create the `twoWordFreqMap` by using the `potentialTwoWordMap` word map
-   * Recount actual occurrences
-   */
-  private cleanTwoWordMap(): void {
-
-    this.potentialTwoWordMap.forEach((val: number, key: string) => {
-
-      if (val > 3) { // set a variable here instead!
-        let newCounter: number = 0;
-
-        for (let i = 0; i < this.onlyFileNames.length; i++) {
-          if (this.onlyFileNames[i].includes(key)) {
-            newCounter++;
-            this.twoWordFreqMap.set(key, newCounter);
-          }
-        }
-      }
-    });
-
+  private cleanTwoWordMapBelowCutoff(): void {
     this.twoWordFreqMap.forEach((val: number, key: string) => {
-
       if (val <= this.twoWordMinInstances) {
         this.twoWordFreqMap.delete(key);
       }
-
     });
-
   }
-
 
   /**
    * clean up the one word map to not include anything that is in the list of two-word tags
@@ -373,5 +317,65 @@ export class AutoTagsService {
     }
   }
 
+  // ===============================================================================================
+  //                                        web worker section
+  // -----------------------------------------------------------------------------------------------
+
+  /**
+   * Outsource the CPU-intensive work to a web worker to prevent locking up the UI
+   * With 10,000 videos takes about 4 seconds
+   *
+   * return `potentialTwoWordMap` -- requires further cleaning
+   *
+   * @param onlyFileNames
+   * @param oneWordFreqMap
+   */
+  private getPotentialTwoWordMap(
+    onlyFileNames: string[],
+    oneWordFreqMap: Map<string, number>
+  ): Promise<Map<string, number>> {
+
+    return new Promise((resolve, reject) => {
+      // it is implied that `Worker` is supported
+      const worker = new Worker('./tags.worker', { type: 'module' });
+
+      worker.onmessage = (message) => {
+        resolve(message.data);
+      };
+
+      worker.postMessage({
+        task: 1,
+        onlyFileNames: onlyFileNames,
+        oneWordFreqMap: oneWordFreqMap,
+      });
+
+    });
+
+  }
+
+  /**
+   * Outsource the CPU-intensive work to a web worker to prevent locking up the UI
+   * With 10,000 videos takes about 4 seconds
+   * performs `cleanTwoWordMap`
+   * @param potentialTwoWordMap
+   */
+  private getTwoWordFreqMap(potentialTwoWordMap: Map<string, number>): Promise<Map<string, number>> {
+
+    return new Promise((resolve, reject) => {
+      // it is implied that `Worker` is supported
+      const worker = new Worker('./tags.worker', { type: 'module' });
+
+      worker.onmessage = (message) => {
+        resolve(message.data);
+      };
+
+      worker.postMessage({
+        task: 2,
+        potentialTwoWordMap: potentialTwoWordMap,
+        onlyFileNames: this.onlyFileNames,
+      });
+    });
+
+  }
 
 }
