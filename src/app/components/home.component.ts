@@ -25,7 +25,7 @@ import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency
 import { SortOrderComponent } from './sort-order/sort-order.component';
 
 // Interfaces
-import { FinalObject, ImageElement, ScreenshotSettings, ResolutionString, NewImageElement } from '../../../interfaces/final-object.interface';
+import { FinalObject, ImageElement, ScreenshotSettings, ResolutionString } from '../../../interfaces/final-object.interface';
 import { ImportStage } from '../../../node/main-support';
 import { SettingsObject } from '../../../interfaces/settings-object.interface';
 import { SortType } from '../pipes/sorting.pipe';
