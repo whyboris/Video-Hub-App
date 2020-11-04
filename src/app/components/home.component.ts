@@ -294,6 +294,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   allFinishedScanning: boolean = true;
 
+  lastRenamedFileHack: ImageElement;
+
   // Behavior Subjects for IPC events:
 
   inputSorceChosenBehaviorSubject: BehaviorSubject<string> = new BehaviorSubject(undefined);
@@ -396,28 +398,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     }, 100);
 
-    this.electronService.ipcRenderer.on(
-      'rename-file-response', (
-          event,
-          index: number,
-          success: boolean,
-          renameTo: string,
-          oldFileName: string,
-          errMsg?: string
-        ) => {
-
-          this.renameFileResponseBehaviorSubject.next({
-            index: index,
-            success: success,
-            renameTo: renameTo,
-            oldFileName: oldFileName,
-            errMsg: errMsg,
-          });
-          this.renameFileResponseBehaviorSubject.next(undefined); // allways remove right away
-
-      });
-
-
     // for statistics.component
     this.electronService.ipcRenderer.on('number-of-screenshots-deleted', (event, totalDeleted: number) => {
       this.numberScreenshotsDeletedBehaviorSubject.next(totalDeleted);
@@ -476,7 +456,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     });
 
-    // Rename file response
+    // When Node succeeds or fails to rename a file that Angular requested to rename
     this.electronService.ipcRenderer.on(
       'rename-file-response', (
           event,
@@ -487,12 +467,29 @@ export class HomeComponent implements OnInit, AfterViewInit {
           errMsg?: string
         ) => {
 
-      if (success) {
-        // Update the final array, close rename dialog if open
-        // the error messaging is handled by `rename-file.component` or `meta.component` if it happens
-        this.imageElementService.replaceFileNameInFinalArray(renameTo, oldFileName, index);
-        this.closeRename();
-      }
+          this.renameFileResponseBehaviorSubject.next({
+            index: index,
+            success: success,
+            renameTo: renameTo,
+            oldFileName: oldFileName,
+            errMsg: errMsg,
+          });
+          this.renameFileResponseBehaviorSubject.next(undefined); // allways remove right away
+
+          if (success) {
+            // Update the final array, close rename dialog if open
+            // the error messaging is handled by `rename-file.component` or `meta.component` if it happens
+            this.imageElementService.replaceFileNameInFinalArray(renameTo, oldFileName, index);
+            this.closeRename();
+
+            // if successful rename, and `watch` directory enabled, this video might appear twice
+            // use `lastRenamedFileHack` to prevent it!
+            const renamedFile: ImageElement = this.imageElementService.imageElements[index];
+            console.log('Rename success:');
+            console.log(renamedFile);
+            this.lastRenamedFileHack = renamedFile;
+          }
+
     });
 
     // happens when user replaced a thumbnail and process is done
@@ -567,6 +564,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       const rootFolder: string = this.sourceFolderService.selectedSourceFolder[sourceIndex].path;
 
+      let somethingDeleted: boolean = false;
+
       this.imageElementService.imageElements
         .filter((element: ImageElement) => { return element.inputSource == sourceIndex })
         // notice the loosey-goosey comparison! this is because number  ^^  string comparison happening here!
@@ -575,11 +574,28 @@ export class HomeComponent implements OnInit, AfterViewInit {
           if (!allFilesMap.has(path.join(rootFolder, element.partialPath, element.fileName))) {
             console.log('deleting');
             element.deleted = true;
+            somethingDeleted = true;
           }
         });
 
-      this.deletePipeHack = !this.deletePipeHack;
+      if (somethingDeleted) {
+        this.deletePipeHack = !this.deletePipeHack;
+      }
 
+    });
+
+    // When `watch` folder and `chokidar` detects a file was deleted (can happen when renamed too!)
+    this.electronService.ipcRenderer.on('single-file-deleted', (event, sourceIndex: number, partialPath: string) => {
+      this.imageElementService.imageElements
+        .filter((element: ImageElement) => { return element.inputSource == sourceIndex })
+        // notice the loosey-goosey comparison! this is because number  ^^  string comparison happening here!
+        .forEach((element: ImageElement) => {
+          if (('\\' + partialPath) === path.join(element.partialPath, element.fileName)) {
+            console.log('FILE DELETED !!!', partialPath);
+            element.deleted = true;
+            this.deletePipeHack = !this.deletePipeHack;
+          }
+        });
     });
 
     /**
@@ -628,6 +644,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       pathToFile: string,
       outputFolderPath: string,
     ) => {
+
+      this.lastRenamedFileHack = undefined;
 
       this.imageElementService.recentlyPlayed = [];
 
@@ -731,6 +749,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     this.electronService.ipcRenderer.on('new-video-meta', (event, element: ImageElement) => {
+
+      if (   this.lastRenamedFileHack // undefined unless file recently renamed
+          && this.lastRenamedFileHack.inputSource === element.inputSource
+          && this.lastRenamedFileHack.partialPath === element.partialPath
+          && this.lastRenamedFileHack.fileName    === element.fileName
+      ) {
+        // this video was just renamed, skip it
+        console.log('SKIPPING THIS -- was just renamed !!!');
+        return;
+      }
+
       element.index = this.imageElementService.imageElements.length;
       this.imageElementService.imageElements.push(element); // not enough for view to update; we need `.slice()`
       this.imageElementService.finalArrayNeedsSaving = true;
