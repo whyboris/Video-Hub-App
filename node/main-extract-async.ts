@@ -277,8 +277,9 @@ export function startFileSystemWatching(
       metadataQueue.push(newItem);
     })
     .on('unlink', (filePath: string) => {
-      console.log(' !!! FILE DELETED:', filePath);
-      console.log('TODO - UPDATE ANGULAR');
+      // note: this happens even when file is renamed!
+      console.log(' !!! FILE DELETED, updating Angular:', filePath);
+      GLOBALS.angularApp.sender.send('single-file-deleted', inputSource, filePath);
     })
     .on('unlinkDir', (folderPath: string) => {
       console.log(' !!!!! DIRECTORY DELETED:', folderPath);

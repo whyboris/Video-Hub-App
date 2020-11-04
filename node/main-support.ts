@@ -167,6 +167,7 @@ function markDuplicatesAsDeleted(imagesArray: ImageElement[]): ImageElement[] {
       && element.inputSource === currentElement.inputSource
     ) {
       element.deleted = true;
+      console.log('DUPE FOUND: '+ element.fileName);
     }
     currentElement = element;
   });

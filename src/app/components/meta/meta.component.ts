@@ -65,7 +65,7 @@ export class MetaComponent implements OnInit, OnDestroy {
 
     this.responseSubscription = this.renameResponse.subscribe((data: RenameFileResponse) => {
       if (data) {
-        console.log('WOW');
+        console.log('Rename response:');
         console.log(data);
 
         if (this.video.index === data.index) { // make sure the message is about current component's video
