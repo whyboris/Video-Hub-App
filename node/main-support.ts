@@ -325,20 +325,28 @@ function getFileDuration(metadata): number {
  */
 function computeNumberOfScreenshots(screenshotSettings: ScreenshotSettings, duration: number): number {
   let total: number;
+
+  // fixed or per minute
   if (screenshotSettings.fixed) {
     total = screenshotSettings.n;
   } else {
     total = Math.ceil(duration / 60 / screenshotSettings.n);
   }
 
+  // never fewer than 3 screenshots
   if (total < 3) {
-    total = 3; // minimum 3 screenshots!
+    total = 3;
   }
 
+  // never more than would fit in a JPG
   const screenWidth: number = screenshotSettings.height * (16 / 9);
-
   if (total * screenWidth > 65535) {
     total = Math.floor(65535 / screenWidth);
+  }
+
+  // never more screenshots than seconds in a clip
+  if (duration < total) {
+    total = Math.max(2, Math.floor(duration));
   }
 
   return total;
