@@ -254,8 +254,6 @@ export function startFileSystemWatching(
       const fileName = subPath.substring(subPath.lastIndexOf('/') + 1);
       const fullPath = path.join(inputDir, partialPath, fileName);
 
-      // console.log(fullPath);
-
       if (!allFoundFilesMap.has(inputSource)) {
         allFoundFilesMap.set(inputSource, new Map());
       }
@@ -264,8 +262,6 @@ export function startFileSystemWatching(
       if (alreadyInAngular.has(fullPath)) {
         return;
       }
-
-      // console.log('not found, creating:');
 
       const newItem: TempMetadataQueueObject = {
         fullPath: fullPath,
@@ -276,25 +272,15 @@ export function startFileSystemWatching(
 
       metadataQueue.push(newItem);
     })
-    .on('unlink', (filePath: string) => {
-      // note: this happens even when file is renamed!
+    .on('unlink', (filePath: string) => {           // note: this happens even when file is renamed!
       console.log(' !!! FILE DELETED, updating Angular:', filePath);
       GLOBALS.angularApp.sender.send('single-file-deleted', inputSource, filePath);
+      // note: there is no need to watch for `unlinkDir` since `unlink` fires for every file anyway!
     })
-    .on('unlinkDir', (folderPath: string) => {
-      console.log(' !!!!! DIRECTORY DELETED:', folderPath);
-      console.log('TODO - UPDATE ANGULAR');
-    })
-/*
-    .on('all', (event, filePath) => {
-      console.log(event, filePath);
-    })
-*/
     .on('ready', () => {
+      console.log('Finished scanning', inputSource);
 
       metadataQueue.resume();
-
-      console.log('Finished scanning', inputSource);
 
       GLOBALS.angularApp.sender.send('all-files-found-in-dir', inputSource, allFoundFilesMap.get(inputSource));
 
@@ -302,16 +288,14 @@ export function startFileSystemWatching(
         console.log('^^^^^^^^ - CONTINUING to watch this directory!');
       } else {
         console.log('^^^^^^^^ - stopping watching this directory');
-        watcher.close(); // chokidar seems to disregard `persistent` when `fsevents` is not enabled
+        watcher.close();  // chokidar seems to disregard `persistent` when `fsevents` is not enabled
       }
 
       const t1 = performance.now();
       console.log("Chokidar took " + Math.round((t1 - t0) / 100) / 10 + " seconds.");
-
     });
 
-    watcherMap.set(inputSource, watcher);
-
+  watcherMap.set(inputSource, watcher);
 }
 
 /**
