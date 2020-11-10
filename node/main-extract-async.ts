@@ -272,9 +272,12 @@ export function startFileSystemWatching(
 
       metadataQueue.push(newItem);
     })
-    .on('unlink', (filePath: string) => {           // note: this happens even when file is renamed!
-      console.log(' !!! FILE DELETED, updating Angular:', filePath);
-      GLOBALS.angularApp.sender.send('single-file-deleted', inputSource, filePath);
+    .on('unlink', (partialFilePath: string) => {    // note: this happens even when file is renamed!
+      console.log(' !!! FILE DELETED, updating Angular:', partialFilePath);
+      GLOBALS.angularApp.sender.send('single-file-deleted', inputSource, partialFilePath);
+      // remove element from `alreadyInAngular`
+      const basePath: string = GLOBALS.selectedSourceFolders[inputSource].path;
+      alreadyInAngular.delete(path.join(basePath, partialFilePath));
       // note: there is no need to watch for `unlinkDir` since `unlink` fires for every file anyway!
     })
     .on('ready', () => {
