@@ -115,15 +115,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // App state to save -- so it can be exported and saved when closing the app
   appState = AppState;
 
-  // ========================================================================================
-  // ***************************** BUILD TOGGLE *********************************************
-  // ========================================================================================
-  demo = false;
-  macVersion = false;
-  // !!! make sure to update the `GLOBALS.version` and the `package.json` version numbers !!!
-  // webDemo = false;
-  // ========================================================================================
-
+  demo = GLOBALS.demo;
+  macVersion = GLOBALS.macVersion;
   versionNumber = GLOBALS.version;
 
   vhaFileHistory: HistoryItem[] = [];
@@ -760,10 +753,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
         return;
       }
 
-      element.index = this.imageElementService.imageElements.length;
-      this.imageElementService.imageElements.push(element); // not enough for view to update; we need `.slice()`
-      this.imageElementService.finalArrayNeedsSaving = true;
-      this.debounceImport();
+      if (!this.demo || this.imageElementService.imageElements.length <= 50) {
+        element.index = this.imageElementService.imageElements.length;
+        this.imageElementService.imageElements.push(element); // not enough for view to update; we need `.slice()`
+        this.imageElementService.finalArrayNeedsSaving = true;
+        this.debounceImport();
+      }
     });
 
     this.justStarted();
