@@ -31,7 +31,6 @@ export class WizardComponent {
   @Output() selectSourceDirectory      = new EventEmitter<any>();
 
   @Input() canCloseWizard: boolean;
-  @Input() demo: boolean;
   @Input() importStage: ImportStage;
   @Input() vhaFileHistory: HistoryItem[];
   @Input() wizard: WizardOptions;
@@ -43,7 +42,7 @@ export class WizardComponent {
    * @param event key press event
    */
   public validateHubName(event: KeyboardEvent): boolean {
-    const keyCode = event.charCode;
+    const keyCode = event.charCode; // deprecated but it works
     if (keyCode === 32) {
       return true;
     } else if (48 <= keyCode && keyCode <= 57) {

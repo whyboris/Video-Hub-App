@@ -184,6 +184,14 @@ export function metadataQueueRunner(file: TempMetadataQueueObject, done) {
     metaExtractionStartTime = performance.now();
   }
 
+  if (GLOBALS.demo && alreadyInAngular.size >= 50) {
+    console.log(' - DEMO LIMIT REACHED - CANCELING SCAN !!!');
+    sendCurrentProgress(50, 50, 'done');
+    metadataQueue.kill();
+    thumbQueue.resume();
+    return;
+  }
+
   sendCurrentProgress(metaDone, metaDone + metadataQueue.length() + 1, 'importingMeta');
   metaDone++;
 

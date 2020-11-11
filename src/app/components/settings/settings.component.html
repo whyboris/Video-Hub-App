@@ -197,26 +197,26 @@
     </span>
 
     <div style="margin: 20px">
-      <select (change)="changeLanguage.emit($event.target.value)" class="language-drop-down">
+      <select (change)="changeLanguage.emit($event.target.value)" class="language-drop-down monospace">
         <option value="en" [selected]="appState.language == 'en'">English</option>
-        <option value="cs" [selected]="appState.language == 'cs'">Česky</option>
-        <option value="ja" [selected]="appState.language == 'ja'">日本語</option><!-- Japanese -->
-        <option value="de" [selected]="appState.language == 'de'">Deutsche</option>
-        <option value="fr" [selected]="appState.language == 'fr'">Française</option>
-        <option value="es" [selected]="appState.language == 'es'">Espanhol</option>
-        <option value="it" [selected]="appState.language == 'it'">Italiana</option>
-        <option value="pt" [selected]="appState.language == 'pt'">Português</option>
-        <option value="ru" [selected]="appState.language == 'ru'">Русский</option>
-        <option value="tr" [selected]="appState.language == 'tr'">Türkçe</option><!-- Turkish -->
-        <option value="vi" [selected]="appState.language == 'vi'">Tiếng Việt</option><!-- Vietnamese -->
-        <option value="bn" [selected]="appState.language == 'bn'">বাংলা</option><!-- Bengali -->
-        <option value="hi" [selected]="appState.language == 'hi'">हिंदी</option><!-- Hindi -->
-        <option value="zh" [selected]="appState.language == 'zh'">中文</option><!-- Chinese -->
-        <option value="ko" [selected]="appState.language == 'ko'">한국어</option><!-- Korean -->
-        <option value="ms" [selected]="appState.language == 'ms'">Melayu</option><!-- Malay -->
-        <option value="nl" [selected]="appState.language == 'nl'">Nederlands</option>
-        <option value="ar" [selected]="appState.language == 'ar'">العربية</option><!-- Arabic -->
-        <option value="uk" [selected]="appState.language == 'uk'">Українська</option><!-- Ukrainian -->
+        <option value="ar" [selected]="appState.language == 'ar'">Arabic ------ العربية</option>
+        <option value="bn" [selected]="appState.language == 'bn'">Bengali ----- বাংলা</option>
+        <option value="zh" [selected]="appState.language == 'zh'">Chinese ----- 中文</option>
+        <option value="cs" [selected]="appState.language == 'cs'">Czech ------- Česky</option>
+        <option value="nl" [selected]="appState.language == 'nl'">Dutch ------- Nederlands</option>
+        <option value="fr" [selected]="appState.language == 'fr'">French ------ Française</option>
+        <option value="de" [selected]="appState.language == 'de'">German ------ Deutsche</option>
+        <option value="hi" [selected]="appState.language == 'hi'">Hindi ------- हिंदी</option>
+        <option value="it" [selected]="appState.language == 'it'">Italian ----- Italiana</option>
+        <option value="ja" [selected]="appState.language == 'ja'">Japanese ---- 日本語</option>
+        <option value="ko" [selected]="appState.language == 'ko'">Korean ------ 한국어</option>
+        <option value="ms" [selected]="appState.language == 'ms'">Melay ------- Melayu</option>
+        <option value="pt" [selected]="appState.language == 'pt'">Portuguese -- Português</option>
+        <option value="ru" [selected]="appState.language == 'ru'">Russian ----- Русский</option>
+        <option value="es" [selected]="appState.language == 'es'">Spanish ----- Espanhol</option>
+        <option value="tr" [selected]="appState.language == 'tr'">Turkish ----- Türkçe</option>
+        <option value="uk" [selected]="appState.language == 'uk'">Ukrainian --- Українська</option>
+        <option value="vi" [selected]="appState.language == 'vi'">Vietnamese -- Tiếng Việt</option>
       </select>
     </div>
 
