@@ -274,9 +274,11 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
 
     const allHashes: Map<string, 1> = new Map();
 
-    finalArray.forEach((element: ImageElement) => {
-      allHashes.set(element.hash, 1);
-    });
+    finalArray
+      .filter((element: ImageElement) => { return !element.deleted })
+      .forEach((element: ImageElement) => {
+        allHashes.set(element.hash, 1);
+      });
     removeThumbnailsNotInHub(allHashes, screenshotOutputFolder); // WARNING !!! this function will delete stuff
   });
 
