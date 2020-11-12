@@ -1,4 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ImageElementService } from './../../services/image-element.service';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { StarRating, ImageElement } from '../../../../interfaces/final-object.interface';
 
 @Component({
   selector: 'app-top-component',
@@ -6,9 +8,21 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
   styleUrls: ['./top.component.scss',
               '../../fonts/icons.scss']
 })
-export class TopComponent {
+export class TopComponent implements OnInit {
 
+  @Input() video: ImageElement;
   @Input() darkMode: boolean;
+  @Input() star: StarRating;
+
+  starRatingHack: StarRating;
+
+  constructor(
+    public imageElementService: ImageElementService,
+  ) { }
+
+  ngOnInit() {
+    this.starRatingHack = this.star;
+  }
 
   // Handle folder input
   private _folder = '';
@@ -16,7 +30,7 @@ export class TopComponent {
     this._folder = (folderString && folderString.trim()) || '';
     this.folderNameArray = this._folder.split('/');
     this.folderNameArray = this.folderNameArray.filter((element, index) => {
-      // TODO -- fix this up:
+      // TODO -- fix this up: 
       return index === 0 || element !== ''; // ATROCIOUS hack! -- simply to prevent ["", ""]
     });
   }
@@ -52,4 +66,14 @@ export class TopComponent {
     this.onOpenInExplorer.emit(true);
   }
 
+  setStarRating(rating: StarRating): void {
+    if (this.starRatingHack === rating) {
+      rating = 0.5; // reset to "N/A" (not rated)
+    }
+    this.starRatingHack = rating; // hack for getting star opacity updated instantly
+    this.imageElementService.HandleEmission({
+      index: this.video.index,
+      stars: rating
+    });
+  }
 }

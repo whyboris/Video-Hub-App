@@ -18,12 +18,60 @@
   class="file-container"
   [ngClass]="{ 'dark-mode-override': darkMode }"
 >
-  <app-icon class="icon" [icon]="'icon-video-blank'" (click)="openInExplorer()"></app-icon>
-  <span
-    *ngFor="let item of fileNameArray"
-    (click)="fileWordClicked(item)"
-    class="file-word"
+  <!-- Star rating --> 
+  <div 
+    class="starRating"
   >
-    {{ item }}
-  </span>
+    <button
+      (click)="setStarRating(1.5)"
+      class="star-rating"
+      [ngClass]="{ 'star-lit': starRatingHack > 1 }"
+      tabindex="-1"
+    >
+      <app-icon [icon]="'icon-star'"></app-icon>
+    </button>
+    <button
+      (click)="setStarRating(2.5)"
+      class="star-rating"
+      [ngClass]="{ 'star-lit': starRatingHack > 2 }"
+      tabindex="-1"
+    >
+      <app-icon [icon]="'icon-star'"></app-icon>
+    </button>
+    <button
+      (click)="setStarRating(3.5)"
+      class="star-rating"
+      [ngClass]="{ 'star-lit': starRatingHack > 3 }"
+      tabindex="-1"
+    >
+      <app-icon [icon]="'icon-star'"></app-icon>
+    </button>
+    <button
+      (click)="setStarRating(4.5)"
+      class="star-rating"
+      [ngClass]="{ 'star-lit': starRatingHack > 4 }"
+      tabindex="-1"
+    >
+      <app-icon [icon]="'icon-star'"></app-icon>
+    </button>
+    <button
+      (click)="setStarRating(5.5)"
+      class="star-rating"
+      [ngClass]="{ 'star-lit': starRatingHack > 5 }"
+      tabindex="-1"
+    >
+      <app-icon [icon]="'icon-star'"></app-icon>
+    </button>
+  </div>
+
+  <app-icon class="icon" [icon]="'icon-video-blank'" (click)="openInExplorer()" style="margin-left: 0; "></app-icon>
+  <div style="margin-left: 23px; width: 80%;">
+    <span
+      *ngFor="let item of fileNameArray"
+      (click)="fileWordClicked(item)"
+      class="file-word"
+    >
+      {{ item }}
+    </span> 
+  </div>
 </div>
