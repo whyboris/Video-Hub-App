@@ -51,3 +51,7 @@ Update the `languageLookup` method, e.g.
   'fr': French,
   'ru': Russian,
 ```
+
+## Updating all language files
+
+The `update.js` script will translate and add any new key-value pairs found in `en.json` into any of the translation files. It will also remove any key-value pairs that are not found in `en.json` from the translated file.
