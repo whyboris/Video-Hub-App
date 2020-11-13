@@ -8,21 +8,20 @@ import { StarRating, ImageElement } from '../../../../interfaces/final-object.in
   styleUrls: ['./top.component.scss',
               '../../fonts/icons.scss']
 })
-export class TopComponent implements OnInit {
+export class TopComponent {
 
   @Input() video: ImageElement;
   @Input() darkMode: boolean;
-  @Input() star: StarRating;
 
-  starRatingHack: StarRating;
+  private starRatingHack = 0;
+  @Input() set starRating(starRating: number) {
+    this.starRatingHack = starRating;
+  }
+  get starRating(): number {return this.starRatingHack}
 
   constructor(
     public imageElementService: ImageElementService,
   ) { }
-
-  ngOnInit() {
-    this.starRatingHack = this.star;
-  }
 
   // Handle folder input
   private _folder = '';

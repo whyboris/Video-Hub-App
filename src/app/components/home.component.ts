@@ -251,6 +251,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   currentClickedItemName = '';
   currentPlayingFolder = '';
+  currentStarRating = 0;
   fullPathToCurrentFile = '';
 
   fuzzySearchString = '';
@@ -1029,6 +1030,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     this.currentPlayingFolder = item.partialPath;
     this.currentClickedItemName = item.cleanName;
+    this.currentStarRating = item.stars;
     const fullPath = this.filePathService.getPathFromImageElement(item);
     this.fullPathToCurrentFile = fullPath;
 

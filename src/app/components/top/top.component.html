@@ -65,7 +65,9 @@
   </div>
 
   <app-icon class="icon" [icon]="'icon-video-blank'" (click)="openInExplorer()" style="margin-left: 0; "></app-icon>
-  <div style="margin-left: 23px; width: 80%;">
+  <div 
+    style="margin-left: 23px; width: 80%;"
+  >
     <span
       *ngFor="let item of fileNameArray"
       (click)="fileWordClicked(item)"
