@@ -301,6 +301,7 @@ export const SettingsButtons: SettingsButtonsType = {
     hidden: true,
     iconName: 'icon-double-click',
     settingsHeading: 'SETTINGS.doubleClickMode',
+    moreInfo: 'BUTTONS.doubleClickMoreInfo',
     title: 'BUTTONS.doubleClickModeHint',
     toggled: false
   },
@@ -380,6 +381,7 @@ export const SettingsButtons: SettingsButtonsType = {
     description: 'BUTTONS.videoNotesDescription',
     hidden: true,
     iconName: 'icon-toggle-video-notes',
+    moreInfo: 'BUTTONS.videoNotesMoreInfo',
     title: 'BUTTONS.videoNotesHint',
     toggled: false
   },
@@ -565,6 +567,7 @@ export const SettingsButtons: SettingsButtonsType = {
   'dangerousDelete': {
     description: 'BUTTONS.dangerousDeleteDescription',
     hidden: true,
+    moreInfo: 'BUTTONS.dangerousDeleteMoreInfo',
     title: 'BUTTONS.dangerousDelete',
     toggled: false
   },
@@ -824,6 +827,7 @@ export const SettingsButtons: SettingsButtonsType = {
     description: 'BUTTONS.showVideoNotesDescription',
     hidden: true,
     iconName: 'icon-toggle-video-notes',
+    moreInfo: 'BUTTONS.showVideoNotesMoreInfo',
     title: 'BUTTONS.showVideoNotesHint',
     toggled: false
   }
