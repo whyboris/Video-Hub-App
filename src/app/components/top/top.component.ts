@@ -8,20 +8,21 @@ import { StarRating, ImageElement } from '../../../../interfaces/final-object.in
   styleUrls: ['./top.component.scss',
               '../../fonts/icons.scss']
 })
-export class TopComponent {
+export class TopComponent implements OnInit {
 
-  @Input() video: ImageElement;
   @Input() darkMode: boolean;
+  @Input() starRating: StarRating;
+  @Input() index: number;
 
-  private starRatingHack = 0;
-  @Input() set starRating(starRating: number) {
-    this.starRatingHack = starRating;
-  }
-  get starRating(): number {return this.starRatingHack}
+  starRatingHack: StarRating;
 
   constructor(
     public imageElementService: ImageElementService,
   ) { }
+
+  ngOnInit() {
+    this.starRatingHack = this.starRating;
+  }
 
   // Handle folder input
   private _folder = '';
@@ -29,7 +30,7 @@ export class TopComponent {
     this._folder = (folderString && folderString.trim()) || '';
     this.folderNameArray = this._folder.split('/');
     this.folderNameArray = this.folderNameArray.filter((element, index) => {
-      // TODO -- fix this up: 
+      // TODO -- fix this up:
       return index === 0 || element !== ''; // ATROCIOUS hack! -- simply to prevent ["", ""]
     });
   }
@@ -71,7 +72,7 @@ export class TopComponent {
     }
     this.starRatingHack = rating; // hack for getting star opacity updated instantly
     this.imageElementService.HandleEmission({
-      index: this.video.index,
+      index: this.index,
       stars: rating
     });
   }

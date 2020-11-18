@@ -25,7 +25,7 @@ import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency
 import { SortOrderComponent } from './sort-order/sort-order.component';
 
 // Interfaces
-import { FinalObject, ImageElement, ScreenshotSettings, ResolutionString } from '../../../interfaces/final-object.interface';
+import { FinalObject, ImageElement, ScreenshotSettings, ResolutionString, StarRating } from '../../../interfaces/final-object.interface';
 import { ImportStage } from '../../../node/main-support';
 import { SettingsObject } from '../../../interfaces/settings-object.interface';
 import { SortType } from '../pipes/sorting.pipe';
@@ -251,7 +251,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   currentClickedItemName = '';
   currentPlayingFolder = '';
-  currentStarRating = 0;
+  currentStarRating: StarRating;
+  currentIndex = 0;
   fullPathToCurrentFile = '';
 
   fuzzySearchString = '';
@@ -439,7 +440,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.electronService.ipcRenderer.on('file-not-found', (event) => {
       this.zone.run(() => {
         this.modalService.openSnackbar(this.translate.instant('SETTINGS.fileNotFound'));
-      })
+      });
     });
 
     // Closing of Window was issued by Electron
@@ -811,7 +812,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.resetFinalArrayRef();
     } else {
       this.newVideoImportTimeout = setTimeout(() => {
-        this.resetFinalArrayRef()
+        this.resetFinalArrayRef();
       }, 3000);
     }
   }
@@ -1031,6 +1032,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.currentPlayingFolder = item.partialPath;
     this.currentClickedItemName = item.cleanName;
     this.currentStarRating = item.stars;
+    this.currentIndex = item.index;
     const fullPath = this.filePathService.getPathFromImageElement(item);
     this.fullPathToCurrentFile = fullPath;
 
