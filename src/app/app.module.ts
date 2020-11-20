@@ -31,6 +31,7 @@ import { ShortcutsService } from './components/shortcuts/shortcuts.service';
 import { SimilarityService } from './pipes/similarity.service';
 import { SourceFolderService } from './components/statistics/source-folder.service';
 import { StarFilterService } from './pipes/star-filter.service';
+import { StarRatingService } from './pipes/star-rating.service';
 import { WordFrequencyService } from './pipes/word-frequency.service';
 
 // Components
@@ -193,6 +194,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     SortingPipe,
     SourceFolderService,
     StarFilterService,
+    StarRatingService,
     WordFrequencyService,
     ImageElementService
   ],

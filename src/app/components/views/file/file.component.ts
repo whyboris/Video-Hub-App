@@ -1,4 +1,6 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+
+import { StarRatingService } from '../../../pipes/star-rating.service';
 
 import { ImageElement } from '../../../../../interfaces/final-object.interface';
 
@@ -11,7 +13,7 @@ import { ImageElement } from '../../../../../interfaces/final-object.interface';
       '../selected.scss'
     ]
 })
-export class FileComponent {
+export class FileComponent implements OnInit {
 
   @Input() video: ImageElement;
 
@@ -19,6 +21,12 @@ export class FileComponent {
   @Input() largerFont: boolean;
   @Input() showMeta: boolean;
 
-  constructor() { }
+  constructor(
+    private starRatingService: StarRatingService
+  ) { }
+
+  ngOnInit() {
+    this.starRatingService.changeStarRating(this.video.stars, this.video.index);
+  }
 
 }

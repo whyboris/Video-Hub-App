@@ -5,6 +5,7 @@ import { BehaviorSubject } from 'rxjs';
 
 import { ManualTagsService } from '../../tags-manual/manual-tags.service';
 import { FilePathService } from '../file-path.service';
+import { StarRatingService } from '../../../pipes/star-rating.service';
 
 import { StarRating, ImageElement } from '../../../../../interfaces/final-object.interface';
 import { VideoClickEmit, RightClickEmit, TagEmit, RenameFileResponse } from '../../../../../interfaces/shared-interfaces';
@@ -65,7 +66,8 @@ export class DetailsComponent implements OnInit {
   constructor(
     public filePathService: FilePathService,
     public manualTagsService: ManualTagsService,
-    public sanitizer: DomSanitizer
+    public sanitizer: DomSanitizer,
+    private starRatingService: StarRatingService
   ) { }
 
   mouseEnter() {
@@ -85,6 +87,7 @@ export class DetailsComponent implements OnInit {
   ngOnInit() {
     this.firstFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'thumbnails', this.video.hash);
     this.fullFilePath =  this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
+    this.starRatingService.changeStarRating(this.star, this.video.index);
   }
 
   mouseIsMoving($event) {

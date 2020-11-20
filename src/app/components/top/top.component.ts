@@ -1,6 +1,7 @@
 import { ImageElementService } from './../../services/image-element.service';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { StarRating, ImageElement } from '../../../../interfaces/final-object.interface';
+import { StarRatingService } from '../../pipes/star-rating.service';
 
 @Component({
   selector: 'app-top-component',
@@ -11,17 +12,26 @@ import { StarRating, ImageElement } from '../../../../interfaces/final-object.in
 export class TopComponent implements OnInit {
 
   @Input() darkMode: boolean;
-  @Input() starRating: StarRating;
   @Input() index: number;
 
   starRatingHack: StarRating;
 
+  @Input() set starRating(stars: StarRating) {
+    this.starRatingHack = stars;
+  }
+
   constructor(
     public imageElementService: ImageElementService,
+    private starRatingService: StarRatingService,
   ) { }
 
   ngOnInit() {
-    this.starRatingHack = this.starRating;
+
+    this.starRatingService.currentStarRating.subscribe(starRatingList => {
+      this.starRating = starRatingList[this.index];
+      this.starRatingHack = starRatingList[this.index];
+    });
+
   }
 
   // Handle folder input
@@ -75,5 +85,7 @@ export class TopComponent implements OnInit {
       index: this.index,
       stars: rating
     });
+
+    this.starRatingService.changeStarRating(rating, this.index);
   }
 }

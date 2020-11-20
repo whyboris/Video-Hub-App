@@ -2,6 +2,7 @@ import { Component, Input, OnInit, ViewChild, ElementRef, Output, EventEmitter }
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { FilePathService } from '../file-path.service';
+import { StarRatingService } from '../../../pipes/star-rating.service';
 
 import { metaAppear, textAppear } from '../../../common/animations';
 
@@ -43,11 +44,13 @@ export class FilmstripComponent implements OnInit {
 
   constructor(
     public filePathService: FilePathService,
-    public sanitizer: DomSanitizer
+    public sanitizer: DomSanitizer,
+    private starRatingService: StarRatingService
   ) { }
 
   ngOnInit() {
     this.fullFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
+    this.starRatingService.changeStarRating(this.video.stars, this.video.index);
   }
 
   updateFilmXoffset($event) {
