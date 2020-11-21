@@ -39,7 +39,6 @@ export class MetaComponent implements OnInit, OnDestroy {
 
   @Input() renameResponse: Observable<RenameFileResponse>;
 
-  starRatingHack: StarRating;
   yearHack: number;
 
   tagViewUpdateHack: boolean = false;
@@ -56,7 +55,6 @@ export class MetaComponent implements OnInit, OnDestroy {
     public imageElementService: ImageElementService,
     public manualTagsService: ManualTagsService,
     public sanitizer: DomSanitizer,
-    private starRatingService: StarRatingService,
   ) { }
 
   ngOnInit() {
@@ -78,11 +76,6 @@ export class MetaComponent implements OnInit, OnDestroy {
           }
         }
       }
-    });
-
-    this.starRatingService.currentStarRating.subscribe(starRatingList => {
-      this.star = starRatingList[this.video.index];
-      this.starRatingHack = starRatingList[this.video.index];
     });
 
   }
@@ -116,19 +109,6 @@ export class MetaComponent implements OnInit, OnDestroy {
     });
     this.tagViewUpdateHack = !this.tagViewUpdateHack;
   }
-
-  setStarRating(rating: StarRating): void {
-    if (this.starRatingHack === rating) {
-      rating = 0.5; // reset to "N/A" (not rated)
-    }
-    this.starRatingHack = rating; // hack for getting star opacity updated instantly
-    this.imageElementService.HandleEmission({
-      index: this.video.index,
-      stars: rating
-    });
-
-    this.starRatingService.changeStarRating(rating, this.video.index);
-}
 
   /**
    * Update the FinalArray with the year!

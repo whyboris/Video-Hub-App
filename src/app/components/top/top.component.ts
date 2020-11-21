@@ -1,7 +1,6 @@
 import { ImageElementService } from './../../services/image-element.service';
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { StarRating, ImageElement } from '../../../../interfaces/final-object.interface';
-import { StarRatingService } from '../../pipes/star-rating.service';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { StarRating } from '../../../../interfaces/final-object.interface';
 
 @Component({
   selector: 'app-top-component',
@@ -9,30 +8,15 @@ import { StarRatingService } from '../../pipes/star-rating.service';
   styleUrls: ['./top.component.scss',
               '../../fonts/icons.scss']
 })
-export class TopComponent implements OnInit {
+export class TopComponent {
 
   @Input() darkMode: boolean;
   @Input() index: number;
-
-  starRatingHack: StarRating;
-
-  @Input() set starRating(stars: StarRating) {
-    this.starRatingHack = stars;
-  }
+  @Input() starRating: StarRating;
 
   constructor(
     public imageElementService: ImageElementService,
-    private starRatingService: StarRatingService,
   ) { }
-
-  ngOnInit() {
-
-    this.starRatingService.currentStarRating.subscribe(starRatingList => {
-      this.starRating = starRatingList[this.index];
-      this.starRatingHack = starRatingList[this.index];
-    });
-
-  }
 
   // Handle folder input
   private _folder = '';
@@ -74,18 +58,5 @@ export class TopComponent implements OnInit {
 
   public openInExplorer(): void {
     this.onOpenInExplorer.emit(true);
-  }
-
-  setStarRating(rating: StarRating): void {
-    if (this.starRatingHack === rating) {
-      rating = 0.5; // reset to "N/A" (not rated)
-    }
-    this.starRatingHack = rating; // hack for getting star opacity updated instantly
-    this.imageElementService.HandleEmission({
-      index: this.index,
-      stars: rating
-    });
-
-    this.starRatingService.changeStarRating(rating, this.index);
   }
 }

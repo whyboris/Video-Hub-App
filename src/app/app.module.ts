@@ -59,6 +59,7 @@ import { SimilarTrayComponent } from './components/similar-tray/similar-tray.com
 import { SliderFilterComponent } from './components/slider-filter/slider-filter.component';
 import { SortOrderComponent } from './components/sort-order/sort-order.component';
 import { StarFilterComponent } from './components/star-filter/star-filter.component';
+import { StarRatingComponent } from './components/star-rating/star-rating.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { SvgDefinitionsComponent } from './components/icon/svg-definitions.component';
 import { TagTrayComponent } from './components/tag-tray/tag-tray.component';
@@ -152,6 +153,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     SortingPipe,
     StarFilterComponent,
     StarFilterPipe,
+    StarRatingComponent,
     StatisticsComponent,
     SvgDefinitionsComponent,
     TagFilterPipe,

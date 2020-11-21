@@ -18,54 +18,16 @@
   class="file-container"
   [ngClass]="{ 'dark-mode-override': darkMode }"
 >
-  <!-- Star rating --> 
-  <div 
-    class="starRating"
-  >
-    <button
-      (click)="setStarRating(1.5)"
-      class="star-rating"
-      [ngClass]="{ 'star-lit': starRatingHack > 1 }"
-      tabindex="-1"
-    >
-      <app-icon [icon]="'icon-star'"></app-icon>
-    </button>
-    <button
-      (click)="setStarRating(2.5)"
-      class="star-rating"
-      [ngClass]="{ 'star-lit': starRatingHack > 2 }"
-      tabindex="-1"
-    >
-      <app-icon [icon]="'icon-star'"></app-icon>
-    </button>
-    <button
-      (click)="setStarRating(3.5)"
-      class="star-rating"
-      [ngClass]="{ 'star-lit': starRatingHack > 3 }"
-      tabindex="-1"
-    >
-      <app-icon [icon]="'icon-star'"></app-icon>
-    </button>
-    <button
-      (click)="setStarRating(4.5)"
-      class="star-rating"
-      [ngClass]="{ 'star-lit': starRatingHack > 4 }"
-      tabindex="-1"
-    >
-      <app-icon [icon]="'icon-star'"></app-icon>
-    </button>
-    <button
-      (click)="setStarRating(5.5)"
-      class="star-rating"
-      [ngClass]="{ 'star-lit': starRatingHack > 5 }"
-      tabindex="-1"
-    >
-      <app-icon [icon]="'icon-star'"></app-icon>
-    </button>
+  <!-- Star rating -->
+  <div class="starRating">
+    <app-star-rating
+      [starRating]="starRating"
+      [index]="index"
+    ></app-star-rating>
   </div>
 
   <app-icon class="icon" [icon]="'icon-video-blank'" (click)="openInExplorer()" style="margin-left: 0; "></app-icon>
-  <div 
+  <div
     style="margin-left: 23px; width: 80%;"
   >
     <span
@@ -74,6 +36,6 @@
       class="file-word"
     >
       {{ item }}
-    </span> 
+    </span>
   </div>
 </div>
