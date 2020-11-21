@@ -370,10 +370,11 @@
                         appState.menuHidden | sidebarHeightPipe
                           : settingsButtons['hideTop'].toggled
                           : (
-                                 settingsButtons['showRelatedVideosTray'].toggled
-                              || settingsButtons['showRecentlyPlayed'].toggled
-                              || settingsButtons['showTagTray'].toggled
+                                 settingsButtons['showDetailsTray'].toggled
                               || settingsButtons['showFreq'].toggled
+                              || settingsButtons['showRecentlyPlayed'].toggled
+                              || settingsButtons['showRelatedVideosTray'].toggled
+                              || settingsButtons['showTagTray'].toggled
                             )
                       ) + 'px)'
         }"
@@ -626,10 +627,11 @@
                         appState.menuHidden | sidebarHeightPipe
                           : settingsButtons['hideTop'].toggled
                           : (
-                                 settingsButtons['showRelatedVideosTray'].toggled
-                              || settingsButtons['showRecentlyPlayed'].toggled
-                              || settingsButtons['showTagTray'].toggled
+                                 settingsButtons['showDetailsTray'].toggled
                               || settingsButtons['showFreq'].toggled
+                              || settingsButtons['showRecentlyPlayed'].toggled
+                              || settingsButtons['showRelatedVideosTray'].toggled
+                              || settingsButtons['showTagTray'].toggled
                             )
                       ) + 'px)'
         }"
@@ -977,6 +979,7 @@
                           || settingsButtons['showRecentlyPlayed'].toggled
                           || settingsButtons['showTagTray'].toggled
                           || settingsButtons['showFreq'].toggled
+                          || settingsButtons['showDetailsTray'].toggled
   }"
 >
   <button
@@ -1010,6 +1013,14 @@
   >
     {{ 'SETTINGS.recentlyPlayed' | translate }}
   </button>
+
+  <button
+    *ngIf="                   !settingsButtons['showDetailsTray'].hidden"
+    (click)="                     toggleButton('showDetailsTray')"
+    [ngClass]="{ 'active-tab': settingsButtons['showDetailsTray'].toggled }"
+  >
+    {{ 'SETTINGS.showDetailsTray' | translate }}
+  </button>
 </div>
 
 <div
@@ -1018,7 +1029,8 @@
   *ngIf="settingsButtons['showRelatedVideosTray'].toggled
       || settingsButtons['showRecentlyPlayed'].toggled
       || settingsButtons['showTagTray'].toggled
-      || settingsButtons['showFreq'].toggled"
+      || settingsButtons['showFreq'].toggled
+      || settingsButtons['showDetailsTray'].toggled"
 >
 
   <div
@@ -1071,6 +1083,51 @@
         {{ word.word }}
       </span>
     </ng-container>
+  </div>
+
+  <!-- CURRENT (last-clicked) FILE -->
+  <div
+    *ngIf="settingsButtons['showDetailsTray'].toggled"
+    class="current-clicked"
+  >
+
+    <app-thumbnail
+      [elHeight]="144"
+      [elWidth]="256"
+      [folderPath]="appState.selectedOutputFolder"
+      [hubName]="appState.hubName"
+      [imgHeight]="144"
+
+      [video]="currentClickedItem"
+
+      [connected]="sourceFolderService.sourceFolderConnected[currentClickedItem.inputSource]"
+
+      [darkMode]="settingsButtons['darkMode'].toggled"
+      [hoverScrub]="settingsButtons['hoverScrub'].toggled"
+      [largerFont]="settingsButtons['fontSizeLarger'].toggled"
+      [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
+      [showMeta]="false"
+    ></app-thumbnail>
+
+    <app-meta-item
+      class="meta-container top-offset"
+
+      [video]="currentClickedItem"
+
+      [imgHeight]="144"
+
+      [maxWidth]="galleryWidth - 80"
+      [darkMode]="settingsButtons['darkMode'].toggled"
+      [largerFont]="settingsButtons['fontSizeLarger'].toggled"
+      [showAutoFileTags]="settingsButtons['autoFileTags'].toggled"
+      [showAutoFolderTags]="settingsButtons['autoFolderTags'].toggled"
+      [showManualTags]="settingsButtons['manualTags'].toggled"
+      [showMeta]="settingsButtons['showMoreInfo'].toggled"
+      [showVideoNotes]="settingsButtons['showVideoNotes'].toggled"
+
+      [renameResponse]="renameFileResponseBehaviorSubject.asObservable()"
+
+    ></app-meta-item>
   </div>
 
 </div>

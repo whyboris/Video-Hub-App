@@ -100,7 +100,16 @@
       color: $pretty-blue;
     }
   }
+}
 
+.current-clicked {
+  display: flex;
+  margin-left: -10px;
+  margin-top: -6px;
+
+  .top-offset {
+    transform: translate(-20px, 30px);
+  }
 }
 
 .tag-type-ahead-on-home {

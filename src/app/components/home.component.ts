@@ -249,6 +249,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // Miscellaneous variables
   // ------------------------------------------------------------------------
 
+  currentClickedItem: ImageElement;
   currentClickedItemName = '';
   currentPlayingFolder = '';
   fullPathToCurrentFile = '';
@@ -1027,6 +1028,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     this.imageElementService.updateNumberOfTimesPlayed(item.index);
 
+    this.currentClickedItem = item;
     this.currentPlayingFolder = item.partialPath;
     this.currentClickedItemName = item.cleanName;
     const fullPath = this.filePathService.getPathFromImageElement(item);
@@ -1324,6 +1326,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * A helper function for `toggleBotton`
    */
   toggleAllTrayViewsButtonsOff(): void {
+    this.settingsButtons['showDetailsTray'].toggled = false;
     this.settingsButtons['showFreq'].toggled = false;
     this.settingsButtons['showRecentlyPlayed'].toggled = false;
     this.settingsButtons['showRelatedVideosTray'].toggled = false;

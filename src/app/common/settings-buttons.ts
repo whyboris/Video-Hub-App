@@ -42,6 +42,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'showDeleteOption'
  | 'showDetails'
  | 'showDetails2'
+ | 'showDetailsTray'
  | 'showFiles'
  | 'showFilmstrip'
  | 'showFolders'
@@ -60,8 +61,8 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'sortOptionAlphabetical'
  | 'sortOptionAlphabetical2'
  | 'sortOptionAspectRatio'
- | 'sortOptionFolderSize'
  | 'sortOptionCreated'
+ | 'sortOptionFolderSize'
  | 'sortOptionModified'
  | 'sortOptionSize'
  | 'sortOptionStar'
@@ -142,7 +143,8 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'showFreq',
     'showTagTray',
     'showRelatedVideosTray',
-    'showRecentlyPlayed'
+    'showRecentlyPlayed',
+    'showDetailsTray'
   ],
   [ // 7
     'compactView',
@@ -644,6 +646,14 @@ export const SettingsButtons: SettingsButtonsType = {
     hidden: false,
     iconName: 'icon-recent-history',
     title: 'BUTTONS.showRecentPlayed',
+    toggled: false
+  },
+  'showDetailsTray': {
+    description: 'BUTTONS.showDetailsTray',
+    hidden: false,
+    iconName: 'icon-show-details-tray',
+    moreInfo: 'BUTTONS.showDetailsTrayMoreInfo',
+    title: 'BUTTONS.showDetailsTray',
     toggled: false
   },
   'showRelatedVideosTray': {
