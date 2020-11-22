@@ -23,6 +23,7 @@
   // width: calc(95vw + 10px);
 
   @include scrollBar;
+  @include scrollBarRound;
 }
 
 .full-path {

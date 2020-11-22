@@ -147,7 +147,7 @@
     #videoNotes
     *ngIf="showVideoNotes"
     (blur)="saveVideoNotes($event)"
-    placeholder="notes"
+    placeholder="{{ 'TAGS.notes' | translate }}"
     [ngClass]="{ 'notes-dark-mode': darkMode }"
   >{{ video.notes }}</textarea>
 
