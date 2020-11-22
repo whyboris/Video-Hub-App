@@ -74,6 +74,12 @@ $top-region: 45px;
   }
 }
 
+@mixin scrollBarRound {
+  &::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+  }
+}
+
 @mixin scrollBarHidden {
   &::-webkit-scrollbar-track {
     visibility: hidden;

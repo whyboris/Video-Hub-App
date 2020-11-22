@@ -137,8 +137,7 @@
 .settings-modal {
   background-color: $gray-10;
   border: 1px solid $gray-50;
-  border-bottom-left-radius: 10px;
-  border-top-left-radius: 10px;
+  border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.2);
   box-sizing: border-box;
   height: calc(100vh - 215px);
@@ -153,6 +152,7 @@
   z-index: 500;
 
   @include scrollBar;
+  @include scrollBarRound;
 
   .defaultSettingsButton {
     border-radius: 5px !important;

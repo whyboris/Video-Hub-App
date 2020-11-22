@@ -6,23 +6,17 @@
   border-radius: 10px;
   box-shadow: 0 3px 7px 3px rgba(0, 0, 0, 0.3);
   box-sizing: border-box;
-  height: calc(100vh - 130px);
+  height: calc(100vh - 50px);
   left: 10vw;
   overflow-y: scroll;
   padding: 2%;
   position: fixed;
-  top: 115px;
+  top: 35px;
   width: calc(80vw + 10px);
   z-index: 30;
 
-  // Consider making larger
-  // Will need to add a `close` button if made bigger
-  // top: 4vh;
-  // left: 2vw;
-  // height: 94vh;
-  // width: calc(95vw + 10px);
-
   @include scrollBar;
+  @include scrollBarRound;
 }
 
 .full-path {
