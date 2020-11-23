@@ -152,7 +152,6 @@
   z-index: 500;
 
   @include scrollBar;
-  @include scrollBarRound;
 
   .defaultSettingsButton {
     border-radius: 5px !important;
@@ -198,6 +197,7 @@
   width: calc(100vw - #{$sidebar-width});
 
   @include scrollBar;
+  @include scrollBarSquare;
 }
 
 .gallery-container-dark-mode {
