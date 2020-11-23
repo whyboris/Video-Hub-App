@@ -10,7 +10,6 @@
     [importStage]="importStage"
     [macVersion]="macVersion"
     [progressString]="progressString"
-    [rootFolderLive]="rootFolderLive"
     [settingsButtons]="settingsButtons"
   ></app-title-bar>
 
@@ -82,19 +81,19 @@
     <ul @rightClickContentAnimation>
       <li
         (click)="openRenameFileModal()"
-        [ngClass]="{ 'right-click-disabled': !rootFolderLive }"
+        [ngClass]="{ 'right-click-disabled': !sourceFolderService.sourceFolderConnected[currentRightClickedItem.inputSource] }"
       >{{ 'RIGHTCLICK.renameFile' | translate }}</li>
       <li (click)="showSimilarNow()">{{ 'RIGHTCLICK.showSimilar' | translate }}</li>
       <li (click)="showOnlyThisFolderNow()">{{ 'RIGHTCLICK.viewFolder' | translate }}</li>
       <li
         (click)="openContainingFolderNow()"
-        [ngClass]="{ 'right-click-disabled': !rootFolderLive }"
+        [ngClass]="{ 'right-click-disabled': !sourceFolderService.sourceFolderConnected[currentRightClickedItem.inputSource] }"
       >{{ 'RIGHTCLICK.openFolder' | translate }}</li>
       <li (click)="openThumbnailSheet(currentRightClickedItem)">{{ 'RIGHTCLICK.sheetModal' | translate }}</li>
       <li
         *ngIf="settingsButtons['showDeleteOption'].toggled"
         (click)="deleteThisFile(currentRightClickedItem)"
-        [ngClass]="{ 'right-click-disabled': !rootFolderLive }"
+        [ngClass]="{ 'right-click-disabled': !sourceFolderService.sourceFolderConnected[currentRightClickedItem.inputSource] }"
         class="right-click-delete"
       >{{ 'RIGHTCLICK.delete' | translate }}</li>
     </ul>

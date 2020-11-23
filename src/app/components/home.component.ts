@@ -137,7 +137,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   settingsModalOpen = false;
   flickerReduceOverlay = true;
   isFirstRunEver = false;
-  rootFolderLive: boolean = true; // set to `false` when loading hub but video folder is not connected
 
   // ========================================================================
   // Import / extraction progress
@@ -647,7 +646,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       this.currentScreenshotSettings = finalObject.screenshotSettings;
 
-      this.rootFolderLive = true; // TODO -- do away with this once many root folders supported
       this.imageElementService.finalArrayNeedsSaving = false; // TODO -- remove; used to be for hadling root folder change
 
       this.appState.currentVhaFile = pathToFile;
@@ -1007,8 +1005,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // ctrl/cmd + click for thumbnail sheet
     if (eventObject.mouseEvent.ctrlKey === true || eventObject.mouseEvent.metaKey) {
       this.openThumbnailSheet(item);
-    } else if (this.rootFolderLive) {
+    } else {
       this.openVideo(item, eventObject.thumbIndex);
+      //  `openVideo` method handles the `not connected` case
     }
   }
 
@@ -1920,6 +1919,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   rightMouseClicked(event: MouseEvent, item: ImageElement): void {
+    this.currentRightClickedItem = item;
+
     const winWidth: number = window.innerWidth;
     const clientX: number = event.clientX;
     const howFarFromRight: number = winWidth - clientX;
@@ -1930,9 +1931,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const howFarFromBottom: number = winHeight - clientY;
 
     this.rightClickPosition.x = (howFarFromRight < 150) ? clientX - 150 + (howFarFromRight) : clientX;
-    this.rightClickPosition.y = (howFarFromBottom < 190) ? clientY - 190 + (howFarFromBottom) : clientY;
+    this.rightClickPosition.y = (howFarFromBottom < 210) ? clientY - 210 + (howFarFromBottom) : clientY;
 
-    this.currentRightClickedItem = item;
     this.rightClickShowing = true;
   }
 
