@@ -110,6 +110,18 @@
   .top-offset {
     transform: translate(-20px, 30px);
   }
+
+  .must-click-first {
+    color: $gray-70;
+    font-size: 14px;
+    margin-top: 80px;
+    text-align: center;
+    width: 100vw;
+  }
+
+  .must-click-dark-mode {
+    color: $gray-30;
+  }
 }
 
 .tag-type-ahead-on-home {

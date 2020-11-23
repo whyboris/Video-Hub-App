@@ -1031,6 +1031,7 @@
       || settingsButtons['showTagTray'].toggled
       || settingsButtons['showFreq'].toggled
       || settingsButtons['showDetailsTray'].toggled"
+  @bottomTrayAnimation
 >
 
   <div
@@ -1091,43 +1092,52 @@
     class="current-clicked"
   >
 
-    <app-thumbnail
-      [elHeight]="144"
-      [elWidth]="256"
-      [folderPath]="appState.selectedOutputFolder"
-      [hubName]="appState.hubName"
-      [imgHeight]="144"
+    <ng-container *ngIf="currentClickedItem; else mustClickFirst">
+      <app-thumbnail
+        [elHeight]="144"
+        [elWidth]="256"
+        [folderPath]="appState.selectedOutputFolder"
+        [hubName]="appState.hubName"
+        [imgHeight]="144"
 
-      [video]="currentClickedItem"
+        [video]="currentClickedItem"
 
-      [connected]="sourceFolderService.sourceFolderConnected[currentClickedItem.inputSource]"
+        [connected]="sourceFolderService.sourceFolderConnected[currentClickedItem.inputSource]"
 
-      [darkMode]="settingsButtons['darkMode'].toggled"
-      [hoverScrub]="settingsButtons['hoverScrub'].toggled"
-      [largerFont]="settingsButtons['fontSizeLarger'].toggled"
-      [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
-      [showMeta]="false"
-    ></app-thumbnail>
+        [darkMode]="settingsButtons['darkMode'].toggled"
+        [hoverScrub]="settingsButtons['hoverScrub'].toggled"
+        [largerFont]="settingsButtons['fontSizeLarger'].toggled"
+        [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
+        [showMeta]="false"
+      ></app-thumbnail>
 
-    <app-meta-item
-      class="meta-container top-offset"
+      <app-meta-item
+        class="meta-container top-offset"
 
-      [video]="currentClickedItem"
+        [video]="currentClickedItem"
 
-      [imgHeight]="144"
+        [imgHeight]="144"
 
-      [maxWidth]="galleryWidth - 80"
-      [darkMode]="settingsButtons['darkMode'].toggled"
-      [largerFont]="settingsButtons['fontSizeLarger'].toggled"
-      [showAutoFileTags]="settingsButtons['autoFileTags'].toggled"
-      [showAutoFolderTags]="settingsButtons['autoFolderTags'].toggled"
-      [showManualTags]="settingsButtons['manualTags'].toggled"
-      [showMeta]="settingsButtons['showMoreInfo'].toggled"
-      [showVideoNotes]="settingsButtons['showVideoNotes'].toggled"
+        [maxWidth]="galleryWidth - 80"
+        [darkMode]="settingsButtons['darkMode'].toggled"
+        [largerFont]="settingsButtons['fontSizeLarger'].toggled"
+        [showAutoFileTags]="settingsButtons['autoFileTags'].toggled"
+        [showAutoFolderTags]="settingsButtons['autoFolderTags'].toggled"
+        [showManualTags]="settingsButtons['manualTags'].toggled"
+        [showMeta]="settingsButtons['showMoreInfo'].toggled"
+        [showVideoNotes]="settingsButtons['showVideoNotes'].toggled"
 
-      [renameResponse]="renameFileResponseBehaviorSubject.asObservable()"
+        [renameResponse]="renameFileResponseBehaviorSubject.asObservable()"
 
-    ></app-meta-item>
+      ></app-meta-item>
+    </ng-container>
+
+    <ng-template #mustClickFirst>
+      <div class="must-click-first" [ngClass]="{ 'must-click-dark-mode': settingsButtons['darkMode'].toggled }">
+        {{ 'TAGS.detailsBottomTray' | translate }}
+      </div>
+    </ng-template>
+
   </div>
 
 </div>

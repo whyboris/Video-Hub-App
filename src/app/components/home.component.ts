@@ -49,6 +49,7 @@ import { SettingsButtons, SettingsButtonsGroups, SettingsButtonKey, SettingsButt
 
 // Animations
 import {
+  bottomTrayAnimation,
   buttonAnimation,
   donutAppear,
   filterItemAppear,
@@ -80,6 +81,7 @@ import {
     './rightclick.scss'
   ],
   animations: [
+    bottomTrayAnimation,
     buttonAnimation,
     donutAppear,
     filterItemAppear,
