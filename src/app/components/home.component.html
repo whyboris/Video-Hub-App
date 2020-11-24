@@ -1087,10 +1087,12 @@
       <button
         (click)="toggleButton('manualTags')"
         [ngClass]="{
-            defaultSettingsButton:        !settingsButtons['flatIcons'].toggled,
-            defaultSettingsButtonToggled: !settingsButtons['flatIcons'].toggled && settingsButtons['manualTags'].toggled,
-            flatSettingsButton:           settingsButtons['flatIcons'].toggled,
-            flatSettingsButtonToggled:    settingsButtons['flatIcons'].toggled && settingsButtons['manualTags'].toggled
+            defaultSettingsButton:            !settingsButtons['flatIcons'].toggled,
+            defaultSettingsButtonToggled:     !settingsButtons['flatIcons'].toggled                                        && settingsButtons['manualTags'].toggled,
+            flatSettingsButton:                settingsButtons['flatIcons'].toggled,
+            flatSettingsButtonToggled:         settingsButtons['flatIcons'].toggled                                        && settingsButtons['manualTags'].toggled,
+            defaultSettingsButtonDark:        !settingsButtons['flatIcons'].toggled && settingsButtons['darkMode'].toggled,
+            defaultSettingsButtonDarkToggled: !settingsButtons['flatIcons'].toggled && settingsButtons['darkMode'].toggled && settingsButtons['manualTags'].toggled
           }"
         title="{{ settingsButtons['manualTags'].title | translate }}"
       >
@@ -1103,10 +1105,12 @@
       <button
         (click)="toggleButton('autoFileTags')"
         [ngClass]="{
-            defaultSettingsButton:        !settingsButtons['flatIcons'].toggled,
-            defaultSettingsButtonToggled: !settingsButtons['flatIcons'].toggled && settingsButtons['autoFileTags'].toggled,
-            flatSettingsButton:           settingsButtons['flatIcons'].toggled,
-            flatSettingsButtonToggled:    settingsButtons['flatIcons'].toggled && settingsButtons['autoFileTags'].toggled
+            defaultSettingsButton:            !settingsButtons['flatIcons'].toggled,
+            defaultSettingsButtonToggled:     !settingsButtons['flatIcons'].toggled                                        && settingsButtons['autoFileTags'].toggled,
+            flatSettingsButton:                settingsButtons['flatIcons'].toggled,
+            flatSettingsButtonToggled:         settingsButtons['flatIcons'].toggled                                        && settingsButtons['autoFileTags'].toggled,
+            defaultSettingsButtonDark:        !settingsButtons['flatIcons'].toggled && settingsButtons['darkMode'].toggled,
+            defaultSettingsButtonDarkToggled: !settingsButtons['flatIcons'].toggled && settingsButtons['darkMode'].toggled && settingsButtons['autoFileTags'].toggled
           }"
         title="{{ settingsButtons['autoFileTags'].title | translate }}"
       >
@@ -1119,10 +1123,12 @@
       <button
         (click)="toggleButton('autoFolderTags')"
         [ngClass]="{
-            defaultSettingsButton:        !settingsButtons['flatIcons'].toggled,
-            defaultSettingsButtonToggled: !settingsButtons['flatIcons'].toggled && settingsButtons['autoFolderTags'].toggled,
-            flatSettingsButton:           settingsButtons['flatIcons'].toggled,
-            flatSettingsButtonToggled:    settingsButtons['flatIcons'].toggled && settingsButtons['autoFolderTags'].toggled
+            defaultSettingsButton:            !settingsButtons['flatIcons'].toggled,
+            defaultSettingsButtonToggled:     !settingsButtons['flatIcons'].toggled                                        && settingsButtons['autoFolderTags'].toggled,
+            flatSettingsButton:                settingsButtons['flatIcons'].toggled,
+            flatSettingsButtonToggled:         settingsButtons['flatIcons'].toggled                                        && settingsButtons['autoFolderTags'].toggled,
+            defaultSettingsButtonDark:        !settingsButtons['flatIcons'].toggled && settingsButtons['darkMode'].toggled,
+            defaultSettingsButtonDarkToggled: !settingsButtons['flatIcons'].toggled && settingsButtons['darkMode'].toggled && settingsButtons['autoFolderTags'].toggled
           }"
         title="{{ settingsButtons['autoFolderTags'].title | translate }}"
       >
