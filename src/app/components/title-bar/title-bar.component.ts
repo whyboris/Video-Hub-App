@@ -17,7 +17,6 @@ export class TitleBarComponent {
   @Input() importStage;
   @Input() macVersion: boolean;
   @Input() progressString;
-  @Input() rootFolderLive;
   @Input() settingsButtons: SettingsButtonsType;
 
   constructor() { }

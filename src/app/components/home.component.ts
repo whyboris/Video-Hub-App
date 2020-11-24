@@ -49,6 +49,7 @@ import { SettingsButtons, SettingsButtonsGroups, SettingsButtonKey, SettingsButt
 
 // Animations
 import {
+  bottomTrayAnimation,
   buttonAnimation,
   donutAppear,
   filterItemAppear,
@@ -80,6 +81,7 @@ import {
     './rightclick.scss'
   ],
   animations: [
+    bottomTrayAnimation,
     buttonAnimation,
     donutAppear,
     filterItemAppear,
@@ -135,7 +137,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   settingsModalOpen = false;
   flickerReduceOverlay = true;
   isFirstRunEver = false;
-  rootFolderLive: boolean = true; // set to `false` when loading hub but video folder is not connected
 
   // ========================================================================
   // Import / extraction progress
@@ -249,6 +250,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // Miscellaneous variables
   // ------------------------------------------------------------------------
 
+  currentClickedItem: ImageElement;
   currentClickedItemName = '';
   currentPlayingFolder = '';
   fullPathToCurrentFile = '';
@@ -335,13 +337,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @HostListener('window:resize')
   handleResizeEvent() {
     this.debounceUpdateMax();
-  }
-
-  @HostListener('window:click')
-  handleWindowClick() {
-    if (this.rightClickShowing) {
-      this.rightClickShowing = false;
-    }
   }
 
   constructor(
@@ -543,9 +538,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // WIP -- delete any videos no longer found on the hard drive!
     this.electronService.ipcRenderer.on('all-files-found-in-dir', (event, sourceIndex: number, allFilesMap: Map<string, 1>) => {
-      console.log('all files returning:');
-      console.log(sourceIndex, typeof(sourceIndex));
-      console.log(allFilesMap);
+      // console.log('all files returning:');
+      // console.log(sourceIndex, typeof(sourceIndex));
+      // console.log(allFilesMap);
 
       this.sourceFolderService.removeCurrentScanning(sourceIndex);
 
@@ -563,9 +558,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
         .filter((element: ImageElement) => { return element.inputSource == sourceIndex })
         // notice the loosey-goosey comparison! this is because number  ^^  string comparison happening here!
         .forEach((element: ImageElement) => {
-          console.log(element.fileName);
+          // console.log(element.fileName);
           if (!allFilesMap.has(path.join(rootFolder, element.partialPath, element.fileName))) {
-            console.log('deleting');
+            console.log('deleting: ', element.fileName);
             element.deleted = true;
             somethingDeleted = true;
           }
@@ -637,15 +632,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
       pathToFile: string,
       outputFolderPath: string,
     ) => {
-
+      // console.log('input dirs', finalObject.inputDirs);
+      // reset to initial
+      this.currentClickedItem = undefined;
       this.lastRenamedFileHack = undefined;
-
+      this.imageElementService.finalArrayNeedsSaving = false;
       this.imageElementService.recentlyPlayed = [];
 
       this.currentScreenshotSettings = finalObject.screenshotSettings;
-
-      this.rootFolderLive = true; // TODO -- do away with this once many root folders supported
-      this.imageElementService.finalArrayNeedsSaving = false; // TODO -- remove; used to be for hadling root folder change
 
       this.appState.currentVhaFile = pathToFile;
       this.appState.selectedOutputFolder = outputFolderPath;
@@ -655,8 +649,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       this.sourceFolderService.selectedSourceFolder = finalObject.inputDirs;
       this.sourceFolderService.resetConnected();
-
-      console.log('input dirs', finalObject.inputDirs);
 
       // Update history of opened files
       this.updateVhaFileHistory(pathToFile, finalObject.hubName);
@@ -1004,8 +996,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // ctrl/cmd + click for thumbnail sheet
     if (eventObject.mouseEvent.ctrlKey === true || eventObject.mouseEvent.metaKey) {
       this.openThumbnailSheet(item);
-    } else if (this.rootFolderLive) {
+    } else {
       this.openVideo(item, eventObject.thumbIndex);
+      //  `openVideo` method handles the `not connected` case
     }
   }
 
@@ -1026,6 +1019,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
 
     this.imageElementService.updateNumberOfTimesPlayed(item.index);
+
+    this.currentClickedItem = null;
+    setTimeout(() => {
+      this.currentClickedItem = item;
+    }); // so the view updates
 
     this.currentPlayingFolder = item.partialPath;
     this.currentClickedItemName = item.cleanName;
@@ -1324,6 +1322,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * A helper function for `toggleBotton`
    */
   toggleAllTrayViewsButtonsOff(): void {
+    this.settingsButtons['showDetailsTray'].toggled = false;
     this.settingsButtons['showFreq'].toggled = false;
     this.settingsButtons['showRecentlyPlayed'].toggled = false;
     this.settingsButtons['showRelatedVideosTray'].toggled = false;
@@ -1915,6 +1914,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   rightMouseClicked(event: MouseEvent, item: ImageElement): void {
+    this.currentRightClickedItem = item;
+
     const winWidth: number = window.innerWidth;
     const clientX: number = event.clientX;
     const howFarFromRight: number = winWidth - clientX;
@@ -1925,9 +1926,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const howFarFromBottom: number = winHeight - clientY;
 
     this.rightClickPosition.x = (howFarFromRight < 150) ? clientX - 150 + (howFarFromRight) : clientX;
-    this.rightClickPosition.y = (howFarFromBottom < 190) ? clientY - 190 + (howFarFromBottom) : clientY;
+    this.rightClickPosition.y = (howFarFromBottom < 210) ? clientY - 210 + (howFarFromBottom) : clientY;
 
-    this.currentRightClickedItem = item;
     this.rightClickShowing = true;
   }
 
@@ -1954,20 +1954,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const base: string = this.sourceFolderService.selectedSourceFolder[item.inputSource].path;
     const dangerously: boolean = this.settingsButtons['dangerousDelete'].toggled;
     this.electronService.ipcRenderer.send('delete-video-file', base, item, dangerously);
-  }
-
-  /**
-   * Close the thumbnail sheet
-   */
-  closeSheetOverlay() {
-    this.sheetOverlayShowing = false;
-  }
-
-  /**
-   * Opens rename file modal, prepares all the name and extension
-   */
-  openRenameFileModal(): void {
-    this.renamingNow = true;
   }
 
   /**
