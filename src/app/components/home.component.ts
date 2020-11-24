@@ -640,6 +640,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       outputFolderPath: string,
     ) => {
 
+      this.currentClickedItem = undefined;
       this.lastRenamedFileHack = undefined;
 
       this.imageElementService.recentlyPlayed = [];
@@ -1029,7 +1030,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     this.imageElementService.updateNumberOfTimesPlayed(item.index);
 
-    this.currentClickedItem = item;
+    this.currentClickedItem = null;
+    setTimeout(() => {
+      this.currentClickedItem = item;
+    }); // so the view updates
+
     this.currentPlayingFolder = item.partialPath;
     this.currentClickedItemName = item.cleanName;
     const fullPath = this.filePathService.getPathFromImageElement(item);

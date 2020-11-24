@@ -112,7 +112,6 @@
     [folderPath]="appState.selectedOutputFolder"
     [hubName]="appState.hubName"
     [imgHeight]="previewHeight"
-    [selectedSourceFolder]="sourceFolderService.selectedSourceFolder[sheetItemToDisplay.inputSource].path"
     [star]="sheetItemToDisplay.stars"
 
     [darkMode]="settingsButtons['darkMode'].toggled"
@@ -125,6 +124,7 @@
     [showMeta]="settingsButtons['showMoreInfo'].toggled"
     [showVideoNotes]="settingsButtons['showVideoNotes'].toggled"
 
+    [selectedSourceFolder]="sourceFolderService.selectedSourceFolder[sheetItemToDisplay.inputSource].path"
     [renameResponse]="renameFileResponseBehaviorSubject"
   >
   </app-thumbnail-sheet>
@@ -1093,6 +1093,9 @@
 
     <ng-container *ngIf="currentClickedItem; else mustClickFirst">
       <app-thumbnail
+        (videoClick)="handleClick($event, currentClickedItem)"
+        (sheetClick)="this.openThumbnailSheet(currentClickedItem)"
+
         [elHeight]="144"
         [elWidth]="256"
         [folderPath]="appState.selectedOutputFolder"
@@ -1116,8 +1119,9 @@
         [video]="currentClickedItem"
 
         [imgHeight]="144"
-
         [maxWidth]="galleryWidth - 80"
+        [star]="currentClickedItem.stars"
+
         [darkMode]="settingsButtons['darkMode'].toggled"
         [largerFont]="settingsButtons['fontSizeLarger'].toggled"
         [showAutoFileTags]="settingsButtons['autoFileTags'].toggled"
@@ -1126,8 +1130,8 @@
         [showMeta]="settingsButtons['showMoreInfo'].toggled"
         [showVideoNotes]="settingsButtons['showVideoNotes'].toggled"
 
+        [selectedSourceFolder]="sourceFolderService.selectedSourceFolder[currentClickedItem.inputSource].path"
         [renameResponse]="renameFileResponseBehaviorSubject.asObservable()"
-
       ></app-meta-item>
     </ng-container>
 
