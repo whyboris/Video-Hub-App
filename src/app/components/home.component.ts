@@ -751,7 +751,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
 
       // if the element is part of any of the deleted videos, copy over the metadata into it !
-      // important for when user renames a folder for examle
+      // important for when user renames a folder for example
       this.imageElementService.imageElements
         .filter((currentElements: ImageElement) => {
           return currentElements.deleted
