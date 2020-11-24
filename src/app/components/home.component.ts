@@ -545,9 +545,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // WIP -- delete any videos no longer found on the hard drive!
     this.electronService.ipcRenderer.on('all-files-found-in-dir', (event, sourceIndex: number, allFilesMap: Map<string, 1>) => {
-      console.log('all files returning:');
-      console.log(sourceIndex, typeof(sourceIndex));
-      console.log(allFilesMap);
+      // console.log('all files returning:');
+      // console.log(sourceIndex, typeof(sourceIndex));
+      // console.log(allFilesMap);
 
       this.sourceFolderService.removeCurrentScanning(sourceIndex);
 
@@ -565,9 +565,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
         .filter((element: ImageElement) => { return element.inputSource == sourceIndex })
         // notice the loosey-goosey comparison! this is because number  ^^  string comparison happening here!
         .forEach((element: ImageElement) => {
-          console.log(element.fileName);
+          // console.log(element.fileName);
           if (!allFilesMap.has(path.join(rootFolder, element.partialPath, element.fileName))) {
-            console.log('deleting');
+            console.log('deleting: ', element.fileName);
             element.deleted = true;
             somethingDeleted = true;
           }
@@ -639,15 +639,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
       pathToFile: string,
       outputFolderPath: string,
     ) => {
-
+      // console.log('input dirs', finalObject.inputDirs);
+      // reset to initial
       this.currentClickedItem = undefined;
       this.lastRenamedFileHack = undefined;
-
+      this.imageElementService.finalArrayNeedsSaving = false;
       this.imageElementService.recentlyPlayed = [];
 
       this.currentScreenshotSettings = finalObject.screenshotSettings;
-
-      this.imageElementService.finalArrayNeedsSaving = false;
 
       this.appState.currentVhaFile = pathToFile;
       this.appState.selectedOutputFolder = outputFolderPath;
@@ -657,8 +656,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       this.sourceFolderService.selectedSourceFolder = finalObject.inputDirs;
       this.sourceFolderService.resetConnected();
-
-      console.log('input dirs', finalObject.inputDirs);
 
       // Update history of opened files
       this.updateVhaFileHistory(pathToFile, finalObject.hubName);
