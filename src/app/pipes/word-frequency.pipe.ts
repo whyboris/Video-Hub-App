@@ -39,7 +39,9 @@ export class WordFrequencyPipe implements PipeTransform {
         if (showManualTags && element.tags) {
           this.wordFrequencyService.addString(element.tags.join(' '));
         }
-        if (showAutoFileTags) {
+        if (showAutoFileTags
+            || (!showAutoFileTags && !showManualTags && !showAutoFileTags)
+        ) {
           this.wordFrequencyService.addString(element.cleanName);
         }
         if (showAutoFolderTags) {
@@ -49,7 +51,7 @@ export class WordFrequencyPipe implements PipeTransform {
 
       // this.wordFrequencyService.cleanMap();
 
-      this.wordFrequencyService.computeFrequencyArray(finalArray.length, 100);
+      this.wordFrequencyService.computeFrequencyArray(finalArray.length, 165);
     }
 
     return finalArray;
