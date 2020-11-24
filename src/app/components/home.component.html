@@ -1025,11 +1025,11 @@
 <div
   class="bottom-tray"
   [ngClass]="{ 'bottom-tray-dark': settingsButtons['darkMode'].toggled }"
-  *ngIf="settingsButtons['showRelatedVideosTray'].toggled
-      || settingsButtons['showRecentlyPlayed'].toggled
-      || settingsButtons['showTagTray'].toggled
+  *ngIf="settingsButtons['showDetailsTray'].toggled
       || settingsButtons['showFreq'].toggled
-      || settingsButtons['showDetailsTray'].toggled"
+      || settingsButtons['showRecentlyPlayed'].toggled
+      || settingsButtons['showRelatedVideosTray'].toggled
+      || settingsButtons['showTagTray'].toggled"
   @bottomTrayAnimation
 >
 
