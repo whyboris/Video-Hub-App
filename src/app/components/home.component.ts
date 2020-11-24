@@ -1133,10 +1133,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   // -----------------------------------------------------------------------------------------------
-  // handle output from top.component
 
   /**
-   * Add filter to FILE search when word in file is clicked
+   * Add filter to tag search when word in word cloud or tag tray is clicked
    * @param filter - particular tag clicked
    */
   handleTagWordClicked(filter: string, event?): void {
@@ -1146,17 +1145,26 @@ export class HomeComponent implements OnInit, AfterViewInit {
       return;
     }
 
+    if (  // if all tags disabled, perform a FILE search
+         !this.settingsButtons['manualTags'].toggled
+      && !this.settingsButtons['autoFileTags'].toggled
+      && !this.settingsButtons['autoFolderTags'].toggled
+    ) {
+      this.handleFileWordClicked(filter, event);
+      return;
+    }
+
     this.showSidebar();
-    if (event && event.shiftKey) { // Shift click to exclude
+    if (event && event.shiftKey) { // Shift click to exclude tag!
       if (!this.settingsButtons['tagExclusion'].toggled) {
         this.settingsButtons['tagExclusion'].toggled = true;
       }
-      this.onEnterKey(filter, 7); // 7th item is the `tag` exlcude filter
+      this.onEnterKey(filter, 7); // 7th item is the `tagExclusion` filter in `FilterKeyNames`
     } else {
       if (!this.settingsButtons['tagIntersection'].toggled) {
         this.settingsButtons['tagIntersection'].toggled = true;
       }
-      this.onEnterKey(filter, 6); // 6th item is the `tag` filter
+      this.onEnterKey(filter, 6); // 6th item is the `tagIntersection` filter in `FilterKeyNames`
     }
   }
 
@@ -1166,16 +1174,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   handleFileWordClicked(filter: string, event?): void {
     this.showSidebar();
-    if (event && event.shiftKey) {
+    if (event && event.shiftKey) { // Shift click to exclude tag!
       if (!this.settingsButtons['exclude'].toggled) {
         this.settingsButtons['exclude'].toggled = true;
       }
-      this.onEnterKey(filter, 4); // 3rd item is the `exclude` filter
+      this.onEnterKey(filter, 4); // 4th item is the `exclude` filter in `FilterKeyNames`
     } else {
       if (!this.settingsButtons['fileIntersection'].toggled) {
         this.settingsButtons['fileIntersection'].toggled = true;
       }
-      this.onEnterKey(filter, 3); // 3rd item is the `fileIntersection` filter
+      this.onEnterKey(filter, 3); // 3rd item is the `fileIntersection` filter in `FilterKeyNames`
     }
   }
 

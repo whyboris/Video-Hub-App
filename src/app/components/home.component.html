@@ -1082,10 +1082,10 @@
     *ngIf="settingsButtons['showFreq'].toggled"
     class="cloud-frequency"
   >
-    <ng-container *ngFor="let word of wordFreqArr; index as i">
+    <ng-container *ngFor="let word of wordFreqArr">
       <span
         [ngStyle]="{'font-size': word.height + 'px' }"
-        (click)="handleFileWordClicked(word.word, $event)"
+        (click)="handleTagWordClicked(word.word, $event)"
       >
         {{ word.word }}
       </span>
