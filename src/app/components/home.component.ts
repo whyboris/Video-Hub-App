@@ -339,13 +339,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.debounceUpdateMax();
   }
 
-  @HostListener('window:click')
-  handleWindowClick() {
-    if (this.rightClickShowing) {
-      this.rightClickShowing = false;
-    }
-  }
-
   constructor(
     private http: HttpClient,
     public autoTagsSaveService: AutoTagsSaveService,
@@ -1961,20 +1954,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const base: string = this.sourceFolderService.selectedSourceFolder[item.inputSource].path;
     const dangerously: boolean = this.settingsButtons['dangerousDelete'].toggled;
     this.electronService.ipcRenderer.send('delete-video-file', base, item, dangerously);
-  }
-
-  /**
-   * Close the thumbnail sheet
-   */
-  closeSheetOverlay() {
-    this.sheetOverlayShowing = false;
-  }
-
-  /**
-   * Opens rename file modal, prepares all the name and extension
-   */
-  openRenameFileModal(): void {
-    this.renamingNow = true;
   }
 
   /**

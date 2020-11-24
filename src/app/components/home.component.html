@@ -46,6 +46,8 @@
   <div
     *ngIf="rightClickShowing"
     class="click-away-overlay"
+    (click)="      rightClickShowing = false"
+    (contextmenu)="rightClickShowing = false"
     @overlayAppear
   >
   </div>
@@ -62,8 +64,8 @@
   <div
     *ngIf="sheetOverlayShowing"
     class="click-away-overlay"
-    (click)="closeSheetOverlay()"
-    (contextmenu)="closeSheetOverlay()"
+    (click)="      sheetOverlayShowing = false;"
+    (contextmenu)="sheetOverlayShowing = false;"
     @overlayAppear
   >
   </div>
@@ -71,6 +73,7 @@
   <!-- ===========   RIGHT CLICK MODAL    =========== -->
   <div
     *ngIf="rightClickShowing"
+    (click)="rightClickShowing = false"
     [ngStyle]="{
         top: rightClickPosition.y + 'px',
         left: rightClickPosition.x + 'px'
@@ -80,22 +83,25 @@
   >
     <ul @rightClickContentAnimation>
       <li
-        (click)="openRenameFileModal()"
+        (click)="renamingNow = true"
         [ngClass]="{ 'right-click-disabled': !sourceFolderService.sourceFolderConnected[currentRightClickedItem.inputSource] }"
-      >{{ 'RIGHTCLICK.renameFile' | translate }}</li>
-      <li (click)="showSimilarNow()">{{ 'RIGHTCLICK.showSimilar' | translate }}</li>
-      <li (click)="showOnlyThisFolderNow()">{{ 'RIGHTCLICK.viewFolder' | translate }}</li>
+      >
+                                                                {{ 'RIGHTCLICK.renameFile'  | translate }}</li>
+      <li (click)="showSimilarNow()">                           {{ 'RIGHTCLICK.showSimilar' | translate }}</li>
+      <li (click)="showOnlyThisFolderNow()">                    {{ 'RIGHTCLICK.viewFolder'  | translate }}</li>
       <li
         (click)="openContainingFolderNow()"
         [ngClass]="{ 'right-click-disabled': !sourceFolderService.sourceFolderConnected[currentRightClickedItem.inputSource] }"
-      >{{ 'RIGHTCLICK.openFolder' | translate }}</li>
-      <li (click)="openThumbnailSheet(currentRightClickedItem)">{{ 'RIGHTCLICK.sheetModal' | translate }}</li>
+      >
+                                                                {{ 'RIGHTCLICK.openFolder'  | translate }}</li>
+      <li (click)="openThumbnailSheet(currentRightClickedItem)">{{ 'RIGHTCLICK.sheetModal'  | translate }}</li>
       <li
         *ngIf="settingsButtons['showDeleteOption'].toggled"
         (click)="deleteThisFile(currentRightClickedItem)"
-        [ngClass]="{ 'right-click-disabled': !sourceFolderService.sourceFolderConnected[currentRightClickedItem.inputSource] }"
         class="right-click-delete"
-      >{{ 'RIGHTCLICK.delete' | translate }}</li>
+        [ngClass]="{ 'right-click-disabled': !sourceFolderService.sourceFolderConnected[currentRightClickedItem.inputSource] }"
+      >
+                                                                {{ 'RIGHTCLICK.delete'      | translate }}</li>
     </ul>
   </div>
 
