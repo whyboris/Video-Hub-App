@@ -426,11 +426,11 @@ export function extractMetadataAsync(
           }
 
           const imageElement = NewImageElement();
-          imageElement.birthtime = fileStat.birthtimeMs;
+          imageElement.birthtime = Math.round(fileStat.birthtimeMs);
           imageElement.duration  = duration;
           imageElement.fileSize  = fileStat.size;
           imageElement.height    = origHeight;
-          imageElement.mtime     = fileStat.mtimeMs;
+          imageElement.mtime     = Math.round(fileStat.mtimeMs);
           imageElement.screens   = computeNumberOfScreenshots(screenshotSettings, duration);
           imageElement.width     = origWidth;
 

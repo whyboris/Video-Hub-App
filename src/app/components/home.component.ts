@@ -573,12 +573,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     // When `watch` folder and `chokidar` detects a file was deleted (can happen when renamed too!)
+    // mark the element in `imageElements[]` as `deleted`
     this.electronService.ipcRenderer.on('single-file-deleted', (event, sourceIndex: number, partialPath: string) => {
       this.imageElementService.imageElements
         .filter((element: ImageElement) => { return element.inputSource == sourceIndex })
         // notice the loosey-goosey comparison! this is because number  ^^  string comparison happening here!
         .forEach((element: ImageElement) => {
-          if (('\\' + partialPath) === path.join(element.partialPath, element.fileName)) {
+          if (
+            '\\' + partialPath === path.join(element.partialPath, element.fileName)
+            ||     partialPath === path.join(element.partialPath, element.fileName)
+          ) {
             console.log('FILE DELETED !!!', partialPath);
             element.deleted = true;
             this.deletePipeHack = !this.deletePipeHack;
@@ -733,17 +737,30 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     });
 
+    // gets called for every element that node extracted metadata for (screenshots not yet extracted)
     this.electronService.ipcRenderer.on('new-video-meta', (event, element: ImageElement) => {
 
+      // if this video was just renamed from within the app do not add the element, skip it
       if (   this.lastRenamedFileHack // undefined unless file recently renamed
           && this.lastRenamedFileHack.inputSource === element.inputSource
           && this.lastRenamedFileHack.partialPath === element.partialPath
           && this.lastRenamedFileHack.fileName    === element.fileName
       ) {
-        // this video was just renamed, skip it
         console.log('SKIPPING THIS -- was just renamed !!!');
         return;
       }
+
+      // if the element is part of any of the deleted videos, copy over the metadata into it !
+      // important for when user renames a folder for example
+      this.imageElementService.imageElements
+        .filter((currentElements: ImageElement) => {
+          return currentElements.deleted
+        })
+        .forEach((deletedElement: ImageElement) => {
+          if (deletedElement.hash === element.hash) {
+            this.copyMetaProperties(element, deletedElement);
+          }
+        });
 
       if (!this.demo || this.imageElementService.imageElements.length <= 50) {
         element.index = this.imageElementService.imageElements.length;
@@ -772,6 +789,20 @@ export class HomeComponent implements OnInit, AfterViewInit {
         }
       }
     };
+  }
+
+  /**
+   * Migrate VHA meta properties from one ImageElement to another
+   * @param destination
+   * @param origin
+   */
+  copyMetaProperties(destination: ImageElement, origin: ImageElement): void {
+    // WARNING - some day in MacOS we'll add OS tags, so this will need to be a merge, not replace
+    destination.notes       = origin.notes;
+    destination.stars       = origin.stars;
+    destination.tags        = origin.tags;
+    destination.timesPlayed = origin.timesPlayed;
+    destination.year        = origin.year;
   }
 
   /**

@@ -398,7 +398,8 @@
           title="{{ 'SIDEBAR.scanInProgress' | translate }}"
           @slowFadeOut
         ></div>
-        {{ imageElementService.imageElements.length | number }} {{ 'SIDEBAR.videos' | translate }}
+        {{ (imageElementService.imageElements | deleteFilePipe).length | number }}
+        {{ 'SIDEBAR.videos' | translate }}
       </div>
 
       <!-- Regular search boxes / filters -->
@@ -897,7 +898,7 @@
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
           [imgHeight]="previewHeight"
-          [selectedSourceFolder]="sourceFolderService.selectedSourceFolder[item.inputSource].path"
+          [selectedSourceFolder]="sourceFolderService.selectedSourceFolder[item.inputSource]?.path"
 
           [star]="item.stars"
 
