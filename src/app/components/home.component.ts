@@ -1145,6 +1145,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
       return;
     }
 
+    if (  // if all tags disabled, perform a FILE search
+         !this.settingsButtons['manualTags'].toggled
+      && !this.settingsButtons['autoFileTags'].toggled
+      && !this.settingsButtons['autoFolderTags'].toggled
+    ) {
+      this.handleFileWordClicked(filter, event);
+      return;
+    }
+
     this.showSidebar();
     if (event && event.shiftKey) { // Shift click to exclude tag!
       if (!this.settingsButtons['tagExclusion'].toggled) {
