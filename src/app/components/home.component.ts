@@ -579,7 +579,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
         .filter((element: ImageElement) => { return element.inputSource == sourceIndex })
         // notice the loosey-goosey comparison! this is because number  ^^  string comparison happening here!
         .forEach((element: ImageElement) => {
-          if (partialPath === path.join(element.partialPath, element.fileName)) {
+          if (
+            '\\' + partialPath === path.join(element.partialPath, element.fileName)
+            ||     partialPath === path.join(element.partialPath, element.fileName)
+          ) {
             console.log('FILE DELETED !!!', partialPath);
             element.deleted = true;
             this.deletePipeHack = !this.deletePipeHack;
