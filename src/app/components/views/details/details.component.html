@@ -37,20 +37,18 @@
     [video]="video"
 
     [imgHeight]="imgHeight"
-
-    [star]="this.star"
-
     [maxWidth]="maxWidth / (showTwoColumns ? 2 : 1) - elWidth"
+    [star]="this.star"
 
     [darkMode]="darkMode"
     [largerFont]="largerFont"
-    [selectedSourceFolder]="selectedSourceFolder"
     [showAutoFileTags]="showAutoFileTags"
     [showAutoFolderTags]="showAutoFolderTags"
     [showManualTags]="showManualTags"
     [showMeta]="showMeta"
     [showVideoNotes]="showVideoNotes"
 
+    [selectedSourceFolder]="selectedSourceFolder"
     [renameResponse]="renameResponse.asObservable()"
   ></app-meta-item>
 

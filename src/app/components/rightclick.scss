@@ -41,7 +41,11 @@
   }
 
   .right-click-delete {
+    border-top: 1px solid $gray-20;
     color: $dark-red;
+    margin-top: 6px;
+    padding-top: 14px !important;
+    text-align: center;
   }
 
   .right-click-disabled {
