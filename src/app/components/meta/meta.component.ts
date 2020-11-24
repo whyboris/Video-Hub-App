@@ -70,6 +70,7 @@ export class MetaComponent implements OnInit, OnDestroy {
 
         if (this.video.index === data.index) { // make sure the message is about current component's video
           if (data.success) {
+            this.renamingWIP = data.renameTo.split('.').slice(0, -1).join('.'); // removes the extension (e.g. ".mp4")
             this.renameError = false;
           } else {
             this.renameError = true;

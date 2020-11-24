@@ -647,7 +647,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       this.currentScreenshotSettings = finalObject.screenshotSettings;
 
-      this.imageElementService.finalArrayNeedsSaving = false; // TODO -- remove; used to be for hadling root folder change
+      this.imageElementService.finalArrayNeedsSaving = false;
 
       this.appState.currentVhaFile = pathToFile;
       this.appState.selectedOutputFolder = outputFolderPath;
