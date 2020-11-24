@@ -398,7 +398,7 @@
           title="{{ 'SIDEBAR.scanInProgress' | translate }}"
           @slowFadeOut
         ></div>
-        {{ (imageElementService.imageElements | deleteFilePipe).length | number }}
+        {{ (imageElementService.imageElements | deleteFilePipe : deletePipeHack).length | number }}
         {{ 'SIDEBAR.videos' | translate }}
       </div>
 
