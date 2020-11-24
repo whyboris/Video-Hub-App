@@ -89,10 +89,25 @@
 
 .cloud-frequency {
   color: $gray-90;
+  display: flex;
   line-height: 26px;
   max-height: 140px;
   overflow: hidden;
   padding: 20px 20px 0;
+
+  .word-cloud-buttons {
+    margin-right: 20px;
+
+    button {
+      border-radius: 5px !important;
+      display: block !important;
+      margin-bottom: 10px;
+    }
+  }
+
+  .word-cloud-tags {
+    width: calc(100vw - 78px);
+  }
 
   span {
     cursor: pointer;

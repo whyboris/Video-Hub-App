@@ -159,7 +159,6 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
   ],
   [ // 9
     'manualTags',
-
     'showVideoNotes',
   ],
   [ // 10

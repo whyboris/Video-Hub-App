@@ -1082,14 +1082,66 @@
     *ngIf="settingsButtons['showFreq'].toggled"
     class="cloud-frequency"
   >
-    <ng-container *ngFor="let word of wordFreqArr">
+    <div class="word-cloud-buttons">
+
+      <button
+        (click)="toggleButton('manualTags')"
+        [ngClass]="{
+            defaultSettingsButton:        !settingsButtons['flatIcons'].toggled,
+            defaultSettingsButtonToggled: !settingsButtons['flatIcons'].toggled && settingsButtons['manualTags'].toggled,
+            flatSettingsButton:           settingsButtons['flatIcons'].toggled,
+            flatSettingsButtonToggled:    settingsButtons['flatIcons'].toggled && settingsButtons['manualTags'].toggled
+          }"
+        title="{{ settingsButtons['manualTags'].title | translate }}"
+      >
+        <app-icon
+          class="icon"
+          [icon]="settingsButtons['manualTags'].iconName ? settingsButtons['manualTags'].iconName : 'icon-default-button'"
+        ></app-icon>
+      </button>
+
+      <button
+        (click)="toggleButton('autoFileTags')"
+        [ngClass]="{
+            defaultSettingsButton:        !settingsButtons['flatIcons'].toggled,
+            defaultSettingsButtonToggled: !settingsButtons['flatIcons'].toggled && settingsButtons['autoFileTags'].toggled,
+            flatSettingsButton:           settingsButtons['flatIcons'].toggled,
+            flatSettingsButtonToggled:    settingsButtons['flatIcons'].toggled && settingsButtons['autoFileTags'].toggled
+          }"
+        title="{{ settingsButtons['autoFileTags'].title | translate }}"
+      >
+        <app-icon
+          class="icon"
+          [icon]="settingsButtons['autoFileTags'].iconName ? settingsButtons['autoFileTags'].iconName : 'icon-default-button'"
+        ></app-icon>
+      </button>
+
+      <button
+        (click)="toggleButton('autoFolderTags')"
+        [ngClass]="{
+            defaultSettingsButton:        !settingsButtons['flatIcons'].toggled,
+            defaultSettingsButtonToggled: !settingsButtons['flatIcons'].toggled && settingsButtons['autoFolderTags'].toggled,
+            flatSettingsButton:           settingsButtons['flatIcons'].toggled,
+            flatSettingsButtonToggled:    settingsButtons['flatIcons'].toggled && settingsButtons['autoFolderTags'].toggled
+          }"
+        title="{{ settingsButtons['autoFolderTags'].title | translate }}"
+      >
+        <app-icon
+          class="icon"
+          [icon]="settingsButtons['autoFolderTags'].iconName ? settingsButtons['autoFolderTags'].iconName : 'icon-default-button'"
+        ></app-icon>
+      </button>
+    </div>
+
+    <div class="word-cloud-tags">
       <span
+        *ngFor="let word of wordFreqArr"
         [ngStyle]="{'font-size': word.height + 'px' }"
         (click)="handleTagWordClicked(word.word, $event)"
       >
         {{ word.word }}
       </span>
-    </ng-container>
+    </div>
   </div>
 
   <!-- CURRENT (last-clicked) FILE -->
