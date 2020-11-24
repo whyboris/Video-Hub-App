@@ -1,0 +1,17 @@
+<button
+  (click)="toggleButton.emit(button)"
+  [ngClass]="{
+      defaultSettingsButton:            !settingsButtons['flatIcons'].toggled,
+      defaultSettingsButtonToggled:     !settingsButtons['flatIcons'].toggled                                        && settingsButtons[button].toggled,
+      flatSettingsButton:                settingsButtons['flatIcons'].toggled,
+      flatSettingsButtonToggled:         settingsButtons['flatIcons'].toggled                                        && settingsButtons[button].toggled,
+      defaultSettingsButtonDark:        !settingsButtons['flatIcons'].toggled && settingsButtons['darkMode'].toggled,
+      defaultSettingsButtonDarkToggled: !settingsButtons['flatIcons'].toggled && settingsButtons['darkMode'].toggled && settingsButtons[button].toggled
+    }"
+  title="{{ settingsButtons[button].title | translate }}"
+>
+  <app-icon
+    class="icon"
+    [icon]="settingsButtons[button].iconName ? settingsButtons[button].iconName : 'icon-default-button'"
+  ></app-icon>
+</button>

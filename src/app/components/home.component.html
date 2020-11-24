@@ -1084,59 +1084,27 @@
   >
     <div class="word-cloud-buttons">
 
-      <button
-        (click)="toggleButton('manualTags')"
-        [ngClass]="{
-            defaultSettingsButton:            !settingsButtons['flatIcons'].toggled,
-            defaultSettingsButtonToggled:     !settingsButtons['flatIcons'].toggled                                        && settingsButtons['manualTags'].toggled,
-            flatSettingsButton:                settingsButtons['flatIcons'].toggled,
-            flatSettingsButtonToggled:         settingsButtons['flatIcons'].toggled                                        && settingsButtons['manualTags'].toggled,
-            defaultSettingsButtonDark:        !settingsButtons['flatIcons'].toggled && settingsButtons['darkMode'].toggled,
-            defaultSettingsButtonDarkToggled: !settingsButtons['flatIcons'].toggled && settingsButtons['darkMode'].toggled && settingsButtons['manualTags'].toggled
-          }"
-        title="{{ settingsButtons['manualTags'].title | translate }}"
+      <app-button
+        (toggleButton)="toggleButton($event)"
+        [button]="'manualTags'"
+        [settingsButtons]="settingsButtons"
       >
-        <app-icon
-          class="icon"
-          [icon]="settingsButtons['manualTags'].iconName ? settingsButtons['manualTags'].iconName : 'icon-default-button'"
-        ></app-icon>
-      </button>
+      </app-button>
 
-      <button
-        (click)="toggleButton('autoFileTags')"
-        [ngClass]="{
-            defaultSettingsButton:            !settingsButtons['flatIcons'].toggled,
-            defaultSettingsButtonToggled:     !settingsButtons['flatIcons'].toggled                                        && settingsButtons['autoFileTags'].toggled,
-            flatSettingsButton:                settingsButtons['flatIcons'].toggled,
-            flatSettingsButtonToggled:         settingsButtons['flatIcons'].toggled                                        && settingsButtons['autoFileTags'].toggled,
-            defaultSettingsButtonDark:        !settingsButtons['flatIcons'].toggled && settingsButtons['darkMode'].toggled,
-            defaultSettingsButtonDarkToggled: !settingsButtons['flatIcons'].toggled && settingsButtons['darkMode'].toggled && settingsButtons['autoFileTags'].toggled
-          }"
-        title="{{ settingsButtons['autoFileTags'].title | translate }}"
+      <app-button
+        (toggleButton)="toggleButton($event)"
+        [button]="'autoFileTags'"
+        [settingsButtons]="settingsButtons"
       >
-        <app-icon
-          class="icon"
-          [icon]="settingsButtons['autoFileTags'].iconName ? settingsButtons['autoFileTags'].iconName : 'icon-default-button'"
-        ></app-icon>
-      </button>
+      </app-button>
 
-      <button
-        (click)="toggleButton('autoFolderTags')"
-        [ngClass]="{
-            defaultSettingsButton:            !settingsButtons['flatIcons'].toggled,
-            defaultSettingsButtonToggled:     !settingsButtons['flatIcons'].toggled                                        && settingsButtons['autoFolderTags'].toggled,
-            flatSettingsButton:                settingsButtons['flatIcons'].toggled,
-            flatSettingsButtonToggled:         settingsButtons['flatIcons'].toggled                                        && settingsButtons['autoFolderTags'].toggled,
-            defaultSettingsButtonDark:        !settingsButtons['flatIcons'].toggled && settingsButtons['darkMode'].toggled,
-            defaultSettingsButtonDarkToggled: !settingsButtons['flatIcons'].toggled && settingsButtons['darkMode'].toggled && settingsButtons['autoFolderTags'].toggled
-          }"
-        title="{{ settingsButtons['autoFolderTags'].title | translate }}"
+      <app-button
+        (toggleButton)="toggleButton($event)"
+        [button]="'autoFolderTags'"
+        [settingsButtons]="settingsButtons"
       >
-        <app-icon
-          class="icon"
-          [icon]="settingsButtons['autoFolderTags'].iconName ? settingsButtons['autoFolderTags'].iconName : 'icon-default-button'"
-        ></app-icon>
-      </button>
+      </app-button>
+
     </div>
 
     <div class="word-cloud-tags">
