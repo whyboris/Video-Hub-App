@@ -15,11 +15,11 @@ export class ButtonStylePipe implements PipeTransform {
   transform(toggled: boolean, darkMode: boolean, flatIcons: boolean): Object {
 
     return {
-      defaultSettingsButton:            !flatIcons,
-      defaultSettingsButtonToggled:     !flatIcons             && toggled,
-
       flatSettingsButton:                flatIcons,
       flatSettingsButtonToggled:         flatIcons             && toggled,
+
+      defaultSettingsButton:            !flatIcons,
+      defaultSettingsButtonToggled:     !flatIcons             && toggled,
 
       defaultSettingsButtonDark:        !flatIcons && darkMode,
       defaultSettingsButtonDarkToggled: !flatIcons && darkMode && toggled
