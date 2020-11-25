@@ -1,6 +1,6 @@
 <button
   (click)="toggleButton.emit(button)"
-  [ngClass]="settingsButtons[button].toggled | buttonStylePipe : settingsButtons['darkMode'].toggled
+  [ngClass]="settingsButtons[button].toggled | buttonStylePipe : (neverDarkMode ? false : settingsButtons['darkMode'].toggled)
                                                                : settingsButtons['flatIcons'].toggled"
   title="{{ settingsButtons[button].title | translate }}"
 >

@@ -21,21 +21,12 @@
           <div
             class="button-description"
           >
-            <button
-              (click)="toggleButton.emit(buttonKey)"
-              [ngClass]="{
-                  defaultSettingsButton:        !settingsButtons['flatIcons'].toggled,
-                  defaultSettingsButtonToggled: !settingsButtons['flatIcons'].toggled && settingsButtons[buttonKey].toggled,
-                  flatSettingsButton:           settingsButtons['flatIcons'].toggled,
-                  flatSettingsButtonToggled:    settingsButtons['flatIcons'].toggled && settingsButtons[buttonKey].toggled
-                }"
-              title="{{ settingsButtons[buttonKey].title | translate }}"
-            >
-              <app-icon
-                class="icon"
-                [icon]="settingsButtons[buttonKey].iconName ? settingsButtons[buttonKey].iconName : 'icon-default-button'"
-              ></app-icon>
-            </button>
+            <app-button
+              (toggleButton)="toggleButton.emit($event)"
+              [button]="buttonKey"
+              [neverDarkMode]="true"
+              [settingsButtons]="settingsButtons"
+            ></app-button>
 
             <span
               *ngIf="settingsButtons[buttonKey].iconName"

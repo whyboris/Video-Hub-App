@@ -14,6 +14,7 @@ export class ButtonComponent {
 
   @Input() button: SettingsButtonKey;
   @Input() settingsButtons: SettingsButtonsType;
+  @Input() neverDarkMode: boolean;
 
   @Output() toggleButton = new EventEmitter<string>();
 
