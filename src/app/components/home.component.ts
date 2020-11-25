@@ -101,7 +101,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   @ViewChild('fuzzySearch', { static: false }) fuzzySearch: ElementRef;
   @ViewChild('magicSearch', { static: false }) magicSearch: ElementRef;
-  @ViewChild('searchRef', { static: false }) searchRef: ElementRef;
+  @ViewChild('searchRef',   { static: false }) searchRef:   ElementRef;
 
   @ViewChild(SortOrderComponent) sortOrderRef:SortOrderComponent;
 
@@ -1335,10 +1335,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param event
    */
   autoTagClicked(event: string): void {
-    if (!this.settingsButtons['autoFileTags'].toggled) {
-      this.settingsButtons['autoFileTags'].toggled = true;
-    }
-    this.handleTagWordClicked(event);
+    this.handleFileWordClicked(event);
     this.toggleButton('showTags'); // close the modal
   }
 

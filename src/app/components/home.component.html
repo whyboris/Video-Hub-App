@@ -1082,14 +1082,31 @@
     *ngIf="settingsButtons['showFreq'].toggled"
     class="cloud-frequency"
   >
-    <ng-container *ngFor="let word of wordFreqArr">
+    <div class="word-cloud-buttons">
+      <app-button (toggleButton)="toggleButton($event)" [button]="'manualTags'"     [settingsButtons]="settingsButtons"></app-button>
+      <app-button (toggleButton)="toggleButton($event)" [button]="'autoFileTags'"   [settingsButtons]="settingsButtons"></app-button>
+      <app-button (toggleButton)="toggleButton($event)" [button]="'autoFolderTags'" [settingsButtons]="settingsButtons"></app-button>
+    </div>
+
+    <div
+      *ngIf="   settingsButtons['manualTags'].toggled
+             || settingsButtons['autoFileTags'].toggled
+             || settingsButtons['autoFolderTags'].toggled; else pleaseSelectTag"
+      class="word-cloud-tags"
+    >
       <span
+        *ngFor="let word of wordFreqArr"
         [ngStyle]="{'font-size': word.height + 'px' }"
         (click)="handleTagWordClicked(word.word, $event)"
       >
         {{ word.word }}
       </span>
-    </ng-container>
+    </div>
+    <ng-template #pleaseSelectTag>
+      <span class="please-select-tag" @modalAnimation>
+        {{ 'TAGS.pleaseEnable' | translate }}
+      </span>
+    </ng-template>
   </div>
 
   <!-- CURRENT (last-clicked) FILE -->

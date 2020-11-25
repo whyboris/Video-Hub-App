@@ -19,12 +19,12 @@ import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 // Services
 import { AutoTagsSaveService } from './components/tags-auto/tags-save.service';
 import { AutoTagsService } from './components/tags-auto/autotags.service';
-import { ModalService } from './components/modal/modal.service';
 import { ElectronService } from './providers/electron.service';
 import { FilePathService } from './components/views/file-path.service';
 import { HomeComponent } from './components/home.component';
 import { ImageElementService } from './services/image-element.service';
 import { ManualTagsService } from './components/tags-manual/manual-tags.service';
+import { ModalService } from './components/modal/modal.service';
 import { PipeSideEffectService } from './pipes/pipe-side-effect.service';
 import { ResolutionFilterService } from './pipes/resolution-filter.service';
 import { ShortcutsService } from './components/shortcuts/shortcuts.service';
@@ -37,6 +37,7 @@ import { WordFrequencyService } from './pipes/word-frequency.service';
 import { AddTagComponent } from './components/tags-manual/add-tag.component';
 import { AppComponent } from './app.component';
 import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
+import { ButtonComponent } from './components/button/button.component';
 import { ClipComponent } from './components/views/clip/clip.component';
 import { DetailsComponent } from './components/views/details/details.component';
 import { DonutComponent } from './components/donut/donut.component';
@@ -71,6 +72,7 @@ import { WizardComponent } from './components/wizard/wizard.component';
 
 // Pipes
 import { AlphabetPrefixPipe } from './pipes/alphabet-prefix.pipe';
+import { ButtonStylePipe } from './components/button/button-style.pipe';
 import { CountPipe } from './pipes/count.pipe';
 import { DeleteFilePipe } from './pipes/delete-file.pipe';
 import { DuplicateFinderPipe } from './pipes/duplicateFinder.pipe';
@@ -106,6 +108,8 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     AlphabetPrefixPipe,
     AppComponent,
     BreadcrumbsComponent,
+    ButtonComponent,
+    ButtonStylePipe,
     ClipComponent,
     CountPipe,
     DeleteFilePipe,
