@@ -72,6 +72,7 @@ import { WizardComponent } from './components/wizard/wizard.component';
 
 // Pipes
 import { AlphabetPrefixPipe } from './pipes/alphabet-prefix.pipe';
+import { ButtonStylePipe } from './components/button/button-style.pipe';
 import { CountPipe } from './pipes/count.pipe';
 import { DeleteFilePipe } from './pipes/delete-file.pipe';
 import { DuplicateFinderPipe } from './pipes/duplicateFinder.pipe';
@@ -108,6 +109,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     AppComponent,
     BreadcrumbsComponent,
     ButtonComponent,
+    ButtonStylePipe,
     ClipComponent,
     CountPipe,
     DeleteFilePipe,
