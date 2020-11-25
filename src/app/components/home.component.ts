@@ -101,7 +101,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   @ViewChild('fuzzySearch', { static: false }) fuzzySearch: ElementRef;
   @ViewChild('magicSearch', { static: false }) magicSearch: ElementRef;
-  @ViewChild('searchRef', { static: false }) searchRef: ElementRef;
+  @ViewChild('searchRef',   { static: false }) searchRef:   ElementRef;
 
   @ViewChild(SortOrderComponent) sortOrderRef:SortOrderComponent;
 
