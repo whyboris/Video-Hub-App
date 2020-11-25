@@ -117,6 +117,13 @@
       color: $pretty-blue;
     }
   }
+
+  .please-select-tag {
+    font-size: 14px;
+    margin-top: 105px;
+    pointer-events: none;
+    position: absolute;
+  }
 }
 
 .current-clicked {

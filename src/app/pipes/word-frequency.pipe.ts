@@ -39,9 +39,7 @@ export class WordFrequencyPipe implements PipeTransform {
         if (showManualTags && element.tags) {
           this.wordFrequencyService.addString(element.tags.join(' '));
         }
-        if (showAutoFileTags
-            || (!showAutoFileTags && !showManualTags && !showAutoFileTags)
-        ) {
+        if (showAutoFileTags) {
           this.wordFrequencyService.addString(element.cleanName);
         }
         if (showAutoFolderTags) {

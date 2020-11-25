@@ -426,6 +426,7 @@
     "loading": "Loading",
     "minimum": "minimum",
     "notes": "notes",
+    "pleaseEnable": "Please enable at least one tag type to see the Word cloud",
     "selectAllButton": "Select all visible",
     "showingFrequency": "Showing frequency",
     "showingMostSimilar": "Showing most similar to:",

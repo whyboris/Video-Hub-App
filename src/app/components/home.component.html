@@ -1088,7 +1088,12 @@
       <app-button (toggleButton)="toggleButton($event)" [button]="'autoFolderTags'" [settingsButtons]="settingsButtons"></app-button>
     </div>
 
-    <div class="word-cloud-tags">
+    <div
+      *ngIf="   settingsButtons['manualTags'].toggled
+             || settingsButtons['autoFileTags'].toggled
+             || settingsButtons['autoFolderTags'].toggled; else pleaseSelectTag"
+      class="word-cloud-tags"
+    >
       <span
         *ngFor="let word of wordFreqArr"
         [ngStyle]="{'font-size': word.height + 'px' }"
@@ -1097,6 +1102,11 @@
         {{ word.word }}
       </span>
     </div>
+    <ng-template #pleaseSelectTag>
+      <span class="please-select-tag" @modalAnimation>
+        {{ 'TAGS.pleaseEnable' | translate }}
+      </span>
+    </ng-template>
   </div>
 
   <!-- CURRENT (last-clicked) FILE -->
