@@ -536,6 +536,9 @@ export function upgradeToVersion3(finalObject: FinalObject): void {
     finalObject.version = 3;
     finalObject.images.forEach((element: ImageElement) => {
       element.inputSource = 0
+      element.screens = computeNumberOfScreenshots(finalObject.screenshotSettings, element.duration);
+      // update number of screens to account for too-many or too-few cases
+      // as they were not handlede prior to version 3 release
     });
   }
 }
