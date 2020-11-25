@@ -962,7 +962,10 @@
     <div
       *ngIf="numberOfVideosFound === 0"
       class="no-results"
-      [ngStyle]="{ 'padding-left': settingsButtons['hideSidebar'].toggled ? 0 : '190px' }"
+      [ngStyle]="{
+        'padding-left': settingsButtons['hideSidebar'].toggled ? 0 : '190px',
+        'color': settingsButtons['darkMode'].toggled ? '#aaaaaa' : 'initial'
+      }"
     >
       <ng-container *ngIf="(appState.currentView === 'showClips' && currentScreenshotSettings.clipSnippets === 0); else noResultsFound">
         {{ 'SETTINGS.noClipsExtracted' | translate }}

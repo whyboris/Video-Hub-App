@@ -1644,6 +1644,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Decrease preview size
    */
   public decreaseSize(): void {
+    if (this.appState.currentView === 'showFiles') {
+      return;
+    }
     this.currentImgsPerRow++;
     this.computePreviewWidth();
     this.virtualScroller.invalidateAllCachedMeasurements();
@@ -1653,6 +1656,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Increase preview size
    */
   public increaseSize(): void {
+    if (this.appState.currentView === 'showFiles') {
+      return;
+    }
     if (this.appState.currentView === 'showDetails') {
       if (this.currentImgsPerRow > 2) {
         this.currentImgsPerRow--;
