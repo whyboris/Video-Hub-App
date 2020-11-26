@@ -20,13 +20,15 @@ export class WordFrequencyPipe implements PipeTransform {
    * @param showManualTags      boolean
    * @param showAutoFileTags    boolean
    * @param showAutoFolderTags  boolean
+   * @param folderViewNavigationPath  string
    */
   transform(
     finalArray: ImageElement[],
     render: boolean,
     showManualTags: boolean,
     showAutoFileTags: boolean,
-    showAutoFolderTags: boolean
+    showAutoFolderTags: boolean,
+    folderViewNavigationPath: string,
   ): ImageElement[] {
 
     if (render && finalArray.length > 0) {
@@ -35,7 +37,13 @@ export class WordFrequencyPipe implements PipeTransform {
 
       this.wordFrequencyService.resetMap();
 
-      finalArray.forEach(element => {
+      finalArray.filter((element: ImageElement) => {
+        if (folderViewNavigationPath) {
+          return element.partialPath.startsWith(folderViewNavigationPath);
+        } else {
+          return true;
+        }
+      }).forEach(element => {
         if (showManualTags && element.tags) {
           this.wordFrequencyService.addString(element.tags.join(' '));
         }
