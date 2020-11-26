@@ -138,7 +138,7 @@
   .must-click-first {
     color: $gray-70;
     font-size: 14px;
-    margin: 32px 0 0 294px;
+    margin: 32px 0 0 294px; // align to match the video title so the flicker when switching between videos is obscured
   }
 
   .must-click-dark-mode {
