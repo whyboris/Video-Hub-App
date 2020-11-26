@@ -10,8 +10,9 @@ export interface WordAndFreq {
   prefix: string; // filled in inside alphabetPrefixPipe
 }
 
-// Used to strip out: all non-words, e.g. {}()[]-,.
-export const autoFileTagsRegex: RegExp = /\b(\w+)\b/g;
+// Used to select words, allows for non-english characters
+// thank you to https://stackoverflow.com/a/48902765/5017391
+export const autoFileTagsRegex: RegExp = /[\p{L}]+/ug;
 
 @Injectable()
 export class AutoTagsService {
