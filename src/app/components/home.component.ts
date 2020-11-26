@@ -1051,10 +1051,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     this.imageElementService.updateNumberOfTimesPlayed(item.index);
 
-    this.currentClickedItem = null;
-    setTimeout(() => {
-      this.currentClickedItem = item;
-    }); // so the view updates
+    this.updateCurrentClickedItem(item);
 
     this.currentPlayingFolder = item.partialPath;
     this.currentClickedItemName = item.cleanName;
@@ -1979,6 +1976,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   assignSelectedFile(item: ImageElement): void {
     this.currentClickedItemName = item.cleanName;
+    this.updateCurrentClickedItem(item);
+  }
+
+  /**
+   * If the `showDetailsTray` is open, update the `currentClickedItem`
+   * @param item
+   */
+  updateCurrentClickedItem(item: ImageElement): void {
+    // to update the view, we must first destroy the component with `null` since component sets thumbnail at `ngOnInit`
+    this.currentClickedItem = null;
+    setTimeout(() => {
+      this.currentClickedItem = item;
+    });
   }
 
   /**
