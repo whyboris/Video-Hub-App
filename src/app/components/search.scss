@@ -136,13 +136,27 @@
   }
 
   .must-click-first {
+    animation: preventFlicker;
+    animation-duration: 0.1s;
     color: $gray-70;
     font-size: 14px;
-    margin: 32px 0 0 294px; // align to match the video title so the flicker when switching between videos is obscured
+    margin-top: 80px;
+    text-align: center;
+    width: 100vw;
   }
 
   .must-click-dark-mode {
     color: $gray-30;
+  }
+}
+
+@keyframes preventFlicker {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
   }
 }
 
