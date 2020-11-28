@@ -18,12 +18,24 @@
   class="file-container"
   [ngClass]="{ 'dark-mode-override': darkMode }"
 >
-  <app-icon class="icon" [icon]="'icon-video-blank'" (click)="openInExplorer()"></app-icon>
-  <span
-    *ngFor="let item of fileNameArray"
-    (click)="fileWordClicked(item)"
-    class="file-word"
+  <!-- Star rating -->
+  <div class="starRating">
+    <app-star-rating
+      [starRating]="starRating"
+      [index]="index"
+    ></app-star-rating>
+  </div>
+
+  <app-icon class="icon" [icon]="'icon-video-blank'" (click)="openInExplorer()" style="margin-left: 0; "></app-icon>
+  <div
+    style="margin-left: 23px; width: 80%;"
   >
-    {{ item }}
-  </span>
+    <span
+      *ngFor="let item of fileNameArray"
+      (click)="fileWordClicked(item)"
+      class="file-word"
+    >
+      {{ item }}
+    </span>
+  </div>
 </div>

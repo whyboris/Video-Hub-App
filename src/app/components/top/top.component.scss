@@ -50,16 +50,12 @@
 
 .file-container {
   max-height: 20px;
-  min-width: calc(100vw - 100px);
+  width: 100%;
   overflow: hidden;
 
   .icon-video-blank {
     position: absolute;
     transform: translate(0, 3px);
-  }
-
-  :nth-child(2) {
-    margin-left: 23px;
   }
 
   .file-word {
@@ -75,6 +71,12 @@
       color: $dark-blue;
     }
   }
+}
+
+.starRating {
+  float: right;
+  width: 117px;
+  margin-left: 5px;
 }
 
 .dark-mode-override {

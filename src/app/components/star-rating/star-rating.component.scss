@@ -1,0 +1,20 @@
+.star-rating {
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+  fill: yellow;
+  height: 20px;
+  margin: 0;
+  opacity: 0.4;
+  outline: none;
+  padding: 0;
+  stroke: #000000;
+  stroke-linejoin: round;
+  stroke-width: 0.3px;
+  width: 20px;
+}
+
+.star-lit {
+  opacity: 1;
+  transform: scale(1.5);
+}

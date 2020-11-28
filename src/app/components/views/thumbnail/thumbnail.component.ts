@@ -1,6 +1,7 @@
 import { Component, Input, Output, EventEmitter, OnInit, ElementRef, ViewChild, OnDestroy } from '@angular/core';
 
 import { FilePathService } from '../file-path.service';
+import { StarRatingService } from '../../../pipes/star-rating.service';
 
 import { metaAppear, textAppear } from '../../../common/animations';
 
@@ -53,7 +54,8 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
   scrollInterval: any = null;
 
   constructor(
-    public filePathService: FilePathService
+    public filePathService: FilePathService,
+    private starRatingService: StarRatingService
   ) { }
 
   ngOnInit() {
@@ -73,6 +75,8 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
       this.hover = true;
       this.percentOffset = this.defaultScreenOffset(this.video);
     }
+
+    this.starRatingService.changeStarRating(this.video.stars, this.video.index);
   }
 
   defaultScreenOffset(video: ImageElement): number {

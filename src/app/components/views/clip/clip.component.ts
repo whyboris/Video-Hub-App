@@ -2,6 +2,7 @@ import { Component, HostListener, Input, Output, EventEmitter, OnInit, ChangeDet
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { FilePathService } from '../file-path.service';
+import { StarRatingService } from '../../../pipes/star-rating.service';
 
 import { ImageElement } from '../../../../../interfaces/final-object.interface';
 import { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/shared-interfaces';
@@ -54,7 +55,8 @@ export class ClipComponent implements OnInit {
   constructor(
     public filePathService: FilePathService,
     public sanitizer: DomSanitizer,
-    public cd: ChangeDetectorRef
+    public cd: ChangeDetectorRef,
+    private starRatingService: StarRatingService
   ) { }
 
   @HostListener('mouseenter') onMouseEnter() {
@@ -104,6 +106,8 @@ export class ClipComponent implements OnInit {
       this.folderThumbPaths.push(this.pathToVideo);
       this.folderPosterPaths.push(this.poster);
     }
+
+    this.starRatingService.changeStarRating(this.video.stars, this.video.index);
   }
 
 }

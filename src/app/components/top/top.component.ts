@@ -1,4 +1,6 @@
+import { ImageElementService } from './../../services/image-element.service';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { StarRating } from '../../../../interfaces/final-object.interface';
 
 @Component({
   selector: 'app-top-component',
@@ -9,6 +11,12 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class TopComponent {
 
   @Input() darkMode: boolean;
+  @Input() index: number;
+  @Input() starRating: StarRating;
+
+  constructor(
+    public imageElementService: ImageElementService,
+  ) { }
 
   // Handle folder input
   private _folder = '';
@@ -51,5 +59,4 @@ export class TopComponent {
   public openInExplorer(): void {
     this.onOpenInExplorer.emit(true);
   }
-
 }

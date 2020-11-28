@@ -2,6 +2,7 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { FilePathService } from '../file-path.service';
+import { StarRatingService } from '../../../pipes/star-rating.service';
 
 import { metaAppear, textAppear } from '../../../common/animations';
 
@@ -52,12 +53,14 @@ export class FullViewComponent implements OnInit {
 
   constructor(
     public filePathService: FilePathService,
-    public sanitizer: DomSanitizer
+    public sanitizer: DomSanitizer,
+    private starRatingService: StarRatingService
   ) { }
 
   ngOnInit() {
     this.fullFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
     this.render();
+    this.starRatingService.changeStarRating(this.video.stars, this.video.index);
   }
 
   render(): void {

@@ -19,13 +19,14 @@ import { ResolutionFilterService } from '../pipes/resolution-filter.service';
 import { ShortcutsService, CustomShortcutAction } from './shortcuts/shortcuts.service';
 import { SourceFolderService } from './statistics/source-folder.service';
 import { StarFilterService } from '../pipes/star-filter.service';
+import { StarRatingService } from '../pipes/star-rating.service';
 import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency.service';
 
 // Components
 import { SortOrderComponent } from './sort-order/sort-order.component';
 
 // Interfaces
-import { FinalObject, ImageElement, ScreenshotSettings, ResolutionString } from '../../../interfaces/final-object.interface';
+import { FinalObject, ImageElement, ScreenshotSettings, ResolutionString, StarRating } from '../../../interfaces/final-object.interface';
 import { ImportStage } from '../../../node/main-support';
 import { SettingsObject } from '../../../interfaces/settings-object.interface';
 import { SortType } from '../pipes/sorting.pipe';
@@ -103,7 +104,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild('magicSearch', { static: false }) magicSearch: ElementRef;
   @ViewChild('searchRef',   { static: false }) searchRef:   ElementRef;
 
-  @ViewChild(SortOrderComponent) sortOrderRef:SortOrderComponent;
+  @ViewChild(SortOrderComponent) sortOrderRef: SortOrderComponent;
 
   @ViewChild(VirtualScrollerComponent, { static: false }) virtualScroller: VirtualScrollerComponent;
 
@@ -253,6 +254,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   currentClickedItem: ImageElement;
   currentClickedItemName = '';
   currentPlayingFolder = '';
+  currentStarRating: StarRating;
+  currentIndex = 0;
   fullPathToCurrentFile = '';
 
   fuzzySearchString = '';
@@ -353,6 +356,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     public shortcutService: ShortcutsService,
     public sourceFolderService: SourceFolderService,
     public starFilterService: StarFilterService,
+    public starRatingService: StarRatingService,
     public translate: TranslateService,
     public wordFrequencyService: WordFrequencyService,
     public zone: NgZone,
@@ -433,7 +437,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.electronService.ipcRenderer.on('file-not-found', (event) => {
       this.zone.run(() => {
         this.modalService.openSnackbar(this.translate.instant('SETTINGS.fileNotFound'));
-      })
+      });
     });
 
     // Closing of Window was issued by Electron
@@ -555,7 +559,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       let somethingDeleted: boolean = false;
 
       this.imageElementService.imageElements
-        .filter((element: ImageElement) => { return element.inputSource == sourceIndex })
+        .filter((element: ImageElement) => { return element.inputSource == sourceIndex; })
         // notice the loosey-goosey comparison! this is because number  ^^  string comparison happening here!
         .forEach((element: ImageElement) => {
           // console.log(element.fileName);
@@ -576,7 +580,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // mark the element in `imageElements[]` as `deleted`
     this.electronService.ipcRenderer.on('single-file-deleted', (event, sourceIndex: number, partialPath: string) => {
       this.imageElementService.imageElements
-        .filter((element: ImageElement) => { return element.inputSource == sourceIndex })
+        .filter((element: ImageElement) => { return element.inputSource == sourceIndex; })
         // notice the loosey-goosey comparison! this is because number  ^^  string comparison happening here!
         .forEach((element: ImageElement) => {
           if (
@@ -833,7 +837,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.resetFinalArrayRef();
     } else {
       this.newVideoImportTimeout = setTimeout(() => {
-        this.resetFinalArrayRef()
+        this.resetFinalArrayRef();
       }, 3000);
     }
   }
@@ -1041,7 +1045,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param clickedThumbnailIndex an index of the thumbnail clicked
    */
   public openVideo(item: ImageElement, clickedThumbnailIndex?: number): void {
-
     if (!this.sourceFolderService.sourceFolderConnected[item.inputSource]) {
       console.log('not connected!');
       this.modalService.openSnackbar(this.translate.instant('SETTINGS.rootFolderNotLive'));
@@ -1055,6 +1058,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     this.currentPlayingFolder = item.partialPath;
     this.currentClickedItemName = item.cleanName;
+    this.currentStarRating = item.stars;
+    this.currentIndex = item.index;
     const fullPath = this.filePathService.getPathFromImageElement(item);
     this.fullPathToCurrentFile = fullPath;
 
@@ -1070,6 +1075,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } else {
       this.electronService.ipcRenderer.send('open-media-file', fullPath);
     }
+
   }
 
   /**

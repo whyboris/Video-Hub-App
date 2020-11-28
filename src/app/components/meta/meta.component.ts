@@ -7,6 +7,7 @@ import { Subscription, Observable } from 'rxjs';
 import { ElectronService } from '../../providers/electron.service';
 import { FilePathService } from '../views/file-path.service';
 import { ManualTagsService } from '../tags-manual/manual-tags.service';
+import { StarRatingService } from '../../pipes/star-rating.service';
 
 import { StarRating, ImageElement } from '../../../../interfaces/final-object.interface';
 import { TagEmit, RenameFileResponse } from '../../../../interfaces/shared-interfaces';
@@ -36,9 +37,8 @@ export class MetaComponent implements OnInit, OnDestroy {
   @Input() showVideoNotes: boolean;
   @Input() star: StarRating;
 
-  @Input() renameResponse: Observable<RenameFileResponse>
+  @Input() renameResponse: Observable<RenameFileResponse>;
 
-  starRatingHack: StarRating;
   yearHack: number;
 
   tagViewUpdateHack: boolean = false;
@@ -58,7 +58,6 @@ export class MetaComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.starRatingHack = this.star;
     this.yearHack = this.video.year;
 
     this.renamingWIP = this.video.cleanName; // or should this be video.fileName (without extension!?)
@@ -110,17 +109,6 @@ export class MetaComponent implements OnInit, OnDestroy {
       type: 'remove'
     });
     this.tagViewUpdateHack = !this.tagViewUpdateHack;
-  }
-
-  setStarRating(rating: StarRating): void {
-    if (this.starRatingHack === rating) {
-      rating = 0.5; // reset to "N/A" (not rated)
-    }
-    this.starRatingHack = rating; // hack for getting star opacity updated instantly
-    this.imageElementService.HandleEmission({
-      index: this.video.index,
-      stars: rating
-    });
   }
 
   /**
@@ -214,7 +202,7 @@ export class MetaComponent implements OnInit, OnDestroy {
     event.target.blur();
     this.renamingWIP = this.video.cleanName;
     event.stopPropagation();
-    this.renameError = false
+    this.renameError = false;
   }
 
   /**
