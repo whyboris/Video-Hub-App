@@ -1144,6 +1144,8 @@
       <app-meta-item
         class="meta-container top-offset"
 
+        (filterTag)="handleTagWordClicked($event.tag.name, $event.event)"
+
         [video]="currentClickedItem"
 
         [imgHeight]="144"

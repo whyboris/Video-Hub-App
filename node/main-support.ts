@@ -267,9 +267,9 @@ export function createDotPlsFile(savePath: string, playlist: ImageElement[], sou
 /**
  * Clean up the displayed file name
  * (1) remove extension
- * (2) replace underscores with spaces                "_"   => " "
- * (3) replace periods with spaces                    "."   => " "
- * (4) tripple & double spaces become single spaces   "   " => " "
+ * (2) replace underscores with spaces            "_"   => " "
+ * (3) replace periods with spaces                "."   => " "
+ * (4) replace multi-spaces with a single space   "   " => " "
  * @param original {string}
  * @return {string}
  */
@@ -277,8 +277,7 @@ export function cleanUpFileName(original: string): string {
   return original.split('.').slice(0, -1).join('.')   // (1)
                  .split('_').join(' ')                // (2)
                  .split('.').join(' ')                // (3)
-                 .split('   ').join(' ')              // (4)
-                 .split('  ').join(' ');              // (4)
+                 .split(/\s+/).join(' ')              // (4)
 }
 
 /**

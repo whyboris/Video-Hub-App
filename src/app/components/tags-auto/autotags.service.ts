@@ -12,7 +12,7 @@ export interface WordAndFreq {
 
 // Used to select words, allows for non-english characters
 // thank you to https://stackoverflow.com/a/48902765/5017391
-export const autoFileTagsRegex: RegExp = /[\p{L}]+/ug;
+export const autoFileTagsRegex: RegExp = /[\p{L}\d]+/ug;
 
 @Injectable()
 export class AutoTagsService {
