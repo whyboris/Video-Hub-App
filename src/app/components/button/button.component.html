@@ -1,0 +1,11 @@
+<button
+  (click)="toggleButton.emit(button)"
+  [ngClass]="settingsButtons[button].toggled | buttonStylePipe : (neverDarkMode ? false : settingsButtons['darkMode'].toggled)
+                                                               : settingsButtons['flatIcons'].toggled"
+  title="{{ settingsButtons[button].title | translate }}"
+>
+  <app-icon
+    class="icon"
+    [icon]="settingsButtons[button].iconName ? settingsButtons[button].iconName : 'icon-default-button'"
+  ></app-icon>
+</button>

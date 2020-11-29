@@ -135,7 +135,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
    * 2. save .pls file
    * 3. ask OS to open the .pls file
    */
-  ipc.on('please-create-playlist', (event, playlist: ImageElement[], sourceFolderMap: InputSources) => {
+  ipc.on('please-create-playlist', (event, playlist: ImageElement[], sourceFolderMap: InputSources, execPath: string) => {
 
     const cleanPlaylist: ImageElement[] = playlist.filter((element: ImageElement) => {
       return element.cleanName !== '*FOLDER*';
@@ -145,8 +145,15 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
 
     if (cleanPlaylist.length) {
       createDotPlsFile(savePath, cleanPlaylist, sourceFolderMap, () => {
-        shell.openItem(savePath);
-        // shell.openPath(savePath); // Electron 9
+
+        if (execPath) { // if `preferredVideoPlayer` is sent
+          const cmdline: string = `"${path.normalize(execPath)}" "${path.normalize(savePath)}"`;
+          console.log(cmdline);
+          exec(cmdline);
+        } else {
+          shell.openItem(savePath);
+          // shell.openPath(savePath); // Electron 9
+        }
       });
     }
   });
@@ -158,27 +165,39 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
     const fileToDelete = path.join(basePath, item.partialPath, item.fileName);
 
     if (dangerousDelete) {
+
       fs.unlink(fileToDelete, (err) => {
         if (err) {
-          console.log(fileToDelete + ' was NOT deleted');
+          console.log('ERROR:', fileToDelete + ' was NOT deleted');
+        } else {
+          notifyFileDeleted(event, fileToDelete, item);
         }
       });
+
     } else {
+
       (async () => {
         await trash(fileToDelete);
+        notifyFileDeleted(event, fileToDelete, item);
       })();
-    }
 
-    // TODO --   handle async stuff better -- maybe wait before checking access?
-    console.log('HANDLE ASYNC STUFF CORRECTLY !?');
-    // check if file exists
+    }
+  });
+
+  /**
+   * Helper function for `delete-video-file`
+   * @param event
+   * @param fileToDelete
+   * @param item
+   */
+  function notifyFileDeleted(event, fileToDelete, item) {
     fs.access(fileToDelete, fs.constants.F_OK, (err: any) => {
       if (err) {
+        console.log('FILE DELETED SUCCESS !!!')
         event.sender.send('file-deleted', item);
       }
     });
-
-  });
+  }
 
   /**
    * Method to replace thumbnail of a particular item
@@ -267,9 +286,11 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
 
     const allHashes: Map<string, 1> = new Map();
 
-    finalArray.forEach((element: ImageElement) => {
-      allHashes.set(element.hash, 1);
-    });
+    finalArray
+      .filter((element: ImageElement) => { return !element.deleted })
+      .forEach((element: ImageElement) => {
+        allHashes.set(element.hash, 1);
+      });
     removeThumbnailsNotInHub(allHashes, screenshotOutputFolder); // WARNING !!! this function will delete stuff
   });
 

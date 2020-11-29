@@ -1,10 +1,7 @@
+// Update the `demo` and `version` when building
 import { GLOBALS } from './node/main-globals';
-// =================================================================================================
-// -------------------------------------     BUILD TOGGLE     --------------------------------------
-// -------------------------------------------------------------------------------------------------
-const demo = false; // TODO: add this back into code
-GLOBALS.version = '3.0.0';   // update `package.json` version to `#.#.#-demo` when building the demo
-// =================================================================================================
+
+GLOBALS.macVersion = process.platform === 'darwin';
 
 import * as path from 'path';
 import * as url from 'url';
@@ -30,7 +27,6 @@ const pathToAppData = app.getPath('appData');
 const pathToPortableApp = process.env.PORTABLE_EXECUTABLE_DIR;
 GLOBALS.settingsPath = pathToPortableApp ? pathToPortableApp : path.join(pathToAppData, 'video-hub-app-2');
 
-const codeRunningOnMac: boolean = process.platform === 'darwin';
 const English = require('./i18n/en.json');
 let systemMessages = English.SYSTEM; // Set English as default; update via `system-messages-updated`
 
@@ -136,7 +132,7 @@ function createWindow() {
     }));
   }
 
-  if (codeRunningOnMac) {
+  if (GLOBALS.macVersion) {
     const touchBar = createTouchBar();
     if (touchBar) {
       win.setTouchBar(touchBar);
@@ -199,7 +195,7 @@ try {
 
 } catch {}
 
-if (codeRunningOnMac) {
+if (GLOBALS.macVersion) {
   systemPreferences.subscribeNotification(
     'AppleInterfaceThemeChangedNotification',
     function theThemeHasChanged () {
@@ -279,7 +275,7 @@ ipcMain.on('just-started', (event) => {
   GLOBALS.angularApp = event;
   GLOBALS.winRef = win;
 
-  if (codeRunningOnMac) {
+  if (GLOBALS.macVersion) {
     tellElectronDarkModeChange(systemPreferences.getEffectiveAppearance());
   }
 

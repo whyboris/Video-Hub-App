@@ -44,12 +44,12 @@ How to start:
 
 Main dependencies in use:
 
-| Library          | Version | Date        | Comment                                           |
-| ---------------- | ------- | ----------- | ------------------------------------------------- |
-| Angular          | v10.0.0 | June 2020   |                                                   |
-| Angular-CLI      | v10.0.0 | June 2020   |                                                   |
-| Electron         |  v9.0.0 | June 2020   | (internally uses Node `v12.14.1` and Chromium 83) |
-| Electron Builder | v22.7.0 | June 2020   |                                                   |
+| Library          | Version | Date            | Comment                                           |
+| ---------------- | ------- | --------------- | ------------------------------------------------- |
+| Angular          | v11.0.2 | November 2020   |                                                   |
+| Angular-CLI      | v11.0.2 | November 2020   |                                                   |
+| Electron         |  v8.5.5 | November 2020   | (internally uses Node `v12.14.1` and Chromium 83) |
+| Electron Builder | v22.9.1 | November 2020   |                                                   |
 
 - **Node**: I recommend using the same version as _Electron_ uses internally, but version 10 or above should work.
 

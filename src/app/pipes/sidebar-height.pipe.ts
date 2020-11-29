@@ -7,20 +7,20 @@ export class SidebarHeightPipe implements PipeTransform {
 
   /**
    * Return number of pixels to offset the sidebar (as a string)
-   * @param finalArray
-   * @param searchString  the search string
+   * @param menuHidden     - whether to hide the menu bar
+   * @param hideTop        - whether to hide the top bar
+   * @param showBottomTray - whether the bottom tray is showing
    */
   transform(
     menuHidden: boolean,
     hideTop: boolean,
-    showRelatedVideosTray: boolean,
-    showTagTray: boolean
+    showBottomTray: boolean
   ): string {
 
     return (
-        (menuHidden                             ? -32 :  0)
-      + (hideTop                                ?  53 : 98)
-      + ((showRelatedVideosTray || showTagTray) ? 170 :  0)
+        (menuHidden     ? -32 :  0)
+      + (hideTop        ?  53 : 98)
+      + (showBottomTray ? 170 :  0)
       ).toString();
 
   }

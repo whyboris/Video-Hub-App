@@ -1,6 +1,5 @@
 <div
   class="manual-tag-tray"
-  [ngClass]="{ 'bottom-tray-dark': settingsButtons['darkMode'].toggled }"
 >
   <div class="tag-tray-menu-left" *ngIf="!batchTaggingMode; else batchModeExplainer">
     <button
@@ -21,6 +20,7 @@
       (keyup.esc)="manualTagFilterString = ''"
       [(ngModel)]="manualTagFilterString"
       class="filter-general manual-tag-tray-filter"
+      [ngClass]="{ 'manual-tag-tray-filter-dark': settingsButtons['darkMode'].toggled }"
       placeholder="{{ 'TAGS.filterTags' | translate }}"
     >
 
@@ -35,17 +35,22 @@
         {{ 'TAGS.clickTagToAdd' | translate }}
       </span>
       <button
-      class="wizard-button wizard-button-small"
-      (click)="selectAll.emit()"
-    >
-      {{ 'TAGS.selectAllButton' | translate }}
-    </button>
+        class="wizard-button wizard-button-small"
+        [ngClass]="{ 'select-all-dark': settingsButtons['darkMode'].toggled }"
+        (click)="selectAll.emit()"
+      >
+        {{ 'TAGS.selectAllButton' | translate }}
+      </button>
     </div>
   </ng-template>
 
   <button
     class="wizard-button wizard-button-small button-toggle-batch-mode"
-    [ngClass]="{ 'edit-mode-active': batchTaggingMode }"
+    [ngClass]="{
+      'button-toggle-batch-mode-dark': settingsButtons['darkMode'].toggled,
+      'button-toggle-batch-mode-dark-active': settingsButtons['darkMode'].toggled && batchTaggingMode,
+      'edit-mode-active': batchTaggingMode
+    }"
     (click)="toggleBatchTaggingMode.emit()"
   >
     {{ 'TAGS.batchModeButton' | translate }}

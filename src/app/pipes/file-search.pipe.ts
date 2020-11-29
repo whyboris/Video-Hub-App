@@ -32,13 +32,11 @@ export class FileSearchPipe implements PipeTransform {
     autoFileTags?: boolean,
     autoFolderTags?: boolean
   ): ImageElement[] {
-    // console.log('fileSearchPipe triggered');
-    // console.log(arrOfStrings);
 
     if (arrOfStrings.length === 0) {
       return finalArray;
     } else {
-      // console.log('file search pipe working');
+
       return finalArray.filter((item) => {
 
         // exact prefix match
@@ -49,16 +47,18 @@ export class FileSearchPipe implements PipeTransform {
         let matchFound = 0;
 
         arrOfStrings.forEach(element => {
-          // search through the FILE or FOLDER array !!!
+
           let searchString = '';
           if (searchType === 'folder') {
             searchString = item.partialPath;
+
           } else if (searchType === 'file') {
             searchString = item.fileName;
+
           } else if (searchType === 'notes') {
             searchString = item.notes || '';
+
           } else if (searchType === 'tag') {
-            searchString = '';
             if (manualTags && item.tags) {
               searchString += item.tags.join(' ');
             }
@@ -69,6 +69,7 @@ export class FileSearchPipe implements PipeTransform {
               searchString += ' ' + item.partialPath.replace(/(\/)/, ' ');
             }
           }
+
           if (searchString.toLowerCase().indexOf(element.toLowerCase()) !== -1) {
             matchFound++;
           }

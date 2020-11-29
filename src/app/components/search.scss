@@ -89,8 +89,25 @@
 
 .cloud-frequency {
   color: $gray-90;
+  display: flex;
   line-height: 26px;
-  padding: 20px;
+  max-height: 140px;
+  overflow: hidden;
+  padding: 20px 20px 0;
+
+  .word-cloud-buttons {
+    margin-right: 20px;
+
+    app-button {
+      border-radius: 5px !important;
+      display: block !important;
+      margin-bottom: 10px;
+    }
+  }
+
+  .word-cloud-tags {
+    width: calc(100vw - 78px);
+  }
 
   span {
     cursor: pointer;
@@ -101,6 +118,46 @@
     }
   }
 
+  .please-select-tag {
+    font-size: 14px;
+    margin-top: 105px;
+    pointer-events: none;
+    position: absolute;
+  }
+}
+
+.current-clicked {
+  display: flex;
+  margin-left: -10px;
+  margin-top: -6px;
+
+  .top-offset {
+    transform: translate(-20px, 30px);
+  }
+
+  .must-click-first {
+    animation: preventFlicker;
+    animation-duration: 0.1s;
+    color: $gray-70;
+    font-size: 14px;
+    margin-top: 80px;
+    text-align: center;
+    width: 100vw;
+  }
+
+  .must-click-dark-mode {
+    color: $gray-30;
+  }
+}
+
+@keyframes preventFlicker {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
 }
 
 .tag-type-ahead-on-home {
