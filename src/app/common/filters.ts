@@ -11,15 +11,15 @@ interface FilterObject {
 }
 
 export const FilterKeyNames: string[] = [
-  'folderUnion',
-  'folderIntersection',
-  'fileUnion',
-  'fileIntersection',
-  'exclude',
-  'tagUnion',
-  'tagIntersection',
-  'tagExclusion',
-  'videoNotes',
+  'folderUnion',        // [0]
+  'folderIntersection', // [1]
+  'fileUnion',          // [2]
+  'fileIntersection',   // [3]
+  'exclude',            // [4]
+  'tagUnion',           // [5]
+  'tagIntersection',    // [6]
+  'tagExclusion',       // [7]
+  'videoNotes',         // [8]
 ];
 
 export let Filters: FilterObject[] = [

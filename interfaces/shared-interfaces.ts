@@ -19,12 +19,14 @@ export const AllSupportedViews: SupportedView[] = [
                             'showClips',
 ];
 
-export type SupportedTrayView = 'showFreq'
+export type SupportedTrayView = 'showDetailsTray'
+                              | 'showFreq'
                               | 'showRecentlyPlayed'
                               | 'showRelatedVideosTray'
                               | 'showTagTray';
 
 export const AllSupportedBottomTrayViews: SupportedTrayView[] = [
+                                'showDetailsTray',
                                 'showFreq',
                                 'showRecentlyPlayed',
                                 'showRelatedVideosTray',

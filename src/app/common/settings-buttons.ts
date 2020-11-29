@@ -42,6 +42,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'showDeleteOption'
  | 'showDetails'
  | 'showDetails2'
+ | 'showDetailsTray'
  | 'showFiles'
  | 'showFilmstrip'
  | 'showFolders'
@@ -60,8 +61,8 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'sortOptionAlphabetical'
  | 'sortOptionAlphabetical2'
  | 'sortOptionAspectRatio'
- | 'sortOptionFolderSize'
  | 'sortOptionCreated'
+ | 'sortOptionFolderSize'
  | 'sortOptionModified'
  | 'sortOptionSize'
  | 'sortOptionStar'
@@ -81,10 +82,10 @@ export type SettingsButtonKey = 'autoFileTags'
 // Add `SettingsButtons` items here so they show up in the buttons ribbon and in the settings
 // Each array separates buttons into their own button groups visually
 export const SettingsButtonsGroups: SettingsButtonKey[][] = [
-  [ // 0
+  [ // 0 - Search & filter settings
     'hideSidebar',
   ],
-  [ // 1
+  [ // 1 - Search filters
     'folderUnion',
     'folderIntersection',
     'fileUnion',
@@ -98,14 +99,14 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'regex',
     'fuzzy',
   ],
-  [ // 2
+  [ // 2 - Filters & sorting options
     'durationFilter',
     'sizeFilter',
     'resolutionFilter',
     'starFilter',
     'sortOrder',
     'hideOffline',
-    'sortOptionAlphabetical',
+    'sortOptionAlphabetical', // Sorting options in the dropdown
     'sortOptionAlphabetical2',
     'sortOptionTime',
     'sortOptionSize',
@@ -119,13 +120,13 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'sortOptionFolderSize'
 
   ],
-  [ // 3
+  [ // 3 - Find duplicates
     'duplicateLength',
     'duplicateSize',
     'duplicateHash',
-    'showRecent'
+    'showRecent' // Recently opened files
   ],
-  [ // 4
+  [ // 4 - Gallery -------------------------------------- 2nd tab
     'showThumbnails',
     'showFilmstrip',
     'showFullView',
@@ -134,58 +135,56 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'showFiles',
     'showClips',
   ],
-  [ // 5
+  [ // 5 - Folder view
     'showFolders',
     'randomizeFoldersScreenshots',
+    'showTags',
   ],
-  [ // 6
+  [ // 6 - Bottom tray
     'showFreq',
     'showTagTray',
     'showRelatedVideosTray',
-    'showRecentlyPlayed'
+    'showRecentlyPlayed',
+    'showDetailsTray'
   ],
-  [ // 7
+  [ // 7 - Layout
     'compactView',
     'showMoreInfo',
     'fontSizeLarger',
     'shuffleGalleryNow',
   ],
-  [ // 8
-    'showTags',
+  [ // 8 - Auto-generated tags
+    'manualTags',
     'autoFileTags',
     'autoFolderTags',
-  ],
-  [ // 9
-    'manualTags',
-
     'showVideoNotes',
   ],
-  [ // 10
+  [ // 9 - Thumbnails view
     'hoverScrub',
     'thumbAutoAdvance',
     'returnToFirstScreenshot',
   ],
-  [ // 11
+  [ // 10 - Clips view
     'muteClips',
     'autoplayClips',
     'clipsThumbnail',
   ],
-  [ // 12
+  [ // 11 - Zoom
     'makeSmaller',
     'makeLarger',
   ],
-  [ // 13
+  [ // 12 - Dark mode
     'darkMode',
-    'doubleClickMode',
-    'dragVideoOutOfApp',
+    'doubleClickMode', // Double click mode
+    'dragVideoOutOfApp', // Drag video outside of app
   ],
-  [ // 14
-    'hideTop',
-    'flatIcons'
+  [ // 13
+    'hideTop', // Hide top bar
+    'flatIcons' // Button style
   ],
-  [ // 15
+  [ // 14 - Create a new hub ---------------------------- 3rd tab
     'startWizard',
-    'resetSettings',
+    'resetSettings', // Various settings
     'clearHistory',
     'showDeleteOption',
     'dangerousDelete',
@@ -225,11 +224,9 @@ export const SettingsMetaGroup: string[][] = [
     ...SettingsButtonsGroups[12],
     'break',
     ...SettingsButtonsGroups[13],
-    'break',
-    ...SettingsButtonsGroups[14],
   ],
   [
-    ...SettingsButtonsGroups[15],
+    ...SettingsButtonsGroups[14],
   ],
 ];
 
@@ -288,6 +285,13 @@ export const SettingsButtons: SettingsButtonsType = {
     title: 'BUTTONS.compactViewHint',
     toggled: false
   },
+  'dangerousDelete': {
+    description: 'BUTTONS.dangerousDeleteDescription',
+    hidden: true,
+    moreInfo: 'BUTTONS.dangerousDeleteMoreInfo',
+    title: 'BUTTONS.dangerousDelete',
+    toggled: false
+  },
   'darkMode': {
     description: 'BUTTONS.darkModeDescription',
     hidden: false,
@@ -300,6 +304,7 @@ export const SettingsButtons: SettingsButtonsType = {
     description: 'BUTTONS.doubleClickModeDescription',
     hidden: true,
     iconName: 'icon-double-click',
+    moreInfo: 'BUTTONS.doubleClickMoreInfo',
     settingsHeading: 'SETTINGS.doubleClickMode',
     title: 'BUTTONS.doubleClickModeHint',
     toggled: false
@@ -344,14 +349,6 @@ export const SettingsButtons: SettingsButtonsType = {
     title: 'BUTTONS.durationFilterHint',
     toggled: false
   },
-  'sizeFilter': {
-    description: 'BUTTONS.sizeFilterDescription',
-    hidden: false,
-    iconName: 'icon-sort-order',
-    moreInfo: 'BUTTONS.sizeFilterMoreInfo',
-    title: 'BUTTONS.sizeFilterHint',
-    toggled: false
-  },
   'exclude': {
     description: 'BUTTONS.excludeDescription',
     hidden: true,
@@ -374,13 +371,6 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-video-plus',
     moreInfo: 'BUTTONS.fileUnionMoreInfo',
     title: 'BUTTONS.fileUnionHint',
-    toggled: false
-  },
-  'videoNotes': {
-    description: 'BUTTONS.videoNotesDescription',
-    hidden: true,
-    iconName: 'icon-toggle-video-notes',
-    title: 'BUTTONS.videoNotesHint',
     toggled: false
   },
   'flatIcons': {
@@ -562,12 +552,6 @@ export const SettingsButtons: SettingsButtonsType = {
     title: 'BUTTONS.showDeleteButton',
     toggled: false
   },
-  'dangerousDelete': {
-    description: 'BUTTONS.dangerousDeleteDescription',
-    hidden: true,
-    title: 'BUTTONS.dangerousDelete',
-    toggled: false
-  },
   'showDetails': {
     description: 'BUTTONS.showDetailsDescription',
     hidden: false,
@@ -580,6 +564,14 @@ export const SettingsButtons: SettingsButtonsType = {
     hidden: false,
     iconName: 'icon-show-details-2',
     title: 'BUTTONS.showDetails2Hint',
+    toggled: false
+  },
+  'showDetailsTray': {
+    description: 'BUTTONS.showDetailsTray',
+    hidden: false,
+    iconName: 'icon-show-details-tray',
+    moreInfo: 'BUTTONS.showDetailsTrayMoreInfo',
+    title: 'BUTTONS.showDetailsTray',
     toggled: false
   },
   'showFiles': {
@@ -656,7 +648,6 @@ export const SettingsButtons: SettingsButtonsType = {
     hidden: false,
     iconName: 'icon-tag-auto',
     moreInfo: 'BUTTONS.showTagsMoreInfo',
-    settingsHeading: 'SETTINGS.autoGenerated',
     title: 'BUTTONS.showTagsHint',
     toggled: false
   },
@@ -674,11 +665,27 @@ export const SettingsButtons: SettingsButtonsType = {
     title: 'BUTTONS.showThumbnailsHint',
     toggled: true
   },
+  'showVideoNotes': {
+    description: 'BUTTONS.showVideoNotesDescription',
+    hidden: true,
+    iconName: 'icon-toggle-video-notes',
+    moreInfo: 'BUTTONS.showVideoNotesMoreInfo',
+    title: 'BUTTONS.showVideoNotesHint',
+    toggled: false
+  },
   'shuffleGalleryNow': {
     description: 'BUTTONS.shuffleGalleryNowDescription',
     hidden: false,
     iconName: 'icon-random',
     title: 'BUTTONS.shuffleGalleryNowHint',
+    toggled: false
+  },
+  'sizeFilter': {
+    description: 'BUTTONS.sizeFilterDescription',
+    hidden: false,
+    iconName: 'icon-sort-order',
+    moreInfo: 'BUTTONS.sizeFilterMoreInfo',
+    title: 'BUTTONS.sizeFilterHint',
     toggled: false
   },
   'sortOptionAlphabetical': {
@@ -703,6 +710,13 @@ export const SettingsButtons: SettingsButtonsType = {
     title: '',
     toggled: false
   },
+  'sortOptionCreated': {
+    description: 'BUTTONS.sortOptionCreatedDescription',
+    hidden: false,
+    moreInfo: 'BUTTONS.sortOptionCreatedMoreInfo',
+    title: '',
+    toggled: false
+  },
   'sortOptionFolderSize': {
     description: 'BUTTONS.sortOptionFolderSizeDescription',
     hidden: false,
@@ -716,13 +730,6 @@ export const SettingsButtons: SettingsButtonsType = {
     moreInfo: 'BUTTONS.sortOptionModifiedMoreInfo',
     title: '',
     toggled: true
-  },
-  'sortOptionCreated': {
-    description: 'BUTTONS.sortOptionCreatedDescription',
-    hidden: false,
-    moreInfo: 'BUTTONS.sortOptionCreatedMoreInfo',
-    title: '',
-    toggled: false
   },
   'sortOptionSize': {
     description: 'BUTTONS.sortOptionSizeDescription',
@@ -820,11 +827,12 @@ export const SettingsButtons: SettingsButtonsType = {
     title: 'BUTTONS.thumbAutoAdvanceHint',
     toggled: false
   },
-  'showVideoNotes': {
-    description: 'BUTTONS.showVideoNotesDescription',
+  'videoNotes': {
+    description: 'BUTTONS.videoNotesDescription',
     hidden: true,
     iconName: 'icon-toggle-video-notes',
-    title: 'BUTTONS.showVideoNotesHint',
+    moreInfo: 'BUTTONS.videoNotesMoreInfo',
+    title: 'BUTTONS.videoNotesHint',
     toggled: false
   }
 }

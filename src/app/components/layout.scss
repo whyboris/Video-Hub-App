@@ -137,8 +137,7 @@
 .settings-modal {
   background-color: $gray-10;
   border: 1px solid $gray-50;
-  border-bottom-left-radius: 10px;
-  border-top-left-radius: 10px;
+  border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.2);
   box-sizing: border-box;
   height: calc(100vh - 215px);
@@ -198,6 +197,7 @@
   width: calc(100vw - #{$sidebar-width});
 
   @include scrollBar;
+  @include scrollBarSquare;
 }
 
 .gallery-container-dark-mode {
@@ -273,6 +273,8 @@
   bottom: 0;
   left: 5px !important;
   top: initial !important;
+  transition-duration: 300ms;
+  transition-property: bottom;
   z-index: 29 !important;
 }
 
@@ -305,6 +307,18 @@
     &::placeholder {
       color: $gray-50 !important;
     }
+  }
+}
+
+.bottom-tray-tabs-dark {
+  button {
+    background: black !important;
+    border: 1px solid #333333 !important;
+    color: white;
+  }
+
+  .active-tab {
+    border-bottom: 1px solid black !important;
   }
 }
 

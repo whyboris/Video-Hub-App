@@ -21,17 +21,29 @@ constructor() { }
    * @param emission
    */
   HandleEmission(emission: YearEmission | StarEmission | TagEmission | DefaultScreenEmission): void {
-    const position: number = emission.index;
-    if ((emission as YearEmission).year) {
-      this.imageElements[position].year = (emission as YearEmission).year;
-    } else if ((emission as StarEmission).stars) {
-      this.imageElements[position].stars = (emission as StarEmission).stars;
+    const index: number = emission.index;
+
+    if (       'year' in emission) {
+
+      this.imageElements[index].year =          (emission as YearEmission).year;
+
+    } else if ('stars' in emission) {
+
+      this.imageElements[index].stars =         (emission as StarEmission).stars;
       this.forceStarFilterUpdate = !this.forceStarFilterUpdate;
-    } else if ((emission as DefaultScreenEmission).defaultScreen) {
-      this.imageElements[position].defaultScreen = (emission as DefaultScreenEmission).defaultScreen;
-    } else {
+
+    } else if ('defaultScreen' in emission) {
+
+      this.imageElements[index].defaultScreen = (emission as DefaultScreenEmission).defaultScreen;
+
+    } else if ('tag' in emission) {
+
       this.handleTagEmission(emission as TagEmission);
+
+    } else {
+      console.log('THIS SHOULD NOT HAPPEN!');
     }
+
     this.finalArrayNeedsSaving = true;
   }
 

@@ -23,7 +23,8 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "webWorkerTsConfig": "tsconfig.worker.json"
           },
           "configurations": {
             "dev": {
@@ -81,7 +82,8 @@
           "options": {
             "eslintConfig": "eslintrc.json",
             "tsConfig": [
-              "src/tsconfig.app.json"
+              "src/tsconfig.app.json",
+              "tsconfig.worker.json"
             ],
             "exclude": []
           }

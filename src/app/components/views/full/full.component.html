@@ -8,7 +8,7 @@
   <!-- the 30 px added above is the padding for the text  -->
 
   <div
-    *ngFor="let row of rowOffsets; index as idx"
+    *ngFor="let row of rowOffsets"
     (click)="   videoClick.emit({ mouseEvent: $event })"
     (dblclick)="videoClick.emit({ mouseEvent: $event, doubleClick: true })"
     (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
@@ -19,8 +19,7 @@
         'background-position-x': '-' + (row * _imgHeight * 16 / 9) + 'px',
         'background-size': 'auto ' + _imgHeight + 'px'
       }"
-  >
-  </div>
+  ></div>
 
   <app-icon
     *ngIf="video.selected"
