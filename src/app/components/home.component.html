@@ -10,7 +10,6 @@
     [importStage]="importStage"
     [macVersion]="macVersion"
     [progressString]="progressString"
-    [rootFolderLive]="rootFolderLive"
     [settingsButtons]="settingsButtons"
   ></app-title-bar>
 
@@ -47,6 +46,8 @@
   <div
     *ngIf="rightClickShowing"
     class="click-away-overlay"
+    (click)="      rightClickShowing = false"
+    (contextmenu)="rightClickShowing = false"
     @overlayAppear
   >
   </div>
@@ -63,8 +64,8 @@
   <div
     *ngIf="sheetOverlayShowing"
     class="click-away-overlay"
-    (click)="closeSheetOverlay()"
-    (contextmenu)="closeSheetOverlay()"
+    (click)="      sheetOverlayShowing = false;"
+    (contextmenu)="sheetOverlayShowing = false;"
     @overlayAppear
   >
   </div>
@@ -72,6 +73,7 @@
   <!-- ===========   RIGHT CLICK MODAL    =========== -->
   <div
     *ngIf="rightClickShowing"
+    (click)="rightClickShowing = false"
     [ngStyle]="{
         top: rightClickPosition.y + 'px',
         left: rightClickPosition.x + 'px'
@@ -81,22 +83,25 @@
   >
     <ul @rightClickContentAnimation>
       <li
-        (click)="openRenameFileModal()"
-        [ngClass]="{ 'right-click-disabled': !rootFolderLive }"
-      >{{ 'RIGHTCLICK.renameFile' | translate }}</li>
-      <li (click)="showSimilarNow()">{{ 'RIGHTCLICK.showSimilar' | translate }}</li>
-      <li (click)="showOnlyThisFolderNow()">{{ 'RIGHTCLICK.viewFolder' | translate }}</li>
+        (click)="renamingNow = true"
+        [ngClass]="{ 'right-click-disabled': !sourceFolderService.sourceFolderConnected[currentRightClickedItem.inputSource] }"
+      >
+                                                                {{ 'RIGHTCLICK.renameFile'  | translate }}</li>
+      <li (click)="showSimilarNow()">                           {{ 'RIGHTCLICK.showSimilar' | translate }}</li>
+      <li (click)="showOnlyThisFolderNow()">                    {{ 'RIGHTCLICK.viewFolder'  | translate }}</li>
       <li
         (click)="openContainingFolderNow()"
-        [ngClass]="{ 'right-click-disabled': !rootFolderLive }"
-      >{{ 'RIGHTCLICK.openFolder' | translate }}</li>
-      <li (click)="openThumbnailSheet(currentRightClickedItem)">{{ 'RIGHTCLICK.sheetModal' | translate }}</li>
+        [ngClass]="{ 'right-click-disabled': !sourceFolderService.sourceFolderConnected[currentRightClickedItem.inputSource] }"
+      >
+                                                                {{ 'RIGHTCLICK.openFolder'  | translate }}</li>
+      <li (click)="openThumbnailSheet(currentRightClickedItem)">{{ 'RIGHTCLICK.sheetModal'  | translate }}</li>
       <li
         *ngIf="settingsButtons['showDeleteOption'].toggled"
         (click)="deleteThisFile(currentRightClickedItem)"
-        [ngClass]="{ 'right-click-disabled': !rootFolderLive }"
         class="right-click-delete"
-      >{{ 'RIGHTCLICK.delete' | translate }}</li>
+        [ngClass]="{ 'right-click-disabled': !sourceFolderService.sourceFolderConnected[currentRightClickedItem.inputSource] }"
+      >
+                                                                {{ 'RIGHTCLICK.delete'      | translate }}</li>
     </ul>
   </div>
 
@@ -113,7 +118,6 @@
     [folderPath]="appState.selectedOutputFolder"
     [hubName]="appState.hubName"
     [imgHeight]="previewHeight"
-    [selectedSourceFolder]="sourceFolderService.selectedSourceFolder[sheetItemToDisplay.inputSource].path"
     [star]="sheetItemToDisplay.stars"
 
     [darkMode]="settingsButtons['darkMode'].toggled"
@@ -126,7 +130,8 @@
     [showMeta]="settingsButtons['showMoreInfo'].toggled"
     [showVideoNotes]="settingsButtons['showVideoNotes'].toggled"
 
-    [renameResponse]="this.renameFileResponseBehaviorSubject"
+    [selectedSourceFolder]="sourceFolderService.selectedSourceFolder[sheetItemToDisplay.inputSource].path"
+    [renameResponse]="renameFileResponseBehaviorSubject"
   >
   </app-thumbnail-sheet>
 
@@ -370,10 +375,11 @@
                         appState.menuHidden | sidebarHeightPipe
                           : settingsButtons['hideTop'].toggled
                           : (
-                                 settingsButtons['showRelatedVideosTray'].toggled
-                              || settingsButtons['showRecentlyPlayed'].toggled
-                              || settingsButtons['showTagTray'].toggled
+                                 settingsButtons['showDetailsTray'].toggled
                               || settingsButtons['showFreq'].toggled
+                              || settingsButtons['showRecentlyPlayed'].toggled
+                              || settingsButtons['showRelatedVideosTray'].toggled
+                              || settingsButtons['showTagTray'].toggled
                             )
                       ) + 'px)'
         }"
@@ -392,7 +398,8 @@
           title="{{ 'SIDEBAR.scanInProgress' | translate }}"
           @slowFadeOut
         ></div>
-        {{ imageElementService.imageElements.length | number }} {{ 'SIDEBAR.videos' | translate }}
+        {{ (imageElementService.imageElements | deleteFilePipe : deletePipeHack).length | number }}
+        {{ 'SIDEBAR.videos' | translate }}
       </div>
 
       <!-- Regular search boxes / filters -->
@@ -626,10 +633,11 @@
                         appState.menuHidden | sidebarHeightPipe
                           : settingsButtons['hideTop'].toggled
                           : (
-                                 settingsButtons['showRelatedVideosTray'].toggled
-                              || settingsButtons['showRecentlyPlayed'].toggled
-                              || settingsButtons['showTagTray'].toggled
+                                 settingsButtons['showDetailsTray'].toggled
                               || settingsButtons['showFreq'].toggled
+                              || settingsButtons['showRecentlyPlayed'].toggled
+                              || settingsButtons['showRelatedVideosTray'].toggled
+                              || settingsButtons['showTagTray'].toggled
                             )
                       ) + 'px)'
         }"
@@ -717,6 +725,7 @@
                                     : settingsButtons['manualTags'].toggled
                                     : settingsButtons['autoFileTags'].toggled
                                     : settingsButtons['autoFolderTags'].toggled
+                                    : folderViewNavigationPath
 
                 | countPipe
 
@@ -890,7 +899,7 @@
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
           [imgHeight]="previewHeight"
-          [selectedSourceFolder]="sourceFolderService.selectedSourceFolder[item.inputSource].path"
+          [selectedSourceFolder]="sourceFolderService.selectedSourceFolder[item.inputSource]?.path"
 
           [star]="item.stars"
 
@@ -954,7 +963,10 @@
     <div
       *ngIf="numberOfVideosFound === 0"
       class="no-results"
-      [ngStyle]="{ 'padding-left': settingsButtons['hideSidebar'].toggled ? 0 : '190px' }"
+      [ngStyle]="{
+        'padding-left': settingsButtons['hideSidebar'].toggled ? 0 : '190px',
+        'color': settingsButtons['darkMode'].toggled ? '#aaaaaa' : 'initial'
+      }"
     >
       <ng-container *ngIf="(appState.currentView === 'showClips' && currentScreenshotSettings.clipSnippets === 0); else noResultsFound">
         {{ 'SETTINGS.noClipsExtracted' | translate }}
@@ -973,10 +985,11 @@
   class="all-settings-tabs bottom-tray-tabs"
   [ngClass]="{
     'bottom-tray-tabs-dark': settingsButtons['darkMode'].toggled,
-    'bottom-tray-tabs-open': settingsButtons['showRelatedVideosTray'].toggled
-                          || settingsButtons['showRecentlyPlayed'].toggled
-                          || settingsButtons['showTagTray'].toggled
+    'bottom-tray-tabs-open': settingsButtons['showDetailsTray'].toggled
                           || settingsButtons['showFreq'].toggled
+                          || settingsButtons['showRecentlyPlayed'].toggled
+                          || settingsButtons['showRelatedVideosTray'].toggled
+                          || settingsButtons['showTagTray'].toggled
   }"
 >
   <button
@@ -1010,15 +1023,25 @@
   >
     {{ 'SETTINGS.recentlyPlayed' | translate }}
   </button>
+
+  <button
+    *ngIf="                   !settingsButtons['showDetailsTray'].hidden"
+    (click)="                     toggleButton('showDetailsTray')"
+    [ngClass]="{ 'active-tab': settingsButtons['showDetailsTray'].toggled }"
+  >
+    {{ 'SETTINGS.showDetailsTray' | translate }}
+  </button>
 </div>
 
 <div
   class="bottom-tray"
   [ngClass]="{ 'bottom-tray-dark': settingsButtons['darkMode'].toggled }"
-  *ngIf="settingsButtons['showRelatedVideosTray'].toggled
+  *ngIf="settingsButtons['showDetailsTray'].toggled
+      || settingsButtons['showFreq'].toggled
       || settingsButtons['showRecentlyPlayed'].toggled
-      || settingsButtons['showTagTray'].toggled
-      || settingsButtons['showFreq'].toggled"
+      || settingsButtons['showRelatedVideosTray'].toggled
+      || settingsButtons['showTagTray'].toggled"
+  @bottomTrayAnimation
 >
 
   <div
@@ -1063,14 +1086,91 @@
     *ngIf="settingsButtons['showFreq'].toggled"
     class="cloud-frequency"
   >
-    <ng-container *ngFor="let word of wordFreqArr; index as i">
+    <div class="word-cloud-buttons">
+      <app-button (toggleButton)="toggleButton($event)" [button]="'manualTags'"     [settingsButtons]="settingsButtons"></app-button>
+      <app-button (toggleButton)="toggleButton($event)" [button]="'autoFileTags'"   [settingsButtons]="settingsButtons"></app-button>
+      <app-button (toggleButton)="toggleButton($event)" [button]="'autoFolderTags'" [settingsButtons]="settingsButtons"></app-button>
+    </div>
+
+    <div
+      *ngIf="   settingsButtons['manualTags'].toggled
+             || settingsButtons['autoFileTags'].toggled
+             || settingsButtons['autoFolderTags'].toggled; else pleaseSelectTag"
+      class="word-cloud-tags"
+    >
       <span
+        *ngFor="let word of wordFreqArr"
         [ngStyle]="{'font-size': word.height + 'px' }"
-        (click)="handleFileWordClicked(word.word, $event)"
+        (click)="handleTagWordClicked(word.word, $event)"
       >
         {{ word.word }}
       </span>
+    </div>
+    <ng-template #pleaseSelectTag>
+      <span class="please-select-tag" @modalAnimation>
+        {{ 'TAGS.pleaseEnable' | translate }}
+      </span>
+    </ng-template>
+  </div>
+
+  <!-- CURRENT (last-clicked) FILE -->
+  <div
+    *ngIf="settingsButtons['showDetailsTray'].toggled"
+    class="current-clicked"
+  >
+
+    <ng-container *ngIf="currentClickedItem; else mustClickFirst">
+      <app-thumbnail
+        (videoClick)="handleClick($event, currentClickedItem)"
+        (sheetClick)="this.openThumbnailSheet(currentClickedItem)"
+
+        [elHeight]="144"
+        [elWidth]="256"
+        [folderPath]="appState.selectedOutputFolder"
+        [hubName]="appState.hubName"
+        [imgHeight]="144"
+
+        [video]="currentClickedItem"
+
+        [connected]="sourceFolderService.sourceFolderConnected[currentClickedItem.inputSource]"
+
+        [darkMode]="settingsButtons['darkMode'].toggled"
+        [hoverScrub]="settingsButtons['hoverScrub'].toggled"
+        [largerFont]="settingsButtons['fontSizeLarger'].toggled"
+        [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
+        [showMeta]="false"
+      ></app-thumbnail>
+
+      <app-meta-item
+        class="meta-container top-offset"
+
+        (filterTag)="handleTagWordClicked($event.tag.name, $event.event)"
+
+        [video]="currentClickedItem"
+
+        [imgHeight]="144"
+        [maxWidth]="galleryWidth - 80"
+        [star]="currentClickedItem.stars"
+
+        [darkMode]="settingsButtons['darkMode'].toggled"
+        [largerFont]="settingsButtons['fontSizeLarger'].toggled"
+        [showAutoFileTags]="settingsButtons['autoFileTags'].toggled"
+        [showAutoFolderTags]="settingsButtons['autoFolderTags'].toggled"
+        [showManualTags]="settingsButtons['manualTags'].toggled"
+        [showMeta]="settingsButtons['showMoreInfo'].toggled"
+        [showVideoNotes]="settingsButtons['showVideoNotes'].toggled"
+
+        [selectedSourceFolder]="sourceFolderService.selectedSourceFolder[currentClickedItem.inputSource].path"
+        [renameResponse]="renameFileResponseBehaviorSubject.asObservable()"
+      ></app-meta-item>
     </ng-container>
+
+    <ng-template #mustClickFirst>
+      <div class="must-click-first" [ngClass]="{ 'must-click-dark-mode': settingsButtons['darkMode'].toggled }">
+        {{ 'TAGS.detailsBottomTray' | translate }}
+      </div>
+    </ng-template>
+
   </div>
 
 </div>
@@ -1090,7 +1190,6 @@
   (selectSourceDirectory)="selectSourceDirectory()"
 
   [canCloseWizard]="canCloseWizard"
-  [demo]="demo"
   [importStage]="importStage"
   [vhaFileHistory]="vhaFileHistory"
   [wizard]="wizard"

@@ -1,5 +1,9 @@
 <div class="columns-container">
 
+  <div *ngIf="loading" class="loading" @metaAppear>
+    {{ 'TAGS.loading' | translate }} ...
+  </div>
+
   <!-- Below two elements are identical except for `oneWordTags` vs `twoWordTags` -->
 
   <ul class="column">

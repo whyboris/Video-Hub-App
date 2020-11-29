@@ -146,7 +146,7 @@ function getDurationDisplay(numOfSec: number): string {
 /**
  * Count the number of unique folders in the final array
  */
-export function countFoldersInFinalArray(imagesArray: ImageElement[]): number {
+function countFoldersInFinalArray(imagesArray: ImageElement[]): number {
   const finalArrayFolderMap: Map<string, number> = new Map;
   imagesArray.forEach((element: ImageElement) => {
     if (!finalArrayFolderMap.has(element.partialPath)) {
@@ -154,6 +154,35 @@ export function countFoldersInFinalArray(imagesArray: ImageElement[]): number {
     }
   });
   return finalArrayFolderMap.size;
+}
+
+/**
+ * Mark element as `deleted` (to remove as duplicate) if the previous element is identical
+ * expect `alphabetizeFinalArray` to run first - so as to only compare adjacent elements
+ * Unsure how duplicates can creep in to `ImageElement[]`, but at least they will be removed
+ *
+ *  !!! WARNING - currently does not merge the `tags` arrays (or other stuff)
+ *  !!!           so tags and metadata could be lost :(
+ *
+ * @param imagesArray
+ */
+function markDuplicatesAsDeleted(imagesArray: ImageElement[]): ImageElement[] {
+
+  let currentElement: ImageElement = NewImageElement();
+
+  imagesArray.forEach((element: ImageElement) => {
+    if (
+         element.fileName    === currentElement.fileName
+      && element.partialPath === currentElement.partialPath
+      && element.inputSource === currentElement.inputSource
+    ) {
+      element.deleted = true;
+      console.log('DUPE FOUND: '+ element.fileName);
+    }
+    currentElement = element;
+  });
+
+  return imagesArray;
 }
 
 /**
@@ -165,9 +194,10 @@ export function countFoldersInFinalArray(imagesArray: ImageElement[]): number {
  * @param done          -- function to execute when done writing the file
  */
 export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: string, done): void {
-  finalObject.images = stripOutTemporaryFields(finalObject.images);
 
   finalObject.images = finalObject.images.filter(element => !element.deleted);
+
+  finalObject.images = stripOutTemporaryFields(finalObject.images);
 
   // remove any videos that have no reference (unsure how this could happen, but just in case)
   const allKeys: string[] = Object.keys(finalObject.inputDirs);
@@ -175,7 +205,9 @@ export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: stri
     return allKeys.includes(element.inputSource.toString());
   });
 
-  finalObject.images = alphabetizeFinalArray(finalObject.images); // TODO -- rethink if this is needed
+  finalObject.images = alphabetizeFinalArray(finalObject.images); // needed for `default` sort to show proper order
+  finalObject.images = markDuplicatesAsDeleted(finalObject.images); // expects `alphabetizeFinalArray` to run first
+  finalObject.images = finalObject.images.filter(element => !element.deleted); // remove any marked in above method
 
   finalObject.numOfFolders = countFoldersInFinalArray(finalObject.images);
 
@@ -245,9 +277,9 @@ export function createDotPlsFile(savePath: string, playlist: ImageElement[], sou
 /**
  * Clean up the displayed file name
  * (1) remove extension
- * (2) replace underscores with spaces                "_"   => " "
- * (3) replace periods with spaces                    "."   => " "
- * (4) tripple & double spaces become single spaces   "   " => " "
+ * (2) replace underscores with spaces            "_"   => " "
+ * (3) replace periods with spaces                "."   => " "
+ * (4) replace multi-spaces with a single space   "   " => " "
  * @param original {string}
  * @return {string}
  */
@@ -255,8 +287,7 @@ export function cleanUpFileName(original: string): string {
   return original.split('.').slice(0, -1).join('.')   // (1)
                  .split('_').join(' ')                // (2)
                  .split('.').join(' ')                // (3)
-                 .split('   ').join(' ')              // (4)
-                 .split('  ').join(' ');              // (4)
+                 .split(/\s+/).join(' ')              // (4)
 }
 
 /**
@@ -303,20 +334,28 @@ function getFileDuration(metadata): number {
  */
 function computeNumberOfScreenshots(screenshotSettings: ScreenshotSettings, duration: number): number {
   let total: number;
+
+  // fixed or per minute
   if (screenshotSettings.fixed) {
     total = screenshotSettings.n;
   } else {
     total = Math.ceil(duration / 60 / screenshotSettings.n);
   }
 
+  // never fewer than 3 screenshots
   if (total < 3) {
-    total = 3; // minimum 3 screenshots!
+    total = 3;
   }
 
+  // never more than would fit in a JPG
   const screenWidth: number = screenshotSettings.height * (16 / 9);
-
   if (total * screenWidth > 65535) {
     total = Math.floor(65535 / screenWidth);
+  }
+
+  // never more screenshots than seconds in a clip
+  if (duration < total) {
+    total = Math.max(2, Math.floor(duration));
   }
 
   return total;
@@ -396,11 +435,11 @@ export function extractMetadataAsync(
           }
 
           const imageElement = NewImageElement();
-          imageElement.birthtime = fileStat.birthtimeMs;
+          imageElement.birthtime = Math.round(fileStat.birthtimeMs);
           imageElement.duration  = duration;
           imageElement.fileSize  = fileStat.size;
           imageElement.height    = origHeight;
-          imageElement.mtime     = fileStat.mtimeMs;
+          imageElement.mtime     = Math.round(fileStat.mtimeMs);
           imageElement.screens   = computeNumberOfScreenshots(screenshotSettings, duration);
           imageElement.width     = origWidth;
 
@@ -547,6 +586,9 @@ export function upgradeToVersion3(finalObject: FinalObject): void {
     finalObject.version = 3;
     finalObject.images.forEach((element: ImageElement) => {
       element.inputSource = 0
+      element.screens = computeNumberOfScreenshots(finalObject.screenshotSettings, element.duration);
+      // update number of screens to account for too-many or too-few cases
+      // as they were not handlede prior to version 3 release
     });
   }
 }

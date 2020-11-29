@@ -7,28 +7,8 @@
    --><button
         *ngIf="!settingsButtons[buttonKey].hidden && settingsButtons[buttonKey].iconName"
         (click)="toggleButton.emit(buttonKey)"
-        [ngClass]="{
-            defaultSettingsButton:             !settingsButtons['flatIcons'].toggled,
-
-            defaultSettingsButtonToggled:      !settingsButtons['flatIcons'].toggled
-                                            && settingsButtons[buttonKey].toggled,
-
-            defaultSettingsButtonDark:         !settingsButtons['flatIcons'].toggled
-                                            && settingsButtons['darkMode'].toggled,
-
-            defaultSettingsButtonDarkToggled:  !settingsButtons['flatIcons'].toggled
-                                            && settingsButtons['darkMode'].toggled
-                                            && settingsButtons[buttonKey].toggled,
-
-            flatSettingsButton:                settingsButtons['flatIcons'].toggled,
-
-            flatSettingsButtonToggled:         settingsButtons['flatIcons'].toggled
-                                            && settingsButtons[buttonKey].toggled,
-
-            disabledButton:                    (settingsButtons[buttonKey].iconName === 'icon-minus'
-                                            || settingsButtons[buttonKey].iconName === 'icon-plus')
-                                            && appState.currentView === 'showFiles'
-          }"
+        [ngClass]="settingsButtons[buttonKey].toggled | buttonStylePipe : settingsButtons['darkMode'].toggled
+                                                                        : settingsButtons['flatIcons'].toggled"
         title="{{ settingsButtons[buttonKey].title | translate }}"
         @buttonAnimation
       >

@@ -16,13 +16,14 @@ export type SupportedLanguage =
 | 'ja'
 | 'ko'
 | 'ms'
+| 'nl'
+| 'pl'
 | 'pt'
 | 'ru'
-| 'zh'
+| 'tr'
 | 'uk'
 | 'vi'
-| 'tr'
-| 'nl';
+| 'zh';
 
 export interface RowNumbers {
   thumbnailSheet: number;

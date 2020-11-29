@@ -165,27 +165,39 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
     const fileToDelete = path.join(basePath, item.partialPath, item.fileName);
 
     if (dangerousDelete) {
+
       fs.unlink(fileToDelete, (err) => {
         if (err) {
-          console.log(fileToDelete + ' was NOT deleted');
+          console.log('ERROR:', fileToDelete + ' was NOT deleted');
+        } else {
+          notifyFileDeleted(event, fileToDelete, item);
         }
       });
+
     } else {
+
       (async () => {
         await trash(fileToDelete);
+        notifyFileDeleted(event, fileToDelete, item);
       })();
-    }
 
-    // TODO --   handle async stuff better -- maybe wait before checking access?
-    console.log('HANDLE ASYNC STUFF CORRECTLY !?');
-    // check if file exists
+    }
+  });
+
+  /**
+   * Helper function for `delete-video-file`
+   * @param event
+   * @param fileToDelete
+   * @param item
+   */
+  function notifyFileDeleted(event, fileToDelete, item) {
     fs.access(fileToDelete, fs.constants.F_OK, (err: any) => {
       if (err) {
+        console.log('FILE DELETED SUCCESS !!!')
         event.sender.send('file-deleted', item);
       }
     });
-
-  });
+  }
 
   /**
    * Method to replace thumbnail of a particular item
@@ -274,9 +286,11 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
 
     const allHashes: Map<string, 1> = new Map();
 
-    finalArray.forEach((element: ImageElement) => {
-      allHashes.set(element.hash, 1);
-    });
+    finalArray
+      .filter((element: ImageElement) => { return !element.deleted })
+      .forEach((element: ImageElement) => {
+        allHashes.set(element.hash, 1);
+      });
     removeThumbnailsNotInHub(allHashes, screenshotOutputFolder); // WARNING !!! this function will delete stuff
   });
 

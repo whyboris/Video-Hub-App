@@ -12,3 +12,6 @@
 
 .DS_Store
 Thumbs.db
+
+!i18n/translate.js
+!i18n/update.js

@@ -71,6 +71,13 @@ $top-region: 45px;
 
   &::-webkit-scrollbar-thumb {
     background-color: $gray-50;
+    border-radius: 5px;
+  }
+}
+
+@mixin scrollBarSquare {
+  &::-webkit-scrollbar-thumb {
+    border-radius: 0;
   }
 }
 

@@ -219,23 +219,17 @@ export const breadcrumbWordAppear = trigger('breadcrumbWordAppear', [
   )]
 );
 
-
-
-// ==================================================================================
-// ARCHIVED -- UNUSED
-// ----------------------------------------------------------------------------------
-
-export const unusedAnimation = trigger('unusedAnimation', [
+export const bottomTrayAnimation = trigger('bottomTrayAnimation', [
   transition(
     ':enter', [
-      style({ opacity: 0, transform: 'translate(0, 1px)' }),
-      animate('300ms ease-in', style({ opacity: 1, transform: 'translate(12px, 1px)' }))
+      style({ transform: 'translate(0, 170px)' }),
+      animate('300ms ease', style({ transform: 'translate(0, 0)' }))
     ]
   ),
   transition(
     ':leave', [
-      style({ opacity: 1, transform: 'translate(12px, 1px)' }),
-      animate('300ms ease-out', style({ opacity: 0, transform: 'translate(0, 1px)' }))
+      style({ transform: 'translate(0, 0)' }),
+      animate('300ms ease', style({ transform: 'translate(0, 170px)' }))
     ]
   )]
 );
