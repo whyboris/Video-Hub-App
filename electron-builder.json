@@ -30,7 +30,8 @@
       "../node_modules/@ffprobe-installer"
     ],
     "target": [
-      "nsis"
+      "nsis",
+      "portable"
     ]
   },
   "mac": {
