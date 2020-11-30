@@ -78,7 +78,7 @@
     "wait-on": "5.2.0",
     "zone.js": "0.11.3"
   },
-  "browserlist": [
+  "browserslist": [
     "chrome 83"
   ]
 }
