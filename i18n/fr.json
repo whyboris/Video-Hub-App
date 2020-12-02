@@ -415,7 +415,7 @@
     "addTag": "Ajouter une étiquette",
     "alreadyExists": "le tag existe déjà",
     "any": "tout",
-    "batchModeButton": "Temps différé",
+    "batchModeButton": "Tag multiple",
     "clickTagToAdd": "Cliquez sur n'importe quelle balise dans la barre d'état pour ajouter la balise à toutes les vidéos sélectionnées",
     "clickVideoToSelect": "Cliquez sur les vidéos pour sélectionner",
     "delete": "mode de suppression",
