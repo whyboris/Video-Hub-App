@@ -34,6 +34,7 @@ import {
   AllSupportedBottomTrayViews,
   AllSupportedViews,
   HistoryItem,
+  RemoteVideoClick,
   RenameFileResponse,
   SupportedTrayView,
   SupportedView,
@@ -434,6 +435,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.zone.run(() => {
         this.modalService.openSnackbar(this.translate.instant('SETTINGS.fileNotFound'));
       })
+    });
+
+    // when `remote-control` requests to open video
+    this.electronService.ipcRenderer.on('remote-open-video', (event, video: RemoteVideoClick) => {
+      this.openVideo(video.video, video.thumbIndex);
     });
 
     // Closing of Window was issued by Electron
@@ -2260,6 +2266,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.toggleButton('showThumbnails');
     this.isFirstRunEver = false;
     this.modalService.openWelcomeMessage();
+  }
+
+  startServer(): void {
+    console.log('starting server');
+    const imagePath: string = path.join(this.appState.selectedOutputFolder, 'vha-' + this.appState.hubName);
+    console.log('SERVING FOLDER:');
+    console.log(imagePath);
+
+    this.electronService.ipcRenderer.send('start-server', this.imageElementService.imageElements, imagePath);
   }
 
 }

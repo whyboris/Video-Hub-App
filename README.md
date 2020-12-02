@@ -34,7 +34,7 @@ See [issues](https://github.com/whyboris/Video-Hub-App/issues) for what is in pr
 
 ## Development
 
-⚠ The repository is usually ahead of the publicly [released version](https://github.com/whyboris/Video-Hub-App/releases). Version `3.0.0` code is already on the `main` branch; while it is 🚧 WIP, it has bugs in it.
+⚠ The repository is usually ahead of the publicly [released version](https://github.com/whyboris/Video-Hub-App/releases) - it is 🚧 WIP and may have bugs in it.
 
 How to start:
 

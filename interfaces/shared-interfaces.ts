@@ -75,3 +75,8 @@ export interface RenameFileResponse {
   oldFileName: string;
   errMsg?: string;
 }
+
+export interface RemoteVideoClick {
+  video: ImageElement;
+  thumbIndex?: number;
+}

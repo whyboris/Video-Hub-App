@@ -445,3 +445,74 @@ ipcMain.on('open-file', (event, pathToVhaFile) => {
 ipcMain.on('clear-recent-documents', (event): void => {
   app.clearRecentDocuments();
 });
+
+let tempData: any;
+
+/**
+ * Clears recent document history from the jump list
+ */
+ipcMain.on('start-server', (event, data, pathToServe: string): void => {
+  console.log('starting server!');
+  tempData = data; // ImageElement[]
+  startTheServer(pathToServe);
+});
+
+function startTheServer(pathToServe: string): void {
+  const express = require('express');
+  const app = express();
+  const appPort = 3000;
+
+  // to handle JSON POST requests
+  const bodyParser = require('body-parser');
+  app.use(bodyParser.json());
+
+  app.get('/lol', (req, res) => {
+    res.send(`Hello World`);
+  });
+
+  app.get('/hello', (req, res) => {
+    res.send(tempData);
+  });
+
+  app.post('/open', (req, res) => {
+    console.log(req.body);
+    res.send('success open');
+
+    GLOBALS.angularApp.sender.send('remote-open-video', req.body);
+  });
+
+  const servePath: string = path.join(__dirname, 'temp');
+  console.log('Serving:', servePath);
+
+  app.use(express.static(servePath));
+
+  app.use('/images', express.static(pathToServe));
+
+  app.listen(appPort, () => console.log(`Command server listening on port ${appPort}`));
+
+  logIp();
+}
+
+
+function logIp(): void {
+  const { networkInterfaces, hostname } = require('os');
+
+  const nets = networkInterfaces();
+  const results = Object.create(null); // or just '{}', an empty object
+
+  for (const name of Object.keys(nets)) {
+      for (const net of nets[name]) {
+          // skip over non-ipv4 and internal (i.e. 127.0.0.1) addresses
+          if (net.family === 'IPv4' && !net.internal) {
+              if (!results[name]) {
+                  results[name] = [];
+              }
+
+              results[name].push(net.address);
+          }
+      }
+  }
+
+  console.log(results);
+  console.log('host name:', hostname());
+}
