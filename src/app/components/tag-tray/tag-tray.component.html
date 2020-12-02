@@ -31,11 +31,17 @@
       <span class="manual-tag-tray-label">
         {{ 'TAGS.clickVideoToSelect' | translate }}
       </span>
-      <span class="manual-tag-tray-label" style="line-height: 24px">
-        {{ 'TAGS.clickTagToAdd' | translate }}
+
+      <span class="more-info">
+        i
       </span>
+
+      <div class="manual-tag-tray-label-info" style="line-height: 24px">
+        {{ 'TAGS.clickTagToAdd' | translate }}
+      </div>
+
       <button
-        class="wizard-button wizard-button-small"
+        class="wizard-button wizard-button-small button-select-all"
         [ngClass]="{ 'select-all-dark': settingsButtons['darkMode'].toggled }"
         (click)="selectAll.emit()"
       >
