@@ -446,7 +446,8 @@ ipcMain.on('clear-recent-documents', (event): void => {
   app.clearRecentDocuments();
 });
 
-
+// =================================================================================================
+// SERVER STUFF
 
 ipcMain.on('latest-gallery-view', (event, data): void => {
   console.log('last message');
@@ -464,7 +465,9 @@ ipcMain.on('latest-gallery-view', (event, data): void => {
   }
 });
 
-
+const remoteAppPath = serve
+                      ? path.join(__dirname, 'remote/')
+                      : path.join(process.resourcesPath, 'remote/');
 
 let tempData: any;
 
@@ -502,10 +505,9 @@ function startTheServer(pathToServe: string): void {
     GLOBALS.angularApp.sender.send('remote-open-video', req.body);
   });
 
-  const servePath: string = path.join(__dirname, 'temp');
-  console.log('Serving:', servePath);
+  console.log('Serving:', remoteAppPath);
 
-  app.use(express.static(servePath));
+  app.use(express.static(remoteAppPath));
 
   app.use('/images', express.static(pathToServe));
 
