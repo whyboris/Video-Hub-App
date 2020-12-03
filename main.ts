@@ -446,16 +446,37 @@ ipcMain.on('clear-recent-documents', (event): void => {
   app.clearRecentDocuments();
 });
 
+
+
+ipcMain.on('latest-gallery-view', (event, data): void => {
+  console.log('last message');
+  if (wss) {
+    console.log('WSS EXISTS !!');
+    wss.clients.forEach(function each(client) {
+
+      console.log(client.readyState);
+
+      if (client.readyState === WebSocket.OPEN) {
+        console.log('sending');
+        client.send(JSON.stringify(data));
+      }
+    });
+  }
+});
+
+
+
 let tempData: any;
 
-/**
- * Clears recent document history from the jump list
- */
 ipcMain.on('start-server', (event, data, pathToServe: string): void => {
   console.log('starting server!');
   tempData = data; // ImageElement[]
   startTheServer(pathToServe);
 });
+
+const WebSocket = require('ws');
+
+let wss;
 
 function startTheServer(pathToServe: string): void {
   const express = require('express');
@@ -491,6 +512,22 @@ function startTheServer(pathToServe: string): void {
   app.listen(appPort, () => console.log(`Command server listening on port ${appPort}`));
 
   logIp();
+
+  wss = new WebSocket.Server({ port: 8080 });
+
+  wss.on('connection', function connection(ws) {
+    ws.on('message', function incoming(message) {
+      console.log('received: %s', message);
+
+      if (message === 'refresh-request') {
+        GLOBALS.angularApp.sender.send('remote-send-new-data');
+      }
+
+    });
+
+    ws.send('something something');
+  });
+
 }
 
 

@@ -442,6 +442,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.openVideo(video.video, video.thumbIndex);
     });
 
+    // when `remote-control` requests to open video
+    this.electronService.ipcRenderer.on('remote-send-new-data', (event, video: RemoteVideoClick) => {
+      console.log('requesting new data!!');
+      console.log(this.pipeSideEffectService.galleryShowing);
+      this.electronService.ipcRenderer.send('latest-gallery-view', this.pipeSideEffectService.galleryShowing);
+    });
+
     // Closing of Window was issued by Electron
     this.electronService.remote.getCurrentWindow().on('close', () => {
       // Check to see if this was not originally triggered by Title-Bar to avoid double saving of settings
