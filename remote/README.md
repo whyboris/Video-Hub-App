@@ -16,7 +16,7 @@ When building VHA, this folder will be included in the build and will be served 
 
 First, clone the [Video Hub App remote](https://github.com/whyboris/Video-Hub-App-remote) repository and `npm install`
 
-1) After changing some code there, run `npm run build`
+1) Edit anything if you'd like and run `npm run build`
 2) Move the newly-generated files from `/dist/remote` to _this folder_
 3) Start the _server_ inside the running VHA app, go to the URL it tells you (either on your computer, phone, or tablet) to use the _remote_
 
