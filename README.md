@@ -59,6 +59,12 @@ To help debug a production build of VHA you can use [Debugtron](https://github.c
 
 ---
 
+## Remote
+
+👩‍🚀 a new feature in VHA is the option for the user to turn on a _server_ after the app starts. This will let the user open a simpler version of the VHA user interface on their phone or tablet (if both PC and device are on the same WiFi) and use it as remote control to play videos 🚀
+
+For details, see [instructions](https://github.com/whyboris/Video-Hub-App/blob/master/remote/README.md).
+
 ## Thank you
 
 This software would not be possible without the tremendous work by other people:
