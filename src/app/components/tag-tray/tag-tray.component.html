@@ -28,7 +28,7 @@
 
   <ng-template #batchModeExplainer>
     <div class="tag-tray-menu-left">
-      <span class="manual-tag-tray-label">
+      <span class="manual-tag-tray-label" [ngStyle]="{ color: darkMode ? 'white' : 'black' }">
         {{ 'TAGS.clickVideoToSelect' | translate }}
       </span>
 
