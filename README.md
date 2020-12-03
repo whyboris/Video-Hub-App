@@ -4,6 +4,7 @@
 
 Read in [Português (Brasileiro)](https://github.com/whyboris/Video-Hub-App/blob/master/README.br.md)
 
+
 ## Download Now
 
 This software is available for $5.00 through [videohubapp.com](https://videohubapp.com/download.html)
@@ -12,13 +13,16 @@ $3.50 of every sale goes to the [_cost-effective_](https://www.givewell.org/char
 
 ![video-hub-app](https://user-images.githubusercontent.com/17264277/82097107-3ed91700-96d0-11ea-8679-87fa3e07cd0b.jpg)
 
+
 ## About
 
 *Video Hub App* was created by [Boris Yakubchik](https://videohubapp.com/about.html). It uses the frameworks _Angular_ and _Electron_.
 
+
 ## License
 
 This software was built on top of [`angular-electron`](https://github.com/maximegris/angular-electron) by [Maxime GRIS](https://github.com/maximegris). It carries an _MIT_ license (see the _LICENSE_ file). While the license is permissive, I ask that you do not distribute free copies of this software unless you have significantly changed it.
+
 
 ## Contributing
 
@@ -28,9 +32,11 @@ Please consider improving any of the translations, or [add a new translation](ht
 
 Please consider improving or adding an icon to the app. It's a simple process, just [follow the instructions](https://github.com/whyboris/Video-Hub-App/tree/master/src/app/components/icon)!
 
+
 ## Upcoming features
 
 See [issues](https://github.com/whyboris/Video-Hub-App/issues) for what is in progress.
+
 
 ## Development
 
@@ -57,13 +63,13 @@ Main dependencies in use:
 
 To help debug a production build of VHA you can use [Debugtron](https://github.com/bytedance/debugtron)
 
----
 
 ## Remote
 
 👩‍🚀 a new feature in VHA is the option for the user to turn on a _server_ after the app starts. This will let the user open a simpler version of the VHA user interface on their phone or tablet (if both PC and device are on the same WiFi) and use it as remote control to play videos 🚀
 
 For details, see [instructions](https://github.com/whyboris/Video-Hub-App/blob/master/remote/README.md).
+
 
 ## Thank you
 
