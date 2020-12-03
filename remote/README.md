@@ -24,5 +24,5 @@ You do not need to restart the server to update the _remote_ code, just move wha
 
 If you install VHA, you can do the same by placing the newly-built _remote_ code to:
 
-`C:\Program Files\Video Hub App 3\resources\remote`
-
+- `C:\Program Files\Video Hub App 3\resources\remote` on PC
+- `Applications\Video Hub App 3\Contents\Resources\remote` on Mac
