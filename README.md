@@ -6,7 +6,7 @@ Read in [Português (Brasileiro)](https://github.com/whyboris/Video-Hub-App/blob
 
 ## Download Now
 
-This software is available for $5.00 through [videohubapp.com](https://videohubapp.com/download.html)
+This software is available for $5.00 through [videohubapp.com](https://videohubapp.com/download)
 
 $3.50 of every sale goes to the [_cost-effective_](https://www.givewell.org/charities/top-charities) charity [Against Malaria Foundation](https://www.againstmalaria.com/).
 
