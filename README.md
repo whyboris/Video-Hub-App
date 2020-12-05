@@ -14,7 +14,7 @@ $3.50 of every sale goes to the [_cost-effective_](https://www.givewell.org/char
 
 ## About
 
-*Video Hub App* was created by [Boris Yakubchik](https://videohubapp.com/about.html). It uses the frameworks _Angular_ and _Electron_.
+*Video Hub App* was created by [Boris Yakubchik](https://videohubapp.com/en/about). It uses the frameworks _Angular_ and _Electron_.
 
 ## License
 
