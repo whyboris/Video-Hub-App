@@ -31,7 +31,7 @@ const { performance } = require('perf_hooks');
 // The three queues will be `QueueObject` - https://caolan.github.io/async/v3/docs.html#QueueObject
 
 // meta queue
-let metadataQueue;      // QueueObject
+let metadataQueue;      // QueueObject - accepts a `.push(TempMetadataQueueObject)`
 let metaDone = 0;
 let metaExtractionStartTime = 0;
 
@@ -212,6 +212,71 @@ export function metadataQueueRunner(file: TempMetadataQueueObject, done) {
 
 }
 
+
+/**
+ * Create a new `chokidar` watcher for a particular directory
+ * @param inputDir    -- full path to the input folder
+ * @param inputSource -- the number corresponding to the `inputSource` in ImageElement -- must be set!
+ */
+function superFastSystemScan(
+  inputDir: string,
+  inputSource: number
+) {
+
+  metadataQueue.pause();
+  thumbQueue.pause();
+
+  const api = new fdir().withFullPaths().crawl(inputDir);
+
+  GLOBALS.angularApp.sender.send('started-watching-this-dir', inputSource);
+
+  const t0 = performance.now(); // LOGGING
+
+  api.withPromise().then((files) => {
+
+    // LOGGING =====================================================================================
+    console.log("scan took " + Math.round((performance.now() - t0) / 100) / 10 + " seconds.");
+    console.log('Found ', files.length, ' files in given directory');
+    // =============================================================================================
+
+    const allAcceptableFiles: string[] = [...acceptableFiles, ...GLOBALS.additionalExtensions];
+
+    files.forEach((fullPath: string) => {
+
+      const parsed = path.parse(fullPath);
+
+      if (allAcceptableFiles.indexOf(parsed.ext.substring(1)) === -1) {
+        return;
+      }
+
+      if (!allFoundFilesMap.has(inputSource)) {
+        allFoundFilesMap.set(inputSource, new Map());
+      }
+      allFoundFilesMap.get(inputSource).set(fullPath, 1);
+
+      if (alreadyInAngular.has(fullPath)) {
+        return;
+      }
+
+      const newItem: TempMetadataQueueObject = {
+        fullPath: fullPath,
+        inputSource: inputSource,
+        name: parsed.base,
+        partialPath: '/' + path.relative(inputDir, parsed.dir),
+      }
+
+      metadataQueue.push(newItem);
+
+    });
+
+    metadataQueue.resume();
+
+  });
+
+  return;
+
+}
+
 /**
  * Create a new `chokidar` watcher for a particular directory
  * @param inputDir
@@ -224,79 +289,30 @@ export function startFileSystemWatching(
   persistent: boolean
 ) {
 
+  // only run `chokidar` if `persistent`
   if (!persistent) {
-
-    metadataQueue.pause();
-    thumbQueue.pause();
-
-    const t0fast = performance.now();
-
-    const api = new fdir().withFullPaths().crawl(inputDir);
-
-    GLOBALS.angularApp.sender.send('started-watching-this-dir', inputSource);
-
-    api.withPromise().then((files) => {
-      const t1fast = performance.now();
-      console.log("scan took " + Math.round((t1fast - t0fast) / 100) / 10 + " seconds.");
-
-      console.log('Found ', files.length, ' files in given directory');
-
-      files.forEach((fullPath: string) => {
-
-        const allAcceptableFiles: string[] = [...acceptableFiles, ...GLOBALS.additionalExtensions];
-
-        const parsed = path.parse(fullPath);
-
-        if (allAcceptableFiles.indexOf(parsed.ext.substring(1)) === -1) {
-          return;
-        }
-
-        if (!allFoundFilesMap.has(inputSource)) {
-          allFoundFilesMap.set(inputSource, new Map());
-        }
-        allFoundFilesMap.get(inputSource).set(fullPath, 1);
-
-        if (alreadyInAngular.has(fullPath)) {
-          return;
-        }
-
-        const newItem: TempMetadataQueueObject = {
-          fullPath: fullPath,
-          inputSource: inputSource,
-          name: parsed.base,
-          partialPath: '/' + path.relative(inputDir, parsed.dir),
-        }
-
-        metadataQueue.push(newItem);
-
-      });
-
-      metadataQueue.resume();
-
-    });
-
+    superFastSystemScan(inputDir, inputSource);
     return;
   }
-
-  console.log('SHOULD ONLY RUN ON PERSISTENT SCAN !!!');
-
 
   const t0 = performance.now();
 
   console.log('================================================================');
+  console.log('SHOULD ONLY RUN ON PERSISTENT SCAN !!!');
 
   console.log('starting watcher ', inputSource, typeof(inputSource), inputDir);
 
   GLOBALS.angularApp.sender.send('started-watching-this-dir', inputSource);
 
+  // WARNING - there are other ways to have a network address that are not accounted here !!!
   const isNetworkAddress: boolean =    inputDir.startsWith('//')
-                                    || inputDir.startsWith('\\');
+                                    || inputDir.startsWith('\\\\');
 
   const watcherConfig = {
     cwd: inputDir,
     disableGlobbing: true,
     ignored: 'vha-*', // WARNING - dangerously ignores any path that includes `vha-` anywhere!!!
-    persistent: persistent,
+    persistent: true, // NOTE: if `!persistent` we use `superFastSystemScan()` instead !!!
     usePolling: isNetworkAddress ? true : false,
   }
 
