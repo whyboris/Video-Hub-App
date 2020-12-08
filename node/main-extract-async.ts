@@ -8,6 +8,8 @@ import * as path from 'path';
 import { FSWatcher } from 'chokidar'; // probably the correct type for chokidar.watch() object
 const fs = require('fs');
 
+const { fdir } = require("fdir");
+
 import { GLOBALS } from './main-globals';
 
 import { ImageElement, ImageElementPlus } from '../interfaces/final-object.interface';
@@ -221,6 +223,63 @@ export function startFileSystemWatching(
   inputSource: number,
   persistent: boolean
 ) {
+
+  if (!persistent) {
+
+    metadataQueue.pause();
+    thumbQueue.pause();
+
+    const t0fast = performance.now();
+
+    const api = new fdir().withFullPaths().crawl(inputDir);
+
+    GLOBALS.angularApp.sender.send('started-watching-this-dir', inputSource);
+
+    api.withPromise().then((files) => {
+      const t1fast = performance.now();
+      console.log("scan took " + Math.round((t1fast - t0fast) / 100) / 10 + " seconds.");
+
+      console.log('Found ', files.length, ' files in given directory');
+
+      files.forEach((fullPath: string) => {
+
+        const allAcceptableFiles: string[] = [...acceptableFiles, ...GLOBALS.additionalExtensions];
+
+        const parsed = path.parse(fullPath);
+
+        if (allAcceptableFiles.indexOf(parsed.ext.substring(1)) === -1) {
+          return;
+        }
+
+        if (!allFoundFilesMap.has(inputSource)) {
+          allFoundFilesMap.set(inputSource, new Map());
+        }
+        allFoundFilesMap.get(inputSource).set(fullPath, 1);
+
+        if (alreadyInAngular.has(fullPath)) {
+          return;
+        }
+
+        const newItem: TempMetadataQueueObject = {
+          fullPath: fullPath,
+          inputSource: inputSource,
+          name: parsed.base,
+          partialPath: '/' + path.relative(inputDir, parsed.dir),
+        }
+
+        metadataQueue.push(newItem);
+
+      });
+
+      metadataQueue.resume();
+
+    });
+
+    return;
+  }
+
+  console.log('SHOULD ONLY RUN ON PERSISTENT SCAN !!!');
+
 
   const t0 = performance.now();
 
