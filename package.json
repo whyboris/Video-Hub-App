@@ -43,6 +43,7 @@
     "chokidar": "3.4.3",
     "electron-window-state": "5.0.3",
     "express": "4.17.1",
+    "fdir": "4.1.0",
     "fuse.js": "6.4.3",
     "natural-orderby": "2.0.3",
     "ngx-virtual-scroller": "4.0.3",

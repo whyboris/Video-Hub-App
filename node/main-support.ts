@@ -406,7 +406,8 @@ export function extractMetadataAsync(
   screenshotSettings: ScreenshotSettings,
 ): Promise<ImageElement> {
   return new Promise((resolve, reject) => {
-    const ffprobeCommand = '"' + ffprobePath + '" -of json -show_streams -show_format -select_streams V "' + filePath + '"';
+    const ffprobeCommand = '"' + ffprobePath + '" -of json -show_streams -show_format -select_streams V "' + path.normalize(filePath) + '"';
+
     exec(ffprobeCommand, (err, data, stderr) => {
       if (err) {
         reject();
