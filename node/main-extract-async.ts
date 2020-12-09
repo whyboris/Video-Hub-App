@@ -7,8 +7,7 @@ const chokidar = require('chokidar');
 import * as path from 'path';
 import { FSWatcher } from 'chokidar'; // probably the correct type for chokidar.watch() object
 const fs = require('fs');
-
-const { fdir } = require("fdir");
+import { fdir } from 'fdir';
 
 import { GLOBALS } from './main-globals';
 
@@ -223,16 +222,19 @@ function superFastSystemScan(
   inputSource: number
 ) {
 
+  GLOBALS.angularApp.sender.send('started-watching-this-dir', inputSource);
+
   metadataQueue.pause();
   thumbQueue.pause();
 
-  const api = new fdir().withFullPaths().crawl(inputDir);
-
-  GLOBALS.angularApp.sender.send('started-watching-this-dir', inputSource);
+  const crawler = new fdir()
+    .exclude((dir: string) => dir.includes('vha-')) // .exclude `dir` is the folder name, not full path
+    .withFullPaths()
+    .crawl(inputDir);
 
   const t0 = performance.now(); // LOGGING
 
-  api.withPromise().then((files) => {
+  crawler.withPromise().then((files: string[]) => {
 
     // LOGGING =====================================================================================
     console.log("scan took " + Math.round((performance.now() - t0) / 100) / 10 + " seconds.");
@@ -245,7 +247,7 @@ function superFastSystemScan(
 
       const parsed = path.parse(fullPath);
 
-      if (allAcceptableFiles.indexOf(parsed.ext.substring(1)) === -1) {
+      if (!allAcceptableFiles.includes(parsed.ext.substr(1).toLowerCase())) {
         return;
       }
 
@@ -258,11 +260,13 @@ function superFastSystemScan(
         return;
       }
 
+      const partial: string = path.relative(inputDir, parsed.dir).replace(/\\/g, '/');
+
       const newItem: TempMetadataQueueObject = {
         fullPath: fullPath,
         inputSource: inputSource,
         name: parsed.base,
-        partialPath: '/' + path.relative(inputDir, parsed.dir),
+        partialPath: '/' + partial,
       }
 
       metadataQueue.push(newItem);
@@ -328,7 +332,7 @@ export function startFileSystemWatching(
 
       const ext = filePath.substring(filePath.lastIndexOf('.') + 1).toLowerCase();
 
-      if (allAcceptableFiles.indexOf(ext) === -1) {
+      if (!allAcceptableFiles.includes(ext)) {
         return;
       }
 
