@@ -211,14 +211,11 @@ export function metadataQueueRunner(file: TempMetadataQueueObject, done): void {
 
 
 /**
- * Create a new `chokidar` watcher for a particular directory
+ * Use `fdir` to quickly generate file list and add it to `metadataQueue`
  * @param inputDir    -- full path to the input folder
  * @param inputSource -- the number corresponding to the `inputSource` in ImageElement -- must be set!
  */
-function superFastSystemScan(
-  inputDir: string,
-  inputSource: number
-): void {
+function superFastSystemScan(inputDir: string, inputSource: number): void {
 
   GLOBALS.angularApp.sender.send('started-watching-this-dir', inputSource);
 
@@ -281,15 +278,11 @@ function superFastSystemScan(
 
 /**
  * Create a new `chokidar` watcher for a particular directory
- * @param inputDir
+ * @param inputDir    -- full path to input folder
  * @param inputSource -- the number corresponding to the `inputSource` in ImageElement -- must be set!
  * @param persistent  -- whether to continue watching after the initial scan
  */
-export function startFileSystemWatching(
-  inputDir: string,
-  inputSource: number,
-  persistent: boolean
-): void {
+export function startFileSystemWatching(inputDir: string, inputSource: number, persistent: boolean): void {
 
   // only run `chokidar` if `persistent`
   if (!persistent) {
@@ -500,43 +493,36 @@ export function extractAnyMissingThumbs(fullArray: ImageElement[]): void {
  */
 export function removeThumbnailsNotInHub(hashesPresent: Map<string, 1>, directory: string): void {
 
+  deleteThumbQueue.pause();
   numberOfThumbsDeleted = 0;
 
-  deleteThumbQueue.pause();
+  const crawler = new fdir()
+    .withFullPaths()
+    .filter((file: string) => {
+      const  it: string = file.toLowerCase();
+      return it.endsWith('.jpg') || it.endsWith('.mp4');
+    })
+    .crawl(directory);
 
-  const watcherConfig = {
-    cwd: directory,
-    persistent: false,
-  }
+  crawler.withPromise().then((files: string[]) => {
 
-  const watcher: FSWatcher = chokidar.watch(directory, watcherConfig)
-    .on('add', (filePath: string) => {
-
-      const parsedPath = path.parse(filePath);
-
-      const ext = parsedPath.ext.substr(1); // remove the `.` from extension (e.g. `.jpg`)
-
-      if (!['jpg', 'mp4'].includes(ext.toLowerCase())) {
-        return; // non-jpg or non-mp4 file (not from VHA - do not delete!)
-      }
-
+    files.forEach((file: string) => {
+      const parsedPath = path.parse(file);
       const fileNameHash = parsedPath.name;
 
       if (!hashesPresent.has(fileNameHash)) {
-        const fullPath = path.join(directory, filePath);
-        deleteThumbQueue.push(fullPath);
+        deleteThumbQueue.push(file);
         numberOfThumbsDeleted++;
       }
-
-    })
-    .on('ready', () => {
-      watcher.close().then(() => {
-        deleteThumbQueue.resume();
-        if (numberOfThumbsDeleted === 0) {
-          GLOBALS.angularApp.sender.send('number-of-screenshots-deleted', 0);
-        } // else only send message after the delete queue is finished
-      });
     });
+
+    if (numberOfThumbsDeleted === 0) {
+      GLOBALS.angularApp.sender.send('number-of-screenshots-deleted', 0);
+    } else {
+      deleteThumbQueue.resume(); // else only send message after the delete queue is finished
+    }
+
+  });
 
 }
 
