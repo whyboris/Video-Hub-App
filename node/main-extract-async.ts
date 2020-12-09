@@ -69,7 +69,7 @@ resetAllQueues();
  *  - Thumb queue
  *  - Delet queue
  */
-export function resetAllQueues() {
+export function resetAllQueues(): void {
 
   allowSleep();
 
@@ -95,8 +95,7 @@ export function resetAllQueues() {
 
     thumbQueue.resume();
 
-    const t1 = performance.now();
-    console.log("META QUEUE took " + Math.round((t1 - metaExtractionStartTime) / 100) / 10 + " seconds.");
+    logPerformance("META QUEUE took ", metaExtractionStartTime);
   });
 
   // Thumbs queue ======================================================================================================
@@ -107,8 +106,7 @@ export function resetAllQueues() {
 
   thumbQueue.drain(() => {
 
-    const t1 = performance.now();
-    console.log("THUMB QUEUE took " + Math.round((t1 - thumbExtractionStartTime) / 100) / 10 + " seconds.");
+    logPerformance("THUMB QUEUE took ", thumbExtractionStartTime);
 
     thumbsDone = 0;
     sendCurrentProgress(1, 1, 'done');
@@ -131,7 +129,7 @@ export function resetAllQueues() {
  * @param element -- ImageElement to extract screenshots for
  * @param done    -- callback to indicate the current extraction finished
  */
-function thumbQueueRunner(element: ImageElement, done) {
+function thumbQueueRunner(element: ImageElement, done): void {
   const screenshotOutputFolder: string = path.join(GLOBALS.selectedOutputFolder, 'vha-' + GLOBALS.hubName);
   const shouldExtractClips: boolean = GLOBALS.screenshotSettings.clipSnippets > 0;
 
@@ -158,7 +156,7 @@ function thumbQueueRunner(element: ImageElement, done) {
  * Send element back to Angular; if any screenshots missing, queue it for extraction
  * @param imageElement
  */
-function sendNewVideoMetadata(imageElement: ImageElementPlus) {
+function sendNewVideoMetadata(imageElement: ImageElementPlus): void {
 
   alreadyInAngular.set(imageElement.fullPath, 1);
 
@@ -179,7 +177,7 @@ function sendNewVideoMetadata(imageElement: ImageElementPlus) {
  * @param fileInfo - various stat metadata about the file
  * @param done
  */
-export function metadataQueueRunner(file: TempMetadataQueueObject, done) {
+export function metadataQueueRunner(file: TempMetadataQueueObject, done): void {
 
   if (metaExtractionStartTime === 0) {
     metaExtractionStartTime = performance.now();
@@ -220,7 +218,7 @@ export function metadataQueueRunner(file: TempMetadataQueueObject, done) {
 function superFastSystemScan(
   inputDir: string,
   inputSource: number
-) {
+): void {
 
   GLOBALS.angularApp.sender.send('started-watching-this-dir', inputSource);
 
@@ -237,7 +235,7 @@ function superFastSystemScan(
   crawler.withPromise().then((files: string[]) => {
 
     // LOGGING =====================================================================================
-    console.log("scan took " + Math.round((performance.now() - t0) / 100) / 10 + " seconds.");
+    logPerformance("scan took ", t0);
     console.log('Found ', files.length, ' files in given directory');
     // =============================================================================================
 
@@ -279,8 +277,6 @@ function superFastSystemScan(
 
   });
 
-  return;
-
 }
 
 /**
@@ -293,7 +289,7 @@ export function startFileSystemWatching(
   inputDir: string,
   inputSource: number,
   persistent: boolean
-) {
+): void {
 
   // only run `chokidar` if `persistent`
   if (!persistent) {
@@ -383,8 +379,7 @@ export function startFileSystemWatching(
         watcher.close();  // chokidar seems to disregard `persistent` when `fsevents` is not enabled
       }
 
-      const t1 = performance.now();
-      console.log("Chokidar took " + Math.round((t1 - t0) / 100) / 10 + " seconds.");
+      logPerformance("Chokidar took ", t0);
     });
 
   watcherMap.set(inputSource, watcher);
@@ -545,7 +540,7 @@ export function removeThumbnailsNotInHub(hashesPresent: Map<string, 1>, director
 
 }
 
-function deleteThumbQueueRunner(pathToFile: string, done) {
+function deleteThumbQueueRunner(pathToFile: string, done): void {
   console.log('deleting:', pathToFile);
 
   fs.unlink(pathToFile, (err) => {
@@ -556,7 +551,7 @@ function deleteThumbQueueRunner(pathToFile: string, done) {
 /**
  * Prevent PC from going to sleep during screenshot extraction
  */
-export function preventSleep() {
+export function preventSleep(): void {
   console.log('preventing sleep');
   preventSleepIds.push(powerSaveBlocker.start('prevent-app-suspension'));
 };
@@ -564,7 +559,7 @@ export function preventSleep() {
 /**
  * Allow PC to go to sleep after screenshots were extracted
  */
-function allowSleep() {
+function allowSleep(): void {
   console.log('allowing sleep');
   if (preventSleepIds.length) {
     preventSleepIds.forEach((id: number) => {
@@ -573,3 +568,7 @@ function allowSleep() {
   }
   preventSleepIds = [];
 };
+
+function logPerformance(message: string, initial: number): void {
+  console.log(message + Math.round((performance.now() - initial) / 100) / 10 + " seconds.");
+}
