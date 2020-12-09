@@ -209,7 +209,6 @@ export function metadataQueueRunner(file: TempMetadataQueueObject, done): void {
 
 }
 
-
 /**
  * Use `fdir` to quickly generate file list and add it to `metadataQueue`
  * @param inputDir    -- full path to the input folder
@@ -223,7 +222,7 @@ function superFastSystemScan(inputDir: string, inputSource: number): void {
   thumbQueue.pause();
 
   const crawler = new fdir()
-    .exclude((dir: string) => dir.includes('vha-')) // .exclude `dir` is the folder name, not full path
+    .exclude((dir: string) => dir.startsWith('vha-')) // .exclude `dir` is the folder name, not full path
     .withFullPaths()
     .crawl(inputDir);
 
