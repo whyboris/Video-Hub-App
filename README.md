@@ -71,6 +71,7 @@ This software would not be possible without the tremendous work by other people:
  - [@ffmpeg-installer/ffmpeg](https://www.npmjs.com/package/@ffmpeg-installer/ffmpeg)
  - [@ffprobe-installer/ffprobe](https://www.npmjs.com/package/@ffprobe-installer/ffprobe)
  - [ngx-translate](https://github.com/ngx-translate/core)
+ - [fdir](https://github.com/thecodrr/fdir)
  - [async](https://github.com/caolan/async)
  - [chokidar](https://github.com/paulmillr/chokidar)
  - [trash](https://github.com/sindresorhus/trash)
