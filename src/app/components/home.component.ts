@@ -2284,4 +2284,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.electronService.ipcRenderer.send('start-server', this.imageElementService.imageElements, imagePath);
   }
 
+  stopServer(): void {
+    console.log('stopping server');
+    this.electronService.ipcRenderer.send('stop-server');
+  }
+
 }

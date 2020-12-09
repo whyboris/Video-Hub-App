@@ -2,6 +2,8 @@ import { GLOBALS } from "./main-globals";
 
 import * as path from 'path';
 
+const express = require('express');
+
 const args = process.argv.slice(1);
 const serve: boolean = args.some(val => val === '--serve');
 
@@ -10,6 +12,8 @@ const serve: boolean = args.some(val => val === '--serve');
 const remoteAppPath = serve
                       ? path.join(__dirname, 'remote/')
                       : path.join(process.resourcesPath, 'remote/');
+                      // Electron ^^^^^^^ extentds `process` with `resourcesPath`
+                      // https://www.electronjs.org/docs/api/process#processresourcespath-readonly
 
 let tempData: any;
 
@@ -42,10 +46,21 @@ export function setUpIpcForServer(ipc) {
     tempData = data; // ImageElement[]
     startTheServer(pathToServe);
   });
+
+  ipc.on('stop-server', (event): void => {
+    stopTheServers();
+  });
 }
 
+function stopTheServers(): void {
+  serverRef.close();
+  wss.close();
+  console.log('stopped server and web sockets');
+}
+
+let serverRef; // reference to express server !!!
+
 function startTheServer(pathToServe: string): void {
-  const express = require('express');
   const app = express();
   const appPort = 3000;
 
@@ -74,10 +89,16 @@ function startTheServer(pathToServe: string): void {
 
   app.use('/images', express.static(pathToServe));
 
-  app.listen(appPort, () => console.log(`Command server listening on port ${appPort}`));
+  serverRef = app.listen(appPort, () => console.log(`Command server listening on port ${appPort}`));
 
   logIp();
 
+  startSockets();
+
+}
+
+
+function startSockets(): void {
   wss = new WebSocket.Server({ port: 8080 });
 
   wss.on('connection', function connection(ws) {
@@ -92,8 +113,8 @@ function startTheServer(pathToServe: string): void {
 
     ws.send('something something');
   });
-
 }
+
 
 function logIp(): void {
   const { networkInterfaces, hostname } = require('os');
