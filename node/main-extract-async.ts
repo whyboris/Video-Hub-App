@@ -273,6 +273,8 @@ function superFastSystemScan(
 
     });
 
+    GLOBALS.angularApp.sender.send('all-files-found-in-dir', inputSource, allFoundFilesMap.get(inputSource));
+
     metadataQueue.resume();
 
   });
