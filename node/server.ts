@@ -3,6 +3,10 @@ import { GLOBALS } from "./main-globals";
 import * as path from 'path';
 
 const express = require('express');
+const bodyParser = require('body-parser');
+const WebSocket = require('ws');
+
+import { ImageElement } from "../interfaces/final-object.interface";
 
 const args = process.argv.slice(1);
 const serve: boolean = args.some(val => val === '--serve');
@@ -11,15 +15,17 @@ const serve: boolean = args.some(val => val === '--serve');
 
 const remoteAppPath = serve
                       ? path.join(__dirname, 'remote/')
-                      : path.join(process.resourcesPath, 'remote/');
-                      // Electron ^^^^^^^ extentds `process` with `resourcesPath`
+                      : path.join((process as any).resourcesPath, 'remote/');
+                      // Electron ^^^^^^^ extends `process` with `resourcesPath`
                       // https://www.electronjs.org/docs/api/process#processresourcespath-readonly
 
-let tempData: any;
+let serverRef; // reference to express server
+let wss;       // reference to Web Socket Server
 
-const WebSocket = require('ws');
+let currentHubImageElements: ImageElement[];
 
-let wss;
+const EXPRESS_PORT: number = 3000;
+const WSS_PORT: number = 8080;
 
 // =================================================================================================
 
@@ -41,10 +47,11 @@ export function setUpIpcForServer(ipc) {
     }
   });
 
-  ipc.on('start-server', (event, data, pathToServe: string): void => {
-    console.log('starting server!');
-    tempData = data; // ImageElement[]
-    startTheServer(pathToServe);
+  ipc.on('start-server', (event, data: ImageElement[], pathToServe: string): void => {
+    currentHubImageElements = data;
+    startTheServer(pathToServe, EXPRESS_PORT);
+    logIp(EXPRESS_PORT);
+    startSockets(WSS_PORT);
   });
 
   ipc.on('stop-server', (event): void => {
@@ -52,54 +59,43 @@ export function setUpIpcForServer(ipc) {
   });
 }
 
-function stopTheServers(): void {
-  serverRef.close();
-  wss.close();
-  console.log('stopped server and web sockets');
-}
-
-let serverRef; // reference to express server !!!
-
-function startTheServer(pathToServe: string): void {
+/**
+ * Start the Express server
+ * @param pathToServe - full path to folder with all images
+ * @param port - port to use
+ */
+function startTheServer(pathToServe: string, port: number): void {
   const app = express();
-  const appPort = 3000;
 
-  // to handle JSON POST requests
-  const bodyParser = require('body-parser');
-  app.use(bodyParser.json());
+  app.use(bodyParser.json()); // to handle JSON POST requests
 
-  app.get('/lol', (req, res) => {
-    res.send(`Hello World`);
+  //  GET endpoint to respond with the full `ImageElement[]`
+  app.get('/hub', (req, res) => {
+    res.send(currentHubImageElements);
   });
 
-  app.get('/hello', (req, res) => {
-    res.send(tempData);
-  });
-
+  //  POST endpoint to ask VHA to play a video from some starting point
   app.post('/open', (req, res) => {
-    console.log(req.body);
-    res.send('success open');
-
     GLOBALS.angularApp.sender.send('remote-open-video', req.body);
+    res.end();
   });
 
-  console.log('Serving:', remoteAppPath);
-
+  // Serve the Angular VHA remote control app
   app.use(express.static(remoteAppPath));
 
+  // Serve all the images from the hub
   app.use('/images', express.static(pathToServe));
 
-  serverRef = app.listen(appPort, () => console.log(`Command server listening on port ${appPort}`));
-
-  logIp();
-
-  startSockets();
-
+  console.log('Serving:', remoteAppPath);
+  serverRef = app.listen(port, () => console.log('VHA server listening on port', port));
 }
 
-
-function startSockets(): void {
-  wss = new WebSocket.Server({ port: 8080 });
+/**
+ * Start the socket server
+ * @param port - the port to use
+ */
+function startSockets(port: number): void {
+  wss = new WebSocket.Server({ port: port });
 
   wss.on('connection', function connection(ws) {
     ws.on('message', function incoming(message) {
@@ -115,8 +111,24 @@ function startSockets(): void {
   });
 }
 
+/**
+ * Shut down the Express and WebSocket servers
+ */
+function stopTheServers(): void {
+  if (serverRef && typeof serverRef.close === "function") {
+    serverRef.close();
+    console.log('closed Express server');
+  }
+  if (wss && typeof wss.close === "function") {
+    wss.close();
+    console.log('closed Socket server');
+  }
+}
 
-function logIp(): void {
+/**
+ * Log the user's IP
+ */
+function logIp(port: number): void {
   const { networkInterfaces, hostname } = require('os');
 
   const nets = networkInterfaces();
@@ -137,4 +149,5 @@ function logIp(): void {
 
   console.log(results);
   console.log('host name:', hostname());
+  GLOBALS.angularApp.sender.send('remote-ip-address', results, hostname(), port);
 }

@@ -442,7 +442,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.openVideo(video.video, video.thumbIndex);
     });
 
-    // when `remote-control` requests to open video
+    // when `remote-control` sends back IP address
+    this.electronService.ipcRenderer.on('remote-ip-address', (event, addresses: any, hostname: string, port: number) => {
+      console.log('listening:');
+      console.log(addresses);
+      console.log(hostname);
+      console.log(port);
+      if (addresses['Wi-Fi']) {
+        console.log('WiFi:', addresses['Wi-Fi'][0]);
+      }
+    });
+
+    // when `remote-control` requests currently-showing gallery view
     this.electronService.ipcRenderer.on('remote-send-new-data', (event, video: RemoteVideoClick) => {
       console.log('requesting new data!!');
       console.log(this.pipeSideEffectService.galleryShowing);
@@ -649,6 +660,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       pathToFile: string,
       outputFolderPath: string,
     ) => {
+
+      this.stopServer();
+
       // console.log('input dirs', finalObject.inputDirs);
       // reset to initial
       this.currentClickedItem = undefined;
@@ -785,6 +799,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     this.justStarted();
   }
+
+  // =======================================================================================================================================
+  // =======================================================================================================================================
+  // =======================================================================================================================================
 
   ngAfterViewInit() {
     this.computePreviewWidth(); // so that fullView knows its size // TODO -- check if still needed!
@@ -2268,13 +2286,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Open modal with instructions for how to use the app. Only runs when `settings.json` is not found
+   */
   showFirstRunMessage(): void {
-    console.log('SHOULD FIX THE FIRST RUN BUG!!!');
     this.toggleButton('showThumbnails');
     this.isFirstRunEver = false;
     this.modalService.openWelcomeMessage();
   }
 
+  /**
+   * Start the remote server
+   */
   startServer(): void {
     console.log('starting server');
     const imagePath: string = path.join(this.appState.selectedOutputFolder, 'vha-' + this.appState.hubName);
@@ -2284,6 +2307,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.electronService.ipcRenderer.send('start-server', this.imageElementService.imageElements, imagePath);
   }
 
+  /**
+   * Stop the remote server
+   */
   stopServer(): void {
     console.log('stopping server');
     this.electronService.ipcRenderer.send('stop-server');
