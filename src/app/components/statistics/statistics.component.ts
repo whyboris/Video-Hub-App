@@ -13,6 +13,8 @@ import { ImageElementService } from './../../services/image-element.service';
   selector: 'app-statistics',
   templateUrl: './statistics.component.html',
   styleUrls: [
+    '../wizard/wizard.component.scss',
+    '../settings.scss',
     '../wizard-button.scss',
     './statistics.component.scss',
     './toggle.scss'
@@ -52,6 +54,8 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   numberOfScreensDeleted: number = 0;
 
   removeFoldersMode: boolean = false;
+
+  serverRunning: boolean = false;
 
   objectKeys = Object.keys; // to use in template
 

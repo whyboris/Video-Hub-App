@@ -116,6 +116,54 @@
 
   </span>
 
+  <span class="stats-heading title sources server-title">{{ 'STATISTICS.server' | translate }}</span>
+
+  <span class="edit-mode-container server-section">
+
+    <button
+      class="wizard-button start-import"
+      (click)="serverRunning = !serverRunning"
+      [ngClass]="{ 'edit-mode-active': serverRunning }"
+    >
+      <ng-container  *ngIf="serverRunning; else stopServer">
+        {{ 'STATISTICS.serverStop' | translate }}
+      </ng-container>
+      <ng-template #stopServer>
+        {{ 'STATISTICS.serverStart' | translate }}
+      </ng-template>
+    </button>
+
+    <span [ngClass]="{ 'disabled': serverRunning }" *ngIf="!serverRunning">
+      {{ 'STATISTICS.serverOnPort' | translate }}
+    </span>
+    <input
+      *ngIf="!serverRunning"
+      type="number"
+      value="3000"
+      min="1"
+      max="65535"
+      class="size-dropdown language-drop-down num-select"
+    >
+
+    <span *ngIf="serverRunning">
+      {{ 'STATISTICS.serverRunning' | translate }}
+    </span>
+    <span *ngIf="serverRunning" class="more-info">
+      i
+    </span>
+
+    <div class="manual-tag-tray-label-info" style="line-height: 24px">
+      {{ 'STATISTICS.serverMoreInfo' | translate }}
+    </div>
+
+    <div *ngIf="serverRunning" class="server-location">
+      192.168.1.10:3000
+      <br>
+      <span class="or">{{ 'STATISTICS.serverOr' | translate }}</span>fastpc:3000
+    </div>
+
+  </span>
+
 
   <div class="table-container">
 
