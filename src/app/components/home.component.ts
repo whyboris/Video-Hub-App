@@ -456,8 +456,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // when `remote-control` requests currently-showing gallery view
     this.electronService.ipcRenderer.on('remote-send-new-data', (event, video: RemoteVideoClick) => {
       console.log('requesting new data!!');
-      console.log(this.pipeSideEffectService.galleryShowing);
-      this.electronService.ipcRenderer.send('latest-gallery-view', this.pipeSideEffectService.galleryShowing);
+
+      const showNotConnected: ImageElement[] = JSON.parse(JSON.stringify(this.pipeSideEffectService.galleryShowing));
+
+      showNotConnected.forEach((element: ImageElement) => {
+        (element as any).connected = this.sourceFolderService.sourceFolderConnected[element.inputSource];
+      });
+
+      console.log(showNotConnected);
+
+      this.electronService.ipcRenderer.send('latest-gallery-view', showNotConnected);
     });
 
     // Closing of Window was issued by Electron

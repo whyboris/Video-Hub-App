@@ -3,7 +3,7 @@ import { GLOBALS } from "./main-globals";
 import * as path from 'path';
 
 const express = require('express');
-const bodyParser = require('body-parser');
+// const bodyParser = require('body-parser'); ----------------------------- disabled
 const WebSocket = require('ws');
 
 import { ImageElement } from "../interfaces/final-object.interface";
@@ -26,6 +26,13 @@ let currentHubImageElements: ImageElement[];
 
 const EXPRESS_PORT: number = 3000;
 const WSS_PORT: number = 8080;
+
+type SocketMessageType = 'open-file' | 'refresh-request';
+
+interface SocketMessage {
+  type: SocketMessageType;
+  data?: any;
+}
 
 // =================================================================================================
 
@@ -67,18 +74,20 @@ export function setUpIpcForServer(ipc) {
 function startTheServer(pathToServe: string, port: number): void {
   const app = express();
 
-  app.use(bodyParser.json()); // to handle JSON POST requests
+  // app.use(bodyParser.json()); // to handle JSON POST requests ------ disabled
 
   //  GET endpoint to respond with the full `ImageElement[]`
-  app.get('/hub', (req, res) => {
-    res.send(currentHubImageElements);
-  });
+  // ------------------------------------------------------------------ disabled
+  // app.get('/hub', (req, res) => {
+  //   res.send(currentHubImageElements);
+  // });
 
   //  POST endpoint to ask VHA to play a video from some starting point
-  app.post('/open', (req, res) => {
-    GLOBALS.angularApp.sender.send('remote-open-video', req.body);
-    res.end();
-  });
+  // ------------------------------------------------------------------ disabled
+  // app.post('/open', (req, res) => {
+  //   GLOBALS.angularApp.sender.send('remote-open-video', req.body);
+  //   res.end();
+  // });
 
   // Serve the Angular VHA remote control app
   app.use(express.static(remoteAppPath));
@@ -98,17 +107,36 @@ function startSockets(port: number): void {
   wss = new WebSocket.Server({ port: port });
 
   wss.on('connection', function connection(ws) {
-    ws.on('message', function incoming(message) {
-      console.log('received: %s', message);
 
-      if (message === 'refresh-request') {
-        GLOBALS.angularApp.sender.send('remote-send-new-data');
-      }
+    ws.on('message', socketMessageHandler);
 
-    });
-
-    ws.send('something something');
+    ws.send('TODO: send over preferred settings ?');
   });
+}
+
+/**
+ * Handler for all the incoming socket messages
+ */
+const socketMessageHandler = (message: string): void => {
+  // all messages are strings from JSON.stringify(data as SocketMessage)
+  console.log('received message');
+
+  try {
+    const parsed: SocketMessage = JSON.parse(message);
+
+    if (parsed.type === 'refresh-request') {
+
+      GLOBALS.angularApp.sender.send('remote-send-new-data');
+
+    } else if (parsed.type === 'open-file') {
+
+      GLOBALS.angularApp.sender.send('remote-open-video', parsed.data);
+
+    }
+
+  } catch {
+    console.log('ERROR: message was not JSON encoded');
+  }
 }
 
 /**
