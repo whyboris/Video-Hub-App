@@ -153,29 +153,15 @@ function stopTheServers(): void {
   }
 }
 
+const ip = require("ip");
+
 /**
  * Log the user's IP
  */
 function logIp(port: number): void {
-  const { networkInterfaces, hostname } = require('os');
+  const { hostname } = require('os');
 
-  const nets = networkInterfaces();
-  const results = Object.create(null); // or just '{}', an empty object
-
-  for (const name of Object.keys(nets)) {
-      for (const net of nets[name]) {
-          // skip over non-ipv4 and internal (i.e. 127.0.0.1) addresses
-          if (net.family === 'IPv4' && !net.internal) {
-              if (!results[name]) {
-                  results[name] = [];
-              }
-
-              results[name].push(net.address);
-          }
-      }
-  }
-
-  console.log(results);
   console.log('host name:', hostname());
-  GLOBALS.angularApp.sender.send('remote-ip-address', results, hostname(), port);
+  console.log('ip:', ip.address());
+  GLOBALS.angularApp.sender.send('remote-ip-address', ip.address(), hostname(), port);
 }

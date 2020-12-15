@@ -445,28 +445,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     // when `remote-control` sends back IP address
-    this.electronService.ipcRenderer.on('remote-ip-address', (event, addresses: any, hostname: string, port: number) => {
-      console.log('listening:');
-      console.log(addresses);
-      console.log(hostname);
-      console.log(port);
-
-      let wifi: string = '';
-
-      if (addresses['Wi-Fi']) { // PC shows up this way
-        wifi = addresses['Wi-Fi'][0];
-      } else if (addresses['en0']) { // Mac shows up this way
-        wifi = addresses['en0'][0];
-      }
-
+    this.electronService.ipcRenderer.on('remote-ip-address', (event, ip: string, hostname: string, port: number) => {
       const serverDetails: ServerDetails = {
-        wifi: wifi,
+        wifi: ip,
         host: hostname,
         port: port
       }
 
+      console.log(serverDetails);
       this.serverDetailsBehaviorSubject.next(serverDetails);
-
     });
 
     // when `remote-control` requests currently-showing gallery view

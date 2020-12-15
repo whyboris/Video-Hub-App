@@ -45,6 +45,7 @@
     "express": "4.17.1",
     "fdir": "4.1.0",
     "fuse.js": "6.4.3",
+    "ip": "1.1.5",
     "natural-orderby": "2.0.3",
     "ngx-virtual-scroller": "4.0.3",
     "path": "0.12.7",
