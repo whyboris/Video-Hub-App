@@ -122,7 +122,7 @@
 
     <button
       class="wizard-button start-import"
-      (click)="serverRunning = !serverRunning"
+      (click)="startServer()"
       [ngClass]="{ 'edit-mode-active': serverRunning }"
     >
       <ng-container  *ngIf="serverRunning; else stopServer">
@@ -138,8 +138,9 @@
     </span>
     <input
       *ngIf="!serverRunning"
+      (change)="validatePort($event.target.value)"
       type="number"
-      value="3000"
+      [(ngModel)]="selectedPort"
       min="1"
       max="65535"
       class="size-dropdown language-drop-down num-select"
@@ -157,9 +158,14 @@
     </div>
 
     <div *ngIf="serverRunning" class="server-location">
-      192.168.1.10:3000
+      <span class="ip-address">
+        {{ serverInfo.wifi }}:{{ serverInfo.port }}
+      </span>
       <br>
-      <span class="or">{{ 'STATISTICS.serverOr' | translate }}</span>fastpc:3000
+      <span class="or">{{ 'STATISTICS.serverOr' | translate }}</span>
+      <span class="ip-address">
+        {{ serverInfo.host.toLowerCase() }}:{{ serverInfo.port }}
+      </span>
     </div>
 
   </span>

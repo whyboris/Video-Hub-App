@@ -9,6 +9,12 @@ import { ImageElement, ScreenshotSettings, InputSources } from '../../../../inte
 import { metaAppear, breadcrumbWordAppear } from '../../common/animations';
 import { ImageElementService } from './../../services/image-element.service';
 
+export interface ServerDetails {
+  port: number;
+  wifi: string;
+  host: string;
+}
+
 @Component({
   selector: 'app-statistics',
   templateUrl: './statistics.component.html',
@@ -25,6 +31,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
 
   @Output() deleteInputSourceFiles = new EventEmitter<number>();
   @Output() finalArrayNeedsSaving = new EventEmitter<any>();
+  @Output() startServerOnPort = new EventEmitter<number>();
 
   @Input() hubName: string;
   @Input() inputFolders: InputSources;
@@ -35,10 +42,13 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   @Input() inputFolderChosen: Observable<string>;
   @Input() numberScreenshotsDeleted: Observable<number>;
   @Input() oldFolderReconnected: Observable<{ source: number, path: string }>;
+  @Input() serverDetails: Observable<any>;
 
   eventSubscriptionMap: Map<string, Subscription> = new Map();
 
   totalFiles: number;
+
+  selectedPort = 3000;
 
   longest: number = 0;
   shortest: number = Infinity;
@@ -57,6 +67,8 @@ export class StatisticsComponent implements OnInit, OnDestroy {
 
   serverRunning: boolean = false;
 
+  serverInfo: ServerDetails;
+
   objectKeys = Object.keys; // to use in template
 
   constructor(
@@ -71,6 +83,18 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     this.computeAverages();
 
     // IPC subscriptions - come in as BehaviorSubject.asObservable()
+
+    this.eventSubscriptionMap.set('serverDetails', this.serverDetails.subscribe((serverDetails: ServerDetails) => {
+      console.log('STATS RECEIVED:');
+      console.log(serverDetails);
+      if (serverDetails) {
+        this.serverRunning = true;
+        this.serverInfo = serverDetails;
+      } else {
+        this.serverRunning = false;
+      }
+      this.cd.detectChanges();
+    }));
 
     this.eventSubscriptionMap.set('inputFolder', this.inputFolderChosen.subscribe((folderPath: string) => {
       if (folderPath) { // first emit from subscription is `undefined`
@@ -294,6 +318,33 @@ export class StatisticsComponent implements OnInit, OnDestroy {
         event.srcElement.classList.remove('progress-gradient-animation');
       }
     }, 3000); // apparently nothing breaks if the component is closed before timeout finishes :)
+  }
+
+  startServer() {
+    if (this.serverRunning) {
+      this.startServerOnPort.emit(0);
+    } else {
+      this.startServerOnPort.emit(this.selectedPort);
+    }
+  }
+
+  /**
+   * Check port any time it changes
+   */
+  validatePort(port: string) {
+    console.log('port', port);
+    console.log(typeof(port));
+    const parsed: number = parseInt(port, 10);
+    console.log(parsed);
+    if (!Number.isInteger(parsed)) {
+      this.selectedPort = 3000;
+    } else if (parsed > 65535) {
+      this.selectedPort = 3000;
+    } else if (parsed < 2) {
+      this.selectedPort = 3000;
+    } else {
+      this.selectedPort = parsed;
+    }
   }
 
   /**

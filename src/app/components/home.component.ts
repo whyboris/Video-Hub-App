@@ -27,6 +27,7 @@ import { SortOrderComponent } from './sort-order/sort-order.component';
 // Interfaces
 import { FinalObject, ImageElement, ScreenshotSettings, ResolutionString } from '../../../interfaces/final-object.interface';
 import { ImportStage } from '../../../node/main-support';
+import { ServerDetails } from './statistics/statistics.component';
 import { SettingsObject } from '../../../interfaces/settings-object.interface';
 import { SortType } from '../pipes/sorting.pipe';
 import { WizardOptions } from '../../../interfaces/wizard-options.interface';
@@ -298,6 +299,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   numberScreenshotsDeletedBehaviorSubject: BehaviorSubject<number> = new BehaviorSubject(undefined);
   oldFolderReconnectedBehaviorSubject: BehaviorSubject<{source: number, path: string}> = new BehaviorSubject(undefined);
   renameFileResponseBehaviorSubject: BehaviorSubject<RenameFileResponse> = new BehaviorSubject(undefined);
+  serverDetailsBehaviorSubject: BehaviorSubject<ServerDetails> = new BehaviorSubject(undefined);
 
   // ========================================================================
   // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
@@ -448,9 +450,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
       console.log(addresses);
       console.log(hostname);
       console.log(port);
+
       if (addresses['Wi-Fi']) {
         console.log('WiFi:', addresses['Wi-Fi'][0]);
       }
+
+      const serverDetails: ServerDetails = {
+        wifi: addresses['Wi-Fi'][0],
+        host: hostname,
+        port: port
+      }
+
+      this.serverDetailsBehaviorSubject.next(serverDetails);
+
     });
 
     // when `remote-control` requests currently-showing gallery view
@@ -2305,14 +2317,21 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   /**
    * Start the remote server
+   * @param port - number of the port
    */
-  startServer(): void {
-    console.log('starting server');
-    const imagePath: string = path.join(this.appState.selectedOutputFolder, 'vha-' + this.appState.hubName);
-    console.log('SERVING FOLDER:');
-    console.log(imagePath);
+  startServer(port: number): void {
+    if (port === 0) {
+      this.stopServer();
+    } else {
+      console.log('starting server');
+      const imagePath: string = path.join(this.appState.selectedOutputFolder, 'vha-' + this.appState.hubName);
+      console.log('SERVING FOLDER:');
+      console.log(imagePath);
+      console.log('on port', port);
 
-    this.electronService.ipcRenderer.send('start-server', this.imageElementService.imageElements, imagePath);
+      this.electronService.ipcRenderer.send('start-server', this.imageElementService.imageElements, imagePath, port);
+    }
+
   }
 
   /**
@@ -2321,6 +2340,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   stopServer(): void {
     console.log('stopping server');
     this.electronService.ipcRenderer.send('stop-server');
+    this.serverDetailsBehaviorSubject.next(undefined);
   }
 
 }

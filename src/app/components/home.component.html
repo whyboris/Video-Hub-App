@@ -249,6 +249,7 @@
       <app-statistics
         (deleteInputSourceFiles)="deleteInputSourceFiles($event)"
         (finalArrayNeedsSaving)="imageElementService.finalArrayNeedsSaving = true"
+        (startServerOnPort)="startServer($event)"
 
         [hubName]="appState.hubName"
         [inputFolders]="sourceFolderService.selectedSourceFolder"
@@ -257,8 +258,9 @@
         [screenshotSettings]="currentScreenshotSettings"
 
         [inputFolderChosen]="inputSorceChosenBehaviorSubject.asObservable()"
-        [oldFolderReconnected]="oldFolderReconnectedBehaviorSubject.asObservable()"
         [numberScreenshotsDeleted]="numberScreenshotsDeletedBehaviorSubject.asObservable()"
+        [oldFolderReconnected]="oldFolderReconnectedBehaviorSubject.asObservable()"
+        [serverDetails]="serverDetailsBehaviorSubject.asObservable()"
       ></app-statistics>
 
     </div>
@@ -401,9 +403,6 @@
         {{ (imageElementService.imageElements | deleteFilePipe : deletePipeHack).length | number }}
         {{ 'SIDEBAR.videos' | translate }}
       </div>
-
-      <button (click)="startServer()">START SERVER</button>
-      <button (click)="stopServer()">STOP SERVER</button>
 
       <!-- Regular search boxes / filters -->
       <app-search-boxes

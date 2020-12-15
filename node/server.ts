@@ -54,10 +54,10 @@ export function setUpIpcForServer(ipc) {
     }
   });
 
-  ipc.on('start-server', (event, data: ImageElement[], pathToServe: string): void => {
+  ipc.on('start-server', (event, data: ImageElement[], pathToServe: string, port: number): void => {
     currentHubImageElements = data;
-    startTheServer(pathToServe, EXPRESS_PORT);
-    logIp(EXPRESS_PORT);
+    startTheServer(pathToServe, port || EXPRESS_PORT);
+    logIp(port || EXPRESS_PORT);
     startSockets(WSS_PORT);
   });
 
