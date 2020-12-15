@@ -159,12 +159,12 @@
 
     <div *ngIf="serverRunning" class="server-location">
       <span class="ip-address">
-        {{ serverInfo.wifi }}:{{ serverInfo.port }}
+        <span class="gray">http://</span>{{ serverInfo.wifi }}:{{ serverInfo.port }}
       </span>
       <br>
       <span class="or">{{ 'STATISTICS.serverOr' | translate }}</span>
       <span class="ip-address">
-        {{ serverInfo.host.toLowerCase() }}:{{ serverInfo.port }}
+        <span class="gray">http://</span>{{ serverInfo.host.toLowerCase() }}:{{ serverInfo.port }}
       </span>
     </div>
 

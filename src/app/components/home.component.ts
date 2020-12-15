@@ -451,12 +451,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
       console.log(hostname);
       console.log(port);
 
-      if (addresses['Wi-Fi']) {
-        console.log('WiFi:', addresses['Wi-Fi'][0]);
+      let wifi: string = '';
+
+      if (addresses['Wi-Fi']) { // PC shows up this way
+        wifi = addresses['Wi-Fi'][0];
+      } else if (addresses['en0']) { // Mac shows up this way
+        wifi = addresses['en0'][0];
       }
 
       const serverDetails: ServerDetails = {
-        wifi: addresses['Wi-Fi'][0],
+        wifi: wifi,
         host: hostname,
         port: port
       }

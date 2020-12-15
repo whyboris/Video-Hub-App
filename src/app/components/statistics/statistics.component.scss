@@ -205,7 +205,7 @@
 .or {
   color: $black;
   font-size: 14px;
-  margin-right: 10px;
+  margin-right: 14px;
 }
 
 .manual-tag-tray-label-info { // copied from `tag-tray.component.scss`
@@ -225,4 +225,8 @@
 
 .more-info:hover + .manual-tag-tray-label-info {
   opacity: 1;
+}
+
+.gray {
+  color: #888888;
 }
