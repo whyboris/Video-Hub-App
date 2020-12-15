@@ -153,15 +153,44 @@ function stopTheServers(): void {
   }
 }
 
+const { networkInterfaces, hostname } = require('os');
 const ip = require("ip");
 
 /**
  * Log the user's IP
  */
 function logIp(port: number): void {
-  const { hostname } = require('os');
+
+  const nets = networkInterfaces();
+  const results = {};
+  // Thank you for the solution: https://stackoverflow.com/a/8440736/5017391
+  for (const name of Object.keys(nets)) {
+    for (const net of nets[name]) {
+      // skip over non-ipv4 and internal (i.e. 127.0.0.1) addresses
+      if (net.family === 'IPv4' && !net.internal) {
+        if (!results[name]) {
+          results[name] = [];
+        }
+
+        results[name].push(net.address);
+      }
+    }
+  }
+
+  console.log(results);
+
+  let wifi = '';
+
+  if (results['Wi-Fi']) { // PC shows up this way
+    wifi = results['Wi-Fi'][0];
+  } else if (results['en0']) { // Mac shows up this way
+    wifi = results['en0'][0];  // will likely be incorrect if Mac is also connected via ethernet
+  } else {
+    wifi = ip.address(); // this grabs the first IP which may be ethernet
+  }
 
   console.log('host name:', hostname());
-  console.log('ip:', ip.address());
-  GLOBALS.angularApp.sender.send('remote-ip-address', ip.address(), hostname(), port);
+  console.log('ip:', wifi);
+
+  GLOBALS.angularApp.sender.send('remote-ip-address', wifi, hostname(), port);
 }
