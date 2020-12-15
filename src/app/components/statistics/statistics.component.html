@@ -116,6 +116,8 @@
 
   </span>
 
+  <!-- SERVER STUFF -->
+
   <span class="stats-heading title sources server-title">{{ 'STATISTICS.server' | translate }}</span>
 
   <span class="edit-mode-container server-section">
@@ -143,7 +145,7 @@
       [(ngModel)]="selectedPort"
       min="1"
       max="65535"
-      class="size-dropdown language-drop-down num-select"
+      class="port-select"
     >
 
     <span *ngIf="serverRunning">
@@ -170,6 +172,7 @@
 
   </span>
 
+  <!-- STATISTICS FOR THE HUB  -->
 
   <div class="table-container">
 

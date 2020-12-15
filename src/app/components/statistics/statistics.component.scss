@@ -175,12 +175,13 @@
   min-height: 100px;
 }
 
-.num-select {
-  border: 1px solid $gray-50;
+.port-select {
+  background-color: $gray-10;
+  border: 0;
+  cursor: pointer;
   font-family: monospace;
-  margin-left: 12px !important;
-  padding-left: 20px;
-  text-align: center;
+  margin-left: 12px;
+  outline: none;
   width: 56px;
 }
 
