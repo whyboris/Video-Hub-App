@@ -28,7 +28,7 @@ import { SortOrderComponent } from './sort-order/sort-order.component';
 import { FinalObject, ImageElement, ScreenshotSettings, ResolutionString } from '../../../interfaces/final-object.interface';
 import { ImportStage } from '../../../node/main-support';
 import { ServerDetails } from './statistics/statistics.component';
-import { SettingsObject } from '../../../interfaces/settings-object.interface';
+import { SettingsButtonSavedProperties, SettingsObject } from '../../../interfaces/settings-object.interface';
 import { SortType } from '../pipes/sorting.pipe';
 import { WizardOptions } from '../../../interfaces/wizard-options.interface';
 import {
@@ -1863,16 +1863,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   getSettingsForSave(): SettingsObject {
 
-    const buttonSettings = {};
+    const buttonSettings = {} as Record<SettingsButtonKey, SettingsButtonSavedProperties>;
 
-    this.grabAllSettingsKeys().forEach(element => {
-      buttonSettings[element] = {
-        toggled: this.settingsButtons[element].toggled,
-        hidden: this.settingsButtons[element].hidden,
-      };
+    this.grabAllSettingsKeys().forEach((key: SettingsButtonKey) => {
+      buttonSettings[key] = {
+        toggled: this.settingsButtons[key].toggled,
+        hidden: this.settingsButtons[key].hidden,
+      } as SettingsButtonSavedProperties;
     });
 
-    // console.log(buttonSettings);
     return {
       appState: this.appState,
       buttonSettings: buttonSettings,

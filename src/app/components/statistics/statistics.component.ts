@@ -3,11 +3,13 @@ import { Component, Input, OnInit, ChangeDetectorRef, Output, EventEmitter, OnDe
 import { Observable, Subscription } from 'rxjs';
 
 import { ElectronService } from '../../providers/electron.service';
+import { ImageElementService } from './../../services/image-element.service';
 import { SourceFolderService } from './source-folder.service';
 
+import { AppStateInterface } from '../../common/app-state';
 import { ImageElement, ScreenshotSettings, InputSources } from '../../../../interfaces/final-object.interface';
+
 import { metaAppear, breadcrumbWordAppear } from '../../common/animations';
-import { ImageElementService } from './../../services/image-element.service';
 
 export interface ServerDetails {
   port: number;
@@ -33,6 +35,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   @Output() finalArrayNeedsSaving = new EventEmitter<any>();
   @Output() startServerOnPort = new EventEmitter<number>();
 
+  @Input() appState: AppStateInterface;
   @Input() hubName: string;
   @Input() inputFolders: InputSources;
   @Input() numFolders: number;
@@ -48,26 +51,27 @@ export class StatisticsComponent implements OnInit, OnDestroy {
 
   totalFiles: number;
 
-  selectedPort = 3000;
-
+  // Length
   longest: number = 0;
   shortest: number = Infinity;
   totalLength: number = 0;
   avgLength: number;
 
+  // Size
   largest: number = 0;
   smallest: number = Infinity;
   totalSize: number = 0;
   avgSize: number;
 
+  // For cleaning old screenshots
   showNumberDeleted: boolean = false;
   numberOfScreensDeleted: number = 0;
 
   removeFoldersMode: boolean = false;
 
-  serverRunning: boolean = false;
-
+  selectedPort = 3000;
   serverInfo: ServerDetails;
+  serverRunning: boolean = false;
 
   objectKeys = Object.keys; // to use in template
 
@@ -81,6 +85,10 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   ngOnInit() {
     console.log('booting up!');
     this.computeAverages();
+
+    console.log('port from settings:', this.appState.port);
+
+    this.selectedPort = this.appState.port ? this.appState.port : 3000;
 
     // IPC subscriptions - come in as BehaviorSubject.asObservable()
 
@@ -345,6 +353,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     } else {
       this.selectedPort = parsed;
     }
+    this.appState.port = this.selectedPort;
   }
 
   /**

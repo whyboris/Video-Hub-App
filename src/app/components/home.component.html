@@ -251,6 +251,7 @@
         (finalArrayNeedsSaving)="imageElementService.finalArrayNeedsSaving = true"
         (startServerOnPort)="startServer($event)"
 
+        [appState]="appState"
         [hubName]="appState.hubName"
         [inputFolders]="sourceFolderService.selectedSourceFolder"
         [numFolders]="appState.numOfFolders"
