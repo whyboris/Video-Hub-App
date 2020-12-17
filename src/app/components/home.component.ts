@@ -865,7 +865,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   draggingVideoFile(event, item: ImageElement): void {
     event.preventDefault();
     const fullPath = this.filePathService.getPathFromImageElement(item);
-    this.electronService.ipcRenderer.send('drag-video-out-of-electron', fullPath);
+    const imgPath = path.join(this.appState.selectedOutputFolder, 'vha-' + this.appState.hubName, 'thumbnails', item.hash + '.jpg');
+    this.electronService.ipcRenderer.send('drag-video-out-of-electron', fullPath, imgPath);
   }
 
   /**
