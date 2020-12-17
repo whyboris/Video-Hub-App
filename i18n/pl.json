@@ -85,7 +85,7 @@
     "muteClipsHint": "Wycisz wszystkie odgłosy",
     "openAtTimestampDescription": "Rozpocznij odtwarzanie filmu od czasu przypisanego do danego zrzutu ekranu",
     "openAtTimestampHint": "Odtwarzaj wideo od klikniętej miniatury",
-    "openAtTimestampMoreInfo": "Dotyczy wyłącznie widoku szczegółowego, miniatur oraz taśmy filmowej. Wymaga ręcznego ustawienia odtwarzacza wideo. W systemie Windows funkcja działa z MPC, VLC i POT Playerem; na Mac tylko z VLC",
+    "openAtTimestampMoreInfo": "Dotyczy wyłącznie widoku szczegółowego, miniatur oraz taśmy filmowej. Wymaga ręcznego ustawienia odtwarzacza wideo. W systemie Windows funkcja działa z MPC, VLC, MPV i POT Playerem; na Mac tylko z VLC",
     "playlistButton": "Odtwórz wszystko",
     "playlistButtonDescription": "Otwórz wszystkie filmy z bieżącej galerii jako playlistę",
     "playlistButtonMoreInfo": "Ta opcja tworzy plik .pls i otwiera go przy użyciu domyślnego odtwarzacza wideo. Lista odtwarzania nie będzie zawierać plików wewnątrz folderów, jeśli wybrano opcję 'Pokaż foldery'.",

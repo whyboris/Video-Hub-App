@@ -85,7 +85,7 @@
     "muteClipsHint": "すべての音をミュート",
     "openAtTimestampDescription": "スクリーンショットをクリックした時間からビデオの再生を開始します",
     "openAtTimestampHint": "クリックした場所からビデオを再生する",
-    "openAtTimestampMoreInfo": "サムネイルビューにのみ影響します。以下の動画プレーヤーを手動で設定する必要があります。 Windowsで動作するのは、MPC、VLC、およびPOTプレーヤーのみです。 MacでVLCのみ",
+    "openAtTimestampMoreInfo": "サムネイルビューにのみ影響します。以下の動画プレーヤーを手動で設定する必要があります。 Windowsで動作するのは、MPC、VLC、MPV、およびPOTプレーヤーのみです。 MacでVLCのみ",
     "playlistButton": "全部やる",
     "playlistButtonDescription": "現在のギャラリーの動画をすべて再生リストとして開く",
     "playlistButtonMoreInfo": "これにより.plsファイルが作成され、デフォルトのビデオプレーヤーで開かれます。 「フォルダを表示」が選択されている場合、プレイリストはフォルダ内のファイルを含みません。",

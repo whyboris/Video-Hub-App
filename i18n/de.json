@@ -85,7 +85,7 @@
     "muteClipsHint": "Schalte alle Töne stumm",
     "openAtTimestampDescription": "Starten Sie die Wiedergabe des Videos ab dem Zeitpunkt, an dem Sie auf den Screenshot geklickt haben",
     "openAtTimestampHint": "Video von dem Standort abspielen, auf den geklickt wurde",
-    "openAtTimestampMoreInfo": "Betrifft nur die Miniaturansicht. Erfordert, dass Sie den Videoplayer unten manuell einstellen. Funktioniert unter Windows nur mit MPC-, VLC- und POT-Playern. Auf Mac nur mit VLC",
+    "openAtTimestampMoreInfo": "Betrifft nur die Miniaturansicht. Erfordert, dass Sie den Videoplayer unten manuell einstellen. Funktioniert unter Windows nur mit MPC-, VLC-, MPV- und POT-Playern. Auf Mac nur mit VLC",
     "playlistButton": "Alle wiedergeben",
     "playlistButtonDescription": "Öffnen Sie alle aktuellen Galerie-Videos als Wiedergabeliste",
     "playlistButtonMoreInfo": "Dadurch wird eine .pls-Datei erstellt und mit Ihrem Standardvideoplayer geöffnet. Die Wiedergabeliste enthält keine Dateien in Ordnern, wenn \"Ordner anzeigen\" ausgewählt ist.",

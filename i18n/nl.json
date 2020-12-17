@@ -85,7 +85,7 @@
     "muteClipsHint": "Demp al het geluid",
     "openAtTimestampDescription": "Speel video vanaf de tijd van het geselecteerde screenshot",
     "openAtTimestampHint": "Speel video vanaf geselecteerde locatie",
-    "openAtTimestampMoreInfo": "Beïnvloed alleen de Thumbnails weergave. Dit vereist dat je de video speler hieronder handmatig instelt. Dit werkt alleen op Windows met MPC, VLC, en POT spelers; op Mac alleen met VLC",
+    "openAtTimestampMoreInfo": "Beïnvloed alleen de Thumbnails weergave. Dit vereist dat je de video speler hieronder handmatig instelt. Dit werkt alleen op Windows met MPC, VLC, MPV, en POT spelers; op Mac alleen met VLC",
     "playlistButton": "Speel alle",
     "playlistButtonDescription": "Open alle huidige galerij-videos als een playlist",
     "playlistButtonMoreInfo": "Dit creëert een .pls bestand en opent het in je standaard video speler. De playlist zal geen bestanden in mappen toevoegen als 'Toon mappen' is geselecteerd.",

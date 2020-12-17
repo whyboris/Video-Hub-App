@@ -85,7 +85,7 @@
     "muteClipsHint": "Silenciar todo o som",
     "openAtTimestampDescription": "Comece a reproduzir o vídeo a partir do momento da captura de tela clicada",
     "openAtTimestampHint": "Reproduzir vídeo do local clicado",
-    "openAtTimestampMoreInfo": "Afeta apenas a exibição de miniaturas. Requer que você defina manualmente o player de vídeo abaixo. Funciona apenas no Windows com MPC, VLC e POT players; no Mac apenas com VLC",
+    "openAtTimestampMoreInfo": "Afeta apenas a exibição de miniaturas. Requer que você defina manualmente o player de vídeo abaixo. Funciona apenas no Windows com MPC, VLC, MPV e POT players; no Mac apenas com VLC",
     "playlistButton": "Jogar tudo",
     "playlistButtonDescription": "Abra todos os vídeos da galeria atual como uma lista de reprodução",
     "playlistButtonMoreInfo": "Isso cria um arquivo .pls e o abre com seu reprodutor de vídeo padrão. A lista de reprodução não incluirá arquivos dentro de pastas se 'Mostrar pastas' estiver selecionado.",

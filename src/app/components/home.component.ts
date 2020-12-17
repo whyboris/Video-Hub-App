@@ -1152,6 +1152,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       } else if (playerPath.toLowerCase().includes('pot')) {
         args = '/seek=' + time.toString();           // in seconds
+
+      } else if (playerPath.toLowerCase().includes('mpv')) {
+        args = '--start=' + time.toString();          // in seconds
+
       }
     }
 
