@@ -330,7 +330,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
 
   startServer() {
     if (this.serverRunning) {
-      this.startServerOnPort.emit(0);
+      this.startServerOnPort.emit(0); // hack to *STOP* the server
     } else {
       this.startServerOnPort.emit(this.selectedPort);
     }
