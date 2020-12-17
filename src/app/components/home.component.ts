@@ -28,7 +28,7 @@ import { SortOrderComponent } from './sort-order/sort-order.component';
 import { FinalObject, ImageElement, ScreenshotSettings, ResolutionString } from '../../../interfaces/final-object.interface';
 import { ImportStage } from '../../../node/main-support';
 import { ServerDetails } from './statistics/statistics.component';
-import { SettingsButtonSavedProperties, SettingsObject } from '../../../interfaces/settings-object.interface';
+import { RemoteSettings, SettingsButtonSavedProperties, SettingsObject } from '../../../interfaces/settings-object.interface';
 import { SortType } from '../pipes/sorting.pipe';
 import { WizardOptions } from '../../../interfaces/wizard-options.interface';
 import {
@@ -293,6 +293,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   lastRenamedFileHack: ImageElement;
 
+  remoteSettings: RemoteSettings;
+
   // Behavior Subjects for IPC events:
 
   inputSorceChosenBehaviorSubject: BehaviorSubject<string> = new BehaviorSubject(undefined);
@@ -454,6 +456,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       console.log(serverDetails);
       this.serverDetailsBehaviorSubject.next(serverDetails);
+    });
+
+    this.electronService.ipcRenderer.on('remote-save-settings', (event, data: RemoteSettings) => {
+      console.log('new settings to save!!!');
+      console.log(data);
+      this.remoteSettings = data;
     });
 
     // when `remote-control` requests currently-showing gallery view
@@ -744,6 +752,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
       if (settingsObject.shortcuts) {
         this.shortcutService.initializeFromSaved(settingsObject.shortcuts);
+      }
+      if (settingsObject.remoteSettings) {
+        this.remoteSettings = settingsObject.remoteSettings;
       }
     });
 
@@ -1875,6 +1886,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     return {
       appState: this.appState,
       buttonSettings: buttonSettings,
+      remoteSettings: this.remoteSettings,
       shortcuts: this.shortcutService.keyToActionMap,
       vhaFileHistory: this.vhaFileHistory,
       windowSizeAndPosition: undefined, // is added in `cose-window` in `main.ts`
@@ -2319,7 +2331,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       console.log(imagePath);
       console.log('on port', port);
 
-      this.electronService.ipcRenderer.send('start-server', this.imageElementService.imageElements, imagePath, port);
+      this.electronService.ipcRenderer.send('start-server', this.imageElementService.imageElements, imagePath, port, this.remoteSettings);
     }
 
   }

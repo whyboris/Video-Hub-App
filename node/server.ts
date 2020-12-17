@@ -11,6 +11,8 @@ import { ImageElement } from "../interfaces/final-object.interface";
 const args = process.argv.slice(1);
 const serve: boolean = args.some(val => val === '--serve');
 
+import { RemoteSettings } from "../interfaces/settings-object.interface";
+
 // =================================================================================================
 
 const remoteAppPath = serve
@@ -27,7 +29,7 @@ let currentHubImageElements: ImageElement[];
 const EXPRESS_PORT: number = 3000;
 const WSS_PORT: number = 8080;
 
-type SocketMessageType = 'open-file' | 'refresh-request';
+type SocketMessageType = 'open-file' | 'refresh-request' | 'save-settings';
 
 interface SocketMessage {
   type: SocketMessageType;
@@ -48,17 +50,20 @@ export function setUpIpcForServer(ipc) {
 
         if (client.readyState === WebSocket.OPEN) {
           console.log('sending');
-          client.send(JSON.stringify(data));
+          client.send(JSON.stringify({
+            type: 'gallery',
+            data: data
+          }));
         }
       });
     }
   });
 
-  ipc.on('start-server', (event, data: ImageElement[], pathToServe: string, port: number): void => {
+  ipc.on('start-server', (event, data: ImageElement[], pathToServe: string, port: number, remoteSettings: RemoteSettings): void => {
     currentHubImageElements = data;
     startTheServer(pathToServe, port || EXPRESS_PORT);
     logIp(port || EXPRESS_PORT);
-    startSockets(WSS_PORT);
+    startSockets(WSS_PORT, remoteSettings);
   });
 
   ipc.on('stop-server', (event): void => {
@@ -103,14 +108,17 @@ function startTheServer(pathToServe: string, port: number): void {
  * Start the socket server
  * @param port - the port to use
  */
-function startSockets(port: number): void {
+function startSockets(port: number, remoteSettings?: RemoteSettings): void {
   wss = new WebSocket.Server({ port: port });
 
   wss.on('connection', function connection(ws) {
 
     ws.on('message', socketMessageHandler);
 
-    ws.send('TODO: send over preferred settings ?');
+    ws.send(JSON.stringify({
+      type: 'settings',
+      data: remoteSettings
+    }));
   });
 }
 
@@ -131,6 +139,10 @@ const socketMessageHandler = (message: string): void => {
     } else if (parsed.type === 'open-file') {
 
       GLOBALS.angularApp.sender.send('remote-open-video', parsed.data);
+
+    } else if (parsed.type === 'save-settings') {
+
+      GLOBALS.angularApp.sender.send('remote-save-settings', parsed.data);
 
     }
 
