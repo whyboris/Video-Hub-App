@@ -85,7 +85,7 @@
     "muteClipsHint": "Tắt tất cả âm thanh",
     "openAtTimestampDescription": "Bắt đầu phát video từ khi nhấp vào ảnh chụp màn hình",
     "openAtTimestampHint": "Phát video từ vị trí được nhấp",
-    "openAtTimestampMoreInfo": "Chỉ tác động trên chế độ xem Hình thu nhỏ. Yêu cầu bạn đặt trình phát video bên dưới theo cách thủ công. Chỉ hoạt động trên Windows với trình phát MPC, VLC và POT; chỉ trên Mac với VLC",
+    "openAtTimestampMoreInfo": "Chỉ tác động trên chế độ xem Hình thu nhỏ. Yêu cầu bạn đặt trình phát video bên dưới theo cách thủ công. Chỉ hoạt động trên Windows với trình phát MPC, VLC, MPV và POT; chỉ trên Mac với VLC",
     "playlistButton": "Phát tất cả",
     "playlistButtonDescription": "Mở tất cả các video trong thư viện hiện tại dưới dạng danh sách phát",
     "playlistButtonMoreInfo": "Thao tác này tạo tệp .pls và mở nó bằng trình phát video mặc định của bạn. Danh sách phát sẽ không bao gồm các tệp bên trong thư mục nếu chọn 'Hiển thị thư mục'.",

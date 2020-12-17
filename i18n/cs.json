@@ -85,7 +85,7 @@
     "muteClipsHint": "Ztlumit veškerý zvuk",
     "openAtTimestampDescription": "Zahájí přehrávání videa od okamžiku, podle snímku na kterém klepnete",
     "openAtTimestampHint": "Přehrát video z místa kliknutí",
-    "openAtTimestampMoreInfo": "Ovlivňuje pouze zobrazení náhledů. Vyžaduje ruční nastavení níže uvedeného videopřehrávače. Funguje na Windows pouze s MPC, VLC a POT přehrávači; v Mac pouze s VLC",
+    "openAtTimestampMoreInfo": "Ovlivňuje pouze zobrazení náhledů. Vyžaduje ruční nastavení níže uvedeného videopřehrávače. Funguje na Windows pouze s MPC, VLC, MPV a POT přehrávači; v Mac pouze s VLC",
     "playlistButton": "Přehrát vše",
     "playlistButtonDescription": "Otevřít všechna aktuální videa v galerii jako seznam skladeb",
     "playlistButtonMoreInfo": "Tímto se vytvoří soubor .pls a otevře se s výchozím přehrávačem videa. Seznam skladeb nezahrnuje soubory ve složkách, pokud je vybrána možnost 'Zobrazit složky'.",

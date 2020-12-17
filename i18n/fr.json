@@ -85,7 +85,7 @@
     "muteClipsHint": "Couper tous les sons",
     "openAtTimestampDescription": "Commencez à jouer une vidéo à partir du moment de la capture d'écran sélectionnée",
     "openAtTimestampHint": "Lire la vidéo à partir de l'emplacement cliqué",
-    "openAtTimestampMoreInfo": "N'affecte que l'affichage Miniatures. Vous devez définir manuellement le lecteur vidéo ci-dessous. Fonctionne sous Windows avec les lecteurs MPC, VLC et POT uniquement; sur Mac uniquement avec VLC",
+    "openAtTimestampMoreInfo": "N'affecte que l'affichage Miniatures. Vous devez définir manuellement le lecteur vidéo ci-dessous. Fonctionne sous Windows avec les lecteurs MPC, VLC, MPV et POT uniquement; sur Mac uniquement avec VLC",
     "playlistButton": "Jouer à tous",
     "playlistButtonDescription": "Ouvrez toutes les vidéos de la galerie actuelle en tant que liste de lecture",
     "playlistButtonMoreInfo": "Cela crée un fichier .pls et l'ouvre avec votre lecteur vidéo par défaut. La liste de lecture n'inclura pas les fichiers dans les dossiers si «Afficher les dossiers» est sélectionné.",

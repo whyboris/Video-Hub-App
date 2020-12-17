@@ -85,7 +85,7 @@
     "muteClipsHint": "Tüm sesleri kapat",
     "openAtTimestampDescription": "Tıklanan ekran görüntüsünden itibaren videoyu oynatmaya başla",
     "openAtTimestampHint": "Tıklanan yerden video oynatın",
-    "openAtTimestampMoreInfo": "Yalnızca Küçük Resimler görünümünü etkiler. Aşağıdaki video oynatıcıyı manuel olarak ayarlamanızı gerektirir. Windows'ta yalnızca MPC, VLC ve POT oynatıcılarla çalışır; Mac'te yalnızca VLC ile",
+    "openAtTimestampMoreInfo": "Yalnızca Küçük Resimler görünümünü etkiler. Aşağıdaki video oynatıcıyı manuel olarak ayarlamanızı gerektirir. Windows'ta yalnızca MPC, VLC, MPV ve POT oynatıcılarla çalışır; Mac'te yalnızca VLC ile",
     "playlistButton": "Tümünü oynat",
     "playlistButtonDescription": "Tüm mevcut galeri videolarını oynatma listesi olarak aç",
     "playlistButtonMoreInfo": "Bu bir .pls dosyası oluşturur ve varsayılan video oynatıcınızla açar. 'Klasörleri göster' seçiliyse oynatma listesi klasörlerin içindeki dosyaları içermez.",

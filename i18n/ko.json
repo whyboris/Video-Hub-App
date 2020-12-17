@@ -85,7 +85,7 @@
     "muteClipsHint": "모든 소리를 음소거",
     "openAtTimestampDescription": "클릭한 스크린샷부터 동영상 재생 시작",
     "openAtTimestampHint": "클릭한 위치에서 동영상 재생",
-    "openAtTimestampMoreInfo": "섬네일 보기에만 작용. 동영상 플레이어를 수동으로 설정해야 합니다. Windows에서 MPC, VLC, POT 플레이어만 작동하며 Mac에서 VLC만 작동",
+    "openAtTimestampMoreInfo": "섬네일 보기에만 작용. 동영상 플레이어를 수동으로 설정해야 합니다. Windows에서 MPC, VLC, MPV, POT 플레이어만 작동하며 Mac에서 VLC만 작동",
     "playlistButton": "모두 재생",
     "playlistButtonDescription": "현재 갤러리의 모든 동영상을 재생 목록으로 열기",
     "playlistButtonMoreInfo": ".pls 파일이 생성되고 기본 동영상 플레이어와 함께 열립니다. '폴더 표시'를 선택하면 재생 목록에 파일이 포함되지 않음",

@@ -85,7 +85,7 @@
     "muteClipsHint": "Disattiva l'audio",
     "openAtTimestampDescription": "Inizia a riprodurre video dal momento dello screenshot selezionato",
     "openAtTimestampHint": "Riproduci video dalla posizione selezionata",
-    "openAtTimestampMoreInfo": "Influisce solo sulla vista Miniature. Richiede di impostare manualmente il lettore video di seguito. Funziona su Windows solo con lettori MPC, VLC e POT; su Mac solo con VLC",
+    "openAtTimestampMoreInfo": "Influisce solo sulla vista Miniature. Richiede di impostare manualmente il lettore video di seguito. Funziona su Windows solo con lettori MPC, VLC, MPV e POT; su Mac solo con VLC",
     "playlistButton": "Giocare tutto",
     "playlistButtonDescription": "Apri tutti i video della galleria corrente come playlist",
     "playlistButtonMoreInfo": "Questo crea un file .pls e lo apre con il tuo lettore video predefinito. La playlist non includerà i file nelle cartelle se è selezionato \"Mostra cartelle\".",
