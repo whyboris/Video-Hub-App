@@ -249,7 +249,9 @@
       <app-statistics
         (deleteInputSourceFiles)="deleteInputSourceFiles($event)"
         (finalArrayNeedsSaving)="imageElementService.finalArrayNeedsSaving = true"
+        (startServerOnPort)="startServer($event)"
 
+        [appState]="appState"
         [hubName]="appState.hubName"
         [inputFolders]="sourceFolderService.selectedSourceFolder"
         [numFolders]="appState.numOfFolders"
@@ -257,8 +259,9 @@
         [screenshotSettings]="currentScreenshotSettings"
 
         [inputFolderChosen]="inputSorceChosenBehaviorSubject.asObservable()"
-        [oldFolderReconnected]="oldFolderReconnectedBehaviorSubject.asObservable()"
         [numberScreenshotsDeleted]="numberScreenshotsDeletedBehaviorSubject.asObservable()"
+        [oldFolderReconnected]="oldFolderReconnectedBehaviorSubject.asObservable()"
+        [serverDetails]="serverDetailsBehaviorSubject.asObservable()"
       ></app-statistics>
 
     </div>

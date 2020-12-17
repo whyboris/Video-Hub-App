@@ -20,6 +20,10 @@
     {
       "from": "src/assets/icons/mac/touch-bar",
       "to": "assets"
+    },
+    {
+      "from": "remote",
+      "to": "remote"
     }
   ],
   "win": {
@@ -30,8 +34,7 @@
       "../node_modules/@ffprobe-installer"
     ],
     "target": [
-      "nsis",
-      "portable"
+      "nsis"
     ]
   },
   "mac": {
