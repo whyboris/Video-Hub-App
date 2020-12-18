@@ -285,6 +285,7 @@
     "andClickAnyFile": "and click any file to see the file details",
     "andPress": "and press",
     "clickToRename": "To change a shortcut, click on it and press desired key on your keyboard.",
+    "compactView": "Toggle compact view",
     "darkMode": "Toggle dark / light mode",
     "focusOnFile": "Focus on file search input",
     "focusOnMagic": "Focus on the Magic search",
