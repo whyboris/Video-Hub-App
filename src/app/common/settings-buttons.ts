@@ -76,6 +76,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'tagExclusion'
  | 'tagIntersection'
  | 'tagUnion'
+ | 'timesPlayedFilter'
  | 'thumbAutoAdvance'
  | 'videoNotes';
 
@@ -102,6 +103,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
   [ // 2 - Filters & sorting options
     'durationFilter',
     'sizeFilter',
+    'timesPlayedFilter',
     'resolutionFilter',
     'starFilter',
     'sortOrder',
@@ -817,6 +819,13 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-tag-plus',
     moreInfo: 'BUTTONS.tagUnionMoreInfo',
     title: 'BUTTONS.tagUnionHint',
+    toggled: false
+  }, 'timesPlayedFilter': {
+    description: 'BUTTONS.timesPlayedDescription',
+    hidden: false,
+    iconName: 'icon-res-filter',
+    moreInfo: 'BUTTONS.timesPlayedMoreInfo',
+    title: 'BUTTONS.timesPlayedHint',
     toggled: false
   },
   'thumbAutoAdvance': {
