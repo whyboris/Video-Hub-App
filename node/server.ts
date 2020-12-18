@@ -38,6 +38,14 @@ interface SocketMessage {
 
 // =================================================================================================
 
+// transcode
+
+const ffprobePath = require('@ffprobe-installer/ffprobe').path.replace('app.asar', 'app.asar.unpacked');
+const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path.replace('app.asar', 'app.asar.unpacked');
+const spawn = require('child_process').spawn;
+
+// ---
+
 export function setUpIpcForServer(ipc) {
 
   ipc.on('latest-gallery-view', (event, data): void => {
@@ -93,6 +101,34 @@ function startTheServer(pathToServe: string, port: number): void {
   //   GLOBALS.angularApp.sender.send('remote-open-video', req.body);
   //   res.end();
   // });
+
+
+  app.get('/video', (req, res) => {
+    const seekTime = req.query.seek || 0;
+    const file = req.query.file || '';
+    // see https://trac.ffmpeg.org/wiki/Encode/H.264#a2.Chooseapreset for more options
+    const ffmpeg = spawn(ffmpegPath, [
+      '-ss', seekTime,
+      '-i', file,
+      '-f', 'mp4',
+      '-crf', '17',
+      '-preset', 'ultrafast',
+      '-movflags', 'frag_keyframe+empty_moov+faststart',
+      '-frag_duration', '15',
+      'pipe:1'
+    ]);
+    res.writeHead(200, {
+      'Content-Type': 'video/mp4'
+    });
+    ffmpeg.stdout.pipe(res);
+    // error logging
+    ffmpeg.stderr.setEncoding('utf8');
+    ffmpeg.stderr.on('data', (data) => {
+        console.log(data);
+    });
+  });
+
+
 
   // Serve the Angular VHA remote control app
   app.use(express.static(remoteAppPath));
