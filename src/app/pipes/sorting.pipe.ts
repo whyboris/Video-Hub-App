@@ -145,10 +145,12 @@ export class SortingPipe implements PipeTransform {
 
     }
 
-    if (decreasing) {
-      return (x[property]) - (y[property]);
+    if (x[property] > y[property]) {
+      return decreasing ? 1 : -1;
+    } else if (x[property] === y[property]) {
+      return 0;
     } else {
-      return (y[property]) - (x[property]);
+      return decreasing ? -1 : 1;
     }
 
   }
