@@ -40,9 +40,9 @@ interface SocketMessage {
 
 // transcode
 
-const ffprobePath = require('@ffprobe-installer/ffprobe').path.replace('app.asar', 'app.asar.unpacked');
 const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path.replace('app.asar', 'app.asar.unpacked');
 const spawn = require('child_process').spawn;
+const onFinished = require('on-finished');
 
 // ---
 
@@ -125,6 +125,10 @@ function startTheServer(pathToServe: string, port: number): void {
     ffmpeg.stderr.setEncoding('utf8');
     ffmpeg.stderr.on('data', (data) => {
         console.log(data);
+    });
+    onFinished(res, () => {
+      console.log('about to kill!');
+      ffmpeg.kill();
     });
   });
 
