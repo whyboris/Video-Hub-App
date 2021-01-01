@@ -94,6 +94,17 @@ function startTheServer(pathToServe: string, port: number): void {
   //   res.end();
   // });
 
+  app.get('/video', (req, res) => {
+
+    const file = req.query.file || '';
+
+    if (file) {
+      console.log(file);
+      res.sendFile(file)
+    }
+
+  });
+
   // Serve the Angular VHA remote control app
   app.use(express.static(remoteAppPath));
 
