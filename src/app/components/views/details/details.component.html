@@ -20,7 +20,7 @@
         height: imgHeight + 'px',
         width: elWidth + 'px',
         'max-width': elWidth + 'px',
-        'background-image': 'url(' + (hover ? fullFilePath : firstFilePath) + ')',
+        'background-image': 'url(' + ((this.video.defaultScreen !== undefined) || hover ? filmstripPath : firstFilePath) + ')',
         'background-position-x': percentOffset + '%'
       }"
   >
