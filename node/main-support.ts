@@ -64,7 +64,7 @@ function labelVideo(width: number, height: number): ResolutionMeta {
   } else if (width > 1920) {
     label = '1080+';
     bucket = 2.5;
-  } else if (width > 720) {
+  } else if (width > 1280) {
     label = '720+';
     bucket = 1.5;
   }
