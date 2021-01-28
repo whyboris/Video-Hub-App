@@ -69,7 +69,7 @@
     "@angular/router": "11.0.2",
     "@types/node": "12.12.6",
     "codelyzer": "5.2.2",
-    "electron": "8.5.5",
+    "electron": "9.4.0",
     "electron-builder": "22.9.1",
     "electron-reload": "1.5.0",
     "npm-run-all": "4.1.5",
