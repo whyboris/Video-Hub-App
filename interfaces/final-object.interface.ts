@@ -39,6 +39,7 @@ export interface ImageElement {
   stars: StarRating;             // star rating 0 = n/a, otherwise 1, 2, 3
   timesPlayed: number;           // number of times the file has been launched by VHA
   width: number;                 // width of the video (px)
+  freameRate: number;            //  base frame rate of the video in fps
   // ========================================================================
   // OPTIONAL
   // ------------------------------------------------------------------------
@@ -56,6 +57,7 @@ export interface ImageElement {
   resBucket: number;             // the resolution category the video falls into (for faster sorting)
   resolution: ResolutionString;  // e.g. `720`, `1080`, `SD`, `HD`, etc
   selected?: boolean;            // for batch-tagging of videos
+  frameRateDisplay: string;      // displayed as XXfps
 }
 
 export interface ImageElementPlus extends ImageElement {
