@@ -87,7 +87,6 @@ export function NewImageElement(): ImageElement {
     timesPlayed: 0,
     width: 0,
     frameRate: 0,
-
   };
 }
 

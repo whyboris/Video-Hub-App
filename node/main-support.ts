@@ -339,7 +339,7 @@ function getFileDuration(metadata): number {
  function getFrameRate(metadata): number {
    if(metadata?.streams?.[0]?.r_frame_rate) {
      let frameRate = metadata.streams[0].r_frame_rate
-     let evalFrameRate =  (eval(frameRate.toString()));
+     let evalFrameRate = eval(frameRate.toString());
      return Math.round(evalFrameRate);
    }
    else {
@@ -469,7 +469,6 @@ export function extractMetadataAsync(
           imageElement.screens   = computeNumberOfScreenshots(screenshotSettings, duration);
           imageElement.width     = origWidth;
           imageElement.frameRate = realFrameRate;
-
 
           hashFileAsync(filePath, fileStat).then((hash) => {
             imageElement.hash = hash;
