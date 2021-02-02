@@ -300,11 +300,11 @@ export class SortingPipe implements PipeTransform {
       });
     } else if (sortingType === 'fpsAsc') {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
-        return this.sortFunctionLol(x, y, 'frameRate', false);
+        return this.sortFunctionLol(x, y, 'frameRate', true);
       });
     } else if (sortingType === 'fpsDesc') {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
-        return this.sortFunctionLol(x, y, 'frameRate', true);
+        return this.sortFunctionLol(x, y, 'frameRate', false);
       });
     }else {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
