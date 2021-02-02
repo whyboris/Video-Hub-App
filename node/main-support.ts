@@ -138,12 +138,11 @@ function getDurationDisplay(numOfSec: number): string {
  * @param frameRate
  */
  function getFrameRateDisplay(frameRate: number): string {
-   let evalFrameRate =  (eval(frameRate.toString()));
-   if(evalFrameRate) {
-     return (evalFrameRate + ' fps');
+   if(frameRate) {
+     return (frameRate + ' fps');
    }
    else{
-     return 'fps not found';
+     return '--fps';
    }
  }
 
@@ -339,7 +338,9 @@ function getFileDuration(metadata): number {
  */
  function getFrameRate(metadata): number {
    if(metadata?.streams?.[0]?.r_frame_rate) {
-     return metadata.streams[0].r_frame_rate;
+     let frameRate = metadata.streams[0].r_frame_rate
+     let evalFrameRate =  (eval(frameRate.toString()));
+     return Math.round(evalFrameRate);
    }
    else {
      return 0;

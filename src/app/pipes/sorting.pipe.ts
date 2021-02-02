@@ -29,7 +29,9 @@ export type SortType = 'default'
                      | 'timesPlayedAsc'
                      | 'timesPlayedDesc'
                      | 'yearAsc'
-                     | 'yearDesc';
+                     | 'yearDesc'
+                     | 'fpsAsc'
+                     | 'fpsDesc';
 
 @Pipe({
   name: 'sortingPipe'
@@ -296,7 +298,15 @@ export class SortingPipe implements PipeTransform {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'folderSize', true);
       });
-    } else {
+    } else if (sortingType === 'fpsAsc') {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
+        return this.sortFunctionLol(x, y, 'frameRate', false);
+      });
+    } else if (sortingType === 'fpsDesc') {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
+        return this.sortFunctionLol(x, y, 'frameRate', true);
+      });
+    }else {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'index', true);
       });
