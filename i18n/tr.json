@@ -200,7 +200,9 @@
     "videoNotesMoreInfo": "Videolarınıza eklediğiniz notlarda arama yapın. 'Manuel etiket ayarlarında' notları etkinleştirin",
     "videoPlayerSettings": "Video Oynatıcı Ayarları",
     "showDetailsTray": "Detaylar",
-    "showDetailsTrayMoreInfo": "Tıkladığınız son videonun ayrıntılarını gösterir"
+    "showDetailsTrayMoreInfo": "Tıkladığınız son videonun ayrıntılarını gösterir",
+    "sortOptionFpsDescription": "FPS",
+    "sortOptionFpsMoreInfo": "Sıralama açılır menüsünde saniye başına kare seçeneğini göster"
   },
   "RIGHTCLICK": {
     "cancelRename": "yeniden adlandırmayı iptal et",
@@ -308,7 +310,8 @@
     "shuffleGalleryNow": "Mevcut sonuçları karıştır",
     "startWizard": "Sihirbaz görünümü geçişi",
     "toggleMinimalMode": "Kiosk / minimal modu geçişi (tüm panelleri gizleme)",
-    "toggleSettings": "Ayarlar geçişi"
+    "toggleSettings": "Ayarlar geçişi",
+    "compactView": "Kompakt görünümü aç / kapat"
   },
   "SIDEBAR": {
     "and": "ve",
@@ -351,7 +354,8 @@
     "totalFolders": "klasör",
     "totalFoldersPlural": "klasörler",
     "videoNotes": "notlarda var",
-    "videos": "videolar"
+    "videos": "videolar",
+    "sortFps": "FPS"
   },
   "STATISTICS": {
     "addFolderToHub": "Klasörü hub'a ekle",
@@ -392,7 +396,14 @@
     "videoFolder": "Burada bulunan videolar:",
     "videoLengths": "Video uzunlukları",
     "watchFolder": "izleme klasörü",
-    "watchFolderHelpText": "Klasör içeriği değiştiğinde hub'ı otomatik olarak güncelle"
+    "watchFolderHelpText": "Klasör içeriği değiştiğinde hub'ı otomatik olarak güncelle",
+    "server": "Sunucu",
+    "serverMoreInfo": "Bilgisayarınızın telefonunuzla aynı WiFi ağına bağlı olduğundan emin olun. Bu adresi telefonunuzda açın.",
+    "serverOnPort": "limanda",
+    "serverOr": "veya",
+    "serverRunning": "Sunucunuz çalışıyor",
+    "serverStart": "Sunucuyu başlat",
+    "serverStop": "Sunucuyu durdur"
   },
   "SYSTEM": {
     "cancel": "İptal",

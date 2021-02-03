@@ -200,7 +200,9 @@
     "videoNotesMoreInfo": "Recherchez dans les notes que vous avez ajoutées à vos vidéos. Activer les notes dans les \"Paramètres des balises manuelles\"",
     "videoPlayerSettings": "Paramètres du lecteur vidéo",
     "showDetailsTray": "Détails",
-    "showDetailsTrayMoreInfo": "Affiche les détails de la dernière vidéo sur laquelle vous avez cliqué"
+    "showDetailsTrayMoreInfo": "Affiche les détails de la dernière vidéo sur laquelle vous avez cliqué",
+    "sortOptionFpsDescription": "FPS",
+    "sortOptionFpsMoreInfo": "Afficher l'option d'ordre des images par seconde dans la liste déroulante de tri"
   },
   "RIGHTCLICK": {
     "cancelRename": "annuler renommer",
@@ -308,7 +310,8 @@
     "shuffleGalleryNow": "Mélanger les résultats actuels",
     "startWizard": "Basculer la vue de l'assistant",
     "toggleMinimalMode": "Basculer en mode minimal (masquer tous les panneaux)",
-    "toggleSettings": "Basculer les paramètres"
+    "toggleSettings": "Basculer les paramètres",
+    "compactView": "Activer la vue compacte"
   },
   "SIDEBAR": {
     "and": "et",
@@ -351,7 +354,8 @@
     "totalFolders": "dossier",
     "totalFoldersPlural": "Dossiers",
     "videoNotes": "les notes ont",
-    "videos": "vidéos"
+    "videos": "vidéos",
+    "sortFps": "FPS"
   },
   "STATISTICS": {
     "addFolderToHub": "Ajouter un dossier au hub",
@@ -392,7 +396,14 @@
     "videoFolder": "Vidéos situées ici:",
     "videoLengths": "Longueurs de vidéos",
     "watchFolder": "dossier de surveillance",
-    "watchFolderHelpText": "Mettre à jour le hub automatiquement lorsque le contenu du dossier change"
+    "watchFolderHelpText": "Mettre à jour le hub automatiquement lorsque le contenu du dossier change",
+    "server": "Serveur",
+    "serverMoreInfo": "Assurez-vous que votre PC est connecté au même WiFi que votre téléphone. Ouvrez cette adresse sur votre téléphone.",
+    "serverOnPort": "sur le port",
+    "serverOr": "ou",
+    "serverRunning": "Votre serveur est en cours d'exécution",
+    "serverStart": "Démarrer le serveur",
+    "serverStop": "Arrêter le serveur"
   },
   "SYSTEM": {
     "cancel": "Annuler",

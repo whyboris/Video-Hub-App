@@ -200,7 +200,9 @@
     "videoNotesMoreInfo": "आपके द्वारा अपने वीडियो में जोड़े गए नोट्स के माध्यम से खोजें। 'मैनुअल टैग सेटिंग' में नोट्स सक्षम करें",
     "videoPlayerSettings": "वीडियो प्लेयर सेटिंग्स",
     "showDetailsTray": "विवरण",
-    "showDetailsTrayMoreInfo": "आपके द्वारा क्लिक किए गए अंतिम वीडियो का विवरण दिखाता है"
+    "showDetailsTrayMoreInfo": "आपके द्वारा क्लिक किए गए अंतिम वीडियो का विवरण दिखाता है",
+    "sortOptionFpsDescription": "एफपीएस",
+    "sortOptionFpsMoreInfo": "सॉर्टिंग ड्रॉपडाउन में फ्रेम प्रति सेकंड ऑर्डर विकल्प दिखाएं"
   },
   "RIGHTCLICK": {
     "cancelRename": "नाम बदलें",
@@ -308,7 +310,8 @@
     "shuffleGalleryNow": "वर्तमान परिणाम में फेरबदल",
     "startWizard": "विज़ार्ड दृश्य टॉगल करें",
     "toggleMinimalMode": "न्यूनतम मोड टॉगल करें (सभी पैनल छिपाते हुए)",
-    "toggleSettings": "सेटिंग्स टॉगल करें"
+    "toggleSettings": "सेटिंग्स टॉगल करें",
+    "compactView": "कॉम्पैक्ट दृश्य टॉगल करें"
   },
   "SIDEBAR": {
     "and": "तथा",
@@ -351,7 +354,8 @@
     "totalFolders": "फ़ोल्डर",
     "totalFoldersPlural": "फ़ोल्डरों",
     "videoNotes": "नोट है",
-    "videos": "वीडियो"
+    "videos": "वीडियो",
+    "sortFps": "एफपीएस"
   },
   "STATISTICS": {
     "addFolderToHub": "हब में फ़ोल्डर जोड़ें",
@@ -392,7 +396,14 @@
     "videoFolder": "यहां स्थित वीडियो:",
     "videoLengths": "वीडियो की लंबाई",
     "watchFolder": "फ़ोल्डर देखें",
-    "watchFolderHelpText": "फ़ोल्डर की सामग्री बदलने पर हब को स्वचालित रूप से अपडेट करें"
+    "watchFolderHelpText": "फ़ोल्डर की सामग्री बदलने पर हब को स्वचालित रूप से अपडेट करें",
+    "server": "सर्वर",
+    "serverMoreInfo": "सुनिश्चित करें कि आपका पीसी आपके फोन के समान ही वाईफाई से जुड़ा है। इस पते को अपने फोन पर खोलें।",
+    "serverOnPort": "बंदरगाह पर",
+    "serverOr": "या",
+    "serverRunning": "आप सर्वर चला रहे हैं",
+    "serverStart": "सर्वर प्रारंभ करें",
+    "serverStop": "सर्वर बंद करो"
   },
   "SYSTEM": {
     "cancel": "रद्द करना",
