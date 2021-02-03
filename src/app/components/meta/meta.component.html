@@ -34,7 +34,7 @@
 
     | {{ video.fileSizeDisplay }}
 
-    | {{ video.fps }} fps
+    {{ video.fps ? '| ' + video.fps + ' fps' : '' }}
 
     | <input
         #yearInput

@@ -118,14 +118,15 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'sortOptionCreated',
     'sortOptionTags',
     'sortOptionAspectRatio',
-    'sortOptionFolderSize'
+    'sortOptionFps',
+    'sortOptionFolderSize',
 
   ],
   [ // 3 - Find duplicates
     'duplicateLength',
     'duplicateSize',
     'duplicateHash',
-    'showRecent' // Recently opened files
+    'showRecent', // Recently opened files
   ],
   [ // 4 - Gallery -------------------------------------- 2nd tab
     'showThumbnails',
@@ -146,7 +147,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'showTagTray',
     'showRelatedVideosTray',
     'showRecentlyPlayed',
-    'showDetailsTray'
+    'showDetailsTray',
   ],
   [ // 7 - Layout
     'compactView',
@@ -181,7 +182,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
   ],
   [ // 13
     'hideTop', // Hide top bar
-    'flatIcons' // Button style
+    'flatIcons', // Button style
   ],
   [ // 14 - Create a new hub ---------------------------- 3rd tab
     'startWizard',
@@ -190,7 +191,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'showDeleteOption',
     'dangerousDelete',
     'playPlaylist',
-    'openAtTimestamp'
+    'openAtTimestamp',
   ]
 ];
 
@@ -731,7 +732,7 @@ export const SettingsButtons: SettingsButtonsType = {
     hidden: false,
     moreInfo: 'BUTTONS.sortOptionFpsMoreInfo',
     title: '',
-    toggled: true
+    toggled: false
   },
   'sortOptionModified': {
     description: 'BUTTONS.sortOptionModifiedDescription',
