@@ -133,18 +133,6 @@ function getDurationDisplay(numOfSec: number): string {
   }
 }
 
-/**
- * Generate frame rate display formatted as XXfps
- * @param frameRate
- */
- function getFrameRateDisplay(frameRate: number): string {
-   if(frameRate) {
-     return (frameRate + ' fps');
-   }
-   else{
-     return '--fps';
-   }
- }
 
 /**
  * Count the number of unique folders in the final array
@@ -241,7 +229,6 @@ function stripOutTemporaryFields(imagesArray: ImageElement[]): ImageElement[] {
     delete(element.resBucket);
     delete(element.resolution);
     delete(element.selected);
-    delete(element.frameRateDisplay);
   });
   return imagesArray;
 }
@@ -336,11 +323,11 @@ function getFileDuration(metadata): number {
  * ===========================================================================================
  * @param metadata
  */
- function getFrameRate(metadata): number {
+ function getFps(metadata): number {
    if(metadata?.streams?.[0]?.r_frame_rate) {
-     let frameRate = metadata.streams[0].r_frame_rate
-     let evalFrameRate = eval(frameRate.toString());
-     return Math.round(evalFrameRate);
+     let fps = metadata.streams[0].r_frame_rate
+     let evalFps = eval(fps.toString());
+     return Math.round(evalFps);
    }
    else {
      return 0;
@@ -449,7 +436,7 @@ export function extractMetadataAsync(
         const metadata = JSON.parse(data);
         const stream = getBestStream(metadata);
         const fileDuration = getFileDuration(metadata);
-        const realFrameRate = getFrameRate(metadata);
+        const realFps = getFps(metadata);
 
         const duration = Math.round(fileDuration) || 0;
         const origWidth = stream.width || 0; // ffprobe does not detect it on some MKV streams
@@ -468,7 +455,7 @@ export function extractMetadataAsync(
           imageElement.mtime     = Math.round(fileStat.mtimeMs);
           imageElement.screens   = computeNumberOfScreenshots(screenshotSettings, duration);
           imageElement.width     = origWidth;
-          imageElement.frameRate = realFrameRate;
+          imageElement.fps = realFps;
 
           hashFileAsync(filePath, fileStat).then((hash) => {
             imageElement.hash = hash;
@@ -550,7 +537,6 @@ export function insertTemporaryFieldsSingle(element: ImageElement): ImageElement
   const resolution: ResolutionMeta = labelVideo(element.width, element.height);
   element.durationDisplay = getDurationDisplay(element.duration);
   element.fileSizeDisplay = getFileSizeDisplay(element.fileSize);
-  element.frameRateDisplay = getFrameRateDisplay(element.frameRate);
   element.resBucket = resolution.bucket;
   element.resolution = resolution.label;
   return element;
