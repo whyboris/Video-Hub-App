@@ -39,6 +39,7 @@ export interface ImageElement {
   stars: StarRating;             // star rating 0 = n/a, otherwise 1, 2, 3
   timesPlayed: number;           // number of times the file has been launched by VHA
   width: number;                 // width of the video (px)
+  fps: number;                   //  base frame rate of the video in fps
   // ========================================================================
   // OPTIONAL
   // ------------------------------------------------------------------------
@@ -84,6 +85,7 @@ export function NewImageElement(): ImageElement {
     stars: 0.5,
     timesPlayed: 0,
     width: 0,
+    fps: 0,
   };
 }
 
