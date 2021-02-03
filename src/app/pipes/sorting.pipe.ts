@@ -10,13 +10,15 @@ export type SortType = 'default'
                      | 'alphabetDesc2'
                      | 'aspectRatioAsc'
                      | 'aspectRatioDesc'
+                     | 'createdAsc'
+                     | 'createdDesc'
                      | 'folderSizeAsc'
                      | 'folderSizeDesc'
+                     | 'fpsAsc'
+                     | 'fpsDesc'
                      | 'hash' // only used by the duplicateFinderPipe
                      | 'modifiedAsc'
                      | 'modifiedDesc'
-                     | 'createdAsc'
-                     | 'createdDesc'
                      | 'random'
                      | 'sizeAsc'
                      | 'sizeDesc'
@@ -29,9 +31,7 @@ export type SortType = 'default'
                      | 'timesPlayedAsc'
                      | 'timesPlayedDesc'
                      | 'yearAsc'
-                     | 'yearDesc'
-                     | 'fpsAsc'
-                     | 'fpsDesc';
+                     | 'yearDesc';
 
 @Pipe({
   name: 'sortingPipe'
