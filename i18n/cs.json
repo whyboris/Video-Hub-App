@@ -200,7 +200,9 @@
     "videoNotesMoreInfo": "Hledejte v poznámkách, které jste přidali ke svým videím. Povolte poznámky v části „Ruční nastavení značek“",
     "videoPlayerSettings": "Nastavení video přehrávače",
     "showDetailsTray": "Detaily",
-    "showDetailsTrayMoreInfo": "Zobrazuje podrobnosti o posledním videu, na které jste klikli"
+    "showDetailsTrayMoreInfo": "Zobrazuje podrobnosti o posledním videu, na které jste klikli",
+    "sortOptionFpsDescription": "FPS",
+    "sortOptionFpsMoreInfo": "V rozbalovací nabídce řazení zobrazte možnost pořadí snímků za sekundu"
   },
   "RIGHTCLICK": {
     "cancelRename": "zrušit přejmenování",
@@ -308,7 +310,8 @@
     "shuffleGalleryNow": "Zamíchat aktuální výsledky",
     "startWizard": "Zapnout / vypnout průvodce",
     "toggleMinimalMode": "Přepnout kiosk / minimální režim (skrytí všech panelů)",
-    "toggleSettings": "Přepnout nastavení"
+    "toggleSettings": "Přepnout nastavení",
+    "compactView": "Přepnout kompaktní zobrazení"
   },
   "SIDEBAR": {
     "and": "a",
@@ -351,7 +354,8 @@
     "totalFolders": "složka",
     "totalFoldersPlural": "složky",
     "videoNotes": "má poznámky",
-    "videos": "videa"
+    "videos": "videa",
+    "sortFps": "FPS"
   },
   "STATISTICS": {
     "addFolderToHub": "Přidat složku do knihovny (hubu)",
@@ -392,7 +396,14 @@
     "videoFolder": "Zde umístěná videa:",
     "videoLengths": "Délka videí",
     "watchFolder": "sledovat složku",
-    "watchFolderHelpText": "Aktualizovat hub automaticky automaticky při změně obsahu složky"
+    "watchFolderHelpText": "Aktualizovat hub automaticky automaticky při změně obsahu složky",
+    "server": "Server",
+    "serverMoreInfo": "Ujistěte se, že je váš počítač připojen ke stejné WiFi jako váš telefon. Otevřete tuto adresu v telefonu.",
+    "serverOnPort": "v přístavu",
+    "serverOr": "nebo",
+    "serverRunning": "Váš server běží",
+    "serverStart": "Spusťte server",
+    "serverStop": "Zastavit server"
   },
   "SYSTEM": {
     "cancel": "Zrušit",

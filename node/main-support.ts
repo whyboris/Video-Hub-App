@@ -455,7 +455,7 @@ export function extractMetadataAsync(
           imageElement.mtime     = Math.round(fileStat.mtimeMs);
           imageElement.screens   = computeNumberOfScreenshots(screenshotSettings, duration);
           imageElement.width     = origWidth;
-          imageElement.fps = realFps;
+          imageElement.fps       = realFps;
 
           hashFileAsync(filePath, fileStat).then((hash) => {
             imageElement.hash = hash;

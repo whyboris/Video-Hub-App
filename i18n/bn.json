@@ -200,7 +200,9 @@
     "videoNotesMoreInfo": "আপনি আপনার ভিডিওগুলিতে যুক্ত নোটগুলির মাধ্যমে অনুসন্ধান করুন। 'ম্যানুয়াল ট্যাগ সেটিংসে' নোটগুলি সক্ষম করুন",
     "videoPlayerSettings": "ভিডিও প্লেয়ার সেটিংস",
     "showDetailsTray": "বিশদ",
-    "showDetailsTrayMoreInfo": "আপনি ক্লিক করা সর্বশেষ ভিডিওর বিশদ দেখায়"
+    "showDetailsTrayMoreInfo": "আপনি ক্লিক করা সর্বশেষ ভিডিওর বিশদ দেখায়",
+    "sortOptionFpsDescription": "এফপিএস",
+    "sortOptionFpsMoreInfo": "বাছাইয়ের ড্রপডাউনটিতে প্রতি সেকেন্ডের অর্ডার অপশনে ফ্রেমগুলি দেখান"
   },
   "RIGHTCLICK": {
     "cancelRename": "পুনরায় নামকরণ বাতিল করুন",
@@ -308,7 +310,8 @@
     "shuffleGalleryNow": "বর্তমান ফলাফল পরিবর্তন করুন",
     "startWizard": "উইজার্ড দর্শন টগল করুন",
     "toggleMinimalMode": "সর্বনিম্ন মোড টগল করুন (সমস্ত প্যানেল লুকিয়ে রাখা)",
-    "toggleSettings": "সেটিংস টগল করুন"
+    "toggleSettings": "সেটিংস টগল করুন",
+    "compactView": "কমপ্যাক্ট ভিউ টগল করুন"
   },
   "SIDEBAR": {
     "and": "এবং",
@@ -351,7 +354,8 @@
     "totalFolders": "ফোল্ডারের",
     "totalFoldersPlural": "ফোল্ডার",
     "videoNotes": "নোট আছে",
-    "videos": "ভিডিও"
+    "videos": "ভিডিও",
+    "sortFps": "এফপিএস"
   },
   "STATISTICS": {
     "addFolderToHub": "হাবটিতে ফোল্ডার যুক্ত করুন",
@@ -392,7 +396,14 @@
     "videoFolder": "ভিডিওগুলি এখানে অবস্থিত:",
     "videoLengths": "ভিডিও দৈর্ঘ্য",
     "watchFolder": "ফোল্ডার দেখুন",
-    "watchFolderHelpText": "ফোল্ডারের সামগ্রী পরিবর্তিত হলে হাবটি স্বয়ংক্রিয়ভাবে আপডেট করুন"
+    "watchFolderHelpText": "ফোল্ডারের সামগ্রী পরিবর্তিত হলে হাবটি স্বয়ংক্রিয়ভাবে আপডেট করুন",
+    "server": "সার্ভার",
+    "serverMoreInfo": "আপনার পিসি আপনার ফোনের মতো একই ওয়াইফাইয়ের সাথে সংযুক্ত রয়েছে তা নিশ্চিত করুন। আপনার ফোনে এই ঠিকানাটি খুলুন।",
+    "serverOnPort": "বন্দরে",
+    "serverOr": "বা",
+    "serverRunning": "আপনার সার্ভার চলছে",
+    "serverStart": "সার্ভার শুরু করুন",
+    "serverStop": "সার্ভার বন্ধ করুন"
   },
   "SYSTEM": {
     "cancel": "বাতিল",
