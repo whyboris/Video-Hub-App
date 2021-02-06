@@ -720,16 +720,16 @@
                 | duplicateFinderPipe : settingsButtons['duplicateHash'].toggled   : 'hash'
 
                 | lengthFilterPipe : settingsButtons['durationFilter'].toggled
-                                   : lengthLeftBound
-                                   : lengthRightBound
+                                   : durationLeftBound
+                                   : durationRightBound
 
                 | fileSizeFilterPipe : settingsButtons['sizeFilter'].toggled
                                      : sizeLeftBound
                                      : sizeRightBound
 
                 | timesPlayedFilterPipe : settingsButtons['timesPlayedFilter'].toggled
-                                     : timesPlayedLeftBound
-                                     : timesPlayedRightBound
+                                        : timesPlayedLeftBound
+                                        : timesPlayedRightBound
 
                 | resolutionFilterPipe : settingsButtons['resolutionFilter'].toggled
                                        : freqLeftBound
