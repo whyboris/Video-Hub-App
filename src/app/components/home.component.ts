@@ -176,6 +176,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
   sizeRightBound: number = Infinity;
 
   // ========================================================================
+  // Times Played filter
+  // ------------------------------------------------------------------------
+
+  timesPlayedLeftBound: number = 0;
+  timesPlayedRightBound: number = Infinity;
+
+  // ========================================================================
   // Frequency / histogram
   // ------------------------------------------------------------------------
 
@@ -274,6 +281,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   durationOutlierCutoff: number = 0; // for the duration filter to cut off outliers
   sizeOutlierCutoff: number = 0; // for the size filter to cut off outliers
+  timesPlayedCutoff: number = 0; // for the times played filter max value
 
   timeExtractionStarted;   // time remaining calculator
   timeExtractionRemaining; // time remaining calculator
@@ -717,6 +725,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       this.setUpDurationFilterValues(this.imageElementService.imageElements);
       this.setUpSizeFilterValues(this.imageElementService.imageElements);
+      this.setUpTimesPlayedFilterValues(this.imageElementService.imageElements);
 
       if (this.sortOrderRef.sortFilterElement) {
         this.sortOrderRef.sortFilterElement.nativeElement.value = this.sortType;
@@ -2192,6 +2201,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   }
 
+  newTimesPlayedFilterSelected(selection: number[]): void {
+
+    this.timesPlayedLeftBound = selection[0];
+    this.timesPlayedRightBound = selection[1];
+
+  }
+
   setUpDurationFilterValues(finalArray: ImageElement[]): void {
     const durations: number[] = finalArray.map((element) => { return element.duration; });
 
@@ -2204,6 +2220,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const fileSizes: number[] = finalArray.map((element) => { return element.fileSize; });
 
     this.sizeOutlierCutoff = Math.max(...fileSizes);
+  }
+
+  setUpTimesPlayedFilterValues(finalArray: ImageElement[]): void {
+    const timesPlayed: number[] = finalArray.map((element) => { return element.timesPlayed; });
+
+    this.timesPlayedCutoff = Math.max(...timesPlayed);
   }
 
   /**
