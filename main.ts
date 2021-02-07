@@ -306,12 +306,16 @@ ipcMain.on('just-started', (event) => {
       event.sender.send('please-open-wizard', true); // firstRun = true!
     } else {
 
-      const previouslySavedSettings: SettingsObject = JSON.parse(data);
-      if (previouslySavedSettings.appState.addtionalExtensions) {
-        GLOBALS.additionalExtensions = parseAdditionalExtensions(previouslySavedSettings.appState.addtionalExtensions);
-      }
+      try {
+        const previouslySavedSettings: SettingsObject = JSON.parse(data);
+        if (previouslySavedSettings.appState.addtionalExtensions) {
+          GLOBALS.additionalExtensions = parseAdditionalExtensions(previouslySavedSettings.appState.addtionalExtensions);
+        }
+        event.sender.send('settings-returning', previouslySavedSettings, locale);
 
-      event.sender.send('settings-returning', previouslySavedSettings, locale);
+      } catch (err) {
+        event.sender.send('please-open-wizard', false);
+      }
     }
   });
 });
