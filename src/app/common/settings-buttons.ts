@@ -77,8 +77,8 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'tagExclusion'
  | 'tagIntersection'
  | 'tagUnion'
- | 'timesPlayedFilter'
  | 'thumbAutoAdvance'
+ | 'timesPlayedFilter'
  | 'videoNotes';
 
 // Add `SettingsButtons` items here so they show up in the buttons ribbon and in the settings
@@ -830,7 +830,8 @@ export const SettingsButtons: SettingsButtonsType = {
     moreInfo: 'BUTTONS.tagUnionMoreInfo',
     title: 'BUTTONS.tagUnionHint',
     toggled: false
-  }, 'timesPlayedFilter': {
+  },
+  'timesPlayedFilter': {
     description: 'BUTTONS.timesPlayedDescription',
     hidden: false,
     iconName: 'icon-res-filter',
