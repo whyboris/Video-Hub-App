@@ -64,6 +64,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'sortOptionAspectRatio'
  | 'sortOptionCreated'
  | 'sortOptionFolderSize'
+ | 'sortOptionFps'
  | 'sortOptionModified'
  | 'sortOptionSize'
  | 'sortOptionStar'
@@ -78,6 +79,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'tagIntersection'
  | 'tagUnion'
  | 'thumbAutoAdvance'
+ | 'timesPlayedFilter'
  | 'videoNotes';
 
 // Add `SettingsButtons` items here so they show up in the buttons ribbon and in the settings
@@ -103,6 +105,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
   [ // 2 - Filters & sorting options
     'durationFilter',
     'sizeFilter',
+    'timesPlayedFilter',
     'resolutionFilter',
     'starFilter',
     'sortOrder',
@@ -118,14 +121,15 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'sortOptionCreated',
     'sortOptionTags',
     'sortOptionAspectRatio',
-    'sortOptionFolderSize'
+    'sortOptionFps',
+    'sortOptionFolderSize',
 
   ],
   [ // 3 - Find duplicates
     'duplicateLength',
     'duplicateSize',
     'duplicateHash',
-    'showRecent' // Recently opened files
+    'showRecent', // Recently opened files
   ],
   [ // 4 - Gallery -------------------------------------- 2nd tab
     'showThumbnails',
@@ -147,7 +151,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'showTagTray',
     'showRelatedVideosTray',
     'showRecentlyPlayed',
-    'showDetailsTray'
+    'showDetailsTray',
   ],
   [ // 7 - Layout
     'compactView',
@@ -182,7 +186,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
   ],
   [ // 13
     'hideTop', // Hide top bar
-    'flatIcons' // Button style
+    'flatIcons', // Button style
   ],
   [ // 14 - Create a new hub ---------------------------- 3rd tab
     'startWizard',
@@ -191,7 +195,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'showDeleteOption',
     'dangerousDelete',
     'playPlaylist',
-    'openAtTimestamp'
+    'openAtTimestamp',
   ]
 ];
 
@@ -734,6 +738,14 @@ export const SettingsButtons: SettingsButtonsType = {
     title: '',
     toggled: false
   },
+
+  'sortOptionFps': {
+    description: 'BUTTONS.sortOptionFpsDescription',
+    hidden: false,
+    moreInfo: 'BUTTONS.sortOptionFpsMoreInfo',
+    title: '',
+    toggled: false
+  },
   'sortOptionModified': {
     description: 'BUTTONS.sortOptionModifiedDescription',
     hidden: false,
@@ -827,6 +839,14 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-tag-plus',
     moreInfo: 'BUTTONS.tagUnionMoreInfo',
     title: 'BUTTONS.tagUnionHint',
+    toggled: false
+  },
+  'timesPlayedFilter': {
+    description: 'BUTTONS.timesPlayedDescription',
+    hidden: false,
+    iconName: 'icon-res-filter',
+    moreInfo: 'BUTTONS.timesPlayedMoreInfo',
+    title: 'BUTTONS.timesPlayedHint',
     toggled: false
   },
   'thumbAutoAdvance': {

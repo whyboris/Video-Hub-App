@@ -27,6 +27,7 @@ export class TagTrayComponent {
 
   @Input() appState: AppStateInterface;
   @Input() batchTaggingMode;
+  @Input() darkMode: boolean;
   @Input() settingsButtons: SettingsButtonsType;
 
   manualTagFilterString: string = '';

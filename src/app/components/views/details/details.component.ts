@@ -57,8 +57,8 @@ export class DetailsComponent implements OnInit {
   @Input() renameResponse: BehaviorSubject<RenameFileResponse>;
 
   containerWidth: number;
+  filmstripPath = '';
   firstFilePath = '';
-  fullFilePath = '';
   hover: boolean;
   indexToShow: number = 1;
   percentOffset: number = 0;
@@ -79,13 +79,26 @@ export class DetailsComponent implements OnInit {
   mouseLeave() {
     if (this.hoverScrub && this.returnToFirstScreenshot) {
       this.hover = false;
-      this.percentOffset = 0;
+      this.percentOffset = (this.video.defaultScreen !== undefined)
+                           ? this.getDefaultScreenOffset(this.video)
+                           : 0;
     }
   }
 
+  getDefaultScreenOffset(video: ImageElement): number {
+    return 100 * video.defaultScreen / (video.screens - 1);
+  }
+
   ngOnInit() {
+    // TODO reconcile changes later
     this.firstFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, this.showFaces ? 'faces' : 'thumbnails', this.video.hash);
-    this.fullFilePath =  this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
+    this.filmstripPath =  this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
+
+    // this.firstFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'thumbnails', this.video.hash);
+    // this.filmstripPath =  this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
+    if (this.video.defaultScreen !== undefined) {
+      this.percentOffset = this.getDefaultScreenOffset(this.video);
+    }
   }
 
   mouseIsMoving($event) {

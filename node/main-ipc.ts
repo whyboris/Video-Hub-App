@@ -96,11 +96,13 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
   /**
    * Handle dragging a file out of VHA into a video editor (e.g. Vegas or Premiere)
    */
-  ipc.on('drag-video-out-of-electron', (event, filePath): void => {
+  ipc.on('drag-video-out-of-electron', (event, filePath, imgPath): void => {
     console.log(filePath);
     event.sender.startDrag({
       file: filePath,
-      icon: './src/assets/logo.png'
+      icon: imgPath,
+      // icon: './src/assets/logo.png' // <-- local dev if I want the logo instead of thumbnail
+      // icon: './resources/assets/logo.png' // <-- production location (if I copy over the asset correctly in `electron-builder.json`)
     });
   });
 

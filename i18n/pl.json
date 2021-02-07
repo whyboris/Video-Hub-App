@@ -85,7 +85,7 @@
     "muteClipsHint": "Wycisz wszystkie odgłosy",
     "openAtTimestampDescription": "Rozpocznij odtwarzanie filmu od czasu przypisanego do danego zrzutu ekranu",
     "openAtTimestampHint": "Odtwarzaj wideo od klikniętej miniatury",
-    "openAtTimestampMoreInfo": "Dotyczy wyłącznie widoku szczegółowego, miniatur oraz taśmy filmowej. Wymaga ręcznego ustawienia odtwarzacza wideo. W systemie Windows funkcja działa z MPC, VLC i POT Playerem; na Mac tylko z VLC",
+    "openAtTimestampMoreInfo": "Dotyczy wyłącznie widoku szczegółowego, miniatur oraz taśmy filmowej. Wymaga ręcznego ustawienia odtwarzacza wideo. W systemie Windows funkcja działa z MPC, VLC, MPV i POT Playerem; na Mac tylko z VLC",
     "playlistButton": "Odtwórz wszystko",
     "playlistButtonDescription": "Otwórz wszystkie filmy z bieżącej galerii jako playlistę",
     "playlistButtonMoreInfo": "Ta opcja tworzy plik .pls i otwiera go przy użyciu domyślnego odtwarzacza wideo. Lista odtwarzania nie będzie zawierać plików wewnątrz folderów, jeśli wybrano opcję 'Pokaż foldery'.",
@@ -200,7 +200,9 @@
     "videoNotesDescription": "Opisy filmów",
     "videoNotesHint": "Wyszukiwanie notatek",
     "videoNotesMoreInfo": "Szukaj wśród notatek dodanych do filmów. Włącz notatki w 'Ręcznych ustawieniach tagów'",
-    "videoPlayerSettings": "Ustawienia odtwarzacza wideo"
+    "videoPlayerSettings": "Ustawienia odtwarzacza wideo",
+    "sortOptionFpsDescription": "FPS",
+    "sortOptionFpsMoreInfo": "Pokaż opcję kolejności klatek na sekundę na liście rozwijanej sortowania"
   },
   "RIGHTCLICK": {
     "cancelRename": "anuluj zmianę nazwy",
@@ -308,7 +310,8 @@
     "shuffleGalleryNow": "Losowa kolejność bieżących wyników",
     "startWizard": "Pokaż/ukryj okno kreatora",
     "toggleMinimalMode": "Pokaż/ukryj tryb kiosk/minimalny (ukrywa wszystkie panele)",
-    "toggleSettings": "Pokaż/ukryj ustawienia"
+    "toggleSettings": "Pokaż/ukryj ustawienia",
+    "compactView": "Przełącz widok kompaktowy"
   },
   "SIDEBAR": {
     "and": "oraz",
@@ -351,7 +354,8 @@
     "totalFolders": "folder",
     "totalFoldersPlural": "folder(y/ów)",
     "videoNotes": "notatka zawiera",
-    "videos": "film(y/ów)"
+    "videos": "film(y/ów)",
+    "sortFps": "FPS"
   },
   "STATISTICS": {
     "addFolderToHub": "Dodaj folder do HUBa",
@@ -392,7 +396,14 @@
     "videoFolder": "Filmy znajdujące się tutaj:",
     "videoLengths": "Czas trwania filmów",
     "watchFolder": "obserwuj folder",
-    "watchFolderHelpText": "Aktualizuje HUBa automatycznie po zmianie zawartości folderu"
+    "watchFolderHelpText": "Aktualizuje HUBa automatycznie po zmianie zawartości folderu",
+    "server": "serwer",
+    "serverMoreInfo": "Upewnij się, że komputer jest podłączony do tego samego WiFi co telefon. Otwórz ten adres w telefonie.",
+    "serverOnPort": "w porcie",
+    "serverOr": "lub",
+    "serverRunning": "Twój serwer działa",
+    "serverStart": "Uruchom serwer",
+    "serverStop": "Zatrzymaj serwer"
   },
   "SYSTEM": {
     "cancel": "Anuluj",

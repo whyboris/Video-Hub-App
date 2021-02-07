@@ -1,6 +1,6 @@
 {
   "name": "video-hub-app-3",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "Video Hub App 3 - browse, search, preview your videos",
   "homepage": "http://www.videohubapp.com",
   "repository": {
@@ -31,7 +31,8 @@
     "build": "npm run electron:serve-tsc && ng build --base-href ./",
     "build:prod": "npm run build -- -c production",
     "buildsize": "sh ./bin/buildSizeCheck.sh",
-    "electron": "npm run build:prod && electron-builder build && npm run buildsize",
+    "hasRemote": "sh ./bin/hasRemoteCheck.sh",
+    "electron": "npm run hasRemote && npm run build:prod && electron-builder build && npm run buildsize",
     "electron:serve": "wait-on tcp:4200 && npm run electron:serve-tsc && npx electron . --serve",
     "electron:serve-tsc": "tsc -p tsconfig-serve.json",
     "ng": "ng",
@@ -44,15 +45,20 @@
     "@ngx-translate/core": "13.0.0",
     "@tensorflow/tfjs-node": "1.5.2",
     "async": "3.2.0",
+    "body-parser": "1.19.0",
     "chokidar": "3.4.3",
     "electron-window-state": "5.0.3",
+    "express": "4.17.1",
     "face-api.js": "0.22.1",
+    "fdir": "4.1.0",
     "fuse.js": "6.4.3",
+    "ip": "1.1.5",
     "natural-orderby": "2.0.3",
     "ngx-virtual-scroller": "4.0.3",
     "path": "0.12.7",
     "sharp": "0.24.0",
-    "trash": "7.0.0"
+    "trash": "7.0.0",
+    "ws": "7.4.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.1100.2",
@@ -73,7 +79,6 @@
     "electron": "8.5.5",
     "electron-builder": "22.9.1",
     "electron-reload": "1.5.0",
-    "node-sass": "5.0.0",
     "npm-run-all": "4.1.5",
     "rxjs": "6.6.3",
     "stylelint": "13.8.0",
@@ -85,5 +90,8 @@
     "typescript": "4.0.5",
     "wait-on": "5.2.0",
     "zone.js": "0.11.3"
-  }
+  },
+  "browserslist": [
+    "chrome 83"
+  ]
 }

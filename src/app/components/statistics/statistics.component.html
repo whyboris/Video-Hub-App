@@ -116,6 +116,63 @@
 
   </span>
 
+  <!-- SERVER STUFF -->
+
+  <span class="stats-heading title sources server-title">{{ 'STATISTICS.server' | translate }}</span>
+
+  <span class="edit-mode-container server-section">
+
+    <button
+      class="wizard-button start-import"
+      (click)="startServer()"
+      [ngClass]="{ 'edit-mode-active': serverRunning }"
+    >
+      <ng-container  *ngIf="serverRunning; else stopServer">
+        {{ 'STATISTICS.serverStop' | translate }}
+      </ng-container>
+      <ng-template #stopServer>
+        {{ 'STATISTICS.serverStart' | translate }}
+      </ng-template>
+    </button>
+
+    <span [ngClass]="{ 'disabled': serverRunning }" *ngIf="!serverRunning">
+      {{ 'STATISTICS.serverOnPort' | translate }}
+    </span>
+    <input
+      *ngIf="!serverRunning"
+      (change)="validatePort($event.target.value)"
+      type="number"
+      [(ngModel)]="selectedPort"
+      min="1"
+      max="65535"
+      class="port-select"
+    >
+
+    <span *ngIf="serverRunning">
+      {{ 'STATISTICS.serverRunning' | translate }}
+    </span>
+    <span *ngIf="serverRunning" class="more-info">
+      i
+    </span>
+
+    <div class="manual-tag-tray-label-info" style="line-height: 24px">
+      {{ 'STATISTICS.serverMoreInfo' | translate }}
+    </div>
+
+    <div *ngIf="serverRunning" class="server-location">
+      <span class="ip-address">
+        <span class="gray">http://</span>{{ serverInfo.wifi }}:{{ serverInfo.port }}
+      </span>
+      <br>
+      <span class="or">{{ 'STATISTICS.serverOr' | translate }}</span>
+      <span class="ip-address">
+        <span class="gray">http://</span>{{ serverInfo.host.toLowerCase() }}:{{ serverInfo.port }}
+      </span>
+    </div>
+
+  </span>
+
+  <!-- STATISTICS FOR THE HUB  -->
 
   <div class="table-container">
 

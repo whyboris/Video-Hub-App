@@ -248,15 +248,16 @@
     font-weight: bold;
   }
 
-  .size-dropdown {
-    margin: 10px 14px 14px;
-
-    &:not([disabled]) {
-      cursor: pointer;
-    }
-  }
 
   @include scrollBarHidden;
+}
+
+.size-dropdown {
+  margin: 10px 14px 14px;
+
+  &:not([disabled]) {
+    cursor: pointer;
+  }
 }
 
 .hub-name-input {

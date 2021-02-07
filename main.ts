@@ -13,6 +13,7 @@ const windowStateKeeper = require('electron-window-state');
 
 // Methods
 import { createTouchBar } from './node/main-touch-bar';
+import { setUpIpcForServer } from './node/server';
 import { setUpIpcMessages } from './node/main-ipc';
 import { sendFinalObjectToAngular, setUpDirectoryWatchers, upgradeToVersion3, writeVhaFileToDisk, parseAdditionalExtensions } from './node/main-support';
 
@@ -41,10 +42,10 @@ electron.Menu.setApplicationMenu(null);
 
 // =================================================================================================
 
-let win, serve;
+let win;
 let myWindow = null;
 const args = process.argv.slice(1);
-serve = args.some(val => val === '--serve');
+const serve: boolean = args.some(val => val === '--serve');
 
 GLOBALS.debug = args.some(val => val === '--debug');
 if (GLOBALS.debug) { console.log('Debug mode enabled!'); }
@@ -266,6 +267,8 @@ function openThisDamnFile(pathToVhaFile: string) {
 // -------------------------------------------------------------------------------------------------
 
 setUpIpcMessages(ipcMain, win, pathToAppData, systemMessages);
+
+setUpIpcForServer(ipcMain);
 
 /**
  * Once Angular loads it sends over the `ready` status
