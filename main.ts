@@ -103,6 +103,7 @@ function createWindow() {
       {
         label: 'Edit',
         submenu: [
+          { role: 'selectAll' },
           { role: 'cut' },
           { role: 'copy' },
           { role: 'paste' }
