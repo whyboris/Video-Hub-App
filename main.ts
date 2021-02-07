@@ -98,6 +98,20 @@ function createWindow() {
     defaultHeight: 850
   });
 
+  if (GLOBALS.macVersion) {
+    electron.Menu.setApplicationMenu(electron.Menu.buildFromTemplate([
+      {
+        label: 'Edit',
+        submenu: [
+          { role: 'selectAll' },
+          { role: 'cut' },
+          { role: 'copy' },
+          { role: 'paste' }
+        ]
+      }
+    ]));
+  }
+
   // Create the browser window.
   win = new BrowserWindow({
     webPreferences: {
