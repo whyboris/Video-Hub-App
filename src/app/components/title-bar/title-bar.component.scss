@@ -78,15 +78,15 @@
   cursor: pointer;
   height: 13px;
   padding: 0;
-  padding-top: 3.5px;
   position: fixed;
+  top: 4px;
   transition: 400ms;
   width: 13px;
 
   &.closeButton {
     background: $close-button;
     fill: $close-button;
-    padding-left: 7px;
+    left: 6px;
 
     & .window-button {
       transform: translate(-1px, -1px) !important;
@@ -96,7 +96,7 @@
   &.maximizeButton {
     background: $maximize-button;
     fill: $maximize-button;
-    left: 47px;
+    left: 46px;
 
     & .window-button {
       transform: translate(-1px, -1px) !important;
@@ -106,7 +106,7 @@
   &.minimizeButton {
     background: $minimize-botton;
     fill: $minimize-botton;
-    left: 27px;
+    left: 26px;
 
     & .window-button {
       transform: translate(-1px, -1px) !important;

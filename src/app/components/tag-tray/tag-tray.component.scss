@@ -8,6 +8,15 @@
     outline: none;
   }
 
+  .tag-tray-menu-left {
+    margin-right: 10px;
+    min-width: 166px;
+    padding: 12px 0 0 5px;
+    position: relative;
+    text-align: right;
+    width: 166px;
+  }
+
   .manual-tag-tray-label,
   .tag-sort-by-toggle,
   .show-frequency {
@@ -18,7 +27,37 @@
   }
 
   .manual-tag-tray-label {
+    display: inline;
     margin-top: 16px;
+  }
+
+  .more-info {
+    display: inline-block;
+    margin-left: 2px;
+  }
+
+  .manual-tag-tray-label-info {
+    background-color: #eeeeee;
+    border: 1px solid #888888;
+    border-radius: 5px;
+    font-size: 12px;
+    opacity: 0;
+    padding: 5px 10px;
+    pointer-events: none;
+    position: absolute;
+    text-align: left;
+    width: 200px;
+    z-index: 30;
+  }
+
+  .more-info:hover + .manual-tag-tray-label-info {
+    opacity: 1;
+  }
+
+  .button-select-all {
+    bottom: 42px;
+    left: 10px;
+    position: absolute;
   }
 
   .tag-sort-by-toggle,

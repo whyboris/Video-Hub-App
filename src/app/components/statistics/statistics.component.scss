@@ -170,3 +170,64 @@
     background-position-x: 100%;
   }
 }
+
+.server-section {
+  min-height: 100px;
+}
+
+.port-select {
+  background-color: $gray-10;
+  border: 0;
+  cursor: pointer;
+  font-family: monospace;
+  margin-left: 12px;
+  outline: none;
+  width: 56px;
+}
+
+.ip-address {
+  font-family: monospace;
+}
+
+.server-location {
+  color: $dark-blue;
+  font-size: 20px;
+  line-height: 34px;
+}
+
+.more-info {
+  margin-left: 8px;
+}
+
+.server-title {
+  margin-bottom: 10px;
+}
+
+.or {
+  color: $black;
+  font-size: 14px;
+  margin-right: 14px;
+}
+
+.manual-tag-tray-label-info { // copied from `tag-tray.component.scss`
+  background-color: #eeeeee;
+  border: 1px solid #888888;
+  border-radius: 5px;
+  font-size: 12px;
+  left: calc(50% - 100px); // changed after copy/paste
+  opacity: 0;
+  padding: 5px 10px;
+  pointer-events: none;
+  position: absolute; // changed after copy/paste
+  text-align: left;
+  width: 200px;
+  z-index: 30;
+}
+
+.more-info:hover + .manual-tag-tray-label-info {
+  opacity: 1;
+}
+
+.gray {
+  color: #888888;
+}

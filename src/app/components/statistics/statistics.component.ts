@@ -3,16 +3,26 @@ import { Component, Input, OnInit, ChangeDetectorRef, Output, EventEmitter, OnDe
 import { Observable, Subscription } from 'rxjs';
 
 import { ElectronService } from '../../providers/electron.service';
+import { ImageElementService } from './../../services/image-element.service';
 import { SourceFolderService } from './source-folder.service';
 
+import { AppStateInterface } from '../../common/app-state';
 import { ImageElement, ScreenshotSettings, InputSources } from '../../../../interfaces/final-object.interface';
+
 import { metaAppear, breadcrumbWordAppear } from '../../common/animations';
-import { ImageElementService } from './../../services/image-element.service';
+
+export interface ServerDetails {
+  port: number;
+  wifi: string;
+  host: string;
+}
 
 @Component({
   selector: 'app-statistics',
   templateUrl: './statistics.component.html',
   styleUrls: [
+    '../wizard/wizard.component.scss',
+    '../settings.scss',
     '../wizard-button.scss',
     './statistics.component.scss',
     './toggle.scss'
@@ -23,7 +33,9 @@ export class StatisticsComponent implements OnInit, OnDestroy {
 
   @Output() deleteInputSourceFiles = new EventEmitter<number>();
   @Output() finalArrayNeedsSaving = new EventEmitter<any>();
+  @Output() startServerOnPort = new EventEmitter<number>();
 
+  @Input() appState: AppStateInterface;
   @Input() hubName: string;
   @Input() inputFolders: InputSources;
   @Input() numFolders: number;
@@ -33,25 +45,33 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   @Input() inputFolderChosen: Observable<string>;
   @Input() numberScreenshotsDeleted: Observable<number>;
   @Input() oldFolderReconnected: Observable<{ source: number, path: string }>;
+  @Input() serverDetails: Observable<any>;
 
   eventSubscriptionMap: Map<string, Subscription> = new Map();
 
   totalFiles: number;
 
+  // Length
   longest: number = 0;
   shortest: number = Infinity;
   totalLength: number = 0;
   avgLength: number;
 
+  // Size
   largest: number = 0;
   smallest: number = Infinity;
   totalSize: number = 0;
   avgSize: number;
 
+  // For cleaning old screenshots
   showNumberDeleted: boolean = false;
   numberOfScreensDeleted: number = 0;
 
   removeFoldersMode: boolean = false;
+
+  selectedPort = 3000;
+  serverInfo: ServerDetails;
+  serverRunning: boolean = false;
 
   objectKeys = Object.keys; // to use in template
 
@@ -66,7 +86,23 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     console.log('booting up!');
     this.computeAverages();
 
+    console.log('port from settings:', this.appState.port);
+
+    this.selectedPort = this.appState.port ? this.appState.port : 3000;
+
     // IPC subscriptions - come in as BehaviorSubject.asObservable()
+
+    this.eventSubscriptionMap.set('serverDetails', this.serverDetails.subscribe((serverDetails: ServerDetails) => {
+      console.log('STATS RECEIVED:');
+      console.log(serverDetails);
+      if (serverDetails) {
+        this.serverRunning = true;
+        this.serverInfo = serverDetails;
+      } else {
+        this.serverRunning = false;
+      }
+      this.cd.detectChanges();
+    }));
 
     this.eventSubscriptionMap.set('inputFolder', this.inputFolderChosen.subscribe((folderPath: string) => {
       if (folderPath) { // first emit from subscription is `undefined`
@@ -290,6 +326,34 @@ export class StatisticsComponent implements OnInit, OnDestroy {
         event.srcElement.classList.remove('progress-gradient-animation');
       }
     }, 3000); // apparently nothing breaks if the component is closed before timeout finishes :)
+  }
+
+  startServer() {
+    if (this.serverRunning) {
+      this.startServerOnPort.emit(0); // hack to *STOP* the server
+    } else {
+      this.startServerOnPort.emit(this.selectedPort);
+    }
+  }
+
+  /**
+   * Check port any time it changes
+   */
+  validatePort(port: string) {
+    console.log('port', port);
+    console.log(typeof(port));
+    const parsed: number = parseInt(port, 10);
+    console.log(parsed);
+    if (!Number.isInteger(parsed)) {
+      this.selectedPort = 3000;
+    } else if (parsed > 65535) {
+      this.selectedPort = 3000;
+    } else if (parsed < 2) {
+      this.selectedPort = 3000;
+    } else {
+      this.selectedPort = parsed;
+    }
+    this.appState.port = this.selectedPort;
   }
 
   /**
