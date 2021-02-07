@@ -200,7 +200,9 @@
     "videoNotesMoreInfo": "Doorzoek de notities die je aan je video's hebt toegevoegd. Schakel notities in de 'Handmatige tag-instellingen' in",
     "videoPlayerSettings": "Video Speler Instellingen",
     "showDetailsTray": "Details",
-    "showDetailsTrayMoreInfo": "Toont de details van de laatste video waarop je hebt geklikt"
+    "showDetailsTrayMoreInfo": "Toont de details van de laatste video waarop je hebt geklikt",
+    "sortOptionFpsDescription": "FPS",
+    "sortOptionFpsMoreInfo": "Geef de optie voor de volgorde van frames per seconde weer in de vervolgkeuzelijst"
   },
   "RIGHTCLICK": {
     "cancelRename": "annuleer hernoemen",
@@ -308,7 +310,8 @@
     "shuffleGalleryNow": "Hussel huidige resultaten",
     "startWizard": "Schakel de wizardweergave in/uit",
     "toggleMinimalMode": "Schakel kiosk/minimale modus in (verbergt alle panelen)/uit",
-    "toggleSettings": "Schakel settings in/uit"
+    "toggleSettings": "Schakel settings in/uit",
+    "compactView": "Schakelen tussen compacte weergave"
   },
   "SIDEBAR": {
     "and": "en",
@@ -351,7 +354,8 @@
     "totalFolders": "map",
     "totalFoldersPlural": "mappen",
     "videoNotes": "notities hebben",
-    "videos": "videos"
+    "videos": "videos",
+    "sortFps": "FPS"
   },
   "STATISTICS": {
     "addFolderToHub": "Voeg map aan hub toe",
@@ -392,7 +396,14 @@
     "videoFolder": "Videos hier:",
     "videoLengths": "Video lengtes",
     "watchFolder": "bekijk map",
-    "watchFolderHelpText": "Update hub automatisch wanneer inhoud mappen verandert"
+    "watchFolderHelpText": "Update hub automatisch wanneer inhoud mappen verandert",
+    "server": "Server",
+    "serverMoreInfo": "Zorg ervoor dat uw pc is verbonden met dezelfde wifi als uw telefoon. Open dit adres op je telefoon.",
+    "serverOnPort": "op de haven",
+    "serverOr": "of",
+    "serverRunning": "Je server draait",
+    "serverStart": "Start de server",
+    "serverStop": "Stop de server"
   },
   "SYSTEM": {
     "cancel": "Annuleer",

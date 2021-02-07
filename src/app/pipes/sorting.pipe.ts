@@ -10,13 +10,15 @@ export type SortType = 'default'
                      | 'alphabetDesc2'
                      | 'aspectRatioAsc'
                      | 'aspectRatioDesc'
+                     | 'createdAsc'
+                     | 'createdDesc'
                      | 'folderSizeAsc'
                      | 'folderSizeDesc'
+                     | 'fpsAsc'
+                     | 'fpsDesc'
                      | 'hash' // only used by the duplicateFinderPipe
                      | 'modifiedAsc'
                      | 'modifiedDesc'
-                     | 'createdAsc'
-                     | 'createdDesc'
                      | 'random'
                      | 'sizeAsc'
                      | 'sizeDesc'
@@ -296,7 +298,15 @@ export class SortingPipe implements PipeTransform {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'folderSize', true);
       });
-    } else {
+    } else if (sortingType === 'fpsAsc') {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
+        return this.sortFunctionLol(x, y, 'fps', true);
+      });
+    } else if (sortingType === 'fpsDesc') {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
+        return this.sortFunctionLol(x, y, 'fps', false);
+      });
+    }else {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'index', true);
       });

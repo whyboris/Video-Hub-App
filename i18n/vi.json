@@ -200,7 +200,9 @@
     "videoNotesMoreInfo": "Tìm kiếm qua các ghi chú bạn đã thêm vào video của mình. Bật ghi chú trong 'Cài đặt thẻ thủ công'",
     "videoPlayerSettings": "Cài đặt trình phát video",
     "showDetailsTray": "Chi tiết",
-    "showDetailsTrayMoreInfo": "Hiển thị chi tiết về video cuối cùng bạn nhấp vào"
+    "showDetailsTrayMoreInfo": "Hiển thị chi tiết về video cuối cùng bạn nhấp vào",
+    "sortOptionFpsDescription": "FPS",
+    "sortOptionFpsMoreInfo": "Hiển thị tùy chọn thứ tự khung hình trên giây trong trình đơn sắp xếp thả xuống"
   },
   "RIGHTCLICK": {
     "cancelRename": "hủy đổi tên",
@@ -308,7 +310,8 @@
     "shuffleGalleryNow": "Trộn kết quả hiện tại",
     "startWizard": "Chuyển đổi chế độ xem trình hướng dẫn",
     "toggleMinimalMode": "Chuyển đổi chế độ kiosk / chế độ tối thiểu (ẩn tất cả các bảng)",
-    "toggleSettings": "Chuyển đổi cài đặt"
+    "toggleSettings": "Chuyển đổi cài đặt",
+    "compactView": "Chuyển đổi chế độ xem thu gọn"
   },
   "SIDEBAR": {
     "and": "và",
@@ -351,7 +354,8 @@
     "totalFolders": "thư mục",
     "totalFoldersPlural": "thư mục",
     "videoNotes": "ghi chú có",
-    "videos": "video"
+    "videos": "video",
+    "sortFps": "FPS"
   },
   "STATISTICS": {
     "addFolderToHub": "Thêm thư mục vào trung tâm",
@@ -392,7 +396,14 @@
     "videoFolder": "Video nằm ở đây:",
     "videoLengths": "Thời lượng video",
     "watchFolder": "thư mục xem",
-    "watchFolderHelpText": "Tự động cập nhật trung tâm khi nội dung thư mục thay đổi"
+    "watchFolderHelpText": "Tự động cập nhật trung tâm khi nội dung thư mục thay đổi",
+    "server": "Người phục vụ",
+    "serverMoreInfo": "Đảm bảo rằng PC của bạn được kết nối với cùng một WiFi như điện thoại của bạn. Mở địa chỉ này trên điện thoại của bạn.",
+    "serverOnPort": "trên cảng",
+    "serverOr": "hoặc là",
+    "serverRunning": "Máy chủ của bạn đang chạy",
+    "serverStart": "Khởi động máy chủ",
+    "serverStop": "Dừng máy chủ"
   },
   "SYSTEM": {
     "cancel": "Hủy bỏ",

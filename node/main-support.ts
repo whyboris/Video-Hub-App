@@ -64,7 +64,7 @@ function labelVideo(width: number, height: number): ResolutionMeta {
   } else if (width > 1920) {
     label = '1080+';
     bucket = 2.5;
-  } else if (width > 720) {
+  } else if (width > 1280) {
     label = '720+';
     bucket = 1.5;
   }
@@ -132,6 +132,7 @@ function getDurationDisplay(numOfSec: number): string {
          + (ss.length !== 2 ? '0' : '') + ss;
   }
 }
+
 
 /**
  * Count the number of unique folders in the final array
@@ -313,6 +314,26 @@ function getFileDuration(metadata): number {
   }
 }
 
+/**
+ * Return the average frame rate of files
+ * ===========================================================================================
+ *  TO SWITCH TO AVERAGE FRAME RATE,
+ *  replace both instances of r_frame_rate with avg_frame_rate
+ *  only in this method
+ * ===========================================================================================
+ * @param metadata
+ */
+ function getFps(metadata): number {
+   if(metadata?.streams?.[0]?.r_frame_rate) {
+     let fps = metadata.streams[0].r_frame_rate
+     let evalFps = eval(fps.toString());
+     return Math.round(evalFps);
+   }
+   else {
+     return 0;
+   }
+ }
+
 // ===========================================================================================
 // Other supporting methods
 // ===========================================================================================
@@ -415,6 +436,7 @@ export function extractMetadataAsync(
         const metadata = JSON.parse(data);
         const stream = getBestStream(metadata);
         const fileDuration = getFileDuration(metadata);
+        const realFps = getFps(metadata);
 
         const duration = Math.round(fileDuration) || 0;
         const origWidth = stream.width || 0; // ffprobe does not detect it on some MKV streams
@@ -433,6 +455,7 @@ export function extractMetadataAsync(
           imageElement.mtime     = Math.round(fileStat.mtimeMs);
           imageElement.screens   = computeNumberOfScreenshots(screenshotSettings, duration);
           imageElement.width     = origWidth;
+          imageElement.fps       = realFps;
 
           hashFileAsync(filePath, fileStat).then((hash) => {
             imageElement.hash = hash;

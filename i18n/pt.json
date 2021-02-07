@@ -200,7 +200,9 @@
     "videoNotesMoreInfo": "Pesquise as notas que você adicionou aos seus vídeos. Ative as notas nas 'Configurações manuais de tags'",
     "videoPlayerSettings": "Configurações do player de vídeo",
     "showDetailsTray": "Detalhes",
-    "showDetailsTrayMoreInfo": "Mostra os detalhes do último vídeo em que você clicou"
+    "showDetailsTrayMoreInfo": "Mostra os detalhes do último vídeo em que você clicou",
+    "sortOptionFpsDescription": "FPS",
+    "sortOptionFpsMoreInfo": "Mostrar a opção de ordem de quadros por segundo na lista suspensa de classificação"
   },
   "RIGHTCLICK": {
     "cancelRename": "cancelar renomear",
@@ -308,7 +310,8 @@
     "shuffleGalleryNow": "Reproduzir aleatoriamente os resultados atuais",
     "startWizard": "Alternar a visualização do assistente",
     "toggleMinimalMode": "Alternar modo mínimo (ocultando todos os painéis)",
-    "toggleSettings": "Alternar configurações"
+    "toggleSettings": "Alternar configurações",
+    "compactView": "Alternar visualização compacta"
   },
   "SIDEBAR": {
     "and": "e",
@@ -351,7 +354,8 @@
     "totalFolders": "pasta",
     "totalFoldersPlural": "pastas",
     "videoNotes": "notas têm",
-    "videos": "vídeos"
+    "videos": "vídeos",
+    "sortFps": "FPS"
   },
   "STATISTICS": {
     "addFolderToHub": "Adicionar pasta ao hub",
@@ -392,7 +396,14 @@
     "videoFolder": "Vídeos localizados aqui:",
     "videoLengths": "Comprimentos de vídeo",
     "watchFolder": "ver pasta",
-    "watchFolderHelpText": "Atualizar hub automaticamente quando o conteúdo da pasta mudar"
+    "watchFolderHelpText": "Atualizar hub automaticamente quando o conteúdo da pasta mudar",
+    "server": "Servidor",
+    "serverMoreInfo": "Certifique-se de que o seu PC está conectado ao mesmo WiFi que o seu telefone. Abra este endereço em seu telefone.",
+    "serverOnPort": "no porto",
+    "serverOr": "ou",
+    "serverRunning": "Seu servidor está rodando",
+    "serverStart": "Iniciar servidor",
+    "serverStop": "Parar servidor"
   },
   "SYSTEM": {
     "cancel": "Cancelar",

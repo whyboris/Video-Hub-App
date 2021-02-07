@@ -34,6 +34,8 @@
 
     | {{ video.fileSizeDisplay }}
 
+    {{ video.fps ? '| ' + video.fps + ' fps' : '' }}
+
     | <input
         #yearInput
         (change)="validateYear($event)"
