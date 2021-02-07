@@ -249,7 +249,9 @@
       <app-statistics
         (deleteInputSourceFiles)="deleteInputSourceFiles($event)"
         (finalArrayNeedsSaving)="imageElementService.finalArrayNeedsSaving = true"
+        (startServerOnPort)="startServer($event)"
 
+        [appState]="appState"
         [hubName]="appState.hubName"
         [inputFolders]="sourceFolderService.selectedSourceFolder"
         [numFolders]="appState.numOfFolders"
@@ -257,8 +259,9 @@
         [screenshotSettings]="currentScreenshotSettings"
 
         [inputFolderChosen]="inputSorceChosenBehaviorSubject.asObservable()"
-        [oldFolderReconnected]="oldFolderReconnectedBehaviorSubject.asObservable()"
         [numberScreenshotsDeleted]="numberScreenshotsDeletedBehaviorSubject.asObservable()"
+        [oldFolderReconnected]="oldFolderReconnectedBehaviorSubject.asObservable()"
+        [serverDetails]="serverDetailsBehaviorSubject.asObservable()"
       ></app-statistics>
 
     </div>
@@ -526,6 +529,20 @@
         ></app-slider-filter>
       </div>
 
+      <!-- timesPlayedFilter -->
+      <div *ngIf="settingsButtons['timesPlayedFilter'].toggled">
+
+        <app-slider-filter
+          (newSliderFilterSelected)="newTimesPlayedFilterSelected($event)"
+          [darkMode]="settingsButtons['darkMode'].toggled"
+          [labelFormatPipe]="'timesPlayedPipe'"
+          [maximumValue]="timesPlayedCutoff"
+          [minimumValue]="-1"
+          [timesPlayed]="true"
+          [steps]="50"
+        ></app-slider-filter>
+      </div>
+
       <!-- resolution filter & its frequency histogram -->
       <app-resolution-filter
         (newResFilterSelected)="newResFilterSelected($event)"
@@ -703,12 +720,16 @@
                 | duplicateFinderPipe : settingsButtons['duplicateHash'].toggled   : 'hash'
 
                 | lengthFilterPipe : settingsButtons['durationFilter'].toggled
-                                   : lengthLeftBound
-                                   : lengthRightBound
+                                   : durationLeftBound
+                                   : durationRightBound
 
                 | fileSizeFilterPipe : settingsButtons['sizeFilter'].toggled
                                      : sizeLeftBound
                                      : sizeRightBound
+
+                | timesPlayedFilterPipe : settingsButtons['timesPlayedFilter'].toggled
+                                        : timesPlayedLeftBound
+                                        : timesPlayedRightBound
 
                 | resolutionFilterPipe : settingsButtons['resolutionFilter'].toggled
                                        : freqLeftBound
@@ -1078,6 +1099,7 @@
 
     [appState]="appState"
     [batchTaggingMode]="batchTaggingMode"
+    [darkMode]="settingsButtons['darkMode'].toggled"
     [settingsButtons]="settingsButtons"
   ></app-tag-tray>
 

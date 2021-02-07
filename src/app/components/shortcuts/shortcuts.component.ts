@@ -44,10 +44,13 @@ export class ShortcutsComponent {
     'toggleSettings',    // o
     'hideSidebar',       // b
     'showTagTray',       // y
-    'toggleMinimalMode', // k
-    'showAutoTags',      // t
+    'showAutoTags',      // t - space after
+
     'showMoreInfo',      // i
-    'darkMode',          // d
+    'compactView',       // l
+    'toggleMinimalMode', // k
+    'darkMode',          // d - space after
+
     'startWizard',       // n - space after
 
     // 'quit',           // w - hardcoded in template

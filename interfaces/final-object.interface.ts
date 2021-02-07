@@ -25,15 +25,16 @@ export interface FinalObject {
 }
 
 export interface ImageElement {
+  birthtime: number;             // file creation time
   cleanName: string;             // file name cleaned of dots, underscores,and file extension; for searching. Can be *FOLDER* sometimes
   duration: number;              // number of seconds - duration of film
   fileName: string;              // full file name with extension - for opening the file
   fileSize: number;              // file size in bytes
+  fps: number;                   // base frame rate of the video in fps
   hash: string;                  // used for detecting changed files and as a screenshot identifier
   height: AllowedScreenshotHeight; // height of the video (px)
   inputSource: number;           // corresponding to `inputDirs`
   mtime: number;                 // file modification time
-  birthtime: number;             // file creation time
   partialPath: string;           // for opening the file, just prepend the `inputDir` (starts with "/", is "/fldr1/fldr2", or can be "")
   screens: number;               // number of screenshots for this file
   stars: StarRating;             // star rating 0 = n/a, otherwise 1, 2, 3
@@ -65,18 +66,19 @@ export interface ImageElementPlus extends ImageElement {
 // Use this to create a new ImageElement if needed
 export function NewImageElement(): ImageElement {
   return {
+    birthtime: 0,
     cleanName: '',
     duration: 0,
     durationDisplay: '',
     fileName: '',
     fileSize: 0,
     fileSizeDisplay: '',
+    fps: 0,
     hash: '',
     height: 144,
     index: 0,
     inputSource: 0,
     mtime: 0,
-    birthtime: 0,
     partialPath: '',
     resBucket: 0,
     resolution: '',

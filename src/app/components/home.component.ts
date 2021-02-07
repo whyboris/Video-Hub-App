@@ -27,13 +27,15 @@ import { SortOrderComponent } from './sort-order/sort-order.component';
 // Interfaces
 import { FinalObject, ImageElement, ScreenshotSettings, ResolutionString } from '../../../interfaces/final-object.interface';
 import { ImportStage } from '../../../node/main-support';
-import { SettingsObject } from '../../../interfaces/settings-object.interface';
+import { ServerDetails } from './statistics/statistics.component';
+import { RemoteSettings, SettingsButtonSavedProperties, SettingsObject } from '../../../interfaces/settings-object.interface';
 import { SortType } from '../pipes/sorting.pipe';
 import { WizardOptions } from '../../../interfaces/wizard-options.interface';
 import {
   AllSupportedBottomTrayViews,
   AllSupportedViews,
   HistoryItem,
+  RemoteVideoClick,
   RenameFileResponse,
   SupportedTrayView,
   SupportedView,
@@ -163,15 +165,25 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // Duration filter
   // ------------------------------------------------------------------------
 
-  lengthLeftBound: number = 0;
-  lengthRightBound: number = Infinity;
+  durationLeftBound: number = 0;
+  durationOutlierCutoff: number = 0;
+  durationRightBound: number = Infinity;
 
   // ========================================================================
   // Size filter
   // ------------------------------------------------------------------------
 
   sizeLeftBound: number = 0;
+  sizeOutlierCutoff: number = 0;
   sizeRightBound: number = Infinity;
+
+  // ========================================================================
+  // Times Played filter
+  // ------------------------------------------------------------------------
+
+  timesPlayedCutoff: number = 0;
+  timesPlayedLeftBound: number = 0;
+  timesPlayedRightBound: number = Infinity;
 
   // ========================================================================
   // Frequency / histogram
@@ -270,9 +282,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   sortType: SortType = 'default';
 
-  durationOutlierCutoff: number = 0; // for the duration filter to cut off outliers
-  sizeOutlierCutoff: number = 0; // for the size filter to cut off outliers
-
   timeExtractionStarted;   // time remaining calculator
   timeExtractionRemaining; // time remaining calculator
 
@@ -291,12 +300,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   lastRenamedFileHack: ImageElement;
 
+  remoteSettings: RemoteSettings;
+
   // Behavior Subjects for IPC events:
 
   inputSorceChosenBehaviorSubject: BehaviorSubject<string> = new BehaviorSubject(undefined);
   numberScreenshotsDeletedBehaviorSubject: BehaviorSubject<number> = new BehaviorSubject(undefined);
   oldFolderReconnectedBehaviorSubject: BehaviorSubject<{source: number, path: string}> = new BehaviorSubject(undefined);
   renameFileResponseBehaviorSubject: BehaviorSubject<RenameFileResponse> = new BehaviorSubject(undefined);
+  serverDetailsBehaviorSubject: BehaviorSubject<ServerDetails> = new BehaviorSubject(undefined);
 
   // ========================================================================
   // \/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/\/
@@ -434,6 +446,44 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.zone.run(() => {
         this.modalService.openSnackbar(this.translate.instant('SETTINGS.fileNotFound'));
       })
+    });
+
+    // when `remote-control` requests to open video
+    this.electronService.ipcRenderer.on('remote-open-video', (event, video: RemoteVideoClick) => {
+      this.openVideo(video.video, video.thumbIndex);
+    });
+
+    // when `remote-control` sends back IP address
+    this.electronService.ipcRenderer.on('remote-ip-address', (event, ip: string, hostname: string, port: number) => {
+      const serverDetails: ServerDetails = {
+        wifi: ip,
+        host: hostname,
+        port: port
+      }
+
+      console.log(serverDetails);
+      this.serverDetailsBehaviorSubject.next(serverDetails);
+    });
+
+    this.electronService.ipcRenderer.on('remote-save-settings', (event, data: RemoteSettings) => {
+      console.log('new settings to save!!!');
+      console.log(data);
+      this.remoteSettings = data;
+    });
+
+    // when `remote-control` requests currently-showing gallery view
+    this.electronService.ipcRenderer.on('remote-send-new-data', (event, video: RemoteVideoClick) => {
+      console.log('requesting new data!!');
+
+      const showNotConnected: ImageElement[] = JSON.parse(JSON.stringify(this.pipeSideEffectService.galleryShowing));
+
+      showNotConnected.forEach((element: ImageElement) => {
+        (element as any).connected = this.sourceFolderService.sourceFolderConnected[element.inputSource];
+      });
+
+      console.log(showNotConnected);
+
+      this.electronService.ipcRenderer.send('latest-gallery-view', showNotConnected);
     });
 
     // Closing of Window was issued by Electron
@@ -636,6 +686,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       pathToFile: string,
       outputFolderPath: string,
     ) => {
+
+      this.stopServer();
+
       // console.log('input dirs', finalObject.inputDirs);
       // reset to initial
       this.currentClickedItem = undefined;
@@ -671,6 +724,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       this.setUpDurationFilterValues(this.imageElementService.imageElements);
       this.setUpSizeFilterValues(this.imageElementService.imageElements);
+      this.setUpTimesPlayedFilterValues(this.imageElementService.imageElements);
 
       if (this.sortOrderRef.sortFilterElement) {
         this.sortOrderRef.sortFilterElement.nativeElement.value = this.sortType;
@@ -706,6 +760,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
       if (settingsObject.shortcuts) {
         this.shortcutService.initializeFromSaved(settingsObject.shortcuts);
+      }
+      if (settingsObject.remoteSettings) {
+        this.remoteSettings = settingsObject.remoteSettings;
       }
     });
 
@@ -773,6 +830,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.justStarted();
   }
 
+  // =======================================================================================================================================
+  // =======================================================================================================================================
+  // =======================================================================================================================================
+
   ngAfterViewInit() {
     this.computePreviewWidth(); // so that fullView knows its size // TODO -- check if still needed!
 
@@ -812,7 +873,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   draggingVideoFile(event, item: ImageElement): void {
     event.preventDefault();
     const fullPath = this.filePathService.getPathFromImageElement(item);
-    this.electronService.ipcRenderer.send('drag-video-out-of-electron', fullPath);
+    const imgPath = path.join(this.appState.selectedOutputFolder, 'vha-' + this.appState.hubName, 'thumbnails', item.hash + '.jpg');
+    this.electronService.ipcRenderer.send('drag-video-out-of-electron', fullPath, imgPath);
   }
 
   /**
@@ -1098,6 +1160,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       } else if (playerPath.toLowerCase().includes('pot')) {
         args = '/seek=' + time.toString();           // in seconds
+
+      } else if (playerPath.toLowerCase().includes('mpv')) {
+        args = '--start=' + time.toString();          // in seconds
+
       }
     }
 
@@ -1821,19 +1887,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   getSettingsForSave(): SettingsObject {
 
-    const buttonSettings = {};
+    const buttonSettings = {} as Record<SettingsButtonKey, SettingsButtonSavedProperties>;
 
-    this.grabAllSettingsKeys().forEach(element => {
-      buttonSettings[element] = {
-        toggled: this.settingsButtons[element].toggled,
-        hidden: this.settingsButtons[element].hidden,
-      };
+    this.grabAllSettingsKeys().forEach((key: SettingsButtonKey) => {
+      buttonSettings[key] = {
+        toggled: this.settingsButtons[key].toggled,
+        hidden: this.settingsButtons[key].hidden,
+      } as SettingsButtonSavedProperties;
     });
 
-    // console.log(buttonSettings);
     return {
       appState: this.appState,
       buttonSettings: buttonSettings,
+      remoteSettings: this.remoteSettings,
       shortcuts: this.shortcutService.keyToActionMap,
       vhaFileHistory: this.vhaFileHistory,
       windowSizeAndPosition: undefined, // is added in `cose-window` in `main.ts`
@@ -2113,12 +2179,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param selection
    */
   newLengthFilterSelected(selection: number[]): void {
-    this.lengthLeftBound = selection[0];
+    this.durationLeftBound = selection[0];
 
     if (selection[1] > this.durationOutlierCutoff - 10) {
-      this.lengthRightBound = Infinity;
+      this.durationRightBound = Infinity;
     } else {
-      this.lengthRightBound = selection[1];
+      this.durationRightBound = selection[1];
     }
   }
 
@@ -2134,6 +2200,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   }
 
+  newTimesPlayedFilterSelected(selection: number[]): void {
+
+    this.timesPlayedLeftBound = selection[0];
+    this.timesPlayedRightBound = selection[1];
+
+  }
+
   setUpDurationFilterValues(finalArray: ImageElement[]): void {
     const durations: number[] = finalArray.map((element) => { return element.duration; });
 
@@ -2146,6 +2219,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const fileSizes: number[] = finalArray.map((element) => { return element.fileSize; });
 
     this.sizeOutlierCutoff = Math.max(...fileSizes);
+  }
+
+  setUpTimesPlayedFilterValues(finalArray: ImageElement[]): void {
+    const timesPlayed: number[] = finalArray.map((element) => { return element.timesPlayed; });
+
+    this.timesPlayedCutoff = Math.max(...timesPlayed);
   }
 
   /**
@@ -2255,11 +2334,41 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Open modal with instructions for how to use the app. Only runs when `settings.json` is not found
+   */
   showFirstRunMessage(): void {
-    console.log('SHOULD FIX THE FIRST RUN BUG!!!');
     this.toggleButton('showThumbnails');
     this.isFirstRunEver = false;
     this.modalService.openWelcomeMessage();
+  }
+
+  /**
+   * Start the remote server
+   * @param port - number of the port
+   */
+  startServer(port: number): void {
+    if (port === 0) {
+      this.stopServer();
+    } else {
+      console.log('starting server');
+      const imagePath: string = path.join(this.appState.selectedOutputFolder, 'vha-' + this.appState.hubName);
+      console.log('SERVING FOLDER:');
+      console.log(imagePath);
+      console.log('on port', port);
+
+      this.electronService.ipcRenderer.send('start-server', this.imageElementService.imageElements, imagePath, port, this.remoteSettings);
+    }
+
+  }
+
+  /**
+   * Stop the remote server
+   */
+  stopServer(): void {
+    console.log('stopping server');
+    this.electronService.ipcRenderer.send('stop-server');
+    this.serverDetailsBehaviorSubject.next(undefined);
   }
 
 }
