@@ -529,6 +529,20 @@
         ></app-slider-filter>
       </div>
 
+      <!-- timesPlayedFilter -->
+      <div *ngIf="settingsButtons['timesPlayedFilter'].toggled">
+
+        <app-slider-filter
+          (newSliderFilterSelected)="newTimesPlayedFilterSelected($event)"
+          [darkMode]="settingsButtons['darkMode'].toggled"
+          [labelFormatPipe]="'timesPlayedPipe'"
+          [maximumValue]="timesPlayedCutoff"
+          [minimumValue]="-1"
+          [timesPlayed]="true"
+          [steps]="50"
+        ></app-slider-filter>
+      </div>
+
       <!-- resolution filter & its frequency histogram -->
       <app-resolution-filter
         (newResFilterSelected)="newResFilterSelected($event)"
@@ -706,12 +720,16 @@
                 | duplicateFinderPipe : settingsButtons['duplicateHash'].toggled   : 'hash'
 
                 | lengthFilterPipe : settingsButtons['durationFilter'].toggled
-                                   : lengthLeftBound
-                                   : lengthRightBound
+                                   : durationLeftBound
+                                   : durationRightBound
 
                 | fileSizeFilterPipe : settingsButtons['sizeFilter'].toggled
                                      : sizeLeftBound
                                      : sizeRightBound
+
+                | timesPlayedFilterPipe : settingsButtons['timesPlayedFilter'].toggled
+                                        : timesPlayedLeftBound
+                                        : timesPlayedRightBound
 
                 | resolutionFilterPipe : settingsButtons['resolutionFilter'].toggled
                                        : freqLeftBound

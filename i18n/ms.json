@@ -200,7 +200,9 @@
     "videoNotesMoreInfo": "Cari melalui nota yang telah anda tambahkan ke video anda. Aktifkan nota dalam 'Tetapan teg manual'",
     "videoPlayerSettings": "Tetapan Pemain Video",
     "showDetailsTray": "Perincian",
-    "showDetailsTrayMoreInfo": "Menunjukkan perincian video terakhir yang anda klik"
+    "showDetailsTrayMoreInfo": "Menunjukkan perincian video terakhir yang anda klik",
+    "sortOptionFpsDescription": "FPS",
+    "sortOptionFpsMoreInfo": "Tunjukkan pilihan rangka setiap saat dalam dropdown penyusun"
   },
   "RIGHTCLICK": {
     "cancelRename": "batalkan namanya",
@@ -308,7 +310,8 @@
     "shuffleGalleryNow": "Shuffle hasil semasa",
     "startWizard": "Togol tampilan wizard",
     "toggleMinimalMode": "Togol mod minimal (menyembunyikan semua panel)",
-    "toggleSettings": "Togol tetapan"
+    "toggleSettings": "Togol tetapan",
+    "compactView": "Togol paparan padat"
   },
   "SIDEBAR": {
     "and": "dan",
@@ -351,7 +354,8 @@
     "totalFolders": "folder",
     "totalFoldersPlural": "folder",
     "videoNotes": "nota mempunyai",
-    "videos": "video"
+    "videos": "video",
+    "sortFps": "FPS"
   },
   "STATISTICS": {
     "addFolderToHub": "Tambahkan folder ke hub",
@@ -392,7 +396,14 @@
     "videoFolder": "Video yang terletak di sini:",
     "videoLengths": "Panjang video",
     "watchFolder": "folder menonton",
-    "watchFolderHelpText": "Kemas kini hab secara automatik apabila kandungan folder berubah"
+    "watchFolderHelpText": "Kemas kini hab secara automatik apabila kandungan folder berubah",
+    "server": "Pelayan",
+    "serverMoreInfo": "Pastikan PC anda disambungkan ke WiFi yang sama dengan telefon anda. Buka alamat ini di telefon anda.",
+    "serverOnPort": "di pelabuhan",
+    "serverOr": "atau",
+    "serverRunning": "Pelayan anda sedang berjalan",
+    "serverStart": "Mulakan pelayan",
+    "serverStop": "Hentikan pelayan"
   },
   "SYSTEM": {
     "cancel": "Batalkan",

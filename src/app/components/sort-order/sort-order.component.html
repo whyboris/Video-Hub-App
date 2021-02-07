@@ -89,6 +89,12 @@
     <option *ngIf="settingsButtons['sortOptionFolderSize'].toggled" value="folderSizeDesc">
       &#x25BC; {{ 'SIDEBAR.sortFolderSize' | translate }}
     </option>
+    <option *ngIf="settingsButtons['sortOptionFps'].toggled" value="fpsAsc">
+      &#x25B2; {{ 'SIDEBAR.sortFps' | translate }}
+    </option>
+    <option *ngIf="settingsButtons['sortOptionFps'].toggled" value="fpsDesc">
+      &#x25BC; {{ 'SIDEBAR.sortFps' | translate }}
+    </option>
     <option value="random">
       {{ 'SIDEBAR.sortRandom' | translate }}
     </option>

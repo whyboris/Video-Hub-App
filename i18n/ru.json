@@ -200,7 +200,9 @@
     "videoNotesMoreInfo": "Найдите заметки, которые вы добавили к своим видео. Включите заметки в \"Ручных настройках тегов\"",
     "videoPlayerSettings": "Настройки видеоплеера",
     "showDetailsTray": "Детали",
-    "showDetailsTrayMoreInfo": "Показывает сведения о последнем видео, по которому вы щелкнули"
+    "showDetailsTrayMoreInfo": "Показывает сведения о последнем видео, по которому вы щелкнули",
+    "sortOptionFpsDescription": "FPS",
+    "sortOptionFpsMoreInfo": "Показывать параметр порядка кадров в секунду в раскрывающемся списке сортировки"
   },
   "RIGHTCLICK": {
     "cancelRename": "отменить переименовать",
@@ -308,7 +310,8 @@
     "shuffleGalleryNow": "Перемешать текущие результаты",
     "startWizard": "Переключить вид мастера",
     "toggleMinimalMode": "Переключить минимальный режим (скрытие всех панелей)",
-    "toggleSettings": "Настройки переключения"
+    "toggleSettings": "Настройки переключения",
+    "compactView": "Переключить компактный вид"
   },
   "SIDEBAR": {
     "and": "а также",
@@ -351,7 +354,8 @@
     "totalFolders": "папка",
     "totalFoldersPlural": "папки",
     "videoNotes": "примечания",
-    "videos": "ролики"
+    "videos": "ролики",
+    "sortFps": "FPS"
   },
   "STATISTICS": {
     "addFolderToHub": "Добавить папку в хаб",
@@ -392,7 +396,14 @@
     "videoFolder": "Видео расположено здесь:",
     "videoLengths": "Продолжительность видео",
     "watchFolder": "смотреть папку",
-    "watchFolderHelpText": "Обновлять концентратор автоматически при изменении содержимого папки"
+    "watchFolderHelpText": "Обновлять концентратор автоматически при изменении содержимого папки",
+    "server": "Сервер",
+    "serverMoreInfo": "Убедитесь, что ваш компьютер подключен к той же сети Wi-Fi, что и ваш телефон. Откройте этот адрес на своем телефоне.",
+    "serverOnPort": "в порту",
+    "serverOr": "или",
+    "serverRunning": "Ваш сервер работает",
+    "serverStart": "Запустить сервер",
+    "serverStop": "Остановить сервер"
   },
   "SYSTEM": {
     "cancel": "Отмена",

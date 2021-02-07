@@ -78,6 +78,7 @@ import { DeleteFilePipe } from './pipes/delete-file.pipe';
 import { DuplicateFinderPipe } from './pipes/duplicateFinder.pipe';
 import { FileSearchPipe } from './pipes/file-search.pipe';
 import { FileSizeFilterPipe } from './pipes/file-size-filter.pipe';
+import { TimesPlayedFilterPipe } from './pipes/times-played-filter.pipe';
 import { FileSizePipe } from './pipes/file-size.pipe';
 import { FolderArrowsPipe } from './pipes/folder-arrows.pipe';
 import { FolderViewPipe } from './pipes/folder-view.pipe';
@@ -99,6 +100,7 @@ import { TagFilterPipe } from './components/tags-auto/tag-filter.pipe';
 import { TagFrequencyPipe } from './components/tags-auto/tag-frequency.pipe';
 import { TagMatchPipe } from './components/tags-auto/tag-match.pipe';
 import { TagsDisplayPipe } from './components/tags-auto/tag-display.pipe';
+import { TimesPlayedPipe } from './pipes/times-played.pipe';
 import { WordFrequencyPipe } from './pipes/word-frequency.pipe';
 import { WrapperPipe } from './pipes/wrapper.pipe';
 
@@ -163,6 +165,8 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     TagTrayComponent,
     TagsComponent,
     TagsDisplayPipe,
+    TimesPlayedPipe,
+    TimesPlayedFilterPipe,
     ThumbnailComponent,
     TitleBarComponent,
     TopComponent,

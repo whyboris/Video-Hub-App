@@ -200,7 +200,9 @@
     "videoNotesMoreInfo": "ابحث في الملاحظات التي أضفتها إلى مقاطع الفيديو الخاصة بك. تمكين الملاحظات في \"إعدادات العلامة اليدوية\"",
     "videoPlayerSettings": "إعدادات مشغل الفيديو",
     "showDetailsTray": "تفاصيل",
-    "showDetailsTrayMoreInfo": "يعرض تفاصيل آخر فيديو نقرت عليه"
+    "showDetailsTrayMoreInfo": "يعرض تفاصيل آخر فيديو نقرت عليه",
+    "sortOptionFpsDescription": "FPS",
+    "sortOptionFpsMoreInfo": "اعرض خيار ترتيب الإطارات في الثانية في قائمة الفرز المنسدلة"
   },
   "RIGHTCLICK": {
     "cancelRename": "إلغاء إعادة تسمية",
@@ -308,7 +310,8 @@
     "shuffleGalleryNow": "خلط النتائج الحالية",
     "startWizard": "تبديل عرض المعالج",
     "toggleMinimalMode": "تبديل الوضع الأدنى (إخفاء كل اللوحات)",
-    "toggleSettings": "تبديل الإعدادات"
+    "toggleSettings": "تبديل الإعدادات",
+    "compactView": "تبديل العرض المضغوط"
   },
   "SIDEBAR": {
     "and": "و",
@@ -351,7 +354,8 @@
     "totalFolders": "مجلد",
     "totalFoldersPlural": "المجلدات",
     "videoNotes": "الملاحظات لها",
-    "videos": "أشرطة فيديو"
+    "videos": "أشرطة فيديو",
+    "sortFps": "FPS"
   },
   "STATISTICS": {
     "addFolderToHub": "إضافة مجلد إلى المحور",
@@ -392,7 +396,14 @@
     "videoFolder": "مقاطع الفيديو الموجودة هنا:",
     "videoLengths": "أطوال الفيديو",
     "watchFolder": "مشاهدة المجلد",
-    "watchFolderHelpText": "قم بتحديث المحور تلقائيًا عندما تتغير محتويات المجلد"
+    "watchFolderHelpText": "قم بتحديث المحور تلقائيًا عندما تتغير محتويات المجلد",
+    "server": "الخادم",
+    "serverMoreInfo": "تأكد من توصيل جهاز الكمبيوتر الخاص بك بنفس شبكة WiFi المتصل بهاتفك. افتح هذا العنوان على هاتفك.",
+    "serverOnPort": "في الميناء",
+    "serverOr": "أو",
+    "serverRunning": "خادمك قيد التشغيل",
+    "serverStart": "ابدأ الخادم",
+    "serverStop": "إيقاف السيرفر"
   },
   "SYSTEM": {
     "cancel": "إلغاء",
