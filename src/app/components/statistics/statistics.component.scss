@@ -191,7 +191,9 @@
 
 .server-location {
   color: $dark-blue;
+  display: flex;
   font-size: 20px;
+  justify-content: center;
   line-height: 34px;
 }
 
@@ -230,4 +232,12 @@
 
 .gray {
   color: #888888;
+}
+
+.ip-text-container {
+  padding-left: 175px;
+}
+
+.qrcode {
+  transform: translate(22px, -53px);
 }
