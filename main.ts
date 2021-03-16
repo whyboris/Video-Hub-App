@@ -4,11 +4,10 @@ import { GLOBALS } from './node/main-globals';
 GLOBALS.macVersion = process.platform === 'darwin';
 
 import * as path from 'path';
-import * as url from 'url';
 
 const fs = require('fs');
 const electron = require('electron');
-import { app, BrowserWindow, screen, dialog, systemPreferences, ipcMain } from 'electron';
+import { app, protocol, BrowserWindow, screen, dialog, systemPreferences, ipcMain } from 'electron';
 const windowStateKeeper = require('electron-window-state');
 
 // Methods
@@ -116,6 +115,7 @@ function createWindow() {
   win = new BrowserWindow({
     webPreferences: {
       nodeIntegration: true,
+      allowRunningInsecureContent: true,
       contextIsolation: false,
       enableRemoteModule: true,
       webSecurity: false  // allow files from hard disk to show up
@@ -142,11 +142,13 @@ function createWindow() {
     win.loadURL('http://localhost:4200');
     win.webContents.openDevTools();
   } else {
-    win.loadURL(url.format({
+    const url = require('url').format({
       pathname: path.join(__dirname, 'dist/index.html'),
       protocol: 'file:',
       slashes: true
-    }));
+    });
+
+    win.loadURL(url);
   }
 
   if (GLOBALS.macVersion) {
@@ -208,6 +210,13 @@ try {
     if (win === null) {
       createWindow();
     }
+  });
+
+  app.whenReady().then(() => {
+    protocol.registerFileProtocol('file', (request, callback) => {
+      const pathname = request.url.replace('file:///', '');
+      callback(pathname);
+    });
   });
 
 } catch {}
