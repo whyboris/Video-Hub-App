@@ -116,6 +116,8 @@ function createWindow() {
   win = new BrowserWindow({
     webPreferences: {
       nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
       webSecurity: false  // allow files from hard disk to show up
     },
     x: mainWindowState.x,

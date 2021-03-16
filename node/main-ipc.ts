@@ -70,8 +70,8 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
   ipc.on('open-media-file', (event, fullFilePath) => {
     fs.access(fullFilePath, fs.constants.F_OK, (err: any) => {
       if (!err) {
-        shell.openItem(path.normalize(fullFilePath)); // normalize because on windows, the path sometimes is mixing `\` and `/`
-        // shell.openPath(path.normalize(fullFilePath)); // Electron 9
+        // shell.openItem(path.normalize(fullFilePath)); // normalize because on windows, the path sometimes is mixing `\` and `/`
+        shell.openPath(path.normalize(fullFilePath)); // Electron 9
       } else {
         event.sender.send('file-not-found');
       }
@@ -153,8 +153,8 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
           console.log(cmdline);
           exec(cmdline);
         } else {
-          shell.openItem(savePath);
-          // shell.openPath(savePath); // Electron 9
+          // shell.openItem(savePath);
+          shell.openPath(savePath); // Electron 9
         }
       });
     }
