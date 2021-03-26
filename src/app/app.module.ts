@@ -80,6 +80,7 @@ import { DuplicateFinderPipe } from './pipes/duplicateFinder.pipe';
 import { FileSearchPipe } from './pipes/file-search.pipe';
 import { FileSizeFilterPipe } from './pipes/file-size-filter.pipe';
 import { TimesPlayedFilterPipe } from './pipes/times-played-filter.pipe';
+import { YearFilterPipe } from './pipes/year-filter.pipe';
 import { FileSizePipe } from './pipes/file-size.pipe';
 import { FolderArrowsPipe } from './pipes/folder-arrows.pipe';
 import { FolderViewPipe } from './pipes/folder-view.pipe';
@@ -104,6 +105,8 @@ import { TagsDisplayPipe } from './components/tags-auto/tag-display.pipe';
 import { TimesPlayedPipe } from './pipes/times-played.pipe';
 import { WordFrequencyPipe } from './pipes/word-frequency.pipe';
 import { WrapperPipe } from './pipes/wrapper.pipe';
+import { YearPipe } from './pipes/year.pipe';
+
 
 @NgModule({
   declarations: [
@@ -175,7 +178,9 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     WelcomeComponent,
     WizardComponent,
     WordFrequencyPipe,
-    WrapperPipe
+    WrapperPipe,
+    YearPipe,
+    YearFilterPipe
   ],
   imports: [
     AnQrcodeModule,

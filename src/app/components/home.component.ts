@@ -186,6 +186,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
   timesPlayedRightBound: number = Infinity;
 
   // ========================================================================
+  // Year filter
+  // ------------------------------------------------------------------------
+
+  yearCutoff: number = 0;
+  yearLeftBound: number = 0;
+  yearRightBound: number = Infinity;
+
+  // ========================================================================
   // Frequency / histogram
   // ------------------------------------------------------------------------
 
@@ -725,6 +733,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.setUpDurationFilterValues(this.imageElementService.imageElements);
       this.setUpSizeFilterValues(this.imageElementService.imageElements);
       this.setUpTimesPlayedFilterValues(this.imageElementService.imageElements);
+      this.setUpYearFilterValues(this.imageElementService.imageElements);
 
       if (this.sortOrderRef.sortFilterElement) {
         this.sortOrderRef.sortFilterElement.nativeElement.value = this.sortType;
@@ -2207,6 +2216,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   }
 
+  newYearFilterSelected(selection: number[]): void {
+
+    this.yearLeftBound = selection[0];
+    this.yearRightBound = selection[1];
+
+  }
+
   setUpDurationFilterValues(finalArray: ImageElement[]): void {
     const durations: number[] = finalArray.map((element) => { return element.duration; });
 
@@ -2227,6 +2243,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.timesPlayedCutoff = Math.max(...timesPlayed);
   }
 
+  setUpYearFilterValues(finalArray: ImageElement[]): void {
+    const year: number[] = finalArray.map((element) => { return element.year; });
+
+    this.yearCutoff = Math.max(...year);
+  }
   /**
    * Given an array of numbers
    * returns the cutoff for outliers

@@ -79,6 +79,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'tagUnion'
  | 'thumbAutoAdvance'
  | 'timesPlayedFilter'
+ | 'yearFilter'
  | 'videoNotes';
 
 // Add `SettingsButtons` items here so they show up in the buttons ribbon and in the settings
@@ -122,6 +123,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'sortOptionAspectRatio',
     'sortOptionFps',
     'sortOptionFolderSize',
+    'yearFilter'
 
   ],
   [ // 3 - Find duplicates
@@ -845,6 +847,14 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-toggle-auto-scrub',
     moreInfo: 'BUTTONS.thumbAutoAdvanceMoreInfo',
     title: 'BUTTONS.thumbAutoAdvanceHint',
+    toggled: false
+  },
+  'yearFilter': {
+    description: 'BUTTONS.yearSliderDescription',
+    hidden: false,
+    iconName: 'icon-times-played',
+    moreInfo: 'BUTTONS.yearSliderMoreInfo',
+    title: 'BUTTONS.yearSliderHint',
     toggled: false
   },
   'videoNotes': {

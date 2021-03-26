@@ -543,6 +543,20 @@
         ></app-slider-filter>
       </div>
 
+      <!-- yearFilter -->
+      <div *ngIf="settingsButtons['yearFilter'].toggled">
+
+        <app-slider-filter
+            (newSliderFilterSelected)="newYearFilterSelected($event)"
+            [darkMode]="settingsButtons['darkMode'].toggled"
+            [labelFormatPipe]="'yearPipe'"
+            [maximumValue]="yearCutoff"
+            [minimumValue]="-1"
+            [yearFilter]="true"
+            [steps]="20"
+        ></app-slider-filter>
+      </div>
+
       <!-- resolution filter & its frequency histogram -->
       <app-resolution-filter
         (newResFilterSelected)="newResFilterSelected($event)"
@@ -730,6 +744,10 @@
                 | timesPlayedFilterPipe : settingsButtons['timesPlayedFilter'].toggled
                                         : timesPlayedLeftBound
                                         : timesPlayedRightBound
+
+                | yearFilterPipe : settingsButtons['yearFilter'].toggled
+                                        : yearLeftBound
+                                        : yearRightBound
 
                 | resolutionFilterPipe : settingsButtons['resolutionFilter'].toggled
                                        : freqLeftBound
