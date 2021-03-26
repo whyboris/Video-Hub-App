@@ -107,6 +107,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'sizeFilter',
     'timesPlayedFilter',
     'resolutionFilter',
+    'yearFilter',
     'starFilter',
     'sortOrder',
     'hideOffline',
@@ -123,8 +124,6 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'sortOptionAspectRatio',
     'sortOptionFps',
     'sortOptionFolderSize',
-    'yearFilter'
-
   ],
   [ // 3 - Find duplicates
     'duplicateLength',
