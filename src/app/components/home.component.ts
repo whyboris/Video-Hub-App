@@ -1023,12 +1023,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public initiateMaximize(): void {
-    if (this.appMaximized === false) {
-      this.electronService.ipcRenderer.send('maximize-window');
-      this.appMaximized = true;
-    } else {
+    if (this.appMaximized) {
       this.electronService.ipcRenderer.send('un-maximize-window');
       this.appMaximized = false;
+    } else {
+      this.electronService.ipcRenderer.send('maximize-window');
+      this.appMaximized = true;
     }
   }
 
