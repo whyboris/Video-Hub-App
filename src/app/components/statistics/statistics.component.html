@@ -160,17 +160,22 @@
     </div>
 
     <div *ngIf="serverRunning" class="server-location">
-      <span class="ip-address">
-        <span class="gray">http://</span>{{ serverInfo.wifi }}:{{ serverInfo.port }}
-      </span>
-      <br>
-      <span class="or">{{ 'STATISTICS.serverOr' | translate }}</span>
-      <span class="ip-address">
-        <span class="gray">http://</span>{{ serverInfo.host.toLowerCase() }}:{{ serverInfo.port }}
-      </span>
+      <div class="ip-text-container">
+        <span class="ip-address">
+          <span class="gray">http://</span>{{ serverInfo.wifi }}:{{ serverInfo.port }}
+        </span>
+        <br>
+        <span class="or">{{ 'STATISTICS.serverOr' | translate }}</span>
+        <span class="ip-address">
+          <span class="gray">http://</span>{{ serverInfo.host.toLowerCase() }}:{{ serverInfo.port }}
+        </span>
+      </div>
+
+      <qrcode class="qrcode" [level]="1" [qrvalue]="'http://' + serverInfo.wifi + ':' + serverInfo.port"></qrcode>
     </div>
 
   </span>
+
 
   <!-- STATISTICS FOR THE HUB  -->
 

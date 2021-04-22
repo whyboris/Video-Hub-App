@@ -834,7 +834,7 @@ export const SettingsButtons: SettingsButtonsType = {
   'timesPlayedFilter': {
     description: 'BUTTONS.timesPlayedDescription',
     hidden: false,
-    iconName: 'icon-res-filter',
+    iconName: 'icon-times-played',
     moreInfo: 'BUTTONS.timesPlayedMoreInfo',
     title: 'BUTTONS.timesPlayedHint',
     toggled: false
