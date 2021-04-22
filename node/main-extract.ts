@@ -420,7 +420,7 @@ function setExtractionDurations(
 
   const sourceFactor = sourceHeight === 0 ? 1 : sourceHeight / 720; // may be better as a square rather than linear
 
-  const multiplier = deepScan ? 1 : 1.5;
+  const multiplier = deepScan ? 1 : 1.5; // always `true` by default, but should be different?
 
   return {                                                                            // for me:
     thumb:     350 * multiplier * sourceFactor * thumbHeightFactor,                                // never above 300ms

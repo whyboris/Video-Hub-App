@@ -146,7 +146,7 @@ function thumbQueueRunner(element: ImageElement, done): void {
         GLOBALS.selectedSourceFolders[element.inputSource].path,
         screenshotOutputFolder,
         GLOBALS.screenshotSettings,
-        true,
+        true, // `deepScan` always on by default -- maybe should be different?
         done
       );
     });

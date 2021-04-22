@@ -487,12 +487,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     // Closing of Window was issued by Electron
-    this.electronService.remote.getCurrentWindow().on('close', () => {
-      // Check to see if this was not originally triggered by Title-Bar to avoid double saving of settings
-      if (!this.isClosing) {
-        this.initiateClose();
-      }
-    });
+    // this.electronService.remote.getCurrentWindow().on('close', () => {
+    //   // Check to see if this was not originally triggered by Title-Bar to avoid double saving of settings
+    //   if (!this.isClosing) {
+    //     this.initiateClose();
+    //   }
+    // });
 
     // When Node succeeds or fails to rename a file that Angular requested to rename
     this.electronService.ipcRenderer.on(
