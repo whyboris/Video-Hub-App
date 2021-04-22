@@ -48,6 +48,7 @@ export class DetailsComponent implements OnInit {
   @Input() selectedSourceFolder: string;
   @Input() showAutoFileTags: boolean;
   @Input() showAutoFolderTags: boolean;
+  @Input() showFaces: boolean;
   @Input() showManualTags: boolean;
   @Input() showMeta: boolean;
   @Input() showVideoNotes: boolean;
@@ -89,8 +90,12 @@ export class DetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.firstFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'thumbnails', this.video.hash);
+    // TODO reconcile changes later
+    this.firstFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, this.showFaces ? 'faces' : 'thumbnails', this.video.hash);
     this.filmstripPath =  this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
+
+    // this.firstFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'thumbnails', this.video.hash);
+    // this.filmstripPath =  this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
     if (this.video.defaultScreen !== undefined) {
       this.percentOffset = this.getDefaultScreenOffset(this.video);
     }

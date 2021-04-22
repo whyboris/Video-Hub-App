@@ -43,6 +43,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'showDetails'
  | 'showDetails2'
  | 'showDetailsTray'
+ | 'showFaces'
  | 'showFiles'
  | 'showFilmstrip'
  | 'showFolders'
@@ -141,6 +142,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
   ],
   [ // 5 - Folder view
     'showFolders',
+    'showFaces',
     'randomizeFoldersScreenshots',
     'showTags',
   ],
@@ -599,6 +601,14 @@ export const SettingsButtons: SettingsButtonsType = {
     moreInfo: 'BUTTONS.showFoldersMoreInfo',
     settingsHeading: 'SETTINGS.folderView',
     title: 'BUTTONS.showFoldersHint',
+    toggled: false
+  },
+  'showFaces': {
+    description: 'BUTTONS.showFacesDescription',
+    moreInfo: 'BUTTONS.showFacesMoreInfo',
+    hidden: false,
+    iconName: 'icon-star',
+    title: 'BUTTONS.showFacesHint',
     toggled: false
   },
   'showFreq': {

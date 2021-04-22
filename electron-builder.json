@@ -28,11 +28,7 @@
   ],
   "win": {
     "icon": "dist/favicon",
-    "asar": true,
-    "asarUnpack": [
-      "../node_modules/@ffmpeg-installer",
-      "../node_modules/@ffprobe-installer"
-    ],
+    "asar": false,
     "target": [
       "nsis"
     ]
