@@ -1,4 +1,7 @@
 {
+  "angularCompilerOptions": {
+    "fullTemplateTypeCheck": true
+  },
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "",
