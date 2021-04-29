@@ -101,6 +101,12 @@ function createWindow() {
   if (GLOBALS.macVersion) {
     electron.Menu.setApplicationMenu(electron.Menu.buildFromTemplate([
       {
+        label: app.name,
+        submenu: [
+          { role: 'quit' }
+        ]
+      },
+      {
         label: 'Edit',
         submenu: [
           { role: 'selectAll' },
