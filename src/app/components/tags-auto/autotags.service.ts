@@ -65,14 +65,14 @@ export class AutoTagsService {
             this.loadAddTags();
             this.loadRemoveTags();
 
-            resolve();
+            resolve(true);
 
           });
 
         });
 
       } else {
-        resolve();
+        resolve(false);
       }
 
     });
