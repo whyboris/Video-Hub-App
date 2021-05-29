@@ -52,7 +52,7 @@
     "ngx-virtual-scroller": "4.0.3",
     "path": "0.12.7",
     "trash": "7.1.0",
-    "ws": "7.4.3"
+    "ws": "7.4.6"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "0.1102.1",
