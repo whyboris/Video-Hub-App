@@ -7,6 +7,7 @@ import * as path from 'path';
 
 const fs = require('fs');
 const electron = require('electron');
+const { nativeTheme } = require('electron')
 import { app, protocol, BrowserWindow, screen, dialog, systemPreferences, ipcMain } from 'electron';
 const windowStateKeeper = require('electron-window-state');
 
@@ -225,7 +226,7 @@ if (GLOBALS.macVersion) {
   systemPreferences.subscribeNotification(
     'AppleInterfaceThemeChangedNotification',
     function theThemeHasChanged () {
-      if (systemPreferences.isDarkMode()) {
+      if (nativeTheme.shouldUseDarkColors) {
         tellElectronDarkModeChange('dark');
       } else {
         tellElectronDarkModeChange('light');
