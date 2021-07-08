@@ -31,7 +31,7 @@
             <span
               *ngIf="settingsButtons[buttonKey].iconName"
               (click)="toggleHideButton.emit(buttonKey)"
-              class="eyeIconContainer icon {{ settingsButtons[buttonKey].hidden ? 'eye-closed' : 'eye-open' }}"
+              class="eye-icon-container icon {{ settingsButtons[buttonKey].hidden ? 'eye-closed' : 'eye-open' }}"
               title="{{ 'SETTINGS.showHideText' | translate }}"
             ></span>
 
@@ -169,8 +169,8 @@
           flatSettingsButton:    settingsButtons['flatIcons'].toggled
         }"
         style="margin: 0 10px; max-width: initial; padding: 0 15px;"
-        >
-          <span>{{ 'SETTINGS.resetZoom' | translate }}</span>
+      >
+        <span>{{ 'SETTINGS.resetZoom' | translate }}</span>
       </button>
       <button
         (click)="increaseZoomLevel.emit()"
@@ -188,7 +188,7 @@
     </span>
 
     <div style="margin: 20px">
-      <select (change)="changeLanguage.emit($event.target.value)" class="language-drop-down monospace">
+      <select #langSelect (change)="changeLanguage.emit(langSelect.value)" class="language-drop-down monospace">
         <option value="en" [selected]="appState.language == 'en'">English</option>
         <option value="ar" [selected]="appState.language == 'ar'">Arabic ------ العربية</option>
         <option value="bn" [selected]="appState.language == 'bn'">Bengali ----- বাংলা</option>
