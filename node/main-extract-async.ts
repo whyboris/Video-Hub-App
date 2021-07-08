@@ -464,7 +464,7 @@ function hasAllThumbs(
         : 'ok'
     ])
       .then(() => {
-        resolve();
+        resolve(true);
       })
       .catch(() => {
         reject();
