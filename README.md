@@ -57,7 +57,7 @@ Main dependencies in use:
 | Electron         | v13.1.6  | July 2021       | (internally uses Node `v14.16.0` and Chromium 91) |
 | Electron Builder | v22.11.7 | July 2021       |                                                   |
 
-- **Node**: I recommend using the same version as _Electron_ uses internally, but version 10 or above should work.
+- **Node**: I recommend using the same version as _Electron_ uses internally, but any version 14 or above should work.
 
 - **Angular CLI**: not required but may be useful: [Angular CLI](https://cli.angular.io).
 
