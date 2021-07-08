@@ -339,6 +339,7 @@ export class AutoTagsService {
     return new Promise((resolve, reject) => {
       // it is implied that `Worker` is supported
       const worker = new Worker('./tags.worker', { type: 'module' });
+      // const worker = new Worker(new URL('./tags.worker', import.meta.url), { type: 'module' });
 
       worker.onmessage = (message) => {
         resolve(message.data);
@@ -365,6 +366,7 @@ export class AutoTagsService {
     return new Promise((resolve, reject) => {
       // it is implied that `Worker` is supported
       const worker = new Worker('./tags.worker', { type: 'module' });
+      // const worker = new Worker(new URL('./tags.worker', import.meta.url), { type: 'module' });
 
       worker.onmessage = (message) => {
         resolve(message.data);

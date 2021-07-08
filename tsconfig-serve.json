@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "declaration": false,
-    "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "lib": [
       "es2020",
