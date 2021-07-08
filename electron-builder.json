@@ -1,7 +1,7 @@
 {
   "productName": "Video Hub App 3",
   "appId": "com.videohubapp.videohubapp3",
-  "copyright": "Copyright © 2020 Boris Yakubchik",
+  "copyright": "Copyright © 2021 Boris Yakubchik",
   "directories": {
     "output": "release/"
   },
