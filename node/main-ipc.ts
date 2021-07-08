@@ -352,16 +352,8 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
    * Close the window / quit / exit the app
    */
   ipc.on('close-window', (event, settingsToSave: SettingsObject, finalObjectToSave: FinalObject) => {
-
     // convert shortcuts map to object
-    // someday when node stops giving error: Property 'fromEntries' does not exist on type 'ObjectConstructor'
-    // settingsToSave.shortcuts = <any>Object.fromEntries(settingsToSave.shortcuts);
-    // until then: https://gist.github.com/lukehorvat/133e2293ba6ae96a35ba#gistcomment-2600839
-    let obj = Array.from(settingsToSave.shortcuts).reduce((obj, [key, value]) => {
-      obj[key] = value;
-      return obj;
-    }, {});
-    settingsToSave.shortcuts = <any>obj;
+    settingsToSave.shortcuts = <any>Object.fromEntries(settingsToSave.shortcuts);
 
     const json = JSON.stringify(settingsToSave);
 
@@ -377,12 +369,14 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
 
         writeVhaFileToDisk(finalObjectToSave, GLOBALS.currentlyOpenVhaFile, () => {
           try {
+            GLOBALS.readyToQuit = true;
             BrowserWindow.getFocusedWindow().close();
           } catch {}
         });
 
       } else {
         try {
+          GLOBALS.readyToQuit = true;
           BrowserWindow.getFocusedWindow().close();
         } catch {}
       }

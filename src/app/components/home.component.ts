@@ -486,14 +486,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.electronService.ipcRenderer.send('latest-gallery-view', showNotConnected);
     });
 
-    // Closing of Window was issued by Electron
-    // this.electronService.remote.getCurrentWindow().on('close', () => {
-    //   // Check to see if this was not originally triggered by Title-Bar to avoid double saving of settings
-    //   if (!this.isClosing) {
-    //     this.initiateClose();
-    //   }
-    // });
-
     // When Node succeeds or fails to rename a file that Angular requested to rename
     this.electronService.ipcRenderer.on(
       'rename-file-response', (
@@ -778,8 +770,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     // This happens when the computer is about to SHUT DOWN
+    // or user closed the app through taskbar or title bar
     this.electronService.ipcRenderer.on('please-shut-down-ASAP', (event) => {
-      this.initiateClose();
+      if (!this.isClosing) {
+        this.initiateClose();
+      }
     });
 
     // gets called if `trash` successfully removed the file

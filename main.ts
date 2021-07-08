@@ -162,7 +162,15 @@ function createWindow() {
   // Watch for computer powerMonitor
   // https://electronjs.org/docs/api/power-monitor
   electron.powerMonitor.on('shutdown', () => {
-    GLOBALS.angularApp.sender.send('please-shut-down-ASAP');
+    getAngularToShutDown();
+  });
+
+  win.on('close', (event) => {
+    if (GLOBALS.readyToQuit) {
+      app.exit();
+    } else {
+      getAngularToShutDown();
+    }
   });
 
   // Emitted when the window is closed.
@@ -248,10 +256,17 @@ function tellElectronDarkModeChange(mode: string) {
 // -------------------------------------------------------------------------------------------------
 
 /**
+ * Get angular to shut down immediately - saving settings and hub if needed.
+ */
+function getAngularToShutDown(): void {
+  GLOBALS.angularApp.sender.send('please-shut-down-ASAP');
+}
+
+/**
  * Load the .vha2 file and send it to app
  * @param pathToVhaFile full path to the .vha2 file
  */
-function openThisDamnFile(pathToVhaFile: string) {
+function openThisDamnFile(pathToVhaFile: string): void {
 
   resetAllQueues();
 
