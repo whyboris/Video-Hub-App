@@ -37,7 +37,6 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
-    "@ffmpeg-installer/ffmpeg": "1.0.20",
     "@ffprobe-installer/ffprobe": "1.1.0",
     "@ngx-translate/core": "13.0.0",
     "an-qrcode": "1.0.7",
@@ -47,6 +46,7 @@
     "electron-window-state": "5.0.3",
     "express": "4.17.1",
     "fdir": "5.1.0",
+    "ffmpeg-static": "4.4.0",
     "fuse.js": "6.4.6",
     "ip": "1.1.5",
     "natural-orderby": "2.0.3",
