@@ -41,15 +41,14 @@ export class TagsComponent implements OnInit, OnDestroy {
   minimumFrequency: number = 0;
 
   constructor(
-    public tagsService: AutoTagsService,
     public autoTagsSaveService: AutoTagsSaveService,
-    public imageElemetService: ImageElementService
+    public imageElemetService: ImageElementService,
+    public tagsService: AutoTagsService,
   ) {}
 
   ngOnInit(): void {
 
     this.tagsService.generateAllTags(this.imageElemetService.imageElements, this.hubName).then(() => {
-
       setTimeout(() => {
         this.showEdit = true;
       }, 300);
