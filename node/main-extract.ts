@@ -25,7 +25,7 @@ const fs = require('fs');
 import * as path from 'path';
 const spawn = require('child_process').spawn;
 
-const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path.replace('app.asar', 'app.asar.unpacked');
+const ffmpegPath = require('ffmpeg-static').replace('app.asar', 'app.asar.unpacked');
 
 import { GLOBALS } from './main-globals';
 
