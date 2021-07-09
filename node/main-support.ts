@@ -11,7 +11,7 @@ import { GLOBALS, VhaGlobals } from './main-globals'; // TODO -- eliminate depen
 import * as path from 'path';
 
 const exec = require('child_process').exec;
-const ffprobePath = require('@ffprobe-installer/ffprobe').path.replace('app.asar', 'app.asar.unpacked');
+const ffprobePath = require('node-ffprobe-installer').path.replace('app.asar', 'app.asar.unpacked');
 const fs = require('fs');
 const hasher = require('crypto').createHash;
 import { Stats } from 'fs';
