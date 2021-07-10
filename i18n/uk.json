@@ -200,7 +200,9 @@
     "videoNotesMoreInfo": "Шукайте в примітках, які ви додали до своїх відео. Увімкніть примітки в розділі \"Налаштування тегів вручну\"",
     "videoPlayerSettings": "Налаштування відеопрогравача",
     "showDetailsTray": "Деталі",
-    "showDetailsTrayMoreInfo": "Показує деталі останнього відео, яке ви натиснули"
+    "showDetailsTrayMoreInfo": "Показує деталі останнього відео, яке ви натиснули",
+    "sortOptionFpsDescription": "FPS",
+    "sortOptionFpsMoreInfo": "Покажіть опцію кадрів за секунду в спадному меню, що сортується"
   },
   "RIGHTCLICK": {
     "cancelRename": "скасувати перейменування",
@@ -308,7 +310,8 @@
     "shuffleGalleryNow": "Перемішайте поточні результати",
     "startWizard": "Переключення подання майстра",
     "toggleMinimalMode": "Переключення мінімального режиму (приховування всіх панелей)",
-    "toggleSettings": "Увімкніть налаштування"
+    "toggleSettings": "Увімкніть налаштування",
+    "compactView": "Переключити компактний вигляд"
   },
   "SIDEBAR": {
     "and": "і",
@@ -351,7 +354,8 @@
     "totalFolders": "папку",
     "totalFoldersPlural": "папки",
     "videoNotes": "нотатки мають",
-    "videos": "відео"
+    "videos": "відео",
+    "sortFps": "FPS"
   },
   "STATISTICS": {
     "addFolderToHub": "Додати папку до концентратора",
@@ -392,7 +396,14 @@
     "videoFolder": "Тут розміщені відео:",
     "videoLengths": "Довжина відео",
     "watchFolder": "папка годинника",
-    "watchFolderHelpText": "Оновлюйте концентратор автоматично при зміні вмісту папки"
+    "watchFolderHelpText": "Оновлюйте концентратор автоматично при зміні вмісту папки",
+    "server": "Сервер",
+    "serverMoreInfo": "Переконайтеся, що ваш ПК підключений до того ж Wi-Fi, що і ваш телефон. Відкрийте цю адресу на своєму телефоні.",
+    "serverOnPort": "в порту",
+    "serverOr": "або",
+    "serverRunning": "Ваш сервер запущений",
+    "serverStart": "Запустити сервер",
+    "serverStop": "Зупинити сервер"
   },
   "SYSTEM": {
     "cancel": "Скасувати",

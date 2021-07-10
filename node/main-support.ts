@@ -11,7 +11,7 @@ import { GLOBALS, VhaGlobals } from './main-globals'; // TODO -- eliminate depen
 import * as path from 'path';
 
 const exec = require('child_process').exec;
-const ffprobePath = require('@ffprobe-installer/ffprobe').path.replace('app.asar', 'app.asar.unpacked');
+const ffprobePath = require('node-ffprobe-installer').path.replace('app.asar', 'app.asar.unpacked');
 const fs = require('fs');
 const hasher = require('crypto').createHash;
 import { Stats } from 'fs';
@@ -64,7 +64,7 @@ function labelVideo(width: number, height: number): ResolutionMeta {
   } else if (width > 1920) {
     label = '1080+';
     bucket = 2.5;
-  } else if (width > 720) {
+  } else if (width > 1280) {
     label = '720+';
     bucket = 1.5;
   }
@@ -133,6 +133,7 @@ function getDurationDisplay(numOfSec: number): string {
   }
 }
 
+
 /**
  * Count the number of unique folders in the final array
  */
@@ -167,7 +168,7 @@ function markDuplicatesAsDeleted(imagesArray: ImageElement[]): ImageElement[] {
       && element.inputSource === currentElement.inputSource
     ) {
       element.deleted = true;
-      console.log('DUPE FOUND: '+ element.fileName);
+      console.log('DUPE FOUND: ' + element.fileName);
     }
     currentElement = element;
   });
@@ -277,7 +278,7 @@ export function cleanUpFileName(original: string): string {
   return original.split('.').slice(0, -1).join('.')   // (1)
                  .split('_').join(' ')                // (2)
                  .split('.').join(' ')                // (3)
-                 .split(/\s+/).join(' ')              // (4)
+                 .split(/\s+/).join(' ');             // (4)
 }
 
 /**
@@ -312,6 +313,25 @@ function getFileDuration(metadata): number {
     return 0;
   }
 }
+
+/**
+ * Return the average frame rate of files
+ * ===========================================================================================
+ *  TO SWITCH TO AVERAGE FRAME RATE,
+ *  replace both instances of r_frame_rate with avg_frame_rate
+ *  only in this method
+ * ===========================================================================================
+ * @param metadata
+ */
+ function getFps(metadata): number {
+   if (metadata?.streams?.[0]?.r_frame_rate) {
+     const fps = metadata.streams[0].r_frame_rate;
+     const evalFps = eval(fps.toString()); // `eval` because FPS is a fraction like `24000/1001`
+     return Math.round(evalFps);
+   } else {
+     return 0;
+   }
+ }
 
 // ===========================================================================================
 // Other supporting methods
@@ -415,13 +435,14 @@ export function extractMetadataAsync(
         const metadata = JSON.parse(data);
         const stream = getBestStream(metadata);
         const fileDuration = getFileDuration(metadata);
+        const realFps = getFps(metadata);
 
         const duration = Math.round(fileDuration) || 0;
         const origWidth = stream.width || 0; // ffprobe does not detect it on some MKV streams
         const origHeight = stream.height || 0;
 
-        fs.stat(filePath, (err, fileStat) => {
-          if (err) {
+        fs.stat(filePath, (err2, fileStat) => {
+          if (err2) {
             reject();
           }
 
@@ -433,6 +454,7 @@ export function extractMetadataAsync(
           imageElement.mtime     = Math.round(fileStat.mtimeMs);
           imageElement.screens   = computeNumberOfScreenshots(screenshotSettings, duration);
           imageElement.width     = origWidth;
+          imageElement.fps       = realFps;
 
           hashFileAsync(filePath, fileStat).then((hash) => {
             imageElement.hash = hash;
@@ -535,7 +557,7 @@ export function upgradeToVersion3(finalObject: FinalObject): void {
     };
     finalObject.version = 3;
     finalObject.images.forEach((element: ImageElement) => {
-      element.inputSource = 0
+      element.inputSource = 0;
       element.screens = computeNumberOfScreenshots(finalObject.screenshotSettings, element.duration);
       // update number of screens to account for too-many or too-few cases
       // as they were not handlede prior to version 3 release

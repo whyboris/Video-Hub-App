@@ -200,7 +200,9 @@
     "videoNotesMoreInfo": "Busque entre las notas que ha agregado a sus videos. Habilitar notas en la 'Configuración manual de etiquetas'",
     "videoPlayerSettings": "Configuración del reproductor de video",
     "showDetailsTray": "Detalles",
-    "showDetailsTrayMoreInfo": "Muestra los detalles del último video en el que hiciste clic."
+    "showDetailsTrayMoreInfo": "Muestra los detalles del último video en el que hiciste clic.",
+    "sortOptionFpsDescription": "FPS",
+    "sortOptionFpsMoreInfo": "Mostrar la opción de orden de fotogramas por segundo en el menú desplegable de clasificación"
   },
   "RIGHTCLICK": {
     "cancelRename": "cancelar renombrar",
@@ -308,7 +310,8 @@
     "shuffleGalleryNow": "Barajar resultados actuales",
     "startWizard": "Alternar la vista del asistente",
     "toggleMinimalMode": "Alternar el modo mínimo (ocultar todos los paneles)",
-    "toggleSettings": "Cambiar configuración"
+    "toggleSettings": "Cambiar configuración",
+    "compactView": "Alternar vista compacta"
   },
   "SIDEBAR": {
     "and": "y",
@@ -351,7 +354,8 @@
     "totalFolders": "carpeta",
     "totalFoldersPlural": "carpetas",
     "videoNotes": "notas tienen",
-    "videos": "videos"
+    "videos": "videos",
+    "sortFps": "FPS"
   },
   "STATISTICS": {
     "addFolderToHub": "Agregar carpeta al hub",
@@ -392,7 +396,14 @@
     "videoFolder": "Videos ubicados aquí:",
     "videoLengths": "Longitudes de video",
     "watchFolder": "ver carpeta",
-    "watchFolderHelpText": "Actualizar el concentrador automáticamente cuando cambie el contenido de la carpeta"
+    "watchFolderHelpText": "Actualizar el concentrador automáticamente cuando cambie el contenido de la carpeta",
+    "server": "Servidor",
+    "serverMoreInfo": "Asegúrese de que su PC esté conectada al mismo WiFi que su teléfono. Abra esta dirección en su teléfono.",
+    "serverOnPort": "en el puerto",
+    "serverOr": "o",
+    "serverRunning": "Tu servidor se está ejecutando",
+    "serverStart": "Iniciar servidor",
+    "serverStop": "Detener servidor"
   },
   "SYSTEM": {
     "cancel": "Cancelar",

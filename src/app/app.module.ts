@@ -11,6 +11,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 
 // External
+import { AnQrcodeModule } from 'an-qrcode';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
@@ -177,6 +178,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     WrapperPipe
   ],
   imports: [
+    AnQrcodeModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     BrowserModule,

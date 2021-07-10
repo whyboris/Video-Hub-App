@@ -200,7 +200,9 @@
     "videoNotesMoreInfo": "Cerca tra le note che hai aggiunto ai tuoi video. Abilita le note nelle \"Impostazioni tag manuali\"",
     "videoPlayerSettings": "Impostazioni del lettore video",
     "showDetailsTray": "Dettagli",
-    "showDetailsTrayMoreInfo": "Mostra i dettagli dell'ultimo video su cui hai fatto clic"
+    "showDetailsTrayMoreInfo": "Mostra i dettagli dell'ultimo video su cui hai fatto clic",
+    "sortOptionFpsDescription": "FPS",
+    "sortOptionFpsMoreInfo": "Mostra l'opzione di ordinamento dei fotogrammi al secondo nel menu a discesa di ordinamento"
   },
   "RIGHTCLICK": {
     "cancelRename": "annulla rinomina",
@@ -308,7 +310,8 @@
     "shuffleGalleryNow": "Mischia i risultati attuali",
     "startWizard": "Attiva / disattiva la vista della procedura guidata",
     "toggleMinimalMode": "Attiva / disattiva la modalità minima (nasconde tutti i pannelli)",
-    "toggleSettings": "Attiva / disattiva le impostazioni"
+    "toggleSettings": "Attiva / disattiva le impostazioni",
+    "compactView": "Attiva / disattiva la visualizzazione compatta"
   },
   "SIDEBAR": {
     "and": "e",
@@ -351,7 +354,8 @@
     "totalFolders": "cartella",
     "totalFoldersPlural": "cartelle",
     "videoNotes": "note hanno",
-    "videos": "video"
+    "videos": "video",
+    "sortFps": "FPS"
   },
   "STATISTICS": {
     "addFolderToHub": "Aggiungi cartella all'hub",
@@ -392,7 +396,14 @@
     "videoFolder": "Video disponibili qui:",
     "videoLengths": "Lunghezze video",
     "watchFolder": "cartella di controllo",
-    "watchFolderHelpText": "Aggiorna automaticamente l'hub quando il contenuto della cartella cambia"
+    "watchFolderHelpText": "Aggiorna automaticamente l'hub quando il contenuto della cartella cambia",
+    "server": "server",
+    "serverMoreInfo": "Assicurati che il tuo PC sia connesso allo stesso WiFi del telefono. Apri questo indirizzo sul tuo telefono.",
+    "serverOnPort": "in porto",
+    "serverOr": "o",
+    "serverRunning": "Il tuo server è in esecuzione",
+    "serverStart": "Avvia il server",
+    "serverStop": "Ferma il server"
   },
   "SYSTEM": {
     "cancel": "Annulla",

@@ -200,7 +200,9 @@
     "videoNotesMoreInfo": "Durchsuchen Sie die Notizen, die Sie Ihren Videos hinzugefügt haben. Aktivieren Sie Notizen in den 'manuellen Schlagwörter-Einstellungen'.",
     "videoPlayerSettings": "Video Player-Einstellungen",
     "showDetailsTray": "Einzelheiten",
-    "showDetailsTrayMoreInfo": "Zeigt die Details des letzten Videos an, auf das Sie geklickt haben"
+    "showDetailsTrayMoreInfo": "Zeigt die Details des letzten Videos an, auf das Sie geklickt haben",
+    "sortOptionFpsDescription": "FPS",
+    "sortOptionFpsMoreInfo": "Zeigen Sie die Option für die Reihenfolge der Bilder pro Sekunde in der Dropdown-Liste \"Sortieren\" an"
   },
   "RIGHTCLICK": {
     "cancelRename": "Umbenennung abbrechen",
@@ -308,7 +310,8 @@
     "shuffleGalleryNow": "Mische aktuelle Ergebnisse",
     "startWizard": "Schaltet die Assistentenansicht um",
     "toggleMinimalMode": "Minimalmodus umschalten (alle Bedienfelder verbergen)",
-    "toggleSettings": "Einstellungen umschalten"
+    "toggleSettings": "Einstellungen umschalten",
+    "compactView": "Kompakte Ansicht umschalten"
   },
   "SIDEBAR": {
     "and": "und",
@@ -351,7 +354,8 @@
     "totalFolders": "Mappe",
     "totalFoldersPlural": "Ordner",
     "videoNotes": "Notizen haben",
-    "videos": "Videos"
+    "videos": "Videos",
+    "sortFps": "FPS"
   },
   "STATISTICS": {
     "addFolderToHub": "Ordner zum Hub hinzufügen",
@@ -392,7 +396,14 @@
     "videoFolder": "Videos befinden sich hier:",
     "videoLengths": "Videolängen",
     "watchFolder": "Ordner überwachen",
-    "watchFolderHelpText": "Aktualisieren Sie den Hub automatisch, wenn sich der Ordnerinhalt ändert"
+    "watchFolderHelpText": "Aktualisieren Sie den Hub automatisch, wenn sich der Ordnerinhalt ändert",
+    "server": "Server",
+    "serverMoreInfo": "Stellen Sie sicher, dass Ihr PC mit demselben WLAN wie Ihr Telefon verbunden ist. Öffnen Sie diese Adresse auf Ihrem Telefon.",
+    "serverOnPort": "am Hafen",
+    "serverOr": "oder",
+    "serverRunning": "Ihr Server läuft",
+    "serverStart": "Server starten",
+    "serverStop": "Server stoppen"
   },
   "SYSTEM": {
     "cancel": "Stornieren",

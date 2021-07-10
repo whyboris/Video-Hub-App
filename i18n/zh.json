@@ -200,7 +200,9 @@
     "videoNotesMoreInfo": "搜索您添加到视频中的注释。在“手动标签设置”中启用注释",
     "videoPlayerSettings": "视频播放器设置",
     "showDetailsTray": "细节",
-    "showDetailsTrayMoreInfo": "显示您最近点击的视频的详细信息"
+    "showDetailsTrayMoreInfo": "显示您最近点击的视频的详细信息",
+    "sortOptionFpsDescription": "第一人称射击",
+    "sortOptionFpsMoreInfo": "在排序下拉列表中显示每秒帧数选项"
   },
   "RIGHTCLICK": {
     "cancelRename": "取消重命名",
@@ -308,7 +310,8 @@
     "shuffleGalleryNow": "随机播放当前结果",
     "startWizard": "切换向导视图",
     "toggleMinimalMode": "切换最小模式（隐藏所有面板）",
-    "toggleSettings": "切换设定"
+    "toggleSettings": "切换设定",
+    "compactView": "切换紧凑视图"
   },
   "SIDEBAR": {
     "and": "和",
@@ -351,7 +354,8 @@
     "totalFolders": "夹",
     "totalFoldersPlural": "资料夹",
     "videoNotes": "笔记有",
-    "videos": "影片"
+    "videos": "影片",
+    "sortFps": "第一人称射击"
   },
   "STATISTICS": {
     "addFolderToHub": "将文件夹添加到集线器",
@@ -392,7 +396,14 @@
     "videoFolder": "视频位于此处：",
     "videoLengths": "影片长度",
     "watchFolder": "手表夹",
-    "watchFolderHelpText": "文件夹内容更改时自动更新集线器"
+    "watchFolderHelpText": "文件夹内容更改时自动更新集线器",
+    "server": "服务器",
+    "serverMoreInfo": "确保您的PC连接到与手机相同的WiFi。在手机上打开此地址。",
+    "serverOnPort": "在港口",
+    "serverOr": "要么",
+    "serverRunning": "您的服务器正在运行",
+    "serverStart": "启动服务器",
+    "serverStop": "停止服务器"
   },
   "SYSTEM": {
     "cancel": "取消",

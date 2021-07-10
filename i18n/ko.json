@@ -200,7 +200,9 @@
     "videoNotesMoreInfo": "비디오에 추가 한 메모를 검색합니다. '수동 태그 설정'에서 메모 활성화",
     "videoPlayerSettings": "비디오 플레이어 설정",
     "showDetailsTray": "세부",
-    "showDetailsTrayMoreInfo": "마지막으로 클릭 한 비디오의 세부 정보를 표시합니다."
+    "showDetailsTrayMoreInfo": "마지막으로 클릭 한 비디오의 세부 정보를 표시합니다.",
+    "sortOptionFpsDescription": "FPS",
+    "sortOptionFpsMoreInfo": "정렬 드롭 다운에 초당 프레임 순서 옵션 표시"
   },
   "RIGHTCLICK": {
     "cancelRename": "이름 바꾸기 취소",
@@ -308,7 +310,8 @@
     "shuffleGalleryNow": "현재 결과 섞기",
     "startWizard": "마법사 표시",
     "toggleMinimalMode": "최소 모드 전환(모든 패널 숨기기)",
-    "toggleSettings": "설정 표시"
+    "toggleSettings": "설정 표시",
+    "compactView": "축소보기 전환"
   },
   "SIDEBAR": {
     "and": "and",
@@ -351,7 +354,8 @@
     "totalFolders": "폴더",
     "totalFoldersPlural": "폴더",
     "videoNotes": "노트는",
-    "videos": "동영상"
+    "videos": "동영상",
+    "sortFps": "FPS"
   },
   "STATISTICS": {
     "addFolderToHub": "허브에 폴더 추가",
@@ -392,7 +396,14 @@
     "videoFolder": "동영상 위치:",
     "videoLengths": "동영상 길이",
     "watchFolder": "감시 폴더",
-    "watchFolderHelpText": "폴더 내용 변경시 허브 자동 업데이트"
+    "watchFolderHelpText": "폴더 내용 변경시 허브 자동 업데이트",
+    "server": "섬기는 사람",
+    "serverMoreInfo": "PC가 휴대폰과 동일한 WiFi에 연결되어 있는지 확인하십시오. 휴대 전화에서이 주소를 엽니 다.",
+    "serverOnPort": "항구에",
+    "serverOr": "또는",
+    "serverRunning": "서버가 실행 중입니다.",
+    "serverStart": "서버 시작",
+    "serverStop": "서버 중지"
   },
   "SYSTEM": {
     "cancel": "취소",
