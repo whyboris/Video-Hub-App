@@ -494,8 +494,8 @@ function spawn_ffmpeg_and_run(
 
   return new Promise((resolve, reject) => {
 
-    // Uncomment things in this method to check how long extraction takes
-    const t0: number = performance.now();
+    // Uncomment things in this method (and the `performance` import) to check how long extraction takes
+    // const t0: number = performance.now();
 
     const ffmpeg_process = spawn(ffmpegPath, args);
 
@@ -522,7 +522,6 @@ function spawn_ffmpeg_and_run(
     ffmpeg_process.on('exit', () => {
       clearTimeout(killProcessTimeout);
       // const t1: number = performance.now();
-      // console.log('==========================');
       // console.log(description + ' ' + Math.round(t1 - t0) + ' < ' + maxRunningTime);
       return resolve(true);
     });
