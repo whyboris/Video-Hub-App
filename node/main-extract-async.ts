@@ -146,7 +146,6 @@ function thumbQueueRunner(element: ImageElement, done): void {
         GLOBALS.selectedSourceFolders[element.inputSource].path,
         screenshotOutputFolder,
         GLOBALS.screenshotSettings,
-        true, // `deepScan` always on by default -- maybe should be different?
         done
       );
     });
@@ -455,12 +454,16 @@ function hasAllThumbs(
     const thumb: string =     path.join(screenshotFolder, '/thumbnails/', fileHash + '.jpg');
     const filmstrip: string = path.join(screenshotFolder, '/filmstrips/', fileHash + '.jpg');
     const clip: string =      path.join(screenshotFolder, '/clips/',      fileHash + '.mp4');
+    const clipThumb: string = path.join(screenshotFolder, '/clips/',      fileHash + '.jpg');
 
     Promise.all([
       fs.promises.access(thumb, fs.constants.F_OK),
       fs.promises.access(filmstrip, fs.constants.F_OK),
       shouldExtractClips
         ? fs.promises.access(clip, fs.constants.F_OK)
+        : 'ok',
+      shouldExtractClips
+        ? fs.promises.access(clipThumb, fs.constants.F_OK)
         : 'ok'
     ])
       .then(() => {
