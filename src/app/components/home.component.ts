@@ -165,20 +165,23 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // Duration filter
   // ------------------------------------------------------------------------
 
-  lengthLeftBound: number = 0;
-  lengthRightBound: number = Infinity;
+  durationLeftBound: number = 0;
+  durationOutlierCutoff: number = 0;
+  durationRightBound: number = Infinity;
 
   // ========================================================================
   // Size filter
   // ------------------------------------------------------------------------
 
   sizeLeftBound: number = 0;
+  sizeOutlierCutoff: number = 0;
   sizeRightBound: number = Infinity;
 
   // ========================================================================
   // Times Played filter
   // ------------------------------------------------------------------------
 
+  timesPlayedCutoff: number = 0;
   timesPlayedLeftBound: number = 0;
   timesPlayedRightBound: number = Infinity;
 
@@ -278,10 +281,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
   shuffleTheViewNow = 0; // dummy number to force re-shuffle current view
 
   sortType: SortType = 'default';
-
-  durationOutlierCutoff: number = 0; // for the duration filter to cut off outliers
-  sizeOutlierCutoff: number = 0; // for the size filter to cut off outliers
-  timesPlayedCutoff: number = 0; // for the times played filter max value
 
   timeExtractionStarted;   // time remaining calculator
   timeExtractionRemaining; // time remaining calculator
@@ -485,14 +484,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       console.log(showNotConnected);
 
       this.electronService.ipcRenderer.send('latest-gallery-view', showNotConnected);
-    });
-
-    // Closing of Window was issued by Electron
-    this.electronService.remote.getCurrentWindow().on('close', () => {
-      // Check to see if this was not originally triggered by Title-Bar to avoid double saving of settings
-      if (!this.isClosing) {
-        this.initiateClose();
-      }
     });
 
     // When Node succeeds or fails to rename a file that Angular requested to rename
@@ -779,8 +770,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     // This happens when the computer is about to SHUT DOWN
+    // or user closed the app through taskbar or title bar
     this.electronService.ipcRenderer.on('please-shut-down-ASAP', (event) => {
-      this.initiateClose();
+      if (!this.isClosing) {
+        this.initiateClose();
+      }
     });
 
     // gets called if `trash` successfully removed the file
@@ -1024,12 +1018,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public initiateMaximize(): void {
-    if (this.appMaximized === false) {
-      this.electronService.ipcRenderer.send('maximize-window');
-      this.appMaximized = true;
-    } else {
+    if (this.appMaximized) {
       this.electronService.ipcRenderer.send('un-maximize-window');
       this.appMaximized = false;
+    } else {
+      this.electronService.ipcRenderer.send('maximize-window');
+      this.appMaximized = true;
     }
   }
 
@@ -2180,12 +2174,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param selection
    */
   newLengthFilterSelected(selection: number[]): void {
-    this.lengthLeftBound = selection[0];
+    this.durationLeftBound = selection[0];
 
     if (selection[1] > this.durationOutlierCutoff - 10) {
-      this.lengthRightBound = Infinity;
+      this.durationRightBound = Infinity;
     } else {
-      this.lengthRightBound = selection[1];
+      this.durationRightBound = selection[1];
     }
   }
 

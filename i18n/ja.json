@@ -200,7 +200,9 @@
     "videoNotesMoreInfo": "動画に追加したメモを検索します。 「手動タグ設定」でメモを有効にする",
     "videoPlayerSettings": "ビデオプレーヤーの設定",
     "showDetailsTray": "詳細",
-    "showDetailsTrayMoreInfo": "最後にクリックしたビデオの詳細を表示します"
+    "showDetailsTrayMoreInfo": "最後にクリックしたビデオの詳細を表示します",
+    "sortOptionFpsDescription": "FPS",
+    "sortOptionFpsMoreInfo": "並べ替えドロップダウンに[1秒あたりのフレーム数]オプションを表示する"
   },
   "RIGHTCLICK": {
     "cancelRename": "名前の変更をキャンセル",
@@ -308,7 +310,8 @@
     "shuffleGalleryNow": "現在の結果をシャッフルする",
     "startWizard": "ウィザードビューを切り替える",
     "toggleMinimalMode": "キオスク/最小モードの切り替え（すべてのパネルを非表示）",
-    "toggleSettings": "設定を切り替え"
+    "toggleSettings": "設定を切り替え",
+    "compactView": "コンパクトビューを切り替えます"
   },
   "SIDEBAR": {
     "and": "そして",
@@ -351,7 +354,8 @@
     "totalFolders": "フォルダ",
     "totalFoldersPlural": "フォルダー",
     "videoNotes": "ノートは持っています",
-    "videos": "ビデオ"
+    "videos": "ビデオ",
+    "sortFps": "FPS"
   },
   "STATISTICS": {
     "addFolderToHub": "ハブにフォルダーを追加",
@@ -392,7 +396,14 @@
     "videoFolder": "ここにあるビデオ：",
     "videoLengths": "ビデオの長さ",
     "watchFolder": "監視フォルダー",
-    "watchFolderHelpText": "フォルダーの内容が変更されたときにハブを自動的に更新する"
+    "watchFolderHelpText": "フォルダーの内容が変更されたときにハブを自動的に更新する",
+    "server": "サーバ",
+    "serverMoreInfo": "PCが電話と同じWiFiに接続されていることを確認してください。お使いの携帯電話でこのアドレスを開きます。",
+    "serverOnPort": "ポート上",
+    "serverOr": "または",
+    "serverRunning": "サーバーが実行されています",
+    "serverStart": "サーバーを起動します",
+    "serverStop": "サーバーを停止します"
   },
   "SYSTEM": {
     "cancel": "キャンセル",

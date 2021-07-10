@@ -14,6 +14,11 @@ export class TimesPlayedPipe implements PipeTransform {
     if (timesPlayed) {
       const rounded = Math.floor(timesPlayed+1)
 
+      console.log(rounded);
+      if (!isFinite(rounded)) {
+        return "∞"
+      }
+
       return rounded.toString(10);
     } else {
       return '0';

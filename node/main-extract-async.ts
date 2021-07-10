@@ -50,7 +50,7 @@ let numberOfThumbsDeleted: number = 0;
 let alreadyInAngular: Map<string, 1> = new Map(); // full paths to videos we have metadata for in Angular
 
 // These two are together:
-let watcherMap:       Map<number, FSWatcher> = new Map();
+const watcherMap:       Map<number, FSWatcher> = new Map();
 let allFoundFilesMap: Map<number, Map<string, 1>> = new Map();
 // both these numbers     ^^^^^^ match up - they refer to the same `inputSource`
 
@@ -74,13 +74,13 @@ export function resetAllQueues(): void {
   allowSleep();
 
   // kill all previeous
-  if (thumbQueue && typeof thumbQueue.kill === "function") {
+  if (thumbQueue && typeof thumbQueue.kill === 'function') {
     thumbQueue.kill();
   }
-  if (metadataQueue && typeof metadataQueue.kill === "function") {
+  if (metadataQueue && typeof metadataQueue.kill === 'function') {
     metadataQueue.kill();
   }
-  if (deleteThumbQueue && typeof deleteThumbQueue.kill === "function") {
+  if (deleteThumbQueue && typeof deleteThumbQueue.kill === 'function') {
     deleteThumbQueue.kill();
   }
 
@@ -95,7 +95,7 @@ export function resetAllQueues(): void {
 
     thumbQueue.resume();
 
-    logPerformance("META QUEUE took ", metaExtractionStartTime);
+    logPerformance('META QUEUE took ', metaExtractionStartTime);
   });
 
   // Thumbs queue ======================================================================================================
@@ -106,7 +106,7 @@ export function resetAllQueues(): void {
 
   thumbQueue.drain(() => {
 
-    logPerformance("THUMB QUEUE took ", thumbExtractionStartTime);
+    logPerformance('THUMB QUEUE took ', thumbExtractionStartTime);
 
     thumbsDone = 0;
     sendCurrentProgress(1, 1, 'done');
@@ -146,7 +146,7 @@ function thumbQueueRunner(element: ImageElement, done): void {
         GLOBALS.selectedSourceFolders[element.inputSource].path,
         screenshotOutputFolder,
         GLOBALS.screenshotSettings,
-        true,
+        true, // `deepScan` always on by default -- maybe should be different?
         done
       );
     });
@@ -231,7 +231,7 @@ function superFastSystemScan(inputDir: string, inputSource: number): void {
   crawler.withPromise().then((files: string[]) => {
 
     // LOGGING =====================================================================================
-    logPerformance("scan took ", t0);
+    logPerformance('scan took ', t0);
     console.log('Found ', files.length, ' files in given directory');
     // =============================================================================================
 
@@ -261,7 +261,7 @@ function superFastSystemScan(inputDir: string, inputSource: number): void {
         inputSource: inputSource,
         name: parsed.base,
         partialPath: '/' + partial,
-      }
+      };
 
       metadataQueue.push(newItem);
 
@@ -308,7 +308,7 @@ export function startFileSystemWatching(inputDir: string, inputSource: number, p
     ignored: 'vha-*', // WARNING - dangerously ignores any path that includes `vha-` anywhere!!!
     persistent: true, // NOTE: if `!persistent` we use `superFastSystemScan()` instead !!!
     usePolling: isNetworkAddress ? true : false,
-  }
+  };
 
   const watcher: FSWatcher = chokidar.watch(inputDir, watcherConfig);
 
@@ -345,7 +345,7 @@ export function startFileSystemWatching(inputDir: string, inputSource: number, p
         inputSource: inputSource,
         name: fileName,
         partialPath: partialPath,
-      }
+      };
 
       metadataQueue.push(newItem);
     })
@@ -371,7 +371,7 @@ export function startFileSystemWatching(inputDir: string, inputSource: number, p
         watcher.close();  // chokidar seems to disregard `persistent` when `fsevents` is not enabled
       }
 
-      logPerformance("Chokidar took ", t0);
+      logPerformance('Chokidar took ', t0);
     });
 
   watcherMap.set(inputSource, watcher);
@@ -432,7 +432,7 @@ export function startWatcher(inputSource: number, folderPath: string, persistent
   GLOBALS.selectedSourceFolders[inputSource] = {
     path: folderPath,
     watch: persistent,
-  }
+  };
 
   preventSleep();
   startFileSystemWatching(folderPath, inputSource, persistent);
@@ -464,7 +464,7 @@ function hasAllThumbs(
         : 'ok'
     ])
       .then(() => {
-        resolve();
+        resolve(true);
       })
       .catch(() => {
         reject();
@@ -539,7 +539,7 @@ function deleteThumbQueueRunner(pathToFile: string, done): void {
 export function preventSleep(): void {
   console.log('preventing sleep');
   preventSleepIds.push(powerSaveBlocker.start('prevent-app-suspension'));
-};
+}
 
 /**
  * Allow PC to go to sleep after screenshots were extracted
@@ -552,8 +552,8 @@ function allowSleep(): void {
     });
   }
   preventSleepIds = [];
-};
+}
 
 function logPerformance(message: string, initial: number): void {
-  console.log(message + Math.round((performance.now() - initial) / 100) / 10 + " seconds.");
+  console.log(message + Math.round((performance.now() - initial) / 100) / 10 + ' seconds.');
 }
