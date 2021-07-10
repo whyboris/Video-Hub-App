@@ -7,6 +7,7 @@ import * as path from 'path';
 
 const fs = require('fs');
 const electron = require('electron');
+const { nativeTheme } = require('electron')
 import { app, protocol, BrowserWindow, screen, dialog, systemPreferences, ipcMain } from 'electron';
 const windowStateKeeper = require('electron-window-state');
 
@@ -47,7 +48,9 @@ const args = process.argv.slice(1);
 const serve: boolean = args.some(val => val === '--serve');
 
 GLOBALS.debug = args.some(val => val === '--debug');
-if (GLOBALS.debug) { console.log('Debug mode enabled!'); }
+if (GLOBALS.debug) {
+  console.log('Debug mode enabled!');
+}
 
 // =================================================================================================
 
@@ -99,6 +102,12 @@ function createWindow() {
 
   if (GLOBALS.macVersion) {
     electron.Menu.setApplicationMenu(electron.Menu.buildFromTemplate([
+      {
+        label: app.name,
+        submenu: [
+          { role: 'quit' }
+        ]
+      },
       {
         label: 'Edit',
         submenu: [
@@ -161,7 +170,15 @@ function createWindow() {
   // Watch for computer powerMonitor
   // https://electronjs.org/docs/api/power-monitor
   electron.powerMonitor.on('shutdown', () => {
-    GLOBALS.angularApp.sender.send('please-shut-down-ASAP');
+    getAngularToShutDown();
+  });
+
+  win.on('close', (event) => {
+    if (GLOBALS.readyToQuit) {
+      app.exit();
+    } else {
+      getAngularToShutDown();
+    }
   });
 
   // Emitted when the window is closed.
@@ -225,7 +242,7 @@ if (GLOBALS.macVersion) {
   systemPreferences.subscribeNotification(
     'AppleInterfaceThemeChangedNotification',
     function theThemeHasChanged () {
-      if (systemPreferences.isDarkMode()) {
+      if (nativeTheme.shouldUseDarkColors) {
         tellElectronDarkModeChange('dark');
       } else {
         tellElectronDarkModeChange('light');
@@ -247,10 +264,17 @@ function tellElectronDarkModeChange(mode: string) {
 // -------------------------------------------------------------------------------------------------
 
 /**
+ * Get angular to shut down immediately - saving settings and hub if needed.
+ */
+function getAngularToShutDown(): void {
+  GLOBALS.angularApp.sender.send('please-shut-down-ASAP');
+}
+
+/**
  * Load the .vha2 file and send it to app
  * @param pathToVhaFile full path to the .vha2 file
  */
-function openThisDamnFile(pathToVhaFile: string) {
+function openThisDamnFile(pathToVhaFile: string): void {
 
   resetAllQueues();
 
