@@ -168,7 +168,7 @@ function markDuplicatesAsDeleted(imagesArray: ImageElement[]): ImageElement[] {
       && element.inputSource === currentElement.inputSource
     ) {
       element.deleted = true;
-      console.log('DUPE FOUND: '+ element.fileName);
+      console.log('DUPE FOUND: ' + element.fileName);
     }
     currentElement = element;
   });
@@ -278,7 +278,7 @@ export function cleanUpFileName(original: string): string {
   return original.split('.').slice(0, -1).join('.')   // (1)
                  .split('_').join(' ')                // (2)
                  .split('.').join(' ')                // (3)
-                 .split(/\s+/).join(' ')              // (4)
+                 .split(/\s+/).join(' ');             // (4)
 }
 
 /**
@@ -324,12 +324,11 @@ function getFileDuration(metadata): number {
  * @param metadata
  */
  function getFps(metadata): number {
-   if(metadata?.streams?.[0]?.r_frame_rate) {
-     let fps = metadata.streams[0].r_frame_rate
-     let evalFps = eval(fps.toString());
+   if (metadata?.streams?.[0]?.r_frame_rate) {
+     const fps = metadata.streams[0].r_frame_rate;
+     const evalFps = eval(fps.toString()); // `eval` because FPS is a fraction like `24000/1001`
      return Math.round(evalFps);
-   }
-   else {
+   } else {
      return 0;
    }
  }
@@ -442,8 +441,8 @@ export function extractMetadataAsync(
         const origWidth = stream.width || 0; // ffprobe does not detect it on some MKV streams
         const origHeight = stream.height || 0;
 
-        fs.stat(filePath, (err, fileStat) => {
-          if (err) {
+        fs.stat(filePath, (err2, fileStat) => {
+          if (err2) {
             reject();
           }
 
@@ -558,7 +557,7 @@ export function upgradeToVersion3(finalObject: FinalObject): void {
     };
     finalObject.version = 3;
     finalObject.images.forEach((element: ImageElement) => {
-      element.inputSource = 0
+      element.inputSource = 0;
       element.screens = computeNumberOfScreenshots(finalObject.screenshotSettings, element.duration);
       // update number of screens to account for too-many or too-few cases
       // as they were not handlede prior to version 3 release
