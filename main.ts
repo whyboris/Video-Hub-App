@@ -48,7 +48,9 @@ const args = process.argv.slice(1);
 const serve: boolean = args.some(val => val === '--serve');
 
 GLOBALS.debug = args.some(val => val === '--debug');
-if (GLOBALS.debug) { console.log('Debug mode enabled!'); }
+if (GLOBALS.debug) {
+  console.log('Debug mode enabled!');
+}
 
 // =================================================================================================
 

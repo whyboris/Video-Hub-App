@@ -1,6 +1,4 @@
-import { BrowserWindow } from 'electron';
-const dialog = require('electron').dialog;
-const shell = require('electron').shell;
+import { app, dialog, shell, BrowserWindow } from 'electron';
 
 import * as path from 'path';
 const fs = require('fs');
@@ -94,14 +92,22 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
 
   /**
    * Handle dragging a file out of VHA into a video editor (e.g. Vegas or Premiere)
+   * if `imgPath` points to a file that does not exist, replace with default image
    */
   ipc.on('drag-video-out-of-electron', (event, filePath, imgPath): void => {
-    console.log(filePath);
-    event.sender.startDrag({
-      file: filePath,
-      icon: imgPath,
-      // icon: './src/assets/logo.png' // <-- local dev if I want the logo instead of thumbnail
-      // icon: './resources/assets/logo.png' // <-- production location (if I copy over the asset correctly in `electron-builder.json`)
+    fs.access(imgPath, fs.constants.F_OK, (err: any) => {
+      if (!err) {
+        event.sender.startDrag({
+          file: filePath,
+          icon: imgPath,
+        });
+      } else {
+        const tempIcon: string = app.isPackaged ? './resources/assets/logo.png' : './src/assets/logo.png';
+        event.sender.startDrag({
+          file: filePath,
+          icon: tempIcon,
+        });
+      }
     });
   });
 

@@ -24,6 +24,10 @@
     {
       "from": "remote",
       "to": "remote"
+    },
+    {
+      "from": "src/assets/logo.png",
+      "to": "assets/logo.png"
     }
   ],
   "win": {
