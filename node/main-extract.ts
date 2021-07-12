@@ -232,7 +232,6 @@ const extractFirstFrameArgs = (
  * @param videoFolderPath    -- path to base folder where videos are
  * @param screenshotFolder   -- path to folder where .jpg files will be saved
  * @param screenshotSettings -- ScreenshotSettings object
- * @param deepScan           -- spend 50% more time trying to extracts screenshots
  * @param done               -- execute this method when done extracting
  */
 export function extractAll(
@@ -240,7 +239,6 @@ export function extractAll(
   videoFolderPath: string,
   screenshotFolder: string,
   screenshotSettings: ScreenshotSettings,
-  deepScan: boolean,
   done
 ): void {
 
@@ -256,13 +254,13 @@ export function extractAll(
   const numOfScreens: number = currentElement.screens;
   const sourceHeight: number = currentElement.height;
 
-  const thumbnailSavePath: string = screenshotFolder + '/thumbnails/' + fileHash + '.jpg';
-  const filmstripSavePath: string = screenshotFolder + '/filmstrips/' + fileHash + '.jpg';
-  const clipSavePath:      string = screenshotFolder + '/clips/' +      fileHash + '.mp4';
-  const clipThumbSavePath: string = screenshotFolder + '/clips/' +      fileHash + '.jpg';
+  const thumbnailSavePath: string = path.normalize(screenshotFolder + '/thumbnails/' + fileHash + '.jpg');
+  const filmstripSavePath: string = path.normalize(screenshotFolder + '/filmstrips/' + fileHash + '.jpg');
+  const clipSavePath:      string = path.normalize(screenshotFolder + '/clips/' +      fileHash + '.mp4');
+  const clipThumbSavePath: string = path.normalize(screenshotFolder + '/clips/' +      fileHash + '.jpg');
 
   const maxRunTime: ExtractionDurations = setExtractionDurations(
-    sourceHeight, numOfScreens, screenshotHeight, clipSnippets, snippetLength, clipHeight, deepScan
+    sourceHeight, numOfScreens, screenshotHeight, clipSnippets, snippetLength, clipHeight
   );
 
   checkFileExists(pathToVideo)                                                            // (1)
@@ -395,7 +393,6 @@ interface ExtractionDurations {
  * @param clipSnippets
  * @param snippetLength
  * @param clipHeight
- * @param deepScan -- whether to spend 50% more time extracting screenshots
  */
 function setExtractionDurations(
   sourceHeight: number,
@@ -403,30 +400,28 @@ function setExtractionDurations(
   screenshotHeight: number,
   clipSnippets: number,
   snippetLength: number,
-  clipHeight: number,
-  deepScan: boolean
+  clipHeight: number
 ): ExtractionDurations {
 
   // screenshot heights range from 144px to 504px
   // we'll call 144 the baseline and increase duration based on this
   // number of pixels grows ~ as square of height, so we square below
-  // this means at highest resolution we multyply by 9 the time we wait
-  const thumbHeightRatio = screenshotHeight / 144;
-  const thumbHeightFactor = thumbHeightRatio * thumbHeightRatio; // square of ratio
+  // this means at highest resolution we multyply by 12.5 the time we wait
+  const thumbHeightRatio = screenshotHeight / 144; // max 3.5 or 12.25 when squared
+  const thumbHeightFactor = 1 + (thumbHeightRatio * thumbHeightRatio / 4); // square of ratio
   // not using Math.pow(n,2) because this is apparently faster https://stackoverflow.com/a/26594370/5017391
 
-  const clipHeightRatio = clipHeight / 144;
-  const clipHeightFactor = clipHeightRatio * clipHeightRatio; // square of ratio
+  const clipHeightRatio = clipHeight / 144; // max 3.5 or 12.25 when squared
+  const clipHeightFactor = 1 + (clipHeightRatio * clipHeightRatio / 4); // square of ratio
 
-  const sourceFactor = sourceHeight === 0 ? 1 : sourceHeight / 720; // may be better as a square rather than linear
+  const sourceRatio = (sourceHeight === 0) ? 1 : (sourceHeight / 720); // 3 when source is 4k
+  const sourceFactor = 1 + (sourceRatio * sourceRatio / 3); // square of ratio
 
-  const multiplier = deepScan ? 1 : 1.5; // always `true` by default, but should be different?
-
-  return {                                                                            // for me:
-    thumb:     350 * multiplier * sourceFactor * thumbHeightFactor,                                // never above 300ms
-    filmstrip: 350 * multiplier * sourceFactor * numOfScreens * thumbHeightFactor,                 // rarely above 15s, but 4K 30screens took 50s
-    clip:     1000 * multiplier * sourceFactor * clipSnippets * snippetLength * clipHeightFactor,  // barely ever above 15s
-    clipThumb: 150 * multiplier * sourceFactor * clipHeightFactor,                                 // never above 100ms
+  return {                                                                           // for me:
+    thumb:     500 * sourceFactor * thumbHeightFactor,                               // never above 800ms
+    filmstrip: 350 * sourceFactor * thumbHeightFactor * numOfScreens,                // rarely above 15s, but 4K 30screens took 50s
+    clip:      350 * sourceFactor * clipHeightFactor * clipSnippets * snippetLength, // rarely above 15s
+    clipThumb: 400 * clipHeightRatio,                                                // never above 600ms
   };
 }
 
@@ -499,7 +494,7 @@ function spawn_ffmpeg_and_run(
 
   return new Promise((resolve, reject) => {
 
-    // Uncomment things in this method to check how long extraction takes
+    // Uncomment things in this method (and the `performance` import) to check how long extraction takes
     // const t0: number = performance.now();
 
     const ffmpeg_process = spawn(ffmpegPath, args);
@@ -527,7 +522,7 @@ function spawn_ffmpeg_and_run(
     ffmpeg_process.on('exit', () => {
       clearTimeout(killProcessTimeout);
       // const t1: number = performance.now();
-      // console.log(description + ': ' + (t1 - t0).toString());
+      // console.log(description + ' ' + Math.round(t1 - t0) + ' < ' + maxRunningTime);
       return resolve(true);
     });
 
