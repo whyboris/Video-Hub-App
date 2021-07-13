@@ -189,6 +189,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // Year filter
   // ------------------------------------------------------------------------
 
+  yearMinCutoff: number = 0;
   yearCutoff: number = 0;
   yearLeftBound: number = 0;
   yearRightBound: number = Infinity;
@@ -2213,8 +2214,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   newYearFilterSelected(selection: number[]): void {
 
-    this.yearLeftBound = selection[0];
-    this.yearRightBound = selection[1];
+      this.yearLeftBound = selection[0];
+      this.yearRightBound = selection[1];
 
   }
 
@@ -2238,10 +2239,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.timesPlayedCutoff = Math.max(...timesPlayed);
   }
 
+  //need to filter otherwise cutoff will be NaN
   setUpYearFilterValues(finalArray: ImageElement[]): void {
     const year: number[] = finalArray.map((element) => { return element.year; });
-
-    this.yearCutoff = Math.max(...year);
+    const filtrate = el => Number.isInteger(el) && el > 0;
+    const yearFiltered = year.filter(filtrate)
+    this.yearMinCutoff = Math.min(...yearFiltered) - 1
+    this.yearCutoff = Math.max(...yearFiltered);
   }
   /**
    * Given an array of numbers

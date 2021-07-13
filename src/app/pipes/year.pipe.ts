@@ -12,8 +12,6 @@ export class YearPipe implements PipeTransform {
   transform(year: number): string {
     if (year) {
       const rounded = Math.floor(year)
-
-      console.log(rounded);
       if (!isFinite(rounded)) {
         return "∞"
       }
