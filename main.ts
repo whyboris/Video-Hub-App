@@ -65,6 +65,8 @@ if (args[0]) {
 
 const gotTheLock = app.requestSingleInstanceLock(); // Open file on windows from file double click
 
+app.commandLine.appendSwitch('enable-features', 'JXL');
+
 if (!gotTheLock) {
   app.quit();
 } else {
