@@ -105,7 +105,8 @@ function createWindow() {
       {
         label: app.name,
         submenu: [
-          { role: 'quit' }
+          { role: 'quit' },
+          { role: 'hide' },
         ]
       },
       {
@@ -116,8 +117,11 @@ function createWindow() {
           { role: 'copy' },
           { role: 'paste' }
         ]
-      }
-    ]));
+      },
+      {
+        label: "Window",
+        role: 'windowMenu',
+      }]));
   }
 
   // Create the browser window.
