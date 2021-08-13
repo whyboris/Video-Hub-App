@@ -119,9 +119,16 @@ function createWindow() {
         ]
       },
       {
+        label: "View",
+        submenu: [
+          { role: "togglefullscreen" },
+        ]
+      },
+      {
         label: "Window",
         role: 'windowMenu',
-      }]));
+      },
+    ]));
   }
 
   // Create the browser window.
