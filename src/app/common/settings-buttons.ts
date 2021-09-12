@@ -855,4 +855,4 @@ export const SettingsButtons: SettingsButtonsType = {
     title: 'BUTTONS.videoNotesHint',
     toggled: false
   }
-}
+};

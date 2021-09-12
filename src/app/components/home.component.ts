@@ -105,7 +105,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild('magicSearch', { static: false }) magicSearch: ElementRef;
   @ViewChild('searchRef',   { static: false }) searchRef:   ElementRef;
 
-  @ViewChild(SortOrderComponent) sortOrderRef:SortOrderComponent;
+  @ViewChild(SortOrderComponent) sortOrderRef: SortOrderComponent;
 
   @ViewChild(VirtualScrollerComponent, { static: false }) virtualScroller: VirtualScrollerComponent;
 
@@ -445,7 +445,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.electronService.ipcRenderer.on('file-not-found', (event) => {
       this.zone.run(() => {
         this.modalService.openSnackbar(this.translate.instant('SETTINGS.fileNotFound'));
-      })
+      });
     });
 
     // when `remote-control` requests to open video
@@ -459,7 +459,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         wifi: ip,
         host: hostname,
         port: port
-      }
+      };
 
       console.log(serverDetails);
       this.serverDetailsBehaviorSubject.next(serverDetails);
@@ -597,7 +597,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       let somethingDeleted: boolean = false;
 
       this.imageElementService.imageElements
-        .filter((element: ImageElement) => { return element.inputSource == sourceIndex })
+        .filter((element: ImageElement) => { return element.inputSource == sourceIndex; })
         // notice the loosey-goosey comparison! this is because number  ^^  string comparison happening here!
         .forEach((element: ImageElement) => {
           // console.log(element.fileName);
@@ -618,7 +618,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // mark the element in `imageElements[]` as `deleted`
     this.electronService.ipcRenderer.on('single-file-deleted', (event, sourceIndex: number, partialPath: string) => {
       this.imageElementService.imageElements
-        .filter((element: ImageElement) => { return element.inputSource == sourceIndex })
+        .filter((element: ImageElement) => { return element.inputSource == sourceIndex; })
         // notice the loosey-goosey comparison! this is because number  ^^  string comparison happening here!
         .forEach((element: ImageElement) => {
           if (
@@ -806,7 +806,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       // important for when user renames a folder for example
       this.imageElementService.imageElements
         .filter((currentElements: ImageElement) => {
-          return currentElements.deleted
+          return currentElements.deleted;
         })
         .forEach((deletedElement: ImageElement) => {
           if (deletedElement.hash === element.hash) {
@@ -890,7 +890,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.resetFinalArrayRef();
     } else {
       this.newVideoImportTimeout = setTimeout(() => {
-        this.resetFinalArrayRef()
+        this.resetFinalArrayRef();
       }, 3000);
     }
   }

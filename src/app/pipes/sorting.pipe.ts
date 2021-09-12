@@ -111,13 +111,13 @@ export class SortingPipe implements PipeTransform {
     }
 
     if (property === 'aspectRatio') {
-      var xAspectRatio = x.width / x.height;
-      var yAspectRatio = y.width / y.height;
+      let xAspectRatio = x.width / x.height;
+      let yAspectRatio = y.width / y.height;
 
       if (xAspectRatio < yAspectRatio) {
-        if (decreasing) { return 1 } else { return -1;}
+        if (decreasing) { return 1; } else { return -1; }
       } if (xAspectRatio > yAspectRatio) {
-        if (decreasing) { return -1 } else { return 1;}
+        if (decreasing) { return -1; } else { return 1; }
       } else {
         return 0;
       }
@@ -126,14 +126,14 @@ export class SortingPipe implements PipeTransform {
     if (property === 'folderSize') {
 
       // want non-folders to be considered "less than" a folder so give negative value by default.
-      var xDisplay = -Infinity;
-      var yDisplay = -Infinity;
+      let xDisplay = -Infinity;
+      let yDisplay = -Infinity;
 
-      if(x.cleanName === "*FOLDER*"){
+      if (x.cleanName === '*FOLDER*') {
         xDisplay = parseInt(x.fileSizeDisplay, 10);
       }
 
-      if(y.cleanName === "*FOLDER*"){
+      if (y.cleanName === '*FOLDER*') {
         yDisplay = parseInt(y.fileSizeDisplay, 10);
       }
 
@@ -306,7 +306,7 @@ export class SortingPipe implements PipeTransform {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'fps', false);
       });
-    }else {
+    } else {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): any => {
         return this.sortFunctionLol(x, y, 'index', true);
       });
