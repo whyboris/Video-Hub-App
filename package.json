@@ -23,6 +23,9 @@
   ],
   "main": "main.js",
   "license": "MIT",
+  "engines": {
+    "node": ">=v14"
+  },
   "scripts": {
     "start": "npm-run-all -p electron:serve ng:serve",
     "build": "npm run electron:serve-tsc && ng build --base-href ./",
