@@ -111,8 +111,8 @@ export class SortingPipe implements PipeTransform {
     }
 
     if (property === 'aspectRatio') {
-      let xAspectRatio = x.width / x.height;
-      let yAspectRatio = y.width / y.height;
+      const xAspectRatio = x.width / x.height;
+      const yAspectRatio = y.width / y.height;
 
       if (xAspectRatio < yAspectRatio) {
         if (decreasing) { return 1; } else { return -1; }

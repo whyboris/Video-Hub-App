@@ -597,6 +597,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       let somethingDeleted: boolean = false;
 
       this.imageElementService.imageElements
+        // tslint:disable-next-line:triple-equals
         .filter((element: ImageElement) => { return element.inputSource == sourceIndex; })
         // notice the loosey-goosey comparison! this is because number  ^^  string comparison happening here!
         .forEach((element: ImageElement) => {
@@ -618,6 +619,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // mark the element in `imageElements[]` as `deleted`
     this.electronService.ipcRenderer.on('single-file-deleted', (event, sourceIndex: number, partialPath: string) => {
       this.imageElementService.imageElements
+        // tslint:disable-next-line:triple-equals
         .filter((element: ImageElement) => { return element.inputSource == sourceIndex; })
         // notice the loosey-goosey comparison! this is because number  ^^  string comparison happening here!
         .forEach((element: ImageElement) => {
@@ -910,6 +912,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   deleteInputSourceFiles(sourceIndex: number): void {
     this.imageElementService.imageElements.forEach((element: ImageElement) => {
+      // tslint:disable-next-line:triple-equals
       if (element.inputSource == sourceIndex) { // TODO -- stop the loosey goosey `==` and figure out `string` vs `number`
         element.deleted = true;
         this.imageElementService.finalArrayNeedsSaving = true;
