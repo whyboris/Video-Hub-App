@@ -44,9 +44,10 @@ See [issues](https://github.com/whyboris/Video-Hub-App/issues) for what is in pr
 
 How to start:
 
-- `npm install` to install
-- `npm start` to develop
-- `npm run electron` to build
+- `npm install -g yarn` to install yarn globally
+- `yarn install` to install
+- `yarn start` to develop
+- `yarn run electron` to build
 
 Main dependencies in use:
 
