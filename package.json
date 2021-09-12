@@ -32,6 +32,7 @@
     "build:prod": "npm run build -- -c production",
     "buildsize": "sh ./bin/buildSizeCheck.sh",
     "check:lint": "tslint --project ./tsconfig.json && tslint --project ./tsconfig-serve.json && tslint --project ./tsconfig.worker.json",
+    "check:tsc": "tsc --project ./tsconfig.json --noEmit && tsc --project ./tsconfig-serve.json --noEmit && tsc --project ./tsconfig.worker.json --noEmit",
     "hasRemote": "sh ./bin/hasRemoteCheck.sh",
     "electron": "npm run hasRemote && npm run build:prod && electron-builder build && npm run buildsize",
     "electron:serve": "wait-on tcp:4200 && npm run electron:serve-tsc && npx electron . --serve",
