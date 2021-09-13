@@ -46,12 +46,14 @@ export class SettingsComponent implements OnInit {
     private electronService: ElectronService,
     private modalService: ModalService,
     private translate: TranslateService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.additionalInput = this.appState.addtionalExtensions;
   }
-
+  ngOnChanges(): void {
+    document.getElementById('settings').scrollTop = 0;
+  }
   editAdditionalExtensions() {
     this.editAdditional = !this.editAdditional;
     this.additionalInput = this.appState.addtionalExtensions;
