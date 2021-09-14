@@ -6,6 +6,7 @@
 /out-tsc
 /app-builds
 /remote
+/.idea
 
 *.js
 *.js.map

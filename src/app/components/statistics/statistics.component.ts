@@ -114,7 +114,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
       if (data) { // first emit from subscription is `undefined`
         this.handleOldFolderReconnected(data.source, data.path);
       }
-    }))
+    }));
 
     this.eventSubscriptionMap.set('numberOfScreenshotsDeleted', this.numberScreenshotsDeleted.subscribe((deleted: number) => {
       if (deleted !== undefined) { // first emit from subscription is `undefined`
@@ -155,10 +155,10 @@ export class StatisticsComponent implements OnInit, OnDestroy {
 
       this.numberOfScreensDeleted = numDeleted;
       this.showNumberDeleted = true;
-      this.cd.detectChanges()
+      this.cd.detectChanges();
       setTimeout(() => {
         this.showNumberDeleted = false;
-        this.cd.detectChanges()
+        this.cd.detectChanges();
       }, 3000);
 
     }, 1000); // make sure it doesn't appear instantly -- feels like an error if it happens to quickly :P

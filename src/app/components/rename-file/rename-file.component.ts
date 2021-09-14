@@ -25,7 +25,7 @@ export class RenameFileComponent implements OnInit, OnDestroy {
   @Input() macVersion: boolean;
   @Input() selectedSourceFolder: string;
 
-  @Input() renameResponse: Observable<RenameFileResponse>
+  @Input() renameResponse: Observable<RenameFileResponse>;
 
   renamingWIP: string;
   renamingExtension: string;

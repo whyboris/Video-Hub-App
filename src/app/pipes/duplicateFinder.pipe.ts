@@ -33,7 +33,7 @@ export class DuplicateFinderPipe implements PipeTransform {
       let feature: Feature = undefined;
       let comparison: Function = undefined;
 
-      switch(dupeType) {
+      switch (dupeType) {
         case 'length':
           // console.log('DUPLICATE by LENGTH');
           sortBy = 'timeDesc';
