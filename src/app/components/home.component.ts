@@ -2242,12 +2242,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.timesPlayedCutoff = Math.max(...timesPlayed);
   }
 
-  //need to filter otherwise cutoff will be NaN
+  // need to filter otherwise cutoff will be NaN
   setUpYearFilterValues(finalArray: ImageElement[]): void {
     const year: number[] = finalArray.map((element) => { return element.year; });
     const filtrate = el => Number.isInteger(el) && el > 0;
-    const yearFiltered = year.filter(filtrate)
-    this.yearMinCutoff = Math.min(...yearFiltered) - 1
+    const yearFiltered = year.filter(filtrate);
+    this.yearMinCutoff = Math.min(...yearFiltered) - 1;
     this.yearCutoff = Math.max(...yearFiltered);
   }
   /**
