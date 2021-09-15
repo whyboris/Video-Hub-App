@@ -77,8 +77,9 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'tagExclusion'
  | 'tagIntersection'
  | 'tagUnion'
- | 'thumbAutoAdvance'
  | 'timesPlayedFilter'
+ | 'thumbAutoAdvance'
+ | 'yearFilter'
  | 'videoNotes';
 
 // Add `SettingsButtons` items here so they show up in the buttons ribbon and in the settings
@@ -106,6 +107,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'sizeFilter',
     'timesPlayedFilter',
     'resolutionFilter',
+    'yearFilter',
     'starFilter',
     'sortOrder',
     'hideOffline',
@@ -122,7 +124,6 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'sortOptionAspectRatio',
     'sortOptionFps',
     'sortOptionFolderSize',
-
   ],
   [ // 3 - Find duplicates
     'duplicateLength',
@@ -845,6 +846,14 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-toggle-auto-scrub',
     moreInfo: 'BUTTONS.thumbAutoAdvanceMoreInfo',
     title: 'BUTTONS.thumbAutoAdvanceHint',
+    toggled: false
+  },
+  'yearFilter': {
+    description: 'BUTTONS.yearSliderDescription',
+    hidden: false,
+    iconName: 'icon-times-played',
+    moreInfo: 'BUTTONS.yearSliderMoreInfo',
+    title: 'BUTTONS.yearSliderHint',
     toggled: false
   },
   'videoNotes': {

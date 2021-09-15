@@ -186,6 +186,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
   timesPlayedRightBound: number = Infinity;
 
   // ========================================================================
+  // Year filter
+  // ------------------------------------------------------------------------
+
+  yearMinCutoff: number = 0;
+  yearCutoff: number = 0;
+  yearLeftBound: number = 0;
+  yearRightBound: number = Infinity;
+
+  // ========================================================================
   // Frequency / histogram
   // ------------------------------------------------------------------------
 
@@ -719,6 +728,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.setUpDurationFilterValues(this.imageElementService.imageElements);
       this.setUpSizeFilterValues(this.imageElementService.imageElements);
       this.setUpTimesPlayedFilterValues(this.imageElementService.imageElements);
+      this.setUpYearFilterValues(this.imageElementService.imageElements);
 
       if (this.sortOrderRef.sortFilterElement) {
         this.sortOrderRef.sortFilterElement.nativeElement.value = this.sortType;
@@ -2205,6 +2215,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   }
 
+  newYearFilterSelected(selection: number[]): void {
+
+      this.yearLeftBound = selection[0];
+      this.yearRightBound = selection[1];
+
+  }
+
   setUpDurationFilterValues(finalArray: ImageElement[]): void {
     const durations: number[] = finalArray.map((element) => { return element.duration; });
 
@@ -2225,6 +2242,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.timesPlayedCutoff = Math.max(...timesPlayed);
   }
 
+  //need to filter otherwise cutoff will be NaN
+  setUpYearFilterValues(finalArray: ImageElement[]): void {
+    const year: number[] = finalArray.map((element) => { return element.year; });
+    const filtrate = el => Number.isInteger(el) && el > 0;
+    const yearFiltered = year.filter(filtrate)
+    this.yearMinCutoff = Math.min(...yearFiltered) - 1
+    this.yearCutoff = Math.max(...yearFiltered);
+  }
   /**
    * Given an array of numbers
    * returns the cutoff for outliers
