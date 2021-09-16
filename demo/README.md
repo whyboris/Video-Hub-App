@@ -2,7 +2,7 @@
 
 This folder contains files for showing a web preview of the app.
 
-First build the app (`npm run build`) with the web-demo flag `webDemo` set to `true` (in `home.component.ts`). This should populate the `/dist` folder with `index.html`. 
+First build the app (`yarn run build`) with the web-demo flag `webDemo` set to `true` (in `home.component.ts`). This should populate the `/dist` folder with `index.html`. 
 
 Now when you open the `index.html` within this folder, you should see a web version of the app with sample demo content. 
 
