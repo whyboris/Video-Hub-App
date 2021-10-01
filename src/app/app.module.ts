@@ -106,6 +106,7 @@ import { WordFrequencyPipe } from './pipes/word-frequency.pipe';
 import { WrapperPipe } from './pipes/wrapper.pipe';
 import { YearFilterPipe } from './pipes/year-filter.pipe';
 import { YearPipe } from './pipes/year.pipe';
+import { OrderByPipe } from './pipes/order-by-pipe';
 
 
 @NgModule({
@@ -180,7 +181,8 @@ import { YearPipe } from './pipes/year.pipe';
     WordFrequencyPipe,
     WrapperPipe,
     YearFilterPipe,
-    YearPipe
+    YearPipe,
+    OrderByPipe
   ],
   imports: [
     AnQrcodeModule,
