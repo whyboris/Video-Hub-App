@@ -12,6 +12,7 @@ import { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/shared
   selector: 'app-filmstrip-item',
   templateUrl: './filmstrip.component.html',
   styleUrls: [
+      '../clip-and-preview.scss',
       '../film-and-full.scss',
       '../time-and-rez.scss',
       '../selected.scss'
@@ -28,6 +29,7 @@ export class FilmstripComponent implements OnInit {
 
   @Input() video: ImageElement;
 
+  @Input() compactView: boolean;
   @Input() darkMode: boolean;
   @Input() elHeight: number;
   @Input() folderPath: string;

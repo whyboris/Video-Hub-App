@@ -1600,6 +1600,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (
         this.settingsButtons['showThumbnails'].toggled
         || this.settingsButtons['showClips'].toggled
+        || this.settingsButtons['showFilmstrip'].toggled
       ) {
         this.computeTextBufferAmount();
       }
@@ -1799,7 +1800,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
         break;
 
       case 'showFilmstrip':
-        if (this.settingsButtons.showMoreInfo.toggled) {
+        if (this.settingsButtons.compactView.toggled) {
+          this.textPaddingHeight = 0;
+        } else if (this.settingsButtons.showMoreInfo.toggled) {
           this.textPaddingHeight = 20;
         } else {
           this.textPaddingHeight = 0;
