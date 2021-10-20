@@ -397,7 +397,7 @@ function hashFileAsync(pathToFile: string, stats: Stats): Promise<string> {
       data = Buffer.alloc(sampleSize * 3);
       fs.open(pathToFile, 'r', (err, fd) => {
         fs.read(fd, data, 0, sampleSize, 0, (err2, bytesRead, buffer) => { // read beginning of file
-          fs.read(fd, data, sampleSize, sampleSize, fileSize / 2, (err3, bytesRead2, buffer2) => {
+          fs.read(fd, data, sampleSize, sampleSize, Math.floor(fileSize / 2), (err3, bytesRead2, buffer2) => {
             fs.read(fd, data, sampleSize * 2, sampleSize, fileSize - sampleSize, (err4, bytesRead3, buffer3) => {
               fs.close(fd, (err5) => {
                 // append the file size to the data
