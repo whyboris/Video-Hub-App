@@ -137,7 +137,6 @@ function createWindow() {
       nodeIntegration: true,
       allowRunningInsecureContent: true,
       contextIsolation: false,
-      enableRemoteModule: true,
       webSecurity: false  // allow files from hard disk to show up
     },
     x: mainWindowState.x,
