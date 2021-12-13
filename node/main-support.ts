@@ -303,12 +303,11 @@ function getBestStream(metadata) {
  */
 function getFileDuration(metadata): number {
   if (metadata?.streams?.[0]?.duration) {
-    console.log(metadata.streams[0].duration);
+    
     return metadata.streams[0].duration;
 
   } else if (metadata?.format?.duration) {
 
-    console.log(metadata.format.duration);
     return   metadata.format.duration;
   } else {
     return 0;
