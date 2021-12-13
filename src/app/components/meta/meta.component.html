@@ -33,7 +33,9 @@
     | {{ video.width }} x {{ video.height }}
 
     | {{ video.fileSizeDisplay }}
-
+    
+    | {{ video.bitrate + ' mb/s' }}
+    
     {{ video.fps ? '| ' + video.fps + ' fps' : '' }}
 
     | <input

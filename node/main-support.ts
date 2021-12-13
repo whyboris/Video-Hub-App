@@ -117,6 +117,7 @@ function getFileSizeDisplay(sizeInBytes: number): string {
  * Generate duration formatted as X:XX:XX
  * @param numOfSec
  */
+
 function getDurationDisplay(numOfSec: number): string {
 
   if (numOfSec === undefined || numOfSec === 0) {
@@ -302,16 +303,23 @@ function getBestStream(metadata) {
  */
 function getFileDuration(metadata): number {
   if (metadata?.streams?.[0]?.duration) {
-
+    console.log(metadata.streams[0].duration);
     return metadata.streams[0].duration;
 
   } else if (metadata?.format?.duration) {
 
+    console.log(metadata.format.duration);
     return   metadata.format.duration;
-
   } else {
     return 0;
   }
+}
+
+//Calculation of video bitrate in mb/s
+
+function getBitrate(fileSize,duration){
+  var bitrate = ((fileSize/1000)/duration)/1000;
+  return Math.round(bitrate*100)/100;
 }
 
 /**
@@ -537,6 +545,7 @@ export function insertTemporaryFieldsSingle(element: ImageElement): ImageElement
   const resolution: ResolutionMeta = labelVideo(element.width, element.height);
   element.durationDisplay = getDurationDisplay(element.duration);
   element.fileSizeDisplay = getFileSizeDisplay(element.fileSize);
+  element.bitrate = getBitrate(element.fileSize, element.duration);
   element.resBucket = resolution.bucket;
   element.resolution = resolution.label;
   return element;
