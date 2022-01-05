@@ -123,7 +123,7 @@
   </button>
 
   <!-- Times played -->
-  <span class="fileSize times-played" *ngIf="video.timesPlayed">
+  <span class="fileSize times-played" [ngStyle]="{color: darkMode ? '#DDDDDD' : '#000000'}"  *ngIf="video.timesPlayed">
     {{ 'TAGS.timesPlayed' | translate }}: {{ video.timesPlayed }}
   </span>
 
