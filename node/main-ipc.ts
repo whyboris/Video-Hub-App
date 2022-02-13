@@ -2,7 +2,7 @@ import { app, dialog, shell, BrowserWindow } from 'electron';
 
 import * as path from 'path';
 const fs = require('fs');
-const trash = require('trash');
+import trash from 'trash';
 const exec = require('child_process').exec;
 
 import { GLOBALS } from './main-globals';
