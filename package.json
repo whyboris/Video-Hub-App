@@ -44,6 +44,7 @@
   },
   "dependencies": {
     "@ngx-translate/core": "14.0.0",
+    "an-qrcode": "1.0.7",
     "async": "3.2.3",
     "body-parser": "1.19.1",
     "chokidar": "3.5.3",
@@ -57,7 +58,7 @@
     "ngx-virtual-scroller": "4.0.3",
     "node-ffprobe-installer": "1.2.3",
     "path": "0.12.7",
-    "trash": "8.1.0",
+    "trash": "7.2.0",
     "ws": "8.5.0"
   },
   "devDependencies": {
