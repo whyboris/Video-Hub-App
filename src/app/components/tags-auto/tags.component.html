@@ -1,61 +1,84 @@
 <div class="columns-container">
+
+  <div *ngIf="loading" class="loading" @metaAppear>
+    {{ 'TAGS.loading' | translate }} ...
+  </div>
+
+  <!-- Below two elements are identical except for `oneWordTags` vs `twoWordTags` -->
+
   <ul class="column">
-    <li
-      *ngFor="let item of oneWordTags | tagFrequencyPipe: minimumFrequency
-                                      | tagFilterPipe: currentFiltering
-                                      | alphabetPrefixPipe"
+
+    <virtual-scroller
+      #scrollOne
+      class="virt-scroll"
+      [items]="oneWordTags | tagFrequencyPipe : minimumFrequency
+                           | tagFilterPipe : currentFiltering
+                           | alphabetPrefixPipe"
     >
-      <span *ngIf="item.prefix" class="prefix">
-        {{ item.prefix }}
-      </span>
-      <span class="frequency">
-        {{ item.freq }}
-      </span>
-      <span
-        (click)="tagWasClicked(item.word)"
-        [ngClass]="{ strikethrough: editMode }"
-        class="clickable"
+      <li
+        *ngFor="let item of scrollOne.viewPortItems"
       >
-        {{ item.word }}<!--
-   --></span>
-      <!-- using opacity instead of *ngIf because creation of hundreds of elements is slow -->
-      <app-icon
-        [ngStyle]="{ opacity: editMode ? 1 : 0 }"
-        [icon]="'icon-close'"
-        class="icon-lol"
-      ></app-icon>
-    </li>
+        <span *ngIf="item.prefix" class="prefix">
+          {{ item.prefix }}
+        </span>
+        <span class="frequency">
+          {{ item.freq }}
+        </span>
+        <span
+          (click)="tagWasClicked(item.word)"
+          [ngClass]="{ strikethrough: editMode }"
+          class="clickable"
+        >
+          {{ item.word }}<!--
+    --></span>
+        <!-- using opacity instead of *ngIf because creation of hundreds of elements is slow -->
+        <span
+          class="delete-tag-hack"
+          [ngStyle]="{ opacity: editMode ? 1 : 0 }"
+        >x</span>
+      </li>
+    </virtual-scroller>
   </ul>
 
   <ul class="column">
-    <li
-      class="capitalize"
-      *ngFor="let item of twoWordTags | tagFrequencyPipe: minimumFrequency
-                                      | tagFilterPipe: currentFiltering
-                                      | alphabetPrefixPipe"
+
+    <virtual-scroller
+      #scrollTwo
+      class="virt-scroll"
+      [items]="twoWordTags | tagFrequencyPipe : minimumFrequency
+                           | tagFilterPipe : currentFiltering
+                           | alphabetPrefixPipe"
     >
-      <span *ngIf="item.prefix" class="prefix">
-        {{ item.prefix }}
-      </span>
-      <span class="frequency">
-        {{ item.freq }}
-      </span>
-      <span
-        (click)="tagWasClicked(item.word)"
-        [ngClass]="{ strikethrough: editMode }"
-        class="clickable"
+
+      <li
+        *ngFor="let item of scrollTwo.viewPortItems"
       >
-        {{ item.word }}<!--
-   --></span>
-      <!-- using opacity instead of *ngIf because creation of hundreds of elements is slow -->
-      <app-icon
-        [ngStyle]="{ opacity: editMode ? 1 : 0 }"
-        class="icon-lol"
-        [icon]="'icon-close'"
-      ></app-icon>
-    </li>
+        <span *ngIf="item.prefix" class="prefix">
+          {{ item.prefix }}
+        </span>
+        <span class="frequency">
+          {{ item.freq }}
+        </span>
+        <span
+          (click)="tagWasClicked(item.word)"
+          [ngClass]="{ strikethrough: editMode }"
+          class="clickable"
+        >
+          {{ item.word }}<!--
+     --></span>
+        <!-- using opacity instead of *ngIf because creation of hundreds of elements is slow -->
+        <span
+          class="delete-tag-hack"
+          [ngStyle]="{ opacity: editMode ? 1 : 0 }"
+        >x</span>
+      </li>
+
+    </virtual-scroller>
+
   </ul>
 </div>
+
+<!-- Bottom tray for edeting & searching tags -->
 
 <div
   *ngIf="showEdit"

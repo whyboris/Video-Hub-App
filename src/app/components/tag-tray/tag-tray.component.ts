@@ -21,13 +21,13 @@ import { SettingsButtonsType } from '../../common/settings-buttons';
 })
 export class TagTrayComponent {
 
-  @Output() closeTagsTray = new EventEmitter<any>();
   @Output() toggleBatchTaggingMode = new EventEmitter<any>();
   @Output() handleTagWordClicked = new EventEmitter<TagEmit>();
   @Output() selectAll = new EventEmitter<any>();
 
   @Input() appState: AppStateInterface;
   @Input() batchTaggingMode;
+  @Input() darkMode: boolean;
   @Input() settingsButtons: SettingsButtonsType;
 
   manualTagFilterString: string = '';

@@ -5,23 +5,20 @@
 
   <app-meta-item
     class="meta-container"
-
-    (editFinalArrayStars)="editFinalArrayStars.emit($event)"
-    (editFinalArrayTag)="editFinalArrayTag.emit($event)"
-    (editFinalArrayYear)="editFinalArrayYear.emit($event)"
     (filterTag)="filterTag.emit($event)"
 
     [video]="video"
 
-    [darkMode]="darkMode"
     [imgHeight]="imgHeight"
+    [star]="star"
+
+    [darkMode]="darkMode"
     [largerFont]="largerFont"
     [showAutoFileTags]="showAutoFileTags"
     [showAutoFolderTags]="showAutoFolderTags"
     [showManualTags]="showManualTags"
     [showMeta]="showMeta"
     [showVideoNotes]="showVideoNotes"
-    [star]="star"
 
     [selectedSourceFolder]="selectedSourceFolder"
     [renameResponse]="renameResponse.asObservable()"

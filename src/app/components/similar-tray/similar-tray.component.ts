@@ -1,7 +1,11 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
-import { modalAnimation, similarResultsText } from '../../common/animations';
+
+import { ImageElementService } from './../../services/image-element.service';
+import { SourceFolderService } from '../statistics/source-folder.service';
+
 import { RightClickEmit } from '../../../../interfaces/shared-interfaces';
 import { SettingsButtonsType } from '../../common/settings-buttons';
+import { modalAnimation, similarResultsText } from '../../common/animations';
 
 @Component({
   selector: 'app-similar-tray',
@@ -20,11 +24,14 @@ export class SimilarTrayComponent {
 
   @Input() appState;
   @Input() currentClickedItemName;
-  @Input() finalArray;
   @Input() previewHeightRelated;
   @Input() previewWidthRelated;
   @Input() settingsButtons: SettingsButtonsType;
+  @Input() showRecentNotSimilar;
 
-  constructor() { }
+  constructor(
+    public imageElementService: ImageElementService,
+    public sourceFolderService: SourceFolderService,
+  ) { }
 
 }

@@ -11,12 +11,12 @@ import { GLOBALS, VhaGlobals } from './main-globals'; // TODO -- eliminate depen
 import * as path from 'path';
 
 const exec = require('child_process').exec;
-const ffprobePath = require('@ffprobe-installer/ffprobe').path.replace('app.asar', 'app.asar.unpacked');
+const ffprobePath = require('node-ffprobe-installer').path.replace('app.asar', 'app.asar.unpacked');
 const fs = require('fs');
 const hasher = require('crypto').createHash;
 import { Stats } from 'fs';
 
-import { FinalObject, ImageElement, ScreenshotSettings, InputSources, ResolutionString } from '../interfaces/final-object.interface';
+import { FinalObject, ImageElement, ScreenshotSettings, InputSources, ResolutionString, NewImageElement } from '../interfaces/final-object.interface';
 import { startFileSystemWatching, resetWatchers } from './main-extract-async';
 
 interface ResolutionMeta {
@@ -24,7 +24,7 @@ interface ResolutionMeta {
   bucket: number;
 }
 
-export type ImportStage = 'importingScreenshots' | 'done';    // TODO -- rethin import stages?
+export type ImportStage = 'importingMeta' | 'importingScreenshots' | 'done';
 
 /**
  * Return an HTML string for a path to a file
@@ -42,7 +42,7 @@ export function getHtmlPath(anyOsPath: string): string {
 }
 
 /**
- * Label the video according to cosest resolution label
+ * Label the video according to closest resolution label
  * @param width
  * @param height
  */
@@ -64,7 +64,7 @@ function labelVideo(width: number, height: number): ResolutionMeta {
   } else if (width > 1920) {
     label = '1080+';
     bucket = 2.5;
-  } else if (width > 720) {
+  } else if (width > 1280) {
     label = '720+';
     bucket = 1.5;
   }
@@ -117,6 +117,7 @@ function getFileSizeDisplay(sizeInBytes: number): string {
  * Generate duration formatted as X:XX:XX
  * @param numOfSec
  */
+
 function getDurationDisplay(numOfSec: number): string {
 
   if (numOfSec === undefined || numOfSec === 0) {
@@ -133,10 +134,11 @@ function getDurationDisplay(numOfSec: number): string {
   }
 }
 
+
 /**
  * Count the number of unique folders in the final array
  */
-export function countFoldersInFinalArray(imagesArray: ImageElement[]): number {
+function countFoldersInFinalArray(imagesArray: ImageElement[]): number {
   const finalArrayFolderMap: Map<string, number> = new Map;
   imagesArray.forEach((element: ImageElement) => {
     if (!finalArrayFolderMap.has(element.partialPath)) {
@@ -144,6 +146,35 @@ export function countFoldersInFinalArray(imagesArray: ImageElement[]): number {
     }
   });
   return finalArrayFolderMap.size;
+}
+
+/**
+ * Mark element as `deleted` (to remove as duplicate) if the previous element is identical
+ * expect `alphabetizeFinalArray` to run first - so as to only compare adjacent elements
+ * Unsure how duplicates can creep in to `ImageElement[]`, but at least they will be removed
+ *
+ *  !!! WARNING - currently does not merge the `tags` arrays (or other stuff)
+ *  !!!           so tags and metadata could be lost :(
+ *
+ * @param imagesArray
+ */
+function markDuplicatesAsDeleted(imagesArray: ImageElement[]): ImageElement[] {
+
+  let currentElement: ImageElement = NewImageElement();
+
+  imagesArray.forEach((element: ImageElement) => {
+    if (
+         element.fileName    === currentElement.fileName
+      && element.partialPath === currentElement.partialPath
+      && element.inputSource === currentElement.inputSource
+    ) {
+      element.deleted = true;
+      console.log('DUPE FOUND: ' + element.fileName);
+    }
+    currentElement = element;
+  });
+
+  return imagesArray;
 }
 
 /**
@@ -155,9 +186,10 @@ export function countFoldersInFinalArray(imagesArray: ImageElement[]): number {
  * @param done          -- function to execute when done writing the file
  */
 export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: string, done): void {
-  finalObject.images = stripOutTemporaryFields(finalObject.images);
 
   finalObject.images = finalObject.images.filter(element => !element.deleted);
+
+  finalObject.images = stripOutTemporaryFields(finalObject.images);
 
   // remove any videos that have no reference (unsure how this could happen, but just in case)
   const allKeys: string[] = Object.keys(finalObject.inputDirs);
@@ -165,7 +197,9 @@ export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: stri
     return allKeys.includes(element.inputSource.toString());
   });
 
-  finalObject.images = alphabetizeFinalArray(finalObject.images); // TODO -- rethink if this is needed
+  finalObject.images = alphabetizeFinalArray(finalObject.images); // needed for `default` sort to show proper order
+  finalObject.images = markDuplicatesAsDeleted(finalObject.images); // expects `alphabetizeFinalArray` to run first
+  finalObject.images = finalObject.images.filter(element => !element.deleted); // remove any marked in above method
 
   finalObject.numOfFolders = countFoldersInFinalArray(finalObject.images);
 
@@ -216,7 +250,7 @@ export function createDotPlsFile(savePath: string, playlist: ImageElement[], sou
   for (let i = 0; i < playlist.length; i++) {
 
     const fullPath: string = path.join(
-      sourceFolderMap[i].path,
+      sourceFolderMap[playlist[i].inputSource].path,
       playlist[i].partialPath,
       playlist[i].fileName
     );
@@ -235,20 +269,17 @@ export function createDotPlsFile(savePath: string, playlist: ImageElement[], sou
 /**
  * Clean up the displayed file name
  * (1) remove extension
- * (2) replace underscores with spaces                "_"   => " "
- * (3) replace periods with spaces                    "."   => " "
- * (4) tripple & double spaces become single spaces   "   " => " "
+ * (2) replace underscores with spaces            "_"   => " "
+ * (3) replace periods with spaces                "."   => " "
+ * (4) replace multi-spaces with a single space   "   " => " "
  * @param original {string}
  * @return {string}
  */
 export function cleanUpFileName(original: string): string {
-  let cleaned = original;
-  cleaned = cleaned.split('.').slice(0, -1).join('.');   // (1)
-  cleaned = cleaned.split('_').join(' ');                // (2)
-  cleaned = cleaned.split('.').join(' ');                // (3)
-  cleaned = cleaned.split('   ').join(' ');              // (4)
-  cleaned = cleaned.split('  ').join(' ');               // (4)
-  return cleaned;
+  return original.split('.').slice(0, -1).join('.')   // (1)
+                 .split('_').join(' ')                // (2)
+                 .split('.').join(' ')                // (3)
+                 .split(/\s+/).join(' ');             // (4)
 }
 
 /**
@@ -272,17 +303,43 @@ function getBestStream(metadata) {
  */
 function getFileDuration(metadata): number {
   if (metadata?.streams?.[0]?.duration) {
-
+    
     return metadata.streams[0].duration;
 
   } else if (metadata?.format?.duration) {
 
     return   metadata.format.duration;
-
   } else {
     return 0;
   }
 }
+
+//Calculation of video bitrate in mb/s
+
+function getBitrate(fileSize,duration){
+  var bitrate = ((fileSize/1000)/duration)/1000;
+  return Math.round(bitrate*100)/100;
+}
+
+/**
+ * Return the average frame rate of files
+ * ===========================================================================================
+ *  TO SWITCH TO AVERAGE FRAME RATE,
+ *  replace both instances of r_frame_rate with avg_frame_rate
+ *  only in this method
+ * ===========================================================================================
+ * @param metadata
+ */
+ function getFps(metadata): number {
+   if (metadata?.streams?.[0]?.r_frame_rate) {
+     const fps = metadata.streams[0].r_frame_rate;
+     const fpsParts = fps.split('/');
+     const evalFps = Number(fpsParts[0]) / Number(fpsParts[1]); // FPS is a fraction like `24000/1001`
+     return Math.round(evalFps);
+   } else {
+     return 0;
+   }
+ }
 
 // ===========================================================================================
 // Other supporting methods
@@ -295,14 +352,28 @@ function getFileDuration(metadata): number {
  */
 function computeNumberOfScreenshots(screenshotSettings: ScreenshotSettings, duration: number): number {
   let total: number;
+
+  // fixed or per minute
   if (screenshotSettings.fixed) {
     total = screenshotSettings.n;
   } else {
     total = Math.ceil(duration / 60 / screenshotSettings.n);
   }
 
+  // never fewer than 3 screenshots
   if (total < 3) {
-    total = 3; // minimum 3 screenshots!
+    total = 3;
+  }
+
+  // never more than would fit in a JPG
+  const screenWidth: number = screenshotSettings.height * (16 / 9);
+  if (total * screenWidth > 65535) {
+    total = Math.floor(65535 / screenWidth);
+  }
+
+  // never more screenshots than seconds in a clip
+  if (duration < total) {
+    total = Math.max(2, Math.floor(duration));
   }
 
   return total;
@@ -311,21 +382,20 @@ function computeNumberOfScreenshots(screenshotSettings: ScreenshotSettings, dura
 /**
  * Hash a given file using its size
  * @param pathToFile  -- path to file
+ * @param stats -- Stats from `fs.stat(pathToFile)`
  */
-export function hashFileAsync(pathToFile: string): Promise<string> {
-  const sampleSize = 16 * 1024;
-  const sampleThreshold = 128 * 1024;
-  const stats = fs.statSync(pathToFile);                               // TODO -- change to `fs.stat()` -- async version
-  const fileSize = stats.size;
-
-  let data: Buffer;
-
+function hashFileAsync(pathToFile: string, stats: Stats): Promise<string> {
   return new Promise((resolve, reject) => {
+    const sampleSize = 16 * 1024;
+    const sampleThreshold = 128 * 1024;
+    const fileSize = stats.size;
+    let data: Buffer;
+
     if (fileSize < sampleThreshold) {
-      data = fs.readFile(pathToFile, (err, data) => {
+      fs.readFile(pathToFile, (err, data2) => {
         if (err) { throw err; }
         // append the file size to the data
-        const buf = Buffer.concat([data, Buffer.from(fileSize.toString())]);
+        const buf = Buffer.concat([data2, Buffer.from(fileSize.toString())]);
         // make the magic happen!
         const hash = hasher('md5').update(buf.toString('hex')).digest('hex');
         resolve(hash);
@@ -333,10 +403,10 @@ export function hashFileAsync(pathToFile: string): Promise<string> {
     } else {
       data = Buffer.alloc(sampleSize * 3);
       fs.open(pathToFile, 'r', (err, fd) => {
-        fs.read(fd, data, 0, sampleSize, 0, (err, bytesRead, buffer) => { // read beginning of file
-          fs.read(fd, data, sampleSize, sampleSize, fileSize / 2, (err, bytesRead, buffer) => {
-            fs.read(fd, data, sampleSize * 2, sampleSize, fileSize - sampleSize, (err, bytesRead, buffer) => {
-              fs.close(fd, (err) => {
+        fs.read(fd, data, 0, sampleSize, 0, (err2, bytesRead, buffer) => { // read beginning of file
+          fs.read(fd, data, sampleSize, sampleSize, fileSize / 2, (err3, bytesRead2, buffer2) => {
+            fs.read(fd, data, sampleSize * 2, sampleSize, fileSize - sampleSize, (err4, bytesRead3, buffer3) => {
+              fs.close(fd, (err5) => {
                 // append the file size to the data
                 const buf = Buffer.concat([data, Buffer.from(fileSize.toString())]);
                 // make the magic happen!
@@ -348,6 +418,7 @@ export function hashFileAsync(pathToFile: string): Promise<string> {
         });
       });
     }
+
   });
 }
 
@@ -356,45 +427,50 @@ export function hashFileAsync(pathToFile: string): Promise<string> {
  * Stores information into the ImageElement and returns it via callback
  * @param filePath              path to the file
  * @param screenshotSettings    ScreenshotSettings
- * @param imageElement          index in array to update
  * @param callback
  */
 export function extractMetadataAsync(
   filePath: string,
   screenshotSettings: ScreenshotSettings,
-  imageElement: ImageElement,
-  fileStat: Stats
 ): Promise<ImageElement> {
   return new Promise((resolve, reject) => {
-    const ffprobeCommand = '"' + ffprobePath + '" -of json -show_streams -show_format -select_streams V "' + filePath + '"';
+    const ffprobeCommand = '"' + ffprobePath + '" -of json -show_streams -show_format -select_streams V "' + path.normalize(filePath) + '"';
+
     exec(ffprobeCommand, (err, data, stderr) => {
       if (err) {
-        reject(imageElement);
+        reject();
       } else {
         const metadata = JSON.parse(data);
         const stream = getBestStream(metadata);
         const fileDuration = getFileDuration(metadata);
+        const realFps = getFps(metadata);
 
         const duration = Math.round(fileDuration) || 0;
         const origWidth = stream.width || 0; // ffprobe does not detect it on some MKV streams
         const origHeight = stream.height || 0;
 
-        imageElement.ctime = fileStat.ctimeMs;
-        imageElement.duration = duration;
-        imageElement.fileSize = fileStat.size;
-        imageElement.height = origHeight;
-        imageElement.mtime = fileStat.mtimeMs;
-        imageElement.screens = computeNumberOfScreenshots(screenshotSettings, duration);
-        imageElement.width = origWidth;
+        fs.stat(filePath, (err2, fileStat) => {
+          if (err2) {
+            reject();
+          }
 
-        if (imageElement.hash === '') {
-          hashFileAsync(filePath).then((hash) => {
+          const imageElement = NewImageElement();
+          imageElement.birthtime = Math.round(fileStat.birthtimeMs);
+          imageElement.duration  = duration;
+          imageElement.fileSize  = fileStat.size;
+          imageElement.height    = origHeight;
+          imageElement.mtime     = Math.round(fileStat.mtimeMs);
+          imageElement.screens   = computeNumberOfScreenshots(screenshotSettings, duration);
+          imageElement.width     = origWidth;
+          imageElement.fps       = realFps;
+
+          hashFileAsync(filePath, fileStat).then((hash) => {
             imageElement.hash = hash;
             resolve(imageElement);
           });
-        } else {
-          resolve(imageElement);
-        }
+
+        });
+
       }
     });
   });
@@ -413,6 +489,16 @@ export function sendCurrentProgress(current: number, total: number, stage: Impor
   } else {
     GLOBALS.winRef.setProgressBar(-1);
   }
+}
+
+/**
+ * Parse additional extension string
+ * @param additionalExtension string
+ */
+export function parseAdditionalExtensions(additionalExtension: string): string[] {
+  return additionalExtension.split(',').map((token => {
+    return token.trim();
+  }));
 }
 
 /**
@@ -458,6 +544,7 @@ export function insertTemporaryFieldsSingle(element: ImageElement): ImageElement
   const resolution: ResolutionMeta = labelVideo(element.width, element.height);
   element.durationDisplay = getDurationDisplay(element.duration);
   element.fileSizeDisplay = getFileSizeDisplay(element.fileSize);
+  element.bitrate = getBitrate(element.fileSize, element.duration);
   element.resBucket = resolution.bucket;
   element.resolution = resolution.label;
   return element;
@@ -469,7 +556,6 @@ export function insertTemporaryFieldsSingle(element: ImageElement): ImageElement
  * @param finalObject
  */
 export function upgradeToVersion3(finalObject: FinalObject): void {
-
   if (finalObject.version === 2) {
     console.log('OLD version file -- converting!');
     finalObject.inputDirs = {
@@ -480,7 +566,10 @@ export function upgradeToVersion3(finalObject: FinalObject): void {
     };
     finalObject.version = 3;
     finalObject.images.forEach((element: ImageElement) => {
-      element.inputSource = 0
+      element.inputSource = 0;
+      element.screens = computeNumberOfScreenshots(finalObject.screenshotSettings, element.duration);
+      // update number of screens to account for too-many or too-few cases
+      // as they were not handlede prior to version 3 release
     });
   }
 }
@@ -508,7 +597,7 @@ export function setUpDirectoryWatchers(inputDirs: InputSources, currentImages: I
     console.log(key, 'watch =', shouldWatch, ':', pathToDir);
 
     // check if directory connected
-    fs.access(pathToDir, fs.constants.W_OK, function(err) {
+    fs.access(pathToDir, fs.constants.W_OK, (err: any) => {
 
       if (!err) {
         GLOBALS.angularApp.sender.send('directory-now-connected', parseInt(key, 10), pathToDir);

@@ -22,6 +22,7 @@
         draggerDarkMode: darkMode
        }"
       class="dragger"
+      title="{{ timesPlayed ? ('BUTTONS.timesPlayedDescription' | translate) : '' }}"
     >
     </div>
   </div>
@@ -38,9 +39,11 @@
           draggerDarkMode: darkMode
         }"
       class="dragger"
+      title="{{ timesPlayed ? ('BUTTONS.timesPlayedDescription' | translate) : '' }}"
     >
     </div>
   </div>
+
   <span
     *ngIf="lengthFilter"
     class="left-label"
@@ -52,6 +55,20 @@
     *ngIf="sizeFilter"
     class="left-label"
     [ngStyle]="{ left: ((currentXleft > 35) ? currentXleft - 35 : 0) + 'px' }"
+  >
+    {{ convertToIndex(currentXleft) | wrapperPipe : labelFormatPipe }}
+  </span>
+  <span
+    *ngIf="timesPlayed"
+    class="left-label"
+    [ngStyle]="{ left: ((currentXleft > 10) ? currentXleft - 10 : 0) + 'px', width: 6 + 'px' }"
+  >
+    {{ convertToIndex(currentXleft) | wrapperPipe : labelFormatPipe }}
+  </span>
+  <span
+    *ngIf="yearFilter"
+    class="left-label"
+    [ngStyle]="{ left: ((currentXleft > 10) ? currentXleft - 10 : 0) + 'px', width: 6 + 'px' }"
   >
     {{ convertToIndex(currentXleft) | wrapperPipe : labelFormatPipe }}
   </span>
@@ -69,8 +86,28 @@
   >
     {{ convertToIndex(currentXright) | wrapperPipe : labelFormatPipe }}
   </span>
+  <span
+    *ngIf="timesPlayed"
+    class="right-label"
+    [ngStyle]="{ right: 160 - ((currentXright < 160) ? currentXright + 11 : 160) + 'px'}"
+  >
+    {{ convertToIndex(currentXright) | wrapperPipe : labelFormatPipe }}
+  </span>
+  <span
+    *ngIf="yearFilter"
+    class="right-label"
+    [ngStyle]="{ right: 160 - ((currentXright < 125) ? currentXright + 35 : 160) + 'px'}"
+  >
+    {{ convertToIndex(currentXright) | wrapperPipe : labelFormatPipe }}
+  </span>
+
   <span *ngIf="lengthFilter" class="minLabel">0 min</span>
   <span *ngIf="lengthFilter" class="maxLabel">∞</span>
   <span *ngIf="sizeFilter" class="minLabel">0 MB</span>
   <span *ngIf="sizeFilter" class="maxLabel">∞</span>
+  <span *ngIf="timesPlayed" class="minLabel">0</span>
+  <span *ngIf="timesPlayed" class="maxLabel">∞</span>
+  <span *ngIf="yearFilter" class="minLabel">0</span>
+  <span *ngIf="yearFilter" class="maxLabel">∞</span>
+
 </div>

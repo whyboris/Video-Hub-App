@@ -5,6 +5,8 @@
 /tmp
 /out-tsc
 /app-builds
+/remote
+/.idea
 
 *.js
 *.js.map
@@ -12,3 +14,7 @@
 
 .DS_Store
 Thumbs.db
+
+!i18n/translate.js
+!i18n/update.js
+!remote/README.md

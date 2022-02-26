@@ -17,18 +17,18 @@ export class WordFrequencyPipe implements PipeTransform {
    * Return only items that match search string
    * @param finalArray
    * @param render              whether to calculate the wordFrequency
-   * @param numberOfTags        number of tags to generate for the word cloud
    * @param showManualTags      boolean
    * @param showAutoFileTags    boolean
    * @param showAutoFolderTags  boolean
+   * @param folderViewNavigationPath  string
    */
   transform(
     finalArray: ImageElement[],
     render: boolean,
-    numberOfTags: number,
     showManualTags: boolean,
     showAutoFileTags: boolean,
-    showAutoFolderTags: boolean
+    showAutoFolderTags: boolean,
+    folderViewNavigationPath: string,
   ): ImageElement[] {
 
     if (render && finalArray.length > 0) {
@@ -37,7 +37,13 @@ export class WordFrequencyPipe implements PipeTransform {
 
       this.wordFrequencyService.resetMap();
 
-      finalArray.forEach(element => {
+      finalArray.filter((element: ImageElement) => {
+        if (folderViewNavigationPath) {
+          return element.partialPath.startsWith(folderViewNavigationPath);
+        } else {
+          return true;
+        }
+      }).forEach(element => {
         if (showManualTags && element.tags) {
           this.wordFrequencyService.addString(element.tags.join(' '));
         }
@@ -51,7 +57,7 @@ export class WordFrequencyPipe implements PipeTransform {
 
       // this.wordFrequencyService.cleanMap();
 
-      this.wordFrequencyService.computeFrequencyArray(finalArray.length, numberOfTags);
+      this.wordFrequencyService.computeFrequencyArray(finalArray.length, 165);
     }
 
     return finalArray;

@@ -1,22 +1,36 @@
 import { ImageElement } from './final-object.interface';
 
-// Let's make these identical to settings buttons!
+// Identical to settings buttons
 export type SupportedView = 'showThumbnails'
-  | 'showFilmstrip'
-  | 'showFullView'
-  | 'showDetails'
-  | 'showDetails2'
-  | 'showFiles'
-  | 'showClips';
+                          | 'showFilmstrip'
+                          | 'showFullView'
+                          | 'showDetails'
+                          | 'showDetails2'
+                          | 'showFiles'
+                          | 'showClips';
 
 export const AllSupportedViews: SupportedView[] = [
-  'showThumbnails',
-  'showFilmstrip',
-  'showFullView',
-  'showDetails',
-  'showDetails2',
-  'showFiles',
-  'showClips',
+                            'showThumbnails',
+                            'showFilmstrip',
+                            'showFullView',
+                            'showDetails',
+                            'showDetails2',
+                            'showFiles',
+                            'showClips',
+];
+
+export type SupportedTrayView = 'showDetailsTray'
+                              | 'showFreq'
+                              | 'showRecentlyPlayed'
+                              | 'showRelatedVideosTray'
+                              | 'showTagTray';
+
+export const AllSupportedBottomTrayViews: SupportedTrayView[] = [
+                                'showDetailsTray',
+                                'showFreq',
+                                'showRecentlyPlayed',
+                                'showRelatedVideosTray',
+                                'showTagTray',
 ];
 
 // Mouse click events
@@ -60,4 +74,9 @@ export interface RenameFileResponse {
   renameTo: string;
   oldFileName: string;
   errMsg?: string;
+}
+
+export interface RemoteVideoClick {
+  video: ImageElement;
+  thumbIndex?: number;
 }

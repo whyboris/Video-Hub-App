@@ -1,21 +1,7 @@
 <div
-  *ngIf="settingsButtons['showTagTray'].toggled"
-  class="bottom-tray manual-tag-tray"
-  [ngClass]="{ 'bottom-tray-dark': settingsButtons['darkMode'].toggled }"
-  @modalAnimation
+  class="manual-tag-tray"
 >
-  <div
-    (click)="closeTagsTray.emit()"
-    class="close-bottom-tray"
-    title="{{ 'TAGS.closeTagTray' | translate }}"
-  >
-    <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
-  </div>
-
   <div class="tag-tray-menu-left" *ngIf="!batchTaggingMode; else batchModeExplainer">
-    <span class="manual-tag-tray-label">
-      {{ 'TAGS.presentTags' | translate }}:
-    </span>
     <button
       (click)="appState.sortTagsByFrequency = !appState.sortTagsByFrequency"
       class="tag-sort-by-toggle"
@@ -34,6 +20,7 @@
       (keyup.esc)="manualTagFilterString = ''"
       [(ngModel)]="manualTagFilterString"
       class="filter-general manual-tag-tray-filter"
+      [ngClass]="{ 'manual-tag-tray-filter-dark': settingsButtons['darkMode'].toggled }"
       placeholder="{{ 'TAGS.filterTags' | translate }}"
     >
 
@@ -41,24 +28,35 @@
 
   <ng-template #batchModeExplainer>
     <div class="tag-tray-menu-left">
-      <span class="manual-tag-tray-label">
+      <span class="manual-tag-tray-label" [ngStyle]="{ color: darkMode ? 'white' : 'black' }">
         {{ 'TAGS.clickVideoToSelect' | translate }}
       </span>
-      <span class="manual-tag-tray-label" style="line-height: 24px">
-        {{ 'TAGS.clickTagToAdd' | translate }}
+
+      <span class="more-info">
+        i
       </span>
+
+      <div class="manual-tag-tray-label-info" style="line-height: 24px">
+        {{ 'TAGS.clickTagToAdd' | translate }}
+      </div>
+
       <button
-      class="wizard-button wizard-button-small"
-      (click)="selectAll.emit()"
-    >
-      {{ 'TAGS.selectAllButton' | translate }}
-    </button>
+        class="wizard-button wizard-button-small button-select-all"
+        [ngClass]="{ 'select-all-dark': settingsButtons['darkMode'].toggled }"
+        (click)="selectAll.emit()"
+      >
+        {{ 'TAGS.selectAllButton' | translate }}
+      </button>
     </div>
   </ng-template>
 
   <button
     class="wizard-button wizard-button-small button-toggle-batch-mode"
-    [ngClass]="{ 'edit-mode-active': batchTaggingMode }"
+    [ngClass]="{
+      'button-toggle-batch-mode-dark': settingsButtons['darkMode'].toggled,
+      'button-toggle-batch-mode-dark-active': settingsButtons['darkMode'].toggled && batchTaggingMode,
+      'edit-mode-active': batchTaggingMode
+    }"
     (click)="toggleBatchTaggingMode.emit()"
   >
     {{ 'TAGS.batchModeButton' | translate }}

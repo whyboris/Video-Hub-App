@@ -7,12 +7,7 @@ import { ManualTagsService } from '../../tags-manual/manual-tags.service';
 import { FilePathService } from '../file-path.service';
 
 import { StarRating, ImageElement } from '../../../../../interfaces/final-object.interface';
-import { TagEmission, VideoClickEmit, RightClickEmit, TagEmit, RenameFileResponse } from '../../../../../interfaces/shared-interfaces';
-
-export interface StarEmission {
-  index: number;
-  stars: StarRating;
-}
+import { VideoClickEmit, RightClickEmit, TagEmit, RenameFileResponse } from '../../../../../interfaces/shared-interfaces';
 
 export interface YearEmission {
   index: number;
@@ -31,11 +26,7 @@ export class DetailsComponent implements OnInit {
 
   @ViewChild('filmstripHolder', { static: false }) filmstripHolder: ElementRef;
 
-  @Output() editFinalArrayStars = new EventEmitter<StarEmission>();
-  @Output() editFinalArrayTag = new EventEmitter<TagEmission>();
-  @Output() editFinalArrayYear = new EventEmitter<YearEmission>();
   @Output() filterTag = new EventEmitter<TagEmit>();
-
   @Output() videoClick = new EventEmitter<VideoClickEmit>();
   @Output() rightClick = new EventEmitter<RightClickEmit>();
 
@@ -65,8 +56,8 @@ export class DetailsComponent implements OnInit {
   @Input() renameResponse: BehaviorSubject<RenameFileResponse>;
 
   containerWidth: number;
+  filmstripPath = '';
   firstFilePath = '';
-  fullFilePath = '';
   hover: boolean;
   indexToShow: number = 1;
   percentOffset: number = 0;
@@ -87,13 +78,22 @@ export class DetailsComponent implements OnInit {
   mouseLeave() {
     if (this.hoverScrub && this.returnToFirstScreenshot) {
       this.hover = false;
-      this.percentOffset = 0;
+      this.percentOffset = (this.video.defaultScreen !== undefined)
+                           ? this.getDefaultScreenOffset(this.video)
+                           : 0;
     }
+  }
+
+  getDefaultScreenOffset(video: ImageElement): number {
+    return 100 * video.defaultScreen / (video.screens - 1);
   }
 
   ngOnInit() {
     this.firstFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'thumbnails', this.video.hash);
-    this.fullFilePath =  this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
+    this.filmstripPath =  this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
+    if (this.video.defaultScreen !== undefined) {
+      this.percentOffset = this.getDefaultScreenOffset(this.video);
+    }
   }
 
   mouseIsMoving($event) {

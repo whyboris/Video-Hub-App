@@ -4,11 +4,14 @@ export const GLOBALS: VhaGlobals = {
   angularApp: null,            // reference used to send messages back to Angular App
   currentlyOpenVhaFile: '',    // OFFICAL DECREE IN NODE WHICH FILE IS CURRENTLY OPEN !!!
   debug: false,
+  demo: false,                 // update `package.json` version to `#.#.#-demo` when building the demo             <---- !!!
   hubName: 'untitled',         // in case user doesn't name their hub any name
+  macVersion: false,           // auto updated by `main.ts`
+  readyToQuit: false,          // hack to quit gracefully
   selectedOutputFolder: '',
   selectedSourceFolders: {},
   settingsPath: '',            // to differentiate between standard & Windows Portable settings location
-  version: '3.0.0',            // update it and the `package.json` version in tandem before release!
+  version: '3.2.0',            // update it and the `package.json` version in tandem before release!               <---- !!!
   vhaFileVersion: 3,
   winRef: null,
   screenshotSettings: {
@@ -19,13 +22,18 @@ export const GLOBALS: VhaGlobals = {
     height: 288,
     n: 10,
   },
+  additionalExtensions: [],
 };
 
 export interface VhaGlobals {
+  additionalExtensions: string[];
   angularApp: any;
   currentlyOpenVhaFile: string;
   debug: boolean;
+  demo: boolean;
   hubName: string;
+  macVersion: boolean;
+  readyToQuit: boolean;
   screenshotSettings: ScreenshotSettings;
   selectedOutputFolder: string;
   selectedSourceFolders: InputSources;

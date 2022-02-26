@@ -1,27 +1,40 @@
 @import '../variables';
 
 .columns-container {
+  height: calc(100% - 100px);
   margin-top: 20px;
-  position: absolute;
-  position: relative;
   width: calc(100% - 10px);
+
+  .loading {
+    display: block;
+    left: 50%;
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, 0);
+  }
 }
 
 .column {
   box-sizing: border-box;
   float: left;
+  height: 100%;
   margin-top: 0;
-  padding-left: 40px;
+  padding-left: 14px;
   user-select: none;
   width: 50%;
 }
 
+.virt-scroll {
+  @include scrollBar;
+  height: 100%;
+}
+
 ul {
   list-style-type: none;
-  margin-bottom: 100px;
 
   li {
     margin-bottom: 10px;
+    margin-left: 28px;
   }
 }
 
@@ -45,12 +58,8 @@ ul {
   font-size: 10px;
   position: absolute;
   text-align: right;
-  transform: translate(-3px, 2px);
+  transform: translate(-3px, 3px);
   width: 20px;
-}
-
-.capitalize {
-  text-transform: capitalize;
 }
 
 .prefix {
@@ -126,13 +135,13 @@ ul {
   text-align: left;
 }
 
-.icon-lol {
-  fill: $pretty-red;
+.delete-tag-hack {
+  color: $pretty-red;
+  font-size: 12px;
   position: absolute;
-  transform: translate(3px, 1px);
+  transform: translate(8px, 1px);
   transition-duration: 300ms;
   transition-property: opacity;
-  width: 15px;
 }
 
 .strikethrough {

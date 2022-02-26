@@ -1,4 +1,5 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
+
 import { SortType } from '../../pipes/sorting.pipe';
 import { filterItemAppear } from '../../common/animations';
 import { SettingsButtonsType } from '../../common/settings-buttons';
@@ -13,6 +14,8 @@ import { SettingsButtonsType } from '../../common/settings-buttons';
   animations: [filterItemAppear]
 })
 export class SortOrderComponent {
+
+  @ViewChild('sortFilterElement', { static: false }) sortFilterElement: ElementRef;
 
   @Output() sortTypeChange = new EventEmitter<SortType>();
 

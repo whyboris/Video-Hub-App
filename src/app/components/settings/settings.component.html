@@ -21,26 +21,17 @@
           <div
             class="button-description"
           >
-            <button
-              (click)="toggleButton.emit(buttonKey)"
-              [ngClass]="{
-                  defaultSettingsButton:        !settingsButtons['flatIcons'].toggled,
-                  defaultSettingsButtonToggled: !settingsButtons['flatIcons'].toggled && settingsButtons[buttonKey].toggled,
-                  flatSettingsButton:           settingsButtons['flatIcons'].toggled,
-                  flatSettingsButtonToggled:    settingsButtons['flatIcons'].toggled && settingsButtons[buttonKey].toggled
-                }"
-              title="{{ settingsButtons[buttonKey].title | translate }}"
-            >
-              <app-icon
-                class="icon"
-                [icon]="settingsButtons[buttonKey].iconName ? settingsButtons[buttonKey].iconName : 'icon-default-button'"
-              ></app-icon>
-            </button>
+            <app-button
+              (toggleButton)="toggleButton.emit($event)"
+              [button]="buttonKey"
+              [neverDarkMode]="true"
+              [settingsButtons]="settingsButtons"
+            ></app-button>
 
             <span
               *ngIf="settingsButtons[buttonKey].iconName"
               (click)="toggleHideButton.emit(buttonKey)"
-              class="eyeIconContainer icon {{ settingsButtons[buttonKey].hidden ? 'eye-closed' : 'eye-open' }}"
+              class="eye-icon-container icon {{ settingsButtons[buttonKey].hidden ? 'eye-closed' : 'eye-open' }}"
               title="{{ 'SETTINGS.showHideText' | translate }}"
             ></span>
 
@@ -74,7 +65,11 @@
 
   <div class="misc-settings" *ngIf="settingTabToShow == 2 && i == 2">
 
-    <div class="player-settings">{{ 'SETTINGS.preferredPlayer' | translate }}</div>
+    <!-- VIDEO PLAYER SETTINGS -->
+
+    <div class="player-settings">
+      {{ 'SETTINGS.preferredPlayer' | translate }}
+    </div>
 
     <div class="player-current-chosen">
       {{ appState.preferredVideoPlayer ? appState.preferredVideoPlayer : ('SETTINGS.systemDefault' | translate) }}
@@ -96,8 +91,13 @@
 
     </div>
 
-    <div *ngIf="appState.preferredVideoPlayer" class="player-settings">
+    <!-- LAUNCH ARGUMENTS -->
 
+    <div
+      *ngIf="appState.preferredVideoPlayer"
+      class="player-settings player-settings-launch-args"
+      [ngStyle]="{ opacity: appState.videoPlayerArgs ? 1 : '0.7' }"
+    >
       {{ 'SETTINGS.playerArgs' | translate }}
 
       <input
@@ -108,7 +108,49 @@
 
     </div>
 
-    <span class="setting-heading">{{ 'SETTINGS.changeAppZoom' | translate }}</span>
+    <!-- EXTENSIONS -->
+
+    <div
+      class="additional-extenstions"
+      [ngStyle]="{ opacity: (additionalInput || editAdditional) ? 1 : '0.7' }"
+    >
+      {{ 'SETTINGS.additionalExtensions' | translate }}
+    </div>
+
+    <div
+      class="additional-extenstions-setting"
+      [ngStyle]="{ opacity: (additionalInput || editAdditional) ? 1 : '0.7' }"
+    >
+
+      {{ 'SETTINGS.extensions' | translate }}
+
+      <input
+        class="filter-general input-filter extensions-input"
+        [(ngModel)]="additionalInput"
+        type="text"
+        [disabled]="!editAdditional"
+      >
+
+      <button
+        class="defaultSettingsButton player-settings-button"
+        (click)="editAdditionalExtensions()"
+      >
+        {{ (editAdditional ? 'SETTINGS.cancelExtensionsEdit': 'SETTINGS.editExtensionsInput') | translate }}
+      </button>
+
+      <button *ngIf="editAdditional"
+        class="defaultSettingsButton player-settings-button"
+        (click)="applyAdditionalExtensions()"
+      >
+        {{ 'SETTINGS.applyAdditionalExtensions' | translate }}
+      </button>
+    </div>
+
+    <!-- ZOOM BUTTONS -->
+
+    <span class="setting-heading">
+      {{ 'SETTINGS.changeAppZoom' | translate }}
+    </span>
 
     <div class="zoom-buttons">
       <button
@@ -127,8 +169,8 @@
           flatSettingsButton:    settingsButtons['flatIcons'].toggled
         }"
         style="margin: 0 10px; max-width: initial; padding: 0 15px;"
-        >
-          <span>{{ 'SETTINGS.resetZoom' | translate }}</span>
+      >
+        <span>{{ 'SETTINGS.resetZoom' | translate }}</span>
       </button>
       <button
         (click)="increaseZoomLevel.emit()"
@@ -141,30 +183,41 @@
       </button>
     </div>
 
-    <span class="setting-heading">{{ 'SETTINGS.changeLanguage' | translate }}</span>
+    <span class="setting-heading">
+      {{ 'SETTINGS.changeLanguage' | translate }}
+    </span>
 
     <div style="margin: 20px">
-      <select (change)="changeLanguage.emit($event.target.value)" class="language-drop-down">
+      <select #langSelect (change)="changeLanguage.emit(langSelect.value)" class="language-drop-down monospace">
         <option value="en" [selected]="appState.language == 'en'">English</option>
-        <option value="ja" [selected]="appState.language == 'ja'">日本語</option><!-- Japanese -->
-        <option value="de" [selected]="appState.language == 'de'">Deutsche</option>
-        <option value="fr" [selected]="appState.language == 'fr'">Française</option>
-        <option value="es" [selected]="appState.language == 'es'">Espanhol</option>
-        <option value="it" [selected]="appState.language == 'it'">Italiana</option>
-        <option value="pt" [selected]="appState.language == 'pt'">Português</option>
-        <option value="ru" [selected]="appState.language == 'ru'">Русский</option>
-        <option value="bn" [selected]="appState.language == 'bn'">বাংলা</option><!-- Bengali -->
-        <option value="hi" [selected]="appState.language == 'hi'">हिंदी</option><!-- Hindi -->
-        <option value="zh" [selected]="appState.language == 'zh'">中文</option><!-- Chinese -->
-        <option value="ko" [selected]="appState.language == 'ko'">한국어</option><!-- Korean -->
-        <option value="ms" [selected]="appState.language == 'ms'">Melayu</option><!-- Malay -->
-        <option value="ar" [selected]="appState.language == 'ar'">العربية</option><!-- Arabic -->
-        <option value="uk" [selected]="appState.language == 'uk'">Українська</option><!-- Ukrainian -->
+        <option value="ar" [selected]="appState.language == 'ar'">Arabic ------ العربية</option>
+        <option value="bn" [selected]="appState.language == 'bn'">Bengali ----- বাংলা</option>
+        <option value="zh" [selected]="appState.language == 'zh'">Chinese ----- 中文</option>
+        <option value="cs" [selected]="appState.language == 'cs'">Czech ------- Česky</option>
+        <option value="nl" [selected]="appState.language == 'nl'">Dutch ------- Nederlands</option>
+        <option value="fr" [selected]="appState.language == 'fr'">French ------ Française</option>
+        <option value="de" [selected]="appState.language == 'de'">German ------ Deutsch</option>
+        <option value="hi" [selected]="appState.language == 'hi'">Hindi ------- हिंदी</option>
+        <option value="it" [selected]="appState.language == 'it'">Italian ----- Italiana</option>
+        <option value="ja" [selected]="appState.language == 'ja'">Japanese ---- 日本語</option>
+        <option value="ko" [selected]="appState.language == 'ko'">Korean ------ 한국어</option>
+        <option value="ms" [selected]="appState.language == 'ms'">Melay ------- Melayu</option>
+        <option value="pl" [selected]="appState.language == 'pl'">Polish ------ Polski</option>
+        <option value="pt" [selected]="appState.language == 'pt'">Portuguese -- Português</option>
+        <option value="ru" [selected]="appState.language == 'ru'">Russian ----- Русский</option>
+        <option value="es" [selected]="appState.language == 'es'">Spanish ----- Espanhol</option>
+        <option value="tr" [selected]="appState.language == 'tr'">Turkish ----- Türkçe</option>
+        <option value="uk" [selected]="appState.language == 'uk'">Ukrainian --- Українська</option>
+        <option value="vi" [selected]="appState.language == 'vi'">Vietnamese -- Tiếng Việt</option>
       </select>
     </div>
 
     <div class="credits-and-help" (click)="openOnlineHelp.emit()">
       {{ 'SETTINGS.FAQ' | translate }}
+    </div>
+
+    <div class="credits-and-help" style="margin-top: 12px; pointer-events: none">
+      This software uses libraries from the FFmpeg project under the LGPLv2.1
     </div>
 
     <div class="app-version">

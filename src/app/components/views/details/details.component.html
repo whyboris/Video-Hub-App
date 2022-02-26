@@ -20,7 +20,7 @@
         height: imgHeight + 'px',
         width: elWidth + 'px',
         'max-width': elWidth + 'px',
-        'background-image': 'url(' + (hover ? fullFilePath : firstFilePath) + ')',
+        'background-image': 'url(' + ((this.video.defaultScreen !== undefined) || hover ? filmstripPath : firstFilePath) + ')',
         'background-position-x': percentOffset + '%'
       }"
   >
@@ -32,28 +32,23 @@
   </div>
 
   <app-meta-item
-    (editFinalArrayStars)="editFinalArrayStars.emit($event)"
-    (editFinalArrayTag)="editFinalArrayTag.emit($event)"
-    (editFinalArrayYear)="editFinalArrayYear.emit($event)"
     (filterTag)="filterTag.emit($event)"
 
     [video]="video"
 
     [imgHeight]="imgHeight"
-
-    [star]="this.star"
-
     [maxWidth]="maxWidth / (showTwoColumns ? 2 : 1) - elWidth"
+    [star]="this.star"
 
     [darkMode]="darkMode"
     [largerFont]="largerFont"
-    [selectedSourceFolder]="selectedSourceFolder"
     [showAutoFileTags]="showAutoFileTags"
     [showAutoFolderTags]="showAutoFolderTags"
     [showManualTags]="showManualTags"
     [showMeta]="showMeta"
     [showVideoNotes]="showVideoNotes"
 
+    [selectedSourceFolder]="selectedSourceFolder"
     [renameResponse]="renameResponse.asObservable()"
   ></app-meta-item>
 

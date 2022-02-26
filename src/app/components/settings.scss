@@ -186,7 +186,7 @@ h3 {
   top: 2px;
 }
 
-.eyeIconContainer {
+.eye-icon-container {
   cursor: pointer;
   display: block;
   left: 42px;
@@ -234,6 +234,10 @@ h3 {
     cursor: initial;
     pointer-events: none;
   }
+}
+
+.monospace {
+  font-family: monospace;
 }
 
 .num-select {
@@ -336,31 +340,22 @@ input[type="radio"]:checked:before {
 .zoom-buttons {
   margin: 20px;
 
+  button:first-child {
+    border-radius: 50% !important;
+  }
+
+  button:last-child {
+    border-radius: 50% !important;
+  }
+
   button {
+    border-radius: 10px;
     display: inline-block;
     font-size: 16px;
     min-height: 36px;
     min-width: 36px;
     vertical-align: top
   }
-}
-
-.player-settings {
-  font-size: 14px;
-  font-style: italic;
-  margin: -24px 0 10px 84px;
-}
-
-.player-current-chosen {
-  font-size: 14px;
-  margin: 0 10px 30px 84px;
-}
-
-.player-settings-button {
-  margin-left: 20px   !important;
-  max-height: initial !important;
-  max-width: initial  !important;
-  padding: 5px        !important;
 }
 
 .all-settings-tabs {

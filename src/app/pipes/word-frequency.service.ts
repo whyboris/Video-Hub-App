@@ -73,7 +73,7 @@ export class WordFrequencyService {
     let currLargestWord = '';
 
     this.wordMap.forEach((value, key) => {
-      if (value > currLargestFreq && value < total) {
+      if (value > currLargestFreq && value <= total) {
         currLargestFreq = value;
         currLargestWord = key;
       }
@@ -89,12 +89,12 @@ export class WordFrequencyService {
 
   /**
    * Computes the array `numberOfTags` objects long with most frequent words
-   * Creates `height` property, scaled between 8 and 22 proportionally
+   * Creates `height` property, scaled between 12 and 22 proportionally
    * calls `.next` on BehaviorSubject
    * @param total: total number of files displayed
    **/
   public computeFrequencyArray(total: number, numberOfTags: number): void {
-    const finalResult: WordFreqAndHeight[] = []; // array of objects
+    const finalResult: WordFreqAndHeight[] = [];
     for (let i = 0; i < numberOfTags; i++) {
       if (this.wordMap.size > 0) {
         finalResult[i] = this.getMostFrequent(total);
@@ -109,15 +109,14 @@ export class WordFrequencyService {
     if (finalResult.length > 0) {
       const largest = finalResult[0].freq;
       const smallest = finalResult[finalResult.length - 1].freq;
-      const scaleFactor = 14 / (largest - smallest);
-      // 14 is the range between 8 and 22 -- smallest and largest I'd like text to be (px).
+      const scaleFactor = 10 / (largest - smallest);
+      // 14 is the range between 12 and 22 -- smallest and largest I'd like text to be (px).
 
       finalResult.forEach((element) => {
-        element.height = 8 + (element.freq - smallest) * scaleFactor;
+        element.height = 12 + (element.freq - smallest) * scaleFactor;
       });
     }
 
-    // console.log(finalResult);
     this.finalMapBehaviorSubject.next(finalResult);
   }
 

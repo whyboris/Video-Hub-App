@@ -2,13 +2,13 @@ import { Injectable } from '@angular/core';
 import { SettingsButtonKey } from '../../common/settings-buttons';
 
 export type CustomShortcutAction = 'focusOnFile'
-  | 'fuzzySearch'
-  | 'toggleMinimalMode'
   | 'focusOnMagic'
+  | 'fuzzySearch'
   | 'quit'
   | 'showAutoTags'
   | 'showTagTray'
   | 'startWizard'
+  | 'toggleMinimalMode'
   | 'toggleSettings';
 
 @Injectable({
@@ -17,33 +17,21 @@ export type CustomShortcutAction = 'focusOnFile'
 export class ShortcutsService {
 
   regularShortcuts: SettingsButtonKey[] = [
-    'showThumbnails',
-    'showFilmstrip',
-    'showFullView',
+    'compactView',
+    'darkMode',
+    'hideSidebar',
+    'makeLarger',
+    'makeSmaller',
+    'showClips',
     'showDetails',
     'showDetails2',
     'showFiles',
-    'showClips',
-    'hideSidebar',
-    'darkMode',
+    'showFilmstrip',
+    'showFullView',
     'showMoreInfo',
+    'showThumbnails',
     'shuffleGalleryNow',
-    'makeLarger',
-    'makeSmaller',
   ];
-
-  customShortcuts: CustomShortcutAction[] = [
-    'focusOnFile',
-    'focusOnMagic',
-    'toggleMinimalMode',
-    'startWizard',
-    'toggleSettings',
-    'quit',
-    'fuzzySearch',
-    'showTagTray',
-    'showAutoTags',
-    'quit',
-  ]
 
   // the mapping used in `home.component` in `handleKeyboardEvent`
   keyToActionMap: Map<string, SettingsButtonKey | CustomShortcutAction> = new Map([
@@ -56,24 +44,26 @@ export class ShortcutsService {
     ['7', 'showClips'],
     ['b', 'hideSidebar'],
     ['d', 'darkMode'],
-    ['i', 'showMoreInfo'],
-    ['s', 'shuffleGalleryNow'],
-    ['x', 'makeLarger'],
-    ['z', 'makeSmaller'],
     ['f', 'focusOnFile'],
     ['g', 'focusOnMagic'],
+    ['i', 'showMoreInfo'],
     ['k', 'toggleMinimalMode'],
+    ['l', 'compactView'],
     ['n', 'startWizard'],
     ['o', 'toggleSettings'],
     ['q', 'quit'], // cannot be changed
     ['r', 'fuzzySearch'],
+    ['s', 'shuffleGalleryNow'],
     ['t', 'showAutoTags'],
-    ['y', 'showTagTray'],
     ['w', 'quit'], // cannot be changed
+    ['x', 'makeLarger'],
+    ['y', 'showTagTray'],
+    ['z', 'makeSmaller'],
   ]);
 
   // used in template to show key-shortcut connection (excludes quit: `q` and `w`)
   actionToKeyMap: Map<SettingsButtonKey | CustomShortcutAction, string> = new Map([
+    ['compactView', 'l'],
     ['darkMode', 'd'],
     ['focusOnFile', 'f'],
     ['focusOnMagic', 'g'],
@@ -82,7 +72,6 @@ export class ShortcutsService {
     ['makeLarger', 'x'],
     ['makeSmaller', 'z'],
     ['showAutoTags', 't'],
-    ['showTagTray', 'y'],
     ['showClips', '7'],
     ['showDetails', '4'],
     ['showDetails2', '5'],
@@ -90,12 +79,15 @@ export class ShortcutsService {
     ['showFilmstrip', '2'],
     ['showFullView', '3'],
     ['showMoreInfo', 'i'],
+    ['showTagTray', 'y'],
     ['showThumbnails', '1'],
     ['shuffleGalleryNow', 's'],
     ['startWizard', 'n'],
     ['toggleMinimalMode', 'k'],
     ['toggleSettings', 'o'],
-  ])
+    // quit -> q
+    // quit -> w
+  ]);
 
   constructor() { }
 
@@ -107,7 +99,7 @@ export class ShortcutsService {
     this.actionToKeyMap.clear();
     this.keyToActionMap.clear();
 
-    for (let [key, value] of Object.entries(keyToAction)) {
+    for (const [key, value] of Object.entries(keyToAction)) {
       this.actionToKeyMap.set(value, <any>key);
       this.keyToActionMap.set(<any>key, value);
     }

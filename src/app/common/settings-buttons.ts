@@ -9,12 +9,12 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'dangerousDelete'
  | 'darkMode'
  | 'doubleClickMode'
+ | 'dragVideoOutOfApp'
  | 'duplicateHash'
  | 'duplicateLength'
  | 'duplicateSize'
  | 'durationFilter'
  | 'exclude'
- | 'extendedWordCloud'
  | 'fileIntersection'
  | 'fileUnion'
  | 'flatIcons'
@@ -22,6 +22,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'folderUnion'
  | 'fontSizeLarger'
  | 'fuzzy'
+ | 'hideOffline'
  | 'hideSidebar'
  | 'hideTop'
  | 'hoverScrub'
@@ -41,6 +42,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'showDeleteOption'
  | 'showDetails'
  | 'showDetails2'
+ | 'showDetailsTray'
  | 'showFiles'
  | 'showFilmstrip'
  | 'showFolders'
@@ -48,6 +50,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'showFullView'
  | 'showMoreInfo'
  | 'showRecent'
+ | 'showRecentlyPlayed'
  | 'showRelatedVideosTray'
  | 'showTagTray'
  | 'showTags'
@@ -56,8 +59,11 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'shuffleGalleryNow'
  | 'sizeFilter'
  | 'sortOptionAlphabetical'
+ | 'sortOptionAlphabetical2'
  | 'sortOptionAspectRatio'
  | 'sortOptionCreated'
+ | 'sortOptionFolderSize'
+ | 'sortOptionFps'
  | 'sortOptionModified'
  | 'sortOptionSize'
  | 'sortOptionStar'
@@ -71,16 +77,18 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'tagExclusion'
  | 'tagIntersection'
  | 'tagUnion'
+ | 'timesPlayedFilter'
  | 'thumbAutoAdvance'
+ | 'yearFilter'
  | 'videoNotes';
 
 // Add `SettingsButtons` items here so they show up in the buttons ribbon and in the settings
 // Each array separates buttons into their own button groups visually
 export const SettingsButtonsGroups: SettingsButtonKey[][] = [
-  [ // 0
+  [ // 0 - Search & filter settings
     'hideSidebar',
   ],
-  [ // 1
+  [ // 1 - Search filters
     'folderUnion',
     'folderIntersection',
     'fileUnion',
@@ -94,13 +102,17 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'regex',
     'fuzzy',
   ],
-  [ // 2
+  [ // 2 - Filters & sorting options
     'durationFilter',
     'sizeFilter',
+    'timesPlayedFilter',
     'resolutionFilter',
+    'yearFilter',
     'starFilter',
     'sortOrder',
-    'sortOptionAlphabetical',
+    'hideOffline',
+    'sortOptionAlphabetical', // Sorting options in the dropdown
+    'sortOptionAlphabetical2',
     'sortOptionTime',
     'sortOptionSize',
     'sortOptionTimesPlayed',
@@ -109,17 +121,17 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'sortOptionModified',
     'sortOptionCreated',
     'sortOptionTags',
-    'sortOptionAspectRatio'
+    'sortOptionAspectRatio',
+    'sortOptionFps',
+    'sortOptionFolderSize',
   ],
-  [ // 3
+  [ // 3 - Find duplicates
     'duplicateLength',
     'duplicateSize',
     'duplicateHash',
-    'showFreq',
-    'extendedWordCloud',
-    'showRecent'
+    'showRecent', // Recently opened files
   ],
-  [ // 4
+  [ // 4 - Gallery -------------------------------------- 2nd tab
     'showThumbnails',
     'showFilmstrip',
     'showFullView',
@@ -128,57 +140,61 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'showFiles',
     'showClips',
   ],
-  [ // 5
+  [ // 5 - Folder view
+    'showFolders',
+    'randomizeFoldersScreenshots',
+    'showTags',
+  ],
+  [ // 6 - Bottom tray
+    'showFreq',
+    'showTagTray',
+    'showRelatedVideosTray',
+    'showRecentlyPlayed',
+    'showDetailsTray',
+  ],
+  [ // 7 - Layout
     'compactView',
     'showMoreInfo',
     'fontSizeLarger',
-  ],
-  [ // 6
-    'showFolders',
-    'randomizeFoldersScreenshots',
-    'showRelatedVideosTray',
     'shuffleGalleryNow',
   ],
-  [ // 7
-    'showTags',
+  [ // 8 - Auto-generated tags
+    'manualTags',
     'autoFileTags',
     'autoFolderTags',
-  ],
-  [ // 8
-    'manualTags',
-    'showTagTray',
     'showVideoNotes',
   ],
-  [ // 9
+  [ // 9 - Thumbnails view
     'hoverScrub',
     'thumbAutoAdvance',
     'returnToFirstScreenshot',
   ],
-  [ // 10
+  [ // 10 - Clips view
     'muteClips',
     'autoplayClips',
     'clipsThumbnail',
   ],
-  [ // 11
+  [ // 11 - Zoom
     'makeSmaller',
     'makeLarger',
   ],
-  [ // 12
+  [ // 12 - Dark mode
     'darkMode',
-    'doubleClickMode',
+    'doubleClickMode', // Double click mode
+    'dragVideoOutOfApp', // Drag video outside of app
   ],
   [ // 13
-    'hideTop',
-    'flatIcons'
+    'hideTop', // Hide top bar
+    'flatIcons', // Button style
   ],
-  [ // 14
+  [ // 14 - Create a new hub ---------------------------- 3rd tab
     'startWizard',
-    'resetSettings',
+    'resetSettings', // Various settings
     'clearHistory',
     'showDeleteOption',
     'dangerousDelete',
     'playPlaylist',
-    'openAtTimestamp'
+    'openAtTimestamp',
   ]
 ];
 
@@ -274,6 +290,13 @@ export const SettingsButtons: SettingsButtonsType = {
     title: 'BUTTONS.compactViewHint',
     toggled: false
   },
+  'dangerousDelete': {
+    description: 'BUTTONS.dangerousDeleteDescription',
+    hidden: true,
+    moreInfo: 'BUTTONS.dangerousDeleteMoreInfo',
+    title: 'BUTTONS.dangerousDelete',
+    toggled: false
+  },
   'darkMode': {
     description: 'BUTTONS.darkModeDescription',
     hidden: false,
@@ -284,10 +307,20 @@ export const SettingsButtons: SettingsButtonsType = {
   },
   'doubleClickMode': {
     description: 'BUTTONS.doubleClickModeDescription',
-    hidden: false,
+    hidden: true,
     iconName: 'icon-double-click',
+    moreInfo: 'BUTTONS.doubleClickMoreInfo',
     settingsHeading: 'SETTINGS.doubleClickMode',
     title: 'BUTTONS.doubleClickModeHint',
+    toggled: false
+  },
+  'dragVideoOutOfApp': {
+    description: 'BUTTONS.dragVideoOutOfAppDescription',
+    hidden: true,
+    iconName: 'icon-double-click',
+    moreInfo: 'BUTTONS.dragVideoOutOfAppMoreInfo',
+    settingsHeading: 'SETTINGS.dragVideoOutOfApp',
+    title: 'BUTTONS.dragVideoOutOfAppHint',
     toggled: false
   },
   'duplicateHash': {
@@ -321,28 +354,12 @@ export const SettingsButtons: SettingsButtonsType = {
     title: 'BUTTONS.durationFilterHint',
     toggled: false
   },
-  'sizeFilter': {
-    description: 'BUTTONS.sizeFilterDescription',
-    hidden: false,
-    iconName: 'icon-sort-order',
-    moreInfo: 'BUTTONS.sizeFilterMoreInfo',
-    title: 'BUTTONS.sizeFilterHint',
-    toggled: false
-  },
   'exclude': {
     description: 'BUTTONS.excludeDescription',
     hidden: true,
     iconName: 'icon-video-x',
     moreInfo: 'BUTTONS.excludeMoreInfo',
     title: 'BUTTONS.excludeHint',
-    toggled: false
-  },
-  'extendedWordCloud': {
-    description: 'BUTTONS.extendedWordCloudDescription',
-    hidden: true,
-    iconName: 'icon-cloud-plus',
-    moreInfo: 'BUTTONS.extendedWordCloudMoreInfo',
-    title: 'BUTTONS.extendedWordCloudHint',
     toggled: false
   },
   'fileIntersection': {
@@ -359,13 +376,6 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-video-plus',
     moreInfo: 'BUTTONS.fileUnionMoreInfo',
     title: 'BUTTONS.fileUnionHint',
-    toggled: false
-  },
-  'videoNotes': {
-    description: 'BUTTONS.videoNotesDescription',
-    hidden: true,
-    iconName: 'icon-toggle-video-notes',
-    title: 'BUTTONS.videoNotesHint',
     toggled: false
   },
   'flatIcons': {
@@ -406,6 +416,14 @@ export const SettingsButtons: SettingsButtonsType = {
     moreInfo: 'BUTTONS.fuzzyMoreInfo',
     title: 'BUTTONS.fuzzyHint',
     toggled: true
+  },
+  'hideOffline': {
+    description: 'BUTTONS.hideOfflineDescription',
+    hidden: true,
+    iconName: 'icon-eye-closed',
+    moreInfo: 'BUTTONS.hideOfflineMoreInfo',
+    title: 'BUTTONS.hideOfflineHint',
+    toggled: false
   },
   'hideSidebar': {
     description: 'BUTTONS.hideSidebarDescription',
@@ -476,6 +494,7 @@ export const SettingsButtons: SettingsButtonsType = {
     hidden: true,
     iconName: 'icon-toggle-scrub',
     moreInfo: 'BUTTONS.openAtTimestampMoreInfo',
+    settingsHeading: 'BUTTONS.videoPlayerSettings',
     title: 'BUTTONS.openAtTimestampHint',
     toggled: false
   },
@@ -538,12 +557,6 @@ export const SettingsButtons: SettingsButtonsType = {
     title: 'BUTTONS.showDeleteButton',
     toggled: false
   },
-  'dangerousDelete': {
-    description: 'BUTTONS.dangerousDeleteDescription',
-    hidden: true,
-    title: 'BUTTONS.dangerousDelete',
-    toggled: false
-  },
   'showDetails': {
     description: 'BUTTONS.showDetailsDescription',
     hidden: false,
@@ -556,6 +569,14 @@ export const SettingsButtons: SettingsButtonsType = {
     hidden: false,
     iconName: 'icon-show-details-2',
     title: 'BUTTONS.showDetails2Hint',
+    toggled: false
+  },
+  'showDetailsTray': {
+    description: 'BUTTONS.showDetailsTray',
+    hidden: false,
+    iconName: 'icon-show-details-tray',
+    moreInfo: 'BUTTONS.showDetailsTrayMoreInfo',
+    title: 'BUTTONS.showDetailsTray',
     toggled: false
   },
   'showFiles': {
@@ -577,7 +598,7 @@ export const SettingsButtons: SettingsButtonsType = {
     hidden: false,
     iconName: 'icon-folder-blank',
     moreInfo: 'BUTTONS.showFoldersMoreInfo',
-    settingsHeading: 'SETTINGS.viewSettings',
+    settingsHeading: 'SETTINGS.folderView',
     title: 'BUTTONS.showFoldersHint',
     toggled: false
   },
@@ -608,7 +629,15 @@ export const SettingsButtons: SettingsButtonsType = {
     description: 'BUTTONS.showRecentDescription',
     hidden: false,
     iconName: 'icon-recent-history',
+    settingsHeading: 'SETTINGS.showRecent',
     title: 'BUTTONS.showRecentHint',
+    toggled: false
+  },
+  'showRecentlyPlayed': {
+    description: 'BUTTONS.showRecentPlayed',
+    hidden: false,
+    iconName: 'icon-recent-history',
+    title: 'BUTTONS.showRecentPlayed',
     toggled: false
   },
   'showRelatedVideosTray': {
@@ -624,7 +653,6 @@ export const SettingsButtons: SettingsButtonsType = {
     hidden: false,
     iconName: 'icon-tag-auto',
     moreInfo: 'BUTTONS.showTagsMoreInfo',
-    settingsHeading: 'SETTINGS.autoGenerated',
     title: 'BUTTONS.showTagsHint',
     toggled: false
   },
@@ -642,6 +670,14 @@ export const SettingsButtons: SettingsButtonsType = {
     title: 'BUTTONS.showThumbnailsHint',
     toggled: true
   },
+  'showVideoNotes': {
+    description: 'BUTTONS.showVideoNotesDescription',
+    hidden: true,
+    iconName: 'icon-toggle-video-notes',
+    moreInfo: 'BUTTONS.showVideoNotesMoreInfo',
+    title: 'BUTTONS.showVideoNotesHint',
+    toggled: false
+  },
   'shuffleGalleryNow': {
     description: 'BUTTONS.shuffleGalleryNowDescription',
     hidden: false,
@@ -649,11 +685,26 @@ export const SettingsButtons: SettingsButtonsType = {
     title: 'BUTTONS.shuffleGalleryNowHint',
     toggled: false
   },
+  'sizeFilter': {
+    description: 'BUTTONS.sizeFilterDescription',
+    hidden: false,
+    iconName: 'icon-sort-order',
+    moreInfo: 'BUTTONS.sizeFilterMoreInfo',
+    title: 'BUTTONS.sizeFilterHint',
+    toggled: false
+  },
   'sortOptionAlphabetical': {
     description: 'BUTTONS.sortOptionAlphabeticalDescription',
     hidden: false,
     moreInfo: 'BUTTONS.sortOptionAlphabeticalMoreInfo',
     settingsHeading: 'BUTTONS.sortOptionsHeading',
+    title: '',
+    toggled: true
+  },
+  'sortOptionAlphabetical2': {
+    description: 'BUTTONS.sortOptionAlphabeticalDescription2',
+    hidden: false,
+    moreInfo: 'BUTTONS.sortOptionAlphabeticalMoreInfo2',
     title: '',
     toggled: false
   },
@@ -664,19 +715,34 @@ export const SettingsButtons: SettingsButtonsType = {
     title: '',
     toggled: false
   },
-  'sortOptionModified': {
-    description: 'BUTTONS.sortOptionModifiedDescription',
-    hidden: false,
-    moreInfo: 'BUTTONS.sortOptionModifiedMoreInfo',
-    title: '',
-    toggled: false
-  },
   'sortOptionCreated': {
     description: 'BUTTONS.sortOptionCreatedDescription',
     hidden: false,
     moreInfo: 'BUTTONS.sortOptionCreatedMoreInfo',
     title: '',
     toggled: false
+  },
+  'sortOptionFolderSize': {
+    description: 'BUTTONS.sortOptionFolderSizeDescription',
+    hidden: false,
+    moreInfo: 'BUTTONS.sortOptionFolderSizeMoreInfo',
+    title: '',
+    toggled: false
+  },
+
+  'sortOptionFps': {
+    description: 'BUTTONS.sortOptionFpsDescription',
+    hidden: false,
+    moreInfo: 'BUTTONS.sortOptionFpsMoreInfo',
+    title: '',
+    toggled: false
+  },
+  'sortOptionModified': {
+    description: 'BUTTONS.sortOptionModifiedDescription',
+    hidden: false,
+    moreInfo: 'BUTTONS.sortOptionModifiedMoreInfo',
+    title: '',
+    toggled: true
   },
   'sortOptionSize': {
     description: 'BUTTONS.sortOptionSizeDescription',
@@ -726,7 +792,7 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-sort-order',
     moreInfo: 'BUTTONS.sortOrderMoreInfo',
     title: 'BUTTONS.sortOrderHint',
-    toggled: false
+    toggled: true
   },
   'starFilter': {
     description: 'BUTTONS.starFilterDescription',
@@ -766,6 +832,14 @@ export const SettingsButtons: SettingsButtonsType = {
     title: 'BUTTONS.tagUnionHint',
     toggled: false
   },
+  'timesPlayedFilter': {
+    description: 'BUTTONS.timesPlayedDescription',
+    hidden: false,
+    iconName: 'icon-times-played',
+    moreInfo: 'BUTTONS.timesPlayedMoreInfo',
+    title: 'BUTTONS.timesPlayedHint',
+    toggled: false
+  },
   'thumbAutoAdvance': {
     description: 'BUTTONS.thumbAutoAdvanceDescription',
     hidden: true,
@@ -774,11 +848,20 @@ export const SettingsButtons: SettingsButtonsType = {
     title: 'BUTTONS.thumbAutoAdvanceHint',
     toggled: false
   },
-  'showVideoNotes': {
-    description: 'BUTTONS.showVideoNotesDescription',
+  'yearFilter': {
+    description: 'BUTTONS.yearSliderDescription',
+    hidden: false,
+    iconName: 'icon-times-played',
+    moreInfo: 'BUTTONS.yearSliderMoreInfo',
+    title: 'BUTTONS.yearSliderHint',
+    toggled: false
+  },
+  'videoNotes': {
+    description: 'BUTTONS.videoNotesDescription',
     hidden: true,
     iconName: 'icon-toggle-video-notes',
-    title: 'BUTTONS.showVideoNotesHint',
+    moreInfo: 'BUTTONS.videoNotesMoreInfo',
+    title: 'BUTTONS.videoNotesHint',
     toggled: false
   }
-}
+};

@@ -11,6 +11,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 
 // External
+import { AnQrcodeModule } from 'an-qrcode';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
@@ -19,11 +20,12 @@ import { VirtualScrollerModule } from 'ngx-virtual-scroller';
 // Services
 import { AutoTagsSaveService } from './components/tags-auto/tags-save.service';
 import { AutoTagsService } from './components/tags-auto/autotags.service';
-import { ModalService } from './components/modal/modal.service';
 import { ElectronService } from './providers/electron.service';
 import { FilePathService } from './components/views/file-path.service';
 import { HomeComponent } from './components/home.component';
+import { ImageElementService } from './services/image-element.service';
 import { ManualTagsService } from './components/tags-manual/manual-tags.service';
+import { ModalService } from './components/modal/modal.service';
 import { PipeSideEffectService } from './pipes/pipe-side-effect.service';
 import { ResolutionFilterService } from './pipes/resolution-filter.service';
 import { ShortcutsService } from './components/shortcuts/shortcuts.service';
@@ -36,6 +38,7 @@ import { WordFrequencyService } from './pipes/word-frequency.service';
 import { AddTagComponent } from './components/tags-manual/add-tag.component';
 import { AppComponent } from './app.component';
 import { BreadcrumbsComponent } from './components/breadcrumbs/breadcrumbs.component';
+import { ButtonComponent } from './components/button/button.component';
 import { ClipComponent } from './components/views/clip/clip.component';
 import { DetailsComponent } from './components/views/details/details.component';
 import { DonutComponent } from './components/donut/donut.component';
@@ -59,8 +62,8 @@ import { SortOrderComponent } from './components/sort-order/sort-order.component
 import { StarFilterComponent } from './components/star-filter/star-filter.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { SvgDefinitionsComponent } from './components/icon/svg-definitions.component';
-import { TagTrayComponent } from './components/tag-tray/tag-tray.component';
 import { TagsComponent } from './components/tags-auto/tags.component';
+import { TagTrayComponent } from './components/tag-tray/tag-tray.component';
 import { ThumbnailComponent } from './components/views/thumbnail/thumbnail.component';
 import { TitleBarComponent } from './components/title-bar/title-bar.component';
 import { TopComponent } from './components/top/top.component';
@@ -70,6 +73,7 @@ import { WizardComponent } from './components/wizard/wizard.component';
 
 // Pipes
 import { AlphabetPrefixPipe } from './pipes/alphabet-prefix.pipe';
+import { ButtonStylePipe } from './components/button/button-style.pipe';
 import { CountPipe } from './pipes/count.pipe';
 import { DeleteFilePipe } from './pipes/delete-file.pipe';
 import { DuplicateFinderPipe } from './pipes/duplicateFinder.pipe';
@@ -79,6 +83,7 @@ import { FileSizePipe } from './pipes/file-size.pipe';
 import { FolderArrowsPipe } from './pipes/folder-arrows.pipe';
 import { FolderViewPipe } from './pipes/folder-view.pipe';
 import { FuzzySearchPipe } from './pipes/fuzzy-search.pipe';
+import { HideOfflinePipe } from './pipes/hide-offline.pipe';
 import { LengthFilterPipe } from './pipes/length-filter.pipe';
 import { LengthPipe } from './pipes/length.pipe';
 import { MagicSearchPipe } from './pipes/magic-search.pipe';
@@ -95,8 +100,13 @@ import { TagFilterPipe } from './components/tags-auto/tag-filter.pipe';
 import { TagFrequencyPipe } from './components/tags-auto/tag-frequency.pipe';
 import { TagMatchPipe } from './components/tags-auto/tag-match.pipe';
 import { TagsDisplayPipe } from './components/tags-auto/tag-display.pipe';
+import { TimesPlayedFilterPipe } from './pipes/times-played-filter.pipe';
+import { TimesPlayedPipe } from './pipes/times-played.pipe';
 import { WordFrequencyPipe } from './pipes/word-frequency.pipe';
 import { WrapperPipe } from './pipes/wrapper.pipe';
+import { YearFilterPipe } from './pipes/year-filter.pipe';
+import { YearPipe } from './pipes/year.pipe';
+
 
 @NgModule({
   declarations: [
@@ -104,8 +114,9 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     AlphabetPrefixPipe,
     AppComponent,
     BreadcrumbsComponent,
+    ButtonComponent,
+    ButtonStylePipe,
     ClipComponent,
-    ModalComponent,
     CountPipe,
     DeleteFilePipe,
     DetailsComponent,
@@ -120,6 +131,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     FolderViewPipe,
     FullViewComponent,
     FuzzySearchPipe,
+    HideOfflinePipe,
     HomeComponent,
     IconComponent,
     LengthFilterPipe,
@@ -127,6 +139,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     MagicSearchPipe,
     ManualTagSortPipe,
     MetaComponent,
+    ModalComponent,
     PlaylistPipe,
     RecentlyOpenedComponent,
     RegexSearchPipe,
@@ -141,11 +154,11 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     SheetComponent,
     ShortcutsComponent,
     SidebarHeightPipe,
-    SimilarTrayComponent,
     SimilarityPipe,
+    SimilarTrayComponent,
     SliderFilterComponent,
-    SortOrderComponent,
     SortingPipe,
+    SortOrderComponent,
     StarFilterComponent,
     StarFilterPipe,
     StatisticsComponent,
@@ -153,10 +166,12 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     TagFilterPipe,
     TagFrequencyPipe,
     TagMatchPipe,
-    TagTrayComponent,
     TagsComponent,
     TagsDisplayPipe,
+    TagTrayComponent,
     ThumbnailComponent,
+    TimesPlayedFilterPipe,
+    TimesPlayedPipe,
     TitleBarComponent,
     TopComponent,
     ViewTagsComponent,
@@ -164,8 +179,11 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     WizardComponent,
     WordFrequencyPipe,
     WrapperPipe,
+    YearFilterPipe,
+    YearPipe
   ],
   imports: [
+    AnQrcodeModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     BrowserModule,
@@ -179,10 +197,11 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
   providers: [
     AutoTagsSaveService,
     AutoTagsService,
-    ModalService,
     ElectronService,
     FilePathService,
+    ImageElementService,
     ManualTagsService,
+    ModalService,
     PipeSideEffectService,
     ResolutionFilterService,
     ShortcutsService,
@@ -190,7 +209,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     SortingPipe,
     SourceFolderService,
     StarFilterService,
-    WordFrequencyService,
+    WordFrequencyService
   ],
   bootstrap: [AppComponent]
 })

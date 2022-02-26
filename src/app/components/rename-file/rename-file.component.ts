@@ -25,7 +25,7 @@ export class RenameFileComponent implements OnInit, OnDestroy {
   @Input() macVersion: boolean;
   @Input() selectedSourceFolder: string;
 
-  @Input() renameResponse: Observable<RenameFileResponse>
+  @Input() renameResponse: Observable<RenameFileResponse>;
 
   renamingWIP: string;
   renamingExtension: string;
@@ -51,7 +51,7 @@ export class RenameFileComponent implements OnInit, OnDestroy {
     this.responseSubscription = this.renameResponse.subscribe((data: RenameFileResponse) => {
 
       if (data) {
-        console.log('WOW !!!');
+        console.log('Rename response:');
         console.log(data);
 
         // just in case, make sure the message came back for the current file

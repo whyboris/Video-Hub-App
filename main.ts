@@ -1,36 +1,33 @@
+// Update the `demo` and `version` when building
 import { GLOBALS } from './node/main-globals';
-// =================================================================================================
-// -------------------------------------     BUILD TOGGLE     --------------------------------------
-// -------------------------------------------------------------------------------------------------
-const demo = false; // TODO: add this back into code
-GLOBALS.version = '3.0.0';   // update `package.json` version to `#.#.#-demo` when building the demo
-// =================================================================================================
+
+GLOBALS.macVersion = process.platform === 'darwin';
 
 import * as path from 'path';
-import * as url from 'url';
 
 const fs = require('fs');
 const electron = require('electron');
-import { app, BrowserWindow, screen, dialog, systemPreferences, ipcMain } from 'electron';
+const { nativeTheme } = require('electron');
+import { app, protocol, BrowserWindow, screen, dialog, systemPreferences, ipcMain } from 'electron';
 const windowStateKeeper = require('electron-window-state');
 
 // Methods
 import { createTouchBar } from './node/main-touch-bar';
+import { setUpIpcForServer } from './node/server';
 import { setUpIpcMessages } from './node/main-ipc';
-import { sendFinalObjectToAngular, setUpDirectoryWatchers, upgradeToVersion3, writeVhaFileToDisk } from './node/main-support';
+import { sendFinalObjectToAngular, setUpDirectoryWatchers, upgradeToVersion3, writeVhaFileToDisk, parseAdditionalExtensions } from './node/main-support';
 
 // Interfaces
 import { FinalObject } from './interfaces/final-object.interface';
 import { SettingsObject } from './interfaces/settings-object.interface';
 import { WizardOptions } from './interfaces/wizard-options.interface';
-import { stopThumbExtraction } from './node/main-extract-async';
+import { preventSleep, resetAllQueues } from './node/main-extract-async';
 
 // Variables
 const pathToAppData = app.getPath('appData');
 const pathToPortableApp = process.env.PORTABLE_EXECUTABLE_DIR;
 GLOBALS.settingsPath = pathToPortableApp ? pathToPortableApp : path.join(pathToAppData, 'video-hub-app-2');
 
-const codeRunningOnMac: boolean = process.platform === 'darwin';
 const English = require('./i18n/en.json');
 let systemMessages = English.SYSTEM; // Set English as default; update via `system-messages-updated`
 
@@ -45,13 +42,15 @@ electron.Menu.setApplicationMenu(null);
 
 // =================================================================================================
 
-let win, serve;
+let win;
 let myWindow = null;
 const args = process.argv.slice(1);
-serve = args.some(val => val === '--serve');
+const serve: boolean = args.some(val => val === '--serve');
 
 GLOBALS.debug = args.some(val => val === '--debug');
-if (GLOBALS.debug) { console.log('Debug mode enabled!'); }
+if (GLOBALS.debug) {
+  console.log('Debug mode enabled!');
+}
 
 // =================================================================================================
 
@@ -101,10 +100,44 @@ function createWindow() {
     defaultHeight: 850
   });
 
+  if (GLOBALS.macVersion) {
+    electron.Menu.setApplicationMenu(electron.Menu.buildFromTemplate([
+      {
+        label: app.name,
+        submenu: [
+          { role: 'quit' },
+          { role: 'hide' },
+        ]
+      },
+      {
+        label: 'Edit',
+        submenu: [
+          { role: 'selectAll' },
+          { role: 'cut' },
+          { role: 'copy' },
+          { role: 'paste' }
+        ]
+      },
+      {
+        label: "View",
+        submenu: [
+          { role: "togglefullscreen" },
+        ]
+      },
+      {
+        label: "Window",
+        role: 'windowMenu',
+      },
+    ]));
+  }
+
   // Create the browser window.
   win = new BrowserWindow({
     webPreferences: {
       nodeIntegration: true,
+      allowRunningInsecureContent: true,
+      contextIsolation: false,
+      enableRemoteModule: true,
       webSecurity: false  // allow files from hard disk to show up
     },
     x: mainWindowState.x,
@@ -129,14 +162,16 @@ function createWindow() {
     win.loadURL('http://localhost:4200');
     win.webContents.openDevTools();
   } else {
-    win.loadURL(url.format({
+    const url = require('url').format({
       pathname: path.join(__dirname, 'dist/index.html'),
       protocol: 'file:',
       slashes: true
-    }));
+    });
+
+    win.loadURL(url);
   }
 
-  if (codeRunningOnMac) {
+  if (GLOBALS.macVersion) {
     const touchBar = createTouchBar();
     if (touchBar) {
       win.setTouchBar(touchBar);
@@ -146,7 +181,15 @@ function createWindow() {
   // Watch for computer powerMonitor
   // https://electronjs.org/docs/api/power-monitor
   electron.powerMonitor.on('shutdown', () => {
-    GLOBALS.angularApp.sender.send('please-shut-down-ASAP');
+    getAngularToShutDown();
+  });
+
+  win.on('close', (event) => {
+    if (GLOBALS.readyToQuit) {
+      app.exit();
+    } else {
+      getAngularToShutDown();
+    }
   });
 
   // Emitted when the window is closed.
@@ -197,13 +240,20 @@ try {
     }
   });
 
+  app.whenReady().then(() => {
+    protocol.registerFileProtocol('file', (request, callback) => {
+      const pathname = request.url.replace('file:///', '');
+      callback(pathname);
+    });
+  });
+
 } catch {}
 
-if (codeRunningOnMac) {
+if (GLOBALS.macVersion) {
   systemPreferences.subscribeNotification(
     'AppleInterfaceThemeChangedNotification',
     function theThemeHasChanged () {
-      if (systemPreferences.isDarkMode()) {
+      if (nativeTheme.shouldUseDarkColors) {
         tellElectronDarkModeChange('dark');
       } else {
         tellElectronDarkModeChange('light');
@@ -225,12 +275,19 @@ function tellElectronDarkModeChange(mode: string) {
 // -------------------------------------------------------------------------------------------------
 
 /**
+ * Get angular to shut down immediately - saving settings and hub if needed.
+ */
+function getAngularToShutDown(): void {
+  GLOBALS.angularApp.sender.send('please-shut-down-ASAP');
+}
+
+/**
  * Load the .vha2 file and send it to app
  * @param pathToVhaFile full path to the .vha2 file
  */
-function openThisDamnFile(pathToVhaFile: string) {
+function openThisDamnFile(pathToVhaFile: string): void {
 
-  stopThumbExtraction(); // todo -- rename to "reset task runners" and reset all that jazz
+  resetAllQueues();
 
   macFirstRun = false;     // TODO - figure out how to open file when double click first time on Mac
 
@@ -271,6 +328,8 @@ function openThisDamnFile(pathToVhaFile: string) {
 
 setUpIpcMessages(ipcMain, win, pathToAppData, systemMessages);
 
+setUpIpcForServer(ipcMain);
+
 /**
  * Once Angular loads it sends over the `ready` status
  * Load up the settings.json and send settings over to Angular
@@ -279,7 +338,7 @@ ipcMain.on('just-started', (event) => {
   GLOBALS.angularApp = event;
   GLOBALS.winRef = win;
 
-  if (codeRunningOnMac) {
+  if (GLOBALS.macVersion) {
     tellElectronDarkModeChange(systemPreferences.getEffectiveAppearance());
   }
 
@@ -293,9 +352,16 @@ ipcMain.on('just-started', (event) => {
       event.sender.send('please-open-wizard', true); // firstRun = true!
     } else {
 
-      const previouslySavedSettings: SettingsObject = JSON.parse(data);
+      try {
+        const previouslySavedSettings: SettingsObject = JSON.parse(data);
+        if (previouslySavedSettings.appState.addtionalExtensions) {
+          GLOBALS.additionalExtensions = parseAdditionalExtensions(previouslySavedSettings.appState.addtionalExtensions);
+        }
+        event.sender.send('settings-returning', previouslySavedSettings, locale);
 
-      event.sender.send('settings-returning', previouslySavedSettings, locale);
+      } catch (err) {
+        event.sender.send('please-open-wizard', false);
+      }
     }
   });
 });
@@ -304,6 +370,9 @@ ipcMain.on('just-started', (event) => {
  * Start extracting the screenshots into a chosen output folder from a chosen input folder
  */
 ipcMain.on('start-the-import', (event, wizard: WizardOptions) => {
+
+  preventSleep();
+
   const hubName = wizard.futureHubName;
   const outDir: string = wizard.selectedOutputFolder;
 
@@ -411,7 +480,15 @@ ipcMain.on('load-this-vha-file', (event, pathToVhaFile: string, finalObjectToSav
  * Interrupt current import process
  */
 ipcMain.on('cancel-current-import', (event): void => {
-  stopThumbExtraction();
+  GLOBALS.winRef.setProgressBar(-1);
+  resetAllQueues();
+});
+
+/**
+ * Update additonal extensions from settings
+ */
+ipcMain.on('update-additional-extensions', (event, newAdditionalExtensions: string): void => {
+  GLOBALS.additionalExtensions = parseAdditionalExtensions(newAdditionalExtensions);
 });
 
 /**

@@ -1,7 +1,7 @@
 {
   "productName": "Video Hub App 3",
   "appId": "com.videohubapp.videohubapp3",
-  "copyright": "Copyright © 2020 Boris Yakubchik",
+  "copyright": "Copyright © 2021 Boris Yakubchik",
   "directories": {
     "output": "release/"
   },
@@ -20,14 +20,22 @@
     {
       "from": "src/assets/icons/mac/touch-bar",
       "to": "assets"
+    },
+    {
+      "from": "remote",
+      "to": "remote"
+    },
+    {
+      "from": "src/assets/logo.png",
+      "to": "assets/logo.png"
     }
   ],
   "win": {
     "icon": "dist/favicon",
     "asar": true,
     "asarUnpack": [
-      "../node_modules/@ffmpeg-installer",
-      "../node_modules/@ffprobe-installer"
+      "../node_modules/ffmpeg-static",
+      "../node_modules/node-ffprobe-installer"
     ],
     "target": [
       "nsis"
@@ -39,8 +47,8 @@
     "icon": "src/assets/icons.icns",
     "asar": true,
     "asarUnpack": [
-      "../node_modules/@ffmpeg-installer",
-      "../node_modules/@ffprobe-installer"
+      "../node_modules/ffmpeg-static",
+      "../node_modules/node-ffprobe-installer"
     ]
   },
   "linux": {

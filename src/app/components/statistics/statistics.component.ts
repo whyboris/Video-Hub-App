@@ -3,15 +3,26 @@ import { Component, Input, OnInit, ChangeDetectorRef, Output, EventEmitter, OnDe
 import { Observable, Subscription } from 'rxjs';
 
 import { ElectronService } from '../../providers/electron.service';
+import { ImageElementService } from './../../services/image-element.service';
 import { SourceFolderService } from './source-folder.service';
 
+import { AppStateInterface } from '../../common/app-state';
 import { ImageElement, ScreenshotSettings, InputSources } from '../../../../interfaces/final-object.interface';
+
 import { metaAppear, breadcrumbWordAppear } from '../../common/animations';
+
+export interface ServerDetails {
+  port: number;
+  wifi: string;
+  host: string;
+}
 
 @Component({
   selector: 'app-statistics',
   templateUrl: './statistics.component.html',
   styleUrls: [
+    '../wizard/wizard.component.scss',
+    '../settings.scss',
     '../wizard-button.scss',
     './statistics.component.scss',
     './toggle.scss'
@@ -20,12 +31,11 @@ import { metaAppear, breadcrumbWordAppear } from '../../common/animations';
 })
 export class StatisticsComponent implements OnInit, OnDestroy {
 
-  @Output() addMissingThumbnailsPlease = new EventEmitter<any>();
-  @Output() cleanScreenshotFolderPlease = new EventEmitter<any>();
   @Output() deleteInputSourceFiles = new EventEmitter<number>();
   @Output() finalArrayNeedsSaving = new EventEmitter<any>();
+  @Output() startServerOnPort = new EventEmitter<number>();
 
-  @Input() finalArray: ImageElement[];
+  @Input() appState: AppStateInterface;
   @Input() hubName: string;
   @Input() inputFolders: InputSources;
   @Input() numFolders: number;
@@ -35,25 +45,33 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   @Input() inputFolderChosen: Observable<string>;
   @Input() numberScreenshotsDeleted: Observable<number>;
   @Input() oldFolderReconnected: Observable<{ source: number, path: string }>;
+  @Input() serverDetails: Observable<any>;
 
   eventSubscriptionMap: Map<string, Subscription> = new Map();
 
   totalFiles: number;
 
+  // Length
   longest: number = 0;
   shortest: number = Infinity;
   totalLength: number = 0;
   avgLength: number;
 
+  // Size
   largest: number = 0;
   smallest: number = Infinity;
   totalSize: number = 0;
   avgSize: number;
 
+  // For cleaning old screenshots
   showNumberDeleted: boolean = false;
   numberOfScreensDeleted: number = 0;
 
   removeFoldersMode: boolean = false;
+
+  selectedPort = 3000;
+  serverInfo: ServerDetails;
+  serverRunning: boolean = false;
 
   objectKeys = Object.keys; // to use in template
 
@@ -61,13 +79,30 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     public cd: ChangeDetectorRef,
     public electronService: ElectronService,
     public sourceFolderService: SourceFolderService,
+    public imageElementService: ImageElementService
   ) { }
 
   ngOnInit() {
     console.log('booting up!');
     this.computeAverages();
 
+    console.log('port from settings:', this.appState.port);
+
+    this.selectedPort = this.appState.port ? this.appState.port : 3000;
+
     // IPC subscriptions - come in as BehaviorSubject.asObservable()
+
+    this.eventSubscriptionMap.set('serverDetails', this.serverDetails.subscribe((serverDetails: ServerDetails) => {
+      console.log('STATS RECEIVED:');
+      console.log(serverDetails);
+      if (serverDetails) {
+        this.serverRunning = true;
+        this.serverInfo = serverDetails;
+      } else {
+        this.serverRunning = false;
+      }
+      this.cd.detectChanges();
+    }));
 
     this.eventSubscriptionMap.set('inputFolder', this.inputFolderChosen.subscribe((folderPath: string) => {
       if (folderPath) { // first emit from subscription is `undefined`
@@ -79,10 +114,10 @@ export class StatisticsComponent implements OnInit, OnDestroy {
       if (data) { // first emit from subscription is `undefined`
         this.handleOldFolderReconnected(data.source, data.path);
       }
-    }))
+    }));
 
     this.eventSubscriptionMap.set('numberOfScreenshotsDeleted', this.numberScreenshotsDeleted.subscribe((deleted: number) => {
-      if (deleted) { // first emit from subscription is `undefined`
+      if (deleted !== undefined) { // first emit from subscription is `undefined`
         this.handleScreenshotsDeleted(deleted);
       }
     }));
@@ -94,7 +129,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   computeAverages() {
     console.log(this.inputFolders);
 
-    this.finalArray.forEach((element: ImageElement): void => {
+    this.imageElementService.imageElements.forEach((element: ImageElement): void => {
       this.shortest = Math.min(element.duration, this.shortest);
       this.longest = Math.max(element.duration, this.longest);
       this.totalLength += element.duration;
@@ -104,7 +139,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
       this.totalSize += element.fileSize;
     });
 
-    this.totalFiles = this.finalArray.length;
+    this.totalFiles = this.imageElementService.imageElements.length;
 
     this.avgLength = Math.round(this.totalLength / this.totalFiles);
     this.avgSize = Math.round(this.totalSize / this.totalFiles);
@@ -120,10 +155,10 @@ export class StatisticsComponent implements OnInit, OnDestroy {
 
       this.numberOfScreensDeleted = numDeleted;
       this.showNumberDeleted = true;
-      this.cd.detectChanges()
+      this.cd.detectChanges();
       setTimeout(() => {
         this.showNumberDeleted = false;
-        this.cd.detectChanges()
+        this.cd.detectChanges();
       }, 3000);
 
     }, 1000); // make sure it doesn't appear instantly -- feels like an error if it happens to quickly :P
@@ -216,10 +251,15 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Add any missing thumbnails / continue thumbnail import
+   * Add any missing thumbnails / resume thumbnail import
+   * Tell node to find and extract all missing thumbnails
    */
   addMissingThumbnails() {
-    this.addMissingThumbnailsPlease.emit(true);
+    console.log('trying to extract missing thumbnails');
+    this.electronService.ipcRenderer.send(
+      'add-missing-thumbnails',
+      this.imageElementService.imageElements,
+      this.screenshotSettings.clipSnippets > 0);
   }
 
   /**
@@ -247,9 +287,12 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     this.deleteInputSourceFiles.emit(itemSourceKey);
   }
 
+  /**
+   * Tell node to delete all screenshots that are no longer in the hub
+   */
   cleanScreenshotFolder(): void {
     console.log('cleaning screenshots!');
-    this.cleanScreenshotFolderPlease.emit(true);
+    this.electronService.ipcRenderer.send('clean-old-thumbnails', this.imageElementService.imageElements);
   }
 
   /**
@@ -283,6 +326,34 @@ export class StatisticsComponent implements OnInit, OnDestroy {
         event.srcElement.classList.remove('progress-gradient-animation');
       }
     }, 3000); // apparently nothing breaks if the component is closed before timeout finishes :)
+  }
+
+  startServer() {
+    if (this.serverRunning) {
+      this.startServerOnPort.emit(0); // hack to *STOP* the server
+    } else {
+      this.startServerOnPort.emit(this.selectedPort);
+    }
+  }
+
+  /**
+   * Check port any time it changes
+   */
+  validatePort(port: string) {
+    console.log('port', port);
+    console.log(typeof(port));
+    const parsed: number = parseInt(port, 10);
+    console.log(parsed);
+    if (!Number.isInteger(parsed)) {
+      this.selectedPort = 3000;
+    } else if (parsed > 65535) {
+      this.selectedPort = 3000;
+    } else if (parsed < 2) {
+      this.selectedPort = 3000;
+    } else {
+      this.selectedPort = parsed;
+    }
+    this.appState.port = this.selectedPort;
   }
 
   /**

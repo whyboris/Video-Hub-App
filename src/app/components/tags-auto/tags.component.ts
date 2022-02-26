@@ -3,9 +3,8 @@ import { Component, EventEmitter, Input, Output, OnDestroy, ViewChild, ElementRe
 import { AutoTagsService, WordAndFreq } from './autotags.service';
 import { AutoTagsSaveService } from './tags-save.service';
 
-import { ImageElement } from '../../../../interfaces/final-object.interface';
-
-import { slowFadeIn, donutAppear } from '../../common/animations';
+import { slowFadeIn, donutAppear, metaAppear } from '../../common/animations';
+import { ImageElementService } from './../../services/image-element.service';
 
 @Component({
   selector: 'app-tags-component',
@@ -14,23 +13,24 @@ import { slowFadeIn, donutAppear } from '../../common/animations';
               '../../fonts/icons.scss',
               '../wizard-button.scss',
               'tags.component.scss'],
-  animations: [slowFadeIn, donutAppear]
+  animations: [slowFadeIn, donutAppear, metaAppear]
 })
 export class TagsComponent implements OnInit, OnDestroy {
 
-  @Input() finalArray: ImageElement[];
   @Input() hubName: string; // if hubName changes, tagsService will recalculate, otherwise it will show cached
 
   @Output() tagClicked = new EventEmitter<string>();
 
   @ViewChild('filterInput', { static: false }) filterInput: ElementRef;
 
-  oneWordTags: WordAndFreq[];
-  twoWordTags: WordAndFreq[];
+  oneWordTags: WordAndFreq[] = [];
+  twoWordTags: WordAndFreq[] = [];
 
   editMode: boolean = false;
 
   showEdit: boolean = false;
+
+  loading: boolean = true;
 
   currentAdding: string = '';
   currentFiltering: string = '';
@@ -41,28 +41,34 @@ export class TagsComponent implements OnInit, OnDestroy {
   minimumFrequency: number = 0;
 
   constructor(
+    public autoTagsSaveService: AutoTagsSaveService,
+    public imageElemetService: ImageElementService,
     public tagsService: AutoTagsService,
-    public autoTagsSaveService: AutoTagsSaveService
   ) {}
 
   ngOnInit(): void {
 
-    setTimeout(() => {
-      this.showEdit = true;
-    }, 300);
+    this.tagsService.generateAllTags(this.imageElemetService.imageElements, this.hubName).then(() => {
+      setTimeout(() => {
+        this.showEdit = true;
+      }, 300);
 
-    setTimeout(() => {
-      this.filterInput.nativeElement.focus();
-    }, 350);
+      setTimeout(() => {
+        if (this.filterInput) { // in case user already closed the modal
+          this.filterInput.nativeElement.focus();
+        }
+      }, 350);
 
-    this.tagsService.generateAllTags(this.finalArray, this.hubName);
+      this.loading = false;
+      this.oneWordTags = this.tagsService.getOneWordTags();
+      this.twoWordTags = this.tagsService.getTwoWordTags();
+    });
 
-    this.oneWordTags = this.tagsService.getOneWordTags();
-    this.twoWordTags = this.tagsService.getTwoWordTags();
   }
 
   /**
    * Emit string to home component to search for this string
+   * if in `editMode` update tags accordingly
    */
   tagWasClicked(tag: string): void {
     if (this.editMode) {

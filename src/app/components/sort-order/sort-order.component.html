@@ -9,8 +9,8 @@
   @filterItemAppear
 >
   <select
-    (change)="sortTypeChange.emit($event.target.value)"
     #sortFilterElement
+    (change)="sortTypeChange.emit($event.target.value)"
     class="language-drop-down sort-dropdown"
     [ngClass]="{ 'sort-dropdown-dark-mode': settingsButtons['darkMode'].toggled }"
   >
@@ -22,6 +22,12 @@
     </option>
     <option *ngIf="settingsButtons['sortOptionAlphabetical'].toggled" value="alphabetDesc">
       &#x25BC; {{ 'SIDEBAR.sortAlphabetical' | translate }}
+    </option>
+    <option *ngIf="settingsButtons['sortOptionAlphabetical2'].toggled" value="alphabetAsc2">
+      &#x25B2; {{ 'SIDEBAR.sortAlphabetical2' | translate }}
+    </option>
+    <option *ngIf="settingsButtons['sortOptionAlphabetical2'].toggled" value="alphabetDesc2">
+      &#x25BC; {{ 'SIDEBAR.sortAlphabetical2' | translate }}
     </option>
     <option *ngIf="settingsButtons['sortOptionTime'].toggled" value="timeAsc">
       &#x25B2; {{ 'SIDEBAR.sortTime' | translate }}
@@ -76,6 +82,18 @@
     </option>
     <option *ngIf="settingsButtons['sortOptionAspectRatio'].toggled" value="aspectRatioDesc">
       &#x25BC; {{ 'SIDEBAR.sortAspectRatio' | translate }}
+    </option>
+    <option *ngIf="settingsButtons['sortOptionFolderSize'].toggled" value="folderSizeAsc">
+      &#x25B2; {{ 'SIDEBAR.sortFolderSize' | translate }}
+    </option>
+    <option *ngIf="settingsButtons['sortOptionFolderSize'].toggled" value="folderSizeDesc">
+      &#x25BC; {{ 'SIDEBAR.sortFolderSize' | translate }}
+    </option>
+    <option *ngIf="settingsButtons['sortOptionFps'].toggled" value="fpsAsc">
+      &#x25B2; {{ 'SIDEBAR.sortFps' | translate }}
+    </option>
+    <option *ngIf="settingsButtons['sortOptionFps'].toggled" value="fpsDesc">
+      &#x25BC; {{ 'SIDEBAR.sortFps' | translate }}
     </option>
     <option value="random">
       {{ 'SIDEBAR.sortRandom' | translate }}

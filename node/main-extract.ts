@@ -25,7 +25,7 @@ const fs = require('fs');
 import * as path from 'path';
 const spawn = require('child_process').spawn;
 
-const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path.replace('app.asar', 'app.asar.unpacked');
+const ffmpegPath = require('ffmpeg-static').replace('app.asar', 'app.asar.unpacked');
 
 import { GLOBALS } from './main-globals';
 
@@ -72,7 +72,7 @@ const extractSingleFrameArgs = (
  *
  * @param pathToVideo          -- full path to the video file
  * @param duration             -- duration of clip
- * @param screenshotHeight     -- height of screenshot in pixels (defaul is 100)
+ * @param screenshotHeight     -- height of screenshot in pixels
  * @param numberOfScreenshots  -- number of screenshots to extract
  * @param savePath             -- full path to file name and extension
  */
@@ -232,7 +232,6 @@ const extractFirstFrameArgs = (
  * @param videoFolderPath    -- path to base folder where videos are
  * @param screenshotFolder   -- path to folder where .jpg files will be saved
  * @param screenshotSettings -- ScreenshotSettings object
- * @param deepScan           -- spend 50% more time trying to extracts screenshots
  * @param done               -- execute this method when done extracting
  */
 export function extractAll(
@@ -240,7 +239,6 @@ export function extractAll(
   videoFolderPath: string,
   screenshotFolder: string,
   screenshotSettings: ScreenshotSettings,
-  deepScan: boolean,
   done
 ): void {
 
@@ -249,126 +247,126 @@ export function extractAll(
   const screenshotHeight: number = screenshotSettings.height;            // -- number in px how tall each screenshot should be
   const snippetLength:    number = screenshotSettings.clipSnippetLength; // -- length of each snippet in the clip
 
-    const pathToVideo: string = path.join(videoFolderPath, currentElement.partialPath, currentElement.fileName);
+  const pathToVideo: string = path.join(videoFolderPath, currentElement.partialPath, currentElement.fileName);
 
-    const duration:     number = currentElement.duration;
-    const fileHash:     string = currentElement.hash;
-    const numOfScreens: number = currentElement.screens;
-    const sourceHeight: number = currentElement.height;
+  const duration:     number = currentElement.duration;
+  const fileHash:     string = currentElement.hash;
+  const numOfScreens: number = currentElement.screens;
+  const sourceHeight: number = currentElement.height;
 
-    const thumbnailSavePath: string = screenshotFolder + '/thumbnails/' + fileHash + '.jpg';
-    const filmstripSavePath: string = screenshotFolder + '/filmstrips/' + fileHash + '.jpg';
-    const clipSavePath:      string = screenshotFolder + '/clips/' +      fileHash + '.mp4';
-    const clipThumbSavePath: string = screenshotFolder + '/clips/' +      fileHash + '.jpg';
+  const thumbnailSavePath: string = path.normalize(screenshotFolder + '/thumbnails/' + fileHash + '.jpg');
+  const filmstripSavePath: string = path.normalize(screenshotFolder + '/filmstrips/' + fileHash + '.jpg');
+  const clipSavePath:      string = path.normalize(screenshotFolder + '/clips/' +      fileHash + '.mp4');
+  const clipThumbSavePath: string = path.normalize(screenshotFolder + '/clips/' +      fileHash + '.jpg');
 
-    const maxRunTime: ExtractionDurations = setExtractionDurations(
-      sourceHeight, numOfScreens, screenshotHeight, clipSnippets, snippetLength, clipHeight, deepScan
-    );
+  const maxRunTime: ExtractionDurations = setExtractionDurations(
+    sourceHeight, numOfScreens, screenshotHeight, clipSnippets, snippetLength, clipHeight
+  );
 
-    checkFileExists(pathToVideo)                                                            // (1)
-      .then((videoFileExists: boolean) => {
-        // console.log('01 - video file live = ' + videoFileExists);
+  checkFileExists(pathToVideo)                                                            // (1)
+    .then((videoFileExists: boolean) => {
+      // console.log('01 - video file live = ' + videoFileExists);
 
-        if (!videoFileExists) {
-          throw new Error('VIDEO FILE NOT PRESENT');
-        } else {
-          return checkFileExists(thumbnailSavePath);                                        // (2)
-        }
-      })
-      .then((thumbExists: boolean) => {
-        // console.log('02 - thumbnail already present = ' + thumbExists);
+      if (!videoFileExists) {
+        throw new Error('VIDEO FILE NOT PRESENT');
+      } else {
+        return checkFileExists(thumbnailSavePath);                                        // (2)
+      }
+    })
+    .then((thumbExists: boolean) => {
+      // console.log('02 - thumbnail already present = ' + thumbExists);
 
-        if (thumbExists) {
-          return true;
-        } else {
-          const ffmpegArgs: string[] =  extractSingleFrameArgs(
-            pathToVideo, screenshotHeight, duration, thumbnailSavePath
-          );
+      if (thumbExists) {
+        return true;
+      } else {
+        const ffmpegArgs: string[] =  extractSingleFrameArgs(
+          pathToVideo, screenshotHeight, duration, thumbnailSavePath
+        );
 
-          return spawn_ffmpeg_and_run(ffmpegArgs, maxRunTime.thumb, 'thumb');               // (3)
-        }
-      })
-      .then((thumbSuccess: boolean) => {
-        // console.log('03 - single screenshot now present = ' + thumbSuccess);
+        return spawn_ffmpeg_and_run(ffmpegArgs, maxRunTime.thumb, 'thumb');               // (3)
+      }
+    })
+    .then((thumbSuccess: boolean) => {
+      // console.log('03 - single screenshot now present = ' + thumbSuccess);
 
-        if (!thumbSuccess) {
-          throw new Error('SINGLE SCREENSHOT EXTRACTION TIMED OUT - LIKELY CORRUPT');
-        } else {
-          return checkFileExists(filmstripSavePath);                                        // (4)
-        }
-      })
-      .then((filmstripExists: boolean) => {
-        // console.log('04 - filmstrip already present = ' + filmstripExists);
+      if (!thumbSuccess) {
+        throw new Error('SINGLE SCREENSHOT EXTRACTION TIMED OUT - LIKELY CORRUPT');
+      } else {
+        return checkFileExists(filmstripSavePath);                                        // (4)
+      }
+    })
+    .then((filmstripExists: boolean) => {
+      // console.log('04 - filmstrip already present = ' + filmstripExists);
 
-        if (filmstripExists) {
-          return true;
-        } else {
+      if (filmstripExists) {
+        return true;
+      } else {
 
-          const ffmpegArgs: string [] = generateScreenshotStripArgs(
-            pathToVideo, duration, screenshotHeight, numOfScreens, filmstripSavePath
-          );
+        const ffmpegArgs: string [] = generateScreenshotStripArgs(
+          pathToVideo, duration, screenshotHeight, numOfScreens, filmstripSavePath
+        );
 
-          return spawn_ffmpeg_and_run(ffmpegArgs, maxRunTime.filmstrip, 'filmstrip');       // (5)
-        }
-      })
-      .then((filmstripSuccess: boolean) => {
-        // console.log('05 - filmstrip now present = ' + filmstripSuccess);
+        return spawn_ffmpeg_and_run(ffmpegArgs, maxRunTime.filmstrip, 'filmstrip');       // (5)
+      }
+    })
+    .then((filmstripSuccess: boolean) => {
+      // console.log('05 - filmstrip now present = ' + filmstripSuccess);
 
-        if (!filmstripSuccess) {
-          throw new Error('FILMSTRIP GENERATION TIMED OUT - LIKELY CORRUPT');
-        } else if (clipSnippets === 0) {
-          throw new Error('USER DOES NOT WANT CLIPS');
-        } else {
-          return checkFileExists(clipSavePath);                                             // (6)
-        }
-      })
-      .then((clipExists: boolean) => {
-        // console.log('04 - preview clip already present = ' + clipExists);
+      if (!filmstripSuccess) {
+        throw new Error('FILMSTRIP GENERATION TIMED OUT - LIKELY CORRUPT');
+      } else if (clipSnippets === 0) {
+        throw new Error('USER DOES NOT WANT CLIPS');
+      } else {
+        return checkFileExists(clipSavePath);                                             // (6)
+      }
+    })
+    .then((clipExists: boolean) => {
+      // console.log('04 - preview clip already present = ' + clipExists);
 
-        if (clipExists) {
-          return true;
-        } else {
+      if (clipExists) {
+        return true;
+      } else {
 
-          const ffmpegArgs: string[] = generatePreviewClipArgs(
-            pathToVideo, duration, clipHeight, clipSnippets, snippetLength, clipSavePath
-          );
+        const ffmpegArgs: string[] = generatePreviewClipArgs(
+          pathToVideo, duration, clipHeight, clipSnippets, snippetLength, clipSavePath
+        );
 
-          return spawn_ffmpeg_and_run(ffmpegArgs, maxRunTime.clip, 'clip');                 // (7)
-        }
+        return spawn_ffmpeg_and_run(ffmpegArgs, maxRunTime.clip, 'clip');                 // (7)
+      }
 
-      })
-      .then((clipGenerationSuccess: boolean) => {
-        // console.log('07 - preview clip now present = ' + clipGenerationSuccess);
+    })
+    .then((clipGenerationSuccess: boolean) => {
+      // console.log('07 - preview clip now present = ' + clipGenerationSuccess);
 
-        if (clipGenerationSuccess) {
-          return checkFileExists(clipThumbSavePath);                                        // (8)
-        } else {
-          throw new Error('ERROR GENERATING CLIP');
-        }
-      })
-      .then((clipThumbExists: boolean) => {
-        // console.log('05 - preview clip thumb already present = ' + clipThumbExists);
+      if (clipGenerationSuccess) {
+        return checkFileExists(clipThumbSavePath);                                        // (8)
+      } else {
+        throw new Error('ERROR GENERATING CLIP');
+      }
+    })
+    .then((clipThumbExists: boolean) => {
+      // console.log('05 - preview clip thumb already present = ' + clipThumbExists);
 
-        if (clipThumbExists) {
-          return true;
-        } else {
-          const ffmpegArgs: string[] = extractFirstFrameArgs(clipSavePath, clipThumbSavePath);
+      if (clipThumbExists) {
+        return true;
+      } else {
+        const ffmpegArgs: string[] = extractFirstFrameArgs(clipSavePath, clipThumbSavePath);
 
-          return spawn_ffmpeg_and_run(ffmpegArgs, maxRunTime.clipThumb, 'clip thumb');      // (9)
-        }
-      })
-      .then((success: boolean) => {
-        // console.log('09 - preview clip thumb now exists = ' + success);
+        return spawn_ffmpeg_and_run(ffmpegArgs, maxRunTime.clipThumb, 'clip thumb');      // (9)
+      }
+    })
+    .then((success: boolean) => {
+      // console.log('09 - preview clip thumb now exists = ' + success);
 
-        if (success) {
-          // console.log('======= ALL STEPS SUCCESSFUL ==========');
-        }
-        done();
-      })
-      .catch((err) => {
-        // console.log('===> ERROR - RESTARTING: ' + err);
-        done();
-      });
+      if (success) {
+        // console.log('======= ALL STEPS SUCCESSFUL ==========');
+      }
+      done();
+    })
+    .catch((err) => {
+      // console.log('===> ERROR - RESTARTING: ' + err);
+      done();
+    });
 }
 
 // ========================================================================================
@@ -395,7 +393,6 @@ interface ExtractionDurations {
  * @param clipSnippets
  * @param snippetLength
  * @param clipHeight
- * @param deepScan -- whether to spend 50% more time extracting screenshots
  */
 function setExtractionDurations(
   sourceHeight: number,
@@ -403,30 +400,28 @@ function setExtractionDurations(
   screenshotHeight: number,
   clipSnippets: number,
   snippetLength: number,
-  clipHeight: number,
-  deepScan: boolean
+  clipHeight: number
 ): ExtractionDurations {
 
   // screenshot heights range from 144px to 504px
   // we'll call 144 the baseline and increase duration based on this
   // number of pixels grows ~ as square of height, so we square below
-  // this means at highest resolution we multyply by 9 the time we wait
-  const thumbHeightRatio = screenshotHeight / 144;
-  const thumbHeightFactor = thumbHeightRatio * thumbHeightRatio; // square of ratio
+  // this means at highest resolution we multyply by 12.5 the time we wait
+  const thumbHeightRatio = screenshotHeight / 144; // max 3.5 or 12.25 when squared
+  const thumbHeightFactor = 1 + (thumbHeightRatio * thumbHeightRatio / 4); // square of ratio
   // not using Math.pow(n,2) because this is apparently faster https://stackoverflow.com/a/26594370/5017391
 
-  const clipHeightRatio = clipHeight / 144;
-  const clipHeightFactor = clipHeightRatio * clipHeightRatio; // square of ratio
+  const clipHeightRatio = clipHeight / 144; // max 3.5 or 12.25 when squared
+  const clipHeightFactor = 1 + (clipHeightRatio * clipHeightRatio / 4); // square of ratio
 
-  const sourceFactor = sourceHeight === 0 ? 1 : sourceHeight / 720; // may be better as a square rather than linear
+  const sourceRatio = (sourceHeight === 0) ? 1 : (sourceHeight / 720); // 3 when source is 4k
+  const sourceFactor = 1 + (sourceRatio * sourceRatio / 3); // square of ratio
 
-  const multiplier = deepScan ? 1 : 1.5;
-
-  return {                                                                            // for me:
-    thumb:     350 * multiplier * sourceFactor * thumbHeightFactor,                                // never above 300ms
-    filmstrip: 350 * multiplier * sourceFactor * numOfScreens * thumbHeightFactor,                 // rarely above 15s, but 4K 30screens took 50s
-    clip:     1000 * multiplier * sourceFactor * clipSnippets * snippetLength * clipHeightFactor,  // barely ever above 15s
-    clipThumb: 150 * multiplier * sourceFactor * clipHeightFactor,                                 // never above 100ms
+  return {                                                                           // for me:
+    thumb:     500 * sourceFactor * thumbHeightFactor,                               // never above 800ms
+    filmstrip: 350 * sourceFactor * thumbHeightFactor * numOfScreens,                // rarely above 15s, but 4K 30screens took 50s
+    clip:      350 * sourceFactor * clipHeightFactor * clipSnippets * snippetLength, // rarely above 15s
+    clipThumb: 400 * clipHeightRatio,                                                // never above 600ms
   };
 }
 
@@ -436,11 +431,9 @@ function setExtractionDurations(
  */
 function checkFileExists(pathToFile: string): Promise<boolean> {
   return new Promise((resolve, reject) => {
-    if (fs.existsSync(pathToFile)) {
-      return resolve(true);
-    } else {
-      return resolve(false);
-    }
+    fs.access(pathToFile, fs.constants.F_OK, (err: any) => {
+      return(resolve(!err));
+    });
   });
 }
 
@@ -501,7 +494,7 @@ function spawn_ffmpeg_and_run(
 
   return new Promise((resolve, reject) => {
 
-    // Uncomment things in this method to check how long extraction takes
+    // Uncomment things in this method (and the `performance` import) to check how long extraction takes
     // const t0: number = performance.now();
 
     const ffmpeg_process = spawn(ffmpegPath, args);
@@ -529,7 +522,7 @@ function spawn_ffmpeg_and_run(
     ffmpeg_process.on('exit', () => {
       clearTimeout(killProcessTimeout);
       // const t1: number = performance.now();
-      // console.log(description + ': ' + (t1 - t0).toString());
+      // console.log(description + ' ' + Math.round(t1 - t0) + ' < ' + maxRunningTime);
       return resolve(true);
     });
 
