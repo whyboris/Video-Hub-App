@@ -768,6 +768,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (settingsObject.remoteSettings) {
         this.remoteSettings = settingsObject.remoteSettings;
       }
+      if (settingsObject.wizardOptions) {
+        this.wizard = settingsObject.wizardOptions;
+      }
     });
 
     this.electronService.ipcRenderer.on('please-open-wizard', (event, firstRun) => {
@@ -1695,13 +1698,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
       clipSnippets: 5,
       extractClips: false,
       futureHubName: '',
-      isFixedNumberOfScreenshots: true,
-      screenshotSizeForImport: 288, // default
+      isFixedNumberOfScreenshots: this.wizard.isFixedNumberOfScreenshots ?? true,
+      screenshotSizeForImport: this.wizard.screenshotSizeForImport ?? 288, // default
       selectedOutputFolder: '',
       selectedSourceFolder: { 0: { path: '', watch: false }},
       showWizard: true,
-      ssConstant: 10,
-      ssVariable: 10,
+      ssConstant: this.wizard.ssConstant ?? 10,
+      ssVariable: this.wizard.ssVariable ?? 5,
     };
     this.toggleSettings();
   }
@@ -1911,6 +1914,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       shortcuts: this.shortcutService.keyToActionMap,
       vhaFileHistory: this.vhaFileHistory,
       windowSizeAndPosition: undefined, // is added in `cose-window` in `main.ts`
+      wizardOptions: this.wizard
     };
   }
 
