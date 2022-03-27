@@ -166,7 +166,7 @@
       <input
         type="radio"
         name="ss-num-selection"
-        checked
+        [checked]="wizard.isFixedNumberOfScreenshots"
         (change)="setScreensPerVideo(true)"
         [disabled]="wizard.selectedOutputFolder === ''
                  || wizard.selectedSourceFolder[0].path === ''
@@ -176,7 +176,7 @@
         (change)="selectNumOfScreens($event.target.value)"
         type="number"
         class="size-dropdown language-drop-down num-select"
-        value=10
+        value="{{ wizard.ssConstant }}"
         min=3
         max=30
         onKeyDown="return false"
@@ -197,6 +197,7 @@
       <input
         type="radio"
         name="ss-num-selection"
+        [checked]="!wizard.isFixedNumberOfScreenshots"
         (change)="setScreensPerVideo(false)"
         [disabled]="wizard.selectedOutputFolder === ''
                  || wizard.selectedSourceFolder[0].path === ''
@@ -207,7 +208,7 @@
         (change)="selectNumOfScreens($event.target.value)"
         type="number"
         class="size-dropdown language-drop-down num-select"
-        value=5
+        value="{{ wizard.ssVariable }}"
         min=1
         max=20
         onKeyDown="return false"
@@ -242,12 +243,12 @@
                || wizard.selectedSourceFolder[0].path === ''
                || wizard.futureHubName === ''"
     >
-      <option value="144">144px</option>
-      <option value="216">216px</option>
-      <option value="288" selected="selected">288px</option>
-      <option value="360">360px</option>
-      <option value="432">432px</option>
-      <option value="504">504px</option>
+      <option value="144" [selected]="wizard.screenshotSizeForImport === 144">144px</option>
+      <option value="216" [selected]="wizard.screenshotSizeForImport === 216">216px</option>
+      <option value="288" [selected]="wizard.screenshotSizeForImport === 288">288px</option>
+      <option value="360" [selected]="wizard.screenshotSizeForImport === 360">360px</option>
+      <option value="432" [selected]="wizard.screenshotSizeForImport === 432">432px</option>
+      <option value="504" [selected]="wizard.screenshotSizeForImport === 504">504px</option>
     </select>
 
     <span
