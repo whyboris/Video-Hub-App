@@ -1,3 +1,5 @@
+import { SupportedLanguage } from './app-state';
+
 // Languages
 const Arabic     = require('../../../i18n/ar.json');
 const Bengali    = require('../../../i18n/bn.json');
@@ -20,7 +22,7 @@ const Turkish    = require('../../../i18n/tr.json');
 const Ukrainian  = require('../../../i18n/uk.json');
 const Vietnamese = require('../../../i18n/vi.json');
 
-export const LanguageLookup: Record<string, any> = {
+export const LanguageLookup: Record<SupportedLanguage, any> = {
   'ar': Arabic,
   'bn': Bengali,
   'cs': Czech,

@@ -23,7 +23,7 @@ export class ButtonStylePipe implements PipeTransform {
 
       defaultSettingsButtonDark:        !flatIcons && darkMode,
       defaultSettingsButtonDarkToggled: !flatIcons && darkMode && toggled
-    }
+    };
 
   }
 

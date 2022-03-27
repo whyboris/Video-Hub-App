@@ -10,6 +10,7 @@ export const acceptableFiles = [
   'h264',
   'h265',
   'hevc',
+  'm2ts',
   'm4a',
   'm4v',
   'mkv',
