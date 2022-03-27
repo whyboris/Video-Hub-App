@@ -52,7 +52,7 @@
     "electron-window-state": "5.0.3",
     "express": "4.17.2",
     "fdir": "5.2.0",
-    "ffmpeg-static": "4.4.1",
+    "ffmpeg-static": "5.0.0",
     "fuse.js": "6.5.3",
     "ip": "1.1.5",
     "natural-orderby": "2.0.3",
