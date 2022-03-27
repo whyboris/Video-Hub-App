@@ -151,9 +151,6 @@
     "sizeFilterDescription": "Size",
     "sizeFilterHint": "Size filter",
     "sizeFilterMoreInfo": "Show the size filter",
-    "timesPlayedDescription": "Times Played",
-    "timesPlayedHint": "Times Played filter",
-    "timesPlayedMoreInfo": "Show the times played filter",
     "sortOptionAlphabeticalDescription": "Alphabetical",
     "sortOptionAlphabeticalDescription2": "Alphabetical 2",
     "sortOptionAlphabeticalMoreInfo": "Show the alphabetical order option in the sorting dropdown",
@@ -205,10 +202,16 @@
     "thumbAutoAdvanceDescription": "Cycle on hover",
     "thumbAutoAdvanceHint": "Enable thumbnail auto advance",
     "thumbAutoAdvanceMoreInfo": "Hovering over thumbnails cycles through screenshots",
+    "timesPlayedDescription": "Times Played",
+    "timesPlayedHint": "Times Played filter",
+    "timesPlayedMoreInfo": "Show the times played filter",
     "videoNotesDescription": "Notes search",
     "videoNotesHint": "Notes search",
     "videoNotesMoreInfo": "Search through the notes you have added to your videos. Enable notes in the Tags settings",
-    "videoPlayerSettings": "Video Player Settings"
+    "videoPlayerSettings": "Video Player Settings",
+    "yearSliderDescription": "Filter by Year",
+    "yearSliderHint": "Year Filter",
+    "yearSliderMoreInfo": "Show the year slider filter"
   },
   "RIGHTCLICK": {
     "cancelRename": "cancel rename",
