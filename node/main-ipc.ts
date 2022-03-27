@@ -1,6 +1,4 @@
-import { BrowserWindow } from 'electron';
-const dialog = require('electron').dialog;
-const shell = require('electron').shell;
+import { app, dialog, shell, BrowserWindow } from 'electron';
 
 import * as path from 'path';
 const fs = require('fs');
@@ -70,8 +68,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
   ipc.on('open-media-file', (event, fullFilePath) => {
     fs.access(fullFilePath, fs.constants.F_OK, (err: any) => {
       if (!err) {
-        shell.openItem(path.normalize(fullFilePath)); // normalize because on windows, the path sometimes is mixing `\` and `/`
-        // shell.openPath(path.normalize(fullFilePath)); // Electron 9
+        shell.openPath(path.normalize(fullFilePath));
       } else {
         event.sender.send('file-not-found');
       }
@@ -95,14 +92,22 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
 
   /**
    * Handle dragging a file out of VHA into a video editor (e.g. Vegas or Premiere)
+   * if `imgPath` points to a file that does not exist, replace with default image
    */
   ipc.on('drag-video-out-of-electron', (event, filePath, imgPath): void => {
-    console.log(filePath);
-    event.sender.startDrag({
-      file: filePath,
-      icon: imgPath,
-      // icon: './src/assets/logo.png' // <-- local dev if I want the logo instead of thumbnail
-      // icon: './resources/assets/logo.png' // <-- production location (if I copy over the asset correctly in `electron-builder.json`)
+    fs.access(imgPath, fs.constants.F_OK, (err: any) => {
+      if (!err) {
+        event.sender.startDrag({
+          file: filePath,
+          icon: imgPath,
+        });
+      } else {
+        const tempIcon: string = app.isPackaged ? './resources/assets/logo.png' : './src/assets/logo.png';
+        event.sender.startDrag({
+          file: filePath,
+          icon: tempIcon,
+        });
+      }
     });
   });
 
@@ -153,8 +158,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
           console.log(cmdline);
           exec(cmdline);
         } else {
-          shell.openItem(savePath);
-          // shell.openPath(savePath); // Electron 9
+          shell.openPath(savePath);
         }
       });
     }
@@ -195,7 +199,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
   function notifyFileDeleted(event, fileToDelete, item) {
     fs.access(fileToDelete, fs.constants.F_OK, (err: any) => {
       if (err) {
-        console.log('FILE DELETED SUCCESS !!!')
+        console.log('FILE DELETED SUCCESS !!!');
         event.sender.send('file-deleted', item);
       }
     });
@@ -265,10 +269,10 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
   /**
    * Stop watching a particular folder
    */
-  ipc.on('start-watching-folder', (event, watchedFolderIndex: string, path: string, persistent: boolean) => {
+  ipc.on('start-watching-folder', (event, watchedFolderIndex: string, path2: string, persistent: boolean) => {
     // annoyingly it's not a number :     ^^^^^^^^^^^^^^^^^^ -- because object keys are strings :(
-    console.log('start watching:', watchedFolderIndex, path, persistent);
-    startWatcher(parseInt(watchedFolderIndex, 10), path, persistent);
+    console.log('start watching:', watchedFolderIndex, path2, persistent);
+    startWatcher(parseInt(watchedFolderIndex, 10), path2, persistent);
   });
 
   /**
@@ -289,7 +293,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
     const allHashes: Map<string, 1> = new Map();
 
     finalArray
-      .filter((element: ImageElement) => { return !element.deleted })
+      .filter((element: ImageElement) => { return !element.deleted; })
       .forEach((element: ImageElement) => {
         allHashes.set(element.hash, 1);
       });
@@ -354,16 +358,8 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
    * Close the window / quit / exit the app
    */
   ipc.on('close-window', (event, settingsToSave: SettingsObject, finalObjectToSave: FinalObject) => {
-
     // convert shortcuts map to object
-    // someday when node stops giving error: Property 'fromEntries' does not exist on type 'ObjectConstructor'
-    // settingsToSave.shortcuts = <any>Object.fromEntries(settingsToSave.shortcuts);
-    // until then: https://gist.github.com/lukehorvat/133e2293ba6ae96a35ba#gistcomment-2600839
-    let obj = Array.from(settingsToSave.shortcuts).reduce((obj, [key, value]) => {
-      obj[key] = value;
-      return obj;
-    }, {});
-    settingsToSave.shortcuts = <any>obj;
+    settingsToSave.shortcuts = <any>Object.fromEntries(settingsToSave.shortcuts);
 
     const json = JSON.stringify(settingsToSave);
 
@@ -379,12 +375,14 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
 
         writeVhaFileToDisk(finalObjectToSave, GLOBALS.currentlyOpenVhaFile, () => {
           try {
+            GLOBALS.readyToQuit = true;
             BrowserWindow.getFocusedWindow().close();
           } catch {}
         });
 
       } else {
         try {
+          GLOBALS.readyToQuit = true;
           BrowserWindow.getFocusedWindow().close();
         } catch {}
       }

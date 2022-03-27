@@ -1,7 +1,6 @@
 {
   "recommendations": [
     "Angular.ng-template",
-    "coenraads.bracket-pair-colorizer",
     "dbaeumer.vscode-eslint",
     "editorconfig.editorconfig",
     "ms-vscode.vscode-typescript-tslint-plugin",

@@ -1,4 +1,4 @@
-import { GLOBALS } from "./main-globals";
+import { GLOBALS } from './main-globals';
 
 import * as path from 'path';
 
@@ -6,12 +6,12 @@ const express = require('express');
 // const bodyParser = require('body-parser'); ----------------------------- disabled
 const WebSocket = require('ws');
 
-import { ImageElement } from "../interfaces/final-object.interface";
+import { ImageElement } from '../interfaces/final-object.interface';
 
 const args = process.argv.slice(1);
 const serve: boolean = args.some(val => val === '--serve');
 
-import { RemoteSettings } from "../interfaces/settings-object.interface";
+import { RemoteSettings } from '../interfaces/settings-object.interface';
 
 // =================================================================================================
 
@@ -149,24 +149,24 @@ const socketMessageHandler = (message: string): void => {
   } catch {
     console.log('ERROR: message was not JSON encoded');
   }
-}
+};
 
 /**
  * Shut down the Express and WebSocket servers
  */
 function stopTheServers(): void {
-  if (serverRef && typeof serverRef.close === "function") {
+  if (serverRef && typeof serverRef.close === 'function') {
     serverRef.close();
     console.log('closed Express server');
   }
-  if (wss && typeof wss.close === "function") {
+  if (wss && typeof wss.close === 'function') {
     wss.close();
     console.log('closed Socket server');
   }
 }
 
 const { networkInterfaces, hostname } = require('os');
-const ip = require("ip");
+const ip = require('ip');
 
 /**
  * Log the user's IP
