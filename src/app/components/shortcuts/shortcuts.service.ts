@@ -87,7 +87,7 @@ export class ShortcutsService {
     ['toggleSettings', 'o'],
     // quit -> q
     // quit -> w
-  ])
+  ]);
 
   constructor() { }
 
@@ -99,7 +99,7 @@ export class ShortcutsService {
     this.actionToKeyMap.clear();
     this.keyToActionMap.clear();
 
-    for (let [key, value] of Object.entries(keyToAction)) {
+    for (const [key, value] of Object.entries(keyToAction)) {
       this.actionToKeyMap.set(value, <any>key);
       this.keyToActionMap.set(<any>key, value);
     }

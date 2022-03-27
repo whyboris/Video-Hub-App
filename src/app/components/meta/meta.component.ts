@@ -36,7 +36,7 @@ export class MetaComponent implements OnInit, OnDestroy {
   @Input() showVideoNotes: boolean;
   @Input() star: StarRating;
 
-  @Input() renameResponse: Observable<RenameFileResponse>
+  @Input() renameResponse: Observable<RenameFileResponse>;
 
   starRatingHack: StarRating;
   yearHack: number;
@@ -214,7 +214,7 @@ export class MetaComponent implements OnInit, OnDestroy {
     event.target.blur();
     this.renamingWIP = this.video.cleanName;
     event.stopPropagation();
-    this.renameError = false
+    this.renameError = false;
   }
 
   /**

@@ -7,7 +7,7 @@ import * as path from 'path';
 
 const fs = require('fs');
 const electron = require('electron');
-const { nativeTheme } = require('electron')
+const { nativeTheme } = require('electron');
 import { app, protocol, BrowserWindow, screen, dialog, systemPreferences, ipcMain } from 'electron';
 const windowStateKeeper = require('electron-window-state');
 
@@ -48,7 +48,9 @@ const args = process.argv.slice(1);
 const serve: boolean = args.some(val => val === '--serve');
 
 GLOBALS.debug = args.some(val => val === '--debug');
-if (GLOBALS.debug) { console.log('Debug mode enabled!'); }
+if (GLOBALS.debug) {
+  console.log('Debug mode enabled!');
+}
 
 // =================================================================================================
 
@@ -103,7 +105,8 @@ function createWindow() {
       {
         label: app.name,
         submenu: [
-          { role: 'quit' }
+          { role: 'quit' },
+          { role: 'hide' },
         ]
       },
       {
@@ -114,7 +117,17 @@ function createWindow() {
           { role: 'copy' },
           { role: 'paste' }
         ]
-      }
+      },
+      {
+        label: "View",
+        submenu: [
+          { role: "togglefullscreen" },
+        ]
+      },
+      {
+        label: "Window",
+        role: 'windowMenu',
+      },
     ]));
   }
 
@@ -124,7 +137,6 @@ function createWindow() {
       nodeIntegration: true,
       allowRunningInsecureContent: true,
       contextIsolation: false,
-      enableRemoteModule: true,
       webSecurity: false  // allow files from hard disk to show up
     },
     x: mainWindowState.x,

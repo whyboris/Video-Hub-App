@@ -34,7 +34,7 @@ export class RegexSearchPipe implements PipeTransform {
 
       return finalArray.filter(item => {
         return item.fileName.match(re);
-      })
+      });
 
     }
   }
