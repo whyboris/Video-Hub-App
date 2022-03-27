@@ -7,10 +7,11 @@ export const GLOBALS: VhaGlobals = {
   demo: false,                 // update `package.json` version to `#.#.#-demo` when building the demo             <---- !!!
   hubName: 'untitled',         // in case user doesn't name their hub any name
   macVersion: false,           // auto updated by `main.ts`
+  readyToQuit: false,          // hack to quit gracefully
   selectedOutputFolder: '',
   selectedSourceFolders: {},
   settingsPath: '',            // to differentiate between standard & Windows Portable settings location
-  version: '3.1.0',            // update it and the `package.json` version in tandem before release!               <---- !!!
+  version: '3.2.0',            // update it and the `package.json` version in tandem before release!               <---- !!!
   vhaFileVersion: 3,
   winRef: null,
   screenshotSettings: {
@@ -32,6 +33,7 @@ export interface VhaGlobals {
   demo: boolean;
   hubName: string;
   macVersion: boolean;
+  readyToQuit: boolean;
   screenshotSettings: ScreenshotSettings;
   selectedOutputFolder: string;
   selectedSourceFolders: InputSources;

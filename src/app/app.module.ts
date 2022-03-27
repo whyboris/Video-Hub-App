@@ -11,6 +11,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 
 // External
+import { AnQrcodeModule } from 'an-qrcode';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
@@ -61,8 +62,8 @@ import { SortOrderComponent } from './components/sort-order/sort-order.component
 import { StarFilterComponent } from './components/star-filter/star-filter.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { SvgDefinitionsComponent } from './components/icon/svg-definitions.component';
-import { TagTrayComponent } from './components/tag-tray/tag-tray.component';
 import { TagsComponent } from './components/tags-auto/tags.component';
+import { TagTrayComponent } from './components/tag-tray/tag-tray.component';
 import { ThumbnailComponent } from './components/views/thumbnail/thumbnail.component';
 import { TitleBarComponent } from './components/title-bar/title-bar.component';
 import { TopComponent } from './components/top/top.component';
@@ -78,7 +79,6 @@ import { DeleteFilePipe } from './pipes/delete-file.pipe';
 import { DuplicateFinderPipe } from './pipes/duplicateFinder.pipe';
 import { FileSearchPipe } from './pipes/file-search.pipe';
 import { FileSizeFilterPipe } from './pipes/file-size-filter.pipe';
-import { TimesPlayedFilterPipe } from './pipes/times-played-filter.pipe';
 import { FileSizePipe } from './pipes/file-size.pipe';
 import { FolderArrowsPipe } from './pipes/folder-arrows.pipe';
 import { FolderViewPipe } from './pipes/folder-view.pipe';
@@ -100,9 +100,13 @@ import { TagFilterPipe } from './components/tags-auto/tag-filter.pipe';
 import { TagFrequencyPipe } from './components/tags-auto/tag-frequency.pipe';
 import { TagMatchPipe } from './components/tags-auto/tag-match.pipe';
 import { TagsDisplayPipe } from './components/tags-auto/tag-display.pipe';
+import { TimesPlayedFilterPipe } from './pipes/times-played-filter.pipe';
 import { TimesPlayedPipe } from './pipes/times-played.pipe';
 import { WordFrequencyPipe } from './pipes/word-frequency.pipe';
 import { WrapperPipe } from './pipes/wrapper.pipe';
+import { YearFilterPipe } from './pipes/year-filter.pipe';
+import { YearPipe } from './pipes/year.pipe';
+
 
 @NgModule({
   declarations: [
@@ -150,11 +154,11 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     SheetComponent,
     ShortcutsComponent,
     SidebarHeightPipe,
-    SimilarTrayComponent,
     SimilarityPipe,
+    SimilarTrayComponent,
     SliderFilterComponent,
-    SortOrderComponent,
     SortingPipe,
+    SortOrderComponent,
     StarFilterComponent,
     StarFilterPipe,
     StatisticsComponent,
@@ -162,21 +166,24 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     TagFilterPipe,
     TagFrequencyPipe,
     TagMatchPipe,
-    TagTrayComponent,
     TagsComponent,
     TagsDisplayPipe,
-    TimesPlayedPipe,
-    TimesPlayedFilterPipe,
+    TagTrayComponent,
     ThumbnailComponent,
+    TimesPlayedFilterPipe,
+    TimesPlayedPipe,
     TitleBarComponent,
     TopComponent,
     ViewTagsComponent,
     WelcomeComponent,
     WizardComponent,
     WordFrequencyPipe,
-    WrapperPipe
+    WrapperPipe,
+    YearFilterPipe,
+    YearPipe
   ],
   imports: [
+    AnQrcodeModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     BrowserModule,
@@ -190,10 +197,11 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
   providers: [
     AutoTagsSaveService,
     AutoTagsService,
-    ModalService,
     ElectronService,
     FilePathService,
+    ImageElementService,
     ManualTagsService,
+    ModalService,
     PipeSideEffectService,
     ResolutionFilterService,
     ShortcutsService,
@@ -201,8 +209,7 @@ import { WrapperPipe } from './pipes/wrapper.pipe';
     SortingPipe,
     SourceFolderService,
     StarFilterService,
-    WordFrequencyService,
-    ImageElementService
+    WordFrequencyService
   ],
   bootstrap: [AppComponent]
 })

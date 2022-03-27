@@ -2,8 +2,6 @@
 
 [*Video Hub App 3*](https://videohubapp.com/) is the fastest way to browse and search for videos on your computer. Think of it like YouTube for videos on your computer: browse, search, and preview. Works on Windows, Mac, and Linux!
 
-Read in [Português (Brasileiro)](https://github.com/whyboris/Video-Hub-App/blob/master/README.br.md)
-
 
 ## Download Now
 
@@ -50,14 +48,14 @@ How to start:
 
 Main dependencies in use:
 
-| Library          | Version | Date            | Comment                                           |
-| ---------------- | ------- | --------------- | ------------------------------------------------- |
-| Angular          | v11.0.2 | November 2020   |                                                   |
-| Angular-CLI      | v11.0.2 | November 2020   |                                                   |
-| Electron         |  v8.5.5 | November 2020   | (internally uses Node `v12.14.1` and Chromium 83) |
-| Electron Builder | v22.9.1 | November 2020   |                                                   |
+| Library          | Version   | Date            | Comment                                           |
+| ---------------- | --------- | --------------- | ------------------------------------------------- |
+| Angular          | v13.2.2   | Feb 2022        |                                                   |
+| Angular-CLI      | v13.2.2   | Feb 2022        |                                                   |
+| Electron         | v17.0.0   | Feb 2022        | (internally uses Node `v16.13.0` and Chromium 98) |
+| Electron Builder | v22.14.13 | Feb 2022        |                                                   |
 
-- **Node**: I recommend using the same version as _Electron_ uses internally, but version 10 or above should work.
+- **Node**: I recommend using the same version as _Electron_ uses internally, but any version 14 or above should work.
 
 - **Angular CLI**: not required but may be useful: [Angular CLI](https://cli.angular.io).
 

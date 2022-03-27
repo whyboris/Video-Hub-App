@@ -14,6 +14,7 @@ export class SliderFilterComponent implements OnInit, OnDestroy {
   @Input() lengthFilter?: boolean = false;
   @Input() sizeFilter?: boolean = false;
   @Input() timesPlayed?: boolean = false;
+  @Input() yearFilter?: boolean = false;
   @Input() labelFormatPipe?: string;
 
   @Output() newSliderFilterSelected = new EventEmitter<number[]>();
@@ -86,7 +87,7 @@ export class SliderFilterComponent implements OnInit, OnDestroy {
 
     const cutoff = (value / this.width) * (this.maximumValue - this.minimumValue) + this.minimumValue;
 
-    if ((this.lengthFilter || this.sizeFilter || this.timesPlayed) && cutoff > this.maximumValue) {
+    if ((this.lengthFilter || this.sizeFilter || this.timesPlayed || this.yearFilter) && cutoff > this.maximumValue) {
       return Infinity;
     } else {
       return cutoff;
