@@ -7,7 +7,7 @@ import * as path from 'path';
 
 const fs = require('fs');
 const electron = require('electron');
-const { nativeTheme } = require('electron')
+const { nativeTheme } = require('electron');
 import { app, protocol, BrowserWindow, screen, dialog, systemPreferences, ipcMain } from 'electron';
 const windowStateKeeper = require('electron-window-state');
 
@@ -107,7 +107,8 @@ function createWindow() {
       {
         label: app.name,
         submenu: [
-          { role: 'quit' }
+          { role: 'quit' },
+          { role: 'hide' },
         ]
       },
       {
@@ -118,7 +119,17 @@ function createWindow() {
           { role: 'copy' },
           { role: 'paste' }
         ]
-      }
+      },
+      {
+        label: "View",
+        submenu: [
+          { role: "togglefullscreen" },
+        ]
+      },
+      {
+        label: "Window",
+        role: 'windowMenu',
+      },
     ]));
   }
 
@@ -128,7 +139,6 @@ function createWindow() {
       nodeIntegration: true,
       allowRunningInsecureContent: true,
       contextIsolation: false,
-      enableRemoteModule: true,
       webSecurity: false  // allow files from hard disk to show up
     },
     x: mainWindowState.x,

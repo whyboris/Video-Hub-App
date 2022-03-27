@@ -13,7 +13,7 @@ function received(message: any): void {
     postMessage(getCleanTwoWordMap(message.data.potentialTwoWordMap, message.data.onlyFileNames));
 
   }
-};
+}
 
 /**
  * Create the `twoWordFreqMap` by using the `potentialTwoWordMap` word map

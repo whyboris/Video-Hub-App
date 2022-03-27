@@ -15,7 +15,7 @@ export class FilePathService {
     ' ': '%20',
     '(': '%28',
     ')': '%29',
-  }
+  };
 
   constructor(
     public sourceFolderService: SourceFolderService,
@@ -46,7 +46,7 @@ export class FilePathService {
    */
   getFileNameWithoutExtension(fileName: string): string {
     return fileName.slice().substr(0, fileName.lastIndexOf('.'));
-  };
+  }
 
   /**
    * return extension without file name
@@ -54,7 +54,7 @@ export class FilePathService {
    */
   getFileNameExtension(fileName: string): string {
     return fileName.slice().split('.').pop();
-  };
+  }
 
   /**
    * Return full filesystem path to video file
