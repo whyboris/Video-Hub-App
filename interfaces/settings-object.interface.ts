@@ -15,7 +15,6 @@ export interface SettingsObject {
   remoteSettings: RemoteSettings;
   shortcuts: Map<string, SettingsButtonKey | CustomShortcutAction>;
   vhaFileHistory: HistoryItem[];
-  windowSizeAndPosition: any; // TODO -- confirm if I need this
   wizardOptions: WizardOptions;
 }
 

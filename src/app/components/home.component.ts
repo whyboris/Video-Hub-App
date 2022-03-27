@@ -1913,7 +1913,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       remoteSettings: this.remoteSettings,
       shortcuts: this.shortcutService.keyToActionMap,
       vhaFileHistory: this.vhaFileHistory,
-      windowSizeAndPosition: undefined, // is added in `cose-window` in `main.ts`
       wizardOptions: this.wizard
     };
   }
