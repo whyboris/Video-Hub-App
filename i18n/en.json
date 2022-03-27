@@ -207,7 +207,10 @@
     "videoNotesDescription": "Notes search",
     "videoNotesHint": "Notes search",
     "videoNotesMoreInfo": "Search through the notes you have added to your videos. Enable notes in the Tags settings",
-    "videoPlayerSettings": "Video Player Settings"
+    "videoPlayerSettings": "Video Player Settings",
+    "yearSliderDescription": "Filter by Year",
+    "yearSliderHint": "Year Filter",
+    "yearSliderMoreInfo": "Show the year slider filter"
   },
   "RIGHTCLICK": {
     "cancelRename": "cancel rename",

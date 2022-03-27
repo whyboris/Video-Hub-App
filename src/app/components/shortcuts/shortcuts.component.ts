@@ -55,7 +55,7 @@ export class ShortcutsComponent {
 
     // 'quit',           // w - hardcoded in template
     // 'quit',           // q - hardcoded in template
-  ]
+  ];
 
   constructor(
     public shortcutService: ShortcutsService

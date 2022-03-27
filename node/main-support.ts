@@ -117,6 +117,7 @@ function getFileSizeDisplay(sizeInBytes: number): string {
  * Generate duration formatted as X:XX:XX
  * @param numOfSec
  */
+
 function getDurationDisplay(numOfSec: number): string {
 
   if (numOfSec === undefined || numOfSec === 0) {
@@ -302,16 +303,22 @@ function getBestStream(metadata) {
  */
 function getFileDuration(metadata): number {
   if (metadata?.streams?.[0]?.duration) {
-
+    
     return metadata.streams[0].duration;
 
   } else if (metadata?.format?.duration) {
 
     return   metadata.format.duration;
-
   } else {
     return 0;
   }
+}
+
+//Calculation of video bitrate in mb/s
+
+function getBitrate(fileSize,duration){
+  var bitrate = ((fileSize/1000)/duration)/1000;
+  return Math.round(bitrate*100)/100;
 }
 
 /**
@@ -326,7 +333,8 @@ function getFileDuration(metadata): number {
  function getFps(metadata): number {
    if (metadata?.streams?.[0]?.r_frame_rate) {
      const fps = metadata.streams[0].r_frame_rate;
-     const evalFps = eval(fps.toString()); // `eval` because FPS is a fraction like `24000/1001`
+     const fpsParts = fps.split('/');
+     const evalFps = Number(fpsParts[0]) / Number(fpsParts[1]); // FPS is a fraction like `24000/1001`
      return Math.round(evalFps);
    } else {
      return 0;
@@ -384,10 +392,10 @@ function hashFileAsync(pathToFile: string, stats: Stats): Promise<string> {
     let data: Buffer;
 
     if (fileSize < sampleThreshold) {
-      data = fs.readFile(pathToFile, (err, data) => {
+      fs.readFile(pathToFile, (err, data2) => {
         if (err) { throw err; }
         // append the file size to the data
-        const buf = Buffer.concat([data, Buffer.from(fileSize.toString())]);
+        const buf = Buffer.concat([data2, Buffer.from(fileSize.toString())]);
         // make the magic happen!
         const hash = hasher('md5').update(buf.toString('hex')).digest('hex');
         resolve(hash);
@@ -395,10 +403,10 @@ function hashFileAsync(pathToFile: string, stats: Stats): Promise<string> {
     } else {
       data = Buffer.alloc(sampleSize * 3);
       fs.open(pathToFile, 'r', (err, fd) => {
-        fs.read(fd, data, 0, sampleSize, 0, (err, bytesRead, buffer) => { // read beginning of file
-          fs.read(fd, data, sampleSize, sampleSize, fileSize / 2, (err, bytesRead, buffer) => {
-            fs.read(fd, data, sampleSize * 2, sampleSize, fileSize - sampleSize, (err, bytesRead, buffer) => {
-              fs.close(fd, (err) => {
+        fs.read(fd, data, 0, sampleSize, 0, (err2, bytesRead, buffer) => { // read beginning of file
+          fs.read(fd, data, sampleSize, sampleSize, Math.floor(fileSize / 2), (err3, bytesRead2, buffer2) => {
+            fs.read(fd, data, sampleSize * 2, sampleSize, fileSize - sampleSize, (err4, bytesRead3, buffer3) => {
+              fs.close(fd, (err5) => {
                 // append the file size to the data
                 const buf = Buffer.concat([data, Buffer.from(fileSize.toString())]);
                 // make the magic happen!
@@ -536,6 +544,7 @@ export function insertTemporaryFieldsSingle(element: ImageElement): ImageElement
   const resolution: ResolutionMeta = labelVideo(element.width, element.height);
   element.durationDisplay = getDurationDisplay(element.duration);
   element.fileSizeDisplay = getFileSizeDisplay(element.fileSize);
+  element.bitrate = getBitrate(element.fileSize, element.duration);
   element.resBucket = resolution.bucket;
   element.resolution = resolution.label;
   return element;

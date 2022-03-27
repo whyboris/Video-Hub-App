@@ -33,7 +33,9 @@
     | {{ video.width }} x {{ video.height }}
 
     | {{ video.fileSizeDisplay }}
-
+    
+    | {{ video.bitrate + ' mb/s' }}
+    
     {{ video.fps ? '| ' + video.fps + ' fps' : '' }}
 
     | <input
@@ -50,6 +52,7 @@
         placeholder="YYYY"
         type="number"
         tabindex="-1"
+        [ngStyle]="{color: darkMode ? '#DDDDDD' : '#000000'}"
       >
 
   </span>
@@ -121,7 +124,7 @@
   </button>
 
   <!-- Times played -->
-  <span class="fileSize times-played" *ngIf="video.timesPlayed">
+  <span class="fileSize times-played" [ngStyle]="{color: darkMode ? '#DDDDDD' : '#000000'}"  *ngIf="video.timesPlayed">
     {{ 'TAGS.timesPlayed' | translate }}: {{ video.timesPlayed }}
   </span>
 

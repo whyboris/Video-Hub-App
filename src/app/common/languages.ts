@@ -1,4 +1,4 @@
-import { SupportedLanguage } from "./app-state";
+import { SupportedLanguage } from './app-state';
 
 // Languages
 const Arabic     = require('../../../i18n/ar.json');

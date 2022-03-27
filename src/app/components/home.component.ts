@@ -105,7 +105,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild('magicSearch', { static: false }) magicSearch: ElementRef;
   @ViewChild('searchRef',   { static: false }) searchRef:   ElementRef;
 
-  @ViewChild(SortOrderComponent) sortOrderRef:SortOrderComponent;
+  @ViewChild(SortOrderComponent) sortOrderRef: SortOrderComponent;
 
   @ViewChild(VirtualScrollerComponent, { static: false }) virtualScroller: VirtualScrollerComponent;
 
@@ -184,6 +184,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
   timesPlayedCutoff: number = 0;
   timesPlayedLeftBound: number = 0;
   timesPlayedRightBound: number = Infinity;
+
+  // ========================================================================
+  // Year filter
+  // ------------------------------------------------------------------------
+
+  yearMinCutoff: number = 0;
+  yearCutoff: number = 0;
+  yearLeftBound: number = 0;
+  yearRightBound: number = Infinity;
 
   // ========================================================================
   // Frequency / histogram
@@ -450,7 +459,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.electronService.ipcRenderer.on('file-not-found', (event) => {
       this.zone.run(() => {
         this.modalService.openSnackbar(this.translate.instant('SETTINGS.fileNotFound'));
-      })
+      });
     });
 
     // when `remote-control` requests to open video
@@ -464,7 +473,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         wifi: ip,
         host: hostname,
         port: port
-      }
+      };
 
       console.log(serverDetails);
       this.serverDetailsBehaviorSubject.next(serverDetails);
@@ -602,7 +611,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       let somethingDeleted: boolean = false;
 
       this.imageElementService.imageElements
-        .filter((element: ImageElement) => { return element.inputSource == sourceIndex })
+        // tslint:disable-next-line:triple-equals
+        .filter((element: ImageElement) => { return element.inputSource == sourceIndex; })
         // notice the loosey-goosey comparison! this is because number  ^^  string comparison happening here!
         .forEach((element: ImageElement) => {
           // console.log(element.fileName);
@@ -623,7 +633,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // mark the element in `imageElements[]` as `deleted`
     this.electronService.ipcRenderer.on('single-file-deleted', (event, sourceIndex: number, partialPath: string) => {
       this.imageElementService.imageElements
-        .filter((element: ImageElement) => { return element.inputSource == sourceIndex })
+        // tslint:disable-next-line:triple-equals
+        .filter((element: ImageElement) => { return element.inputSource == sourceIndex; })
         // notice the loosey-goosey comparison! this is because number  ^^  string comparison happening here!
         .forEach((element: ImageElement) => {
           if (
@@ -722,6 +733,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.setUpDurationFilterValues(this.imageElementService.imageElements);
       this.setUpSizeFilterValues(this.imageElementService.imageElements);
       this.setUpTimesPlayedFilterValues(this.imageElementService.imageElements);
+      this.setUpYearFilterValues(this.imageElementService.imageElements);
 
       if (this.sortOrderRef.sortFilterElement) {
         this.sortOrderRef.sortFilterElement.nativeElement.value = this.sortType;
@@ -760,6 +772,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
       if (settingsObject.remoteSettings) {
         this.remoteSettings = settingsObject.remoteSettings;
+      }
+      if (settingsObject.wizardOptions) {
+        this.wizard = settingsObject.wizardOptions;
       }
     });
 
@@ -811,7 +826,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       // important for when user renames a folder for example
       this.imageElementService.imageElements
         .filter((currentElements: ImageElement) => {
-          return currentElements.deleted
+          return currentElements.deleted;
         })
         .forEach((deletedElement: ImageElement) => {
           if (deletedElement.hash === element.hash) {
@@ -895,7 +910,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.resetFinalArrayRef();
     } else {
       this.newVideoImportTimeout = setTimeout(() => {
-        this.resetFinalArrayRef()
+        this.resetFinalArrayRef();
       }, 3000);
     }
   }
@@ -915,6 +930,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   deleteInputSourceFiles(sourceIndex: number): void {
     this.imageElementService.imageElements.forEach((element: ImageElement) => {
+      // tslint:disable-next-line:triple-equals
       if (element.inputSource == sourceIndex) { // TODO -- stop the loosey goosey `==` and figure out `string` vs `number`
         element.deleted = true;
         this.imageElementService.finalArrayNeedsSaving = true;
@@ -1687,13 +1703,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
       clipSnippets: 5,
       extractClips: false,
       futureHubName: '',
-      isFixedNumberOfScreenshots: true,
-      screenshotSizeForImport: 288, // default
+      isFixedNumberOfScreenshots: this.wizard.isFixedNumberOfScreenshots ?? true,
+      screenshotSizeForImport: this.wizard.screenshotSizeForImport ?? 288, // default
       selectedOutputFolder: '',
       selectedSourceFolder: { 0: { path: '', watch: false }},
       showWizard: true,
-      ssConstant: 10,
-      ssVariable: 10,
+      ssConstant: this.wizard.ssConstant ?? 10,
+      ssVariable: this.wizard.ssVariable ?? 5,
     };
     this.toggleSettings();
   }
@@ -1902,7 +1918,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       remoteSettings: this.remoteSettings,
       shortcuts: this.shortcutService.keyToActionMap,
       vhaFileHistory: this.vhaFileHistory,
-      windowSizeAndPosition: undefined, // is added in `cose-window` in `main.ts`
+      wizardOptions: this.wizard
     };
   }
 
@@ -2207,6 +2223,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   }
 
+  newYearFilterSelected(selection: number[]): void {
+
+      this.yearLeftBound = selection[0];
+      this.yearRightBound = selection[1];
+
+  }
+
   setUpDurationFilterValues(finalArray: ImageElement[]): void {
     const durations: number[] = finalArray.map((element) => { return element.duration; });
 
@@ -2227,6 +2250,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.timesPlayedCutoff = Math.max(...timesPlayed);
   }
 
+  // need to filter otherwise cutoff will be NaN
+  setUpYearFilterValues(finalArray: ImageElement[]): void {
+    const year: number[] = finalArray.map((element) => { return element.year; });
+    const filtrate = el => Number.isInteger(el) && el > 0;
+    const yearFiltered = year.filter(filtrate);
+    this.yearMinCutoff = Math.min(...yearFiltered) - 1;
+    this.yearCutoff = Math.max(...yearFiltered);
+  }
   /**
    * Given an array of numbers
    * returns the cutoff for outliers

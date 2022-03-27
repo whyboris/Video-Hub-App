@@ -199,7 +199,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
   function notifyFileDeleted(event, fileToDelete, item) {
     fs.access(fileToDelete, fs.constants.F_OK, (err: any) => {
       if (err) {
-        console.log('FILE DELETED SUCCESS !!!')
+        console.log('FILE DELETED SUCCESS !!!');
         event.sender.send('file-deleted', item);
       }
     });
@@ -269,10 +269,10 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
   /**
    * Stop watching a particular folder
    */
-  ipc.on('start-watching-folder', (event, watchedFolderIndex: string, path: string, persistent: boolean) => {
+  ipc.on('start-watching-folder', (event, watchedFolderIndex: string, path2: string, persistent: boolean) => {
     // annoyingly it's not a number :     ^^^^^^^^^^^^^^^^^^ -- because object keys are strings :(
-    console.log('start watching:', watchedFolderIndex, path, persistent);
-    startWatcher(parseInt(watchedFolderIndex, 10), path, persistent);
+    console.log('start watching:', watchedFolderIndex, path2, persistent);
+    startWatcher(parseInt(watchedFolderIndex, 10), path2, persistent);
   });
 
   /**
@@ -293,7 +293,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
     const allHashes: Map<string, 1> = new Map();
 
     finalArray
-      .filter((element: ImageElement) => { return !element.deleted })
+      .filter((element: ImageElement) => { return !element.deleted; })
       .forEach((element: ImageElement) => {
         allHashes.set(element.hash, 1);
       });
