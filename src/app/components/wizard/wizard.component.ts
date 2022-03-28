@@ -35,8 +35,6 @@ export class WizardComponent {
   @Input() vhaFileHistory: HistoryItem[];
   @Input() wizard: WizardOptions;
 
-  constructor() { }
-
   /**
    * Only allow characters and numbers for hub name
    * @param event key press event
@@ -64,7 +62,7 @@ export class WizardComponent {
    * Called on screenshot size dropdown select
    * @param pxHeightForImport - string of number of pixels for the height of each screenshot
    */
-  selectScreenshotSize(pxHeightForImport: '144' | '216' | '288' | '360' | '432' | '504'): void {
+  selectScreenshotSize(pxHeightForImport: '144' | '216' | '288' | '360' | '432' | '504' | string): void {
     const height: AllowedScreenshotHeight = parseInt(pxHeightForImport, 10) as AllowedScreenshotHeight;
     this.wizard.screenshotSizeForImport = height;
   }
@@ -73,7 +71,7 @@ export class WizardComponent {
    * Called on screenshot size dropdown select
    * @param pxHeightForImport - string of number of pixels for the height of each screenshot
    */
-  selectClipSize(pxHeightForImport: '144' | '216' | '288' | '360' | '432' | '504'): void {
+  selectClipSize(pxHeightForImport: '144' | '216' | '288' | '360' | '432' | '504' | string): void {
     const height: AllowedScreenshotHeight = parseInt(pxHeightForImport, 10) as AllowedScreenshotHeight;
     this.wizard.clipHeight = height;
   }
