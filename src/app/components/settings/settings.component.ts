@@ -1,10 +1,10 @@
 import type { OnInit } from '@angular/core';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
-import type { TranslateService } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 
-import type { ElectronService } from './../../providers/electron.service';
-import type { ModalService } from './../modal/modal.service';
+import { ElectronService } from './../../providers/electron.service';
+import { ModalService } from './../modal/modal.service';
 
 import type { SettingsButtonsType } from '../../common/settings-buttons';
 import { SettingsMetaGroup, SettingsMetaGroupLabels } from '../../common/settings-buttons';

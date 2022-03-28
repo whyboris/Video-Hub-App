@@ -1,7 +1,7 @@
 import type { PipeTransform } from '@angular/core';
 import { Pipe } from '@angular/core';
 
-import type { WordFrequencyService } from './word-frequency.service';
+import { WordFrequencyService } from './word-frequency.service';
 
 import type { ImageElement } from '../../../interfaces/final-object.interface';
 

@@ -1,7 +1,7 @@
 import type { PipeTransform } from '@angular/core';
 import { Pipe } from '@angular/core';
 
-import type { StarFilterService } from './star-filter.service';
+import { StarFilterService } from './star-filter.service';
 
 import type { ImageElement } from '../../../interfaces/final-object.interface';
 

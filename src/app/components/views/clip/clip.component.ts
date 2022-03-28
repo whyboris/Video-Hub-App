@@ -1,8 +1,9 @@
-import type { OnInit, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
+import type { OnInit } from '@angular/core';
 import { Component, HostListener, Input, Output, EventEmitter } from '@angular/core';
-import type { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 
-import type { FilePathService } from '../file-path.service';
+import { FilePathService } from '../file-path.service';
 
 import type { ImageElement } from '../../../../../interfaces/final-object.interface';
 import type { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/shared-interfaces';

@@ -1,8 +1,8 @@
 import type { OnInit, ElementRef} from '@angular/core';
 import { Component, Input, ViewChild, Output, EventEmitter } from '@angular/core';
-import type { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 
-import type { FilePathService } from '../file-path.service';
+import { FilePathService } from '../file-path.service';
 
 import { metaAppear, textAppear } from '../../../common/animations';
 

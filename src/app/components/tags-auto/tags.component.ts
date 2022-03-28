@@ -1,11 +1,11 @@
 import type { OnDestroy, ElementRef, OnInit } from '@angular/core';
 import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 
-import type { AutoTagsService, WordAndFreq } from './autotags.service';
-import type { AutoTagsSaveService } from './tags-save.service';
+import { AutoTagsSaveService } from './tags-save.service';
+import { AutoTagsService, WordAndFreq } from './autotags.service';
+import { ImageElementService } from './../../services/image-element.service';
 
 import { slowFadeIn, donutAppear, metaAppear } from '../../common/animations';
-import type { ImageElementService } from './../../services/image-element.service';
 
 @Component({
   selector: 'app-tags-component',

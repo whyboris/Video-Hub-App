@@ -1,7 +1,7 @@
 import type { PipeTransform } from '@angular/core';
 import { Pipe } from '@angular/core';
 
-import type { ResolutionFilterService } from './resolution-filter.service';
+import { ResolutionFilterService } from './resolution-filter.service';
 import type { ImageElement } from '../../../interfaces/final-object.interface';
 
 @Pipe({

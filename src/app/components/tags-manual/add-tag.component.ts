@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter, Input } from '@angular/core';
-import type { ManualTagsService } from './manual-tags.service';
+import { ManualTagsService } from './manual-tags.service';
 
 @Component({
   selector: 'app-add-tag-component',

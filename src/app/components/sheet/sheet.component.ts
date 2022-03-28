@@ -1,13 +1,13 @@
-import type { ImageElementService } from './../../services/image-element.service';
 import type { OnInit, ElementRef} from '@angular/core';
 import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import type { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 
 import * as path from 'path';
 import type { BehaviorSubject } from 'rxjs';
 
-import type { ManualTagsService } from '../tags-manual/manual-tags.service';
-import type { FilePathService } from '../views/file-path.service';
+import { FilePathService } from '../views/file-path.service';
+import { ImageElementService } from './../../services/image-element.service';
+import { ManualTagsService } from '../tags-manual/manual-tags.service';
 
 import type { StarRating, ImageElement } from '../../../../interfaces/final-object.interface';
 import type { TagEmit, RenameFileResponse } from '../../../../interfaces/shared-interfaces';

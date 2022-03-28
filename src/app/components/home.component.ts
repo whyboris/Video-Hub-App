@@ -1,26 +1,27 @@
-import type { AfterViewInit, ChangeDetectorRef, ElementRef, OnInit, NgZone } from '@angular/core';
+import type { AfterViewInit, ElementRef, OnInit } from '@angular/core';
+import { ChangeDetectorRef, NgZone } from '@angular/core';
 import { Component, HostListener, ViewChild } from '@angular/core';
-import type { HttpClient } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 import * as path from 'path';
 
 import { BehaviorSubject } from 'rxjs';
-import type { TranslateService } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
 
 // Services
-import type { AutoTagsSaveService } from './tags-auto/tags-save.service';
-import type { ElectronService } from '../providers/electron.service';
-import type { FilePathService } from './views/file-path.service';
-import type { ImageElementService } from '../services/image-element.service';
-import type { ManualTagsService } from './tags-manual/manual-tags.service';
-import type { ModalService } from './modal/modal.service';
-import type { PipeSideEffectService } from '../pipes/pipe-side-effect.service';
-import type { ResolutionFilterService } from '../pipes/resolution-filter.service';
-import type { ShortcutsService, CustomShortcutAction } from './shortcuts/shortcuts.service';
-import type { SourceFolderService } from './statistics/source-folder.service';
-import type { StarFilterService } from '../pipes/star-filter.service';
-import type { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency.service';
+import { AutoTagsSaveService } from './tags-auto/tags-save.service';
+import { ElectronService } from '../providers/electron.service';
+import { FilePathService } from './views/file-path.service';
+import { ImageElementService } from '../services/image-element.service';
+import { ManualTagsService } from './tags-manual/manual-tags.service';
+import { ModalService } from './modal/modal.service';
+import { PipeSideEffectService } from '../pipes/pipe-side-effect.service';
+import { ResolutionFilterService } from '../pipes/resolution-filter.service';
+import { ShortcutsService, CustomShortcutAction } from './shortcuts/shortcuts.service';
+import { SourceFolderService } from './statistics/source-folder.service';
+import { StarFilterService } from '../pipes/star-filter.service';
+import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency.service';
 
 // Components
 import { SortOrderComponent } from './sort-order/sort-order.component';
@@ -485,7 +486,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     // when `remote-control` requests currently-showing gallery view
-    this.electronService.ipcRenderer.on('remote-send-new-data', (event, video: RemoteVideoClick) => {
+    this.electronService.ipcRenderer.on('remote-send-new-data', (event) => {
       console.log('requesting new data!!');
 
       const showNotConnected: ImageElement[] = JSON.parse(JSON.stringify(this.pipeSideEffectService.galleryShowing));

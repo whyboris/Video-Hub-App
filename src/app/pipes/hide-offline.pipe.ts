@@ -1,8 +1,9 @@
 import type { PipeTransform } from '@angular/core';
 import { Pipe } from '@angular/core';
 
+import { SourceFolderService } from '../components/statistics/source-folder.service';
+
 import type { ImageElement } from '../../../interfaces/final-object.interface';
-import type { SourceFolderService } from '../components/statistics/source-folder.service';
 
 @Pipe({
   name: 'hideOfflinePipe'

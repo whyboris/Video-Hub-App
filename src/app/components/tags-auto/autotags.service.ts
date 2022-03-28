@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import type { AutoTagsSaveService } from './tags-save.service';
+import { AutoTagsSaveService } from './tags-save.service';
 
 import type { ImageElement } from '../../../../interfaces/final-object.interface';
 

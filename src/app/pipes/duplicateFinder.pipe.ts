@@ -1,7 +1,7 @@
 import type { PipeTransform } from '@angular/core';
 import { Pipe } from '@angular/core';
 
-import type { SortingPipe } from './sorting.pipe';
+import { SortingPipe } from './sorting.pipe';
 
 import type { ImageElement } from '../../../interfaces/final-object.interface';
 

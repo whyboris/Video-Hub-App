@@ -1,7 +1,7 @@
 import type { PipeTransform } from '@angular/core';
 import { Pipe } from '@angular/core';
 
-import type { SimilarityService } from './similarity.service';
+import { SimilarityService } from './similarity.service';
 
 import type { ImageElement } from '../../../interfaces/final-object.interface';
 

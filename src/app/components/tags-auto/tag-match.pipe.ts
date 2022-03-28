@@ -1,9 +1,9 @@
 import type { PipeTransform } from '@angular/core';
 import { Pipe } from '@angular/core';
 
-import type { TranslateService } from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 
-import type { AutoTagsService } from './autotags.service';
+import { AutoTagsService } from './autotags.service';
 
 @Pipe({
   name: 'tagMatchPipe'

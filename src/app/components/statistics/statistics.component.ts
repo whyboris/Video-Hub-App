@@ -1,11 +1,12 @@
-import type { OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import type { OnInit, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import type { Observable, Subscription } from 'rxjs';
 
-import type { ElectronService } from '../../providers/electron.service';
-import type { ImageElementService } from './../../services/image-element.service';
-import type { SourceFolderService } from './source-folder.service';
+import { ElectronService } from '../../providers/electron.service';
+import { ImageElementService } from './../../services/image-element.service';
+import { SourceFolderService } from './source-folder.service';
 
 import type { AppStateInterface } from '../../common/app-state';
 import type { ImageElement, ScreenshotSettings, InputSources } from '../../../../interfaces/final-object.interface';

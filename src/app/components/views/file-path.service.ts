@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 
 import * as path from 'path';
 
-import type { SourceFolderService } from '../statistics/source-folder.service';
+import { SourceFolderService } from '../statistics/source-folder.service';
 
 import type { ImageElement } from '../../../../interfaces/final-object.interface';
 

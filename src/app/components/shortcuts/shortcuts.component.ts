@@ -1,5 +1,5 @@
 import { Component, Input, HostListener } from '@angular/core';
-import type { ShortcutsService, CustomShortcutAction } from './shortcuts.service';
+import { ShortcutsService, CustomShortcutAction } from './shortcuts.service';
 import type { SettingsButtonKey } from '../../common/settings-buttons';
 
 @Component({

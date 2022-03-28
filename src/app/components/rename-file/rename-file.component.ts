@@ -1,10 +1,11 @@
-import type { ChangeDetectorRef, OnInit, ElementRef, OnDestroy } from '@angular/core';
+import type { OnInit, ElementRef, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
 import { Component, Input, ViewChild } from '@angular/core';
 
 import type { Observable, Subscription } from 'rxjs';
 
-import type { ElectronService } from '../../providers/electron.service';
-import type { FilePathService } from '../views/file-path.service';
+import { ElectronService } from '../../providers/electron.service';
+import { FilePathService } from '../views/file-path.service';
 
 import type { ImageElement } from '../../../../interfaces/final-object.interface';
 import type { RenameFileResponse } from '../../../../interfaces/shared-interfaces';

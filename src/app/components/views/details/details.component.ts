@@ -1,11 +1,11 @@
 import type { OnInit, ElementRef} from '@angular/core';
 import { Component, Input, ViewChild, Output, EventEmitter } from '@angular/core';
-import type { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer } from '@angular/platform-browser';
 
 import type { BehaviorSubject } from 'rxjs';
 
-import type { ManualTagsService } from '../../tags-manual/manual-tags.service';
-import type { FilePathService } from '../file-path.service';
+import { FilePathService } from '../file-path.service';
+import { ManualTagsService } from '../../tags-manual/manual-tags.service';
 
 import type { StarRating, ImageElement } from '../../../../../interfaces/final-object.interface';
 import type { VideoClickEmit, RightClickEmit, TagEmit, RenameFileResponse } from '../../../../../interfaces/shared-interfaces';

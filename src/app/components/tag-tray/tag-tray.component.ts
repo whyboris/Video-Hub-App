@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
-import type { ManualTagsService } from '../tags-manual/manual-tags.service';
+import { ManualTagsService } from '../tags-manual/manual-tags.service';
 
 import type { AppStateInterface } from '../../common/app-state';
 import type { TagEmit } from '../../../../interfaces/shared-interfaces';

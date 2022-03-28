@@ -1,6 +1,8 @@
 import type { ElementRef} from '@angular/core';
 import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
-import type { ManualTagsService } from './manual-tags.service';
+
+import { ManualTagsService } from './manual-tags.service';
+
 import type { Tag, TagEmit } from '../../../../interfaces/shared-interfaces';
 
 @Component({

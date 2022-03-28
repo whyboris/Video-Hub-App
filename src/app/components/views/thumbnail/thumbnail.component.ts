@@ -1,7 +1,7 @@
 import type { OnInit, ElementRef, OnDestroy } from '@angular/core';
 import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 
-import type { FilePathService } from '../file-path.service';
+import { FilePathService } from '../file-path.service';
 
 import { metaAppear, textAppear } from '../../../common/animations';
 

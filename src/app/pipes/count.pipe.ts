@@ -1,7 +1,7 @@
 import type { PipeTransform } from '@angular/core';
 import { Pipe } from '@angular/core';
 
-import type { PipeSideEffectService } from './pipe-side-effect.service';
+import { PipeSideEffectService } from './pipe-side-effect.service';
 
 import type { ImageElement } from '../../../interfaces/final-object.interface';
 
