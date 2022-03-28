@@ -6,7 +6,7 @@ export class AutoTagsSaveService {
   addTags: string[] = [];
   removeTags: string[] = [];
 
-  needToSaveTags: boolean = false;
+  needToSaveTags = false;
 
   /**
    * Return `true` if tags have been updated

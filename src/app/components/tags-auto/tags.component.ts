@@ -1,10 +1,11 @@
-import { Component, EventEmitter, Input, Output, OnDestroy, ViewChild, ElementRef, OnInit } from '@angular/core';
+import type { OnDestroy, ElementRef, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 
-import { AutoTagsService, WordAndFreq } from './autotags.service';
 import { AutoTagsSaveService } from './tags-save.service';
+import { AutoTagsService, WordAndFreq } from './autotags.service';
+import { ImageElementService } from './../../services/image-element.service';
 
 import { slowFadeIn, donutAppear, metaAppear } from '../../common/animations';
-import { ImageElementService } from './../../services/image-element.service';
 
 @Component({
   selector: 'app-tags-component',
@@ -26,19 +27,19 @@ export class TagsComponent implements OnInit, OnDestroy {
   oneWordTags: WordAndFreq[] = [];
   twoWordTags: WordAndFreq[] = [];
 
-  editMode: boolean = false;
+  editMode = false;
 
-  showEdit: boolean = false;
+  showEdit = false;
 
-  loading: boolean = true;
+  loading = true;
 
-  currentAdding: string = '';
-  currentFiltering: string = '';
+  currentAdding = '';
+  currentFiltering = '';
 
-  statusMessage: string = '';
-  showingStatusMessage: boolean = false;
+  statusMessage = '';
+  showingStatusMessage = false;
 
-  minimumFrequency: number = 0;
+  minimumFrequency = 0;
 
   constructor(
     public autoTagsSaveService: AutoTagsSaveService,

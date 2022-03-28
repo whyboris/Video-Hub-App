@@ -1,8 +1,9 @@
-import { Component, Input, Output, EventEmitter, ElementRef, ViewChild } from '@angular/core';
+import type { ElementRef} from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 
-import { SortType } from '../../pipes/sorting.pipe';
+import type { SortType } from '../../pipes/sorting.pipe';
 import { filterItemAppear } from '../../common/animations';
-import { SettingsButtonsType } from '../../common/settings-buttons';
+import type { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
   selector: 'app-sort-order',

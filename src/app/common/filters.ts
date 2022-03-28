@@ -22,7 +22,7 @@ export const FilterKeyNames: string[] = [
   'videoNotes',         // [8]
 ];
 
-export let Filters: FilterObject[] = [
+export const Filters: FilterObject[] = [
   {
     uniqueKey: 'folderUnion',
     string: '',
