@@ -134,8 +134,8 @@ export class TagsComponent implements OnInit, OnDestroy {
    * Set the minimum frequency to show
    * @param min minimum frequency to show
    */
-  selectMinFrequency(min: number): void {
-    this.minimumFrequency = min;
+  selectMinFrequency(min: string): void {
+    this.minimumFrequency = parseInt(min, 10);
   }
 
   /**

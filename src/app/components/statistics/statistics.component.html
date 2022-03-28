@@ -139,8 +139,9 @@
       {{ 'STATISTICS.serverOnPort' | translate }}
     </span>
     <input
+      #portSelectInput
       *ngIf="!serverRunning"
-      (change)="validatePort($event.target.value)"
+      (change)="validatePort(portSelectInput.value)"
       type="number"
       [(ngModel)]="selectedPort"
       min="1"
