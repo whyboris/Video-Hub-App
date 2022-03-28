@@ -1,15 +1,16 @@
-import { ImageElementService } from './../../services/image-element.service';
-import { Component, Input, OnInit, Output, EventEmitter, ChangeDetectorRef, ViewChild, ElementRef, OnDestroy } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import type { ImageElementService } from './../../services/image-element.service';
+import type { OnInit, ChangeDetectorRef, ElementRef, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import type { DomSanitizer } from '@angular/platform-browser';
 
-import { Subscription, Observable } from 'rxjs';
+import type { Subscription, Observable } from 'rxjs';
 
-import { ElectronService } from '../../providers/electron.service';
-import { FilePathService } from '../views/file-path.service';
-import { ManualTagsService } from '../tags-manual/manual-tags.service';
+import type { ElectronService } from '../../providers/electron.service';
+import type { FilePathService } from '../views/file-path.service';
+import type { ManualTagsService } from '../tags-manual/manual-tags.service';
 
-import { StarRating, ImageElement } from '../../../../interfaces/final-object.interface';
-import { TagEmit, RenameFileResponse } from '../../../../interfaces/shared-interfaces';
+import type { StarRating, ImageElement } from '../../../../interfaces/final-object.interface';
+import type { TagEmit, RenameFileResponse } from '../../../../interfaces/shared-interfaces';
 
 @Component({
   selector: 'app-meta-item',
@@ -41,10 +42,10 @@ export class MetaComponent implements OnInit, OnDestroy {
   starRatingHack: StarRating;
   yearHack: number;
 
-  tagViewUpdateHack: boolean = false;
+  tagViewUpdateHack = false;
 
-  renamingWIP: string = '';
-  renameError: boolean = false;
+  renamingWIP = '';
+  renameError = false;
 
   responseSubscription: Subscription;
 

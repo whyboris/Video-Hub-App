@@ -1,8 +1,9 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import type { PipeTransform } from '@angular/core';
+import { Pipe } from '@angular/core';
 
-import { SortingPipe } from './sorting.pipe';
+import type { SortingPipe } from './sorting.pipe';
 
-import { ImageElement } from '../../../interfaces/final-object.interface';
+import type { ImageElement } from '../../../interfaces/final-object.interface';
 
 type DupeType = 'length'   | 'size'     | 'hash';
 type SortBy =   'timeDesc' | 'sizeDesc' | 'hash';
@@ -68,7 +69,7 @@ export class DuplicateFinderPipe implements PipeTransform {
       const duplicateArray: ImageElement[] = [];
 
       let featureTracker: any = initial; // number | string
-      let lastIndex: number = -1; // keep track of the index of the last item pushed to duplicateArray
+      let lastIndex = -1; // keep track of the index of the last item pushed to duplicateArray
 
       sortedByFeature.forEach((element, idx) => {
 

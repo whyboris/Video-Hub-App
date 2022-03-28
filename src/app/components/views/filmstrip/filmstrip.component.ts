@@ -1,12 +1,13 @@
-import { Component, Input, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import type { OnInit, ElementRef} from '@angular/core';
+import { Component, Input, ViewChild, Output, EventEmitter } from '@angular/core';
+import type { DomSanitizer } from '@angular/platform-browser';
 
-import { FilePathService } from '../file-path.service';
+import type { FilePathService } from '../file-path.service';
 
 import { metaAppear, textAppear } from '../../../common/animations';
 
-import { ImageElement } from '../../../../../interfaces/final-object.interface';
-import { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/shared-interfaces';
+import type { ImageElement } from '../../../../../interfaces/final-object.interface';
+import type { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/shared-interfaces';
 
 @Component({
   selector: 'app-filmstrip-item',
@@ -37,9 +38,9 @@ export class FilmstripComponent implements OnInit {
   @Input() largerFont: boolean;
   @Input() showMeta: boolean;
 
-  fullFilePath: string = '';
-  filmXoffset: number = 0;
-  indexToShow: number = 1;
+  fullFilePath = '';
+  filmXoffset = 0;
+  indexToShow = 1;
 
   constructor(
     public filePathService: FilePathService,

@@ -1,10 +1,11 @@
-import { Component, HostListener, Input, Output, EventEmitter, OnInit, ChangeDetectorRef } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import type { OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, HostListener, Input, Output, EventEmitter } from '@angular/core';
+import type { DomSanitizer } from '@angular/platform-browser';
 
-import { FilePathService } from '../file-path.service';
+import type { FilePathService } from '../file-path.service';
 
-import { ImageElement } from '../../../../../interfaces/final-object.interface';
-import { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/shared-interfaces';
+import type { ImageElement } from '../../../../../interfaces/final-object.interface';
+import type { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/shared-interfaces';
 
 import { metaAppear, textAppear } from '../../../common/animations';
 
@@ -42,12 +43,12 @@ export class ClipComponent implements OnInit {
   @Input() largerFont: boolean;
   @Input() showMeta: boolean;
 
-  appInFocus: boolean = true;
+  appInFocus = true;
   folderPosterPaths: string[] = [];
   folderThumbPaths: string[] = [];
   hover: boolean;
   noError = true;
-  pathToVideo: string = '';
+  pathToVideo = '';
   poster: string;
   posterFolderType: any = 'clips';
 

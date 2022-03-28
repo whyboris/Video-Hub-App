@@ -1,7 +1,10 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import type { PipeTransform } from '@angular/core';
+import { Pipe } from '@angular/core';
 
-import { ImageElement, StarRating, NewImageElement } from '../../../interfaces/final-object.interface';
-import { SettingsButtonsType, SettingsButtons } from '../common/settings-buttons';
+import type { ImageElement, StarRating} from '../../../interfaces/final-object.interface';
+import { NewImageElement } from '../../../interfaces/final-object.interface';
+import type { SettingsButtonsType} from '../common/settings-buttons';
+import { SettingsButtons } from '../common/settings-buttons';
 
 interface FolderProperties {
   byteSize: number;    //                             corresponds to ImageElement `fileSize`
@@ -23,11 +26,11 @@ export class FolderViewPipe implements PipeTransform {
    * @param files
    */
   determineFolderProperties(files: ImageElement[]): FolderProperties {
-    let totalFileSize: number = 0;
-    let totalDuration: number = 0;
-    let starAverage: number = 0;
-    let totalStars: number = 0;
-    let lastUpdated: number = 0;
+    let totalFileSize = 0;
+    let totalDuration = 0;
+    let starAverage = 0;
+    let totalStars = 0;
+    let lastUpdated = 0;
     let firstCreated: number = Number.MAX_SAFE_INTEGER;
 
     files.forEach((element: ImageElement) => {
@@ -63,7 +66,7 @@ export class FolderViewPipe implements PipeTransform {
    * @param files
    */
   extractFourPreviewHashes(files: ImageElement[]): string {
-    let hashes: string = '';
+    let hashes = '';
     if (files.length > 4 && this.settingsButtons['randomizeFoldersScreenshots'].toggled) {
       hashes = this.extractRandomPreviewHashes(files);
     } else {
@@ -76,7 +79,7 @@ export class FolderViewPipe implements PipeTransform {
   }
 
   extractFirstFourPreviewHashes(files: ImageElement[]): string {
-    let hashes: string = '';
+    let hashes = '';
     for (let n = 0; n < 4; n++) {
       if (files[n]) {
         hashes += ':' + files[n].hash;
@@ -88,7 +91,7 @@ export class FolderViewPipe implements PipeTransform {
   }
 
   extractRandomPreviewHashes(files: ImageElement[]): string {
-    let hashes: string = '';
+    let hashes = '';
     for (let index = 0; index < 4; index++) {
       const randomIndex = Math.floor(Math.random() * files.length);
       hashes += ':' + files.splice(randomIndex, 1)[0].hash;

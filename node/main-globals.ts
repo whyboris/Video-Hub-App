@@ -1,4 +1,4 @@
-import { ScreenshotSettings, InputSources } from '../interfaces/final-object.interface';
+import type { ScreenshotSettings, InputSources } from '../interfaces/final-object.interface';
 
 export const GLOBALS: VhaGlobals = {
   angularApp: null,            // reference used to send messages back to Angular App

@@ -1,11 +1,11 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
-import { ManualTagsService } from '../tags-manual/manual-tags.service';
+import type { ManualTagsService } from '../tags-manual/manual-tags.service';
 
-import { AppStateInterface } from '../../common/app-state';
-import { TagEmit } from '../../../../interfaces/shared-interfaces';
+import type { AppStateInterface } from '../../common/app-state';
+import type { TagEmit } from '../../../../interfaces/shared-interfaces';
 import { modalAnimation } from '../../common/animations';
-import { SettingsButtonsType } from '../../common/settings-buttons';
+import type { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
   selector: 'app-tag-tray',
@@ -30,8 +30,8 @@ export class TagTrayComponent {
   @Input() darkMode: boolean;
   @Input() settingsButtons: SettingsButtonsType;
 
-  manualTagFilterString: string = '';
-  manualTagShowFrequency: boolean = true;
+  manualTagFilterString = '';
+  manualTagShowFrequency = true;
 
   constructor(
     public manualTagsService: ManualTagsService,

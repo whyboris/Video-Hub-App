@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import type { MatDialog } from '@angular/material/dialog';
+import type { MatSnackBar } from '@angular/material/snack-bar';
 
 import { ModalComponent } from './modal.component';
 import { WelcomeComponent } from './welcome.component';

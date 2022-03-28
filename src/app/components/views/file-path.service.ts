@@ -2,9 +2,9 @@ import { Injectable } from '@angular/core';
 
 import * as path from 'path';
 
-import { SourceFolderService } from '../statistics/source-folder.service';
+import type { SourceFolderService } from '../statistics/source-folder.service';
 
-import { ImageElement } from '../../../../interfaces/final-object.interface';
+import type { ImageElement } from '../../../../interfaces/final-object.interface';
 
 type FolderType = 'thumbnails' | 'filmstrips' | 'clips';
 

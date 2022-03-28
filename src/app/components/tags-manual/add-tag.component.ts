@@ -1,5 +1,5 @@
 import { Component, Output, EventEmitter, Input } from '@angular/core';
-import { ManualTagsService } from './manual-tags.service';
+import type { ManualTagsService } from './manual-tags.service';
 
 @Component({
   selector: 'app-add-tag-component',
@@ -13,8 +13,8 @@ export class AddTagComponent {
 
   @Output() tag = new EventEmitter<string>();
 
-  currentText: string = '';
-  typeAhead: string = '';
+  currentText = '';
+  typeAhead = '';
 
   constructor(
     public manualTagsService: ManualTagsService

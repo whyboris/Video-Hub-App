@@ -82,7 +82,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "eslintConfig": ".eslintrc.js",
+            "eslintConfig": ".eslintrc.json",
             "lintFilePatterns": [
               "**/*.ts"
             ]

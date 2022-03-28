@@ -1,12 +1,13 @@
-import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import type { OnInit} from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import type { DomSanitizer } from '@angular/platform-browser';
 
-import { FilePathService } from '../file-path.service';
+import type { FilePathService } from '../file-path.service';
 
 import { metaAppear, textAppear } from '../../../common/animations';
 
-import { ImageElement } from '../../../../../interfaces/final-object.interface';
-import { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/shared-interfaces';
+import type { ImageElement } from '../../../../../interfaces/final-object.interface';
+import type { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/shared-interfaces';
 
 @Component({
   selector: 'app-full-item',
@@ -47,7 +48,7 @@ export class FullViewComponent implements OnInit {
   _imgHeight: number;
   _metaWidth: number;
   computedWidth: number;
-  fullFilePath: string = '';
+  fullFilePath = '';
   rowOffsets: number[];
 
   constructor(

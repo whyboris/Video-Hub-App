@@ -1,13 +1,14 @@
-import { Component, Input, OnInit, ChangeDetectorRef, Output, EventEmitter, OnDestroy } from '@angular/core';
+import type { OnInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
-import { Observable, Subscription } from 'rxjs';
+import type { Observable, Subscription } from 'rxjs';
 
-import { ElectronService } from '../../providers/electron.service';
-import { ImageElementService } from './../../services/image-element.service';
-import { SourceFolderService } from './source-folder.service';
+import type { ElectronService } from '../../providers/electron.service';
+import type { ImageElementService } from './../../services/image-element.service';
+import type { SourceFolderService } from './source-folder.service';
 
-import { AppStateInterface } from '../../common/app-state';
-import { ImageElement, ScreenshotSettings, InputSources } from '../../../../interfaces/final-object.interface';
+import type { AppStateInterface } from '../../common/app-state';
+import type { ImageElement, ScreenshotSettings, InputSources } from '../../../../interfaces/final-object.interface';
 
 import { metaAppear, breadcrumbWordAppear } from '../../common/animations';
 
@@ -52,26 +53,26 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   totalFiles: number;
 
   // Length
-  longest: number = 0;
-  shortest: number = Infinity;
-  totalLength: number = 0;
+  longest = 0;
+  shortest = Infinity;
+  totalLength = 0;
   avgLength: number;
 
   // Size
-  largest: number = 0;
-  smallest: number = Infinity;
-  totalSize: number = 0;
+  largest = 0;
+  smallest = Infinity;
+  totalSize = 0;
   avgSize: number;
 
   // For cleaning old screenshots
-  showNumberDeleted: boolean = false;
-  numberOfScreensDeleted: number = 0;
+  showNumberDeleted = false;
+  numberOfScreensDeleted = 0;
 
-  removeFoldersMode: boolean = false;
+  removeFoldersMode = false;
 
   selectedPort = 3000;
   serverInfo: ServerDetails;
-  serverRunning: boolean = false;
+  serverRunning = false;
 
   objectKeys = Object.keys; // to use in template
 
