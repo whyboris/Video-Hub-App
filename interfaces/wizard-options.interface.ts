@@ -1,4 +1,4 @@
-import { ImageElement, AllowedScreenshotHeight, InputSources } from './final-object.interface';
+import type { AllowedScreenshotHeight, InputSources } from './final-object.interface';
 
 // meant to keep the full state of the Wizard settings chosen
 export interface WizardOptions {

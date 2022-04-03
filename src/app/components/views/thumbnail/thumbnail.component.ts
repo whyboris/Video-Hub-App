@@ -1,11 +1,12 @@
-import { Component, Input, Output, EventEmitter, OnInit, ElementRef, ViewChild, OnDestroy } from '@angular/core';
+import type { OnInit, ElementRef, OnDestroy } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 
 import { FilePathService } from '../file-path.service';
 
 import { metaAppear, textAppear } from '../../../common/animations';
 
-import { ImageElement } from '../../../../../interfaces/final-object.interface';
-import { VideoClickEmit, RightClickEmit } from '../../../../../interfaces/shared-interfaces';
+import type { ImageElement } from '../../../../../interfaces/final-object.interface';
+import type { VideoClickEmit, RightClickEmit } from '../../../../../interfaces/shared-interfaces';
 
 @Component({
   selector: 'app-thumbnail',
@@ -48,8 +49,8 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
   folderThumbPaths: string[] = [];
   fullFilePath = '';
   hover: boolean;
-  indexToShow: number = 1;
-  percentOffset: number = 0;
+  indexToShow = 1;
+  percentOffset = 0;
   scrollInterval: any = null;
 
   constructor(

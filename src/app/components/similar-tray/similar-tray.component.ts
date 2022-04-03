@@ -3,8 +3,8 @@ import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { ImageElementService } from './../../services/image-element.service';
 import { SourceFolderService } from '../statistics/source-folder.service';
 
-import { RightClickEmit } from '../../../../interfaces/shared-interfaces';
-import { SettingsButtonsType } from '../../common/settings-buttons';
+import type { RightClickEmit } from '../../../../interfaces/shared-interfaces';
+import type { SettingsButtonsType } from '../../common/settings-buttons';
 import { modalAnimation, similarResultsText } from '../../common/animations';
 
 @Component({

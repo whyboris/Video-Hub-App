@@ -1,7 +1,7 @@
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 
-import { DialogData } from './modal.service';
+import type { DialogData } from './modal.service';
 
 @Component({
   selector: 'app-modal',

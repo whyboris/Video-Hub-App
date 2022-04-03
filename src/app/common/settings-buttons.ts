@@ -1,4 +1,4 @@
-import { SettingsButton } from './settings-buttons.interface';
+import type { SettingsButton } from './settings-buttons.interface';
 
 export type SettingsButtonKey = 'autoFileTags'
  | 'autoFolderTags'
