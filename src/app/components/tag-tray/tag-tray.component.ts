@@ -3,7 +3,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ManualTagsService } from '../tags-manual/manual-tags.service';
 
 import type { AppStateInterface } from '../../common/app-state';
-import type { TagEmit } from '../../../../interfaces/shared-interfaces';
+import type { TagEmit } from '@my/shared-interfaces';
 import { modalAnimation } from '../../common/animations';
 import type { SettingsButtonsType } from '../../common/settings-buttons';
 

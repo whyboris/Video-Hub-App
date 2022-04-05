@@ -3,7 +3,7 @@ import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core
 
 import { ManualTagsService } from './manual-tags.service';
 
-import type { Tag, TagEmit } from '../../../../interfaces/shared-interfaces';
+import type { Tag, TagEmit } from '@my/shared-interfaces';
 
 @Component({
   selector: 'app-view-tags-component',

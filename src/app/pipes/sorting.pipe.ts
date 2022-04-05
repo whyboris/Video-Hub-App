@@ -1,6 +1,6 @@
 import type { PipeTransform } from '@angular/core';
 import { Pipe } from '@angular/core';
-import type { ImageElement, StarRating } from '../../../interfaces/final-object.interface';
+import type { ImageElement, StarRating } from '@my/final-object.interface';
 import { randomizeArray } from '../../../node/utility';
 import { orderBy } from 'natural-orderby';
 

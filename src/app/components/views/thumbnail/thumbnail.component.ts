@@ -5,8 +5,8 @@ import { FilePathService } from '../file-path.service';
 
 import { metaAppear, textAppear } from '../../../common/animations';
 
-import type { ImageElement } from '../../../../../interfaces/final-object.interface';
-import type { VideoClickEmit, RightClickEmit } from '../../../../../interfaces/shared-interfaces';
+import type { ImageElement } from '@my/final-object.interface';
+import type { VideoClickEmit, RightClickEmit } from '@my/shared-interfaces';
 
 @Component({
   selector: 'app-thumbnail',

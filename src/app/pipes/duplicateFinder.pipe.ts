@@ -3,7 +3,7 @@ import { Pipe } from '@angular/core';
 
 import { SortingPipe } from './sorting.pipe';
 
-import type { ImageElement } from '../../../interfaces/final-object.interface';
+import type { ImageElement } from '@my/final-object.interface';
 
 type DupeType = 'length'   | 'size'     | 'hash';
 type SortBy =   'timeDesc' | 'sizeDesc' | 'hash';

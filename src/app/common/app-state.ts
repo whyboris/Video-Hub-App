@@ -1,5 +1,5 @@
 import type { SortType } from '@pipes';
-import type { SupportedView } from '../../../interfaces/shared-interfaces';
+import type { SupportedView } from '@my/shared-interfaces';
 
 // Please conform the supported languages exactly to the first two characters from here:
 // https://github.com/electron/electron/blob/master/docs/api/locales.md

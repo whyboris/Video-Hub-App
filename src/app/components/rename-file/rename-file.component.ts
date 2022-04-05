@@ -7,8 +7,8 @@ import type { Observable, Subscription } from 'rxjs';
 import { ElectronService } from '../../providers/electron.service';
 import { FilePathService } from '../views/file-path.service';
 
-import type { ImageElement } from '../../../../interfaces/final-object.interface';
-import type { RenameFileResponse } from '../../../../interfaces/shared-interfaces';
+import type { ImageElement } from '@my/final-object.interface';
+import type { RenameFileResponse } from '@my/shared-interfaces';
 
 @Component({
   selector: 'app-rename-file',

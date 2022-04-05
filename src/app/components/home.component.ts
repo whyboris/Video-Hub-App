@@ -29,25 +29,25 @@ import { WordFrequencyService, WordFreqAndHeight } from '@pipes';
 import { SortOrderComponent } from './sort-order/sort-order.component';
 
 // Interfaces
-import type { FinalObject, ImageElement, ScreenshotSettings, ResolutionString } from '../../../interfaces/final-object.interface';
+import type { FinalObject, ImageElement, ScreenshotSettings, ResolutionString } from '@my/final-object.interface';
 import type { ImportStage } from '../../../node/main-support';
 import type { ServerDetails } from './statistics/statistics.component';
-import type { RemoteSettings, SettingsButtonSavedProperties, SettingsObject } from '../../../interfaces/settings-object.interface';
+import type { RemoteSettings, SettingsButtonSavedProperties, SettingsObject } from '@my/settings-object.interface';
 import type { SortType } from '@pipes';
 import type { SupportedLanguage, RowNumbers } from '../common/app-state';
 import type { SettingsButtonKey, SettingsButtonsType } from '../common/settings-buttons';
-import type { WizardOptions } from '../../../interfaces/wizard-options.interface';
+import type { WizardOptions } from '@my/wizard-options.interface';
 import type {
   HistoryItem,
   RemoteVideoClick,
   RenameFileResponse,
   SupportedTrayView,
   SupportedView,
-  VideoClickEmit} from '../../../interfaces/shared-interfaces';
+  VideoClickEmit} from '@my/shared-interfaces';
 import {
   AllSupportedBottomTrayViews,
   AllSupportedViews
-} from '../../../interfaces/shared-interfaces';
+} from '@my/shared-interfaces';
 
 // Constants, etc
 import { AppState, DefaultImagesPerRow } from '../common/app-state';

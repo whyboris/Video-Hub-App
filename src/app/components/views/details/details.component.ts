@@ -7,8 +7,8 @@ import type { BehaviorSubject } from 'rxjs';
 import { FilePathService } from '../file-path.service';
 import { ManualTagsService } from '../../tags-manual/manual-tags.service';
 
-import type { StarRating, ImageElement } from '../../../../../interfaces/final-object.interface';
-import type { VideoClickEmit, RightClickEmit, TagEmit, RenameFileResponse } from '../../../../../interfaces/shared-interfaces';
+import type { StarRating, ImageElement } from '@my/final-object.interface';
+import type { VideoClickEmit, RightClickEmit, TagEmit, RenameFileResponse } from '@my/shared-interfaces';
 
 export interface YearEmission {
   index: number;
