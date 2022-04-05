@@ -26,13 +26,15 @@ import { HomeComponent } from './components/home.component';
 import { ImageElementService } from './services/image-element.service';
 import { ManualTagsService } from './components/tags-manual/manual-tags.service';
 import { ModalService } from './components/modal/modal.service';
-import { PipeSideEffectService } from './pipes/pipe-side-effect.service';
-import { ResolutionFilterService } from './pipes/resolution-filter.service';
 import { ShortcutsService } from './components/shortcuts/shortcuts.service';
-import { SimilarityService } from './pipes/similarity.service';
 import { SourceFolderService } from './components/statistics/source-folder.service';
-import { StarFilterService } from './pipes/star-filter.service';
-import { WordFrequencyService } from './pipes/word-frequency.service';
+
+// Pipe Services
+import { PipeSideEffectService } from '@pipes';
+import { ResolutionFilterService } from '@pipes';
+import { SimilarityService } from '@pipes';
+import { StarFilterService } from '@pipes';
+import { WordFrequencyService } from '@pipes';
 
 // Components
 import { AddTagComponent } from './components/tags-manual/add-tag.component';

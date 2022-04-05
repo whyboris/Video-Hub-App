@@ -1,4 +1,4 @@
-import type { SortType } from '../pipes/sorting.pipe';
+import type { SortType } from '@pipes';
 import type { SupportedView } from '../../../interfaces/shared-interfaces';
 
 // Please conform the supported languages exactly to the first two characters from here:

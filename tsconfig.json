@@ -4,6 +4,9 @@
     "strictTemplates": true
   },
   "compilerOptions": {
+    "paths": {
+      "@pipes": ["src/app/pipes"]
+    },
     "baseUrl": "",
     "declaration": false,
     "experimentalDecorators": true,
