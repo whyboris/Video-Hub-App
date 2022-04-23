@@ -57,8 +57,11 @@ export class FullViewComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.fullFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
-    this.render();
+    if (this.video.type == 'image') {
+      this.fullFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'thumbnails', this.video.hash);
+    } else {
+      this.fullFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
+    }    this.render();
   }
 
   render(): void {
