@@ -30,6 +30,7 @@ const ffmpegPath = require('ffmpeg-static').replace('app.asar', 'app.asar.unpack
 import { GLOBALS } from './main-globals';
 
 import type { ImageElement, ScreenshotSettings } from '../interfaces/final-object.interface';
+import { acceptableImageFiles } from './main-filenames';
 
 
 // ========================================================================================
@@ -44,16 +45,26 @@ import type { ImageElement, ScreenshotSettings } from '../interfaces/final-objec
  * @param savePath
  */
 const extractSingleFrameArgs = (
+  currentElement: ImageElement,
   pathToVideo: string,
   screenshotHeight: number,
-  duration: number,
   savePath: string,
 ): string[] => {
 
   const ssWidth: number = screenshotHeight * (16 / 9);
 
+  if (currentElement.type == 'image') {
+    const args: string[] = [
+      '-i', pathToVideo,
+      '-q:v', '2',
+      '-vf', scaleAndPadString(ssWidth, screenshotHeight),
+      savePath,
+    ];
+    return args;
+  }
+
   const args: string[] = [
-    '-ss', (duration / 10).toString(),
+    '-ss', (currentElement.duration / 10).toString(),
     '-i', pathToVideo,
     '-frames', '1',
     '-q:v', '2',
@@ -280,7 +291,7 @@ export function extractAll(
         return true;
       } else {
         const ffmpegArgs: string[] =  extractSingleFrameArgs(
-          pathToVideo, screenshotHeight, duration, thumbnailSavePath
+          currentElement, pathToVideo, screenshotHeight, thumbnailSavePath
         );
 
         return spawn_ffmpeg_and_run(ffmpegArgs, maxRunTime.thumb, 'thumb');               // (3)

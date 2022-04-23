@@ -1,4 +1,4 @@
-export const acceptableFiles = [
+export const acceptableVideoFiles = [
   '264',
   '265',
   '3g2',
@@ -31,4 +31,8 @@ export const acceptableFiles = [
   'vob',
   'webm',
   'wmv'
+];
+
+export const acceptableImageFiles = [
+  'jpg'
 ];

@@ -17,9 +17,10 @@ const fs = require('fs');
 const hasher = require('crypto').createHash;
 import type { Stats } from 'fs';
 
-import type { FinalObject, ImageElement, ScreenshotSettings, InputSources, ResolutionString} from '../interfaces/final-object.interface';
+import type { FinalObject, ImageElement, ScreenshotSettings, InputSources, ResolutionString, FileType} from '../interfaces/final-object.interface';
 import { NewImageElement } from '../interfaces/final-object.interface';
 import { startFileSystemWatching, resetWatchers } from './main-extract-async';
+import { acceptableImageFiles, acceptableVideoFiles } from './main-filenames';
 
 interface ResolutionMeta {
   label: ResolutionString;
@@ -305,7 +306,7 @@ function getBestStream(metadata) {
  */
 function getFileDuration(metadata): number {
   if (metadata?.streams?.[0]?.duration) {
-    
+
     return metadata.streams[0].duration;
 
   } else if (metadata?.format?.duration) {
@@ -451,12 +452,14 @@ export function extractMetadataAsync(
         const origWidth = stream.width || 0; // ffprobe does not detect it on some MKV streams
         const origHeight = stream.height || 0;
 
+
         fs.stat(filePath, (err2, fileStat) => {
           if (err2) {
             reject();
           }
 
           const imageElement = NewImageElement();
+          imageElement.type      = getFileType(filePath);
           imageElement.birthtime = Math.round(fileStat.birthtimeMs);
           imageElement.duration  = duration;
           imageElement.fileSize  = fileStat.size;
@@ -476,6 +479,15 @@ export function extractMetadataAsync(
       }
     });
   });
+}
+
+export function getFileType(filePath: string): FileType {
+  const fileExtension = path.parse(filePath).ext.substr(1).toLowerCase();
+  if (acceptableVideoFiles.includes(fileExtension)) {
+    return 'video';
+  } else if (acceptableImageFiles.includes(fileExtension)) {
+    return 'image';
+  }
 }
 
 /**
