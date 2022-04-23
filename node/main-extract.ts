@@ -303,6 +303,11 @@ export function extractAll(
       if (!thumbSuccess) {
         throw new Error('SINGLE SCREENSHOT EXTRACTION TIMED OUT - LIKELY CORRUPT');
       } else {
+        if (currentElement.type == 'image') {
+          // Bale out early, images don't need anything else
+          done();
+          return;
+        }
         return checkFileExists(filmstripSavePath);                                        // (4)
       }
     })
