@@ -61,9 +61,13 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
     // multiple hashes == folder view
     if (this.video.hash.indexOf(':') !== -1) {
       const hashes = this.video.hash.split(':');
+      const numberOfFiles = Number(this.video.fileSizeDisplay);
       hashes.slice(0, 4).forEach((hash) => {
         this.folderThumbPaths.push(this.filePathService.createFilePath(this.folderPath, this.hubName, 'thumbnails', hash));
       });
+      if (numberOfFiles > 999) {
+        this.video.fileSizeDisplay = Math.floor(numberOfFiles/1000) + 'k';
+      }
     } else {
       this.firstFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'thumbnails', this.video.hash);
       this.fullFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
