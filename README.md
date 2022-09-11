@@ -11,6 +11,17 @@ $3.50 of every sale goes to the [_cost-effective_](https://www.givewell.org/char
 
 ![video-hub-app](https://user-images.githubusercontent.com/17264277/82097107-3ed91700-96d0-11ea-8679-87fa3e07cd0b.jpg)
 
+This should be the landing screen of the videohub. 
+<img width="851" alt="Screen Shot 2022-09-11 at 5 25 41 PM" src="https://user-images.githubusercontent.com/56640569/189549489-92716b53-7a98-4881-a799-6a932e661ec6.png">
+
+### Mac OS
+If you are having issues with the downloading process access issues. Follow these steps:
+- Choose Apple menu  > System Preferences, click Security & Privacy , then click General.
+- Click on the Lock to change Security Settings.
+- Allow system from opening Video-Hub-App
+
+<img width="659" alt="Screen Shot 2022-09-11 at 5 28 51 PM" src="https://user-images.githubusercontent.com/56640569/189549592-7da8df5a-0c04-455c-829f-e51e1d2456b1.png">
+
 
 ## About
 
@@ -39,6 +50,17 @@ See [issues](https://github.com/whyboris/Video-Hub-App/issues) for what is in pr
 ## Development
 
 ⚠ The repository is usually ahead of the publicly [released version](https://github.com/whyboris/Video-Hub-App/releases) - it is 🚧 WIP and may have bugs in it.
+
+### Download Node:
+
+<i>Skip this step if you have the latest Node downloaded.</i>
+
+- Navigate and download Node for your correct Operating System: https://nodejs.org/en/download/
+
+Check if you have Node downloaded by running this command
+``` 
+npm --version
+```
 
 How to start:
 
