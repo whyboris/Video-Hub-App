@@ -6,6 +6,7 @@ export enum Colors {
   // this is the order in which filters appear
   folderUnion =        '#FFD672',
   folderIntersection = '#ffe5a5',
+  folderExclusion =    '#FF8888',
   fileUnion =          '#97b3fc', // like `fileIntersection` but darker
   fileIntersection =   '#b1c6fd',
   exclude =            '#FF8888',
