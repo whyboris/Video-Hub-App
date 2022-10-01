@@ -52,6 +52,7 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
   indexToShow = 1;
   percentOffset = 0;
   scrollInterval: any = null;
+  folderSizeDisplay: string;
 
   constructor(
     public filePathService: FilePathService
@@ -64,6 +65,13 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
       hashes.slice(0, 4).forEach((hash) => {
         this.folderThumbPaths.push(this.filePathService.createFilePath(this.folderPath, this.hubName, 'thumbnails', hash));
       });
+
+      const fileCount = parseInt(this.video.fileSizeDisplay, 10);
+      if (fileCount >= 1000) {
+        this.folderSizeDisplay = Math.floor(fileCount / 1000) + 'k';
+      } else {
+        this.folderSizeDisplay = this.video.fileSizeDisplay;
+      }
     } else {
       this.firstFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'thumbnails', this.video.hash);
       this.fullFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);

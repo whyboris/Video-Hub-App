@@ -31,7 +31,7 @@
 
     <div *ngIf="video.cleanName === '*FOLDER*' && video.fileName !== '*UP*'" class="folder-icon">
       <app-icon [icon]="'icon-folder-blank'"></app-icon>
-      <div class="items-in-folder">{{ video.fileSizeDisplay }}</div>
+      <div class="items-in-folder">{{ folderSizeDisplay }}</div>
     </div>
 
     <span
