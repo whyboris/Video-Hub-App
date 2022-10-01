@@ -12,13 +12,13 @@ import type { VideoClickEmit, RightClickEmit } from '../../../../../interfaces/s
   selector: 'app-thumbnail',
   templateUrl: './thumbnail.component.html',
   styleUrls: [
-      '../clip-and-preview.scss',
-      '../time-and-rez.scss',
-      './thumbnail.component.scss',
-      '../selected.scss'
-    ],
-  animations: [ textAppear,
-                metaAppear ]
+    '../clip-and-preview.scss',
+    '../time-and-rez.scss',
+    './thumbnail.component.scss',
+    '../selected.scss'
+  ],
+  animations: [textAppear,
+    metaAppear]
 })
 export class ThumbnailComponent implements OnInit, OnDestroy {
 
@@ -66,12 +66,7 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
         this.folderThumbPaths.push(this.filePathService.createFilePath(this.folderPath, this.hubName, 'thumbnails', hash));
       });
 
-      const fileCount = parseInt(this.video.fileSizeDisplay, 10);
-      if (fileCount >= 1000) {
-        this.folderSizeDisplay = Math.floor(fileCount / 1000) + 'k';
-      } else {
-        this.folderSizeDisplay = this.video.fileSizeDisplay;
-      }
+      this.folderSizeDisplay = this.formatFolderSize(this.video);
     } else {
       this.firstFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'thumbnails', this.video.hash);
       this.fullFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
@@ -129,6 +124,16 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     clearInterval(this.scrollInterval);
+  }
+
+  private formatFolderSize(video: ImageElement): string {
+    let output = this.video.fileSizeDisplay;
+    const fileCount = parseInt(video.fileSizeDisplay, 10);
+    if (fileCount >= 1000) {
+      output = Math.floor(fileCount / 1000) + 'k';
+    }
+
+    return output;
   }
 
 }
