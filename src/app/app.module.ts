@@ -81,6 +81,7 @@ import { FileSearchPipe } from './pipes/file-search.pipe';
 import { FileSizeFilterPipe } from './pipes/file-size-filter.pipe';
 import { FileSizePipe } from './pipes/file-size.pipe';
 import { FolderArrowsPipe } from './pipes/folder-arrows.pipe';
+import { FolderSizePipe } from './pipes/folder-size.pipe';
 import { FolderViewPipe } from './pipes/folder-view.pipe';
 import { FuzzySearchPipe } from './pipes/fuzzy-search.pipe';
 import { HideOfflinePipe } from './pipes/hide-offline.pipe';
@@ -128,6 +129,7 @@ import { YearPipe } from './pipes/year.pipe';
     FileSizePipe,
     FilmstripComponent,
     FolderArrowsPipe,
+    FolderSizePipe,
     FolderViewPipe,
     FullViewComponent,
     FuzzySearchPipe,
