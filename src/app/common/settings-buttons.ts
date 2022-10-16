@@ -19,6 +19,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'fileUnion'
  | 'flatIcons'
  | 'folderIntersection'
+ | 'folderExclusion'
  | 'folderUnion'
  | 'fontSizeLarger'
  | 'fuzzy'
@@ -91,6 +92,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
   [ // 1 - Search filters
     'folderUnion',
     'folderIntersection',
+    'folderExclusion',
     'fileUnion',
     'fileIntersection',
     'exclude',
@@ -383,6 +385,14 @@ export const SettingsButtons: SettingsButtonsType = {
     hidden: false,
     settingsHeading: 'SETTINGS.buttonStyle',
     title: 'BUTTONS.flatIconsHint',
+    toggled: false
+  },
+  'folderExclusion': {
+    description:'BUTTONS.folderExclusionDescription',
+    hidden: true,
+    iconName: 'icon-folder-x',
+    moreInfo: 'BUTTONS.folderExclusionMoreInfo',
+    title: 'BUTTONS.folderExclusionHint',
     toggled: false
   },
   'folderIntersection': {
