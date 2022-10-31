@@ -334,6 +334,7 @@
     "folder": "folder name has",
     "folderExclusion": "folders do not have",
     "folderUnion": "folder has any",
+    "folderExclusion": "folder does not have",
     "found": "found",
     "fuzzy": "fuzzy search",
     "hidingOffline": "Hiding Offline",
