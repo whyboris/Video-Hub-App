@@ -13,13 +13,14 @@ interface FilterObject {
 export const FilterKeyNames: string[] = [
   'folderUnion',        // [0]
   'folderIntersection', // [1]
-  'fileUnion',          // [2]
-  'fileIntersection',   // [3]
-  'exclude',            // [4]
-  'tagUnion',           // [5]
-  'tagIntersection',    // [6]
-  'tagExclusion',       // [7]
-  'videoNotes',         // [8]
+  'folderExclusion',    // [2]
+  'fileUnion',          // [3]
+  'fileIntersection',   // [4]
+  'exclude',            // [5]
+  'tagUnion',           // [6]
+  'tagIntersection',    // [7]
+  'tagExclusion',       // [8]
+  'videoNotes',         // [9]
 ];
 
 export const Filters: FilterObject[] = [
@@ -40,6 +41,14 @@ export const Filters: FilterObject[] = [
     conjunction: 'SIDEBAR.and',
     color: Colors.folderIntersection
   }, {
+    uniqueKey: 'folderExclusion',
+    string: '',
+    array: [],
+    bool: true,
+    placeholder: 'SIDEBAR.folderExclusion',
+    conjunction: 'SIDEBAR.or',
+    color: Colors.folderExclusion
+  },{
     uniqueKey: 'fileUnion',
     string: '',
     array: [],
@@ -101,11 +110,12 @@ export const Filters: FilterObject[] = [
 export const filterKeyToIndex = {
   folderUnion: 0,
   folderIntersection: 1,
-  fileUnion: 2,
-  fileIntersection: 3,
-  exclude: 4,
-  tagUnion: 5,
-  tagIntersection: 6,
-  tagExclusion: 7,
-  videoNotes: 8,
+  folderExclusion: 2,
+  fileUnion: 3,
+  fileIntersection: 4,
+  exclude: 5,
+  tagUnion: 6,
+  tagIntersection: 7,
+  tagExclusion: 8,
+  videoNotes: 9,
 };
