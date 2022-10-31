@@ -10,7 +10,7 @@
 >
   <select
     #sortFilterElement
-    (change)="sortTypeChange.emit($event.target.value)"
+    (change)="sortTypeChange.emit($any(sortFilterElement).value)"
     class="language-drop-down sort-dropdown"
     [ngClass]="{ 'sort-dropdown-dark-mode': settingsButtons['darkMode'].toggled }"
   >

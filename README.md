@@ -48,12 +48,12 @@ How to start:
 
 Main dependencies in use:
 
-| Library          | Version   | Date            | Comment                                           |
-| ---------------- | --------- | --------------- | ------------------------------------------------- |
-| Angular          | v13.2.2   | Feb 2022        |                                                   |
-| Angular-CLI      | v13.2.2   | Feb 2022        |                                                   |
-| Electron         | v17.0.0   | Feb 2022        | (internally uses Node `v16.13.0` and Chromium 98) |
-| Electron Builder | v22.14.13 | Feb 2022        |                                                   |
+| Library          | Version   | Date            | Comment                                            |
+| ---------------- | --------- | --------------- | -------------------------------------------------- |
+| Angular          | v13.2.2   | Feb 2022        |                                                    |
+| Angular-CLI      | v13.2.2   | Feb 2022        |                                                    |
+| Electron         | v18.0.0   | Mar 2022        | (internally uses Node `v16.13.2` and Chromium 100) |
+| Electron Builder | v22.14.13 | Feb 2022        |                                                    |
 
 - **Node**: I recommend using the same version as _Electron_ uses internally, but any version 14 or above should work.
 
@@ -78,8 +78,8 @@ This software would not be possible without the tremendous work by other people:
  - [FFmpeg](https://www.ffmpeg.org/)
  - [angular-electron](https://github.com/maximegris/angular-electron)
  - [ngx-virtual-scroller](https://github.com/rintoj/ngx-virtual-scroller)
- - [@ffmpeg-installer/ffmpeg](https://www.npmjs.com/package/@ffmpeg-installer/ffmpeg)
- - [@ffprobe-installer/ffprobe](https://www.npmjs.com/package/@ffprobe-installer/ffprobe)
+ - [ffmpeg-static](https://github.com/eugeneware/ffmpeg-static)
+ - [@ffprobe-installer/ffprobe](https://github.com/SavageCore/node-ffprobe-installer)
  - [ngx-translate](https://github.com/ngx-translate/core)
  - [fdir](https://github.com/thecodrr/fdir)
  - [async](https://github.com/caolan/async)

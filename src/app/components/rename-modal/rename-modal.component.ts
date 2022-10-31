@@ -1,11 +1,11 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
-import { BehaviorSubject } from 'rxjs';
+import type { BehaviorSubject } from 'rxjs';
 
-import { AppStateInterface } from '../../common/app-state';
-import { ImageElement } from '../../../../interfaces/final-object.interface';
-import { RenameFileResponse } from '../../../../interfaces/shared-interfaces';
-import { SettingsButtonsType } from '../../common/settings-buttons';
+import type { AppStateInterface } from '../../common/app-state';
+import type { ImageElement } from '../../../../interfaces/final-object.interface';
+import type { RenameFileResponse } from '../../../../interfaces/shared-interfaces';
+import type { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
   selector: 'app-rename-modal',

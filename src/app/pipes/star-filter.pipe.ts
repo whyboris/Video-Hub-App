@@ -1,8 +1,9 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import type { PipeTransform } from '@angular/core';
+import { Pipe } from '@angular/core';
 
 import { StarFilterService } from './star-filter.service';
 
-import { ImageElement } from '../../../interfaces/final-object.interface';
+import type { ImageElement } from '../../../interfaces/final-object.interface';
 
 @Pipe({
   name: 'starFilterPipe'

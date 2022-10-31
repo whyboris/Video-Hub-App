@@ -82,7 +82,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "eslintConfig": ".eslintrc.js",
+            "eslintConfig": ".eslintrc.json",
             "lintFilePatterns": [
               "**/*.ts"
             ]
@@ -91,7 +91,6 @@
       }
     }
   },
-  "defaultProject": "video-hub-app",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
