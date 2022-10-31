@@ -6,12 +6,15 @@ import { Pipe } from '@angular/core';
 })
 export class AutoTagSortPipe implements PipeTransform {
 
-  transform(allTags: string[]): string[] {
+  transform(allTags: string[], sort: boolean): string[] {
+    if (sort) {
+      let sortedTags: string[];
+      sortedTags = allTags.sort((a, b) => (a['name'] < b['name']) ? -1 : 1);
 
-    let sortedTags: string[];
-    sortedTags = allTags.sort((a, b) => (a['name'] < b['name']) ? -1 : 1);
-    
-    return sortedTags;
+      return sortedTags;
+    } else {
+      return allTags;
+    }
   }
 
 }
