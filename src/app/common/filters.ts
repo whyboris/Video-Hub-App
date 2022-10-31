@@ -48,7 +48,7 @@ export const Filters: FilterObject[] = [
     placeholder: 'SIDEBAR.folderExclusion',
     conjunction: 'SIDEBAR.or',
     color: Colors.folderExclusion
-  },{
+  }, {
     uniqueKey: 'fileUnion',
     string: '',
     array: [],

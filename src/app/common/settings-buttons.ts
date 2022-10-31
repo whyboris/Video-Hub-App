@@ -388,7 +388,7 @@ export const SettingsButtons: SettingsButtonsType = {
     toggled: false
   },
   'folderExclusion': {
-    description:'BUTTONS.folderExclusionDescription',
+    description: 'BUTTONS.folderExclusionDescription',
     hidden: true,
     iconName: 'icon-folder-x',
     moreInfo: 'BUTTONS.folderExclusionMoreInfo',
