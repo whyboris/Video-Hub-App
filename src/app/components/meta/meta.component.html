@@ -136,17 +136,36 @@
     style="display: block;"
   ></app-add-tag-component>
 
-  <app-view-tags-component
-    [tags]="video | tagDisplayPipe : showManualTags
-                                   : showAutoFileTags
-                                   : showAutoFolderTags
-                                   : tagViewUpdateHack"
-    [darkMode]="darkMode"
-    (tagClicked)="filterThisTag($event)"
-    (removeTagEmit)="removeThisTag($event)"
-    class="view-tags-holder"
-    [ngStyle]="{ 'min-height': imgHeight - 128 + 'px' }"
-  ></app-view-tags-component>
+  <div *ngIf="!sortAutoTags; else sortedTags">
+    <app-view-tags-component
+   
+      [tags]="video | tagDisplayPipe : showManualTags
+                                     : showAutoFileTags
+                                     : showAutoFolderTags
+                                     : tagViewUpdateHack"
+      [darkMode]="darkMode"
+      (tagClicked)="filterThisTag($event)"
+      (removeTagEmit)="removeThisTag($event)"
+      class="view-tags-holder"
+      [ngStyle]="{ 'min-height': imgHeight - 128 + 'px' }"
+    ></app-view-tags-component>
+  </div>
+
+  <ng-template #sortedTags>
+    <app-view-tags-component
+  
+      [tags]="(video | tagDisplayPipe : showManualTags
+                                    : showAutoFileTags
+                                    : showAutoFolderTags
+                                    : tagViewUpdateHack)
+                      | autoTagSortPipe"
+      [darkMode]="darkMode"
+      (tagClicked)="filterThisTag($event)"
+      (removeTagEmit)="removeThisTag($event)"
+      class="view-tags-holder"
+      [ngStyle]="{ 'min-height': imgHeight - 128 + 'px' }"
+    ></app-view-tags-component>
+</ng-template>
 
   <textarea
     #videoNotes
