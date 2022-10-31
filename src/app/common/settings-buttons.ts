@@ -57,6 +57,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'showTagTray'
  | 'showThumbnails'
  | 'showVideoNotes'
+ | 'sortAutoTags'
  | 'shuffleGalleryNow'
  | 'sizeFilter'
  | 'sortOptionAlphabetical'
@@ -165,6 +166,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'autoFileTags',
     'autoFolderTags',
     'showVideoNotes',
+    'sortAutoTags',
   ],
   [ // 9 - Thumbnails view
     'hoverScrub',
@@ -686,6 +688,14 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-toggle-video-notes',
     moreInfo: 'BUTTONS.showVideoNotesMoreInfo',
     title: 'BUTTONS.showVideoNotesHint',
+    toggled: false
+  },
+  'sortAutoTags':{
+    description: 'BUTTONS.sortAutoTagsDescription',
+    hidden: true,
+    iconName: 'icon-sort-auto-tags',
+    moreInfo: 'BUTTONS.sortAutoTagsMoreInfo',
+    title: 'BUTTONS.sortAutoTagsHint',
     toggled: false
   },
   'shuffleGalleryNow': {

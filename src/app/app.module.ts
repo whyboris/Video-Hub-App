@@ -89,6 +89,7 @@ import { LengthFilterPipe } from './pipes/length-filter.pipe';
 import { LengthPipe } from './pipes/length.pipe';
 import { MagicSearchPipe } from './pipes/magic-search.pipe';
 import { ManualTagSortPipe } from './pipes/manual-tags-sort.pipe';
+import { AutoTagSortPipe } from './pipes/auto-tag-sort.pipe';
 import { PlaylistPipe } from './pipes/playlist.pipe';
 import { RegexSearchPipe } from './pipes/regex-search.pipe';
 import { ResolutionFilterPipe } from './pipes/resolution-filter.pipe';
@@ -140,6 +141,7 @@ import { YearPipe } from './pipes/year.pipe';
     LengthPipe,
     MagicSearchPipe,
     ManualTagSortPipe,
+    AutoTagSortPipe,
     MetaComponent,
     ModalComponent,
     PlaylistPipe,
@@ -182,7 +184,8 @@ import { YearPipe } from './pipes/year.pipe';
     WordFrequencyPipe,
     WrapperPipe,
     YearFilterPipe,
-    YearPipe
+    YearPipe,
+    AutoTagSortPipe
   ],
   imports: [
     AnQrcodeModule,
