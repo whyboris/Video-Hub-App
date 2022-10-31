@@ -51,8 +51,6 @@
     "flatIconsDescription": "Show flat button style",
     "flatIconsHint": "Flat icons",
     "folderDescription": "Folders with each",
-    "folderHint": "Folder search",
-    "folderMoreInfo": "Filter for folders containing each of the search words",
     "folderExclusionDescription": "Folder names without",
     "folderExclusionHint": "Folder exclude filter",
     "folderExclusionMoreInfo": "Filter to exclude any folders that contain the filter word",
