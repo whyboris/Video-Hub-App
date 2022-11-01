@@ -48,12 +48,12 @@ How to start:
 
 Main dependencies in use:
 
-| Library          | Version   | Date            | Comment                                            |
-| ---------------- | --------- | --------------- | -------------------------------------------------- |
-| Angular          | v13.2.2   | Feb 2022        |                                                    |
-| Angular-CLI      | v13.2.2   | Feb 2022        |                                                    |
-| Electron         | v18.0.0   | Mar 2022        | (internally uses Node `v16.13.2` and Chromium 100) |
-| Electron Builder | v22.14.13 | Feb 2022        |                                                    |
+| Library          | Version   | Date           | Comment |
+| ---------------- | --------- | -------------- | ------- |
+| Angular          | v14.2.7   | Nov 2022       |         |
+| Angular-CLI      | v14.2.7   | Nov 2022       |         |
+| Electron         | v21.2.1   | Nov 2022       | (internally uses Node `v16.16.0` and Chromium 106) |
+| Electron Builder | v23.6.0   | Nov 2022       |         |
 
 - **Node**: I recommend using the same version as _Electron_ uses internally, but any version 14 or above should work.
 
