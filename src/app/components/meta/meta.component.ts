@@ -13,6 +13,9 @@ import { ManualTagsService } from '../tags-manual/manual-tags.service';
 import type { StarRating, ImageElement } from '../../../../interfaces/final-object.interface';
 import type { TagEmit, RenameFileResponse } from '../../../../interfaces/shared-interfaces';
 
+import {SettingsButtons } from '../../common/settings-buttons';
+
+
 @Component({
   selector: 'app-meta-item',
   templateUrl: './meta.component.html',
@@ -49,6 +52,8 @@ export class MetaComponent implements OnInit, OnDestroy {
   renameError = false;
 
   responseSubscription: Subscription;
+
+  sortAutoTags = SettingsButtons['sortAutoTags'].toggled;
 
   constructor(
     private cd: ChangeDetectorRef,
