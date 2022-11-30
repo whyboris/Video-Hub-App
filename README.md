@@ -42,7 +42,7 @@ See [issues](https://github.com/whyboris/Video-Hub-App/issues) for what is in pr
 
 How to start:
 
-- `npm install` to install
+- `npm install` to install (you may need to run `npm install --legacy-peer-deps` if install fails)
 - `npm start` to develop
 - `npm run electron` to build
 
@@ -50,12 +50,12 @@ Main dependencies in use:
 
 | Library          | Version   | Date           | Comment |
 | ---------------- | --------- | -------------- | ------- |
-| Angular          | v14.2.7   | Nov 2022       |         |
-| Angular-CLI      | v14.2.7   | Nov 2022       |         |
-| Electron         | v21.2.1   | Nov 2022       | (internally uses Node `v16.16.0` and Chromium 106) |
+| Angular          | v15.0.1   | Nov 2022       |         |
+| Angular-CLI      | v15.0.1   | Nov 2022       |         |
+| Electron         | v22.0.0   | Nov 2022       | (internally uses Node `v16.17.1` and Chromium 108) |
 | Electron Builder | v23.6.0   | Nov 2022       |         |
 
-- **Node**: I recommend using the same version as _Electron_ uses internally, but any version 14 or above should work.
+- **Node**: It may be best to use the same version as _Electron_ uses internally, but consider `v18.12.1`.
 
 - **Angular CLI**: not required but may be useful: [Angular CLI](https://cli.angular.io).
 
