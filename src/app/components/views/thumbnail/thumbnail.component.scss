@@ -54,3 +54,18 @@
   top: 8px;
   width: 18px;
 }
+
+.video-box {
+  position: relative;
+}
+
+.heart-icon {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  stroke: white;
+  stroke-opacity: 1.0;
+  fill-opacity: 0.0;
+  width: 15px;
+  z-index: 2;
+}
