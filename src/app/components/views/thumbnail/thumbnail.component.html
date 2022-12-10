@@ -135,10 +135,15 @@
       [icon]="'icon-show-more-info'"
     ></app-icon>
 
-    <app-icon
-      class="heart-icon"
-      [icon]="'icon-heart'"
-    ></app-icon> <!-- Make into a button later -->
+    <div>
+      <button
+        (click)="toggleHeart()"
+        class="heart"
+        [ngClass]="{ 'heart-lit' : heartLitHack }"
+      >
+        <app-icon [icon]="'icon-heart'"></app-icon>
+      </button>
+    </div>
 
     <span *ngIf="showMeta" class="time">{{ video.durationDisplay }}</span>
     <span *ngIf="showMeta" class="rez">{{ video.resolution }}</span>

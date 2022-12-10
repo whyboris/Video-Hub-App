@@ -5,6 +5,7 @@ import { FilePathService } from '../file-path.service';
 
 import { metaAppear, textAppear } from '../../../common/animations';
 
+import { ImageElementService } from './../../../services/image-element.service';
 import type { ImageElement } from '../../../../../interfaces/final-object.interface';
 import type { VideoClickEmit, RightClickEmit } from '../../../../../interfaces/shared-interfaces';
 
@@ -52,9 +53,11 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
   indexToShow = 1;
   percentOffset = 0;
   scrollInterval: any = null;
+  heartLitHack: boolean; // true if stars == 5.5, false otherwise
 
   constructor(
-    public filePathService: FilePathService
+    public filePathService: FilePathService,
+    public imageElementService: ImageElementService,
   ) { }
 
   ngOnInit() {
@@ -74,6 +77,8 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
       this.hover = true;
       this.percentOffset = this.defaultScreenOffset(this.video);
     }
+
+    this.heartLitHack = this.video.stars == 5.5;
   }
 
   defaultScreenOffset(video: ImageElement): number {
@@ -123,4 +128,26 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
     clearInterval(this.scrollInterval);
   }
 
+  toggleHeart(): void {
+    console.log("Called toggleHeart()\n");
+    console.log("Previous rating:");
+    console.log(this.video.stars);
+    if (this.video.stars == 5.5) { // "un-favorite" the video
+      this.imageElementService.HandleEmission({
+        index: this.video.index,
+        stars: 0.5,
+      });
+      this.heartLitHack = false;
+    } else { // "favorite" the video
+      this.imageElementService.HandleEmission({
+        index: this.video.index,
+        stars: 5.5,
+      });
+      this.heartLitHack = true;
+    }
+    // stop event propagation (such as opening the video)
+    event.stopImmediatePropagation();
+    console.log("\nNow rating:");
+    console.log(this.video.stars);
+  }
 }

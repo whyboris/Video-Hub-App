@@ -59,13 +59,22 @@
   position: relative;
 }
 
-.heart-icon {
+.heart {
   position: absolute;
-  top: 5px;
-  left: 5px;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  top: 7px;
+  left: 3px;
+  fill: transparent;
   stroke: white;
+  stroke-width: 0.5px;
   stroke-opacity: 1.0;
-  fill-opacity: 0.0;
-  width: 15px;
-  z-index: 2;
+  width: 30px;
+  z-index: 1;
+}
+
+.heart-lit {
+  stroke: #FF2C55;
+  fill: #FF2C55;
 }
