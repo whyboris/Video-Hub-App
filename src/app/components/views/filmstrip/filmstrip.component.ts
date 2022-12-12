@@ -7,6 +7,7 @@ import { FilePathService } from '../file-path.service';
 import { metaAppear, textAppear } from '../../../common/animations';
 
 import type { ImageElement } from '../../../../../interfaces/final-object.interface';
+import { ImageElementService } from './../../../services/image-element.service';
 import type { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/shared-interfaces';
 
 @Component({
@@ -41,14 +42,17 @@ export class FilmstripComponent implements OnInit {
   fullFilePath = '';
   filmXoffset = 0;
   indexToShow = 1;
+  heartLitHack: boolean; // true if stars == 5.5, false otherwise
 
   constructor(
     public filePathService: FilePathService,
+    public imageElementService: ImageElementService,
     public sanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
     this.fullFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
+    this.heartLitHack = this.video.stars == 5.5;
   }
 
   updateFilmXoffset($event) {
@@ -61,5 +65,28 @@ export class FilmstripComponent implements OnInit {
       this.indexToShow = Math.floor(cursorX * (this.video.screens / containerWidth));
       this.filmXoffset = imgWidth * Math.floor(cursorX / (containerWidth / howManyScreensOutsideCutoff));
     }
+  }
+
+  toggleHeart(): void {
+    console.log("Called toggleHeart()\n");
+    console.log("Previous rating:");
+    console.log(this.video.stars);
+    if (this.video.stars == 5.5) { // "un-favorite" the video
+      this.imageElementService.HandleEmission({
+        index: this.video.index,
+        stars: 0.5,
+      });
+      this.heartLitHack = false;
+    } else { // "favorite" the video
+      this.imageElementService.HandleEmission({
+        index: this.video.index,
+        stars: 5.5,
+      });
+      this.heartLitHack = true;
+    }
+    // stop event propagation (such as opening the video)
+    event.stopImmediatePropagation();
+    console.log("\nNow rating:");
+    console.log(this.video.stars);
   }
 }

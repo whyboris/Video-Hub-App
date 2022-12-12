@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 import type { ImageElement } from '../../../../../interfaces/final-object.interface';
+import { ImageElementService } from './../../../services/image-element.service';
 
 @Component({
   selector: 'app-file-item',
@@ -19,6 +20,36 @@ export class FileComponent {
   @Input() largerFont: boolean;
   @Input() showMeta: boolean;
 
-  constructor() { }
+  heartLitHack: boolean; // true if stars == 5.5, false otherwise
 
+  constructor(
+    public imageElementService: ImageElementService,
+  ) { }
+
+  ngOnInit() {
+    this.heartLitHack = this.video.stars == 5.5;
+  }
+
+  toggleHeart(): void {
+    console.log("Called toggleHeart()\n");
+    console.log("Previous rating:");
+    console.log(this.video.stars);
+    if (this.video.stars == 5.5) { // "un-favorite" the video
+      this.imageElementService.HandleEmission({
+        index: this.video.index,
+        stars: 0.5,
+      });
+      this.heartLitHack = false;
+    } else { // "favorite" the video
+      this.imageElementService.HandleEmission({
+        index: this.video.index,
+        stars: 5.5,
+      });
+      this.heartLitHack = true;
+    }
+    // stop event propagation (such as opening the video)
+    event.stopImmediatePropagation();
+    console.log("\nNow rating:");
+    console.log(this.video.stars);
+  }
 }

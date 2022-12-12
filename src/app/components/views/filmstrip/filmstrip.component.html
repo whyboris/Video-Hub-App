@@ -1,38 +1,25 @@
-<div
-  class="meta-container"
-  [ngStyle]="{ height: elHeight + 'px'}"
->
+<div class="meta-container" [ngStyle]="{ height: elHeight + 'px'}">
 
-  <div
-    #filmstripHolder
-    (mousemove)="updateFilmXoffset($event)"
-    (click)="   videoClick.emit({ mouseEvent: $event, thumbIndex: indexToShow })"
-    (dblclick)="videoClick.emit({ mouseEvent: $event, thumbIndex: indexToShow, doubleClick: true })"
-    (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
-    class="filmstrip-container"
-    [ngStyle]="{
+    <div #filmstripHolder (mousemove)="updateFilmXoffset($event)" (click)="   videoClick.emit({ mouseEvent: $event, thumbIndex: indexToShow })" (dblclick)="videoClick.emit({ mouseEvent: $event, thumbIndex: indexToShow, doubleClick: true })" (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
+        class="filmstrip-container" [ngStyle]="{
         height: imgHeight + 'px',
         'background-image': 'url(' + fullFilePath + ')',
         'background-position-x': '-' + filmXoffset + 'px',
         'background-size': 'auto ' + imgHeight + 'px'
-      }"
-  >
-    <span *ngIf="showMeta" class="time">{{ video.durationDisplay }}</span>
-    <span *ngIf="showMeta" class="rez">{{ video.resolution }}</span>
-  </div>
+      }">
+        <span *ngIf="showMeta" class="time">{{ video.durationDisplay }}</span>
+        <span *ngIf="showMeta" class="rez">{{ video.resolution }}</span>
+    </div>
 
-  <app-icon
-    *ngIf="video.selected"
-    class="selected"
-    [icon]="'icon-show-more-info'"
-  ></app-icon>
+    <app-icon *ngIf="video.selected" class="selected" [icon]="'icon-show-more-info'"></app-icon>
 
-  <span
-    *ngIf="showMeta"
-    [ngClass]="{ 'larger-font': largerFont }"
-    [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
-    class="title"
-  >
+    <div>
+        <button (click)="toggleHeart()" class="heart" [ngClass]="{ 'heart-lit' : heartLitHack }">
+      <app-icon [icon]="'icon-heart'"></app-icon>
+    </button>
+    </div>
+
+    <span *ngIf="showMeta" [ngClass]="{ 'larger-font': largerFont }" [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }" class="title">
     {{ video.cleanName }}
     <div class="fileSize" *ngIf="showMeta">
       ({{ video.fileSizeDisplay }})

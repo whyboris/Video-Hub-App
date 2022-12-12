@@ -9,6 +9,7 @@ import { ManualTagsService } from '../../tags-manual/manual-tags.service';
 
 import type { StarRating, ImageElement } from '../../../../../interfaces/final-object.interface';
 import type { VideoClickEmit, RightClickEmit, TagEmit, RenameFileResponse } from '../../../../../interfaces/shared-interfaces';
+import { ImageElementService } from './../../../services/image-element.service';
 
 export interface YearEmission {
   index: number;
@@ -62,9 +63,11 @@ export class DetailsComponent implements OnInit {
   hover: boolean;
   indexToShow = 1;
   percentOffset = 0;
+  heartLitHack: boolean; // true if stars == 5.5, false otherwise
 
   constructor(
     public filePathService: FilePathService,
+    public imageElementService: ImageElementService,
     public manualTagsService: ManualTagsService,
     public sanitizer: DomSanitizer
   ) { }
@@ -95,6 +98,8 @@ export class DetailsComponent implements OnInit {
     if (this.video.defaultScreen !== undefined) {
       this.percentOffset = this.getDefaultScreenOffset(this.video);
     }
+
+    this.heartLitHack = this.video.stars == 5.5;
   }
 
   mouseIsMoving($event) {
@@ -103,5 +108,28 @@ export class DetailsComponent implements OnInit {
       this.indexToShow = Math.floor(cursorX * (this.video.screens / this.containerWidth));
       this.percentOffset = this.indexToShow * (100 / (this.video.screens - 1));
     }
+  }
+
+  toggleHeart(): void {
+    console.log("Called toggleHeart()\n");
+    console.log("Previous rating:");
+    console.log(this.video.stars);
+    if (this.video.stars == 5.5) { // "un-favorite" the video
+      this.imageElementService.HandleEmission({
+        index: this.video.index,
+        stars: 0.5,
+      });
+      this.heartLitHack = false;
+    } else { // "favorite" the video
+      this.imageElementService.HandleEmission({
+        index: this.video.index,
+        stars: 5.5,
+      });
+      this.heartLitHack = true;
+    }
+    // stop event propagation (such as opening the video)
+    event.stopImmediatePropagation();
+    console.log("\nNow rating:");
+    console.log(this.video.stars);
   }
 }

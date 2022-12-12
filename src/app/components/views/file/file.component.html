@@ -1,91 +1,63 @@
-<div
-  class="element-container"
->
+<div class="element-container">
 
-  <!-- FOLDER BLOCK -->
+    <!-- FOLDER BLOCK -->
 
-  <div *ngIf="video.cleanName === '*FOLDER*'; else fileViewDiv">
-    <ng-container
-      *ngIf="video.fileName !== '*UP*'; else backButton"
-    >
-      <div *ngIf="showMeta" class="number-of-files">
-        {{ video.fileSizeDisplay | number }}
-      </div>
-      <app-icon [icon]="'icon-folder-blank'" class="icon-folder-lol"></app-icon>
-      <div
-        class="folder-name"
-        [ngClass]="{ 'folder-name-dark-mode': darkMode }"
-      >{{ video.fileName }}
-        <div class="folder-size" *ngIf="showMeta">
-          {{ video.fileSize | fileSizePipe }}
-        </div>
-      </div>
+    <div *ngIf="video.cleanName === '*FOLDER*'; else fileViewDiv">
+        <ng-container *ngIf="video.fileName !== '*UP*'; else backButton">
+            <div *ngIf="showMeta" class="number-of-files">
+                {{ video.fileSizeDisplay | number }}
+            </div>
+            <app-icon [icon]="'icon-folder-blank'" class="icon-folder-lol"></app-icon>
+            <div class="folder-name" [ngClass]="{ 'folder-name-dark-mode': darkMode }">{{ video.fileName }}
+                <div class="folder-size" *ngIf="showMeta">
+                    {{ video.fileSize | fileSizePipe }}
+                </div>
+            </div>
 
-      <div
-        *ngIf="showMeta"
-        class="length"
-        [ngClass]="{ 'meta-dark-mode': darkMode }"
-      >
-        {{ video.duration | lengthPipe : 'folder' }}
-      </div>
+            <div *ngIf="showMeta" class="length" [ngClass]="{ 'meta-dark-mode': darkMode }">
+                {{ video.duration | lengthPipe : 'folder' }}
+            </div>
 
-    </ng-container>
+        </ng-container>
 
-    <ng-template #backButton>
-      <app-icon
-        class="back-icon"
-        [icon]="'icon-chevron-left'"
-        [ngClass]="{ 'back-icon-dark-mode': darkMode }"
-      ></app-icon>
-    </ng-template>
+        <ng-template #backButton>
+            <app-icon class="back-icon" [icon]="'icon-chevron-left'" [ngClass]="{ 'back-icon-dark-mode': darkMode }"></app-icon>
+        </ng-template>
 
-  </div>
-
-
-  <!-- INDIVIDUAL FILE BLOCK -->
-
-  <ng-template #fileViewDiv>
-
-    <app-icon
-      *ngIf="video.selected"
-      class="selected-file-view"
-      [icon]="'icon-show-more-info'"
-    ></app-icon>
-
-    <div
-      *ngIf="showMeta"
-      [ngClass]="{ 'meta-dark-mode': darkMode }"
-      class="size"
-    >
-      {{ video.resolution }}
     </div>
 
-    <div
-      class="title"
-      [ngClass]="{
+
+    <!-- INDIVIDUAL FILE BLOCK -->
+
+    <ng-template #fileViewDiv>
+
+        <app-icon *ngIf="video.selected" class="selected-file-view" [icon]="'icon-show-more-info'"></app-icon>
+
+        <div>
+            <button (click)="toggleHeart()" class="heart" [ngClass]="{ 'heart-lit' : heartLitHack }">
+            <app-icon [icon]="'icon-heart'"></app-icon>
+            </button>
+        </div>
+
+        <div *ngIf="showMeta" [ngClass]="{ 'meta-dark-mode': darkMode }" class="size">
+            {{ video.resolution }}
+        </div>
+
+        <div class="title" [ngClass]="{
           'title-dark-mode': darkMode,
           'larger-font': largerFont,
           'showing-meta': showMeta
-        }"
-    >
-      {{ video.cleanName }}
-      <div
-        *ngIf="showMeta"
-        class="fileSize"
-        [ngClass]="{ 'meta-dark-mode': darkMode }"
-      >
-        ({{ video.fileSizeDisplay }})
-      </div>
-    </div>
+        }">
+            {{ video.cleanName }}
+            <div *ngIf="showMeta" class="fileSize" [ngClass]="{ 'meta-dark-mode': darkMode }">
+                ({{ video.fileSizeDisplay }})
+            </div>
+        </div>
 
-    <div
-      *ngIf="showMeta"
-      class="length"
-      [ngClass]="{ 'meta-dark-mode': darkMode }"
-    >
-      {{ video.durationDisplay }}
-    </div>
+        <div *ngIf="showMeta" class="length" [ngClass]="{ 'meta-dark-mode': darkMode }">
+            {{ video.durationDisplay }}
+        </div>
 
-  </ng-template>
+    </ng-template>
 
 </div>
