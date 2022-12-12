@@ -371,6 +371,7 @@ export const SettingsButtons: SettingsButtonsType = {
   'favorites': {
     description: 'BUTTONS.favoritesDescription',
     hidden: false,
+    iconName: 'icon-heart',
     settingsHeading: 'SETTINGS.favorites',
     title: 'BUTTONS.favrotiesHint',
     toggled: false
