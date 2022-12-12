@@ -15,6 +15,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'duplicateSize'
  | 'durationFilter'
  | 'exclude'
+ | 'favorites'
  | 'fileIntersection'
  | 'fileUnion'
  | 'flatIcons'
@@ -364,6 +365,13 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-video-x',
     moreInfo: 'BUTTONS.excludeMoreInfo',
     title: 'BUTTONS.excludeHint',
+    toggled: false
+  },
+  'favorites': {
+    description: 'BUTTONS.favoritesDescription',
+    hidden: false,
+    settingsHeading: 'SETTINGS.favorite',
+    title: 'BUTTONS.favrotiesHint',
     toggled: false
   },
   'fileIntersection': {
