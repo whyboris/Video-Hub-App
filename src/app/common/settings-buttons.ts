@@ -191,6 +191,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
   [ // 13
     'hideTop', // Hide top bar
     'flatIcons', // Button style
+    'favorites', // Show favroite icon
   ],
   [ // 14 - Create a new hub ---------------------------- 3rd tab
     'startWizard',
@@ -370,7 +371,7 @@ export const SettingsButtons: SettingsButtonsType = {
   'favorites': {
     description: 'BUTTONS.favoritesDescription',
     hidden: false,
-    settingsHeading: 'SETTINGS.favorite',
+    settingsHeading: 'SETTINGS.favorites',
     title: 'BUTTONS.favrotiesHint',
     toggled: false
   },
