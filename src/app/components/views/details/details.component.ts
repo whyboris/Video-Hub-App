@@ -109,7 +109,6 @@ export class DetailsComponent implements OnInit {
       this.indexToShow = Math.floor(cursorX * (this.video.screens / this.containerWidth));
       this.percentOffset = this.indexToShow * (100 / (this.video.screens - 1));
     }
-    console.log(this.showFavorites);
   }
 
   toggleHeart(): void {
