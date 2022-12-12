@@ -55,6 +55,9 @@ export class DetailsComponent implements OnInit {
   @Input() showVideoNotes: boolean;
   @Input() showFavorites: boolean;
   @Input() star: StarRating;
+  // @Input() starRatingHack: StarRating;
+  // @Input() heartLitHack: boolean;
+  starRatingHack: StarRating;
 
   @Input() renameResponse: BehaviorSubject<RenameFileResponse>;
 
@@ -101,6 +104,7 @@ export class DetailsComponent implements OnInit {
     }
 
     this.heartLitHack = this.video.stars == 5.5;
+    this.starRatingHack = this.video.stars;
   }
 
   mouseIsMoving($event) {
@@ -121,12 +125,14 @@ export class DetailsComponent implements OnInit {
         stars: 0.5,
       });
       this.heartLitHack = false;
+      this.starRatingHack = 0.5;
     } else { // "favorite" the video
       this.imageElementService.HandleEmission({
         index: this.video.index,
         stars: 5.5,
       });
       this.heartLitHack = true;
+      this.starRatingHack = 5.5;
     }
     // stop event propagation (such as opening the video)
     event.stopImmediatePropagation();
