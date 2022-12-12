@@ -44,6 +44,7 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
   @Input() returnToFirstScreenshot: boolean;
   @Input() showMeta: boolean;
   @Input() thumbAutoAdvance: boolean;
+  @Input() showFavorites: boolean;
 
   containerWidth: number;
   firstFilePath = '';

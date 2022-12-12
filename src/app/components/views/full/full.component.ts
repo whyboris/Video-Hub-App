@@ -45,6 +45,7 @@ export class FullViewComponent implements OnInit {
   @Input() hubName: string;
   @Input() largerFont: boolean;
   @Input() showMeta: boolean;
+  @Input() showFavorites: boolean;
 
   _imgHeight: number;
   _metaWidth: number;

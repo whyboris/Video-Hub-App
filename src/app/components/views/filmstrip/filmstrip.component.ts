@@ -38,6 +38,7 @@ export class FilmstripComponent implements OnInit {
   @Input() imgHeight: number;
   @Input() largerFont: boolean;
   @Input() showMeta: boolean;
+  @Input() showFavorites: boolean;
 
   fullFilePath = '';
   filmXoffset = 0;

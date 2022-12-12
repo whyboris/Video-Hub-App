@@ -808,6 +808,7 @@
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
           [imgHeight]="previewHeight"
+          [showFavorites]="settingsButtons['favorites'].toggled"
 
           [compactView]="settingsButtons['compactView'].toggled"
           [darkMode]="settingsButtons['darkMode'].toggled"
@@ -848,6 +849,7 @@
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
           [imgHeight]="previewHeight"
+          [showFavorites]="settingsButtons['favorites'].toggled"
 
           [darkMode]="settingsButtons['darkMode'].toggled"
           [hoverScrub]="settingsButtons['hoverScrub'].toggled"
@@ -880,6 +882,7 @@
           [galleryWidth]="galleryWidth"
           [hubName]="appState.hubName"
           [imgHeight]="previewHeight"
+          [showFavorites]="settingsButtons['favorites'].toggled"
 
           [darkMode]="settingsButtons['darkMode'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
@@ -903,8 +906,8 @@
 
           [draggable]="settingsButtons['dragVideoOutOfApp'].toggled"
           (dragstart)="draggingVideoFile($event, item)"
-
           [video]="item"
+          [showFavorites]="settingsButtons['favorites'].toggled"
 
           [darkMode]="settingsButtons['darkMode'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
