@@ -136,12 +136,14 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
       this.imageElementService.HandleEmission({
         index: this.video.index,
         stars: 0.5,
+        favorite: false
       });
       this.heartLitHack = false;
     } else { // "favorite" the video
       this.imageElementService.HandleEmission({
         index: this.video.index,
         stars: 5.5,
+        favorite: true
       });
       this.heartLitHack = true;
     }
@@ -149,5 +151,6 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
     event.stopImmediatePropagation();
     console.log("\nNow rating:");
     console.log(this.video.stars);
+    console.log(this.video.favorite);
   }
 }

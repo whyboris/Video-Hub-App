@@ -19,7 +19,7 @@
         </div>
     </div>
 
-    <app-meta-item (filterTag)="filterTag.emit($event)" [video]="video" [imgHeight]="imgHeight" [maxWidth]="maxWidth / (showTwoColumns ? 2 : 1) - elWidth" [star]="this.star" [darkMode]="darkMode" [largerFont]="largerFont" [showAutoFileTags]="showAutoFileTags"
+    <app-meta-item (filterTag)="filterTag.emit($event)" [video]="video" [imgHeight]="imgHeight" [maxWidth]="maxWidth / (showTwoColumns ? 2 : 1) - elWidth" [star]="this.star" [starRatingHack]="starRatingHack" [darkMode]="darkMode" [largerFont]="largerFont" [showAutoFileTags]="showAutoFileTags"
         [showAutoFolderTags]="showAutoFolderTags" [showManualTags]="showManualTags" [showMeta]="showMeta" [showVideoNotes]="showVideoNotes" [selectedSourceFolder]="selectedSourceFolder" [renameResponse]="renameResponse.asObservable()"></app-meta-item>
 
 </div>

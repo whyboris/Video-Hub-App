@@ -17,6 +17,7 @@ import { metaAppear, textAppear, modalAnimation } from '../../common/animations'
 export interface StarEmission {
   index: number;
   stars: StarRating;
+  favorite: boolean;
 }
 
 export interface DefaultScreenEmission {
@@ -130,7 +131,8 @@ export class SheetComponent implements OnInit {
     this.starRatingHack = rating; // hack for getting star opacity updated instantly
     this.imageElementService.HandleEmission({
       index: this.video.index,
-      stars: rating
+      stars: rating,
+      favorite: rating == 5.5
     });
   }
 

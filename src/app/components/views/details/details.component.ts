@@ -54,7 +54,7 @@ export class DetailsComponent implements OnInit {
   @Input() showMeta: boolean;
   @Input() showVideoNotes: boolean;
   @Input() star: StarRating;
-
+  
   @Input() renameResponse: BehaviorSubject<RenameFileResponse>;
 
   containerWidth: number;
@@ -63,7 +63,8 @@ export class DetailsComponent implements OnInit {
   hover: boolean;
   indexToShow = 1;
   percentOffset = 0;
-  heartLitHack: boolean; // true if stars == 5.5, false otherwise
+  starRatingHack = 0.5;
+  @Input() heartLitHack: boolean; // true if stars == 5.5, false otherwise
 
   constructor(
     public filePathService: FilePathService,
@@ -100,6 +101,7 @@ export class DetailsComponent implements OnInit {
     }
 
     this.heartLitHack = this.video.stars == 5.5;
+    this.starRatingHack = this.video.stars;
   }
 
   mouseIsMoving($event) {
@@ -111,6 +113,8 @@ export class DetailsComponent implements OnInit {
   }
 
   toggleHeart(): void {
+    console.log("WHAT IS THIS VALUE");
+    console.log(this.starRatingHack);
     console.log("Called toggleHeart()\n");
     console.log("Previous rating:");
     console.log(this.video.stars);
@@ -118,18 +122,24 @@ export class DetailsComponent implements OnInit {
       this.imageElementService.HandleEmission({
         index: this.video.index,
         stars: 0.5,
+        favorite: false
       });
       this.heartLitHack = false;
+      this.starRatingHack = 0.5;
     } else { // "favorite" the video
       this.imageElementService.HandleEmission({
         index: this.video.index,
         stars: 5.5,
+        favorite: true
       });
       this.heartLitHack = true;
+      this.starRatingHack = 5.5;
     }
     // stop event propagation (such as opening the video)
     event.stopImmediatePropagation();
-    console.log("\nNow rating:");
+    console.log("\Changed rating:");
     console.log(this.video.stars);
+    console.log(this.star);
+    console.log(this.video.favorite);
   }
 }
