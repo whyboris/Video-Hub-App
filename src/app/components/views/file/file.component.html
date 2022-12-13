@@ -33,7 +33,7 @@
 
         <app-icon *ngIf="video.selected" class="selected-file-view" [icon]="'icon-show-more-info'"></app-icon>
 
-        <div>
+        <div *ngIf="showFavorites">
             <button (click)="toggleHeart()" class="heart" [ngClass]="{ 'heart-lit' : heartLitHack }">
             <app-icon [icon]="'icon-heart'"></app-icon>
             </button>

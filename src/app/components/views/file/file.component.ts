@@ -19,6 +19,7 @@ export class FileComponent {
   @Input() darkMode: boolean;
   @Input() largerFont: boolean;
   @Input() showMeta: boolean;
+  @Input() showFavorites: boolean;
 
   heartLitHack: boolean; // true if stars == 5.5, false otherwise
 
