@@ -134,6 +134,13 @@
       class="selected"
       [icon]="'icon-show-more-info'"
     ></app-icon>
+
+    <div *ngIf="showFavorites">
+        <button (click)="toggleHeart()" class="heart" [ngClass]="{ 'heart-lit' : heartLitHack }">
+        <app-icon [icon]="'icon-heart'"></app-icon>
+        </button>
+    </div>
+
     <span *ngIf="showMeta" class="time">{{ video.durationDisplay }}</span>
     <span *ngIf="showMeta" class="rez">{{ video.resolution }}</span>
     <span *ngIf="!connected" class="not-connected"></span>

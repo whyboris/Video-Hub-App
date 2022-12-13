@@ -232,6 +232,7 @@ function stripOutTemporaryFields(imagesArray: ImageElement[]): ImageElement[] {
     delete(element.resBucket);
     delete(element.resolution);
     delete(element.selected);
+    delete(element.favorite);
   });
   return imagesArray;
 }
@@ -342,6 +343,18 @@ function getBitrate(fileSize,duration){
      return 0;
    }
  }
+
+
+//Check if the video is "favorited" or not at the start of the hub
+
+  function isFavorite(stars): boolean {
+    var result = false;
+    if (stars == 5.5) {
+      result = true;
+    }
+    return result;
+  }
+
 
 // ===========================================================================================
 // Other supporting methods
@@ -549,6 +562,7 @@ export function insertTemporaryFieldsSingle(element: ImageElement): ImageElement
   element.bitrate = getBitrate(element.fileSize, element.duration);
   element.resBucket = resolution.bucket;
   element.resolution = resolution.label;
+  element.favorite = isFavorite(element.stars);
   return element;
 }
 
