@@ -55,7 +55,7 @@ export class DetailsComponent implements OnInit {
   @Input() showVideoNotes: boolean;
   @Input() showFavorites: boolean;
   @Input() star: StarRating;
-
+  
   @Input() renameResponse: BehaviorSubject<RenameFileResponse>;
 
   containerWidth: number;
@@ -109,11 +109,13 @@ export class DetailsComponent implements OnInit {
       this.imageElementService.HandleEmission({
         index: this.video.index,
         stars: 0.5,
+        favorite: false
       });
     } else { // "favorite" the video
       this.imageElementService.HandleEmission({
         index: this.video.index,
         stars: 5.5,
+        favorite: true
       });
     }
     this.updateHeart();
