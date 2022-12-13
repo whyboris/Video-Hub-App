@@ -55,9 +55,6 @@ export class DetailsComponent implements OnInit {
   @Input() showVideoNotes: boolean;
   @Input() showFavorites: boolean;
   @Input() star: StarRating;
-  // @Input() starRatingHack: StarRating;
-  // @Input() heartLitHack: boolean;
-  starRatingHack: StarRating;
 
   @Input() renameResponse: BehaviorSubject<RenameFileResponse>;
 
@@ -67,6 +64,7 @@ export class DetailsComponent implements OnInit {
   hover: boolean;
   indexToShow = 1;
   percentOffset = 0;
+  starRatingHack: StarRating; // updates visuals of rating
   heartLitHack: boolean; // true if stars == 5.5, false otherwise
 
   constructor(
@@ -96,6 +94,34 @@ export class DetailsComponent implements OnInit {
     return 100 * video.defaultScreen / (video.screens - 1);
   }
 
+  // update heart icon and video rating visuals based on video.stars
+  updateHeart() {
+    this.heartLitHack = this.video.stars == 5.5;
+    this.starRatingHack = this.video.stars;
+  }
+
+  ngOnChanges(changes: any) {
+    this.updateHeart();
+  }
+
+  toggleHeart(): void {
+    if (this.video.stars == 5.5) { // "un-favorite" the video
+      this.imageElementService.HandleEmission({
+        index: this.video.index,
+        stars: 0.5,
+      });
+    } else { // "favorite" the video
+      this.imageElementService.HandleEmission({
+        index: this.video.index,
+        stars: 5.5,
+      });
+    }
+    this.updateHeart();
+
+    // stop event propagation (such as opening the video)
+    event.stopImmediatePropagation();
+  }
+
   ngOnInit() {
     this.firstFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'thumbnails', this.video.hash);
     this.filmstripPath =  this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
@@ -103,8 +129,7 @@ export class DetailsComponent implements OnInit {
       this.percentOffset = this.getDefaultScreenOffset(this.video);
     }
 
-    this.heartLitHack = this.video.stars == 5.5;
-    this.starRatingHack = this.video.stars;
+    this.updateHeart();
   }
 
   mouseIsMoving($event) {
@@ -113,30 +138,5 @@ export class DetailsComponent implements OnInit {
       this.indexToShow = Math.floor(cursorX * (this.video.screens / this.containerWidth));
       this.percentOffset = this.indexToShow * (100 / (this.video.screens - 1));
     }
-  }
-
-  toggleHeart(): void {
-    console.log("Called toggleHeart()\n");
-    console.log("Previous rating:");
-    console.log(this.video.stars);
-    if (this.video.stars == 5.5) { // "un-favorite" the video
-      this.imageElementService.HandleEmission({
-        index: this.video.index,
-        stars: 0.5,
-      });
-      this.heartLitHack = false;
-      this.starRatingHack = 0.5;
-    } else { // "favorite" the video
-      this.imageElementService.HandleEmission({
-        index: this.video.index,
-        stars: 5.5,
-      });
-      this.heartLitHack = true;
-      this.starRatingHack = 5.5;
-    }
-    // stop event propagation (such as opening the video)
-    event.stopImmediatePropagation();
-    console.log("\nNow rating:");
-    console.log(this.video.stars);
   }
 }
