@@ -79,9 +79,6 @@ export class FullViewComponent implements OnInit {
   }
 
   toggleHeart(): void {
-    console.log("Called toggleHeart()\n");
-    console.log("Previous rating:");
-    console.log(this.video.stars);
     if (this.video.stars == 5.5) { // "un-favorite" the video
       this.imageElementService.HandleEmission({
         index: this.video.index,
@@ -99,8 +96,5 @@ export class FullViewComponent implements OnInit {
     }
     // stop event propagation (such as opening the video)
     event.stopImmediatePropagation();
-    console.log("\nNow rating:");
-    console.log(this.video.stars);
-    console.log(this.video.favorite);
   }
 }

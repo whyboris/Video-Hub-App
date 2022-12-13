@@ -44,7 +44,7 @@ export class MetaComponent implements OnInit, OnDestroy {
   @Input() heartLitHack: boolean;
 
   @Input() renameResponse: Observable<RenameFileResponse>;
-  
+
   // starRatingHack: StarRating;
   yearHack: number;
 
@@ -138,9 +138,6 @@ export class MetaComponent implements OnInit, OnDestroy {
   }
 
   setHeart(): void {
-    console.log("Called toggleHeart()\n");
-    console.log("Previous rating:");
-    console.log(this.video.stars);
     if (this.video.stars == 5.5) { // "un-favorite" the video
       this.imageElementService.HandleEmission({
         index: this.video.index,
@@ -148,7 +145,7 @@ export class MetaComponent implements OnInit, OnDestroy {
         favorite: false
       });
       this.heartLitHack = false;
-      this.starRatingHack = 0.5; 
+      this.starRatingHack = 0.5;
     } else { // "favorite" the video
       this.imageElementService.HandleEmission({
         index: this.video.index,
@@ -156,14 +153,11 @@ export class MetaComponent implements OnInit, OnDestroy {
         favorite: true
       });
       this.heartLitHack = true;
-      this.starRatingHack = 0.5; 
+      this.starRatingHack = 0.5;
 
     }
     // stop event propagation (such as opening the video)
     event.stopImmediatePropagation();
-    console.log("\Changed rating:");
-    console.log(this.video.stars);
-    console.log(this.video.favorite);
   }
 
   /**

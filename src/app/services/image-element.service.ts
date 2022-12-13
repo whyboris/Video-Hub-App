@@ -28,17 +28,12 @@ constructor() { }
       this.imageElements[index].year =          (emission as YearEmission).year;
 
     } else if ('stars' in emission) {
-      console.log("STARS");
       this.imageElements[index].stars =         (emission as StarEmission).stars;
       this.forceStarFilterUpdate = !this.forceStarFilterUpdate;
 
       if ('favorite' in emission) {
-        console.log("HEART");
         this.imageElements[index].favorite = (emission as StarEmission).favorite;
-        console.log("NOW?");
-        console.log(this.imageElements[index].favorite);
-  
-      } 
+      }
 
     } else if ('defaultScreen' in emission) {
 
