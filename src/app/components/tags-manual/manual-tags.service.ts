@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 
-import { ImageElement } from '../../../../interfaces/final-object.interface';
+import type { ImageElement } from '../../../../interfaces/final-object.interface';
 
 @Injectable()
 export class ManualTagsService {
 
   tagsMap: Map<string, number> = new Map(); // map tag name to its frequency
   tagsList: string[] = [];
-  pipeToggleHack: boolean = false;
+  pipeToggleHack = false;
 
   constructor() { }
 

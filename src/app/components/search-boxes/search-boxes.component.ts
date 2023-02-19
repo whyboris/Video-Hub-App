@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { filterItemAppear } from '../../common/animations';
-import { SettingsButtonsType } from '../../common/settings-buttons';
+import type { SettingsButtonsType } from '../../common/settings-buttons';
 
 interface FilterEmit {
   word: string;

@@ -173,13 +173,14 @@
                  || wizard.futureHubName === ''"
       >
       <input
-        (change)="selectNumOfScreens($event.target.value)"
+        #numOfScreensConstantInput
+        (change)="selectNumOfScreens(numOfScreensConstantInput.value)"
         type="number"
         class="size-dropdown language-drop-down num-select"
         value="{{ wizard.ssConstant }}"
         min=3
         max=30
-        onKeyDown="return false"
+        onKeyDown="event.preventDefault()"
         [disabled]="wizard.selectedOutputFolder === ''
                  || wizard.selectedSourceFolder[0].path === ''
                  || wizard.futureHubName === ''
@@ -205,13 +206,14 @@
       >
       {{ 'WIZARD.oneScreenshotEvery' | translate }}
       <input
-        (change)="selectNumOfScreens($event.target.value)"
+        #numOfScreensVariableInput
+        (change)="selectNumOfScreens(numOfScreensVariableInput.value)"
         type="number"
         class="size-dropdown language-drop-down num-select"
         value="{{ wizard.ssVariable }}"
         min=1
         max=20
-        onKeyDown="return false"
+        onKeyDown="event.preventDefault()"
         [disabled]="wizard.selectedOutputFolder === ''
                  || wizard.selectedSourceFolder[0].path === ''
                  || wizard.futureHubName === ''
@@ -237,7 +239,8 @@
     </div>
 
     <select
-      (change)="selectScreenshotSize($event.target.value)"
+      #screenshotSelectElement
+      (change)="selectScreenshotSize(screenshotSelectElement.value)"
       class="size-dropdown language-drop-down"
       [disabled]="wizard.selectedOutputFolder === ''
                || wizard.selectedSourceFolder[0].path === ''
@@ -291,13 +294,14 @@
         </span>
 
         <input
-          (change)="selectNumOfClipSnippets($event.target.value)"
+          #inputNumClipSnippets
+          (change)="selectNumOfClipSnippets(inputNumClipSnippets.value)"
           type="number"
           class="size-dropdown language-drop-down num-select"
           value=5
           min=3
           max=15
-          onKeyDown="return false"
+          onKeyDown="event.preventDefault()"
           [disabled]="wizard.selectedOutputFolder === ''
                    || wizard.selectedSourceFolder[0].path === ''
                    || wizard.futureHubName === ''
@@ -320,13 +324,14 @@
       </span>
 
       <input
-        (change)="selectLengthOfClipSnippets($event.target.value)"
+        #lengthOfClipsInput
+        (change)="selectLengthOfClipSnippets(lengthOfClipsInput.value)"
         type="number"
         class="size-dropdown language-drop-down num-select"
         value=1
         min=1
         max=5
-        onKeyDown="return false"
+        onKeyDown="event.preventDefault()"
         [disabled]="wizard.selectedOutputFolder === ''
                  || wizard.selectedSourceFolder[0].path === ''
                  || wizard.futureHubName === ''
@@ -342,7 +347,8 @@
     <div [ngClass]="{ 'dim-row': !wizard.extractClips }">
 
       <select
-        (change)="selectClipSize($event.target.value)"
+        #selectClipSizeElement
+        (change)="selectClipSize(selectClipSizeElement.value)"
         class="size-dropdown language-drop-down"
         [disabled]="!wizard.extractClips"
       >

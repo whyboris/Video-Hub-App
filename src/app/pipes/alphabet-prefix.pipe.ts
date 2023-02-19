@@ -1,6 +1,7 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import type { PipeTransform } from '@angular/core';
+import { Pipe } from '@angular/core';
 
-import { WordAndFreq } from '../components/tags-auto/autotags.service';
+import type { WordAndFreq } from '../components/tags-auto/autotags.service';
 
 @Pipe({
   name: 'alphabetPrefixPipe'
@@ -13,7 +14,7 @@ export class AlphabetPrefixPipe implements PipeTransform {
    */
   transform(allTags: WordAndFreq[]): WordAndFreq[] {
 
-    let lastLetter: string = '';
+    let lastLetter = '';
 
     allTags.forEach((element: WordAndFreq) => {
 

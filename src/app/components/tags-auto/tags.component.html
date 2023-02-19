@@ -101,7 +101,8 @@
     >
 
     <input
-      (change)="selectMinFrequency($event.target.value)"
+      #minFrequencyInput
+      (change)="selectMinFrequency(minFrequencyInput.value)"
       type="number"
       class="num-select"
       value=0

@@ -1,4 +1,4 @@
-import { ImageElement } from './final-object.interface';
+import type { ImageElement } from './final-object.interface';
 
 // Identical to settings buttons
 export type SupportedView = 'showThumbnails'
