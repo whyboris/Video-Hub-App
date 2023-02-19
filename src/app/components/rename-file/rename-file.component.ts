@@ -1,12 +1,14 @@
-import { Component, ChangeDetectorRef, OnInit, Input, ElementRef, ViewChild, OnDestroy } from '@angular/core';
+import type { OnInit, ElementRef, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 
-import { Observable, Subscription } from 'rxjs';
+import type { Observable, Subscription } from 'rxjs';
 
 import { ElectronService } from '../../providers/electron.service';
 import { FilePathService } from '../views/file-path.service';
 
-import { ImageElement } from '../../../../interfaces/final-object.interface';
-import { RenameFileResponse } from '../../../../interfaces/shared-interfaces';
+import type { ImageElement } from '../../../../interfaces/final-object.interface';
+import type { RenameFileResponse } from '../../../../interfaces/shared-interfaces';
 
 @Component({
   selector: 'app-rename-file',
@@ -29,8 +31,8 @@ export class RenameFileComponent implements OnInit, OnDestroy {
 
   renamingWIP: string;
   renamingExtension: string;
-  nodeRenamingFile: boolean = false;
-  renameErrMsg: string = '';
+  nodeRenamingFile = false;
+  renameErrMsg = '';
 
   responseSubscription: Subscription;
 

@@ -53,7 +53,7 @@ export class StarFilterService {
     // Don't let the `N/A` column to be higher than all others
     // find max value and set `N/A` to just 1 more than that
     const first: number = this.frequencyMap.get(0.5);
-    let max: number = 0;
+    let max = 0;
     this.frequencyMap.forEach((value, key) => {
       if (key !== 0.5 && value > max) {
         max = value;

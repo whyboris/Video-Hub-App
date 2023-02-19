@@ -1,4 +1,5 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import type { PipeTransform } from '@angular/core';
+import { Pipe } from '@angular/core';
 
 @Pipe({
   name: 'folderArrowsPipe'
@@ -11,7 +12,7 @@ export class FolderArrowsPipe implements PipeTransform {
    */
   transform(folderPath: string): string {
 
-    const arrowString: string = '<span class="icon icon-arrow"></span>';
+    const arrowString = '<span class="icon icon-arrow"></span>';
 
     const htmlString = folderPath.replace(/\/|\\/g, arrowString);
 
