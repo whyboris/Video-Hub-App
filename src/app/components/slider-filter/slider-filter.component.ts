@@ -1,4 +1,5 @@
-import { Component, Input, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
+import type { OnInit, OnDestroy} from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-slider-filter',
@@ -20,15 +21,15 @@ export class SliderFilterComponent implements OnInit, OnDestroy {
   @Output() newSliderFilterSelected = new EventEmitter<number[]>();
 
   step: number;
-  hover: boolean = false;
+  hover = false;
 
-  dragging: boolean = false;
-  draggingLeft: boolean = false;
-  draggingRight: boolean = false;
+  dragging = false;
+  draggingLeft = false;
+  draggingRight = false;
 
-  width: number = 160;
+  width = 160;
 
-  currentXleft: number = 0;
+  currentXleft = 0;
   currentXright: number = this.width;
 
   leftBound: number;

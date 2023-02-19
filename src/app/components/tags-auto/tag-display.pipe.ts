@@ -1,10 +1,11 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import type { PipeTransform } from '@angular/core';
+import { Pipe } from '@angular/core';
 
 import { autoFileTagsRegex } from './autotags.service';
 
 import { Colors } from '../../common/colors';
-import { ImageElement } from '../../../../interfaces/final-object.interface';
-import { Tag } from '../../../../interfaces/shared-interfaces';
+import type { ImageElement } from '../../../../interfaces/final-object.interface';
+import type { Tag } from '../../../../interfaces/shared-interfaces';
 
 @Pipe({
   name: 'tagDisplayPipe'

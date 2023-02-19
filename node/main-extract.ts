@@ -29,7 +29,7 @@ const ffmpegPath = require('ffmpeg-static').replace('app.asar', 'app.asar.unpack
 
 import { GLOBALS } from './main-globals';
 
-import { ImageElement, ScreenshotSettings } from '../interfaces/final-object.interface';
+import type { ImageElement, ScreenshotSettings } from '../interfaces/final-object.interface';
 
 
 // ========================================================================================

@@ -1,15 +1,16 @@
-import { ImageElementService } from './../../services/image-element.service';
-import { Component, Input, Output, OnInit, ElementRef, EventEmitter, ViewChild } from '@angular/core';
+import type { OnInit, ElementRef} from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import * as path from 'path';
-import { BehaviorSubject } from 'rxjs';
+import type { BehaviorSubject } from 'rxjs';
 
-import { ManualTagsService } from '../tags-manual/manual-tags.service';
 import { FilePathService } from '../views/file-path.service';
+import { ImageElementService } from './../../services/image-element.service';
+import { ManualTagsService } from '../tags-manual/manual-tags.service';
 
-import { StarRating, ImageElement } from '../../../../interfaces/final-object.interface';
-import { TagEmit, RenameFileResponse } from '../../../../interfaces/shared-interfaces';
+import type { StarRating, ImageElement } from '../../../../interfaces/final-object.interface';
+import type { TagEmit, RenameFileResponse } from '../../../../interfaces/shared-interfaces';
 
 import { metaAppear, textAppear, modalAnimation } from '../../common/animations';
 
@@ -64,7 +65,7 @@ export class SheetComponent implements OnInit {
 
   pathToFilmstripJpg: string;
   pathToVideoFile: string;
-  percentOffset: number = 0;
+  percentOffset = 0;
   starRatingHack: StarRating;
   thumbnailsToDisplay = 4;
 

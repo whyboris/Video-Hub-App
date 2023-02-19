@@ -16,17 +16,19 @@ import * as path from 'path';
 
 const fs = require('fs');
 
-import { GLOBALS, VhaGlobals } from './main-globals'; // TODO -- eliminate dependence on `GLOBALS` in this file!
+import type { VhaGlobals } from './main-globals';
+import { GLOBALS } from './main-globals'; // TODO -- eliminate dependence on `GLOBALS` in this file!
 
 import * as path from 'path';
 
 const exec = require('child_process').exec;
-const ffprobePath = require('node-ffprobe-installer').path.replace('app.asar', 'app.asar.unpacked');
+const ffprobePath = require('@ffprobe-installer/ffprobe').path.replace('app.asar', 'app.asar.unpacked');
 const fs = require('fs');
 const hasher = require('crypto').createHash;
-import { Stats } from 'fs';
+import type { Stats } from 'fs';
 
-import { FinalObject, ImageElement, ScreenshotSettings, InputSources, ResolutionString, NewImageElement } from '../interfaces/final-object.interface';
+import type { FinalObject, ImageElement, ScreenshotSettings, InputSources, ResolutionString} from '../interfaces/final-object.interface';
+import { NewImageElement } from '../interfaces/final-object.interface';
 import { startFileSystemWatching, resetWatchers } from './main-extract-async';
 
 interface ResolutionMeta {
@@ -58,7 +60,7 @@ export function getHtmlPath(anyOsPath: string): string {
  */
 function labelVideo(width: number, height: number): ResolutionMeta {
   let label: ResolutionString = '';
-  let bucket: number = 0.5;
+  let bucket = 0.5;
   if (width === 3840 && height === 2160) {
     label = '4K';
     bucket = 3.5;
@@ -313,7 +315,7 @@ function getBestStream(metadata) {
  */
 function getFileDuration(metadata): number {
   if (metadata?.streams?.[0]?.duration) {
-    
+
     return metadata.streams[0].duration;
 
   } else if (metadata?.format?.duration) {
@@ -327,7 +329,7 @@ function getFileDuration(metadata): number {
 //Calculation of video bitrate in mb/s
 
 function getBitrate(fileSize,duration){
-  var bitrate = ((fileSize/1000)/duration)/1000;
+  const bitrate = ((fileSize/1000)/duration)/1000;
   return Math.round(bitrate*100)/100;
 }
 
