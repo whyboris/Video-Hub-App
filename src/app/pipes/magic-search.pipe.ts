@@ -1,6 +1,7 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import type { PipeTransform } from '@angular/core';
+import { Pipe } from '@angular/core';
 
-import { ImageElement } from '../../../interfaces/final-object.interface';
+import type { ImageElement } from '../../../interfaces/final-object.interface';
 
 @Pipe({
   name: 'magicSearchPipe'
@@ -20,8 +21,8 @@ export class MagicSearchPipe implements PipeTransform {
       return finalArray.filter(item =>
         item.partialPath.toLowerCase().indexOf(searchString.toLowerCase()) !== -1
         || item.fileName.toLowerCase().indexOf(searchString.toLowerCase()) !== -1
+        || (item.tags && item.tags.join().toLowerCase().indexOf(searchString.toLowerCase()) !== -1)
       );
     }
   }
-
 }

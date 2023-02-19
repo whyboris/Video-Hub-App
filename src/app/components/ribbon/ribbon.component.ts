@@ -1,6 +1,6 @@
 import { Component, Input, EventEmitter, Output } from '@angular/core';
 import { buttonAnimation } from '../../common/animations';
-import { SettingsButtonsType } from '../../common/settings-buttons';
+import type { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
   selector: 'app-ribbon',

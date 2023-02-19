@@ -1,4 +1,6 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, HostListener, OnInit, ViewChild, NgZone } from '@angular/core';
+import type { AfterViewInit, ElementRef, OnInit } from '@angular/core';
+import { ChangeDetectorRef, NgZone } from '@angular/core';
+import { Component, HostListener, ViewChild } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import * as path from 'path';
@@ -25,29 +27,32 @@ import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency
 import { SortOrderComponent } from './sort-order/sort-order.component';
 
 // Interfaces
-import { FinalObject, ImageElement, ScreenshotSettings, ResolutionString } from '../../../interfaces/final-object.interface';
-import { ImportStage } from '../../../node/main-support';
-import { ServerDetails } from './statistics/statistics.component';
-import { RemoteSettings, SettingsButtonSavedProperties, SettingsObject } from '../../../interfaces/settings-object.interface';
-import { SortType } from '../pipes/sorting.pipe';
-import { WizardOptions } from '../../../interfaces/wizard-options.interface';
-import {
-  AllSupportedBottomTrayViews,
-  AllSupportedViews,
+import type { FinalObject, ImageElement, ScreenshotSettings, ResolutionString } from '../../../interfaces/final-object.interface';
+import type { ImportStage } from '../../../node/main-support';
+import type { ServerDetails } from './statistics/statistics.component';
+import type { RemoteSettings, SettingsButtonSavedProperties, SettingsObject } from '../../../interfaces/settings-object.interface';
+import type { SortType } from '../pipes/sorting.pipe';
+import type { WizardOptions } from '../../../interfaces/wizard-options.interface';
+import type {
   HistoryItem,
   RemoteVideoClick,
   RenameFileResponse,
   SupportedTrayView,
   SupportedView,
-  VideoClickEmit,
+  VideoClickEmit} from '../../../interfaces/shared-interfaces';
+import {
+  AllSupportedBottomTrayViews,
+  AllSupportedViews
 } from '../../../interfaces/shared-interfaces';
 
 // Constants, etc
-import { AppState, SupportedLanguage, DefaultImagesPerRow, RowNumbers } from '../common/app-state';
+import type { SupportedLanguage, RowNumbers } from '../common/app-state';
+import { AppState, DefaultImagesPerRow } from '../common/app-state';
 import { Filters, filterKeyToIndex, FilterKeyNames } from '../common/filters';
 import { GLOBALS } from '../../../node/main-globals';
 import { LanguageLookup } from '../common/languages';
-import { SettingsButtons, SettingsButtonsGroups, SettingsButtonKey, SettingsButtonsType } from '../common/settings-buttons';
+import type { SettingsButtonKey, SettingsButtonsType } from '../common/settings-buttons';
+import { SettingsButtons, SettingsButtonsGroups } from '../common/settings-buttons';
 
 // Animations
 import {
@@ -128,7 +133,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   windowResizeTimeout = null;
 
   newVideoImportTimeout = null;
-  newVideoImportCounter: number = 0;
+  newVideoImportCounter = 0;
 
   // ========================================================================
   // App state / UI state
@@ -144,7 +149,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // Import / extraction progress
   // ------------------------------------------------------------------------
 
-  extractionPercent: number = 1;
+  extractionPercent = 1;
   importStage: ImportStage = 'done';
   progressString = '';
 
@@ -152,11 +157,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // Gallery thumbnails
   // ------------------------------------------------------------------------
 
-  currentImgsPerRow: number = 5;
+  currentImgsPerRow = 5;
   galleryWidth: number;
   imgsPerRow: RowNumbers = DefaultImagesPerRow;
-  previewHeight: number = 144;
-  previewHeightRelated: number = 144;   // For the Related Videos tab:
+  previewHeight = 144;
+  previewHeightRelated = 144;   // For the Related Videos tab:
   previewWidth: number;
   previewWidthRelated: number;          // For the Related Videos tab:
   textPaddingHeight: number;            // for text padding below filmstrip or thumbnail element
@@ -165,42 +170,42 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // Duration filter
   // ------------------------------------------------------------------------
 
-  durationLeftBound: number = 0;
-  durationOutlierCutoff: number = 0;
-  durationRightBound: number = Infinity;
+  durationLeftBound = 0;
+  durationOutlierCutoff = 0;
+  durationRightBound = Infinity;
 
   // ========================================================================
   // Size filter
   // ------------------------------------------------------------------------
 
-  sizeLeftBound: number = 0;
-  sizeOutlierCutoff: number = 0;
-  sizeRightBound: number = Infinity;
+  sizeLeftBound = 0;
+  sizeOutlierCutoff = 0;
+  sizeRightBound = Infinity;
 
   // ========================================================================
   // Times Played filter
   // ------------------------------------------------------------------------
 
-  timesPlayedCutoff: number = 0;
-  timesPlayedLeftBound: number = 0;
-  timesPlayedRightBound: number = Infinity;
+  timesPlayedCutoff = 0;
+  timesPlayedLeftBound = 0;
+  timesPlayedRightBound = Infinity;
 
   // ========================================================================
   // Year filter
   // ------------------------------------------------------------------------
 
-  yearMinCutoff: number = 0;
-  yearCutoff: number = 0;
-  yearLeftBound: number = 0;
-  yearRightBound: number = Infinity;
+  yearMinCutoff = 0;
+  yearCutoff = 0;
+  yearLeftBound = 0;
+  yearRightBound = Infinity;
 
   // ========================================================================
   // Frequency / histogram
   // ------------------------------------------------------------------------
 
   resolutionFreqArr: number[];
-  freqLeftBound: number = 0;
-  freqRightBound: number = 4;
+  freqLeftBound = 0;
+  freqRightBound = 4;
   resolutionNames: ResolutionString[] = ['SD', '720', '1080', '4K'];
 
   // ========================================================================
@@ -208,8 +213,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // ------------------------------------------------------------------------
 
   starRatingFreqArr: number[];
-  starLeftBound: number = 0;
-  starRightBound: number = 6;
+  starLeftBound = 0;
+  starRightBound = 6;
   starRatingNames: string[] = ['N/A', '1', '2', '3', '4', '5'];
 
   // ========================================================================
@@ -218,16 +223,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   currentRightClickedItem: ImageElement;
   renamingExtension: string;
-  renamingNow: boolean = false;
+  renamingNow = false;
   rightClickPosition: { x: number, y: number } = { x: 0, y: 0 };
-  rightClickShowing: boolean = false;
+  rightClickShowing = false;
 
   // ========================================================================
   // Thumbnail Sheet Overlay Display
   // ------------------------------------------------------------------------
 
   sheetItemToDisplay: ImageElement;
-  sheetOverlayShowing: boolean = false;
+  sheetOverlayShowing = false;
 
   // ========================================================================
   // Variables for the wizard during import
@@ -285,7 +290,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   numberOfVideosFound: number; // after applying all search filters
 
   findMostSimilar: string; // for finding similar files to this one
-  showSimilar: boolean = false; // to toggle the similarity pipe
+  showSimilar = false; // to toggle the similarity pipe
 
   shuffleTheViewNow = 0; // dummy number to force re-shuffle current view
 
@@ -294,18 +299,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
   timeExtractionStarted;   // time remaining calculator
   timeExtractionRemaining; // time remaining calculator
 
-  deletePipeHack: boolean = false; // to force deletePipe to update
+  deletePipeHack = false; // to force deletePipe to update
 
-  folderNavigationScrollOffset: number = 0; // when in folder view and returning back to root
-  folderViewNavigationPath: string = '';
+  folderNavigationScrollOffset = 0; // when in folder view and returning back to root
+  folderViewNavigationPath = '';
 
   batchTaggingMode = false; // when batch tagging is enabled
 
   latestVersionAvailable: string;
 
-  tagTypeAhead: string = '';
+  tagTypeAhead = '';
 
-  allFinishedScanning: boolean = true;
+  allFinishedScanning = true;
 
   lastRenamedFileHack: ImageElement;
 
@@ -486,7 +491,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     // when `remote-control` requests currently-showing gallery view
-    this.electronService.ipcRenderer.on('remote-send-new-data', (event, video: RemoteVideoClick) => {
+    this.electronService.ipcRenderer.on('remote-send-new-data', (event) => {
       console.log('requesting new data!!');
 
       const showNotConnected: ImageElement[] = JSON.parse(JSON.stringify(this.pipeSideEffectService.galleryShowing));
@@ -608,7 +613,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       const rootFolder: string = this.sourceFolderService.selectedSourceFolder[sourceIndex].path;
 
-      let somethingDeleted: boolean = false;
+      let somethingDeleted = false;
 
       this.imageElementService.imageElements
         // tslint:disable-next-line:triple-equals
@@ -1143,7 +1148,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       const execPath: string = this.appState.preferredVideoPlayer;
 
-      const finalArgs: string = `${this.getVideoPlayerArgs(execPath, time)} ${this.appState.videoPlayerArgs}`;
+      const finalArgs = `${this.getVideoPlayerArgs(execPath, time)} ${this.appState.videoPlayerArgs}`;
       this.electronService.ipcRenderer.send('open-media-file-at-timestamp', execPath, fullPath, finalArgs);
     } else {
       this.electronService.ipcRenderer.send('open-media-file', fullPath);
@@ -1165,7 +1170,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   public getVideoPlayerArgs(playerPath: string, time: number): string {
     // if user doesn't want to open at timestamp, don't!
-    let args: string = '';
+    let args = '';
 
     if (this.settingsButtons['openAtTimestamp'].toggled) {
       if (playerPath.toLowerCase().includes('vlc')) {
@@ -1238,12 +1243,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (!this.settingsButtons['tagExclusion'].toggled) {
         this.settingsButtons['tagExclusion'].toggled = true;
       }
-      this.onEnterKey(filter, 7); // 7th item is the `tagExclusion` filter in `FilterKeyNames`
+      this.onEnterKey(filter, 8); // 8th item is the `tagExclusion` filter in `FilterKeyNames`
     } else {
       if (!this.settingsButtons['tagIntersection'].toggled) {
         this.settingsButtons['tagIntersection'].toggled = true;
       }
-      this.onEnterKey(filter, 6); // 6th item is the `tagIntersection` filter in `FilterKeyNames`
+      this.onEnterKey(filter, 7); // 7th item is the `tagIntersection` filter in `FilterKeyNames`
     }
   }
 
@@ -1257,12 +1262,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (!this.settingsButtons['exclude'].toggled) {
         this.settingsButtons['exclude'].toggled = true;
       }
-      this.onEnterKey(filter, 4); // 4th item is the `exclude` filter in `FilterKeyNames`
+      this.onEnterKey(filter, 5); // 5th item is the `exclude` filter in `FilterKeyNames`
     } else {
       if (!this.settingsButtons['fileIntersection'].toggled) {
         this.settingsButtons['fileIntersection'].toggled = true;
       }
-      this.onEnterKey(filter, 3); // 3rd item is the `fileIntersection` filter in `FilterKeyNames`
+      this.onEnterKey(filter, 4); // 4th item is the `fileIntersection` filter in `FilterKeyNames`
     }
   }
 
@@ -1270,14 +1275,20 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Add filter to FOLDER search when word in folder is clicked
    * @param filter
    */
-  handleFolderWordClicked(filter: string): void {
+  handleFolderWordClicked(filter: string, event?): void {
     this.showSidebar();
-    if (!this.settingsButtons['folderIntersection'].toggled) {
-      this.settingsButtons['folderIntersection'].toggled = true;
+    if (event && event.shiftKey) { // Shift click to exclude tag!
+      if (!this.settingsButtons['folderExclusion'].toggled) {
+        this.settingsButtons['folderExclusion'].toggled = true;
+      }
+      this.onEnterKey(filter, 2); // 2nd item is the `folderExclusion` filter in `FilterKeyNames`
+    } else {
+      if (!this.settingsButtons['folderIntersection'].toggled) {
+        this.settingsButtons['folderIntersection'].toggled = true;
+      }
+      this.onEnterKey(filter, 1); // 1st item is the `folder` filter
     }
-    this.onEnterKey(filter, 1); // 1st item is the `folder` filter
   }
-
   /**
    * Handle clicking on FOLDER in gallery, or the folder icon in breadcrumbs, or the `UP` folder
    * @param filter

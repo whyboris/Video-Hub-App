@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 
-import { InputSources } from '../../../../interfaces/final-object.interface';
+import type { InputSources } from '../../../../interfaces/final-object.interface';
 
 export type InputSourceConnected = Record<number, boolean>; // matches InputSources number, boolean represents if folder is connected
 

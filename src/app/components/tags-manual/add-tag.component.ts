@@ -13,8 +13,8 @@ export class AddTagComponent {
 
   @Output() tag = new EventEmitter<string>();
 
-  currentText: string = '';
-  typeAhead: string = '';
+  currentText = '';
+  typeAhead = '';
 
   constructor(
     public manualTagsService: ManualTagsService
