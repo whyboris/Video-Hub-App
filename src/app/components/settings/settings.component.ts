@@ -1,11 +1,13 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import type { OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import { TranslateService } from '@ngx-translate/core';
 
 import { ElectronService } from './../../providers/electron.service';
 import { ModalService } from './../modal/modal.service';
 
-import { SettingsMetaGroup, SettingsMetaGroupLabels, SettingsButtonsType } from '../../common/settings-buttons';
+import type { SettingsButtonsType } from '../../common/settings-buttons';
+import { SettingsMetaGroup, SettingsMetaGroupLabels } from '../../common/settings-buttons';
 
 @Component({
   selector: 'app-settings',
@@ -37,8 +39,8 @@ export class SettingsComponent implements OnInit {
   @Input() settingsButtons: SettingsButtonsType;
   @Input() versionNumber;
 
-  additionalInput: string = '';
-  editAdditional: boolean = false;
+  additionalInput = '';
+  editAdditional = false;
   settingsMetaGroup = SettingsMetaGroup;
   settingsMetaGroupLabels = SettingsMetaGroupLabels;
 

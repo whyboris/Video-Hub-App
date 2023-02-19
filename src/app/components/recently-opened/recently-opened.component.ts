@@ -1,5 +1,5 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { SettingsButtonsType } from '../../common/settings-buttons';
+import type { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
   selector: 'app-recently-opened',
