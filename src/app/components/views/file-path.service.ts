@@ -4,7 +4,7 @@ import * as path from 'path';
 
 import { SourceFolderService } from '../statistics/source-folder.service';
 
-import { ImageElement } from '../../../../interfaces/final-object.interface';
+import type { ImageElement } from '../../../../interfaces/final-object.interface';
 
 type FolderType = 'thumbnails' | 'filmstrips' | 'clips' | 'faces' | 'facestrips';
 

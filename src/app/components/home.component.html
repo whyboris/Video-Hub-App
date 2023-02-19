@@ -223,7 +223,7 @@
     <!-- BUTTONS -->
 
     <app-settings
-      (changeLanguage)="changeLanguage($event)"
+      (changeLanguage)="changeLanguage($any($event))"
       (checkForNewVersion)="checkForNewVersion()"
       (chooseDefaultVideoPlayer)="chooseDefaultVideoPlayer()"
       (decreaseZoomLevel)="decreaseZoomLevel()"
@@ -231,7 +231,7 @@
       (increaseZoomLevel)="increaseZoomLevel()"
       (openOnlineHelp)="openOnlineHelp()"
       (resetZoomLevel)="resetZoomLevel()"
-      (toggleButton)="toggleButton($event)"
+      (toggleButton)="toggleButton($any($event))"
       (toggleHideButton)="toggleHideButton($event)"
 
       [appState]="appState"
@@ -318,7 +318,7 @@
 
       <!-- ALL THE BUTTONS IN THE RIBBON -->
       <app-ribbon
-        (toggleButton)="toggleButton($event)"
+        (toggleButton)="toggleButton($any($event))"
         [appState]="appState"
         [settingsButtonsGroups]="settingsButtonsGroups"
         [settingsButtons]="settingsButtons"
@@ -700,28 +700,30 @@
 
                 | fileSearchPipe : filters[1].array : filters[1].bool : false : 'folder' : false
 
-                | fileSearchPipe : filters[2].array : filters[2].bool : true  : 'file'   : false
+                | fileSearchPipe : filters[2].array : filters[2].bool : true : 'folder' : true
 
-                | fileSearchPipe : filters[3].array : filters[3].bool : false : 'file'   : false
+                | fileSearchPipe : filters[3].array : filters[3].bool : true  : 'file'   : false
 
-                | fileSearchPipe : filters[4].array : filters[4].bool : true  : 'file'   : true
+                | fileSearchPipe : filters[4].array : filters[4].bool : false : 'file'   : false
 
-                | fileSearchPipe : filters[5].array : filters[5].bool : true  : 'tag'    : false
+                | fileSearchPipe : filters[5].array : filters[5].bool : true  : 'file'   : true
+
+                | fileSearchPipe : filters[6].array : filters[6].bool : true  : 'tag'    : false
                                  : settingsButtons['manualTags'].toggled
                                  : settingsButtons['autoFileTags'].toggled
                                  : settingsButtons['autoFolderTags'].toggled
 
-                | fileSearchPipe : filters[6].array : filters[6].bool : false : 'tag'    : false
+                | fileSearchPipe : filters[7].array : filters[7].bool : false : 'tag'    : false
                                  : settingsButtons['manualTags'].toggled
                                  : settingsButtons['autoFileTags'].toggled
                                  : settingsButtons['autoFolderTags'].toggled
 
-                | fileSearchPipe : filters[7].array : filters[7].bool : true  : 'tag'    : true
+                | fileSearchPipe : filters[8].array : filters[8].bool : true  : 'tag'    : true
                                  : settingsButtons['manualTags'].toggled
                                  : settingsButtons['autoFileTags'].toggled
                                  : settingsButtons['autoFolderTags'].toggled
 
-                | fileSearchPipe : filters[8].array : filters[8].bool : false : 'notes'  : false
+                | fileSearchPipe : filters[9].array : filters[9].bool : false : 'notes'  : false
 
                 | magicSearchPipe : magicSearchString
 
@@ -1132,9 +1134,9 @@
     class="cloud-frequency"
   >
     <div class="word-cloud-buttons">
-      <app-button (toggleButton)="toggleButton($event)" [button]="'manualTags'"     [settingsButtons]="settingsButtons"></app-button>
-      <app-button (toggleButton)="toggleButton($event)" [button]="'autoFileTags'"   [settingsButtons]="settingsButtons"></app-button>
-      <app-button (toggleButton)="toggleButton($event)" [button]="'autoFolderTags'" [settingsButtons]="settingsButtons"></app-button>
+      <app-button (toggleButton)="toggleButton($any($event))" [button]="'manualTags'"     [settingsButtons]="settingsButtons"></app-button>
+      <app-button (toggleButton)="toggleButton($any($event))" [button]="'autoFileTags'"   [settingsButtons]="settingsButtons"></app-button>
+      <app-button (toggleButton)="toggleButton($any($event))" [button]="'autoFolderTags'" [settingsButtons]="settingsButtons"></app-button>
     </div>
 
     <div

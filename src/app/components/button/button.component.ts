@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import { SettingsButtonKey, SettingsButtonsType } from '../../common/settings-buttons';
+import type { SettingsButtonKey, SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
   selector: 'app-button',

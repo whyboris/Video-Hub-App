@@ -52,8 +52,8 @@ export class SimilarityService {
    * and return its index
    */
   private getMostCommon(): number {
-    let currNumSimilar: number = 0;
-    let currBestMatch: number = 0;
+    let currNumSimilar = 0;
+    let currBestMatch = 0;
 
     this.similarityMap.forEach((value, key) => {
       if (value > currNumSimilar) {

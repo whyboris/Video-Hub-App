@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { SettingsButtonKey } from '../../common/settings-buttons';
+import type { SettingsButtonKey } from '../../common/settings-buttons';
 
 export type CustomShortcutAction = 'focusOnFile'
   | 'focusOnMagic'

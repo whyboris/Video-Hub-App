@@ -1,13 +1,14 @@
-import { Component, Input, OnInit, ElementRef, ViewChild, Output, EventEmitter } from '@angular/core';
+import type { OnInit, ElementRef} from '@angular/core';
+import { Component, Input, ViewChild, Output, EventEmitter } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
-import { BehaviorSubject } from 'rxjs';
+import type { BehaviorSubject } from 'rxjs';
 
-import { ManualTagsService } from '../../tags-manual/manual-tags.service';
 import { FilePathService } from '../file-path.service';
+import { ManualTagsService } from '../../tags-manual/manual-tags.service';
 
-import { StarRating, ImageElement } from '../../../../../interfaces/final-object.interface';
-import { VideoClickEmit, RightClickEmit, TagEmit, RenameFileResponse } from '../../../../../interfaces/shared-interfaces';
+import type { StarRating, ImageElement } from '../../../../../interfaces/final-object.interface';
+import type { VideoClickEmit, RightClickEmit, TagEmit, RenameFileResponse } from '../../../../../interfaces/shared-interfaces';
 
 export interface YearEmission {
   index: number;
@@ -60,8 +61,8 @@ export class DetailsComponent implements OnInit {
   filmstripPath = '';
   firstFilePath = '';
   hover: boolean;
-  indexToShow: number = 1;
-  percentOffset: number = 0;
+  indexToShow = 1;
+  percentOffset = 0;
 
   constructor(
     public filePathService: FilePathService,

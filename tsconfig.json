@@ -1,8 +1,8 @@
 {
-  "angularCompilerOptions": {
-    "fullTemplateTypeCheck": true
-  },
   "compileOnSave": false,
+  "angularCompilerOptions": {
+    "strictTemplates": true
+  },
   "compilerOptions": {
     "baseUrl": "",
     "declaration": false,
