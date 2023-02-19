@@ -161,7 +161,9 @@ function createWindow() {
       electron: require(`${__dirname}/node_modules/electron`)
     });
     win.loadURL('http://localhost:4200');
-    win.webContents.openDevTools();
+    setTimeout(() => {
+      win.webContents.openDevTools();
+    }, 1000);
   } else {
     const url = require('url').format({
       pathname: path.join(__dirname, 'dist/index.html'),

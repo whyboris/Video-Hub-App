@@ -5,13 +5,13 @@ const { powerSaveBlocker } = require('electron');
 const async = require('async');
 const chokidar = require('chokidar');
 import * as path from 'path';
-import { FSWatcher } from 'chokidar'; // probably the correct type for chokidar.watch() object
+import type { FSWatcher } from 'chokidar'; // probably the correct type for chokidar.watch() object
 const fs = require('fs');
 import { fdir } from 'fdir';
 
 import { GLOBALS } from './main-globals';
 
-import { ImageElement, ImageElementPlus } from '../interfaces/final-object.interface';
+import type { ImageElement, ImageElementPlus } from '../interfaces/final-object.interface';
 import { acceptableFiles } from './main-filenames';
 import { extractAll } from './main-extract';
 import { sendCurrentProgress, insertTemporaryFieldsSingle, extractMetadataAsync, cleanUpFileName } from './main-support';
@@ -41,7 +41,7 @@ let thumbExtractionStartTime = 0;
 
 // delete queue
 let deleteThumbQueue;   // QueueObject
-let numberOfThumbsDeleted: number = 0;
+let numberOfThumbsDeleted = 0;
 
 // =====================================================================================================================
 

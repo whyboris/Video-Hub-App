@@ -1,4 +1,4 @@
-import { SettingsButton } from './settings-buttons.interface';
+import type { SettingsButton } from './settings-buttons.interface';
 
 export type SettingsButtonKey = 'autoFileTags'
  | 'autoFolderTags'
@@ -18,6 +18,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'fileIntersection'
  | 'fileUnion'
  | 'flatIcons'
+ | 'folderExclusion'
  | 'folderIntersection'
  | 'folderUnion'
  | 'fontSizeLarger'
@@ -52,10 +53,11 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'showRecent'
  | 'showRecentlyPlayed'
  | 'showRelatedVideosTray'
- | 'showTagTray'
  | 'showTags'
+ | 'showTagTray'
  | 'showThumbnails'
  | 'showVideoNotes'
+ | 'sortAutoTags'
  | 'shuffleGalleryNow'
  | 'sizeFilter'
  | 'sortOptionAlphabetical'
@@ -77,10 +79,10 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'tagExclusion'
  | 'tagIntersection'
  | 'tagUnion'
- | 'timesPlayedFilter'
  | 'thumbAutoAdvance'
- | 'yearFilter'
- | 'videoNotes';
+ | 'timesPlayedFilter'
+ | 'videoNotes'
+ | 'yearFilter';
 
 // Add `SettingsButtons` items here so they show up in the buttons ribbon and in the settings
 // Each array separates buttons into their own button groups visually
@@ -91,6 +93,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
   [ // 1 - Search filters
     'folderUnion',
     'folderIntersection',
+    'folderExclusion',
     'fileUnion',
     'fileIntersection',
     'exclude',
@@ -163,6 +166,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'autoFileTags',
     'autoFolderTags',
     'showVideoNotes',
+    'sortAutoTags',
   ],
   [ // 9 - Thumbnails view
     'hoverScrub',
@@ -383,6 +387,14 @@ export const SettingsButtons: SettingsButtonsType = {
     hidden: false,
     settingsHeading: 'SETTINGS.buttonStyle',
     title: 'BUTTONS.flatIconsHint',
+    toggled: false
+  },
+  'folderExclusion': {
+    description: 'BUTTONS.folderExclusionDescription',
+    hidden: true,
+    iconName: 'icon-folder-x',
+    moreInfo: 'BUTTONS.folderExclusionMoreInfo',
+    title: 'BUTTONS.folderExclusionHint',
     toggled: false
   },
   'folderIntersection': {
@@ -676,6 +688,14 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-toggle-video-notes',
     moreInfo: 'BUTTONS.showVideoNotesMoreInfo',
     title: 'BUTTONS.showVideoNotesHint',
+    toggled: false
+  },
+  'sortAutoTags':{
+    description: 'BUTTONS.sortAutoTagsDescription',
+    hidden: true,
+    iconName: 'icon-sort-auto-tags',
+    moreInfo: 'BUTTONS.sortAutoTagsMoreInfo',
+    title: 'BUTTONS.sortAutoTagsHint',
     toggled: false
   },
   'shuffleGalleryNow': {
