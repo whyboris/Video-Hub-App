@@ -83,6 +83,7 @@ import { FileSearchPipe } from './pipes/file-search.pipe';
 import { FileSizeFilterPipe } from './pipes/file-size-filter.pipe';
 import { FileSizePipe } from './pipes/file-size.pipe';
 import { FolderArrowsPipe } from './pipes/folder-arrows.pipe';
+import { FolderSizePipe } from './pipes/folder-size.pipe';
 import { FolderViewPipe } from './pipes/folder-view.pipe';
 import { FuzzySearchPipe } from './pipes/fuzzy-search.pipe';
 import { HideOfflinePipe } from './pipes/hide-offline.pipe';
@@ -90,6 +91,7 @@ import { LengthFilterPipe } from './pipes/length-filter.pipe';
 import { LengthPipe } from './pipes/length.pipe';
 import { MagicSearchPipe } from './pipes/magic-search.pipe';
 import { ManualTagSortPipe } from './pipes/manual-tags-sort.pipe';
+import { AutoTagSortPipe } from './pipes/auto-tag-sort.pipe';
 import { PlaylistPipe } from './pipes/playlist.pipe';
 import { RegexSearchPipe } from './pipes/regex-search.pipe';
 import { ResolutionFilterPipe } from './pipes/resolution-filter.pipe';
@@ -130,6 +132,7 @@ import { YearPipe } from './pipes/year.pipe';
     FileSizePipe,
     FilmstripComponent,
     FolderArrowsPipe,
+    FolderSizePipe,
     FolderViewPipe,
     FullViewComponent,
     FuzzySearchPipe,
@@ -140,6 +143,7 @@ import { YearPipe } from './pipes/year.pipe';
     LengthPipe,
     MagicSearchPipe,
     ManualTagSortPipe,
+    AutoTagSortPipe,
     MetaComponent,
     ModalComponent,
     PlaylistPipe,
@@ -182,7 +186,8 @@ import { YearPipe } from './pipes/year.pipe';
     WordFrequencyPipe,
     WrapperPipe,
     YearFilterPipe,
-    YearPipe
+    YearPipe,
+    AutoTagSortPipe
   ],
   imports: [
     AnQrcodeModule,

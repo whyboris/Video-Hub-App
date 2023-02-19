@@ -12,13 +12,13 @@ import type { VideoClickEmit, RightClickEmit } from '@my/shared-interfaces';
   selector: 'app-thumbnail',
   templateUrl: './thumbnail.component.html',
   styleUrls: [
-      '../clip-and-preview.scss',
-      '../time-and-rez.scss',
-      './thumbnail.component.scss',
-      '../selected.scss'
-    ],
-  animations: [ textAppear,
-                metaAppear ]
+    '../clip-and-preview.scss',
+    '../time-and-rez.scss',
+    './thumbnail.component.scss',
+    '../selected.scss'
+  ],
+  animations: [textAppear,
+    metaAppear]
 })
 export class ThumbnailComponent implements OnInit, OnDestroy {
 

@@ -9,7 +9,7 @@
       "projectType": "application",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:browser-esbuild",
           "options": {
             "outputPath": "dist",
             "index": "src/index.html",
@@ -91,7 +91,6 @@
       }
     }
   },
-  "defaultProject": "video-hub-app",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",

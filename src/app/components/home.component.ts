@@ -1240,12 +1240,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (!this.settingsButtons['tagExclusion'].toggled) {
         this.settingsButtons['tagExclusion'].toggled = true;
       }
-      this.onEnterKey(filter, 7); // 7th item is the `tagExclusion` filter in `FilterKeyNames`
+      this.onEnterKey(filter, 8); // 8th item is the `tagExclusion` filter in `FilterKeyNames`
     } else {
       if (!this.settingsButtons['tagIntersection'].toggled) {
         this.settingsButtons['tagIntersection'].toggled = true;
       }
-      this.onEnterKey(filter, 6); // 6th item is the `tagIntersection` filter in `FilterKeyNames`
+      this.onEnterKey(filter, 7); // 7th item is the `tagIntersection` filter in `FilterKeyNames`
     }
   }
 
@@ -1259,12 +1259,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (!this.settingsButtons['exclude'].toggled) {
         this.settingsButtons['exclude'].toggled = true;
       }
-      this.onEnterKey(filter, 4); // 4th item is the `exclude` filter in `FilterKeyNames`
+      this.onEnterKey(filter, 5); // 5th item is the `exclude` filter in `FilterKeyNames`
     } else {
       if (!this.settingsButtons['fileIntersection'].toggled) {
         this.settingsButtons['fileIntersection'].toggled = true;
       }
-      this.onEnterKey(filter, 3); // 3rd item is the `fileIntersection` filter in `FilterKeyNames`
+      this.onEnterKey(filter, 4); // 4th item is the `fileIntersection` filter in `FilterKeyNames`
     }
   }
 
@@ -1272,14 +1272,20 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Add filter to FOLDER search when word in folder is clicked
    * @param filter
    */
-  handleFolderWordClicked(filter: string): void {
+  handleFolderWordClicked(filter: string, event?): void {
     this.showSidebar();
-    if (!this.settingsButtons['folderIntersection'].toggled) {
-      this.settingsButtons['folderIntersection'].toggled = true;
+    if (event && event.shiftKey) { // Shift click to exclude tag!
+      if (!this.settingsButtons['folderExclusion'].toggled) {
+        this.settingsButtons['folderExclusion'].toggled = true;
+      }
+      this.onEnterKey(filter, 2); // 2nd item is the `folderExclusion` filter in `FilterKeyNames`
+    } else {
+      if (!this.settingsButtons['folderIntersection'].toggled) {
+        this.settingsButtons['folderIntersection'].toggled = true;
+      }
+      this.onEnterKey(filter, 1); // 1st item is the `folder` filter
     }
-    this.onEnterKey(filter, 1); // 1st item is the `folder` filter
   }
-
   /**
    * Handle clicking on FOLDER in gallery, or the folder icon in breadcrumbs, or the `UP` folder
    * @param filter
