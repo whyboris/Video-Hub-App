@@ -91,7 +91,11 @@ export class DetailsComponent implements OnInit {
 
   ngOnInit() {
     this.firstFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'thumbnails', this.video.hash);
-    this.filmstripPath =  this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
+    if (this.video.type == 'image') {
+      this.filmstripPath = this.firstFilePath;
+    } else {
+      this.filmstripPath =  this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
+    }
     if (this.video.defaultScreen !== undefined) {
       this.percentOffset = this.getDefaultScreenOffset(this.video);
     }

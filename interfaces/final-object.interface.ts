@@ -5,6 +5,8 @@ export type AllowedScreenshotHeight = 144 | 216 | 288 | 360 | 432 | 504;
 
 export type ResolutionString = '' | 'SD' | '720' | '720+' | '1080' | '1080+' | '4K' | '4K+';
 
+export type FileType = 'video' | 'image';
+
 export interface SourceFolder {
   path: string;
   watch: boolean;
@@ -25,12 +27,13 @@ export interface FinalObject {
 }
 
 export interface ImageElement {
+  type: FileType;                // type of file
   birthtime: number;             // file creation time
   cleanName: string;             // file name cleaned of dots, underscores,and file extension; for searching. Can be *FOLDER* sometimes
   duration: number;              // number of seconds - duration of film
   fileName: string;              // full file name with extension - for opening the file
   fileSize: number;              // file size in bytes
-  bitrate: number;               // bitrate of the displayed video file - (fileSize/duration)*1024 
+  bitrate: number;               // bitrate of the displayed video file - (fileSize/duration)*1024
   fps: number;                   // base frame rate of the video in fps
   hash: string;                  // used for detecting changed files and as a screenshot identifier
   height: AllowedScreenshotHeight; // height of the video (px)
@@ -67,6 +70,7 @@ export interface ImageElementPlus extends ImageElement {
 // Use this to create a new ImageElement if needed
 export function NewImageElement(): ImageElement {
   return {
+    type: 'video',
     birthtime: 0,
     cleanName: '',
     duration: 0,

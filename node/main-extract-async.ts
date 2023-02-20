@@ -12,7 +12,7 @@ import { fdir } from 'fdir';
 import { GLOBALS } from './main-globals';
 
 import type { ImageElement, ImageElementPlus } from '../interfaces/final-object.interface';
-import { acceptableFiles } from './main-filenames';
+import { acceptableImageFiles, acceptableVideoFiles } from './main-filenames';
 import { extractAll } from './main-extract';
 import { sendCurrentProgress, insertTemporaryFieldsSingle, extractMetadataAsync, cleanUpFileName } from './main-support';
 
@@ -238,7 +238,7 @@ function superFastSystemScan(inputDir: string, inputSource: number): void {
     console.log('Found ', files.length, ' files in given directory');
     // =============================================================================================
 
-    const allAcceptableFiles: string[] = [...acceptableFiles, ...GLOBALS.additionalExtensions];
+    const allAcceptableFiles: string[] = [...acceptableVideoFiles, ...acceptableImageFiles, ...GLOBALS.additionalExtensions];
 
     files.forEach((fullPath: string) => {
 
@@ -315,7 +315,7 @@ export function startFileSystemWatching(inputDir: string, inputSource: number, p
 
   const watcher: FSWatcher = chokidar.watch(inputDir, watcherConfig);
 
-  const allAcceptableFiles: string[] = [...acceptableFiles, ...GLOBALS.additionalExtensions];
+  const allAcceptableFiles: string[] = [...acceptableVideoFiles, ...acceptableImageFiles, ...GLOBALS.additionalExtensions];
 
   metadataQueue.pause();
   thumbQueue.pause();
