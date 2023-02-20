@@ -123,11 +123,11 @@ export class MetaComponent implements OnInit, OnDestroy {
     if (this.starRatingHack === rating) {
       rating = 0.5; // reset to "N/A" (not rated)
     }
+    this.starRatingHack = rating; // hack for getting star opacity updated instantly
     this.imageElementService.HandleEmission({
       index: this.video.index,
       stars: rating,
     });
-    this.starRatingHack = rating; // hack for getting star opacity updated instantly
   }
 
   setHeart(): void {
