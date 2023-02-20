@@ -1,159 +1,159 @@
 @import "../../variables";
 .element-container {
-    cursor: pointer;
-    height: 20px;
-    margin: 0px 20px;
-    padding: 5px 0;
-    position: relative;
-    &:hover {
-        .folder-name,
-        .title {
-            color: $dark-blue
-        }
-        .folder-name-dark-mode,
-        .title-dark-mode {
-            color: $pretty-blue;
-        }
-        .back-icon {
-            fill: $dark-blue;
-        }
-        .back-icon-dark-mode {
-            fill: $pretty-blue;
-        }
-        .icon-folder-lol {
-            fill: $pretty-blue;
-        }
+  cursor: pointer;
+  height: 20px;
+  margin: 0px 20px;
+  padding: 5px 0;
+  position: relative;
+  &:hover {
+    .folder-name,
+    .title {
+      color: $dark-blue;
     }
+    .folder-name-dark-mode,
+    .title-dark-mode {
+      color: $pretty-blue;
+    }
+    .back-icon {
+      fill: $dark-blue;
+    }
+    .back-icon-dark-mode {
+      fill: $pretty-blue;
+    }
+    .icon-folder-lol {
+      fill: $pretty-blue;
+    }
+  }
 }
 
 .back-icon {
-    fill: black;
-    height: 18px;
-    left: 9px;
-    position: absolute;
-    top: 6px;
-    transition-duration: 300ms;
-    transition-property: fill;
-    width: 16px;
+  fill: black;
+  height: 18px;
+  left: 9px;
+  position: absolute;
+  top: 6px;
+  transition-duration: 300ms;
+  transition-property: fill;
+  width: 16px;
 }
 
 .back-icon-dark-mode {
-    fill: white;
+  fill: white;
 }
 
 .length,
 .size {
-    color: $gray-50;
-    display: block;
-    font-size: 10px;
-    position: absolute;
-    top: 6px;
-    z-index: 200;
+  color: $gray-50;
+  display: block;
+  font-size: 10px;
+  position: absolute;
+  top: 6px;
+  z-index: 200;
 }
 
 .length {
-    right: 0;
+  right: 0;
 }
 
 .size {
-    left: 0;
-    text-align: right;
-    width: 21px;
-    color: transparent;
+  left: 0;
+  text-align: right;
+  width: 21px;
+  color: transparent;
 }
 
 .fileSize {
-    color: $gray-60;
-    display: inline-block;
-    font-size: 10px;
-    opacity: 0.8;
+  color: $gray-60;
+  display: inline-block;
+  font-size: 10px;
+  opacity: 0.8;
 }
 
 .meta-dark-mode {
-    color: $gray-60;
+  color: $gray-60;
 }
 
 .folder-name {
-    color: $black;
-    font-size: 12px;
-    left: 36px;
-    position: absolute;
+  color: $black;
+  font-size: 12px;
+  left: 36px;
+  position: absolute;
 }
 
 .folder-size {
-    color: $gray-60;
-    display: inline-block;
-    font-size: 10px;
+  color: $gray-60;
+  display: inline-block;
+  font-size: 10px;
 }
 
 .folder-name-dark-mode {
-    color: $gray-10;
+  color: $gray-10;
 }
 
 .number-of-files {
-    color: $gray-60;
-    display: block;
-    font-size: 10px;
-    left: -25px;
-    position: absolute;
-    text-align: right;
-    top: 7px;
-    width: 30px;
+  color: $gray-60;
+  display: block;
+  font-size: 10px;
+  left: -25px;
+  position: absolute;
+  text-align: right;
+  top: 7px;
+  width: 30px;
 }
 
 .icon-folder-lol {
-    fill: $gray-50;
-    height: 15px;
-    left: 10px;
-    position: absolute;
-    top: 5px;
-    transition-duration: 300ms;
-    transition-property: fill;
-    width: 15px;
+  fill: $gray-50;
+  height: 15px;
+  left: 10px;
+  position: absolute;
+  top: 5px;
+  transition-duration: 300ms;
+  transition-property: fill;
+  width: 15px;
 }
 
 .title {
-    color: $black;
-    display: inline-block;
-    font-size: 12px;
-    overflow: hidden;
-    text-align: left;
-    text-overflow: ellipsis;
-    transform: translate(10px, 0);
-    transition: 300ms;
-    transition-property: width, transform, color;
-    white-space: nowrap;
-    width: calc(100% - 20px);
+  color: $black;
+  display: inline-block;
+  font-size: 12px;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  transform: translate(10px, 0);
+  transition: 300ms;
+  transition-property: width, transform, color;
+  white-space: nowrap;
+  width: calc(100% - 20px);
 }
 
 .title-dark-mode {
-    color: $gray-10;
+  color: $gray-10;
 }
 
 .larger-font {
-    font-size: 16px;
+  font-size: 16px;
 }
 
 .showing-meta {
-    transform: translate(35px, 0);
-    width: calc(100% - 65px);
+  transform: translate(35px, 0);
+  width: calc(100% - 65px);
 }
 
 .video-box {
-    position: relative;
+  position: relative;
 }
 
 .heart {
-    position: absolute;
-    background-color: transparent;
-    border: none;
-    outline: none;
-    fill: #00000047;
-    width: 30px;
-    z-index: 1;
+  position: absolute;
+  background-color: transparent;
+  border: none;
+  outline: none;
+  fill: #00000047;
+  width: 30px;
+  z-index: 1;
 }
 
 .heart-lit {
-    stroke: #FF2C55;
-    fill: #FF2C55;
+  stroke: #ff2c55;
+  fill: #ff2c55;
 }

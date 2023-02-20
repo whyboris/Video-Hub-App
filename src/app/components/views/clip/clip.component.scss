@@ -1,37 +1,37 @@
 .mini-video-thumb {
-    height: 50%;
-    position: absolute;
-    width: 50%;
+  height: 50%;
+  position: absolute;
+  width: 50%;
 }
 
 .folder {
-    border: 3px solid white;
-    border-radius: 10px;
-    box-sizing: border-box;
+  border: 3px solid white;
+  border-radius: 10px;
+  box-sizing: border-box;
 }
 
 .screencap {
-    height: 100px;
-    margin-left: 50%;
-    position: absolute;
-    transform: translate(-50%, 0);
+  height: 100px;
+  margin-left: 50%;
+  position: absolute;
+  transform: translate(-50%, 0);
 }
 
 .fileSize {
-    display: inline-block;
-    font-size: 10px;
-    opacity: 0.8;
+  display: inline-block;
+  font-size: 10px;
+  opacity: 0.8;
 }
 
 .folder-preview-1 {
-    left: 50%;
+  left: 50%;
 }
 
 .folder-preview-2 {
-    top: 50%;
+  top: 50%;
 }
 
 .folder-preview-3 {
-    left: 50%;
-    top: 50%;
+  left: 50%;
+  top: 50%;
 }
