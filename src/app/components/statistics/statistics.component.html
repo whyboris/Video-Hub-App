@@ -9,7 +9,9 @@
   <span class="stats-heading title sources">{{ 'STATISTICS.videoFolder' | translate }}</span>
 
   <div class="input-sources">
-    <div class="input-sources-row" *ngFor="let item of inputFolders | keyvalue; index as i; trackBy: trackByFn">
+    <div class="input-sources-row"
+      *ngFor="let item of inputFolders | keyvalue | alphabetizeSourceFolders : 'value.path'; index as i; trackBy: trackByFn"
+    >
       <span
         class="stats-heading folder input-folder"
         [innerHtml]="item.value.path | folderArrowsPipe"
