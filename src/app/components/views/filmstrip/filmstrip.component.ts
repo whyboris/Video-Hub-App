@@ -14,10 +14,10 @@ import type { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/s
   selector: 'app-filmstrip-item',
   templateUrl: './filmstrip.component.html',
   styleUrls: [
-      '../clip-and-preview.scss',
       '../film-and-full.scss',
       '../time-and-rez.scss',
-      '../selected.scss'
+      '../selected.scss',
+      './filmstrip.component.scss'
     ],
   animations: [ textAppear,
                 metaAppear ]

@@ -136,7 +136,7 @@
     "showFullViewDescription": "All screenshots view",
     "showFullViewHint": "Full view",
     "showMoreInfoDescription": "Show file name, resolution, and video length",
-    "showMoreInfoHint": "Show file name",
+    "showMoreInfoHint": "Show file name & meta",
     "showRecentDescription": "Show recently-opened video hub history",
     "showRecentHint": "Show recently opened hubs",
     "showRecentPlayed": "Recently played",

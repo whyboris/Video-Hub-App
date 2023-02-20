@@ -1,6 +1,7 @@
 <div
   [ngStyle]="{ height: elHeight + 'px'}"
-  [ngClass]="compactView ? 'compact-margins': 'meta-container'"
+  class="meta-container"
+  [ngClass]="{ 'compact-margins' : compactView }"
 >
   <div
     #filmstripHolder
@@ -35,7 +36,7 @@
   </app-icon>
 
   <span
-    *ngIf="showMeta"
+    *ngIf="showMeta && !compactView"
     [ngClass]="{ 'larger-font': largerFont }"
     [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
     class="title"
