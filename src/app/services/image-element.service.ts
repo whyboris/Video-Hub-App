@@ -79,9 +79,6 @@ constructor() { }
    * Toggle heart
    */
   toggleHeart(index: number) {
-
-    console.log('service: TOGGLE HEART');
-
     if (this.imageElements[index].stars == 5.5) { // "un-favorite" the video
       this.HandleEmission({
         index: index,

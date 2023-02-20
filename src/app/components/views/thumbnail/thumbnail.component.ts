@@ -128,7 +128,6 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
 
   toggleHeart(): void {
     this.imageElementService.toggleHeart(this.video.index);
-    console.log("Called toggleHeart");
     event.stopPropagation();
   }
 }
