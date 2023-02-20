@@ -17,7 +17,7 @@ const fs = require('fs');
 const hasher = require('crypto').createHash;
 import type { Stats } from 'fs';
 
-import type { FinalObject, ImageElement, ScreenshotSettings, InputSources, ResolutionString} from '../interfaces/final-object.interface';
+import type { FinalObject, ImageElement, ScreenshotSettings, InputSources, ResolutionString, StarRating} from '../interfaces/final-object.interface';
 import { NewImageElement } from '../interfaces/final-object.interface';
 import { startFileSystemWatching, resetWatchers } from './main-extract-async';
 
@@ -351,7 +351,7 @@ function getBitrate(fileSize,duration){
  /**
   * Check if the video is "favorited" or not when the hub starts
   */
- function isFavorite(stars): boolean {
+ function isFavorite(stars: StarRating): boolean {
    return stars === 5.5;
  }
 
