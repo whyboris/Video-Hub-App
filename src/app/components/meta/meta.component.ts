@@ -143,10 +143,7 @@ export class MetaComponent implements OnInit, OnDestroy {
         stars: 5.5,
       });
       this.starRatingHack = 0.5;
-
     }
-    // stop event propagation (such as opening the video)
-    event.stopPropagation();
   }
 
   /**
