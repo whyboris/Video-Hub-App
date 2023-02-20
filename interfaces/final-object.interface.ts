@@ -58,6 +58,7 @@ export interface ImageElement {
   resBucket: number;             // the resolution category the video falls into (for faster sorting)
   resolution: ResolutionString;  // e.g. `720`, `1080`, `SD`, `HD`, etc
   selected?: boolean;            // for batch-tagging of videos
+  favorite?: boolean;            // toggled on if favorited video; removed before saving .vha file
 }
 
 export interface ImageElementPlus extends ImageElement {

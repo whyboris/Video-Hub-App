@@ -15,6 +15,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'duplicateSize'
  | 'durationFilter'
  | 'exclude'
+ | 'favorites'
  | 'fileIntersection'
  | 'fileUnion'
  | 'flatIcons'
@@ -190,6 +191,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
   [ // 13
     'hideTop', // Hide top bar
     'flatIcons', // Button style
+    'favorites', // Show favroite icon
   ],
   [ // 14 - Create a new hub ---------------------------- 3rd tab
     'startWizard',
@@ -364,6 +366,14 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-video-x',
     moreInfo: 'BUTTONS.excludeMoreInfo',
     title: 'BUTTONS.excludeHint',
+    toggled: false
+  },
+  'favorites': {
+    description: 'BUTTONS.favoritesDescription',
+    hidden: false,
+    iconName: 'icon-heart',
+    settingsHeading: 'SETTINGS.favorites',
+    title: 'BUTTONS.favrotiesHint',
     toggled: false
   },
   'fileIntersection': {

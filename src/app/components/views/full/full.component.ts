@@ -7,6 +7,7 @@ import { FilePathService } from '../file-path.service';
 import { metaAppear, textAppear } from '../../../common/animations';
 
 import type { ImageElement } from '../../../../../interfaces/final-object.interface';
+import { ImageElementService } from './../../../services/image-element.service';
 import type { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/shared-interfaces';
 
 @Component({
@@ -44,21 +45,26 @@ export class FullViewComponent implements OnInit {
   @Input() hubName: string;
   @Input() largerFont: boolean;
   @Input() showMeta: boolean;
+  @Input() showFavorites: boolean;
 
   _imgHeight: number;
   _metaWidth: number;
   computedWidth: number;
   fullFilePath = '';
   rowOffsets: number[];
+  heartLitHack: boolean; // true if stars == 5.5, false otherwise
 
   constructor(
     public filePathService: FilePathService,
+    public imageElementService: ImageElementService,
     public sanitizer: DomSanitizer
   ) { }
 
   ngOnInit() {
     this.fullFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
     this.render();
+
+    this.heartLitHack = this.video.stars == 5.5;
   }
 
   render(): void {
@@ -70,5 +76,25 @@ export class FullViewComponent implements OnInit {
     for (let i = 0; i < numOfRows; i++) {
       this.rowOffsets.push(i * Math.floor(this._metaWidth / imgWidth));
     }
+  }
+
+  toggleHeart(): void {
+    if (this.video.stars == 5.5) { // "un-favorite" the video
+      this.imageElementService.HandleEmission({
+        index: this.video.index,
+        stars: 0.5,
+        favorite: false
+      });
+      this.heartLitHack = false;
+    } else { // "favorite" the video
+      this.imageElementService.HandleEmission({
+        index: this.video.index,
+        stars: 5.5,
+        favorite: true
+      });
+      this.heartLitHack = true;
+    }
+    // stop event propagation (such as opening the video)
+    event.stopImmediatePropagation();
   }
 }

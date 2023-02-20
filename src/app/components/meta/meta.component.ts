@@ -40,10 +40,12 @@ export class MetaComponent implements OnInit, OnDestroy {
   @Input() showMeta: boolean;
   @Input() showVideoNotes: boolean;
   @Input() star: StarRating;
+  @Input() starRatingHack: StarRating;
+  @Input() heartLitHack: boolean;
 
   @Input() renameResponse: Observable<RenameFileResponse>;
 
-  starRatingHack: StarRating;
+  // starRatingHack: StarRating;
   yearHack: number;
 
   tagViewUpdateHack = false;
@@ -122,12 +124,40 @@ export class MetaComponent implements OnInit, OnDestroy {
   setStarRating(rating: StarRating): void {
     if (this.starRatingHack === rating) {
       rating = 0.5; // reset to "N/A" (not rated)
+      this.heartLitHack = false;
+    } else if (rating === 5.5) {
+      this.heartLitHack = true;
     }
-    this.starRatingHack = rating; // hack for getting star opacity updated instantly
     this.imageElementService.HandleEmission({
       index: this.video.index,
-      stars: rating
+      stars: rating,
+      favorite: rating == 5.5
     });
+    this.starRatingHack = rating; // hack for getting star opacity updated instantly
+    this.heartLitHack = rating == 5.5;
+  }
+
+  setHeart(): void {
+    if (this.video.stars == 5.5) { // "un-favorite" the video
+      this.imageElementService.HandleEmission({
+        index: this.video.index,
+        stars: 0.5,
+        favorite: false
+      });
+      this.heartLitHack = false;
+      this.starRatingHack = 0.5;
+    } else { // "favorite" the video
+      this.imageElementService.HandleEmission({
+        index: this.video.index,
+        stars: 5.5,
+        favorite: true
+      });
+      this.heartLitHack = true;
+      this.starRatingHack = 0.5;
+
+    }
+    // stop event propagation (such as opening the video)
+    event.stopImmediatePropagation();
   }
 
   /**
