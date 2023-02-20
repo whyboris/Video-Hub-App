@@ -17,7 +17,7 @@ const fs = require('fs');
 const hasher = require('crypto').createHash;
 import type { Stats } from 'fs';
 
-import type { FinalObject, ImageElement, ScreenshotSettings, InputSources, ResolutionString} from '../interfaces/final-object.interface';
+import type { FinalObject, ImageElement, ScreenshotSettings, InputSources, ResolutionString } from '../interfaces/final-object.interface';
 import { NewImageElement } from '../interfaces/final-object.interface';
 import { startFileSystemWatching, resetWatchers } from './main-extract-async';
 
@@ -305,7 +305,7 @@ function getBestStream(metadata) {
  */
 function getFileDuration(metadata): number {
   if (metadata?.streams?.[0]?.duration) {
-    
+
     return metadata.streams[0].duration;
 
   } else if (metadata?.format?.duration) {

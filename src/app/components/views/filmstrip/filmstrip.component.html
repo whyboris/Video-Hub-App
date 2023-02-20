@@ -27,6 +27,14 @@
     [icon]="'icon-show-more-info'"
   ></app-icon>
 
+  <app-icon
+    *ngIf="showFavorites"
+    (click)="toggleHeart()"
+    class="heart"
+    [ngClass]="{ 'heart-lit' : video.stars === 5.5 }"
+    [icon]="'icon-heart'">
+  </app-icon>
+
   <span
     *ngIf="showMeta"
     [ngClass]="{ 'larger-font': largerFont }"

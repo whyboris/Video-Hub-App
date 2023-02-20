@@ -8,7 +8,7 @@
     "declaration": false,
     "experimentalDecorators": true,
     "lib": [
-      "es2020",
+      "es2022",
       "dom"
     ],
     "module": "esnext",
@@ -16,7 +16,7 @@
     "outDir": "./dist/out-tsc",
     "removeComments": true,
     "sourceMap": true,
-    "target": "es2020",
+    "target": "es2022",
     "typeRoots": [
       "node_modules/@types"
     ]

@@ -7,6 +7,7 @@ import { FilePathService } from '../file-path.service';
 import { metaAppear, textAppear } from '../../../common/animations';
 
 import type { ImageElement } from '../../../../../interfaces/final-object.interface';
+import { ImageElementService } from './../../../services/image-element.service';
 import type { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/shared-interfaces';
 
 @Component({
@@ -37,6 +38,7 @@ export class FilmstripComponent implements OnInit {
   @Input() imgHeight: number;
   @Input() largerFont: boolean;
   @Input() showMeta: boolean;
+  @Input() showFavorites: boolean;
 
   fullFilePath = '';
   filmXoffset = 0;
@@ -44,6 +46,7 @@ export class FilmstripComponent implements OnInit {
 
   constructor(
     public filePathService: FilePathService,
+    public imageElementService: ImageElementService,
     public sanitizer: DomSanitizer
   ) { }
 
@@ -61,5 +64,10 @@ export class FilmstripComponent implements OnInit {
       this.indexToShow = Math.floor(cursorX * (this.video.screens / containerWidth));
       this.filmXoffset = imgWidth * Math.floor(cursorX / (containerWidth / howManyScreensOutsideCutoff));
     }
+  }
+
+  toggleHeart(): void {
+    this.imageElementService.toggleHeart(this.video.index);
+    event.stopPropagation();
   }
 }
