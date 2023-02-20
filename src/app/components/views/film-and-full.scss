@@ -1,41 +1,64 @@
 .meta-container {
-  margin: 20px 20px 5px;
-  position: relative;
-  transition: 300ms;
-  transition-property: height;
-  width: calc(100% - 40px);
+    margin: 20px 20px 5px;
+    position: relative;
+    transition: 300ms;
+    transition-property: height;
+    width: calc(100% - 40px);
 }
 
 .filmstrip-container {
-  background-color: black;
-  background-repeat: no-repeat;
-  cursor: pointer;
-  height: 100px;
-  outline: 3px solid black;
-  overflow-y: hidden;
-  position: relative;
-  width: 100%;
+    background-color: black;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    height: 100px;
+    outline: 3px solid black;
+    overflow-y: hidden;
+    position: relative;
+    width: 100%;
 }
 
 .title {
-  display: block;
-  font-size: 12px;
-  margin: 6px 2px 0px;
-  overflow: hidden;
-  text-align: left;
-  text-overflow: ellipsis;
-  transition: 300ms;
-  transition-property: font-size;
-  white-space: nowrap;
-  width: 100%;
+    display: block;
+    font-size: 12px;
+    margin: 6px 2px 0px;
+    overflow: hidden;
+    text-align: left;
+    text-overflow: ellipsis;
+    transition: 300ms;
+    transition-property: font-size;
+    white-space: nowrap;
+    width: 100%;
 }
 
 .fileSize {
-  display: inline-block;
-  font-size: 10px;
-  opacity: 0.8;
+    display: inline-block;
+    font-size: 10px;
+    opacity: 0.8;
 }
 
 .larger-font {
-  font-size: 16px;
+    font-size: 16px;
+}
+
+.video-box {
+    position: relative;
+}
+
+.heart {
+    position: absolute;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    top: 4%;
+    stroke: white;
+    stroke-width: 5%;
+    stroke-opacity: 0.5;
+    fill: #00000047;
+    width: 30px;
+    z-index: 1;
+}
+
+.heart-lit {
+    stroke: #FF2C55;
+    fill: #FF2C55;
 }

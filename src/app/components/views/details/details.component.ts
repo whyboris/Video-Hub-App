@@ -9,6 +9,7 @@ import { ManualTagsService } from '../../tags-manual/manual-tags.service';
 
 import type { StarRating, ImageElement } from '../../../../../interfaces/final-object.interface';
 import type { VideoClickEmit, RightClickEmit, TagEmit, RenameFileResponse } from '../../../../../interfaces/shared-interfaces';
+import { ImageElementService } from './../../../services/image-element.service';
 
 export interface YearEmission {
   index: number;
@@ -52,8 +53,9 @@ export class DetailsComponent implements OnInit {
   @Input() showManualTags: boolean;
   @Input() showMeta: boolean;
   @Input() showVideoNotes: boolean;
+  @Input() showFavorites: boolean;
   @Input() star: StarRating;
-
+  
   @Input() renameResponse: BehaviorSubject<RenameFileResponse>;
 
   containerWidth: number;
@@ -62,9 +64,12 @@ export class DetailsComponent implements OnInit {
   hover: boolean;
   indexToShow = 1;
   percentOffset = 0;
+  starRatingHack: StarRating; // updates visuals of rating
+  heartLitHack: boolean; // true if stars == 5.5, false otherwise
 
   constructor(
     public filePathService: FilePathService,
+    public imageElementService: ImageElementService,
     public manualTagsService: ManualTagsService,
     public sanitizer: DomSanitizer
   ) { }
@@ -89,12 +94,44 @@ export class DetailsComponent implements OnInit {
     return 100 * video.defaultScreen / (video.screens - 1);
   }
 
+  // update heart icon and video rating visuals based on video.stars
+  updateHeart() {
+    this.heartLitHack = this.video.stars == 5.5;
+    this.starRatingHack = this.video.stars;
+  }
+
+  ngOnChanges(changes: any) {
+    this.updateHeart();
+  }
+
+  toggleHeart(): void {
+    if (this.video.stars == 5.5) { // "un-favorite" the video
+      this.imageElementService.HandleEmission({
+        index: this.video.index,
+        stars: 0.5,
+        favorite: false
+      });
+    } else { // "favorite" the video
+      this.imageElementService.HandleEmission({
+        index: this.video.index,
+        stars: 5.5,
+        favorite: true
+      });
+    }
+    this.updateHeart();
+
+    // stop event propagation (such as opening the video)
+    event.stopImmediatePropagation();
+  }
+
   ngOnInit() {
     this.firstFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'thumbnails', this.video.hash);
     this.filmstripPath =  this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
     if (this.video.defaultScreen !== undefined) {
       this.percentOffset = this.getDefaultScreenOffset(this.video);
     }
+
+    this.updateHeart();
   }
 
   mouseIsMoving($event) {
