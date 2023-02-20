@@ -20,6 +20,7 @@ export interface YearEmission {
   selector: 'app-details-item',
   templateUrl: './details.component.html',
   styleUrls: [
+      '../time-and-rez.scss',
       './details.component.scss',
       '../selected.scss'
     ]

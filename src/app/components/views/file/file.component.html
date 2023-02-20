@@ -33,11 +33,13 @@
 
         <app-icon *ngIf="video.selected" class="selected-file-view" [icon]="'icon-show-more-info'"></app-icon>
 
-        <div *ngIf="showFavorites">
-            <button (click)="toggleHeart()" class="heart" [ngClass]="{ 'heart-lit' : video.stars === 5.5 }">
-            <app-icon [icon]="'icon-heart'"></app-icon>
-            </button>
-        </div>
+        <app-icon
+          *ngIf="showFavorites"
+          (click)="toggleHeart()"
+          class="heart"
+          [ngClass]="{ 'heart-lit' : video.stars === 5.5 }"
+          [icon]="'icon-heart'">
+        </app-icon>
 
         <div *ngIf="showMeta" [ngClass]="{ 'meta-dark-mode': darkMode }" class="size">
             {{ video.resolution }}

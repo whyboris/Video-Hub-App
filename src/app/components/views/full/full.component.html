@@ -4,6 +4,14 @@
   }">
     <!-- the 30 px added above is the padding for the text  -->
 
+    <app-icon
+      *ngIf="showFavorites"
+      (click)="toggleHeart()"
+      class="heart"
+      [ngClass]="{ 'heart-lit' : video.stars === 5.5 }"
+      [icon]="'icon-heart'">
+    </app-icon>
+
     <div *ngFor="let row of rowOffsets" (click)="   videoClick.emit({ mouseEvent: $event })" (dblclick)="videoClick.emit({ mouseEvent: $event, doubleClick: true })" (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })" class="filmstrip-container"
         [ngStyle]="{
         height: _imgHeight + 'px',
@@ -13,12 +21,6 @@
       }"></div>
 
     <app-icon *ngIf="video.selected" class="selected" [icon]="'icon-show-more-info'"></app-icon>
-
-    <div *ngIf="showFavorites">
-        <button (click)="toggleHeart()" class="heart" [ngClass]="{ 'heart-lit' : video.stars === 5.5 }">
-        <app-icon [icon]="'icon-heart'"></app-icon>
-        </button>
-    </div>
 
     <span *ngIf="showMeta" [ngClass]="{ 'larger-font': largerFont }" [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }" class="title">
     {{ video.cleanName }}

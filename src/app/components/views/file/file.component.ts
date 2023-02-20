@@ -7,6 +7,7 @@ import { ImageElementService } from './../../../services/image-element.service';
   selector: 'app-file-item',
   templateUrl: './file.component.html',
   styleUrls: [
+      '../time-and-rez.scss',
       './file.component.scss',
       '../../../fonts/icons.scss',
       '../selected.scss'

@@ -14,6 +14,7 @@ import type { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/s
   selector: 'app-full-item',
   templateUrl: './full.component.html',
   styleUrls: [
+      '../time-and-rez.scss',
       '../film-and-full.scss',
       '../selected.scss'
     ],

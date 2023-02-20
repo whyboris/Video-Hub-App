@@ -23,23 +23,3 @@
 .video-box {
   position: relative;
 }
-
-.heart {
-  position: absolute;
-  background-color: transparent;
-  border: none;
-  outline: none;
-  top: 8%;
-  left: 2%;
-  stroke: white;
-  stroke-width: 5%;
-  stroke-opacity: 0.5;
-  fill: #00000047;
-  width: 30px;
-  z-index: 1;
-}
-
-.heart-lit {
-  stroke: #ff2c55;
-  fill: #ff2c55;
-}

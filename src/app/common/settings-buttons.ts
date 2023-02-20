@@ -373,7 +373,7 @@ export const SettingsButtons: SettingsButtonsType = {
     hidden: false,
     iconName: 'icon-heart',
     settingsHeading: 'SETTINGS.favorites',
-    title: 'BUTTONS.favrotiesHint',
+    title: 'BUTTONS.favoritesHint',
     toggled: false
   },
   'fileIntersection': {
