@@ -130,7 +130,7 @@ export class SheetComponent implements OnInit {
     this.starRatingHack = rating; // hack for getting star opacity updated instantly
     this.imageElementService.HandleEmission({
       index: this.video.index,
-      stars: rating,
+      stars: rating
     });
   }
 

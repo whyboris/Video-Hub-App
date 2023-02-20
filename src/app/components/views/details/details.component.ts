@@ -94,17 +94,9 @@ export class DetailsComponent implements OnInit {
     return 100 * video.defaultScreen / (video.screens - 1);
   }
 
-  // update heart icon and video rating visuals based on video.stars
-  updateHeart() {
-    this.starRatingHack = this.video.stars;
-  }
-
   toggleHeart(): void {
     this.imageElementService.toggleHeart(this.video.index);
-
-    this.updateHeart();
-
-    // stop event propagation (such as opening the video)
+    this.starRatingHack = this.video.stars;
     event.stopPropagation();
   }
 
@@ -114,8 +106,6 @@ export class DetailsComponent implements OnInit {
     if (this.video.defaultScreen !== undefined) {
       this.percentOffset = this.getDefaultScreenOffset(this.video);
     }
-
-    this.updateHeart();
   }
 
   mouseIsMoving($event) {
