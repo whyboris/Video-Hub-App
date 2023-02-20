@@ -1,8 +1,7 @@
 <div
-  class="meta-container"
   [ngStyle]="{ height: elHeight + 'px'}"
+  [ngClass]="compactView ? 'compact-margins': 'meta-container'"
 >
-
   <div
     #filmstripHolder
     (mousemove)="updateFilmXoffset($event)"

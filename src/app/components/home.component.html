@@ -851,14 +851,20 @@
           [imgHeight]="previewHeight"
           [showFavorites]="settingsButtons['favorites'].toggled"
 
+          [compactView]="settingsButtons['compactView'].toggled"
           [darkMode]="settingsButtons['darkMode'].toggled"
           [hoverScrub]="settingsButtons['hoverScrub'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
 
           style="display: block"
-          [ngStyle]="{ height: previewHeight + textPaddingHeight + 10 + 'px'}"
-        ></app-filmstrip-item>
+          [ngStyle]="{
+              height:   previewHeight
+                      + textPaddingHeight
+                      + (settingsButtons['compactView'].toggled ? 0 : 10)
+                      + 'px'
+            }"
+          ></app-filmstrip-item>
       </ng-container>
 
       <!-- ==================================== FULL VIEW ==================================== -->
