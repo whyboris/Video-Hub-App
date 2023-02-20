@@ -1,28 +1,46 @@
-<div class="meta-container" [ngStyle]="{
+<div
+  class="meta-container"
+  [ngStyle]="{
     height: rowOffsets.length * _imgHeight + 30 + 'px',
     width: computedWidth + 'px'
-  }">
-    <!-- the 30 px added above is the padding for the text  -->
+  }"
+  >
+  <!-- the 30 px added above is the padding for the text  -->
 
-    <app-icon
-      *ngIf="showFavorites"
-      (click)="toggleHeart()"
-      class="heart"
-      [ngClass]="{ 'heart-lit' : video.stars === 5.5 }"
-      [icon]="'icon-heart'">
-    </app-icon>
+  <app-icon
+    *ngIf="showFavorites"
+    (click)="toggleHeart()"
+    class="heart"
+    [ngClass]="{ 'heart-lit' : video.stars === 5.5 }"
+    [icon]="'icon-heart'">
+  </app-icon>
 
-    <div *ngFor="let row of rowOffsets" (click)="   videoClick.emit({ mouseEvent: $event })" (dblclick)="videoClick.emit({ mouseEvent: $event, doubleClick: true })" (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })" class="filmstrip-container"
-        [ngStyle]="{
+  <div
+    *ngFor="let row of rowOffsets"
+    (click)="   videoClick.emit({ mouseEvent: $event })"
+    (dblclick)="videoClick.emit({ mouseEvent: $event, doubleClick: true })"
+    (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
+    class="filmstrip-container"
+    [ngStyle]="{
         height: _imgHeight + 'px',
         'background-image': 'url(' + fullFilePath + ')',
         'background-position-x': '-' + (row * _imgHeight * 16 / 9) + 'px',
         'background-size': 'auto ' + _imgHeight + 'px'
-      }"></div>
+      }"
+  ></div>
 
-    <app-icon *ngIf="video.selected" class="selected" [icon]="'icon-show-more-info'"></app-icon>
+  <app-icon
+    *ngIf="video.selected"
+    class="selected"
+    [icon]="'icon-show-more-info'"
+  ></app-icon>
 
-    <span *ngIf="showMeta" [ngClass]="{ 'larger-font': largerFont }" [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }" class="title">
+  <span
+    *ngIf="showMeta"
+    [ngClass]="{ 'larger-font': largerFont }"
+    [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
+    class="title"
+  >
     {{ video.cleanName }}
     <div class="fileSize" *ngIf="showMeta">
       ({{ video.fileSizeDisplay }})
