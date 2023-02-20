@@ -168,6 +168,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'autoFolderTags',
     'showVideoNotes',
     'sortAutoTags',
+    'favorites',
   ],
   [ // 9 - Thumbnails view
     'hoverScrub',
@@ -191,7 +192,6 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
   [ // 13
     'hideTop', // Hide top bar
     'flatIcons', // Button style
-    'favorites', // Show favroite icon
   ],
   [ // 14 - Create a new hub ---------------------------- 3rd tab
     'startWizard',

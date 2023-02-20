@@ -232,7 +232,6 @@ function stripOutTemporaryFields(imagesArray: ImageElement[]): ImageElement[] {
     delete(element.resBucket);
     delete(element.resolution);
     delete(element.selected);
-    delete(element.favorite);
   });
   return imagesArray;
 }
@@ -347,13 +346,6 @@ function getBitrate(fileSize,duration){
  // ===========================================================================================
  // Other supporting methods
  // ===========================================================================================
-
- /**
-  * Check if the video is "favorited" or not when the hub starts
-  */
- function isFavorite(stars: StarRating): boolean {
-   return stars === 5.5;
- }
 
 /**
  * Compute the number of screenshots to extract for a particular video
@@ -557,7 +549,6 @@ export function insertTemporaryFieldsSingle(element: ImageElement): ImageElement
   element.bitrate = getBitrate(element.fileSize, element.duration);
   element.resBucket = resolution.bucket;
   element.resolution = resolution.label;
-  element.favorite = isFavorite(element.stars);
   return element;
 }
 

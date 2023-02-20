@@ -131,7 +131,6 @@ export class MetaComponent implements OnInit, OnDestroy {
     this.imageElementService.HandleEmission({
       index: this.video.index,
       stars: rating,
-      favorite: rating == 5.5
     });
     this.starRatingHack = rating; // hack for getting star opacity updated instantly
     this.heartLitHack = rating == 5.5;
@@ -142,7 +141,6 @@ export class MetaComponent implements OnInit, OnDestroy {
       this.imageElementService.HandleEmission({
         index: this.video.index,
         stars: 0.5,
-        favorite: false
       });
       this.heartLitHack = false;
       this.starRatingHack = 0.5;
@@ -150,7 +148,6 @@ export class MetaComponent implements OnInit, OnDestroy {
       this.imageElementService.HandleEmission({
         index: this.video.index,
         stars: 5.5,
-        favorite: true
       });
       this.heartLitHack = true;
       this.starRatingHack = 0.5;

@@ -28,12 +28,9 @@ constructor() { }
       this.imageElements[index].year =          (emission as YearEmission).year;
 
     } else if ('stars' in emission) {
+
       this.imageElements[index].stars =         (emission as StarEmission).stars;
       this.forceStarFilterUpdate = !this.forceStarFilterUpdate;
-
-      if ('favorite' in emission) {
-        this.imageElements[index].favorite = (emission as StarEmission).favorite;
-      }
 
     } else if ('defaultScreen' in emission) {
 
@@ -88,14 +85,12 @@ constructor() { }
     if (this.imageElements[index].stars == 5.5) { // "un-favorite" the video
       this.HandleEmission({
         index: index,
-        stars: 0.5,
-        favorite: false
+        stars: 0.5
       });
     } else { // "favorite" the video
       this.HandleEmission({
         index: index,
-        stars: 5.5,
-        favorite: true
+        stars: 5.5
       });
     }
   }
