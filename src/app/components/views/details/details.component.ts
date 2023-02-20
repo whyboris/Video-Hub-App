@@ -55,7 +55,7 @@ export class DetailsComponent implements OnInit {
   @Input() showVideoNotes: boolean;
   @Input() showFavorites: boolean;
   @Input() star: StarRating;
-  
+
   @Input() renameResponse: BehaviorSubject<RenameFileResponse>;
 
   containerWidth: number;
@@ -65,7 +65,6 @@ export class DetailsComponent implements OnInit {
   indexToShow = 1;
   percentOffset = 0;
   starRatingHack: StarRating; // updates visuals of rating
-  heartLitHack: boolean; // true if stars == 5.5, false otherwise
 
   constructor(
     public filePathService: FilePathService,
@@ -96,32 +95,16 @@ export class DetailsComponent implements OnInit {
 
   // update heart icon and video rating visuals based on video.stars
   updateHeart() {
-    this.heartLitHack = this.video.stars == 5.5;
     this.starRatingHack = this.video.stars;
   }
 
-  ngOnChanges(changes: any) {
-    this.updateHeart();
-  }
-
   toggleHeart(): void {
-    if (this.video.stars == 5.5) { // "un-favorite" the video
-      this.imageElementService.HandleEmission({
-        index: this.video.index,
-        stars: 0.5,
-        favorite: false
-      });
-    } else { // "favorite" the video
-      this.imageElementService.HandleEmission({
-        index: this.video.index,
-        stars: 5.5,
-        favorite: true
-      });
-    }
+    this.imageElementService.toggleHeart(this.video.index);
+
     this.updateHeart();
 
     // stop event propagation (such as opening the video)
-    event.stopImmediatePropagation();
+    event.stopPropagation();
   }
 
   ngOnInit() {

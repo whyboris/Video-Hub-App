@@ -157,7 +157,7 @@ export class MetaComponent implements OnInit, OnDestroy {
 
     }
     // stop event propagation (such as opening the video)
-    event.stopImmediatePropagation();
+    event.stopPropagation();
   }
 
   /**

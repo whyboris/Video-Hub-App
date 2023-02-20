@@ -54,7 +54,6 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
   indexToShow = 1;
   percentOffset = 0;
   scrollInterval: any = null;
-  heartLitHack: boolean; // true if stars == 5.5, false otherwise
 
   constructor(
     public filePathService: FilePathService,
@@ -78,8 +77,6 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
       this.hover = true;
       this.percentOffset = this.defaultScreenOffset(this.video);
     }
-
-    this.heartLitHack = this.video.stars == 5.5;
   }
 
   defaultScreenOffset(video: ImageElement): number {
@@ -130,28 +127,8 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
   }
 
   toggleHeart(): void {
-    console.log("Called toggleHeart()\n");
-    console.log("Previous rating:");
-    console.log(this.video.stars);
-    if (this.video.stars == 5.5) { // "un-favorite" the video
-      this.imageElementService.HandleEmission({
-        index: this.video.index,
-        stars: 0.5,
-        favorite: false
-      });
-      this.heartLitHack = false;
-    } else { // "favorite" the video
-      this.imageElementService.HandleEmission({
-        index: this.video.index,
-        stars: 5.5,
-        favorite: true
-      });
-      this.heartLitHack = true;
-    }
-    // stop event propagation (such as opening the video)
-    event.stopImmediatePropagation();
-    console.log("\nNow rating:");
-    console.log(this.video.stars);
-    console.log(this.video.favorite);
+    this.imageElementService.toggleHeart(this.video.index);
+    console.log("Called toggleHeart");
+    event.stopPropagation();
   }
 }

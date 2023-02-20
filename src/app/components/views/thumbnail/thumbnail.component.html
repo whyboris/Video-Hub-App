@@ -136,9 +136,9 @@
     ></app-icon>
 
     <div *ngIf="showFavorites">
-        <button (click)="toggleHeart()" class="heart" [ngClass]="{ 'heart-lit' : heartLitHack }">
+      <button (click)="toggleHeart()" class="heart" [ngClass]="{ 'heart-lit' : video.stars === 5.5 }">
         <app-icon [icon]="'icon-heart'"></app-icon>
-        </button>
+      </button>
     </div>
 
     <span *ngIf="showMeta" class="time">{{ video.durationDisplay }}</span>

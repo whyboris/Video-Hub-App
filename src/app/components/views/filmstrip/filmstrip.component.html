@@ -14,10 +14,10 @@
     <app-icon *ngIf="video.selected" class="selected" [icon]="'icon-show-more-info'"></app-icon>
 
     <div *ngIf="showFavorites">
-      <button (click)="toggleHeart()" class="heart" [ngClass]="{ 'heart-lit' : heartLitHack }">
-      <app-icon [icon]="'icon-heart'"></app-icon>
+      <button (click)="toggleHeart()" class="heart" [ngClass]="{ 'heart-lit' : video.stars === 5.5 }">
+        <app-icon [icon]="'icon-heart'"></app-icon>
       </button>
-  </div>
+    </div>
 
 
     <span *ngIf="showMeta" [ngClass]="{ 'larger-font': largerFont }" [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }" class="title">

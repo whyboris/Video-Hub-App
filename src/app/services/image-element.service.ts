@@ -79,6 +79,28 @@ constructor() { }
   }
 
   /**
+   * Toggle heart
+   */
+  toggleHeart(index: number) {
+
+    console.log('service: TOGGLE HEART');
+
+    if (this.imageElements[index].stars == 5.5) { // "un-favorite" the video
+      this.HandleEmission({
+        index: index,
+        stars: 0.5,
+        favorite: false
+      });
+    } else { // "favorite" the video
+      this.HandleEmission({
+        index: index,
+        stars: 5.5,
+        favorite: true
+      });
+    }
+  }
+
+  /**
    * Update recently played
    *  - remove duplicates
    *  - trim to at most 7

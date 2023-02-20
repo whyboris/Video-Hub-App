@@ -52,7 +52,6 @@ export class FullViewComponent implements OnInit {
   computedWidth: number;
   fullFilePath = '';
   rowOffsets: number[];
-  heartLitHack: boolean; // true if stars == 5.5, false otherwise
 
   constructor(
     public filePathService: FilePathService,
@@ -63,8 +62,6 @@ export class FullViewComponent implements OnInit {
   ngOnInit() {
     this.fullFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
     this.render();
-
-    this.heartLitHack = this.video.stars == 5.5;
   }
 
   render(): void {
@@ -79,22 +76,7 @@ export class FullViewComponent implements OnInit {
   }
 
   toggleHeart(): void {
-    if (this.video.stars == 5.5) { // "un-favorite" the video
-      this.imageElementService.HandleEmission({
-        index: this.video.index,
-        stars: 0.5,
-        favorite: false
-      });
-      this.heartLitHack = false;
-    } else { // "favorite" the video
-      this.imageElementService.HandleEmission({
-        index: this.video.index,
-        stars: 5.5,
-        favorite: true
-      });
-      this.heartLitHack = true;
-    }
-    // stop event propagation (such as opening the video)
-    event.stopImmediatePropagation();
+    this.imageElementService.toggleHeart(this.video.index);
+    event.stopPropagation();
   }
 }
