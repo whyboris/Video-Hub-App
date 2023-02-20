@@ -59,7 +59,19 @@
   left: 0;
   text-align: right;
   width: 21px;
-  color: transparent;
+}
+
+.heart {
+  fill: rgba(0, 0, 0, 0);
+  transform: translate(-20px, 2px);
+}
+
+.heart-lit {
+  fill: #ff2255;
+}
+
+.heart-selected {
+  opacity: 0.5;
 }
 
 .fileSize {
@@ -137,8 +149,4 @@
 .showing-meta {
   transform: translate(35px, 0);
   width: calc(100% - 65px);
-}
-
-.video-box {
-  position: relative;
 }

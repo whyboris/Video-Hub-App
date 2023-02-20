@@ -56,7 +56,7 @@
       *ngIf="showFavorites"
       (click)="toggleHeart()"
       class="heart"
-      [ngClass]="{ 'heart-lit' : video.stars === 5.5 }"
+      [ngClass]="{ 'heart-lit' : video.stars === 5.5, 'heart-selected' : video.selected }"
       [icon]="'icon-heart'">
     </app-icon>
 
