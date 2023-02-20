@@ -306,7 +306,7 @@ function getBestStream(metadata) {
  */
 function getFileDuration(metadata): number {
   if (metadata?.streams?.[0]?.duration) {
-    
+
     return metadata.streams[0].duration;
 
   } else if (metadata?.format?.duration) {
@@ -344,21 +344,16 @@ function getBitrate(fileSize,duration){
    }
  }
 
+ // ===========================================================================================
+ // Other supporting methods
+ // ===========================================================================================
 
-//Check if the video is "favorited" or not at the start of the hub
-
-  function isFavorite(stars): boolean {
-    var result = false;
-    if (stars == 5.5) {
-      result = true;
-    }
-    return result;
-  }
-
-
-// ===========================================================================================
-// Other supporting methods
-// ===========================================================================================
+ /**
+  * Check if the video is "favorited" or not when the hub starts
+  */
+ function isFavorite(stars): boolean {
+   return stars === 5.5;
+ }
 
 /**
  * Compute the number of screenshots to extract for a particular video
