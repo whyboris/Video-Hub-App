@@ -1,9 +1,9 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
-import type { AllowedScreenshotHeight } from '../../../../interfaces/final-object.interface';
-import type { HistoryItem } from '../../../../interfaces/shared-interfaces';
+import type { AllowedScreenshotHeight } from '@my/final-object.interface';
+import type { HistoryItem } from '@my/shared-interfaces';
 import type { ImportStage } from '../../../../node/main-support';
-import type { WizardOptions } from '../../../../interfaces/wizard-options.interface';
+import type { WizardOptions } from '@my/wizard-options.interface';
 
 import { historyItemRemove, slowFadeIn } from '../../common/animations';
 

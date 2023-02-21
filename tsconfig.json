@@ -4,6 +4,10 @@
     "strictTemplates": true
   },
   "compilerOptions": {
+    "paths": {
+      "@pipes": ["src/app/pipes"],
+      "@my/*": ["interfaces/*"]
+    },
     "baseUrl": "",
     "declaration": false,
     "experimentalDecorators": true,

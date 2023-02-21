@@ -1,9 +1,10 @@
 import type { ElementRef} from '@angular/core';
 import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 
-import type { SortType } from '../../pipes/sorting.pipe';
-import { filterItemAppear } from '../../common/animations';
+import type { SortType } from '@pipes';
 import type { SettingsButtonsType } from '../../common/settings-buttons';
+
+import { filterItemAppear } from '../../common/animations';
 
 @Component({
   selector: 'app-sort-order',

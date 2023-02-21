@@ -3,7 +3,7 @@ import { Pipe } from '@angular/core';
 
 import { StarFilterService } from './star-filter.service';
 
-import type { ImageElement } from '../../../interfaces/final-object.interface';
+import type { ImageElement } from '@my/final-object.interface';
 
 @Pipe({
   name: 'starFilterPipe'
