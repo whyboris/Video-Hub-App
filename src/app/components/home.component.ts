@@ -1594,6 +1594,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       ) {
         this.computePreviewWidth();
       }
+      this.cd.detectChanges();
 
       // ======== Filter buttons =========================
     } else if (FilterKeyNames.includes(uniqueKey)) {
