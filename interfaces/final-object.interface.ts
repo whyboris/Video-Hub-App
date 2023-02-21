@@ -33,7 +33,7 @@ export interface ImageElement {
   bitrate: number;               // bitrate of the displayed video file - (fileSize/duration)*1024
   fps: number;                   // base frame rate of the video in fps
   hash: string;                  // used for detecting changed files and as a screenshot identifier
-  height: AllowedScreenshotHeight; // height of the video (px)
+  height: number;                // height of the video (px)
   inputSource: number;           // corresponding to `inputDirs`
   mtime: number;                 // file modification time
   partialPath: string;           // for opening the file, just prepend the `inputDir` (starts with "/", is "/fldr1/fldr2", or can be "")
