@@ -40,10 +40,10 @@ export class MetaComponent implements OnInit, OnDestroy {
   @Input() showMeta: boolean;
   @Input() showVideoNotes: boolean;
   @Input() star: StarRating;
+  @Input() starRatingHack: StarRating;
 
   @Input() renameResponse: Observable<RenameFileResponse>;
 
-  starRatingHack: StarRating;
   yearHack: number;
 
   tagViewUpdateHack = false;
@@ -126,8 +126,24 @@ export class MetaComponent implements OnInit, OnDestroy {
     this.starRatingHack = rating; // hack for getting star opacity updated instantly
     this.imageElementService.HandleEmission({
       index: this.video.index,
-      stars: rating
+      stars: rating,
     });
+  }
+
+  setHeart(): void {
+    if (this.video.stars == 5.5) { // "un-favorite" the video
+      this.imageElementService.HandleEmission({
+        index: this.video.index,
+        stars: 0.5,
+      });
+      this.starRatingHack = 0.5;
+    } else { // "favorite" the video
+      this.imageElementService.HandleEmission({
+        index: this.video.index,
+        stars: 5.5,
+      });
+      this.starRatingHack = 0.5;
+    }
   }
 
   /**

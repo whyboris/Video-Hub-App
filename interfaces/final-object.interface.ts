@@ -30,7 +30,7 @@ export interface ImageElement {
   duration: number;              // number of seconds - duration of film
   fileName: string;              // full file name with extension - for opening the file
   fileSize: number;              // file size in bytes
-  bitrate: number;               // bitrate of the displayed video file - (fileSize/duration)*1024 
+  bitrate: number;               // bitrate of the displayed video file - (fileSize/duration)*1024
   fps: number;                   // base frame rate of the video in fps
   hash: string;                  // used for detecting changed files and as a screenshot identifier
   height: AllowedScreenshotHeight; // height of the video (px)

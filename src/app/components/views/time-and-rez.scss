@@ -42,3 +42,19 @@
   width: 10px;
   z-index: 2;
 }
+
+.heart {
+  fill: #00000047;
+  left: 0;
+  position: absolute;
+  stroke-opacity: 0.5;
+  stroke: white;
+  top: 0;
+  width: 20px;
+  z-index: 1;
+}
+
+.heart-lit {
+  stroke: #ff2255;
+  fill: #ff2255;
+}

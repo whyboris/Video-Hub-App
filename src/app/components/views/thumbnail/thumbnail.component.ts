@@ -2,6 +2,7 @@ import type { OnInit, ElementRef, OnDestroy } from '@angular/core';
 import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 
 import { FilePathService } from '../file-path.service';
+import { ImageElementService } from './../../../services/image-element.service';
 
 import { metaAppear, textAppear } from '../../../common/animations';
 
@@ -43,6 +44,7 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
   @Input() returnToFirstScreenshot: boolean;
   @Input() showMeta: boolean;
   @Input() thumbAutoAdvance: boolean;
+  @Input() showFavorites: boolean;
 
   containerWidth: number;
   firstFilePath = '';
@@ -54,7 +56,8 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
   scrollInterval: any = null;
 
   constructor(
-    public filePathService: FilePathService
+    public filePathService: FilePathService,
+    public imageElementService: ImageElementService,
   ) { }
 
   ngOnInit() {
@@ -123,4 +126,8 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
     clearInterval(this.scrollInterval);
   }
 
+  toggleHeart(): void {
+    this.imageElementService.toggleHeart(this.video.index);
+    event.stopPropagation();
+  }
 }

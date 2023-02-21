@@ -7,6 +7,14 @@
   >
   <!-- the 30 px added above is the padding for the text  -->
 
+  <app-icon
+    *ngIf="showFavorites"
+    (click)="toggleHeart()"
+    class="heart"
+    [ngClass]="{ 'heart-lit' : video.stars === 5.5 }"
+    [icon]="'icon-heart'">
+  </app-icon>
+
   <div
     *ngFor="let row of rowOffsets"
     (click)="   videoClick.emit({ mouseEvent: $event })"
