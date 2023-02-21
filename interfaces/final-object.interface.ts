@@ -3,6 +3,8 @@ export type StarRating = 0.5 | 1.5 | 2.5 | 3.5 | 4.5 | 5.5;
 // must be heights from true `16:9` resolutions AND divisible by 8
 export type AllowedScreenshotHeight = 144 | 216 | 288 | 360 | 432 | 504;
 
+export type AllowedScreenshotHeightString = '144' | '216' | '288' | '360' | '432' | '504';
+
 export type ResolutionString = '' | 'SD' | '720' | '720+' | '1080' | '1080+' | '4K' | '4K+';
 
 export interface SourceFolder {
