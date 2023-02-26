@@ -42,6 +42,7 @@ export interface ImageElement {
   screens: number;               // number of screenshots for this file
   stars: StarRating;             // star rating 0 = n/a, otherwise 1, 2, 3
   timesPlayed: number;           // number of times the file has been launched by VHA
+  lastPlayed: number;            // timestamp of last time video was played; for last-played sorting order
   width: number;                 // width of the video (px)
   // ========================================================================
   // OPTIONAL
@@ -70,18 +71,19 @@ export interface ImageElementPlus extends ImageElement {
 export function NewImageElement(): ImageElement {
   return {
     birthtime: 0,
+    bitrate: 0,
     cleanName: '',
     duration: 0,
     durationDisplay: '',
     fileName: '',
     fileSize: 0,
-    bitrate: 0,
     fileSizeDisplay: '',
     fps: 0,
     hash: '',
     height: 144,
     index: 0,
     inputSource: 0,
+    lastPlayed: 0,
     mtime: 0,
     partialPath: '',
     resBucket: 0,
