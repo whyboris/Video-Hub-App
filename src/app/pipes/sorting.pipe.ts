@@ -6,8 +6,8 @@ import { orderBy } from 'natural-orderby';
 
 export type SortType = 'default'
                      | 'alphabetAsc'
-                     | 'alphabetDesc'
                      | 'alphabetAsc2'
+                     | 'alphabetDesc'
                      | 'alphabetDesc2'
                      | 'aspectRatioAsc'
                      | 'aspectRatioDesc'
@@ -18,6 +18,8 @@ export type SortType = 'default'
                      | 'fpsAsc'
                      | 'fpsDesc'
                      | 'hash' // only used by the duplicateFinderPipe
+                     | 'lastPlayedAsc'
+                     | 'lastPlayedDesc'
                      | 'modifiedAsc'
                      | 'modifiedDesc'
                      | 'random'
@@ -246,6 +248,14 @@ export class SortingPipe implements PipeTransform {
     } else if (sortingType === 'yearDesc') {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): number => {
         return this.sortFunctionLol(x, y, 'year', false);
+      });
+    } else if (sortingType === 'lastPlayedAsc') {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): number => {
+        return this.sortFunctionLol(x, y, 'lastPlayed', false);
+      });
+    } else if (sortingType === 'lastPlayedDesc') {
+      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): number => {
+        return this.sortFunctionLol(x, y, 'lastPlayed', true);
       });
     } else if (sortingType === 'timesPlayedAsc') {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): number => {
