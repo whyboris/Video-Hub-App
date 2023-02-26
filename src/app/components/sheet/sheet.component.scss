@@ -91,6 +91,10 @@
 
   .star-selected {
     opacity: 1 !important;
+
+    &:hover {
+      opacity: 0.7 !important;
+    }
   }
 }
 
