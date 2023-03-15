@@ -44,7 +44,13 @@
   },
   "mac": {
     "category": "public.app-category.video",
-    "target": "dmg",
+    "target": {
+      "target": "dmg",
+      "arch": [
+        "x64",
+        "arm64"
+      ]
+    },
     "icon": "src/assets/icons.icns",
     "asar": true,
     "asarUnpack": [

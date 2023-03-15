@@ -59,6 +59,8 @@ Main dependencies in use:
 
 - **Angular CLI**: not required but may be useful: [Angular CLI](https://cli.angular.io).
 
+- **Mac**: We now have `M1` and `Intel` builds, but you may need to manually update the _FFmpeg_ and _FFprobe_ executables if you're building for a different architecture than you are on.
+
 To help debug a production build of VHA you can use [Debugtron](https://github.com/bytedance/debugtron)
 
 
