@@ -80,8 +80,6 @@ This software would not be possible without the tremendous work by other people:
  - [FFmpeg](https://www.ffmpeg.org/)
  - [angular-electron](https://github.com/maximegris/angular-electron)
  - [ngx-virtual-scroller](https://github.com/rintoj/ngx-virtual-scroller)
- - [ffmpeg-static](https://github.com/eugeneware/ffmpeg-static)
- - [@ffprobe-installer/ffprobe](https://github.com/SavageCore/node-ffprobe-installer)
  - [ngx-translate](https://github.com/ngx-translate/core)
  - [fdir](https://github.com/thecodrr/fdir)
  - [async](https://github.com/caolan/async)
