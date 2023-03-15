@@ -1,7 +1,7 @@
 {
   "name": "video-hub-app-3",
   "productName": "Video Hub App 3",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "Video Hub App 3 - browse, search, preview your videos",
   "homepage": "http://www.videohubapp.com",
   "repository": {
@@ -81,7 +81,7 @@
     "@types/node": "18.14.0",
     "@typescript-eslint/eslint-plugin": "5.53.0",
     "@typescript-eslint/parser": "5.53.0",
-    "electron": "23.1.0",
+    "electron": "22.3.2",
     "electron-builder": "^22.10.3",
     "electron-reload": "1.5.0",
     "npm-run-all": "4.1.5",

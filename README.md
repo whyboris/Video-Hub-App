@@ -52,7 +52,7 @@ Main dependencies in use:
 | ---------------- | --------- | -------------- | ------- |
 | Angular          | v15.1.5   | Feb 2023       |         |
 | Angular-CLI      | v15.1.6   | Feb 2023       |         |
-| Electron         | v23.1.0   | Feb 2023       | (internally uses Node `v18.12.1` and Chromium 110) |
+| Electron         | v22.3.2   | Feb 2023       | (internally uses Node `v16.17.1` and Chromium 108) Do not upgrade because [version `23` no longer works with Windows 7](https://www.electronjs.org/blog/windows-7-to-8-1-deprecation-notice) |
 | Electron Builder | v23.6.0   | Feb 2023       |         |
 
 - **Node**: It may be best to use the same version as _Electron_ uses internally, but consider `v18.12.1`.
