@@ -81,7 +81,7 @@
     "@types/node": "18.14.0",
     "@typescript-eslint/eslint-plugin": "5.53.0",
     "@typescript-eslint/parser": "5.53.0",
-    "electron": "22.3.2",
+    "electron": "22.3.24",
     "electron-builder": "^22.10.3",
     "electron-reload": "1.5.0",
     "npm-run-all": "4.1.5",
