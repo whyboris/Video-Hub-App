@@ -188,7 +188,7 @@ import { YearPipe } from './pipes/year.pipe';
     YearPipe,
   ],
   imports: [
-    AnQrcodeModule,
+    // AnQrcodeModule, // TODO: enable and fix later!
     AppRoutingModule,
     BrowserAnimationsModule,
     BrowserModule,
