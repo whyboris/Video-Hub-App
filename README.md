@@ -28,29 +28,27 @@ Please consider improving or adding an icon to the app. It's a simple process, j
 
 Please see the [Code of Conduct](https://github.com/whyboris/Video-Hub-App/blob/main/CODE_OF_CONDUCT.md) before contributing.
 
-## Fork the Repository
-To contribute, please fork the repository by clicking the fork button at the top of this page. This will create a copy of this repository to your personal account.
+## How to Contribute
+Fork the Repository:
+- Fork the repository by clicking the fork button at the top of this page. This will create a copy of this repository to your personal account.
 
-## Clone the repository
 Clone the repository to your personal machine:
 - Open your forked repository on your GitHub account.
 - Click the code button and copy the provided URL.
 - Open the terminal and run the following git command: `git clone <Copied URL>`
 - Navigate to the repository directory on your machine.
 
-## Create a new Branch
-Create a new branch by running `git branch <Branch Name>`
-Switch to the new branch using `git checkout <Branch Name>`
+Create a new Branch where you will make your changes:
+- Create a new branch by running `git branch <Branch Name>`
+- Switch to the new branch using `git checkout <Branch Name>`
 
-This branch is where you will make your necessary changes.
+Add and commit your changes:
+- Add your changes to the branch using `git add`
+- Commit your changes using `git commit -m <Changes>`
+- Push your changes to your branch using `Git push -u origin <Branch Name>` 
 
-## Commit and push changes
-Add your changes to the branch using `git add`
-Commit your changes using `git commit -m <Changes>`
-Push your changes to your branch using `Git push -u origin <Branch Name>` 
-
-## Create a pull request
-In your personal repository, navigate to the Pull Requests tab and open a new pull request.
+Create a pull request:
+- In your personal repository, navigate to the Pull Requests tab and open a new pull request.
 
 ## Upcoming features
 
