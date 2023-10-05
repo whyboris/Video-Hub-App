@@ -63,7 +63,7 @@
     "ws": "8.14.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "16.2.4",
+    "@angular-devkit/build-angular": "16.2.5",
     "@angular-eslint/builder": "16.2.0",
     "@angular-eslint/schematics": "16.2.0",
     "@angular/animations": "16.2.7",
