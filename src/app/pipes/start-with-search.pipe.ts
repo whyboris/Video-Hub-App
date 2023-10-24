@@ -15,7 +15,7 @@ export class StartWithSearchPipe implements PipeTransform {
   transform(finalArray: ImageElement[], searchString?: string): ImageElement[] {
     if (searchString.length > 0) {
       return finalArray.filter((item) =>
-        item.cleanName.startsWith(searchString)
+        item.cleanName.split(" ").find((word) => word.startsWith(searchString))
       );
     } else {
       return finalArray;
