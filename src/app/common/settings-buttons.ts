@@ -460,14 +460,12 @@ export const SettingsButtons: SettingsButtonsType = {
     title: "BUTTONS.fuzzyHint",
     toggled: true,
   },
-  //TODO  Add description with translation and new icon
   startWith: {
-    description: "Start with search",
+    description: "BUTTONS.startWithDescription",
     hidden: false,
     iconName: "icon-start-with",
-    moreInfo:
-      "Filter which updates the result as you type. It finds videos which start with what you typed",
-    title: "Start-with search",
+    moreInfo: "BUTTONS.startWithMoreInfo",
+    title: "BUTTONS.startWithHint",
     toggled: true,
   },
   hideOffline: {
