@@ -1,102 +1,99 @@
 import type { SettingsButton } from './settings-buttons.interface';
 
-export type SettingsButtonKey =
-  | 'autoFileTags'
-  | 'autoFolderTags'
-  | 'autoplayClips'
-  | 'clearHistory'
-  | 'clipsThumbnail'
-  | 'compactView'
-  | 'dangerousDelete'
-  | 'darkMode'
-  | 'doubleClickMode'
-  | 'dragVideoOutOfApp'
-  | 'duplicateHash'
-  | 'duplicateLength'
-  | 'duplicateSize'
-  | 'durationFilter'
-  | 'exclude'
-  | 'favorites'
-  | 'fileIntersection'
-  | 'fileUnion'
-  | 'flatIcons'
-  | 'folderExclusion'
-  | 'folderIntersection'
-  | 'folderUnion'
-  | 'fontSizeLarger'
-  | 'fuzzy'
-  | 'startWith'
-  | 'hideOffline'
-  | 'hideSidebar'
-  | 'hideTop'
-  | 'hoverScrub'
-  | 'magic'
-  | 'makeLarger'
-  | 'makeSmaller'
-  | 'manualTags'
-  | 'muteClips'
-  | 'openAtTimestamp'
-  | 'playPlaylist'
-  | 'randomizeFoldersScreenshots'
-  | 'regex'
-  | 'resetSettings'
-  | 'resolutionFilter'
-  | 'returnToFirstScreenshot'
-  | 'showClips'
-  | 'showDeleteOption'
-  | 'showDetails'
-  | 'showDetails2'
-  | 'showDetailsTray'
-  | 'showFiles'
-  | 'showFilmstrip'
-  | 'showFolders'
-  | 'showFreq'
-  | 'showFullView'
-  | 'showMoreInfo'
-  | 'showRecent'
-  | 'showRecentlyPlayed'
-  | 'showRelatedVideosTray'
-  | 'showTags'
-  | 'showTagTray'
-  | 'showThumbnails'
-  | 'showVideoNotes'
-  | 'shuffleGalleryNow'
-  | 'sizeFilter'
-  | 'sortAutoTags'
-  | 'sortOptionAlphabetical'
-  | 'sortOptionAlphabetical2'
-  | 'sortOptionAspectRatio'
-  | 'sortOptionCreated'
-  | 'sortOptionLastPlayed'
-  | 'sortOptionFolderSize'
-  | 'sortOptionFps'
-  | 'sortOptionModified'
-  | 'sortOptionSize'
-  | 'sortOptionStar'
-  | 'sortOptionTags'
-  | 'sortOptionTime'
-  | 'sortOptionTimesPlayed'
-  | 'sortOptionYear'
-  | 'sortOrder'
-  | 'starFilter'
-  | 'startWizard'
-  | 'tagExclusion'
-  | 'tagIntersection'
-  | 'tagUnion'
-  | 'thumbAutoAdvance'
-  | 'timesPlayedFilter'
-  | 'videoNotes'
-  | 'yearFilter';
+export type SettingsButtonKey = 'autoFileTags'
+ | 'autoFolderTags'
+ | 'autoplayClips'
+ | 'clearHistory'
+ | 'clipsThumbnail'
+ | 'compactView'
+ | 'dangerousDelete'
+ | 'darkMode'
+ | 'doubleClickMode'
+ | 'dragVideoOutOfApp'
+ | 'duplicateHash'
+ | 'duplicateLength'
+ | 'duplicateSize'
+ | 'durationFilter'
+ | 'exclude'
+ | 'favorites'
+ | 'fileIntersection'
+ | 'fileUnion'
+ | 'flatIcons'
+ | 'folderExclusion'
+ | 'folderIntersection'
+ | 'folderUnion'
+ | 'fontSizeLarger'
+ | 'fuzzy'
+ | 'startWith'
+ | 'hideOffline'
+ | 'hideSidebar'
+ | 'hideTop'
+ | 'hoverScrub'
+ | 'magic'
+ | 'makeLarger'
+ | 'makeSmaller'
+ | 'manualTags'
+ | 'muteClips'
+ | 'openAtTimestamp'
+ | 'playPlaylist'
+ | 'randomizeFoldersScreenshots'
+ | 'regex'
+ | 'resetSettings'
+ | 'resolutionFilter'
+ | 'returnToFirstScreenshot'
+ | 'showClips'
+ | 'showDeleteOption'
+ | 'showDetails'
+ | 'showDetails2'
+ | 'showDetailsTray'
+ | 'showFiles'
+ | 'showFilmstrip'
+ | 'showFolders'
+ | 'showFreq'
+ | 'showFullView'
+ | 'showMoreInfo'
+ | 'showRecent'
+ | 'showRecentlyPlayed'
+ | 'showRelatedVideosTray'
+ | 'showTags'
+ | 'showTagTray'
+ | 'showThumbnails'
+ | 'showVideoNotes'
+ | 'shuffleGalleryNow'
+ | 'sizeFilter'
+ | 'sortAutoTags'
+ | 'sortOptionAlphabetical'
+ | 'sortOptionAlphabetical2'
+ | 'sortOptionAspectRatio'
+ | 'sortOptionCreated'
+ | 'sortOptionLastPlayed'
+ | 'sortOptionFolderSize'
+ | 'sortOptionFps'
+ | 'sortOptionModified'
+ | 'sortOptionSize'
+ | 'sortOptionStar'
+ | 'sortOptionTags'
+ | 'sortOptionTime'
+ | 'sortOptionTimesPlayed'
+ | 'sortOptionYear'
+ | 'sortOrder'
+ | 'starFilter'
+ | 'startWizard'
+ | 'tagExclusion'
+ | 'tagIntersection'
+ | 'tagUnion'
+ | 'thumbAutoAdvance'
+ | 'timesPlayedFilter'
+ | 'videoNotes'
+ | 'yearFilter';
 
 // Add `SettingsButtons` items here so they show up in the buttons ribbon and in the settings
 // Each array separates buttons into their own button groups visually
 export const SettingsButtonsGroups: SettingsButtonKey[][] = [
-  [
-    // 0 - Search & filter settings
+  [ // 0 - Search & filter settings
     'hideSidebar',
   ],
-  [
-    // 1 - Search filters
+  [ // 1 - Search filters
     'folderUnion',
     'folderIntersection',
     'folderExclusion',
@@ -112,8 +109,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'fuzzy',
     'startWith',
   ],
-  [
-    // 2 - Filters & sorting options
+  [ // 2 - Filters & sorting options
     'durationFilter',
     'sizeFilter',
     'timesPlayedFilter',
@@ -137,15 +133,13 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'sortOptionFps',
     'sortOptionFolderSize',
   ],
-  [
-    // 3 - Find duplicates
+  [ // 3 - Find duplicates
     'duplicateLength',
     'duplicateSize',
     'duplicateHash',
     'showRecent', // Recently opened files
   ],
-  [
-    // 4 - Gallery -------------------------------------- 2nd tab
+  [ // 4 - Gallery -------------------------------------- 2nd tab
     'showThumbnails',
     'showFilmstrip',
     'showFullView',
@@ -154,29 +148,25 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'showFiles',
     'showClips',
   ],
-  [
-    // 5 - Folder view
+  [ // 5 - Folder view
     'showFolders',
     'randomizeFoldersScreenshots',
     'showTags',
   ],
-  [
-    // 6 - Bottom tray
+  [ // 6 - Bottom tray
     'showFreq',
     'showTagTray',
     'showRelatedVideosTray',
     'showRecentlyPlayed',
     'showDetailsTray',
   ],
-  [
-    // 7 - Layout
+  [ // 7 - Layout
     'compactView',
     'showMoreInfo',
     'fontSizeLarger',
     'shuffleGalleryNow',
   ],
-  [
-    // 8 - Auto-generated tags
+  [ // 8 - Auto-generated tags
     'manualTags',
     'autoFileTags',
     'autoFolderTags',
@@ -184,36 +174,30 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'sortAutoTags',
     'favorites',
   ],
-  [
-    // 9 - Thumbnails view
+  [ // 9 - Thumbnails view
     'hoverScrub',
     'thumbAutoAdvance',
     'returnToFirstScreenshot',
   ],
-  [
-    // 10 - Clips view
+  [ // 10 - Clips view
     'muteClips',
     'autoplayClips',
     'clipsThumbnail',
   ],
-  [
-    // 11 - Zoom
+  [ // 11 - Zoom
     'makeSmaller',
     'makeLarger',
   ],
-  [
-    // 12 - Dark mode
+  [ // 12 - Dark mode
     'darkMode',
     'doubleClickMode', // Double click mode
     'dragVideoOutOfApp', // Drag video outside of app
   ],
-  [
-    // 13
+  [ // 13
     'hideTop', // Hide top bar
     'flatIcons', // Button style
   ],
-  [
-    // 14 - Create a new hub ---------------------------- 3rd tab
+  [ // 14 - Create a new hub ---------------------------- 3rd tab
     'startWizard',
     'resetSettings', // Various settings
     'clearHistory',
@@ -221,7 +205,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'dangerousDelete',
     'playPlaylist',
     'openAtTimestamp',
-  ],
+  ]
 ];
 
 // Breaks up content into 3 tabs
@@ -256,7 +240,9 @@ export const SettingsMetaGroup: string[][] = [
     'break',
     ...SettingsButtonsGroups[13],
   ],
-  [...SettingsButtonsGroups[14]],
+  [
+    ...SettingsButtonsGroups[14],
+  ],
 ];
 
 // correspond to each group (tab) above
@@ -266,199 +252,197 @@ export const SettingsMetaGroupLabels: string[] = [
   'SETTINGS.otherSettings',
 ];
 
-export type SettingsButtonsType = {
-  [key in SettingsButtonKey]: SettingsButton;
-};
+export type SettingsButtonsType = { [key in SettingsButtonKey]: SettingsButton };
 
 export const SettingsButtons: SettingsButtonsType = {
-  autoFileTags: {
+  'autoFileTags': {
     description: 'BUTTONS.autoFileTagsDescription',
     hidden: true,
     iconName: 'icon-tag-auto-file',
     moreInfo: 'BUTTONS.autoFileTagsMoreInfo',
     title: 'BUTTONS.autoFileTagsHint',
-    toggled: true,
+    toggled: true
   },
-  autoFolderTags: {
+  'autoFolderTags': {
     description: 'BUTTONS.autoFolderTagsDescription',
     hidden: true,
     iconName: 'icon-tag-auto-folder',
     moreInfo: 'BUTTONS.autoFolderTagsMoreInfo',
     title: 'BUTTONS.autoFolderTagsHint',
-    toggled: false,
+    toggled: false
   },
-  autoplayClips: {
+  'autoplayClips': {
     description: 'BUTTONS.autoplayClipsDescription',
     hidden: true,
     iconName: 'icon-auto-play-clips',
     title: 'BUTTONS.autoplayClipsHint',
-    toggled: false,
+    toggled: false
   },
-  clearHistory: {
+  'clearHistory': {
     description: 'BUTTONS.clearHistoryDescription',
     hidden: false,
     title: 'BUTTONS.clearHistoryHint',
-    toggled: false,
+    toggled: false
   },
-  clipsThumbnail: {
+  'clipsThumbnail': {
     description: 'BUTTONS.clipsThumbnailDescription',
     hidden: true,
     moreInfo: 'BUTTONS.clipsThumbnailMoreInfo',
     title: 'BUTTONS.clipsThumbnailHint',
-    toggled: false,
+    toggled: false
   },
-  compactView: {
+  'compactView': {
     description: 'BUTTONS.compactViewDescription',
     hidden: false,
     iconName: 'icon-compact-view',
     moreInfo: 'BUTTONS.compactViewMoreInfo',
     settingsHeading: 'SETTINGS.miscView',
     title: 'BUTTONS.compactViewHint',
-    toggled: false,
+    toggled: false
   },
-  dangerousDelete: {
+  'dangerousDelete': {
     description: 'BUTTONS.dangerousDeleteDescription',
     hidden: true,
     moreInfo: 'BUTTONS.dangerousDeleteMoreInfo',
     title: 'BUTTONS.dangerousDelete',
-    toggled: false,
+    toggled: false
   },
-  darkMode: {
+  'darkMode': {
     description: 'BUTTONS.darkModeDescription',
     hidden: false,
     iconName: 'icon-darken',
     settingsHeading: 'SETTINGS.darkMode',
     title: 'BUTTONS.darkModeHint',
-    toggled: false,
+    toggled: false
   },
-  doubleClickMode: {
+  'doubleClickMode': {
     description: 'BUTTONS.doubleClickModeDescription',
     hidden: true,
     iconName: 'icon-double-click',
     moreInfo: 'BUTTONS.doubleClickMoreInfo',
     settingsHeading: 'SETTINGS.doubleClickMode',
     title: 'BUTTONS.doubleClickModeHint',
-    toggled: false,
+    toggled: false
   },
-  dragVideoOutOfApp: {
+  'dragVideoOutOfApp': {
     description: 'BUTTONS.dragVideoOutOfAppDescription',
     hidden: true,
     iconName: 'icon-double-click',
     moreInfo: 'BUTTONS.dragVideoOutOfAppMoreInfo',
     settingsHeading: 'SETTINGS.dragVideoOutOfApp',
     title: 'BUTTONS.dragVideoOutOfAppHint',
-    toggled: false,
+    toggled: false
   },
-  duplicateHash: {
+  'duplicateHash': {
     description: 'BUTTONS.duplicateHashDescription',
     hidden: true,
     moreInfo: 'BUTTONS.duplicateHashMoreInfo',
     title: 'BUTTONS.duplicateHashHint',
-    toggled: false,
+    toggled: false
   },
-  duplicateLength: {
+  'duplicateLength': {
     description: 'BUTTONS.duplicateLengthDescription',
     hidden: true,
     moreInfo: 'BUTTONS.duplicateLengthMoreInfo',
     settingsHeading: 'SETTINGS.duplicateLength',
     title: 'BUTTONS.duplicateLengthHint',
-    toggled: false,
+    toggled: false
   },
-  duplicateSize: {
+  'duplicateSize': {
     description: 'BUTTONS.duplicateSizeDescription',
     hidden: true,
     moreInfo: 'BUTTONS.duplicateSizeMoreInfo',
     title: 'BUTTONS.duplicateSizeHint',
-    toggled: false,
+    toggled: false
   },
-  durationFilter: {
+  'durationFilter': {
     description: 'BUTTONS.durationFilterDescription',
     hidden: false,
     iconName: 'icon-hourglass',
     moreInfo: 'BUTTONS.durationFilterMoreInfo',
     settingsHeading: 'SETTINGS.sortingFilters',
     title: 'BUTTONS.durationFilterHint',
-    toggled: false,
+    toggled: false
   },
-  exclude: {
+  'exclude': {
     description: 'BUTTONS.excludeDescription',
     hidden: true,
     iconName: 'icon-video-x',
     moreInfo: 'BUTTONS.excludeMoreInfo',
     title: 'BUTTONS.excludeHint',
-    toggled: false,
+    toggled: false
   },
-  favorites: {
+  'favorites': {
     description: 'BUTTONS.favoritesDescription',
     hidden: false,
     iconName: 'icon-heart',
     settingsHeading: 'SETTINGS.favorites',
     moreInfo: 'BUTTONS.favoritesMoreInfo',
     title: 'BUTTONS.favoritesHint',
-    toggled: false,
+    toggled: false
   },
-  fileIntersection: {
+  'fileIntersection': {
     description: 'BUTTONS.fileDescription',
     hidden: false,
     iconName: 'icon-video-minus',
     moreInfo: 'BUTTONS.fileMoreInfo',
     title: 'BUTTONS.fileHint',
-    toggled: true,
+    toggled: true
   },
-  fileUnion: {
+  'fileUnion': {
     description: 'BUTTONS.fileUnionDescription',
     hidden: true,
     iconName: 'icon-video-plus',
     moreInfo: 'BUTTONS.fileUnionMoreInfo',
     title: 'BUTTONS.fileUnionHint',
-    toggled: false,
+    toggled: false
   },
-  flatIcons: {
+  'flatIcons': {
     description: 'BUTTONS.flatIconsDescription',
     hidden: false,
     settingsHeading: 'SETTINGS.buttonStyle',
     title: 'BUTTONS.flatIconsHint',
-    toggled: false,
+    toggled: false
   },
-  folderExclusion: {
+  'folderExclusion': {
     description: 'BUTTONS.folderExclusionDescription',
     hidden: true,
     iconName: 'icon-folder-x',
     moreInfo: 'BUTTONS.folderExclusionMoreInfo',
     title: 'BUTTONS.folderExclusionHint',
-    toggled: false,
+    toggled: false
   },
-  folderIntersection: {
+  'folderIntersection': {
     description: 'BUTTONS.folderDescription',
     hidden: false,
     iconName: 'icon-folder-minus',
     moreInfo: 'BUTTONS.folderMoreInfo',
     title: 'BUTTONS.folderHint',
-    toggled: true,
+    toggled: true
   },
-  folderUnion: {
+  'folderUnion': {
     description: 'BUTTONS.folderUnionDescription',
     hidden: true,
     iconName: 'icon-folder-plus',
     moreInfo: 'BUTTONS.folderUnionMoreInfo',
     settingsHeading: 'SETTINGS.searchFilters',
     title: 'BUTTONS.folderUnionHint',
-    toggled: false,
+    toggled: false
   },
-  fontSizeLarger: {
+  'fontSizeLarger': {
     description: 'BUTTONS.fontSizeLargerDescription',
     hidden: true,
     iconName: 'icon-larger-font',
     title: 'BUTTONS.fontSizeLargerHint',
-    toggled: false,
+    toggled: false
   },
-  fuzzy: {
+  'fuzzy': {
     description: 'BUTTONS.fuzzyDescription',
     hidden: false,
     iconName: 'icon-show-similar',
     moreInfo: 'BUTTONS.fuzzyMoreInfo',
     title: 'BUTTONS.fuzzyHint',
-    toggled: true,
+    toggled: true
   },
   startWith: {
     description: 'BUTTONS.startWithDescription',
@@ -468,466 +452,466 @@ export const SettingsButtons: SettingsButtonsType = {
     title: 'BUTTONS.startWithHint',
     toggled: true,
   },
-  hideOffline: {
+  'hideOffline': {
     description: 'BUTTONS.hideOfflineDescription',
     hidden: true,
     iconName: 'icon-eye-closed',
     moreInfo: 'BUTTONS.hideOfflineMoreInfo',
     title: 'BUTTONS.hideOfflineHint',
-    toggled: false,
+    toggled: false
   },
-  hideSidebar: {
+  'hideSidebar': {
     description: 'BUTTONS.hideSidebarDescription',
     hidden: false,
     iconName: 'icon-chevron-left',
     title: 'BUTTONS.hideSidebarHint',
-    toggled: false,
+    toggled: false
   },
-  hideTop: {
+  'hideTop': {
     description: 'BUTTONS.hideTopDescription',
     hidden: false,
     iconName: 'icon-chevron-up',
     settingsHeading: 'SETTINGS.hideTopBar',
     title: 'BUTTONS.hideTopHint',
-    toggled: false,
+    toggled: false
   },
-  hoverScrub: {
+  'hoverScrub': {
     description: 'BUTTONS.hoverScrubDescription',
     hidden: true,
     iconName: 'icon-toggle-scrub',
     moreInfo: 'BUTTONS.hoverScrubMoreInfo',
     settingsHeading: 'SETTINGS.thumbnailHeading',
     title: 'BUTTONS.hoverScrubHint',
-    toggled: true,
+    toggled: true
   },
-  magic: {
+  'magic': {
     description: 'BUTTONS.magicDescription',
     hidden: false,
     iconName: 'icon-looking-glass',
     moreInfo: 'BUTTONS.magicMoreInfo',
     title: 'BUTTONS.magicHint',
-    toggled: true,
+    toggled: true
   },
-  makeLarger: {
+  'makeLarger': {
     description: 'BUTTONS.makeLargerDescription',
     hidden: false,
     iconName: 'icon-plus',
     title: 'BUTTONS.makeLargerHint',
-    toggled: false,
+    toggled: false
   },
-  makeSmaller: {
+  'makeSmaller': {
     description: 'BUTTONS.makeSmallerDescription',
     hidden: false,
     iconName: 'icon-minus',
     settingsHeading: 'SETTINGS.zoom',
     title: 'BUTTONS.makeSmallerHint',
-    toggled: false,
+    toggled: false
   },
-  manualTags: {
+  'manualTags': {
     description: 'BUTTONS.manualTagsDescription',
     hidden: true,
     iconName: 'icon-tag-manual',
     moreInfo: 'BUTTONS.manualTagsMoreInfo',
     settingsHeading: 'SETTINGS.manualTags',
     title: 'BUTTONS.manualTagsHint',
-    toggled: true,
+    toggled: true
   },
-  muteClips: {
+  'muteClips': {
     description: 'BUTTONS.muteClipsDescription',
     hidden: true,
     iconName: 'icon-mute-clips',
     settingsHeading: 'SETTINGS.clipsHeading',
     title: 'BUTTONS.muteClipsHint',
-    toggled: true,
+    toggled: true
   },
-  openAtTimestamp: {
+  'openAtTimestamp': {
     description: 'BUTTONS.openAtTimestampDescription',
     hidden: true,
     iconName: 'icon-toggle-scrub',
     moreInfo: 'BUTTONS.openAtTimestampMoreInfo',
     settingsHeading: 'BUTTONS.videoPlayerSettings',
     title: 'BUTTONS.openAtTimestampHint',
-    toggled: false,
+    toggled: false
   },
-  playPlaylist: {
+  'playPlaylist': {
     description: 'BUTTONS.playlistButtonDescription',
     hidden: true,
     iconName: 'icon-video-blank',
     moreInfo: 'BUTTONS.playlistButtonMoreInfo',
     title: 'BUTTONS.playlistButton',
-    toggled: false,
+    toggled: false
   },
-  randomizeFoldersScreenshots: {
+  'randomizeFoldersScreenshots': {
     description: 'BUTTONS.randFolderScreenDesc',
     hidden: true,
     title: 'BUTTONS.randFolderScreen',
-    toggled: true,
+    toggled: true
   },
-  regex: {
+  'regex': {
     description: 'BUTTONS.regexDescription',
     hidden: true,
     iconName: 'icon-regex',
     moreInfo: 'BUTTONS.regexMoreInfo',
     title: 'BUTTONS.regexHint',
-    toggled: false,
+    toggled: false
   },
-  resetSettings: {
+  'resetSettings': {
     description: 'BUTTONS.resetSettingsDescription',
     hidden: false,
     settingsHeading: 'SETTINGS.variousSettings',
     title: 'BUTTONS.resetSettingsHint',
-    toggled: false,
+    toggled: false
   },
-  resolutionFilter: {
+  'resolutionFilter': {
     description: 'BUTTONS.resolutionFilterDescription',
     hidden: false,
     iconName: 'icon-res-filter',
     moreInfo: 'BUTTONS.resolutionFilterMoreInfo',
     title: 'BUTTONS.resolutionFilterHint',
-    toggled: false,
+    toggled: false
   },
-  returnToFirstScreenshot: {
+  'returnToFirstScreenshot': {
     description: 'BUTTONS.returnToFirstScreenshotDescription',
     hidden: true,
     iconName: 'icon-toggle-scrub-return',
     moreInfo: 'BUTTONS.returnToFirstScreenshotMoreInfo',
     title: 'BUTTONS.returnToFirstScreenshotHint',
-    toggled: true,
+    toggled: true
   },
-  showClips: {
+  'showClips': {
     description: 'BUTTONS.showClipsDescription',
     hidden: false,
     iconName: 'icon-video-blank',
     title: 'BUTTONS.showClipsHint',
-    toggled: false,
+    toggled: false
   },
-  showDeleteOption: {
+  'showDeleteOption': {
     description: 'BUTTONS.showDeleteButtonDescription',
     hidden: true,
     moreInfo: 'BUTTONS.showDeleteButtonMoreInfo',
     title: 'BUTTONS.showDeleteButton',
-    toggled: false,
+    toggled: false
   },
-  showDetails: {
+  'showDetails': {
     description: 'BUTTONS.showDetailsDescription',
     hidden: false,
     iconName: 'icon-show-details',
     title: 'BUTTONS.showDetailsHint',
-    toggled: false,
+    toggled: false
   },
-  showDetails2: {
+  'showDetails2': {
     description: 'BUTTONS.showDetails2Description',
     hidden: false,
     iconName: 'icon-show-details-2',
     title: 'BUTTONS.showDetails2Hint',
-    toggled: false,
+    toggled: false
   },
-  showDetailsTray: {
+  'showDetailsTray': {
     description: 'BUTTONS.showDetailsTray',
     hidden: false,
     iconName: 'icon-show-details-tray',
     moreInfo: 'BUTTONS.showDetailsTrayMoreInfo',
     title: 'BUTTONS.showDetailsTray',
-    toggled: false,
+    toggled: false
   },
-  showFiles: {
+  'showFiles': {
     description: 'BUTTONS.showFilesDescription',
     hidden: false,
     iconName: 'icon-show-filenames',
     title: 'BUTTONS.showFilesHint',
-    toggled: false,
+    toggled: false
   },
-  showFilmstrip: {
+  'showFilmstrip': {
     description: 'BUTTONS.showFilmstripDescription',
     hidden: false,
     iconName: 'icon-show-filmstrip',
     title: 'BUTTONS.showFilmstripHint',
-    toggled: false,
+    toggled: false
   },
-  showFolders: {
+  'showFolders': {
     description: 'BUTTONS.showFoldersDescription',
     hidden: false,
     iconName: 'icon-folder-blank',
     moreInfo: 'BUTTONS.showFoldersMoreInfo',
     settingsHeading: 'SETTINGS.folderView',
     title: 'BUTTONS.showFoldersHint',
-    toggled: false,
+    toggled: false
   },
-  showFreq: {
+  'showFreq': {
     description: 'BUTTONS.showFreqDescription',
     hidden: false,
     iconName: 'icon-cloud',
     moreInfo: 'BUTTONS.showFreqMoreInfo',
     settingsHeading: 'SETTINGS.wordCloud',
     title: 'BUTTONS.showFreqHint',
-    toggled: false,
+    toggled: false
   },
-  showFullView: {
+  'showFullView': {
     description: 'BUTTONS.showFullViewDescription',
     hidden: false,
     iconName: 'icon-show-full-view',
     title: 'BUTTONS.showFullViewHint',
-    toggled: false,
+    toggled: false
   },
-  showMoreInfo: {
+  'showMoreInfo': {
     description: 'BUTTONS.showMoreInfoDescription',
     hidden: false,
     iconName: 'icon-show-more-info',
     title: 'BUTTONS.showMoreInfoHint',
-    toggled: true,
+    toggled: true
   },
-  showRecent: {
+  'showRecent': {
     description: 'BUTTONS.showRecentDescription',
     hidden: false,
     iconName: 'icon-recent-history',
     settingsHeading: 'SETTINGS.showRecent',
     title: 'BUTTONS.showRecentHint',
-    toggled: false,
+    toggled: false
   },
-  showRecentlyPlayed: {
+  'showRecentlyPlayed': {
     description: 'BUTTONS.showRecentPlayed',
     hidden: false,
     iconName: 'icon-recent-history',
     title: 'BUTTONS.showRecentPlayed',
-    toggled: false,
+    toggled: false
   },
-  showRelatedVideosTray: {
+  'showRelatedVideosTray': {
     description: 'BUTTONS.relatedTrayDescription',
     hidden: false,
     iconName: 'icon-show-similar',
     moreInfo: 'BUTTONS.relatedTrayMoreInfo',
     title: 'BUTTONS.relatedTrayHint',
-    toggled: false,
+    toggled: false
   },
-  showTags: {
+  'showTags': {
     description: 'BUTTONS.showTagsDescription',
     hidden: false,
     iconName: 'icon-tag-auto',
     moreInfo: 'BUTTONS.showTagsMoreInfo',
     title: 'BUTTONS.showTagsHint',
-    toggled: false,
+    toggled: false
   },
-  showTagTray: {
+  'showTagTray': {
     description: 'BUTTONS.tagTrayDescription',
     hidden: true,
     iconName: 'icon-tag-tray',
     title: 'BUTTONS.tagTrayHint',
-    toggled: false,
+    toggled: false
   },
-  showThumbnails: {
+  'showThumbnails': {
     description: 'BUTTONS.showThumbnailsDescription',
     hidden: false,
     iconName: 'icon-show-thumbnails',
     title: 'BUTTONS.showThumbnailsHint',
-    toggled: true,
+    toggled: true
   },
-  showVideoNotes: {
+  'showVideoNotes': {
     description: 'BUTTONS.showVideoNotesDescription',
     hidden: true,
     iconName: 'icon-toggle-video-notes',
     moreInfo: 'BUTTONS.showVideoNotesMoreInfo',
     title: 'BUTTONS.showVideoNotesHint',
-    toggled: false,
+    toggled: false
   },
-  sortAutoTags: {
+  'sortAutoTags':{
     description: 'BUTTONS.sortAutoTagsDescription',
     hidden: true,
     iconName: 'icon-sort-auto-tags',
     moreInfo: 'BUTTONS.sortAutoTagsMoreInfo',
     title: 'BUTTONS.sortAutoTagsHint',
-    toggled: false,
+    toggled: false
   },
-  shuffleGalleryNow: {
+  'shuffleGalleryNow': {
     description: 'BUTTONS.shuffleGalleryNowDescription',
     hidden: false,
     iconName: 'icon-random',
     title: 'BUTTONS.shuffleGalleryNowHint',
-    toggled: false,
+    toggled: false
   },
-  sizeFilter: {
+  'sizeFilter': {
     description: 'BUTTONS.sizeFilterDescription',
     hidden: false,
     iconName: 'icon-sort-order',
     moreInfo: 'BUTTONS.sizeFilterMoreInfo',
     title: 'BUTTONS.sizeFilterHint',
-    toggled: false,
+    toggled: false
   },
-  sortOptionAlphabetical: {
+  'sortOptionAlphabetical': {
     description: 'BUTTONS.sortOptionAlphabeticalDescription',
     hidden: false,
     moreInfo: 'BUTTONS.sortOptionAlphabeticalMoreInfo',
     settingsHeading: 'BUTTONS.sortOptionsHeading',
     title: '',
-    toggled: true,
+    toggled: true
   },
-  sortOptionAlphabetical2: {
+  'sortOptionAlphabetical2': {
     description: 'BUTTONS.sortOptionAlphabeticalDescription2',
     hidden: false,
     moreInfo: 'BUTTONS.sortOptionAlphabeticalMoreInfo2',
     title: '',
-    toggled: false,
+    toggled: false
   },
-  sortOptionAspectRatio: {
+  'sortOptionAspectRatio': {
     description: 'BUTTONS.sortOptionAspectRatioDescription',
     hidden: false,
     moreInfo: 'BUTTONS.sortOptionAspectRatioMoreInfo',
     title: '',
-    toggled: false,
+    toggled: false
   },
-  sortOptionCreated: {
+  'sortOptionCreated': {
     description: 'BUTTONS.sortOptionCreatedDescription',
     hidden: false,
     moreInfo: 'BUTTONS.sortOptionCreatedMoreInfo',
     title: '',
-    toggled: false,
+    toggled: false
   },
-  sortOptionFolderSize: {
+  'sortOptionFolderSize': {
     description: 'BUTTONS.sortOptionFolderSizeDescription',
     hidden: false,
     moreInfo: 'BUTTONS.sortOptionFolderSizeMoreInfo',
     title: '',
-    toggled: false,
+    toggled: false
   },
 
-  sortOptionFps: {
+  'sortOptionFps': {
     description: 'BUTTONS.sortOptionFpsDescription',
     hidden: false,
     moreInfo: 'BUTTONS.sortOptionFpsMoreInfo',
     title: '',
-    toggled: false,
+    toggled: false
   },
-  sortOptionModified: {
+  'sortOptionModified': {
     description: 'BUTTONS.sortOptionModifiedDescription',
     hidden: false,
     moreInfo: 'BUTTONS.sortOptionModifiedMoreInfo',
     title: '',
-    toggled: true,
+    toggled: true
   },
-  sortOptionSize: {
+  'sortOptionSize': {
     description: 'BUTTONS.sortOptionSizeDescription',
     hidden: false,
     moreInfo: 'BUTTONS.sortOptionSizeMoreInfo',
     title: '',
-    toggled: true,
+    toggled: true
   },
-  sortOptionStar: {
+  'sortOptionStar': {
     description: 'BUTTONS.sortOptionStarDescription',
     hidden: false,
     moreInfo: 'BUTTONS.sortOptionStarMoreInfo',
     title: '',
-    toggled: false,
+    toggled: false
   },
-  sortOptionTags: {
+  'sortOptionTags': {
     description: 'BUTTONS.sortOptionTagsDescription',
     hidden: false,
     moreInfo: 'BUTTONS.sortOptionTagsMoreInfo',
     title: '',
-    toggled: false,
+    toggled: false
   },
-  sortOptionTime: {
+  'sortOptionTime': {
     description: 'BUTTONS.sortOptionTimeDescription',
     hidden: false,
     moreInfo: 'BUTTONS.sortOptionTimeMoreInfo',
     title: '',
-    toggled: true,
+    toggled: true
   },
-  sortOptionTimesPlayed: {
+  'sortOptionTimesPlayed': {
     description: 'BUTTONS.sortOptionTimesPlayedDescription',
     hidden: false,
     moreInfo: 'BUTTONS.sortOptionTimesPlayedMoreInfo',
     title: '',
-    toggled: false,
+    toggled: false
   },
-  sortOptionLastPlayed: {
+  'sortOptionLastPlayed': {
     description: 'BUTTONS.sortOptionLastPlayedDescription',
     hidden: false,
     moreInfo: 'BUTTONS.sortOptionLastPlayedMoreInfo',
     title: '',
-    toggled: false,
+    toggled: false
   },
-  sortOptionYear: {
+  'sortOptionYear': {
     description: 'BUTTONS.sortOptionYearDescription',
     hidden: false,
     moreInfo: 'BUTTONS.sortOptionYearMoreInfo',
     title: '',
-    toggled: false,
+    toggled: false
   },
-  sortOrder: {
+  'sortOrder': {
     description: 'BUTTONS.sortOrderDescription',
     hidden: false,
     iconName: 'icon-sort-order',
     moreInfo: 'BUTTONS.sortOrderMoreInfo',
     title: 'BUTTONS.sortOrderHint',
-    toggled: true,
+    toggled: true
   },
-  starFilter: {
+  'starFilter': {
     description: 'BUTTONS.starFilterDescription',
     hidden: false,
     iconName: 'icon-star',
     moreInfo: 'BUTTONS.starFilterMoreInfo',
     title: 'BUTTONS.starFilterHint',
-    toggled: false,
+    toggled: false
   },
-  startWizard: {
+  'startWizard': {
     description: 'BUTTONS.startWizardDescription',
     hidden: false,
     title: 'BUTTONS.startWizardHint',
-    toggled: false,
+    toggled: false
   },
-  tagExclusion: {
+  'tagExclusion': {
     description: 'BUTTONS.tagExclusionDescription',
     hidden: true,
     iconName: 'icon-tag-x',
     moreInfo: 'BUTTONS.tagExclusionMoreInfo',
     title: 'BUTTONS.tagExclusionHint',
-    toggled: false,
+    toggled: false
   },
-  tagIntersection: {
+  'tagIntersection': {
     description: 'BUTTONS.tagIntersectionDescription',
     hidden: true,
     iconName: 'icon-tag-minus',
     moreInfo: 'BUTTONS.tagIntersectionMoreInfo',
     title: 'BUTTONS.tagIntersectionHint',
-    toggled: false,
+    toggled: false
   },
-  tagUnion: {
+  'tagUnion': {
     description: 'BUTTONS.tagUnionDescription',
     hidden: true,
     iconName: 'icon-tag-plus',
     moreInfo: 'BUTTONS.tagUnionMoreInfo',
     title: 'BUTTONS.tagUnionHint',
-    toggled: false,
+    toggled: false
   },
-  timesPlayedFilter: {
+  'timesPlayedFilter': {
     description: 'BUTTONS.timesPlayedDescription',
     hidden: false,
     iconName: 'icon-times-played',
     moreInfo: 'BUTTONS.timesPlayedMoreInfo',
     title: 'BUTTONS.timesPlayedHint',
-    toggled: false,
+    toggled: false
   },
-  thumbAutoAdvance: {
+  'thumbAutoAdvance': {
     description: 'BUTTONS.thumbAutoAdvanceDescription',
     hidden: true,
     iconName: 'icon-toggle-auto-scrub',
     moreInfo: 'BUTTONS.thumbAutoAdvanceMoreInfo',
     title: 'BUTTONS.thumbAutoAdvanceHint',
-    toggled: false,
+    toggled: false
   },
-  yearFilter: {
+  'yearFilter': {
     description: 'BUTTONS.yearSliderDescription',
     hidden: false,
     iconName: 'icon-times-played',
     moreInfo: 'BUTTONS.yearSliderMoreInfo',
     title: 'BUTTONS.yearSliderHint',
-    toggled: false,
+    toggled: false
   },
-  videoNotes: {
+  'videoNotes': {
     description: 'BUTTONS.videoNotesDescription',
     hidden: true,
     iconName: 'icon-toggle-video-notes',
     moreInfo: 'BUTTONS.videoNotesMoreInfo',
     title: 'BUTTONS.videoNotesHint',
-    toggled: false,
-  },
+    toggled: false
+  }
 };
