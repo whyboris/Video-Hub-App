@@ -1,36 +1,36 @@
-import type { AfterViewInit, ElementRef, OnInit } from "@angular/core";
-import { ChangeDetectorRef, NgZone } from "@angular/core";
-import { Component, HostListener, ViewChild } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
+import type { AfterViewInit, ElementRef, OnInit } from '@angular/core';
+import { ChangeDetectorRef, NgZone } from '@angular/core';
+import { Component, HostListener, ViewChild } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
-import * as path from "path";
+import * as path from 'path';
 
-import { BehaviorSubject } from "rxjs";
-import { TranslateService } from "@ngx-translate/core";
-import { VirtualScrollerComponent } from "ngx-virtual-scroller";
+import { BehaviorSubject } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
+import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
 
 // Services
-import { AutoTagsSaveService } from "./tags-auto/tags-save.service";
-import { ElectronService } from "../providers/electron.service";
-import { FilePathService } from "./views/file-path.service";
-import { ImageElementService } from "../services/image-element.service";
-import { ManualTagsService } from "./tags-manual/manual-tags.service";
-import { ModalService } from "./modal/modal.service";
-import { PipeSideEffectService } from "../pipes/pipe-side-effect.service";
-import { ResolutionFilterService } from "../pipes/resolution-filter.service";
+import { AutoTagsSaveService } from './tags-auto/tags-save.service';
+import { ElectronService } from '../providers/electron.service';
+import { FilePathService } from './views/file-path.service';
+import { ImageElementService } from '../services/image-element.service';
+import { ManualTagsService } from './tags-manual/manual-tags.service';
+import { ModalService } from './modal/modal.service';
+import { PipeSideEffectService } from '../pipes/pipe-side-effect.service';
+import { ResolutionFilterService } from '../pipes/resolution-filter.service';
 import {
   ShortcutsService,
   CustomShortcutAction,
-} from "./shortcuts/shortcuts.service";
-import { SourceFolderService } from "./statistics/source-folder.service";
-import { StarFilterService } from "../pipes/star-filter.service";
+} from './shortcuts/shortcuts.service';
+import { SourceFolderService } from './statistics/source-folder.service';
+import { StarFilterService } from '../pipes/star-filter.service';
 import {
   WordFrequencyService,
   WordFreqAndHeight,
-} from "../pipes/word-frequency.service";
+} from '../pipes/word-frequency.service';
 
 // Components
-import { SortOrderComponent } from "./sort-order/sort-order.component";
+import { SortOrderComponent } from './sort-order/sort-order.component';
 
 // Interfaces
 import type {
@@ -38,16 +38,16 @@ import type {
   ImageElement,
   ScreenshotSettings,
   ResolutionString,
-} from "../../../interfaces/final-object.interface";
-import type { ImportStage } from "../../../node/main-support";
-import type { ServerDetails } from "./statistics/statistics.component";
+} from '../../../interfaces/final-object.interface';
+import type { ImportStage } from '../../../node/main-support';
+import type { ServerDetails } from './statistics/statistics.component';
 import type {
   RemoteSettings,
   SettingsButtonSavedProperties,
   SettingsObject,
-} from "../../../interfaces/settings-object.interface";
-import type { SortType } from "../pipes/sorting.pipe";
-import type { WizardOptions } from "../../../interfaces/wizard-options.interface";
+} from '../../../interfaces/settings-object.interface';
+import type { SortType } from '../pipes/sorting.pipe';
+import type { WizardOptions } from '../../../interfaces/wizard-options.interface';
 import type {
   HistoryItem,
   RemoteVideoClick,
@@ -55,26 +55,26 @@ import type {
   SupportedTrayView,
   SupportedView,
   VideoClickEmit,
-} from "../../../interfaces/shared-interfaces";
+} from '../../../interfaces/shared-interfaces';
 import {
   AllSupportedBottomTrayViews,
   AllSupportedViews,
-} from "../../../interfaces/shared-interfaces";
+} from '../../../interfaces/shared-interfaces';
 
 // Constants, etc
-import type { SupportedLanguage, RowNumbers } from "../common/app-state";
-import { AppState, DefaultImagesPerRow } from "../common/app-state";
-import { Filters, filterKeyToIndex, FilterKeyNames } from "../common/filters";
-import { GLOBALS } from "../../../node/main-globals";
-import { LanguageLookup } from "../common/languages";
+import type { SupportedLanguage, RowNumbers } from '../common/app-state';
+import { AppState, DefaultImagesPerRow } from '../common/app-state';
+import { Filters, filterKeyToIndex, FilterKeyNames } from '../common/filters';
+import { GLOBALS } from '../../../node/main-globals';
+import { LanguageLookup } from '../common/languages';
 import type {
   SettingsButtonKey,
   SettingsButtonsType,
-} from "../common/settings-buttons";
+} from '../common/settings-buttons';
 import {
   SettingsButtons,
   SettingsButtonsGroups,
-} from "../common/settings-buttons";
+} from '../common/settings-buttons';
 
 // Animations
 import {
@@ -92,22 +92,22 @@ import {
   slowFadeIn,
   slowFadeOut,
   topAnimation,
-} from "../common/animations";
+} from '../common/animations';
 
 @Component({
-  selector: "app-home",
-  templateUrl: "./home.component.html",
+  selector: 'app-home',
+  templateUrl: './home.component.html',
   styleUrls: [
-    "./layout.scss",
-    "./settings.scss",
-    "./buttons.scss",
-    "./search.scss",
-    "./search-input.scss",
-    "../fonts/icons.scss",
-    "./gallery.scss",
-    "./wizard-button.scss",
-    "./resolution.scss",
-    "./rightclick.scss",
+    './layout.scss',
+    './settings.scss',
+    './buttons.scss',
+    './search.scss',
+    './search-input.scss',
+    '../fonts/icons.scss',
+    './gallery.scss',
+    './wizard-button.scss',
+    './resolution.scss',
+    './rightclick.scss',
   ],
   animations: [
     bottomTrayAnimation,
@@ -127,10 +127,10 @@ import {
   ],
 })
 export class HomeComponent implements OnInit, AfterViewInit {
-  @ViewChild("fuzzySearch", { static: false }) fuzzySearch: ElementRef;
-  @ViewChild("startWith", { static: false }) startWith: ElementRef;
-  @ViewChild("magicSearch", { static: false }) magicSearch: ElementRef;
-  @ViewChild("searchRef", { static: false }) searchRef: ElementRef;
+  @ViewChild('fuzzySearch', { static: false }) fuzzySearch: ElementRef;
+  @ViewChild('startWith', { static: false }) startWith: ElementRef;
+  @ViewChild('magicSearch', { static: false }) magicSearch: ElementRef;
+  @ViewChild('searchRef', { static: false }) searchRef: ElementRef;
 
   @ViewChild(SortOrderComponent) sortOrderRef: SortOrderComponent;
 
@@ -173,8 +173,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // ------------------------------------------------------------------------
 
   extractionPercent = 1;
-  importStage: ImportStage = "done";
-  progressString = "";
+  importStage: ImportStage = 'done';
+  progressString = '';
 
   // ========================================================================
   // Gallery thumbnails
@@ -229,7 +229,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   resolutionFreqArr: number[];
   freqLeftBound = 0;
   freqRightBound = 4;
-  resolutionNames: ResolutionString[] = ["SD", "720", "1080", "4K"];
+  resolutionNames: ResolutionString[] = ['SD', '720', '1080', '4K'];
 
   // ========================================================================
   // Star filter
@@ -238,7 +238,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   starRatingFreqArr: number[];
   starLeftBound = 0;
   starRightBound = 6;
-  starRatingNames: string[] = ["N/A", "1", "2", "3", "4", "5"];
+  starRatingNames: string[] = ['N/A', '1', '2', '3', '4', '5'];
 
   // ========================================================================
   // Right-click / Renaming functionality
@@ -268,11 +268,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     clipSnippetLength: 1,
     clipSnippets: 3,
     extractClips: false,
-    futureHubName: "",
+    futureHubName: '',
     isFixedNumberOfScreenshots: true,
     screenshotSizeForImport: 288,
-    selectedOutputFolder: "",
-    selectedSourceFolder: { 0: { path: "", watch: false } },
+    selectedOutputFolder: '',
+    selectedSourceFolder: { 0: { path: '', watch: false } },
     showWizard: false,
     ssConstant: 10,
     ssVariable: 5,
@@ -300,14 +300,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // ------------------------------------------------------------------------
 
   currentClickedItem: ImageElement;
-  currentClickedItemName = "";
-  currentPlayingFolder = "";
-  fullPathToCurrentFile = "";
+  currentClickedItemName = '';
+  currentPlayingFolder = '';
+  fullPathToCurrentFile = '';
 
-  fuzzySearchString = "";
-  startWithSearchString = "";
-  magicSearchString = "";
-  regexSearchString = "";
+  fuzzySearchString = '';
+  startWithSearchString = '';
+  magicSearchString = '';
+  regexSearchString = '';
   regexError = false; // handle pipe-side-effect BehaviorSubject
 
   wordFreqArr: WordFreqAndHeight[];
@@ -318,7 +318,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   shuffleTheViewNow = 0; // dummy number to force re-shuffle current view
 
-  sortType: SortType = "default";
+  sortType: SortType = 'default';
 
   timeExtractionStarted; // time remaining calculator
   timeExtractionRemaining; // time remaining calculator
@@ -326,13 +326,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
   deletePipeHack = false; // to force deletePipe to update
 
   folderNavigationScrollOffset = 0; // when in folder view and returning back to root
-  folderViewNavigationPath = "";
+  folderViewNavigationPath = '';
 
   batchTaggingMode = false; // when batch tagging is enabled
 
   latestVersionAvailable: string;
 
-  tagTypeAhead = "";
+  tagTypeAhead = '';
 
   allFinishedScanning = true;
 
@@ -360,7 +360,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // ========================================================================
 
   // Listen for key presses
-  @HostListener("document:keydown", ["$event"])
+  @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     // .metaKey is for mac `command` button
     if (event.ctrlKey === true || event.metaKey) {
@@ -384,29 +384,29 @@ export class HomeComponent implements OnInit, AfterViewInit {
         }
       }
     } else if (
-      event.key === "Escape" &&
+      event.key === 'Escape' &&
       this.wizard.showWizard === true &&
       this.canCloseWizard === true
     ) {
       this.wizard.showWizard = false;
-    } else if (event.key === "Escape" && this.settingsModalOpen) {
+    } else if (event.key === 'Escape' && this.settingsModalOpen) {
       this.settingsModalOpen = false;
     } else if (
-      event.key === "Escape" &&
+      event.key === 'Escape' &&
       (this.rightClickShowing || this.renamingNow || this.sheetOverlayShowing)
     ) {
       this.rightClickShowing = false;
       this.renamingNow = false;
       this.sheetOverlayShowing = false;
     } else if (
-      event.key === "Escape" &&
-      this.settingsButtons["showTags"].toggled
+      event.key === 'Escape' &&
+      this.settingsButtons['showTags'].toggled
     ) {
-      this.toggleButton("showTags");
+      this.toggleButton('showTags');
     }
   }
 
-  @HostListener("window:resize")
+  @HostListener('window:resize')
   handleResizeEvent() {
     this.debounceUpdateMax();
   }
@@ -431,8 +431,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit() {
-    this.translate.setDefaultLang("en");
-    this.changeLanguage("en");
+    this.translate.setDefaultLang('en');
+    this.changeLanguage('en');
 
     // this.modalService.openWelcomeMessage(); // WIP
 
@@ -463,7 +463,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // for statistics.component
     this.electronService.ipcRenderer.on(
-      "number-of-screenshots-deleted",
+      'number-of-screenshots-deleted',
       (event, totalDeleted: number) => {
         this.numberScreenshotsDeletedBehaviorSubject.next(totalDeleted);
         this.numberScreenshotsDeletedBehaviorSubject.next(undefined); // allways remove right away
@@ -472,7 +472,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // for statistics.component
     this.electronService.ipcRenderer.on(
-      "old-folder-reconnected",
+      'old-folder-reconnected',
       (event, sourceIndex: number, newPath: string) => {
         this.oldFolderReconnectedBehaviorSubject.next({
           source: sourceIndex,
@@ -484,7 +484,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // Returning Input
     this.electronService.ipcRenderer.on(
-      "input-folder-chosen",
+      'input-folder-chosen',
       (event, filePath) => {
         // if this happens when CURRENT HUB is open
         this.inputSorceChosenBehaviorSubject.next(filePath);
@@ -499,7 +499,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // Returning Output
     this.electronService.ipcRenderer.on(
-      "output-folder-chosen",
+      'output-folder-chosen',
       (event, filePath) => {
         this.wizard.selectedOutputFolder = filePath;
         this.cd.detectChanges();
@@ -507,14 +507,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
     );
 
     // Happens if a file with the same hub name already exists in the directory
-    this.electronService.ipcRenderer.on("please-fix-hub-name", (event) => {
-      this.importStage = "done";
+    this.electronService.ipcRenderer.on('please-fix-hub-name', (event) => {
+      this.importStage = 'done';
       this.cd.detectChanges();
     });
 
     // Generic messaging from Node
     this.electronService.ipcRenderer.on(
-      "show-msg-dialog",
+      'show-msg-dialog',
       (event, title: string, content: string, details: string) => {
         this.zone.run(() => {
           this.modalService.openDialog(title, content, details);
@@ -523,17 +523,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
     );
 
     // When clicking to open a file and it turns out no longer present there
-    this.electronService.ipcRenderer.on("file-not-found", (event) => {
+    this.electronService.ipcRenderer.on('file-not-found', (event) => {
       this.zone.run(() => {
         this.modalService.openSnackbar(
-          this.translate.instant("SETTINGS.fileNotFound")
+          this.translate.instant('SETTINGS.fileNotFound')
         );
       });
     });
 
     // when `remote-control` requests to open video
     this.electronService.ipcRenderer.on(
-      "remote-open-video",
+      'remote-open-video',
       (event, video: RemoteVideoClick) => {
         this.openVideo(video.video, video.thumbIndex);
       }
@@ -541,7 +541,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // when `remote-control` sends back IP address
     this.electronService.ipcRenderer.on(
-      "remote-ip-address",
+      'remote-ip-address',
       (event, ip: string, hostname: string, port: number) => {
         const serverDetails: ServerDetails = {
           wifi: ip,
@@ -555,17 +555,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
     );
 
     this.electronService.ipcRenderer.on(
-      "remote-save-settings",
+      'remote-save-settings',
       (event, data: RemoteSettings) => {
-        console.log("new settings to save!!!");
+        console.log('new settings to save!!!');
         console.log(data);
         this.remoteSettings = data;
       }
     );
 
     // when `remote-control` requests currently-showing gallery view
-    this.electronService.ipcRenderer.on("remote-send-new-data", (event) => {
-      console.log("requesting new data!!");
+    this.electronService.ipcRenderer.on('remote-send-new-data', (event) => {
+      console.log('requesting new data!!');
 
       const showNotConnected: ImageElement[] = JSON.parse(
         JSON.stringify(this.pipeSideEffectService.galleryShowing)
@@ -579,14 +579,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
       console.log(showNotConnected);
 
       this.electronService.ipcRenderer.send(
-        "latest-gallery-view",
+        'latest-gallery-view',
         showNotConnected
       );
     });
 
     // When Node succeeds or fails to rename a file that Angular requested to rename
     this.electronService.ipcRenderer.on(
-      "rename-file-response",
+      'rename-file-response',
       (
         event,
         index: number,
@@ -618,7 +618,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           // use `lastRenamedFileHack` to prevent it!
           const renamedFile: ImageElement =
             this.imageElementService.imageElements[index];
-          console.log("Rename success:");
+          console.log('Rename success:');
           console.log(renamedFile);
           this.lastRenamedFileHack = renamedFile;
         }
@@ -626,12 +626,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     );
 
     // happens when user replaced a thumbnail and process is done
-    this.electronService.ipcRenderer.on("thumbnail-replaced", (event) => {
+    this.electronService.ipcRenderer.on('thumbnail-replaced', (event) => {
       this.electronService.webFrame.clearCache();
     });
 
     this.electronService.ipcRenderer.on(
-      "touchBar-to-app",
+      'touchBar-to-app',
       (event, changesFromTouchBar: SettingsButtonKey | SupportedView) => {
         if (changesFromTouchBar) {
           this.toggleButton(changesFromTouchBar, true);
@@ -640,17 +640,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
     );
 
     this.electronService.ipcRenderer.on(
-      "preferred-video-player-returning",
+      'preferred-video-player-returning',
       (event, filePath) => {
         this.appState.preferredVideoPlayer = filePath;
 
         // Hardcode for MAC & VLC
         if (
           this.macVersion &&
-          this.appState.preferredVideoPlayer.toLowerCase().includes("vlc")
+          this.appState.preferredVideoPlayer.toLowerCase().includes('vlc')
         ) {
           this.appState.preferredVideoPlayer =
-            "/Applications/VLC.app/Contents/MacOS/VLC";
+            '/Applications/VLC.app/Contents/MacOS/VLC';
         }
 
         this.cd.detectChanges();
@@ -659,15 +659,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // Happens on a Mac when the OS Dark Mode is enabled/disabled
     this.electronService.ipcRenderer.on(
-      "os-dark-mode-change",
+      'os-dark-mode-change',
       (event, desiredMode: string) => {
-        const darkModeOn: boolean = this.settingsButtons["darkMode"].toggled;
+        const darkModeOn: boolean = this.settingsButtons['darkMode'].toggled;
 
-        if (darkModeOn && desiredMode === "light") {
-          this.toggleButton("darkMode");
+        if (darkModeOn && desiredMode === 'light') {
+          this.toggleButton('darkMode');
           this.cd.detectChanges();
-        } else if (!darkModeOn && desiredMode === "dark") {
-          this.toggleButton("darkMode");
+        } else if (!darkModeOn && desiredMode === 'dark') {
+          this.toggleButton('darkMode');
           this.cd.detectChanges();
         }
       }
@@ -675,9 +675,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // TODO -- update 'source connected' thingy
     this.electronService.ipcRenderer.on(
-      "directory-now-connected",
+      'directory-now-connected',
       (event, sourceIndex: number, sourcePath: string) => {
-        console.log("FOLDER NOT CONNECTED !!!");
+        console.log('FOLDER NOT CONNECTED !!!');
         console.log(sourceIndex, sourcePath);
 
         // TODO -- if this error never happens, all is well; remove the `sourcePath` from this method :)
@@ -685,7 +685,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.sourceFolderService.selectedSourceFolder[sourceIndex].path !==
           sourcePath
         ) {
-          console.log("WARNING HUGE ERROR HERE !!!!!! MUST NEVER HAPPEN !!!");
+          console.log('WARNING HUGE ERROR HERE !!!!!! MUST NEVER HAPPEN !!!');
         }
 
         this.sourceFolderService.sourceFolderConnected[sourceIndex] = true;
@@ -694,7 +694,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     );
 
     this.electronService.ipcRenderer.on(
-      "started-watching-this-dir",
+      'started-watching-this-dir',
       (event, sourceIndex: number) => {
         this.allFinishedScanning = false;
         this.sourceFolderService.addCurrentScanning(sourceIndex);
@@ -703,7 +703,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // WIP -- delete any videos no longer found on the hard drive!
     this.electronService.ipcRenderer.on(
-      "all-files-found-in-dir",
+      'all-files-found-in-dir',
       (event, sourceIndex: number, allFilesMap: Map<string, 1>) => {
         // console.log('all files returning:');
         // console.log(sourceIndex, typeof(sourceIndex));
@@ -714,7 +714,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.allFinishedScanning =
           this.sourceFolderService.areAllFinishedScanning();
         if (this.allFinishedScanning) {
-          console.log("DONE SCANNING !!!!!!!");
+          console.log('DONE SCANNING !!!!!!!');
           this.cd.detectChanges();
         }
 
@@ -736,7 +736,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
                 path.join(rootFolder, element.partialPath, element.fileName)
               )
             ) {
-              console.log("deleting: ", element.fileName);
+              console.log('deleting: ', element.fileName);
               element.deleted = true;
               somethingDeleted = true;
             }
@@ -751,7 +751,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // When `watch` folder and `chokidar` detects a file was deleted (can happen when renamed too!)
     // mark the element in `imageElements[]` as `deleted`
     this.electronService.ipcRenderer.on(
-      "single-file-deleted",
+      'single-file-deleted',
       (event, sourceIndex: number, partialPath: string) => {
         this.imageElementService.imageElements
           // tslint:disable-next-line:triple-equals
@@ -761,11 +761,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
           // notice the loosey-goosey comparison! this is because number  ^^  string comparison happening here!
           .forEach((element: ImageElement) => {
             if (
-              "\\" + partialPath ===
+              '\\' + partialPath ===
                 path.join(element.partialPath, element.fileName) ||
               partialPath === path.join(element.partialPath, element.fileName)
             ) {
-              console.log("FILE DELETED !!!", partialPath);
+              console.log('FILE DELETED !!!', partialPath);
               element.deleted = true;
               this.deletePipeHack = !this.deletePipeHack;
             }
@@ -780,7 +780,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
      * @param stage   - `ImportStage` type
      */
     this.electronService.ipcRenderer.on(
-      "import-progress-update",
+      'import-progress-update',
       (event, current: number, total: number, stage: ImportStage) => {
         this.importStage = stage;
 
@@ -804,7 +804,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         }
 
         const percentProgress: number = Math.round((100 * current) / total);
-        this.progressString = "loading - " + percentProgress + "%";
+        this.progressString = 'loading - ' + percentProgress + '%';
         this.extractionPercent = percentProgress;
 
         this.cd.detectChanges(); // seems needed to update the donut
@@ -813,7 +813,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // Final object returns
     this.electronService.ipcRenderer.on(
-      "final-object-returning",
+      'final-object-returning',
       (
         event,
         finalObject: FinalObject,
@@ -843,7 +843,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         // Update history of opened files
         this.updateVhaFileHistory(pathToFile, finalObject.hubName);
 
-        this.folderViewNavigationPath = "";
+        this.folderViewNavigationPath = '';
 
         this.manualTagsService.removeAllTags();
         this.setTags(finalObject.addTags, finalObject.removeTags);
@@ -875,7 +875,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // If no previously saved settings exist, this gets sent over
     this.electronService.ipcRenderer.on(
-      "set-language-based-off-system-locale",
+      'set-language-based-off-system-locale',
       (event, localeString: string) => {
         if (localeString) {
           this.setOrRestoreLanguage(undefined, localeString);
@@ -885,7 +885,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // Returning settings
     this.electronService.ipcRenderer.on(
-      "settings-returning",
+      'settings-returning',
       (event, settingsObject: SettingsObject, locale: string) => {
         this.vhaFileHistory = settingsObject.vhaFileHistory || [];
         this.restoreSettingsFromBefore(settingsObject);
@@ -914,7 +914,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     );
 
     this.electronService.ipcRenderer.on(
-      "please-open-wizard",
+      'please-open-wizard',
       (event, firstRun) => {
         // Correlated with the first time ever starting the app !!!
         // Can happen when no settings present
@@ -929,7 +929,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // This happens when the computer is about to SHUT DOWN
     // or user closed the app through taskbar or title bar
-    this.electronService.ipcRenderer.on("please-shut-down-ASAP", (event) => {
+    this.electronService.ipcRenderer.on('please-shut-down-ASAP', (event) => {
       if (!this.isClosing) {
         this.initiateClose();
       }
@@ -937,7 +937,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // gets called if `trash` successfully removed the file
     this.electronService.ipcRenderer.on(
-      "file-deleted",
+      'file-deleted',
       (event, element: ImageElement) => {
         // spot check it's the same element
         // just in case the message comes back after user has switched to view another hub
@@ -955,7 +955,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // gets called for every element that node extracted metadata for (screenshots not yet extracted)
     this.electronService.ipcRenderer.on(
-      "new-video-meta",
+      'new-video-meta',
       (event, element: ImageElement) => {
         // if this video was just renamed from within the app do not add the element, skip it
         if (
@@ -964,7 +964,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.lastRenamedFileHack.partialPath === element.partialPath &&
           this.lastRenamedFileHack.fileName === element.fileName
         ) {
-          console.log("SKIPPING THIS -- was just renamed !!!");
+          console.log('SKIPPING THIS -- was just renamed !!!');
           return;
         }
 
@@ -1007,7 +1007,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (ev.dataTransfer.files.length > 0) {
         const fullPath: string = ev.dataTransfer.files[0].path;
         ev.preventDefault();
-        if (fullPath.endsWith(".vha2")) {
+        if (fullPath.endsWith('.vha2')) {
           this.loadThisVhaFile(fullPath);
         }
       }
@@ -1037,12 +1037,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const fullPath = this.filePathService.getPathFromImageElement(item);
     const imgPath = path.join(
       this.appState.selectedOutputFolder,
-      "vha-" + this.appState.hubName,
-      "thumbnails",
-      item.hash + ".jpg"
+      'vha-' + this.appState.hubName,
+      'thumbnails',
+      item.hash + '.jpg'
     );
     this.electronService.ipcRenderer.send(
-      "drag-video-out-of-electron",
+      'drag-video-out-of-electron',
       fullPath,
       imgPath
     );
@@ -1107,9 +1107,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   droppedSomethingOverVideo(event, galleryItem: ImageElement) {
     // this occurs when a tag is dropped on a video from the tag tray
-    if (event.dataTransfer.getData("text")) {
+    if (event.dataTransfer.getData('text')) {
       // tag previously set by `dragStart` in `view-tags.component`
-      const tag: string = event.dataTransfer.getData("text");
+      const tag: string = event.dataTransfer.getData('text');
 
       this.addTagToThisElement(tag, galleryItem);
 
@@ -1121,13 +1121,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const pathToNewImage: string =
       event.dataTransfer.files[0].path.toLowerCase();
     if (
-      (pathToNewImage.endsWith(".jpg") ||
-        pathToNewImage.endsWith(".jpeg") ||
-        pathToNewImage.endsWith(".png")) &&
-      galleryItem.cleanName !== "*FOLDER*"
+      (pathToNewImage.endsWith('.jpg') ||
+        pathToNewImage.endsWith('.jpeg') ||
+        pathToNewImage.endsWith('.png')) &&
+      galleryItem.cleanName !== '*FOLDER*'
     ) {
       this.electronService.ipcRenderer.send(
-        "replace-thumbnail",
+        'replace-thumbnail',
         pathToNewImage,
         galleryItem
       );
@@ -1153,7 +1153,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Summon a dialog to open a default video player
    */
   public chooseDefaultVideoPlayer(): void {
-    this.electronService.ipcRenderer.send("select-default-video-player");
+    this.electronService.ipcRenderer.send('select-default-video-player');
   }
 
   // ---------------- INTERACT WITH ELECTRON ------------------ //
@@ -1163,54 +1163,54 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * triggers function that grabs settings and sends them back with `settings-returning`
    */
   public justStarted(): void {
-    this.electronService.ipcRenderer.send("just-started");
+    this.electronService.ipcRenderer.send('just-started');
   }
 
   public loadThisVhaFile(fullPath: string): void {
     this.electronService.ipcRenderer.send(
-      "load-this-vha-file",
+      'load-this-vha-file',
       fullPath,
       this.getFinalObjectForSaving()
     );
   }
 
   public loadFromFile(): void {
-    this.electronService.ipcRenderer.send("system-open-file-through-modal");
+    this.electronService.ipcRenderer.send('system-open-file-through-modal');
   }
 
   public selectSourceDirectory(): void {
-    this.electronService.ipcRenderer.send("choose-input");
+    this.electronService.ipcRenderer.send('choose-input');
   }
 
   public selectOutputDirectory(): void {
-    this.electronService.ipcRenderer.send("choose-output");
+    this.electronService.ipcRenderer.send('choose-output');
   }
 
   public importFresh(): void {
     this.sourceFolderService.selectedSourceFolder =
       this.wizard.selectedSourceFolder;
     this.appState.selectedOutputFolder = this.wizard.selectedOutputFolder;
-    this.electronService.ipcRenderer.send("start-the-import", this.wizard);
+    this.electronService.ipcRenderer.send('start-the-import', this.wizard);
   }
 
   public cancelCurrentImport(): void {
-    this.electronService.ipcRenderer.send("cancel-current-import");
+    this.electronService.ipcRenderer.send('cancel-current-import');
     setTimeout(() => {
-      this.importStage = "done";
+      this.importStage = 'done';
       this.cd.detectChanges();
     }, 10); // just in case delay
   }
 
   public initiateMinimize(): void {
-    this.electronService.ipcRenderer.send("minimize-window");
+    this.electronService.ipcRenderer.send('minimize-window');
   }
 
   public initiateMaximize(): void {
     if (this.appMaximized) {
-      this.electronService.ipcRenderer.send("un-maximize-window");
+      this.electronService.ipcRenderer.send('un-maximize-window');
       this.appMaximized = false;
     } else {
-      this.electronService.ipcRenderer.send("maximize-window");
+      this.electronService.ipcRenderer.send('maximize-window');
       this.appMaximized = true;
     }
   }
@@ -1220,7 +1220,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.savePreviousViewSize();
     this.appState.imgsPerRow = this.imgsPerRow;
     this.electronService.ipcRenderer.send(
-      "close-window",
+      'close-window',
       this.getSettingsForSave(),
       this.getFinalObjectForSaving()
     );
@@ -1303,9 +1303,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   public openVideo(item: ImageElement, clickedThumbnailIndex?: number): void {
     if (!this.sourceFolderService.sourceFolderConnected[item.inputSource]) {
-      console.log("not connected!");
+      console.log('not connected!');
       this.modalService.openSnackbar(
-        this.translate.instant("SETTINGS.rootFolderNotLive")
+        this.translate.instant('SETTINGS.rootFolderNotLive')
       );
 
       return;
@@ -1331,13 +1331,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.appState.videoPlayerArgs
       }`;
       this.electronService.ipcRenderer.send(
-        "open-media-file-at-timestamp",
+        'open-media-file-at-timestamp',
         execPath,
         fullPath,
         finalArgs
       );
     } else {
-      this.electronService.ipcRenderer.send("open-media-file", fullPath);
+      this.electronService.ipcRenderer.send('open-media-file', fullPath);
     }
   }
 
@@ -1358,17 +1358,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   public getVideoPlayerArgs(playerPath: string, time: number): string {
     // if user doesn't want to open at timestamp, don't!
-    let args = "";
+    let args = '';
 
-    if (this.settingsButtons["openAtTimestamp"].toggled) {
-      if (playerPath.toLowerCase().includes("vlc")) {
-        args = "--start-time=" + time.toString(); // in seconds
-      } else if (playerPath.toLowerCase().includes("mpc")) {
-        args = "/start " + (1000 * time).toString(); // in milliseconds
-      } else if (playerPath.toLowerCase().includes("pot")) {
-        args = "/seek=" + time.toString(); // in seconds
-      } else if (playerPath.toLowerCase().includes("mpv")) {
-        args = "--start=" + time.toString(); // in seconds
+    if (this.settingsButtons['openAtTimestamp'].toggled) {
+      if (playerPath.toLowerCase().includes('vlc')) {
+        args = '--start-time=' + time.toString(); // in seconds
+      } else if (playerPath.toLowerCase().includes('mpc')) {
+        args = '/start ' + (1000 * time).toString(); // in milliseconds
+      } else if (playerPath.toLowerCase().includes('pot')) {
+        args = '/seek=' + time.toString(); // in seconds
+      } else if (playerPath.toLowerCase().includes('mpv')) {
+        args = '--start=' + time.toString(); // in seconds
       }
     }
 
@@ -1377,8 +1377,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   public openOnlineHelp(): void {
     this.electronService.ipcRenderer.send(
-      "please-open-url",
-      "https://www.videohubapp.com"
+      'please-open-url',
+      'https://www.videohubapp.com'
     );
   }
 
@@ -1423,9 +1423,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     if (
       // if all tags disabled, perform a FILE search
-      !this.settingsButtons["manualTags"].toggled &&
-      !this.settingsButtons["autoFileTags"].toggled &&
-      !this.settingsButtons["autoFolderTags"].toggled
+      !this.settingsButtons['manualTags'].toggled &&
+      !this.settingsButtons['autoFileTags'].toggled &&
+      !this.settingsButtons['autoFolderTags'].toggled
     ) {
       this.handleFileWordClicked(filter, event);
       return;
@@ -1434,13 +1434,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.showSidebar();
     if (event && event.shiftKey) {
       // Shift click to exclude tag!
-      if (!this.settingsButtons["tagExclusion"].toggled) {
-        this.settingsButtons["tagExclusion"].toggled = true;
+      if (!this.settingsButtons['tagExclusion'].toggled) {
+        this.settingsButtons['tagExclusion'].toggled = true;
       }
       this.onEnterKey(filter, 8); // 8th item is the `tagExclusion` filter in `FilterKeyNames`
     } else {
-      if (!this.settingsButtons["tagIntersection"].toggled) {
-        this.settingsButtons["tagIntersection"].toggled = true;
+      if (!this.settingsButtons['tagIntersection'].toggled) {
+        this.settingsButtons['tagIntersection'].toggled = true;
       }
       this.onEnterKey(filter, 7); // 7th item is the `tagIntersection` filter in `FilterKeyNames`
     }
@@ -1454,13 +1454,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.showSidebar();
     if (event && event.shiftKey) {
       // Shift click to exclude tag!
-      if (!this.settingsButtons["exclude"].toggled) {
-        this.settingsButtons["exclude"].toggled = true;
+      if (!this.settingsButtons['exclude'].toggled) {
+        this.settingsButtons['exclude'].toggled = true;
       }
       this.onEnterKey(filter, 5); // 5th item is the `exclude` filter in `FilterKeyNames`
     } else {
-      if (!this.settingsButtons["fileIntersection"].toggled) {
-        this.settingsButtons["fileIntersection"].toggled = true;
+      if (!this.settingsButtons['fileIntersection'].toggled) {
+        this.settingsButtons['fileIntersection'].toggled = true;
       }
       this.onEnterKey(filter, 4); // 4th item is the `fileIntersection` filter in `FilterKeyNames`
     }
@@ -1474,13 +1474,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.showSidebar();
     if (event && event.shiftKey) {
       // Shift click to exclude tag!
-      if (!this.settingsButtons["folderExclusion"].toggled) {
-        this.settingsButtons["folderExclusion"].toggled = true;
+      if (!this.settingsButtons['folderExclusion'].toggled) {
+        this.settingsButtons['folderExclusion'].toggled = true;
       }
       this.onEnterKey(filter, 2); // 2nd item is the `folderExclusion` filter in `FilterKeyNames`
     } else {
-      if (!this.settingsButtons["folderIntersection"].toggled) {
-        this.settingsButtons["folderIntersection"].toggled = true;
+      if (!this.settingsButtons['folderIntersection'].toggled) {
+        this.settingsButtons['folderIntersection'].toggled = true;
       }
       this.onEnterKey(filter, 1); // 1st item is the `folder` filter
     }
@@ -1506,9 +1506,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   handleBbreadcrumbClicked(idx: number): void {
     this.folderViewNavigationPath = this.folderViewNavigationPath
-      .split("/")
+      .split('/')
       .slice(0, idx + 1)
-      .join("/");
+      .join('/');
     this.scrollToTop();
   }
 
@@ -1519,7 +1519,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Fails if user enters folder, changes some search or sort filter, and navigates back
    */
   scrollAppropriately(filter: string) {
-    if (filter === "") {
+    if (filter === '') {
       setTimeout(() => {
         this.virtualScroller.scrollToPosition(
           this.folderNavigationScrollOffset,
@@ -1536,8 +1536,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Go back to root and scroll to last-seen location
    */
   breadcrumbHomeIconClick(): void {
-    this.folderViewNavigationPath = "";
-    this.scrollAppropriately("");
+    this.folderViewNavigationPath = '';
+    this.scrollAppropriately('');
   }
 
   /**
@@ -1545,7 +1545,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   openInExplorer(): void {
     this.electronService.ipcRenderer.send(
-      "open-in-explorer",
+      'open-in-explorer',
       this.fullPathToCurrentFile
     );
   }
@@ -1554,8 +1554,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Show sidebar if it's closed
    */
   showSidebar(): void {
-    if (this.settingsButtons["hideSidebar"].toggled) {
-      this.toggleButton("hideSidebar");
+    if (this.settingsButtons['hideSidebar'].toggled) {
+      this.toggleButton('hideSidebar');
       this.computePreviewWidth();
     }
   }
@@ -1570,7 +1570,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   updateVhaFileHistory(pathToVhaFile: string, hubName: string): void {
     const newHistoryItem = {
       vhaFilePath: pathToVhaFile,
-      hubName: hubName || "untitled",
+      hubName: hubName || 'untitled',
     };
 
     let matchFound = false;
@@ -1610,7 +1610,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   clearRecentlyViewedHistory(): void {
     this.vhaFileHistory = [];
-    this.electronService.ipcRenderer.send("clear-recent-documents");
+    this.electronService.ipcRenderer.send('clear-recent-documents');
   }
 
   /**
@@ -1631,7 +1631,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   autoTagClicked(event: string): void {
     this.handleFileWordClicked(event);
-    this.toggleButton("showTags"); // close the modal
+    this.toggleButton('showTags'); // close the modal
   }
 
   /**
@@ -1639,13 +1639,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * A helper function for `toggleBotton`
    */
   toggleAllViewsButtonsOff(): void {
-    this.settingsButtons["showClips"].toggled = false;
-    this.settingsButtons["showDetails"].toggled = false;
-    this.settingsButtons["showDetails2"].toggled = false;
-    this.settingsButtons["showFiles"].toggled = false;
-    this.settingsButtons["showFilmstrip"].toggled = false;
-    this.settingsButtons["showFullView"].toggled = false;
-    this.settingsButtons["showThumbnails"].toggled = false;
+    this.settingsButtons['showClips'].toggled = false;
+    this.settingsButtons['showDetails'].toggled = false;
+    this.settingsButtons['showDetails2'].toggled = false;
+    this.settingsButtons['showFiles'].toggled = false;
+    this.settingsButtons['showFilmstrip'].toggled = false;
+    this.settingsButtons['showFullView'].toggled = false;
+    this.settingsButtons['showThumbnails'].toggled = false;
   }
 
   /**
@@ -1653,11 +1653,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * A helper function for `toggleBotton`
    */
   toggleAllTrayViewsButtonsOff(): void {
-    this.settingsButtons["showDetailsTray"].toggled = false;
-    this.settingsButtons["showFreq"].toggled = false;
-    this.settingsButtons["showRecentlyPlayed"].toggled = false;
-    this.settingsButtons["showRelatedVideosTray"].toggled = false;
-    this.settingsButtons["showTagTray"].toggled = false;
+    this.settingsButtons['showDetailsTray'].toggled = false;
+    this.settingsButtons['showFreq'].toggled = false;
+    this.settingsButtons['showRecentlyPlayed'].toggled = false;
+    this.settingsButtons['showRelatedVideosTray'].toggled = false;
+    this.settingsButtons['showTagTray'].toggled = false;
   }
 
   /**
@@ -1702,61 +1702,61 @@ export class HomeComponent implements OnInit, AfterViewInit {
     shortcutAction: CustomShortcutAction
   ): void {
     switch (shortcutAction) {
-      case "toggleSettings":
+      case 'toggleSettings':
         if (this.wizard.showWizard === false) {
           this.toggleSettings();
         }
         break;
 
-      case "showAutoTags":
+      case 'showAutoTags':
         if (!this.wizard.showWizard) {
-          this.toggleButton("showTags");
+          this.toggleButton('showTags');
         }
         break;
 
-      case "showTagTray":
+      case 'showTagTray':
         if (!this.wizard.showWizard) {
-          this.toggleButton("showTagTray");
+          this.toggleButton('showTagTray');
         }
         break;
 
-      case "quit":
+      case 'quit':
         event.preventDefault();
         event.stopPropagation();
         this.initiateClose();
         break;
 
-      case "startWizard":
+      case 'startWizard':
         this.startWizard();
         this.settingsModalOpen = false;
-        this.settingsButtons["showTags"].toggled = false;
+        this.settingsButtons['showTags'].toggled = false;
         break;
 
-      case "toggleMinimalMode":
-        this.toggleButton("hideTop");
-        this.toggleButton("hideSidebar");
-        this.toggleButtonOff("showTagTray");
+      case 'toggleMinimalMode':
+        this.toggleButton('hideTop');
+        this.toggleButton('hideSidebar');
+        this.toggleButtonOff('showTagTray');
         this.toggleRibbon();
-        this.toggleButton("showMoreInfo");
+        this.toggleButton('showMoreInfo');
         break;
 
-      case "focusOnFile":
-        if (this.settingsButtons["fileIntersection"].toggled === false) {
-          this.settingsButtons["fileIntersection"].toggled = true;
+      case 'focusOnFile':
+        if (this.settingsButtons['fileIntersection'].toggled === false) {
+          this.settingsButtons['fileIntersection'].toggled = true;
         }
         this.showSidebar();
         setTimeout(() => {
-          if (this.searchRef.nativeElement.querySelector("#fileIntersection")) {
+          if (this.searchRef.nativeElement.querySelector('#fileIntersection')) {
             this.searchRef.nativeElement
-              .querySelector("#fileIntersection")
+              .querySelector('#fileIntersection')
               .focus();
           }
         }, 1);
         break;
 
-      case "focusOnMagic":
-        if (!this.settingsButtons["magic"].toggled) {
-          this.settingsButtons["magic"].toggled = true;
+      case 'focusOnMagic':
+        if (!this.settingsButtons['magic'].toggled) {
+          this.settingsButtons['magic'].toggled = true;
         }
         this.showSidebar();
         setTimeout(() => {
@@ -1764,9 +1764,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
         }, 1);
         break;
 
-      case "fuzzySearch":
-        if (!this.settingsButtons["fuzzy"].toggled) {
-          this.settingsButtons["fuzzy"].toggled = true;
+      case 'fuzzySearch':
+        if (!this.settingsButtons['fuzzy'].toggled) {
+          this.settingsButtons['fuzzy'].toggled = true;
         }
         this.showSidebar();
         setTimeout(() => {
@@ -1808,10 +1808,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.settingsButtons[uniqueKey].toggled = !stateBeforeClick;
 
       if (
-        (uniqueKey === "showRelatedVideosTray" &&
-          this.settingsButtons["showRelatedVideosTray"].toggled) ||
-        (uniqueKey === "showRecentlyPlayed" &&
-          this.settingsButtons["showRecentlyPlayed"].toggled)
+        (uniqueKey === 'showRelatedVideosTray' &&
+          this.settingsButtons['showRelatedVideosTray'].toggled) ||
+        (uniqueKey === 'showRecentlyPlayed' &&
+          this.settingsButtons['showRecentlyPlayed'].toggled)
       ) {
         this.computePreviewWidth();
       }
@@ -1823,56 +1823,56 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.filters[filterKeyToIndex[uniqueKey]].bool =
         !this.filters[filterKeyToIndex[uniqueKey]].bool;
       this.toggleButtonOpposite(uniqueKey);
-    } else if (uniqueKey === "magic") {
-      this.magicSearchString = "";
+    } else if (uniqueKey === 'magic') {
+      this.magicSearchString = '';
       this.toggleButtonOpposite(uniqueKey);
-    } else if (uniqueKey === "fuzzy") {
-      this.fuzzySearchString = "";
+    } else if (uniqueKey === 'fuzzy') {
+      this.fuzzySearchString = '';
       this.toggleButtonOpposite(uniqueKey);
-    } else if (uniqueKey === "startWith") {
-      this.startWithSearchString = "";
+    } else if (uniqueKey === 'startWith') {
+      this.startWithSearchString = '';
       this.toggleButtonOpposite(uniqueKey);
       // ======== Other buttons ========================
-    } else if (uniqueKey === "compactView") {
+    } else if (uniqueKey === 'compactView') {
       this.toggleButtonOpposite(uniqueKey);
       this.virtualScroller.refresh();
       if (
-        this.settingsButtons["showThumbnails"].toggled ||
-        this.settingsButtons["showClips"].toggled ||
-        this.settingsButtons["showFilmstrip"].toggled
+        this.settingsButtons['showThumbnails'].toggled ||
+        this.settingsButtons['showClips'].toggled ||
+        this.settingsButtons['showFilmstrip'].toggled
       ) {
         this.computeTextBufferAmount();
       }
-    } else if (uniqueKey === "showFolders") {
-      this.toggleButtonOpposite("showFolders");
-      if (!this.settingsButtons["showFolders"].toggled) {
-        this.folderViewNavigationPath = "";
+    } else if (uniqueKey === 'showFolders') {
+      this.toggleButtonOpposite('showFolders');
+      if (!this.settingsButtons['showFolders'].toggled) {
+        this.folderViewNavigationPath = '';
       }
       this.scrollToTop();
-    } else if (uniqueKey === "makeSmaller") {
+    } else if (uniqueKey === 'makeSmaller') {
       this.decreaseSize();
-    } else if (uniqueKey === "makeLarger") {
+    } else if (uniqueKey === 'makeLarger') {
       this.increaseSize();
-    } else if (uniqueKey === "startWizard") {
+    } else if (uniqueKey === 'startWizard') {
       this.startWizard();
-    } else if (uniqueKey === "clearHistory") {
+    } else if (uniqueKey === 'clearHistory') {
       this.clearRecentlyViewedHistory();
-    } else if (uniqueKey === "resetSettings") {
+    } else if (uniqueKey === 'resetSettings') {
       this.resetSettingsToDefault();
-    } else if (uniqueKey === "showTags") {
+    } else if (uniqueKey === 'showTags') {
       if (this.settingsModalOpen) {
         this.settingsModalOpen = false;
       }
-      this.toggleButtonOpposite("showTags");
-    } else if (uniqueKey === "playPlaylist") {
+      this.toggleButtonOpposite('showTags');
+    } else if (uniqueKey === 'playPlaylist') {
       const execPath: string = this.appState.preferredVideoPlayer;
       this.electronService.ipcRenderer.send(
-        "please-create-playlist",
+        'please-create-playlist',
         this.pipeSideEffectService.galleryShowing,
         this.sourceFolderService.selectedSourceFolder,
         execPath
       );
-    } else if (uniqueKey === "sortOrder") {
+    } else if (uniqueKey === 'sortOrder') {
       this.toggleButtonOpposite(uniqueKey);
       setTimeout(() => {
         if (this.sortOrderRef.sortFilterElement) {
@@ -1881,27 +1881,27 @@ export class HomeComponent implements OnInit, AfterViewInit {
             this.sortType;
         }
       });
-    } else if (uniqueKey === "shuffleGalleryNow") {
-      this.sortType = "random";
+    } else if (uniqueKey === 'shuffleGalleryNow') {
+      this.sortType = 'random';
       this.shuffleTheViewNow++;
       this.scrollToTop();
       // if sort filter is NOT showin on the sidebar, enable
       if (!this.sortOrderRef.sortFilterElement) {
-        this.settingsButtons["sortOrder"].toggled = true;
+        this.settingsButtons['sortOrder'].toggled = true;
       }
       // and set the setting-option to `Random' after timeout to update view
       setTimeout(() => {
         if (this.sortOrderRef.sortFilterElement) {
           // just in case, perform check
-          this.sortOrderRef.sortFilterElement.nativeElement.value = "random";
+          this.sortOrderRef.sortFilterElement.nativeElement.value = 'random';
         }
       });
     } else {
       this.toggleButtonOpposite(uniqueKey);
-      if (uniqueKey === "showMoreInfo") {
+      if (uniqueKey === 'showMoreInfo') {
         this.computeTextBufferAmount();
       }
-      if (uniqueKey === "hideSidebar") {
+      if (uniqueKey === 'hideSidebar') {
         setTimeout(() => {
           this.virtualScroller.refresh();
           this.computePreviewWidth();
@@ -1909,7 +1909,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     }
     if (!fromIpc) {
-      this.electronService.ipcRenderer.send("app-to-touchBar", uniqueKey);
+      this.electronService.ipcRenderer.send('app-to-touchBar', uniqueKey);
     } else {
       this.cd.detectChanges();
     }
@@ -1927,7 +1927,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * scroll to the top of the gallery
    */
   public scrollToTop(): void {
-    document.getElementById("scrollDiv").scrollTop = 0;
+    document.getElementById('scrollDiv').scrollTop = 0;
   }
 
   /**
@@ -1939,12 +1939,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
       clipSnippetLength: 1,
       clipSnippets: 5,
       extractClips: false,
-      futureHubName: "",
+      futureHubName: '',
       isFixedNumberOfScreenshots:
         this.wizard.isFixedNumberOfScreenshots ?? true,
       screenshotSizeForImport: this.wizard.screenshotSizeForImport ?? 288, // default
-      selectedOutputFolder: "",
-      selectedSourceFolder: { 0: { path: "", watch: false } },
+      selectedOutputFolder: '',
+      selectedSourceFolder: { 0: { path: '', watch: false } },
       showWizard: true,
       ssConstant: this.wizard.ssConstant ?? 10,
       ssVariable: this.wizard.ssVariable ?? 5,
@@ -1960,7 +1960,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Decrease preview size
    */
   public decreaseSize(): void {
-    if (this.appState.currentView === "showFiles") {
+    if (this.appState.currentView === 'showFiles') {
       return;
     }
     this.currentImgsPerRow++;
@@ -1972,14 +1972,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Increase preview size
    */
   public increaseSize(): void {
-    if (this.appState.currentView === "showFiles") {
+    if (this.appState.currentView === 'showFiles') {
       return;
     }
-    if (this.appState.currentView === "showDetails") {
+    if (this.appState.currentView === 'showDetails') {
       if (this.currentImgsPerRow > 2) {
         this.currentImgsPerRow--;
       }
-    } else if (this.appState.currentView === "showDetails2") {
+    } else if (this.appState.currentView === 'showDetails2') {
       if (this.currentImgsPerRow > 3) {
         this.currentImgsPerRow--;
       }
@@ -1996,21 +1996,21 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public computePreviewWidth(): void {
     // Subtract 14 -- it is a bit more than the scrollbar on the right
     this.galleryWidth =
-      document.getElementById("scrollDiv").getBoundingClientRect().width - 14;
+      document.getElementById('scrollDiv').getBoundingClientRect().width - 14;
 
     if (
-      this.appState.currentView === "showClips" ||
-      this.appState.currentView === "showThumbnails" ||
-      this.appState.currentView === "showDetails" ||
-      this.appState.currentView === "showDetails2"
+      this.appState.currentView === 'showClips' ||
+      this.appState.currentView === 'showThumbnails' ||
+      this.appState.currentView === 'showDetails' ||
+      this.appState.currentView === 'showDetails2'
     ) {
-      const margin: number = this.settingsButtons["compactView"].toggled
+      const margin: number = this.settingsButtons['compactView'].toggled
         ? 4
         : 40;
       this.previewWidth = this.galleryWidth / this.currentImgsPerRow - margin;
     } else if (
-      this.appState.currentView === "showFilmstrip" ||
-      this.appState.currentView === "showFullView"
+      this.appState.currentView === 'showFilmstrip' ||
+      this.appState.currentView === 'showFullView'
     ) {
       this.previewWidth = (this.galleryWidth - 30) / this.currentImgsPerRow;
     }
@@ -2019,8 +2019,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // compute preview dimensions for thumbs in the most similar tab:
     if (
-      this.settingsButtons["showRelatedVideosTray"].toggled ||
-      this.settingsButtons["showRecentlyPlayed"].toggled
+      this.settingsButtons['showRelatedVideosTray'].toggled ||
+      this.settingsButtons['showRecentlyPlayed'].toggled
     ) {
       this.previewWidthRelated = Math.min(this.galleryWidth / 5 - 40, 176);
       this.previewHeightRelated = Math.min(
@@ -2039,7 +2039,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.computePreviewWidth();
 
     switch (this.appState.currentView) {
-      case "showThumbnails":
+      case 'showThumbnails':
         if (this.settingsButtons.compactView.toggled) {
           this.textPaddingHeight = 0;
         } else if (this.settingsButtons.showMoreInfo.toggled) {
@@ -2049,7 +2049,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         }
         break;
 
-      case "showFilmstrip":
+      case 'showFilmstrip':
         if (this.settingsButtons.compactView.toggled) {
           this.textPaddingHeight = 0;
         } else if (this.settingsButtons.showMoreInfo.toggled) {
@@ -2059,11 +2059,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
         }
         break;
 
-      case "showFiles":
+      case 'showFiles':
         this.textPaddingHeight = 20;
         break;
 
-      case "showClips":
+      case 'showClips':
         if (this.settingsButtons.compactView.toggled) {
           this.textPaddingHeight = 0;
         } else if (this.settingsButtons.showMoreInfo.toggled) {
@@ -2088,7 +2088,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     if (origin === 6) {
       // the `tags include` search
-      this.tagTypeAhead = "";
+      this.tagTypeAhead = '';
     }
 
     if (trimmed) {
@@ -2096,7 +2096,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (!this.filters[origin].array.includes(trimmed)) {
         this.filters[origin].array.push(trimmed);
         this.filters[origin].bool = !this.filters[origin].bool;
-        this.filters[origin].string = "";
+        this.filters[origin].string = '';
         this.scrollToTop();
       }
     }
@@ -2108,7 +2108,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param origin  -- array from which to .pop()
    */
   onBackspace(value: string, origin: number): void {
-    if (value === "" && this.filters[origin].array.length > 0) {
+    if (value === '' && this.filters[origin].array.length > 0) {
       this.filters[origin].array.pop();
       this.filters[origin].bool = !this.filters[origin].bool;
     }
@@ -2192,7 +2192,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.settingsButtons = JSON.parse(
       JSON.stringify(this.defaultSettingsButtons)
     ); // JSON hack to allow resetting more than once
-    this.toggleButton("showThumbnails");
+    this.toggleButton('showThumbnails');
   }
 
   /**
@@ -2220,18 +2220,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
           settingsObject.buttonSettings[element].hidden;
         // retrieving state of buttons for touchBar
         if (this.settingsButtons[element].toggled) {
-          this.electronService.ipcRenderer.send("app-to-touchBar", element);
+          this.electronService.ipcRenderer.send('app-to-touchBar', element);
         }
       }
     });
     this.computeTextBufferAmount();
 
-    this.settingsButtons["showTags"].toggled = false; // never show tags on load (they don't load right anyway)
+    this.settingsButtons['showTags'].toggled = false; // never show tags on load (they don't load right anyway)
 
-    if (this.settingsButtons["showTagTray"].toggled) {
-      this.settingsButtons["showTagTray"].toggled = false;
+    if (this.settingsButtons['showTagTray'].toggled) {
+      this.settingsButtons['showTagTray'].toggled = false;
       setTimeout(() => {
-        this.settingsButtons["showTagTray"].toggled = true; // needs a delay to show up correctly
+        this.settingsButtons['showTagTray'].toggled = true; // needs a delay to show up correctly
       }, 100);
     }
   }
@@ -2251,7 +2251,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } else if (<any>locale.substring(0, 2)) {
       this.changeLanguage(<any>locale.substring(0, 2));
     } else {
-      this.changeLanguage("en");
+      this.changeLanguage('en');
     }
   }
 
@@ -2345,9 +2345,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const base: string =
       this.sourceFolderService.selectedSourceFolder[item.inputSource].path;
     const dangerously: boolean =
-      this.settingsButtons["dangerousDelete"].toggled;
+      this.settingsButtons['dangerousDelete'].toggled;
     this.electronService.ipcRenderer.send(
-      "delete-video-file",
+      'delete-video-file',
       base,
       item,
       dangerously
@@ -2402,14 +2402,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
   updateSystemMessages() {
     const newMessages = {};
 
-    for (const key in LanguageLookup["en"].SYSTEM) {
-      if (LanguageLookup["en"].SYSTEM[key]) {
-        newMessages[key] = this.translate.instant("SYSTEM." + key);
+    for (const key in LanguageLookup['en'].SYSTEM) {
+      if (LanguageLookup['en'].SYSTEM[key]) {
+        newMessages[key] = this.translate.instant('SYSTEM.' + key);
       }
     }
 
     this.electronService.ipcRenderer.send(
-      "system-messages-updated",
+      'system-messages-updated',
       newMessages
     );
   }
@@ -2419,8 +2419,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Gets triggered when the settings.json is missing from the app folder
    */
   firstRunLogic(): void {
-    console.log("WELCOME TO VIDEO HUB APP!");
-    console.log("this is the first time you are running this app");
+    console.log('WELCOME TO VIDEO HUB APP!');
+    console.log('this is the first time you are running this app');
     this.isFirstRunEver = true;
   }
 
@@ -2448,9 +2448,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param origin -- the `j` in the template, just pass it on to the `onEnterKey`
    */
   typeaheadTabPressed(origin: number): void {
-    if (this.tagTypeAhead !== "") {
+    if (this.tagTypeAhead !== '') {
       this.onEnterKey(this.tagTypeAhead, origin);
-      this.tagTypeAhead = "";
+      this.tagTypeAhead = '';
     }
   }
 
@@ -2528,7 +2528,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   /**
    * Given an array of numbers
    * returns the cutoff for outliers
-   * defined unconventionally as "anything beyond the 3rd quartile + 3 * IQR (the inter-quartile range)"
+   * defined unconventionally as 'anything beyond the 3rd quartile + 3 * IQR (the inter-quartile range)'
    *   cutoff may be the max number if the other computation returns a number too high
    * @param someArray
    */
@@ -2567,7 +2567,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.manualTagsService.addTag(tag); // only updates the count in the tray, nothing else!
 
       this.imageElementService.HandleEmission({
-        type: "add",
+        type: 'add',
         index: element.index,
         tag: tag,
       });
@@ -2580,8 +2580,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   ifShowDetailsViewRefreshTags(): void {
     if (
-      this.appState.currentView === "showDetails" ||
-      this.appState.currentView === "showDetails2"
+      this.appState.currentView === 'showDetails' ||
+      this.appState.currentView === 'showDetails2'
     ) {
       // details view shows tags but they don't update without some code that forces a refresh :(
       // hack-y code simply hides manual tags and then shows them again
@@ -2618,12 +2618,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Check whether new version of the app is available
    */
   checkForNewVersion(): void {
-    this.http.get("https://my.videohubapp.com/version.php").subscribe(
+    this.http.get('https://my.videohubapp.com/version.php').subscribe(
       (version: string) => {
         this.latestVersionAvailable = version;
       },
       (err: any) => {
-        this.latestVersionAvailable = "error";
+        this.latestVersionAvailable = 'error';
       }
     );
   }
@@ -2634,13 +2634,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
   goDownloadNewVersion(): void {
     if (this.demo) {
       this.electronService.ipcRenderer.send(
-        "please-open-url",
-        "https://videohubapp.com"
+        'please-open-url',
+        'https://videohubapp.com'
       );
     } else {
       this.electronService.ipcRenderer.send(
-        "please-open-url",
-        "https://my.videohubapp.com"
+        'please-open-url',
+        'https://my.videohubapp.com'
       );
     }
   }
@@ -2649,7 +2649,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Open modal with instructions for how to use the app. Only runs when `settings.json` is not found
    */
   showFirstRunMessage(): void {
-    this.toggleButton("showThumbnails");
+    this.toggleButton('showThumbnails');
     this.isFirstRunEver = false;
     this.modalService.openWelcomeMessage();
   }
@@ -2662,17 +2662,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if (port === 0) {
       this.stopServer();
     } else {
-      console.log("starting server");
+      console.log('starting server');
       const imagePath: string = path.join(
         this.appState.selectedOutputFolder,
-        "vha-" + this.appState.hubName
+        'vha-' + this.appState.hubName
       );
-      console.log("SERVING FOLDER:");
+      console.log('SERVING FOLDER:');
       console.log(imagePath);
-      console.log("on port", port);
+      console.log('on port', port);
 
       this.electronService.ipcRenderer.send(
-        "start-server",
+        'start-server',
         this.imageElementService.imageElements,
         imagePath,
         port,
@@ -2685,8 +2685,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Stop the remote server
    */
   stopServer(): void {
-    console.log("stopping server");
-    this.electronService.ipcRenderer.send("stop-server");
+    console.log('stopping server');
+    this.electronService.ipcRenderer.send('stop-server');
     this.serverDetailsBehaviorSubject.next(undefined);
   }
 }
