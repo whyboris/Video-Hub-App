@@ -4,7 +4,17 @@
  * There should be no side-effects of running any of them
  * They should depend only on their inputs and behave exactly
  * the same way each time they run no matter the outside state
+ *
+ * !!!!!!!!!!!! WARNING !!!!!!!!!!!!!!!
+ * DANGEROUSLY DEPENDS ON `codeRunningOnMac` when extracting metadata
+ * !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  */
+
+const codeRunningOnMac: boolean = process.platform === 'darwin'; // <---- MAKES MANY FUNCTIONS NOT PURE !!!!
+
+import * as path from 'path';
+
+const fs = require('fs');
 
 import type { VhaGlobals } from './main-globals';
 import { GLOBALS } from './main-globals'; // TODO -- eliminate dependence on `GLOBALS` in this file!
@@ -485,7 +495,20 @@ export function extractMetadataAsync(
           imageElement.width     = origWidth;
           imageElement.fps       = realFps;
 
+
+          // WIP
+          if (codeRunningOnMac) {
+            const foundTags: string[] = readTags(filePath);
+            console.log('tags:', foundTags);
+
+            if (foundTags && foundTags.length) {
+              imageElement.tags = foundTags;
+            }
+          }
+
+
           hashFileAsync(filePath, fileStat).then((hash) => {
+
             imageElement.hash = hash;
             resolve(imageElement);
           });
@@ -495,6 +518,34 @@ export function extractMetadataAsync(
       }
     });
   });
+}
+
+/**
+ * If on Mac OS - read the file-system-added file tags and return them
+ * @param filename
+ */
+export function readTags(filename): string[] {
+
+  console.log('reading', filename);
+
+  const cmdArr = ['mdls', '-raw', '-name', 'kMDItemUserTags', '"' + filename + '"'];
+  const cmd = cmdArr.join(' ');
+
+  let foundTags: string[] = undefined;
+
+  exec(cmd, function (error, stdout, stderr) {
+    if (error) { console.error(error); }
+    if (stderr) { console.log(stderr); }
+    if (stdout) {
+      const tagz: string[] = stdout.toString().split(',');
+      console.log('Tags in file "' + filename + '": ' + tagz);
+
+      foundTags = tagz;
+    }
+
+  });
+
+  return foundTags;
 }
 
 /**
