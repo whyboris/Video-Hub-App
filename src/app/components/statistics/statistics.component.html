@@ -28,7 +28,6 @@
         *ngIf="!removeFoldersMode && !item.value.watch && sourceFolderService.sourceFolderConnected[item.key]"
         class="rescan-input-folder"
         (click)="rescanFolder(item.key)"
-        (mouseup)="animateThis($event)"
         title="{{ 'STATISTICS.clickToRescan' | translate }}"
         @breadcrumbWordAppear
       >
