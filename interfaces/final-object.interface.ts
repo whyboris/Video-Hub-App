@@ -24,6 +24,7 @@ export interface FinalObject {
   removeTags: string[];          // tags to remove
   screenshotSettings: ScreenshotSettings;
   version: number;               // version of this vha file
+  password?: string; // Optional password field
 }
 
 export interface ImageElement {
@@ -102,4 +103,21 @@ export interface ScreenshotSettings {
   fixed: boolean;
   height: AllowedScreenshotHeight;
   n: number;
+}
+
+//Setting the password
+import bcrypt from 'bcrypt';
+
+const saltRounds = 10;
+
+async function setPassword(finalObject: FinalObject, plainPassword: string) {
+  const hashedPassword = await bcrypt.hash(plainPassword, saltRounds);
+  finalObject.password = hashedPassword; // Store the hashed password
+}
+
+// Verifying the password
+async function verifyPassword(finalObject: FinalObject, inputPassword: string) {
+  if (!finalObject.password) return false; // No password set
+  const match = await bcrypt.compare(inputPassword, finalObject.password);
+  return match; // Returns true if the password matches
 }
