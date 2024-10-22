@@ -5,4 +5,4 @@ title: "[OTHER] "
 assignees: ""
 ---
 
-{{ share a brief description of what you are thinking }}
+<!-- share a brief description of what you are thinking -->

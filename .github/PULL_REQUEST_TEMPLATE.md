@@ -1,5 +1,5 @@
-## Description
+<!-- 🙇‍♂️ Thank you very much for contributing to VHA ♥ -->
 
-Fixes #{{issue number}}
+Related issue: #{{issue number}}
 
-{{please add any additional comments too}}
+<!-- please add any additional comments too -->

@@ -6,11 +6,11 @@ labels: bug
 assignees: ""
 ---
 
-{{ feel free to delete any section and add comments freeform }}
+<!-- feel free to delete any section and add comments freeform -->
 
 ### Description
 
-{{ A description of what the bug is }}
+<!-- A description of what the bug is -->
 
 #### To Reproduce
 
@@ -20,21 +20,21 @@ assignees: ""
 
 #### Expected behavior
 
-{{ What did you expect to happen? }}
+<!-- What did you expect to happen? -->
 
 #### Actual behavior
 
-{{ What happened instead? }}
+<!-- What happened instead? -->
 
-#### Screenshots
+#### Screenshot
 
-If useful and easy consider adding a screenshot
+<!-- If useful for explanation and easy to do consider adding a screenshot -->
 
 #### Environment
 
 - OS: `Windows` / `Mac` / `Linux`
-- VHA version: `3.1.0`
+- VHA version: `3.2.0`
 
 #### Additional context
 
-{{ any other comments }}
+<!-- any other comments -->
