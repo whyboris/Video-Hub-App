@@ -3,7 +3,7 @@
     "declaration": false,
     "experimentalDecorators": true,
     "lib": [
-      "es2020",
+      "es2023",
       "dom"
     ],
     "moduleResolution": "node",
