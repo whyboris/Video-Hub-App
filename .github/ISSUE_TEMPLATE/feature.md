@@ -1,6 +1,6 @@
 ---
 name: Feature request
-about: Suggest a new feature for the project
+about: Suggest a new feature for VHA
 title: "[FEATURE] "
 labels: enhancement
 assignees: ""
