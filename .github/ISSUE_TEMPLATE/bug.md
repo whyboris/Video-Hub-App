@@ -6,32 +6,35 @@ labels: bug
 assignees: ""
 ---
 
-## Description
+{{ feel free to delete any section and add comments freeform }}
 
-A clear and concise description of what the bug is.
+### Description
 
-**Steps to Reproduce:**
+{{ A description of what the bug is }}
 
-1. Step 1
-2. Step 2
-3. Step 3
+#### To Reproduce
 
-**Expected behavior:**
-What did you expect to happen?
+1. 🖱
+2. 💥
+3. 🤦‍♂️
 
-**Actual behavior:**
-What happened instead?
+#### Expected behavior
 
-## Screenshots
+{{ What did you expect to happen? }}
 
-If applicable, add screenshots to help explain the problem.
+#### Actual behavior
 
-## Environment (please complete the following information):\*\*
+{{ What happened instead? }}
 
-- OS: [e.g. MacOS, Windows]
-- Browser [e.g. Chrome, Firefox]
-- Version of the application
+#### Screenshots
 
-## Additional context
+If useful and easy consider adding a screenshot
 
-Add any other context about the problem here.
+#### Environment
+
+- OS: `Windows` / `Mac` / `Linux`
+- VHA version: `3.1.0`
+
+#### Additional context
+
+Add any other comments
