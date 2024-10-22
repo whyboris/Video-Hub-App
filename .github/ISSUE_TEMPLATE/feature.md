@@ -6,24 +6,20 @@ labels: enhancement
 assignees: ""
 ---
 
-## Feature Description
+{{ feel free to delete any section and add comments freeform }}
 
-Describe the feature or enhancement you'd like to see implemented in the project.
+### Description
 
-**What problem does this solve?**
-Explain why this feature is important, what problem it solves, and how it benefits the users.
+{{ Describe the feature or enhancement you'd like to see implemented in VHA }}
 
-## Proposed Solution
+#### What problem does this solve?
 
-Describe how the feature should work, providing examples if possible.
+{{ Explain why this feature is important, what problem it solves, and how it benefits the users }}
 
-**Is this part of a larger feature request or related to other issues?**
-If yes, provide links to other issues or features.
+#### Proposed Solution
 
-## Alternatives Considered
+{{ Describe how the feature should work, providing examples if possible }}
 
-Have you considered any alternative solutions? Please list them here.
+#### Additional context
 
-## Additional Context
-
-Include any screenshots, mockups, or other relevant context.
+{{ Add any other comments }}
