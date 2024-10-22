@@ -5,7 +5,7 @@ import '../polyfills';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -15,7 +15,7 @@ import { AnQrcodeModule } from 'an-qrcode';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
-import { VirtualScrollerModule } from 'ngx-virtual-scroller';
+import { VirtualScrollerModule } from '@iharbeck/ngx-virtual-scroller';
 
 // Services
 import { AutoTagsSaveService } from './components/tags-auto/tags-save.service';
@@ -193,13 +193,13 @@ import { YearPipe } from './pipes/year.pipe';
     BrowserAnimationsModule,
     BrowserModule,
     FormsModule,
-    HttpClientModule,
     MatDialogModule,
     MatSnackBarModule,
     TranslateModule.forRoot(),
     VirtualScrollerModule,
   ],
   providers: [
+    provideHttpClient(),
     AutoTagsSaveService,
     AutoTagsService,
     ElectronService,
