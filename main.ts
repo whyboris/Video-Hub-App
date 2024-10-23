@@ -188,9 +188,8 @@ function createWindow() {
   });
 
   win.on('close', (event) => {
-    if (GLOBALS.readyToQuit) {
-      app.exit();
-    } else {
+    if (!GLOBALS.readyToQuit) {
+      event.preventDefault();
       getAngularToShutDown();
     }
   });
