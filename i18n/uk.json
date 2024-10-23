@@ -202,7 +202,24 @@
     "showDetailsTray": "Деталі",
     "showDetailsTrayMoreInfo": "Показує деталі останнього відео, яке ви натиснули",
     "sortOptionFpsDescription": "FPS",
-    "sortOptionFpsMoreInfo": "Покажіть опцію кадрів за секунду в спадному меню, що сортується"
+    "sortOptionFpsMoreInfo": "Покажіть опцію кадрів за секунду в спадному меню, що сортується",
+    "favoritesDescription": "Показати значок вибраного.",
+    "favoritesHint": "Показати значок вибраного",
+    "favoritesMoreInfo": "Натискання серця встановлює рейтинг 5 зірок. Усі відео з 5 зірками є вибраними.",
+    "folderExclusionDescription": "Назви папок без",
+    "folderExclusionHint": "Фільтр виключення папки",
+    "folderExclusionMoreInfo": "Фільтр, щоб виключити будь-які папки, які містять слово фільтра",
+    "sortAutoTagsDescription": "Сортувати автоматично згенеровані теги",
+    "sortAutoTagsHint": "Сортувати автоматично згенеровані теги",
+    "sortAutoTagsMoreInfo": "Сортувати автоматично згенеровані теги в алфавітному порядку, коли кнопка перемикається. Якщо ні, вони відображаються в порядку за замовчуванням",
+    "sortOptionLastPlayedDescription": "Востаннє грали",
+    "sortOptionLastPlayedMoreInfo": "Показати параметр порядку останньої гри в спадному списку сортування",
+    "timesPlayedDescription": "Зіграно",
+    "timesPlayedHint": "Фільтр \"Час відтворення\".",
+    "timesPlayedMoreInfo": "Показати фільтр часу відтворення",
+    "yearSliderDescription": "Фільтрувати за роком",
+    "yearSliderHint": "Фільтр року",
+    "yearSliderMoreInfo": "Показати фільтр-повзунок року"
   },
   "RIGHTCLICK": {
     "cancelRename": "скасувати перейменування",
@@ -281,7 +298,8 @@
     "wordCloud": "Хмара слів та нещодавно відкриті файли",
     "youHaveLatest": "у вас остання версія",
     "zoom": "Збільшити",
-    "showDetailsTray": "Деталі"
+    "showDetailsTray": "Деталі",
+    "favorites": "Показати улюблені"
   },
   "SHORTCUTS": {
     "andClickAnyFile": "і натисніть будь-який файл, щоб переглянути його дані",
@@ -355,7 +373,9 @@
     "totalFoldersPlural": "папки",
     "videoNotes": "нотатки мають",
     "videos": "відео",
-    "sortFps": "FPS"
+    "sortFps": "FPS",
+    "folderExclusion": "папки не мають",
+    "sortLastPlayed": "Востаннє грали"
   },
   "STATISTICS": {
     "addFolderToHub": "Додати папку до концентратора",

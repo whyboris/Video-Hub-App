@@ -1,6 +1,6 @@
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
-import type { AllowedScreenshotHeight } from '@my/final-object.interface';
+import type { AllowedScreenshotHeight, AllowedScreenshotHeightString } from '@my/final-object.interface';
 import type { HistoryItem } from '@my/shared-interfaces';
 import type { ImportStage } from '../../../../node/main-support';
 import type { WizardOptions } from '@my/wizard-options.interface';
@@ -62,7 +62,7 @@ export class WizardComponent {
    * Called on screenshot size dropdown select
    * @param pxHeightForImport - string of number of pixels for the height of each screenshot
    */
-  selectScreenshotSize(pxHeightForImport: '144' | '216' | '288' | '360' | '432' | '504' | string): void {
+  selectScreenshotSize(pxHeightForImport: AllowedScreenshotHeightString | string): void {
     const height: AllowedScreenshotHeight = parseInt(pxHeightForImport, 10) as AllowedScreenshotHeight;
     this.wizard.screenshotSizeForImport = height;
   }
@@ -71,7 +71,7 @@ export class WizardComponent {
    * Called on screenshot size dropdown select
    * @param pxHeightForImport - string of number of pixels for the height of each screenshot
    */
-  selectClipSize(pxHeightForImport: '144' | '216' | '288' | '360' | '432' | '504' | string): void {
+  selectClipSize(pxHeightForImport: AllowedScreenshotHeightString | string): void {
     const height: AllowedScreenshotHeight = parseInt(pxHeightForImport, 10) as AllowedScreenshotHeight;
     this.wizard.clipHeight = height;
   }

@@ -7,7 +7,7 @@ import * as path from 'path';
 
 import { BehaviorSubject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
-import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
+import { VirtualScrollerComponent } from '@iharbeck/ngx-virtual-scroller';
 
 // Services
 import { AutoTagsSaveService } from './tags-auto/tags-save.service';
@@ -1596,6 +1596,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       ) {
         this.computePreviewWidth();
       }
+      this.cd.detectChanges();
 
       // ======== Filter buttons =========================
     } else if (FilterKeyNames.includes(uniqueKey)) {

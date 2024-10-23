@@ -30,9 +30,7 @@ export interface DefaultScreenEmission {
   styleUrls: [ './../buttons.scss',
                './../views/time-and-rez.scss',
                './sheet.component.scss' ],
-  animations: [ modalAnimation,
-                textAppear,
-                metaAppear ]
+  animations: [ modalAnimation, textAppear, metaAppear ]
 })
 export class SheetComponent implements OnInit {
 

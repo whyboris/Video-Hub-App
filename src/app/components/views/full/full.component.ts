@@ -18,8 +18,7 @@ import type { RightClickEmit, VideoClickEmit } from '@my/shared-interfaces';
       '../film-and-full.scss',
       '../selected.scss'
     ],
-  animations: [ textAppear,
-                metaAppear ]
+  animations: [ textAppear, metaAppear ]
 })
 export class FullViewComponent implements OnInit {
 

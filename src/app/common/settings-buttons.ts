@@ -58,13 +58,14 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'showTagTray'
  | 'showThumbnails'
  | 'showVideoNotes'
- | 'sortAutoTags'
  | 'shuffleGalleryNow'
  | 'sizeFilter'
+ | 'sortAutoTags'
  | 'sortOptionAlphabetical'
  | 'sortOptionAlphabetical2'
  | 'sortOptionAspectRatio'
  | 'sortOptionCreated'
+ | 'sortOptionLastPlayed'
  | 'sortOptionFolderSize'
  | 'sortOptionFps'
  | 'sortOptionModified'
@@ -120,6 +121,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'sortOptionTime',
     'sortOptionSize',
     'sortOptionTimesPlayed',
+    'sortOptionLastPlayed',
     'sortOptionStar',
     'sortOptionYear',
     'sortOptionModified',
@@ -373,6 +375,7 @@ export const SettingsButtons: SettingsButtonsType = {
     hidden: false,
     iconName: 'icon-heart',
     settingsHeading: 'SETTINGS.favorites',
+    moreInfo: 'BUTTONS.favoritesMoreInfo',
     title: 'BUTTONS.favoritesHint',
     toggled: false
   },
@@ -806,6 +809,13 @@ export const SettingsButtons: SettingsButtonsType = {
     description: 'BUTTONS.sortOptionTimesPlayedDescription',
     hidden: false,
     moreInfo: 'BUTTONS.sortOptionTimesPlayedMoreInfo',
+    title: '',
+    toggled: false
+  },
+  'sortOptionLastPlayed': {
+    description: 'BUTTONS.sortOptionLastPlayedDescription',
+    hidden: false,
+    moreInfo: 'BUTTONS.sortOptionLastPlayedMoreInfo',
     title: '',
     toggled: false
   },

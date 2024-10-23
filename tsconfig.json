@@ -1,7 +1,7 @@
 {
   "compileOnSave": false,
   "angularCompilerOptions": {
-    "strictTemplates": true
+    "strictTemplates": false
   },
   "compilerOptions": {
     "paths": {
@@ -12,7 +12,7 @@
     "declaration": false,
     "experimentalDecorators": true,
     "lib": [
-      "es2022",
+      "es2023",
       "dom"
     ],
     "module": "esnext",

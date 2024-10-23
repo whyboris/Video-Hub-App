@@ -58,3 +58,20 @@
   stroke: #ff2255;
   fill: #ff2255;
 }
+
+.meta-container,
+.video-box {
+  .heart {
+    opacity: 0;
+  }
+
+  .heart-lit {
+    opacity: 1;
+  }
+
+  &:hover {
+    .heart {
+      opacity: 1
+    }
+  }
+}

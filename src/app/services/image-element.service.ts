@@ -62,12 +62,14 @@ constructor() { }
   }
 
   /**
-   * update number of times played
+   * update number of times played & the `lastPlayed` date
    * @param index
    */
   updateNumberOfTimesPlayed(index: number) {
 
     this.updateRecentlyPlayed(index);
+
+    this.imageElements[index].lastPlayed = Date.now();
 
     this.imageElements[index].timesPlayed ?
     this.imageElements[index].timesPlayed++ :
