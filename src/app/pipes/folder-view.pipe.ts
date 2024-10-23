@@ -1,8 +1,8 @@
 import type { PipeTransform } from '@angular/core';
 import { Pipe } from '@angular/core';
 
-import type { ImageElement, StarRating} from '../../../interfaces/final-object.interface';
-import { NewImageElement } from '../../../interfaces/final-object.interface';
+import type { ImageElement, StarRating} from '@my/final-object.interface';
+import { NewImageElement } from '@my/final-object.interface';
 import type { SettingsButtonsType} from '../common/settings-buttons';
 import { SettingsButtons } from '../common/settings-buttons';
 

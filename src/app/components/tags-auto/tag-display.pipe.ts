@@ -4,8 +4,8 @@ import { Pipe } from '@angular/core';
 import { autoFileTagsRegex } from './autotags.service';
 
 import { Colors } from '../../common/colors';
-import type { ImageElement } from '../../../../interfaces/final-object.interface';
-import type { Tag } from '../../../../interfaces/shared-interfaces';
+import type { ImageElement } from '@my/final-object.interface';
+import type { Tag } from '@my/shared-interfaces';
 
 @Pipe({
   name: 'tagDisplayPipe'

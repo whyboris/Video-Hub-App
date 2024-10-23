@@ -3,7 +3,7 @@ import { Pipe } from '@angular/core';
 
 import { PipeSideEffectService } from './pipe-side-effect.service';
 
-import type { ImageElement } from '../../../interfaces/final-object.interface';
+import type { ImageElement } from '@my/final-object.interface';
 
 @Pipe({
   name: 'regexSearchPipe'
