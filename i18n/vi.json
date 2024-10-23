@@ -202,7 +202,24 @@
     "showDetailsTray": "Chi tiết",
     "showDetailsTrayMoreInfo": "Hiển thị chi tiết về video cuối cùng bạn nhấp vào",
     "sortOptionFpsDescription": "FPS",
-    "sortOptionFpsMoreInfo": "Hiển thị tùy chọn thứ tự khung hình trên giây trong trình đơn sắp xếp thả xuống"
+    "sortOptionFpsMoreInfo": "Hiển thị tùy chọn thứ tự khung hình trên giây trong trình đơn sắp xếp thả xuống",
+    "favoritesDescription": "Hiển thị biểu tượng yêu thích.",
+    "favoritesHint": "Hiển thị biểu tượng yêu thích",
+    "favoritesMoreInfo": "Nhấp vào trái tim sẽ đặt xếp hạng sao thành 5. Tất cả các video 5 sao đều là video yêu thích.",
+    "folderExclusionDescription": "Tên thư mục không có",
+    "folderExclusionHint": "Bộ lọc loại trừ thư mục",
+    "folderExclusionMoreInfo": "Lọc để loại trừ mọi thư mục chứa từ lọc",
+    "sortAutoTagsDescription": "Sắp xếp các thẻ được tạo tự động",
+    "sortAutoTagsHint": "Sắp xếp các thẻ được tạo tự động",
+    "sortAutoTagsMoreInfo": "Sắp xếp các thẻ được tạo tự động theo thứ tự bảng chữ cái, khi nút được bật. Nếu không, chúng được hiển thị theo thứ tự mặc định",
+    "sortOptionLastPlayedDescription": "Lần chơi cuối",
+    "sortOptionLastPlayedMoreInfo": "Hiển thị tùy chọn thứ tự chơi lần cuối trong danh sách thả xuống sắp xếp",
+    "timesPlayedDescription": "Số lần chơi",
+    "timesPlayedHint": "Bộ lọc số lần đã chơi",
+    "timesPlayedMoreInfo": "Hiển thị bộ lọc số lần đã chơi",
+    "yearSliderDescription": "Lọc theo năm",
+    "yearSliderHint": "Bộ lọc năm",
+    "yearSliderMoreInfo": "Hiển thị bộ lọc thanh trượt năm"
   },
   "RIGHTCLICK": {
     "cancelRename": "hủy đổi tên",
@@ -281,7 +298,8 @@
     "wordCloud": "Đám mây từ và các tệp đã mở gần đây",
     "youHaveLatest": "bạn có phiên bản mới nhất",
     "zoom": "Thu phóng",
-    "showDetailsTray": "Chi tiết"
+    "showDetailsTray": "Chi tiết",
+    "favorites": "Hiển thị mục yêu thích"
   },
   "SHORTCUTS": {
     "andClickAnyFile": "và nhấp vào bất kỳ tệp nào để xem chi tiết",
@@ -355,7 +373,9 @@
     "totalFoldersPlural": "thư mục",
     "videoNotes": "ghi chú có",
     "videos": "video",
-    "sortFps": "FPS"
+    "sortFps": "FPS",
+    "folderExclusion": "thư mục không có",
+    "sortLastPlayed": "Lần chơi cuối"
   },
   "STATISTICS": {
     "addFolderToHub": "Thêm thư mục vào trung tâm",

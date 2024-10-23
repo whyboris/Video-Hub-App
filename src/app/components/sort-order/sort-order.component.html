@@ -41,6 +41,12 @@
     <option *ngIf="settingsButtons['sortOptionSize'].toggled" value="sizeDesc">
       &#x25BC; {{ 'SIDEBAR.sortSize' | translate }}
     </option>
+    <option *ngIf="settingsButtons['sortOptionLastPlayed'].toggled" value="lastPlayedAsc">
+      &#x25B2; {{ 'SIDEBAR.sortLastPlayed' | translate }}
+    </option>
+    <option *ngIf="settingsButtons['sortOptionLastPlayed'].toggled" value="lastPlayedDesc">
+      &#x25BC; {{ 'SIDEBAR.sortLastPlayed' | translate }}
+    </option>
     <option *ngIf="settingsButtons['sortOptionTimesPlayed'].toggled" value="timesPlayedAsc">
       &#x25B2; {{ 'SIDEBAR.sortTimesPlayed' | translate }}
     </option>
