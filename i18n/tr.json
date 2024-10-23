@@ -202,7 +202,24 @@
     "showDetailsTray": "Detaylar",
     "showDetailsTrayMoreInfo": "Tıkladığınız son videonun ayrıntılarını gösterir",
     "sortOptionFpsDescription": "FPS",
-    "sortOptionFpsMoreInfo": "Sıralama açılır menüsünde saniye başına kare seçeneğini göster"
+    "sortOptionFpsMoreInfo": "Sıralama açılır menüsünde saniye başına kare seçeneğini göster",
+    "favoritesDescription": "Favori simgesini göster.",
+    "favoritesHint": "Favori simgesini göster",
+    "favoritesMoreInfo": "Kalbi tıklamak, yıldız derecelendirmesini 5 olarak ayarlar. 5 yıldızlı tüm videolar favorilerdir.",
+    "folderExclusionDescription": "olmayan klasör adları",
+    "folderExclusionHint": "Klasör hariç tutma filtresi",
+    "folderExclusionMoreInfo": "Filtre kelimesini içeren klasörleri hariç tutmak için filtreleyin",
+    "sortAutoTagsDescription": "Otomatik oluşturulan etiketleri sırala",
+    "sortAutoTagsHint": "Otomatik oluşturulan etiketleri sırala",
+    "sortAutoTagsMoreInfo": "Düğme değiştirildiğinde, otomatik oluşturulan etiketleri alfabetik sıraya göre sıralayın. Değilse, varsayılan sırayla görüntülenirler.",
+    "sortOptionLastPlayedDescription": "Son çalınan",
+    "sortOptionLastPlayedMoreInfo": "Sıralama açılır menüsünde en son oynanan sıra seçeneğini göster",
+    "timesPlayedDescription": "Oynanan Süreler",
+    "timesPlayedHint": "Oynatılan Süreler filtresi",
+    "timesPlayedMoreInfo": "Oynatılan süre filtresini göster",
+    "yearSliderDescription": "Yıla Göre Filtrele",
+    "yearSliderHint": "Yıl Filtresi",
+    "yearSliderMoreInfo": "Yıl kaydırıcı filtresini göster"
   },
   "RIGHTCLICK": {
     "cancelRename": "yeniden adlandırmayı iptal et",
@@ -281,7 +298,8 @@
     "wordCloud": "Kelime bulutu ve son açılan dosyalar",
     "youHaveLatest": "en son sürüme sahipsiniz",
     "zoom": "Yakınlaştır",
-    "showDetailsTray": "Detaylar"
+    "showDetailsTray": "Detaylar",
+    "favorites": "Favorileri göster"
   },
   "SHORTCUTS": {
     "andClickAnyFile": "ve dosya ayrıntılarını görmek için herhangi bir dosyaya tıklayın",
@@ -355,7 +373,9 @@
     "totalFoldersPlural": "klasörler",
     "videoNotes": "notlarda var",
     "videos": "videolar",
-    "sortFps": "FPS"
+    "sortFps": "FPS",
+    "folderExclusion": "klasörler yok",
+    "sortLastPlayed": "Son çalınan"
   },
   "STATISTICS": {
     "addFolderToHub": "Klasörü hub'a ekle",

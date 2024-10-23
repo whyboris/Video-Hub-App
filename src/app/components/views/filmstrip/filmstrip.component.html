@@ -1,8 +1,8 @@
 <div
-  class="meta-container"
   [ngStyle]="{ height: elHeight + 'px'}"
+  class="meta-container"
+  [ngClass]="{ 'compact-margins' : compactView }"
 >
-
   <div
     #filmstripHolder
     (mousemove)="updateFilmXoffset($event)"
@@ -27,8 +27,16 @@
     [icon]="'icon-show-more-info'"
   ></app-icon>
 
+  <app-icon
+    *ngIf="showFavorites"
+    (click)="toggleHeart()"
+    class="heart"
+    [ngClass]="{ 'heart-lit' : video.stars === 5.5 }"
+    [icon]="'icon-heart'">
+  </app-icon>
+
   <span
-    *ngIf="showMeta"
+    *ngIf="showMeta && !compactView"
     [ngClass]="{ 'larger-font': largerFont }"
     [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
     class="title"

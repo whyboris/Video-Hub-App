@@ -62,17 +62,36 @@ constructor() { }
   }
 
   /**
-   * update number of times played
+   * update number of times played & the `lastPlayed` date
    * @param index
    */
   updateNumberOfTimesPlayed(index: number) {
 
     this.updateRecentlyPlayed(index);
 
+    this.imageElements[index].lastPlayed = Date.now();
+
     this.imageElements[index].timesPlayed ?
     this.imageElements[index].timesPlayed++ :
     this.imageElements[index].timesPlayed = 1;
     this.finalArrayNeedsSaving = true;
+  }
+
+  /**
+   * Toggle heart
+   */
+  toggleHeart(index: number) {
+    if (this.imageElements[index].stars == 5.5) { // "un-favorite" the video
+      this.HandleEmission({
+        index: index,
+        stars: 0.5
+      });
+    } else { // "favorite" the video
+      this.HandleEmission({
+        index: index,
+        stars: 5.5
+      });
+    }
   }
 
   /**
