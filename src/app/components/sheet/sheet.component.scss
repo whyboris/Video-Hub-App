@@ -91,6 +91,10 @@
 
   .star-selected {
     opacity: 1 !important;
+
+    &:hover {
+      opacity: 0.7 !important;
+    }
   }
 }
 
@@ -101,7 +105,7 @@
   transform: translate(0, -3px);
 }
 
-.zoomButtons {
+.details-zoom-buttons {
   position: absolute;
   right: 40px;
   top: 40px;

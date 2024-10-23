@@ -31,7 +31,7 @@
 
     <div *ngIf="video.cleanName === '*FOLDER*' && video.fileName !== '*UP*'" class="folder-icon">
       <app-icon [icon]="'icon-folder-blank'"></app-icon>
-      <div class="items-in-folder">{{ video.fileSizeDisplay | folderSize }}</div>
+      <div class="items-in-folder">{{ video.fileSizeDisplay | folderSizePipe }}</div>
     </div>
 
     <span
@@ -134,6 +134,15 @@
       class="selected"
       [icon]="'icon-show-more-info'"
     ></app-icon>
+
+    <app-icon
+      *ngIf="showFavorites"
+      (click)="toggleHeart()"
+      class="heart"
+      [ngClass]="{ 'heart-lit' : video.stars === 5.5 }"
+      [icon]="'icon-heart'">
+    </app-icon>
+
     <span *ngIf="showMeta" class="time">{{ video.durationDisplay }}</span>
     <span *ngIf="showMeta" class="rez">{{ video.resolution }}</span>
     <span *ngIf="!connected" class="not-connected"></span>

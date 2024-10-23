@@ -9,6 +9,7 @@ import { ManualTagsService } from '../../tags-manual/manual-tags.service';
 
 import type { StarRating, ImageElement } from '../../../../../interfaces/final-object.interface';
 import type { VideoClickEmit, RightClickEmit, TagEmit, RenameFileResponse } from '../../../../../interfaces/shared-interfaces';
+import { ImageElementService } from './../../../services/image-element.service';
 
 export interface YearEmission {
   index: number;
@@ -19,6 +20,7 @@ export interface YearEmission {
   selector: 'app-details-item',
   templateUrl: './details.component.html',
   styleUrls: [
+      '../time-and-rez.scss',
       './details.component.scss',
       '../selected.scss'
     ]
@@ -52,6 +54,7 @@ export class DetailsComponent implements OnInit {
   @Input() showManualTags: boolean;
   @Input() showMeta: boolean;
   @Input() showVideoNotes: boolean;
+  @Input() showFavorites: boolean;
   @Input() star: StarRating;
 
   @Input() renameResponse: BehaviorSubject<RenameFileResponse>;
@@ -62,9 +65,11 @@ export class DetailsComponent implements OnInit {
   hover: boolean;
   indexToShow = 1;
   percentOffset = 0;
+  starRatingHack: StarRating; // updates visuals of rating
 
   constructor(
     public filePathService: FilePathService,
+    public imageElementService: ImageElementService,
     public manualTagsService: ManualTagsService,
     public sanitizer: DomSanitizer
   ) { }
@@ -87,6 +92,12 @@ export class DetailsComponent implements OnInit {
 
   getDefaultScreenOffset(video: ImageElement): number {
     return 100 * video.defaultScreen / (video.screens - 1);
+  }
+
+  toggleHeart(): void {
+    this.imageElementService.toggleHeart(this.video.index);
+    this.starRatingHack = this.video.stars;
+    event.stopPropagation();
   }
 
   ngOnInit() {
