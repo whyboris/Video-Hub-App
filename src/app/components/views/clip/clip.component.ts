@@ -19,8 +19,7 @@ import { metaAppear, textAppear } from '../../../common/animations';
       './clip.component.scss',
       '../selected.scss'
     ],
-  animations: [ textAppear,
-                metaAppear ]
+  animations: [ textAppear, metaAppear ]
 })
 export class ClipComponent implements OnInit {
 

@@ -202,7 +202,24 @@
     "showDetailsTray": "Детали",
     "showDetailsTrayMoreInfo": "Показывает сведения о последнем видео, по которому вы щелкнули",
     "sortOptionFpsDescription": "FPS",
-    "sortOptionFpsMoreInfo": "Показывать параметр порядка кадров в секунду в раскрывающемся списке сортировки"
+    "sortOptionFpsMoreInfo": "Показывать параметр порядка кадров в секунду в раскрывающемся списке сортировки",
+    "favoritesDescription": "Показать значок избранного.",
+    "favoritesHint": "Показать значок избранного",
+    "favoritesMoreInfo": "Нажатие на сердце устанавливает звездный рейтинг на 5. Все видео с 5 звездами являются избранными.",
+    "folderExclusionDescription": "Имена папок без",
+    "folderExclusionHint": "Папка исключить фильтр",
+    "folderExclusionMoreInfo": "Фильтровать, чтобы исключить любые папки, содержащие слово фильтра",
+    "sortAutoTagsDescription": "Сортировать автоматически сгенерированные теги",
+    "sortAutoTagsHint": "Сортировать автоматически сгенерированные теги",
+    "sortAutoTagsMoreInfo": "Сортировать автоматически сгенерированные теги в алфавитном порядке при нажатии кнопки. Если нет, они отображаются в порядке по умолчанию.",
+    "sortOptionLastPlayedDescription": "Последняя игра",
+    "sortOptionLastPlayedMoreInfo": "Показывать последний вариант порядка воспроизведения в раскрывающемся списке сортировки",
+    "timesPlayedDescription": "Количество сыгранных",
+    "timesPlayedHint": "Фильтр времени воспроизведения",
+    "timesPlayedMoreInfo": "Фильтр «Показать время воспроизведения»",
+    "yearSliderDescription": "Фильтровать по году",
+    "yearSliderHint": "Фильтр года",
+    "yearSliderMoreInfo": "Показать ползунок фильтра года"
   },
   "RIGHTCLICK": {
     "cancelRename": "отменить переименовать",
@@ -281,7 +298,8 @@
     "wordCloud": "Облако слов и недавно открытые файлы",
     "youHaveLatest": "у вас последняя версия",
     "zoom": "Увеличить",
-    "showDetailsTray": "Детали"
+    "showDetailsTray": "Детали",
+    "favorites": "Показать избранное"
   },
   "SHORTCUTS": {
     "andClickAnyFile": "и нажмите любой файл, чтобы увидеть детали файла",
@@ -355,7 +373,9 @@
     "totalFoldersPlural": "папки",
     "videoNotes": "примечания",
     "videos": "ролики",
-    "sortFps": "FPS"
+    "sortFps": "FPS",
+    "folderExclusion": "папки не имеют",
+    "sortLastPlayed": "Последняя игра"
   },
   "STATISTICS": {
     "addFolderToHub": "Добавить папку в хаб",

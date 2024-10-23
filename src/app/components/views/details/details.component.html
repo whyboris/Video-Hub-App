@@ -25,6 +25,14 @@
       }"
   >
     <app-icon
+      *ngIf="showFavorites"
+      (click)="toggleHeart()"
+      class="heart"
+      [ngClass]="{ 'heart-lit' : video.stars === 5.5 }"
+      [icon]="'icon-heart'">
+    </app-icon>
+
+    <app-icon
       *ngIf="video.selected"
       class="selected"
       [icon]="'icon-show-more-info'"
@@ -40,6 +48,7 @@
     [maxWidth]="maxWidth / (showTwoColumns ? 2 : 1) - elWidth"
     [star]="this.star"
 
+    [starRatingHack]="starRatingHack"
     [darkMode]="darkMode"
     [largerFont]="largerFont"
     [showAutoFileTags]="showAutoFileTags"
