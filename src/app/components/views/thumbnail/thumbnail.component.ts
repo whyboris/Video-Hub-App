@@ -18,8 +18,7 @@ import type { VideoClickEmit, RightClickEmit } from '../../../../../interfaces/s
     './thumbnail.component.scss',
     '../selected.scss'
   ],
-  animations: [textAppear,
-    metaAppear]
+  animations: [textAppear, metaAppear]
 })
 export class ThumbnailComponent implements OnInit, OnDestroy {
 
