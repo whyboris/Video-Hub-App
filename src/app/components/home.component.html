@@ -810,6 +810,7 @@
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
           [imgHeight]="previewHeight"
+          [showFavorites]="settingsButtons['favorites'].toggled"
 
           [showFaces]="settingsButtons['showFaces'].toggled"
           [compactView]="settingsButtons['compactView'].toggled"
@@ -850,7 +851,9 @@
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
           [imgHeight]="previewHeight"
+          [showFavorites]="settingsButtons['favorites'].toggled"
 
+          [compactView]="settingsButtons['compactView'].toggled"
           [darkMode]="settingsButtons['darkMode'].toggled"
           [hoverScrub]="settingsButtons['hoverScrub'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
@@ -858,8 +861,13 @@
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
 
           style="display: block"
-          [ngStyle]="{ height: previewHeight + textPaddingHeight + 10 + 'px'}"
-        ></app-filmstrip-item>
+          [ngStyle]="{
+              height:   previewHeight
+                      + textPaddingHeight
+                      + (settingsButtons['compactView'].toggled ? 0 : 10)
+                      + 'px'
+            }"
+          ></app-filmstrip-item>
       </ng-container>
 
       <!-- ==================================== FULL VIEW ==================================== -->
@@ -883,6 +891,7 @@
           [galleryWidth]="galleryWidth"
           [hubName]="appState.hubName"
           [imgHeight]="previewHeight"
+          [showFavorites]="settingsButtons['favorites'].toggled"
 
           [darkMode]="settingsButtons['darkMode'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
@@ -906,8 +915,8 @@
 
           [draggable]="settingsButtons['dragVideoOutOfApp'].toggled"
           (dragstart)="draggingVideoFile($event, item)"
-
           [video]="item"
+          [showFavorites]="settingsButtons['favorites'].toggled"
 
           [darkMode]="settingsButtons['darkMode'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
@@ -958,6 +967,7 @@
           [showManualTags]="settingsButtons['manualTags'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
           [showVideoNotes]="settingsButtons['showVideoNotes'].toggled"
+          [showFavorites]="settingsButtons['favorites'].toggled"
 
           [renameResponse]="renameFileResponseBehaviorSubject"
 

@@ -7,7 +7,7 @@ import * as path from 'path';
 
 import { BehaviorSubject } from 'rxjs';
 import { TranslateService } from '@ngx-translate/core';
-import { VirtualScrollerComponent } from 'ngx-virtual-scroller';
+import { VirtualScrollerComponent } from '@iharbeck/ngx-virtual-scroller';
 
 // Services
 import { AutoTagsSaveService } from './tags-auto/tags-save.service';
@@ -1601,6 +1601,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       ) {
         this.computePreviewWidth();
       }
+      this.cd.detectChanges();
 
       // ======== Filter buttons =========================
     } else if (FilterKeyNames.includes(uniqueKey)) {
@@ -1621,6 +1622,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (
         this.settingsButtons['showThumbnails'].toggled
         || this.settingsButtons['showClips'].toggled
+        || this.settingsButtons['showFilmstrip'].toggled
       ) {
         this.computeTextBufferAmount();
       }
@@ -1820,7 +1822,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
         break;
 
       case 'showFilmstrip':
-        if (this.settingsButtons.showMoreInfo.toggled) {
+        if (this.settingsButtons.compactView.toggled) {
+          this.textPaddingHeight = 0;
+        } else if (this.settingsButtons.showMoreInfo.toggled) {
           this.textPaddingHeight = 20;
         } else {
           this.textPaddingHeight = 0;

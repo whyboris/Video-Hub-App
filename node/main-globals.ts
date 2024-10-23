@@ -1,17 +1,24 @@
 import type { ScreenshotSettings, InputSources } from '../interfaces/final-object.interface';
 
+// For release, update 4 values:                                                                          <---- !!! RELEASE !!!
+//
+// `demo: true,`                 -- below
+// `version: 'X.X.X',`           -- below
+// `productName: "... Demo'`     -- package.json
+// `"version": "X.X.X",`         -- package.json
+
 export const GLOBALS: VhaGlobals = {
   angularApp: null,            // reference used to send messages back to Angular App
   currentlyOpenVhaFile: '',    // OFFICAL DECREE IN NODE WHICH FILE IS CURRENTLY OPEN !!!
   debug: false,
-  demo: false,                 // update `package.json` version to `#.#.#-demo` when building the demo             <---- !!!
+  demo: false,                 // change to `true` during release                                         <---- !!! RELEASE !!!
   hubName: 'untitled',         // in case user doesn't name their hub any name
   macVersion: false,           // auto updated by `main.ts`
   readyToQuit: false,          // hack to quit gracefully
   selectedOutputFolder: '',
   selectedSourceFolders: {},
   settingsPath: '',            // to differentiate between standard & Windows Portable settings location
-  version: '3.2.0',            // update it and the `package.json` version in tandem before release!               <---- !!!
+  version: '3.2.1',            // see instructions above to update `package.json` in tandem               <---- !!! RELEASE !!!!
   vhaFileVersion: 3,
   winRef: null,
   screenshotSettings: {

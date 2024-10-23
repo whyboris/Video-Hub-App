@@ -205,7 +205,21 @@
     "videoNotesDescription": "视频笔记搜索",
     "videoNotesHint": "笔记搜索",
     "videoNotesMoreInfo": "搜索您添加到视频中的笔记。在“标签设置”中启用笔记",
-    "videoPlayerSettings": "视频播放器设置"
+    "videoPlayerSettings": "视频播放器设置",
+    "favoritesDescription": "显示收藏夹图标。",
+    "favoritesHint": "显示收藏夹图标",
+    "favoritesMoreInfo": "单击心脏将星级评级设置为 5。所有 5 星视频都是我的最爱。",
+    "folderExclusionDescription": "文件夹名称不带",
+    "folderExclusionHint": "文件夹排除过滤器",
+    "folderExclusionMoreInfo": "过滤以排除任何包含过滤词的文件夹",
+    "sortAutoTagsDescription": "对自动生成的标签进行排序",
+    "sortAutoTagsHint": "对自动生成的标签进行排序",
+    "sortAutoTagsMoreInfo": "切换按钮时，按字母顺序对自动生成的标签进行排序。如果不是，它们将按默认顺序显示",
+    "sortOptionLastPlayedDescription": "最后播放",
+    "sortOptionLastPlayedMoreInfo": "在排序下拉列表中显示上次播放顺序选项",
+    "yearSliderDescription": "按年份筛选",
+    "yearSliderHint": "年份过滤器",
+    "yearSliderMoreInfo": "显示年份滑块过滤器"
   },
   "RIGHTCLICK": {
     "cancelRename": "取消重命名",
@@ -284,7 +298,8 @@
     "versionError": "目前无法检查新版本",
     "wordCloud": "词云和最近打开的文件",
     "youHaveLatest": "你有最新版本",
-    "zoom": "缩放"
+    "zoom": "缩放",
+    "favorites": "显示收藏夹"
   },
   "SHORTCUTS": {
     "andClickAnyFile": "然后单击任何文件以查看文件详细信息",
@@ -358,7 +373,9 @@
     "totalFolders": "文件夹",
     "totalFoldersPlural": "文件夹",
     "videoNotes": "笔记包含",
-    "videos": "视频"
+    "videos": "视频",
+    "folderExclusion": "文件夹没有",
+    "sortLastPlayed": "最后播放"
   },
   "STATISTICS": {
     "addFolderToHub": "将文件夹添加到枢纽",
