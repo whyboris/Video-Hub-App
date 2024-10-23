@@ -19,8 +19,7 @@ import type { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/s
       '../selected.scss',
       './filmstrip.component.scss'
     ],
-  animations: [ textAppear,
-                metaAppear ]
+  animations: [ textAppear, metaAppear ]
 })
 export class FilmstripComponent implements OnInit {
 
