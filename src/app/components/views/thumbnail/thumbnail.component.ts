@@ -41,6 +41,7 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
   @Input() imgHeight: number;
   @Input() largerFont: boolean;
   @Input() returnToFirstScreenshot: boolean;
+  @Input() showFaces: boolean;
   @Input() showMeta: boolean;
   @Input() thumbAutoAdvance: boolean;
   @Input() showFavorites: boolean;
@@ -67,8 +68,8 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
         this.folderThumbPaths.push(this.filePathService.createFilePath(this.folderPath, this.hubName, 'thumbnails', hash));
       });
     } else {
-      this.firstFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'thumbnails', this.video.hash);
-      this.fullFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
+      this.firstFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, this.showFaces ? 'faces' : 'thumbnails', this.video.hash);
+      this.fullFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, this.showFaces ? 'faces' : 'filmstrips', this.video.hash);
       this.folderThumbPaths.push(this.firstFilePath);
     }
 

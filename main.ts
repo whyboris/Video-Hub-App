@@ -516,3 +516,46 @@ ipcMain.on('open-file', (event, pathToVhaFile) => {
 ipcMain.on('clear-recent-documents', (event): void => {
   app.clearRecentDocuments();
 });
+
+
+import { runEverything } from './face/pipeline';
+
+// ===========================================================================================
+// EXTRACT FACES !!!!!!!!! - electron messages
+// -------------------------------------------------------------------------------------------
+
+let hack: number = 0;
+
+ipc.on('extract-face', function (event, currentAngularFinalArray: ImageElement[]) {
+
+  const element: ImageElement = currentAngularFinalArray[hack];
+
+  console.log(element.fileName);
+
+  const inputFile: string = path.join(
+    globals.selectedOutputFolder,
+    'vha-' + globals.hubName,
+    '/filmstrips',
+    element.hash + '.jpg');
+
+  console.log(inputFile);
+
+  const outputFile: string = path.join(
+    globals.selectedOutputFolder,
+    'vha-' + globals.hubName,
+    '/faces',
+    element.hash + '.jpg');
+
+  try {
+    runEverything(inputFile, element.screens, outputFile, 'female');
+  } catch (err) {
+    dialog.showMessageBox(win, {
+      message: systemMessages.noSuchFileFound,
+      detail: err,
+      buttons: ['OK']
+    });
+  }
+
+  hack++;
+});
+
