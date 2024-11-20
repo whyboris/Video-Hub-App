@@ -16,42 +16,44 @@ import { FilePathService } from './views/file-path.service';
 import { ImageElementService } from '../services/image-element.service';
 import { ManualTagsService } from './tags-manual/manual-tags.service';
 import { ModalService } from './modal/modal.service';
-import { PipeSideEffectService } from '../pipes/pipe-side-effect.service';
-import { ResolutionFilterService } from '../pipes/resolution-filter.service';
 import { ShortcutsService, CustomShortcutAction } from './shortcuts/shortcuts.service';
 import { SourceFolderService } from './statistics/source-folder.service';
-import { StarFilterService } from '../pipes/star-filter.service';
-import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency.service';
+
+// Pipe Services
+import { PipeSideEffectService } from '@pipes';
+import { ResolutionFilterService } from '@pipes';
+import { StarFilterService } from '@pipes';
+import { WordFrequencyService, WordFreqAndHeight } from '@pipes';
 
 // Components
 import { SortOrderComponent } from './sort-order/sort-order.component';
 
 // Interfaces
-import type { FinalObject, ImageElement, ScreenshotSettings, ResolutionString } from '../../../interfaces/final-object.interface';
+import type { FinalObject, ImageElement, ScreenshotSettings, ResolutionString } from '@my/final-object.interface';
 import type { ImportStage } from '../../../node/main-support';
 import type { ServerDetails } from './statistics/statistics.component';
-import type { RemoteSettings, SettingsButtonSavedProperties, SettingsObject } from '../../../interfaces/settings-object.interface';
-import type { SortType } from '../pipes/sorting.pipe';
-import type { WizardOptions } from '../../../interfaces/wizard-options.interface';
+import type { RemoteSettings, SettingsButtonSavedProperties, SettingsObject } from '@my/settings-object.interface';
+import type { SortType } from '@pipes';
+import type { SupportedLanguage, RowNumbers } from '../common/app-state';
+import type { SettingsButtonKey, SettingsButtonsType } from '../common/settings-buttons';
+import type { WizardOptions } from '@my/wizard-options.interface';
 import type {
   HistoryItem,
   RemoteVideoClick,
   RenameFileResponse,
   SupportedTrayView,
   SupportedView,
-  VideoClickEmit} from '../../../interfaces/shared-interfaces';
+  VideoClickEmit} from '@my/shared-interfaces';
 import {
   AllSupportedBottomTrayViews,
   AllSupportedViews
-} from '../../../interfaces/shared-interfaces';
+} from '@my/shared-interfaces';
 
 // Constants, etc
-import type { SupportedLanguage, RowNumbers } from '../common/app-state';
 import { AppState, DefaultImagesPerRow } from '../common/app-state';
 import { Filters, filterKeyToIndex, FilterKeyNames } from '../common/filters';
 import { GLOBALS } from '../../../node/main-globals';
 import { LanguageLookup } from '../common/languages';
-import type { SettingsButtonKey, SettingsButtonsType } from '../common/settings-buttons';
 import { SettingsButtons, SettingsButtonsGroups } from '../common/settings-buttons';
 
 // Animations

@@ -9,8 +9,8 @@ import { FilePathService } from '../views/file-path.service';
 import { ImageElementService } from './../../services/image-element.service';
 import { ManualTagsService } from '../tags-manual/manual-tags.service';
 
-import type { StarRating, ImageElement } from '../../../../interfaces/final-object.interface';
-import type { TagEmit, RenameFileResponse } from '../../../../interfaces/shared-interfaces';
+import type { StarRating, ImageElement } from '@my/final-object.interface';
+import type { TagEmit, RenameFileResponse } from '@my/shared-interfaces';
 
 import { metaAppear, textAppear, modalAnimation } from '../../common/animations';
 

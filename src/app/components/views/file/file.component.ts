@@ -1,7 +1,8 @@
 import { Component, Input } from '@angular/core';
 
-import type { ImageElement } from '../../../../../interfaces/final-object.interface';
 import { ImageElementService } from './../../../services/image-element.service';
+
+import type { ImageElement } from '@my/final-object.interface';
 
 @Component({
   selector: 'app-file-item',

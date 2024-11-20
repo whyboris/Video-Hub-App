@@ -5,8 +5,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 import { FilePathService } from '../file-path.service';
 
-import type { ImageElement } from '../../../../../interfaces/final-object.interface';
-import type { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/shared-interfaces';
+import type { ImageElement } from '@my/final-object.interface';
+import type { RightClickEmit, VideoClickEmit } from '@my/shared-interfaces';
 
 import { metaAppear, textAppear } from '../../../common/animations';
 
