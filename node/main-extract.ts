@@ -1,3 +1,5 @@
+import { app } from "electron";
+
 /**
  * This file contains all the logic for extracting:
  * first thumbnail,
@@ -25,7 +27,7 @@ const fs = require('fs');
 import * as path from 'path';
 const spawn = require('child_process').spawn;
 
-const ffmpegPath = require('ffmpeg-static').replace('app.asar', 'app.asar.unpacked');
+const ffmpegPath: string = app.isPackaged ? './resources/ffmpeg/ffmpeg' : './ffmpeg/ffmpeg';
 
 import { GLOBALS } from './main-globals';
 
