@@ -86,6 +86,7 @@ import { FolderArrowsPipe } from './pipes/folder-arrows.pipe';
 import { FolderSizePipe } from './pipes/folder-size.pipe';
 import { FolderViewPipe } from './pipes/folder-view.pipe';
 import { FuzzySearchPipe } from './pipes/fuzzy-search.pipe';
+import { StartWithSearchPipe } from './pipes/start-with-search.pipe';
 import { HideOfflinePipe } from './pipes/hide-offline.pipe';
 import { LengthFilterPipe } from './pipes/length-filter.pipe';
 import { LengthPipe } from './pipes/length.pipe';
@@ -136,6 +137,7 @@ import { YearPipe } from './pipes/year.pipe';
     FolderViewPipe,
     FullViewComponent,
     FuzzySearchPipe,
+    StartWithSearchPipe,
     HideOfflinePipe,
     HomeComponent,
     IconComponent,
@@ -196,7 +198,7 @@ import { YearPipe } from './pipes/year.pipe';
     MatDialogModule,
     MatSnackBarModule,
     TranslateModule.forRoot(),
-    VirtualScrollerModule,
+    VirtualScrollerModule
   ],
   providers: [
     provideHttpClient(),
