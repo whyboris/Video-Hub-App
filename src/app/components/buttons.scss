@@ -1,4 +1,4 @@
-@import "variables";
+@use "variables";
 
 $button-toggle-length: 275ms;
 
@@ -14,14 +14,14 @@ button {
   width: 15px;
 
   &:hover {
-    fill: $pretty-red;
+    fill: variables.$pretty-red;
   }
 }
 
 .flatSettingsButton {
   background: transparent;
   border: none;
-  fill: $gray-50;
+  fill: variables.$gray-50;
   margin-right: 8px;
   margin-top: 2px;
 
@@ -31,12 +31,12 @@ button {
   transition-property: color;
 
   &:hover {
-    text-shadow: 0 0 3px $white;
+    text-shadow: 0 0 3px variables.$white;
     transition-duration: $button-toggle-length;
   }
 
   &:active {
-    fill: $light-blue;
+    fill: variables.$light-blue;
     transition-duration: $button-toggle-length;
   }
 
@@ -47,16 +47,16 @@ button {
 }
 
 .flatSettingsButtonToggled {
-  fill: $pretty-blue;
+  fill: variables.$pretty-blue;
   transition-duration: $button-toggle-length;
 }
 
 .defaultSettingsButton {
-  background: $gray-15;
-  border: 1px solid $gray-30; // keep ordered above `border-` properties
-  border-left: 1px solid $gray-10;
+  background: variables.$gray-15;
+  border: 1px solid variables.$gray-30; // keep ordered above `border-` properties
+  border-left: 1px solid variables.$gray-10;
   border-radius: 0;
-  border-top: 1px solid $gray-10;
+  border-top: 1px solid variables.$gray-10;
   box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
   box-sizing: border-box;
   margin: 0;
@@ -70,7 +70,7 @@ button {
   transition-property: color, transform, background-color, margin, opacity;
 
   & .icon {
-    fill: $gray-70;
+    fill: variables.$gray-70;
   }
 
   &:first-child {
@@ -84,11 +84,11 @@ button {
   }
 
   &:hover {
-    background-color: $gray-10;
+    background-color: variables.$gray-10;
   }
 
   &:active {
-    background: $gray-30 !important;
+    background: variables.$gray-30 !important;
     border-bottom: 1px solid rgba(255, 255, 255, 0.5);
     border-left: 0px;
     border-right: 1px solid rgba(255, 255, 255, 0.5);
@@ -99,7 +99,7 @@ button {
     transform: translate(1px, 1px);
 
     & .icon {
-      fill: $white;
+      fill: variables.$white;
     }
   }
 
@@ -110,21 +110,21 @@ button {
 }
 
 .defaultSettingsButtonToggled {
-  background: $gray-40 !important;
+  background: variables.$gray-40 !important;
   border-bottom: 1px solid rgba(255, 255, 255, 0.2);
   border-left: 0px;
-  border-right: 1px solid $gray-40;
+  border-right: 1px solid variables.$gray-40;
   border-top: 1px solid rgba(0, 0, 0, 0.05);
   box-shadow: none;
   margin-bottom: 1px;
   transform: translateY(1px);
 
   &:hover {
-    background-color: $gray-30 !important;
+    background-color: variables.$gray-30 !important;
   }
 
   & .icon {
-    fill: $white;
+    fill: variables.$white;
   }
 
   span {
@@ -133,26 +133,26 @@ button {
 }
 
 .defaultSettingsButtonDark {
-  background: $gray-85;
-  border: 1px solid $gray-90;
-  border-left: 1px solid $gray-70;
-  border-top: 1px solid $gray-70;
+  background: variables.$gray-85;
+  border: 1px solid variables.$gray-90;
+  border-left: 1px solid variables.$gray-70;
+  border-top: 1px solid variables.$gray-70;
 
   &:hover {
-    background-color: $gray-60 !important;
+    background-color: variables.$gray-60 !important;
   }
 
   & .icon {
-    fill: $gray-40;
+    fill: variables.$gray-40;
   }
 }
 
 .defaultSettingsButtonDarkToggled {
-  background: $black !important;
-  border-bottom: 1px solid $gray-85;
-  border-left: 1px solid $black;
-  border-right: 1px solid $gray-85;
-  border-top: 1px solid $gray-80;
+  background: variables.$black !important;
+  border-bottom: 1px solid variables.$gray-85;
+  border-left: 1px solid variables.$black;
+  border-right: 1px solid variables.$gray-85;
+  border-top: 1px solid variables.$gray-80;
 
   & .icon {
     fill: white;

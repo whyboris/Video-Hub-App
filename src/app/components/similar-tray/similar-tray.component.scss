@@ -1,8 +1,8 @@
-@import "../variables.scss";
+@use "../variables.scss";
 
 .most-similar-tray {
   .most-similar-comment {
-    color: $gray-70;
+    color: variables.$gray-70;
     display: inline-block;
     font-size: 12px;
     margin-left: 20px;

@@ -1,4 +1,4 @@
-@import "../variables";
+@use "../variables";
 
 .frequency-sliders {
   min-height: 55px;
@@ -14,8 +14,8 @@
 .slider-back-track,
 .left-side,
 .right-side {
-  background: $gray-20;
-  border: 1px solid $gray-50;
+  background: variables.$gray-20;
+  border: 1px solid variables.$gray-50;
   border-radius: 15px;
   min-height: 5px;
   position: absolute;
@@ -25,10 +25,10 @@
 }
 
 .darkMode {
-  background: $gray-60;
-  border: 1px solid $gray-70;
-  border-bottom: 1px solid $gray-50;
-  border-top: 1px solid $gray-80;
+  background: variables.$gray-60;
+  border: 1px solid variables.$gray-70;
+  border-bottom: 1px solid variables.$gray-50;
+  border-top: 1px solid variables.$gray-80;
 }
 
 .left-side {
@@ -37,15 +37,15 @@
 }
 
 .right-side {
-  background: $pretty-blue;
-  border: 1px solid $gray-60;
+  background: variables.$pretty-blue;
+  border: 1px solid variables.$gray-60;
   max-width: 153px;
   z-index: 2;
 }
 
 .dragger {
-  background-color: $gray-05;
-  border: 1px solid $gray-50;
+  background-color: variables.$gray-05;
+  border: 1px solid variables.$gray-50;
   border-radius: 4px;
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25);
   height: 14px;
@@ -72,8 +72,8 @@
 }
 
 .draggerDarkMode {
-  background-color: $gray-30;
-  border: 1px solid $gray-80;
+  background-color: variables.$gray-30;
+  border: 1px solid variables.$gray-80;
 }
 
 .isDragging {
@@ -81,7 +81,7 @@
 }
 
 .left-label {
-  color: $gray-50;
+  color: variables.$gray-50;
   font-size: 10px;
   margin-top: 5px;
   position: absolute;
@@ -90,7 +90,7 @@
 }
 
 .right-label {
-  color: $gray-50;
+  color: variables.$gray-50;
   font-size: 10px;
   margin-top: 5px;
   position: absolute;
@@ -100,14 +100,14 @@
 
 
 .minLabel {
-  color: $gray-50;
+  color: variables.$gray-50;
   float: left;
   font-size: 10px;
   margin-top: 40px;
 }
 
 .maxLabel {
-  color: $gray-50;
+  color: variables.$gray-50;
   float: right;
   font-size: 18px;
   margin-top: 30px;
