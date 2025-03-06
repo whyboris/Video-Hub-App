@@ -1,4 +1,4 @@
-@import "../../variables";
+@use "../../variables";
 .element-container {
   cursor: pointer;
   height: 20px;
@@ -8,20 +8,20 @@
   &:hover {
     .folder-name,
     .title {
-      color: $dark-blue;
+      color: variables.$dark-blue;
     }
     .folder-name-dark-mode,
     .title-dark-mode {
-      color: $pretty-blue;
+      color: variables.$pretty-blue;
     }
     .back-icon {
-      fill: $dark-blue;
+      fill: variables.$dark-blue;
     }
     .back-icon-dark-mode {
-      fill: $pretty-blue;
+      fill: variables.$pretty-blue;
     }
     .icon-folder-lol {
-      fill: $pretty-blue;
+      fill: variables.$pretty-blue;
     }
   }
 }
@@ -43,7 +43,7 @@
 
 .length,
 .size {
-  color: $gray-50;
+  color: variables.$gray-50;
   display: block;
   font-size: 10px;
   position: absolute;
@@ -75,35 +75,35 @@
 }
 
 .fileSize {
-  color: $gray-60;
+  color: variables.$gray-60;
   display: inline-block;
   font-size: 10px;
   opacity: 0.8;
 }
 
 .meta-dark-mode {
-  color: $gray-60;
+  color: variables.$gray-60;
 }
 
 .folder-name {
-  color: $black;
+  color: variables.$black;
   font-size: 12px;
   left: 36px;
   position: absolute;
 }
 
 .folder-size {
-  color: $gray-60;
+  color: variables.$gray-60;
   display: inline-block;
   font-size: 10px;
 }
 
 .folder-name-dark-mode {
-  color: $gray-10;
+  color: variables.$gray-10;
 }
 
 .number-of-files {
-  color: $gray-60;
+  color: variables.$gray-60;
   display: block;
   font-size: 10px;
   left: -25px;
@@ -114,7 +114,7 @@
 }
 
 .icon-folder-lol {
-  fill: $gray-50;
+  fill: variables.$gray-50;
   height: 15px;
   left: 10px;
   position: absolute;
@@ -125,7 +125,7 @@
 }
 
 .title {
-  color: $black;
+  color: variables.$black;
   display: inline-block;
   font-size: 12px;
   overflow: hidden;
@@ -139,7 +139,7 @@
 }
 
 .title-dark-mode {
-  color: $gray-10;
+  color: variables.$gray-10;
 }
 
 .larger-font {

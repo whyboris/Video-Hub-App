@@ -1,9 +1,9 @@
-@import 'variables';
+@use "variables";
 
 .filter-general {
   background: transparent;
   border: 0;
-  border-bottom: 1px solid $gray-40;
+  border-bottom: 1px solid variables.$gray-40;
   box-sizing: border-box;
   margin: 5px 0 10px;
   outline: none;
@@ -17,7 +17,7 @@
   width: 100%;
 
   &::placeholder {
-    color: $gray-50;
+    color: variables.$gray-50;
   }
 }
 

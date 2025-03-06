@@ -1,4 +1,4 @@
-@import '../variables.scss';
+@use "../variables.scss";
 
 .manual-tag-tray {
   display: flex;
@@ -64,12 +64,12 @@
   .show-frequency {
     background: none;
     border: none;
-    color: $gray-70;
+    color: variables.$gray-70;
     margin-top: 14px;
     padding-right: 0;
 
     &:hover {
-      color: $pretty-blue;
+      color: variables.$pretty-blue;
     }
   }
 
@@ -78,12 +78,12 @@
     padding: 12px 15px;
     width: 100%;
 
-    @include scrollBarShown;
+    @include variables.scrollBarShown;
   }
 
   // added on top of .filter-general
   .manual-tag-tray-filter {
-    border-color: $gray-80;
+    border-color: variables.$gray-80;
     font-size: 15px;
     padding: 6px 6px 0;
     position: absolute;
@@ -91,7 +91,7 @@
     width: 155px;
 
     &::placeholder {
-      color: $gray-80;
+      color: variables.$gray-80;
     }
   }
 
@@ -99,7 +99,7 @@
     color: white;
 
     &::placeholder {
-      color: $gray-20;
+      color: variables.$gray-20;
     }
   }
 }
@@ -121,11 +121,11 @@
 }
 
 .button-toggle-batch-mode-dark-active {
-  background: $pretty-red;
+  background: variables.$pretty-red;
   color: black !important;
 
   &:hover {
-    background-color: $pretty-red-lighter;
+    background-color: variables.$pretty-red-lighter;
   }
 }
 

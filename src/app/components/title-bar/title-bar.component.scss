@@ -1,8 +1,8 @@
-@import "../variables";
+@use "../variables";
 
 .title-bar {
-  background-color: $gray-40;
-  border-bottom: 1px solid $gray-60;
+  background-color: variables.$gray-40;
+  border-bottom: 1px solid variables.$gray-60;
   height: 20px;
   position: relative;
   transition: 300ms;
@@ -17,7 +17,7 @@
 
 .draggable {
   -webkit-app-region: drag;
-  color: $gray-70;
+  color: variables.$gray-70;
   font-size: 12px;
   margin-top: 4px;
   overflow: hidden;
@@ -44,7 +44,7 @@
 
 .windows-button {
   cursor: pointer;
-  fill: $gray-80;
+  fill: variables.$gray-80;
   position: fixed;
   transition: 600ms;
   transition-property: fill;
@@ -66,7 +66,7 @@
   }
 
   &:hover {
-    fill: $pretty-red;
+    fill: variables.$pretty-red;
     transition: 200ms;
     transition-property: fill;
   }
@@ -84,8 +84,8 @@
   width: 13px;
 
   &.closeButton {
-    background: $close-button;
-    fill: $close-button;
+    background: variables.$close-button;
+    fill: variables.$close-button;
     left: 6px;
 
     & .window-button {
@@ -94,8 +94,8 @@
   }
 
   &.maximizeButton {
-    background: $maximize-button;
-    fill: $maximize-button;
+    background: variables.$maximize-button;
+    fill: variables.$maximize-button;
     left: 46px;
 
     & .window-button {
@@ -104,8 +104,8 @@
   }
 
   &.minimizeButton {
-    background: $minimize-botton;
-    fill: $minimize-botton;
+    background: variables.$minimize-botton;
+    fill: variables.$minimize-botton;
     left: 26px;
 
     & .window-button {
@@ -114,23 +114,23 @@
   }
 
   &:hover {
-    fill: $black;
+    fill: variables.$black;
     transition: 200ms;
   }
 }
 
 .dark-mode-override { // needs to be after titleBar and windows-button and draggable
-  background: $gray-85;
+  background: variables.$gray-85;
 
   & .draggable {
-    fill: $gray-50;
+    fill: variables.$gray-50;
   }
 
   & .windows-button {
-    fill: $gray-30;
+    fill: variables.$gray-30;
 
     &:hover {
-      fill: $pretty-red;
+      fill: variables.$pretty-red;
       transition: 200ms;
     }
   }

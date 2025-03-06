@@ -1,4 +1,4 @@
-@import "../variables";
+@use "../variables";
 
 .shortcut-container {
   display: flex;
@@ -17,8 +17,8 @@
 }
 
 .shortcut-key {
-  background: $white;
-  border: 1px solid $gray-50;
+  background: variables.$white;
+  border: 1px solid variables.$gray-50;
   border-radius: 3px;
   box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
   color: black;
@@ -43,7 +43,7 @@
 }
 
 .selected-for-change {
-  box-shadow: 0 0 5px 2px $pretty-blue;
+  box-shadow: 0 0 5px 2px variables.$pretty-blue;
 }
 
 .empty {

@@ -1,7 +1,7 @@
-@import "../variables.scss";
+@use "../variables.scss";
 
 .rename-heading {
-  color: $gray-50;
+  color: variables.$gray-50;
   font-size: 16px;
   left: 40px;
   position: absolute;
@@ -10,7 +10,7 @@
 
 .rename-from,
 .rename-to {
-  color: $gray-50;
+  color: variables.$gray-50;
   display: block;
   font-size: 12px;
   left: 0px;

@@ -1,4 +1,4 @@
-@import '../variables';
+@use "../variables";
 
 .columns-container {
   height: calc(100% - 100px);
@@ -25,7 +25,7 @@
 }
 
 .virt-scroll {
-  @include scrollBar;
+  @include variables.scrollBar;
   height: 100%;
 }
 
@@ -46,14 +46,14 @@ ul {
   transition-property: color;
 
   &:hover {
-    color: $pretty-blue;
+    color: variables.$pretty-blue;
     transition: 30ms;
     transition-property: color;
   }
 }
 
 .frequency {
-  color: $gray-50;
+  color: variables.$gray-50;
   cursor: default;
   font-size: 10px;
   position: absolute;
@@ -63,7 +63,7 @@ ul {
 }
 
 .prefix {
-  color: $gray-30;
+  color: variables.$gray-30;
   cursor: default;
   display: block;
   font-size: 20px;
@@ -76,8 +76,8 @@ ul {
 
 .edit-bar {
   align-items: baseline;
-  background: $gray-10;
-  border-top: 1px solid $gray-30;
+  background: variables.$gray-10;
+  border-top: 1px solid variables.$gray-30;
   bottom: 16px;
   box-sizing: border-box;
   display: flex;
@@ -90,12 +90,12 @@ ul {
 }
 
 .filter-description {
-  color: $gray-50;
+  color: variables.$gray-50;
   font-size: 12px;
 }
 
 .num-select {
-  background-color: $gray-10;
+  background-color: variables.$gray-10;
   border: none;
   margin: 0 0 0 14px;
   outline: none;
@@ -123,7 +123,7 @@ ul {
 
 .num-found {
   bottom: 15px;
-  color: $gray-50;
+  color: variables.$gray-50;
   display: block;
   font-size: 12px;
   line-height: 0;
@@ -136,7 +136,7 @@ ul {
 }
 
 .delete-tag-hack {
-  color: $pretty-red;
+  color: variables.$pretty-red;
   font-size: 12px;
   position: absolute;
   transform: translate(8px, 1px);
@@ -146,13 +146,13 @@ ul {
 
 .strikethrough {
   &:hover {
-    color: $pretty-red;
+    color: variables.$pretty-red;
     text-decoration: line-through !important;
   }
 }
 
 .add-error {
-  color: $pretty-blue;
+  color: variables.$pretty-blue;
 }
 
 .break-point-hack {
