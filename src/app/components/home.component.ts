@@ -109,6 +109,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   @ViewChild('fuzzySearch', { static: false }) fuzzySearch: ElementRef;
   @ViewChild('magicSearch', { static: false }) magicSearch: ElementRef;
   @ViewChild('searchRef',   { static: false }) searchRef:   ElementRef;
+  @ViewChild('settingsModal', { static: false }) settingsModal: ElementRef;
 
   @ViewChild(SortOrderComponent) sortOrderRef: SortOrderComponent;
 
@@ -2410,6 +2411,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
     console.log('stopping server');
     this.electronService.ipcRenderer.send('stop-server');
     this.serverDetailsBehaviorSubject.next(undefined);
+  }
+
+  /**
+   * Scroll the settings modal to the top
+   */
+  scrollSettingsToTop(): void {
+    if (this.settingsModal) {
+      this.settingsModal.nativeElement.scrollTop = 0;
+    }
   }
 
 }
