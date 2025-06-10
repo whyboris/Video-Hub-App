@@ -1,3 +1,22 @@
-<router-outlet></router-outlet>
+<div class="sticky top-0 bg-white z-50 p-4 shadow-sm flex items-center">
+  <button (click)="checkDuplicates()" class="p-2 rounded shadow">
+    🔍 Find Duplicates by Name/Tags
+  </button>
 
+  <span *ngIf="duplicates.length > 0" class="ml-4">
+    Found {{ duplicates.length }} duplicates
+  </span>
+</div>
+
+<router-outlet></router-outlet>
 <app-svg-definitions></app-svg-definitions>
+
+<div *ngIf="duplicates.length > 0" class="p-4 bg-gray-50">
+  <h3 class="mb-2">Duplicate videos:</h3>
+  <ul class="list-disc list-inside">
+    <li *ngFor="let d of duplicates">
+      {{ d.fileName }}
+      <span *ngIf="d.tags?.length">— Tags: {{ d.tags.join(', ') }}</span>
+    </li>
+  </ul>
+</div>
