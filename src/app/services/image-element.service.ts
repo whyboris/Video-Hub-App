@@ -125,5 +125,36 @@ constructor() { }
         splice(this.imageElements[position].tags.indexOf(emission.tag), 1);
     }
   }
+  /**
+   * Find duplicates based on exact fileName match or shared tags
+   */
+  public findDuplicatesByTagsOrName(): ImageElement[] {
+    const duplicates: ImageElement[] = [];
+
+    for (let i = 0; i < this.imageElements.length; i++) {
+      const current = this.imageElements[i];
+
+      for (let j = i + 1; j < this.imageElements.length; j++) {
+        const other = this.imageElements[j];
+
+        // Exact fileName match
+        if (current.fileName === other.fileName) {
+          duplicates.push(current);
+          break;
+        }
+
+        // Shared tags
+        if (current.tags && other.tags) {
+          const common = current.tags.filter(tag => other.tags.includes(tag));
+          if (common.length > 0) {
+            duplicates.push(current);
+            break;
+          }
+        }
+      }
+    }
+
+    return duplicates;
+  }
 
 }
