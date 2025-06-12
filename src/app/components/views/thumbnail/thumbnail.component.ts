@@ -8,21 +8,24 @@ import { metaAppear, textAppear } from '../../../common/animations';
 import { ImageElementService } from './../../../services/image-element.service';
 import type { ImageElement } from '../../../../../interfaces/final-object.interface';
 import type { VideoClickEmit, RightClickEmit } from '../../../../../interfaces/shared-interfaces';
+import {
+  SettingsButtons,
+  SettingsButtonsType,
+} from "../../../common/settings-buttons";
 
 @Component({
-  selector: 'app-thumbnail',
-  templateUrl: './thumbnail.component.html',
+  selector: "app-thumbnail",
+  templateUrl: "./thumbnail.component.html",
   styleUrls: [
-    '../clip-and-preview.scss',
-    '../time-and-rez.scss',
-    './thumbnail.component.scss',
-    '../selected.scss'
+    "../clip-and-preview.scss",
+    "../time-and-rez.scss",
+    "./thumbnail.component.scss",
+    "../selected.scss",
   ],
-  animations: [textAppear, metaAppear]
+  animations: [textAppear, metaAppear],
 })
 export class ThumbnailComponent implements OnInit, OnDestroy {
-
-  @ViewChild('filmstripHolder', { static: false }) filmstripHolder: ElementRef;
+  @ViewChild("filmstripHolder", { static: false }) filmstripHolder: ElementRef;
 
   @Output() sheetClick = new EventEmitter<any>(); // does not emit data of any kind
   @Output() videoClick = new EventEmitter<VideoClickEmit>();
@@ -44,31 +47,50 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
   @Input() showMeta: boolean;
   @Input() thumbAutoAdvance: boolean;
   @Input() showFavorites: boolean;
+  @Input() SettingsButtons: SettingsButtonsType;
 
   containerWidth: number;
-  firstFilePath = '';
+  firstFilePath = "";
   folderThumbPaths: string[] = [];
-  fullFilePath = '';
+  fullFilePath = "";
   hover: boolean;
   indexToShow = 1;
   percentOffset = 0;
   scrollInterval: any = null;
+  settingsButtons = SettingsButtons;
 
   constructor(
     public filePathService: FilePathService,
-    public imageElementService: ImageElementService,
-  ) { }
+    public imageElementService: ImageElementService
+  ) {}
 
   ngOnInit() {
     // multiple hashes == folder view
-    if (this.video.hash.indexOf(':') !== -1) {
-      const hashes = this.video.hash.split(':');
+    if (this.video.hash.indexOf(":") !== -1) {
+      const hashes = this.video.hash.split(":");
       hashes.slice(0, 4).forEach((hash) => {
-        this.folderThumbPaths.push(this.filePathService.createFilePath(this.folderPath, this.hubName, 'thumbnails', hash));
+        this.folderThumbPaths.push(
+          this.filePathService.createFilePath(
+            this.folderPath,
+            this.hubName,
+            "thumbnails",
+            hash
+          )
+        );
       });
     } else {
-      this.firstFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'thumbnails', this.video.hash);
-      this.fullFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
+      this.firstFilePath = this.filePathService.createFilePath(
+        this.folderPath,
+        this.hubName,
+        "thumbnails",
+        this.video.hash
+      );
+      this.fullFilePath = this.filePathService.createFilePath(
+        this.folderPath,
+        this.hubName,
+        "filmstrips",
+        this.video.hash
+      );
       this.folderThumbPaths.push(this.firstFilePath);
     }
 
@@ -79,20 +101,21 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
   }
 
   defaultScreenOffset(video: ImageElement): number {
-    return 100 * video.defaultScreen / (video.screens - 1);
+    return (100 * video.defaultScreen) / (video.screens - 1);
   }
 
   mouseEntered() {
-    this.containerWidth = this.filmstripHolder.nativeElement.getBoundingClientRect().width;
+    this.containerWidth =
+      this.filmstripHolder.nativeElement.getBoundingClientRect().width;
 
     if (this.thumbAutoAdvance) {
       this.hover = true;
 
       this.scrollInterval = setInterval(() => {
-        this.percentOffset = this.indexToShow * (100 / (this.video.screens - 1));
+        this.percentOffset =
+          this.indexToShow * (100 / (this.video.screens - 1));
         this.indexToShow++;
       }, 750);
-
     } else if (this.hoverScrub) {
       this.hover = true;
     }
@@ -116,7 +139,9 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
   mouseIsMoving($event: any) {
     if (this.hoverScrub) {
       const cursorX = $event.layerX;
-      this.indexToShow = Math.floor(cursorX * (this.video.screens / this.containerWidth));
+      this.indexToShow = Math.floor(
+        cursorX * (this.video.screens / this.containerWidth)
+      );
       this.percentOffset = this.indexToShow * (100 / (this.video.screens - 1));
     }
   }
