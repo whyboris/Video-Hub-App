@@ -42,7 +42,7 @@
     class="title"
   >
     {{ video.cleanName }}
-    <div class="fileSize" *ngIf="showMeta">
+    <div class="fileSize" *ngIf="showMeta && !settingsButtons['showFileSize'].toggled">
       ({{ video.fileSizeDisplay }})
     </div>
   </span>

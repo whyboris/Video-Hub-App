@@ -143,8 +143,8 @@
       [icon]="'icon-heart'">
     </app-icon>
 
-    <span *ngIf="showMeta" class="time">{{ video.durationDisplay }}</span>
-    <span *ngIf="showMeta" class="rez">{{ video.resolution }}</span>
+    <span *ngIf="showMeta && !settingsButtons['showDuration'].toggled" class="time">{{ video.durationDisplay }}</span>
+    <span *ngIf="showMeta && !settingsButtons['showResolution'].toggled" class="rez">{{ video.resolution }}</span>
     <span *ngIf="!connected" class="not-connected"></span>
   </div>
   <!--
@@ -165,7 +165,7 @@
   >
     {{ video.cleanName }}
     <div
-      *ngIf="showMeta"
+      *ngIf="showMeta && !settingsButtons['showFileSize'].toggled"
       class="fileSize"
     >
       {{ showMeta ? '(' + video.fileSizeDisplay + ')' : '' }}
