@@ -66,31 +66,14 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // multiple hashes == folder view
-    if (this.video.hash.indexOf(":") !== -1) {
-      const hashes = this.video.hash.split(":");
+    if (this.video.hash.indexOf(':') !== -1) {
+      const hashes = this.video.hash.split(':');
       hashes.slice(0, 4).forEach((hash) => {
-        this.folderThumbPaths.push(
-          this.filePathService.createFilePath(
-            this.folderPath,
-            this.hubName,
-            "thumbnails",
-            hash
-          )
-        );
+        this.folderThumbPaths.push(this.filePathService.createFilePath(this.folderPath, this.hubName, 'thumbnails', hash));
       });
     } else {
-      this.firstFilePath = this.filePathService.createFilePath(
-        this.folderPath,
-        this.hubName,
-        "thumbnails",
-        this.video.hash
-      );
-      this.fullFilePath = this.filePathService.createFilePath(
-        this.folderPath,
-        this.hubName,
-        "filmstrips",
-        this.video.hash
-      );
+      this.firstFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'thumbnails', this.video.hash);
+      this.fullFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
       this.folderThumbPaths.push(this.firstFilePath);
     }
 
