@@ -7,7 +7,6 @@
 .meta {
   box-sizing: border-box;
   display: inline-block;
-  height: 190px;
   overflow: hidden; // will hide tags that don't fit in 2 lines
   padding: 0 0 0 20px;
   vertical-align: top;
@@ -107,9 +106,7 @@
   @include scrollBar;
   box-sizing: border-box;
   display: block;
-  height: 60px;
   overflow-y: auto;
-  padding-bottom: 2px;
 }
 
 .times-played {
