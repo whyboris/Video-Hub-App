@@ -1,29 +1,13 @@
-<div
-  *ngIf="_file !== ''"
-  class="folder-container"
-  [ngClass]="{ 'dark-mode-override': darkMode }"
->
-  <app-icon class="icon" [icon]="'icon-folder-blank'" (click)="openInExplorer()"></app-icon>
-  <span
-    *ngFor="let item of folderNameArray"
-    (click)="folderWordClicked(item)"
-    class="folder-word"
-  >
-    {{ item }}
-  </span>
-</div>
-
-<div
-  *ngIf="_file !== ''"
-  class="file-container"
-  [ngClass]="{ 'dark-mode-override': darkMode }"
->
-  <app-icon class="icon" [icon]="'icon-video-blank'" (click)="openInExplorer()"></app-icon>
-  <span
-    *ngFor="let item of fileNameArray"
-    (click)="fileWordClicked(item)"
-    class="file-word"
-  >
-    {{ item }}
-  </span>
+<div class="top-container">
+  <img *ngIf="getThumbnailPath()" [src]="getThumbnailPath()" class="thumbnail" alt="Thumbnail" />
+  <div class="text-container">
+    <div class="folder-container" *ngIf="folderString">
+      <span class="icon icon-folder"></span>
+      <span class="folder-word" *ngFor="let item of folderNameArray" (click)="folderWordClicked(item)">{{ item }}</span>
+    </div>
+    <div class="file-container" *ngIf="fileString">
+      <span class="icon icon-video-blank"></span>
+      <span class="file-word" *ngFor="let item of fileNameArray" (click)="fileWordClicked(item)">{{ item }}</span>
+    </div>
+  </div>
 </div>
