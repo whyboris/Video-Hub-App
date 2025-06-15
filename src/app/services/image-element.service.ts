@@ -129,32 +129,32 @@ constructor() { }
    * Find duplicates based on exact fileName match or shared tags
    */
   public findDuplicatesByTagsOrName(): ImageElement[] {
-  const duplicates: ImageElement[] = [];
+  const duplicates = new Set<ImageElement>();
+  const seenNames = new Set<string>();
+  const tagMap = new Map<string, ImageElement>();
 
-  for (let i = 0; i < this.imageElements.length; i++) {
-    const current = this.imageElements[i];
+  // 1) Detect filename duplicates in one pass
+  for (const el of this.imageElements) {
+    if (seenNames.has(el.fileName)) {
+      duplicates.add(el);
+    } else {
+      seenNames.add(el.fileName);
+    }
+  }
 
-    for (let j = i + 1; j < this.imageElements.length; j++) {
-      const other = this.imageElements[j];
-
-      if (this.isDuplicateByName(current, other) || this.isDuplicateByTags(current, other)) {
-        duplicates.push(current);
-        break;
+  // 2) Detect tag duplicates in one pass
+  for (const el of this.imageElements) {
+    if (!el.tags) continue;
+    for (const tag of el.tags) {
+      if (tagMap.has(tag)) {
+        duplicates.add(tagMap.get(tag)!);
+      } else {
+        tagMap.set(tag, el);
       }
     }
   }
 
-  return duplicates;
+  return Array.from(duplicates);
 }
-
-private isDuplicateByName(a: ImageElement, b: ImageElement): boolean {
-  return a.fileName === b.fileName;
-}
-
-private isDuplicateByTags(a: ImageElement, b: ImageElement): boolean {
-  if (!a.tags || !b.tags) return false;
-  return a.tags.some(tag => b.tags.includes(tag));
-}
-
 
 }
