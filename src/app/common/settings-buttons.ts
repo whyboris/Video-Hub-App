@@ -84,6 +84,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'thumbAutoAdvance'
  | 'timesPlayedFilter'
  | 'videoNotes'
+ | 'showPlaylist'
  | 'yearFilter';
 
 // Add `SettingsButtons` items here so they show up in the buttons ribbon and in the settings
@@ -203,6 +204,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'dangerousDelete',
     'playPlaylist',
     'openAtTimestamp',
+    'showPlaylist',
   ]
 ];
 
@@ -902,6 +904,13 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-toggle-video-notes',
     moreInfo: 'BUTTONS.videoNotesMoreInfo',
     title: 'BUTTONS.videoNotesHint',
+    toggled: false
+  },
+  'showPlaylist': {
+    description: 'BUTTONS.playlistViewDescription',
+    hidden: false,
+    iconName: 'icon-show-playlist',
+    title: 'BUTTONS.playlistViewHint',
     toggled: false
   }
 };
