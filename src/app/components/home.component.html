@@ -788,7 +788,7 @@
 
       <ng-container *ngIf="appState.currentView === 'showThumbnails'">
         <app-thumbnail
-          *ngFor="let item of scroll.viewPortItems"
+          *ngFor="let item of settingsButtons['showPlaylist'].toggled ? pipeSideEffectService.currentPlaylist : scroll.viewPortItems"
 
           (videoClick)=" (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
           (rightClick)=" (item.cleanName === '*FOLDER*') ? doNothing()                               : rightMouseClicked($event.mouseEvent, $event.item)"
@@ -833,7 +833,7 @@
 
       <ng-container *ngIf="appState.currentView === 'showFilmstrip'">
         <app-filmstrip-item
-          *ngFor="let item of scroll.viewPortItems"
+          *ngFor="let item of settingsButtons['showPlaylist'].toggled ? pipeSideEffectService.currentPlaylist : scroll.viewPortItems"
 
           (videoClick)="handleClick($event, item)"
           (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
@@ -871,7 +871,7 @@
 
       <ng-container *ngIf="appState.currentView === 'showFullView'">
         <app-full-item
-          *ngFor="let item of scroll.viewPortItems"
+          *ngFor="let item of settingsButtons['showPlaylist'].toggled ? pipeSideEffectService.currentPlaylist : scroll.viewPortItems"
 
           (videoClick)="handleClick($event, item)"
           (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
@@ -902,7 +902,7 @@
 
       <ng-container *ngIf="appState.currentView === 'showFiles'">
         <app-file-item
-          *ngFor="let item of scroll.viewPortItems"
+          *ngFor="let item of settingsButtons['showPlaylist'].toggled ? pipeSideEffectService.currentPlaylist : scroll.viewPortItems"
 
           (click)="      (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick({ mouseEvent: $event }, item)"
           (dblclick)="   (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick({ mouseEvent: $event }, item, true)"
@@ -927,7 +927,7 @@
 
       <ng-container *ngIf="appState.currentView === 'showDetails' || appState.currentView === 'showDetails2'">
         <app-details-item
-          *ngFor="let item of scroll.viewPortItems"
+          *ngFor="let item of settingsButtons['showPlaylist'].toggled ? pipeSideEffectService.currentPlaylist : scroll.viewPortItems"
 
           (videoClick)="handleClick($event, item)"
           (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
@@ -974,7 +974,7 @@
 
       <ng-container *ngIf="appState.currentView === 'showClips'">
         <app-clip-item
-          *ngFor="let item of scroll.viewPortItems"
+          *ngFor="let item of settingsButtons['showPlaylist'].toggled ? pipeSideEffectService.currentPlaylist : scroll.viewPortItems"
 
           (videoClick)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
           (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing()                               : rightMouseClicked($event.mouseEvent, $event.item)"

@@ -1570,11 +1570,24 @@ export class HomeComponent implements OnInit, AfterViewInit {
   toggleButton(uniqueKey: SettingsButtonKey | SupportedView | SupportedTrayView, fromIpc = false): void {
     // ======== View buttons ================
     if (AllSupportedViews.includes(<SupportedView>uniqueKey)) {
-      this.savePreviousViewSize();
-      this.toggleAllViewsButtonsOff();
-      this.toggleButtonTrue(uniqueKey);
-      this.restoreViewSize(uniqueKey);
-      this.appState.currentView = <SupportedView>uniqueKey;
+      // Toggle playlist state
+      this.settingsButtons['showPlaylist'].toggled = !this.settingsButtons['showPlaylist'].toggled;
+
+      // Handle other view changes
+      if (this.settingsButtons['showPlaylist'].toggled) {
+        this.savePreviousViewSize();
+        this.toggleAllViewsButtonsOff();
+        this.toggleButtonTrue(uniqueKey);
+        this.restoreViewSize(uniqueKey);
+      } else {
+        this.toggleAllViewsButtonsOff();
+        this.toggleButtonTrue(uniqueKey);
+        this.settingsButtons['showPlaylist'].toggled = true;
+      }
+
+      // Update view and refresh
+      const currentView = AllSupportedViews.find(key => this.settingsButtons[key].toggled);
+      this.appState.currentView = <SupportedView>currentView;
       this.computeTextBufferAmount();
       this.virtualScroller.invalidateAllCachedMeasurements();
       this.scrollToTop();
