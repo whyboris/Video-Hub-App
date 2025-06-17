@@ -1,4 +1,4 @@
-import { ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, input } from '@angular/core';
 import type { OnInit } from '@angular/core';
 import { Component, HostListener, Input, Output, EventEmitter } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
@@ -9,6 +9,8 @@ import type { ImageElement } from '../../../../../interfaces/final-object.interf
 import type { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/shared-interfaces';
 
 import { metaAppear, textAppear } from '../../../common/animations';
+import {SettingsButtons, SettingsButtonsType } from '../../../common/settings-buttons';
+import { log } from 'console';
 
 @Component({
   selector: 'app-clip-item',
@@ -42,6 +44,7 @@ export class ClipComponent implements OnInit {
   @Input() imgHeight: number;
   @Input() largerFont: boolean;
   @Input() showMeta: boolean;
+  @Input() SettingsButtons: SettingsButtonsType;
 
   appInFocus = true;
   folderPosterPaths: string[] = [];
@@ -51,6 +54,7 @@ export class ClipComponent implements OnInit {
   pathToVideo = '';
   poster: string;
   posterFolderType: any = 'clips';
+  settingsButtons = SettingsButtons;
 
   constructor(
     public filePathService: FilePathService,

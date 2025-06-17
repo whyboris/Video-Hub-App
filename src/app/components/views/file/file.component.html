@@ -61,7 +61,7 @@
     </app-icon>
 
     <div
-      *ngIf="showMeta"
+      *ngIf="showMeta && !settingsButtons['showResolution'].toggled"
       [ngClass]="{ 'meta-dark-mode': darkMode }"
       class="size"
     >
@@ -78,7 +78,7 @@
     >
       {{ video.cleanName }}
       <div
-        *ngIf="showMeta"
+        *ngIf="showMeta && !settingsButtons['showFileSize'].toggled"
         class="fileSize"
         [ngClass]="{ 'meta-dark-mode': darkMode }"
       >
@@ -87,7 +87,7 @@
     </div>
 
     <div
-      *ngIf="showMeta"
+      *ngIf="showMeta && !settingsButtons['showDuration'].toggled"
       class="length"
       [ngClass]="{ 'meta-dark-mode': darkMode }"
     >
