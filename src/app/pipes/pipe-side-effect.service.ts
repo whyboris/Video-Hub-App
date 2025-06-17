@@ -15,6 +15,8 @@ export class PipeSideEffectService {
 
   regexError: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
+  currentPlaylist: ImageElement[] = [];
+
   /**
    * Update the searchResults BehaviorSubject (to show total number of videos showing in gallery)
    * @param total
@@ -51,6 +53,16 @@ export class PipeSideEffectService {
    */
   saveCurrentResults(results: ImageElement[]): void {
     this.galleryShowing = results;
+  }
+
+  saveCurrentPlaylist(playlist: any[]): void {
+    // Create a map for faster lookups
+    const playlistMap = new Map(playlist.map(item => [item.title, item]));
+
+    // Search the current playlist videos in galleryShowing
+    this.currentPlaylist = this.galleryShowing.filter(element =>
+      playlistMap.has(element.cleanName)
+    );
   }
 
 }

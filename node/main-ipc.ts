@@ -389,4 +389,44 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
     });
   });
 
+  /**
+   * Read a .pls file and send its content back to the renderer process
+   */
+  ipc.on('read-pls-file', (event, filePath: string) => {
+    try {
+      const plsPath: string = path.join(GLOBALS.settingsPath, filePath);
+      const content = fs.readFileSync(plsPath, 'utf8');
+      const lines = content.split(/\r?\n/);
+      const entries = [];
+
+      // Skip the [playlist] header
+      let i = 1;
+
+      // Get number of entries
+      const numEntries = parseInt(lines[i].split('=')[1]);
+      i++;
+
+      // Parse each entry
+      for (let j = 0; j < numEntries; j++) {
+        const fileLine = lines[i];
+        const titleLine = lines[i + 1];
+
+        if (fileLine && titleLine) {
+          const file = fileLine.split('=')[1];
+          const title = titleLine.split('=')[1];
+
+          entries.push({
+            file: file,
+            title: title
+          } as never);
+        }
+
+        i += 2; // Move to next entry
+      }
+      event.sender.send('pls-file-content', entries);
+    } catch (error) {
+      console.error('Error reading .pls file:', error);
+      event.sender.send('pls-file-content', []);
+    }
+  });
 }

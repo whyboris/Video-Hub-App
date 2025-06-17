@@ -2,6 +2,7 @@ import type { PipeTransform } from '@angular/core';
 import { Pipe } from '@angular/core';
 
 import { PipeSideEffectService } from './pipe-side-effect.service';
+import { ElectronService } from '../providers/electron.service';
 
 import type { ImageElement } from '../../../interfaces/final-object.interface';
 
@@ -11,7 +12,8 @@ import type { ImageElement } from '../../../interfaces/final-object.interface';
 export class PlaylistPipe implements PipeTransform {
 
   constructor(
-    public pipeSideEffectService: PipeSideEffectService
+    public pipeSideEffectService: PipeSideEffectService,
+    public electronService: ElectronService
   ) { }
 
   /**
@@ -21,6 +23,17 @@ export class PlaylistPipe implements PipeTransform {
   transform(finalArray: ImageElement[]): ImageElement[] {
 
     this.pipeSideEffectService.saveCurrentResults(finalArray);
+
+    // Read playlist file
+    this.electronService.ipcRenderer.send('read-pls-file', 'temp.pls');
+
+    // Listen for the response
+    this.electronService.ipcRenderer.once('pls-file-content', (event, entries) => {
+      if (entries && entries.length > 0) {
+        const playlist = entries;
+        this.pipeSideEffectService.saveCurrentPlaylist(playlist);
+      }
+    });
 
     return finalArray;
   }
