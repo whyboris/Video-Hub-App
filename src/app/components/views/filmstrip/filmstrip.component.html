@@ -14,7 +14,8 @@
         height: imgHeight + 'px',
         'background-image': 'url(' + fullFilePath + ')',
         'background-position-x': '-' + filmXoffset + 'px',
-        'background-size': 'auto ' + imgHeight + 'px'
+        'background-size': 'auto ' + imgHeight + 'px',
+        'padding': isVertical(video) ? '2px 4px' : '10px'
       }"
   >
     <span *ngIf="showMeta" class="time">{{ video.durationDisplay }}</span>
