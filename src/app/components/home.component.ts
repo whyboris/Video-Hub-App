@@ -357,6 +357,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.sheetOverlayShowing = false;
     } else if (event.key === 'Escape' && this.settingsButtons['showTags'].toggled) {
       this.toggleButton('showTags');
+    } else if (event.key === ' ' && this.settingsButtons['spacePlaysRandom'].toggled) {
+      const randomIndex: number = Math.floor(Math.random() * this.pipeSideEffectService.galleryShowing.length);
+      const video: ImageElement = this.pipeSideEffectService.galleryShowing[randomIndex];
+      const randomPlayStart: number = Math.floor(Math.random() * video.screens);
+      this.openVideo(video, randomPlayStart);
     }
   }
 
