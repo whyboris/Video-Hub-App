@@ -1,5 +1,23 @@
 @import "../variables";
 
+.top-container {
+  display: flex;
+  align-items: flex-start;
+}
+
+.thumbnail {
+  width: 30px;
+  height: 20px;
+  object-fit: cover;
+  margin-right: 5px;
+  margin-top: 2px;
+}
+
+.text-container {
+  display: flex;
+  flex-direction: column;
+}
+
 .icon {
   cursor: pointer;
   display: inline-block;
@@ -23,7 +41,7 @@
   overflow: hidden;
 
   :nth-child(2) {
-    margin-left: 23px;
+    margin-left: 23px; // Space for icon
   }
 
   .folder-word {
@@ -59,7 +77,7 @@
   }
 
   :nth-child(2) {
-    margin-left: 23px;
+    margin-left: 23px; // Space for icon
   }
 
   .file-word {
@@ -104,5 +122,9 @@
     &:hover {
       fill: $light-blue;
     }
+  }
+
+  & .thumbnail {
+    filter: brightness(0.8); // Slightly dim thumbnail in dark mode for better contrast
   }
 }
