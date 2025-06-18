@@ -3,7 +3,11 @@
   class="folder-container"
   [ngClass]="{ 'dark-mode-override': darkMode }"
 >
-  <app-icon class="icon" [icon]="'icon-folder-blank'" (click)="openInExplorer()"></app-icon>
+  <app-icon
+    class="icon"
+    [icon]="'icon-folder-blank'"
+    (click)="openInExplorer()"
+  ></app-icon>
   <span
     *ngFor="let item of folderNameArray"
     (click)="folderWordClicked(item)"
@@ -18,7 +22,11 @@
   class="file-container"
   [ngClass]="{ 'dark-mode-override': darkMode }"
 >
-  <app-icon class="icon" [icon]="'icon-video-blank'" (click)="openInExplorer()"></app-icon>
+  <app-icon
+    class="icon"
+    [icon]="'icon-video-blank'"
+    (click)="openInExplorer()"
+  ></app-icon>
   <span
     *ngFor="let item of fileNameArray"
     (click)="fileWordClicked(item)"
@@ -27,3 +35,12 @@
     {{ item }}
   </span>
 </div>
+
+<!-- Find Duplicates Button -->
+<app-icon
+  class="icon"
+  [icon]="'icon-search'"
+  (click)="checkDuplicates()"
+  title="Find duplicates with names/tags"
+></app-icon>
+

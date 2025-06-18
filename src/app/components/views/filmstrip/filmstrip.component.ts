@@ -29,7 +29,6 @@ export class FilmstripComponent implements OnInit {
   @Output() rightClick = new EventEmitter<RightClickEmit>();
 
   @Input() video: ImageElement;
-
   @Input() compactView: boolean;
   @Input() darkMode: boolean;
   @Input() elHeight: number;
@@ -53,6 +52,14 @@ export class FilmstripComponent implements OnInit {
 
   ngOnInit() {
     this.fullFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
+  }
+
+  /**
+   * Return true if this video is portrait (vertical) orientation
+   */
+  public isVertical(video: ImageElement): boolean {
+    console.log('Video dimensions:', video.width, video.height);
+    return video.width < video.height;
   }
 
   updateFilmXoffset($event) {

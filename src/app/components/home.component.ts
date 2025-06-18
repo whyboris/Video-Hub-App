@@ -758,15 +758,27 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.vhaFileHistory = (settingsObject.vhaFileHistory || []);
       this.restoreSettingsFromBefore(settingsObject);
       this.setOrRestoreLanguage(settingsObject.appState.language, locale);
+
       if (this.appState.currentZoomLevel !== 1) {
+        // restore zoom
         this.electronService.webFrame.setZoomFactor(this.appState.currentZoomLevel);
+
+        // —————————————————————————
+        // Immediately recompute gallery layout
+        // —————————————————————————
+        setTimeout(() => {
+          this.computePreviewWidth();
+          this.virtualScroller.refresh();
+        }, 0);
       }
+
       if (settingsObject.appState.currentVhaFile) {
         this.loadThisVhaFile(settingsObject.appState.currentVhaFile);
       } else {
         this.wizard.showWizard = true;
         this.flickerReduceOverlay = false;
       }
+
       if (settingsObject.shortcuts) {
         this.shortcutService.initializeFromSaved(settingsObject.shortcuts);
       }
