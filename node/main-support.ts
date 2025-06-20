@@ -641,3 +641,42 @@ export function setUpDirectoryWatchers(inputDirs: InputSources, currentImages: I
 
   });
 }
+
+/**
+ * Edit the playlist
+ * @param savePath -- location to save the temp.pls file
+ * @param item -- array of ImageElements
+ * @param sourceFolderMap -- array of InputSources
+ */
+export function editPlaylist(savePath: string, item: ImageElement, sourceFolderMap: InputSources): void {
+  let entries = 0;
+  const writeArray = ['[playlist]'];
+
+  if (fs.existsSync(savePath)) {
+    const playlist = fs.readFileSync(savePath, 'utf8').split('\n');
+    entries = Math.floor(playlist.length / 2);
+
+    writeArray.push(`NumberOfEntries=${entries}`);
+
+    // Copy existing entries
+    writeArray.push(...playlist.slice(2));
+  } else {
+    writeArray.push('NumberOfEntries=0');
+  }
+
+  // Add new entry
+  const fullPath = path.join(
+    sourceFolderMap[0].path,
+    item.partialPath,
+    item.fileName
+  );
+
+  writeArray.push(`File${entries}=${fullPath}`);
+  writeArray.push(`Title${entries}=${item.cleanName}`);
+
+  fs.writeFile(savePath, writeArray.join('\n'), 'utf8', (err) => {
+    if (err) {
+      console.error('Error writing playlist file:', err);
+    }
+  });
+}

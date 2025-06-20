@@ -102,7 +102,7 @@
         [ngClass]="{ 'right-click-disabled': !sourceFolderService.sourceFolderConnected[currentRightClickedItem.inputSource] }"
       >
                                                                 {{ 'RIGHTCLICK.delete'      | translate }}</li>
-      <li (click)="addToPlaylist()">                            {{'RIGHTCLICK.addToPlaylist'| translate }}</li>
+      <li (click)="addToPlaylist(currentRightClickedItem)">     {{'RIGHTCLICK.addToPlaylist'| translate }}</li>
     </ul>
   </div>
 
@@ -782,7 +782,7 @@
                                                                 || settingsButtons['duplicateHash'].toggled
                                                                 || (sortType === 'default' && fuzzySearchString.length > 2))
 
-                | playlistPipe"
+                | playlistPipe : settingsButtons['showPlaylist'].toggled"
     >
 
       <!-- ==================================== THUMBNAILS ==================================== -->

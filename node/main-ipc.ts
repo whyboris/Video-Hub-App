@@ -8,7 +8,7 @@ const exec = require('child_process').exec;
 import { GLOBALS } from './main-globals';
 import { ImageElement, FinalObject, InputSources } from '../interfaces/final-object.interface';
 import { SettingsObject } from '../interfaces/settings-object.interface';
-import { createDotPlsFile, writeVhaFileToDisk } from './main-support';
+import { createDotPlsFile, writeVhaFileToDisk, editPlaylist } from './main-support';
 import { replaceThumbnailWithNewImage } from './main-extract';
 import { closeWatcher, startWatcher, extractAnyMissingThumbs, removeThumbnailsNotInHub } from './main-extract-async';
 
@@ -428,5 +428,15 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
       console.error('Error reading .pls file:', error);
       event.sender.send('pls-file-content', []);
     }
+  });
+
+  /**
+   * Add the current video to the playlist
+   */
+  ipc.on('please-add-to-playlist', (event, item: ImageElement, sourceFolderMap: InputSources) => {
+
+    const savePath: string = path.join(GLOBALS.settingsPath, 'temp.pls');
+
+    editPlaylist(savePath, item, sourceFolderMap);
   });
 }

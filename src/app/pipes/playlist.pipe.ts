@@ -7,7 +7,8 @@ import { ElectronService } from '../providers/electron.service';
 import type { ImageElement } from '../../../interfaces/final-object.interface';
 
 @Pipe({
-  name: 'playlistPipe'
+  name: 'playlistPipe',
+  pure: false
 })
 export class PlaylistPipe implements PipeTransform {
 
@@ -19,8 +20,9 @@ export class PlaylistPipe implements PipeTransform {
   /**
    * Return only items that match search string
    * @param finalArray
+   * @param trigger - optional trigger to make pipe reactive
    */
-  transform(finalArray: ImageElement[]): ImageElement[] {
+  transform(finalArray: ImageElement[], trigger?: number): ImageElement[] {
 
     this.pipeSideEffectService.saveCurrentResults(finalArray);
 

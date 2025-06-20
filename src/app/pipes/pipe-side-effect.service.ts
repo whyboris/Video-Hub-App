@@ -17,6 +17,8 @@ export class PipeSideEffectService {
 
   currentPlaylist: ImageElement[] = [];
 
+  playlistUpdateTrigger = new BehaviorSubject<number>(0);
+
   /**
    * Update the searchResults BehaviorSubject (to show total number of videos showing in gallery)
    * @param total
@@ -63,6 +65,16 @@ export class PipeSideEffectService {
     this.currentPlaylist = this.galleryShowing.filter(element =>
       playlistMap.has(element.cleanName)
     );
+
+    // Trigger an update
+    this.playlistUpdateTrigger.next(this.playlistUpdateTrigger.value + 1);
+  }
+
+  /**
+   * Force a playlist refresh by triggering an update
+   */
+  refreshPlaylist(): void {
+    this.playlistUpdateTrigger.next(this.playlistUpdateTrigger.value + 1);
   }
 
 }

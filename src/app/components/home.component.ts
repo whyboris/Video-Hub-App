@@ -1649,6 +1649,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.sourceFolderService.selectedSourceFolder,
         execPath
       );
+    } else if (uniqueKey === 'showPlaylist') {
+      this.toggleButtonOpposite(uniqueKey);
+      // Trigger a playlist refresh when toggling playlist view
+      if (this.settingsButtons['showPlaylist'].toggled) {
+        this.pipeSideEffectService.refreshPlaylist();
+      }
+
+      this.scrollToTop();
     } else if (uniqueKey === 'sortOrder') {
       this.toggleButtonOpposite(uniqueKey);
       setTimeout(() => {
@@ -2414,4 +2422,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.serverDetailsBehaviorSubject.next(undefined);
   }
 
+  /**
+   * Add the current video to the playlist
+   */
+  addToPlaylist(item: ImageElement): void {
+    this.electronService.ipcRenderer.send(
+      'please-add-to-playlist',
+      item,
+      this.sourceFolderService.selectedSourceFolder,
+    );
+
+    // Trigger a playlist refresh after a short delay to allow the file to be written
+    setTimeout(() => {
+      this.pipeSideEffectService.refreshPlaylist();
+    }, 100);
+  }
 }
