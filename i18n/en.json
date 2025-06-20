@@ -240,7 +240,8 @@
     "sheetModal": "Details",
     "showSimilar": "Show similar",
     "shuffle": "Shuffle results",
-    "viewFolder": "View folder"
+    "viewFolder": "View folder",
+    "addToPlaylist": "Add to playlist"
   },
   "SETTINGS": {
     "additionalExtensions": "Support additional extensions",
