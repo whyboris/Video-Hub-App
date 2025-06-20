@@ -842,6 +842,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     });
 
+    // Playlist file content listener
+    this.electronService.ipcRenderer.on('pls-file-content', (event, entries) => {
+      if (entries && entries.length > 0) {
+        const playlist = entries;
+        this.pipeSideEffectService.saveCurrentPlaylist(playlist);
+      }
+    });
+
     this.justStarted();
   }
 

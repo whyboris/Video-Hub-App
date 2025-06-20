@@ -26,16 +26,11 @@ export class PlaylistPipe implements PipeTransform {
 
     this.pipeSideEffectService.saveCurrentResults(finalArray);
 
-    // Read playlist file
-    this.electronService.ipcRenderer.send('read-pls-file', 'temp.pls');
-
-    // Listen for the response
-    this.electronService.ipcRenderer.once('pls-file-content', (event, entries) => {
-      if (entries && entries.length > 0) {
-        const playlist = entries;
-        this.pipeSideEffectService.saveCurrentPlaylist(playlist);
-      }
-    });
+    // Only read playlist file if trigger is provided
+    if (trigger !== undefined) {
+      // Read playlist file
+      this.electronService.ipcRenderer.send('read-pls-file', 'temp.pls');
+    }
 
     return finalArray;
   }
