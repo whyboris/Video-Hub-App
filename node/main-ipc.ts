@@ -395,15 +395,43 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
   ipc.on('read-pls-file', (event, filePath: string) => {
     try {
       const plsPath: string = path.join(GLOBALS.settingsPath, filePath);
+
+      if (!fs.existsSync(plsPath)) {
+        event.sender.send('pls-file-content', []);
+        return;
+      }
+
       const content = fs.readFileSync(plsPath, 'utf8');
-      const lines = content.split(/\r?\n/);
+      const lines = content.split(/\r?\n/).filter(line => line.trim() !== '');
       const entries = [];
+
+      // Check if file has minimum required structure
+      if (lines.length < 2) {
+        event.sender.send('pls-file-content', []);
+        return;
+      }
 
       // Skip the [playlist] header
       let i = 1;
 
-      // Get number of entries
-      const numEntries = parseInt(lines[i].split('=')[1]);
+      // Get number of entries - add safety check
+      if (i >= lines.length || !lines[i] || !lines[i].includes('=')) {
+        event.sender.send('pls-file-content', []);
+        return;
+      }
+
+      const numEntriesLine = lines[i].split('=');
+      if (numEntriesLine.length < 2) {
+        event.sender.send('pls-file-content', []);
+        return;
+      }
+
+      const numEntries = parseInt(numEntriesLine[1]);
+      if (isNaN(numEntries) || numEntries < 0) {
+        event.sender.send('pls-file-content', []);
+        return;
+      }
+
       i++;
 
       // Parse each entry
@@ -411,17 +439,27 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
         const fileLine = lines[i];
         const titleLine = lines[i + 1];
 
-        if (fileLine && titleLine) {
-          const file = fileLine.split('=')[1];
-          const title = titleLine.split('=')[1];
+        if (fileLine && titleLine && fileLine.includes('=') && titleLine.includes('=')) {
+          const fileParts = fileLine.split('=');
+          const titleParts = titleLine.split('=');
 
-          entries.push({
-            file: file,
-            title: title
-          } as never);
+          if (fileParts.length >= 2 && titleParts.length >= 2) {
+            const file = fileParts.slice(1).join('=');
+            const title = titleParts.slice(1).join('=');
+
+            entries.push({
+              file: file,
+              title: title
+            } as never);
+          }
         }
 
         i += 2; // Move to next entry
+
+        // Safety check to prevent going out of bounds
+        if (i >= lines.length) {
+          break;
+        }
       }
       event.sender.send('pls-file-content', entries);
     } catch (error) {

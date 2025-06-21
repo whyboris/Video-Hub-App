@@ -663,7 +663,7 @@ export function editPlaylist(savePath: string, item: ImageElement, sourceFolderM
     // Copy existing entries
     writeArray.push(...playlist.slice(2));
   } else {
-    writeArray.push('NumberOfEntries=0');
+    writeArray.push('NumberOfEntries=1');
   }
 
   // Add new entry
