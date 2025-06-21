@@ -241,7 +241,8 @@
     "showSimilar": "Show similar",
     "shuffle": "Shuffle results",
     "viewFolder": "View folder",
-    "addToPlaylist": "Add to playlist"
+    "addToPlaylist": "Add to playlist",
+    "removeFromPlaylist": "Remove from playlist"
   },
   "SETTINGS": {
     "additionalExtensions": "Support additional extensions",

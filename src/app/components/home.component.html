@@ -102,7 +102,8 @@
         [ngClass]="{ 'right-click-disabled': !sourceFolderService.sourceFolderConnected[currentRightClickedItem.inputSource] }"
       >
                                                                 {{ 'RIGHTCLICK.delete'      | translate }}</li>
-      <li (click)="addToPlaylist(currentRightClickedItem)">     {{'RIGHTCLICK.addToPlaylist'| translate }}</li>
+      <li *ngIf="!settingsButtons['showPlaylist'].toggled" (click)="addToPlaylist(currentRightClickedItem)">     {{'RIGHTCLICK.addToPlaylist'| translate }}</li>
+      <li *ngIf="settingsButtons['showPlaylist'].toggled" (click)="removeFromPlaylist(currentRightClickedItem)">     {{'RIGHTCLICK.removeFromPlaylist'| translate }}</li>
     </ul>
   </div>
 
