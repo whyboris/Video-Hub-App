@@ -847,6 +847,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (entries && entries.length > 0) {
         const playlist = entries;
         this.pipeSideEffectService.saveCurrentPlaylist(playlist);
+      } else {
+        // Handle empty playlist
+        this.pipeSideEffectService.saveCurrentPlaylist([]);
       }
     });
 

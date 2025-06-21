@@ -58,6 +58,14 @@ export class PipeSideEffectService {
   }
 
   saveCurrentPlaylist(playlist: any[]): void {
+    // Handle empty playlist
+    if (!playlist || playlist.length === 0) {
+      this.currentPlaylist = [];
+      // Trigger an update
+      this.playlistUpdateTrigger.next(this.playlistUpdateTrigger.value + 1);
+      return;
+    }
+
     // Create a map for faster lookups
     const playlistMap = new Map(playlist.map(item => [item.title, item]));
 
