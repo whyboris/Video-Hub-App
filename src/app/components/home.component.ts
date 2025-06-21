@@ -2445,4 +2445,20 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.pipeSideEffectService.refreshPlaylist();
     }, 100);
   }
+
+  /**
+   * Remove the current video from the playlist
+   */
+  removeFromPlaylist(item: ImageElement): void {
+    this.electronService.ipcRenderer.send(
+      'please-remove-from-playlist',
+      item,
+      this.sourceFolderService.selectedSourceFolder,
+    );
+
+    // Trigger a playlist refresh after a short delay to allow the file to be written
+    setTimeout(() => {
+      this.pipeSideEffectService.refreshPlaylist();
+    }, 100);
+  }
 }
