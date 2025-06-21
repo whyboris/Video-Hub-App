@@ -486,4 +486,19 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
 
     removeItemFromPlaylist(savePath, item);
   });
+
+  /**
+   * Clean out the playlist (delete the .pls file)
+   */
+  ipc.on('please-clean-out-playlist', (event) => {
+    const savePath: string = path.join(GLOBALS.settingsPath, 'temp.pls');
+
+    if(fs.existsSync(savePath)) {
+      fs.unlink(savePath, (err) => {
+        if (err) {
+          console.error('Error deleting playlist:', err);
+        }
+      });
+    }
+  });
 }

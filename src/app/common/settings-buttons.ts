@@ -85,7 +85,8 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'timesPlayedFilter'
  | 'videoNotes'
  | 'showPlaylist'
- | 'yearFilter';
+ | 'yearFilter'
+ | 'cleanOutPlaylist';
 
 // Add `SettingsButtons` items here so they show up in the buttons ribbon and in the settings
 // Each array separates buttons into their own button groups visually
@@ -205,6 +206,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'playPlaylist',
     'openAtTimestamp',
     'showPlaylist',
+    'cleanOutPlaylist',
   ]
 ];
 
@@ -911,6 +913,13 @@ export const SettingsButtons: SettingsButtonsType = {
     hidden: false,
     iconName: 'icon-show-playlist',
     title: 'BUTTONS.playlistViewHint',
+    toggled: false
+  },
+  'cleanOutPlaylist': {
+    description: 'BUTTONS.cleanOutPlaylistDescription',
+    hidden: false,
+    iconName: 'icon-clean-out-playlist',
+    title: 'BUTTONS.cleanOutPlaylistHint',
     toggled: false
   }
 };

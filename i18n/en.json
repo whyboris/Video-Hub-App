@@ -221,7 +221,9 @@
     "yearSliderHint": "Year Filter",
     "yearSliderMoreInfo": "Show the year slider filter",
     "playlistViewDescription": "Playlist view",
-    "playlistViewHint": "Playlist view"
+    "playlistViewHint": "Playlist view",
+    "cleanOutPlaylistDescription": "Clean out playlist",
+    "cleanOutPlaylistHint": "Clean out playlist"
   },
   "RIGHTCLICK": {
     "cancelRename": "cancel rename",

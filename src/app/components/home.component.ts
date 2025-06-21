@@ -1668,6 +1668,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
 
       this.scrollToTop();
+    } else if (uniqueKey === 'cleanOutPlaylist') {
+      this.electronService.ipcRenderer.send('please-clean-out-playlist');
+      // Trigger a playlist refresh
+      this.pipeSideEffectService.refreshPlaylist();
     } else if (uniqueKey === 'sortOrder') {
       this.toggleButtonOpposite(uniqueKey);
       setTimeout(() => {
