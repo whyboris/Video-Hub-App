@@ -2438,29 +2438,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Add the current video to the playlist
+   * Add or remove items from playlist
+   * @param item - the ImageElement to modify
+   * @param action - 'add' or 'remove'
    */
-  addToPlaylist(item: ImageElement): void {
-    this.electronService.ipcRenderer.send(
-      'please-add-to-playlist',
-      item,
-      this.sourceFolderService.selectedSourceFolder,
-    );
+  modifyPlaylist(item: ImageElement, action: 'add' | 'remove'): void {
+    const eventName = action === 'add' ? 'please-add-to-playlist' : 'please-remove-from-playlist';
 
-    // Trigger a playlist refresh after a short delay to allow the file to be written
-    setTimeout(() => {
-      this.pipeSideEffectService.refreshPlaylist();
-    }, 100);
-  }
-
-  /**
-   * Remove the current video from the playlist
-   */
-  removeFromPlaylist(item: ImageElement): void {
     this.electronService.ipcRenderer.send(
-      'please-remove-from-playlist',
+      eventName,
       item,
-      this.sourceFolderService.selectedSourceFolder,
+      this.sourceFolderService.selectedSourceFolder
     );
 
     // Trigger a playlist refresh after a short delay to allow the file to be written

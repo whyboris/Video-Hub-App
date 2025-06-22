@@ -676,11 +676,7 @@ export function editPlaylist(savePath: string, item: ImageElement, sourceFolderM
   writeArray.push(`File${entries}=${fullPath}`);
   writeArray.push(`Title${entries}=${item.cleanName}`);
 
-  fs.writeFile(savePath, writeArray.join('\n'), 'utf8', (err) => {
-    if (err) {
-      console.error('Error writing playlist file:', err);
-    }
-  });
+  writePlaylistFile(savePath, writeArray);
 }
 
 /**
@@ -689,47 +685,43 @@ export function editPlaylist(savePath: string, item: ImageElement, sourceFolderM
  * @param item -- array of ImageElements
  */
 export function removeItemFromPlaylist(savePath: string, item: ImageElement): void {
-  let entries = 0;
   const writeArray = ['[playlist]'];
   let playlist: string[] = [];
+  let remainingEntries = 0;
 
   if (fs.existsSync(savePath)) {
-    const content = fs.readFileSync(savePath, 'utf8');
-    playlist = content.split(/\r?\n/).filter(line => line.trim() !== '');
+    playlist = fs.readFileSync(savePath, 'utf8').split(/\r?\n/).filter(line => line.trim() !== '');
 
-    // playlist = fs.readFileSync(savePath, 'utf8').split('\n');
-    entries = Math.floor(playlist.length / 2);
+    for (let i = 2; i < playlist.length; i += 2) {
+      const fileLine = playlist[i];
+      const titleLine = playlist[i + 1];
 
-    writeArray.push(`NumberOfEntries=${entries - 2}`);
-  } else {
-    writeArray.push('NumberOfEntries=0');
-  }
+      // Skip if lines are undefined
+      if (!fileLine || !titleLine) {
+        continue;
+      }
 
-  let newIndex = 1;
-  for (let i = 0; i < entries; i++) {
-    const fileLine = playlist[2 + i * 2]; // Skip [playlist] and NumberOfEntries
-    const titleLine = playlist[2 + i * 2 + 1];
+      const title = titleLine.split('=')[1];
+      const file = fileLine.split('=')[1];
 
-    // Skip if lines are undefined
-    if (!fileLine || !titleLine) {
-      continue;
-    }
-
-    const title = titleLine.split('=')[1];
-    const file = fileLine.split('=')[1];
-
-    // Skip if split failed
-    if (!title || !file) {
-      continue;
-    }
-
-    if (title !== item.cleanName) {
-      writeArray.push(`File${newIndex}=${file}`);
-      writeArray.push(`Title${newIndex}=${title}`);
-      newIndex++;
+      if (title && file && title !== item.cleanName) {
+        remainingEntries++;
+        writeArray.push(`File${remainingEntries}=${file}`);
+        writeArray.push(`Title${remainingEntries}=${title}`);
+      }
     }
   }
 
+  // Set the correct number of entries
+  writeArray.splice(1, 0, `NumberOfEntries=${remainingEntries}`);
+
+  writePlaylistFile(savePath, writeArray);
+}
+
+/**
+ * Help function for write playlist file
+ */
+export function writePlaylistFile(savePath: string, writeArray: string[]): void {
   fs.writeFile(savePath, writeArray.join('\n'), 'utf8', (err) => {
     if (err) {
       console.error('Error writing playlist file:', err);
