@@ -219,7 +219,11 @@
     "timesPlayedMoreInfo": "Hiển thị bộ lọc số lần đã chơi",
     "yearSliderDescription": "Lọc theo năm",
     "yearSliderHint": "Bộ lọc năm",
-    "yearSliderMoreInfo": "Hiển thị bộ lọc thanh trượt năm"
+    "yearSliderMoreInfo": "Hiển thị bộ lọc thanh trượt năm",
+    "playlistViewDescription": "Xem danh sách phát",
+    "playlistViewHint": "Xem danh sách phát",
+    "cleanOutPlaylistDescription": "Dọn dẹp danh sách phát",
+    "cleanOutPlaylistHint": "Dọn dẹp danh sách phát"
   },
   "RIGHTCLICK": {
     "cancelRename": "hủy đổi tên",
@@ -238,7 +242,9 @@
     "sheetModal": "Chi tiết",
     "showSimilar": "Hiển thị tương tự",
     "shuffle": "Trộn kết quả",
-    "viewFolder": "Xem thư mục"
+    "viewFolder": "Xem thư mục",
+    "addToPlaylist": "Thêm vào danh sách phát",
+    "removeFromPlaylist": "Xóa khỏi danh sách phát"
   },
   "SETTINGS": {
     "additionalExtensions": "Hỗ trợ các phần mở rộng bổ sung",

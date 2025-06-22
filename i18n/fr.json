@@ -219,7 +219,11 @@
     "videoPlayerSettings": "Paramètres du lecteur vidéo",
     "yearSliderDescription": "Filtrer par année",
     "yearSliderHint": "Filtre d'année",
-    "yearSliderMoreInfo": "Afficher le filtre du curseur de l'année"
+    "yearSliderMoreInfo": "Afficher le filtre du curseur de l'année",
+    "playlistViewDescription": "Affichage de la liste de lecture",
+    "playlistViewHint": "Affichage de la liste de lecture",
+    "cleanOutPlaylistDescription": "Nettoyer la playlist",
+    "cleanOutPlaylistHint": "Nettoyer la playlist"
   },
   "RIGHTCLICK": {
     "cancelRename": "annuler renommer",
@@ -238,7 +242,9 @@
     "sheetModal": "Détails",
     "showSimilar": "Montrer similaire",
     "shuffle": "Résultats de mélange",
-    "viewFolder": "Voir le dossier"
+    "viewFolder": "Voir le dossier",
+    "addToPlaylist": "Ajouter à la playlist",
+    "removeFromPlaylist": "Supprimer de la playlist"
   },
   "SETTINGS": {
     "additionalExtensions": "Prise en charge des extensions supplémentaires",

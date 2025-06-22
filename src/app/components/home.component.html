@@ -102,6 +102,9 @@
         [ngClass]="{ 'right-click-disabled': !sourceFolderService.sourceFolderConnected[currentRightClickedItem.inputSource] }"
       >
                                                                 {{ 'RIGHTCLICK.delete'      | translate }}</li>
+      <li (click)="modifyPlaylist(currentRightClickedItem, settingsButtons['showPlaylist'].toggled ? 'remove' : 'add')">
+        {{ settingsButtons['showPlaylist'].toggled ? ('RIGHTCLICK.removeFromPlaylist' | translate) : ('RIGHTCLICK.addToPlaylist' | translate) }}
+      </li>
     </ul>
   </div>
 
@@ -686,8 +689,8 @@
 
       [bufferAmount]="0"
 
-      [items]="imageElementService.imageElements
-
+      [items]="(settingsButtons['showPlaylist'].toggled ? pipeSideEffectService.currentPlaylist :
+                imageElementService.imageElements)
                 | deleteFilePipe : deletePipeHack
 
                 | hideOfflinePipe : settingsButtons['hideOffline'].toggled
@@ -781,7 +784,7 @@
                                                                 || settingsButtons['duplicateHash'].toggled
                                                                 || (sortType === 'default' && fuzzySearchString.length > 2))
 
-                | playlistPipe"
+                | playlistPipe : settingsButtons['showPlaylist'].toggled"
     >
 
       <!-- ==================================== THUMBNAILS ==================================== -->

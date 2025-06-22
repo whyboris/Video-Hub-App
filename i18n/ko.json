@@ -219,7 +219,11 @@
     "videoPlayerSettings": "비디오 플레이어 설정",
     "yearSliderDescription": "연도별로 필터링",
     "yearSliderHint": "연도 필터",
-    "yearSliderMoreInfo": "연도 슬라이더 필터 표시"
+    "yearSliderMoreInfo": "연도 슬라이더 필터 표시",
+    "playlistViewDescription": "재생 목록 보기",
+    "playlistViewHint": "재생 목록 보기",
+    "cleanOutPlaylistDescription": "재생목록 정리",
+    "cleanOutPlaylistHint": "재생목록 정리"
   },
   "RIGHTCLICK": {
     "cancelRename": "이름 바꾸기 취소",
@@ -238,7 +242,9 @@
     "sheetModal": "자세히",
     "showSimilar": "비슷한 동영상 보기",
     "shuffle": "결과 섞기",
-    "viewFolder": "폴더 보기"
+    "viewFolder": "폴더 보기",
+    "addToPlaylist": "플레이리스트에 추가",
+    "removeFromPlaylist": "재생 목록에서 제거"
   },
   "SETTINGS": {
     "additionalExtensions": "추가 확장 지원",

@@ -219,7 +219,11 @@
     "videoPlayerSettings": "ভিডিও প্লেয়ার সেটিংস",
     "yearSliderDescription": "বছর অনুসারে ফিল্টার করুন",
     "yearSliderHint": "বছরের ফিল্টার",
-    "yearSliderMoreInfo": "বছরের স্লাইডার ফিল্টার দেখান"
+    "yearSliderMoreInfo": "বছরের স্লাইডার ফিল্টার দেখান",
+    "playlistViewDescription": "প্লেলিস্ট ভিউ",
+    "playlistViewHint": "প্লেলিস্ট ভিউ",
+    "cleanOutPlaylistDescription": "প্লেলিস্ট পরিষ্কার করুন",
+    "cleanOutPlaylistHint": "প্লেলিস্ট পরিষ্কার করুন"
   },
   "RIGHTCLICK": {
     "cancelRename": "পুনরায় নামকরণ বাতিল করুন",
@@ -238,7 +242,9 @@
     "sheetModal": "বিস্তারিত",
     "showSimilar": "অনুরূপ দেখান",
     "shuffle": "বদলানো ফলাফল",
-    "viewFolder": "ফোল্ডার দেখুন"
+    "viewFolder": "ফোল্ডার দেখুন",
+    "addToPlaylist": "প্লেলিস্টে যোগ করুন",
+    "removeFromPlaylist": "প্লেলিস্ট থেকে সরান"
   },
   "SETTINGS": {
     "additionalExtensions": "অতিরিক্ত এক্সটেনশানগুলি সমর্থন করুন",

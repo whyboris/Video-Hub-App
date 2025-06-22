@@ -842,6 +842,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
     });
 
+    // Playlist file content listener
+    this.electronService.ipcRenderer.on('pls-file-content', (event, entries) => {
+      if (entries && entries.length > 0) {
+        const playlist = entries;
+        this.pipeSideEffectService.saveCurrentPlaylist(playlist);
+      } else {
+        // Handle empty playlist
+        this.pipeSideEffectService.saveCurrentPlaylist([]);
+      }
+    });
+
     this.justStarted();
   }
 
@@ -1570,6 +1581,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   toggleButton(uniqueKey: SettingsButtonKey | SupportedView | SupportedTrayView, fromIpc = false): void {
     // ======== View buttons ================
     if (AllSupportedViews.includes(<SupportedView>uniqueKey)) {
+      // Update view and refresh
       this.savePreviousViewSize();
       this.toggleAllViewsButtonsOff();
       this.toggleButtonTrue(uniqueKey);
@@ -1648,6 +1660,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.sourceFolderService.selectedSourceFolder,
         execPath
       );
+    } else if (uniqueKey === 'showPlaylist') {
+      this.toggleButtonOpposite(uniqueKey);
+      // Trigger a playlist refresh when toggling playlist view
+      if (this.settingsButtons['showPlaylist'].toggled) {
+        this.pipeSideEffectService.refreshPlaylist();
+      }
+
+      this.scrollToTop();
+    } else if (uniqueKey === 'cleanOutPlaylist') {
+      this.electronService.ipcRenderer.send('please-clean-out-playlist');
+      // Trigger a playlist refresh
+      this.pipeSideEffectService.refreshPlaylist();
     } else if (uniqueKey === 'sortOrder') {
       this.toggleButtonOpposite(uniqueKey);
       setTimeout(() => {
@@ -1680,6 +1704,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.computePreviewWidth();
         }, 300);
       }
+      this.scrollToTop();
     }
     if (!fromIpc) {
       this.electronService.ipcRenderer.send('app-to-touchBar', uniqueKey);
@@ -2412,4 +2437,23 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.serverDetailsBehaviorSubject.next(undefined);
   }
 
+  /**
+   * Add or remove items from playlist
+   * @param item - the ImageElement to modify
+   * @param action - 'add' or 'remove'
+   */
+  modifyPlaylist(item: ImageElement, action: 'add' | 'remove'): void {
+    const eventName = action === 'add' ? 'please-add-to-playlist' : 'please-remove-from-playlist';
+
+    this.electronService.ipcRenderer.send(
+      eventName,
+      item,
+      this.sourceFolderService.selectedSourceFolder
+    );
+
+    // Trigger a playlist refresh after a short delay to allow the file to be written
+    setTimeout(() => {
+      this.pipeSideEffectService.refreshPlaylist();
+    }, 100);
+  }
 }
