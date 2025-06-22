@@ -219,7 +219,11 @@
     "sortOptionLastPlayedMoreInfo": "在排序下拉列表中显示上次播放顺序选项",
     "yearSliderDescription": "按年份筛选",
     "yearSliderHint": "年份过滤器",
-    "yearSliderMoreInfo": "显示年份滑块过滤器"
+    "yearSliderMoreInfo": "显示年份滑块过滤器",
+    "playlistViewDescription": "播放列表视图",
+    "playlistViewHint": "播放列表视图",
+    "cleanOutPlaylistDescription": "清除播放列表",
+    "cleanOutPlaylistHint": "清除播放列表"
   },
   "RIGHTCLICK": {
     "cancelRename": "取消重命名",
@@ -238,7 +242,9 @@
     "sheetModal": "详情",
     "showSimilar": "显示类似",
     "shuffle": "随机结果",
-    "viewFolder": "查看文件夹"
+    "viewFolder": "查看文件夹",
+    "addToPlaylist": "添加至播放列表",
+    "removeFromPlaylist": "从播放列表中删除"
   },
   "SETTINGS": {
     "additionalExtensions": "支持其他扩展",

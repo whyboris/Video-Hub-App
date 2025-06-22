@@ -219,7 +219,11 @@
     "videoPlayerSettings": "ビデオプレーヤーの設定",
     "yearSliderDescription": "年で絞り込む",
     "yearSliderHint": "年フィルター",
-    "yearSliderMoreInfo": "年スライダー フィルターを表示する"
+    "yearSliderMoreInfo": "年スライダー フィルターを表示する",
+    "playlistViewDescription": "プレイリストビュー",
+    "playlistViewHint": "プレイリストビュー",
+    "cleanOutPlaylistDescription": "プレイリストを整理する",
+    "cleanOutPlaylistHint": "プレイリストを整理する"
   },
   "RIGHTCLICK": {
     "cancelRename": "名前の変更をキャンセル",
@@ -238,7 +242,9 @@
     "sheetModal": "細部",
     "showSimilar": "類似を表示",
     "shuffle": "結果をシャッフルする",
-    "viewFolder": "フォルダを表示"
+    "viewFolder": "フォルダを表示",
+    "addToPlaylist": "プレイリストに追加",
+    "removeFromPlaylist": "プレイリストから削除"
   },
   "SETTINGS": {
     "additionalExtensions": "追加の拡張機能をサポートする",
