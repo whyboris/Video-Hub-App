@@ -427,18 +427,18 @@
   },
   "SYSTEM": {
     "cancel": "Cancelar",
-    "continueAnyway": "De todas maneras, continúe",
+    "continueAnyway": "Continuar de todas maneras",
     "directory": "Directorio",
     "doesNotExist": "no existe",
     "error": "Error",
-    "fileRenameError": "No se cambió el nombre del archivo. Ocurrió algún error.",
-    "hubAlreadyExists": "Un Centro ya existe con este nombre",
-    "noSuchFileFound": "No se encontró tal archivo:",
-    "pleaseChangeName": "Por favor, cambie el nombre del concentrador arriba",
-    "pressEscToStopRenaming": "Renombrar archivo. Presione 'enter' para cambiar el nombre, 'esc' para cancelar",
+    "fileRenameError": "El nombre no se cambio. Hubo un error.",
+    "hubAlreadyExists": "Un hub ya existe con este nombre",
+    "noSuchFileFound": "No se encontró el archivo:",
+    "pleaseChangeName": "Por favor, cambie el nombre del hub arriba",
+    "pressEscToStopRenaming": "Para renombrar el archivo. Presione 'enter' para cambiar el nombre, 'esc' para cancelar",
     "selectDefaultPlayer": "Por favor seleccione su reproductor de video preferido",
-    "selectPreviousHub": "Seleccione un archivo centro previamente guardado",
-    "selectRootFolder": "Seleccione la carpeta de video de origen"
+    "selectPreviousHub": "Seleccione un archivo hub previamente guardado",
+    "selectRootFolder": "Seleccione la carpeta origen del video"
   },
   "TAGS": {
     "add": "Añadir",
