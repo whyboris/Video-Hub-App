@@ -219,7 +219,11 @@
     "videoPlayerSettings": "Video Player Settings",
     "yearSliderDescription": "Filter by Year",
     "yearSliderHint": "Year Filter",
-    "yearSliderMoreInfo": "Show the year slider filter"
+    "yearSliderMoreInfo": "Show the year slider filter",
+    "playlistViewDescription": "Playlist view",
+    "playlistViewHint": "Playlist view",
+    "cleanOutPlaylistDescription": "Clean out playlist",
+    "cleanOutPlaylistHint": "Clean out playlist"
   },
   "RIGHTCLICK": {
     "cancelRename": "cancel rename",
@@ -238,7 +242,9 @@
     "sheetModal": "Details",
     "showSimilar": "Show similar",
     "shuffle": "Shuffle results",
-    "viewFolder": "View folder"
+    "viewFolder": "View folder",
+    "addToPlaylist": "Add to playlist",
+    "removeFromPlaylist": "Remove from playlist"
   },
   "SETTINGS": {
     "additionalExtensions": "Support additional extensions",

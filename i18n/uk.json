@@ -219,7 +219,11 @@
     "timesPlayedMoreInfo": "Показати фільтр часу відтворення",
     "yearSliderDescription": "Фільтрувати за роком",
     "yearSliderHint": "Фільтр року",
-    "yearSliderMoreInfo": "Показати фільтр-повзунок року"
+    "yearSliderMoreInfo": "Показати фільтр-повзунок року",
+    "playlistViewDescription": "Перегляд списку відтворення",
+    "playlistViewHint": "Перегляд списку відтворення",
+    "cleanOutPlaylistDescription": "Очистити список відтворення",
+    "cleanOutPlaylistHint": "Очистити список відтворення"
   },
   "RIGHTCLICK": {
     "cancelRename": "скасувати перейменування",
@@ -238,7 +242,9 @@
     "sheetModal": "Деталі",
     "showSimilar": "Показати подібне",
     "shuffle": "Результати перемішання",
-    "viewFolder": "Переглянути папку"
+    "viewFolder": "Переглянути папку",
+    "addToPlaylist": "Додати до списку відтворення",
+    "removeFromPlaylist": "Видалити зі списку відтворення"
   },
   "SETTINGS": {
     "additionalExtensions": "Підтримка додаткових розширень",

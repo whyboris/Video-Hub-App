@@ -219,7 +219,11 @@
     "timesPlayedMoreInfo": "Oynatılan süre filtresini göster",
     "yearSliderDescription": "Yıla Göre Filtrele",
     "yearSliderHint": "Yıl Filtresi",
-    "yearSliderMoreInfo": "Yıl kaydırıcı filtresini göster"
+    "yearSliderMoreInfo": "Yıl kaydırıcı filtresini göster",
+    "playlistViewDescription": "Çalma listesi görünümü",
+    "playlistViewHint": "Çalma listesi görünümü",
+    "cleanOutPlaylistDescription": "Çalma listesini temizle",
+    "cleanOutPlaylistHint": "Çalma listesini temizle"
   },
   "RIGHTCLICK": {
     "cancelRename": "yeniden adlandırmayı iptal et",
@@ -238,7 +242,9 @@
     "sheetModal": "Ayrıntılar",
     "showSimilar": "Benzerini göster",
     "shuffle": "Sonuçları karıştır",
-    "viewFolder": "Klasörü görüntüle"
+    "viewFolder": "Klasörü görüntüle",
+    "addToPlaylist": "Çalma listesine ekle",
+    "removeFromPlaylist": "Çalma listesinden kaldır"
   },
   "SETTINGS": {
     "additionalExtensions": "Ek uzantıları destekleyin",

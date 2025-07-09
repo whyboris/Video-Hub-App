@@ -8,7 +8,7 @@ const exec = require('child_process').exec;
 import { GLOBALS } from './main-globals';
 import { ImageElement, FinalObject, InputSources } from '../interfaces/final-object.interface';
 import { SettingsObject } from '../interfaces/settings-object.interface';
-import { createDotPlsFile, writeVhaFileToDisk } from './main-support';
+import { createDotPlsFile, writeVhaFileToDisk, editPlaylist, removeItemFromPlaylist } from './main-support';
 import { replaceThumbnailWithNewImage } from './main-extract';
 import { closeWatcher, startWatcher, extractAnyMissingThumbs, removeThumbnailsNotInHub } from './main-extract-async';
 
@@ -389,4 +389,116 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
     });
   });
 
+  /**
+   * Read a .pls file and send its content back to the renderer process
+   */
+  ipc.on('read-pls-file', (event, filePath: string) => {
+    try {
+      const plsPath: string = path.join(GLOBALS.settingsPath, filePath);
+
+      if (!fs.existsSync(plsPath)) {
+        event.sender.send('pls-file-content', []);
+        return;
+      }
+
+      const content = fs.readFileSync(plsPath, 'utf8');
+      const lines = content.split(/\r?\n/).filter(line => line.trim() !== '');
+      const entries = [];
+
+      // Check if file has minimum required structure
+      if (lines.length < 2) {
+        event.sender.send('pls-file-content', []);
+        return;
+      }
+
+      // Skip the [playlist] header
+      let i = 1;
+
+      // Get number of entries - add safety check
+      if (i >= lines.length || !lines[i] || !lines[i].includes('=')) {
+        event.sender.send('pls-file-content', []);
+        return;
+      }
+
+      const numEntriesLine = lines[i].split('=');
+      if (numEntriesLine.length < 2) {
+        event.sender.send('pls-file-content', []);
+        return;
+      }
+
+      const numEntries = parseInt(numEntriesLine[1]);
+      if (isNaN(numEntries) || numEntries < 0) {
+        event.sender.send('pls-file-content', []);
+        return;
+      }
+
+      i++;
+
+      // Parse each entry
+      for (let j = 0; j < numEntries; j++) {
+        const fileLine = lines[i];
+        const titleLine = lines[i + 1];
+
+        if (fileLine && titleLine && fileLine.includes('=') && titleLine.includes('=')) {
+          const fileParts = fileLine.split('=');
+          const titleParts = titleLine.split('=');
+
+          if (fileParts.length >= 2 && titleParts.length >= 2) {
+            const file = fileParts.slice(1).join('=');
+            const title = titleParts.slice(1).join('=');
+
+            entries.push({
+              file: file,
+              title: title
+            } as never);
+          }
+        }
+
+        i += 2; // Move to next entry
+
+        // Safety check to prevent going out of bounds
+        if (i >= lines.length) {
+          break;
+        }
+      }
+      event.sender.send('pls-file-content', entries);
+    } catch (error) {
+      console.error('Error reading .pls file:', error);
+      event.sender.send('pls-file-content', []);
+    }
+  });
+
+  /**
+   * Add the current video to the playlist
+   */
+  ipc.on('please-add-to-playlist', (event, item: ImageElement, sourceFolderMap: InputSources) => {
+
+    const savePath: string = path.join(GLOBALS.settingsPath, 'temp.pls');
+
+    editPlaylist(savePath, item, sourceFolderMap);
+  });
+
+  /**
+   * Remove the current video from the playlist
+   */
+  ipc.on('please-remove-from-playlist', (event, item: ImageElement) => {
+    const savePath: string = path.join(GLOBALS.settingsPath, 'temp.pls');
+
+    removeItemFromPlaylist(savePath, item);
+  });
+
+  /**
+   * Clean out the playlist (delete the .pls file)
+   */
+  ipc.on('please-clean-out-playlist', (event) => {
+    const savePath: string = path.join(GLOBALS.settingsPath, 'temp.pls');
+
+    if(fs.existsSync(savePath)) {
+      fs.unlink(savePath, (err) => {
+        if (err) {
+          console.error('Error deleting playlist:', err);
+        }
+      });
+    }
+  });
 }

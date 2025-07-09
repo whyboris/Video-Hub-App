@@ -219,7 +219,11 @@
     "videoPlayerSettings": "إعدادات مشغل الفيديو",
     "yearSliderDescription": "تصفية حسب السنة",
     "yearSliderHint": "مرشح السنة",
-    "yearSliderMoreInfo": "عرض مرشح السنة المنزلق"
+    "yearSliderMoreInfo": "عرض مرشح السنة المنزلق",
+    "playlistViewDescription": "عرض قائمة التشغيل",
+    "playlistViewHint": "عرض قائمة التشغيل",
+    "cleanOutPlaylistDescription": "تنظيف قائمة التشغيل",
+    "cleanOutPlaylistHint": "تنظيف قائمة التشغيل"
   },
   "RIGHTCLICK": {
     "cancelRename": "إلغاء إعادة تسمية",
@@ -238,7 +242,9 @@
     "sheetModal": "تفاصيل",
     "showSimilar": "تظهر مماثلة",
     "shuffle": "نتائج خلط ورق اللعب",
-    "viewFolder": "مشاهدة الملف"
+    "viewFolder": "مشاهدة الملف",
+    "addToPlaylist": "أضف إلى قائمة التشغيل",
+    "removeFromPlaylist": "إزالة من قائمة التشغيل"
   },
   "SETTINGS": {
     "additionalExtensions": "دعم ملحقات إضافية",

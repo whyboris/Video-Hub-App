@@ -15,6 +15,10 @@ export class PipeSideEffectService {
 
   regexError: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
+  currentPlaylist: ImageElement[] = [];
+
+  playlistUpdateTrigger = new BehaviorSubject<number>(0);
+
   /**
    * Update the searchResults BehaviorSubject (to show total number of videos showing in gallery)
    * @param total
@@ -51,6 +55,34 @@ export class PipeSideEffectService {
    */
   saveCurrentResults(results: ImageElement[]): void {
     this.galleryShowing = results;
+  }
+
+  saveCurrentPlaylist(playlist: any[]): void {
+    // Handle empty playlist
+    if (!playlist || playlist.length === 0) {
+      this.currentPlaylist = [];
+      // Trigger an update
+      this.playlistUpdateTrigger.next(this.playlistUpdateTrigger.value + 1);
+      return;
+    }
+
+    // Create a map for faster lookups
+    const playlistMap = new Map(playlist.map(item => [item.title, item]));
+
+    // Search the current playlist videos in galleryShowing
+    this.currentPlaylist = this.galleryShowing.filter(element =>
+      playlistMap.has(element.cleanName)
+    );
+
+    // Trigger an update
+    this.playlistUpdateTrigger.next(this.playlistUpdateTrigger.value + 1);
+  }
+
+  /**
+   * Force a playlist refresh by triggering an update
+   */
+  refreshPlaylist(): void {
+    this.playlistUpdateTrigger.next(this.playlistUpdateTrigger.value + 1);
   }
 
 }

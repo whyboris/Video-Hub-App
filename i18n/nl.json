@@ -219,7 +219,11 @@
     "videoPlayerSettings": "Video Speler Instellingen",
     "yearSliderDescription": "Filteren op jaar",
     "yearSliderHint": "Jaarfilter",
-    "yearSliderMoreInfo": "Toon het jaarschuiffilter"
+    "yearSliderMoreInfo": "Toon het jaarschuiffilter",
+    "playlistViewDescription": "Afspeellijstweergave",
+    "playlistViewHint": "Afspeellijstweergave",
+    "cleanOutPlaylistDescription": "Opruimen afspeellijst",
+    "cleanOutPlaylistHint": "Opruimen afspeellijst"
   },
   "RIGHTCLICK": {
     "cancelRename": "annuleer hernoemen",
@@ -238,7 +242,9 @@
     "sheetModal": "Details",
     "showSimilar": "Toon vergelijkbaar",
     "shuffle": "Hussel resultaten",
-    "viewFolder": "Bekijk map"
+    "viewFolder": "Bekijk map",
+    "addToPlaylist": "Toevoegen aan afspeellijst",
+    "removeFromPlaylist": "Verwijderen uit afspeellijst"
   },
   "SETTINGS": {
     "additionalExtensions": "Ondersteuning aanvullende extensies",

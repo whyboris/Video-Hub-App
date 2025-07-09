@@ -219,7 +219,11 @@
     "videoPlayerSettings": "Nastavení video přehrávače",
     "yearSliderDescription": "Filtrovat podle roku",
     "yearSliderHint": "Rok filtr",
-    "yearSliderMoreInfo": "Zobrazit posuvný filtr roku"
+    "yearSliderMoreInfo": "Zobrazit posuvný filtr roku",
+    "playlistViewDescription": "Zobrazení seznamu skladeb",
+    "playlistViewHint": "Zobrazení seznamu skladeb",
+    "cleanOutPlaylistDescription": "Vyčistit playlist",
+    "cleanOutPlaylistHint": "Vyčistit playlist"
   },
   "RIGHTCLICK": {
     "cancelRename": "zrušit přejmenování",
@@ -238,7 +242,9 @@
     "sheetModal": "Detaily",
     "showSimilar": "Zobrazit podobné",
     "shuffle": "Zamíchat výsledky",
-    "viewFolder": "Zobrazit složku"
+    "viewFolder": "Zobrazit složku",
+    "addToPlaylist": "Přidat do playlistu",
+    "removeFromPlaylist": "Odebrat ze seznamu skladeb"
   },
   "SETTINGS": {
     "additionalExtensions": "Podporovat dodatečná rozšíření",

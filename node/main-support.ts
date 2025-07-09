@@ -641,3 +641,90 @@ export function setUpDirectoryWatchers(inputDirs: InputSources, currentImages: I
 
   });
 }
+
+/**
+ * Edit the playlist
+ * @param savePath -- location to save the temp.pls file
+ * @param item -- array of ImageElements
+ * @param sourceFolderMap -- array of InputSources
+ */
+export function editPlaylist(savePath: string, item: ImageElement, sourceFolderMap: InputSources): void {
+  let entries = 0;
+  const writeArray = ['[playlist]'];
+
+  if (fs.existsSync(savePath)) {
+    const content = fs.readFileSync(savePath, 'utf8');
+    const playlist = content.split(/\r?\n/).filter(line => line.trim() !== '');
+
+    entries = Math.floor(playlist.length / 2);
+
+    writeArray.push(`NumberOfEntries=${entries}`);
+
+    // Copy existing entries
+    writeArray.push(...playlist.slice(2));
+  } else {
+    writeArray.push('NumberOfEntries=1');
+  }
+
+  // Add new entry
+  const fullPath = path.join(
+    sourceFolderMap[0].path,
+    item.partialPath,
+    item.fileName
+  );
+
+  writeArray.push(`File${entries}=${fullPath}`);
+  writeArray.push(`Title${entries}=${item.cleanName}`);
+
+  writePlaylistFile(savePath, writeArray);
+}
+
+/**
+ * Remove the current video from the playlist
+ * @param savePath -- location to save the temp.pls file
+ * @param item -- array of ImageElements
+ */
+export function removeItemFromPlaylist(savePath: string, item: ImageElement): void {
+  const writeArray = ['[playlist]'];
+  let playlist: string[] = [];
+  let remainingEntries = 0;
+
+  if (fs.existsSync(savePath)) {
+    playlist = fs.readFileSync(savePath, 'utf8').split(/\r?\n/).filter(line => line.trim() !== '');
+
+    for (let i = 2; i < playlist.length; i += 2) {
+      const fileLine = playlist[i];
+      const titleLine = playlist[i + 1];
+
+      // Skip if lines are undefined
+      if (!fileLine || !titleLine) {
+        continue;
+      }
+
+      const title = titleLine.split('=')[1];
+      const file = fileLine.split('=')[1];
+
+      if (title && file && title !== item.cleanName) {
+        remainingEntries++;
+        writeArray.push(`File${remainingEntries}=${file}`);
+        writeArray.push(`Title${remainingEntries}=${title}`);
+      }
+    }
+  }
+
+  // Set the correct number of entries
+  writeArray.splice(1, 0, `NumberOfEntries=${remainingEntries}`);
+
+  writePlaylistFile(savePath, writeArray);
+}
+
+/**
+ * Help function for write playlist file
+ */
+export function writePlaylistFile(savePath: string, writeArray: string[]): void {
+  fs.writeFile(savePath, writeArray.join('\n'), 'utf8', (err) => {
+    if (err) {
+      console.error('Error writing playlist file:', err);
+    }
+  });
+}
