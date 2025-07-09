@@ -1,5 +1,5 @@
-import type { OnInit } from '@angular/core';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import type { OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 
 import { TranslateService } from '@ngx-translate/core';
 
@@ -19,7 +19,7 @@ import { SettingsMetaGroup, SettingsMetaGroupLabels } from '../../common/setting
     './settings.component.scss'
   ]
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent implements OnInit, OnChanges {
 
   @Output() changeLanguage = new EventEmitter<string>();
   @Output() checkForNewVersion = new EventEmitter<any>();
@@ -31,6 +31,7 @@ export class SettingsComponent implements OnInit {
   @Output() resetZoomLevel = new EventEmitter<any>();
   @Output() toggleButton = new EventEmitter<string>();
   @Output() toggleHideButton = new EventEmitter<string>();
+  @Output() scrollSettingsToTop = new EventEmitter<void>();
 
   @Input() appState;
   @Input() demo;
@@ -38,6 +39,8 @@ export class SettingsComponent implements OnInit {
   @Input() settingTabToShow;
   @Input() settingsButtons: SettingsButtonsType;
   @Input() versionNumber;
+
+  @ViewChild('settingsModal') settingsModal: ElementRef;
 
   additionalInput = '';
   editAdditional = false;
@@ -52,6 +55,12 @@ export class SettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.additionalInput = this.appState.addtionalExtensions;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.settingTabToShow) {
+      this.scrollSettingsToTop.emit();
+    }
   }
 
   editAdditionalExtensions() {
