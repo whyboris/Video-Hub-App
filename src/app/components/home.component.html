@@ -285,15 +285,20 @@
     @topAnimation
   >
 
-    <app-top-component
-      class="top-content-position"
-      [darkMode]="settingsButtons['darkMode'].toggled"
-      [fileString]="currentClickedItemName"
-      [folderString]="currentPlayingFolder"
-      (onFileWordClicked)="handleFileWordClicked($event)"
-      (onFolderWordClicked)="handleFolderWordClicked($event)"
-      (onOpenInExplorer)="openInExplorer()"
-    ></app-top-component>
+<!-- Modified app-top-component to include thumbnail inputs and event bindings -->
+<app-top-component
+  [folderString]="currentPlayingFolder"
+  [fileString]="currentClickedItemName"
+  [currentClickedItem]="currentClickedItem"
+  [hubName]="appState.hubName"
+  [selectedOutputFolder]="appState.selectedOutputFolder"
+  [darkMode]="settingsButtons.darkMode.toggled"
+  (onFileWordClicked)="handleFileWordClicked($event)"
+  (onFolderWordClicked)="handleFolderIconClicked($event)"
+  (onOpenInExplorer)="openInExplorer()"
+  *ngIf="currentClickedItemName !== '' && !settingsModalOpen && !wizard.showWizard"
+  [@topAnimation]="currentClickedItemName !== '' ? 'show' : 'hide'"
+></app-top-component>
 
   </header>
 
