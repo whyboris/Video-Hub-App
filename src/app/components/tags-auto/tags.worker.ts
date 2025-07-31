@@ -28,8 +28,7 @@ function getCleanTwoWordMap(
 
   const twoWordFreqMap: Map<string, number> = new Map();
 
-  potentialTwoWordMap.forEach((val: number, key: string) => {
-
+  for (const [key, val] of potentialTwoWordMap.entries()) {
     if (val > 3) { // set a variable here instead!
       let newCounter: number = 0;
 
@@ -40,8 +39,7 @@ function getCleanTwoWordMap(
         }
       }
     }
-  });
-
+  };
   return twoWordFreqMap;
 }
 
@@ -56,14 +54,14 @@ function getPotentialTwoWordTags(
 ): Map<string, number> {
   const potentialTwoWordMap: Map<string, number> = new Map();
 
-  oneWordFreqMap.forEach((val: number, key: string) => {
+  for (const [key, val] of oneWordFreqMap) {
     findTwoWords(
       potentialTwoWordMap,
       key,
       onlyFileNames,
       oneWordFreqMap
     );
-  });
+  }
 
   return potentialTwoWordMap;
 }
@@ -83,14 +81,13 @@ function findTwoWords(
   onlyFileNames: string[],
   oneWordFreqMap: Map<string, number>
 ): void {
-
   const filesContainingTheSingleWord: string[] = [];
 
-  onlyFileNames.forEach((fileName) => {
+  for (const fileName of onlyFileNames) {
     if (fileName.includes(singleWord)) {
       filesContainingTheSingleWord.push(fileName);
     }
-  });
+  }
 
   filesContainingTheSingleWord.forEach((fileName) => {
 
