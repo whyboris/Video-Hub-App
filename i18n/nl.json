@@ -1,5 +1,9 @@
 {
   "BUTTONS": {
+    "clearAllFilters": "Alle filters wissen",
+    "clearAllFiltersMoreInfo": "Dit verwijdert alle filters en toont alle items.",
+    "clearAllFiltersHint": "Wis alle filters in één keer.",
+    "clearAllFiltersDescription": "Knop om alle filters in één keer te wissen.",
     "autoFileTagsDescription": "Schakel automatisch gegenereerde labels gebaseerd op bestandsnamen in",
     "autoFileTagsHint": "Schakel auto labels in",
     "autoFileTagsMoreInfo": "Zie deze in het Details scherm. Als dit is ingeschakeld zijn ze ook zoekbaar met het Labels filter",

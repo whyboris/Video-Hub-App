@@ -1669,7 +1669,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.sortOrderRef.sortFilterElement.nativeElement.value = 'random';
         }
       });
-    } else {
+    } 
+    else if(uniqueKey === 'clearAllFilters'){
+      this.clearAllFilters();
+    }
+    else {
       this.toggleButtonOpposite(uniqueKey);
       if (uniqueKey === 'showMoreInfo') {
         this.computeTextBufferAmount();
@@ -2412,4 +2416,61 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.serverDetailsBehaviorSubject.next(undefined);
   }
 
+  /**
+   * Clear all filters and search strings
+   * This is used when the user clicks the "Clear All Filters" button
+   * It resets all filter arrays, bounds, and toggles all filter buttons off
+   */
+  clearAllFilters(): void {
+    // Clear all filter arrays and bools
+    this.filters.forEach((filter) => {
+      filter.array = [];
+      filter.bool = false;
+      filter.string = '';
+    });
+
+    // Clear Duration filter
+    this.durationLeftBound = 0;
+    this.durationRightBound = Infinity;
+    this.toggleButtonOff('durationFilter');
+
+    // Clear Size filter
+    this.sizeLeftBound = 0;
+    this.sizeRightBound = Infinity;
+    this.toggleButtonOff('sizeFilter');
+
+    // Clear Times Played filter
+    this.timesPlayedLeftBound = 0;
+    this.timesPlayedRightBound = Infinity;
+    this.toggleButtonOff('timesPlayedFilter');
+
+    // Clear Resolution filter
+    this.freqLeftBound = 0;
+    this.freqRightBound = Infinity;
+    this.toggleButtonOff('resolutionFilter');
+
+    // Clear Year filter
+    this.yearLeftBound = 0;
+    this.yearRightBound = Infinity;
+    this.toggleButtonOff('yearFilter');
+
+    // Clear Star filter
+    this.starLeftBound = 0;
+    this.starRightBound = Infinity;
+    this.toggleButtonOff('starFilter');
+
+
+    // Clear sort filter
+    this.sortType = 'default';
+    this.appState.currentSort = 'default';
+    this.toggleButtonOff('sortOrder');
+
+    // Clear search strings
+    this.fuzzySearchString = '';
+    this.magicSearchString = '';
+    this.regexSearchString = '';
+
+    // Prevent ExpressionChangedAfterItHasBeenCheckedError
+    this.cd.detectChanges();
+  }
 }
