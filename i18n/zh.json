@@ -1,5 +1,9 @@
 {
   "BUTTONS": {
+    "clearAllFilters": "清除所有筛选器",
+    "clearAllFiltersMoreInfo": "这将移除所有筛选器并显示所有项目。",
+    "clearAllFiltersHint": "一次清除所有筛选器。",
+    "clearAllFiltersDescription": "用于一次清除所有筛选器的按钮。",
     "autoFileTagsDescription": "启用基于视频文件名自动生成的标签",
     "autoFileTagsHint": "启用自动文件名标签",
     "autoFileTagsMoreInfo": "请在“详情”视图中查看。启用后，自动标签将出现在词云中，也可以使用标签过滤器进行搜索",

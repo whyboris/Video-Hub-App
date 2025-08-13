@@ -1,5 +1,9 @@
 {
   "BUTTONS": {
+    "clearAllFilters": "सभी फ़िल्टर साफ़ करें",
+    "clearAllFiltersMoreInfo": "यह सभी फ़िल्टर हटा देगा और सभी आइटम दिखाएगा।",
+    "clearAllFiltersHint": "एक बार में सभी फ़िल्टर साफ़ करें।",
+    "clearAllFiltersDescription": "सभी फ़िल्टर एक साथ साफ़ करने के लिए बटन।",
     "autoFileTagsDescription": "वीडियो फ़ाइल नामों के आधार पर स्वतः-निर्मित टैग सक्षम करें",
     "autoFileTagsHint": "ऑटो टैग सक्षम करें",
     "autoFileTagsMoreInfo": "विवरण दृश्य में इन्हें देखें। सक्षम होने पर, वे टैग फ़िल्टर के साथ भी खोज योग्य हो जाएंगे",

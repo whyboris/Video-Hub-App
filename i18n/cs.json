@@ -1,5 +1,9 @@
 {
   "BUTTONS": {
+    "clearAllFilters": "Vymazat všechny filtry",
+    "clearAllFiltersMoreInfo": "Tímto odstraníte všechny filtry a zobrazíte všechny položky.",
+    "clearAllFiltersHint": "Vymazat všechny filtry najednou.",
+    "clearAllFiltersDescription": "Tlačítko pro vymazání všech filtrů najednou.",
     "autoFileTagsDescription": "Povolit automaticky generované štítky na základě názvů video souborů",
     "autoFileTagsHint": "Povolit automatické štítky",
     "autoFileTagsMoreInfo": "Podívejte se na ně v zobrazení Podrobnosti. Pokud je povoleno, budou také prohledávatelné pomocí filtru štítky",

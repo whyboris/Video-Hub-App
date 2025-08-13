@@ -1,5 +1,9 @@
 {
   "BUTTONS": {
+    "clearAllFilters": "Limpiar todos los filtros",
+    "clearAllFiltersMoreInfo": "Esto eliminará todos los filtros y mostrará todos los elementos.",
+    "clearAllFiltersHint": "Limpiar todos los filtros a la vez.",
+    "clearAllFiltersDescription": "Botón para limpiar todos los filtros a la vez.",
     "autoFileTagsDescription": "Habilite etiquetas autogeneradas basadas en nombres de archivos de video",
     "autoFileTagsHint": "Habilitar etiquetas automáticas",
     "autoFileTagsMoreInfo": "Véalos en la vista Detalles. Cuando esté habilitado, también se podrán buscar con el filtro Etiquetas",

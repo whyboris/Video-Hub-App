@@ -1,5 +1,9 @@
 {
   "BUTTONS": {
+    "clearAllFilters": "Wyczyść wszystkie filtry",
+    "clearAllFiltersMoreInfo": "To usunie wszystkie filtry i pokaże wszystkie elementy.",
+    "clearAllFiltersHint": "Wyczyść wszystkie filtry naraz.",
+    "clearAllFiltersDescription": "Przycisk do wyczyszczenia wszystkich filtrów naraz.",
     "autoFileTagsDescription": "Włącz automatyczne generowanie tagów na podstawie nazw plików wideo",
     "autoFileTagsHint": "Włącz automatyczne tagi",
     "autoFileTagsMoreInfo": "Znajdziesz je w widoku szczegółowym. Po włączeniu będą one również możliwe do wyszukiwania przy użyciu filtra Tagów",
