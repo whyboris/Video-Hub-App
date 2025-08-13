@@ -219,7 +219,10 @@
     "videoPlayerSettings": "Video Player Settings",
     "yearSliderDescription": "Filter by Year",
     "yearSliderHint": "Year Filter",
-    "yearSliderMoreInfo": "Show the year slider filter"
+    "yearSliderMoreInfo": "Show the year slider filter",
+    "clearAllFiltersMoreInfo": "Clears all currently applied filters and resets the search input",
+    "clearAllFiltersHint": "Clear all filters",
+    "clearAllFiltersDescription": "Clear all currently applied filters"
   },
   "RIGHTCLICK": {
     "cancelRename": "cancel rename",

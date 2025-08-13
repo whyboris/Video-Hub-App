@@ -84,7 +84,8 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'thumbAutoAdvance'
  | 'timesPlayedFilter'
  | 'videoNotes'
- | 'yearFilter';
+ | 'yearFilter'
+ | 'clearAllFilters';
 
 // Add `SettingsButtons` items here so they show up in the buttons ribbon and in the settings
 // Each array separates buttons into their own button groups visually
@@ -203,7 +204,11 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'dangerousDelete',
     'playPlaylist',
     'openAtTimestamp',
-  ]
+  ],
+    [ // 15
+    'clearAllFilters', // Hide top bar
+    'flatIcons', // Button style
+  ],
 ];
 
 // Breaks up content into 3 tabs
@@ -237,6 +242,8 @@ export const SettingsMetaGroup: string[][] = [
     ...SettingsButtonsGroups[12],
     'break',
     ...SettingsButtonsGroups[13],
+    'break',
+    ...SettingsButtonsGroups[15],
   ],
   [
     ...SettingsButtonsGroups[14],
@@ -902,6 +909,14 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-toggle-video-notes',
     moreInfo: 'BUTTONS.videoNotesMoreInfo',
     title: 'BUTTONS.videoNotesHint',
+    toggled: false
+  },
+  'clearAllFilters': {
+    description: 'BUTTONS.clearAllFiltersDescription',
+    hidden: false,
+    iconName: 'icon-clear-all-filters',
+    moreInfo: 'BUTTONS.clearAllFiltersMoreInfo',
+    title: 'BUTTONS.clearAllFiltersHint',
     toggled: false
   }
 };
