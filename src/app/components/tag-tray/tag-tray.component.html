@@ -70,5 +70,7 @@
                                                            : appState.sortTagsByFrequency
                                                            : manualTagsService.pipeToggleHack"
     (tagClicked)="handleTagWordClicked.emit($event)"
+    (removeTagEmit)="removeThisTag($event)"
+    [tagsOnToggleBatch]="batchTaggingMode"
   ></app-view-tags-component>
 </div>

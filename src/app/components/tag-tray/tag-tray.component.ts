@@ -6,6 +6,7 @@ import type { AppStateInterface } from '../../common/app-state';
 import type { TagEmit } from '../../../../interfaces/shared-interfaces';
 import { modalAnimation } from '../../common/animations';
 import type { SettingsButtonsType } from '../../common/settings-buttons';
+import { ImageElementService } from './../../services/image-element.service';
 
 @Component({
   selector: 'app-tag-tray',
@@ -33,8 +34,31 @@ export class TagTrayComponent {
   manualTagFilterString = '';
   manualTagShowFrequency = true;
 
+  selectedTagList = [];
+  removeThisTag(tag: string) {
+    //get the list of all the videos that contain the selected tag for removal in batch
+    this.selectedTagList = this.imageElementService.imageElements
+      .map((ele, idx) => {
+        if (ele.tags?.includes(tag)) {
+          return idx;
+        }
+      })
+      .filter((item) => item != undefined);
+
+    this.manualTagsService.removeTagBatch(tag);
+
+    this.selectedTagList.forEach((item) => {
+      this.imageElementService.HandleEmission({
+        index: item,
+        tag: tag,
+        type: "remove",
+      });
+    });
+  }
+
   constructor(
     public manualTagsService: ManualTagsService,
+    public imageElementService: ImageElementService
   ) { }
 
 }
