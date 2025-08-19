@@ -9,6 +9,7 @@ import { metaAppear, textAppear } from '../../../common/animations';
 import type { ImageElement } from '../../../../../interfaces/final-object.interface';
 import { ImageElementService } from './../../../services/image-element.service';
 import type { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/shared-interfaces';
+import {SettingsButtons, SettingsButtonsType } from '../../../common/settings-buttons';
 
 @Component({
   selector: 'app-full-item',
@@ -46,6 +47,7 @@ export class FullViewComponent implements OnInit {
   @Input() largerFont: boolean;
   @Input() showMeta: boolean;
   @Input() showFavorites: boolean;
+  @Input() SettingsButtons: SettingsButtonsType
 
   _imgHeight: number;
   _metaWidth: number;
@@ -53,6 +55,7 @@ export class FullViewComponent implements OnInit {
   fullFilePath = '';
   rowOffsets: number[];
 
+  settingsButtons = SettingsButtons;
   constructor(
     public filePathService: FilePathService,
     public imageElementService: ImageElementService,

@@ -17,8 +17,8 @@
         'background-size': 'auto ' + imgHeight + 'px'
       }"
   >
-    <span *ngIf="showMeta" class="time">{{ video.durationDisplay }}</span>
-    <span *ngIf="showMeta" class="rez">{{ video.resolution }}</span>
+    <span *ngIf="showMeta && !settingsButtons['showDuration'].toggled" class="time">{{ video.durationDisplay }}</span>
+    <span *ngIf="showMeta && !settingsButtons['showResolution'].toggled" class="rez">{{ video.resolution }}</span>
   </div>
 
   <app-icon
@@ -42,7 +42,7 @@
     class="title"
   >
     {{ video.cleanName }}
-    <div class="fileSize" *ngIf="showMeta">
+    <div class="fileSize" *ngIf="showMeta && !settingsButtons['showFileSize'].toggled">
       ({{ video.fileSizeDisplay }})
     </div>
   </span>

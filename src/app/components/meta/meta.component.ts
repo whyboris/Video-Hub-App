@@ -13,7 +13,7 @@ import { ManualTagsService } from '../tags-manual/manual-tags.service';
 import type { StarRating, ImageElement } from '../../../../interfaces/final-object.interface';
 import type { TagEmit, RenameFileResponse } from '../../../../interfaces/shared-interfaces';
 
-import {SettingsButtons } from '../../common/settings-buttons';
+import {SettingsButtons, SettingsButtonsType } from '../../common/settings-buttons';
 
 
 @Component({
@@ -41,6 +41,7 @@ export class MetaComponent implements OnInit, OnDestroy {
   @Input() showVideoNotes: boolean;
   @Input() star: StarRating;
   @Input() starRatingHack: StarRating;
+  @Input() SettingsButtons: SettingsButtonsType;
 
   @Input() renameResponse: Observable<RenameFileResponse>;
 
@@ -50,6 +51,7 @@ export class MetaComponent implements OnInit, OnDestroy {
 
   renamingWIP = '';
   renameError = false;
+  settingsButtons = SettingsButtons;
 
   responseSubscription: Subscription;
 
