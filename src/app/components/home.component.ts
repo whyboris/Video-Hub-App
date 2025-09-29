@@ -994,6 +994,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.electronService.ipcRenderer.send('select-default-video-player');
   }
 
+  /**
+   * WOOT !!!
+   */
+  extractFaces() {
+    this.electronService.ipcRenderer.send('extract-face', this.finalArray);
+  }
+
   // ---------------- INTERACT WITH ELECTRON ------------------ //
 
   /**

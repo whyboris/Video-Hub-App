@@ -648,6 +648,8 @@
         [vhaFileHistory]="vhaFileHistory"
       ></app-recently-opened>
 
+      <div><button (click)="extractFaces()">EXTRACT FACES</button></div>
+
     </div> <!-- closing the SIDEBAR -->
 
     <!-- ============================================== -->
@@ -804,12 +806,13 @@
           [connected]="sourceFolderService.sourceFolderConnected[item.inputSource]"
 
           [elHeight]="previewHeight + textPaddingHeight"
-          [elWidth]="previewWidth"
+          [elWidth]="this.settingsButtons['showFaces'].toggled ? previewWidth / 2 : previewWidth"
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
           [imgHeight]="previewHeight"
           [showFavorites]="settingsButtons['favorites'].toggled"
 
+          [showFaces]="settingsButtons['showFaces'].toggled"
           [compactView]="settingsButtons['compactView'].toggled"
           [darkMode]="settingsButtons['darkMode'].toggled"
           [hoverScrub]="settingsButtons['hoverScrub'].toggled"
@@ -823,8 +826,7 @@
               height:   previewHeight
                       + textPaddingHeight
                       + (settingsButtons['compactView'].toggled ? 0 : 20)
-                      + 'px',
-              width: previewWidth
+                      + 'px'
             }"
         ></app-thumbnail>
       </ng-container>
@@ -855,6 +857,7 @@
           [darkMode]="settingsButtons['darkMode'].toggled"
           [hoverScrub]="settingsButtons['hoverScrub'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
+          [showFaces]="settingsButtons['showFaces'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
 
           style="display: block"
@@ -942,10 +945,11 @@
 
           [showTwoColumns]="appState.currentView === 'showDetails2'"
 
+          [elHeight]="previewHeight + textPaddingHeight"
+          [elWidth]="settingsButtons['showFaces'].toggled ? previewWidth / 2 : previewWidth"
+
           [maxWidth]="galleryWidth - 40"
 
-          [elHeight]="previewHeight"
-          [elWidth]="previewWidth"
           [folderPath]="appState.selectedOutputFolder"
           [hubName]="appState.hubName"
           [imgHeight]="previewHeight"
@@ -954,6 +958,7 @@
           [star]="item.stars"
 
           [darkMode]="settingsButtons['darkMode'].toggled"
+          [showFaces]="settingsButtons['showFaces'].toggled"
           [hoverScrub]="settingsButtons['hoverScrub'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
           [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"

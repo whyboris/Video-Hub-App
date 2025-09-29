@@ -25,8 +25,12 @@
     "node_modules"
   ],
   "include": [
+    "face/**/*",
     "i18n",
     "interfaces",
-    "src/main.ts"
+    "main.ts",
+    "src/**/*",
+    "src/main.ts",
+    "weights",
   ]
 }
