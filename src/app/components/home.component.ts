@@ -1105,7 +1105,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // ctrl/cmd + click for thumbnail sheet
     if (eventObject.mouseEvent.ctrlKey === true || eventObject.mouseEvent.metaKey) {
       this.openThumbnailSheet(item);
-    } else {
+    } else if (eventObject.mouseEvent.shiftKey === true) {
+      // If Shift key is pressed, open the file in the explorer
+      this.openInExplorer();
+    }else {
       this.openVideo(item, eventObject.thumbIndex);
       //  `openVideo` method handles the `not connected` case
     }
