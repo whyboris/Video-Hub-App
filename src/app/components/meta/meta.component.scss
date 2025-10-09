@@ -8,7 +8,7 @@
   box-sizing: border-box;
   display: inline-block;
   height: 190px;
-  overflow: hidden; // will hide tags that don't fit in 2 lines
+  overflow: visible; // changed from hidden to allow color picker to show
   padding: 0 0 0 20px;
   vertical-align: top;
 }
@@ -108,7 +108,7 @@
   box-sizing: border-box;
   display: block;
   height: 60px;
-  overflow-y: auto;
+  overflow-y: visible; // changed from auto to allow color picker to show
   padding-bottom: 2px;
 }
 

@@ -66,9 +66,12 @@
     class="all-the-tags"
     [draggable]="true"
     [displayFrequency]="manualTagShowFrequency"
+    [enableColorPicker]="true"
+    [darkMode]="darkMode"
     [tags]="manualTagsService.tagsList | manualTagSortPipe : manualTagFilterString
                                                            : appState.sortTagsByFrequency
                                                            : manualTagsService.pipeToggleHack"
     (tagClicked)="handleTagWordClicked.emit($event)"
+    (tagRightClick)="onTagRightClick($event)"
   ></app-view-tags-component>
 </div>

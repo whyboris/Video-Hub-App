@@ -12,8 +12,12 @@
   <span
     class="search-or-tag-general tag"
     [ngClass]="{ 'tag-draggable': draggable }"
-    [ngStyle]="{ background: tag.colour }"
+    [ngStyle]="{
+      background: tag.colour,
+      color: tag.colour ? getContrastColor(tag.colour) : undefined
+    }"
     (click)="tagClick(tag, $event)"
+    (contextmenu)="onTagRightClick($event, tag)"
     [draggable]='draggable'
     (dragstart)="dragStart($event)"
   >

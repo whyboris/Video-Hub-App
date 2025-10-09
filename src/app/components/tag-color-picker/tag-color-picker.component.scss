@@ -1,0 +1,147 @@
+@import "../variables";
+
+.color-picker-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 100000;
+  pointer-events: auto;
+}
+
+.color-picker-container {
+  position: fixed;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 16px;
+  min-width: 240px;
+  z-index: 100001;
+  pointer-events: auto;
+
+  &.dark-mode {
+    background: #2a2a2a;
+    border-color: #555;
+    color: #e0e0e0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.color-picker-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  font-weight: 600;
+  font-size: 14px;
+
+  .close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+
+    &:hover {
+      color: #000;
+    }
+  }
+
+  .dark-mode & .close-btn {
+    color: #aaa;
+
+    &:hover {
+      color: #fff;
+    }
+  }
+}
+
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.color-swatch {
+  width: 60px;
+  height: 60px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  &:hover {
+    border-color: rgba(0, 0, 0, 0.3);
+    transform: scale(1.05);
+  }
+
+  &.selected {
+    border-color: #000;
+    box-shadow: 0 0 0 2px white, 0 0 0 4px #000;
+  }
+
+  .dark-mode & {
+    &:hover {
+      border-color: rgba(255, 255, 255, 0.3);
+    }
+
+    &.selected {
+      border-color: #fff;
+      box-shadow: 0 0 0 2px #2a2a2a, 0 0 0 4px #fff;
+    }
+  }
+
+  .checkmark {
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
+  }
+}
+
+.color-actions {
+  display: flex;
+  justify-content: center;
+  padding-top: 8px;
+  border-top: 1px solid #e0e0e0;
+
+  .dark-mode & {
+    border-top-color: #444;
+  }
+}
+
+.default-btn {
+  background: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: #e0e0e0;
+  }
+
+  .dark-mode & {
+    background: #3a3a3a;
+    border-color: #555;
+    color: #e0e0e0;
+
+    &:hover {
+      background: #4a4a4a;
+    }
+  }
+}
