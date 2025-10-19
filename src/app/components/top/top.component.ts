@@ -1,10 +1,13 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { ImageElementService } from '../../services/image-element.service';
 
 @Component({
   selector: 'app-top-component',
   templateUrl: './top.component.html',
-  styleUrls: ['./top.component.scss',
-              '../../fonts/icons.scss']
+  styleUrls: [
+    './top.component.scss',
+    '../../fonts/icons.scss'
+  ]
 })
 export class TopComponent {
 
@@ -37,12 +40,13 @@ export class TopComponent {
   public folderNameArray: string[];
   public fileNameArray: string[];
 
+  constructor(private imageElementService: ImageElementService) {}
+
   public folderWordClicked(item: string): void {
     this.onFolderWordClicked.emit(item.trim());
   }
 
   public fileWordClicked(item: string): void {
-    // Strip away any of: {}()[].,
     const regex = /{|}|\(|\)|\[|\]|\.|\,/g;
     item = item.replace(regex, '');
     this.onFileWordClicked.emit(item.trim());
@@ -52,4 +56,8 @@ export class TopComponent {
     this.onOpenInExplorer.emit(true);
   }
 
+  /** Called by the toolbar button to trigger duplicate detection */
+  public checkDuplicates(): void {
+    this.imageElementService.findDuplicatesByTagsOrName();
+  }
 }
