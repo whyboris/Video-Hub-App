@@ -125,5 +125,27 @@ constructor() { }
         splice(this.imageElements[position].tags.indexOf(emission.tag), 1);
     }
   }
+  /**
+   * Find duplicates based on exact fileName match or shared tags
+   */
+  public findDuplicatesByTagsOrName(): ImageElement[] {
+  // 1) Finds all filenames that occur more than once
+  const allNames = this.imageElements.map(el => el.fileName);
+  const dupNames = new Set(
+    allNames.filter((name, i, arr) => arr.indexOf(name) !== i)
+  );
+
+  // 2) Finds all tags that occur more than once
+  const allTags = this.imageElements.flatMap(el => el.tags || []);
+  const dupTags = new Set(
+    allTags.filter((tag, i, arr) => arr.indexOf(tag) !== i)
+  );
+
+  // 3) Returns every element whose name or whose tags hit one of those duplicates
+  return this.imageElements.filter(el =>
+    dupNames.has(el.fileName) ||
+    (el.tags ?? []).some(tag => dupTags.has(tag))
+  );
+}
 
 }
