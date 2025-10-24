@@ -4,6 +4,7 @@ import { Pipe } from '@angular/core';
 import type { WordAndFreq } from '../components/tags-auto/autotags.service';
 
 @Pipe({
+  standalone: false,
   name: 'alphabetPrefixPipe'
 })
 export class AlphabetPrefixPipe implements PipeTransform {

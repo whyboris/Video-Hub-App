@@ -1,7 +1,7 @@
-@import "../variables.scss";
+@use "../variables.scss";
 
 .recently-opened-label {
-  color: $gray-50;
+  color: variables.$gray-50;
   display: block;
   font-style: italic;
   margin-bottom: 10px;
@@ -12,7 +12,7 @@
   transition-property: color;
 
   &:hover {
-    color: $pretty-blue;
+    color: variables.$pretty-blue;
     transition-property: color;
   }
 }
@@ -36,6 +36,6 @@
 }
 
 .current-open {
-  color: $pretty-blue;
+  color: variables.$pretty-blue;
   pointer-events: none;
 }

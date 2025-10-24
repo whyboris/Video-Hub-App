@@ -6,6 +6,7 @@ import { PipeSideEffectService } from './pipe-side-effect.service';
 import type { ImageElement } from '../../../interfaces/final-object.interface';
 
 @Pipe({
+  standalone: false,
   name: 'countPipe'
 })
 export class CountPipe implements PipeTransform {

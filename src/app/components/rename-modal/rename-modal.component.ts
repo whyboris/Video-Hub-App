@@ -8,6 +8,7 @@ import type { RenameFileResponse } from '../../../../interfaces/shared-interface
 import type { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
+  standalone: false,
   selector: 'app-rename-modal',
   templateUrl: './rename-modal.component.html',
   styleUrls: [

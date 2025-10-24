@@ -10,6 +10,7 @@ import type { SettingsButtonsType } from '../../common/settings-buttons';
 import { SettingsMetaGroup, SettingsMetaGroupLabels } from '../../common/settings-buttons';
 
 @Component({
+  standalone: false,
   selector: 'app-settings',
   templateUrl: './settings.component.html',
   styleUrls: [

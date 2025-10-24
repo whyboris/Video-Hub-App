@@ -6,6 +6,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { AutoTagsService } from './autotags.service';
 
 @Pipe({
+  standalone: false,
   name: 'tagMatchPipe'
 })
 export class TagMatchPipe implements PipeTransform {

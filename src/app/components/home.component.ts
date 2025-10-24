@@ -73,6 +73,7 @@ import {
 } from '../common/animations';
 
 @Component({
+  standalone: false,
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: [
@@ -863,7 +864,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     };
     document.body.ondrop = (ev) => {
       if (ev.dataTransfer.files.length > 0) {
-        const fullPath: string = ev.dataTransfer.files[0].path;
+        // const fullPath: string = ev.dataTransfer.files[0].path;
+        console.warn("TODO: FIX - DRAG & DROP BROKEN");
+        const fullPath = "TODO";
         ev.preventDefault();
         if (fullPath.endsWith('.vha2')) {
           this.loadThisVhaFile(fullPath);

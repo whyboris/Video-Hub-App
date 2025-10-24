@@ -8,6 +8,7 @@ import type { ImageElement } from '../../../../interfaces/final-object.interface
 import type { Tag } from '../../../../interfaces/shared-interfaces';
 
 @Pipe({
+  standalone: false,
   name: 'tagDisplayPipe'
 })
 export class TagsDisplayPipe implements PipeTransform {

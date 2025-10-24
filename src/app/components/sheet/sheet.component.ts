@@ -25,6 +25,7 @@ export interface DefaultScreenEmission {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-thumbnail-sheet',
   templateUrl: './sheet.component.html',
   styleUrls: [ './../buttons.scss',

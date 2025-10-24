@@ -1,13 +1,13 @@
+@use "app/components/variables";
+
+@import "~@angular/cdk/overlay-prebuilt.css";
+
 /* You can add global styles to this file, and also import other style files */
 html, body {
   font-family: sans-serif;
   margin: 0;
   padding: 0;
 }
-
-@import '~@angular/cdk/overlay-prebuilt.css';
-
-@import 'app/components/variables';
 
 .mat-dialog-container {
   background-color: white;
@@ -17,7 +17,7 @@ html, body {
 }
 
 .mat-simple-snackbar {
-  background: $pretty-red;
+  background: variables.$pretty-red;
   border: 1px solid red;
   border-radius: 15px;
   color: white;

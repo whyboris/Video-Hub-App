@@ -3,6 +3,7 @@ import { ShortcutsService, CustomShortcutAction } from './shortcuts.service';
 import type { SettingsButtonKey } from '../../common/settings-buttons';
 
 @Component({
+  standalone: false,
   selector: 'app-shortcuts',
   templateUrl: './shortcuts.component.html',
   styleUrls: ['./shortcuts.component.scss']
