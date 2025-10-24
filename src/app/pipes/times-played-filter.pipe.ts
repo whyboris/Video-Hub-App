@@ -4,6 +4,7 @@ import { Pipe } from '@angular/core';
 import type { ImageElement } from '../../../interfaces/final-object.interface';
 
 @Pipe({
+  standalone: false,
   name: 'timesPlayedFilterPipe'
 })
 export class TimesPlayedFilterPipe implements PipeTransform {

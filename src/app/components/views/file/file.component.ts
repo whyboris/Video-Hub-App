@@ -4,6 +4,7 @@ import type { ImageElement } from '../../../../../interfaces/final-object.interf
 import { ImageElementService } from './../../../services/image-element.service';
 
 @Component({
+  standalone: false,
   selector: 'app-file-item',
   templateUrl: './file.component.html',
   styleUrls: [

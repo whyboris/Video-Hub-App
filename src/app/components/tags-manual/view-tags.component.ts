@@ -6,6 +6,7 @@ import { ManualTagsService } from './manual-tags.service';
 import type { Tag, TagEmit } from '../../../../interfaces/shared-interfaces';
 
 @Component({
+  standalone: false,
   selector: 'app-view-tags-component',
   templateUrl: 'view-tags.component.html',
   styleUrls: ['../search.scss',

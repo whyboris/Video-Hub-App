@@ -10,6 +10,7 @@ import type { ImageElement } from '../../../../../interfaces/final-object.interf
 import type { VideoClickEmit, RightClickEmit } from '../../../../../interfaces/shared-interfaces';
 
 @Component({
+  standalone: false,
   selector: 'app-thumbnail',
   templateUrl: './thumbnail.component.html',
   styleUrls: [

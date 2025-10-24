@@ -4,6 +4,7 @@ import { Pipe } from '@angular/core';
 type TimeFormat = 'slider' | 'file' | 'folder';
 
 @Pipe({
+  standalone: false,
   name: 'lengthPipe'
 })
 export class LengthPipe implements PipeTransform {

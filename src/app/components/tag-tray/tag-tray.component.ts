@@ -8,6 +8,7 @@ import { modalAnimation } from '../../common/animations';
 import type { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
+  standalone: false,
   selector: 'app-tag-tray',
   templateUrl: './tag-tray.component.html',
   styleUrls: [

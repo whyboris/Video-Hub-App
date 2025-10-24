@@ -11,6 +11,7 @@ import { ImageElementService } from './../../../services/image-element.service';
 import type { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/shared-interfaces';
 
 @Component({
+  standalone: false,
   selector: 'app-filmstrip-item',
   templateUrl: './filmstrip.component.html',
   styleUrls: [
