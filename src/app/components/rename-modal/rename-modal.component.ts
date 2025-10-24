@@ -3,8 +3,8 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import type { BehaviorSubject } from 'rxjs';
 
 import type { AppStateInterface } from '../../common/app-state';
-import type { ImageElement } from '../../../../interfaces/final-object.interface';
-import type { RenameFileResponse } from '../../../../interfaces/shared-interfaces';
+import type { ImageElement } from '@my/final-object.interface';
+import type { RenameFileResponse } from '@my/shared-interfaces';
 import type { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
