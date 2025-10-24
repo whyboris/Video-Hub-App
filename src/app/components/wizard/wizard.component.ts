@@ -8,6 +8,7 @@ import type { WizardOptions } from '@my/wizard-options.interface';
 import { historyItemRemove, slowFadeIn } from '../../common/animations';
 
 @Component({
+  standalone: false,
   selector: 'app-wizard',
   templateUrl: './wizard.component.html',
   styleUrls: [

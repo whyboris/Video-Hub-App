@@ -2,6 +2,7 @@ import type { OnInit, OnDestroy} from '@angular/core';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-slider-filter',
   templateUrl: './slider-filter.component.html',
   styleUrls: [ './slider-filter.component.scss' ]

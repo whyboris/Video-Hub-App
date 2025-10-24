@@ -11,6 +11,7 @@ import type { RightClickEmit, VideoClickEmit } from '@my/shared-interfaces';
 import { metaAppear, textAppear } from '../../../common/animations';
 
 @Component({
+  standalone: false,
   selector: 'app-clip-item',
   templateUrl: './clip.component.html',
   styleUrls: [

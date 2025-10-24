@@ -1,7 +1,7 @@
-@import "../variables";
+@use "../variables";
 
 .darkModeText {
-  color: $gray-30;
+  color: variables.$gray-30;
 }
 
 .meta {
@@ -52,19 +52,19 @@
 }
 
 .renaming-message {
-  color: $dark-blue;
+  color: variables.$dark-blue;
 }
 
 .renaming-message-dark-mode {
-  color: $light-blue;
+  color: variables.$light-blue;
 }
 
 .renaming-error {
-  color: $dark-red;
+  color: variables.$dark-red;
 }
 
 .renaming-error-dark-mode {
-  color: $pretty-red;
+  color: variables.$pretty-red;
 }
 
 .larger-font {
@@ -104,7 +104,7 @@
 }
 
 .view-tags-holder {
-  @include scrollBar;
+  @include variables.scrollBar;
   box-sizing: border-box;
   display: block;
   height: 60px;
@@ -119,10 +119,10 @@
 }
 
 textarea {
-  @include scrollBar;
+  @include variables.scrollBar;
   background: transparent;
   border: 0;
-  border-left: 1px solid $gray-30;
+  border-left: 1px solid variables.$gray-30;
   box-sizing: border-box;
   font-family: sans-serif;
   font-size: 12px;
@@ -134,6 +134,6 @@ textarea {
 }
 
 .notes-dark-mode {
-  border-left: 1px solid $gray-70;
+  border-left: 1px solid variables.$gray-70;
   color: white;
 }

@@ -11,6 +11,7 @@ import type { ImageElement } from '@my/final-object.interface';
 import type { RightClickEmit, VideoClickEmit } from '@my/shared-interfaces';
 
 @Component({
+  standalone: false,
   selector: 'app-filmstrip-item',
   templateUrl: './filmstrip.component.html',
   styleUrls: [

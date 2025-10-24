@@ -8,6 +8,7 @@ import type { SettingsButtonsType } from '../../common/settings-buttons';
 import { modalAnimation, similarResultsText } from '../../common/animations';
 
 @Component({
+  standalone: false,
   selector: 'app-similar-tray',
   templateUrl: './similar-tray.component.html',
   styleUrls: [

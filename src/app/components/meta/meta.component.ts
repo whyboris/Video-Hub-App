@@ -17,6 +17,7 @@ import {SettingsButtons } from '../../common/settings-buttons';
 
 
 @Component({
+  standalone: false,
   selector: 'app-meta-item',
   templateUrl: './meta.component.html',
   styleUrls: [ './meta.component.scss' ]

@@ -4,6 +4,7 @@ import { Pipe } from '@angular/core';
 import type { ImageElement } from '@my/final-object.interface';
 
 @Pipe({
+  standalone: false,
   name: 'fileSizeFilterPipe'
 })
 export class FileSizeFilterPipe implements PipeTransform {

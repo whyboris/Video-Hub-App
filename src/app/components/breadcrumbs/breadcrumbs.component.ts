@@ -3,6 +3,7 @@ import { breadcrumbsAppear, breadcrumbWordAppear } from '../../common/animations
 import type { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
+  standalone: false,
   selector: 'app-breadcrumbs',
   templateUrl: './breadcrumbs.component.html',
   styleUrls: ['./breadcrumbs.component.scss'],

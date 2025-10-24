@@ -7,6 +7,7 @@ import type { SettingsButtonsType } from '../../common/settings-buttons';
 import { filterItemAppear } from '../../common/animations';
 
 @Component({
+  standalone: false,
   selector: 'app-sort-order',
   templateUrl: './sort-order.component.html',
   styleUrls: [

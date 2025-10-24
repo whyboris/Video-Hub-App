@@ -4,7 +4,7 @@
 
 ## Download Now
 
-This software is available for $5.00 through [videohubapp.com](https://videohubapp.com/download)
+This software is available for $5.00 through [videohubapp.com](https://videohubapp.com/en/download)
 
 $3.50 of every sale goes to the [_cost-effective_](https://www.givewell.org/charities/top-charities) charity [Against Malaria Foundation](https://www.againstmalaria.com/).
 
@@ -44,12 +44,12 @@ Main dependencies in use:
 
 | Library          | Version | Date      | Comment |
 | ---------------- | ------- | --------- | ------- |
-| Angular          | v18     | Oct 2024  |         |
-| Angular-CLI      | v18     | Oct 2024  |         |
-| Electron         | v33     | Oct 2024  | (internally uses Node `v20.18.0` and Chromium 128) |
-| Electron Builder | v25     | Oct 2024  |         |
+| Angular          | v20     | Oct 2025  |         |
+| Angular-CLI      | v20     | Oct 2025  |         |
+| Electron         | v38     | Oct 2025  | (internally uses Node `v22.18.0` and Chromium 140) |
+| Electron Builder | v26     | Oct 2025  |         |
 
-- **Node**: It may be best to use the same version as _Electron_ uses internally (`v20.18.0`)
+- **Node**: It may be best to use the same version as _Electron_ uses internally (`v22.18.0`)
 
 - **Angular CLI**: not required but may be useful: [Angular CLI](https://cli.angular.io).
 

@@ -17,6 +17,7 @@ export interface YearEmission {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-details-item',
   templateUrl: './details.component.html',
   styleUrls: [

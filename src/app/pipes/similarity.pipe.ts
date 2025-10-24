@@ -6,6 +6,7 @@ import { SimilarityService } from './similarity.service';
 import type { ImageElement } from '@my/final-object.interface';
 
 @Pipe({
+  standalone: false,
   name: 'similarityPipe'
 })
 export class SimilarityPipe implements PipeTransform {

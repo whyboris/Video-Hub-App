@@ -2,6 +2,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import type { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
+  standalone: false,
   selector: 'app-title-bar',
   templateUrl: './title-bar.component.html',
   styleUrls: ['./title-bar.component.scss']

@@ -37,6 +37,7 @@ export type SortType = 'default'
                      | 'yearDesc';
 
 @Pipe({
+  standalone: false,
   name: 'sortingPipe'
 })
 export class SortingPipe implements PipeTransform {

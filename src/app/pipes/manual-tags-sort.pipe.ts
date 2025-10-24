@@ -4,6 +4,7 @@ import { Pipe } from '@angular/core';
 import { ManualTagsService } from '../components/tags-manual/manual-tags.service';
 
 @Pipe({
+  standalone: false,
   name: 'manualTagSortPipe'
 })
 export class ManualTagSortPipe implements PipeTransform {

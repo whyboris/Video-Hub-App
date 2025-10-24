@@ -8,6 +8,7 @@ interface FilterEmit {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-search-boxes',
   templateUrl: './search-boxes.component.html',
   styleUrls: [
