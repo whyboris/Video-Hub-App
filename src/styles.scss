@@ -25,27 +25,12 @@ html, body {
   .mdc-snackbar__surface {
     background: variables.$pretty-red !important;
     border: 1px solid red;
-    border-radius: 15px;
-    padding: 10px 20px;
+    border-radius: 10px !important;
+    padding: 0;
   }
 
   .mat-mdc-snack-bar-label {
     color: white;
     text-align: center;
-  }
-}
-
-// Legacy support for older Angular Material versions
-.mat-simple-snackbar {
-  background: variables.$pretty-red;
-  border: 1px solid red;
-  border-radius: 15px;
-  color: white;
-  padding: 10px 20px;
-
-  span {
-    display: block;
-    text-align: center;
-    width: 100%;
   }
 }
