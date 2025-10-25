@@ -16,6 +16,26 @@ html, body {
   box-shadow: 0 10px 20px 10px rgba(0,0,0,0.1);
 }
 
+// Snackbar container styles (for Angular Material v14+)
+.mat-mdc-snack-bar-container,
+.custom-snackbar {
+  --mdc-snackbar-container-color: #{variables.$pretty-red};
+  --mat-snack-bar-button-color: white;
+
+  .mdc-snackbar__surface {
+    background: variables.$pretty-red !important;
+    border: 1px solid red;
+    border-radius: 15px;
+    padding: 10px 20px;
+  }
+
+  .mat-mdc-snack-bar-label {
+    color: white;
+    text-align: center;
+  }
+}
+
+// Legacy support for older Angular Material versions
 .mat-simple-snackbar {
   background: variables.$pretty-red;
   border: 1px solid red;
