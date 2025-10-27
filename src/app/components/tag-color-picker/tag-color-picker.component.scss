@@ -1,4 +1,4 @@
-@import "../variables";
+@use "../variables";
 
 .color-picker-overlay {
   position: fixed;
@@ -13,12 +13,12 @@
 
 .color-picker-container {
   position: fixed;
-  background: white;
+  background: variables.$gray-20;
   border: 1px solid #ddd;
-  border-radius: 8px;
+  border-radius: 4px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  padding: 16px;
-  min-width: 240px;
+  padding: 12px;
+  // min-width: 240px;
   z-index: 100001;
   pointer-events: auto;
 
@@ -31,7 +31,7 @@
 }
 
 .color-picker-header {
-  display: flex;
+  display: none; // disabled for visual style
   justify-content: space-between;
   align-items: center;
   margin-bottom: 12px;
@@ -67,44 +67,47 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 8px;
-  margin-bottom: 12px;
+  margin-bottom: 0;
 }
 
 .color-swatch {
-  width: 60px;
-  height: 60px;
-  border-radius: 6px;
-  cursor: pointer;
-  border: 2px solid transparent;
-  transition: all 0.2s ease;
-  display: flex;
+  // transition: all 0.2s ease;
   align-items: center;
+  border-radius: 4px;
+  box-shadow: 1px 1px 3px 0px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  display: flex;
+  height: 16px;
   justify-content: center;
+  outline: 1px solid transparent;
   position: relative;
+  width: 42px;
 
   &:hover {
-    border-color: rgba(0, 0, 0, 0.3);
-    transform: scale(1.05);
+    outline-color: rgba(0, 0, 0, 0.3);
+    // transform: scale(1.05);
   }
 
   &.selected {
-    border-color: #000;
-    box-shadow: 0 0 0 2px white, 0 0 0 4px #000;
+    outline-color: #000;
+    outline-width: 2px;
+    // box-shadow: 0 0 0 2px white, 0 0 0 4px #000;
   }
 
   .dark-mode & {
     &:hover {
-      border-color: rgba(255, 255, 255, 0.3);
+      outline-color: rgba(255, 255, 255, 0.3);
     }
 
     &.selected {
-      border-color: #fff;
-      box-shadow: 0 0 0 2px #2a2a2a, 0 0 0 4px #fff;
+      outline-width: 2px;
+      outline-color: #fff;
+      // box-shadow: 0 0 0 2px #2a2a2a, 0 0 0 4px #fff;
     }
   }
 
   .checkmark {
-    font-size: 24px;
+    font-size: 14px;
     font-weight: bold;
     color: white;
     text-shadow: 0 0 3px rgba(0, 0, 0, 0.5);
@@ -112,7 +115,7 @@
 }
 
 .color-actions {
-  display: flex;
+  display: none;  // disabled for visual style
   justify-content: center;
   padding-top: 8px;
   border-top: 1px solid #e0e0e0;

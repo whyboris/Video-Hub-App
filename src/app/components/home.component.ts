@@ -365,6 +365,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.sheetOverlayShowing = false;
     } else if (event.key === 'Escape' && this.settingsButtons['showTags'].toggled) {
       this.toggleButton('showTags');
+    } else if (event.key === 'Escape' && this.showTagColorPicker ) {
+      this.showTagColorPicker = false;
     }
   }
 
