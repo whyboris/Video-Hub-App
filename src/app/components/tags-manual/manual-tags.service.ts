@@ -1,13 +1,21 @@
 import { Injectable } from '@angular/core';
+import { Subject } from 'rxjs';
 
 import type { ImageElement } from '../../../../interfaces/final-object.interface';
+import type { ColorPickerPosition } from '../tag-color-picker/tag-color-picker.component';
 
 @Injectable()
 export class ManualTagsService {
 
   tagsMap: Map<string, number> = new Map(); // map tag name to its frequency
   tagsList: string[] = [];
+  tagColors: Record<string, string> = {}; // map tag name to its color
   pipeToggleHack = false;
+
+  // Color picker state - shared across all components
+  showColorPickerSubject = new Subject<{ tagName: string, currentColor: string, position: ColorPickerPosition }>();
+  hideColorPickerSubject = new Subject<void>();
+  tagColorUpdatedSubject = new Subject<void>(); // Notify when tag color changes
 
   constructor() { }
 
@@ -84,6 +92,46 @@ export class ManualTagsService {
 
   forceTagSortPipeUpdate(): void {
     this.pipeToggleHack = !this.pipeToggleHack;
+  }
+
+  /**
+   * Set the color for a tag
+   * @param tagName - name of the tag
+   * @param color - color hex code or null to remove color
+   */
+  setTagColor(tagName: string, color: string | null): void {
+    if (color === null || color === undefined) {
+      delete this.tagColors[tagName];
+    } else {
+      this.tagColors[tagName] = color;
+    }
+    // Notify all components that tag colors have been updated
+    this.tagColorUpdatedSubject.next();
+  }
+
+  /**
+   * Get the color for a tag
+   * @param tagName - name of the tag
+   * @returns color hex code or undefined if no color set
+   */
+  getTagColor(tagName: string): string | undefined {
+    return this.tagColors[tagName];
+  }
+
+  /**
+   * Load tag colors from saved data
+   * @param tagColors - Record of tag name to color mapping
+   */
+  loadTagColors(tagColors: Record<string, string> | undefined): void {
+    this.tagColors = tagColors || {};
+  }
+
+  /**
+   * Get all tag colors for saving
+   * @returns Record of tag name to color mapping
+   */
+  getTagColors(): Record<string, string> {
+    return this.tagColors;
   }
 
 }

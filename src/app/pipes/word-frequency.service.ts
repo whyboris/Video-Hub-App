@@ -4,6 +4,8 @@ import { BehaviorSubject } from 'rxjs';
 
 import { autoFileTagsRegex } from '../components/tags-auto/autotags.service';
 
+import { AutoTagsSaveService } from '../components/tags-auto/tags-save.service';
+
 export interface WordFreqAndHeight {
   word: string;
   freq: number;
@@ -16,7 +18,9 @@ export class WordFrequencyService {
   wordMap: Map<string, number> = new Map();
   finalMapBehaviorSubject: BehaviorSubject<WordFreqAndHeight[]> = new BehaviorSubject([]);
 
-  constructor() { }
+  constructor(
+    private autoTagsSaveService: AutoTagsSaveService
+  ) { }
 
   /**
    * Reset the map to empty
@@ -27,14 +31,15 @@ export class WordFrequencyService {
 
   /**
    * Add each word from the file name to the wordMap via the `addWord` method
-   * Ignore all words less than 2 characters long
+   * Ignore all words less than 3 characters long and any words in the hiddenTags list
    * Strip out all parantheses, brackets, and a few other words
    * @param filename
    */
   public addString(filename: string): void {
+    const hiddenTags = this.autoTagsSaveService.getRemoveTags();
     const wordArray: string[] = filename.toLowerCase().match(autoFileTagsRegex) || [];
     wordArray.forEach(word => {
-      if (word.length >= 3) {
+      if (word.length >= 3 && !hiddenTags.includes(word)) {
         this.addWord(word);
       }
     });

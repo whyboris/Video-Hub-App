@@ -62,6 +62,7 @@ import { SortOrderComponent } from './components/sort-order/sort-order.component
 import { StarFilterComponent } from './components/star-filter/star-filter.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { SvgDefinitionsComponent } from './components/icon/svg-definitions.component';
+import { TagColorPickerComponent } from './components/tag-color-picker/tag-color-picker.component';
 import { TagsComponent } from './components/tags-auto/tags.component';
 import { TagTrayComponent } from './components/tag-tray/tag-tray.component';
 import { ThumbnailComponent } from './components/views/thumbnail/thumbnail.component';
@@ -168,6 +169,7 @@ import { YearPipe } from './pipes/year.pipe';
     StarFilterPipe,
     StatisticsComponent,
     SvgDefinitionsComponent,
+    TagColorPickerComponent,
     TagFilterPipe,
     TagFrequencyPipe,
     TagMatchPipe,

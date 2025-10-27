@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ElectronService } from './providers/electron.service';
 
 @Component({
+  standalone: false,
   selector: 'app-root',
   templateUrl: './app.component.html'
 })

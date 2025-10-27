@@ -20,6 +20,7 @@ export interface ServerDetails {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-statistics',
   templateUrl: './statistics.component.html',
   styleUrls: [

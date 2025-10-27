@@ -1,4 +1,4 @@
-@import "variables";
+@use "variables";
 
 ::ng-deep * {
   user-select: none;
@@ -6,7 +6,7 @@
 
 .scanning-indicator {
   animation: scanning 3s infinite;
-  background: $pretty-green;
+  background: variables.$pretty-green;
   border-radius: 5px;
   display: inline-block;
   height: 10px;
@@ -37,7 +37,7 @@
 }
 
 .reduceFlicker {
-  background: $gray-10;
+  background: variables.$gray-10;
   height: 100vh;
   position: fixed;
   width: 100vw;
@@ -45,8 +45,8 @@
 }
 
 .progress-modal {
-  background: $gray-10;
-  border: 1px solid $gray-20;
+  background: variables.$gray-10;
+  border: 1px solid variables.$gray-20;
   border-radius: 10px;
   box-shadow: 1px 1px 5px rgba(0,0,0,0.2);
   box-sizing: border-box;
@@ -59,15 +59,15 @@
 }
 
 .progress-container {
-  background: $gray-50;
-  border: 1px solid $gray-60;
+  background: variables.$gray-50;
+  border: 1px solid variables.$gray-60;
   border-radius: 3px;
   box-sizing: border-box;
   height: 19px;
   width: 100%;
 
   .current-progress {
-    background: $pretty-green;
+    background: variables.$pretty-green;
     border-radius: 3px;
     height: 17px;
     transition: 500ms;
@@ -82,9 +82,9 @@
 }
 
 .top-of-buttons {
-  background-image: linear-gradient(to bottom, $gray-10 0%, $gray-20 100%);
-  border-bottom: 1px solid $gray-30;
-  height: $top-region;
+  background-image: linear-gradient(to bottom, variables.$gray-10 0%, variables.$gray-20 100%);
+  border-bottom: 1px solid variables.$gray-30;
+  height: variables.$top-region;
   overflow: hidden;
   position: relative;
   transition-duration: 300ms;
@@ -94,8 +94,8 @@
 }
 
 .top-of-buttons-dark-mode {
-  background-image: linear-gradient(to bottom, $gray-70 0%, $gray-80 100%);
-  border-bottom: 1px solid $gray-80;
+  background-image: linear-gradient(to bottom, variables.$gray-70 0%, variables.$gray-80 100%);
+  border-bottom: 1px solid variables.$gray-80;
 }
 
 .top-content-position {
@@ -111,11 +111,11 @@
 }
 
 .all-settings {
-  background-color: $gray-20;
-  border-bottom: 1px solid $gray-30;
+  background-color: variables.$gray-20;
+  border-bottom: 1px solid variables.$gray-30;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   box-sizing: border-box;
-  height: $settings-height;
+  height: variables.$settings-height;
   overflow: hidden;
   padding: 4px 36px 4px 5px;
   position: absolute;
@@ -126,8 +126,8 @@
 }
 
 .all-settings-dark-mode {
-  background-color: $gray-80;
-  border-bottom: $black;
+  background-color: variables.$gray-80;
+  border-bottom: variables.$black;
 }
 
 .all-settings-flat-icons {
@@ -135,8 +135,8 @@
 }
 
 .settings-modal {
-  background-color: $gray-10;
-  border: 1px solid $gray-50;
+  background-color: variables.$gray-10;
+  border: 1px solid variables.$gray-50;
   border-radius: 10px;
   box-shadow: 0 2px 10px rgba(0,0,0,0.2);
   box-sizing: border-box;
@@ -151,7 +151,7 @@
   width: calc(100% - 215px);
   z-index: 500;
 
-  @include scrollBar;
+  @include variables.scrollBar;
 
   .defaultSettingsButton {
     border-radius: 5px !important;
@@ -159,49 +159,49 @@
 }
 
 .sidebar {
-  background-color: $gray-15;
-  border-right: 1px solid $gray-30;
+  background-color: variables.$gray-15;
+  border-right: 1px solid variables.$gray-30;
   box-sizing: border-box;
   height: 100vh;
-  max-width: $sidebar-width !important;
+  max-width: variables.$sidebar-width !important;
   overflow-x: hidden;
   overflow-y: scroll;
   padding: 10px 10px 60px;
   position: absolute;
-  top: $settings-height;
+  top: variables.$settings-height;
   transform: translate(0, 0);
   transition: 300ms;
-  width: $sidebar-width;
+  width: variables.$sidebar-width;
 
-  @include scrollBarHidden;
+  @include variables.scrollBarHidden;
 }
 
 .sidebar-dark-mode {
-  background: $gray-90;
-  border: 1px solid $black;
+  background: variables.$gray-90;
+  border: 1px solid variables.$black;
 }
 
 .sidebar-hidden {
-  transform: translate(-$sidebar-width, 0);
+  transform: translate(-(variables.$sidebar-width), 0);
   transition: 300ms;
 }
 
 .gallery-container {
-  background: $gray-20;
+  background: variables.$gray-20;
   box-sizing: border-box;
-  left: $sidebar-width;
+  left: variables.$sidebar-width;
   overflow-y: scroll;
   position: absolute;
-  top: $settings-height;
+  top: variables.$settings-height;
   transition: 300ms;
-  width: calc(100vw - #{$sidebar-width});
+  width: calc(100vw - #{variables.$sidebar-width});
 
-  @include scrollBar;
-  @include scrollBarSquare;
+  @include variables.scrollBar;
+  @include variables.scrollBarSquare;
 }
 
 .gallery-container-dark-mode {
-  background: $black;
+  background: variables.$black;
 }
 
 .gallery-container-full-width {
@@ -232,7 +232,7 @@
   z-index: 9999;
 
   &:hover {
-    color: $pretty-red;
+    color: variables.$pretty-red;
   }
 }
 
@@ -240,13 +240,13 @@
   color: white;
 
   &:hover {
-    color: $pretty-red;
+    color: variables.$pretty-red;
   }
 }
 
 .bottom-tray {
-  background: $gray-10;
-  border-top: 1px solid $gray-50;
+  background: variables.$gray-10;
+  border-top: 1px solid variables.$gray-50;
   bottom: 0;
   box-sizing: border-box;
   display: flex;
@@ -284,22 +284,22 @@
 
 .bottom-tray-dark {
   background: black;
-  border-top: 1px solid $gray-80;
+  border-top: 1px solid variables.$gray-80;
 
   button,
   span,
   input {
-    color: $gray-40;
+    color: variables.$gray-40;
   }
 
   .tag-sort-by-toggle,
   .show-frequency {
-    color: $gray-60;
+    color: variables.$gray-60;
   }
 
   input {
     &::placeholder {
-      color: $gray-50 !important;
+      color: variables.$gray-50 !important;
     }
   }
 }

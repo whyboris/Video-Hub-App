@@ -1,9 +1,9 @@
-@import "variables";
+@use "variables";
 
 $transition-length: 300ms;
 
 h2, h3 {
-  color: $gray-60;
+  color: variables.$gray-60;
   font-size: 16px;
   margin: 15px 0 0 10px;
 }
@@ -14,7 +14,7 @@ h3 {
 
 .gearButton {
   cursor: pointer;
-  fill: $gray-40;
+  fill: variables.$gray-40;
   font-size: 14px;
   height: 15px;
   position: absolute;
@@ -24,14 +24,14 @@ h3 {
   width: 15px;
 
   &:hover {
-    fill: $gray-50;
+    fill: variables.$gray-50;
     text-shadow: 0 0 7px rgba(255, 255, 255, 0.5);
     transition: 370ms;
   }
 }
 
 .credits-and-help {
-  color: $gray-60;
+  color: variables.$gray-60;
   cursor: pointer;
   font-size: 14px;
   margin: 60px 70px 0;
@@ -49,7 +49,7 @@ h3 {
   }
 
   span {
-    color: $gray-40;
+    color: variables.$gray-40;
     font-size: 12px;
   }
 
@@ -61,11 +61,11 @@ h3 {
   }
 
   .you-have-latest {
-    color: $pretty-blue;
+    color: variables.$pretty-blue;
   }
 
   .version-error {
-    color: $gray-40;
+    color: variables.$gray-40;
   }
 
   .check-new-version {
@@ -73,7 +73,7 @@ h3 {
     pointer-events: all;
 
     &:hover {
-      color: $pretty-blue;
+      color: variables.$pretty-blue;
     }
   }
 }
@@ -90,7 +90,7 @@ h3 {
   z-index: 101;
 
   &:hover {
-    color: $dark-red;
+    color: variables.$dark-red;
     transition-duration: 300ms;
   }
 }
@@ -103,7 +103,7 @@ h3 {
 }
 
 .gearButtonActive {
-  color: $gray-60;
+  color: variables.$gray-60;
   transform: rotate(180deg);
   transform-origin: 7.5px 7.5px;
   transition: 370ms;
@@ -148,14 +148,14 @@ h3 {
 }
 
 .extraSettingsText {
-  color: $gray-50;
+  color: variables.$gray-50;
   font-size: 12px;
   left: 27px;
   line-height: 20px;
 }
 
 .setting-heading {
-  border-top: 1px solid $gray-40;
+  border-top: 1px solid variables.$gray-40;
   display: block;
   margin-bottom: 24px;
   padding-top: 20px;
@@ -176,7 +176,7 @@ h3 {
 
 .button-description-text {
   -webkit-box-orient: vertical !important;
-  color: $black;
+  color: variables.$black;
   display: -webkit-box !important;
   font-size: 14px;
   left: 80px;
@@ -212,7 +212,7 @@ h3 {
 
 .showButtonLabel {
   bottom: 0;
-  color: $gray-40;
+  color: variables.$gray-40;
   font-size: 10px;
   left: 0;
   position: absolute;
@@ -241,7 +241,7 @@ h3 {
 }
 
 .num-select {
-  border: 1px solid $gray-50;
+  border: 1px solid variables.$gray-50;
   margin: 0 3px 0 !important;
   user-select: none;
   width: 30px;
@@ -254,7 +254,7 @@ h3 {
 
 input[type="radio"] {
   -webkit-appearance: inherit;
-  border: 1px solid $gray-50;
+  border: 1px solid variables.$gray-50;
   border-radius: 10px;
   cursor: pointer;
   height: 15px;
@@ -264,8 +264,8 @@ input[type="radio"] {
 }
 
 input[type="radio"]:checked:before {
-  background: $pretty-blue;
-  border: 3px solid $gray-10;
+  background: variables.$pretty-blue;
+  border: 3px solid variables.$gray-10;
   border-radius: 10px;
   content:"";
   height: 7px;
@@ -278,7 +278,7 @@ input[type="radio"]:checked:before {
 }
 
 .modal-fade-out {
-  background: linear-gradient($gray-10, $gray-10, transparent);
+  background: linear-gradient(variables.$gray-10, variables.$gray-10, transparent);
   display: block;
   height: 50px;
   margin-bottom: -50px;
@@ -290,9 +290,9 @@ input[type="radio"]:checked:before {
 }
 
 .more-info {
-  border: 1px solid $pretty-blue;
+  border: 1px solid variables.$pretty-blue;
   border-radius: 50%;
-  color: $pretty-blue;
+  color: variables.$pretty-blue;
   cursor: none;
   display: inline-block;
   font-size: 11px;
@@ -367,8 +367,8 @@ input[type="radio"]:checked:before {
   z-index: 501;
 
   button {
-    background-color: $gray-15;
-    border: 1px solid $gray-50;
+    background-color: variables.$gray-15;
+    border: 1px solid variables.$gray-50;
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
     font-size: 12px;
@@ -381,8 +381,8 @@ input[type="radio"]:checked:before {
   }
 
   .active-tab {
-    background-color: $gray-10;
-    border-bottom: 1px solid $gray-10;
+    background-color: variables.$gray-10;
+    border-bottom: 1px solid variables.$gray-10;
     text-shadow:0px 0px 1px black;
     transition: 300ms;
     transition-property: text-shadow background-color;

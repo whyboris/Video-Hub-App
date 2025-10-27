@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-donut',
   templateUrl: './donut.component.html',
   styleUrls: ['./donut.component.scss']

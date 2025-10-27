@@ -2,6 +2,7 @@ import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { ManualTagsService } from './manual-tags.service';
 
 @Component({
+  standalone: false,
   selector: 'app-add-tag-component',
   templateUrl: 'add-tag.component.html',
   styleUrls: ['../search-input.scss',
