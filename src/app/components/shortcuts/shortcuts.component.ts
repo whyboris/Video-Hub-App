@@ -44,6 +44,7 @@ export class ShortcutsComponent {
 
     'toggleSettings',    // o
     'hideSidebar',       // b
+    'clearAllFilters',   // 0
     'showTagTray',       // y
     'showAutoTags',      // t - space after
 

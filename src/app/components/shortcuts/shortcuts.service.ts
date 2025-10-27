@@ -111,7 +111,7 @@ export class ShortcutsService {
     if (!this.keyToActionMap.has('0')) {
       this.keyToActionMap.set('0', 'clearAllFilters');
     }
-    if (!this.actionToKeyMap.has('clearAllFilters')) {
+    if (!this.actionToKeyMap.has('clearAllFilters') && !this.keyToActionMap.has('0')) {
       this.actionToKeyMap.set('clearAllFilters', '0');
     }
   }

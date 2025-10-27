@@ -307,6 +307,7 @@
   "SHORTCUTS": {
     "andClickAnyFile": "and click any file to see the file details",
     "andPress": "and press",
+    "clearAllFilters": "Clear all filters",
     "clickToRename": "To change a shortcut, click on it and press desired key on your keyboard.",
     "compactView": "Toggle compact view",
     "darkMode": "Toggle dark / light mode",
