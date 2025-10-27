@@ -9,11 +9,12 @@ import { ElectronService } from '../../providers/electron.service';
 import { FilePathService } from '../views/file-path.service';
 import { ImageElementService } from './../../services/image-element.service';
 import { ManualTagsService } from '../tags-manual/manual-tags.service';
+import type { ColorPickerPosition } from '../tag-color-picker/tag-color-picker.component';
 
 import type { StarRating, ImageElement } from '../../../../interfaces/final-object.interface';
 import type { TagEmit, RenameFileResponse } from '../../../../interfaces/shared-interfaces';
 
-import {SettingsButtons } from '../../common/settings-buttons';
+import { SettingsButtons } from '../../common/settings-buttons';
 
 
 @Component({
@@ -53,8 +54,11 @@ export class MetaComponent implements OnInit, OnDestroy {
   renameError = false;
 
   responseSubscription: Subscription;
+  tagColorSubscription: Subscription;
 
   sortAutoTags = SettingsButtons['sortAutoTags'].toggled;
+
+  selectedTagForColor: string = '';
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -88,6 +92,12 @@ export class MetaComponent implements OnInit, OnDestroy {
       }
     });
 
+    // Subscribe to tag color updates
+    this.tagColorSubscription = this.manualTagsService.tagColorUpdatedSubject.subscribe(() => {
+      this.tagViewUpdateHack = !this.tagViewUpdateHack;
+      this.cd.detectChanges();
+    });
+
   }
 
   addThisTag(tag: string) {
@@ -118,6 +128,24 @@ export class MetaComponent implements OnInit, OnDestroy {
       type: 'remove'
     });
     this.tagViewUpdateHack = !this.tagViewUpdateHack;
+  }
+
+  /**
+   * Handle tag right-click event - show color picker via service
+   * @param event - Object containing tag and mouse event
+   */
+  onTagRightClick(event: { tag: any, event: MouseEvent }): void {
+    this.selectedTagForColor = event.tag.name;
+
+    // Emit event to show color picker at home component level
+    this.manualTagsService.showColorPickerSubject.next({
+      tagName: event.tag.name,
+      currentColor: event.tag.colour || '',
+      position: {
+        x: event.event.clientX,
+        y: event.event.clientY
+      }
+    });
   }
 
   setStarRating(rating: StarRating): void {
@@ -252,5 +280,8 @@ export class MetaComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.responseSubscription.unsubscribe();
+    if (this.tagColorSubscription) {
+      this.tagColorSubscription.unsubscribe();
+    }
   }
 }

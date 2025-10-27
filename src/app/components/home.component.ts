@@ -146,6 +146,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
   flickerReduceOverlay = true;
   isFirstRunEver = false;
 
+  // Tag color picker state
+  showTagColorPicker = false;
+  tagColorPickerPosition = { x: 0, y: 0 };
+  currentTagColor = '';
+  currentTagName = '';
+  tagColorPickerSubscription: any;
+
   // ========================================================================
   // Import / extraction progress
   // ------------------------------------------------------------------------
@@ -390,6 +397,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.changeLanguage('en');
 
     // this.modalService.openWelcomeMessage(); // WIP
+
+    // Subscribe to tag color picker events
+    this.tagColorPickerSubscription = this.manualTagsService.showColorPickerSubject.subscribe((data) => {
+      this.currentTagName = data.tagName;
+      this.currentTagColor = data.currentColor;
+      this.tagColorPickerPosition = data.position;
+      this.showTagColorPicker = true;
+      this.cd.detectChanges();
+    });
 
     setTimeout(() => {
       this.wordFrequencyService.finalMapBehaviorSubject.subscribe((value: WordFreqAndHeight[]) => {
@@ -724,6 +740,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.manualTagsService.removeAllTags();
       this.setTags(finalObject.addTags, finalObject.removeTags);
       this.manualTagsService.populateManualTagsService(finalObject.images);
+      this.manualTagsService.loadTagColors(finalObject.tagColors);
 
       this.imageElementService.imageElements = this.demo ? finalObject.images.slice(0, 50) : finalObject.images;
 
@@ -1073,6 +1090,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         numOfFolders: this.appState.numOfFolders,
         removeTags: this.autoTagsSaveService.getRemoveTags(),
         screenshotSettings: this.currentScreenshotSettings,
+        tagColors: this.manualTagsService.getTagColors(),
         version: 3,
       };
       return propsToReturn;
@@ -2413,6 +2431,23 @@ export class HomeComponent implements OnInit, AfterViewInit {
     console.log('stopping server');
     this.electronService.ipcRenderer.send('stop-server');
     this.serverDetailsBehaviorSubject.next(undefined);
+  }
+
+  /**
+   * Handle tag color selection from color picker
+   */
+  onTagColorSelected(color: string): void {
+    this.manualTagsService.setTagColor(this.currentTagName, color);
+    this.showTagColorPicker = false;
+    // setTagColor will trigger tagColorUpdatedSubject which updates all views
+  }
+
+  /**
+   * Close tag color picker
+   */
+  onTagColorPickerClose(): void {
+    this.showTagColorPicker = false;
+    this.cd.detectChanges();
   }
 
 }

@@ -2,6 +2,7 @@ import type { PipeTransform } from '@angular/core';
 import { Pipe } from '@angular/core';
 
 import { autoFileTagsRegex } from './autotags.service';
+import { ManualTagsService } from '../tags-manual/manual-tags.service';
 
 import { Colors } from '../../common/colors';
 import type { ImageElement } from '../../../../interfaces/final-object.interface';
@@ -12,6 +13,8 @@ import type { Tag } from '../../../../interfaces/shared-interfaces';
   name: 'tagDisplayPipe'
 })
 export class TagsDisplayPipe implements PipeTransform {
+
+  constructor(private manualTagsService: ManualTagsService) { }
 
   transform(
     video: ImageElement,
@@ -28,7 +31,7 @@ export class TagsDisplayPipe implements PipeTransform {
         video.tags.sort().forEach(tag => {
           tags.push({
             name: tag,
-            colour: Colors.manualTags,
+            colour: this.manualTagsService.getTagColor(tag) || Colors.manualTags,
             removable: true
           });
         });
