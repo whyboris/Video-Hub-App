@@ -9,7 +9,11 @@
   padding: 1px 3px 0px 3px;
   position: absolute;
   z-index: 2;
-  box-shadow: inset 1px 1px 3px variables.$gray-40;
+}
+
+.dark-style {
+  color: variables.$gray-20;
+  background: black;
 }
 
 .time {
