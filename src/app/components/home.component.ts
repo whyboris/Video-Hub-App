@@ -1692,7 +1692,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.sortOrderRef.sortFilterElement.nativeElement.value = 'random';
         }
       });
-    } 
+    }
     else if(uniqueKey === 'clearAllFilters'){
       this.clearAllFilters();
     }
@@ -2496,7 +2496,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // Prevent ExpressionChangedAfterItHasBeenCheckedError
     this.cd.detectChanges();
   }
-  
+
   /**
    * Handle tag color selection from color picker
    */
