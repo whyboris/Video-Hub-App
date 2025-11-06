@@ -222,7 +222,11 @@
     "videoPlayerSettings": "Tetapan Pemain Video",
     "yearSliderDescription": "Tapis mengikut Tahun",
     "yearSliderHint": "Penapis Tahun",
-    "yearSliderMoreInfo": "Tunjukkan penapis peluncur tahun"
+    "yearSliderMoreInfo": "Tunjukkan penapis peluncur tahun",
+    "playlistViewDescription": "Paparan senarai main",
+    "playlistViewHint": "Paparan senarai main",
+    "cleanOutPlaylistDescription": "Bersihkan senarai main",
+    "cleanOutPlaylistHint": "Bersihkan senarai main"
   },
   "RIGHTCLICK": {
     "cancelRename": "batalkan namanya",
@@ -241,7 +245,9 @@
     "sheetModal": "Butiran",
     "showSimilar": "Tunjukkan sama",
     "shuffle": "Hasilkan shuffle",
-    "viewFolder": "Lihat folder"
+    "viewFolder": "Lihat folder",
+    "addToPlaylist": "Tambahkan pada senarai main",
+    "removeFromPlaylist": "Alih keluar daripada senarai main"
   },
   "SETTINGS": {
     "additionalExtensions": "Sokong sambungan tambahan",
