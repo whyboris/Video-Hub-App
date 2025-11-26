@@ -70,7 +70,7 @@
     "@angular/animations": "20.3.7",
     "@angular/cdk": "20.2.10",
     "@angular/cli": "20.3.7",
-    "@angular/common": "20.3.7",
+    "@angular/common": "20.3.14",
     "@angular/compiler": "20.3.7",
     "@angular/compiler-cli": "20.3.7",
     "@angular/core": "20.3.7",
