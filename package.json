@@ -52,7 +52,7 @@
     "body-parser": "2.2.0",
     "chokidar": "4.0.3",
     "electron-window-state": "5.0.3",
-    "express": "5.1.0",
+    "express": "5.2.1",
     "fdir": "6.5.0",
     "ffmpeg-static": "5.2.0",
     "fuse.js": "7.1.0",
