@@ -8,6 +8,15 @@
   font-size: 9px;
   padding: 1px 3px 0px 3px;
   position: absolute;
+    text-shadow:
+    -1px  -1px  3px #000,
+    0px   -1px  3px #000,
+    1px   -1px  3px #000,
+    1px    0px  3px #000,
+    1px    1px  3px #000,
+    0px    1px  3px #000,
+    -1px   1px  3px #000,
+    -1px   0px  3px #000;
   z-index: 2;
 }
 
