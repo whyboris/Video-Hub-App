@@ -149,7 +149,7 @@
       [ngClass]="{ 'dark-style': darkMode }"
     >{{ video.durationDisplay }}</span>
     <span
-      *ngIf="showMeta"
+      *ngIf="showMeta && video.resolution"
       class="rez"
       [ngClass]="{ 'dark-style': darkMode }"
     >{{ video.resolution }}</span>

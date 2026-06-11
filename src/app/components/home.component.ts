@@ -1125,6 +1125,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
       return;
     }
 
+    // ctrl + shift => set thumbnail as favorite
+    if (eventObject.mouseEvent.ctrlKey === true && eventObject.mouseEvent.shiftKey) {
+      this.imageElementService.HandleEmission({
+        index: item.index,
+        defaultScreen: eventObject.thumbIndex as number
+      });
+
+      return;
+    }
+
     // ctrl/cmd + click for thumbnail sheet
     if (eventObject.mouseEvent.ctrlKey === true || eventObject.mouseEvent.metaKey) {
       this.openThumbnailSheet(item);
