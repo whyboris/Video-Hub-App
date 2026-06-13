@@ -23,6 +23,7 @@ export interface FinalObject {
   numOfFolders: number;          // number of folders - is always re-counted when app starts
   removeTags: string[];          // tags to remove
   screenshotSettings: ScreenshotSettings;
+  tagColors?: Record<string, string>; // lookup table for tag name to color mapping
   version: number;               // version of this vha file
 }
 

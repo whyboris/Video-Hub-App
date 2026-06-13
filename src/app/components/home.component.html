@@ -1247,3 +1247,14 @@
   [wizard]="wizard"
 >
 </app-wizard>
+
+<!-- TAG COLOR PICKER -->
+<app-tag-color-picker
+  *ngIf="showTagColorPicker"
+  [position]="tagColorPickerPosition"
+  [currentColor]="currentTagColor"
+  [darkMode]="settingsButtons['darkMode'].toggled"
+  (colorSelected)="onTagColorSelected($event)"
+  (close)="onTagColorPickerClose()"
+>
+</app-tag-color-picker>
