@@ -2501,9 +2501,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
 
     // Clear sort filter
-    // this.sortType = 'default';
-    // this.appState.currentSort = 'default';
-    // this.toggleButtonOff('sortOrder');
+    this.sortType = 'default';
+    this.appState.currentSort = 'default';
+    this.toggleButtonOff('sortOrder');
 
     // Clear search strings
     this.fuzzySearchString = '';
