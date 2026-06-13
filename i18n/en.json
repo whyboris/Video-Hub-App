@@ -189,7 +189,7 @@
     "sortOrderDescription": "Sort order",
     "sortOrderHint": "Sort order",
     "sortOrderMoreInfo": "Show the sort order filter",
-    "spacePlaysRandomDescription": "Pressing spacebar plays random video from random starting time",
+    "spacePlaysRandomDescription": "Pressing CRTL + spacebar plays random video from random starting time",
     "spacePlaysRandomMoreInfo": "Random starting time only works when preferred video player is set",
     "starFilterDescription": "Star",
     "starFilterHint": "Star filter",
