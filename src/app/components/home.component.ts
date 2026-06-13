@@ -340,8 +340,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // Listen for key presses
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
-    // .metaKey is for mac `command` button
-    if (event.ctrlKey === true || event.metaKey) {
+
+    if (event.ctrlKey && event.key === ' ' && this.settingsButtons['spacePlaysRandom'].toggled) {
+      const randomIndex: number = Math.floor(Math.random() * this.pipeSideEffectService.galleryShowing.length);
+      const video: ImageElement = this.pipeSideEffectService.galleryShowing[randomIndex];
+      const randomPlayStart: number = Math.floor(Math.random() * video.screens);
+      this.openVideo(video, randomPlayStart);
+
+    // .metaKey is for Mac `command` button
+    } else if (event.ctrlKey === true || event.metaKey) {
 
       const key: string = event.key;
 
@@ -365,7 +372,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.sheetOverlayShowing = false;
     } else if (event.key === 'Escape' && this.settingsButtons['showTags'].toggled) {
       this.toggleButton('showTags');
-    } else if (event.key === 'Escape' && this.showTagColorPicker ) {
+    } else if (event.key === 'Escape' && this.showTagColorPicker) {
       this.showTagColorPicker = false;
     }
   }
