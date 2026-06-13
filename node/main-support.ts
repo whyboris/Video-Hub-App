@@ -1,3 +1,5 @@
+import { app } from "electron"
+
 /*
  * This whole file is meant to contain only PURE functions
  *
@@ -12,7 +14,9 @@ import { GLOBALS } from './main-globals'; // TODO -- eliminate dependence on `GL
 import * as path from 'path';
 
 const exec = require('child_process').exec;
-const ffprobePath = require('@ffprobe-installer/ffprobe').path.replace('app.asar', 'app.asar.unpacked');
+
+const ffprobePath: string = app.isPackaged ? './resources/ffmpeg/ffprobe' : './ffmpeg/ffprobe';
+
 const fs = require('fs');
 const hasher = require('crypto').createHash;
 import type { Stats } from 'fs';
