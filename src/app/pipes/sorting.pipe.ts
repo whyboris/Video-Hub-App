@@ -1,4 +1,5 @@
-import type { PipeTransform } from '@angular/core';
+import type { PipeTransform } from '@angular/core' with { "resolution-mode": "import" };
+// @ts-ignore
 import { Pipe } from '@angular/core';
 import type { ImageElement, StarRating } from '../../../interfaces/final-object.interface';
 import { randomizeArray } from '../../../node/utility';
@@ -54,7 +55,7 @@ export class SortingPipe implements PipeTransform {
   sortFunctionLol(
     x: ImageElement,
     y: ImageElement,
-    property: string,
+    property: string, // TODO - maybe use stricter type?
     decreasing: boolean
   ): number {
     // up button first

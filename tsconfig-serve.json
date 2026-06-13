@@ -1,14 +1,19 @@
 {
   "compilerOptions": {
+    "noImplicitAny": false,
+    "strictNullChecks": false,
     "declaration": false,
     "experimentalDecorators": true,
+    "ignoreDeprecations": "6.0",
+    "baseUrl": "",
     "lib": [
       "es2023",
       "dom"
     ],
-    "moduleResolution": "node",
+    "module": "node16",
+    "moduleResolution": "nodenext",
     "sourceMap": true,
-    "target": "es5",
+    "target": "es6",
     "typeRoots": [
       "node_modules/@types"
     ]

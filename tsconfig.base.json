@@ -1,6 +1,7 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "ignoreDeprecations": "6.0",
     "baseUrl": "",
     "declaration": false,
     "experimentalDecorators": true,
@@ -8,8 +9,8 @@
       "es2023",
       "dom"
     ],
-    "module": "es2022",
-    "moduleResolution": "node",
+    "module": "node16",
+    "moduleResolution": "nodenext",
     "outDir": "./dist/out-tsc",
     "removeComments": true,
     "sourceMap": true,

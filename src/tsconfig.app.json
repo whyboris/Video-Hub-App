@@ -2,8 +2,9 @@
   "extends": "../tsconfig.json",
   "compilerOptions": {
     "outDir": "../out-tsc/app",
-    "module": "es2022",
+    "ignoreDeprecations": "6.0",
     "baseUrl": "",
+    "module": "node16",
     "types": []
   },
   "exclude": [

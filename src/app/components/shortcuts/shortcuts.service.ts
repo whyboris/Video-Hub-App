@@ -1,3 +1,4 @@
+// @ts-ignore
 import { Injectable } from '@angular/core';
 import type { SettingsButtonKey } from '../../common/settings-buttons';
 

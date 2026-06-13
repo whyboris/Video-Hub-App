@@ -338,7 +338,7 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
     } else {
       try {
         fs.renameSync(original, newName);
-      } catch (err) {
+      } catch (err: any) {
         success = false;
         console.log(err);
         if (err.code === 'ENOENT') {

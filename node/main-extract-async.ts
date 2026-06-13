@@ -5,7 +5,7 @@ const { powerSaveBlocker } = require('electron');
 const async = require('async');
 const chokidar = require('chokidar');
 import * as path from 'path';
-import type { FSWatcher } from 'chokidar'; // probably the correct type for chokidar.watch() object
+import type { FSWatcher } from 'chokidar' with { "resolution-mode": "import" }; // probably the correct type for chokidar.watch() object
 const fs = require('fs');
 import { fdir } from 'fdir';
 
@@ -198,7 +198,7 @@ export function metadataQueueRunner(file: TempMetadataQueueObject, done): void {
   metaDone++;
 
   extractMetadataAsync(file.fullPath, GLOBALS.screenshotSettings)
-    .then((imageElement: ImageElementPlus) => {
+    .then((imageElement: ImageElementPlus | any) => { // TODO: remove `any` -- added to prevent TSC from crashing out
       imageElement.cleanName = cleanUpFileName(file.name);
       imageElement.fileName = file.name;
       imageElement.fullPath = file.fullPath; // insert this converting `ImageElement` to `ImageElementPlus`

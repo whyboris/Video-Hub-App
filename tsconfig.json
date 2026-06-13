@@ -4,15 +4,17 @@
     "strictTemplates": false
   },
   "compilerOptions": {
+    "ignoreDeprecations": "6.0",
     "baseUrl": "",
+    "noCheck": true,
     "declaration": false,
     "experimentalDecorators": true,
     "lib": [
       "es2023",
       "dom"
     ],
-    "module": "esnext",
-    "moduleResolution": "node",
+    "module": "node16",
+    "moduleResolution": "node16",
     "outDir": "./dist/out-tsc",
     "removeComments": true,
     "sourceMap": true,

@@ -14,7 +14,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AnQrcodeModule } from 'an-qrcode';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService, provideTranslateLoader } from "@ngx-translate/core";
 import { VirtualScrollerModule } from '@iharbeck/ngx-virtual-scroller';
 
 // Services
@@ -193,14 +193,17 @@ import { YearPipe } from './pipes/year.pipe';
     // AnQrcodeModule, // TODO: enable and fix later!
     AppRoutingModule,
     BrowserAnimationsModule,
-    BrowserModule,
+    BrowserModule, // TODO: why is this complaining?
     FormsModule,
     MatDialogModule,
     MatSnackBarModule,
-    TranslateModule.forRoot(),
     VirtualScrollerModule,
   ],
   providers: [
+    provideTranslateService({
+        loader: provideTranslateLoader(MyLoader), // TODO: FIX TRANSLATIONS SERVICE ! `MyLoader` doesn't even exist
+        fallbackLang: "en",
+    }),
     provideHttpClient(),
     AutoTagsSaveService,
     AutoTagsService,
