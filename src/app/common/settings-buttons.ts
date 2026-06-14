@@ -76,6 +76,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'sortOptionTimesPlayed'
  | 'sortOptionYear'
  | 'sortOrder'
+ | 'spacePlaysRandom'
  | 'starFilter'
  | 'startWizard'
  | 'tagExclusion'
@@ -84,7 +85,8 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'thumbAutoAdvance'
  | 'timesPlayedFilter'
  | 'videoNotes'
- | 'yearFilter';
+ | 'yearFilter'
+ | 'clearAllFilters';
 
 // Add `SettingsButtons` items here so they show up in the buttons ribbon and in the settings
 // Each array separates buttons into their own button groups visually
@@ -106,6 +108,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'magic',
     'regex',
     'fuzzy',
+    'clearAllFilters',
   ],
   [ // 2 - Filters & sorting options
     'durationFilter',
@@ -202,6 +205,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'showDeleteOption',
     'dangerousDelete',
     'playPlaylist',
+    'spacePlaysRandom',
     'openAtTimestamp',
   ]
 ];
@@ -762,7 +766,13 @@ export const SettingsButtons: SettingsButtonsType = {
     title: '',
     toggled: false
   },
-
+  'spacePlaysRandom': {
+    description: 'BUTTONS.spacePlaysRandomDescription',
+    hidden: false,
+    moreInfo: 'BUTTONS.spacePlaysRandomMoreInfo',
+    title: '',
+    toggled: false
+  },
   'sortOptionFps': {
     description: 'BUTTONS.sortOptionFpsDescription',
     hidden: false,
@@ -902,6 +912,14 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-toggle-video-notes',
     moreInfo: 'BUTTONS.videoNotesMoreInfo',
     title: 'BUTTONS.videoNotesHint',
+    toggled: false
+  },
+  'clearAllFilters': {
+    description: 'BUTTONS.clearAllFiltersDescription',
+    hidden: false,
+    iconName: 'icon-clear-all-filters',
+    moreInfo: 'BUTTONS.clearAllFiltersMoreInfo',
+    title: 'BUTTONS.clearAllFiltersHint',
     toggled: false
   }
 };

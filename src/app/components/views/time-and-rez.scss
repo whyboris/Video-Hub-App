@@ -1,17 +1,27 @@
+@use "../variables.scss";
+
 .time, .rez {
-  bottom: 3px;
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 10px;
+  background: variables.$gray-20;
+  border-radius: 4px;
+  bottom: 2px;
+  color: black;
+  font-size: 9px;
+  padding: 1px 3px 0px 3px;
   position: absolute;
   z-index: 2;
 }
 
+.dark-style {
+  color: variables.$gray-20;
+  background: black;
+}
+
 .time {
-  right: 4px;
+  right: 2px;
 }
 
 .rez {
-  left: 4px;
+  left: 2px;
 }
 
 .sheet-icon {
@@ -31,14 +41,15 @@
 
 .not-connected {
   background-color: yellow;
-  border: 1px solid #999900;
   border-radius: 5px;
+  border: 1px solid #999900;
+  bottom: 3px;
+  box-sizing: border-box;
   display: block;
   height: 10px;
-  left: 4px;
+  left: calc(50% - 5px);
   opacity: 0.5;
   position: absolute;
-  top: 4px;
   width: 10px;
   z-index: 2;
 }

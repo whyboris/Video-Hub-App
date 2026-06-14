@@ -144,8 +144,10 @@
                                   : tagViewUpdateHack)
                     | autoTagSortPipe : sortAutoTags"
     [darkMode]="darkMode"
+    [enableColorPicker]="true"
     (tagClicked)="filterThisTag($event)"
     (removeTagEmit)="removeThisTag($event)"
+    (tagRightClick)="onTagRightClick($event)"
     class="view-tags-holder"
     [ngStyle]="{ 'min-height': imgHeight - 128 + 'px' }"
   ></app-view-tags-component>

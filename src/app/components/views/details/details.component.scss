@@ -2,7 +2,7 @@
   display: inline-block;
   margin: 20px 20px 0;
   min-height: 180px;
-  overflow: hidden;
+  overflow: visible; // changed from hidden to allow color picker to show
   transition: 300ms;
   transition-property: height;
 }

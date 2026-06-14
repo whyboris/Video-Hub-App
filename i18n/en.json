@@ -189,6 +189,8 @@
     "sortOrderDescription": "Sort order",
     "sortOrderHint": "Sort order",
     "sortOrderMoreInfo": "Show the sort order filter",
+    "spacePlaysRandomDescription": "Pressing CRTL + spacebar plays random video from random starting time",
+    "spacePlaysRandomMoreInfo": "Random starting time only works when preferred video player is set",
     "starFilterDescription": "Star",
     "starFilterHint": "Star filter",
     "starFilterMoreInfo": "Show the star filter",
@@ -219,7 +221,10 @@
     "videoPlayerSettings": "Video Player Settings",
     "yearSliderDescription": "Filter by Year",
     "yearSliderHint": "Year Filter",
-    "yearSliderMoreInfo": "Show the year slider filter"
+    "yearSliderMoreInfo": "Show the year slider filter",
+    "clearAllFiltersMoreInfo": "Clears all currently applied filters and resets the search input",
+    "clearAllFiltersHint": "Clear all filters",
+    "clearAllFiltersDescription": "Clear all currently applied filters"
   },
   "RIGHTCLICK": {
     "cancelRename": "cancel rename",
@@ -304,6 +309,7 @@
   "SHORTCUTS": {
     "andClickAnyFile": "and click any file to see the file details",
     "andPress": "and press",
+    "clearAllFilters": "Clear all filters",
     "clickToRename": "To change a shortcut, click on it and press desired key on your keyboard.",
     "compactView": "Toggle compact view",
     "darkMode": "Toggle dark / light mode",
@@ -456,6 +462,7 @@
     "hidingFrequency": "Hiding frequency",
     "loading": "Loading",
     "minimum": "minimum",
+    "showMore": "show more",
     "notes": "notes",
     "pleaseEnable": "Please enable at least one tag type to see the Word cloud",
     "selectAllButton": "Select all visible",

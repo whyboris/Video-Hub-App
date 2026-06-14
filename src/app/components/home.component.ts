@@ -148,6 +148,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
   flickerReduceOverlay = true;
   isFirstRunEver = false;
 
+  // Tag color picker state
+  showTagColorPicker = false;
+  tagColorPickerPosition = { x: 0, y: 0 };
+  currentTagColor = '';
+  currentTagName = '';
+  tagColorPickerSubscription: any;
+
   // ========================================================================
   // Import / extraction progress
   // ------------------------------------------------------------------------
@@ -335,8 +342,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // Listen for key presses
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
-    // .metaKey is for mac `command` button
-    if (event.ctrlKey === true || event.metaKey) {
+
+    if (event.ctrlKey && event.key === ' ' && this.settingsButtons['spacePlaysRandom'].toggled) {
+      const randomIndex: number = Math.floor(Math.random() * this.pipeSideEffectService.galleryShowing.length);
+      const video: ImageElement = this.pipeSideEffectService.galleryShowing[randomIndex];
+      const randomPlayStart: number = Math.floor(Math.random() * video.screens);
+      this.openVideo(video, randomPlayStart);
+
+    // .metaKey is for Mac `command` button
+    } else if (event.ctrlKey === true || event.metaKey) {
 
       const key: string = event.key;
 
@@ -360,6 +374,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.sheetOverlayShowing = false;
     } else if (event.key === 'Escape' && this.settingsButtons['showTags'].toggled) {
       this.toggleButton('showTags');
+    } else if (event.key === 'Escape' && this.showTagColorPicker) {
+      this.showTagColorPicker = false;
     }
   }
 
@@ -392,6 +408,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.changeLanguage('en');
 
     // this.modalService.openWelcomeMessage(); // WIP
+
+    // Subscribe to tag color picker events
+    this.tagColorPickerSubscription = this.manualTagsService.showColorPickerSubject.subscribe((data) => {
+      this.currentTagName = data.tagName;
+      this.currentTagColor = data.currentColor;
+      this.tagColorPickerPosition = data.position;
+      this.showTagColorPicker = true;
+      this.cd.detectChanges();
+    });
 
     setTimeout(() => {
       this.wordFrequencyService.finalMapBehaviorSubject.subscribe((value: WordFreqAndHeight[]) => {
@@ -705,7 +730,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.currentClickedItem = undefined;
       this.lastRenamedFileHack = undefined;
       this.imageElementService.finalArrayNeedsSaving = false;
-      this.imageElementService.recentlyPlayed = [];
 
       this.currentScreenshotSettings = finalObject.screenshotSettings;
 
@@ -726,6 +750,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.manualTagsService.removeAllTags();
       this.setTags(finalObject.addTags, finalObject.removeTags);
       this.manualTagsService.populateManualTagsService(finalObject.images);
+      this.manualTagsService.loadTagColors(finalObject.tagColors);
 
       this.imageElementService.imageElements = this.demo ? finalObject.images.slice(0, 50) : finalObject.images;
 
@@ -1075,6 +1100,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         numOfFolders: this.appState.numOfFolders,
         removeTags: this.autoTagsSaveService.getRemoveTags(),
         screenshotSettings: this.currentScreenshotSettings,
+        tagColors: this.manualTagsService.getTagColors(),
         version: 3,
       };
       return propsToReturn;
@@ -1103,6 +1129,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if (this.settingsButtons.doubleClickMode.toggled && !(eventObject.doubleClick || doubleClick)) {
       // when double-clicking, this runs twice anyway
       this.assignSelectedFile(item);
+
+      return;
+    }
+
+    // ctrl + shift => set thumbnail as favorite
+    if (eventObject.mouseEvent.ctrlKey === true && eventObject.mouseEvent.shiftKey) {
+      this.imageElementService.HandleEmission({
+        index: item.index,
+        defaultScreen: eventObject.thumbIndex as number
+      });
 
       return;
     }
@@ -1674,7 +1710,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
           this.sortOrderRef.sortFilterElement.nativeElement.value = 'random';
         }
       });
-    } else {
+    }
+    else if(uniqueKey === 'clearAllFilters'){
+      this.clearAllFilters();
+    }
+    else {
       this.toggleButtonOpposite(uniqueKey);
       if (uniqueKey === 'showMoreInfo') {
         this.computeTextBufferAmount();
@@ -2184,6 +2224,21 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
+   * Sort by most-recent
+   */
+  sortByRecentlyPlayed(): void {
+    this.settingsButtons['sortOptionLastPlayed'].toggled = true;
+
+    this.selectFilterOrder('lastPlayedDesc');
+
+    setTimeout(() => {
+      if (this.sortOrderRef.sortFilterElement) { // just in case, perform check
+        this.sortOrderRef.sortFilterElement.nativeElement.value = 'lastPlayedDesc';
+      }
+    });
+  }
+
+  /**
    * Check type-ahead for the manually-added tags!
    * @param text     input text to check type-ahead
    * @param compute  whether or not to perform the lookup
@@ -2415,6 +2470,81 @@ export class HomeComponent implements OnInit, AfterViewInit {
     console.log('stopping server');
     this.electronService.ipcRenderer.send('stop-server');
     this.serverDetailsBehaviorSubject.next(undefined);
+  }
+
+  /**
+   * Clear all filters and search strings
+   * This is used when the user clicks the "Clear All Filters" button
+   * It resets all filter arrays, bounds, and toggles all filter buttons off
+   */
+  clearAllFilters(): void {
+    // Clear all filter arrays and bools
+    this.filters.forEach((filter) => {
+      filter.array = [];
+      filter.bool = false;
+      filter.string = '';
+    });
+
+    // Clear Duration filter
+    this.durationLeftBound = 0;
+    this.durationRightBound = Infinity;
+    this.toggleButtonOff('durationFilter');
+
+    // Clear Size filter
+    this.sizeLeftBound = 0;
+    this.sizeRightBound = Infinity;
+    this.toggleButtonOff('sizeFilter');
+
+    // Clear Times Played filter
+    this.timesPlayedLeftBound = 0;
+    this.timesPlayedRightBound = Infinity;
+    this.toggleButtonOff('timesPlayedFilter');
+
+    // Clear Resolution filter
+    this.freqLeftBound = 0;
+    this.freqRightBound = Infinity;
+    this.toggleButtonOff('resolutionFilter');
+
+    // Clear Year filter
+    this.yearLeftBound = 0;
+    this.yearRightBound = Infinity;
+    this.toggleButtonOff('yearFilter');
+
+    // Clear Star filter
+    this.starLeftBound = 0;
+    this.starRightBound = Infinity;
+    this.toggleButtonOff('starFilter');
+
+
+    // Clear sort filter
+    // this.sortType = 'default';
+    // this.appState.currentSort = 'default';
+    // this.toggleButtonOff('sortOrder');
+
+    // Clear search strings
+    this.fuzzySearchString = '';
+    this.magicSearchString = '';
+    this.regexSearchString = '';
+
+    // Prevent ExpressionChangedAfterItHasBeenCheckedError
+    this.cd.detectChanges();
+  }
+
+  /**
+   * Handle tag color selection from color picker
+   */
+  onTagColorSelected(color: string): void {
+    this.manualTagsService.setTagColor(this.currentTagName, color);
+    this.showTagColorPicker = false;
+    // setTagColor will trigger tagColorUpdatedSubject which updates all views
+  }
+
+  /**
+   * Close tag color picker
+   */
+  onTagColorPickerClose(): void {
+    this.showTagColorPicker = false;
+    this.cd.detectChanges();
   }
 
 }

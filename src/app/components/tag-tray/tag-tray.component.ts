@@ -38,4 +38,20 @@ export class TagTrayComponent {
     public manualTagsService: ManualTagsService,
   ) { }
 
+  /**
+   * Handle tag right-click event - show color picker via service
+   * @param event - Object containing tag and mouse event
+   */
+  onTagRightClick(event: { tag: any, event: MouseEvent }): void {
+    // Emit event to show color picker at home component level
+    this.manualTagsService.showColorPickerSubject.next({
+      tagName: event.tag.name,
+      currentColor: event.tag.colour || '',
+      position: {
+        x: event.event.clientX,
+        y: event.event.clientY
+      }
+    });
+  }
+
 }
