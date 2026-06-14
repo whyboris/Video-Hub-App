@@ -8,6 +8,7 @@ import { ImageElementService } from './../../services/image-element.service';
 import { slowFadeIn, donutAppear, metaAppear } from '../../common/animations';
 
 @Component({
+  standalone: false,
   selector: 'app-tags-component',
   templateUrl: 'tags.component.html',
   styleUrls: ['../search-input.scss',

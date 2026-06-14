@@ -3,6 +3,7 @@ import { ShortcutsService, CustomShortcutAction } from './shortcuts.service';
 import type { SettingsButtonKey } from '../../common/settings-buttons';
 
 @Component({
+  standalone: false,
   selector: 'app-shortcuts',
   templateUrl: './shortcuts.component.html',
   styleUrls: ['./shortcuts.component.scss']
@@ -43,6 +44,7 @@ export class ShortcutsComponent {
 
     'toggleSettings',    // o
     'hideSidebar',       // b
+    'clearAllFilters',   // 0
     'showTagTray',       // y
     'showAutoTags',      // t - space after
 

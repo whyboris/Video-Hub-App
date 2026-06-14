@@ -8,6 +8,7 @@ import type { SettingsButtonsType } from '../../common/settings-buttons';
 import { modalAnimation, similarResultsText } from '../../common/animations';
 
 @Component({
+  standalone: false,
   selector: 'app-similar-tray',
   templateUrl: './similar-tray.component.html',
   styleUrls: [
@@ -19,8 +20,9 @@ import { modalAnimation, similarResultsText } from '../../common/animations';
 })
 export class SimilarTrayComponent {
 
-  @Output() handleClick = new EventEmitter<any>(); // todo: fix up the vague type
+  @Output() handleClick = new EventEmitter<any>(); // TODO: fix up the vague type
   @Output() rightMouseClicked = new EventEmitter<RightClickEmit>();
+  @Output() showMoreRecentlyPlayed = new EventEmitter<any>();
 
   @Input() appState;
   @Input() currentClickedItemName;

@@ -2,7 +2,8 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
 import type { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
-  selector: 'app-recently-opened',
+  standalone: false,
+  selector: 'app-recently-opened-hubs',
   templateUrl: './recently-opened.component.html',
   styleUrls: ['./recently-opened.component.scss']
 })

@@ -4,6 +4,7 @@ import { Pipe } from '@angular/core';
 import type { WordAndFreq } from './autotags.service';
 
 @Pipe({
+  standalone: false,
   name: 'tagFilterPipe'
 })
 export class TagFilterPipe implements PipeTransform {

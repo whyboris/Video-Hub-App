@@ -1,0 +1,36 @@
+<div class="color-picker-overlay" (click)="onClose()"></div>
+
+<div
+  class="color-picker-container"
+  [ngClass]="{ 'dark-mode': darkMode }"
+  [style.left.px]="position.x"
+  [style.top.px]="position.y"
+  (click)="$event.stopPropagation()"
+>
+  <div class="color-picker-header">
+    <span>Select Tag Color</span>
+    <button class="close-btn" (click)="onClose()">×</button>
+  </div>
+
+  <div class="color-grid">
+    <div
+      *ngFor="let color of colors"
+      class="color-swatch"
+      [style.background-color]="color"
+      [class.selected]="currentColor === color"
+      (click)="selectColor(color)"
+      [title]="color"
+    >
+      <span *ngIf="currentColor === color" class="checkmark">✓</span>
+    </div>
+  </div>
+
+  <div class="color-actions">
+    <button
+      class="default-btn"
+      (click)="clearColor()"
+    >
+      Reset to Default
+    </button>
+  </div>
+</div>

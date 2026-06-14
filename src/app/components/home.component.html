@@ -642,11 +642,11 @@
       </div>
 
       <!-- Recently opened -->
-      <app-recently-opened
+      <app-recently-opened-hubs
         (openFromHistory)="openFromHistory($event)"
         [settingsButtons]="settingsButtons"
         [vhaFileHistory]="vhaFileHistory"
-      ></app-recently-opened>
+      ></app-recently-opened-hubs>
 
     </div> <!-- closing the SIDEBAR -->
 
@@ -1110,6 +1110,7 @@
 
     (handleClick)="handleClick($event.expectedEvent, $event.item)"
     (rightMouseClicked)="rightMouseClicked($event.mouseEvent, $event.item)"
+    (showMoreRecentlyPlayed)="sortByRecentlyPlayed()"
 
     [appState]="appState"
     [currentClickedItemName]="currentClickedItemName"
@@ -1247,3 +1248,14 @@
   [wizard]="wizard"
 >
 </app-wizard>
+
+<!-- TAG COLOR PICKER -->
+<app-tag-color-picker
+  *ngIf="showTagColorPicker"
+  [position]="tagColorPickerPosition"
+  [currentColor]="currentTagColor"
+  [darkMode]="settingsButtons['darkMode'].toggled"
+  (colorSelected)="onTagColorSelected($event)"
+  (close)="onTagColorPickerClose()"
+>
+</app-tag-color-picker>

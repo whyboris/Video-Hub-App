@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-top-component',
   templateUrl: './top.component.html',
   styleUrls: ['./top.component.scss',

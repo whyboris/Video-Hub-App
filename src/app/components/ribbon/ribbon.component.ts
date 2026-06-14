@@ -3,6 +3,7 @@ import { buttonAnimation } from '../../common/animations';
 import type { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
+  standalone: false,
   selector: 'app-ribbon',
   templateUrl: './ribbon.component.html',
   styleUrls: [

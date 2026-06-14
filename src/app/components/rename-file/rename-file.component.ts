@@ -11,6 +11,7 @@ import type { ImageElement } from '../../../../interfaces/final-object.interface
 import type { RenameFileResponse } from '../../../../interfaces/shared-interfaces';
 
 @Component({
+  standalone: false,
   selector: 'app-rename-file',
   templateUrl: './rename-file.component.html',
   styleUrls: [

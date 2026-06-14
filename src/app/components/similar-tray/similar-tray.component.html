@@ -15,7 +15,8 @@
 
   <app-thumbnail
     *ngFor="let item of (showRecentNotSimilar
-                          ?  imageElementService.recentlyPlayed
+                          ? (imageElementService.imageElements | sortingPipe : 'lastPlayedDesc' : currentClickedItemName
+                                                               | slice : 0 : 8)
                           : (imageElementService.imageElements | similarityPipe : true : currentClickedItemName
                                                                | slice : 0 : 8 )
                         )"
@@ -41,5 +42,16 @@
 
     style="display: inline-block; margin-bottom: 50px"
   ></app-thumbnail>
+
+  @if(showRecentNotSimilar) {
+    <div
+      (click)="showMoreRecentlyPlayed.emit()"
+      class="more"
+    >
+      <span>
+        {{ 'TAGS.showMore' | translate }}
+      </span>
+    </div>
+  }
 
 </div>
