@@ -12,7 +12,6 @@ export class ImageElementService {
 public finalArrayNeedsSaving = false;
 public forceStarFilterUpdate = true;
 public imageElements: ImageElement[] = [];
-public recentlyPlayed: ImageElement[] = [];
 
 constructor() { }
 
@@ -67,13 +66,12 @@ constructor() { }
    */
   updateNumberOfTimesPlayed(index: number) {
 
-    this.updateRecentlyPlayed(index);
+    this.imageElements[index].lastPlayed = Date.now(); // update `lastPlayed`
 
-    this.imageElements[index].lastPlayed = Date.now();
+    this.imageElements[index].timesPlayed
+      ? this.imageElements[index].timesPlayed++
+      : this.imageElements[index].timesPlayed = 1;     // update `timesPlayed`
 
-    this.imageElements[index].timesPlayed ?
-    this.imageElements[index].timesPlayed++ :
-    this.imageElements[index].timesPlayed = 1;
     this.finalArrayNeedsSaving = true;
   }
 
@@ -91,24 +89,6 @@ constructor() { }
         index: index,
         stars: 5.5
       });
-    }
-  }
-
-  /**
-   * Update recently played
-   *  - remove duplicates
-   *  - trim to at most 7
-   * @param index
-   */
-  updateRecentlyPlayed(index: number) {
-    this.recentlyPlayed = [
-      this.imageElements[index],
-      ...(this.recentlyPlayed.filter((element: ImageElement) => {
-        return element.hash !== this.imageElements[index].hash;
-      }))
-    ];
-    if (this.recentlyPlayed.length > 7) {
-      this.recentlyPlayed.length = 7;
     }
   }
 

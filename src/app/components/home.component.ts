@@ -728,7 +728,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.currentClickedItem = undefined;
       this.lastRenamedFileHack = undefined;
       this.imageElementService.finalArrayNeedsSaving = false;
-      this.imageElementService.recentlyPlayed = [];
 
       this.currentScreenshotSettings = finalObject.screenshotSettings;
 
