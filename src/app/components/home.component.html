@@ -1110,6 +1110,7 @@
 
     (handleClick)="handleClick($event.expectedEvent, $event.item)"
     (rightMouseClicked)="rightMouseClicked($event.mouseEvent, $event.item)"
+    (showMoreRecentlyPlayed)="sortByRecentlyPlayed()"
 
     [appState]="appState"
     [currentClickedItemName]="currentClickedItemName"

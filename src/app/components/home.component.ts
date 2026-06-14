@@ -2222,6 +2222,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
+   * Sort by most-recent
+   */
+  sortByRecentlyPlayed(): void {
+    this.selectFilterOrder('lastPlayedDesc');
+  }
+
+  /**
    * Check type-ahead for the manually-added tags!
    * @param text     input text to check type-ahead
    * @param compute  whether or not to perform the lookup

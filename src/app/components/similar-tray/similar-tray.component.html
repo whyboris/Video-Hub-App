@@ -43,4 +43,15 @@
     style="display: inline-block; margin-bottom: 50px"
   ></app-thumbnail>
 
+  @if(showRecentNotSimilar) {
+    <div
+      (click)="showMoreRecentlyPlayed.emit()"
+      class="more"
+    >
+      <span>
+        {{ 'TAGS.showMore' | translate }}
+      </span>
+    </div>
+  }
+
 </div>
