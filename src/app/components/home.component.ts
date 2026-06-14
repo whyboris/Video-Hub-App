@@ -2225,7 +2225,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Sort by most-recent
    */
   sortByRecentlyPlayed(): void {
+    this.settingsButtons['sortOptionLastPlayed'].toggled = true;
+
     this.selectFilterOrder('lastPlayedDesc');
+
+    setTimeout(() => {
+      if (this.sortOrderRef.sortFilterElement) { // just in case, perform check
+        this.sortOrderRef.sortFilterElement.nativeElement.value = 'lastPlayedDesc';
+      }
+    });
   }
 
   /**
