@@ -3,7 +3,7 @@ import type { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
   standalone: false,
-  selector: 'app-recently-opened',
+  selector: 'app-recently-opened-hubs',
   templateUrl: './recently-opened.component.html',
   styleUrls: ['./recently-opened.component.scss']
 })
