@@ -79,11 +79,11 @@
       class="title"
     >
       {{ video.fileName }}
-    @if (showMeta) {
+
       <div class="fileSize">
         {{ video.fileSize | fileSizePipe }} [{{ video.fileSizeDisplay }} files]
       </div>
-    }
+
     </span>
 
   }
@@ -144,13 +144,13 @@
     [ngClass]="{ 'larger-font': largerFont }"
     [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
     class="title"
-    >
+  >
     {{ video.cleanName }}
-  @if (showMeta) {
+
     <div class="fileSize">
-      {{ showMeta ? '(' + video.fileSizeDisplay + ')' : '' }}
+      {{ '(' + video.fileSizeDisplay + ')' }}
     </div>
-  }
+
   </span>
 }
 
