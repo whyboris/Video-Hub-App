@@ -1,6 +1,6 @@
 <div
   [ngClass]="{ 'rename-dark': darkMode }"
->
+  >
 
   <div class="input">
     <input
@@ -13,19 +13,24 @@
       type="text"
     >
     <!-- in the mac the font sizes are not aligned properly and the extension shows up overlapping -->
+  @if (!macVersion) {
     <span
-      *ngIf="!macVersion"
       class="extension-hack"
       [ngClass]="{ 'dark-mode-on': darkMode }"
     >
       <span class="hidden">{{ renamingWIP }}</span>
-      <span class="extension" *ngIf="renamingWIP.length > 0">.{{ renamingExtension }}</span>
+    @if (renamingWIP.length > 0) {
+      <span class="extension">.{{ renamingExtension }}</span>
+    }
     </span>
+  }
   </div>
 
-  <span *ngIf="renameErrMsg !== ''" class="rename-err-msg">
+@if (renameErrMsg !== '') {
+  <span class="rename-err-msg">
     {{ renameErrMsg | translate }}
   </span>
+}
 
   <button
     [disabled]="
