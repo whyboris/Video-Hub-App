@@ -1,7 +1,10 @@
 <div
   class="manual-tag-tray"
 >
-  <div class="tag-tray-menu-left" *ngIf="!batchTaggingMode; else batchModeExplainer">
+
+@if (!batchTaggingMode) {
+
+  <div class="tag-tray-menu-left">
     <button
       (click)="appState.sortTagsByFrequency = !appState.sortTagsByFrequency"
       class="tag-sort-by-toggle"
@@ -23,10 +26,10 @@
       [ngClass]="{ 'manual-tag-tray-filter-dark': settingsButtons['darkMode'].toggled }"
       placeholder="{{ 'TAGS.filterTags' | translate }}"
     >
-
   </div>
 
-  <ng-template #batchModeExplainer>
+} @else {
+
     <div class="tag-tray-menu-left">
       <span class="manual-tag-tray-label" [ngStyle]="{ color: darkMode ? 'white' : 'black' }">
         {{ 'TAGS.clickVideoToSelect' | translate }}
@@ -48,7 +51,8 @@
         {{ 'TAGS.selectAllButton' | translate }}
       </button>
     </div>
-  </ng-template>
+
+}
 
   <button
     class="wizard-button wizard-button-small button-toggle-batch-mode"

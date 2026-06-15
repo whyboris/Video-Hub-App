@@ -1,8 +1,9 @@
+@if (settingsButtons['showFolders'].toggled
+  && (   appState.currentView === 'showThumbnails'
+      || appState.currentView === 'showFiles'
+      || appState.currentView === 'showClips')) {
+
 <div
-  *ngIf="settingsButtons['showFolders'].toggled
-          && (   appState.currentView === 'showThumbnails'
-              || appState.currentView === 'showFiles'
-              || appState.currentView === 'showClips')"
   [ngClass]="{
       'breadcrumbs-full-width': settingsButtons['hideSidebar'].toggled,
       'breadcrumbs-dark-mode': settingsButtons['darkMode'].toggled
@@ -11,13 +12,17 @@
   @breadcrumbsAppear
 >
   <app-icon class="breadcrumb-folder-icon" [icon]="'icon-folder-blank'" (click)="breadcrumbHomeIconClick.emit()"></app-icon>
+
+@for (item of folderViewNavigationPath.split('/'); track item; let idx = $index) {
   <span
-    *ngFor="let item of folderViewNavigationPath.split('/'); index as idx"
     (click)="handleBbreadcrumbClicked.emit(idx)"
     class="breadcrumb-folder-word"
     @breadcrumbWordAppear
   >
     {{ item }}
   </span>
+}
 
 </div>
+
+}

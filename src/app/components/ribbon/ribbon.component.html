@@ -1,11 +1,11 @@
-<ng-container *ngFor="let btnGroup of settingsButtonsGroups; index as i">
-  <div
-    class="settings-buttons-group"
-  ><ng-container
-      *ngFor="let buttonKey of btnGroup"
-    ><!--
-   --><button
-        *ngIf="!settingsButtons[buttonKey].hidden && settingsButtons[buttonKey].iconName"
+@for (btnGroup of settingsButtonsGroups; track btnGroup; let i = $index) {
+
+  <div class="settings-buttons-group">
+
+  @for (buttonKey of btnGroup; track buttonKey) {
+
+    @if (!settingsButtons[buttonKey].hidden && settingsButtons[buttonKey].iconName) {
+      <button
         (click)="toggleButton.emit(buttonKey)"
         [ngClass]="settingsButtons[buttonKey].toggled | buttonStylePipe : settingsButtons['darkMode'].toggled
                                                                         : settingsButtons['flatIcons'].toggled"
@@ -13,8 +13,11 @@
         @buttonAnimation
       >
         <app-icon class="icon" [icon]="settingsButtons[buttonKey].iconName"></app-icon>
-      </button><!--
-  --></ng-container><!--
-  --><!--
---></div>
-</ng-container>
+      </button>
+    }
+
+  }
+
+  </div>
+
+}

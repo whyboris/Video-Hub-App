@@ -1,6 +1,8 @@
-<div *ngIf="settingsButtons['resolutionFilter'].toggled">
+@if (settingsButtons['resolutionFilter'].toggled) {
+
+<div>
   <div class="frequency-graph-container">
-    <ng-container *ngFor="let resolution of resolutionFreqArr; index as i">
+    @for (resolution of resolutionFreqArr; track resolution; let i = $index) {
       <div
         [ngClass]="{ resDisabled: (i < freqLeftBound) || (i >= freqRightBound) }"
         [ngStyle]="{ height: resolution + '%' }"
@@ -13,7 +15,7 @@
       >
         {{ resolutionNames[i] }}
       </div>
-    </ng-container>
+    }
   </div>
 
   <app-slider-filter
@@ -24,3 +26,5 @@
     [steps]="4"
   ></app-slider-filter>
 </div>
+
+}

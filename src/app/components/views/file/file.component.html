@@ -4,70 +4,75 @@
 
   <!-- FOLDER BLOCK -->
 
-  <div *ngIf="video.cleanName === '*FOLDER*'; else fileViewDiv">
-    <ng-container
-      *ngIf="video.fileName !== '*UP*'; else backButton"
-    >
-      <div *ngIf="showMeta" class="number-of-files">
+@if (video.cleanName === '*FOLDER*') {
+  <div>
+  @if (video.fileName !== '*UP*') {
+
+    @if (showMeta) {
+      <div class="number-of-files">
         {{ video.fileSizeDisplay | number }}
       </div>
+    }
+
       <app-icon [icon]="'icon-folder-blank'" class="icon-folder-lol"></app-icon>
       <div
         class="folder-name"
         [ngClass]="{ 'folder-name-dark-mode': darkMode }"
       >{{ video.fileName }}
-        <div class="folder-size" *ngIf="showMeta">
+
+      @if (showMeta) {
+        <div class="folder-size">
           {{ video.fileSize | fileSizePipe }}
         </div>
-      </div>
+      }
 
+      </div>
+    @if (showMeta) {
       <div
-        *ngIf="showMeta"
         class="length"
         [ngClass]="{ 'meta-dark-mode': darkMode }"
       >
         {{ video.duration | lengthPipe : 'folder' }}
       </div>
+    }
 
-    </ng-container>
-
-    <ng-template #backButton>
+    } @else {
       <app-icon
         class="back-icon"
         [icon]="'icon-chevron-left'"
         [ngClass]="{ 'back-icon-dark-mode': darkMode }"
       ></app-icon>
-    </ng-template>
-
+    }
   </div>
 
+  } @else {
 
   <!-- INDIVIDUAL FILE BLOCK -->
 
-  <ng-template #fileViewDiv>
-
+  @if (video.selected) {
     <app-icon
-      *ngIf="video.selected"
       class="selected-file-view"
       [icon]="'icon-show-more-info'"
     ></app-icon>
+  }
 
+  @if (showFavorites) {
     <app-icon
-      *ngIf="showFavorites"
       (click)="toggleHeart()"
       class="heart"
       [ngClass]="{ 'heart-lit' : video.stars === 5.5, 'heart-selected' : video.selected }"
       [icon]="'icon-heart'">
     </app-icon>
+  }
 
+  @if (showMeta) {
     <div
-      *ngIf="showMeta"
       [ngClass]="{ 'meta-dark-mode': darkMode }"
       class="size"
-    >
+      >
       {{ video.resolution }}
     </div>
-
+  }
     <div
       class="title"
       [ngClass]="{
@@ -77,23 +82,26 @@
         }"
     >
       {{ video.cleanName }}
+
+    @if (showMeta) {
       <div
-        *ngIf="showMeta"
         class="fileSize"
         [ngClass]="{ 'meta-dark-mode': darkMode }"
       >
         ({{ video.fileSizeDisplay }})
       </div>
+    }
+
     </div>
 
+  @if (showMeta) {
     <div
-      *ngIf="showMeta"
       class="length"
       [ngClass]="{ 'meta-dark-mode': darkMode }"
     >
       {{ video.durationDisplay }}
     </div>
-
-  </ng-template>
+  }
+}
 
 </div>
