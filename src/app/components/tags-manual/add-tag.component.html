@@ -11,7 +11,11 @@
     type="text"
     placeholder="{{ 'TAGS.addTag' | translate }}"
   >
-  <span class="typeahead" *ngIf="typeAhead.length > 0">
+
+@if (typeAhead.length > 0) {
+  <span class="typeahead">
     {{ typeAhead }}
   </span>
+}
+
 </div>
