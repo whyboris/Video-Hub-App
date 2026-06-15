@@ -7,16 +7,17 @@
   >
   <!-- the 30 px added above is the padding for the text  -->
 
+@if (showFavorites) {
   <app-icon
-    *ngIf="showFavorites"
     (click)="toggleHeart()"
     class="heart"
     [ngClass]="{ 'heart-lit' : video.stars === 5.5 }"
     [icon]="'icon-heart'">
   </app-icon>
+}
 
+@for (row of rowOffsets; track row) {
   <div
-    *ngFor="let row of rowOffsets"
     (click)="   videoClick.emit({ mouseEvent: $event })"
     (dblclick)="videoClick.emit({ mouseEvent: $event, doubleClick: true })"
     (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
@@ -28,23 +29,28 @@
         'background-size': 'auto ' + _imgHeight + 'px'
       }"
   ></div>
+}
 
+@if (video.selected) {
   <app-icon
-    *ngIf="video.selected"
     class="selected"
     [icon]="'icon-show-more-info'"
   ></app-icon>
+}
 
+@if (showMeta) {
   <span
-    *ngIf="showMeta"
     [ngClass]="{ 'larger-font': largerFont }"
     [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
     class="title"
   >
     {{ video.cleanName }}
-    <div class="fileSize" *ngIf="showMeta">
+  @if (showMeta) {
+    <div class="fileSize">
       ({{ video.fileSizeDisplay }})
     </div>
+  }
   </span>
+}
 
 </div>
