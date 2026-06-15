@@ -34,6 +34,8 @@ See [issues](https://github.com/whyboris/Video-Hub-App/issues) for what is in pr
 
 ⚠ The repository is usually ahead of the publicly [released version](https://github.com/whyboris/Video-Hub-App/releases) - it is 🚧 WIP and may have bugs in it.
 
+⚠ For screenshot generation to work, download and place `ffmpeg` and `ffprobe` executable into the `ffmpeg` folder. You can download the files from [FFmpeg](https://ffmpeg.org/download.html). For [windows](https://www.gyan.dev/ffmpeg/builds/) you can download `release-full` which will include hardware acceleration for nvidia (to enable, toggle `nvidiaBuild` variable in `main-extract.ts`).
+
 How to start:
 
 - `npm install` to install (you may need to run `npm install --legacy-peer-deps` if install fails)

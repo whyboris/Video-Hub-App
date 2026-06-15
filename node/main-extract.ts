@@ -39,6 +39,20 @@ import type { ImageElement, ScreenshotSettings } from '../interfaces/final-objec
 // ========================================================================================
 
 /**
+ * nVidia-accelerated GPU decoding for screenshot generation
+ * added conditionally on `nvidiaBuild` variable
+ */
+const prependNvidiaAccelerationArgumentsIfEnabled = (args: string[]): string[] => {
+
+  if (GLOBALS.nvidiaBuild) {
+    args.push('-hwaccel');
+    args.push('cuda');
+  }
+
+  return args;
+}
+
+/**
  * Generate the ffmpeg args to extract a single frame according to settings
  * @param pathToVideo
  * @param screenshotHeight
@@ -54,7 +68,12 @@ const extractSingleFrameArgs = (
 
   const ssWidth: number = screenshotHeight * (16 / 9);
 
+  const nvidia: string[] = [];
+
+  prependNvidiaAccelerationArgumentsIfEnabled(nvidia);
+
   const args: string[] = [
+    ...nvidia,
     '-ss', (duration / 10).toString(),
     '-i', pathToVideo,
     '-frames', '1',
@@ -90,6 +109,8 @@ const generateScreenshotStripArgs = (
   const totalCount = numberOfScreenshots;
   const step: number = duration / (totalCount + 1);
   const args: string[] = [];
+  prependNvidiaAccelerationArgumentsIfEnabled(args);
+
   let allFramesFiltered = '';
   let outputFrames = '';
 
@@ -139,6 +160,8 @@ const generatePreviewClipArgs = (
   const totalCount = clipSnippets;
   const step: number = duration / (totalCount + 1);
   const args: string[] = [];
+  prependNvidiaAccelerationArgumentsIfEnabled(args);
+
   let concat = '';
 
   // make the magic filter
