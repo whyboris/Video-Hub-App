@@ -46,7 +46,7 @@ Main dependencies in use:
 | ---------------- | ------- | --------- | ------- |
 | Angular          | v20     | Oct 2025  |         |
 | Angular-CLI      | v20     | Oct 2025  |         |
-| Electron         | v41     | Jun 2026  | (internally uses Node `v24.16.0` and Chromium 146) |
+| Electron         | v42     | Jun 2026  | (internally uses Node `v24.16.0` and Chromium 148) |
 | Electron Builder | v26     | Oct 2025  |         |
 
 - **Node**: It may be best to use the same version as _Electron_ uses internally (`v24.16.0`)
