@@ -13,16 +13,21 @@
   </div>
 
   <div class="color-grid">
+
+  @for (color of colors; track color) {
     <div
-      *ngFor="let color of colors"
       class="color-swatch"
       [style.background-color]="color"
       [class.selected]="currentColor === color"
       (click)="selectColor(color)"
       [title]="color"
     >
-      <span *ngIf="currentColor === color" class="checkmark">✓</span>
+    @if (currentColor === color) {
+      <span class="checkmark">✓</span>
+    }
     </div>
+  }
+
   </div>
 
   <div class="color-actions">
