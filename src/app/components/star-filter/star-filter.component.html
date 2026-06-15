@@ -1,6 +1,8 @@
-<div *ngIf="settingsButtons['starFilter'].toggled">
+@if (settingsButtons['starFilter'].toggled) {
+
+<div>
   <div class="frequency-graph-container-star">
-    <ng-container *ngFor="let starRating of starRatingFreqArr; index as i">
+    @for (starRating of starRatingFreqArr; track starRating; let i = $index) {
       <div
         [ngClass]="{ resDisabled: (i < starLeftBound) || (i >= starRightBound) }"
         [ngStyle]="{ height: starRating + '%' }"
@@ -13,7 +15,7 @@
       >
         {{ starRatingNames[i] }}
       </div>
-    </ng-container>
+    }
   </div>
 
   <app-slider-filter
@@ -25,3 +27,5 @@
   ></app-slider-filter>
 
 </div>
+
+}
