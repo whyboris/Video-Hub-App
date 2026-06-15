@@ -24,19 +24,21 @@
         'background-position-x': percentOffset + '%'
       }"
   >
+  @if (showFavorites) {
     <app-icon
-      *ngIf="showFavorites"
       (click)="toggleHeart()"
       class="heart"
       [ngClass]="{ 'heart-lit' : video.stars === 5.5 }"
       [icon]="'icon-heart'">
     </app-icon>
+  }
 
+  @if (video.selected) {
     <app-icon
-      *ngIf="video.selected"
       class="selected"
       [icon]="'icon-show-more-info'"
     ></app-icon>
+  }
   </div>
 
   <app-meta-item

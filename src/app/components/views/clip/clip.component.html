@@ -9,10 +9,13 @@
 
   <!-- ================================= FOLDER VIEW ================================= -->
 
-  <div *ngIf="video.cleanName === '*FOLDER*'; else singleThumbnailDiv">
+@if (video.cleanName === '*FOLDER*') {
+
+  <div>
+
+  @if (video.fileName !== '*UP*') {
     <div
       #filmstripHolder
-      *ngIf="video.fileName !== '*UP*'; else upFolderDiv"
       class="video-box folder"
       (click)="   videoClick.emit({ mouseEvent: $event })"
       (dblclick)="videoClick.emit({ mouseEvent: $event, doubleClick: true })"
@@ -21,9 +24,9 @@
       }"
     >
       <!-- ========================== regular folder view ========================== -->
-      <ng-container *ngFor="let idx of [0, 1, 2, 3]">
+    @for (idx of [0, 1, 2, 3]; track idx) {
+      @if (noError && !autoplay && folderThumbPaths[idx]) {
         <video
-          *ngIf="noError && !autoplay && folderThumbPaths[idx]"
           [src]="folderThumbPaths[idx]"
           [poster]="sanitizer.bypassSecurityTrustUrl(folderPosterPaths[idx])"
           class="mini-video-thumb {{ 'folder-preview-' + idx }}"
@@ -32,11 +35,13 @@
           (mouseout)="stopPreview($event)"
           loop
         ></video>
-      </ng-container>
+      }
+    }
+
       <!-- ========================== AUTOPLAY folder view ========================== -->
-      <ng-container *ngFor="let idx of [0, 1, 2, 3]">
+    @for (idx of [0, 1, 2, 3]; track idx) {
+      @if (noError && autoplay && appInFocus && folderThumbPaths[idx]) {
         <video
-          *ngIf="noError && autoplay && appInFocus && folderThumbPaths[idx]"
           [src]="folderThumbPaths[idx]"
           [poster]="sanitizer.bypassSecurityTrustUrl(folderPosterPaths[idx])"
           class="mini-video-thumb {{ 'folder-preview-' + idx }}"
@@ -47,11 +52,13 @@
           loop
           autoplay
         ></video>
-      </ng-container>
+      }
+    }
     </div>
 
+  } @else {
+
     <!-- ========================== UP FOLDER ========================== -->
-    <ng-template #upFolderDiv>
       <div
         class="video-box folder"
         (click)="   videoClick.emit({ mouseEvent: $event })"
@@ -62,42 +69,40 @@
           <app-icon [icon]="'icon-chevron-left'"></app-icon>
         </div>
       </div>
-    </ng-template>
+    }
 
     <!-- ==========================FOLDER TEXT ========================== -->
+  @if (showMeta && video.fileName !== '*UP*') {
     <span
-      *ngIf="showMeta && video.fileName !== '*UP*'"
       [ngClass]="{ 'larger-font': largerFont }"
       [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
       class="title"
     >
       {{ video.fileName }}
-      <div class="fileSize" *ngIf="showMeta">
+    @if (showMeta) {
+      <div class="fileSize">
         {{ video.fileSize | fileSizePipe }} [{{ video.fileSizeDisplay }} files]
       </div>
+    }
     </span>
+
+  }
 
   </div>
 
+} @else {   <!-- END of folder @if FOLDER VIEW -- END -->
+
   <!-- ================================= SINGLE CLIP ================================= -->
 
-  <ng-template #singleThumbnailDiv>
+  <div class="video-box" [ngStyle]="{ height: imgHeight + 'px' }">
 
-  <div
-    class="video-box"
-    [ngStyle]="{ height: imgHeight + 'px' }"
-  >
-    <app-icon
-      *ngIf="video.selected"
-      class="selected"
-      [icon]="'icon-show-more-info'"
-    ></app-icon>
-    <span *ngIf="showMeta" class="time">{{ video.durationDisplay }}</span>
-    <span *ngIf="showMeta" class="rez">{{ video.resolution }}</span>
+    @if (video.selected) { <app-icon class="selected" [icon]="'icon-show-more-info'"></app-icon> }
+    @if (showMeta) {       <span class="time">{{ video.durationDisplay }}</span> }
+    @if (showMeta) {       <span class="rez">{{ video.resolution }}</span> }
 
     <!-- ========================== regular view ========================== -->
+  @if (noError && !autoplay) {
     <video
-      *ngIf="noError && !autoplay"
       [src]="pathToVideo"
       [poster]="sanitizer.bypassSecurityTrustUrl(poster)"
       [ngStyle]="{ 'height': imgHeight + 'px' }"
@@ -110,10 +115,11 @@
       (mouseout)="stopPreview($event)"
       loop
     ></video>
+  }
 
     <!-- ========================== AUTOPLAY view ========================== -->
+  @if (noError && autoplay && appInFocus) {
     <video
-      *ngIf="noError && autoplay && appInFocus"
       [src]="pathToVideo"
       [poster]="sanitizer.bypassSecurityTrustUrl(poster)"
       [ngStyle]="{ 'height': imgHeight + 'px' }"
@@ -128,22 +134,25 @@
       onloadeddata="setTimeout(() => { this.play(); }, Math.floor(Math.random() * 500))"
       loop
     ></video>
+  }
 
-  </div>
+  </div> <!-- end of video-box -->
 
   <!-- ================================= TEXT ================================= -->
-
+@if (showMeta) {
   <span
-    *ngIf="showMeta"
     [ngClass]="{ 'larger-font': largerFont }"
     [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
     class="title"
-  >
+    >
     {{ video.cleanName }}
-    <div class="fileSize" *ngIf="showMeta">
+  @if (showMeta) {
+    <div class="fileSize">
       {{ showMeta ? '(' + video.fileSizeDisplay + ')' : '' }}
     </div>
+  }
   </span>
+}
 
   <app-icon
     class="sheet-icon"
@@ -152,6 +161,7 @@
     [ngStyle]="{
       'opacity': (this.hover ? 1 : 0)
     }"></app-icon>
-  </ng-template>
+
+} <!-- end of the @else -->
 
 </div>
