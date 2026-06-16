@@ -1,6 +1,4 @@
-@if (settingsButtons['resolutionFilter'].toggled) {
 
-<div>
   <div class="frequency-graph-container">
     @for (resolution of resolutionFreqArr; track resolution; let i = $index) {
       <div
@@ -11,7 +9,7 @@
       </div>
       <div
         [ngClass]="{ resDisabled: (i < freqLeftBound) || (i >= freqRightBound) }"
-        class="resolutionName"
+        class="resolution-name"
       >
         {{ resolutionNames[i] }}
       </div>
@@ -25,6 +23,3 @@
     [minimumValue]="0"
     [steps]="4"
   ></app-slider-filter>
-</div>
-
-}

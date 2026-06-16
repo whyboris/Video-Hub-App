@@ -5,10 +5,7 @@ import type { SettingsButtonsType } from '../../common/settings-buttons';
   standalone: false,
   selector: 'app-resolution-filter',
   templateUrl: './resolution-filter.component.html',
-  styleUrls: [
-    '../resolution.scss',
-    './resolution-filter.component.scss'
-  ]
+  styleUrls: ['../resolution.scss']
 })
 export class ResolutionFilterComponent {
 

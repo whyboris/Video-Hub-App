@@ -60,6 +60,7 @@ import {
   buttonAnimation,
   donutAppear,
   filterItemAppear,
+  sliderAppear,
   historyItemRemove,
   modalAnimation,
   myWizardAnimation,
@@ -100,6 +101,7 @@ import {
     rightClickAnimation,
     rightClickContentAnimation,
     similarResultsText,
+    sliderAppear,
     slowFadeIn,
     slowFadeOut,
     topAnimation

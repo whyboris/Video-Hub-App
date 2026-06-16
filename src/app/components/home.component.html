@@ -517,7 +517,7 @@
 
       <!-- durationFilter -->
     @if (settingsButtons['durationFilter'].toggled) {
-      <div>
+      <div class="slider-container" @sliderAppear>
         <app-slider-filter
           (newSliderFilterSelected)="newLengthFilterSelected($event)"
           [darkMode]="settingsButtons['darkMode'].toggled"
@@ -532,7 +532,7 @@
 
       <!-- sizeFilter -->
     @if (settingsButtons['sizeFilter'].toggled) {
-      <div>
+      <div class="slider-container" @sliderAppear>
         <app-slider-filter
           (newSliderFilterSelected)="newSizeFilterSelected($event)"
           [darkMode]="settingsButtons['darkMode'].toggled"
@@ -547,7 +547,7 @@
 
       <!-- timesPlayedFilter -->
     @if (settingsButtons['timesPlayedFilter'].toggled) {
-      <div>
+      <div class="slider-container" @sliderAppear>
         <app-slider-filter
           (newSliderFilterSelected)="newTimesPlayedFilterSelected($event)"
           [darkMode]="settingsButtons['darkMode'].toggled"
@@ -562,7 +562,7 @@
 
       <!-- yearFilter -->
     @if (settingsButtons['yearFilter'].toggled) {
-      <div>
+      <div class="slider-container" @sliderAppear>
         <app-slider-filter
             (newSliderFilterSelected)="newYearFilterSelected($event)"
             [darkMode]="settingsButtons['darkMode'].toggled"
@@ -575,7 +575,9 @@
       </div>
     }
 
-      <!-- resolution filter & its frequency histogram -->
+    <!-- resolution filter & its frequency histogram -->
+    @if (settingsButtons['resolutionFilter'].toggled) {
+      <div class="slider-container" @sliderAppear>
       <app-resolution-filter
         (newResFilterSelected)="newResFilterSelected($event)"
 
@@ -585,8 +587,12 @@
         [resolutionNames]="resolutionNames"
         [settingsButtons]="settingsButtons"
       ></app-resolution-filter>
+      </div>
+    }
 
       <!-- star filter & its frequency histogram -->
+    @if (settingsButtons['starFilter'].toggled) {
+      <div class="slider-container" @sliderAppear>
       <app-star-filter
         (newStarFilterSelected)="newStarFilterSelected($event)"
 
@@ -596,6 +602,8 @@
         [starRightBound]="starRightBound"
         [starRatingNames]="starRatingNames"
       ></app-star-filter>
+      </div>
+    }
 
       <!-- Lev Distance -->
     @if (showSimilar) {

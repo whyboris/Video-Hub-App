@@ -5,20 +5,17 @@ import type { SettingsButtonsType } from '../../common/settings-buttons';
   standalone: false,
   selector: 'app-star-filter',
   templateUrl: './star-filter.component.html',
-  styleUrls: [
-    '../resolution.scss',
-    './star-filter.component.scss'
-  ]
+  styleUrls: ['../resolution.scss']
 })
 export class StarFilterComponent {
 
   @Output() newStarFilterSelected = new EventEmitter<any>();
 
   @Input() settingsButtons: SettingsButtonsType;
-  @Input() starLeftBound;
-  @Input() starRatingFreqArr;
-  @Input() starRatingNames;
-  @Input() starRightBound;
+  @Input() starLeftBound: number;
+  @Input() starRatingFreqArr: number[];
+  @Input() starRatingNames: string[];
+  @Input() starRightBound: number;
 
   constructor() { }
 
