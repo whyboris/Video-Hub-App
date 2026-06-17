@@ -4,7 +4,7 @@
   class="close-settings close-rename"
   title="{{ 'RIGHTCLICK.cancelRename' | translate }}"
 >
-  <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
+  <app-icon class="close-modal-icon" [icon]="'icon-close'" />
 </div>
 
 <span class="rename-heading">{{ 'RIGHTCLICK.renameTitle' | translate }}</span>
@@ -19,7 +19,7 @@
   [largerFont]="true"
   [showMeta]="true"
   [video]="currentRightClickedItem"
-></app-filmstrip-item>
+ />
 
 <span class="rename-from">{{ 'RIGHTCLICK.renameFrom' | translate }}</span>
 <span class="rename-to">{{ 'RIGHTCLICK.renameTo' | translate }}</span>
@@ -31,4 +31,4 @@
   [darkMode]="settingsButtons['darkMode'].toggled"
 
   [renameResponse]="renameResponse.asObservable()"
-></app-rename-file>
+ />

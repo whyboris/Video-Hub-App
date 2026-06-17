@@ -22,10 +22,7 @@
   </div>
 
 @if (video.selected) {
-  <app-icon
-    class="selected"
-    [icon]="'icon-show-more-info'"
-  ></app-icon>
+  <app-icon class="selected" [icon]="'icon-show-more-info'" />
 }
 
 @if (showFavorites) {
@@ -33,8 +30,8 @@
     (click)="toggleHeart()"
     class="heart"
     [ngClass]="{ 'heart-lit' : video.stars === 5.5 }"
-    [icon]="'icon-heart'">
-  </app-icon>
+    [icon]="'icon-heart'"
+   />
 }
 
 @if (showMeta && !compactView) {

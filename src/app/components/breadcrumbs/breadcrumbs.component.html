@@ -11,7 +11,7 @@
   class="breadcrumbs"
   @breadcrumbsAppear
 >
-  <app-icon class="breadcrumb-folder-icon" [icon]="'icon-folder-blank'" (click)="breadcrumbHomeIconClick.emit()"></app-icon>
+  <app-icon class="breadcrumb-folder-icon" [icon]="'icon-folder-blank'" (click)="breadcrumbHomeIconClick.emit()" />
 
 @for (item of folderViewNavigationPath.split('/'); track item; let idx = $index) {
   <span

@@ -37,12 +37,7 @@
 }
 
 @if (tag.removable) {
-  <app-icon
-    [icon]="'icon-close'"
-    class="remove-tag"
-    (click)="removeTag(tag.name)"
-  >
-  </app-icon>
+  <app-icon [icon]="'icon-close'" class="remove-tag" (click)="removeTag(tag.name)" />
 }
 
 </div>

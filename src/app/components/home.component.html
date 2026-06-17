@@ -11,7 +11,7 @@
     [macVersion]="macVersion"
     [progressString]="progressString"
     [settingsButtons]="settingsButtons"
-  ></app-title-bar>
+   />
 
 @if (flickerReduceOverlay === true) {
   <div
@@ -42,7 +42,7 @@
     [timeRemaining]="timeExtractionRemaining"
     [darkMode]="settingsButtons['darkMode'].toggled"
     @donutAppear
-  ></app-donut>
+   />
 }
 
 <!-- OVERLAY to cancel out right click modal -->
@@ -140,8 +140,7 @@
 
     [selectedSourceFolder]="sourceFolderService.selectedSourceFolder[sheetItemToDisplay.inputSource].path"
     [renameResponse]="renameFileResponseBehaviorSubject"
-  >
-  </app-thumbnail-sheet>
+   />
 }
 
 <!-- ===========    RENAMING MODAL    =========== -->
@@ -160,7 +159,7 @@
     [settingsButtons]="settingsButtons"
 
     [renameResponse]="renameFileResponseBehaviorSubject"
-  ></app-rename-modal>
+   />
 }
 
   <!-- ===========    AUTO-GENERATED TAGS MODAL    =========== -->
@@ -174,12 +173,9 @@
       class="close-settings"
       title="{{ 'SETTINGS.closeSettings' | translate }}"
     >
-      <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
+      <app-icon class="close-modal-icon" [icon]="'icon-close'" />
     </div>
-    <app-tags-component
-      [hubName]="appState.hubName"
-      (tagClicked)="autoTagClicked($event)"
-    ></app-tags-component>
+    <app-tags-component [hubName]="appState.hubName" (tagClicked)="autoTagClicked($event)" />
   </div>
 }
 
@@ -228,7 +224,7 @@
         class="close-settings close-settings-fade-out-override"
         title="{{ 'SETTINGS.closeSettings' | translate }}"
       >
-        <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
+        <app-icon class="close-modal-icon" [icon]="'icon-close'" />
       </div>
     </div>
 
@@ -252,7 +248,7 @@
       [settingTabToShow]="settingTabToShow"
       [settingsButtons]="settingsButtons"
       [versionNumber]="versionNumber"
-    ></app-settings>
+     />
 
     <!-- HUB STATISTICS / Current Hub Settings -->
 
@@ -274,13 +270,13 @@
         [numberScreenshotsDeleted]="numberScreenshotsDeletedBehaviorSubject.asObservable()"
         [oldFolderReconnected]="oldFolderReconnectedBehaviorSubject.asObservable()"
         [serverDetails]="serverDetailsBehaviorSubject.asObservable()"
-      ></app-statistics>
+       />
     </div>
   }
     <!-- KEYBOARD SHORTCUTS -->
   @if (settingTabToShow == 4) {
     <div class="shortcut-menu">
-      <app-shortcuts [macVersion]="macVersion"></app-shortcuts>
+      <app-shortcuts [macVersion]="macVersion" />
     </div>
   }
   </div>
@@ -302,7 +298,7 @@
       (onFileWordClicked)="handleFileWordClicked($event)"
       (onFolderWordClicked)="handleFolderWordClicked($event)"
       (onOpenInExplorer)="openInExplorer()"
-    ></app-top-component>
+     />
   </header>
 }
 
@@ -331,7 +327,7 @@
         [appState]="appState"
         [settingsButtonsGroups]="settingsButtonsGroups"
         [settingsButtons]="settingsButtons"
-      ></app-ribbon>
+       />
 
       <!-- GEAR BUTTON -->
       <div
@@ -340,7 +336,7 @@
         class="gearButton"
         title="{{ 'SETTINGS.settings' | translate }}"
       >
-        <app-icon [icon]="'icon-gear'"></app-icon>
+        <app-icon [icon]="'icon-gear'" />
       </div>
     @if (importStage !== 'done' && settingsButtons['hideTop'].toggled) {
       <div
@@ -360,7 +356,7 @@
           'hiding-settings-menu-dark': settingsButtons['darkMode'].toggled
         }"
     >
-      <app-icon class="mini-chevron" [icon]="'icon-chevron-down-mini'"></app-icon>
+      <app-icon class="mini-chevron" [icon]="'icon-chevron-down-mini'" />
     </div>
 
     <!-- BREADCRUMBS -->
@@ -371,7 +367,7 @@
       [appState]="appState"
       [folderViewNavigationPath]="folderViewNavigationPath"
       [settingsButtons]="settingsButtons"
-    ></app-breadcrumbs>
+     />
 
     <!-- ============================================== -->
     <!-- ===========         SIDEBAR        =========== -->
@@ -430,12 +426,12 @@
         [filters]="filters"
         [settingsButtons]="settingsButtons"
         [tagTypeAhead]="tagTypeAhead"
-      ></app-search-boxes>
+       />
 
       <!-- magic search -->
     @if (settingsButtons['magic'].toggled) {
       <div @filterItemAppear>
-        <app-icon class="input-icon" [icon]="settingsButtons['magic'].iconName"></app-icon>
+        <app-icon class="input-icon" [icon]="settingsButtons['magic'].iconName" />
         <input
           #magicSearch
           (keydown.escape)="magicSearchString = ''"
@@ -462,7 +458,7 @@
     <!-- regex search -->
     @if (settingsButtons['regex'].toggled) {
       <div @filterItemAppear>
-        <app-icon class="input-icon" [icon]="settingsButtons['regex'].iconName"></app-icon>
+        <app-icon class="input-icon" [icon]="settingsButtons['regex'].iconName" />
         <input
           #regexSearch
           (keydown.escape)="regexSearchString = ''"
@@ -491,7 +487,7 @@
       <!-- fuzzy search -->
     @if (settingsButtons['fuzzy'].toggled) {
       <div @filterItemAppear>
-        <app-icon class="input-icon" [icon]="settingsButtons['fuzzy'].iconName"></app-icon>
+        <app-icon class="input-icon" [icon]="settingsButtons['fuzzy'].iconName" />
         <input
           #fuzzySearch
           (keydown.escape)="fuzzySearchString = ''"
@@ -526,7 +522,7 @@
           [minimumValue]="0"
           [lengthFilter]="true"
           [steps]="50"
-        ></app-slider-filter>
+         />
       </div>
     }
 
@@ -541,7 +537,7 @@
           [minimumValue]="0"
           [sizeFilter]="true"
           [steps]="50"
-        ></app-slider-filter>
+         />
       </div>
     }
 
@@ -556,7 +552,7 @@
           [minimumValue]="-1"
           [timesPlayed]="true"
           [steps]="50"
-        ></app-slider-filter>
+         />
       </div>
     }
 
@@ -571,7 +567,7 @@
             [minimumValue]="yearMinCutoff"
             [yearFilter]="true"
             [steps]="50"
-        ></app-slider-filter>
+         />
       </div>
     }
 
@@ -580,13 +576,12 @@
       <div class="slider-container" @sliderAppear>
       <app-resolution-filter
         (newResFilterSelected)="newResFilterSelected($event)"
-
         [freqLeftBound]="freqLeftBound"
         [freqRightBound]="freqRightBound"
         [resolutionFreqArr]="resolutionFreqArr"
         [resolutionNames]="resolutionNames"
         [settingsButtons]="settingsButtons"
-      ></app-resolution-filter>
+       />
       </div>
     }
 
@@ -595,13 +590,12 @@
       <div class="slider-container" @sliderAppear>
       <app-star-filter
         (newStarFilterSelected)="newStarFilterSelected($event)"
-
         [settingsButtons]="settingsButtons"
         [starRatingFreqArr]="starRatingFreqArr"
         [starLeftBound]="starLeftBound"
         [starRightBound]="starRightBound"
         [starRatingNames]="starRatingNames"
-      ></app-star-filter>
+       />
       </div>
     }
 
@@ -658,7 +652,7 @@
       <app-sort-order
         (sortTypeChange)="selectFilterOrder($event)"
         [settingsButtons]="settingsButtons"
-      ></app-sort-order>
+       />
 
     @if (settingsButtons['hideOffline'].toggled) {
       <div
@@ -679,7 +673,7 @@
         (openFromHistory)="openFromHistory($event)"
         [settingsButtons]="settingsButtons"
         [vhaFileHistory]="vhaFileHistory"
-      ></app-recently-opened-hubs>
+       />
 
     </div> <!-- closing the SIDEBAR -->
 
@@ -858,7 +852,7 @@
                       + 'px',
               width: previewWidth
             }"
-        ></app-thumbnail>
+         />
       }
     }
 
@@ -896,7 +890,7 @@
                       + (settingsButtons['compactView'].toggled ? 0 : 10)
                       + 'px'
             }"
-        ></app-filmstrip-item>
+         />
       }
     }
 
@@ -927,7 +921,7 @@
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
 
           style="display: block"
-        ></app-full-item>
+         />
       }
     }
 
@@ -952,7 +946,7 @@
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
 
           style="display: block"
-        ></app-file-item>
+         />
       }
     }
 
@@ -999,7 +993,7 @@
           [renameResponse]="renameFileResponseBehaviorSubject"
 
           [ngStyle]="{ display: appState.currentView === 'showDetails' ? 'block' : 'inline-block' }"
-        ></app-details-item>
+         />
       }
     }
 
@@ -1036,7 +1030,7 @@
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
 
           style="display: inline-block"
-        ></app-clip-item>
+         />
       }
     }
 
@@ -1139,7 +1133,7 @@
     class="close-bottom-tray"
     title="{{ 'SETTINGS.closeBottomTray' | translate }}"
   >
-    <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
+    <app-icon class="close-modal-icon" [icon]="'icon-close'" />
   </div>
   <!-- MOST SIMILAR & RECENTLY PLAYED -->
 @if (settingsButtons['showRelatedVideosTray'].toggled
@@ -1154,7 +1148,7 @@
     [previewWidthRelated]="previewWidthRelated"
     [settingsButtons]="settingsButtons"
     [showRecentNotSimilar]="settingsButtons['showRecentlyPlayed'].toggled"
-  ></app-similar-tray>
+   />
 }
   <!-- TAGS -->
 @if (settingsButtons['showTagTray'].toggled) {
@@ -1166,7 +1160,7 @@
     [batchTaggingMode]="batchTaggingMode"
     [darkMode]="settingsButtons['darkMode'].toggled"
     [settingsButtons]="settingsButtons"
-  ></app-tag-tray>
+   />
 }
   <!-- WORD CLOUD -->
 @if (settingsButtons['showFreq'].toggled) {
@@ -1174,9 +1168,9 @@
     class="cloud-frequency"
   >
     <div class="word-cloud-buttons">
-      <app-button (toggleButton)="toggleButton($any($event))" [button]="'manualTags'"     [settingsButtons]="settingsButtons"></app-button>
-      <app-button (toggleButton)="toggleButton($any($event))" [button]="'autoFileTags'"   [settingsButtons]="settingsButtons"></app-button>
-      <app-button (toggleButton)="toggleButton($any($event))" [button]="'autoFolderTags'" [settingsButtons]="settingsButtons"></app-button>
+      <app-button (toggleButton)="toggleButton($any($event))" [button]="'manualTags'"     [settingsButtons]="settingsButtons" />
+      <app-button (toggleButton)="toggleButton($any($event))" [button]="'autoFileTags'"   [settingsButtons]="settingsButtons" />
+      <app-button (toggleButton)="toggleButton($any($event))" [button]="'autoFolderTags'" [settingsButtons]="settingsButtons" />
     </div>
   @if (settingsButtons['manualTags'].toggled
     || settingsButtons['autoFileTags'].toggled
@@ -1225,7 +1219,7 @@
         [largerFont]="settingsButtons['fontSizeLarger'].toggled"
         [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
         [showMeta]="false"
-      ></app-thumbnail>
+       />
 
       <app-meta-item
         class="meta-container top-offset"
@@ -1248,7 +1242,7 @@
 
         [selectedSourceFolder]="sourceFolderService.selectedSourceFolder[currentClickedItem.inputSource].path"
         [renameResponse]="renameFileResponseBehaviorSubject.asObservable()"
-      ></app-meta-item>
+       />
     } @else {
       <div class="must-click-first" [ngClass]="{ 'must-click-dark-mode': settingsButtons['darkMode'].toggled }">
         {{ 'TAGS.detailsBottomTray' | translate }}
@@ -1277,8 +1271,7 @@
   [importStage]="importStage"
   [vhaFileHistory]="vhaFileHistory"
   [wizard]="wizard"
->
-</app-wizard>
+ />
 }
 
 <!-- TAG COLOR PICKER -->
@@ -1289,6 +1282,5 @@
   [darkMode]="settingsButtons['darkMode'].toggled"
   (colorSelected)="onTagColorSelected($event)"
   (close)="onTagColorPickerClose()"
->
-</app-tag-color-picker>
+ />
 }

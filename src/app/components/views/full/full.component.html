@@ -12,8 +12,8 @@
     (click)="toggleHeart()"
     class="heart"
     [ngClass]="{ 'heart-lit' : video.stars === 5.5 }"
-    [icon]="'icon-heart'">
-  </app-icon>
+    [icon]="'icon-heart'"
+   />
 }
 
 @for (row of rowOffsets; track row) {
@@ -32,10 +32,7 @@
 }
 
 @if (video.selected) {
-  <app-icon
-    class="selected"
-    [icon]="'icon-show-more-info'"
-  ></app-icon>
+  <app-icon class="selected" [icon]="'icon-show-more-info'" />
 }
 
 @if (showMeta) {

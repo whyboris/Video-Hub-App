@@ -64,7 +64,7 @@
         [ngStyle]="{ height: imgHeight + 'px' }"
       >
         <div class="up-icon">
-          <app-icon [icon]="'icon-chevron-left'"></app-icon>
+          <app-icon [icon]="'icon-chevron-left'" />
         </div>
       </div>
     }
@@ -92,7 +92,7 @@
 
   <div class="video-box" [ngStyle]="{ height: imgHeight + 'px' }">
 
-    @if (video.selected) { <app-icon class="selected" [icon]="'icon-show-more-info'"></app-icon> }
+    @if (video.selected) { <app-icon class="selected" [icon]="'icon-show-more-info'" /> }
     @if (showMeta) {       <span class="time">{{ video.durationDisplay }}</span> }
     @if (showMeta) {       <span class="rez">{{ video.resolution }}</span> }
 
@@ -156,7 +156,7 @@
     (click)="sheetClick.emit()"
     [ngStyle]="{
       'opacity': (this.hover ? 1 : 0)
-    }"></app-icon>
+    }" />
 
 } <!-- end of the @else -->
 

@@ -14,7 +14,7 @@
       </div>
     }
 
-      <app-icon [icon]="'icon-folder-blank'" class="icon-folder-lol"></app-icon>
+      <app-icon [icon]="'icon-folder-blank'" class="icon-folder-lol" />
       <div
         class="folder-name"
         [ngClass]="{ 'folder-name-dark-mode': darkMode }"
@@ -41,7 +41,7 @@
         class="back-icon"
         [icon]="'icon-chevron-left'"
         [ngClass]="{ 'back-icon-dark-mode': darkMode }"
-      ></app-icon>
+       />
     }
 
   } @else {
@@ -49,10 +49,7 @@
   <!-- INDIVIDUAL FILE BLOCK -->
 
   @if (video.selected) {
-    <app-icon
-      class="selected-file-view"
-      [icon]="'icon-show-more-info'"
-    ></app-icon>
+    <app-icon class="selected-file-view" [icon]="'icon-show-more-info'" />
   }
 
   @if (showFavorites) {
@@ -60,8 +57,8 @@
       (click)="toggleHeart()"
       class="heart"
       [ngClass]="{ 'heart-lit' : video.stars === 5.5, 'heart-selected' : video.selected }"
-      [icon]="'icon-heart'">
-    </app-icon>
+      [icon]="'icon-heart'"
+     />
   }
 
   @if (showMeta) {
