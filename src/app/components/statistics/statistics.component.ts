@@ -1,6 +1,6 @@
 import type { OnInit, OnDestroy } from '@angular/core';
-import { ChangeDetectorRef, input } from '@angular/core';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { ChangeDetectorRef, input, output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import type { Observable, Subscription } from 'rxjs';
 
@@ -34,9 +34,9 @@ export interface ServerDetails {
 })
 export class StatisticsComponent implements OnInit, OnDestroy {
 
-  @Output() deleteInputSourceFiles = new EventEmitter<number>();
-  @Output() finalArrayNeedsSaving = new EventEmitter<any>();
-  @Output() startServerOnPort = new EventEmitter<number>();
+  readonly deleteInputSourceFiles = output<number>();
+  readonly finalArrayNeedsSaving = output<any>();
+  readonly startServerOnPort = output<number>();
 
   readonly appState = input<AppStateInterface>(undefined);
   readonly hubName = input<string>(undefined);

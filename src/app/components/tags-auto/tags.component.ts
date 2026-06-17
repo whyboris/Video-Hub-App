@@ -1,5 +1,5 @@
 import type { OnDestroy, ElementRef, OnInit } from '@angular/core';
-import { Component, EventEmitter, Output, ViewChild, input } from '@angular/core';
+import { Component, ViewChild, input, output } from '@angular/core';
 
 import { AutoTagsSaveService } from './tags-save.service';
 import { AutoTagsService, WordAndFreq } from './autotags.service';
@@ -21,7 +21,7 @@ export class TagsComponent implements OnInit, OnDestroy {
 
   readonly hubName = input<string>(undefined); // if hubName changes, tagsService will recalculate, otherwise it will show cached
 
-  @Output() tagClicked = new EventEmitter<string>();
+  readonly tagClicked = output<string>();
 
   @ViewChild('filterInput', { static: false }) filterInput: ElementRef;
 

@@ -1,6 +1,6 @@
-import { ChangeDetectorRef, input } from '@angular/core';
+import { ChangeDetectorRef, input, output } from '@angular/core';
 import type { OnInit } from '@angular/core';
-import { Component, HostListener, Input, Output, EventEmitter } from '@angular/core';
+import { Component, HostListener, Input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { FilePathService } from '../file-path.service';
@@ -24,9 +24,9 @@ import { metaAppear, textAppear } from '../../../common/animations';
 })
 export class ClipComponent implements OnInit {
 
-  @Output() rightClick = new EventEmitter<RightClickEmit>();
-  @Output() sheetClick = new EventEmitter<any>(); // does not emit data of any kind
-  @Output() videoClick = new EventEmitter<VideoClickEmit>();
+  readonly rightClick = output<RightClickEmit>();
+  readonly sheetClick = output<any>(); // does not emit data of any kind
+  readonly videoClick = output<VideoClickEmit>();
 
   @Input() video: ImageElement;
 

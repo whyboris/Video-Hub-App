@@ -1,5 +1,5 @@
 import type { OnInit, ElementRef} from '@angular/core';
-import { Component, ViewChild, Output, EventEmitter, input } from '@angular/core';
+import { Component, ViewChild, input, output } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import type { BehaviorSubject } from 'rxjs';
@@ -30,9 +30,9 @@ export class DetailsComponent implements OnInit {
 
   @ViewChild('filmstripHolder', { static: false }) filmstripHolder: ElementRef;
 
-  @Output() filterTag = new EventEmitter<TagEmit>();
-  @Output() videoClick = new EventEmitter<VideoClickEmit>();
-  @Output() rightClick = new EventEmitter<RightClickEmit>();
+  readonly filterTag = output<TagEmit>();
+  readonly videoClick = output<VideoClickEmit>();
+  readonly rightClick = output<RightClickEmit>();
 
   readonly video = input<ImageElement>(undefined);
 

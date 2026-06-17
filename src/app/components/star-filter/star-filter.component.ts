@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import type { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
@@ -9,7 +9,7 @@ import type { SettingsButtonsType } from '../../common/settings-buttons';
 })
 export class StarFilterComponent {
 
-  @Output() newStarFilterSelected = new EventEmitter<any>();
+  readonly newStarFilterSelected = output<any>();
 
   readonly settingsButtons = input<SettingsButtonsType>(undefined);
   readonly starLeftBound = input<number>(undefined);

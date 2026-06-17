@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 import type { SettingsButtonKey, SettingsButtonsType } from '../../common/settings-buttons';
 
@@ -17,7 +17,7 @@ export class ButtonComponent {
   readonly settingsButtons = input<SettingsButtonsType>(undefined);
   readonly neverDarkMode = input<boolean>(undefined);
 
-  @Output() toggleButton = new EventEmitter<string>();
+  readonly toggleButton = output<string>();
 
   constructor() { }
 }

@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 import type { BehaviorSubject } from 'rxjs';
 
@@ -19,7 +19,7 @@ import type { SettingsButtonsType } from '../../common/settings-buttons';
 })
 export class RenameModalComponent {
 
-  @Output() closeRename = new EventEmitter<any>();
+  readonly closeRename = output<any>();
 
   readonly appState = input<AppStateInterface>(undefined);
   readonly basePath = input<string>(undefined);

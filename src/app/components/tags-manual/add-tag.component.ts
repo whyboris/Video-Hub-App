@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { ManualTagsService } from './manual-tags.service';
 
 @Component({
@@ -12,7 +12,7 @@ export class AddTagComponent {
 
   readonly darkMode = input<boolean>(undefined);
 
-  @Output() tag = new EventEmitter<string>();
+  readonly tag = output<string>();
 
   currentText = '';
   typeAhead = '';

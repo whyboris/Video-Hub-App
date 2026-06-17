@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import type { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
@@ -9,9 +9,9 @@ import type { SettingsButtonsType } from '../../common/settings-buttons';
 })
 export class TitleBarComponent {
 
-  @Output() initiateClose = new EventEmitter<any>();
-  @Output() initiateMaximize = new EventEmitter<any>();
-  @Output() initiateMinimize = new EventEmitter<any>();
+  readonly initiateClose = output<any>();
+  readonly initiateMaximize = output<any>();
+  readonly initiateMinimize = output<any>();
 
   readonly appState = input(undefined);
   readonly demo = input<boolean>(undefined);

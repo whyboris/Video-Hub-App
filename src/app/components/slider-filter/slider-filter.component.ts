@@ -1,5 +1,5 @@
 import type { OnInit, OnDestroy} from '@angular/core';
-import { Component, Output, EventEmitter, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 @Component({
   standalone: false,
@@ -19,7 +19,7 @@ export class SliderFilterComponent implements OnInit, OnDestroy {
   readonly yearFilter = input<boolean>(false);
   readonly labelFormatPipe = input<string>(undefined);
 
-  @Output() newSliderFilterSelected = new EventEmitter<number[]>();
+  readonly newSliderFilterSelected = output<number[]>();
 
   step: number;
   hover = false;

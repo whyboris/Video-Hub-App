@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import type { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
@@ -9,7 +9,7 @@ import type { SettingsButtonsType } from '../../common/settings-buttons';
 })
 export class ResolutionFilterComponent {
 
-  @Output() newResFilterSelected = new EventEmitter<any>();
+  readonly newResFilterSelected = output<any>();
 
   readonly freqLeftBound = input(undefined);
   readonly freqRightBound = input(undefined);

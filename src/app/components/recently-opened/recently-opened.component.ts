@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, input } from '@angular/core';
+import { Component, Input, input, output } from '@angular/core';
 import type { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
@@ -9,7 +9,7 @@ import type { SettingsButtonsType } from '../../common/settings-buttons';
 })
 export class RecentlyOpenedComponent {
 
-  @Output() openFromHistory = new EventEmitter<number>();
+  readonly openFromHistory = output<number>();
 
   @Input() settingsButtons: SettingsButtonsType;
   readonly vhaFileHistory = input(undefined);
