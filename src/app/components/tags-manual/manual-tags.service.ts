@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
 
 import type { ImageElement } from '../../../../interfaces/final-object.interface';
-import type { ColorPickerPosition } from '../tag-color-picker/tag-color-picker.component';
+import type { ContextMenuCoordinate } from '../../../../interfaces/shared-interfaces';
 
 @Injectable()
 export class ManualTagsService {
@@ -13,7 +13,7 @@ export class ManualTagsService {
   pipeToggleHack = false;
 
   // Color picker state - shared across all components
-  showColorPickerSubject = new Subject<{ tagName: string, currentColor: string, position: ColorPickerPosition }>();
+  showColorPickerSubject = new Subject<{ tagName: string, currentColor: string, position: ContextMenuCoordinate }>();
   hideColorPickerSubject = new Subject<void>();
   tagColorUpdatedSubject = new Subject<void>(); // Notify when tag color changes
 
