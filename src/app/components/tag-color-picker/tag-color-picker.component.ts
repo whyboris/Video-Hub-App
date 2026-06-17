@@ -1,9 +1,6 @@
 import { Component, OnInit, input, output } from '@angular/core';
 
-export interface ColorPickerPosition {
-  x: number;
-  y: number;
-}
+import { ContextMenuCoordinate } from '../../../../interfaces/shared-interfaces';
 
 @Component({
   standalone: false,
@@ -13,7 +10,7 @@ export interface ColorPickerPosition {
 })
 export class TagColorPickerComponent implements OnInit {
 
-  readonly position = input<ColorPickerPosition>(undefined);
+  readonly position = input<ContextMenuCoordinate>(undefined);
   readonly currentColor = input<string>(undefined);
   readonly darkMode = input<boolean>(undefined);
 

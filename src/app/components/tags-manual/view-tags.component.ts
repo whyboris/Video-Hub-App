@@ -4,7 +4,6 @@ import { Component, Input, input, output, viewChild } from '@angular/core';
 import { ManualTagsService } from './manual-tags.service';
 
 import type { Tag, TagEmit } from '../../../../interfaces/shared-interfaces';
-import type { ColorPickerPosition } from '../tag-color-picker/tag-color-picker.component';
 
 @Component({
   standalone: false,
