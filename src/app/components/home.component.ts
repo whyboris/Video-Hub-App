@@ -1,6 +1,6 @@
 import type { AfterViewInit, ElementRef, OnInit } from '@angular/core';
-import { ChangeDetectorRef, NgZone } from '@angular/core';
-import { Component, HostListener, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, NgZone, viewChild } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import * as path from 'path';
@@ -109,13 +109,13 @@ import {
 })
 export class HomeComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('fuzzySearch', { static: false }) fuzzySearch: ElementRef;
-  @ViewChild('magicSearch', { static: false }) magicSearch: ElementRef;
-  @ViewChild('searchRef',   { static: false }) searchRef:   ElementRef;
+  readonly fuzzySearch = viewChild<ElementRef>('fuzzySearch');
+  readonly magicSearch = viewChild<ElementRef>('magicSearch');
+  readonly searchRef = viewChild<ElementRef>('searchRef');
 
-  @ViewChild(SortOrderComponent) sortOrderRef: SortOrderComponent;
+  readonly sortOrderRef = viewChild(SortOrderComponent);
 
-  @ViewChild(VirtualScrollerComponent, { static: false }) virtualScroller: VirtualScrollerComponent;
+  readonly virtualScroller = viewChild(VirtualScrollerComponent);
 
   defaultSettingsButtons = JSON.parse(JSON.stringify(SettingsButtons));
   settingsButtons: SettingsButtonsType = SettingsButtons;
@@ -763,8 +763,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.setUpTimesPlayedFilterValues(this.imageElementService.imageElements);
       this.setUpYearFilterValues(this.imageElementService.imageElements);
 
-      if (this.sortOrderRef.sortFilterElement) {
-        this.sortOrderRef.sortFilterElement.nativeElement.value = this.sortType;
+      const sortOrderRef = this.sortOrderRef();
+      const sortFilterElement = sortOrderRef.sortFilterElement();
+      if (sortFilterElement) {
+        sortFilterElement.nativeElement.value = this.sortType;
       }
 
       this.cd.detectChanges();
@@ -1012,7 +1014,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     clearTimeout(this.windowResizeTimeout);
     this.windowResizeTimeout = setTimeout(() => {
       // console.log('Virtual scroll refreshed');
-      this.virtualScroller.refresh();
+      this.virtualScroller().refresh();
       this.computePreviewWidth();
     }, delay);
   }
@@ -1331,7 +1333,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   handleFolderIconClicked(filter: string): void {
     if (this.folderNavigationScrollOffset === 0) {
-      this.folderNavigationScrollOffset = this.virtualScroller.viewPortInfo.scrollStartPosition;
+      this.folderNavigationScrollOffset = this.virtualScroller().viewPortInfo.scrollStartPosition;
     }
 
     this.folderViewNavigationPath = filter;
@@ -1357,7 +1359,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   scrollAppropriately(filter: string) {
     if (filter === '') {
       setTimeout(() => {
-        this.virtualScroller.scrollToPosition(this.folderNavigationScrollOffset, 0);
+        this.virtualScroller().scrollToPosition(this.folderNavigationScrollOffset, 0);
         this.folderNavigationScrollOffset = 0;
       }, 1);
     } else {
@@ -1574,8 +1576,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
         }
         this.showSidebar();
         setTimeout(() => {
-          if (this.searchRef.nativeElement.querySelector('#fileIntersection')) {
-            this.searchRef.nativeElement.querySelector('#fileIntersection').focus();
+          const searchRef = this.searchRef();
+          if (searchRef.nativeElement.querySelector('#fileIntersection')) {
+            searchRef.nativeElement.querySelector('#fileIntersection').focus();
           }
         }, 1);
         break;
@@ -1586,7 +1589,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         }
         this.showSidebar();
         setTimeout(() => {
-          this.magicSearch.nativeElement.focus();
+          this.magicSearch().nativeElement.focus();
         }, 1);
         break;
 
@@ -1596,7 +1599,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         }
         this.showSidebar();
         setTimeout(() => {
-          this.fuzzySearch.nativeElement.focus();
+          this.fuzzySearch().nativeElement.focus();
         }, 1);
         break;
     }
@@ -1617,7 +1620,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.restoreViewSize(uniqueKey);
       this.appState.currentView = <SupportedView>uniqueKey;
       this.computeTextBufferAmount();
-      this.virtualScroller.invalidateAllCachedMeasurements();
+      this.virtualScroller().invalidateAllCachedMeasurements();
       this.scrollToTop();
 
       // ======== Bottom tray views buttons =========================
@@ -1652,7 +1655,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       // ======== Other buttons ========================
     } else if (uniqueKey === 'compactView') {
       this.toggleButtonOpposite(uniqueKey);
-      this.virtualScroller.refresh();
+      this.virtualScroller().refresh();
       if (
         this.settingsButtons['showThumbnails'].toggled
         || this.settingsButtons['showClips'].toggled
@@ -1692,8 +1695,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } else if (uniqueKey === 'sortOrder') {
       this.toggleButtonOpposite(uniqueKey);
       setTimeout(() => {
-        if (this.sortOrderRef.sortFilterElement) { // just in case, perform check
-          this.sortOrderRef.sortFilterElement.nativeElement.value = this.sortType;
+        const sortOrderRef = this.sortOrderRef();
+        const sortFilterElement = sortOrderRef.sortFilterElement();
+        if (sortFilterElement) { // just in case, perform check
+          sortFilterElement.nativeElement.value = this.sortType;
         }
       });
     } else if (uniqueKey === 'shuffleGalleryNow') {
@@ -1701,13 +1706,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.shuffleTheViewNow++;
       this.scrollToTop();
       // if sort filter is NOT showin on the sidebar, enable
-      if (!this.sortOrderRef.sortFilterElement) {
+      if (!this.sortOrderRef().sortFilterElement()) {
         this.settingsButtons['sortOrder'].toggled = true;
       }
       // and set the setting-option to `Random' after timeout to update view
       setTimeout(() => {
-        if (this.sortOrderRef.sortFilterElement) { // just in case, perform check
-          this.sortOrderRef.sortFilterElement.nativeElement.value = 'random';
+        const sortOrderRef = this.sortOrderRef();
+        const sortFilterElement = sortOrderRef.sortFilterElement();
+        if (sortFilterElement) { // just in case, perform check
+          sortFilterElement.nativeElement.value = 'random';
         }
       });
     }
@@ -1721,7 +1728,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
       if (uniqueKey === 'hideSidebar') {
         setTimeout(() => {
-          this.virtualScroller.refresh();
+          this.virtualScroller().refresh();
           this.computePreviewWidth();
         }, 300);
       }
@@ -1781,7 +1788,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
     this.currentImgsPerRow++;
     this.computePreviewWidth();
-    this.virtualScroller.invalidateAllCachedMeasurements();
+    this.virtualScroller().invalidateAllCachedMeasurements();
   }
 
   /**
@@ -1803,7 +1810,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.currentImgsPerRow--;
     }
     this.computePreviewWidth();
-    this.virtualScroller.invalidateAllCachedMeasurements();
+    this.virtualScroller().invalidateAllCachedMeasurements();
   }
 
   /**
@@ -2232,8 +2239,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.selectFilterOrder('lastPlayedDesc');
 
     setTimeout(() => {
-      if (this.sortOrderRef.sortFilterElement) { // just in case, perform check
-        this.sortOrderRef.sortFilterElement.nativeElement.value = 'lastPlayedDesc';
+      const sortOrderRef = this.sortOrderRef();
+      const sortFilterElement = sortOrderRef.sortFilterElement();
+      if (sortFilterElement) { // just in case, perform check
+        sortFilterElement.nativeElement.value = 'lastPlayedDesc';
       }
     });
   }

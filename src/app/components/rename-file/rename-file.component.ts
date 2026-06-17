@@ -1,6 +1,6 @@
 import type { OnInit, ElementRef, OnDestroy } from '@angular/core';
-import { ChangeDetectorRef, input } from '@angular/core';
-import { Component, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, input, viewChild } from '@angular/core';
+import { Component } from '@angular/core';
 
 import type { Observable, Subscription } from 'rxjs';
 
@@ -21,7 +21,7 @@ import type { RenameFileResponse } from '../../../../interfaces/shared-interface
   ]
 })
 export class RenameFileComponent implements OnInit, OnDestroy {
-  @ViewChild('renameFileInput', { static: false }) renameFileInput: ElementRef;
+  readonly renameFileInput = viewChild<ElementRef>('renameFileInput');
 
   readonly currentRightClickedItem = input<ImageElement>(undefined);
   readonly darkMode = input<boolean>(undefined);
@@ -48,7 +48,7 @@ export class RenameFileComponent implements OnInit, OnDestroy {
     this.renamingExtension = this.filePathService.getFileNameExtension(this.currentRightClickedItem().fileName);
 
     setTimeout(() => {
-      this.renameFileInput.nativeElement.focus();
+      this.renameFileInput().nativeElement.focus();
     }, 0);
 
     this.responseSubscription = this.renameResponse().subscribe((data: RenameFileResponse) => {

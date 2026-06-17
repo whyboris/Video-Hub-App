@@ -1,5 +1,5 @@
 import type { ElementRef} from '@angular/core';
-import { Component, Input, ViewChild, input, output } from '@angular/core';
+import { Component, Input, input, output, viewChild } from '@angular/core';
 
 import { ManualTagsService } from './manual-tags.service';
 
@@ -38,7 +38,7 @@ export class ViewTagsComponent {
   readonly tagClicked = output<TagEmit>();
   readonly tagRightClick = output<{ tag: Tag; event: MouseEvent; }>();
 
-  @ViewChild('dragHack', { static: false }) dragHack: ElementRef;
+  readonly dragHack = viewChild<ElementRef>('dragHack');
 
   constructor(
     public tagService: ManualTagsService
@@ -82,7 +82,7 @@ export class ViewTagsComponent {
   dragStart(event: DragEvent): void {
     event.dataTransfer.setData('text/plain', (event.target as HTMLElement).innerText);
 
-    const quickHack: Element = this.dragHack.nativeElement;
+    const quickHack: Element = this.dragHack().nativeElement;
 
     quickHack.innerHTML = (event.target as HTMLElement).innerText;
 

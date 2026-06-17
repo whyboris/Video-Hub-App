@@ -1,5 +1,5 @@
 import type { ElementRef} from '@angular/core';
-import { Component, Input, ViewChild, output } from '@angular/core';
+import { Component, Input, output, viewChild } from '@angular/core';
 
 import type { SortType } from '../../pipes/sorting.pipe';
 import { filterItemAppear } from '../../common/animations';
@@ -17,7 +17,7 @@ import type { SettingsButtonsType } from '../../common/settings-buttons';
 })
 export class SortOrderComponent {
 
-  @ViewChild('sortFilterElement', { static: false }) sortFilterElement: ElementRef;
+  readonly sortFilterElement = viewChild<ElementRef>('sortFilterElement');
 
   readonly sortTypeChange = output<SortType>();
 

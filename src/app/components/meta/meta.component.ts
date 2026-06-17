@@ -1,6 +1,6 @@
 import type { OnInit, ElementRef, OnDestroy } from '@angular/core';
-import { ChangeDetectorRef, input, output } from '@angular/core';
-import { Component, Input, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, input, output, viewChild } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import type { Subscription, Observable } from 'rxjs';
@@ -25,8 +25,8 @@ import { SettingsButtons } from '../../common/settings-buttons';
 })
 export class MetaComponent implements OnInit, OnDestroy {
 
-  @ViewChild('yearInput', { static: false }) yearInput: ElementRef;
-  @ViewChild('videoNotes', { static: false}) videoNotes: ElementRef;
+  readonly yearInput = viewChild<ElementRef>('yearInput');
+  readonly videoNotes = viewChild<ElementRef>('videoNotes');
 
   readonly filterTag = output<TagEmit>();
 
@@ -214,7 +214,7 @@ export class MetaComponent implements OnInit, OnDestroy {
       // when deleting the year, currVal is NaN
       this.yearHack = isNaN(currVal) ? undefined : currVal;
     }
-    this.yearInput.nativeElement.blur();
+    this.yearInput().nativeElement.blur();
     this.setYear(this.yearHack);
   }
 
@@ -227,7 +227,7 @@ export class MetaComponent implements OnInit, OnDestroy {
       this.yearHack = 2000;
       this.setYear(2000);
       setTimeout(() => {
-        this.yearInput.nativeElement.select();
+        this.yearInput().nativeElement.select();
       }, 1);
     }
   }
@@ -274,8 +274,9 @@ export class MetaComponent implements OnInit, OnDestroy {
    * @param event
    */
   saveVideoNotes(event): void {
-    console.log(this.videoNotes.nativeElement.value);
-    this.video.notes = this.videoNotes.nativeElement.value;
+    const videoNotes = this.videoNotes();
+    console.log(videoNotes.nativeElement.value);
+    this.video.notes = videoNotes.nativeElement.value;
   }
 
   ngOnDestroy(): void {

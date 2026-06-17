@@ -1,5 +1,5 @@
 import type { OnInit, ElementRef, OnDestroy } from '@angular/core';
-import { Component, Input, ViewChild, input, output } from '@angular/core';
+import { Component, Input, input, output, viewChild } from '@angular/core';
 
 import { FilePathService } from '../file-path.service';
 
@@ -23,7 +23,7 @@ import type { VideoClickEmit, RightClickEmit } from '../../../../../interfaces/s
 })
 export class ThumbnailComponent implements OnInit, OnDestroy {
 
-  @ViewChild('filmstripHolder', { static: false }) filmstripHolder: ElementRef;
+  readonly filmstripHolder = viewChild<ElementRef>('filmstripHolder');
 
   readonly sheetClick = output<any>(); // does not emit data of any kind
   readonly videoClick = output<VideoClickEmit>();
@@ -84,7 +84,7 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
   }
 
   mouseEntered() {
-    this.containerWidth = this.filmstripHolder.nativeElement.getBoundingClientRect().width;
+    this.containerWidth = this.filmstripHolder().nativeElement.getBoundingClientRect().width;
 
     if (this.thumbAutoAdvance()) {
       this.hover = true;
