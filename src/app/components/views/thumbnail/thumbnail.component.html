@@ -90,7 +90,7 @@
       [ngStyle]="{ height: imgHeight + 'px' }"
       >
       <div class="up-icon">
-        <app-icon [icon]="'icon-chevron-left'"></app-icon>
+        <app-icon [icon]="'icon-chevron-left'" />
       </div>
     </div>
 
@@ -99,7 +99,7 @@
 
   @if (video.cleanName === '*FOLDER*' && video.fileName !== '*UP*') {
     <div class="folder-icon">
-      <app-icon [icon]="'icon-folder-blank'"></app-icon>
+      <app-icon [icon]="'icon-folder-blank'" />
       <div class="items-in-folder">{{ video.fileSizeDisplay | folderSizePipe }}</div>
     </div>
   }
@@ -148,10 +148,7 @@
   >
 
   @if (video.selected) {
-    <app-icon
-      class="selected"
-      [icon]="'icon-show-more-info'"
-    ></app-icon>
+    <app-icon class="selected" [icon]="'icon-show-more-info'" />
   }
 
   @if (showFavorites) {
@@ -159,8 +156,8 @@
       (click)="toggleHeart()"
       class="heart"
       [ngClass]="{ 'heart-lit' : video.stars === 5.5 }"
-      [icon]="'icon-heart'">
-    </app-icon>
+      [icon]="'icon-heart'"
+     />
   }
 
   @if (showMeta) {
@@ -186,11 +183,7 @@
   .sheet-icon needs to be the next sibling of .video-box aka `(B) div` for hover to work - SCSS rule
   DO NOT SEPARATE!
   -->
-  <app-icon
-    class="sheet-icon"
-    [icon]="'icon-show-thumbnails'"
-    (click)="sheetClick.emit()"
-  ></app-icon>
+  <app-icon class="sheet-icon" [icon]="'icon-show-thumbnails'" (click)="sheetClick.emit()" />
 
 @if (showMeta) {
   <span

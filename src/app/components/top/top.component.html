@@ -3,7 +3,7 @@
   class="folder-container"
   [ngClass]="{ 'dark-mode-override': darkMode }"
 >
-  <app-icon class="icon" [icon]="'icon-folder-blank'" (click)="openInExplorer()"></app-icon>
+  <app-icon class="icon" [icon]="'icon-folder-blank'" (click)="openInExplorer()" />
 
 @for (item of folderNameArray; track $index) {
   <span
@@ -20,7 +20,7 @@
   class="file-container"
   [ngClass]="{ 'dark-mode-override': darkMode }"
 >
-  <app-icon class="icon" [icon]="'icon-video-blank'" (click)="openInExplorer()"></app-icon>
+  <app-icon class="icon" [icon]="'icon-video-blank'" (click)="openInExplorer()" />
 
 @for (item of fileNameArray; track $index) {
   <span

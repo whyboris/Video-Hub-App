@@ -6,7 +6,7 @@
     class="close-wizard"
     title="{{ 'WIZARD.closeButton' | translate }}"
   >
-    <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
+    <app-icon class="close-modal-icon" [icon]="'icon-close'" />
   </div>
 }
 
@@ -46,9 +46,7 @@
             (click)="removeHistoryItem($event, i)"
             title="{{ 'WIZARD.removeFromHistory' | translate }}"
           >
-            <app-icon
-              [icon]="'icon-close'"
-            ></app-icon>
+            <app-icon [icon]="'icon-close'" />
           </div>
           <img class="history-icon" src="./assets/logo.png">
           <span

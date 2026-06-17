@@ -6,7 +6,7 @@
     class="filter-container"
     @filterItemAppear
   >
-    <app-icon class="input-icon" [icon]="settingsButtons[filter.uniqueKey].iconName"></app-icon>
+    <app-icon class="input-icon" [icon]="settingsButtons[filter.uniqueKey].iconName" />
     <input
       id="{{ filter.uniqueKey }}"
       (keyup.enter)="onEnterKey.emit({ word: filter.string, index: j })"

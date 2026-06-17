@@ -86,7 +86,7 @@
     [ngClass]="{ 'star-lit': starRatingHack > 1 }"
     tabindex="-1"
   >
-    <app-icon [icon]="'icon-star'"></app-icon>
+    <app-icon [icon]="'icon-star'" />
   </button>
   <button
     (click)="setStarRating(2.5)"
@@ -94,7 +94,7 @@
     [ngClass]="{ 'star-lit': starRatingHack > 2 }"
     tabindex="-1"
   >
-    <app-icon [icon]="'icon-star'"></app-icon>
+    <app-icon [icon]="'icon-star'" />
   </button>
   <button
     (click)="setStarRating(3.5)"
@@ -102,7 +102,7 @@
     [ngClass]="{ 'star-lit': starRatingHack > 3 }"
     tabindex="-1"
   >
-    <app-icon [icon]="'icon-star'"></app-icon>
+    <app-icon [icon]="'icon-star'" />
   </button>
   <button
     (click)="setStarRating(4.5)"
@@ -110,7 +110,7 @@
     [ngClass]="{ 'star-lit': starRatingHack > 4 }"
     tabindex="-1"
   >
-    <app-icon [icon]="'icon-star'"></app-icon>
+    <app-icon [icon]="'icon-star'" />
   </button>
   <button
     (click)="setStarRating(5.5)"
@@ -118,7 +118,7 @@
     [ngClass]="{ 'star-lit': starRatingHack > 5 }"
     tabindex="-1"
   >
-    <app-icon [icon]="'icon-star'"></app-icon>
+    <app-icon [icon]="'icon-star'" />
   </button>
 
 <!-- Times played -->
@@ -134,11 +134,10 @@
     (tag)="addThisTag($event)"
     [darkMode]="darkMode"
     style="display: block;"
-  ></app-add-tag-component>
+   />
 }
 
   <app-view-tags-component
-
     [tags]="(video | tagDisplayPipe : showManualTags
                                   : showAutoFileTags
                                   : showAutoFolderTags
@@ -151,7 +150,7 @@
     (tagRightClick)="onTagRightClick($event)"
     class="view-tags-holder"
     [ngStyle]="{ 'min-height': imgHeight - 128 + 'px' }"
-  ></app-view-tags-component>
+   />
 
 @if (showVideoNotes) {
   <textarea

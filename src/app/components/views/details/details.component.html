@@ -24,20 +24,17 @@
         'background-position-x': percentOffset + '%'
       }"
   >
+
   @if (showFavorites) {
     <app-icon
       (click)="toggleHeart()"
       class="heart"
       [ngClass]="{ 'heart-lit' : video.stars === 5.5 }"
-      [icon]="'icon-heart'">
-    </app-icon>
+      [icon]="'icon-heart'" />
   }
 
   @if (video.selected) {
-    <app-icon
-      class="selected"
-      [icon]="'icon-show-more-info'"
-    ></app-icon>
+    <app-icon class="selected" [icon]="'icon-show-more-info'" />
   }
   </div>
 
@@ -61,6 +58,6 @@
 
     [selectedSourceFolder]="selectedSourceFolder"
     [renameResponse]="renameResponse.asObservable()"
-  ></app-meta-item>
+   />
 
 </div>

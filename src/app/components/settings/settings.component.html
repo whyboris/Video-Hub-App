@@ -28,7 +28,7 @@
               [button]="buttonKey"
               [neverDarkMode]="true"
               [settingsButtons]="settingsButtons"
-            ></app-button>
+             />
           @if (settingsButtons[buttonKey].iconName) {
             <span
               (click)="toggleHideButton.emit(buttonKey)"
@@ -163,7 +163,7 @@
           flatSettingsButton:    settingsButtons['flatIcons'].toggled
         }"
       >
-        <app-icon [icon]="'icon-minus'"></app-icon>
+        <app-icon [icon]="'icon-minus'" />
       </button>
       <button
         (click)="resetZoomLevel.emit()"
@@ -182,7 +182,7 @@
           flatSettingsButton:    settingsButtons['flatIcons'].toggled
         }"
       >
-        <app-icon [icon]="'icon-plus'"></app-icon>
+        <app-icon [icon]="'icon-plus'" />
       </button>
     </div>
 
