@@ -1,5 +1,5 @@
 import type { OnInit, ElementRef, OnDestroy } from '@angular/core';
-import { Component, Input, Output, EventEmitter, ViewChild, input } from '@angular/core';
+import { Component, Input, ViewChild, input, output } from '@angular/core';
 
 import { FilePathService } from '../file-path.service';
 
@@ -25,9 +25,9 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
 
   @ViewChild('filmstripHolder', { static: false }) filmstripHolder: ElementRef;
 
-  @Output() sheetClick = new EventEmitter<any>(); // does not emit data of any kind
-  @Output() videoClick = new EventEmitter<VideoClickEmit>();
-  @Output() rightClick = new EventEmitter<RightClickEmit>();
+  readonly sheetClick = output<any>(); // does not emit data of any kind
+  readonly videoClick = output<VideoClickEmit>();
+  readonly rightClick = output<RightClickEmit>();
 
   @Input() video: ImageElement;
 

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 import { ImageElementService } from './../../services/image-element.service';
 import { SourceFolderService } from '../statistics/source-folder.service';
@@ -20,9 +20,9 @@ import { modalAnimation, similarResultsText } from '../../common/animations';
 })
 export class SimilarTrayComponent {
 
-  @Output() handleClick = new EventEmitter<any>(); // TODO: fix up the vague type
-  @Output() rightMouseClicked = new EventEmitter<RightClickEmit>();
-  @Output() showMoreRecentlyPlayed = new EventEmitter<any>();
+  readonly handleClick = output<any>(); // TODO: fix up the vague type
+  readonly rightMouseClicked = output<RightClickEmit>();
+  readonly showMoreRecentlyPlayed = output<any>();
 
   readonly appState = input(undefined);
   readonly currentClickedItemName = input(undefined);

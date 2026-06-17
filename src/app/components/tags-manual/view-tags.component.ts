@@ -1,5 +1,5 @@
 import type { ElementRef} from '@angular/core';
-import { Component, Input, Output, EventEmitter, ViewChild, input } from '@angular/core';
+import { Component, Input, ViewChild, input, output } from '@angular/core';
 
 import { ManualTagsService } from './manual-tags.service';
 
@@ -34,9 +34,9 @@ export class ViewTagsComponent {
   readonly draggable = input<boolean>(undefined);
   readonly enableColorPicker = input<boolean>(false);
 
-  @Output() removeTagEmit = new EventEmitter<string>();
-  @Output() tagClicked = new EventEmitter<TagEmit>();
-  @Output() tagRightClick = new EventEmitter<{ tag: Tag, event: MouseEvent }>();
+  readonly removeTagEmit = output<string>();
+  readonly tagClicked = output<TagEmit>();
+  readonly tagRightClick = output<{ tag: Tag; event: MouseEvent; }>();
 
   @ViewChild('dragHack', { static: false }) dragHack: ElementRef;
 

@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, input } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 import { ManualTagsService } from '../tags-manual/manual-tags.service';
 
@@ -22,9 +22,9 @@ import type { SettingsButtonsType } from '../../common/settings-buttons';
 })
 export class TagTrayComponent {
 
-  @Output() toggleBatchTaggingMode = new EventEmitter<any>();
-  @Output() handleTagWordClicked = new EventEmitter<TagEmit>();
-  @Output() selectAll = new EventEmitter<any>();
+  readonly toggleBatchTaggingMode = output<any>();
+  readonly handleTagWordClicked = output<TagEmit>();
+  readonly selectAll = output<any>();
 
   readonly appState = input<AppStateInterface>(undefined);
   readonly batchTaggingMode = input(undefined);

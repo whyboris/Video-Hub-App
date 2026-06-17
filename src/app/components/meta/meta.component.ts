@@ -1,6 +1,6 @@
 import type { OnInit, ElementRef, OnDestroy } from '@angular/core';
-import { ChangeDetectorRef, input } from '@angular/core';
-import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, input, output } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import type { Subscription, Observable } from 'rxjs';
@@ -28,7 +28,7 @@ export class MetaComponent implements OnInit, OnDestroy {
   @ViewChild('yearInput', { static: false }) yearInput: ElementRef;
   @ViewChild('videoNotes', { static: false}) videoNotes: ElementRef;
 
-  @Output() filterTag = new EventEmitter<TagEmit>();
+  readonly filterTag = output<TagEmit>();
 
   @Input() video: ImageElement;
   readonly darkMode = input<boolean>(undefined);

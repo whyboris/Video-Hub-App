@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output, OnInit, input } from '@angular/core';
+import { Component, OnInit, input, output } from '@angular/core';
 
 export interface ColorPickerPosition {
   x: number;
@@ -17,8 +17,8 @@ export class TagColorPickerComponent implements OnInit {
   readonly currentColor = input<string>(undefined);
   readonly darkMode = input<boolean>(undefined);
 
-  @Output() colorSelected = new EventEmitter<string>();
-  @Output() close = new EventEmitter<void>();
+  readonly colorSelected = output<string>();
+  readonly close = output<void>();
 
   // 3x3 grid of distinct colors plus default option
   colors: string[] = [
@@ -67,6 +67,7 @@ export class TagColorPickerComponent implements OnInit {
   }
 
   onClose(): void {
+    // TODO: The 'emit' function requires a mandatory void argument
     this.close.emit();
   }
 }

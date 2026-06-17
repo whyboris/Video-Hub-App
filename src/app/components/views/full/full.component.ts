@@ -1,5 +1,5 @@
 import type { OnInit} from '@angular/core';
-import { Component, Input, Output, EventEmitter, input } from '@angular/core';
+import { Component, Input, input, output } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { FilePathService } from '../file-path.service';
@@ -23,8 +23,8 @@ import type { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/s
 })
 export class FullViewComponent implements OnInit {
 
-  @Output() videoClick = new EventEmitter<VideoClickEmit>();
-  @Output() rightClick = new EventEmitter<RightClickEmit>();
+  readonly videoClick = output<VideoClickEmit>();
+  readonly rightClick = output<RightClickEmit>();
 
   @Input()
   set galleryWidth(galleryWidth: number) {

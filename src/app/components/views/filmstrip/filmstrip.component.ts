@@ -1,5 +1,5 @@
 import type { OnInit, ElementRef} from '@angular/core';
-import { Component, ViewChild, Output, EventEmitter, input } from '@angular/core';
+import { Component, ViewChild, input, output } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { FilePathService } from '../file-path.service';
@@ -26,8 +26,8 @@ export class FilmstripComponent implements OnInit {
 
   @ViewChild('filmstripHolder', { static: false }) filmstripHolder: ElementRef;
 
-  @Output() videoClick = new EventEmitter<VideoClickEmit>();
-  @Output() rightClick = new EventEmitter<RightClickEmit>();
+  readonly videoClick = output<VideoClickEmit>();
+  readonly rightClick = output<RightClickEmit>();
 
   readonly video = input<ImageElement>(undefined);
 

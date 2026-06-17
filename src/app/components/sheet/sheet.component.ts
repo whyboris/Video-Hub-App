@@ -1,5 +1,5 @@
 import type { OnInit, ElementRef} from '@angular/core';
-import { Component, Output, EventEmitter, ViewChild, input } from '@angular/core';
+import { Component, ViewChild, input, output } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import * as path from 'path';
@@ -38,8 +38,8 @@ export class SheetComponent implements OnInit {
   @ViewChild('filmstripHolder', {static: false}) filmstripHolder: ElementRef;
   @ViewChild('thumbHolder', {static: false}) thumbHolder: ElementRef;
 
-  @Output() filterTag = new EventEmitter<TagEmit>();
-  @Output() openVideoAtTime = new EventEmitter<object>();
+  readonly filterTag = output<TagEmit>();
+  readonly openVideoAtTime = output<object>();
 
   readonly video = input<ImageElement>(undefined);
 

@@ -1,5 +1,5 @@
 import type { OnInit } from '@angular/core';
-import { Component, Input, Output, EventEmitter, input } from '@angular/core';
+import { Component, Input, input, output } from '@angular/core';
 
 import { TranslateService } from '@ngx-translate/core';
 
@@ -22,16 +22,16 @@ import { SettingsMetaGroup, SettingsMetaGroupLabels } from '../../common/setting
 })
 export class SettingsComponent implements OnInit {
 
-  @Output() changeLanguage = new EventEmitter<string>();
-  @Output() checkForNewVersion = new EventEmitter<any>();
-  @Output() chooseDefaultVideoPlayer = new EventEmitter<any>();
-  @Output() decreaseZoomLevel = new EventEmitter<any>();
-  @Output() goDownloadNewVersion = new EventEmitter<any>();
-  @Output() increaseZoomLevel = new EventEmitter<any>();
-  @Output() openOnlineHelp = new EventEmitter<any>();
-  @Output() resetZoomLevel = new EventEmitter<any>();
-  @Output() toggleButton = new EventEmitter<string>();
-  @Output() toggleHideButton = new EventEmitter<string>();
+  readonly changeLanguage = output<string>();
+  readonly checkForNewVersion = output<any>();
+  readonly chooseDefaultVideoPlayer = output<any>();
+  readonly decreaseZoomLevel = output<any>();
+  readonly goDownloadNewVersion = output<any>();
+  readonly increaseZoomLevel = output<any>();
+  readonly openOnlineHelp = output<any>();
+  readonly resetZoomLevel = output<any>();
+  readonly toggleButton = output<string>();
+  readonly toggleHideButton = output<string>();
 
   @Input() appState;
   readonly demo = input(undefined);
