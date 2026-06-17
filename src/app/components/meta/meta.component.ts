@@ -9,7 +9,6 @@ import { ElectronService } from '../../providers/electron.service';
 import { FilePathService } from '../views/file-path.service';
 import { ImageElementService } from './../../services/image-element.service';
 import { ManualTagsService } from '../tags-manual/manual-tags.service';
-import type { ColorPickerPosition } from '../tag-color-picker/tag-color-picker.component';
 
 import type { StarRating, ImageElement } from '../../../../interfaces/final-object.interface';
 import type { TagEmit, RenameFileResponse } from '../../../../interfaces/shared-interfaces';

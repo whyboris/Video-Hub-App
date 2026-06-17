@@ -27,6 +27,7 @@ import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency
 import { SortOrderComponent } from './sort-order/sort-order.component';
 
 // Interfaces
+import type { ColorPickerPosition } from './tag-color-picker/tag-color-picker.component';
 import type { FinalObject, ImageElement, ScreenshotSettings, ResolutionString } from '../../../interfaces/final-object.interface';
 import type { ImportStage } from '../../../node/main-support';
 import type { ServerDetails } from './statistics/statistics.component';
@@ -150,7 +151,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   // Tag color picker state
   showTagColorPicker = false;
-  tagColorPickerPosition = { x: 0, y: 0 };
+  tagColorPickerPosition: ColorPickerPosition = { x: 0, y: 0 };
   currentTagColor = '';
   currentTagName = '';
   tagColorPickerSubscription: any;
