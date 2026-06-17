@@ -1,30 +1,30 @@
 <div
   class="title-bar"
-  [ngClass]="{ 'dark-mode-override': settingsButtons['darkMode'].toggled }"
+  [ngClass]="{ 'dark-mode-override': settingsButtons()['darkMode'].toggled }"
 >
   <div
     class="draggable"
     [ngStyle]="{
-        left: macVersion ? '65px' : '5px',
-        'text-align': macVersion ? 'center' : 'left'
+        left: macVersion() ? '65px' : '5px',
+        'text-align': macVersion() ? 'center' : 'left'
       }"
   >
     <img width="16px" height="16px" class="top-logo" src="./assets/logo.png">
     <span
       class="heading-title"
-      [ngStyle]="{ 'color': settingsButtons['darkMode'].toggled ? '#AAAAAA' : '#111111' }"
+      [ngStyle]="{ 'color': settingsButtons()['darkMode'].toggled ? '#AAAAAA' : '#111111' }"
     >
       Video Hub App 3
-      <b>{{ demo ? ' demo - limited to 50 video files ' : '' }}</b>
-      {{ importStage !== 'done' ? ' - ' + progressString + ' - ' : ' - ' }}
-      {{ appState.hubName }}
+      <b>{{ demo() ? ' demo - limited to 50 video files ' : '' }}</b>
+      {{ importStage() !== 'done' ? ' - ' + progressString() + ' - ' : ' - ' }}
+      {{ appState().hubName }}
     </span>
   </div>
   <div
     (click)="initiateMinimize.emit()"
     [ngClass]="{
-        'windows-button': !macVersion,
-        'mac-button': macVersion
+        'windows-button': !macVersion(),
+        'mac-button': macVersion()
       }"
     class="minimizeButton"
   >
@@ -33,8 +33,8 @@
   <div
     (click)="initiateMaximize.emit()"
     [ngClass]="{
-        'windows-button': !macVersion,
-        'mac-button': macVersion
+        'windows-button': !macVersion(),
+        'mac-button': macVersion()
       }"
     class="maximizeButton"
   >
@@ -43,8 +43,8 @@
   <div
     (click)="initiateClose.emit()"
     [ngClass]="{
-        'windows-button': !macVersion,
-        'mac-button': macVersion
+        'windows-button': !macVersion(),
+        'mac-button': macVersion()
       }"
     class="closeButton"
   >

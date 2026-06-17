@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { Component, Input, EventEmitter, Output, input } from '@angular/core';
 import { buttonAnimation } from '../../common/animations';
 import type { SettingsButtonsType } from '../../common/settings-buttons';
 
@@ -16,9 +16,9 @@ export class RibbonComponent {
 
   @Output() toggleButton = new EventEmitter<string>();
 
-  @Input() appState;
+  readonly appState = input(undefined);
   @Input() settingsButtons: SettingsButtonsType;
-  @Input() settingsButtonsGroups;
+  readonly settingsButtonsGroups = input(undefined);
 
   constructor() { }
 

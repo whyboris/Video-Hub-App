@@ -1,5 +1,5 @@
 import type { OnInit } from '@angular/core';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, input } from '@angular/core';
 
 import { TranslateService } from '@ngx-translate/core';
 
@@ -34,11 +34,11 @@ export class SettingsComponent implements OnInit {
   @Output() toggleHideButton = new EventEmitter<string>();
 
   @Input() appState;
-  @Input() demo;
-  @Input() latestVersionAvailable;
-  @Input() settingTabToShow;
+  readonly demo = input(undefined);
+  readonly latestVersionAvailable = input(undefined);
+  readonly settingTabToShow = input(undefined);
   @Input() settingsButtons: SettingsButtonsType;
-  @Input() versionNumber;
+  readonly versionNumber = input(undefined);
 
   additionalInput = '';
   editAdditional = false;

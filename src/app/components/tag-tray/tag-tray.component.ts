@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, input } from '@angular/core';
 
 import { ManualTagsService } from '../tags-manual/manual-tags.service';
 
@@ -26,10 +26,10 @@ export class TagTrayComponent {
   @Output() handleTagWordClicked = new EventEmitter<TagEmit>();
   @Output() selectAll = new EventEmitter<any>();
 
-  @Input() appState: AppStateInterface;
-  @Input() batchTaggingMode;
-  @Input() darkMode: boolean;
-  @Input() settingsButtons: SettingsButtonsType;
+  readonly appState = input<AppStateInterface>(undefined);
+  readonly batchTaggingMode = input(undefined);
+  readonly darkMode = input<boolean>(undefined);
+  readonly settingsButtons = input<SettingsButtonsType>(undefined);
 
   manualTagFilterString = '';
   manualTagShowFrequency = true;

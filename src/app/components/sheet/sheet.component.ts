@@ -1,5 +1,5 @@
 import type { OnInit, ElementRef} from '@angular/core';
-import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, Output, EventEmitter, ViewChild, input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import * as path from 'path';
@@ -41,26 +41,26 @@ export class SheetComponent implements OnInit {
   @Output() filterTag = new EventEmitter<TagEmit>();
   @Output() openVideoAtTime = new EventEmitter<object>();
 
-  @Input() video: ImageElement;
+  readonly video = input<ImageElement>(undefined);
 
-  @Input() darkMode: boolean;
-  @Input() elHeight: number;
-  @Input() elWidth: number;
-  @Input() folderPath: string;
-  @Input() hoverScrub: boolean;
-  @Input() hubName: string;
-  @Input() imgHeight: number;
-  @Input() largerFont: boolean;
-  @Input() returnToFirstScreenshot: boolean;
-  @Input() selectedSourceFolder: string;
-  @Input() showAutoFileTags: boolean;
-  @Input() showAutoFolderTags: boolean;
-  @Input() showManualTags: boolean;
-  @Input() showMeta: boolean;
-  @Input() showVideoNotes: boolean;
-  @Input() star: StarRating;
+  readonly darkMode = input<boolean>(undefined);
+  readonly elHeight = input<number>(undefined);
+  readonly elWidth = input<number>(undefined);
+  readonly folderPath = input<string>(undefined);
+  readonly hoverScrub = input<boolean>(undefined);
+  readonly hubName = input<string>(undefined);
+  readonly imgHeight = input<number>(undefined);
+  readonly largerFont = input<boolean>(undefined);
+  readonly returnToFirstScreenshot = input<boolean>(undefined);
+  readonly selectedSourceFolder = input<string>(undefined);
+  readonly showAutoFileTags = input<boolean>(undefined);
+  readonly showAutoFolderTags = input<boolean>(undefined);
+  readonly showManualTags = input<boolean>(undefined);
+  readonly showMeta = input<boolean>(undefined);
+  readonly showVideoNotes = input<boolean>(undefined);
+  readonly star = input<StarRating>(undefined);
 
-  @Input() renameResponse: BehaviorSubject<RenameFileResponse>;
+  readonly renameResponse = input<BehaviorSubject<RenameFileResponse>>(undefined);
 
   pathToFilmstripJpg: string;
   pathToVideoFile: string;
@@ -76,10 +76,10 @@ export class SheetComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.pathToFilmstripJpg = this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
-    this.pathToVideoFile = path.join(this.selectedSourceFolder, this.video.partialPath, this.video.fileName);
-    this.percentOffset = (100 / (this.video.screens - 1));
-    this.starRatingHack = this.star;
+    this.pathToFilmstripJpg = this.filePathService.createFilePath(this.folderPath(), this.hubName(), 'filmstrips', this.video().hash);
+    this.pathToVideoFile = path.join(this.selectedSourceFolder(), this.video().partialPath, this.video().fileName);
+    this.percentOffset = (100 / (this.video().screens - 1));
+    this.starRatingHack = this.star();
   }
 
   decreaseZoomLevel() {
@@ -99,13 +99,14 @@ export class SheetComponent implements OnInit {
   }
 
   addThisTag(tag: string) {
-    if (this.video.tags && this.video.tags.includes(tag)) {
+    const video = this.video();
+    if (video.tags && video.tags.includes(tag)) {
       // console.log('TAG ALREADY ADDED!');
     } else {
       this.manualTagsService.addTag(tag);
 
       this.imageElementService.HandleEmission({
-        index: this.video.index,
+        index: video.index,
         tag: tag,
         type: 'add'
       });
@@ -116,7 +117,7 @@ export class SheetComponent implements OnInit {
     this.manualTagsService.removeTag(tag);
 
     this.imageElementService.HandleEmission({
-      index: this.video.index,
+      index: this.video().index,
       tag: tag,
       type: 'remove'
     });
@@ -128,7 +129,7 @@ export class SheetComponent implements OnInit {
     }
     this.starRatingHack = rating; // hack for getting star opacity updated instantly
     this.imageElementService.HandleEmission({
-      index: this.video.index,
+      index: this.video().index,
       stars: rating
     });
   }
@@ -144,8 +145,8 @@ export class SheetComponent implements OnInit {
     event.stopPropagation();
 
     this.imageElementService.HandleEmission({
-      index: this.video.index,
-      defaultScreen: this.video.defaultScreen === index ? undefined : index
+      index: this.video().index,
+      defaultScreen: this.video().defaultScreen === index ? undefined : index
     });
   }
 

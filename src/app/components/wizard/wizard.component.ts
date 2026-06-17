@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, input } from '@angular/core';
 
 import type { AllowedScreenshotHeight, AllowedScreenshotHeightString } from '../../../../interfaces/final-object.interface';
 import type { HistoryItem } from '../../../../interfaces/shared-interfaces';
@@ -31,8 +31,8 @@ export class WizardComponent {
   @Output() selectOutputDirectory      = new EventEmitter<any>();
   @Output() selectSourceDirectory      = new EventEmitter<any>();
 
-  @Input() canCloseWizard: boolean;
-  @Input() importStage: ImportStage;
+  readonly canCloseWizard = input<boolean>(undefined);
+  readonly importStage = input<ImportStage>(undefined);
   @Input() vhaFileHistory: HistoryItem[];
   @Input() wizard: WizardOptions;
 

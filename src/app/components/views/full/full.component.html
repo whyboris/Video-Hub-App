@@ -7,11 +7,11 @@
   >
   <!-- the 30 px added above is the padding for the text  -->
 
-@if (showFavorites) {
+@if (showFavorites()) {
   <app-icon
     (click)="toggleHeart()"
     class="heart"
-    [ngClass]="{ 'heart-lit' : video.stars === 5.5 }"
+    [ngClass]="{ 'heart-lit' : video().stars === 5.5 }"
     [icon]="'icon-heart'"
    />
 }
@@ -20,7 +20,7 @@
   <div
     (click)="   videoClick.emit({ mouseEvent: $event })"
     (dblclick)="videoClick.emit({ mouseEvent: $event, doubleClick: true })"
-    (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
+    (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video() })"
     class="filmstrip-container"
     [ngStyle]="{
         height: _imgHeight + 'px',
@@ -31,20 +31,20 @@
   ></div>
 }
 
-@if (video.selected) {
+@if (video().selected) {
   <app-icon class="selected" [icon]="'icon-show-more-info'" />
 }
 
-@if (showMeta) {
+@if (showMeta()) {
   <span
-    [ngClass]="{ 'larger-font': largerFont }"
-    [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
+    [ngClass]="{ 'larger-font': largerFont() }"
+    [ngStyle]="{ color: darkMode() ? '#BBBBBB' : '#000000' }"
     class="title"
   >
-    {{ video.cleanName }}
+    {{ video().cleanName }}
 
     <div class="fileSize">
-      ({{ video.fileSizeDisplay }})
+      ({{ video().fileSizeDisplay }})
     </div>
 
   </span>

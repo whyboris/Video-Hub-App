@@ -9,7 +9,7 @@
   </span>
   <ul>
 
-  @for (historyItem of vhaFileHistory; track historyItem; let i = $index) {
+  @for (historyItem of vhaFileHistory(); track historyItem; let i = $index) {
     <li
       (click)="openFromHistory.emit(i)"
       class="recently-opened-item"

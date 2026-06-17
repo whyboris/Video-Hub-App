@@ -1,10 +1,10 @@
 <div
   [ngStyle]="{
-      height: elHeight + 'px',
-      width: elWidth + 'px'
+      height: elHeight() + 'px',
+      width: elWidth() + 'px'
     }"
   class="filmstrip-container"
-  [ngClass]="{ 'compact-margins': compactView }"
+  [ngClass]="{ 'compact-margins': compactView() }"
 >
 
   <!-- ================================= FOLDER VIEW ================================= -->
@@ -18,17 +18,17 @@
       (click)="   videoClick.emit({ mouseEvent: $event })"
       (dblclick)="videoClick.emit({ mouseEvent: $event, doubleClick: true })"
       [ngStyle]="{
-          height: imgHeight + 'px'
+          height: imgHeight() + 'px'
       }"
     >
       <!-- ========================== regular folder view ========================== -->
     @for (idx of [0, 1, 2, 3]; track idx) {
-      @if (noError && !autoplay && folderThumbPaths[idx]) {
+      @if (noError && !autoplay() && folderThumbPaths[idx]) {
         <video
           [src]="folderThumbPaths[idx]"
           [poster]="sanitizer.bypassSecurityTrustUrl(folderPosterPaths[idx])"
           class="mini-video-thumb {{ 'folder-preview-' + idx }}"
-          [volume]="forceMute ? 0 : 1"
+          [volume]="forceMute() ? 0 : 1"
           onmouseover="this.play().catch((err) => {this.load()})"
           (mouseout)="stopPreview($event)"
           loop
@@ -38,12 +38,12 @@
 
       <!-- ========================== AUTOPLAY folder view ========================== -->
     @for (idx of [0, 1, 2, 3]; track idx) {
-      @if (noError && autoplay && appInFocus && folderThumbPaths[idx]) {
+      @if (noError && autoplay() && appInFocus && folderThumbPaths[idx]) {
         <video
           [src]="folderThumbPaths[idx]"
           [poster]="sanitizer.bypassSecurityTrustUrl(folderPosterPaths[idx])"
           class="mini-video-thumb {{ 'folder-preview-' + idx }}"
-          [volume]="forceMute ? 0 : 1"
+          [volume]="forceMute() ? 0 : 1"
           onmouseover="this.muted = false;"
           onmouseout="this.muted = true;"
           onloadstart="this.muted = true;"
@@ -61,7 +61,7 @@
         class="video-box folder"
         (click)="   videoClick.emit({ mouseEvent: $event })"
         (dblclick)="videoClick.emit({ mouseEvent: $event, doubleClick: true })"
-        [ngStyle]="{ height: imgHeight + 'px' }"
+        [ngStyle]="{ height: imgHeight() + 'px' }"
       >
         <div class="up-icon">
           <app-icon [icon]="'icon-chevron-left'" />
@@ -70,10 +70,10 @@
     }
 
     <!-- ==========================FOLDER TEXT ========================== -->
-  @if (showMeta && video.fileName !== '*UP*') {
+  @if (showMeta() && video.fileName !== '*UP*') {
     <span
-      [ngClass]="{ 'larger-font': largerFont }"
-      [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
+      [ngClass]="{ 'larger-font': largerFont() }"
+      [ngStyle]="{ color: darkMode() ? '#BBBBBB' : '#000000' }"
       class="title"
     >
       {{ video.fileName }}
@@ -90,23 +90,23 @@
 
   <!-- ================================= SINGLE CLIP ================================= -->
 
-  <div class="video-box" [ngStyle]="{ height: imgHeight + 'px' }">
+  <div class="video-box" [ngStyle]="{ height: imgHeight() + 'px' }">
 
     @if (video.selected) { <app-icon class="selected" [icon]="'icon-show-more-info'" /> }
-    @if (showMeta) {       <span class="time">{{ video.durationDisplay }}</span> }
-    @if (showMeta) {       <span class="rez">{{ video.resolution }}</span> }
+    @if (showMeta()) {       <span class="time">{{ video.durationDisplay }}</span> }
+    @if (showMeta()) {       <span class="rez">{{ video.resolution }}</span> }
 
     <!-- ========================== regular view ========================== -->
-  @if (noError && !autoplay) {
+  @if (noError && !autoplay()) {
     <video
       [src]="pathToVideo"
       [poster]="sanitizer.bypassSecurityTrustUrl(poster)"
-      [ngStyle]="{ 'height': imgHeight + 'px' }"
+      [ngStyle]="{ 'height': imgHeight() + 'px' }"
       (click)="   videoClick.emit({ mouseEvent: $event })"
       (dblclick)="videoClick.emit({ mouseEvent: $event, doubleClick: true })"
       (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
       class="screencap"
-      [volume]="forceMute ? 0 : 1"
+      [volume]="forceMute() ? 0 : 1"
       onmouseover="this.play().catch((err) => {this.load()})"
       (mouseout)="stopPreview($event)"
       loop
@@ -114,16 +114,16 @@
   }
 
     <!-- ========================== AUTOPLAY view ========================== -->
-  @if (noError && autoplay && appInFocus) {
+  @if (noError && autoplay() && appInFocus) {
     <video
       [src]="pathToVideo"
       [poster]="sanitizer.bypassSecurityTrustUrl(poster)"
-      [ngStyle]="{ 'height': imgHeight + 'px' }"
+      [ngStyle]="{ 'height': imgHeight() + 'px' }"
       (click)="   videoClick.emit({ mouseEvent: $event })"
       (dblclick)="videoClick.emit({ mouseEvent: $event, doubleClick: true })"
       (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
       class="screencap"
-      [volume]="forceMute ? 0 : 1"
+      [volume]="forceMute() ? 0 : 1"
       onmouseover="this.muted = false;"
       onmouseout="this.muted = true;"
       onloadstart="this.muted = true;"
@@ -135,10 +135,10 @@
   </div> <!-- end of video-box -->
 
   <!-- ================================= TEXT ================================= -->
-@if (showMeta) {
+@if (showMeta()) {
   <span
-    [ngClass]="{ 'larger-font': largerFont }"
-    [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
+    [ngClass]="{ 'larger-font': largerFont() }"
+    [ngStyle]="{ color: darkMode() ? '#BBBBBB' : '#000000' }"
     class="title"
   >
     {{ video.cleanName }}

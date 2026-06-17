@@ -1,5 +1,5 @@
 import type { OnInit, ElementRef, OnDestroy } from '@angular/core';
-import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild, input } from '@angular/core';
 
 import { FilePathService } from '../file-path.service';
 
@@ -31,20 +31,20 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
 
   @Input() video: ImageElement;
 
-  @Input() compactView: boolean;
-  @Input() connected: boolean;
-  @Input() darkMode: boolean;
-  @Input() elHeight: number;
-  @Input() elWidth: number;
-  @Input() folderPath: string;
-  @Input() hoverScrub: boolean;
-  @Input() hubName: string;
-  @Input() imgHeight: number;
-  @Input() largerFont: boolean;
-  @Input() returnToFirstScreenshot: boolean;
+  readonly compactView = input<boolean>(undefined);
+  readonly connected = input<boolean>(undefined);
+  readonly darkMode = input<boolean>(undefined);
+  readonly elHeight = input<number>(undefined);
+  readonly elWidth = input<number>(undefined);
+  readonly folderPath = input<string>(undefined);
+  readonly hoverScrub = input<boolean>(undefined);
+  readonly hubName = input<string>(undefined);
+  readonly imgHeight = input<number>(undefined);
+  readonly largerFont = input<boolean>(undefined);
+  readonly returnToFirstScreenshot = input<boolean>(undefined);
   @Input() showMeta: boolean;
-  @Input() thumbAutoAdvance: boolean;
-  @Input() showFavorites: boolean;
+  readonly thumbAutoAdvance = input<boolean>(undefined);
+  readonly showFavorites = input<boolean>(undefined);
 
   containerWidth: number;
   firstFilePath = '';
@@ -65,11 +65,11 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
     if (this.video.hash.indexOf(':') !== -1) {
       const hashes = this.video.hash.split(':');
       hashes.slice(0, 4).forEach((hash) => {
-        this.folderThumbPaths.push(this.filePathService.createFilePath(this.folderPath, this.hubName, 'thumbnails', hash));
+        this.folderThumbPaths.push(this.filePathService.createFilePath(this.folderPath(), this.hubName(), 'thumbnails', hash));
       });
     } else {
-      this.firstFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'thumbnails', this.video.hash);
-      this.fullFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
+      this.firstFilePath = this.filePathService.createFilePath(this.folderPath(), this.hubName(), 'thumbnails', this.video.hash);
+      this.fullFilePath = this.filePathService.createFilePath(this.folderPath(), this.hubName(), 'filmstrips', this.video.hash);
       this.folderThumbPaths.push(this.firstFilePath);
     }
 
@@ -86,7 +86,7 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
   mouseEntered() {
     this.containerWidth = this.filmstripHolder.nativeElement.getBoundingClientRect().width;
 
-    if (this.thumbAutoAdvance) {
+    if (this.thumbAutoAdvance()) {
       this.hover = true;
 
       this.scrollInterval = setInterval(() => {
@@ -94,17 +94,17 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
         this.indexToShow++;
       }, 750);
 
-    } else if (this.hoverScrub) {
+    } else if (this.hoverScrub()) {
       this.hover = true;
     }
   }
 
   mouseLeft() {
-    if (this.thumbAutoAdvance) {
+    if (this.thumbAutoAdvance()) {
       clearInterval(this.scrollInterval);
     }
 
-    if (this.returnToFirstScreenshot) {
+    if (this.returnToFirstScreenshot()) {
       if (this.video.defaultScreen !== undefined) {
         this.percentOffset = this.defaultScreenOffset(this.video);
       } else {
@@ -115,7 +115,7 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
   }
 
   mouseIsMoving($event: any) {
-    if (this.hoverScrub) {
+    if (this.hoverScrub()) {
       const cursorX = $event.layerX;
       this.indexToShow = Math.floor(cursorX * (this.video.screens / this.containerWidth));
       this.percentOffset = this.indexToShow * (100 / (this.video.screens - 1));

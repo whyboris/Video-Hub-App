@@ -1,5 +1,5 @@
 <div
-  [ngClass]="{ 'rename-dark': darkMode }"
+  [ngClass]="{ 'rename-dark': darkMode() }"
   >
 
   <div class="input">
@@ -7,16 +7,16 @@
       #renameFileInput
       (keyup.enter)="attemptToRename()"
       [(ngModel)]="renamingWIP"
-      [ngClass]="{ 'dark-mode-on': darkMode }"
+      [ngClass]="{ 'dark-mode-on': darkMode() }"
       [disabled]="nodeRenamingFile"
       class="rename-file"
       type="text"
     >
     <!-- in the mac the font sizes are not aligned properly and the extension shows up overlapping -->
-  @if (!macVersion) {
+  @if (!macVersion()) {
     <span
       class="extension-hack"
-      [ngClass]="{ 'dark-mode-on': darkMode }"
+      [ngClass]="{ 'dark-mode-on': darkMode() }"
     >
       <span class="hidden">{{ renamingWIP }}</span>
     @if (renamingWIP.length > 0) {
@@ -34,7 +34,7 @@
 
   <button
     [disabled]="
-          (renamingWIP + '.' + renamingExtension) === currentRightClickedItem.fileName
+          (renamingWIP + '.' + renamingExtension) === currentRightClickedItem().fileName
         || nodeRenamingFile
         || renamingWIP.length === 0
       "

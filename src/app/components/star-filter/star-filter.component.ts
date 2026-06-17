@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, input } from '@angular/core';
 import type { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
@@ -11,11 +11,11 @@ export class StarFilterComponent {
 
   @Output() newStarFilterSelected = new EventEmitter<any>();
 
-  @Input() settingsButtons: SettingsButtonsType;
-  @Input() starLeftBound: number;
-  @Input() starRatingFreqArr: number[];
-  @Input() starRatingNames: string[];
-  @Input() starRightBound: number;
+  readonly settingsButtons = input<SettingsButtonsType>(undefined);
+  readonly starLeftBound = input<number>(undefined);
+  readonly starRatingFreqArr = input<number[]>(undefined);
+  readonly starRatingNames = input<string[]>(undefined);
+  readonly starRightBound = input<number>(undefined);
 
   constructor() { }
 

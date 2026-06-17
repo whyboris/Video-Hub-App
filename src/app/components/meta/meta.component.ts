@@ -1,5 +1,5 @@
 import type { OnInit, ElementRef, OnDestroy } from '@angular/core';
-import { ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, input } from '@angular/core';
 import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -31,20 +31,20 @@ export class MetaComponent implements OnInit, OnDestroy {
   @Output() filterTag = new EventEmitter<TagEmit>();
 
   @Input() video: ImageElement;
-  @Input() darkMode: boolean;
-  @Input() imgHeight: number;
-  @Input() largerFont: boolean;
-  @Input() maxWidth: number;
-  @Input() selectedSourceFolder: string;
-  @Input() showAutoFileTags: boolean;
-  @Input() showAutoFolderTags: boolean;
-  @Input() showManualTags: boolean;
-  @Input() showMeta: boolean;
-  @Input() showVideoNotes: boolean;
-  @Input() star: StarRating;
+  readonly darkMode = input<boolean>(undefined);
+  readonly imgHeight = input<number>(undefined);
+  readonly largerFont = input<boolean>(undefined);
+  readonly maxWidth = input<number>(undefined);
+  readonly selectedSourceFolder = input<string>(undefined);
+  readonly showAutoFileTags = input<boolean>(undefined);
+  readonly showAutoFolderTags = input<boolean>(undefined);
+  readonly showManualTags = input<boolean>(undefined);
+  readonly showMeta = input<boolean>(undefined);
+  readonly showVideoNotes = input<boolean>(undefined);
+  readonly star = input<StarRating>(undefined);
   @Input() starRatingHack: StarRating;
 
-  @Input() renameResponse: Observable<RenameFileResponse>;
+  readonly renameResponse = input<Observable<RenameFileResponse>>(undefined);
 
   yearHack: number;
 
@@ -70,12 +70,12 @@ export class MetaComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.starRatingHack = this.star;
+    this.starRatingHack = this.star();
     this.yearHack = this.video.year;
 
     this.renamingWIP = this.video.cleanName; // or should this be video.fileName (without extension!?)
 
-    this.responseSubscription = this.renameResponse.subscribe((data: RenameFileResponse) => {
+    this.responseSubscription = this.renameResponse().subscribe((data: RenameFileResponse) => {
       if (data) {
         console.log('Rename response:');
         console.log(data);
@@ -239,7 +239,7 @@ export class MetaComponent implements OnInit, OnDestroy {
   tryRenamingFile() {
     this.renameError = false;
 
-    const sourceFolder = this.selectedSourceFolder;
+    const sourceFolder = this.selectedSourceFolder();
     const relativeFilePath = this.video.partialPath;
     const originalFile = this.video.fileName;
     const newFileName = this.renamingWIP + '.' + this.filePathService.getFileNameExtension(this.video.fileName);

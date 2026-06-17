@@ -1,6 +1,6 @@
 <div
   (click)="closeRename.emit()"
-  [ngClass]="{ 'close-rename-dark': settingsButtons['darkMode'].toggled }"
+  [ngClass]="{ 'close-rename-dark': settingsButtons()['darkMode'].toggled }"
   class="close-settings close-rename"
   title="{{ 'RIGHTCLICK.cancelRename' | translate }}"
 >
@@ -10,25 +10,25 @@
 <span class="rename-heading">{{ 'RIGHTCLICK.renameTitle' | translate }}</span>
 
 <app-filmstrip-item
-  [darkMode]="settingsButtons['darkMode'].toggled"
+  [darkMode]="settingsButtons()['darkMode'].toggled"
   [elHeight]="150"
-  [folderPath]="appState.selectedOutputFolder"
+  [folderPath]="appState().selectedOutputFolder"
   [hoverScrub]="true"
-  [hubName]="appState.hubName"
+  [hubName]="appState().hubName"
   [imgHeight]="100"
   [largerFont]="true"
   [showMeta]="true"
-  [video]="currentRightClickedItem"
+  [video]="currentRightClickedItem()"
  />
 
 <span class="rename-from">{{ 'RIGHTCLICK.renameFrom' | translate }}</span>
 <span class="rename-to">{{ 'RIGHTCLICK.renameTo' | translate }}</span>
 
 <app-rename-file
-  [selectedSourceFolder]="basePath"
-  [currentRightClickedItem]="currentRightClickedItem"
-  [macVersion]="macVersion"
-  [darkMode]="settingsButtons['darkMode'].toggled"
+  [selectedSourceFolder]="basePath()"
+  [currentRightClickedItem]="currentRightClickedItem()"
+  [macVersion]="macVersion()"
+  [darkMode]="settingsButtons()['darkMode'].toggled"
 
-  [renameResponse]="renameResponse.asObservable()"
+  [renameResponse]="renameResponse().asObservable()"
  />

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output, input } from '@angular/core';
 
 @Component({
   standalone: false,
@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class TopComponent {
 
-  @Input() darkMode: boolean;
+  readonly darkMode = input<boolean>(undefined);
 
   // Handle folder input
   private _folder = '';

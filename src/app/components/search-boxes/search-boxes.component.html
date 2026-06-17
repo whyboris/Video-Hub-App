@@ -1,4 +1,4 @@
-@for (filter of filters; track filter; let j = $index) {
+@for (filter of filters(); track filter; let j = $index) {
 
   @if (settingsButtons[filter.uniqueKey].toggled) {
 
@@ -24,7 +24,7 @@
     @if (filter.uniqueKey === 'tagIntersection' && filter.string !== '') {
       <span
         class="tag-type-ahead-on-home"
-      >{{ tagTypeAhead }}</span>
+      >{{ tagTypeAhead() }}</span>
     }
 
     <div class="filteredWords">

@@ -7,22 +7,22 @@
 
   <div
     class="slider-back-track"
-    [ngClass]="{ darkMode: darkMode }"
+    [ngClass]="{ darkMode: darkMode() }"
   ></div>
 
   <div
     class="left-side"
     [ngStyle]="{ width: currentXleft + 'px' }"
-    [ngClass]="{ darkMode: darkMode }"
+    [ngClass]="{ darkMode: darkMode() }"
   >
     <div
       (mousedown)="leftSideClick($event)"
       [ngClass]="{
         isDragging: draggingLeft,
-        draggerDarkMode: darkMode
+        draggerDarkMode: darkMode()
        }"
       class="dragger"
-      title="{{ timesPlayed ? ('BUTTONS.timesPlayedDescription' | translate) : '' }}"
+      title="{{ timesPlayed() ? ('BUTTONS.timesPlayedDescription' | translate) : '' }}"
     >
     </div>
   </div>
@@ -30,21 +30,21 @@
   <div
     class="right-side"
     [ngStyle]="{ width: currentXright + 'px' }"
-    [ngClass]="{ darkMode: darkMode }"
+    [ngClass]="{ darkMode: darkMode() }"
   >
     <div
       (mousedown)="rightSideClick($event)"
       [ngClass]="{
           isDragging: draggingRight,
-          draggerDarkMode: darkMode
+          draggerDarkMode: darkMode()
         }"
       class="dragger"
-      title="{{ timesPlayed ? ('BUTTONS.timesPlayedDescription' | translate) : '' }}"
+      title="{{ timesPlayed() ? ('BUTTONS.timesPlayedDescription' | translate) : '' }}"
     >
     </div>
   </div>
 
-@if(lengthFilter || sizeFilter || timesPlayed || yearFilter) {
+@if(lengthFilter() || sizeFilter() || timesPlayed() || yearFilter()) {
   <span
     class="left-label"
     [ngStyle]="{
@@ -52,11 +52,11 @@
       right: (currentXleft < 35) ? 'unset' : 172 - currentXleft + 'px'
     }"
   >
-    {{ convertToIndex(currentXleft) | wrapperPipe : labelFormatPipe }}
+    {{ convertToIndex(currentXleft) | wrapperPipe : labelFormatPipe() }}
   </span>
 }
 
-@if(lengthFilter || sizeFilter || timesPlayed || yearFilter) {
+@if(lengthFilter() || sizeFilter() || timesPlayed() || yearFilter()) {
   <span
     class="right-label"
     [ngStyle]="{
@@ -64,20 +64,20 @@
       left: (currentXright > 140) ? 'unset' : currentXright + 'px'
     }"
   >
-    {{ convertToIndex(currentXright) | wrapperPipe : labelFormatPipe }}
+    {{ convertToIndex(currentXright) | wrapperPipe : labelFormatPipe() }}
   </span>
 }
 
-  @if(lengthFilter) { <span class="minLabel">0 min</span> }
-  @if(lengthFilter) { <span class="maxLabel">∞</span> }
+  @if(lengthFilter()) { <span class="minLabel">0 min</span> }
+  @if(lengthFilter()) { <span class="maxLabel">∞</span> }
 
-  @if(sizeFilter)   { <span class="minLabel">0 MB</span> }
-  @if(sizeFilter)   { <span class="maxLabel">∞</span> }
+  @if(sizeFilter())   { <span class="minLabel">0 MB</span> }
+  @if(sizeFilter())   { <span class="maxLabel">∞</span> }
 
-  @if(timesPlayed)  { <span class="minLabel">0</span> }
-  @if(timesPlayed)  { <span class="maxLabel">∞</span> }
+  @if(timesPlayed())  { <span class="minLabel">0</span> }
+  @if(timesPlayed())  { <span class="maxLabel">∞</span> }
 
-  @if(yearFilter)   { <span class="minLabel">0</span> }
-  @if(yearFilter)   { <span class="maxLabel">∞</span> }
+  @if(yearFilter())   { <span class="minLabel">0</span> }
+  @if(yearFilter())   { <span class="maxLabel">∞</span> }
 
 </div>

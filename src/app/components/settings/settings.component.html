@@ -1,6 +1,6 @@
 @for (group of settingsMetaGroup; track group; let i = $index) {
 <div [id]=i>
-@if (settingTabToShow == i) {
+@if (settingTabToShow() == i) {
   <div>
     <span
       class="setting-heading"
@@ -62,7 +62,7 @@
   </div>
 } <!-- END of settingsTab 1 -->
 
-@if (settingTabToShow == 2 && i == 2) {
+@if (settingTabToShow() == 2 && i == 2) {
   <div class="misc-settings">
     <!-- VIDEO PLAYER SETTINGS -->
 
@@ -224,9 +224,9 @@
     </div>
 
     <div class="app-version">
-      <span>v{{ versionNumber }} {{ demo ? ' DEMO - limited to 50 video files' : '' }}</span>
+      <span>v{{ versionNumber() }} {{ demo() ? ' DEMO - limited to 50 video files' : '' }}</span>
       <img width="30px" height="30px" src="./assets/logo.png">
-    @switch (latestVersionAvailable) {
+    @switch (latestVersionAvailable()) {
       @case (undefined) {
         <div
           class="version-message check-new-version"
@@ -235,7 +235,7 @@
           {{ 'SETTINGS.checkNewVersion' | translate }}
         </div>
       }
-      @case (versionNumber) {
+      @case (versionNumber()) {
         <div
           class="version-message you-have-latest"
         >
