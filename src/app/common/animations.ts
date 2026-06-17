@@ -147,7 +147,7 @@ export const sliderAppear = trigger('sliderAppear', [
   ),
   transition(
     ':leave', [
-      style({ height: '64px', opacity: 1 }),
+      style({ height: '55px', opacity: 1 }),
       animate('300ms ease-out', style({ height: 0, opacity: 0 }))
     ]
   )]

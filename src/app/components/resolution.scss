@@ -20,15 +20,15 @@ $frequency-bar: variables.$pretty-blue;
 .frequency-graph-container,
 .frequency-graph-container-star {
   height: 20px;
-  position: relative;
+  position: absolute;
 }
 
 .frequency-graph-container {
-  transform: translate(13px, 25px);
+  transform: translate(13px, 5px);
 }
 
 .frequency-graph-container-star {
-  transform: translate(3px, 25px);
+  transform: translate(3px, 5px);
 }
 
 .frequency-bar,
