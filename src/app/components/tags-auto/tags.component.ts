@@ -1,5 +1,5 @@
 import type { OnDestroy, ElementRef, OnInit } from '@angular/core';
-import { Component, ViewChild, input, output } from '@angular/core';
+import { Component, input, output, viewChild } from '@angular/core';
 
 import { AutoTagsSaveService } from './tags-save.service';
 import { AutoTagsService, WordAndFreq } from './autotags.service';
@@ -23,7 +23,7 @@ export class TagsComponent implements OnInit, OnDestroy {
 
   readonly tagClicked = output<string>();
 
-  @ViewChild('filterInput', { static: false }) filterInput: ElementRef;
+  readonly filterInput = viewChild<ElementRef>('filterInput');
 
   oneWordTags: WordAndFreq[] = [];
   twoWordTags: WordAndFreq[] = [];
@@ -56,8 +56,9 @@ export class TagsComponent implements OnInit, OnDestroy {
       }, 300);
 
       setTimeout(() => {
-        if (this.filterInput) { // in case user already closed the modal
-          this.filterInput.nativeElement.focus();
+        const filterInput = this.filterInput();
+        if (filterInput) { // in case user already closed the modal
+          filterInput.nativeElement.focus();
         }
       }, 350);
 

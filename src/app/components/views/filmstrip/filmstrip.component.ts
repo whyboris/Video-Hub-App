@@ -1,5 +1,5 @@
 import type { OnInit, ElementRef} from '@angular/core';
-import { Component, ViewChild, input, output } from '@angular/core';
+import { Component, input, output, viewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { FilePathService } from '../file-path.service';
@@ -24,7 +24,7 @@ import type { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/s
 })
 export class FilmstripComponent implements OnInit {
 
-  @ViewChild('filmstripHolder', { static: false }) filmstripHolder: ElementRef;
+  readonly filmstripHolder = viewChild<ElementRef>('filmstripHolder');
 
   readonly videoClick = output<VideoClickEmit>();
   readonly rightClick = output<RightClickEmit>();
@@ -59,7 +59,7 @@ export class FilmstripComponent implements OnInit {
   updateFilmXoffset($event) {
     if (this.hoverScrub()) {
       const imgWidth = this.imgHeight() * (16 / 9); // hardcoded aspect ratio
-      const containerWidth = this.filmstripHolder.nativeElement.getBoundingClientRect().width;
+      const containerWidth = this.filmstripHolder().nativeElement.getBoundingClientRect().width;
       const howManyScreensOutsideCutoff = this.video().screens - Math.floor(containerWidth / imgWidth);
 
       const cursorX = $event.layerX; // cursor's X position inside the filmstrip element

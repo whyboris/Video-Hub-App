@@ -1,5 +1,5 @@
 import type { OnInit, ElementRef} from '@angular/core';
-import { Component, ViewChild, input, output } from '@angular/core';
+import { Component, input, output, viewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import type { BehaviorSubject } from 'rxjs';
@@ -28,7 +28,7 @@ export interface YearEmission {
 })
 export class DetailsComponent implements OnInit {
 
-  @ViewChild('filmstripHolder', { static: false }) filmstripHolder: ElementRef;
+  readonly filmstripHolder = viewChild<ElementRef>('filmstripHolder');
 
   readonly filterTag = output<TagEmit>();
   readonly videoClick = output<VideoClickEmit>();
@@ -77,7 +77,7 @@ export class DetailsComponent implements OnInit {
 
   mouseEnter() {
     if (this.hoverScrub()) {
-      this.containerWidth = this.filmstripHolder.nativeElement.getBoundingClientRect().width;
+      this.containerWidth = this.filmstripHolder().nativeElement.getBoundingClientRect().width;
       this.hover = true;
     }
   }
