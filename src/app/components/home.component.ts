@@ -2317,7 +2317,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   setUpTimesPlayedFilterValues(finalArray: ImageElement[]): void {
     const timesPlayed: number[] = finalArray.map((element) => { return element.timesPlayed; });
 
-    this.timesPlayedCutoff = Math.max(...timesPlayed);
+    this.timesPlayedCutoff = Math.max(...timesPlayed) + 3;
   }
 
   // need to filter otherwise cutoff will be NaN
