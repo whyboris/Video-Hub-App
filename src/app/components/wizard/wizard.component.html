@@ -1,6 +1,6 @@
 <div class="wizard">
 
-@if (canCloseWizard) {
+@if (canCloseWizard()) {
   <div
     (click)="hideWizard.emit()"
     class="close-wizard"
@@ -397,7 +397,7 @@
       [disabled]="
              wizard.selectedOutputFolder === ''
           || wizard.selectedSourceFolder[0].path === ''
-          || importStage !== 'done'
+          || importStage() !== 'done'
           || wizard.futureHubName === ''
         "
       (click)="importFresh.emit()"

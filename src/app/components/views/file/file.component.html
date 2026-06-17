@@ -8,7 +8,7 @@
 
   @if (video.fileName !== '*UP*') {
 
-    @if (showMeta) {
+    @if (showMeta()) {
       <div class="number-of-files">
         {{ video.fileSizeDisplay | number }}
       </div>
@@ -17,20 +17,20 @@
       <app-icon [icon]="'icon-folder-blank'" class="icon-folder-lol" />
       <div
         class="folder-name"
-        [ngClass]="{ 'folder-name-dark-mode': darkMode }"
+        [ngClass]="{ 'folder-name-dark-mode': darkMode() }"
       >{{ video.fileName }}
 
-      @if (showMeta) {
+      @if (showMeta()) {
         <div class="folder-size">
           {{ video.fileSize | fileSizePipe }}
         </div>
       }
 
       </div>
-    @if (showMeta) {
+    @if (showMeta()) {
       <div
         class="length"
-        [ngClass]="{ 'meta-dark-mode': darkMode }"
+        [ngClass]="{ 'meta-dark-mode': darkMode() }"
       >
         {{ video.duration | lengthPipe : 'folder' }}
       </div>
@@ -40,7 +40,7 @@
       <app-icon
         class="back-icon"
         [icon]="'icon-chevron-left'"
-        [ngClass]="{ 'back-icon-dark-mode': darkMode }"
+        [ngClass]="{ 'back-icon-dark-mode': darkMode() }"
        />
     }
 
@@ -52,7 +52,7 @@
     <app-icon class="selected-file-view" [icon]="'icon-show-more-info'" />
   }
 
-  @if (showFavorites) {
+  @if (showFavorites()) {
     <app-icon
       (click)="toggleHeart()"
       class="heart"
@@ -61,9 +61,9 @@
      />
   }
 
-  @if (showMeta) {
+  @if (showMeta()) {
     <div
-      [ngClass]="{ 'meta-dark-mode': darkMode }"
+      [ngClass]="{ 'meta-dark-mode': darkMode() }"
       class="size"
       >
       {{ video.resolution }}
@@ -72,17 +72,17 @@
     <div
       class="title"
       [ngClass]="{
-          'title-dark-mode': darkMode,
-          'larger-font': largerFont,
-          'showing-meta': showMeta
+          'title-dark-mode': darkMode(),
+          'larger-font': largerFont(),
+          'showing-meta': showMeta()
         }"
     >
       {{ video.cleanName }}
 
-    @if (showMeta) {
+    @if (showMeta()) {
       <div
         class="fileSize"
-        [ngClass]="{ 'meta-dark-mode': darkMode }"
+        [ngClass]="{ 'meta-dark-mode': darkMode() }"
       >
         ({{ video.fileSizeDisplay }})
       </div>
@@ -90,10 +90,10 @@
 
     </div>
 
-  @if (showMeta) {
+  @if (showMeta()) {
     <div
       class="length"
-      [ngClass]="{ 'meta-dark-mode': darkMode }"
+      [ngClass]="{ 'meta-dark-mode': darkMode() }"
     >
       {{ video.durationDisplay }}
     </div>

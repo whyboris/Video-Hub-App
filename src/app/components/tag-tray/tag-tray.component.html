@@ -2,14 +2,14 @@
   class="manual-tag-tray"
 >
 
-@if (!batchTaggingMode) {
+@if (!batchTaggingMode()) {
 
   <div class="tag-tray-menu-left">
     <button
       (click)="appState.sortTagsByFrequency = !appState.sortTagsByFrequency"
       class="tag-sort-by-toggle"
     >
-      {{ (appState.sortTagsByFrequency ? 'TAGS.sortByFrequency'
+      {{ (appState().sortTagsByFrequency ? 'TAGS.sortByFrequency'
                                        : 'TAGS.sortAlphabetical') | translate }}
     </button>
     <button
@@ -23,7 +23,7 @@
       (keyup.esc)="manualTagFilterString = ''"
       [(ngModel)]="manualTagFilterString"
       class="filter-general manual-tag-tray-filter"
-      [ngClass]="{ 'manual-tag-tray-filter-dark': settingsButtons['darkMode'].toggled }"
+      [ngClass]="{ 'manual-tag-tray-filter-dark': settingsButtons()['darkMode'].toggled }"
       placeholder="{{ 'TAGS.filterTags' | translate }}"
     >
   </div>
@@ -31,7 +31,7 @@
 } @else {
 
     <div class="tag-tray-menu-left">
-      <span class="manual-tag-tray-label" [ngStyle]="{ color: darkMode ? 'white' : 'black' }">
+      <span class="manual-tag-tray-label" [ngStyle]="{ color: darkMode() ? 'white' : 'black' }">
         {{ 'TAGS.clickVideoToSelect' | translate }}
       </span>
 
@@ -45,7 +45,7 @@
 
       <button
         class="wizard-button wizard-button-small button-select-all"
-        [ngClass]="{ 'select-all-dark': settingsButtons['darkMode'].toggled }"
+        [ngClass]="{ 'select-all-dark': settingsButtons()['darkMode'].toggled }"
         (click)="selectAll.emit()"
       >
         {{ 'TAGS.selectAllButton' | translate }}
@@ -57,9 +57,9 @@
   <button
     class="wizard-button wizard-button-small button-toggle-batch-mode"
     [ngClass]="{
-      'button-toggle-batch-mode-dark': settingsButtons['darkMode'].toggled,
-      'button-toggle-batch-mode-dark-active': settingsButtons['darkMode'].toggled && batchTaggingMode,
-      'edit-mode-active': batchTaggingMode
+      'button-toggle-batch-mode-dark': settingsButtons()['darkMode'].toggled,
+      'button-toggle-batch-mode-dark-active': settingsButtons()['darkMode'].toggled && batchTaggingMode(),
+      'edit-mode-active': batchTaggingMode()
     }"
     (click)="toggleBatchTaggingMode.emit()"
   >
@@ -71,9 +71,9 @@
     [draggable]="true"
     [displayFrequency]="manualTagShowFrequency"
     [enableColorPicker]="true"
-    [darkMode]="darkMode"
+    [darkMode]="darkMode()"
     [tags]="manualTagsService.tagsList | manualTagSortPipe : manualTagFilterString
-                                                           : appState.sortTagsByFrequency
+                                                           : appState().sortTagsByFrequency
                                                            : manualTagsService.pipeToggleHack"
     (tagClicked)="handleTagWordClicked.emit($event)"
     (tagRightClick)="onTagRightClick($event)"

@@ -1,5 +1,5 @@
 import type { OnDestroy, ElementRef, OnInit } from '@angular/core';
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Output, ViewChild, input } from '@angular/core';
 
 import { AutoTagsSaveService } from './tags-save.service';
 import { AutoTagsService, WordAndFreq } from './autotags.service';
@@ -19,7 +19,7 @@ import { slowFadeIn, donutAppear, metaAppear } from '../../common/animations';
 })
 export class TagsComponent implements OnInit, OnDestroy {
 
-  @Input() hubName: string; // if hubName changes, tagsService will recalculate, otherwise it will show cached
+  readonly hubName = input<string>(undefined); // if hubName changes, tagsService will recalculate, otherwise it will show cached
 
   @Output() tagClicked = new EventEmitter<string>();
 
@@ -50,7 +50,7 @@ export class TagsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.tagsService.generateAllTags(this.imageElemetService.imageElements, this.hubName).then(() => {
+    this.tagsService.generateAllTags(this.imageElemetService.imageElements, this.hubName()).then(() => {
       setTimeout(() => {
         this.showEdit = true;
       }, 300);

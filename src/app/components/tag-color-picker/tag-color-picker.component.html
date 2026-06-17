@@ -2,9 +2,9 @@
 
 <div
   class="color-picker-container"
-  [ngClass]="{ 'dark-mode': darkMode }"
-  [style.left.px]="position.x"
-  [style.top.px]="position.y"
+  [ngClass]="{ 'dark-mode': darkMode() }"
+  [style.left.px]="position().x"
+  [style.top.px]="position().y"
   (click)="$event.stopPropagation()"
 >
   <div class="color-picker-header">
@@ -18,11 +18,11 @@
     <div
       class="color-swatch"
       [style.background-color]="color"
-      [class.selected]="currentColor === color"
+      [class.selected]="currentColor() === color"
       (click)="selectColor(color)"
       [title]="color"
     >
-    @if (currentColor === color) {
+    @if (currentColor() === color) {
       <span class="checkmark">✓</span>
     }
     </div>

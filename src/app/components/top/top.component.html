@@ -1,7 +1,7 @@
 @if (_file !== '') {
 <div
   class="folder-container"
-  [ngClass]="{ 'dark-mode-override': darkMode }"
+  [ngClass]="{ 'dark-mode-override': darkMode() }"
 >
   <app-icon class="icon" [icon]="'icon-folder-blank'" (click)="openInExplorer()" />
 
@@ -18,7 +18,7 @@
 
 <div
   class="file-container"
-  [ngClass]="{ 'dark-mode-override': darkMode }"
+  [ngClass]="{ 'dark-mode-override': darkMode() }"
 >
   <app-icon class="icon" [icon]="'icon-video-blank'" (click)="openInExplorer()" />
 

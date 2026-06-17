@@ -1,5 +1,5 @@
 import type { ElementRef} from '@angular/core';
-import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewChild, input } from '@angular/core';
 
 import { ManualTagsService } from './manual-tags.service';
 
@@ -29,10 +29,10 @@ export class ViewTagsComponent {
     }
   }
 
-  @Input() darkMode: boolean;
-  @Input() displayFrequency: boolean;
-  @Input() draggable: boolean;
-  @Input() enableColorPicker: boolean = false;
+  readonly darkMode = input<boolean>(undefined);
+  readonly displayFrequency = input<boolean>(undefined);
+  readonly draggable = input<boolean>(undefined);
+  readonly enableColorPicker = input<boolean>(false);
 
   @Output() removeTagEmit = new EventEmitter<string>();
   @Output() tagClicked = new EventEmitter<TagEmit>();
@@ -95,7 +95,7 @@ export class ViewTagsComponent {
    * @param tag - Tag
    */
   onTagRightClick(event: MouseEvent, tag: Tag): void {
-    if (!this.enableColorPicker) {
+    if (!this.enableColorPicker()) {
       return;
     }
 

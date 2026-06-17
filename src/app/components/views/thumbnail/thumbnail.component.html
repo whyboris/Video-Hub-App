@@ -4,11 +4,11 @@
 
 <div
   [ngStyle]="{
-      height: elHeight + 'px',
-      width: elWidth + 'px'
+      height: elHeight() + 'px',
+      width: elWidth() + 'px'
     }"
   class="filmstrip-container"
-  [ngClass]="{ 'compact-margins': compactView }"
+  [ngClass]="{ 'compact-margins': compactView() }"
 >
 
 @if (video.cleanName === '*FOLDER*') {
@@ -21,7 +21,7 @@
       (mousemove)="mouseIsMoving($event)"
       (click)="   videoClick.emit($event)"
       (dblclick)="videoClick.emit($event)"
-      [ngStyle]="{ height: imgHeight + 'px' }"
+      [ngStyle]="{ height: imgHeight() + 'px' }"
     >
 
     <!-- Show one thumbnail if there is only one video inside the folder -->
@@ -87,7 +87,7 @@
       class="video-box folder"
       (click)="   videoClick.emit($event)"
       (dblclick)="videoClick.emit($event)"
-      [ngStyle]="{ height: imgHeight + 'px' }"
+      [ngStyle]="{ height: imgHeight() + 'px' }"
       >
       <div class="up-icon">
         <app-icon [icon]="'icon-chevron-left'" />
@@ -106,8 +106,8 @@
 
   @if (showMeta && video.fileName !== '*UP*') {
     <span
-      [ngClass]="{ 'larger-font': largerFont }"
-      [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
+      [ngClass]="{ 'larger-font': largerFont() }"
+      [ngStyle]="{ color: darkMode() ? '#BBBBBB' : '#000000' }"
       class="title"
     >
       {{ video.fileName }}
@@ -141,7 +141,7 @@
     (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
 
     [ngStyle]="{
-        height: imgHeight + 'px',
+        height: imgHeight() + 'px',
         'background-image': 'url(' + (hover ? fullFilePath : firstFilePath) + ')',
         'background-position-x': percentOffset + '%'
       }"
@@ -151,7 +151,7 @@
     <app-icon class="selected" [icon]="'icon-show-more-info'" />
   }
 
-  @if (showFavorites) {
+  @if (showFavorites()) {
     <app-icon
       (click)="toggleHeart()"
       class="heart"
@@ -163,18 +163,18 @@
   @if (showMeta) {
     <span
       class="time"
-      [ngClass]="{ 'dark-style': darkMode }"
+      [ngClass]="{ 'dark-style': darkMode() }"
     >{{ video.durationDisplay }}</span>
   }
 
   @if (showMeta && video.resolution) {
     <span
       class="rez"
-      [ngClass]="{ 'dark-style': darkMode }"
+      [ngClass]="{ 'dark-style': darkMode() }"
     >{{ video.resolution }}</span>
   }
 
-  @if (!connected) {
+  @if (!connected()) {
     <span class="not-connected"></span>
   }
 
@@ -187,8 +187,8 @@
 
 @if (showMeta) {
   <span
-    [ngClass]="{ 'larger-font': largerFont }"
-    [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
+    [ngClass]="{ 'larger-font': largerFont() }"
+    [ngStyle]="{ color: darkMode() ? '#BBBBBB' : '#000000' }"
     class="title"
   >
     {{ video.cleanName }}

@@ -1,19 +1,19 @@
 <div
   class="meta"
   [ngStyle]="{
-    'min-height': imgHeight + 'px',
-    'width': maxWidth + 'px'
+    'min-height': imgHeight() + 'px',
+    'width': maxWidth() + 'px'
    }"
   >
 
   <!-- RENAME FILE SECTION -->
   <input
     class="meta-title"
-    [ngClass]="{ 'larger-font': largerFont }"
+    [ngClass]="{ 'larger-font': largerFont() }"
     [ngStyle]="{
-        color: darkMode ? '#DDDDDD' : '#000000',
+        color: darkMode() ? '#DDDDDD' : '#000000',
         width: renamingWIP.length + 2 + 'ch',
-        'max-width': maxWidth - 20 + 'px'
+        'max-width': maxWidth() - 20 + 'px'
       }"
     [(ngModel)]="renamingWIP"
     type="text"
@@ -27,7 +27,7 @@
 @if (renamingWIP === video.cleanName) {
   <span
     class="fileSize"
-    [ngClass]="{ darkModeText: darkMode }"
+    [ngClass]="{ darkModeText: darkMode() }"
   >
     {{ video.durationDisplay }}
 
@@ -53,7 +53,7 @@
         placeholder="YYYY"
         type="number"
         tabindex="-1"
-        [ngStyle]="{color: darkMode ? '#DDDDDD' : '#000000'}"
+        [ngStyle]="{color: darkMode() ? '#DDDDDD' : '#000000'}"
   >
   </span>
 
@@ -62,14 +62,14 @@
   @if (!renameError) {
     <span
       class="fileSize renaming-message"
-      [ngClass]="{ 'renaming-message-dark-mode': darkMode }"
+      [ngClass]="{ 'renaming-message-dark-mode': darkMode() }"
     >
       {{ 'SYSTEM.pressEscToStopRenaming' | translate }}
     </span>
   } @else {
     <span
       class="fileSize renaming-message renaming-error"
-      [ngClass]="{ 'renaming-error-dark-mode': darkMode }"
+      [ngClass]="{ 'renaming-error-dark-mode': darkMode() }"
     >
       {{ 'SYSTEM.fileRenameError' | translate }}
     </span>
@@ -123,41 +123,41 @@
 
 <!-- Times played -->
 @if (video.timesPlayed) {
-  <span class="fileSize times-played" [ngStyle]="{color: darkMode ? '#DDDDDD' : '#000000'}" >
+  <span class="fileSize times-played" [ngStyle]="{color: darkMode() ? '#DDDDDD' : '#000000'}" >
     {{ 'TAGS.timesPlayed' | translate }}: {{ video.timesPlayed }}
   </span>
 }
 
 <!-- Add tags / view tags -->
-@if (showManualTags) {
+@if (showManualTags()) {
   <app-add-tag-component
     (tag)="addThisTag($event)"
-    [darkMode]="darkMode"
+    [darkMode]="darkMode()"
     style="display: block;"
    />
 }
 
   <app-view-tags-component
-    [tags]="(video | tagDisplayPipe : showManualTags
-                                  : showAutoFileTags
-                                  : showAutoFolderTags
+    [tags]="(video | tagDisplayPipe : showManualTags()
+                                  : showAutoFileTags()
+                                  : showAutoFolderTags()
                                   : tagViewUpdateHack)
                     | autoTagSortPipe : sortAutoTags"
-    [darkMode]="darkMode"
+    [darkMode]="darkMode()"
     [enableColorPicker]="true"
     (tagClicked)="filterThisTag($event)"
     (removeTagEmit)="removeThisTag($event)"
     (tagRightClick)="onTagRightClick($event)"
     class="view-tags-holder"
-    [ngStyle]="{ 'min-height': imgHeight - 128 + 'px' }"
+    [ngStyle]="{ 'min-height': imgHeight() - 128 + 'px' }"
    />
 
-@if (showVideoNotes) {
+@if (showVideoNotes()) {
   <textarea
     #videoNotes
     (blur)="saveVideoNotes($event)"
     placeholder="{{ 'TAGS.notes' | translate }}"
-    [ngClass]="{ 'notes-dark-mode': darkMode }"
+    [ngClass]="{ 'notes-dark-mode': darkMode() }"
   >{{ video.notes }}</textarea>
 }
 

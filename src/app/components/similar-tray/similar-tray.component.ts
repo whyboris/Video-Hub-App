@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Output, input } from '@angular/core';
 
 import { ImageElementService } from './../../services/image-element.service';
 import { SourceFolderService } from '../statistics/source-folder.service';
@@ -24,12 +24,12 @@ export class SimilarTrayComponent {
   @Output() rightMouseClicked = new EventEmitter<RightClickEmit>();
   @Output() showMoreRecentlyPlayed = new EventEmitter<any>();
 
-  @Input() appState;
-  @Input() currentClickedItemName;
-  @Input() previewHeightRelated;
-  @Input() previewWidthRelated;
-  @Input() settingsButtons: SettingsButtonsType;
-  @Input() showRecentNotSimilar;
+  readonly appState = input(undefined);
+  readonly currentClickedItemName = input(undefined);
+  readonly previewHeightRelated = input(undefined);
+  readonly previewWidthRelated = input(undefined);
+  readonly settingsButtons = input<SettingsButtonsType>(undefined);
+  readonly showRecentNotSimilar = input(undefined);
 
   constructor(
     public imageElementService: ImageElementService,

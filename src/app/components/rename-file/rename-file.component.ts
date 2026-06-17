@@ -1,6 +1,6 @@
 import type { OnInit, ElementRef, OnDestroy } from '@angular/core';
-import { ChangeDetectorRef } from '@angular/core';
-import { Component, Input, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, input } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 
 import type { Observable, Subscription } from 'rxjs';
 
@@ -23,12 +23,12 @@ import type { RenameFileResponse } from '../../../../interfaces/shared-interface
 export class RenameFileComponent implements OnInit, OnDestroy {
   @ViewChild('renameFileInput', { static: false }) renameFileInput: ElementRef;
 
-  @Input() currentRightClickedItem: ImageElement;
-  @Input() darkMode: boolean;
-  @Input() macVersion: boolean;
-  @Input() selectedSourceFolder: string;
+  readonly currentRightClickedItem = input<ImageElement>(undefined);
+  readonly darkMode = input<boolean>(undefined);
+  readonly macVersion = input<boolean>(undefined);
+  readonly selectedSourceFolder = input<string>(undefined);
 
-  @Input() renameResponse: Observable<RenameFileResponse>;
+  readonly renameResponse = input<Observable<RenameFileResponse>>(undefined);
 
   renamingWIP: string;
   renamingExtension: string;
@@ -44,21 +44,21 @@ export class RenameFileComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    this.renamingWIP = this.filePathService.getFileNameWithoutExtension(this.currentRightClickedItem.fileName);
-    this.renamingExtension = this.filePathService.getFileNameExtension(this.currentRightClickedItem.fileName);
+    this.renamingWIP = this.filePathService.getFileNameWithoutExtension(this.currentRightClickedItem().fileName);
+    this.renamingExtension = this.filePathService.getFileNameExtension(this.currentRightClickedItem().fileName);
 
     setTimeout(() => {
       this.renameFileInput.nativeElement.focus();
     }, 0);
 
-    this.responseSubscription = this.renameResponse.subscribe((data: RenameFileResponse) => {
+    this.responseSubscription = this.renameResponse().subscribe((data: RenameFileResponse) => {
 
       if (data) {
         console.log('Rename response:');
         console.log(data);
 
         // just in case, make sure the message came back for the current file
-        if (this.currentRightClickedItem.index === data.index && !data.success) {
+        if (this.currentRightClickedItem().index === data.index && !data.success) {
           this.nodeRenamingFile = false;
           this.renameErrMsg = data.errMsg;
           this.cd.detectChanges();
@@ -77,9 +77,9 @@ export class RenameFileComponent implements OnInit, OnDestroy {
     this.nodeRenamingFile = true;
     this.renameErrMsg = '';
 
-    const sourceFolder: string = this.selectedSourceFolder;
-    const relativeFilePath: string = this.currentRightClickedItem.partialPath;
-    const originalFile: string = this.currentRightClickedItem.fileName;
+    const sourceFolder: string = this.selectedSourceFolder();
+    const relativeFilePath: string = this.currentRightClickedItem().partialPath;
+    const originalFile: string = this.currentRightClickedItem().fileName;
     const newFileName: string = this.renamingWIP + '.' + this.renamingExtension;
     // check if different first !!!
     if (originalFile === newFileName) {
@@ -91,7 +91,7 @@ export class RenameFileComponent implements OnInit, OnDestroy {
     } else {
       // try renaming
 
-      console.log(this.selectedSourceFolder);
+      console.log(this.selectedSourceFolder());
       console.log(sourceFolder);
 
       this.electronService.ipcRenderer.send(
@@ -100,7 +100,7 @@ export class RenameFileComponent implements OnInit, OnDestroy {
         relativeFilePath,
         originalFile,
         newFileName,
-        this.currentRightClickedItem.index
+        this.currentRightClickedItem().index
       );
     }
   }

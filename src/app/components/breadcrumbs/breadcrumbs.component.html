@@ -1,7 +1,7 @@
 @if (settingsButtons['showFolders'].toggled
-  && (   appState.currentView === 'showThumbnails'
-      || appState.currentView === 'showFiles'
-      || appState.currentView === 'showClips')) {
+  && (   appState().currentView === 'showThumbnails'
+      || appState().currentView === 'showFiles'
+      || appState().currentView === 'showClips')) {
 
 <div
   [ngClass]="{
@@ -13,7 +13,7 @@
 >
   <app-icon class="breadcrumb-folder-icon" [icon]="'icon-folder-blank'" (click)="breadcrumbHomeIconClick.emit()" />
 
-@for (item of folderViewNavigationPath.split('/'); track item; let idx = $index) {
+@for (item of folderViewNavigationPath().split('/'); track item; let idx = $index) {
   <span
     (click)="handleBbreadcrumbClicked.emit(idx)"
     class="breadcrumb-folder-word"

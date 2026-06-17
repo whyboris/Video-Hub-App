@@ -1,5 +1,5 @@
 import type { OnInit, OnDestroy } from '@angular/core';
-import { ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, input } from '@angular/core';
 import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 import type { Observable, Subscription } from 'rxjs';
@@ -38,17 +38,20 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   @Output() finalArrayNeedsSaving = new EventEmitter<any>();
   @Output() startServerOnPort = new EventEmitter<number>();
 
-  @Input() appState: AppStateInterface;
-  @Input() hubName: string;
-  @Input() inputFolders: InputSources;
-  @Input() numFolders: number;
-  @Input() pathToVhaFile: string;
+  readonly appState = input<AppStateInterface>(undefined);
+  readonly hubName = input<string>(undefined);
+  readonly inputFolders = input<InputSources>(undefined);
+  readonly numFolders = input<number>(undefined);
+  readonly pathToVhaFile = input<string>(undefined);
   @Input() screenshotSettings: ScreenshotSettings;
 
-  @Input() inputFolderChosen: Observable<string>;
-  @Input() numberScreenshotsDeleted: Observable<number>;
-  @Input() oldFolderReconnected: Observable<{ source: number, path: string }>;
-  @Input() serverDetails: Observable<any>;
+  readonly inputFolderChosen = input<Observable<string>>(undefined);
+  readonly numberScreenshotsDeleted = input<Observable<number>>(undefined);
+  readonly oldFolderReconnected = input<Observable<{
+    source: number;
+    path: string;
+}>>(undefined);
+  readonly serverDetails = input<Observable<any>>(undefined);
 
   eventSubscriptionMap: Map<string, Subscription> = new Map();
 
@@ -89,13 +92,14 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     console.log('booting up!');
     this.computeAverages();
 
-    console.log('port from settings:', this.appState.port);
+    const appState = this.appState();
+    console.log('port from settings:', appState.port);
 
-    this.selectedPort = this.appState.port ? this.appState.port : 3000;
+    this.selectedPort = appState.port ? appState.port : 3000;
 
     // IPC subscriptions - come in as BehaviorSubject.asObservable()
 
-    this.eventSubscriptionMap.set('serverDetails', this.serverDetails.subscribe((serverDetails: ServerDetails) => {
+    this.eventSubscriptionMap.set('serverDetails', this.serverDetails().subscribe((serverDetails: ServerDetails) => {
       console.log('STATS RECEIVED:');
       console.log(serverDetails);
       if (serverDetails) {
@@ -107,19 +111,19 @@ export class StatisticsComponent implements OnInit, OnDestroy {
       this.cd.detectChanges();
     }));
 
-    this.eventSubscriptionMap.set('inputFolder', this.inputFolderChosen.subscribe((folderPath: string) => {
+    this.eventSubscriptionMap.set('inputFolder', this.inputFolderChosen().subscribe((folderPath: string) => {
       if (folderPath) { // first emit from subscription is `undefined`
         this.handleInputFolderChosen(folderPath);
       }
     }));
 
-    this.eventSubscriptionMap.set('folderReconnect', this.oldFolderReconnected.subscribe((data) => {
+    this.eventSubscriptionMap.set('folderReconnect', this.oldFolderReconnected().subscribe((data) => {
       if (data) { // first emit from subscription is `undefined`
         this.handleOldFolderReconnected(data.source, data.path);
       }
     }));
 
-    this.eventSubscriptionMap.set('numberOfScreenshotsDeleted', this.numberScreenshotsDeleted.subscribe((deleted: number) => {
+    this.eventSubscriptionMap.set('numberOfScreenshotsDeleted', this.numberScreenshotsDeleted().subscribe((deleted: number) => {
       if (deleted !== undefined) { // first emit from subscription is `undefined`
         this.handleScreenshotsDeleted(deleted);
       }
@@ -130,7 +134,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
    * After booting up, compute all the totals and averages to display
    */
   computeAverages() {
-    console.log(this.inputFolders);
+    console.log(this.inputFolders());
 
     this.imageElementService.imageElements.forEach((element: ImageElement): void => {
       this.shortest = Math.min(element.duration, this.shortest);
@@ -176,7 +180,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     console.log('NEW FOLDER CHOSEN !!!');
     console.log(sourceIndex);
     console.log(newPath);
-    this.inputFolders[sourceIndex] = { path: newPath, watch: false };
+    this.inputFolders()[sourceIndex] = { path: newPath, watch: false };
     this.sourceFolderService.sourceFolderConnected[sourceIndex] = true;
     setTimeout(() => {
       this.cd.detectChanges();
@@ -193,15 +197,15 @@ export class StatisticsComponent implements OnInit, OnDestroy {
 
     let pathAlreadyExists = false;
 
-    Object.keys(this.inputFolders).forEach((key: string) => {
-      if (this.inputFolders[key].path === filePath) {
+    Object.keys(this.inputFolders()).forEach((key: string) => {
+      if (this.inputFolders()[key].path === filePath) {
         pathAlreadyExists = true;
       }
     });
 
     if (!pathAlreadyExists) {
-      const nextIndex: number = this.pickNextIndex(this.inputFolders);
-      this.inputFolders[nextIndex] = { path: filePath, watch: false };
+      const nextIndex: number = this.pickNextIndex(this.inputFolders());
+      this.inputFolders()[nextIndex] = { path: filePath, watch: false };
       this.sourceFolderService.sourceFolderConnected[nextIndex] = true;
       this.electronService.ipcRenderer.send('start-watching-folder', nextIndex, filePath, false);
     }
@@ -232,8 +236,9 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     console.log(index);
     console.log(shouldWatch);
     if (shouldWatch) {
-      console.log(this.inputFolders[index].path);
-      this.tellNodeStartWatching(index, this.inputFolders[index].path, shouldWatch);
+      const inputFolders = this.inputFolders();
+      console.log(inputFolders[index].path);
+      this.tellNodeStartWatching(index, inputFolders[index].path, shouldWatch);
     } else {
       this.tellNodeStopWatching(index);
     }
@@ -246,8 +251,9 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   rescanFolder(index: number) {
     console.log(index);
     console.log(typeof(index));
-    console.log(this.inputFolders[index].path);
-    this.tellNodeStartWatching(index, this.inputFolders[index].path, false);
+    const inputFolders = this.inputFolders();
+    console.log(inputFolders[index].path);
+    this.tellNodeStartWatching(index, inputFolders[index].path, false);
     setTimeout(() => {
       this.cd.detectChanges(); // to update template whether to show "Rescan" or not
     }, 1);
@@ -283,9 +289,10 @@ export class StatisticsComponent implements OnInit, OnDestroy {
    */
   deleteInputSource(itemSourceKey: number) {
     console.log(itemSourceKey);
-    console.log(this.inputFolders[itemSourceKey]);
+    const inputFolders = this.inputFolders();
+    console.log(inputFolders[itemSourceKey]);
     this.tellNodeStopWatching(itemSourceKey);
-    delete this.inputFolders[itemSourceKey];
+    delete inputFolders[itemSourceKey];
     delete this.sourceFolderService.sourceFolderConnected[itemSourceKey];
     this.deleteInputSourceFiles.emit(itemSourceKey);
   }
@@ -356,7 +363,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
     } else {
       this.selectedPort = parsed;
     }
-    this.appState.port = this.selectedPort;
+    this.appState().port = this.selectedPort;
   }
 
   /**

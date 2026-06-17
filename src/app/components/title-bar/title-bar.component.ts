@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, input } from '@angular/core';
 import type { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
@@ -13,12 +13,12 @@ export class TitleBarComponent {
   @Output() initiateMaximize = new EventEmitter<any>();
   @Output() initiateMinimize = new EventEmitter<any>();
 
-  @Input() appState;
-  @Input() demo: boolean;
-  @Input() importStage;
-  @Input() macVersion: boolean;
-  @Input() progressString;
-  @Input() settingsButtons: SettingsButtonsType;
+  readonly appState = input(undefined);
+  readonly demo = input<boolean>(undefined);
+  readonly importStage = input(undefined);
+  readonly macVersion = input<boolean>(undefined);
+  readonly progressString = input(undefined);
+  readonly settingsButtons = input<SettingsButtonsType>(undefined);
 
   constructor() { }
 

@@ -1,27 +1,27 @@
 <div
   class="sheet-modal"
-  [ngClass]="{ 'sheet-modal-dark-mode': darkMode }"
+  [ngClass]="{ 'sheet-modal-dark-mode': darkMode() }"
 >
 
   <app-meta-item
     class="meta-container"
     (filterTag)="filterTag.emit($event)"
 
-    [video]="video"
+    [video]="video()"
 
-    [imgHeight]="imgHeight"
-    [star]="star"
+    [imgHeight]="imgHeight()"
+    [star]="star()"
 
-    [darkMode]="darkMode"
-    [largerFont]="largerFont"
-    [showAutoFileTags]="showAutoFileTags"
-    [showAutoFolderTags]="showAutoFolderTags"
-    [showManualTags]="showManualTags"
-    [showMeta]="showMeta"
-    [showVideoNotes]="showVideoNotes"
+    [darkMode]="darkMode()"
+    [largerFont]="largerFont()"
+    [showAutoFileTags]="showAutoFileTags()"
+    [showAutoFolderTags]="showAutoFolderTags()"
+    [showManualTags]="showManualTags()"
+    [showMeta]="showMeta()"
+    [showVideoNotes]="showVideoNotes()"
 
-    [selectedSourceFolder]="selectedSourceFolder"
-    [renameResponse]="renameResponse.asObservable()"
+    [selectedSourceFolder]="selectedSourceFolder()"
+    [renameResponse]="renameResponse().asObservable()"
    />
 
   <div class="details-zoom-buttons">
@@ -49,14 +49,14 @@
 
   </div>
 
-  <div class="full-path" [ngClass]="{ 'dark-path': darkMode }" (click)="copyToClipboard()">
+  <div class="full-path" [ngClass]="{ 'dark-path': darkMode() }" (click)="copyToClipboard()">
     <div class="copy-to-clipboard">
       <app-icon [icon]="'icon-clipboard'" />
     </div>
     <span [innerHtml]="pathToVideoFile | folderArrowsPipe"></span>
   </div>
 
-  @for (_ of ' '.repeat(video.screens).split(''); track _; let i = $index) {
+  @for (_ of ' '.repeat(video().screens).split(''); track _; let i = $index) {
     <div
       [ngStyle]="{
           height: 'calc((72vw / ' + thumbnailsToDisplay + ') * (9 / 16))',
@@ -79,13 +79,13 @@
         <div
           class="set-favorite-thumb"
           (click)="setDefaultScreenshot($event, i)"
-          [ngClass]="{ 'star-selected' : video.defaultScreen === i }"
+          [ngClass]="{ 'star-selected' : video().defaultScreen === i }"
         >
           <app-icon [icon]="'icon-star'" />
         </div>
-      @if (showMeta) {
+      @if (showMeta()) {
         <span class="time" @metaAppear>
-          {{ (video.duration / (video.screens + 1)) * (i+1) | lengthPipe }}
+          {{ (video().duration / (video().screens + 1)) * (i+1) | lengthPipe }}
         </span>
       }
       </div>

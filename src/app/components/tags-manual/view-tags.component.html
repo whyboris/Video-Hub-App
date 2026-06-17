@@ -7,7 +7,7 @@
 @if (tag.removable) {
   <span
     class="coverTheX"
-    [ngClass]="{ 'coverTheX-dark': darkMode }"
+    [ngClass]="{ 'coverTheX-dark': darkMode() }"
   >
     &ensp;
   </span>
@@ -15,20 +15,20 @@
 
   <span
     class="search-or-tag-general tag"
-    [ngClass]="{ 'tag-draggable': draggable }"
+    [ngClass]="{ 'tag-draggable': draggable() }"
     [ngStyle]="{
       background: tag.colour,
       color: tag.colour ? getContrastColor(tag.colour) : undefined
     }"
     (click)="tagClick(tag, $event)"
     (contextmenu)="onTagRightClick($event, tag)"
-    [draggable]='draggable'
+    [draggable]='draggable()'
     (dragstart)="dragStart($event)"
   >
     {{ tag.name }}
   </span>
 
-@if (displayFrequency) {
+@if (displayFrequency()) {
   <span
     class="search-or-tag-general tag frequency"
   >
@@ -44,7 +44,7 @@
 
 } <!-- end of @for -->
 
-@if (draggable) {
+@if (draggable()) {
 
 <div style="transform: translate(-100px, -100px)">
   <span #dragHack class="search-or-tag-general tag special">

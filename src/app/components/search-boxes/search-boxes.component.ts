@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, input } from '@angular/core';
 import { filterItemAppear } from '../../common/animations';
 import type { SettingsButtonsType } from '../../common/settings-buttons';
 
@@ -26,9 +26,9 @@ export class SearchBoxesComponent {
   @Output() removeThisFilter = new EventEmitter<{ item: number, origin: number }>();
   @Output() typeaheadTabPressed = new EventEmitter<number>();
 
-  @Input() filters;
+  readonly filters = input(undefined);
   @Input() settingsButtons: SettingsButtonsType;
-  @Input() tagTypeAhead;
+  readonly tagTypeAhead = input(undefined);
 
   constructor() { }
 
@@ -40,7 +40,7 @@ export class SearchBoxesComponent {
    * @param currentText
    */
   handleTabPress(event: Event, isTagSearch: boolean, filterIndex: number, currentText: string): void {
-    if (isTagSearch && currentText !== '' && this.tagTypeAhead !== '') {
+    if (isTagSearch && currentText !== '' && this.tagTypeAhead() !== '') {
       event.preventDefault();
       this.typeaheadTabPressed.emit(filterIndex);
     }
