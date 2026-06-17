@@ -35,8 +35,8 @@ export class TopComponent {
   @Output() onFolderWordClicked = new EventEmitter<string>();
   @Output() onOpenInExplorer = new EventEmitter<boolean>();
 
-  public folderNameArray: string[];
-  public fileNameArray: string[];
+  public folderNameArray: string[] = [];
+  public fileNameArray: string[] = [];
 
   public folderWordClicked(item: string): void {
     this.onFolderWordClicked.emit(item.trim());

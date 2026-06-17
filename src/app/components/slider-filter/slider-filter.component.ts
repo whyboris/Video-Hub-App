@@ -28,7 +28,7 @@ export class SliderFilterComponent implements OnInit, OnDestroy {
   draggingLeft = false;
   draggingRight = false;
 
-  width = 160;
+  width = 167;
 
   currentXleft = 0;
   currentXright: number = this.width;
@@ -57,10 +57,11 @@ export class SliderFilterComponent implements OnInit, OnDestroy {
    * Track the mouse movement while it's inside the res filter div
    * @param event
    */
-  mouseIsMoving(event) {
+  mouseIsMoving(event: DragEvent) {
     if (this.dragging === true) {
       if (this.draggingLeft === true) {
-        const suggested = this.updateNumber(event.clientX);
+        const suggested = this.updateNumber(event.clientX - 10);
+        // -10 because draggable div is 10px away from window border
         if (suggested < this.currentXright) {
           this.currentXleft = suggested;
         }

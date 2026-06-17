@@ -2,7 +2,7 @@
   (mouseleave)="mouseLeft()"
   (mousemove)="mouseIsMoving($event)"
   (mouseup)="mouseIsUp()"
-  class="frequency-sliders"
+  class="frequency-slider"
 >
 
   <div
@@ -44,66 +44,25 @@
     </div>
   </div>
 
-@if(lengthFilter) {
+@if(lengthFilter || sizeFilter || timesPlayed || yearFilter) {
   <span
     class="left-label"
-    [ngStyle]="{ left: ((currentXleft > 35) ? currentXleft - 35 : 0) + 'px' }"
+    [ngStyle]="{
+      left: (currentXleft < 35) ? '3px' : 'unset',
+      right: (currentXleft < 35) ? 'unset' : 172 - currentXleft + 'px'
+    }"
   >
     {{ convertToIndex(currentXleft) | wrapperPipe : labelFormatPipe }}
   </span>
 }
-@if(sizeFilter) {
-  <span
-    class="left-label"
-    [ngStyle]="{ left: ((currentXleft > 35) ? currentXleft - 35 : 0) + 'px' }"
-  >
-    {{ convertToIndex(currentXleft) | wrapperPipe : labelFormatPipe }}
-  </span>
-}
-@if(timesPlayed) {
-  <span
-    class="left-label"
-    [ngStyle]="{ left: ((currentXleft > 10) ? currentXleft - 10 : 0) + 'px', width: 6 + 'px' }"
-  >
-    {{ convertToIndex(currentXleft) | wrapperPipe : labelFormatPipe }}
-  </span>
-}
-@if(yearFilter) {
-  <span
-    class="left-label"
-    [ngStyle]="{ left: ((currentXleft > 10) ? currentXleft - 10 : 0) + 'px', width: 6 + 'px' }"
-  >
-    {{ convertToIndex(currentXleft) | wrapperPipe : labelFormatPipe }}
-  </span>
-}
-@if(lengthFilter) {
+
+@if(lengthFilter || sizeFilter || timesPlayed || yearFilter) {
   <span
     class="right-label"
-    [ngStyle]="{ right: 160 - ((currentXright < 125) ? currentXright + 35 : 160) + 'px' }"
-  >
-    {{ convertToIndex(currentXright) | wrapperPipe : labelFormatPipe }}
-  </span>
-}
-@if(sizeFilter) {
-  <span
-    class="right-label"
-    [ngStyle]="{ right: 160 - ((currentXright < 125) ? currentXright + 35 : 160) + 'px' }"
-  >
-    {{ convertToIndex(currentXright) | wrapperPipe : labelFormatPipe }}
-  </span>
-}
-@if(timesPlayed) {
-  <span
-    class="right-label"
-    [ngStyle]="{ right: 160 - ((currentXright < 160) ? currentXright + 11 : 160) + 'px'}"
-  >
-    {{ convertToIndex(currentXright) | wrapperPipe : labelFormatPipe }}
-  </span>
-}
-@if(yearFilter) {
-  <span
-    class="right-label"
-    [ngStyle]="{ right: 160 - ((currentXright < 125) ? currentXright + 35 : 160) + 'px'}"
+    [ngStyle]="{
+      right: (currentXright > 140) ? '3px' : 'unset',
+      left: (currentXright > 140) ? 'unset' : currentXright + 'px'
+    }"
   >
     {{ convertToIndex(currentXright) | wrapperPipe : labelFormatPipe }}
   </span>
@@ -111,10 +70,13 @@
 
   @if(lengthFilter) { <span class="minLabel">0 min</span> }
   @if(lengthFilter) { <span class="maxLabel">∞</span> }
+
   @if(sizeFilter)   { <span class="minLabel">0 MB</span> }
   @if(sizeFilter)   { <span class="maxLabel">∞</span> }
+
   @if(timesPlayed)  { <span class="minLabel">0</span> }
   @if(timesPlayed)  { <span class="maxLabel">∞</span> }
+
   @if(yearFilter)   { <span class="minLabel">0</span> }
   @if(yearFilter)   { <span class="maxLabel">∞</span> }
 
