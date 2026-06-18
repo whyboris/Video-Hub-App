@@ -111,6 +111,7 @@ import {
 export class HomeComponent implements OnInit, AfterViewInit {
 
   readonly fuzzySearch = viewChild<ElementRef>('fuzzySearch');
+  readonly startWithSearch = viewChild<ElementRef>('startWithSearch');
   readonly magicSearch = viewChild<ElementRef>('magicSearch');
   readonly searchRef = viewChild<ElementRef>('searchRef');
 
@@ -293,6 +294,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   fullPathToCurrentFile = '';
 
   fuzzySearchString = '';
+  startWithSearchString = '';
   magicSearchString = '';
   regexSearchString = '';
   regexError = false; // handle pipe-side-effect BehaviorSubject
@@ -1652,7 +1654,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } else if (uniqueKey === 'fuzzy') {
       this.fuzzySearchString = '';
       this.toggleButtonOpposite(uniqueKey);
-
+    } else if (uniqueKey === 'startWith') {
+      this.startWithSearchString = '';
+      this.toggleButtonOpposite(uniqueKey);
       // ======== Other buttons ========================
     } else if (uniqueKey === 'compactView') {
       this.toggleButtonOpposite(uniqueKey);
