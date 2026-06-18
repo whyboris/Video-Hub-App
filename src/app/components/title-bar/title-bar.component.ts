@@ -9,9 +9,9 @@ import type { SettingsButtonsType } from '../../common/settings-buttons';
 })
 export class TitleBarComponent {
 
-  readonly initiateClose = output<any>();
-  readonly initiateMaximize = output<any>();
-  readonly initiateMinimize = output<any>();
+  readonly initiateClose = output<void>();
+  readonly initiateMaximize = output<void>();
+  readonly initiateMinimize = output<void>();
 
   readonly appState = input(undefined);
   readonly demo = input<boolean>(undefined);
