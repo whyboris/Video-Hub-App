@@ -242,6 +242,10 @@ try {
     }
   });
 
+
+  // TODO: `registerFileProtocol` may be deprecated:
+  // https://www.electronjs.org/blog/electron-33-0#behavior-changed-custom-protocol-url-handling-on-windows
+
   app.whenReady().then(() => {
     protocol.registerFileProtocol('file', (request, callback) => {
       const pathname = request.url.replace('file:///', '');

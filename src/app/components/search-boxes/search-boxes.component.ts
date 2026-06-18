@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, input, output } from '@angular/core';
 import { filterItemAppear } from '../../common/animations';
 import type { SettingsButtonsType } from '../../common/settings-buttons';
 
@@ -8,6 +8,7 @@ interface FilterEmit {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-search-boxes',
   templateUrl: './search-boxes.component.html',
   styleUrls: [
@@ -19,15 +20,15 @@ interface FilterEmit {
 })
 export class SearchBoxesComponent {
 
-  @Output() checkTagTypeahead = new EventEmitter<string>();
-  @Output() onBackspace = new EventEmitter<FilterEmit>();
-  @Output() onEnterKey = new EventEmitter<FilterEmit>();
-  @Output() removeThisFilter = new EventEmitter<{ item: number, origin: number }>();
-  @Output() typeaheadTabPressed = new EventEmitter<number>();
+  readonly checkTagTypeahead = output<string>();
+  readonly onBackspace = output<FilterEmit>();
+  readonly onEnterKey = output<FilterEmit>();
+  readonly removeThisFilter = output<{ item: number; origin: number; }>();
+  readonly typeaheadTabPressed = output<number>();
 
-  @Input() filters;
+  readonly filters = input(undefined);
   @Input() settingsButtons: SettingsButtonsType;
-  @Input() tagTypeAhead;
+  readonly tagTypeAhead = input(undefined);
 
   constructor() { }
 
@@ -39,7 +40,7 @@ export class SearchBoxesComponent {
    * @param currentText
    */
   handleTabPress(event: Event, isTagSearch: boolean, filterIndex: number, currentText: string): void {
-    if (isTagSearch && currentText !== '' && this.tagTypeAhead !== '') {
+    if (isTagSearch && currentText !== '' && this.tagTypeAhead() !== '') {
       event.preventDefault();
       this.typeaheadTabPressed.emit(filterIndex);
     }

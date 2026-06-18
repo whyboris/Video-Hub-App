@@ -2,7 +2,7 @@
   <input
     #tagInputField
     class="filter-general input-filter"
-    [ngClass]="{ 'dark-mode' : darkMode }"
+    [ngClass]="{ 'dark-mode' : darkMode() }"
     (keyup.enter)="emitTag(currentText)"
     (keyup.esc)="escape()"
     [(ngModel)]="currentText"
@@ -11,7 +11,11 @@
     type="text"
     placeholder="{{ 'TAGS.addTag' | translate }}"
   >
-  <span class="typeahead" *ngIf="typeAhead.length > 0">
+
+@if (typeAhead.length > 0) {
+  <span class="typeahead">
     {{ typeAhead }}
   </span>
+}
+
 </div>

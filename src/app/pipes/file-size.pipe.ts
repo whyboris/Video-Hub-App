@@ -2,6 +2,7 @@ import type { PipeTransform } from '@angular/core';
 import { Pipe } from '@angular/core';
 
 @Pipe({
+  standalone: false,
   name: 'fileSizePipe'
 })
 export class FileSizePipe implements PipeTransform {
@@ -12,7 +13,7 @@ export class FileSizePipe implements PipeTransform {
    * @param excludeParen - whether (2.3GB) or 2.3GB
    */
   transform(sizeInBytes: number, excludeParen?: boolean): string {
-    if (sizeInBytes) {
+    if (sizeInBytes || sizeInBytes === 0) {
       const rounded = Math.round(sizeInBytes / 1000000);
 
       return (excludeParen ? '' : '(')

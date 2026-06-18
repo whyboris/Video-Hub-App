@@ -56,6 +56,7 @@ export class ModalService {
   openSnackbar(errorMessage: string) {
     this.snack.open(errorMessage, '', {
       duration: 1500,
+      panelClass: ['custom-snackbar']
     });
   }
 

@@ -6,6 +6,7 @@ import { PipeSideEffectService } from './pipe-side-effect.service';
 import type { ImageElement } from '../../../interfaces/final-object.interface';
 
 @Pipe({
+  standalone: false,
   name: 'playlistPipe'
 })
 export class PlaylistPipe implements PipeTransform {

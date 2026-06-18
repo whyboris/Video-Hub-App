@@ -1,4 +1,4 @@
-@import "../variables";
+@use "../variables";
 
 .singleTag {
   display: inline-block;
@@ -6,7 +6,7 @@
   position: relative;
 
   .tag {
-    background-color: $manual-tag-color;
+    background-color: variables.$manual-tag-color;
     margin: 0;
     position: relative;
     z-index: 3;
@@ -22,7 +22,7 @@
   }
 
   .coverTheX {
-    background-color: $gray-20;
+    background-color: variables.$gray-20;
     height: 16px;
     position: absolute;
     transform: translate(6px, 3px);
@@ -35,8 +35,8 @@
   }
 
   .remove-tag {
-    background-color: $manual-tag-frequency;
-    border: 1px solid $manual-tag-remove-border;
+    background-color: variables.$manual-tag-frequency;
+    border: 1px solid variables.$manual-tag-remove-border;
     border-top-left-radius: 8px;
     border-top-right-radius: 8px;
     box-sizing: border-box;
@@ -65,17 +65,21 @@
   }
 
   .frequency {
-    background-color: $manual-tag-frequency;
-    color: $gray-90;
+    background-color: variables.$manual-tag-frequency;
+    border: 1px solid variables.$gray-20;
+    box-shadow: none;
+    color: variables.$gray-90;
     cursor: initial;
+    font-size: 8px;
     padding-left: 10px;
+    padding: 2px 4px 1px 8px;
     transform: translate(-5px, 0);
     z-index: 1;
   }
 }
 
 .special {
-  background-color: $manual-tag-color;
+  background-color: variables.$manual-tag-color;
   font-size: 15px;
   padding: 3px 6px 4.5px;
 }
