@@ -1,6 +1,6 @@
 import type { OnInit, ElementRef, OnDestroy } from '@angular/core';
-import { ChangeDetectorRef } from '@angular/core';
-import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, input, output, viewChild } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import type { Subscription, Observable } from 'rxjs';
@@ -13,36 +13,37 @@ import { ManualTagsService } from '../tags-manual/manual-tags.service';
 import type { StarRating, ImageElement } from '../../../../interfaces/final-object.interface';
 import type { TagEmit, RenameFileResponse } from '../../../../interfaces/shared-interfaces';
 
-import {SettingsButtons } from '../../common/settings-buttons';
+import { SettingsButtons } from '../../common/settings-buttons';
 
 
 @Component({
+  standalone: false,
   selector: 'app-meta-item',
   templateUrl: './meta.component.html',
   styleUrls: [ './meta.component.scss' ]
 })
 export class MetaComponent implements OnInit, OnDestroy {
 
-  @ViewChild('yearInput', { static: false }) yearInput: ElementRef;
-  @ViewChild('videoNotes', { static: false}) videoNotes: ElementRef;
+  readonly yearInput = viewChild<ElementRef>('yearInput');
+  readonly videoNotes = viewChild<ElementRef>('videoNotes');
 
-  @Output() filterTag = new EventEmitter<TagEmit>();
+  readonly filterTag = output<TagEmit>();
 
   @Input() video: ImageElement;
-  @Input() darkMode: boolean;
-  @Input() imgHeight: number;
-  @Input() largerFont: boolean;
-  @Input() maxWidth: number;
-  @Input() selectedSourceFolder: string;
-  @Input() showAutoFileTags: boolean;
-  @Input() showAutoFolderTags: boolean;
-  @Input() showManualTags: boolean;
-  @Input() showMeta: boolean;
-  @Input() showVideoNotes: boolean;
-  @Input() star: StarRating;
+  readonly darkMode = input<boolean>(undefined);
+  readonly imgHeight = input<number>(undefined);
+  readonly largerFont = input<boolean>(undefined);
+  readonly maxWidth = input<number>(undefined);
+  readonly selectedSourceFolder = input<string>(undefined);
+  readonly showAutoFileTags = input<boolean>(undefined);
+  readonly showAutoFolderTags = input<boolean>(undefined);
+  readonly showManualTags = input<boolean>(undefined);
+  readonly showMeta = input<boolean>(undefined);
+  readonly showVideoNotes = input<boolean>(undefined);
+  readonly star = input<StarRating>(undefined);
   @Input() starRatingHack: StarRating;
 
-  @Input() renameResponse: Observable<RenameFileResponse>;
+  readonly renameResponse = input<Observable<RenameFileResponse>>(undefined);
 
   yearHack: number;
 
@@ -52,8 +53,11 @@ export class MetaComponent implements OnInit, OnDestroy {
   renameError = false;
 
   responseSubscription: Subscription;
+  tagColorSubscription: Subscription;
 
   sortAutoTags = SettingsButtons['sortAutoTags'].toggled;
+
+  selectedTagForColor: string = '';
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -65,12 +69,12 @@ export class MetaComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.starRatingHack = this.star;
+    this.starRatingHack = this.star();
     this.yearHack = this.video.year;
 
     this.renamingWIP = this.video.cleanName; // or should this be video.fileName (without extension!?)
 
-    this.responseSubscription = this.renameResponse.subscribe((data: RenameFileResponse) => {
+    this.responseSubscription = this.renameResponse().subscribe((data: RenameFileResponse) => {
       if (data) {
         console.log('Rename response:');
         console.log(data);
@@ -85,6 +89,12 @@ export class MetaComponent implements OnInit, OnDestroy {
           }
         }
       }
+    });
+
+    // Subscribe to tag color updates
+    this.tagColorSubscription = this.manualTagsService.tagColorUpdatedSubject.subscribe(() => {
+      this.tagViewUpdateHack = !this.tagViewUpdateHack;
+      this.cd.detectChanges();
     });
 
   }
@@ -117,6 +127,24 @@ export class MetaComponent implements OnInit, OnDestroy {
       type: 'remove'
     });
     this.tagViewUpdateHack = !this.tagViewUpdateHack;
+  }
+
+  /**
+   * Handle tag right-click event - show color picker via service
+   * @param event - Object containing tag and mouse event
+   */
+  onTagRightClick(event: { tag: any, event: MouseEvent }): void {
+    this.selectedTagForColor = event.tag.name;
+
+    // Emit event to show color picker at home component level
+    this.manualTagsService.showColorPickerSubject.next({
+      tagName: event.tag.name,
+      currentColor: event.tag.colour || '',
+      position: {
+        x: event.event.clientX,
+        y: event.event.clientY
+      }
+    });
   }
 
   setStarRating(rating: StarRating): void {
@@ -185,7 +213,7 @@ export class MetaComponent implements OnInit, OnDestroy {
       // when deleting the year, currVal is NaN
       this.yearHack = isNaN(currVal) ? undefined : currVal;
     }
-    this.yearInput.nativeElement.blur();
+    this.yearInput().nativeElement.blur();
     this.setYear(this.yearHack);
   }
 
@@ -198,7 +226,7 @@ export class MetaComponent implements OnInit, OnDestroy {
       this.yearHack = 2000;
       this.setYear(2000);
       setTimeout(() => {
-        this.yearInput.nativeElement.select();
+        this.yearInput().nativeElement.select();
       }, 1);
     }
   }
@@ -210,7 +238,7 @@ export class MetaComponent implements OnInit, OnDestroy {
   tryRenamingFile() {
     this.renameError = false;
 
-    const sourceFolder = this.selectedSourceFolder;
+    const sourceFolder = this.selectedSourceFolder();
     const relativeFilePath = this.video.partialPath;
     const originalFile = this.video.fileName;
     const newFileName = this.renamingWIP + '.' + this.filePathService.getFileNameExtension(this.video.fileName);
@@ -245,11 +273,15 @@ export class MetaComponent implements OnInit, OnDestroy {
    * @param event
    */
   saveVideoNotes(event): void {
-    console.log(this.videoNotes.nativeElement.value);
-    this.video.notes = this.videoNotes.nativeElement.value;
+    const videoNotes = this.videoNotes();
+    console.log(videoNotes.nativeElement.value);
+    this.video.notes = videoNotes.nativeElement.value;
   }
 
   ngOnDestroy(): void {
     this.responseSubscription.unsubscribe();
+    if (this.tagColorSubscription) {
+      this.tagColorSubscription.unsubscribe();
+    }
   }
 }

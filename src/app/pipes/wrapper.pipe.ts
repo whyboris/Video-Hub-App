@@ -6,6 +6,7 @@ import { TimesPlayedPipe } from './times-played.pipe';
 import { YearPipe } from './year.pipe';
 
 @Pipe({
+  standalone: false,
   name: 'wrapperPipe'
 })
 export class WrapperPipe implements PipeTransform {

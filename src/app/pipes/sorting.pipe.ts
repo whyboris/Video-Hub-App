@@ -37,6 +37,7 @@ export type SortType = 'default'
                      | 'yearDesc';
 
 @Pipe({
+  standalone: false,
   name: 'sortingPipe'
 })
 export class SortingPipe implements PipeTransform {
@@ -170,15 +171,11 @@ export class SortingPipe implements PipeTransform {
   transform(
     galleryArray: ImageElement[],
     sortingType: SortType,
-    forceSortUpdateHack: number,
+    forceSortUpdateHack: number | string, // changing input forces pipe to re-sort again
     skip: boolean
   ): ImageElement[] {
 
-    // console.log('SORTING RUNNING');
-    // console.log(sortingType);
-
     if (skip) {
-      // console.log('skipping !!!');
       return galleryArray;
     } else if (sortingType === 'random') {
 
@@ -251,11 +248,11 @@ export class SortingPipe implements PipeTransform {
       });
     } else if (sortingType === 'lastPlayedAsc') {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): number => {
-        return this.sortFunctionLol(x, y, 'lastPlayed', false);
+        return this.sortFunctionLol(x, y, 'lastPlayed', true);
       });
     } else if (sortingType === 'lastPlayedDesc') {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): number => {
-        return this.sortFunctionLol(x, y, 'lastPlayed', true);
+        return this.sortFunctionLol(x, y, 'lastPlayed', false);
       });
     } else if (sortingType === 'timesPlayedAsc') {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): number => {

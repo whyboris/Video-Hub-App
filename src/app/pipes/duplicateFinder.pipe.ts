@@ -10,6 +10,7 @@ type SortBy =   'timeDesc' | 'sizeDesc' | 'hash';
 type Feature =  'duration' | 'fileSize' | 'hash';
 
 @Pipe({
+  standalone: false,
   name: 'duplicateFinderPipe'
 })
 export class DuplicateFinderPipe implements PipeTransform {

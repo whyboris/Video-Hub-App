@@ -1,4 +1,4 @@
-@import './../variables';
+@use "./../variables";
 
 .input-container {
   position: relative;
@@ -6,7 +6,7 @@
 
 // added on top of .filter-general
 .input-filter {
-  border-color: $gray-80;
+  border-color: variables.$gray-80;
   font-size: 12px;
   margin-bottom: 5px;
   padding: 4px 4px 0;
@@ -14,21 +14,21 @@
   z-index: 2;
 
   &::placeholder {
-    color: $gray-80;
+    color: variables.$gray-80;
   }
 }
 
 .dark-mode {
-  border-color: $gray-60;
+  border-color: variables.$gray-60;
   color: white;
 
   &::placeholder {
-    color: $gray-60;
+    color: variables.$gray-60;
   }
 }
 
 .typeahead {
-  color: $pretty-blue;
+  color: variables.$pretty-blue;
   font-size: 12px;
   left: 4px;
   pointer-events: none;
