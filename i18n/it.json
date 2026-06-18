@@ -1,5 +1,9 @@
 {
   "BUTTONS": {
+    "clearAllFilters": "Cancella tutti i filtri",
+    "clearAllFiltersMoreInfo": "Questo rimuoverà tutti i filtri e mostrerà tutti gli elementi.",
+    "clearAllFiltersHint": "Cancella tutti i filtri in una volta.",
+    "clearAllFiltersDescription": "Pulsante per cancellare tutti i filtri in una volta.",
     "autoFileTagsDescription": "Abilita i tag generati automaticamente in base ai nomi dei file video",
     "autoFileTagsHint": "Abilita tag automatici",
     "autoFileTagsMoreInfo": "Vedi questi nella vista Dettagli. Se abilitati, saranno anche ricercabili con il filtro Tag",

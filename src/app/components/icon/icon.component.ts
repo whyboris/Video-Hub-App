@@ -1,6 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-icon',
   templateUrl: './icon.component.html',
   styleUrls: ['./icon.component.scss',
@@ -8,7 +9,7 @@ import { Component, Input } from '@angular/core';
 })
 export class IconComponent {
 
-  @Input() icon: string;
+  readonly icon = input<string>(undefined);
 
   constructor() { }
 

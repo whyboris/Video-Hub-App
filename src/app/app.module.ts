@@ -1,12 +1,11 @@
-import { ModalComponent } from './components/modal/modal.component';
 import 'reflect-metadata';
 import '../polyfills';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { provideHttpClient } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -15,14 +14,13 @@ import { AnQrcodeModule } from 'an-qrcode';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
-import { VirtualScrollerModule } from 'ngx-virtual-scroller';
+import { VirtualScrollerModule } from '@iharbeck/ngx-virtual-scroller';
 
 // Services
 import { AutoTagsSaveService } from './components/tags-auto/tags-save.service';
 import { AutoTagsService } from './components/tags-auto/autotags.service';
 import { ElectronService } from './providers/electron.service';
 import { FilePathService } from './components/views/file-path.service';
-import { HomeComponent } from './components/home.component';
 import { ImageElementService } from './services/image-element.service';
 import { ManualTagsService } from './components/tags-manual/manual-tags.service';
 import { ModalService } from './components/modal/modal.service';
@@ -45,8 +43,10 @@ import { DonutComponent } from './components/donut/donut.component';
 import { FileComponent } from './components/views/file/file.component';
 import { FilmstripComponent } from './components/views/filmstrip/filmstrip.component';
 import { FullViewComponent } from './components/views/full/full.component';
+import { HomeComponent } from './components/home.component';
 import { IconComponent } from './components/icon/icon.component';
 import { MetaComponent } from './components/meta/meta.component';
+import { ModalComponent } from './components/modal/modal.component';
 import { RecentlyOpenedComponent } from './components/recently-opened/recently-opened.component';
 import { RenameFileComponent } from './components/rename-file/rename-file.component';
 import { RenameModalComponent } from './components/rename-modal/rename-modal.component';
@@ -62,6 +62,7 @@ import { SortOrderComponent } from './components/sort-order/sort-order.component
 import { StarFilterComponent } from './components/star-filter/star-filter.component';
 import { StatisticsComponent } from './components/statistics/statistics.component';
 import { SvgDefinitionsComponent } from './components/icon/svg-definitions.component';
+import { TagColorPickerComponent } from './components/tag-color-picker/tag-color-picker.component';
 import { TagsComponent } from './components/tags-auto/tags.component';
 import { TagTrayComponent } from './components/tag-tray/tag-tray.component';
 import { ThumbnailComponent } from './components/views/thumbnail/thumbnail.component';
@@ -170,6 +171,7 @@ import { YearPipe } from './pipes/year.pipe';
     StarFilterPipe,
     StatisticsComponent,
     SvgDefinitionsComponent,
+    TagColorPickerComponent,
     TagFilterPipe,
     TagFrequencyPipe,
     TagMatchPipe,
@@ -195,13 +197,13 @@ import { YearPipe } from './pipes/year.pipe';
     BrowserAnimationsModule,
     BrowserModule,
     FormsModule,
-    HttpClientModule,
     MatDialogModule,
     MatSnackBarModule,
     TranslateModule.forRoot(),
     VirtualScrollerModule
   ],
   providers: [
+    provideHttpClient(),
     AutoTagsSaveService,
     AutoTagsService,
     ElectronService,
