@@ -1,12 +1,14 @@
-import type { PipeTransform } from "@angular/core";
-import { Pipe } from "@angular/core";
+import type { PipeTransform } from '@angular/core';
+import { Pipe } from '@angular/core';
 
-import type { ImageElement } from "../../../interfaces/final-object.interface";
+import type { ImageElement } from '../../../interfaces/final-object.interface';
 
 @Pipe({
-  name: "startWithSearchPipe",
+  standalone: false,
+  name: 'startsWithSearchPipe',
 })
-export class StartWithSearchPipe implements PipeTransform {
+export class StartsWithSearchPipe implements PipeTransform {
+
   /**
    * Return only items that names start with search string
    * @param finalArray
@@ -15,7 +17,7 @@ export class StartWithSearchPipe implements PipeTransform {
   transform(finalArray: ImageElement[], searchString?: string): ImageElement[] {
     if (searchString.length > 0) {
       return finalArray.filter((item) =>
-        item.cleanName.split(" ").find((word) => word.startsWith(searchString))
+        item.cleanName.split(' ').find((word) => word.toLowerCase().startsWith(searchString))
       );
     } else {
       return finalArray;

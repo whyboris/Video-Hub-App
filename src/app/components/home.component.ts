@@ -294,7 +294,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   fullPathToCurrentFile = '';
 
   fuzzySearchString = '';
-  startWithSearchString = '';
+  startsWithSearchString = '';
   magicSearchString = '';
   regexSearchString = '';
   regexError = false; // handle pipe-side-effect BehaviorSubject
@@ -1655,7 +1655,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.fuzzySearchString = '';
       this.toggleButtonOpposite(uniqueKey);
     } else if (uniqueKey === 'startWith') {
-      this.startWithSearchString = '';
+      this.startsWithSearchString = '';
       this.toggleButtonOpposite(uniqueKey);
       // ======== Other buttons ========================
     } else if (uniqueKey === 'compactView') {

@@ -87,7 +87,6 @@ import { FolderArrowsPipe } from './pipes/folder-arrows.pipe';
 import { FolderSizePipe } from './pipes/folder-size.pipe';
 import { FolderViewPipe } from './pipes/folder-view.pipe';
 import { FuzzySearchPipe } from './pipes/fuzzy-search.pipe';
-import { StartWithSearchPipe } from './pipes/start-with-search.pipe';
 import { HideOfflinePipe } from './pipes/hide-offline.pipe';
 import { LengthFilterPipe } from './pipes/length-filter.pipe';
 import { LengthPipe } from './pipes/length.pipe';
@@ -101,6 +100,7 @@ import { SidebarHeightPipe } from './pipes/sidebar-height.pipe';
 import { SimilarityPipe } from './pipes/similarity.pipe';
 import { SortingPipe } from './pipes/sorting.pipe';
 import { StarFilterPipe } from './pipes/star-filter.pipe';
+import { StartsWithSearchPipe } from './pipes/start-with-search.pipe';
 import { TagFilterPipe } from './components/tags-auto/tag-filter.pipe';
 import { TagFrequencyPipe } from './components/tags-auto/tag-frequency.pipe';
 import { TagMatchPipe } from './components/tags-auto/tag-match.pipe';
@@ -138,7 +138,6 @@ import { YearPipe } from './pipes/year.pipe';
     FolderViewPipe,
     FullViewComponent,
     FuzzySearchPipe,
-    StartWithSearchPipe,
     HideOfflinePipe,
     HomeComponent,
     IconComponent,
@@ -169,6 +168,7 @@ import { YearPipe } from './pipes/year.pipe';
     SortOrderComponent,
     StarFilterComponent,
     StarFilterPipe,
+    StartsWithSearchPipe,
     StatisticsComponent,
     SvgDefinitionsComponent,
     TagColorPickerComponent,

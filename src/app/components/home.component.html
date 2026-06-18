@@ -519,8 +519,8 @@
         ></app-icon>
         <input
           #startWithSearch
-          (keydown.escape)="startWithSearchString = ''"
-          [(ngModel)]="startWithSearchString"
+          (keydown.escape)="startsWithSearchString = ''"
+          [(ngModel)]="startsWithSearchString"
           [ngStyle]="{
             color: settingsButtons['darkMode'].toggled ? 'white' : 'black'
           }"
@@ -531,12 +531,12 @@
 
         <div class="filteredWords">
           <span
-            *ngIf="startWithSearchString !== ''"
-            (click)="startWithSearchString = ''"
+            *ngIf="startsWithSearchString !== ''"
+            (click)="startsWithSearchString = ''"
             [ngStyle]="{ background: '#aaffaa' }"
             class="search-or-tag-general search-word"
           >
-            {{ startWithSearchString }}
+            {{ startsWithSearchString }}
           </span>
         </div>
       </div>
@@ -786,7 +786,7 @@
 
                 | fuzzySearchPipe : fuzzySearchString
 
-                | startWithSearchPipe : startWithSearchString
+                | startsWithSearchPipe : startsWithSearchString
 
                 | duplicateFinderPipe : settingsButtons['duplicateLength'].toggled : 'length'
 
