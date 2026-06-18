@@ -24,12 +24,12 @@ export class WizardComponent {
 
   readonly clearRecentlyViewedHistory = output<any>();
   readonly hideWizard                 = output<any>();
-  readonly importFresh                = output<any>();
-  readonly loadFromFile               = output<any>();
+  readonly importFresh                = output<void>();
+  readonly loadFromFile               = output<void>();
   readonly openFromHistory            = output<number>();
   readonly removeFromHistory          = output<number>();
-  readonly selectOutputDirectory      = output<any>();
-  readonly selectSourceDirectory      = output<any>();
+  readonly selectOutputDirectory      = output<void>();
+  readonly selectSourceDirectory      = output<void>();
 
   readonly canCloseWizard = input<boolean>(undefined);
   readonly importStage = input<ImportStage>(undefined);

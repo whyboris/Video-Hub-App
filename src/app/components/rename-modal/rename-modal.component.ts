@@ -19,7 +19,7 @@ import type { SettingsButtonsType } from '../../common/settings-buttons';
 })
 export class RenameModalComponent {
 
-  readonly closeRename = output<any>();
+  readonly closeRename = output<void>();
 
   readonly appState = input<AppStateInterface>(undefined);
   readonly basePath = input<string>(undefined);

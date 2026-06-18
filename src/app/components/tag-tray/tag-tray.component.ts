@@ -22,9 +22,9 @@ import type { SettingsButtonsType } from '../../common/settings-buttons';
 })
 export class TagTrayComponent {
 
-  readonly toggleBatchTaggingMode = output<any>();
+  readonly toggleBatchTaggingMode = output<void>();
   readonly handleTagWordClicked = output<TagEmit>();
-  readonly selectAll = output<any>();
+  readonly selectAll = output<void>();
 
   readonly appState = input<AppStateInterface>(undefined);
   readonly batchTaggingMode = input(undefined);
