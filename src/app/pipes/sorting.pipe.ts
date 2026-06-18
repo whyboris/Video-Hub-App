@@ -39,33 +39,33 @@ export type SortType = 'default'
 type SortOrderType =  keyof ImageElement | 'folderSize' | 'alphabetical' | 'aspectRatio';
 
 const sortMapping: Partial<Record<SortType, [SortOrderType, boolean]>> = {
-  alphabetAsc: ['alphabetical', true],
-  alphabetDesc: ['alphabetical', false],
-  aspectRatioAsc: ['aspectRatio', false],
-  aspectRatioDesc: ['aspectRatio', true],
-  createdAsc: ['birthtime', true],
-  createdDesc: ['birthtime', false],
-  folderSizeAsc: ['folderSize', false],
-  folderSizeDesc: ['folderSize', true],
-  fpsAsc: ['fps', true],
-  fpsDesc: ['fps', false],
-  hash: ['hash', true],
-  lastPlayedAsc: ['lastPlayed', true],
-  lastPlayedDesc: ['lastPlayed', false],
-  modifiedAsc: ['mtime', true],
-  modifiedDesc: ['mtime', false],
-  sizeAsc: ['fileSize', true],
-  sizeDesc: ['fileSize', false],
-  starAsc: ['stars', true],
-  starDesc: ['stars', false],
-  tagsAsc: ['tags', true],
-  tagsDesc: ['tags', false],
-  timeAsc: ['duration', true],
-  timeDesc: ['duration', false],
-  timesPlayedAsc: ['timesPlayed', true],
-  timesPlayedDesc: ['timesPlayed', false],
-  yearAsc: ['year', true],
-  yearDesc: ['year', false],
+  alphabetAsc:     ['alphabetical', true],
+  alphabetDesc:    ['alphabetical', false],
+  aspectRatioAsc:  ['aspectRatio',  true],
+  aspectRatioDesc: ['aspectRatio',  false],
+  createdAsc:      ['birthtime',    true],
+  createdDesc:     ['birthtime',    false],
+  folderSizeAsc:   ['folderSize',   true],
+  folderSizeDesc:  ['folderSize',   false],
+  fpsAsc:          ['fps',          true],
+  fpsDesc:         ['fps',          false],
+  hash:            ['hash',         true], // intentionally only one
+  lastPlayedAsc:   ['lastPlayed',   true],
+  lastPlayedDesc:  ['lastPlayed',   false],
+  modifiedAsc:     ['mtime',        true],
+  modifiedDesc:    ['mtime',        false],
+  sizeAsc:         ['fileSize',     true],
+  sizeDesc:        ['fileSize',     false],
+  starAsc:         ['stars',        true],
+  starDesc:        ['stars',        false],
+  tagsAsc:         ['tags',         true],
+  tagsDesc:        ['tags',         false],
+  timeAsc:         ['duration',     true],
+  timeDesc:        ['duration',     false],
+  timesPlayedAsc:  ['timesPlayed',  true],
+  timesPlayedDesc: ['timesPlayed',  false],
+  yearAsc:         ['year',         true],
+  yearDesc:        ['year',         false],
 };
 
 @Pipe({
@@ -89,106 +89,52 @@ export class SortingPipe implements PipeTransform {
     property: string,
     decreasing: boolean
   ): number {
+
     // up button first
-    if (x.fileName === '*UP*') {
-      return -1;
-    } else if (y.fileName === '*UP*') {
-      return 1;
-    }
+    if (x.fileName === '*UP*') return -1;
+    if (y.fileName === '*UP*') return 1;
 
-    if (property === 'alphabetical') {
-      if (x.fileName.toLowerCase() < y.fileName.toLowerCase()) {
-        return decreasing ? -1 : 1;
-      } if (x.fileName.toLowerCase() > y.fileName.toLowerCase()) {
-        return decreasing ? 1 : -1;
-      } else {
-        return 0;
-      }
-    }
+    const orderFactor = decreasing ? -1 : 1;
 
-    if (property === 'tags') {
-      if ((x.tags || []).length < (y.tags || []).length) {
-        return decreasing ? -1 : 1;
-      } if ((x.tags || []).length > (y.tags || []).length) {
-        return decreasing ? 1 : -1;
-      } else {
-        return 0;
-      }
-    }
-
-    if (property === 'hash') {
-      if (x.hash < y.hash) {
-        return -1;
-      } if (x.hash > y.hash) {
-        return 1;
-      } else {
-        return 0;
-      }
-    }
-
-    // handle `year` case:   show properties that are not empty first
-    if (property === 'year') {
-      if (decreasing) {
-        return (x.year || Infinity) - (y.year || Infinity);
-      } else {
-        return (y.year || 0)        - (x.year || 0);
-      }
-    }
-
-    // handle `stars` case:  show properties that are not empty first
-    if (property === 'stars') {
-      if (decreasing) {
-        return (  x.stars === <StarRating><unknown>0.5 ? Infinity : x.stars)
-               - (y.stars === <StarRating><unknown>0.5 ? Infinity : y.stars);
-      } else {
-        return (  y.stars === <StarRating><unknown>0.5 ? 0        : y.stars)
-               - (x.stars === <StarRating><unknown>0.5 ? 0        : x.stars);
-      }
-    }
-
-    if (property === 'aspectRatio') {
-      const xAspectRatio = x.width / x.height;
-      const yAspectRatio = y.width / y.height;
-
-      if (xAspectRatio < yAspectRatio) {
-        if (decreasing) { return 1; } else { return -1; }
-      } if (xAspectRatio > yAspectRatio) {
-        if (decreasing) { return -1; } else { return 1; }
-      } else {
-        return 0;
-      }
-    }
-
-    if (property === 'folderSize') {
-
-      // want non-folders to be considered "less than" a folder so give negative value by default.
-      let xDisplay = -Infinity;
-      let yDisplay = -Infinity;
-
-      if (x.cleanName === '*FOLDER*') {
-        xDisplay = parseInt(x.fileSizeDisplay, 10);
-      }
-
-      if (y.cleanName === '*FOLDER*') {
-        yDisplay = parseInt(y.fileSizeDisplay, 10);
-      }
-
-      if (xDisplay < yDisplay ) {
-        return decreasing ? 1 : -1;
-      } if (xDisplay > yDisplay) {
-        return decreasing ? -1 : 1;
-      } else {
-        return 0;
-      }
-
-    }
-
-    if (x[property] > y[property]) {
-      return decreasing ? 1 : -1;
-    } else if (x[property] === y[property]) {
+    const compareValues = (a: any, b: any): number => {
+      if (a < b) return 1 * orderFactor;
+      if (a > b) return -1 * orderFactor;
       return 0;
-    } else {
-      return decreasing ? -1 : 1;
+    };
+
+    switch (property) {
+      case 'alphabetical':
+        return compareValues(x.fileName.toLowerCase(), y.fileName.toLowerCase());
+
+      case 'aspectRatio':
+        return compareValues(x.width / x.height, y.width / y.height);
+
+      case 'folderSize':
+        // want non-folders to be considered "less than" a folder so give negative value by default.
+        const xDisplay = (x.cleanName === '*FOLDER*') ? parseInt(x.fileSizeDisplay, 10) : -Infinity;
+        const yDisplay = (y.cleanName === '*FOLDER*') ? parseInt(y.fileSizeDisplay, 10) : -Infinity;
+        return compareValues(xDisplay, yDisplay);
+
+      case 'hash':
+        return compareValues(x.hash, y.hash);
+
+      case 'stars':
+        // handle `stars` case:  show properties that are not empty first
+        const xStarsValue = x.stars === <StarRating>(<unknown>0.5) ? (decreasing ? Infinity : 0) : x.stars;
+        const yStarsValue = y.stars === <StarRating>(<unknown>0.5) ? (decreasing ? Infinity : 0) : y.stars;
+        return compareValues(xStarsValue, yStarsValue);
+
+      case 'tags':
+        return compareValues((x.tags || []).length, (y.tags || []).length);
+
+      case 'year':
+        // handle `year` case: show properties that are not empty first
+        const xYearValue = x.year || (decreasing ? Infinity : 0);
+        const yYearValue = y.year || (decreasing ? Infinity : 0);
+        return compareValues(xYearValue, yYearValue);
+
+      default:
+        return compareValues(x[property], y[property]);
     }
 
   }
@@ -209,19 +155,13 @@ export class SortingPipe implements PipeTransform {
 
     if (skip) {
       return galleryArray;
+
     } else if (sortingType === 'random') {
-
-      if (galleryArray.length === 0) {
-        return []; // else `galleryArray[0] errors out!
-      }
-
-      const currentIndex = (galleryArray[0].fileName === '*UP*' ? 1 : 0); // skip 'up button' if present
-
+      const currentIndex = (galleryArray[0]?.fileName === '*UP*' ? 1 : 0); // skip 'up button' if present
       return randomizeArray(galleryArray, currentIndex);
 
     } else if (sortingType === 'default') {
       return galleryArray; // sorting order set via `alphabetizeFinalArray` in `main-support.ts`
-      // no need to `.slice()` as all other sorting types do it
 
     } else if (sortingType === 'alphabetAsc2') {
       if (galleryArray.length && galleryArray[0].fileName === '*UP*') {
@@ -242,19 +182,18 @@ export class SortingPipe implements PipeTransform {
       }
     }
 
-    const sortOrder = sortMapping[sortingType];
+    const sortMap = sortMapping[sortingType];
 
-    if (sortOrder) {
+    if (sortMap) {
       return galleryArray.slice().sort((x: ImageElement, y: ImageElement): number =>
-        this.sortFunctionLol(x, y, sortOrder[0], sortOrder[1])
+        this.sortFunctionLol(x, y, sortMap[0], sortMap[1])
       );
     }
 
-    // else
-
-      return galleryArray.slice().sort((x: ImageElement, y: ImageElement): number => {
-        return this.sortFunctionLol(x, y, 'index', true);
-      });
+    // default sorting
+    return galleryArray.slice().sort((x: ImageElement, y: ImageElement): number => {
+      return this.sortFunctionLol(x, y, 'index', true);
+    });
 
   }
 }
