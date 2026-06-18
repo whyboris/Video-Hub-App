@@ -111,7 +111,7 @@ import {
 export class HomeComponent implements OnInit, AfterViewInit {
 
   readonly fuzzySearch = viewChild<ElementRef>('fuzzySearch');
-  readonly startWithSearch = viewChild<ElementRef>('startWithSearch');
+  readonly startsWithSearch = viewChild<ElementRef>('startsWithSearch');
   readonly magicSearch = viewChild<ElementRef>('magicSearch');
   readonly searchRef = viewChild<ElementRef>('searchRef');
 
@@ -1654,7 +1654,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } else if (uniqueKey === 'fuzzy') {
       this.fuzzySearchString = '';
       this.toggleButtonOpposite(uniqueKey);
-    } else if (uniqueKey === 'startWith') {
+    } else if (uniqueKey === 'startsWith') {
       this.startsWithSearchString = '';
       this.toggleButtonOpposite(uniqueKey);
       // ======== Other buttons ========================

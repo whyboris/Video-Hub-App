@@ -511,24 +511,19 @@
       </div>
     }
 
-       <!-- startWith search -->
-       <div *ngIf="settingsButtons['startWith'].toggled" @filterItemAppear>
-        <app-icon
-          class="input-icon"
-          [icon]="settingsButtons['startWith'].iconName"
-        ></app-icon>
+      <!-- starts-with search -->
+    @if (settingsButtons['startsWith'].toggled) {
+      <div @filterItemAppear>
+        <app-icon class="input-icon" [icon]="settingsButtons['startsWith'].iconName" />
         <input
-          #startWithSearch
+          #startsWithSearch
           (keydown.escape)="startsWithSearchString = ''"
           [(ngModel)]="startsWithSearchString"
-          [ngStyle]="{
-            color: settingsButtons['darkMode'].toggled ? 'white' : 'black'
-          }"
+          [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
           type="text"
           class="filter-general input-filter"
-          placeholder="{{ 'SIDEBAR.startWith' | translate }}"
+          placeholder="{{ 'SIDEBAR.startsWith' | translate }}"
         />
-
         <div class="filteredWords">
           <span
             *ngIf="startsWithSearchString !== ''"
@@ -540,6 +535,7 @@
           </span>
         </div>
       </div>
+    }
 
       <!-- durationFilter -->
     @if (settingsButtons['durationFilter'].toggled) {

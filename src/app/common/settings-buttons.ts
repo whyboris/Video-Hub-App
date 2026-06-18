@@ -24,7 +24,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'folderUnion'
  | 'fontSizeLarger'
  | 'fuzzy'
- | 'startWith'
+ | 'startsWith'
  | 'hideOffline'
  | 'hideSidebar'
  | 'hideTop'
@@ -109,7 +109,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'magic',
     'regex',
     'fuzzy',
-    'startWith',
+    'startsWith',
     'clearAllFilters',
   ],
   [ // 2 - Filters & sorting options
@@ -448,13 +448,13 @@ export const SettingsButtons: SettingsButtonsType = {
     title: 'BUTTONS.fuzzyHint',
     toggled: true
   },
-  startWith: {
-    description: 'BUTTONS.startWithDescription',
-    hidden: false,
+  startsWith: {
+    description: 'BUTTONS.startsWithDescription',
+    hidden: true,
     iconName: 'icon-start-with',
-    moreInfo: 'BUTTONS.startWithMoreInfo',
-    title: 'BUTTONS.startWithHint',
-    toggled: true,
+    moreInfo: 'BUTTONS.startsWithMoreInfo',
+    title: 'BUTTONS.startsWithHint',
+    toggled: false,
   },
   'hideOffline': {
     description: 'BUTTONS.hideOfflineDescription',
