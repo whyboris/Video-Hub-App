@@ -6,6 +6,7 @@ import { SourceFolderService } from '../components/statistics/source-folder.serv
 import type { ImageElement } from '../../../interfaces/final-object.interface';
 
 @Pipe({
+  standalone: false,
   name: 'hideOfflinePipe'
 })
 export class HideOfflinePipe implements PipeTransform {

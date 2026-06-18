@@ -6,6 +6,7 @@ import type { ImageElement } from '../../../interfaces/final-object.interface';
 type SearchType = 'folder' | 'file' | 'tag' | 'notes';
 
 @Pipe({
+  standalone: false,
   name: 'fileSearchPipe'
 })
 export class FileSearchPipe implements PipeTransform {

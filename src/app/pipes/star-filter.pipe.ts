@@ -6,6 +6,7 @@ import { StarFilterService } from './star-filter.service';
 import type { ImageElement } from '../../../interfaces/final-object.interface';
 
 @Pipe({
+  standalone: false,
   name: 'starFilterPipe'
 })
 export class StarFilterPipe implements PipeTransform {

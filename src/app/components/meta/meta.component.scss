@@ -1,14 +1,14 @@
-@import "../variables";
+@use "../variables";
 
 .darkModeText {
-  color: $gray-30;
+  color: variables.$gray-30;
 }
 
 .meta {
   box-sizing: border-box;
   display: inline-block;
   height: 190px;
-  overflow: hidden; // will hide tags that don't fit in 2 lines
+  overflow: visible; // changed from hidden to allow color picker to show
   padding: 0 0 0 20px;
   vertical-align: top;
 }
@@ -26,6 +26,7 @@
   -webkit-box-orient: vertical;
   display: -webkit-box;
   font-size: 12px;
+  line-clamp: 3;
   -webkit-line-clamp: 3;
   max-height: 54px;
   overflow: hidden;
@@ -52,19 +53,19 @@
 }
 
 .renaming-message {
-  color: $dark-blue;
+  color: variables.$dark-blue;
 }
 
 .renaming-message-dark-mode {
-  color: $light-blue;
+  color: variables.$light-blue;
 }
 
 .renaming-error {
-  color: $dark-red;
+  color: variables.$dark-red;
 }
 
 .renaming-error-dark-mode {
-  color: $pretty-red;
+  color: variables.$pretty-red;
 }
 
 .larger-font {
@@ -104,11 +105,11 @@
 }
 
 .view-tags-holder {
-  @include scrollBar;
+  @include variables.scrollBar;
   box-sizing: border-box;
   display: block;
   height: 60px;
-  overflow-y: auto;
+  overflow-y: visible; // changed from auto to allow color picker to show
   padding-bottom: 2px;
 }
 
@@ -119,10 +120,10 @@
 }
 
 textarea {
-  @include scrollBar;
+  @include variables.scrollBar;
   background: transparent;
   border: 0;
-  border-left: 1px solid $gray-30;
+  border-left: 1px solid variables.$gray-30;
   box-sizing: border-box;
   font-family: sans-serif;
   font-size: 12px;
@@ -134,6 +135,6 @@ textarea {
 }
 
 .notes-dark-mode {
-  border-left: 1px solid $gray-70;
+  border-left: 1px solid variables.$gray-70;
   color: white;
 }

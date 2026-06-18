@@ -138,6 +138,21 @@ export const similarResultsText = trigger('similarResultsText', [
   )]
 );
 
+export const sliderAppear = trigger('sliderAppear', [
+  transition(
+    ':enter', [
+      style({ height: 0, opacity: 0 }),
+      animate('300ms ease-in', style({ height: '55px', opacity: 1 }))
+    ]
+  ),
+  transition(
+    ':leave', [
+      style({ height: '55px', opacity: 1 }),
+      animate('300ms ease-out', style({ height: 0, opacity: 0 }))
+    ]
+  )]
+);
+
 export const filterItemAppear = trigger('filterItemAppear', [
   transition(
     ':enter', [
