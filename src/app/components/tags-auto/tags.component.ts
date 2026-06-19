@@ -1,5 +1,5 @@
 import type { OnDestroy, ElementRef, OnInit } from '@angular/core';
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Component, input, output, viewChild } from '@angular/core';
 
 import { AutoTagsSaveService } from './tags-save.service';
 import { AutoTagsService, WordAndFreq } from './autotags.service';
@@ -19,11 +19,11 @@ import { slowFadeIn, donutAppear, metaAppear } from '../../common/animations';
 })
 export class TagsComponent implements OnInit, OnDestroy {
 
-  @Input() hubName: string; // if hubName changes, tagsService will recalculate, otherwise it will show cached
+  readonly hubName = input<string>(undefined); // if hubName changes, tagsService will recalculate, otherwise it will show cached
 
-  @Output() tagClicked = new EventEmitter<string>();
+  readonly tagClicked = output<string>();
 
-  @ViewChild('filterInput', { static: false }) filterInput: ElementRef;
+  readonly filterInput = viewChild<ElementRef>('filterInput');
 
   oneWordTags: WordAndFreq[] = [];
   twoWordTags: WordAndFreq[] = [];
@@ -50,14 +50,15 @@ export class TagsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.tagsService.generateAllTags(this.imageElemetService.imageElements, this.hubName).then(() => {
+    this.tagsService.generateAllTags(this.imageElemetService.imageElements, this.hubName()).then(() => {
       setTimeout(() => {
         this.showEdit = true;
       }, 300);
 
       setTimeout(() => {
-        if (this.filterInput) { // in case user already closed the modal
-          this.filterInput.nativeElement.focus();
+        const filterInput = this.filterInput();
+        if (filterInput) { // in case user already closed the modal
+          filterInput.nativeElement.focus();
         }
       }, 350);
 

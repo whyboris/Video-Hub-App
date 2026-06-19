@@ -1,4 +1,4 @@
-import { Component, Input, HostListener } from '@angular/core';
+import { Component, HostListener, input } from '@angular/core';
 import { ShortcutsService, CustomShortcutAction } from './shortcuts.service';
 import type { SettingsButtonKey } from '../../common/settings-buttons';
 
@@ -10,7 +10,7 @@ import type { SettingsButtonKey } from '../../common/settings-buttons';
 })
 export class ShortcutsComponent {
 
-  @Input() macVersion: boolean;
+  readonly macVersion = input<boolean>(undefined);
 
   isReadyToReceiveKey = false;
   shortcutToChange: SettingsButtonKey | CustomShortcutAction;

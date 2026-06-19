@@ -1,27 +1,25 @@
-<div *ngIf="settingsButtons['starFilter'].toggled">
+
   <div class="frequency-graph-container-star">
-    <ng-container *ngFor="let starRating of starRatingFreqArr; index as i">
+    @for (starRating of starRatingFreqArr(); track starRating; let i = $index) {
       <div
-        [ngClass]="{ resDisabled: (i < starLeftBound) || (i >= starRightBound) }"
+        [ngClass]="{ resDisabled: (i < starLeftBound()) || (i >= starRightBound()) }"
         [ngStyle]="{ height: starRating + '%' }"
         class="frequency-bar-star"
       >
       </div>
       <div
-        [ngClass]="{ resDisabled: (i < starLeftBound) || (i >= starRightBound) }"
-        class="starFilterLabel"
+        [ngClass]="{ resDisabled: (i < starLeftBound()) || (i >= starRightBound()) }"
+        class="star-filter-label"
       >
-        {{ starRatingNames[i] }}
+        {{ starRatingNames()[i] }}
       </div>
-    </ng-container>
+    }
   </div>
 
   <app-slider-filter
-    [darkMode]="settingsButtons['darkMode'].toggled"
+    (newSliderFilterSelected)="newStarFilterSelected.emit($event)"
+    [darkMode]="settingsButtons()['darkMode'].toggled"
     [maximumValue]="6"
     [minimumValue]="0"
     [steps]="6"
-    (newSliderFilterSelected)="newStarFilterSelected.emit($event)"
-  ></app-slider-filter>
-
-</div>
+   />

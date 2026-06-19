@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
   standalone: false,
@@ -8,9 +8,9 @@ import { Component, Input } from '@angular/core';
 })
 export class DonutComponent {
 
-  @Input() darkMode: boolean;
-  @Input() percent: number;
-  @Input() timeRemaining: number;
+  readonly darkMode = input<boolean>(undefined);
+  readonly percent = input<number>(undefined);
+  readonly timeRemaining = input<number>(undefined);
 
   constructor() { }
 

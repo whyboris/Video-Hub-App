@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 import type { BehaviorSubject } from 'rxjs';
 
@@ -19,15 +19,15 @@ import type { SettingsButtonsType } from '../../common/settings-buttons';
 })
 export class RenameModalComponent {
 
-  @Output() closeRename = new EventEmitter<any>();
+  readonly closeRename = output<void>();
 
-  @Input() appState: AppStateInterface;
-  @Input() basePath: string;
-  @Input() currentRightClickedItem: ImageElement;
-  @Input() macVersion: boolean;
-  @Input() settingsButtons: SettingsButtonsType;
+  readonly appState = input<AppStateInterface>(undefined);
+  readonly basePath = input<string>(undefined);
+  readonly currentRightClickedItem = input<ImageElement>(undefined);
+  readonly macVersion = input<boolean>(undefined);
+  readonly settingsButtons = input<SettingsButtonsType>(undefined);
 
-  @Input() renameResponse: BehaviorSubject<RenameFileResponse>;
+  readonly renameResponse = input<BehaviorSubject<RenameFileResponse>>(undefined);
 
   constructor() { }
 

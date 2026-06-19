@@ -1,116 +1,133 @@
+<!-- in this file you'll see:
+    (X) div
+            these are named to track opening / closing  of divs -->
+
 <div
   [ngStyle]="{
-      height: elHeight + 'px',
-      width: elWidth + 'px'
+      height: elHeight() + 'px',
+      width: elWidth() + 'px'
     }"
   class="filmstrip-container"
-  [ngClass]="{ 'compact-margins': compactView }"
+  [ngClass]="{ 'compact-margins': compactView() }"
 >
 
-  <div *ngIf="video.cleanName === '*FOLDER*'; else singleThumbnail">
+@if (video.cleanName === '*FOLDER*') {
+
+  @if (video.fileName !== '*UP*') { <!-- else UP FOLDER TEMPLATE -->
+
+    <!-- (A) div -->
     <div
-      *ngIf="video.fileName !== '*UP*'; else upFolderDiv"
       class="video-box folder"
       (mousemove)="mouseIsMoving($event)"
       (click)="   videoClick.emit($event)"
       (dblclick)="videoClick.emit($event)"
-      [ngStyle]="{ height: imgHeight + 'px' }"
+      [ngStyle]="{ height: imgHeight() + 'px' }"
     >
 
-      <!-- Show one thumbnail if there is only one video inside the folder -->
+    <!-- Show one thumbnail if there is only one video inside the folder -->
+
+    @if (!folderThumbPaths[1] && folderThumbPaths[0]) {
+
       <div
-        *ngIf="!folderThumbPaths[1] && folderThumbPaths[0]; else fourPreviews"
         class="folder-item-fullsize"
         [ngStyle]="{
           'background-image': 'url(' + folderThumbPaths[0] + ')'
         }"
       ></div>
 
-      <span *ngIf="showMeta" class="time folder-time">{{ video.duration | lengthPipe : 'folder' }}</span>
+    } @else {      <!-- ========================= FOUR PREVIEWS TEMPLATE ========================== -->
+
+      @if (folderThumbPaths[0]) {
+        <div
+          class="folder-item"
+          [ngStyle]="{
+            'background-image': 'url(' + folderThumbPaths[0] + ')'
+          }"
+        ></div>
+      }
+
+      @if (folderThumbPaths[1]) {
+        <div
+          class="folder-item"
+          [ngStyle]="{ left: '50%', top: '0%',
+            'background-image': 'url(' + folderThumbPaths[1] + ')'
+          }"
+        ></div>
+      }
+
+      @if (folderThumbPaths[2]) {
+        <div
+          class="folder-item"
+          [ngStyle]="{ left: '0%', top: '50%',
+            'background-image': 'url(' + folderThumbPaths[2] + ')'
+          }"
+        ></div>
+      }
+
+      @if (folderThumbPaths[3]) {
+        <div
+          class="folder-item"
+          [ngStyle]="{ left: '50%', top: '50%',
+            'background-image': 'url(' + folderThumbPaths[3] + ')'
+          }"
+        ></div>
+      }
+
+    } <!-- end of `@else` -- the FOUR PREVIEWS template -->
+
+    @if (showMeta) {
+      <span class="time folder-time">{{ video.duration | lengthPipe : 'folder' }}</span>
+    }
+
+    </div> <!-- end of (A) div --->
+
+  } @else {  <!-- ========================= UP FOLDER TEMPLATE ===================================== -->
+
+    <div
+      class="video-box folder"
+      (click)="   videoClick.emit($event)"
+      (dblclick)="videoClick.emit($event)"
+      [ngStyle]="{ height: imgHeight() + 'px' }"
+      >
+      <div class="up-icon">
+        <app-icon [icon]="'icon-chevron-left'" />
+      </div>
     </div>
 
-    <div *ngIf="video.cleanName === '*FOLDER*' && video.fileName !== '*UP*'" class="folder-icon">
-      <app-icon [icon]="'icon-folder-blank'"></app-icon>
+  }  <!-- end of UP FOLDER TEMPLATE --->
+
+
+  @if (video.cleanName === '*FOLDER*' && video.fileName !== '*UP*') {
+    <div class="folder-icon">
+      <app-icon [icon]="'icon-folder-blank'" />
       <div class="items-in-folder">{{ video.fileSizeDisplay | folderSizePipe }}</div>
     </div>
+  }
 
+  @if (showMeta && video.fileName !== '*UP*') {
     <span
-      *ngIf="showMeta && video.fileName !== '*UP*'"
-      [ngClass]="{ 'larger-font': largerFont }"
-      [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
+      [ngClass]="{ 'larger-font': largerFont() }"
+      [ngStyle]="{ color: darkMode() ? '#BBBBBB' : '#000000' }"
       class="title"
     >
       {{ video.fileName }}
+
+    @if (showMeta) {
       <div
-        *ngIf="showMeta"
         class="fileSize"
       >
         {{ video.fileSize | fileSizePipe }}
       </div>
+    }
+
     </span>
-  </div>
+  }
 
-</div>
-
-<!-- ========================= UP FOLDER TEMPLATE ============================================== -->
-<ng-template #upFolderDiv>
-
-  <div
-    class="video-box folder"
-    (click)="   videoClick.emit($event)"
-    (dblclick)="videoClick.emit($event)"
-    [ngStyle]="{ height: imgHeight + 'px' }"
-  >
-    <div class="up-icon">
-      <app-icon [icon]="'icon-chevron-left'"></app-icon>
-    </div>
-  </div>
-
-</ng-template>
-
-<!-- ========================= FOUR PREVIEWS TEMPLATE ========================================== -->
-<ng-template #fourPreviews>
-
-  <div
-    *ngIf="folderThumbPaths[0]"
-    class="folder-item"
-    [ngStyle]="{
-      'background-image': 'url(' + folderThumbPaths[0] + ')'
-    }"
-  ></div>
-  <div
-    *ngIf="folderThumbPaths[1]"
-    class="folder-item"
-    [ngStyle]="{
-      left: '50%',
-      top: '0%',
-      'background-image': 'url(' + folderThumbPaths[1] + ')'
-    }"
-  ></div>
-  <div
-    *ngIf="folderThumbPaths[2]"
-    class="folder-item"
-    [ngStyle]="{
-      left: '0%',
-      top: '50%',
-      'background-image': 'url(' + folderThumbPaths[2] + ')'
-    }"
-  ></div>
-  <div
-    *ngIf="folderThumbPaths[3]"
-    class="folder-item"
-    [ngStyle]="{
-      left: '50%',
-      top: '50%',
-      'background-image': 'url(' + folderThumbPaths[3] + ')'
-    }"
-  ></div>
-
-</ng-template>
+} @else { <!-- END of folder `video.cleanName === '*FOLDER*'` -->
 
 <!-- ========================= INDIVIDUAL FILE TEMPLATE ======================================== -->
-<ng-template #singleThumbnail>
 
+  <!-- (B) div -->
   <div
     #filmstripHolder
     class="video-box"
@@ -124,60 +141,65 @@
     (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
 
     [ngStyle]="{
-        height: imgHeight + 'px',
+        height: imgHeight() + 'px',
         'background-image': 'url(' + (hover ? fullFilePath : firstFilePath) + ')',
         'background-position-x': percentOffset + '%'
       }"
   >
-    <app-icon
-      *ngIf="video.selected"
-      class="selected"
-      [icon]="'icon-show-more-info'"
-    ></app-icon>
 
+  @if (video.selected) {
+    <app-icon class="selected" [icon]="'icon-show-more-info'" />
+  }
+
+  @if (showFavorites()) {
     <app-icon
-      *ngIf="showFavorites"
       (click)="toggleHeart()"
       class="heart"
       [ngClass]="{ 'heart-lit' : video.stars === 5.5 }"
-      [icon]="'icon-heart'">
-    </app-icon>
+      [icon]="'icon-heart'"
+     />
+  }
 
+  @if (showMeta) {
     <span
-      *ngIf="showMeta"
       class="time"
-      [ngClass]="{ 'dark-style': darkMode }"
+      [ngClass]="{ 'dark-style': darkMode() }"
     >{{ video.durationDisplay }}</span>
-    <span
-      *ngIf="showMeta"
-      class="rez"
-      [ngClass]="{ 'dark-style': darkMode }"
-    >{{ video.resolution }}</span>
-    <span *ngIf="!connected" class="not-connected"></span>
-  </div>
-  <!--
-    .sheet-icon needs to be the next sibling of .video-box for hover to work
-      DO NOT SEPARATE!
-  -->
-  <app-icon
-    class="sheet-icon"
-    [icon]="'icon-show-thumbnails'"
-    (click)="sheetClick.emit()"
-  ></app-icon>
+  }
 
+  @if (showMeta && video.resolution) {
+    <span
+      class="rez"
+      [ngClass]="{ 'dark-style': darkMode() }"
+    >{{ video.resolution }}</span>
+  }
+
+  @if (!connected()) {
+    <span class="not-connected"></span>
+  }
+
+  </div> <!-- end of (B) div --->
+  <!--
+  .sheet-icon needs to be the next sibling of .video-box aka `(B) div` for hover to work - SCSS rule
+  DO NOT SEPARATE!
+  -->
+  <app-icon class="sheet-icon" [icon]="'icon-show-thumbnails'" (click)="sheetClick.emit()" />
+
+@if (showMeta) {
   <span
-    *ngIf="showMeta"
-    [ngClass]="{ 'larger-font': largerFont }"
-    [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
+    [ngClass]="{ 'larger-font': largerFont() }"
+    [ngStyle]="{ color: darkMode() ? '#BBBBBB' : '#000000' }"
     class="title"
   >
     {{ video.cleanName }}
-    <div
-      *ngIf="showMeta"
-      class="fileSize"
-    >
-      {{ showMeta ? '(' + video.fileSizeDisplay + ')' : '' }}
-    </div>
-  </span>
 
-</ng-template>
+    <div class="fileSize">
+      {{ '(' + video.fileSizeDisplay + ')' }}
+    </div>
+
+  </span>
+}
+
+} <!-- end of the @else -- the INDIVIDUAL FILE TEMPLATE -->
+
+</div>

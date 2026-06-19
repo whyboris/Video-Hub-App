@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input, input, output } from '@angular/core';
 
 @Component({
   standalone: false,
@@ -9,7 +9,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class TopComponent {
 
-  @Input() darkMode: boolean;
+  readonly darkMode = input<boolean>(undefined);
 
   // Handle folder input
   private _folder = '';
@@ -31,12 +31,12 @@ export class TopComponent {
   }
   get fileString(): string { return this._file; }
 
-  @Output() onFileWordClicked = new EventEmitter<string>();
-  @Output() onFolderWordClicked = new EventEmitter<string>();
-  @Output() onOpenInExplorer = new EventEmitter<boolean>();
+  readonly onFileWordClicked = output<string>();
+  readonly onFolderWordClicked = output<string>();
+  readonly onOpenInExplorer = output<boolean>();
 
-  public folderNameArray: string[];
-  public fileNameArray: string[];
+  public folderNameArray: string[] = [];
+  public fileNameArray: string[] = [];
 
   public folderWordClicked(item: string): void {
     this.onFolderWordClicked.emit(item.trim());
