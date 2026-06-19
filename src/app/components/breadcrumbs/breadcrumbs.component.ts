@@ -1,8 +1,9 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, input, output } from '@angular/core';
 import { breadcrumbsAppear, breadcrumbWordAppear } from '../../common/animations';
 import type { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
+  standalone: false,
   selector: 'app-breadcrumbs',
   templateUrl: './breadcrumbs.component.html',
   styleUrls: ['./breadcrumbs.component.scss'],
@@ -10,12 +11,12 @@ import type { SettingsButtonsType } from '../../common/settings-buttons';
 })
 export class BreadcrumbsComponent {
 
-  @Output() breadcrumbHomeIconClick = new EventEmitter<any>();
-  @Output() handleBbreadcrumbClicked = new EventEmitter<number>();
+  readonly breadcrumbHomeIconClick = output<any>();
+  readonly handleBbreadcrumbClicked = output<number>();
 
-  @Input() appState;
+  readonly appState = input(undefined);
   @Input() settingsButtons: SettingsButtonsType;
-  @Input() folderViewNavigationPath;
+  readonly folderViewNavigationPath = input(undefined);
 
   constructor() { }
 

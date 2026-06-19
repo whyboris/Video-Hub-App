@@ -5,6 +5,7 @@ import { ResolutionFilterService } from './resolution-filter.service';
 import type { ImageElement } from '../../../interfaces/final-object.interface';
 
 @Pipe({
+  standalone: false,
   name: 'resolutionFilterPipe'
 })
 export class ResolutionFilterPipe implements PipeTransform {

@@ -1,9 +1,9 @@
-@import "../variables";
+@use "../variables";
 
 .icon {
   cursor: pointer;
   display: inline-block;
-  fill: $gray-50;
+  fill: variables.$gray-50;
   max-height: 15px;
   max-width: 15px;
   position: absolute;
@@ -13,7 +13,7 @@
   width: 15px;
 
   &:hover {
-    fill: $pretty-blue;
+    fill: variables.$pretty-blue;
   }
 }
 
@@ -27,7 +27,7 @@
   }
 
   .folder-word {
-    color: $gray-60;
+    color: variables.$gray-60;
     cursor: pointer;
     display: inline-block;
     font-size: 12px;
@@ -36,7 +36,7 @@
     transition-property: color;
 
     &:hover {
-      color: $dark-blue;
+      color: variables.$dark-blue;
     }
 
     &:after {
@@ -63,7 +63,7 @@
   }
 
   .file-word {
-    color: $gray-80;
+    color: variables.$gray-80;
     cursor: pointer;
     display: inline-block;
     font-size: 14px;
@@ -72,37 +72,37 @@
     transition-property: color;
 
     &:hover {
-      color: $dark-blue;
+      color: variables.$dark-blue;
     }
   }
 }
 
 .dark-mode-override {
   & .folder-word {
-    color: $gray-30;
+    color: variables.$gray-30;
     transition: 300ms;
     transition-property: color;
 
     &:hover {
-      color: $pretty-blue;
+      color: variables.$pretty-blue;
     }
   }
 
   & .file-word {
-    color: $gray-20;
+    color: variables.$gray-20;
     transition: 300ms;
     transition-property: color;
 
     &:hover {
-      color: $pretty-blue;
+      color: variables.$pretty-blue;
     }
   }
 
   & .icon {
-    fill: $gray-10;
+    fill: variables.$gray-10;
 
     &:hover {
-      fill: $light-blue;
+      fill: variables.$light-blue;
     }
   }
 }

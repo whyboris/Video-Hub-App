@@ -1,23 +1,28 @@
 <span style="display: block; margin-bottom: 15px;">
   {{ 'SHORTCUTS.hold' | translate }}<em class="shortcut-key modifier-key">Ctrl</em>
-  <ng-container *ngIf="macVersion">
+  @if (macVersion()) {
     {{ 'SHORTCUTS.or' | translate }}<em class="shortcut-key modifier-key">Command</em>
-  </ng-container>
+  }
   {{ 'SHORTCUTS.andClickAnyFile' | translate }}
 </span>
 
+<span style="display: block; margin-bottom: 15px;">
+  {{ 'SHORTCUTS.hold' | translate }}<em class="shortcut-key modifier-key">Shift</em>
+  {{ 'SHORTCUTS.andClickAnyFileForExplorer' | translate }}
+</span>
+
 <span>{{ 'SHORTCUTS.hold' | translate }}<em class="shortcut-key modifier-key">Ctrl</em>
-  <ng-container *ngIf="macVersion">
+@if (macVersion()) {
     {{ 'SHORTCUTS.or' | translate }}<em class="shortcut-key modifier-key">Command</em>
-  </ng-container>
+}
     {{ 'SHORTCUTS.andPress' | translate }}:
 </span>
 
 <div class="shortcut-container">
 
+@for (item of shortcutsInOrder; track item) {
   <div
     class="shortcut-item"
-    *ngFor="let item of shortcutsInOrder"
     [ngClass]="{
         'space-after':     item === 'showClips'
                         || item === 'fuzzySearch'
@@ -37,6 +42,7 @@
     >{{ shortcutService.actionToKeyMap.get(item) || '-' }}</em> -
     {{ 'SHORTCUTS.' + item | translate }}
   </div>
+}
 
   <!-- System reserved -->
   <div class="shortcut-item"><em class="shortcut-key">w</em> - {{ 'SHORTCUTS.quit' | translate }}</div>

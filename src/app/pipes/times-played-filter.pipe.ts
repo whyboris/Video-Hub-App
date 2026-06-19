@@ -4,6 +4,7 @@ import { Pipe } from '@angular/core';
 import type { ImageElement } from '../../../interfaces/final-object.interface';
 
 @Pipe({
+  standalone: false,
   name: 'timesPlayedFilterPipe'
 })
 export class TimesPlayedFilterPipe implements PipeTransform {
@@ -20,7 +21,7 @@ export class TimesPlayedFilterPipe implements PipeTransform {
     if (render && finalArray.length > 0) {
       return finalArray.filter((element) => {
         const timesPlayed = element.timesPlayed;
-        if ( timesPlayed > leftBound && timesPlayed < rightBound) {
+        if ( timesPlayed > leftBound && timesPlayed < rightBound + 1) {
           return true;
         } else {
           return false;
