@@ -31,6 +31,7 @@ export class SettingsComponent implements OnInit, OnChanges {
   readonly increaseZoomLevel = output<any>();
   readonly openOnlineHelp = output<any>();
   readonly resetZoomLevel = output<any>();
+  readonly scrollSettingsToTop = output<void>();
   readonly toggleButton = output<string>();
   readonly toggleHideButton = output<string>();
 
