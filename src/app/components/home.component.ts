@@ -114,6 +114,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   readonly startsWithSearch = viewChild<ElementRef>('startsWithSearch');
   readonly magicSearch = viewChild<ElementRef>('magicSearch');
   readonly searchRef = viewChild<ElementRef>('searchRef');
+  readonly settingsModal = viewChild<ElementRef>('settingsModal');
 
   readonly sortOrderRef = viewChild(SortOrderComponent);
 
@@ -2490,6 +2491,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.serverDetailsBehaviorSubject.next(undefined);
   }
 
+  /**
+   * Scroll the settings modal to the top
+   */
+  scrollSettingsToTop(): void {
+    if (this.settingsModal) {
+      this.settingsModal().nativeElement.scrollTop = 0;
+    }
+  }
+  
   /**
    * Clear all filters and search strings
    * This is used when the user clicks the "Clear All Filters" button

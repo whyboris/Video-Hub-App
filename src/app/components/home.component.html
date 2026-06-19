@@ -214,6 +214,7 @@
   <div
     class="settings-modal"
     @modalAnimation
+    #settingsModal
   >
 
     <!-- fade out & close button -->
@@ -239,6 +240,7 @@
       (increaseZoomLevel)="increaseZoomLevel()"
       (openOnlineHelp)="openOnlineHelp()"
       (resetZoomLevel)="resetZoomLevel()"
+      (scrollSettingsToTop)="scrollSettingsToTop()"
       (toggleButton)="toggleButton($any($event))"
       (toggleHideButton)="toggleHideButton($event)"
 

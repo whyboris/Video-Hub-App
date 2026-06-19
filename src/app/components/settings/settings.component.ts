@@ -1,5 +1,6 @@
 import type { OnInit } from '@angular/core';
-import { Component, Input, input, output } from '@angular/core';
+import { Component, Input, input, output, viewChild } from '@angular/core';
+import type { OnChanges, SimpleChanges } from '@angular/core';
 
 import { TranslateService } from '@ngx-translate/core';
 
@@ -20,7 +21,7 @@ import { SettingsMetaGroup, SettingsMetaGroupLabels } from '../../common/setting
     './settings.component.scss'
   ]
 })
-export class SettingsComponent implements OnInit {
+export class SettingsComponent implements OnInit, OnChanges {
 
   readonly changeLanguage = output<string>();
   readonly checkForNewVersion = output<any>();
@@ -40,6 +41,8 @@ export class SettingsComponent implements OnInit {
   @Input() settingsButtons: SettingsButtonsType;
   readonly versionNumber = input(undefined);
 
+  readonly settingsModal = viewChild('settingsModal');
+
   additionalInput = '';
   editAdditional = false;
   settingsMetaGroup = SettingsMetaGroup;
@@ -53,6 +56,12 @@ export class SettingsComponent implements OnInit {
 
   ngOnInit(): void {
     this.additionalInput = this.appState.addtionalExtensions;
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.settingTabToShow) {
+      this.scrollSettingsToTop.emit();
+    }
   }
 
   editAdditionalExtensions() {
