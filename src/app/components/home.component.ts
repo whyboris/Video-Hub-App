@@ -794,6 +794,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.setOrRestoreLanguage(settingsObject.appState.language, locale);
       if (this.appState.currentZoomLevel !== 1) {
         this.electronService.webFrame.setZoomFactor(this.appState.currentZoomLevel);
+        setTimeout(() => {
+          this.computePreviewWidth();
+          this.cd.detectChanges();
+        }, 10);
       }
       if (settingsObject.appState.currentVhaFile) {
         this.loadThisVhaFile(settingsObject.appState.currentVhaFile);
@@ -2499,7 +2503,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.settingsModal().nativeElement.scrollTop = 0;
     }
   }
-  
+
   /**
    * Clear all filters and search strings
    * This is used when the user clicks the "Clear All Filters" button
