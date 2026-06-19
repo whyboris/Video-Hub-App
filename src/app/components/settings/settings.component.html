@@ -1,23 +1,25 @@
-<div [id]=i *ngFor="let group of settingsMetaGroup; index as i">
-  <div *ngIf="settingTabToShow == i">
-
+@for (group of settingsMetaGroup; track group; let i = $index) {
+<div [id]=i>
+@if (settingTabToShow() == i) {
+  <div>
     <span
       class="setting-heading"
       style="border-top: 0"
     >
       {{ settingsMetaGroupLabels[i] | translate }}
     </span>
-
-    <div *ngFor="let buttonKey of group">
-      <div *ngIf="buttonKey !== 'break'; else insertBreak">
+  @for (buttonKey of group; track buttonKey) {
+    <div>
+    @if (buttonKey !== 'break') {
+      <div>
         <div
           class="search-buttons-settings"
         >
-
-          <span class="setting-heading" *ngIf="settingsButtons[buttonKey]['settingsHeading']">
+        @if (settingsButtons[buttonKey]['settingsHeading']) {
+          <span class="setting-heading">
             {{ settingsButtons[buttonKey]['settingsHeading'] | translate }}
           </span>
-
+        }
           <div
             class="button-description"
           >
@@ -26,45 +28,42 @@
               [button]="buttonKey"
               [neverDarkMode]="true"
               [settingsButtons]="settingsButtons"
-            ></app-button>
-
+             />
+          @if (settingsButtons[buttonKey].iconName) {
             <span
-              *ngIf="settingsButtons[buttonKey].iconName"
               (click)="toggleHideButton.emit(buttonKey)"
               class="eye-icon-container icon {{ settingsButtons[buttonKey].hidden ? 'eye-closed' : 'eye-open' }}"
               title="{{ 'SETTINGS.showHideText' | translate }}"
             ></span>
-
+          }
             <span
               class="button-description-text"
             >
               {{ settingsButtons[buttonKey].description | translate }}
-
+            @if (settingsButtons[buttonKey].moreInfo) {
               <span
-                *ngIf="settingsButtons[buttonKey].moreInfo"
                 class="more-info"
               >
                 i
               </span>
+            }
               <span class="tooltip-text">
                 {{ settingsButtons[buttonKey].moreInfo | translate }}
               </span>
-
             </span>
-
           </div>
-
         </div>
       </div>
-
-      <ng-template #insertBreak>
-        <br>
-      </ng-template>
+    } @else {
+      <br>
+    }
     </div>
+  }
   </div>
+} <!-- END of settingsTab 1 -->
 
-  <div class="misc-settings" *ngIf="settingTabToShow == 2 && i == 2">
-
+@if (settingTabToShow() == 2 && i == 2) {
+  <div class="misc-settings">
     <!-- VIDEO PLAYER SETTINGS -->
 
     <div class="player-settings">
@@ -80,24 +79,24 @@
       >
         {{ 'SETTINGS.chooseVideoPlayer' | translate }}
       </button>
-
+    @if (appState.preferredVideoPlayer) {
       <button
         class="defaultSettingsButton player-settings-button"
-        *ngIf="appState.preferredVideoPlayer"
         (click)="appState.preferredVideoPlayer = ''"
       >
         {{ 'SETTINGS.restorePlayer' | translate }}
       </button>
-
+    }
     </div>
 
     <!-- LAUNCH ARGUMENTS -->
 
+  @if (appState.preferredVideoPlayer) {
     <div
-      *ngIf="appState.preferredVideoPlayer"
       class="player-settings player-settings-launch-args"
       [ngStyle]="{ opacity: appState.videoPlayerArgs ? 1 : '0.7' }"
     >
+
       {{ 'SETTINGS.playerArgs' | translate }}
 
       <input
@@ -107,6 +106,7 @@
       >
 
     </div>
+  }
 
     <!-- EXTENSIONS -->
 
@@ -134,16 +134,19 @@
       <button
         class="defaultSettingsButton player-settings-button"
         (click)="editAdditionalExtensions()"
-      >
+        >
         {{ (editAdditional ? 'SETTINGS.cancelExtensionsEdit': 'SETTINGS.editExtensionsInput') | translate }}
       </button>
 
-      <button *ngIf="editAdditional"
+    @if (editAdditional) {
+      <button
         class="defaultSettingsButton player-settings-button"
         (click)="applyAdditionalExtensions()"
       >
         {{ 'SETTINGS.applyAdditionalExtensions' | translate }}
       </button>
+    }
+
     </div>
 
     <!-- ZOOM BUTTONS -->
@@ -160,7 +163,7 @@
           flatSettingsButton:    settingsButtons['flatIcons'].toggled
         }"
       >
-        <app-icon [icon]="'icon-minus'"></app-icon>
+        <app-icon [icon]="'icon-minus'" />
       </button>
       <button
         (click)="resetZoomLevel.emit()"
@@ -179,7 +182,7 @@
           flatSettingsButton:    settingsButtons['flatIcons'].toggled
         }"
       >
-        <app-icon [icon]="'icon-plus'"></app-icon>
+        <app-icon [icon]="'icon-plus'" />
       </button>
     </div>
 
@@ -221,42 +224,43 @@
     </div>
 
     <div class="app-version">
-      <span>v{{ versionNumber }} {{ demo ? ' DEMO - limited to 50 video files' : '' }}</span>
+      <span>v{{ versionNumber() }} {{ demo() ? ' DEMO - limited to 50 video files' : '' }}</span>
       <img width="30px" height="30px" src="./assets/logo.png">
-
-      <ng-container
-        [ngSwitch]="latestVersionAvailable"
-      >
+    @switch (latestVersionAvailable()) {
+      @case (undefined) {
         <div
-          *ngSwitchCase="undefined"
           class="version-message check-new-version"
           (click)="checkForNewVersion.emit()"
         >
           {{ 'SETTINGS.checkNewVersion' | translate }}
         </div>
+      }
+      @case (versionNumber()) {
         <div
-          *ngSwitchCase="versionNumber"
           class="version-message you-have-latest"
         >
           {{ 'SETTINGS.youHaveLatest' | translate }}
         </div>
+      }
+      @case ('error') {
         <div
-          *ngSwitchCase="'error'"
           class="version-message version-error"
         >
           {{ 'SETTINGS.versionError' | translate }}
         </div>
+      }
+      @default {
         <div
-          *ngSwitchDefault
           class="version-message check-new-version you-have-latest"
           (click)="goDownloadNewVersion.emit()"
         >
           {{ 'SETTINGS.newVersionExists' | translate }}
         </div>
-      </ng-container>
-
+      }
+    }
     </div>
 
   </div>
-
+  }
 </div>
+}

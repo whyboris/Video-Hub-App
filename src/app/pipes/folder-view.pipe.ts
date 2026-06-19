@@ -16,6 +16,7 @@ interface FolderProperties {
 
 
 @Pipe({
+  standalone: false,
   name: 'folderViewPipe'
 })
 export class FolderViewPipe implements PipeTransform {

@@ -1,5 +1,5 @@
 import type { OnInit, ElementRef} from '@angular/core';
-import { Component, Input, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, input, output, viewChild } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import type { BehaviorSubject } from 'rxjs';
@@ -17,6 +17,7 @@ export interface YearEmission {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-details-item',
   templateUrl: './details.component.html',
   styleUrls: [
@@ -27,37 +28,37 @@ export interface YearEmission {
 })
 export class DetailsComponent implements OnInit {
 
-  @ViewChild('filmstripHolder', { static: false }) filmstripHolder: ElementRef;
+  readonly filmstripHolder = viewChild<ElementRef>('filmstripHolder');
 
-  @Output() filterTag = new EventEmitter<TagEmit>();
-  @Output() videoClick = new EventEmitter<VideoClickEmit>();
-  @Output() rightClick = new EventEmitter<RightClickEmit>();
+  readonly filterTag = output<TagEmit>();
+  readonly videoClick = output<VideoClickEmit>();
+  readonly rightClick = output<RightClickEmit>();
 
-  @Input() video: ImageElement;
+  readonly video = input<ImageElement>(undefined);
 
-  @Input() maxWidth: number;
+  readonly maxWidth = input<number>(undefined);
 
-  @Input() showTwoColumns: boolean;
+  readonly showTwoColumns = input<boolean>(undefined);
 
-  @Input() darkMode: boolean;
-  @Input() elHeight: number;
-  @Input() elWidth: number;
-  @Input() folderPath: string;
-  @Input() hoverScrub: boolean;
-  @Input() hubName: string;
-  @Input() imgHeight: number;
-  @Input() largerFont: boolean;
-  @Input() returnToFirstScreenshot: boolean;
-  @Input() selectedSourceFolder: string;
-  @Input() showAutoFileTags: boolean;
-  @Input() showAutoFolderTags: boolean;
-  @Input() showManualTags: boolean;
-  @Input() showMeta: boolean;
-  @Input() showVideoNotes: boolean;
-  @Input() showFavorites: boolean;
-  @Input() star: StarRating;
+  readonly darkMode = input<boolean>(undefined);
+  readonly elHeight = input<number>(undefined);
+  readonly elWidth = input<number>(undefined);
+  readonly folderPath = input<string>(undefined);
+  readonly hoverScrub = input<boolean>(undefined);
+  readonly hubName = input<string>(undefined);
+  readonly imgHeight = input<number>(undefined);
+  readonly largerFont = input<boolean>(undefined);
+  readonly returnToFirstScreenshot = input<boolean>(undefined);
+  readonly selectedSourceFolder = input<string>(undefined);
+  readonly showAutoFileTags = input<boolean>(undefined);
+  readonly showAutoFolderTags = input<boolean>(undefined);
+  readonly showManualTags = input<boolean>(undefined);
+  readonly showMeta = input<boolean>(undefined);
+  readonly showVideoNotes = input<boolean>(undefined);
+  readonly showFavorites = input<boolean>(undefined);
+  readonly star = input<StarRating>(undefined);
 
-  @Input() renameResponse: BehaviorSubject<RenameFileResponse>;
+  readonly renameResponse = input<BehaviorSubject<RenameFileResponse>>(undefined);
 
   containerWidth: number;
   filmstripPath = '';
@@ -75,17 +76,18 @@ export class DetailsComponent implements OnInit {
   ) { }
 
   mouseEnter() {
-    if (this.hoverScrub) {
-      this.containerWidth = this.filmstripHolder.nativeElement.getBoundingClientRect().width;
+    if (this.hoverScrub()) {
+      this.containerWidth = this.filmstripHolder().nativeElement.getBoundingClientRect().width;
       this.hover = true;
     }
   }
 
   mouseLeave() {
-    if (this.hoverScrub && this.returnToFirstScreenshot) {
+    if (this.hoverScrub() && this.returnToFirstScreenshot()) {
       this.hover = false;
-      this.percentOffset = (this.video.defaultScreen !== undefined)
-                           ? this.getDefaultScreenOffset(this.video)
+      const video = this.video();
+      this.percentOffset = (video.defaultScreen !== undefined)
+                           ? this.getDefaultScreenOffset(video)
                            : 0;
     }
   }
@@ -95,24 +97,26 @@ export class DetailsComponent implements OnInit {
   }
 
   toggleHeart(): void {
-    this.imageElementService.toggleHeart(this.video.index);
-    this.starRatingHack = this.video.stars;
+    const video = this.video();
+    this.imageElementService.toggleHeart(video.index);
+    this.starRatingHack = video.stars;
     event.stopPropagation();
   }
 
   ngOnInit() {
-    this.firstFilePath = this.filePathService.createFilePath(this.folderPath, this.hubName, 'thumbnails', this.video.hash);
-    this.filmstripPath =  this.filePathService.createFilePath(this.folderPath, this.hubName, 'filmstrips', this.video.hash);
-    if (this.video.defaultScreen !== undefined) {
-      this.percentOffset = this.getDefaultScreenOffset(this.video);
+    this.firstFilePath = this.filePathService.createFilePath(this.folderPath(), this.hubName(), 'thumbnails', this.video().hash);
+    this.filmstripPath =  this.filePathService.createFilePath(this.folderPath(), this.hubName(), 'filmstrips', this.video().hash);
+    const video = this.video();
+    if (video.defaultScreen !== undefined) {
+      this.percentOffset = this.getDefaultScreenOffset(video);
     }
   }
 
   mouseIsMoving($event) {
-    if (this.hoverScrub) {
+    if (this.hoverScrub()) {
       const cursorX = $event.layerX;
-      this.indexToShow = Math.floor(cursorX * (this.video.screens / this.containerWidth));
-      this.percentOffset = this.indexToShow * (100 / (this.video.screens - 1));
+      this.indexToShow = Math.floor(cursorX * (this.video().screens / this.containerWidth));
+      this.percentOffset = this.indexToShow * (100 / (this.video().screens - 1));
     }
   }
 }

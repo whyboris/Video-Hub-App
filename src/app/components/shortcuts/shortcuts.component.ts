@@ -1,15 +1,16 @@
-import { Component, Input, HostListener } from '@angular/core';
+import { Component, HostListener, input } from '@angular/core';
 import { ShortcutsService, CustomShortcutAction } from './shortcuts.service';
 import type { SettingsButtonKey } from '../../common/settings-buttons';
 
 @Component({
+  standalone: false,
   selector: 'app-shortcuts',
   templateUrl: './shortcuts.component.html',
   styleUrls: ['./shortcuts.component.scss']
 })
 export class ShortcutsComponent {
 
-  @Input() macVersion: boolean;
+  readonly macVersion = input<boolean>(undefined);
 
   isReadyToReceiveKey = false;
   shortcutToChange: SettingsButtonKey | CustomShortcutAction;
@@ -43,6 +44,7 @@ export class ShortcutsComponent {
 
     'toggleSettings',    // o
     'hideSidebar',       // b
+    'clearAllFilters',   // 0
     'showTagTray',       // y
     'showAutoTags',      // t - space after
 
