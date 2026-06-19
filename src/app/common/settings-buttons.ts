@@ -156,7 +156,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'randomizeFoldersScreenshots',
     'showTags',
   ],
-  [ // 6 - Bottom tray
+  [ // 6 - Bottom tray -- hidden from ribbon via !== 6 in ribbon.component.html
     'showFreq',
     'showTagTray',
     'showRelatedVideosTray',
