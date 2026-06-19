@@ -1,8 +1,8 @@
-@import "../variables";
+@use "../variables";
 
 .sheet-modal {
-  background: $gray-10;
-  border: 1px solid $gray-50;
+  background: variables.$gray-10;
+  border: 1px solid variables.$gray-50;
   border-radius: 10px;
   box-shadow: 0 3px 7px 3px rgba(0, 0, 0, 0.3);
   box-sizing: border-box;
@@ -15,7 +15,7 @@
   width: calc(80vw + 10px);
   z-index: 30;
 
-  @include scrollBar;
+  @include variables.scrollBar;
 }
 
 .full-path {
@@ -38,12 +38,12 @@
 }
 
 .dark-path {
-  color: $gray-30;
-  fill: $gray-30;
+  color: variables.$gray-30;
+  fill: variables.$gray-30;
 }
 
 .sheet-modal-dark-mode {
-  background-color: $gray-80;
+  background-color: variables.$gray-80;
 }
 
 .meta-container {

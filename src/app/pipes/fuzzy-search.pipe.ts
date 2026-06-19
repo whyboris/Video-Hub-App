@@ -6,6 +6,7 @@ import type { ImageElement } from '../../../interfaces/final-object.interface';
 import Fuse from 'fuse.js';
 
 @Pipe({
+  standalone: false,
   name: 'fuzzySearchPipe'
 })
 export class FuzzySearchPipe implements PipeTransform {

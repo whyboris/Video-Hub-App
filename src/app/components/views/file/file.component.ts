@@ -1,9 +1,10 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, input } from '@angular/core';
 
 import type { ImageElement } from '../../../../../interfaces/final-object.interface';
 import { ImageElementService } from './../../../services/image-element.service';
 
 @Component({
+  standalone: false,
   selector: 'app-file-item',
   templateUrl: './file.component.html',
   styleUrls: [
@@ -17,10 +18,10 @@ export class FileComponent {
 
   @Input() video: ImageElement;
 
-  @Input() darkMode: boolean;
-  @Input() largerFont: boolean;
-  @Input() showMeta: boolean;
-  @Input() showFavorites: boolean;
+  readonly darkMode = input<boolean>(undefined);
+  readonly largerFont = input<boolean>(undefined);
+  readonly showMeta = input<boolean>(undefined);
+  readonly showFavorites = input<boolean>(undefined);
 
   constructor(
     public imageElementService: ImageElementService,

@@ -2,44 +2,58 @@
   class="most-similar-tray"
 >
 
+@if (!showRecentNotSimilar() && !this.settingsButtons()['hideSidebar'].toggled) {
   <div
-    *ngIf="!showRecentNotSimilar && !this.settingsButtons['hideSidebar'].toggled"
     class="most-similar-comment"
     @similarResultsText
   >
     {{ 'TAGS.showingMostSimilar' | translate }}
     <span class="most-similar-filename">
-      {{ currentClickedItemName }}
+      {{ currentClickedItemName() }}
     </span>
   </div>
+}
+
+@for (item of (showRecentNotSimilar()
+               ? (imageElementService.imageElements | sortingPipe : 'lastPlayedDesc' : currentClickedItemName()
+                                                    | slice : 0 : 8)
+               : (imageElementService.imageElements | similarityPipe : true : currentClickedItemName()
+                                                    | slice : 0 : 8 )
+              ); track item) {
 
   <app-thumbnail
-    *ngFor="let item of (showRecentNotSimilar
-                          ?  imageElementService.recentlyPlayed
-                          : (imageElementService.imageElements | similarityPipe : true : currentClickedItemName
-                                                               | slice : 0 : 8 )
-                        )"
-
     (videoClick)="handleClick.emit({ expectedEvent: $event, item: item })"
     (contextmenu)="rightMouseClicked.emit({ mouseEvent: $event, item: item })"
 
-    [elHeight]="previewHeightRelated + 50"
-    [elWidth]="previewWidthRelated"
-    [folderPath]="appState.selectedOutputFolder"
-    [hubName]="appState.hubName"
-    [imgHeight]="previewHeightRelated"
+    [elHeight]="previewHeightRelated() + 50"
+    [elWidth]="previewWidthRelated()"
+    [folderPath]="appState().selectedOutputFolder"
+    [hubName]="appState().hubName"
+    [imgHeight]="previewHeightRelated()"
 
     [video]="item"
 
     [connected]="sourceFolderService.sourceFolderConnected[item.inputSource]"
 
-    [darkMode]="settingsButtons['darkMode'].toggled"
-    [hoverScrub]="settingsButtons['hoverScrub'].toggled"
-    [largerFont]="settingsButtons['fontSizeLarger'].toggled"
-    [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
-    [showMeta]="settingsButtons['showMoreInfo'].toggled"
+    [darkMode]="settingsButtons()['darkMode'].toggled"
+    [hoverScrub]="settingsButtons()['hoverScrub'].toggled"
+    [largerFont]="settingsButtons()['fontSizeLarger'].toggled"
+    [returnToFirstScreenshot]="settingsButtons()['returnToFirstScreenshot'].toggled"
+    [showMeta]="settingsButtons()['showMoreInfo'].toggled"
 
     style="display: inline-block; margin-bottom: 50px"
-  ></app-thumbnail>
+   />
+}
+
+  @if(showRecentNotSimilar()) {
+    <div
+      (click)="showMoreRecentlyPlayed.emit()"
+      class="more"
+    >
+      <span>
+        {{ 'TAGS.showMore' | translate }}
+      </span>
+    </div>
+  }
 
 </div>

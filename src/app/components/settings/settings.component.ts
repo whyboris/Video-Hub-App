@@ -1,5 +1,6 @@
-import type { OnInit, OnChanges, SimpleChanges } from '@angular/core';
-import { Component, Input, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import type { OnInit } from '@angular/core';
+import { Component, Input, input, output, viewChild } from '@angular/core';
+import type { OnChanges, SimpleChanges } from '@angular/core';
 
 import { TranslateService } from '@ngx-translate/core';
 
@@ -10,6 +11,7 @@ import type { SettingsButtonsType } from '../../common/settings-buttons';
 import { SettingsMetaGroup, SettingsMetaGroupLabels } from '../../common/settings-buttons';
 
 @Component({
+  standalone: false,
   selector: 'app-settings',
   templateUrl: './settings.component.html',
   styleUrls: [
@@ -21,26 +23,25 @@ import { SettingsMetaGroup, SettingsMetaGroupLabels } from '../../common/setting
 })
 export class SettingsComponent implements OnInit, OnChanges {
 
-  @Output() changeLanguage = new EventEmitter<string>();
-  @Output() checkForNewVersion = new EventEmitter<any>();
-  @Output() chooseDefaultVideoPlayer = new EventEmitter<any>();
-  @Output() decreaseZoomLevel = new EventEmitter<any>();
-  @Output() goDownloadNewVersion = new EventEmitter<any>();
-  @Output() increaseZoomLevel = new EventEmitter<any>();
-  @Output() openOnlineHelp = new EventEmitter<any>();
-  @Output() resetZoomLevel = new EventEmitter<any>();
-  @Output() toggleButton = new EventEmitter<string>();
-  @Output() toggleHideButton = new EventEmitter<string>();
-  @Output() scrollSettingsToTop = new EventEmitter<void>();
+  readonly changeLanguage = output<string>();
+  readonly checkForNewVersion = output<any>();
+  readonly chooseDefaultVideoPlayer = output<any>();
+  readonly decreaseZoomLevel = output<any>();
+  readonly goDownloadNewVersion = output<any>();
+  readonly increaseZoomLevel = output<any>();
+  readonly openOnlineHelp = output<any>();
+  readonly resetZoomLevel = output<any>();
+  readonly toggleButton = output<string>();
+  readonly toggleHideButton = output<string>();
 
   @Input() appState;
-  @Input() demo;
-  @Input() latestVersionAvailable;
-  @Input() settingTabToShow;
+  readonly demo = input(undefined);
+  readonly latestVersionAvailable = input(undefined);
+  readonly settingTabToShow = input(undefined);
   @Input() settingsButtons: SettingsButtonsType;
-  @Input() versionNumber;
+  readonly versionNumber = input(undefined);
 
-  @ViewChild('settingsModal') settingsModal: ElementRef;
+  readonly settingsModal = viewChild('settingsModal');
 
   additionalInput = '';
   editAdditional = false;

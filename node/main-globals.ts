@@ -18,7 +18,7 @@ export const GLOBALS: VhaGlobals = {
   selectedOutputFolder: '',
   selectedSourceFolders: {},
   settingsPath: '',            // to differentiate between standard & Windows Portable settings location
-  version: '3.2.1',            // see instructions above to update `package.json` in tandem               <---- !!! RELEASE !!!!
+  version: '3.3.0',            // see instructions above to update `package.json` in tandem               <---- !!! RELEASE !!!!
   vhaFileVersion: 3,
   winRef: null,
   screenshotSettings: {

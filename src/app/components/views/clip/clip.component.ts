@@ -1,6 +1,6 @@
-import { ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, input, output } from '@angular/core';
 import type { OnInit } from '@angular/core';
-import { Component, HostListener, Input, Output, EventEmitter } from '@angular/core';
+import { Component, HostListener, Input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { FilePathService } from '../file-path.service';
@@ -11,6 +11,7 @@ import type { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/s
 import { metaAppear, textAppear } from '../../../common/animations';
 
 @Component({
+  standalone: false,
   selector: 'app-clip-item',
   templateUrl: './clip.component.html',
   styleUrls: [
@@ -23,25 +24,25 @@ import { metaAppear, textAppear } from '../../../common/animations';
 })
 export class ClipComponent implements OnInit {
 
-  @Output() rightClick = new EventEmitter<RightClickEmit>();
-  @Output() sheetClick = new EventEmitter<any>(); // does not emit data of any kind
-  @Output() videoClick = new EventEmitter<VideoClickEmit>();
+  readonly rightClick = output<RightClickEmit>();
+  readonly sheetClick = output<any>(); // does not emit data of any kind
+  readonly videoClick = output<VideoClickEmit>();
 
   @Input() video: ImageElement;
 
-  @Input() autoplay: boolean;
-  @Input() compactView: boolean;
-  @Input() darkMode: boolean;
-  @Input() elHeight: number;
-  @Input() elWidth: number;
-  @Input() folderPath: string;
-  @Input() forceMute: boolean;
-  @Input() defaultThumbnailMode: boolean;
-  @Input() returnToFirstScreenshot: boolean;
-  @Input() hubName: string;
-  @Input() imgHeight: number;
-  @Input() largerFont: boolean;
-  @Input() showMeta: boolean;
+  readonly autoplay = input<boolean>(undefined);
+  readonly compactView = input<boolean>(undefined);
+  readonly darkMode = input<boolean>(undefined);
+  readonly elHeight = input<number>(undefined);
+  readonly elWidth = input<number>(undefined);
+  readonly folderPath = input<string>(undefined);
+  readonly forceMute = input<boolean>(undefined);
+  readonly defaultThumbnailMode = input<boolean>(undefined);
+  readonly returnToFirstScreenshot = input<boolean>(undefined);
+  readonly hubName = input<string>(undefined);
+  readonly imgHeight = input<number>(undefined);
+  readonly largerFont = input<boolean>(undefined);
+  readonly showMeta = input<boolean>(undefined);
 
   appInFocus = true;
   folderPosterPaths: string[] = [];
@@ -74,7 +75,7 @@ export class ClipComponent implements OnInit {
   }
 
   stopPreview(event): any {
-    if (this.defaultThumbnailMode && this.returnToFirstScreenshot) {
+    if (this.defaultThumbnailMode() && this.returnToFirstScreenshot()) {
       event.target.load(); // Reload original thumbnail
     } else {
       event.target.pause();
@@ -83,7 +84,7 @@ export class ClipComponent implements OnInit {
 
   ngOnInit() {
 
-    if (this.defaultThumbnailMode) {
+    if (this.defaultThumbnailMode()) {
       this.posterFolderType = 'thumbnails';
     }
 
@@ -92,15 +93,17 @@ export class ClipComponent implements OnInit {
       const hashes = this.video.hash.split(':');
 
       hashes.slice(0, 4).forEach((hash) => {
-        this.folderThumbPaths.push( this.filePathService.createFilePath(this.folderPath, this.hubName, 'clips', hash, true));
-        this.folderPosterPaths.push(this.filePathService.createFilePath(this.folderPath, this.hubName, this.posterFolderType, hash));
+        const folderPath = this.folderPath();
+        const hubName = this.hubName();
+        this.folderThumbPaths.push( this.filePathService.createFilePath(folderPath, hubName, 'clips', hash, true));
+        this.folderPosterPaths.push(this.filePathService.createFilePath(folderPath, hubName, this.posterFolderType, hash));
       });
     } else {
       if (this.video.hash === undefined) {
         this.noError = false;
       }
-      this.pathToVideo = this.filePathService.createFilePath(this.folderPath, this.hubName, 'clips', this.video.hash, true);
-      this.poster =      this.filePathService.createFilePath(this.folderPath, this.hubName, this.posterFolderType, this.video.hash);
+      this.pathToVideo = this.filePathService.createFilePath(this.folderPath(), this.hubName(), 'clips', this.video.hash, true);
+      this.poster =      this.filePathService.createFilePath(this.folderPath(), this.hubName(), this.posterFolderType, this.video.hash);
 
       this.folderThumbPaths.push(this.pathToVideo);
       this.folderPosterPaths.push(this.poster);

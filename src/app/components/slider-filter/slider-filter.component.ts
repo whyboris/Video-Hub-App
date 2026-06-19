@@ -1,24 +1,25 @@
 import type { OnInit, OnDestroy} from '@angular/core';
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-slider-filter',
   templateUrl: './slider-filter.component.html',
   styleUrls: [ './slider-filter.component.scss' ]
 })
 export class SliderFilterComponent implements OnInit, OnDestroy {
 
-  @Input() darkMode: boolean;
-  @Input() minimumValue: number;
-  @Input() maximumValue: number;
-  @Input() steps: number;
-  @Input() lengthFilter?: boolean = false;
-  @Input() sizeFilter?: boolean = false;
-  @Input() timesPlayed?: boolean = false;
-  @Input() yearFilter?: boolean = false;
-  @Input() labelFormatPipe?: string;
+  readonly darkMode = input<boolean>(undefined);
+  readonly minimumValue = input<number>(undefined);
+  readonly maximumValue = input<number>(undefined);
+  readonly steps = input<number>(undefined);
+  readonly lengthFilter = input<boolean>(false);
+  readonly sizeFilter = input<boolean>(false);
+  readonly timesPlayed = input<boolean>(false);
+  readonly yearFilter = input<boolean>(false);
+  readonly labelFormatPipe = input<string>(undefined);
 
-  @Output() newSliderFilterSelected = new EventEmitter<number[]>();
+  readonly newSliderFilterSelected = output<number[]>();
 
   step: number;
   hover = false;
@@ -27,7 +28,7 @@ export class SliderFilterComponent implements OnInit, OnDestroy {
   draggingLeft = false;
   draggingRight = false;
 
-  width = 160;
+  width = 167;
 
   currentXleft = 0;
   currentXright: number = this.width;
@@ -38,9 +39,9 @@ export class SliderFilterComponent implements OnInit, OnDestroy {
   constructor() { }
 
   ngOnInit() {
-    this.step = (this.maximumValue - this.minimumValue) / this.steps;
-    this.leftBound = this.minimumValue;
-    this.rightBound = this.maximumValue;
+    this.step = (this.maximumValue() - this.minimumValue()) / this.steps();
+    this.leftBound = this.minimumValue();
+    this.rightBound = this.maximumValue();
   }
 
   /**
@@ -56,10 +57,11 @@ export class SliderFilterComponent implements OnInit, OnDestroy {
    * Track the mouse movement while it's inside the res filter div
    * @param event
    */
-  mouseIsMoving(event) {
+  mouseIsMoving(event: DragEvent) {
     if (this.dragging === true) {
       if (this.draggingLeft === true) {
-        const suggested = this.updateNumber(event.clientX);
+        const suggested = this.updateNumber(event.clientX - 10);
+        // -10 because draggable div is 10px away from window border
         if (suggested < this.currentXright) {
           this.currentXleft = suggested;
         }
@@ -77,7 +79,7 @@ export class SliderFilterComponent implements OnInit, OnDestroy {
    * @param current
    */
   updateNumber(current: number): number {
-    return (this.width / this.steps) * Math.round((current / this.width) * this.steps);
+    return (this.width / this.steps()) * Math.round((current / this.width) * this.steps());
   }
 
   /**
@@ -86,9 +88,9 @@ export class SliderFilterComponent implements OnInit, OnDestroy {
    */
   convertToIndex(value: number): number {
 
-    const cutoff = (value / this.width) * (this.maximumValue - this.minimumValue) + this.minimumValue;
+    const cutoff = (value / this.width) * (this.maximumValue() - this.minimumValue()) + this.minimumValue();
 
-    if ((this.lengthFilter || this.sizeFilter || this.timesPlayed || this.yearFilter) && cutoff > this.maximumValue) {
+    if ((this.lengthFilter() || this.sizeFilter() || this.timesPlayed() || this.yearFilter()) && cutoff > this.maximumValue()) {
       return Infinity;
     } else {
       return cutoff;
@@ -126,7 +128,7 @@ export class SliderFilterComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.newSliderFilterSelected.emit([this.minimumValue, this.maximumValue]);
+    this.newSliderFilterSelected.emit([this.minimumValue(), this.maximumValue()]);
   }
 
 }

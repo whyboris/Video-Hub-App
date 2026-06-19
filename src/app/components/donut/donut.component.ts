@@ -1,15 +1,16 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-donut',
   templateUrl: './donut.component.html',
   styleUrls: ['./donut.component.scss']
 })
 export class DonutComponent {
 
-  @Input() darkMode: boolean;
-  @Input() percent: number;
-  @Input() timeRemaining: number;
+  readonly darkMode = input<boolean>(undefined);
+  readonly percent = input<number>(undefined);
+  readonly timeRemaining = input<number>(undefined);
 
   constructor() { }
 

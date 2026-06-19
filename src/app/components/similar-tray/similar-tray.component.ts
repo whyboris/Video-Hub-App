@@ -1,4 +1,4 @@
-import { Component, Input, EventEmitter, Output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 import { ImageElementService } from './../../services/image-element.service';
 import { SourceFolderService } from '../statistics/source-folder.service';
@@ -8,6 +8,7 @@ import type { SettingsButtonsType } from '../../common/settings-buttons';
 import { modalAnimation, similarResultsText } from '../../common/animations';
 
 @Component({
+  standalone: false,
   selector: 'app-similar-tray',
   templateUrl: './similar-tray.component.html',
   styleUrls: [
@@ -19,15 +20,16 @@ import { modalAnimation, similarResultsText } from '../../common/animations';
 })
 export class SimilarTrayComponent {
 
-  @Output() handleClick = new EventEmitter<any>(); // todo: fix up the vague type
-  @Output() rightMouseClicked = new EventEmitter<RightClickEmit>();
+  readonly handleClick = output<any>(); // TODO: fix up the vague type
+  readonly rightMouseClicked = output<RightClickEmit>();
+  readonly showMoreRecentlyPlayed = output<any>();
 
-  @Input() appState;
-  @Input() currentClickedItemName;
-  @Input() previewHeightRelated;
-  @Input() previewWidthRelated;
-  @Input() settingsButtons: SettingsButtonsType;
-  @Input() showRecentNotSimilar;
+  readonly appState = input(undefined);
+  readonly currentClickedItemName = input(undefined);
+  readonly previewHeightRelated = input(undefined);
+  readonly previewWidthRelated = input(undefined);
+  readonly settingsButtons = input<SettingsButtonsType>(undefined);
+  readonly showRecentNotSimilar = input(undefined);
 
   constructor(
     public imageElementService: ImageElementService,

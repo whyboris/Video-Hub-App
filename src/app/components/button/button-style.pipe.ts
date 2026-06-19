@@ -2,6 +2,7 @@ import type { PipeTransform } from '@angular/core';
 import { Pipe } from '@angular/core';
 
 @Pipe({
+  standalone: false,
   name: 'buttonStylePipe'
 })
 export class ButtonStylePipe implements PipeTransform {
