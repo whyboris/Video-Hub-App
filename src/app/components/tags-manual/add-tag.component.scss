@@ -6,7 +6,6 @@
 
 // added on top of .filter-general
 .input-filter {
-  border-color: variables.$gray-80;
   font-size: 12px;
   margin-bottom: 5px;
   padding: 4px 4px 0;
@@ -15,6 +14,7 @@
 
   &::placeholder {
     color: variables.$gray-50;
+    opacity: 0.8;
   }
 }
 
