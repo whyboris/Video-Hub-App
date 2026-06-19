@@ -14,8 +14,7 @@
   z-index: 2;
 
   &::placeholder {
-    color: $gray-60;
-    opacity: 0.6;
+    color: variables.$gray-50;
   }
 }
 
