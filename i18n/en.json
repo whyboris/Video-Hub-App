@@ -311,6 +311,7 @@
   },
   "SHORTCUTS": {
     "andClickAnyFile": "and click any file to see the file details",
+    "andClickAnyFileForExplorer": "and click any file to open it in your explorer",
     "andPress": "and press",
     "clearAllFilters": "Clear all filters",
     "clickToRename": "To change a shortcut, click on it and press desired key on your keyboard.",
