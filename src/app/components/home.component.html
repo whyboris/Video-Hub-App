@@ -700,7 +700,15 @@
 
       <!-- total found -->
       <div class="filtering-total">
-        <span>{{ numberOfVideosFound | number:'.0' }} {{ 'SIDEBAR.found' | translate }}</span>
+        @if (numberOfVideosFound < (imageElementService.imageElements | deleteFilePipe : deletePipeHack).length) {
+          <span
+            title="{{ 'BUTTONS.clearAllFiltersHint' | translate }}"
+            class="clear-all-filters"
+            (click)="clearAllFilters()"
+          >{{ numberOfVideosFound | number:'.0' }} {{ 'SIDEBAR.found' | translate }}</span>
+        } @else {
+          <span>{{ numberOfVideosFound | number:'.0' }} {{ 'SIDEBAR.found' | translate }}</span>
+        }
       </div>
 
       <!-- Recently opened -->
