@@ -85,6 +85,14 @@
   }
 }
 
+.delete-playlist {
+  color: variables.$pretty-red;
+  cursor: not-allowed;
+  float: right;
+  font-size: 10px;
+  transform: translate(-5px, 4px);
+}
+
 .filteredWords {
   display: block;
   margin-bottom: 5px;

@@ -315,6 +315,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   deletePipeHack = false; // to force deletePipe to update
 
+  playlistViewRefresh = false; // to force playlist view to refresh, if showing
+
   folderNavigationScrollOffset = 0; // when in folder view and returning back to root
   folderViewNavigationPath = '';
 
@@ -2560,6 +2562,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.magicSearchString = '';
     this.regexSearchString = '';
 
+    if (this.settingsButtons['showOnlyPlaylist'].toggled) {
+      this.settingsButtons['showOnlyPlaylist'].toggled = false;
+    }
+
     // Prevent ExpressionChangedAfterItHasBeenCheckedError
     this.cd.detectChanges();
   }
@@ -2579,6 +2585,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
   onTagColorPickerClose(): void {
     this.showTagColorPicker = false;
     this.cd.detectChanges();
+  }
+
+  updatePlaylist(item: ImageElement): void {
+    this.imageElementService.updatePlaylist(item.index);
+    if (this.settingsButtons['showOnlyPlaylist'].toggled) {
+      this.playlistViewRefresh = !this.playlistViewRefresh;
+    }
+  }
+
+  emptyPlaylist(): void {
+    this.imageElementService.emptyPlaylist();
+    this.settingsButtons['showOnlyPlaylist'].toggled = false;
   }
 
 }

@@ -52,6 +52,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'showFreq'
  | 'showFullView'
  | 'showMoreInfo'
+ | 'showOnlyPlaylist'
  | 'showRecent'
  | 'showRecentlyPlayed'
  | 'showRelatedVideosTray'
@@ -155,6 +156,8 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'showFolders',
     'randomizeFoldersScreenshots',
     'showTags',
+    'showOnlyPlaylist',
+    'playPlaylist',
   ],
   [ // 6 - Bottom tray -- hidden from ribbon via !== 6 in ribbon.component.html
     'showFreq',
@@ -206,7 +209,6 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'clearHistory',
     'showDeleteOption',
     'dangerousDelete',
-    'playPlaylist',
     'spacePlaysRandom',
     'openAtTimestamp',
   ]
@@ -663,6 +665,14 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-show-more-info',
     title: 'BUTTONS.showMoreInfoHint',
     toggled: true
+  },
+  'showOnlyPlaylist': {
+    description: 'BUTTONS.showOnlyPlaylistDescription',
+    hidden: false,
+    iconName: 'icon-playlist',
+    moreInfo: 'BUTTONS.showOnlyPlaylistMoreInfo',
+    title: 'BUTTONS.showOnlyPlaylistHint',
+    toggled: false
   },
   'showRecent': {
     description: 'BUTTONS.showRecentDescription',
