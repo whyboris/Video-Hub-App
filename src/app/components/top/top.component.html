@@ -1,4 +1,11 @@
 @if (_file !== '') {
+
+<div
+  class="preview"
+  (click)="openDetails()"
+  [ngStyle]="{ 'background-image': 'url(' + previewPath + ')' }"
+></div>
+
 <div
   class="folder-container"
   [ngClass]="{ 'dark-mode-override': darkMode() }"
@@ -20,7 +27,7 @@
   class="file-container"
   [ngClass]="{ 'dark-mode-override': darkMode() }"
 >
-  <app-icon class="icon" [icon]="'icon-video-blank'" (click)="openInExplorer()" />
+  <app-icon class="icon" [icon]="'icon-video-blank'" (click)="playFile()" />
 
 @for (item of fileNameArray; track $index) {
   <span
