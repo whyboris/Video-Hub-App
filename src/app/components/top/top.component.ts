@@ -58,7 +58,9 @@ export class TopComponent {
   }
 
   updateThumbnailPath() {
-    this.previewPath = this.filePathService.createFilePath(this.folderPath(), this.hubName(), 'thumbnails', this.currentImageElement().hash);
+    if (this.currentImageElement()) {
+      this.previewPath = this.filePathService.createFilePath(this.folderPath(), this.hubName(), 'thumbnails', this.currentImageElement().hash);
+    }
   }
 
   folderWordClicked(item: string): void {
