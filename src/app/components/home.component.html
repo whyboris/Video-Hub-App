@@ -88,6 +88,11 @@
     @rightClickAnimation
   >
     <ul @rightClickContentAnimation>
+      <li (click)="updatePlaylist(currentRightClickedItem)">
+        {{ currentRightClickedItem.playlist
+            ? ('RIGHTCLICK.playlistRemove' | translate)
+            : ('RIGHTCLICK.playlistAdd'    | translate) }}</li>
+
       <li
         (click)="renamingNow = true"
         [ngClass]="{ 'right-click-disabled': !sourceFolderService.sourceFolderConnected[currentRightClickedItem.inputSource] }"
@@ -646,6 +651,26 @@
       </div>
     }
 
+      <!-- Playlist only view -->
+    @if (settingsButtons['showOnlyPlaylist'].toggled) {
+      <div class="lev-distance">
+        <span
+          class="search-or-tag-general search-word"
+          (click)="settingsButtons['showOnlyPlaylist'].toggled = false"
+        >
+          {{ 'SIDEBAR.playlistShowingOnly' | translate }}
+        </span>
+
+        <span
+          class="delete-playlist"
+          (click)="emptyPlaylist()"
+          title="{{ 'SIDEBAR.playlistRemoveAll' | translate }}"
+        >
+          ✕
+        </span>
+      </div>
+    }
+
       <!-- Duplicates -->
     @if (settingsButtons['duplicateLength'].toggled
       || settingsButtons['duplicateSize'].toggled
@@ -757,6 +782,8 @@
       [bufferAmount]="0"
 
       [items]="imageElementService.imageElements
+
+                | playlistOnlyPipe : settingsButtons['showOnlyPlaylist'].toggled : playlistViewRefresh
 
                 | deleteFilePipe : deletePipeHack
 
