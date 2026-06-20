@@ -294,12 +294,19 @@
   >
     <app-top-component
       class="top-content-position"
+
+      [currentImageElement]="currentClickedItem"
       [darkMode]="settingsButtons['darkMode'].toggled"
       [fileString]="currentClickedItemName"
+      [folderPath]="appState.selectedOutputFolder"
       [folderString]="currentPlayingFolder"
+      [hubName]="appState.hubName"
+
       (onFileWordClicked)="handleFileWordClicked($event)"
       (onFolderWordClicked)="handleFolderWordClicked($event)"
+      (onOpenDetails)="openThumbnailSheet($event)"
       (onOpenInExplorer)="openInExplorer()"
+      (onPlayVideo)="openVideo($event, 0)"
      />
   </header>
 }
