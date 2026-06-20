@@ -2547,6 +2547,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.starRightBound = Infinity;
     this.toggleButtonOff('starFilter');
 
+    // Clear starts-with filter
+    this.startsWithSearchString = '';
 
     // Clear sort filter
     // this.sortType = 'default';
