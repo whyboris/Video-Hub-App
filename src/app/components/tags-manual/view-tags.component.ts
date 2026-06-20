@@ -1,10 +1,9 @@
 import type { ElementRef} from '@angular/core';
-import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, Input, input, output, viewChild } from '@angular/core';
 
 import { ManualTagsService } from './manual-tags.service';
 
 import type { Tag, TagEmit } from '../../../../interfaces/shared-interfaces';
-import type { ColorPickerPosition } from '../tag-color-picker/tag-color-picker.component';
 
 @Component({
   standalone: false,
@@ -29,16 +28,16 @@ export class ViewTagsComponent {
     }
   }
 
-  @Input() darkMode: boolean;
-  @Input() displayFrequency: boolean;
-  @Input() draggable: boolean;
-  @Input() enableColorPicker: boolean = false;
+  readonly darkMode = input<boolean>(undefined);
+  readonly displayFrequency = input<boolean>(undefined);
+  readonly draggable = input<boolean>(undefined);
+  readonly enableColorPicker = input<boolean>(false);
 
-  @Output() removeTagEmit = new EventEmitter<string>();
-  @Output() tagClicked = new EventEmitter<TagEmit>();
-  @Output() tagRightClick = new EventEmitter<{ tag: Tag, event: MouseEvent }>();
+  readonly removeTagEmit = output<string>();
+  readonly tagClicked = output<TagEmit>();
+  readonly tagRightClick = output<{ tag: Tag; event: MouseEvent; }>();
 
-  @ViewChild('dragHack', { static: false }) dragHack: ElementRef;
+  readonly dragHack = viewChild<ElementRef>('dragHack');
 
   constructor(
     public tagService: ManualTagsService
@@ -82,7 +81,7 @@ export class ViewTagsComponent {
   dragStart(event: DragEvent): void {
     event.dataTransfer.setData('text/plain', (event.target as HTMLElement).innerText);
 
-    const quickHack: Element = this.dragHack.nativeElement;
+    const quickHack: Element = this.dragHack().nativeElement;
 
     quickHack.innerHTML = (event.target as HTMLElement).innerText;
 
@@ -95,7 +94,7 @@ export class ViewTagsComponent {
    * @param tag - Tag
    */
   onTagRightClick(event: MouseEvent, tag: Tag): void {
-    if (!this.enableColorPicker) {
+    if (!this.enableColorPicker()) {
       return;
     }
 

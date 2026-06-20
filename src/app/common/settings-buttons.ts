@@ -24,6 +24,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'folderUnion'
  | 'fontSizeLarger'
  | 'fuzzy'
+ | 'startsWith'
  | 'hideOffline'
  | 'hideSidebar'
  | 'hideTop'
@@ -108,14 +109,15 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'magic',
     'regex',
     'fuzzy',
+    'startsWith',
     'clearAllFilters',
   ],
   [ // 2 - Filters & sorting options
     'durationFilter',
     'sizeFilter',
     'timesPlayedFilter',
-    'resolutionFilter',
     'yearFilter',
+    'resolutionFilter',
     'starFilter',
     'sortOrder',
     'hideOffline',
@@ -154,7 +156,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'randomizeFoldersScreenshots',
     'showTags',
   ],
-  [ // 6 - Bottom tray
+  [ // 6 - Bottom tray -- hidden from ribbon via !== 6 in ribbon.component.html
     'showFreq',
     'showTagTray',
     'showRelatedVideosTray',
@@ -451,6 +453,14 @@ export const SettingsButtons: SettingsButtonsType = {
     moreInfo: 'BUTTONS.fuzzyMoreInfo',
     title: 'BUTTONS.fuzzyHint',
     toggled: true
+  },
+  startsWith: {
+    description: 'BUTTONS.startsWithDescription',
+    hidden: true,
+    iconName: 'icon-start-with',
+    moreInfo: 'BUTTONS.startsWithMoreInfo',
+    title: 'BUTTONS.startsWithHint',
+    toggled: false,
   },
   'hideOffline': {
     description: 'BUTTONS.hideOfflineDescription',

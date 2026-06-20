@@ -1,29 +1,43 @@
+@if (_file !== '') {
+
 <div
-  *ngIf="_file !== ''"
+  class="preview"
+  (click)="openDetails()"
+  [ngStyle]="{ 'background-image': 'url(' + previewPath + ')' }"
+></div>
+
+<div
   class="folder-container"
-  [ngClass]="{ 'dark-mode-override': darkMode }"
+  [ngClass]="{ 'dark-mode-override': darkMode() }"
 >
-  <app-icon class="icon" [icon]="'icon-folder-blank'" (click)="openInExplorer()"></app-icon>
+  <app-icon class="icon" [icon]="'icon-folder-blank'" (click)="openInExplorer()" />
+
+@for (item of folderNameArray; track $index) {
   <span
-    *ngFor="let item of folderNameArray"
     (click)="folderWordClicked(item)"
     class="folder-word"
   >
     {{ item }}
   </span>
+}
+
 </div>
 
 <div
-  *ngIf="_file !== ''"
   class="file-container"
-  [ngClass]="{ 'dark-mode-override': darkMode }"
+  [ngClass]="{ 'dark-mode-override': darkMode() }"
 >
-  <app-icon class="icon" [icon]="'icon-video-blank'" (click)="openInExplorer()"></app-icon>
+  <app-icon class="icon" [icon]="'icon-video-blank'" (click)="playFile()" />
+
+@for (item of fileNameArray; track $index) {
   <span
-    *ngFor="let item of fileNameArray"
     (click)="fileWordClicked(item)"
     class="file-word"
   >
     {{ item }}
   </span>
+}
+
 </div>
+
+}

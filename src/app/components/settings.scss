@@ -293,7 +293,7 @@ input[type="radio"]:checked:before {
   border: 1px solid variables.$pretty-blue;
   border-radius: 50%;
   color: variables.$pretty-blue;
-  cursor: none;
+  cursor: help;
   display: inline-block;
   font-size: 11px;
   font-style: italic;

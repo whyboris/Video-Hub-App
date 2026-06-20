@@ -1,9 +1,6 @@
-import { Component, EventEmitter, Input, Output, OnInit } from '@angular/core';
+import { Component, OnInit, input, output } from '@angular/core';
 
-export interface ColorPickerPosition {
-  x: number;
-  y: number;
-}
+import { ContextMenuCoordinate } from '../../../../interfaces/shared-interfaces';
 
 @Component({
   standalone: false,
@@ -13,12 +10,12 @@ export interface ColorPickerPosition {
 })
 export class TagColorPickerComponent implements OnInit {
 
-  @Input() position: ColorPickerPosition;
-  @Input() currentColor: string;
-  @Input() darkMode: boolean;
+  readonly position = input<ContextMenuCoordinate>(undefined);
+  readonly currentColor = input<string>(undefined);
+  readonly darkMode = input<boolean>(undefined);
 
-  @Output() colorSelected = new EventEmitter<string>();
-  @Output() close = new EventEmitter<void>();
+  readonly colorSelected = output<string>();
+  readonly close = output<void>();
 
   // 3x3 grid of distinct colors plus default option
   colors: string[] = [
@@ -40,20 +37,21 @@ export class TagColorPickerComponent implements OnInit {
     const pickerWidth = 142;
     const pickerHeight = 65;
 
-    if (this.position) {
+    const position = this.position();
+    if (position) {
       // Keep within horizontal bounds
-      if (this.position.x + pickerWidth > window.innerWidth) {
-        this.position.x = window.innerWidth - pickerWidth - 30;
+      if (position.x + pickerWidth > window.innerWidth) {
+        position.x = window.innerWidth - pickerWidth - 30;
       }
 
       // Keep within vertical bounds
-      if (this.position.y + pickerHeight > window.innerHeight) {
-        this.position.y = window.innerHeight - pickerHeight - 30;
+      if (position.y + pickerHeight > window.innerHeight) {
+        position.y = window.innerHeight - pickerHeight - 30;
       }
 
       // Ensure minimum position
-      if (this.position.x < 10) this.position.x = 10;
-      if (this.position.y < 10) this.position.y = 10;
+      if (position.x < 10) position.x = 10;
+      if (position.y < 10) position.y = 10;
     }
   }
 
@@ -66,6 +64,7 @@ export class TagColorPickerComponent implements OnInit {
   }
 
   onClose(): void {
+    // TODO: The 'emit' function requires a mandatory void argument
     this.close.emit();
   }
 }

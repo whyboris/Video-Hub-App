@@ -7,19 +7,20 @@
   >
   <!-- the 30 px added above is the padding for the text  -->
 
+@if (showFavorites()) {
   <app-icon
-    *ngIf="showFavorites"
     (click)="toggleHeart()"
     class="heart"
-    [ngClass]="{ 'heart-lit' : video.stars === 5.5 }"
-    [icon]="'icon-heart'">
-  </app-icon>
+    [ngClass]="{ 'heart-lit' : video().stars === 5.5 }"
+    [icon]="'icon-heart'"
+   />
+}
 
+@for (row of rowOffsets; track row) {
   <div
-    *ngFor="let row of rowOffsets"
     (click)="   videoClick.emit({ mouseEvent: $event })"
     (dblclick)="videoClick.emit({ mouseEvent: $event, doubleClick: true })"
-    (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
+    (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video() })"
     class="filmstrip-container"
     [ngStyle]="{
         height: _imgHeight + 'px',
@@ -28,23 +29,25 @@
         'background-size': 'auto ' + _imgHeight + 'px'
       }"
   ></div>
+}
 
-  <app-icon
-    *ngIf="video.selected"
-    class="selected"
-    [icon]="'icon-show-more-info'"
-  ></app-icon>
+@if (video().selected) {
+  <app-icon class="selected" [icon]="'icon-show-more-info'" />
+}
 
+@if (showMeta()) {
   <span
-    *ngIf="showMeta"
-    [ngClass]="{ 'larger-font': largerFont }"
-    [ngStyle]="{ color: darkMode ? '#BBBBBB' : '#000000' }"
+    [ngClass]="{ 'larger-font': largerFont() }"
+    [ngStyle]="{ color: darkMode() ? '#BBBBBB' : '#000000' }"
     class="title"
   >
-    {{ video.cleanName }}
-    <div class="fileSize" *ngIf="showMeta">
-      ({{ video.fileSizeDisplay }})
+    {{ video().cleanName }}
+
+    <div class="fileSize">
+      ({{ video().fileSizeDisplay }})
     </div>
+
   </span>
+}
 
 </div>
