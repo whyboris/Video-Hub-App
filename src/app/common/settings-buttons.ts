@@ -209,11 +209,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'playPlaylist',
     'spacePlaysRandom',
     'openAtTimestamp',
-  ],
-    [ // 15
-    'clearAllFilters', // Hide top bar
-    'flatIcons', // Button style
-  ],
+  ]
 ];
 
 // Breaks up content into 3 tabs
@@ -247,8 +243,6 @@ export const SettingsMetaGroup: string[][] = [
     ...SettingsButtonsGroups[12],
     'break',
     ...SettingsButtonsGroups[13],
-    'break',
-    ...SettingsButtonsGroups[15],
   ],
   [
     ...SettingsButtonsGroups[14],
