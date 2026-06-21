@@ -41,7 +41,7 @@ export interface VideoClickEmit {
 }
 
 export interface RightClickEmit {
-  mouseEvent: Event;
+  mouseEvent: MouseEvent;
   item: ImageElement;
 }
 
@@ -54,7 +54,7 @@ export interface Tag {
 
 export interface TagEmit {
   tag: Tag;
-  event: Event;
+  event: MouseEvent;
 }
 
 export interface TagEmission {

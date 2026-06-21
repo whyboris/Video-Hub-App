@@ -1,5 +1,7 @@
 @for (btnGroup of settingsButtonsGroups(); track btnGroup; let i = $index) {
 
+  @if (i !== 6) { <!--  hide buttons to toggle tray items - since you can click on tray items directly  -->
+
   <div class="settings-buttons-group">
 
   @for (buttonKey of btnGroup; track buttonKey) {
@@ -19,5 +21,7 @@
   }
 
   </div>
+
+  }
 
 }

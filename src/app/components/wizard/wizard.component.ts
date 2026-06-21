@@ -54,7 +54,7 @@ export class WizardComponent {
     return false;
   }
 
-  removeHistoryItem(event: Event, item: number) {
+  removeHistoryItem(event: MouseEvent, item: number) {
     event.stopPropagation();
     this.removeFromHistory.emit(item);
   }

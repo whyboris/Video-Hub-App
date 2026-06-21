@@ -16,11 +16,11 @@ _Video Hub App_ was created by [Boris Yakubchik](https://videohubapp.com/en/abou
 
 ## License
 
-This software was built on top of [`angular-electron`](https://github.com/maximegris/angular-electron) by [Maxime GRIS](https://github.com/maximegris). It carries an _MIT_ license (see the _LICENSE_ file). While the license is permissive, I ask that you do not distribute free copies of this software unless you have significantly changed it.
+This software was built on top of [`angular-electron`](https://github.com/maximegris/angular-electron) by [Belnadris](https://github.com/belnadris). It carries an _MIT_ license (see the _LICENSE_ file). While the license is permissive, I ask that you do not distribute free copies of this software unless you have significantly changed it.
 
 ## Contributing
 
-I would love to see the improvements you make to this app and am happy to accept pull requests. You can reach out if you'd like to coordinate / collaborate, or just _jump to [issues](https://github.com/whyboris/Video-Hub-App/issues)_ to see what's already getting worked on and to add new suggestions!
+I would love to see the improvements you make to this app and am happy to accept pull requests. See [issues](https://github.com/whyboris/Video-Hub-App/issues) for ideas for improving this app or to add your suggestions.
 
 Please consider improving any of the translations, or [add a new translation](https://github.com/whyboris/Video-Hub-App/tree/master/i18n)!
 
@@ -36,7 +36,7 @@ See [issues](https://github.com/whyboris/Video-Hub-App/issues) for what is in pr
 
 How to start:
 
-- `npm install` to install (you may need to run `npm install --legacy-peer-deps` if install fails)
+- `npm install --legacy-peer-deps` to install
 - `npm start` to develop
 - `npm run electron` to build
 
@@ -72,9 +72,6 @@ This software would not be possible without the tremendous work by other people:
 - [FFmpeg](https://www.ffmpeg.org/)
 - [angular-electron](https://github.com/maximegris/angular-electron)
 - [ngx-virtual-scroller](https://github.com/rintoj/ngx-virtual-scroller)
-- [ffmpeg-static](https://github.com/eugeneware/ffmpeg-static)
-- [@ffprobe-installer/ffprobe](https://github.com/SavageCore/node-ffprobe-installer)
-- [ngx-translate](https://github.com/ngx-translate/core)
 - [fdir](https://github.com/thecodrr/fdir)
 - [async](https://github.com/caolan/async)
 - [chokidar](https://github.com/paulmillr/chokidar)
