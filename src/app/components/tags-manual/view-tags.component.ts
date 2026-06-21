@@ -16,6 +16,7 @@ import type { Tag, TagEmit } from '../../../../interfaces/shared-interfaces';
 export class ViewTagsComponent {
 
   _tags: Tag[];
+  toogleBatchModeValue: boolean = false;
 
   @Input()
   set tags(tags: Tag[] | string[]) {
@@ -26,6 +27,15 @@ export class ViewTagsComponent {
     } else {
       this._tags = <Tag[]>tags; // happens in details & meta view
     }
+  }
+
+  //set the removable property of the selected tag based on the batchmode is enabled or disabled
+  @Input()
+  set tagsOnToggleBatch(toggleBatchMode: boolean) {
+    this.toogleBatchModeValue = toggleBatchMode;
+    this._tags.forEach((item) => {
+      item.removable = toggleBatchMode;
+    });
   }
 
   readonly darkMode = input<boolean>(undefined);
@@ -66,8 +76,8 @@ export class ViewTagsComponent {
     tagList.forEach((tag) => {
       hackList.push({
         name: tag,
+        removable: this.toogleBatchModeValue,
         colour: this.tagService.getTagColor(tag),
-        removable: false,
       });
     });
 
