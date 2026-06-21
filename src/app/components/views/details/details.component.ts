@@ -52,10 +52,11 @@ export class DetailsComponent implements OnInit {
   readonly selectedSourceFolder = input<string>(undefined);
   readonly showAutoFileTags = input<boolean>(undefined);
   readonly showAutoFolderTags = input<boolean>(undefined);
+  readonly showFaces = input<boolean>(undefined);
+  readonly showFavorites = input<boolean>(undefined);
   readonly showManualTags = input<boolean>(undefined);
   readonly showMeta = input<boolean>(undefined);
   readonly showVideoNotes = input<boolean>(undefined);
-  readonly showFavorites = input<boolean>(undefined);
   readonly star = input<StarRating>(undefined);
 
   readonly renameResponse = input<BehaviorSubject<RenameFileResponse>>(undefined);
@@ -104,7 +105,8 @@ export class DetailsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.firstFilePath = this.filePathService.createFilePath(this.folderPath(), this.hubName(), 'thumbnails', this.video().hash);
+    // TODO reconcile changes later `showFaces`
+    this.firstFilePath = this.filePathService.createFilePath(this.folderPath(), this.hubName(), this.showFaces() ? 'faces' : 'thumbnails', this.video().hash);
     this.filmstripPath =  this.filePathService.createFilePath(this.folderPath(), this.hubName(), 'filmstrips', this.video().hash);
     const video = this.video();
     if (video.defaultScreen !== undefined) {

@@ -31,6 +31,7 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
 
   @Input() video: ImageElement;
 
+  @Input() showMeta: boolean;
   readonly compactView = input<boolean>(undefined);
   readonly connected = input<boolean>(undefined);
   readonly darkMode = input<boolean>(undefined);
@@ -42,9 +43,9 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
   readonly imgHeight = input<number>(undefined);
   readonly largerFont = input<boolean>(undefined);
   readonly returnToFirstScreenshot = input<boolean>(undefined);
-  @Input() showMeta: boolean;
-  readonly thumbAutoAdvance = input<boolean>(undefined);
+  readonly showFaces = input<boolean>(undefined);
   readonly showFavorites = input<boolean>(undefined);
+  readonly thumbAutoAdvance = input<boolean>(undefined);
 
   containerWidth: number;
   firstFilePath = '';
@@ -68,8 +69,8 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
         this.folderThumbPaths.push(this.filePathService.createFilePath(this.folderPath(), this.hubName(), 'thumbnails', hash));
       });
     } else {
-      this.firstFilePath = this.filePathService.createFilePath(this.folderPath(), this.hubName(), 'thumbnails', this.video.hash);
-      this.fullFilePath = this.filePathService.createFilePath(this.folderPath(), this.hubName(), 'filmstrips', this.video.hash);
+      this.firstFilePath = this.filePathService.createFilePath(this.folderPath(), this.hubName(), this.showFaces() ? 'faces' : 'thumbnails', this.video.hash);
+      this.fullFilePath = this.filePathService.createFilePath(this.folderPath(), this.hubName(), this.showFaces() ? 'faces' : 'filmstrips', this.video.hash);
       this.folderThumbPaths.push(this.firstFilePath);
     }
 

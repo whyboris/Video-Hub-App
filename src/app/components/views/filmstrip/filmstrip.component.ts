@@ -37,6 +37,7 @@ export class FilmstripComponent implements OnInit {
   readonly folderPath = input<string>(undefined);
   readonly hoverScrub = input<boolean>(undefined);
   readonly hubName = input<string>(undefined);
+  readonly showFaces = input<boolean>(undefined);
   readonly imgHeight = input<number>(undefined);
   readonly largerFont = input<boolean>(undefined);
   readonly showMeta = input<boolean>(undefined);
@@ -53,7 +54,7 @@ export class FilmstripComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.fullFilePath = this.filePathService.createFilePath(this.folderPath(), this.hubName(), 'filmstrips', this.video().hash);
+    this.fullFilePath = this.filePathService.createFilePath(this.folderPath(), this.hubName(), this.showFaces() ? 'faces' : 'filmstrips', this.video().hash);
   }
 
   updateFilmXoffset($event) {
