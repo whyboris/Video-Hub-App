@@ -4,19 +4,16 @@ import type { ImageElement } from './../../../interfaces/final-object.interface'
 import { Injectable } from '@angular/core';
 import type { DefaultScreenEmission, StarEmission } from '../components/sheet/sheet.component';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class ImageElementService {
 
-public finalArrayNeedsSaving = false;
-public forceStarFilterUpdate = true;
-public imageElements: ImageElement[] = [];
-public recentlyPlayed: ImageElement[] = [];
+  public finalArrayNeedsSaving = false;
+  public forceStarFilterUpdate = true;
+  public imageElements: ImageElement[] = [];
 
-constructor() { }
+  constructor() { }
 
-/**
+  /**
    * Update imageElements with emission of element
    * @param emission
    */
@@ -47,7 +44,7 @@ constructor() { }
     this.finalArrayNeedsSaving = true;
   }
 
-    /**
+  /**
    * Searches through the `finalArray` and updates the file name and display name
    * Should not error out if two files have the same name
    */
@@ -65,22 +62,21 @@ constructor() { }
    * update number of times played & the `lastPlayed` date
    * @param index
    */
-  updateNumberOfTimesPlayed(index: number) {
+  updateNumberOfTimesPlayed(index: number): void {
 
-    this.updateRecentlyPlayed(index);
+    this.imageElements[index].lastPlayed = Date.now(); // update `lastPlayed`
 
-    this.imageElements[index].lastPlayed = Date.now();
+    this.imageElements[index].timesPlayed
+      ? this.imageElements[index].timesPlayed++
+      : this.imageElements[index].timesPlayed = 1;     // update `timesPlayed`
 
-    this.imageElements[index].timesPlayed ?
-    this.imageElements[index].timesPlayed++ :
-    this.imageElements[index].timesPlayed = 1;
     this.finalArrayNeedsSaving = true;
   }
 
   /**
    * Toggle heart
    */
-  toggleHeart(index: number) {
+  toggleHeart(index: number): void {
     if (this.imageElements[index].stars == 5.5) { // "un-favorite" the video
       this.HandleEmission({
         index: index,
@@ -95,21 +91,26 @@ constructor() { }
   }
 
   /**
-   * Update recently played
-   *  - remove duplicates
-   *  - trim to at most 7
-   * @param index
+   * Update playlist field
    */
-  updateRecentlyPlayed(index: number) {
-    this.recentlyPlayed = [
-      this.imageElements[index],
-      ...(this.recentlyPlayed.filter((element: ImageElement) => {
-        return element.hash !== this.imageElements[index].hash;
-      }))
-    ];
-    if (this.recentlyPlayed.length > 7) {
-      this.recentlyPlayed.length = 7;
-    }
+  updatePlaylist(index: number): void {
+
+    this.imageElements[index].playlist
+      ? delete this.imageElements[index].playlist
+      : this.imageElements[index].playlist = Date.now();
+
+    this.finalArrayNeedsSaving = true;
+  }
+
+  /**
+   * Clear out the playlist
+   */
+  emptyPlaylist(): void {
+    this.imageElements.forEach((element) => {
+      delete element.playlist;
+    });
+
+    this.finalArrayNeedsSaving = true;
   }
 
   private handleTagEmission(emission: TagEmission): void {

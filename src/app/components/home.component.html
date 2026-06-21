@@ -11,17 +11,18 @@
     [macVersion]="macVersion"
     [progressString]="progressString"
     [settingsButtons]="settingsButtons"
-  ></app-title-bar>
+   />
 
+@if (flickerReduceOverlay === true) {
   <div
-    *ngIf="flickerReduceOverlay === true"
     class="reduceFlicker"
     @slowFadeOut
   ></div>
+}
 
-  <!-- Progress indicator - "Donut" -->
+<!-- Progress indicator - "Donut" -->
+@if (importStage !== 'done' && !settingsButtons['hideTop'].toggled) {
   <div
-    *ngIf="importStage !== 'done' && !settingsButtons['hideTop'].toggled"
     class="cancel-progress"
     @donutAppear
   >
@@ -32,47 +33,52 @@
       {{ 'WIZARD.stopImport' | translate }}
     </span>
   </div>
+}
 
+@if (importStage !== 'done' && !settingsButtons['hideTop'].toggled) {
   <app-donut
-    *ngIf="importStage !== 'done' && !settingsButtons['hideTop'].toggled"
     class="screenShotProgressPercent"
     [percent]="extractionPercent"
     [timeRemaining]="timeExtractionRemaining"
     [darkMode]="settingsButtons['darkMode'].toggled"
     @donutAppear
-  ></app-donut>
+   />
+}
 
-  <!-- OVERLAY to cancel out right click modal -->
+<!-- OVERLAY to cancel out right click modal -->
+@if (rightClickShowing) {
   <div
-    *ngIf="rightClickShowing"
     class="click-away-overlay"
     (click)="      rightClickShowing = false"
     (contextmenu)="rightClickShowing = false"
     @overlayAppear
-  >
+    >
   </div>
+}
 
-  <!-- OVERLAY to cancel out rename modal -->
+<!-- OVERLAY to cancel out rename modal -->
+@if (renamingNow) {
   <div
-    *ngIf="renamingNow"
     class="click-away-overlay disable-mouse-clicks"
     @overlayAppear
-  >
+    >
   </div>
+}
 
-  <!-- OVERLAY to cancel out sheet display modal -->
+<!-- OVERLAY to cancel out sheet display modal -->
+@if (sheetOverlayShowing) {
   <div
-    *ngIf="sheetOverlayShowing"
     class="click-away-overlay"
     (click)="      sheetOverlayShowing = false;"
     (contextmenu)="sheetOverlayShowing = false;"
     @overlayAppear
-  >
+    >
   </div>
+}
 
-  <!-- ===========   RIGHT CLICK MODAL    =========== -->
+<!-- ===========   RIGHT CLICK MODAL    =========== -->
+@if (rightClickShowing) {
   <div
-    *ngIf="rightClickShowing"
     (click)="rightClickShowing = false"
     [ngStyle]="{
         top: rightClickPosition.y + 'px',
@@ -82,6 +88,11 @@
     @rightClickAnimation
   >
     <ul @rightClickContentAnimation>
+      <li (click)="updatePlaylist(currentRightClickedItem)">
+        {{ currentRightClickedItem.playlist
+            ? ('RIGHTCLICK.playlistRemove' | translate)
+            : ('RIGHTCLICK.playlistAdd'    | translate) }}</li>
+
       <li
         (click)="renamingNow = true"
         [ngClass]="{ 'right-click-disabled': !sourceFolderService.sourceFolderConnected[currentRightClickedItem.inputSource] }"
@@ -95,19 +106,21 @@
       >
                                                                 {{ 'RIGHTCLICK.openFolder'  | translate }}</li>
       <li (click)="openThumbnailSheet(currentRightClickedItem)">{{ 'RIGHTCLICK.sheetModal'  | translate }}</li>
+    @if (settingsButtons['showDeleteOption'].toggled) {
       <li
-        *ngIf="settingsButtons['showDeleteOption'].toggled"
         (click)="deleteThisFile(currentRightClickedItem)"
         class="right-click-delete"
         [ngClass]="{ 'right-click-disabled': !sourceFolderService.sourceFolderConnected[currentRightClickedItem.inputSource] }"
       >
                                                                 {{ 'RIGHTCLICK.delete'      | translate }}</li>
+    }
     </ul>
   </div>
+}
 
   <!-- ===========   Thumbnail Sheet Display   =========== -->
+@if (sheetOverlayShowing) {
   <app-thumbnail-sheet
-    *ngIf="sheetOverlayShowing"
     (filterTag)="handleTagWordClicked($event.tag.name, $event.event)"
     (openVideoAtTime)="handleClick($event, sheetItemToDisplay)"
 
@@ -132,12 +145,12 @@
 
     [selectedSourceFolder]="sourceFolderService.selectedSourceFolder[sheetItemToDisplay.inputSource].path"
     [renameResponse]="renameFileResponseBehaviorSubject"
-  >
-  </app-thumbnail-sheet>
+   />
+}
 
-  <!-- ===========    RENAMING MODAL    =========== -->
+<!-- ===========    RENAMING MODAL    =========== -->
+@if (renamingNow) {
   <app-rename-modal
-    *ngIf="renamingNow"
     [ngClass]="{ 'rename-dark': settingsButtons['darkMode'].toggled }"
     class="rename-popup"
     @modalAnimation
@@ -151,11 +164,12 @@
     [settingsButtons]="settingsButtons"
 
     [renameResponse]="renameFileResponseBehaviorSubject"
-  ></app-rename-modal>
+   />
+}
 
   <!-- ===========    AUTO-GENERATED TAGS MODAL    =========== -->
+@if (settingsButtons['showTags'].toggled) {
   <div
-    *ngIf="settingsButtons['showTags'].toggled"
     class="settings-modal"
     @modalAnimation
   >
@@ -164,13 +178,11 @@
       class="close-settings"
       title="{{ 'SETTINGS.closeSettings' | translate }}"
     >
-      <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
+      <app-icon class="close-modal-icon" [icon]="'icon-close'" />
     </div>
-    <app-tags-component
-      [hubName]="appState.hubName"
-      (tagClicked)="autoTagClicked($event)"
-    ></app-tags-component>
+    <app-tags-component [hubName]="appState.hubName" (tagClicked)="autoTagClicked($event)" />
   </div>
+}
 
   <!-- ==================================================== -->
   <!-- ===========   SETTINGS / OPTIONS MODAL   =========== -->
@@ -178,8 +190,8 @@
 
   <!-- Clickable tabs -->
 
+@if (settingsModalOpen) {
   <div
-    *ngIf="settingsModalOpen"
     class="all-settings-tabs"
     @modalAnimation
   >
@@ -199,13 +211,15 @@
       {{ 'SETTINGS.tabShortcuts'  | translate }}
     </button>
   </div>
+}
 
   <!-- Modal with all settings -->
 
+@if (settingsModalOpen) {
   <div
-    *ngIf="settingsModalOpen"
     class="settings-modal"
     @modalAnimation
+    #settingsModal
   >
 
     <!-- fade out & close button -->
@@ -216,7 +230,7 @@
         class="close-settings close-settings-fade-out-override"
         title="{{ 'SETTINGS.closeSettings' | translate }}"
       >
-        <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
+        <app-icon class="close-modal-icon" [icon]="'icon-close'" />
       </div>
     </div>
 
@@ -231,6 +245,7 @@
       (increaseZoomLevel)="increaseZoomLevel()"
       (openOnlineHelp)="openOnlineHelp()"
       (resetZoomLevel)="resetZoomLevel()"
+      (scrollSettingsToTop)="scrollSettingsToTop()"
       (toggleButton)="toggleButton($any($event))"
       (toggleHideButton)="toggleHideButton($event)"
 
@@ -240,12 +255,12 @@
       [settingTabToShow]="settingTabToShow"
       [settingsButtons]="settingsButtons"
       [versionNumber]="versionNumber"
-    ></app-settings>
+     />
 
     <!-- HUB STATISTICS / Current Hub Settings -->
 
-    <div *ngIf="settingTabToShow == 3" class="shortcut-menu">
-
+  @if (settingTabToShow == 3) {
+    <div class="shortcut-menu">
       <app-statistics
         (deleteInputSourceFiles)="deleteInputSourceFiles($event)"
         (finalArrayNeedsSaving)="imageElementService.finalArrayNeedsSaving = true"
@@ -262,40 +277,44 @@
         [numberScreenshotsDeleted]="numberScreenshotsDeletedBehaviorSubject.asObservable()"
         [oldFolderReconnected]="oldFolderReconnectedBehaviorSubject.asObservable()"
         [serverDetails]="serverDetailsBehaviorSubject.asObservable()"
-      ></app-statistics>
-
+       />
     </div>
-
+  }
     <!-- KEYBOARD SHORTCUTS -->
-
-    <div *ngIf="settingTabToShow == 4" class="shortcut-menu">
-
-      <app-shortcuts [macVersion]="macVersion"></app-shortcuts>
-
+  @if (settingTabToShow == 4) {
+    <div class="shortcut-menu">
+      <app-shortcuts [macVersion]="macVersion" />
     </div>
-
+  }
   </div>
+}
 
   <!-- END OF SETTINGS MODAL ------------------------------------------------------------------- -->
 
+@if (!settingsButtons['hideTop'].toggled) {
   <header
-    *ngIf="!settingsButtons['hideTop'].toggled"
     class="top-of-buttons"
     [ngClass]="{ 'top-of-buttons-dark-mode': settingsButtons['darkMode'].toggled }"
     @topAnimation
   >
-
     <app-top-component
       class="top-content-position"
+
+      [currentImageElement]="currentClickedItem"
       [darkMode]="settingsButtons['darkMode'].toggled"
       [fileString]="currentClickedItemName"
+      [folderPath]="appState.selectedOutputFolder"
       [folderString]="currentPlayingFolder"
+      [hubName]="appState.hubName"
+
       (onFileWordClicked)="handleFileWordClicked($event)"
       (onFolderWordClicked)="handleFolderWordClicked($event)"
+      (onOpenDetails)="openThumbnailSheet($event)"
       (onOpenInExplorer)="openInExplorer()"
-    ></app-top-component>
-
+      (onPlayVideo)="openVideo($event, 0)"
+     />
   </header>
+}
 
   <div
     class="window-content"
@@ -322,7 +341,7 @@
         [appState]="appState"
         [settingsButtonsGroups]="settingsButtonsGroups"
         [settingsButtons]="settingsButtons"
-      ></app-ribbon>
+       />
 
       <!-- GEAR BUTTON -->
       <div
@@ -331,14 +350,15 @@
         class="gearButton"
         title="{{ 'SETTINGS.settings' | translate }}"
       >
-        <app-icon [icon]="'icon-gear'"></app-icon>
+        <app-icon [icon]="'icon-gear'" />
       </div>
+    @if (importStage !== 'done' && settingsButtons['hideTop'].toggled) {
       <div
-        *ngIf="importStage !== 'done' && settingsButtons['hideTop'].toggled"
         class="scanning-indicator scanning-indicator-right"
         title="{{ 'WIZARD.importInProgress' | translate }}"
         @slowFadeOut
       ></div>
+    }
 
     </div>
 
@@ -350,7 +370,7 @@
           'hiding-settings-menu-dark': settingsButtons['darkMode'].toggled
         }"
     >
-      <app-icon class="mini-chevron" [icon]="'icon-chevron-down-mini'"></app-icon>
+      <app-icon class="mini-chevron" [icon]="'icon-chevron-down-mini'" />
     </div>
 
     <!-- BREADCRUMBS -->
@@ -361,7 +381,7 @@
       [appState]="appState"
       [folderViewNavigationPath]="folderViewNavigationPath"
       [settingsButtons]="settingsButtons"
-    ></app-breadcrumbs>
+     />
 
     <!-- ============================================== -->
     <!-- ===========         SIDEBAR        =========== -->
@@ -390,17 +410,21 @@
     >
 
       <div class="filtering-total">
-        <ng-container *ngIf="appState.numOfFolders !== 0">
-          {{ appState.numOfFolders | number }}
-          {{ (appState.numOfFolders === 1 ? 'SIDEBAR.totalFolders' : 'SIDEBAR.totalFoldersPlural') | translate }}
-        </ng-container>
+
+      @if (appState.numOfFolders !== 0) {
+        {{ appState.numOfFolders | number }}
+        {{ (appState.numOfFolders === 1 ? 'SIDEBAR.totalFolders' : 'SIDEBAR.totalFoldersPlural') | translate }}
+      }
+
         <br>
+
+      @if (!allFinishedScanning || importStage === 'importingMeta') {
         <div
-          *ngIf="!allFinishedScanning || importStage === 'importingMeta'"
           class="scanning-indicator"
           title="{{ 'SIDEBAR.scanInProgress' | translate }}"
           @slowFadeOut
         ></div>
+      }
         {{ (imageElementService.imageElements | deleteFilePipe : deletePipeHack).length | number }}
         {{ 'SIDEBAR.videos' | translate }}
       </div>
@@ -416,11 +440,12 @@
         [filters]="filters"
         [settingsButtons]="settingsButtons"
         [tagTypeAhead]="tagTypeAhead"
-      ></app-search-boxes>
+       />
 
       <!-- magic search -->
-      <div *ngIf="settingsButtons['magic'].toggled" @filterItemAppear>
-        <app-icon class="input-icon" [icon]="settingsButtons['magic'].iconName"></app-icon>
+    @if (settingsButtons['magic'].toggled) {
+      <div @filterItemAppear>
+        <app-icon class="input-icon" [icon]="settingsButtons['magic'].iconName" />
         <input
           #magicSearch
           (keydown.escape)="magicSearchString = ''"
@@ -430,24 +455,24 @@
           class="filter-general input-filter"
           placeholder="{{ 'SIDEBAR.magic' | translate }}"
         >
-
-        <div
-          class="filteredWords"
-        >
+        <div class="filteredWords">
+        @if (magicSearchString !== '') {
           <span
-            *ngIf="magicSearchString !== ''"
             (click)="magicSearchString = ''"
             [ngStyle]="{ background: '#aaffaa' }"
             class="search-or-tag-general search-word"
           >
             {{ magicSearchString }}
           </span>
+        }
         </div>
       </div>
+    }
 
-      <!-- regex search -->
-      <div *ngIf="settingsButtons['regex'].toggled" @filterItemAppear>
-        <app-icon class="input-icon" [icon]="settingsButtons['regex'].iconName"></app-icon>
+    <!-- regex search -->
+    @if (settingsButtons['regex'].toggled) {
+      <div @filterItemAppear>
+        <app-icon class="input-icon" [icon]="settingsButtons['regex'].iconName" />
         <input
           #regexSearch
           (keydown.escape)="regexSearchString = ''"
@@ -457,12 +482,9 @@
           class="filter-general input-filter"
           placeholder="{{ 'SIDEBAR.regex' | translate }}"
         >
-
-        <div
-          class="filteredWords"
-        >
+        <div class="filteredWords">
+        @if (regexSearchString !== '') {
           <span
-            *ngIf="regexSearchString !== ''"
             (click)="regexSearchString = ''"
             [ngStyle]="{ background: '#aaffaa' }"
             class="search-or-tag-general search-word"
@@ -471,12 +493,15 @@
           >
             {{ regexSearchString }}
           </span>
+        }
         </div>
       </div>
+    }
 
       <!-- fuzzy search -->
-      <div *ngIf="settingsButtons['fuzzy'].toggled" @filterItemAppear>
-        <app-icon class="input-icon" [icon]="settingsButtons['fuzzy'].iconName"></app-icon>
+    @if (settingsButtons['fuzzy'].toggled) {
+      <div @filterItemAppear>
+        <app-icon class="input-icon" [icon]="settingsButtons['fuzzy'].iconName" />
         <input
           #fuzzySearch
           (keydown.escape)="fuzzySearchString = ''"
@@ -486,24 +511,49 @@
           class="filter-general input-filter"
           placeholder="{{ 'SIDEBAR.fuzzy' | translate }}"
         >
-
-        <div
-          class="filteredWords"
-        >
+        <div class="filteredWords">
+        @if (fuzzySearchString !== '' && fuzzySearchString.length > 2) {
           <span
-            *ngIf="fuzzySearchString !== '' && fuzzySearchString.length > 2"
             (click)="fuzzySearchString = ''"
             [ngStyle]="{ background: '#aaffaa' }"
             class="search-or-tag-general search-word"
           >
             {{ fuzzySearchString }}
           </span>
+        }
         </div>
       </div>
+    }
+
+      <!-- starts-with search -->
+    @if (settingsButtons['startsWith'].toggled) {
+      <div @filterItemAppear>
+        <app-icon class="input-icon" [icon]="settingsButtons['startsWith'].iconName" />
+        <input
+          #startsWithSearch
+          (keydown.escape)="startsWithSearchString = ''"
+          [(ngModel)]="startsWithSearchString"
+          [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
+          type="text"
+          class="filter-general input-filter"
+          placeholder="{{ 'SIDEBAR.startsWith' | translate }}"
+        />
+        <div class="filteredWords">
+          <span
+            *ngIf="startsWithSearchString !== ''"
+            (click)="startsWithSearchString = ''"
+            [ngStyle]="{ background: '#aaffaa' }"
+            class="search-or-tag-general search-word"
+          >
+            {{ startsWithSearchString }}
+          </span>
+        </div>
+      </div>
+    }
 
       <!-- durationFilter -->
-      <div *ngIf="settingsButtons['durationFilter'].toggled">
-
+    @if (settingsButtons['durationFilter'].toggled) {
+      <div class="slider-container" @sliderAppear>
         <app-slider-filter
           (newSliderFilterSelected)="newLengthFilterSelected($event)"
           [darkMode]="settingsButtons['darkMode'].toggled"
@@ -512,12 +562,13 @@
           [minimumValue]="0"
           [lengthFilter]="true"
           [steps]="50"
-        ></app-slider-filter>
+         />
       </div>
+    }
 
       <!-- sizeFilter -->
-      <div *ngIf="settingsButtons['sizeFilter'].toggled">
-
+    @if (settingsButtons['sizeFilter'].toggled) {
+      <div class="slider-container" @sliderAppear>
         <app-slider-filter
           (newSliderFilterSelected)="newSizeFilterSelected($event)"
           [darkMode]="settingsButtons['darkMode'].toggled"
@@ -526,12 +577,13 @@
           [minimumValue]="0"
           [sizeFilter]="true"
           [steps]="50"
-        ></app-slider-filter>
+         />
       </div>
+    }
 
       <!-- timesPlayedFilter -->
-      <div *ngIf="settingsButtons['timesPlayedFilter'].toggled">
-
+    @if (settingsButtons['timesPlayedFilter'].toggled) {
+      <div class="slider-container" @sliderAppear>
         <app-slider-filter
           (newSliderFilterSelected)="newTimesPlayedFilterSelected($event)"
           [darkMode]="settingsButtons['darkMode'].toggled"
@@ -540,12 +592,13 @@
           [minimumValue]="-1"
           [timesPlayed]="true"
           [steps]="50"
-        ></app-slider-filter>
+         />
       </div>
+    }
 
       <!-- yearFilter -->
-      <div *ngIf="settingsButtons['yearFilter'].toggled">
-
+    @if (settingsButtons['yearFilter'].toggled) {
+      <div class="slider-container" @sliderAppear>
         <app-slider-filter
             (newSliderFilterSelected)="newYearFilterSelected($event)"
             [darkMode]="settingsButtons['darkMode'].toggled"
@@ -554,33 +607,41 @@
             [minimumValue]="yearMinCutoff"
             [yearFilter]="true"
             [steps]="50"
-        ></app-slider-filter>
+         />
       </div>
+    }
 
-      <!-- resolution filter & its frequency histogram -->
+    <!-- resolution filter & its frequency histogram -->
+    @if (settingsButtons['resolutionFilter'].toggled) {
+      <div class="slider-container" @sliderAppear>
       <app-resolution-filter
         (newResFilterSelected)="newResFilterSelected($event)"
-
         [freqLeftBound]="freqLeftBound"
         [freqRightBound]="freqRightBound"
         [resolutionFreqArr]="resolutionFreqArr"
         [resolutionNames]="resolutionNames"
         [settingsButtons]="settingsButtons"
-      ></app-resolution-filter>
+       />
+      </div>
+    }
 
       <!-- star filter & its frequency histogram -->
+    @if (settingsButtons['starFilter'].toggled) {
+      <div class="slider-container" @sliderAppear>
       <app-star-filter
         (newStarFilterSelected)="newStarFilterSelected($event)"
-
         [settingsButtons]="settingsButtons"
         [starRatingFreqArr]="starRatingFreqArr"
         [starLeftBound]="starLeftBound"
         [starRightBound]="starRightBound"
         [starRatingNames]="starRatingNames"
-      ></app-star-filter>
+       />
+      </div>
+    }
 
       <!-- Lev Distance -->
-      <div class="lev-distance" *ngIf="showSimilar">
+    @if (showSimilar) {
+      <div class="lev-distance">
         <span class="lev-description">
           {{ 'SIDEBAR.similarTo' | translate }}
         </span>
@@ -588,65 +649,99 @@
           {{ findMostSimilar }}
         </span>
       </div>
+    }
+
+      <!-- Playlist only view -->
+    @if (settingsButtons['showOnlyPlaylist'].toggled) {
+      <div class="lev-distance">
+        <span
+          class="search-or-tag-general search-word"
+          (click)="settingsButtons['showOnlyPlaylist'].toggled = false"
+        >
+          {{ 'SIDEBAR.playlistShowingOnly' | translate }}
+        </span>
+
+        <span
+          class="delete-playlist"
+          (click)="emptyPlaylist()"
+          title="{{ 'SIDEBAR.playlistRemoveAll' | translate }}"
+        >
+          ✕
+        </span>
+      </div>
+    }
 
       <!-- Duplicates -->
+    @if (settingsButtons['duplicateLength'].toggled
+      || settingsButtons['duplicateSize'].toggled
+      || settingsButtons['duplicateHash'].toggled) {
       <div
         class="lev-distance"
-        *ngIf="settingsButtons['duplicateLength'].toggled
-            || settingsButtons['duplicateSize'].toggled
-            || settingsButtons['duplicateHash'].toggled"
-       >
+      >
         <span class="lev-description">
           {{ 'SIDEBAR.duplicate' | translate }}
         </span>
+      @if (settingsButtons['duplicateLength'].toggled) {
         <span
-          *ngIf="settingsButtons['duplicateLength'].toggled"
           class="search-or-tag-general search-word on-new-line"
           (click)="settingsButtons['duplicateLength'].toggled = false"
         >
           {{ 'SIDEBAR.dupeByLength' | translate }}
         </span>
+      }
+      @if (settingsButtons['duplicateSize'].toggled) {
         <span
-          *ngIf="settingsButtons['duplicateSize'].toggled"
           class="search-or-tag-general search-word on-new-line"
           (click)="settingsButtons['duplicateSize'].toggled = false"
         >
           {{ 'SIDEBAR.dupeBySize' | translate }}
         </span>
+      }
+      @if (settingsButtons['duplicateHash'].toggled) {
         <span
-          *ngIf="settingsButtons['duplicateHash'].toggled"
           class="search-or-tag-general search-word on-new-line"
           (click)="settingsButtons['duplicateHash'].toggled = false"
         >
           {{ 'SIDEBAR.dupeByHash' | translate }}
         </span>
+      }
       </div>
+    }
 
       <!-- SORT ORDER -->
       <app-sort-order
         (sortTypeChange)="selectFilterOrder($event)"
         [settingsButtons]="settingsButtons"
-      ></app-sort-order>
+       />
 
+    @if (settingsButtons['hideOffline'].toggled) {
       <div
-        *ngIf="settingsButtons['hideOffline'].toggled"
         (click)="settingsButtons['hideOffline'].toggled = false"
         class="search-or-tag-general search-word hiding-offline"
       >
         {{ 'SIDEBAR.hidingOffline' | translate }}
       </div>
+    }
 
       <!-- total found -->
       <div class="filtering-total">
-        <span>{{ numberOfVideosFound | number:'.0' }} {{ 'SIDEBAR.found' | translate }}</span>
+        @if (numberOfVideosFound < (imageElementService.imageElements | deleteFilePipe : deletePipeHack).length) {
+          <span
+            title="{{ 'BUTTONS.clearAllFiltersHint' | translate }}"
+            class="clear-all-filters"
+            (click)="clearAllFilters()"
+          >{{ numberOfVideosFound | number:'.0' }} {{ 'SIDEBAR.found' | translate }}</span>
+        } @else {
+          <span>{{ numberOfVideosFound | number:'.0' }} {{ 'SIDEBAR.found' | translate }}</span>
+        }
       </div>
 
       <!-- Recently opened -->
-      <app-recently-opened
+      <app-recently-opened-hubs
         (openFromHistory)="openFromHistory($event)"
         [settingsButtons]="settingsButtons"
         [vhaFileHistory]="vhaFileHistory"
-      ></app-recently-opened>
+       />
 
     </div> <!-- closing the SIDEBAR -->
 
@@ -688,6 +783,8 @@
 
       [items]="imageElementService.imageElements
 
+                | playlistOnlyPipe : settingsButtons['showOnlyPlaylist'].toggled : playlistViewRefresh
+
                 | deleteFilePipe : deletePipeHack
 
                 | hideOfflinePipe : settingsButtons['hideOffline'].toggled
@@ -728,6 +825,8 @@
                 | regexSearchPipe : regexSearchString
 
                 | fuzzySearchPipe : fuzzySearchString
+
+                | startsWithSearchPipe : startsWithSearchString
 
                 | duplicateFinderPipe : settingsButtons['duplicateLength'].toggled : 'length'
 
@@ -786,10 +885,9 @@
 
       <!-- ==================================== THUMBNAILS ==================================== -->
 
-      <ng-container *ngIf="appState.currentView === 'showThumbnails'">
+    @if (appState.currentView === 'showThumbnails') {
+      @for (item of scroll.viewPortItems; track item) {
         <app-thumbnail
-          *ngFor="let item of scroll.viewPortItems"
-
           (videoClick)=" (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
           (rightClick)=" (item.cleanName === '*FOLDER*') ? doNothing()                               : rightMouseClicked($event.mouseEvent, $event.item)"
 
@@ -826,15 +924,15 @@
                       + 'px',
               width: previewWidth
             }"
-        ></app-thumbnail>
-      </ng-container>
+         />
+      }
+    }
 
-      <!-- ==================================== FILMSTRIP ==================================== -->
+    <!-- ==================================== FILMSTRIP ==================================== -->
 
-      <ng-container *ngIf="appState.currentView === 'showFilmstrip'">
+    @if (appState.currentView === 'showFilmstrip') {
+      @for (item of scroll.viewPortItems; track item) {
         <app-filmstrip-item
-          *ngFor="let item of scroll.viewPortItems"
-
           (videoClick)="handleClick($event, item)"
           (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
 
@@ -864,15 +962,15 @@
                       + (settingsButtons['compactView'].toggled ? 0 : 10)
                       + 'px'
             }"
-          ></app-filmstrip-item>
-      </ng-container>
+         />
+      }
+    }
 
       <!-- ==================================== FULL VIEW ==================================== -->
 
-      <ng-container *ngIf="appState.currentView === 'showFullView'">
+    @if (appState.currentView === 'showFullView') {
+      @for (item of scroll.viewPortItems; track item) {
         <app-full-item
-          *ngFor="let item of scroll.viewPortItems"
-
           (videoClick)="handleClick($event, item)"
           (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
 
@@ -895,15 +993,15 @@
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
 
           style="display: block"
-        ></app-full-item>
-      </ng-container>
+         />
+      }
+    }
 
       <!-- ==================================== FILES / TEXT ==================================== -->
 
-      <ng-container *ngIf="appState.currentView === 'showFiles'">
+    @if (appState.currentView === 'showFiles') {
+      @for (item of scroll.viewPortItems; track item) {
         <app-file-item
-          *ngFor="let item of scroll.viewPortItems"
-
           (click)="      (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick({ mouseEvent: $event }, item)"
           (dblclick)="   (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick({ mouseEvent: $event }, item, true)"
           (contextmenu)="(item.cleanName === '*FOLDER*') ? doNothing()                               : rightMouseClicked($event, item)"
@@ -920,15 +1018,15 @@
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
 
           style="display: block"
-        ></app-file-item>
-      </ng-container>
+         />
+      }
+    }
 
       <!-- ==================================== DETAILS / META ==================================== -->
 
-      <ng-container *ngIf="appState.currentView === 'showDetails' || appState.currentView === 'showDetails2'">
+    @if (appState.currentView === 'showDetails' || appState.currentView === 'showDetails2') {
+      @for (item of scroll.viewPortItems; track item) {
         <app-details-item
-          *ngFor="let item of scroll.viewPortItems"
-
           (videoClick)="handleClick($event, item)"
           (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
           (filterTag)="handleTagWordClicked($event.tag.name, $event.event)"
@@ -967,15 +1065,15 @@
           [renameResponse]="renameFileResponseBehaviorSubject"
 
           [ngStyle]="{ display: appState.currentView === 'showDetails' ? 'block' : 'inline-block' }"
-        ></app-details-item>
-      </ng-container>
+         />
+      }
+    }
 
       <!-- ==================================== CLIPS ==================================== -->
 
-      <ng-container *ngIf="appState.currentView === 'showClips'">
+    @if (appState.currentView === 'showClips') {
+      @for (item of scroll.viewPortItems; track item) {
         <app-clip-item
-          *ngFor="let item of scroll.viewPortItems"
-
           (videoClick)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
           (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing()                               : rightMouseClicked($event.mouseEvent, $event.item)"
 
@@ -1004,28 +1102,29 @@
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
 
           style="display: inline-block"
-        ></app-clip-item>
-      </ng-container>
+         />
+      }
+    }
 
       <div class="bottom-of-scroller-spacer"></div>
 
     </virtual-scroller>
 
+  @if (numberOfVideosFound === 0) {
     <div
-      *ngIf="numberOfVideosFound === 0"
       class="no-results"
       [ngStyle]="{
         'padding-left': settingsButtons['hideSidebar'].toggled ? 0 : '190px',
         'color': settingsButtons['darkMode'].toggled ? '#aaaaaa' : 'initial'
       }"
     >
-      <ng-container *ngIf="(appState.currentView === 'showClips' && currentScreenshotSettings.clipSnippets === 0); else noResultsFound">
+      @if ((appState.currentView === 'showClips' && currentScreenshotSettings.clipSnippets === 0)) {
         {{ 'SETTINGS.noClipsExtracted' | translate }}
-      </ng-container>
-      <ng-template #noResultsFound>
+      } @else {
         {{ 'SETTINGS.noResultsFound' | translate }}
-      </ng-template>
+      }
     </div>
+  }
 
   </div> <!-- end of window-content -->
 
@@ -1043,135 +1142,136 @@
                           || settingsButtons['showTagTray'].toggled
   }"
 >
+@if (                         !settingsButtons['showFreq'].hidden) {
   <button
-    *ngIf="                   !settingsButtons['showFreq'].hidden"
     (click)="                     toggleButton('showFreq')"
     [ngClass]="{ 'active-tab': settingsButtons['showFreq'].toggled }"
   >
     {{ 'SETTINGS.trayCloud'     | translate }}
   </button>
+}
 
+@if (                         !settingsButtons['showTagTray'].hidden) {
   <button
-    *ngIf="                   !settingsButtons['showTagTray'].hidden"
     (click)="                     toggleButton('showTagTray')"
     [ngClass]="{ 'active-tab': settingsButtons['showTagTray'].toggled }"
   >
     {{ 'SETTINGS.trayTags'      | translate }}
   </button>
+}
 
+@if (                         !settingsButtons['showRelatedVideosTray'].hidden) {
   <button
-    *ngIf="                   !settingsButtons['showRelatedVideosTray'].hidden"
     (click)="                     toggleButton('showRelatedVideosTray')"
     [ngClass]="{ 'active-tab': settingsButtons['showRelatedVideosTray'].toggled }"
   >
     {{ 'SETTINGS.traySimilar'   | translate }}
   </button>
+}
 
+@if (                         !settingsButtons['showRecentlyPlayed'].hidden) {
   <button
-    *ngIf="                   !settingsButtons['showRecentlyPlayed'].hidden"
     (click)="                     toggleButton('showRecentlyPlayed')"
     [ngClass]="{ 'active-tab': settingsButtons['showRecentlyPlayed'].toggled }"
   >
     {{ 'SETTINGS.recentlyPlayed' | translate }}
   </button>
+}
 
+@if (                         !settingsButtons['showDetailsTray'].hidden) {
   <button
-    *ngIf="                   !settingsButtons['showDetailsTray'].hidden"
     (click)="                     toggleButton('showDetailsTray')"
     [ngClass]="{ 'active-tab': settingsButtons['showDetailsTray'].toggled }"
   >
     {{ 'SETTINGS.showDetailsTray' | translate }}
   </button>
+}
 </div>
 
+  <!-- ===========    Bottom Tray Section - region below tabs   =========== -->
+
+@if (settingsButtons['showDetailsTray'].toggled
+  || settingsButtons['showFreq'].toggled
+  || settingsButtons['showRecentlyPlayed'].toggled
+  || settingsButtons['showRelatedVideosTray'].toggled
+  || settingsButtons['showTagTray'].toggled) {
 <div
   class="bottom-tray"
   [ngClass]="{ 'bottom-tray-dark': settingsButtons['darkMode'].toggled }"
-  *ngIf="settingsButtons['showDetailsTray'].toggled
-      || settingsButtons['showFreq'].toggled
-      || settingsButtons['showRecentlyPlayed'].toggled
-      || settingsButtons['showRelatedVideosTray'].toggled
-      || settingsButtons['showTagTray'].toggled"
   @bottomTrayAnimation
 >
-
   <div
     (click)="toggleAllTrayViewsButtonsOff()"
     class="close-bottom-tray"
     title="{{ 'SETTINGS.closeBottomTray' | translate }}"
   >
-    <app-icon class="close-modal-icon" [icon]="'icon-close'"></app-icon>
+    <app-icon class="close-modal-icon" [icon]="'icon-close'" />
   </div>
-
   <!-- MOST SIMILAR & RECENTLY PLAYED -->
+@if (settingsButtons['showRelatedVideosTray'].toggled
+  || settingsButtons['showRecentlyPlayed'].toggled) {
   <app-similar-tray
-    *ngIf="settingsButtons['showRelatedVideosTray'].toggled
-        || settingsButtons['showRecentlyPlayed'].toggled"
-
     (handleClick)="handleClick($event.expectedEvent, $event.item)"
     (rightMouseClicked)="rightMouseClicked($event.mouseEvent, $event.item)"
-
+    (showMoreRecentlyPlayed)="sortByRecentlyPlayed()"
     [appState]="appState"
     [currentClickedItemName]="currentClickedItemName"
     [previewHeightRelated]="previewHeightRelated"
     [previewWidthRelated]="previewWidthRelated"
     [settingsButtons]="settingsButtons"
     [showRecentNotSimilar]="settingsButtons['showRecentlyPlayed'].toggled"
-  ></app-similar-tray>
-
+   />
+}
   <!-- TAGS -->
+@if (settingsButtons['showTagTray'].toggled) {
   <app-tag-tray
-    *ngIf="settingsButtons['showTagTray'].toggled"
-
     (handleTagWordClicked)="handleTagWordClicked($event.tag.name, $event.event)"
     (selectAll)="selectAllVisible()"
     (toggleBatchTaggingMode)="toggleBatchTaggingMode()"
-
     [appState]="appState"
     [batchTaggingMode]="batchTaggingMode"
     [darkMode]="settingsButtons['darkMode'].toggled"
     [settingsButtons]="settingsButtons"
-  ></app-tag-tray>
-
+   />
+}
   <!-- WORD CLOUD -->
+@if (settingsButtons['showFreq'].toggled) {
   <div
-    *ngIf="settingsButtons['showFreq'].toggled"
     class="cloud-frequency"
   >
     <div class="word-cloud-buttons">
-      <app-button (toggleButton)="toggleButton($any($event))" [button]="'manualTags'"     [settingsButtons]="settingsButtons"></app-button>
-      <app-button (toggleButton)="toggleButton($any($event))" [button]="'autoFileTags'"   [settingsButtons]="settingsButtons"></app-button>
-      <app-button (toggleButton)="toggleButton($any($event))" [button]="'autoFolderTags'" [settingsButtons]="settingsButtons"></app-button>
+      <app-button (toggleButton)="toggleButton($any($event))" [button]="'manualTags'"     [settingsButtons]="settingsButtons" />
+      <app-button (toggleButton)="toggleButton($any($event))" [button]="'autoFileTags'"   [settingsButtons]="settingsButtons" />
+      <app-button (toggleButton)="toggleButton($any($event))" [button]="'autoFolderTags'" [settingsButtons]="settingsButtons" />
     </div>
-
+  @if (settingsButtons['manualTags'].toggled
+    || settingsButtons['autoFileTags'].toggled
+    || settingsButtons['autoFolderTags'].toggled) {
     <div
-      *ngIf="   settingsButtons['manualTags'].toggled
-             || settingsButtons['autoFileTags'].toggled
-             || settingsButtons['autoFolderTags'].toggled; else pleaseSelectTag"
       class="word-cloud-tags"
     >
+    @for (word of wordFreqArr; track word) {
       <span
-        *ngFor="let word of wordFreqArr"
         [ngStyle]="{'font-size': word.height + 'px' }"
         (click)="handleTagWordClicked(word.word, $event)"
       >
         {{ word.word }}
       </span>
+  }
     </div>
-    <ng-template #pleaseSelectTag>
+  } @else {
       <span class="please-select-tag" @modalAnimation>
         {{ 'TAGS.pleaseEnable' | translate }}
       </span>
-    </ng-template>
+  }
   </div>
-
+}
   <!-- CURRENT (last-clicked) FILE -->
+@if (settingsButtons['showDetailsTray'].toggled) {
   <div
-    *ngIf="settingsButtons['showDetailsTray'].toggled"
     class="current-clicked"
-  >
-
-    <ng-container *ngIf="currentClickedItem; else mustClickFirst">
+    >
+    @if (currentClickedItem) {
       <app-thumbnail
         (videoClick)="handleClick($event, currentClickedItem)"
         (sheetClick)="this.openThumbnailSheet(currentClickedItem)"
@@ -1191,7 +1291,7 @@
         [largerFont]="settingsButtons['fontSizeLarger'].toggled"
         [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
         [showMeta]="false"
-      ></app-thumbnail>
+       />
 
       <app-meta-item
         class="meta-container top-offset"
@@ -1214,22 +1314,20 @@
 
         [selectedSourceFolder]="sourceFolderService.selectedSourceFolder[currentClickedItem.inputSource].path"
         [renameResponse]="renameFileResponseBehaviorSubject.asObservable()"
-      ></app-meta-item>
-    </ng-container>
-
-    <ng-template #mustClickFirst>
+       />
+    } @else {
       <div class="must-click-first" [ngClass]="{ 'must-click-dark-mode': settingsButtons['darkMode'].toggled }">
         {{ 'TAGS.detailsBottomTray' | translate }}
       </div>
-    </ng-template>
-
+    }
   </div>
-
+}
 </div>
+}   <!-- end of bottom tray section (just below all the tabs)    =========== -->
 
 <!-- WIZARD -->
+@if (wizard.showWizard) {
 <app-wizard
-  *ngIf="wizard.showWizard"
   @myWizardAnimation
 
   (clearRecentlyViewedHistory)="clearRecentlyViewedHistory()"
@@ -1245,5 +1343,16 @@
   [importStage]="importStage"
   [vhaFileHistory]="vhaFileHistory"
   [wizard]="wizard"
->
-</app-wizard>
+ />
+}
+
+<!-- TAG COLOR PICKER -->
+@if (showTagColorPicker) {
+<app-tag-color-picker
+  [position]="tagColorPickerPosition"
+  [currentColor]="currentTagColor"
+  [darkMode]="settingsButtons['darkMode'].toggled"
+  (colorSelected)="onTagColorSelected($event)"
+  (close)="onTagColorPickerClose()"
+ />
+}

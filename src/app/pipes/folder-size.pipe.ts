@@ -1,15 +1,16 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'folderSize'
+  standalone: false,
+  name: 'folderSizePipe'
 })
 export class FolderSizePipe implements PipeTransform {
-  transform(value: any, ...args: any[]): any {
-    const fileCount = parseInt(value, 10);
+  transform(numberOfFiles: string): any {
+    const fileCount = parseInt(numberOfFiles, 10);
     if (fileCount >= 1000) {
       return Math.floor(fileCount / 1000) + 'k';
     } else {
-      return value;
+      return numberOfFiles;
     }
   }
 }

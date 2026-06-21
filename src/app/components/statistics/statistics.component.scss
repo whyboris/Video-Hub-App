@@ -1,4 +1,4 @@
-@import "../variables";
+@use "../variables";
 
 .icon-image {
   transform: translateY(2px);
@@ -22,7 +22,7 @@
 }
 
 .stats-heading {
-  color: $gray-70;
+  color: variables.$gray-70;
   display: block;
   font-size: 14px;
   margin-top: 20px;
@@ -45,7 +45,7 @@
 }
 
 .title {
-  color: $black;
+  color: variables.$black;
   font-weight: bold;
 }
 
@@ -106,14 +106,14 @@
 }
 
 .delete-input-folder {
-  color: $pretty-red;
+  color: variables.$pretty-red;
   cursor: not-allowed;
   font-weight: bold;
   right: calc(100% + 10px);
 }
 
 .rescan-input-folder {
-  color: $pretty-blue;
+  color: variables.$pretty-blue;
   cursor: pointer;
   font-weight: bold;
   right: calc(100% + 47px);
@@ -143,7 +143,7 @@
 
 .number-of-thumbs-deleted {
   bottom: -26px;
-  color: $pretty-blue;
+  color: variables.$pretty-blue;
   position: absolute;
   right: 0;
   width: 100%;
@@ -151,9 +151,9 @@
 
 .progress-gradient-animation {
   animation: gradient 3s infinite;
-  background: linear-gradient(90deg, rgba(255,255,255,0) 35%, $pretty-blue 50% , rgba(255,255,255,0) 65%);
+  background: linear-gradient(90deg, rgba(255,255,255,0) 35%, variables.$pretty-blue 50% , rgba(255,255,255,0) 65%);
   background-size: 300%;
-  color: $gray-70;
+  color: variables.$gray-70;
   pointer-events: none;
 }
 
@@ -176,7 +176,7 @@
 }
 
 .port-select {
-  background-color: $gray-10;
+  background-color: variables.$gray-10;
   border: 0;
   cursor: pointer;
   font-family: monospace;
@@ -190,7 +190,7 @@
 }
 
 .server-location {
-  color: $dark-blue;
+  color: variables.$dark-blue;
   display: flex;
   font-size: 20px;
   justify-content: center;
@@ -206,7 +206,7 @@
 }
 
 .or {
-  color: $black;
+  color: variables.$black;
   font-size: 14px;
   margin-right: 14px;
 }

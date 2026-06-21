@@ -1,7 +1,7 @@
-@import "../variables.scss";
+@use "../variables.scss";
 
 .wizard {
-  background: $gray-10;
+  background: variables.$gray-10;
   height: calc(100vh - 50px);
   overflow-x: hidden;
   overflow-y: scroll;
@@ -12,7 +12,7 @@
   z-index: 30;
 
   h1 {
-    color: $gray-60;
+    color: variables.$gray-60;
     font-size: 14px;
   }
 
@@ -38,7 +38,7 @@
     transition-duration: 300ms;
 
     &:hover {
-      color: $dark-red;
+      color: variables.$dark-red;
       transition-duration: 300ms;
     }
   }
@@ -53,7 +53,7 @@
   }
 
   .right-side {
-    border-left: 1px solid $gray-20;
+    border-left: 1px solid variables.$gray-20;
     // box-sizing: border-box;
     float: left;
     min-height: calc(100vh - 180px);
@@ -64,10 +64,10 @@
   }
 
   .steps {
-    background-color: $gray-20;
+    background-color: variables.$gray-20;
     border-radius: 9px;
     box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.07);
-    color: $white;
+    color: variables.$white;
     font-size: 9px;
     height: 18px;
     line-height: 18px;
@@ -80,18 +80,18 @@
   }
 
   .fulfilled {
-    background-color: $pretty-green;
+    background-color: variables.$pretty-green;
   }
 
   .current-step {
-    background-color: $pretty-green;
+    background-color: variables.$pretty-green;
     padding-right: 8px;
     transition: 300ms;
 
     &:after {
       animation: triangleSlide 0.5s forwards;
       border: solid transparent;
-      border-left-color: $pretty-green;
+      border-left-color: variables.$pretty-green;
       border-width: 7px;
       content: " ";
       height: 0;
@@ -113,24 +113,24 @@
   }
 
   .description {
-    color: $gray-50;
+    color: variables.$gray-50;
     margin-bottom: 10px;
     pointer-events: none;
   }
 
   .clear-history {
-    color: $gray-50;
+    color: variables.$gray-50;
     cursor: pointer;
     font-style: italic;
     margin: 20px 0 0 20px;
 
     &:hover {
-      color: $pretty-red;
+      color: variables.$pretty-red;
     }
   }
 
   .recently-opened-wizard {
-    color: $gray-70;
+    color: variables.$gray-70;
     display: block;
     font-size: 12px;
     margin: 0 0 20px 0;
@@ -155,7 +155,7 @@
 
         &:hover {
           .history-name {
-            color: $pretty-blue;
+            color: variables.$pretty-blue;
             text-shadow: 0px 0px 5px rgba(255, 255, 255, 1);
             transition: 300ms;
             transition-property: color;
@@ -170,7 +170,7 @@
           width: 15px;
 
           &:hover {
-            fill: $pretty-red;
+            fill: variables.$pretty-red;
             opacity: 1;
             pointer-events: all;
 
@@ -179,7 +179,7 @@
                 // really hacky way to select the `span`
                 // following the `.clear-history-item`
                 // which happens to be after `img`
-                color: $pretty-red;
+                color: variables.$pretty-red;
                 text-decoration: line-through;
               }
             }
@@ -201,8 +201,8 @@
 
   .screenshot-preview {
     align-items: center;
-    background-color: $wizard-screenshot;
-    border: 1px solid $gray-50;
+    background-color: variables.$wizard-screenshot;
+    border: 1px solid variables.$gray-50;
     display: flex;
     font-size: 12px;
     justify-content: center;
@@ -221,14 +221,14 @@
   }
 
   .recent {
-    color: $gray-50;
+    color: variables.$gray-50;
     font-style: normal !important;
     margin-left: 0;
     padding-top: 5px;
   }
 
   .step-description {
-    color: $gray-60;
+    color: variables.$gray-60;
     margin-left: 16px;
     min-height: 20px;
     pointer-events: none;
@@ -249,7 +249,7 @@
   }
 
 
-  @include scrollBarHidden;
+  @include variables.scrollBarHidden;
 }
 
 .size-dropdown {
@@ -272,7 +272,7 @@
 }
 
 .gradient-to-indicate-scrolling {
-  background-image: linear-gradient(rgba(230, 230, 230, 0), $gray-10);
+  background-image: linear-gradient(rgba(230, 230, 230, 0), variables.$gray-10);
   bottom: 0;
   display: block;
   height: 100px;
@@ -291,7 +291,7 @@
   .wizard {
     margin: 0;
 
-    @include scrollBarShown;
+    @include variables.scrollBarShown;
   }
 
   .left-side {
@@ -301,7 +301,7 @@
 
   .right-side {
     border-left: 0 !important;
-    border-top: 1px solid $gray-20;
+    border-top: 1px solid variables.$gray-20;
     margin-bottom: 100px;
     margin-left: 20px;
     min-height: initial !important;

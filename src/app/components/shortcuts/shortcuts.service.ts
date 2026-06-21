@@ -11,9 +11,7 @@ export type CustomShortcutAction = 'focusOnFile'
   | 'toggleMinimalMode'
   | 'toggleSettings';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class ShortcutsService {
 
   regularShortcuts: SettingsButtonKey[] = [
@@ -31,6 +29,7 @@ export class ShortcutsService {
     'showMoreInfo',
     'showThumbnails',
     'shuffleGalleryNow',
+    'clearAllFilters',
   ];
 
   // the mapping used in `home.component` in `handleKeyboardEvent`
@@ -59,6 +58,7 @@ export class ShortcutsService {
     ['x', 'makeLarger'],
     ['y', 'showTagTray'],
     ['z', 'makeSmaller'],
+    ['0', 'clearAllFilters'],
   ]);
 
   // used in template to show key-shortcut connection (excludes quit: `q` and `w`)
@@ -85,6 +85,7 @@ export class ShortcutsService {
     ['startWizard', 'n'],
     ['toggleMinimalMode', 'k'],
     ['toggleSettings', 'o'],
+    ['clearAllFilters', '0'],
     // quit -> q
     // quit -> w
   ]);
@@ -102,6 +103,14 @@ export class ShortcutsService {
     for (const [key, value] of Object.entries(keyToAction)) {
       this.actionToKeyMap.set(value, <any>key);
       this.keyToActionMap.set(<any>key, value);
+    }
+
+    // Always ensure '0' maps to 'clearAllFilters'
+    if (!this.keyToActionMap.has('0')) {
+      this.keyToActionMap.set('0', 'clearAllFilters');
+    }
+    if (!this.actionToKeyMap.has('clearAllFilters') && !this.keyToActionMap.has('0')) {
+      this.actionToKeyMap.set('clearAllFilters', '0');
     }
   }
 

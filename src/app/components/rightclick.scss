@@ -1,4 +1,4 @@
-@import "variables";
+@use "variables";
 
 .click-away-overlay {
   background-color: rgba(0, 0, 0, 0.1);
@@ -10,8 +10,8 @@
 }
 
 .right-click-menu {
-  background: $gray-10;
-  border: 1px solid $gray-50;
+  background: variables.$gray-10;
+  border: 1px solid variables.$gray-50;
   border-radius: 10px;
   box-shadow: 0 3px 7px 3px rgba(0, 0, 0, 0.3);
   box-sizing: border-box;
@@ -41,22 +41,22 @@
   }
 
   .right-click-delete {
-    border-top: 1px solid $gray-20;
-    color: $dark-red;
+    border-top: 1px solid variables.$gray-20;
+    color: variables.$dark-red;
     margin-top: 6px;
     padding-top: 14px !important;
     text-align: center;
   }
 
   .right-click-disabled {
-    color: $gray-50;
+    color: variables.$gray-50;
     pointer-events: none;
   }
 }
 
 .rename-popup {
-  background: $gray-10;
-  border: 1px solid $gray-50;
+  background: variables.$gray-10;
+  border: 1px solid variables.$gray-50;
   border-radius: 10px;
   box-shadow: 0 3px 7px 3px rgba(0, 0, 0, 0.3);
   box-sizing: border-box;
@@ -70,7 +70,7 @@
 }
 
 .rename-dark {
-  background: $gray-90;
+  background: variables.$gray-90;
 }
 
 .dark-mode-on {

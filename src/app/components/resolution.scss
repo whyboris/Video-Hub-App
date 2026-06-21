@@ -1,31 +1,34 @@
-@import "variables";
+@use "variables";
 
-$frequency-bar: $pretty-blue;
+$frequency-bar: variables.$pretty-blue;
 
-.resolutionName,
-.starFilterLabel {
-  color: $gray-50;
+.resolution-name,
+.star-filter-label {
+  color: variables.$gray-50;
   display: inline-block;
   font-size: 10px;
   text-align: center;
-  transform: translate(-18px, 25px);
+  transform: translate(-18px, 20px);
   transition: opacity 400ms;
   width: 16px;
 }
 
-.starFilterLabel {
+.star-filter-label {
   width: 4px;
 }
 
 .frequency-graph-container,
 .frequency-graph-container-star {
   height: 20px;
-  position: relative;
-  transform: translate(13px, 15px);
+  position: absolute;
+}
+
+.frequency-graph-container {
+  transform: translate(13px, 5px);
 }
 
 .frequency-graph-container-star {
-  transform: translate(3px, 15px);
+  transform: translate(3px, 5px);
 }
 
 .frequency-bar,
@@ -37,17 +40,12 @@ $frequency-bar: $pretty-blue;
   position: relative;
   text-align: center;
   transition: opacity 400ms;
-  width: 20px;
+  width: 24px;
 }
 
 .frequency-bar-star {
   margin: 0 3.5px;
-  width: 14.5px;
-}
-
-.frequency-sliders {
-  position: relative;
-  width: 100%;
+  width: 16.5px;
 }
 
 .resDisabled {
