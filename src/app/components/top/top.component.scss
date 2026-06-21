@@ -1,5 +1,18 @@
 @use "../variables";
 
+.preview {
+  background-size: cover;
+  border-radius: 5px;
+  border: 1px solid variables.$gray-50;
+  cursor: pointer;
+  display: block;
+  float: left;
+  height: 34px;
+  margin-left: 0px;
+  margin-right: 6px;
+  width: 60px;
+}
+
 .icon {
   cursor: pointer;
   display: inline-block;
@@ -17,27 +30,35 @@
   }
 }
 
-.folder-container {
-  max-height: 18px;
-  min-width: calc(100vw - 100px);
+.folder-container,
+.file-container {
+  min-width: calc(100vw - 120px);
   overflow: hidden;
 
   :nth-child(2) {
     margin-left: 23px;
   }
 
-  .folder-word {
+  .folder-word,
+  .file-word {
     color: variables.$gray-60;
     cursor: pointer;
     display: inline-block;
-    font-size: 12px;
     margin-right: 5px;
-    transition: 300ms;
     transition-property: color;
+    transition: 300ms;
 
     &:hover {
       color: variables.$dark-blue;
     }
+  }
+}
+
+.folder-container {
+  max-height: 18px;
+
+  .folder-word {
+    font-size: 12px;
 
     &:after {
       content: '\f1a0'; // chevron-right
@@ -50,30 +71,14 @@
 
 .file-container {
   max-height: 20px;
-  min-width: calc(100vw - 100px);
-  overflow: hidden;
 
   .icon-video-blank {
     position: absolute;
     transform: translate(0, 3px);
   }
 
-  :nth-child(2) {
-    margin-left: 23px;
-  }
-
   .file-word {
-    color: variables.$gray-80;
-    cursor: pointer;
-    display: inline-block;
     font-size: 14px;
-    margin-right: 5px;
-    transition: 300ms;
-    transition-property: color;
-
-    &:hover {
-      color: variables.$dark-blue;
-    }
   }
 }
 

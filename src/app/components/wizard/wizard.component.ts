@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, input, output } from '@angular/core';
 
 import type { AllowedScreenshotHeight, AllowedScreenshotHeightString } from '../../../../interfaces/final-object.interface';
 import type { HistoryItem } from '../../../../interfaces/shared-interfaces';
@@ -22,17 +22,17 @@ import { historyItemRemove, slowFadeIn } from '../../common/animations';
 })
 export class WizardComponent {
 
-  @Output() clearRecentlyViewedHistory = new EventEmitter<any>();
-  @Output() hideWizard                 = new EventEmitter<any>();
-  @Output() importFresh                = new EventEmitter<any>();
-  @Output() loadFromFile               = new EventEmitter<any>();
-  @Output() openFromHistory            = new EventEmitter<number>();
-  @Output() removeFromHistory          = new EventEmitter<number>();
-  @Output() selectOutputDirectory      = new EventEmitter<any>();
-  @Output() selectSourceDirectory      = new EventEmitter<any>();
+  readonly clearRecentlyViewedHistory = output<any>();
+  readonly hideWizard                 = output<any>();
+  readonly importFresh                = output<void>();
+  readonly loadFromFile               = output<void>();
+  readonly openFromHistory            = output<number>();
+  readonly removeFromHistory          = output<number>();
+  readonly selectOutputDirectory      = output<void>();
+  readonly selectSourceDirectory      = output<void>();
 
-  @Input() canCloseWizard: boolean;
-  @Input() importStage: ImportStage;
+  readonly canCloseWizard = input<boolean>(undefined);
+  readonly importStage = input<ImportStage>(undefined);
   @Input() vhaFileHistory: HistoryItem[];
   @Input() wizard: WizardOptions;
 
@@ -54,7 +54,7 @@ export class WizardComponent {
     return false;
   }
 
-  removeHistoryItem(event: Event, item: number) {
+  removeHistoryItem(event: MouseEvent, item: number) {
     event.stopPropagation();
     this.removeFromHistory.emit(item);
   }

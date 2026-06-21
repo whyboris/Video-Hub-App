@@ -11,9 +11,7 @@ export type CustomShortcutAction = 'focusOnFile'
   | 'toggleMinimalMode'
   | 'toggleSettings';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class ShortcutsService {
 
   regularShortcuts: SettingsButtonKey[] = [

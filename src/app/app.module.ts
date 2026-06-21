@@ -1,12 +1,11 @@
-import { ModalComponent } from './components/modal/modal.component';
 import 'reflect-metadata';
 import '../polyfills';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
-import { provideHttpClient } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { provideHttpClient } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -22,7 +21,6 @@ import { AutoTagsSaveService } from './components/tags-auto/tags-save.service';
 import { AutoTagsService } from './components/tags-auto/autotags.service';
 import { ElectronService } from './providers/electron.service';
 import { FilePathService } from './components/views/file-path.service';
-import { HomeComponent } from './components/home.component';
 import { ImageElementService } from './services/image-element.service';
 import { ManualTagsService } from './components/tags-manual/manual-tags.service';
 import { ModalService } from './components/modal/modal.service';
@@ -45,8 +43,10 @@ import { DonutComponent } from './components/donut/donut.component';
 import { FileComponent } from './components/views/file/file.component';
 import { FilmstripComponent } from './components/views/filmstrip/filmstrip.component';
 import { FullViewComponent } from './components/views/full/full.component';
+import { HomeComponent } from './components/home.component';
 import { IconComponent } from './components/icon/icon.component';
 import { MetaComponent } from './components/meta/meta.component';
+import { ModalComponent } from './components/modal/modal.component';
 import { RecentlyOpenedComponent } from './components/recently-opened/recently-opened.component';
 import { RenameFileComponent } from './components/rename-file/rename-file.component';
 import { RenameModalComponent } from './components/rename-modal/rename-modal.component';
@@ -93,6 +93,7 @@ import { LengthPipe } from './pipes/length.pipe';
 import { MagicSearchPipe } from './pipes/magic-search.pipe';
 import { ManualTagSortPipe } from './pipes/manual-tags-sort.pipe';
 import { PlaylistPipe } from './pipes/playlist.pipe';
+import { PlaylistOnlyPipe } from './pipes/playlist-only.pipe';
 import { RegexSearchPipe } from './pipes/regex-search.pipe';
 import { ResolutionFilterPipe } from './pipes/resolution-filter.pipe';
 import { ReturnZeroPipe } from './pipes/return-zero.pipe';
@@ -100,6 +101,7 @@ import { SidebarHeightPipe } from './pipes/sidebar-height.pipe';
 import { SimilarityPipe } from './pipes/similarity.pipe';
 import { SortingPipe } from './pipes/sorting.pipe';
 import { StarFilterPipe } from './pipes/star-filter.pipe';
+import { StartsWithSearchPipe } from './pipes/start-with-search.pipe';
 import { TagFilterPipe } from './components/tags-auto/tag-filter.pipe';
 import { TagFrequencyPipe } from './components/tags-auto/tag-frequency.pipe';
 import { TagMatchPipe } from './components/tags-auto/tag-match.pipe';
@@ -147,6 +149,7 @@ import { YearPipe } from './pipes/year.pipe';
     MetaComponent,
     ModalComponent,
     PlaylistPipe,
+    PlaylistOnlyPipe,
     RecentlyOpenedComponent,
     RegexSearchPipe,
     RenameFileComponent,
@@ -167,6 +170,7 @@ import { YearPipe } from './pipes/year.pipe';
     SortOrderComponent,
     StarFilterComponent,
     StarFilterPipe,
+    StartsWithSearchPipe,
     StatisticsComponent,
     SvgDefinitionsComponent,
     TagColorPickerComponent,
@@ -198,7 +202,7 @@ import { YearPipe } from './pipes/year.pipe';
     MatDialogModule,
     MatSnackBarModule,
     TranslateModule.forRoot(),
-    VirtualScrollerModule,
+    VirtualScrollerModule
   ],
   providers: [
     provideHttpClient(),

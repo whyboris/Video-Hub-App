@@ -1,10 +1,9 @@
 import type { ElementRef} from '@angular/core';
-import { Component, Input, Output, EventEmitter, ViewChild } from '@angular/core';
+import { Component, Input, input, output, viewChild } from '@angular/core';
 
 import { ManualTagsService } from './manual-tags.service';
 
 import type { Tag, TagEmit } from '../../../../interfaces/shared-interfaces';
-import type { ColorPickerPosition } from '../tag-color-picker/tag-color-picker.component';
 
 @Component({
   standalone: false,
@@ -17,6 +16,7 @@ import type { ColorPickerPosition } from '../tag-color-picker/tag-color-picker.c
 export class ViewTagsComponent {
 
   _tags: Tag[];
+  toogleBatchModeValue: boolean = false;
 
   @Input()
   set tags(tags: Tag[] | string[]) {
@@ -29,16 +29,25 @@ export class ViewTagsComponent {
     }
   }
 
-  @Input() darkMode: boolean;
-  @Input() displayFrequency: boolean;
-  @Input() draggable: boolean;
-  @Input() enableColorPicker: boolean = false;
+  //set the removable property of the selected tag based on the batchmode is enabled or disabled
+  @Input()
+  set tagsOnToggleBatch(toggleBatchMode: boolean) {
+    this.toogleBatchModeValue = toggleBatchMode;
+    this._tags.forEach((item) => {
+      item.removable = toggleBatchMode;
+    });
+  }
 
-  @Output() removeTagEmit = new EventEmitter<string>();
-  @Output() tagClicked = new EventEmitter<TagEmit>();
-  @Output() tagRightClick = new EventEmitter<{ tag: Tag, event: MouseEvent }>();
+  readonly darkMode = input<boolean>(undefined);
+  readonly displayFrequency = input<boolean>(undefined);
+  readonly draggable = input<boolean>(undefined);
+  readonly enableColorPicker = input<boolean>(false);
 
-  @ViewChild('dragHack', { static: false }) dragHack: ElementRef;
+  readonly removeTagEmit = output<string>();
+  readonly tagClicked = output<TagEmit>();
+  readonly tagRightClick = output<{ tag: Tag; event: MouseEvent; }>();
+
+  readonly dragHack = viewChild<ElementRef>('dragHack');
 
   constructor(
     public tagService: ManualTagsService
@@ -47,7 +56,7 @@ export class ViewTagsComponent {
   /**
    * Emit to parent component a tag has been clicked
    */
-  tagClick(tag: Tag, event: Event): void {
+  tagClick(tag: Tag, event: MouseEvent): void {
     this.tagClicked.emit({ tag, event });
   }
 
@@ -67,8 +76,8 @@ export class ViewTagsComponent {
     tagList.forEach((tag) => {
       hackList.push({
         name: tag,
+        removable: this.toogleBatchModeValue,
         colour: this.tagService.getTagColor(tag),
-        removable: false,
       });
     });
 
@@ -82,7 +91,7 @@ export class ViewTagsComponent {
   dragStart(event: DragEvent): void {
     event.dataTransfer.setData('text/plain', (event.target as HTMLElement).innerText);
 
-    const quickHack: Element = this.dragHack.nativeElement;
+    const quickHack: Element = this.dragHack().nativeElement;
 
     quickHack.innerHTML = (event.target as HTMLElement).innerText;
 
@@ -95,7 +104,7 @@ export class ViewTagsComponent {
    * @param tag - Tag
    */
   onTagRightClick(event: MouseEvent, tag: Tag): void {
-    if (!this.enableColorPicker) {
+    if (!this.enableColorPicker()) {
       return;
     }
 

@@ -4,18 +4,16 @@ import type { ImageElement } from './../../../interfaces/final-object.interface'
 import { Injectable } from '@angular/core';
 import type { DefaultScreenEmission, StarEmission } from '../components/sheet/sheet.component';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class ImageElementService {
 
-public finalArrayNeedsSaving = false;
-public forceStarFilterUpdate = true;
-public imageElements: ImageElement[] = [];
+  public finalArrayNeedsSaving = false;
+  public forceStarFilterUpdate = true;
+  public imageElements: ImageElement[] = [];
 
-constructor() { }
+  constructor() { }
 
-/**
+  /**
    * Update imageElements with emission of element
    * @param emission
    */
@@ -46,7 +44,7 @@ constructor() { }
     this.finalArrayNeedsSaving = true;
   }
 
-    /**
+  /**
    * Searches through the `finalArray` and updates the file name and display name
    * Should not error out if two files have the same name
    */
@@ -64,7 +62,7 @@ constructor() { }
    * update number of times played & the `lastPlayed` date
    * @param index
    */
-  updateNumberOfTimesPlayed(index: number) {
+  updateNumberOfTimesPlayed(index: number): void {
 
     this.imageElements[index].lastPlayed = Date.now(); // update `lastPlayed`
 
@@ -78,7 +76,7 @@ constructor() { }
   /**
    * Toggle heart
    */
-  toggleHeart(index: number) {
+  toggleHeart(index: number): void {
     if (this.imageElements[index].stars == 5.5) { // "un-favorite" the video
       this.HandleEmission({
         index: index,
@@ -90,6 +88,29 @@ constructor() { }
         stars: 5.5
       });
     }
+  }
+
+  /**
+   * Update playlist field
+   */
+  updatePlaylist(index: number): void {
+
+    this.imageElements[index].playlist
+      ? delete this.imageElements[index].playlist
+      : this.imageElements[index].playlist = Date.now();
+
+    this.finalArrayNeedsSaving = true;
+  }
+
+  /**
+   * Clear out the playlist
+   */
+  emptyPlaylist(): void {
+    this.imageElements.forEach((element) => {
+      delete element.playlist;
+    });
+
+    this.finalArrayNeedsSaving = true;
   }
 
   private handleTagEmission(emission: TagEmission): void {

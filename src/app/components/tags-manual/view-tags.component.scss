@@ -21,27 +21,9 @@
     }
   }
 
-  .coverTheX {
-    background-color: variables.$gray-20;
-    height: 16px;
-    position: absolute;
-    transform: translate(6px, 3px);
-    width: 12px;
-    z-index: 2;
-  }
-
-  .coverTheX-dark {
-    background-color: black;
-  }
-
   .remove-tag {
-    background-color: variables.$manual-tag-frequency;
-    border: 1px solid variables.$manual-tag-remove-border;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
     box-sizing: border-box;
     cursor: not-allowed;
-    display: inline-block;
     fill: red;
     height: 14px;
     left: 1px;
@@ -51,7 +33,7 @@
     transition-delay: 0.25s;
     transition-duration: 0.25s;
     transition-property: transform;
-    width: 16px;
+    width: 14px;
     z-index: 1;
   }
 
