@@ -21,7 +21,7 @@ export class TimesPlayedFilterPipe implements PipeTransform {
     if (render && finalArray.length > 0) {
       return finalArray.filter((element) => {
         const timesPlayed = element.timesPlayed;
-        if ( timesPlayed > leftBound && timesPlayed < rightBound) {
+        if ( timesPlayed > leftBound && timesPlayed < rightBound + 1) {
           return true;
         } else {
           return false;

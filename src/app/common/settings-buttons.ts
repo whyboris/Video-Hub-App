@@ -24,6 +24,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'folderUnion'
  | 'fontSizeLarger'
  | 'fuzzy'
+ | 'startsWith'
  | 'hideOffline'
  | 'hideSidebar'
  | 'hideTop'
@@ -51,6 +52,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'showFreq'
  | 'showFullView'
  | 'showMoreInfo'
+ | 'showOnlyPlaylist'
  | 'showRecent'
  | 'showRecentlyPlayed'
  | 'showRelatedVideosTray'
@@ -108,14 +110,15 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'magic',
     'regex',
     'fuzzy',
+    'startsWith',
     'clearAllFilters',
   ],
   [ // 2 - Filters & sorting options
     'durationFilter',
     'sizeFilter',
     'timesPlayedFilter',
-    'resolutionFilter',
     'yearFilter',
+    'resolutionFilter',
     'starFilter',
     'sortOrder',
     'hideOffline',
@@ -153,8 +156,10 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'showFolders',
     'randomizeFoldersScreenshots',
     'showTags',
+    'showOnlyPlaylist',
+    'playPlaylist',
   ],
-  [ // 6 - Bottom tray
+  [ // 6 - Bottom tray -- hidden from ribbon via !== 6 in ribbon.component.html
     'showFreq',
     'showTagTray',
     'showRelatedVideosTray',
@@ -204,7 +209,6 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'clearHistory',
     'showDeleteOption',
     'dangerousDelete',
-    'playPlaylist',
     'spacePlaysRandom',
     'openAtTimestamp',
   ]
@@ -446,6 +450,14 @@ export const SettingsButtons: SettingsButtonsType = {
     title: 'BUTTONS.fuzzyHint',
     toggled: true
   },
+  startsWith: {
+    description: 'BUTTONS.startsWithDescription',
+    hidden: true,
+    iconName: 'icon-start-with',
+    moreInfo: 'BUTTONS.startsWithMoreInfo',
+    title: 'BUTTONS.startsWithHint',
+    toggled: false,
+  },
   'hideOffline': {
     description: 'BUTTONS.hideOfflineDescription',
     hidden: true,
@@ -653,6 +665,14 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-show-more-info',
     title: 'BUTTONS.showMoreInfoHint',
     toggled: true
+  },
+  'showOnlyPlaylist': {
+    description: 'BUTTONS.showOnlyPlaylistDescription',
+    hidden: false,
+    iconName: 'icon-playlist',
+    moreInfo: 'BUTTONS.showOnlyPlaylistMoreInfo',
+    title: 'BUTTONS.showOnlyPlaylistHint',
+    toggled: false
   },
   'showRecent': {
     description: 'BUTTONS.showRecentDescription',

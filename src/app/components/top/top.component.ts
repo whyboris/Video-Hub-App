@@ -1,4 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, effect, Input, input, output } from '@angular/core';
+
+import { FilePathService } from '../views/file-path.service';
+
+import type { ImageElement } from '../../../../interfaces/final-object.interface';
 
 @Component({
   standalone: false,
@@ -9,7 +13,10 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 })
 export class TopComponent {
 
-  @Input() darkMode: boolean;
+  readonly currentImageElement = input<ImageElement>(undefined);
+  readonly darkMode = input<boolean>(undefined);
+  readonly folderPath = input<string>(undefined);
+  readonly hubName = input<string>(undefined);
 
   // Handle folder input
   private _folder = '';
@@ -31,26 +38,52 @@ export class TopComponent {
   }
   get fileString(): string { return this._file; }
 
-  @Output() onFileWordClicked = new EventEmitter<string>();
-  @Output() onFolderWordClicked = new EventEmitter<string>();
-  @Output() onOpenInExplorer = new EventEmitter<boolean>();
+  readonly onFileWordClicked = output<string>();
+  readonly onFolderWordClicked = output<string>();
+  readonly onOpenInExplorer = output<boolean>();
+  readonly onPlayVideo = output<ImageElement>();
+  readonly onOpenDetails = output<ImageElement>();
 
-  public folderNameArray: string[];
-  public fileNameArray: string[];
+  folderNameArray: string[] = [];
+  fileNameArray: string[] = [];
 
-  public folderWordClicked(item: string): void {
+  previewPath: string = '';
+
+  constructor(
+    public filePathService: FilePathService,
+  ) {
+    effect(() => {
+      this.updateThumbnailPath();
+    })
+  }
+
+  updateThumbnailPath() {
+    if (this.currentImageElement()) {
+      this.previewPath = this.filePathService.createFilePath(this.folderPath(), this.hubName(), 'thumbnails', this.currentImageElement().hash);
+    }
+  }
+
+  folderWordClicked(item: string): void {
     this.onFolderWordClicked.emit(item.trim());
   }
 
-  public fileWordClicked(item: string): void {
+  fileWordClicked(item: string): void {
     // Strip away any of: {}()[].,
     const regex = /{|}|\(|\)|\[|\]|\.|\,/g;
     item = item.replace(regex, '');
     this.onFileWordClicked.emit(item.trim());
   }
 
-  public openInExplorer(): void {
+  openInExplorer(): void {
     this.onOpenInExplorer.emit(true);
+  }
+
+  playFile(): void {
+    this.onPlayVideo.emit(this.currentImageElement());
+  }
+
+  openDetails(): void {
+    this.onOpenDetails.emit(this.currentImageElement());
   }
 
 }

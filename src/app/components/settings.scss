@@ -293,7 +293,7 @@ input[type="radio"]:checked:before {
   border: 1px solid variables.$pretty-blue;
   border-radius: 50%;
   color: variables.$pretty-blue;
-  cursor: none;
+  cursor: help;
   display: inline-block;
   font-size: 11px;
   font-style: italic;
@@ -327,8 +327,8 @@ input[type="radio"]:checked:before {
 
 .sort-dropdown {
   margin: 15px 0 10px;
-  max-width: 166px;
-  min-width: 166px;
+  max-width: 168px;
+  min-width: 168px;
   outline: none;
 }
 

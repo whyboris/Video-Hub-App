@@ -2,40 +2,46 @@
 
   <span class="stats-heading title hub-name">
     <img class="icon-image" src="./assets/logo.png">
-    {{ hubName }}
+    {{ hubName() }}
   </span>
-  <span class="stats-heading folder" [innerHtml]="pathToVhaFile | folderArrowsPipe"></span>
+  <span class="stats-heading folder" [innerHtml]="pathToVhaFile() | folderArrowsPipe"></span>
 
   <span class="stats-heading title sources">{{ 'STATISTICS.videoFolder' | translate }}</span>
 
   <div class="input-sources">
-    <div class="input-sources-row"
-      *ngFor="let item of inputFolders | keyvalue | alphabetizeSourceFolders : 'value.path'; index as i; trackBy: trackByFn"
-    >
+
+  @for (item of inputFolders() | keyvalue | alphabetizeSourceFolders : 'value.path'; track trackByFn(i, item); let i = $index) {
+
+    <div class="input-sources-row">
       <span
         class="stats-heading folder input-folder"
         [innerHtml]="item.value.path | folderArrowsPipe"
       ></span>
+
+    @if ((objectKeys(inputFolders()).length > 1) && removeFoldersMode) {
       <span
-        *ngIf="(objectKeys(inputFolders).length > 1) && removeFoldersMode"
         class="delete-input-folder"
         (click)="deleteInputSource(item.key)"
         @breadcrumbWordAppear
       >
         {{ 'STATISTICS.removeFolder' | translate }}
       </span>
+    }
+
+    @if (!removeFoldersMode && !item.value.watch && sourceFolderService.sourceFolderConnected[item.key]) {
       <span
-        *ngIf="!removeFoldersMode && !item.value.watch && sourceFolderService.sourceFolderConnected[item.key]"
         class="rescan-input-folder"
-        (click)="rescanFolder(item.key)"
-        (mouseup)="animateThis($event)"
+        (click)="($event.button === 0) && rescanFolder(item.key)"
+        (mouseup)="($event.button === 0) && animateThis($event)"
         title="{{ 'STATISTICS.clickToRescan' | translate }}"
         @breadcrumbWordAppear
       >
         {{ 'STATISTICS.rescanFolder' | translate }}
       </span>
+    }
+
+    @if (!sourceFolderService.sourceFolderConnected[item.key] && !removeFoldersMode) {
       <span
-        *ngIf="!sourceFolderService.sourceFolderConnected[item.key] && !removeFoldersMode"
         class="input-not-connected"
         (click)="reconnectThisFolder(item.key)"
         title="{{ 'STATISTICS.clickToConnect' | translate }}"
@@ -43,18 +49,21 @@
       >
         {{ 'STATISTICS.notConnected' | translate }}
       </span>
+    }
 
+    @if (i === 0 && !removeFoldersMode) {
       <span
-        *ngIf="i === 0 && !removeFoldersMode"
         class="watch-folder-note"
         title="{{ 'STATISTICS.watchFolderHelpText' | translate }}"
         @metaAppear
       >
         {{ 'STATISTICS.watchFolder' | translate }}
       </span>
+    }
+
+    @if (!removeFoldersMode) {
       <label
         class="switch"
-        *ngIf="!removeFoldersMode"
         @metaAppear
       >
         <input
@@ -71,8 +80,13 @@
           class="slider round"
         ></span>
       </label>
-    </div>
-  </div>
+    }
+
+    </div> <!-- end of input-sources-row -->
+
+  } <!-- end of the @for -->
+
+  </div> <!-- end of input-sources -->
 
   <span class="edit-mode-container">
 
@@ -110,9 +124,11 @@
     >
       {{ 'STATISTICS.cleanScreenshots' | translate }}
 
-      <div *ngIf="showNumberDeleted" class="number-of-thumbs-deleted" @metaAppear>
+    @if (showNumberDeleted) {
+      <div class="number-of-thumbs-deleted" @metaAppear>
         Deleted {{ numberOfScreensDeleted | number }} thumbnails
       </div>
+    }
 
     </button>
 
@@ -129,20 +145,21 @@
       (click)="startServer()"
       [ngClass]="{ 'edit-mode-active': serverRunning }"
     >
-      <ng-container  *ngIf="serverRunning; else stopServer">
+      @if (serverRunning) {
         {{ 'STATISTICS.serverStop' | translate }}
-      </ng-container>
-      <ng-template #stopServer>
+      } @else {
         {{ 'STATISTICS.serverStart' | translate }}
-      </ng-template>
+      }
     </button>
 
-    <span [ngClass]="{ 'disabled': serverRunning }" *ngIf="!serverRunning">
+  @if (!serverRunning) {
+    <span [ngClass]="{ 'disabled': serverRunning }">
       {{ 'STATISTICS.serverOnPort' | translate }}
     </span>
+  }
+  @if (!serverRunning) {
     <input
       #portSelectInput
-      *ngIf="!serverRunning"
       (change)="validatePort(portSelectInput.value)"
       type="number"
       [(ngModel)]="selectedPort"
@@ -150,19 +167,25 @@
       max="65535"
       class="port-select"
     >
+  }
 
-    <span *ngIf="serverRunning">
+  @if (serverRunning) {
+    <span>
       {{ 'STATISTICS.serverRunning' | translate }}
     </span>
-    <span *ngIf="serverRunning" class="more-info">
+  }
+  @if (serverRunning) {
+    <span class="more-info">
       i
     </span>
+  }
 
     <div class="manual-tag-tray-label-info" style="line-height: 24px">
       {{ 'STATISTICS.serverMoreInfo' | translate }}
     </div>
 
-    <div *ngIf="serverRunning" class="server-location">
+  @if (serverRunning) {
+    <div class="server-location">
       <div class="ip-text-container">
         <span class="ip-address">
           <span class="gray">http://</span>{{ serverInfo.wifi }}:{{ serverInfo.port }}
@@ -174,8 +197,9 @@
         </span>
       </div>
 
-      <qrcode class="qrcode" [level]="1" [qrvalue]="'http://' + serverInfo.wifi + ':' + serverInfo.port"></qrcode>
+      <qrcode class="qrcode" [level]="1" [qrvalue]="'http://' + serverInfo.wifi + ':' + serverInfo.port" />
     </div>
+  }
 
   </span>
 
@@ -191,7 +215,7 @@
 
       <tr>
         <td>{{ 'STATISTICS.numOfFolders' | translate }}</td>
-        <td class="rightCol">{{ numFolders | number:'.0' }}</td>
+        <td class="rightCol">{{ numFolders() | number:'.0' }}</td>
       </tr>
 
       <tr>
@@ -219,12 +243,14 @@
         </td>
       </tr>
 
-      <tr *ngIf="screenshotSettings.clipSnippets > 0">
+    @if (screenshotSettings.clipSnippets > 0) {
+      <tr>
         <td>{{ 'STATISTICS.clipHeight' | translate }}</td>
         <td class="rightCol">
           {{ screenshotSettings.clipHeight }}px
         </td>
       </tr>
+    }
 
       <tr>
         <td>{{ 'STATISTICS.numOfClips' | translate }}</td>
@@ -235,13 +261,15 @@
         </td>
       </tr>
 
-      <tr *ngIf="screenshotSettings.clipSnippets > 0">
+    @if (screenshotSettings.clipSnippets > 0) {
+      <tr>
         <td>{{ 'STATISTICS.snippetLength' | translate }}</td>
         <td class="rightCol">
           {{ screenshotSettings.clipSnippetLength }}
           {{ 'STATISTICS.seconds' | translate }}
         </td>
       </tr>
+    }
 
     </table>
 

@@ -9,7 +9,7 @@ export class PipeSideEffectService {
 
   cachedTotal = 0;
 
-  galleryShowing: ImageElement[];
+  galleryShowing: ImageElement[] = [];
 
   searchResults: BehaviorSubject<number> = new BehaviorSubject(0);
 
