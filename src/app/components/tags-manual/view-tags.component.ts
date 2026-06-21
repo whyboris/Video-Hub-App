@@ -56,7 +56,7 @@ export class ViewTagsComponent {
   /**
    * Emit to parent component a tag has been clicked
    */
-  tagClick(tag: Tag, event: Event): void {
+  tagClick(tag: Tag, event: MouseEvent): void {
     this.tagClicked.emit({ tag, event });
   }
 

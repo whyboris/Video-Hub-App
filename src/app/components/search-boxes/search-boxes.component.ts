@@ -39,7 +39,7 @@ export class SearchBoxesComponent {
    * @param filterIndex
    * @param currentText
    */
-  handleTabPress(event: Event, isTagSearch: boolean, filterIndex: number, currentText: string): void {
+  handleTabPress(event: KeyboardEvent, isTagSearch: boolean, filterIndex: number, currentText: string): void {
     if (isTagSearch && currentText !== '' && this.tagTypeAhead() !== '') {
       event.preventDefault();
       this.typeaheadTabPressed.emit(filterIndex);
