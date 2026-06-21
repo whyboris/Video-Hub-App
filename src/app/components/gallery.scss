@@ -1,4 +1,4 @@
-@import "variables";
+@use "variables";
 
 .filesView {
   height: auto !important;
@@ -40,7 +40,7 @@
 
 .title {
   -webkit-box-orient: vertical;
-  color: $gray-70;
+  color: variables.$gray-70;
   cursor: pointer;
   display: -webkit-box;
   font-size: 12px;
@@ -60,7 +60,7 @@
 
 // add arrows styling to what the folder-arrows.pipe puts out
 ::ng-deep .icon-arrow:before {
-  color: $gray-50;
+  color: variables.$gray-50;
   content: '\f1a0'; // chevron-right
   display: inline-block;
   font-family: "vh-icon-font";

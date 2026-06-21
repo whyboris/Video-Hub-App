@@ -1,6 +1,6 @@
 import type { AfterViewInit, ElementRef, OnInit } from '@angular/core';
-import { ChangeDetectorRef, NgZone } from '@angular/core';
-import { Component, HostListener, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, NgZone, viewChild } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
 import * as path from 'path';
@@ -27,6 +27,7 @@ import { WordFrequencyService, WordFreqAndHeight } from '../pipes/word-frequency
 import { SortOrderComponent } from './sort-order/sort-order.component';
 
 // Interfaces
+import type { ContextMenuCoordinate } from '../../../interfaces/shared-interfaces';
 import type { FinalObject, ImageElement, ScreenshotSettings, ResolutionString } from '../../../interfaces/final-object.interface';
 import type { ImportStage } from '../../../node/main-support';
 import type { ServerDetails } from './statistics/statistics.component';
@@ -60,6 +61,7 @@ import {
   buttonAnimation,
   donutAppear,
   filterItemAppear,
+  sliderAppear,
   historyItemRemove,
   modalAnimation,
   myWizardAnimation,
@@ -73,6 +75,7 @@ import {
 } from '../common/animations';
 
 @Component({
+  standalone: false,
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: [
@@ -99,6 +102,7 @@ import {
     rightClickAnimation,
     rightClickContentAnimation,
     similarResultsText,
+    sliderAppear,
     slowFadeIn,
     slowFadeOut,
     topAnimation
@@ -106,13 +110,15 @@ import {
 })
 export class HomeComponent implements OnInit, AfterViewInit {
 
-  @ViewChild('fuzzySearch', { static: false }) fuzzySearch: ElementRef;
-  @ViewChild('magicSearch', { static: false }) magicSearch: ElementRef;
-  @ViewChild('searchRef',   { static: false }) searchRef:   ElementRef;
+  readonly fuzzySearch = viewChild<ElementRef>('fuzzySearch');
+  readonly startsWithSearch = viewChild<ElementRef>('startsWithSearch');
+  readonly magicSearch = viewChild<ElementRef>('magicSearch');
+  readonly searchRef = viewChild<ElementRef>('searchRef');
+  readonly settingsModal = viewChild<ElementRef>('settingsModal');
 
-  @ViewChild(SortOrderComponent) sortOrderRef: SortOrderComponent;
+  readonly sortOrderRef = viewChild(SortOrderComponent);
 
-  @ViewChild(VirtualScrollerComponent, { static: false }) virtualScroller: VirtualScrollerComponent;
+  readonly virtualScroller = viewChild(VirtualScrollerComponent);
 
   defaultSettingsButtons = JSON.parse(JSON.stringify(SettingsButtons));
   settingsButtons: SettingsButtonsType = SettingsButtons;
@@ -144,6 +150,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
   settingsModalOpen = false;
   flickerReduceOverlay = true;
   isFirstRunEver = false;
+
+  // Tag color picker state
+  showTagColorPicker = false;
+  tagColorPickerPosition: ContextMenuCoordinate = { x: 0, y: 0 };
+  currentTagColor = '';
+  currentTagName = '';
+  tagColorPickerSubscription: any;
 
   // ========================================================================
   // Import / extraction progress
@@ -224,7 +237,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   currentRightClickedItem: ImageElement;
   renamingExtension: string;
   renamingNow = false;
-  rightClickPosition: { x: number, y: number } = { x: 0, y: 0 };
+  rightClickPosition: ContextMenuCoordinate = { x: 0, y: 0 };
   rightClickShowing = false;
 
   // ========================================================================
@@ -282,6 +295,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   fullPathToCurrentFile = '';
 
   fuzzySearchString = '';
+  startsWithSearchString = '';
   magicSearchString = '';
   regexSearchString = '';
   regexError = false; // handle pipe-side-effect BehaviorSubject
@@ -300,6 +314,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   timeExtractionRemaining; // time remaining calculator
 
   deletePipeHack = false; // to force deletePipe to update
+
+  playlistViewRefresh = false; // to force playlist view to refresh, if showing
 
   folderNavigationScrollOffset = 0; // when in folder view and returning back to root
   folderViewNavigationPath = '';
@@ -332,8 +348,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // Listen for key presses
   @HostListener('document:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
-    // .metaKey is for mac `command` button
-    if (event.ctrlKey === true || event.metaKey) {
+
+    if (event.ctrlKey && event.key === ' ' && this.settingsButtons['spacePlaysRandom'].toggled) {
+      const randomIndex: number = Math.floor(Math.random() * this.pipeSideEffectService.galleryShowing.length);
+      const video: ImageElement = this.pipeSideEffectService.galleryShowing[randomIndex];
+      const randomPlayStart: number = Math.floor(Math.random() * video.screens);
+      this.openVideo(video, randomPlayStart);
+
+    // .metaKey is for Mac `command` button
+    } else if (event.ctrlKey === true || event.metaKey) {
 
       const key: string = event.key;
 
@@ -357,6 +380,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.sheetOverlayShowing = false;
     } else if (event.key === 'Escape' && this.settingsButtons['showTags'].toggled) {
       this.toggleButton('showTags');
+    } else if (event.key === 'Escape' && this.showTagColorPicker) {
+      this.showTagColorPicker = false;
     }
   }
 
@@ -389,6 +414,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.changeLanguage('en');
 
     // this.modalService.openWelcomeMessage(); // WIP
+
+    // Subscribe to tag color picker events
+    this.tagColorPickerSubscription = this.manualTagsService.showColorPickerSubject.subscribe((data) => {
+      this.currentTagName = data.tagName;
+      this.currentTagColor = data.currentColor;
+      this.tagColorPickerPosition = data.position;
+      this.showTagColorPicker = true;
+      this.cd.detectChanges();
+    });
 
     setTimeout(() => {
       this.wordFrequencyService.finalMapBehaviorSubject.subscribe((value: WordFreqAndHeight[]) => {
@@ -702,7 +736,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.currentClickedItem = undefined;
       this.lastRenamedFileHack = undefined;
       this.imageElementService.finalArrayNeedsSaving = false;
-      this.imageElementService.recentlyPlayed = [];
 
       this.currentScreenshotSettings = finalObject.screenshotSettings;
 
@@ -723,6 +756,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.manualTagsService.removeAllTags();
       this.setTags(finalObject.addTags, finalObject.removeTags);
       this.manualTagsService.populateManualTagsService(finalObject.images);
+      this.manualTagsService.loadTagColors(finalObject.tagColors);
 
       this.imageElementService.imageElements = this.demo ? finalObject.images.slice(0, 50) : finalObject.images;
 
@@ -735,8 +769,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.setUpTimesPlayedFilterValues(this.imageElementService.imageElements);
       this.setUpYearFilterValues(this.imageElementService.imageElements);
 
-      if (this.sortOrderRef.sortFilterElement) {
-        this.sortOrderRef.sortFilterElement.nativeElement.value = this.sortType;
+      const sortOrderRef = this.sortOrderRef();
+      const sortFilterElement = sortOrderRef.sortFilterElement();
+      if (sortFilterElement) {
+        sortFilterElement.nativeElement.value = this.sortType;
       }
 
       this.cd.detectChanges();
@@ -760,6 +796,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.setOrRestoreLanguage(settingsObject.appState.language, locale);
       if (this.appState.currentZoomLevel !== 1) {
         this.electronService.webFrame.setZoomFactor(this.appState.currentZoomLevel);
+        setTimeout(() => {
+          this.computePreviewWidth();
+          this.cd.detectChanges();
+        }, 10);
       }
       if (settingsObject.appState.currentVhaFile) {
         this.loadThisVhaFile(settingsObject.appState.currentVhaFile);
@@ -858,7 +898,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     };
     document.body.ondrop = (ev) => {
       if (ev.dataTransfer.files.length > 0) {
-        const fullPath: string = ev.dataTransfer.files[0].path;
+        // const fullPath: string = ev.dataTransfer.files[0].path;
+        console.warn("TODO: FIX - DRAG & DROP BROKEN");
+        const fullPath = "TODO";
         ev.preventDefault();
         if (fullPath.endsWith('.vha2')) {
           this.loadThisVhaFile(fullPath);
@@ -982,7 +1024,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     clearTimeout(this.windowResizeTimeout);
     this.windowResizeTimeout = setTimeout(() => {
       // console.log('Virtual scroll refreshed');
-      this.virtualScroller.refresh();
+      this.virtualScroller().refresh();
       this.computePreviewWidth();
     }, delay);
   }
@@ -1077,6 +1119,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         numOfFolders: this.appState.numOfFolders,
         removeTags: this.autoTagsSaveService.getRemoveTags(),
         screenshotSettings: this.currentScreenshotSettings,
+        tagColors: this.manualTagsService.getTagColors(),
         version: 3,
       };
       return propsToReturn;
@@ -1109,10 +1152,24 @@ export class HomeComponent implements OnInit, AfterViewInit {
       return;
     }
 
+    // ctrl + shift => set thumbnail as favorite
+    if (eventObject.mouseEvent.ctrlKey === true && eventObject.mouseEvent.shiftKey) {
+      this.imageElementService.HandleEmission({
+        index: item.index,
+        defaultScreen: eventObject.thumbIndex as number
+      });
+
+      return;
+    }
+
     // ctrl/cmd + click for thumbnail sheet
     if (eventObject.mouseEvent.ctrlKey === true || eventObject.mouseEvent.metaKey) {
       this.openThumbnailSheet(item);
-    } else {
+    } else if (eventObject.mouseEvent.shiftKey === true) {
+      // If Shift key is pressed, open the file in the explorer
+      this.currentRightClickedItem = item; // to make `openContainingFolderNow()` work correctly
+      this.openContainingFolderNow();
+    }else {
       this.openVideo(item, eventObject.thumbIndex);
       //  `openVideo` method handles the `not connected` case
     }
@@ -1297,7 +1354,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   handleFolderIconClicked(filter: string): void {
     if (this.folderNavigationScrollOffset === 0) {
-      this.folderNavigationScrollOffset = this.virtualScroller.viewPortInfo.scrollStartPosition;
+      this.folderNavigationScrollOffset = this.virtualScroller().viewPortInfo.scrollStartPosition;
     }
 
     this.folderViewNavigationPath = filter;
@@ -1323,7 +1380,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   scrollAppropriately(filter: string) {
     if (filter === '') {
       setTimeout(() => {
-        this.virtualScroller.scrollToPosition(this.folderNavigationScrollOffset, 0);
+        this.virtualScroller().scrollToPosition(this.folderNavigationScrollOffset, 0);
         this.folderNavigationScrollOffset = 0;
       }, 1);
     } else {
@@ -1540,8 +1597,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
         }
         this.showSidebar();
         setTimeout(() => {
-          if (this.searchRef.nativeElement.querySelector('#fileIntersection')) {
-            this.searchRef.nativeElement.querySelector('#fileIntersection').focus();
+          const searchRef = this.searchRef();
+          if (searchRef.nativeElement.querySelector('#fileIntersection')) {
+            searchRef.nativeElement.querySelector('#fileIntersection').focus();
           }
         }, 1);
         break;
@@ -1552,7 +1610,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         }
         this.showSidebar();
         setTimeout(() => {
-          this.magicSearch.nativeElement.focus();
+          this.magicSearch().nativeElement.focus();
         }, 1);
         break;
 
@@ -1562,7 +1620,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         }
         this.showSidebar();
         setTimeout(() => {
-          this.fuzzySearch.nativeElement.focus();
+          this.fuzzySearch().nativeElement.focus();
         }, 1);
         break;
     }
@@ -1583,7 +1641,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.restoreViewSize(uniqueKey);
       this.appState.currentView = <SupportedView>uniqueKey;
       this.computeTextBufferAmount();
-      this.virtualScroller.invalidateAllCachedMeasurements();
+      this.virtualScroller().invalidateAllCachedMeasurements();
       this.scrollToTop();
 
       // ======== Bottom tray views buttons =========================
@@ -1614,11 +1672,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } else if (uniqueKey === 'fuzzy') {
       this.fuzzySearchString = '';
       this.toggleButtonOpposite(uniqueKey);
-
+    } else if (uniqueKey === 'startsWith') {
+      this.startsWithSearchString = '';
+      this.toggleButtonOpposite(uniqueKey);
       // ======== Other buttons ========================
     } else if (uniqueKey === 'compactView') {
       this.toggleButtonOpposite(uniqueKey);
-      this.virtualScroller.refresh();
+      this.virtualScroller().refresh();
       if (
         this.settingsButtons['showThumbnails'].toggled
         || this.settingsButtons['showClips'].toggled
@@ -1658,8 +1718,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } else if (uniqueKey === 'sortOrder') {
       this.toggleButtonOpposite(uniqueKey);
       setTimeout(() => {
-        if (this.sortOrderRef.sortFilterElement) { // just in case, perform check
-          this.sortOrderRef.sortFilterElement.nativeElement.value = this.sortType;
+        const sortOrderRef = this.sortOrderRef();
+        const sortFilterElement = sortOrderRef.sortFilterElement();
+        if (sortFilterElement) { // just in case, perform check
+          sortFilterElement.nativeElement.value = this.sortType;
         }
       });
     } else if (uniqueKey === 'shuffleGalleryNow') {
@@ -1667,23 +1729,29 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.shuffleTheViewNow++;
       this.scrollToTop();
       // if sort filter is NOT showin on the sidebar, enable
-      if (!this.sortOrderRef.sortFilterElement) {
+      if (!this.sortOrderRef().sortFilterElement()) {
         this.settingsButtons['sortOrder'].toggled = true;
       }
       // and set the setting-option to `Random' after timeout to update view
       setTimeout(() => {
-        if (this.sortOrderRef.sortFilterElement) { // just in case, perform check
-          this.sortOrderRef.sortFilterElement.nativeElement.value = 'random';
+        const sortOrderRef = this.sortOrderRef();
+        const sortFilterElement = sortOrderRef.sortFilterElement();
+        if (sortFilterElement) { // just in case, perform check
+          sortFilterElement.nativeElement.value = 'random';
         }
       });
-    } else {
+    }
+    else if(uniqueKey === 'clearAllFilters'){
+      this.clearAllFilters();
+    }
+    else {
       this.toggleButtonOpposite(uniqueKey);
       if (uniqueKey === 'showMoreInfo') {
         this.computeTextBufferAmount();
       }
       if (uniqueKey === 'hideSidebar') {
         setTimeout(() => {
-          this.virtualScroller.refresh();
+          this.virtualScroller().refresh();
           this.computePreviewWidth();
         }, 300);
       }
@@ -1743,7 +1811,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
     this.currentImgsPerRow++;
     this.computePreviewWidth();
-    this.virtualScroller.invalidateAllCachedMeasurements();
+    this.virtualScroller().invalidateAllCachedMeasurements();
   }
 
   /**
@@ -1765,7 +1833,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.currentImgsPerRow--;
     }
     this.computePreviewWidth();
-    this.virtualScroller.invalidateAllCachedMeasurements();
+    this.virtualScroller().invalidateAllCachedMeasurements();
   }
 
   /**
@@ -2186,6 +2254,23 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
+   * Sort by most-recent
+   */
+  sortByRecentlyPlayed(): void {
+    this.settingsButtons['sortOptionLastPlayed'].toggled = true;
+
+    this.selectFilterOrder('lastPlayedDesc');
+
+    setTimeout(() => {
+      const sortOrderRef = this.sortOrderRef();
+      const sortFilterElement = sortOrderRef.sortFilterElement();
+      if (sortFilterElement) { // just in case, perform check
+        sortFilterElement.nativeElement.value = 'lastPlayedDesc';
+      }
+    });
+  }
+
+  /**
    * Check type-ahead for the manually-added tags!
    * @param text     input text to check type-ahead
    * @param compute  whether or not to perform the lookup
@@ -2264,7 +2349,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   setUpTimesPlayedFilterValues(finalArray: ImageElement[]): void {
     const timesPlayed: number[] = finalArray.map((element) => { return element.timesPlayed; });
 
-    this.timesPlayedCutoff = Math.max(...timesPlayed);
+    this.timesPlayedCutoff = Math.max(...timesPlayed) + 3;
   }
 
   // need to filter otherwise cutoff will be NaN
@@ -2417,6 +2502,108 @@ export class HomeComponent implements OnInit, AfterViewInit {
     console.log('stopping server');
     this.electronService.ipcRenderer.send('stop-server');
     this.serverDetailsBehaviorSubject.next(undefined);
+  }
+
+  /**
+   * Scroll the settings modal to the top
+   */
+  scrollSettingsToTop(): void {
+    if (this.settingsModal) {
+      this.settingsModal().nativeElement.scrollTop = 0;
+    }
+  }
+
+  /**
+   * Clear all filters and search strings
+   * This is used when the user clicks the "Clear All Filters" button
+   * It resets all filter arrays, bounds, and toggles all filter buttons off
+   */
+  clearAllFilters(): void {
+    // Clear all filter arrays and bools
+    this.filters.forEach((filter) => {
+      filter.array = [];
+      filter.bool = false;
+      filter.string = '';
+    });
+
+    // Clear Duration filter
+    this.durationLeftBound = 0;
+    this.durationRightBound = Infinity;
+    this.toggleButtonOff('durationFilter');
+
+    // Clear Size filter
+    this.sizeLeftBound = 0;
+    this.sizeRightBound = Infinity;
+    this.toggleButtonOff('sizeFilter');
+
+    // Clear Times Played filter
+    this.timesPlayedLeftBound = 0;
+    this.timesPlayedRightBound = Infinity;
+    this.toggleButtonOff('timesPlayedFilter');
+
+    // Clear Resolution filter
+    this.freqLeftBound = 0;
+    this.freqRightBound = Infinity;
+    this.toggleButtonOff('resolutionFilter');
+
+    // Clear Year filter
+    this.yearLeftBound = 0;
+    this.yearRightBound = Infinity;
+    this.toggleButtonOff('yearFilter');
+
+    // Clear Star filter
+    this.starLeftBound = 0;
+    this.starRightBound = Infinity;
+    this.toggleButtonOff('starFilter');
+
+    // Clear starts-with filter
+    this.startsWithSearchString = '';
+
+    // Clear sort filter
+    // this.sortType = 'default';
+    // this.appState.currentSort = 'default';
+    // this.toggleButtonOff('sortOrder');
+
+    // Clear search strings
+    this.fuzzySearchString = '';
+    this.magicSearchString = '';
+    this.regexSearchString = '';
+
+    if (this.settingsButtons['showOnlyPlaylist'].toggled) {
+      this.settingsButtons['showOnlyPlaylist'].toggled = false;
+    }
+
+    // Prevent ExpressionChangedAfterItHasBeenCheckedError
+    this.cd.detectChanges();
+  }
+
+  /**
+   * Handle tag color selection from color picker
+   */
+  onTagColorSelected(color: string): void {
+    this.manualTagsService.setTagColor(this.currentTagName, color);
+    this.showTagColorPicker = false;
+    // setTagColor will trigger tagColorUpdatedSubject which updates all views
+  }
+
+  /**
+   * Close tag color picker
+   */
+  onTagColorPickerClose(): void {
+    this.showTagColorPicker = false;
+    this.cd.detectChanges();
+  }
+
+  updatePlaylist(item: ImageElement): void {
+    this.imageElementService.updatePlaylist(item.index);
+    if (this.settingsButtons['showOnlyPlaylist'].toggled) {
+      this.playlistViewRefresh = !this.playlistViewRefresh;
+    }
+  }
+
+  emptyPlaylist(): void {
+    this.imageElementService.emptyPlaylist();
+    this.settingsButtons['showOnlyPlaylist'].toggled = false;
   }
 
 }

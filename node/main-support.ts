@@ -561,6 +561,9 @@ export function insertTemporaryFields(imagesArray: ImageElement[]): ImageElement
  * Insert temporary fields but just for one file
  */
 export function insertTemporaryFieldsSingle(element: ImageElement): ImageElement {
+
+  if (!element.lastPlayed) element.lastPlayed = 0; // fix `.vha2` files created prior to v3.2.0
+
   // set resolution string & bucket
   const resolution: ResolutionMeta = labelVideo(element.width, element.height);
   element.durationDisplay = getDurationDisplay(element.duration);

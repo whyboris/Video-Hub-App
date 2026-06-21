@@ -1,13 +1,13 @@
+@use "app/components/variables";
+
+@import "~@angular/cdk/overlay-prebuilt.css";
+
 /* You can add global styles to this file, and also import other style files */
 html, body {
   font-family: sans-serif;
   margin: 0;
   padding: 0;
 }
-
-@import '~@angular/cdk/overlay-prebuilt.css';
-
-@import 'app/components/variables';
 
 .mat-dialog-container {
   background-color: white;
@@ -16,16 +16,21 @@ html, body {
   box-shadow: 0 10px 20px 10px rgba(0,0,0,0.1);
 }
 
-.mat-simple-snackbar {
-  background: $pretty-red;
-  border: 1px solid red;
-  border-radius: 15px;
-  color: white;
-  padding: 10px 20px;
+// Snackbar container styles (for Angular Material v14+)
+.mat-mdc-snack-bar-container,
+.custom-snackbar {
+  --mdc-snackbar-container-color: #{variables.$pretty-red};
+  --mat-snack-bar-button-color: white;
 
-  span {
-    display: block;
+  .mdc-snackbar__surface {
+    background: variables.$pretty-red !important;
+    border: 1px solid red;
+    border-radius: 10px !important;
+    padding: 0;
+  }
+
+  .mat-mdc-snack-bar-label {
+    color: white;
     text-align: center;
-    width: 100%;
   }
 }

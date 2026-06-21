@@ -1,34 +1,26 @@
-@import "../variables";
+@use "../variables";
 
-.frequency-sliders {
+.frequency-slider {
   min-height: 55px;
+  padding-left: 1px;
+  padding-right: 1px;
   position: relative;
-  transform: translateY(-10px);
   width: 100%;
 }
 
 .slider-back-track {
-  min-width: 153px;
+  min-width: 167px;
 }
 
 .slider-back-track,
 .left-side,
 .right-side {
-  background: $gray-20;
-  border: 1px solid $gray-50;
+  background: variables.$gray-20;
+  border: 1px solid variables.$gray-50;
   border-radius: 15px;
   min-height: 5px;
   position: absolute;
   top: 25px;
-  transition: 200ms;
-  transition-property: width;
-}
-
-.darkMode {
-  background: $gray-60;
-  border: 1px solid $gray-70;
-  border-bottom: 1px solid $gray-50;
-  border-top: 1px solid $gray-80;
 }
 
 .left-side {
@@ -37,23 +29,21 @@
 }
 
 .right-side {
-  background: $pretty-blue;
-  border: 1px solid $gray-60;
-  max-width: 153px;
+  background: variables.$pretty-blue;
+  border: 1px solid variables.$gray-60;
+  max-width: 168px;
   z-index: 2;
 }
 
 .dragger {
-  background-color: $gray-05;
-  border: 1px solid $gray-50;
+  background-color: variables.$gray-05;
+  border: 1px solid variables.$gray-50;
   border-radius: 4px;
   box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25);
   height: 14px;
   position: absolute;
   right: 0;
   transform: translate(1px, -6px);
-  transition: 200ms;
-  transition-property: background-color transform;
   width: 7px;
 
   &:before {
@@ -72,44 +62,41 @@
 }
 
 .draggerDarkMode {
-  background-color: $gray-30;
-  border: 1px solid $gray-80;
+  background-color: variables.$gray-30;
+  border: 1px solid variables.$gray-80;
 }
 
 .isDragging {
   transform: translate(1px, -6px) scale(1.2);
 }
 
-.left-label {
-  color: $gray-50;
-  font-size: 10px;
-  margin-top: 5px;
-  position: absolute;
-  text-align: right;
-  width: 30px;
-}
-
+.left-label,
 .right-label {
-  color: $gray-50;
+  color: variables.$gray-50;
   font-size: 10px;
   margin-top: 5px;
   position: absolute;
-  text-align: left;
-  width: 30px;
+  white-space: nowrap;
 }
-
 
 .minLabel {
-  color: $gray-50;
+  color: variables.$gray-50;
   float: left;
-  font-size: 10px;
-  margin-top: 40px;
+  font-size: 9px;
+  margin-top: 38px;
 }
 
 .maxLabel {
-  color: $gray-50;
+  color: variables.$gray-50;
   float: right;
-  font-size: 18px;
+  font-size: 15px;
   margin-top: 30px;
-  transform: translate(-4px, 5px);
+  transform: translate(-2px, 4px);
+}
+
+.darkMode {
+  background: variables.$gray-60;
+  border: 1px solid variables.$gray-70;
+  border-bottom: 1px solid variables.$gray-50;
+  border-top: 1px solid variables.$gray-80;
 }

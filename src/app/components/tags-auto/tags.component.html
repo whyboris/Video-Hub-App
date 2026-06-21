@@ -1,8 +1,10 @@
 <div class="columns-container">
 
-  <div *ngIf="loading" class="loading" @metaAppear>
+@if (loading) {
+  <div class="loading" @metaAppear>
     {{ 'TAGS.loading' | translate }} ...
   </div>
+}
 
   <!-- Below two elements are identical except for `oneWordTags` vs `twoWordTags` -->
 
@@ -15,12 +17,15 @@
                            | tagFilterPipe : currentFiltering
                            | alphabetPrefixPipe"
     >
-      <li
-        *ngFor="let item of scrollOne.viewPortItems"
-      >
-        <span *ngIf="item.prefix" class="prefix">
+
+    @for (item of scrollOne.viewPortItems; track item) {
+
+      <li>
+      @if (item.prefix) {
+        <span class="prefix">
           {{ item.prefix }}
         </span>
+      }
         <span class="frequency">
           {{ item.freq }}
         </span>
@@ -31,12 +36,15 @@
         >
           {{ item.word }}<!--
     --></span>
-        <!-- using opacity instead of *ngIf because creation of hundreds of elements is slow -->
+        <!-- using opacity instead of @if because creation of hundreds of elements is slow -->
         <span
           class="delete-tag-hack"
           [ngStyle]="{ opacity: editMode ? 1 : 0 }"
         >x</span>
       </li>
+
+    }
+
     </virtual-scroller>
   </ul>
 
@@ -50,12 +58,14 @@
                            | alphabetPrefixPipe"
     >
 
-      <li
-        *ngFor="let item of scrollTwo.viewPortItems"
-      >
-        <span *ngIf="item.prefix" class="prefix">
+    @for (item of scrollTwo.viewPortItems; track item) {
+
+      <li>
+      @if (item.prefix) {
+        <span class="prefix">
           {{ item.prefix }}
         </span>
+      }
         <span class="frequency">
           {{ item.freq }}
         </span>
@@ -66,12 +76,14 @@
         >
           {{ item.word }}<!--
      --></span>
-        <!-- using opacity instead of *ngIf because creation of hundreds of elements is slow -->
+        <!-- using opacity instead of @if because creation of hundreds of elements is slow -->
         <span
           class="delete-tag-hack"
           [ngStyle]="{ opacity: editMode ? 1 : 0 }"
         >x</span>
       </li>
+
+    }
 
     </virtual-scroller>
 
@@ -80,8 +92,9 @@
 
 <!-- Bottom tray for edeting & searching tags -->
 
+@if (showEdit) {
+
 <div
-  *ngIf="showEdit"
   class="edit-bar"
   @slowFadeIn
 >
@@ -135,20 +148,24 @@
       {{ 'TAGS.add' | translate }}
     </button>
 
+  @if (!showingStatusMessage) {
     <span
-      *ngIf="!showingStatusMessage"
       class="num-found align-left"
       @donutAppear
     >
       {{ currentAdding | tagMatchPipe }}
     </span>
+  }
+
+  @if (showingStatusMessage) {
     <span
-      *ngIf="showingStatusMessage"
       class="num-found add-error align-left"
       @donutAppear
     >
       {{ statusMessage | translate }}
     </span>
+  }
+
   </div>
 
   <!-- DELETE TAGS -->
@@ -164,3 +181,5 @@
   </div>
 
 </div>
+
+}

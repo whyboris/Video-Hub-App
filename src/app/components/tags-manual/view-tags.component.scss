@@ -1,4 +1,4 @@
-@import "../variables";
+@use "../variables";
 
 .singleTag {
   display: inline-block;
@@ -6,7 +6,7 @@
   position: relative;
 
   .tag {
-    background-color: $manual-tag-color;
+    background-color: variables.$manual-tag-color;
     margin: 0;
     position: relative;
     z-index: 3;
@@ -21,27 +21,9 @@
     }
   }
 
-  .coverTheX {
-    background-color: $gray-20;
-    height: 16px;
-    position: absolute;
-    transform: translate(6px, 3px);
-    width: 12px;
-    z-index: 2;
-  }
-
-  .coverTheX-dark {
-    background-color: black;
-  }
-
   .remove-tag {
-    background-color: $manual-tag-frequency;
-    border: 1px solid $manual-tag-remove-border;
-    border-top-left-radius: 8px;
-    border-top-right-radius: 8px;
     box-sizing: border-box;
     cursor: not-allowed;
-    display: inline-block;
     fill: red;
     height: 14px;
     left: 1px;
@@ -51,7 +33,7 @@
     transition-delay: 0.25s;
     transition-duration: 0.25s;
     transition-property: transform;
-    width: 16px;
+    width: 14px;
     z-index: 1;
   }
 
@@ -65,17 +47,21 @@
   }
 
   .frequency {
-    background-color: $manual-tag-frequency;
-    color: $gray-90;
+    background-color: variables.$manual-tag-frequency;
+    border: 1px solid variables.$gray-20;
+    box-shadow: none;
+    color: variables.$gray-90;
     cursor: initial;
+    font-size: 8px;
     padding-left: 10px;
+    padding: 2px 4px 1px 8px;
     transform: translate(-5px, 0);
     z-index: 1;
   }
 }
 
 .special {
-  background-color: $manual-tag-color;
+  background-color: variables.$manual-tag-color;
   font-size: 15px;
   padding: 3px 6px 4.5px;
 }

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 
 import { ManualTagsService } from '../tags-manual/manual-tags.service';
 
@@ -6,8 +6,10 @@ import type { AppStateInterface } from '../../common/app-state';
 import type { TagEmit } from '../../../../interfaces/shared-interfaces';
 import { modalAnimation } from '../../common/animations';
 import type { SettingsButtonsType } from '../../common/settings-buttons';
+import { ImageElementService } from './../../services/image-element.service';
 
 @Component({
+  standalone: false,
   selector: 'app-tag-tray',
   templateUrl: './tag-tray.component.html',
   styleUrls: [
@@ -21,20 +23,59 @@ import type { SettingsButtonsType } from '../../common/settings-buttons';
 })
 export class TagTrayComponent {
 
-  @Output() toggleBatchTaggingMode = new EventEmitter<any>();
-  @Output() handleTagWordClicked = new EventEmitter<TagEmit>();
-  @Output() selectAll = new EventEmitter<any>();
+  readonly toggleBatchTaggingMode = output<void>();
+  readonly handleTagWordClicked = output<TagEmit>();
+  readonly selectAll = output<void>();
 
-  @Input() appState: AppStateInterface;
-  @Input() batchTaggingMode;
-  @Input() darkMode: boolean;
-  @Input() settingsButtons: SettingsButtonsType;
+  readonly appState = input<AppStateInterface>(undefined);
+  readonly batchTaggingMode = input(undefined);
+  readonly darkMode = input<boolean>(undefined);
+  readonly settingsButtons = input<SettingsButtonsType>(undefined);
 
   manualTagFilterString = '';
   manualTagShowFrequency = true;
 
+  selectedTagList = [];
+  removeThisTag(tag: string) {
+    //get the list of all the videos that contain the selected tag for removal in batch
+    this.selectedTagList = this.imageElementService.imageElements
+      .map((ele, idx) => {
+        if (ele.tags?.includes(tag)) {
+          return idx;
+        }
+      })
+      .filter((item) => item != undefined);
+
+    this.manualTagsService.removeTagBatch(tag);
+
+    this.selectedTagList.forEach((item) => {
+      this.imageElementService.HandleEmission({
+        index: item,
+        tag: tag,
+        type: "remove",
+      });
+    });
+  }
+
   constructor(
     public manualTagsService: ManualTagsService,
+    public imageElementService: ImageElementService
   ) { }
+
+  /**
+   * Handle tag right-click event - show color picker via service
+   * @param event - Object containing tag and mouse event
+   */
+  onTagRightClick(event: { tag: any, event: MouseEvent }): void {
+    // Emit event to show color picker at home component level
+    this.manualTagsService.showColorPickerSubject.next({
+      tagName: event.tag.name,
+      currentColor: event.tag.colour || '',
+      position: {
+        x: event.event.clientX,
+        y: event.event.clientY
+      }
+    });
+  }
 
 }

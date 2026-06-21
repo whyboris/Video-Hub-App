@@ -1,6 +1,11 @@
-@import "variables";
+@use "variables";
 
 .filter-container {
+  overflow: hidden;
+}
+
+.slider-container {
+  position: relative;
   overflow: hidden;
 }
 
@@ -39,11 +44,19 @@
 }
 
 .filtering-total {
-  color: $gray-40;
+  color: variables.$gray-40;
   cursor: default;
   font-size: 12px;
   margin: 15px 0 15px;
   text-align: right;
+}
+
+.clear-all-filters {
+  &:hover {
+    cursor: not-allowed;
+    color: variables.$pretty-red;
+    text-decoration: line-through !important;
+  }
 }
 
 .input-icon {
@@ -72,6 +85,14 @@
   }
 }
 
+.delete-playlist {
+  color: variables.$pretty-red;
+  cursor: not-allowed;
+  float: right;
+  font-size: 10px;
+  transform: translate(-5px, 4px);
+}
+
 .filteredWords {
   display: block;
   margin-bottom: 5px;
@@ -88,7 +109,7 @@
 }
 
 .cloud-frequency {
-  color: $gray-90;
+  color: variables.$gray-90;
   display: flex;
   line-height: 26px;
   max-height: 140px;
@@ -114,7 +135,7 @@
     margin: 0 4px;
 
     &:hover {
-      color: $pretty-blue;
+      color: variables.$pretty-blue;
     }
   }
 
@@ -138,7 +159,7 @@
   .must-click-first {
     animation: preventFlicker;
     animation-duration: 0.1s;
-    color: $gray-70;
+    color: variables.$gray-70;
     font-size: 14px;
     margin-top: 80px;
     text-align: center;
@@ -146,7 +167,7 @@
   }
 
   .must-click-dark-mode {
-    color: $gray-30;
+    color: variables.$gray-30;
   }
 }
 
@@ -161,7 +182,7 @@
 }
 
 .tag-type-ahead-on-home {
-  color: $pretty-blue;
+  color: variables.$pretty-blue;
   display: block;
   font-size: 15px;
   pointer-events: none;
@@ -172,7 +193,7 @@
 
 .lev-distance {
   .search-word {
-    background: $show-similar-to;
+    background: variables.$show-similar-to;
     height: initial;
   }
 
@@ -183,7 +204,7 @@
 }
 
 .lev-description {
-  color: $gray-50;
+  color: variables.$gray-50;
   cursor: default;
   display: block;
   font-size: 12px;
@@ -198,7 +219,7 @@
 }
 
 .hiding-offline {
-  background-color: $pretty-red;
+  background-color: variables.$pretty-red;
   margin-top: 15px;
   position: absolute;
 }

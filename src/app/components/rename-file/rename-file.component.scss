@@ -1,9 +1,9 @@
-@import "../variables";
+@use "../variables";
 
 .rename-file {
   background: transparent;
   border: 0;
-  border-bottom: 1px solid $gray-40;
+  border-bottom: 1px solid variables.$gray-40;
   box-sizing: border-box;
   font-size: 16px;
   left: 40px;

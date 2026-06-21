@@ -1,8 +1,8 @@
-@import 'variables';
+@use "variables";
 
 .wizard-button {
-  background: $gray-15;
-  border: 1px solid $gray-30;
+  background: variables.$gray-15;
+  border: 1px solid variables.$gray-30;
   border-radius: 10px;
   cursor: pointer;
   margin: 15px;
@@ -19,7 +19,7 @@
   }
 
   &:hover {
-    background: $gray-10;
+    background: variables.$gray-10;
   }
 
   &:disabled {
@@ -35,20 +35,20 @@
 }
 
 .start-import {
-  background: $light-blue;
-  border-color: $pretty-blue;
+  background: variables.$light-blue;
+  border-color: variables.$pretty-blue;
   color: black;
   font-weight: bold;
   text-shadow: 0 0 5px white;
 
   &:hover {
-    background-color: $pretty-blue;
+    background-color: variables.$pretty-blue;
   }
 
   &:disabled {
-    background: $gray-15;
-    border-color: $gray-30;
-    color: $gray-50;
+    background: variables.$gray-15;
+    border-color: variables.$gray-30;
+    color: variables.$gray-50;
   }
 }
 
@@ -62,14 +62,14 @@
 }
 
 .edit-mode-active {
-  background-color: $pretty-red;
-  border: 1px solid $dark-red;
+  background-color: variables.$pretty-red;
+  border: 1px solid variables.$dark-red;
   box-shadow: 0px 0px 0px rgba(0, 0, 0, 0) !important;
   transform: translateY(1px);
   transition-duration: 50ms;
   transition-property: background-color, border;
 
   &:hover {
-    background-color: $pretty-red-lighter;
+    background-color: variables.$pretty-red-lighter;
   }
 }
