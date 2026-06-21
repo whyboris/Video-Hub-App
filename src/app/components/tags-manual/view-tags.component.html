@@ -4,15 +4,6 @@
   class="singleTag"
 >
 
-@if (tag.removable) {
-  <span
-    class="coverTheX"
-    [ngClass]="{ 'coverTheX-dark': darkMode() }"
-  >
-    &ensp;
-  </span>
-}
-
   <span
     class="search-or-tag-general tag"
     [ngClass]="{ 'tag-draggable': draggable() }"
