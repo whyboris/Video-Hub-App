@@ -88,6 +88,11 @@
     @rightClickAnimation
   >
     <ul @rightClickContentAnimation>
+      <li (click)="updatePlaylist(currentRightClickedItem)">
+        {{ currentRightClickedItem.playlist
+            ? ('RIGHTCLICK.playlistRemove' | translate)
+            : ('RIGHTCLICK.playlistAdd'    | translate) }}</li>
+
       <li
         (click)="renamingNow = true"
         [ngClass]="{ 'right-click-disabled': !sourceFolderService.sourceFolderConnected[currentRightClickedItem.inputSource] }"
@@ -214,6 +219,7 @@
   <div
     class="settings-modal"
     @modalAnimation
+    #settingsModal
   >
 
     <!-- fade out & close button -->
@@ -239,6 +245,7 @@
       (increaseZoomLevel)="increaseZoomLevel()"
       (openOnlineHelp)="openOnlineHelp()"
       (resetZoomLevel)="resetZoomLevel()"
+      (scrollSettingsToTop)="scrollSettingsToTop()"
       (toggleButton)="toggleButton($any($event))"
       (toggleHideButton)="toggleHideButton($event)"
 
@@ -292,12 +299,19 @@
   >
     <app-top-component
       class="top-content-position"
+
+      [currentImageElement]="currentClickedItem"
       [darkMode]="settingsButtons['darkMode'].toggled"
       [fileString]="currentClickedItemName"
+      [folderPath]="appState.selectedOutputFolder"
       [folderString]="currentPlayingFolder"
+      [hubName]="appState.hubName"
+
       (onFileWordClicked)="handleFileWordClicked($event)"
       (onFolderWordClicked)="handleFolderWordClicked($event)"
+      (onOpenDetails)="openThumbnailSheet($event)"
       (onOpenInExplorer)="openInExplorer()"
+      (onPlayVideo)="openVideo($event, 0)"
      />
   </header>
 }
@@ -511,6 +525,32 @@
       </div>
     }
 
+      <!-- starts-with search -->
+    @if (settingsButtons['startsWith'].toggled) {
+      <div @filterItemAppear>
+        <app-icon class="input-icon" [icon]="settingsButtons['startsWith'].iconName" />
+        <input
+          #startsWithSearch
+          (keydown.escape)="startsWithSearchString = ''"
+          [(ngModel)]="startsWithSearchString"
+          [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
+          type="text"
+          class="filter-general input-filter"
+          placeholder="{{ 'SIDEBAR.startsWith' | translate }}"
+        />
+        <div class="filteredWords">
+          <span
+            *ngIf="startsWithSearchString !== ''"
+            (click)="startsWithSearchString = ''"
+            [ngStyle]="{ background: '#aaffaa' }"
+            class="search-or-tag-general search-word"
+          >
+            {{ startsWithSearchString }}
+          </span>
+        </div>
+      </div>
+    }
+
       <!-- durationFilter -->
     @if (settingsButtons['durationFilter'].toggled) {
       <div class="slider-container" @sliderAppear>
@@ -611,6 +651,26 @@
       </div>
     }
 
+      <!-- Playlist only view -->
+    @if (settingsButtons['showOnlyPlaylist'].toggled) {
+      <div class="lev-distance">
+        <span
+          class="search-or-tag-general search-word"
+          (click)="settingsButtons['showOnlyPlaylist'].toggled = false"
+        >
+          {{ 'SIDEBAR.playlistShowingOnly' | translate }}
+        </span>
+
+        <span
+          class="delete-playlist"
+          (click)="emptyPlaylist()"
+          title="{{ 'SIDEBAR.playlistRemoveAll' | translate }}"
+        >
+          ✕
+        </span>
+      </div>
+    }
+
       <!-- Duplicates -->
     @if (settingsButtons['duplicateLength'].toggled
       || settingsButtons['duplicateSize'].toggled
@@ -665,7 +725,15 @@
 
       <!-- total found -->
       <div class="filtering-total">
-        <span>{{ numberOfVideosFound | number:'.0' }} {{ 'SIDEBAR.found' | translate }}</span>
+        @if (numberOfVideosFound < (imageElementService.imageElements | deleteFilePipe : deletePipeHack).length) {
+          <span
+            title="{{ 'BUTTONS.clearAllFiltersHint' | translate }}"
+            class="clear-all-filters"
+            (click)="clearAllFilters()"
+          >{{ numberOfVideosFound | number:'.0' }} {{ 'SIDEBAR.found' | translate }}</span>
+        } @else {
+          <span>{{ numberOfVideosFound | number:'.0' }} {{ 'SIDEBAR.found' | translate }}</span>
+        }
       </div>
 
       <!-- Recently opened -->
@@ -715,6 +783,8 @@
 
       [items]="imageElementService.imageElements
 
+                | playlistOnlyPipe : settingsButtons['showOnlyPlaylist'].toggled : playlistViewRefresh
+
                 | deleteFilePipe : deletePipeHack
 
                 | hideOfflinePipe : settingsButtons['hideOffline'].toggled
@@ -755,6 +825,8 @@
                 | regexSearchPipe : regexSearchString
 
                 | fuzzySearchPipe : fuzzySearchString
+
+                | startsWithSearchPipe : startsWithSearchString
 
                 | duplicateFinderPipe : settingsButtons['duplicateLength'].toggled : 'length'
 

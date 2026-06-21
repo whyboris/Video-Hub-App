@@ -93,6 +93,7 @@ import { LengthPipe } from './pipes/length.pipe';
 import { MagicSearchPipe } from './pipes/magic-search.pipe';
 import { ManualTagSortPipe } from './pipes/manual-tags-sort.pipe';
 import { PlaylistPipe } from './pipes/playlist.pipe';
+import { PlaylistOnlyPipe } from './pipes/playlist-only.pipe';
 import { RegexSearchPipe } from './pipes/regex-search.pipe';
 import { ResolutionFilterPipe } from './pipes/resolution-filter.pipe';
 import { ReturnZeroPipe } from './pipes/return-zero.pipe';
@@ -100,6 +101,7 @@ import { SidebarHeightPipe } from './pipes/sidebar-height.pipe';
 import { SimilarityPipe } from './pipes/similarity.pipe';
 import { SortingPipe } from './pipes/sorting.pipe';
 import { StarFilterPipe } from './pipes/star-filter.pipe';
+import { StartsWithSearchPipe } from './pipes/start-with-search.pipe';
 import { TagFilterPipe } from './components/tags-auto/tag-filter.pipe';
 import { TagFrequencyPipe } from './components/tags-auto/tag-frequency.pipe';
 import { TagMatchPipe } from './components/tags-auto/tag-match.pipe';
@@ -147,6 +149,7 @@ import { YearPipe } from './pipes/year.pipe';
     MetaComponent,
     ModalComponent,
     PlaylistPipe,
+    PlaylistOnlyPipe,
     RecentlyOpenedComponent,
     RegexSearchPipe,
     RenameFileComponent,
@@ -167,6 +170,7 @@ import { YearPipe } from './pipes/year.pipe';
     SortOrderComponent,
     StarFilterComponent,
     StarFilterPipe,
+    StartsWithSearchPipe,
     StatisticsComponent,
     SvgDefinitionsComponent,
     TagColorPickerComponent,
@@ -198,7 +202,7 @@ import { YearPipe } from './pipes/year.pipe';
     MatDialogModule,
     MatSnackBarModule,
     TranslateModule.forRoot(),
-    VirtualScrollerModule,
+    VirtualScrollerModule
   ],
   providers: [
     provideHttpClient(),

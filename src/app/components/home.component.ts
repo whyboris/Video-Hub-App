@@ -111,8 +111,10 @@ import {
 export class HomeComponent implements OnInit, AfterViewInit {
 
   readonly fuzzySearch = viewChild<ElementRef>('fuzzySearch');
+  readonly startsWithSearch = viewChild<ElementRef>('startsWithSearch');
   readonly magicSearch = viewChild<ElementRef>('magicSearch');
   readonly searchRef = viewChild<ElementRef>('searchRef');
+  readonly settingsModal = viewChild<ElementRef>('settingsModal');
 
   readonly sortOrderRef = viewChild(SortOrderComponent);
 
@@ -293,6 +295,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   fullPathToCurrentFile = '';
 
   fuzzySearchString = '';
+  startsWithSearchString = '';
   magicSearchString = '';
   regexSearchString = '';
   regexError = false; // handle pipe-side-effect BehaviorSubject
@@ -311,6 +314,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
   timeExtractionRemaining; // time remaining calculator
 
   deletePipeHack = false; // to force deletePipe to update
+
+  playlistViewRefresh = false; // to force playlist view to refresh, if showing
 
   folderNavigationScrollOffset = 0; // when in folder view and returning back to root
   folderViewNavigationPath = '';
@@ -791,6 +796,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.setOrRestoreLanguage(settingsObject.appState.language, locale);
       if (this.appState.currentZoomLevel !== 1) {
         this.electronService.webFrame.setZoomFactor(this.appState.currentZoomLevel);
+        setTimeout(() => {
+          this.computePreviewWidth();
+          this.cd.detectChanges();
+        }, 10);
       }
       if (settingsObject.appState.currentVhaFile) {
         this.loadThisVhaFile(settingsObject.appState.currentVhaFile);
@@ -1149,7 +1158,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // ctrl/cmd + click for thumbnail sheet
     if (eventObject.mouseEvent.ctrlKey === true || eventObject.mouseEvent.metaKey) {
       this.openThumbnailSheet(item);
-    } else {
+    } else if (eventObject.mouseEvent.shiftKey === true) {
+      // If Shift key is pressed, open the file in the explorer
+      this.currentRightClickedItem = item; // to make `openContainingFolderNow()` work correctly
+      this.openContainingFolderNow();
+    }else {
       this.openVideo(item, eventObject.thumbIndex);
       //  `openVideo` method handles the `not connected` case
     }
@@ -1652,7 +1665,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } else if (uniqueKey === 'fuzzy') {
       this.fuzzySearchString = '';
       this.toggleButtonOpposite(uniqueKey);
-
+    } else if (uniqueKey === 'startsWith') {
+      this.startsWithSearchString = '';
+      this.toggleButtonOpposite(uniqueKey);
       // ======== Other buttons ========================
     } else if (uniqueKey === 'compactView') {
       this.toggleButtonOpposite(uniqueKey);
@@ -2483,6 +2498,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
+   * Scroll the settings modal to the top
+   */
+  scrollSettingsToTop(): void {
+    if (this.settingsModal) {
+      this.settingsModal().nativeElement.scrollTop = 0;
+    }
+  }
+
+  /**
    * Clear all filters and search strings
    * This is used when the user clicks the "Clear All Filters" button
    * It resets all filter arrays, bounds, and toggles all filter buttons off
@@ -2525,6 +2549,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.starRightBound = Infinity;
     this.toggleButtonOff('starFilter');
 
+    // Clear starts-with filter
+    this.startsWithSearchString = '';
 
     // Clear sort filter
     // this.sortType = 'default';
@@ -2535,6 +2561,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.fuzzySearchString = '';
     this.magicSearchString = '';
     this.regexSearchString = '';
+
+    if (this.settingsButtons['showOnlyPlaylist'].toggled) {
+      this.settingsButtons['showOnlyPlaylist'].toggled = false;
+    }
 
     // Prevent ExpressionChangedAfterItHasBeenCheckedError
     this.cd.detectChanges();
@@ -2555,6 +2585,18 @@ export class HomeComponent implements OnInit, AfterViewInit {
   onTagColorPickerClose(): void {
     this.showTagColorPicker = false;
     this.cd.detectChanges();
+  }
+
+  updatePlaylist(item: ImageElement): void {
+    this.imageElementService.updatePlaylist(item.index);
+    if (this.settingsButtons['showOnlyPlaylist'].toggled) {
+      this.playlistViewRefresh = !this.playlistViewRefresh;
+    }
+  }
+
+  emptyPlaylist(): void {
+    this.imageElementService.emptyPlaylist();
+    this.settingsButtons['showOnlyPlaylist'].toggled = false;
   }
 
 }

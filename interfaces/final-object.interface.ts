@@ -50,6 +50,7 @@ export interface ImageElement {
   // ------------------------------------------------------------------------
   defaultScreen?: number;        // index of default screenshot to show
   notes?: string;                // any free-form notes a user may want to add to any video
+  playlist?: number;             // timestamp of when user clicked `add to playlist`
   tags?: string[];               // tags associated with this particular file
   year?: number;                 // optional tag to track the year of the video
   // ========================================================================
