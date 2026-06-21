@@ -77,7 +77,7 @@
                                                            : manualTagsService.pipeToggleHack"
     (tagClicked)="handleTagWordClicked.emit($event)"
     (removeTagEmit)="removeThisTag($event)"
-    [tagsOnToggleBatch]="batchTaggingMode"
+    [tagsOnToggleBatch]="batchTaggingMode()"
     (tagRightClick)="onTagRightClick($event)"
    />
 </div>
