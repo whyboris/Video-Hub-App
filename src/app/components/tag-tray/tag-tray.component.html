@@ -76,6 +76,8 @@
                                                            : appState().sortTagsByFrequency
                                                            : manualTagsService.pipeToggleHack"
     (tagClicked)="handleTagWordClicked.emit($event)"
+    (removeTagEmit)="removeThisTag($event)"
+    [tagsOnToggleBatch]="batchTaggingMode()"
     (tagRightClick)="onTagRightClick($event)"
    />
 </div>

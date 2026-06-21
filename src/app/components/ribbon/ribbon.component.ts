@@ -1,6 +1,6 @@
 import { Component, Input, input, output } from '@angular/core';
 import { buttonAnimation } from '../../common/animations';
-import type { SettingsButtonsType } from '../../common/settings-buttons';
+import type { SettingsButtonsType, SettingsButtonKey } from '../../common/settings-buttons';
 
 @Component({
   standalone: false,
@@ -18,7 +18,7 @@ export class RibbonComponent {
 
   readonly appState = input(undefined);
   @Input() settingsButtons: SettingsButtonsType;
-  readonly settingsButtonsGroups = input(undefined);
+  readonly settingsButtonsGroups = input<SettingsButtonKey[][]>();
 
   constructor() { }
 
