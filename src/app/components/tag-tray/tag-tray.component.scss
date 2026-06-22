@@ -2,19 +2,14 @@
 
 .manual-tag-tray {
   display: flex;
-  height: 170px;
+  height: 170px; // for tag scrollbar to appear
 
   button {
     outline: none;
   }
 
   .tag-tray-menu-left {
-    margin-right: 10px;
-    min-width: 166px;
-    padding: 12px 0 0 5px;
-    position: relative;
-    text-align: left;
-    width: 166px;
+    min-width: 188px;
 
     button {
       text-align: center;
@@ -23,14 +18,14 @@
 
     .batch-mode-instructions {
       text-align: center;
-      margin-top: 14px;
+      margin-top: 23px;
     }
 
     .total-selected {
       color: variables.$gray-70;
       display: block;
       font-size: 12px;
-      margin-top: 27px;
+      margin-top: 16px;
       text-align: center;
     }
 
@@ -43,7 +38,7 @@
     display: block;
     font-size: 12px;
     text-align: right;
-    width: 166px;
+    width: 100%;
   }
 
   .manual-tag-tray-label {
@@ -57,16 +52,18 @@
   }
 
   .manual-tag-tray-label-info {
-    background-color: variables.$gray-10;
+    background-color: variables.$white;
     border: 1px solid variables.$gray-50;
     border-radius: 5px;
+    box-shadow: 1px 4px 5px 1px rgba(0,0,0,0.07);
     font-size: 12px;
     opacity: 0;
     padding: 5px 10px;
     pointer-events: none;
     position: absolute;
     text-align: left;
-    width: 200px;
+    transform: translate(10px, 12px);
+    width: 160px;
     z-index: 30;
   }
 
@@ -100,10 +97,10 @@
   .manual-tag-tray-filter {
     border-color: variables.$gray-50;
     font-size: 15px;
-    margin: 10px;
+    margin: 18px 10px 0;
     padding: 6px 6px 0;
-    right:0;
-    width: 155px;
+    text-align: center;
+    width: 169px;
 
     &::placeholder {
       color: variables.$gray-50;
@@ -122,7 +119,7 @@
 .batch-mode-button-container {
   position: absolute;
   bottom: 16px;
-  width: 166px;
+  width: 188px;
 }
 
 .button-toggle-batch-mode {
@@ -136,7 +133,8 @@
 }
 
 .batch-edit-mode-active {
-  border: 1px solid variables.$pretty-red !important;
-  color: variables.$pretty-red !important;
+  background-color: variables.$pretty-red !important;
+  border: 1px solid variables.$white !important;
+  color: variables.$white !important;
   opacity: 1;
 }

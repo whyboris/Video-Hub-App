@@ -44,36 +44,6 @@
   z-index: 99999;
 }
 
-.progress-modal {
-  background: variables.$gray-10;
-  border: 1px solid variables.$gray-20;
-  border-radius: 10px;
-  box-shadow: 1px 1px 5px rgba(0,0,0,0.2);
-  box-sizing: border-box;
-  left: 5vw;
-  padding: 20px;
-  position: fixed;
-  top: calc(50vh - 30px);
-  width: 90vw;
-  z-index: 101;
-}
-
-.progress-container {
-  background: variables.$gray-50;
-  border: 1px solid variables.$gray-60;
-  border-radius: 3px;
-  box-sizing: border-box;
-  height: 19px;
-  width: 100%;
-
-  .current-progress {
-    background: variables.$pretty-green;
-    border-radius: 3px;
-    height: 17px;
-    transition: 500ms;
-  }
-}
-
 // LAYOUT STYLING
 .window {
   height: 100vh;
@@ -263,7 +233,7 @@
     cursor: pointer;
     display: block;
     position: absolute;
-    right: 12px;
+    right: 12px; // not 5px - to account for scrollbar when too many tags
     top: 5px;
     z-index: 10;
   }

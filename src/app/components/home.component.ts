@@ -611,8 +611,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // TODO -- update 'source connected' thingy
     this.electronService.ipcRenderer.on('directory-now-connected', (event, sourceIndex: number, sourcePath: string) => {
-      console.log('FOLDER NOT CONNECTED !!!');
-      console.log(sourceIndex, sourcePath);
 
       // TODO -- if this error never happens, all is well; remove the `sourcePath` from this method :)
       if (this.sourceFolderService.selectedSourceFolder[sourceIndex].path !== sourcePath) {
@@ -620,7 +618,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       }
 
       this.sourceFolderService.sourceFolderConnected[sourceIndex] = true;
-      console.log(this.sourceFolderService.sourceFolderConnected);
     });
 
     this.electronService.ipcRenderer.on('started-watching-this-dir', (event, sourceIndex: number) => {
@@ -2495,7 +2492,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Stop the remote server
    */
   stopServer(): void {
-    console.log('stopping server');
     this.electronService.ipcRenderer.send('stop-server');
     this.serverDetailsBehaviorSubject.next(undefined);
   }

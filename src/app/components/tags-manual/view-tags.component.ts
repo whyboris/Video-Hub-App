@@ -1,5 +1,5 @@
-import type { ElementRef} from '@angular/core';
 import { Component, Input, input, output, viewChild } from '@angular/core';
+import type { ElementRef } from '@angular/core';
 
 import { ManualTagsService } from './manual-tags.service';
 
@@ -90,12 +90,14 @@ export class ViewTagsComponent {
    * Set the dataTransfer with the current tag - to drop over video
    * @param event - DragEvent
    */
-  dragStart(event: DragEvent): void {
+  tagDragStart(event: DragEvent, tag: Tag): void {
+
     event.dataTransfer.setData('text/plain', (event.target as HTMLElement).innerText);
 
-    const quickHack: Element = this.dragHack().nativeElement;
+    const quickHack: HTMLElement = this.dragHack().nativeElement;
 
     quickHack.innerHTML = (event.target as HTMLElement).innerText;
+    quickHack.style.backgroundColor = tag.colour ? tag.colour : "#f5f5f5";
 
     event.dataTransfer.setDragImage(quickHack, event.offsetX * 1.5, 21);
   }
