@@ -1,5 +1,5 @@
-import type { ElementRef} from '@angular/core';
 import { Component, Input, input, output, viewChild } from '@angular/core';
+import type { ElementRef } from '@angular/core';
 
 import { ManualTagsService } from './manual-tags.service';
 

@@ -114,6 +114,7 @@ export class ManualTagsService {
     }
     // Notify all components that tag colors have been updated
     this.tagColorUpdatedSubject.next();
+    this.forceTagSortPipeUpdate();
   }
 
   /**
