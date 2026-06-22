@@ -160,6 +160,14 @@
      />
   }
 
+  @if (video.playlist) {
+    <div class="playlist-icon" (click)="togglePlaylist()" title="remove from playlist">
+      <app-icon
+        [icon]="'icon-playlist'"
+       />
+    </div>
+  }
+
   @if (showMeta) {
     <span
       class="time"

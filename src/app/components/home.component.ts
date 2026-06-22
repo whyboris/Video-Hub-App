@@ -2598,4 +2598,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.settingsButtons['showOnlyPlaylist'].toggled = false;
   }
 
+  refreshPlaylistIfShowing(): void {
+    if (this.settingsButtons['showOnlyPlaylist'].toggled) {
+      this.playlistViewRefresh = !this.playlistViewRefresh;
+    }
+  }
+
 }
