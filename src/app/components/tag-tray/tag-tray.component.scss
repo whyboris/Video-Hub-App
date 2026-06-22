@@ -8,17 +8,28 @@
     outline: none;
   }
 
+  .batch-mode-instructions {
+    text-align: center;
+    margin-top: 14px;
+  }
+
   .tag-tray-menu-left {
     margin-right: 10px;
     min-width: 166px;
     padding: 12px 0 0 5px;
     position: relative;
-    text-align: right;
+    text-align: left;
     width: 166px;
+
+    button {
+      text-align: center;
+      cursor: pointer;
+    }
   }
 
   .manual-tag-tray-label,
   .tag-sort-by-toggle,
+  .button-select-all,
   .show-frequency {
     display: block;
     font-size: 12px;
@@ -28,7 +39,7 @@
 
   .manual-tag-tray-label {
     display: inline;
-    margin-top: 16px;
+    margin: 16px 0 0 16px;
   }
 
   .more-info {
@@ -55,18 +66,17 @@
   }
 
   .button-select-all {
-    bottom: 42px;
-    left: 10px;
-    position: absolute;
+    margin-top: 38px !important;
   }
 
-  .tag-sort-by-toggle,
-  .show-frequency {
+  .button-select-all,
+  .button-toggle-batch-mode,
+  .show-frequency,
+  .tag-sort-by-toggle {
     background: none;
     border: none;
     color: variables.$gray-70;
     margin-top: 14px;
-    padding-right: 0;
 
     &:hover {
       color: variables.$pretty-blue;
@@ -83,15 +93,15 @@
 
   // added on top of .filter-general
   .manual-tag-tray-filter {
-    border-color: variables.$gray-80;
+    border-color: variables.$gray-50;
     font-size: 15px;
+    margin: 10px;
     padding: 6px 6px 0;
-    position: absolute;
     right:0;
     width: 155px;
 
     &::placeholder {
-      color: variables.$gray-80;
+      color: variables.$gray-50;
     }
   }
 
@@ -99,16 +109,31 @@
     color: white;
 
     &::placeholder {
-      color: variables.$gray-20;
+      color: variables.$gray-50;
     }
   }
 }
 
-.button-toggle-batch-mode {
-  bottom: 8px;
-  color: black !important; // else in dark-mode color changes
-  left: 9px;
+.batch-mode-button-container {
   position: absolute;
+  bottom: 16px;
+  width: 166px;
+}
+
+.button-toggle-batch-mode {
+  border-radius: 5px;
+  border: 1px solid transparent !important;
+  display: block;
+  font-size: 12px;
+  margin: 0 auto;
+  opacity: 0.8;
+  padding: 5px;
+}
+
+.batch-edit-mode-active {
+  border: 1px solid variables.$pretty-red !important;
+  color: variables.$pretty-red !important;
+  opacity: 1;
 }
 
 .button-toggle-batch-mode-dark {

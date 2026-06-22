@@ -31,6 +31,7 @@ export class TagTrayComponent {
   readonly batchTaggingMode = input(undefined);
   readonly darkMode = input<boolean>(undefined);
   readonly settingsButtons = input<SettingsButtonsType>(undefined);
+  readonly totalSelected = input<number>(0);
 
   manualTagFilterString = '';
   manualTagShowFrequency = true;
