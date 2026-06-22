@@ -246,8 +246,6 @@
     "errorMustNotBeEmpty": "new file name may not be empty",
     "errorSomeError": "Some error occurred",
     "openFolder": "Open folder",
-    "playlistAdd": "Add to playlist",
-    "playlistRemove": "Remove from playlist",
     "renameButton": "RENAME",
     "renameFile": "Rename file",
     "renameFrom": "from:",
