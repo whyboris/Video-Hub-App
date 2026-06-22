@@ -153,12 +153,27 @@
 
   @if (showFavorites()) {
     <app-icon
-      (click)="toggleHeart()"
       class="heart"
       [ngClass]="{ 'heart-lit' : video.stars === 5.5 }"
+      (click)="toggleHeart()"
       [icon]="'icon-heart'"
+      title="{{ video.stars === 5.5 ? ('BUTTONS.removeFromFavorites' | translate)
+                                    : ('BUTTONS.addToFavorites' | translate) }}"
+
      />
   }
+
+  <div
+    class="playlist-icon"
+    [ngClass]="{ 'playlist-icon-active' : video.playlist }"
+    (click)="togglePlaylist()"
+    title="{{ video.playlist ? ('BUTTONS.removeFromPlaylist' | translate)
+                             : ('BUTTONS.addToPlaylist' | translate) }}"
+  >
+    <app-icon
+      [icon]="'icon-playlist'"
+      />
+  </div>
 
   @if (showMeta) {
     <span
@@ -183,7 +198,11 @@
   .sheet-icon needs to be the next sibling of .video-box aka `(B) div` for hover to work - SCSS rule
   DO NOT SEPARATE!
   -->
-  <app-icon class="sheet-icon" [icon]="'icon-show-thumbnails'" (click)="sheetClick.emit()" />
+  <app-icon
+    title="{{ 'BUTTONS.viewDetails' | translate }}"
+    class="sheet-icon"
+    [icon]="'icon-show-thumbnails'"
+    (click)="sheetClick.emit()" />
 
 @if (showMeta) {
   <span

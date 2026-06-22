@@ -55,6 +55,7 @@
 }
 
 .heart {
+  cursor: cell;
   fill: #00000047;
   left: 0;
   position: absolute;
@@ -66,13 +67,15 @@
 }
 
 .heart-lit {
-  stroke: #ff2255;
+  cursor: not-allowed;
   fill: #ff2255;
+  stroke: #ff2255;
 }
 
 .meta-container,
 .video-box {
-  .heart {
+  .heart,
+  .playlist-icon {
     opacity: 0;
   }
 
@@ -82,7 +85,11 @@
 
   &:hover {
     .heart {
-      opacity: 1
+      opacity: 1;
+    }
+
+    .playlist-icon {
+      opacity: 0.6;
     }
   }
 }

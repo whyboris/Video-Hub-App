@@ -88,11 +88,6 @@
     @rightClickAnimation
   >
     <ul @rightClickContentAnimation>
-      <li (click)="updatePlaylist(currentRightClickedItem)">
-        {{ currentRightClickedItem.playlist
-            ? ('RIGHTCLICK.playlistRemove' | translate)
-            : ('RIGHTCLICK.playlistAdd'    | translate) }}</li>
-
       <li
         (click)="renamingNow = true"
         [ngClass]="{ 'right-click-disabled': !sourceFolderService.sourceFolderConnected[currentRightClickedItem.inputSource] }"
@@ -893,6 +888,8 @@
 
           (sheetClick)="this.openThumbnailSheet(item)"
           (drop)="droppedSomethingOverVideo($event, item)"
+
+          (refreshPlaylist)="refreshPlaylistIfShowing()"
 
           [draggable]="settingsButtons['dragVideoOutOfApp'].toggled"
           (dragstart)="draggingVideoFile($event, item)"

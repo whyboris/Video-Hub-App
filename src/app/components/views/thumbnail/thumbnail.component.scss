@@ -54,3 +54,22 @@
   top: 8px;
   width: 18px;
 }
+
+.playlist-icon {
+  background: #cccccc;
+  border-radius: 4px;
+  bottom: 17px;
+  font-size: 10px;
+  height: 10px;
+  overflow: hidden;
+  padding: 1px;
+  position: absolute;
+  right: 3px;
+  width: 10px;
+  cursor: cell;
+}
+
+.playlist-icon-active {
+  opacity: 1 !important;
+  cursor: not-allowed;
+}

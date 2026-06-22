@@ -2586,16 +2586,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.cd.detectChanges();
   }
 
-  updatePlaylist(item: ImageElement): void {
-    this.imageElementService.updatePlaylist(item.index);
-    if (this.settingsButtons['showOnlyPlaylist'].toggled) {
-      this.playlistViewRefresh = !this.playlistViewRefresh;
-    }
-  }
-
   emptyPlaylist(): void {
     this.imageElementService.emptyPlaylist();
     this.settingsButtons['showOnlyPlaylist'].toggled = false;
+  }
+
+  refreshPlaylistIfShowing(): void {
+    if (this.settingsButtons['showOnlyPlaylist'].toggled) {
+      this.playlistViewRefresh = !this.playlistViewRefresh;
+    }
   }
 
 }
