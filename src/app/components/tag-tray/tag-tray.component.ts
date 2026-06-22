@@ -1,4 +1,4 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, effect } from '@angular/core';
 
 import { ManualTagsService } from '../tags-manual/manual-tags.service';
 
@@ -31,10 +31,11 @@ export class TagTrayComponent {
   readonly batchTaggingMode = input(undefined);
   readonly darkMode = input<boolean>(undefined);
   readonly settingsButtons = input<SettingsButtonsType>(undefined);
-  readonly totalSelected = input<number>(0);
+  readonly updateTotalSelectedTrigger = input<number>(0);
 
   manualTagFilterString = '';
   manualTagShowFrequency = true;
+  recomputeTrigger = 0;
 
   selectedTagList = [];
   removeThisTag(tag: string) {
@@ -61,7 +62,17 @@ export class TagTrayComponent {
   constructor(
     public manualTagsService: ManualTagsService,
     public imageElementService: ImageElementService
-  ) { }
+  ) {
+    effect(() => {
+      this.recomputeTrigger = this.updateTotalSelectedTrigger();
+
+    })
+  }
+
+  selectAllPressed(): void {
+    this.recomputeTrigger = Date.now();
+    this.selectAll.emit();
+  }
 
   /**
    * Handle tag right-click event - show color picker via service

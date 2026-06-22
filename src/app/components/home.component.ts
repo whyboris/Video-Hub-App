@@ -332,7 +332,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   remoteSettings: RemoteSettings;
 
-  totalSelected: number = 0;
+  tagBatchModeSelectionChangedTrigger = 0;
 
   // Behavior Subjects for IPC events:
 
@@ -1135,13 +1135,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     console.log(item);
 
     if (this.batchTaggingMode) {
-
-      if (item.selected) {
-        this.totalSelected--;
-      } else {
-        this.totalSelected++;
-      }
-
+      this.tagBatchModeSelectionChangedTrigger = Date.now();
       item.selected = !item.selected;
 
       return;

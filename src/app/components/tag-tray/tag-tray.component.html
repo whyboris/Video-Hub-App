@@ -46,14 +46,12 @@
 
     </div>
 
-  @if (false) {
-    <span class="TODO">Total selected: {{ totalSelected() }}</span>
-  }
+    <span class="total-selected">Selected: {{ imageElementService.imageElements | totalSelectedPipe : recomputeTrigger }}</span>
 
     <button
       class="button-select-all"
       [ngClass]="{ 'select-all-dark': settingsButtons()['darkMode'].toggled }"
-      (click)="selectAll.emit()"
+      (click)="selectAllPressed()"
     >
       {{ 'TAGS.selectAllButton' | translate }}
     </button>
@@ -78,16 +76,16 @@
 
   <app-view-tags-component
     class="all-the-tags"
-    [draggable]="true"
-    [displayFrequency]="manualTagShowFrequency"
-    [enableColorPicker]="true"
     [darkMode]="darkMode()"
+    [displayFrequency]="manualTagShowFrequency"
+    [draggable]="true"
+    [enableColorPicker]="true"
+    [tagsOnToggleBatch]="batchTaggingMode()"
     [tags]="manualTagsService.tagsList | manualTagSortPipe : manualTagFilterString
                                                            : appState().sortTagsByFrequency
                                                            : manualTagsService.pipeToggleHack"
     (tagClicked)="handleTagWordClicked.emit($event)"
     (removeTagEmit)="removeThisTag($event)"
-    [tagsOnToggleBatch]="batchTaggingMode()"
     (tagRightClick)="onTagRightClick($event)"
    />
 </div>

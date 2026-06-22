@@ -108,6 +108,7 @@ import { TagMatchPipe } from './components/tags-auto/tag-match.pipe';
 import { TagsDisplayPipe } from './components/tags-auto/tag-display.pipe';
 import { TimesPlayedFilterPipe } from './pipes/times-played-filter.pipe';
 import { TimesPlayedPipe } from './pipes/times-played.pipe';
+import { TotalSelected } from './pipes/total-selected.pipe';
 import { WordFrequencyPipe } from './pipes/word-frequency.pipe';
 import { WrapperPipe } from './pipes/wrapper.pipe';
 import { YearFilterPipe } from './pipes/year-filter.pipe';
@@ -148,8 +149,8 @@ import { YearPipe } from './pipes/year.pipe';
     ManualTagSortPipe,
     MetaComponent,
     ModalComponent,
-    PlaylistPipe,
     PlaylistOnlyPipe,
+    PlaylistPipe,
     RecentlyOpenedComponent,
     RegexSearchPipe,
     RenameFileComponent,
@@ -185,6 +186,7 @@ import { YearPipe } from './pipes/year.pipe';
     TimesPlayedPipe,
     TitleBarComponent,
     TopComponent,
+    TotalSelected,
     ViewTagsComponent,
     WelcomeComponent,
     WizardComponent,
