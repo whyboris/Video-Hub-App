@@ -59,7 +59,6 @@
   background: #cccccc;
   border-radius: 4px;
   bottom: 17px;
-  cursor: not-allowed;
   font-size: 10px;
   height: 10px;
   overflow: hidden;
@@ -67,4 +66,10 @@
   position: absolute;
   right: 3px;
   width: 10px;
+  cursor: cell;
+}
+
+.playlist-icon-active {
+  opacity: 1 !important;
+  cursor: not-allowed;
 }
