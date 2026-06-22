@@ -30,7 +30,7 @@
       color: variables.$gray-70;
       display: block;
       font-size: 12px;
-      margin-top: 20px;
+      margin-top: 27px;
       text-align: center;
     }
 
@@ -72,10 +72,6 @@
 
   .more-info:hover + .manual-tag-tray-label-info {
     opacity: 1;
-  }
-
-  .button-select-all {
-    margin-top: 16px !important;
   }
 
   .button-select-all,
