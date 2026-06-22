@@ -3,6 +3,7 @@ import type { SettingsButton } from './settings-buttons.interface';
 export type SettingsButtonKey = 'autoFileTags'
  | 'autoFolderTags'
  | 'autoplayClips'
+ | 'clearAllFilters'
  | 'clearHistory'
  | 'clipsThumbnail'
  | 'compactView'
@@ -24,7 +25,6 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'folderUnion'
  | 'fontSizeLarger'
  | 'fuzzy'
- | 'startsWith'
  | 'hideOffline'
  | 'hideSidebar'
  | 'hideTop'
@@ -67,10 +67,11 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'sortOptionAlphabetical2'
  | 'sortOptionAspectRatio'
  | 'sortOptionCreated'
- | 'sortOptionLastPlayed'
  | 'sortOptionFolderSize'
  | 'sortOptionFps'
+ | 'sortOptionLastPlayed'
  | 'sortOptionModified'
+ | 'sortOptionPlaylist'
  | 'sortOptionSize'
  | 'sortOptionStar'
  | 'sortOptionTags'
@@ -80,6 +81,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'sortOrder'
  | 'spacePlaysRandom'
  | 'starFilter'
+ | 'startsWith'
  | 'startWizard'
  | 'tagExclusion'
  | 'tagIntersection'
@@ -87,8 +89,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'thumbAutoAdvance'
  | 'timesPlayedFilter'
  | 'videoNotes'
- | 'yearFilter'
- | 'clearAllFilters';
+ | 'yearFilter';
 
 // Add `SettingsButtons` items here so they show up in the buttons ribbon and in the settings
 // Each array separates buttons into their own button groups visually
@@ -134,6 +135,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'sortOptionCreated',
     'sortOptionTags',
     'sortOptionAspectRatio',
+    'sortOptionPlaylist',
     'sortOptionFps',
     'sortOptionFolderSize',
   ],
@@ -790,6 +792,13 @@ export const SettingsButtons: SettingsButtonsType = {
     description: 'BUTTONS.spacePlaysRandomDescription',
     hidden: false,
     moreInfo: 'BUTTONS.spacePlaysRandomMoreInfo',
+    title: '',
+    toggled: false
+  },
+  'sortOptionPlaylist': {
+    description: 'BUTTONS.sortOptionPlaylistDescription',
+    hidden: false,
+    moreInfo: 'BUTTONS.sortOptionPlaylistMoreInfo',
     title: '',
     toggled: false
   },

@@ -158,6 +158,16 @@
       &#x25BC; {{ 'SIDEBAR.sortFps' | translate }}
     </option>
   }
+  @if(settingsButtons['sortOptionPlaylist'].toggled) {
+    <option value="playlistAsc">
+      &#x25B2; {{ 'SIDEBAR.sortPlaylist' | translate }}
+    </option>
+  }
+  @if(settingsButtons['sortOptionPlaylist'].toggled) {
+    <option value="playlistDesc">
+      &#x25BC; {{ 'SIDEBAR.sortPlaylist' | translate }}
+    </option>
+  }
     <option value="random">
       {{ 'SIDEBAR.sortRandom' | translate }}
     </option>
