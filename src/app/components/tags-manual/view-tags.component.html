@@ -14,7 +14,7 @@
     (click)="tagClick(tag, $event)"
     (contextmenu)="onTagRightClick($event, tag)"
     [draggable]='draggable()'
-    (dragstart)="dragStart($event)"
+    (dragstart)="tagDragStart($event, tag)"
   >
     {{ tag.name }}
   </span>
