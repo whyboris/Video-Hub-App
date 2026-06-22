@@ -144,31 +144,3 @@
   color: variables.$pretty-red !important;
   opacity: 1;
 }
-
-.button-toggle-batch-mode-dark {
-  background: #333333;
-  color: white !important;
-
-  &:hover {
-    background: #555555;
-  }
-}
-
-.button-toggle-batch-mode-dark-active {
-  background: variables.$pretty-red;
-  color: black !important;
-
-  &:hover {
-    background-color: variables.$pretty-red-lighter;
-  }
-}
-
-.select-all-dark {
-  background: #333333;
-  border: 1px solid #888888;
-  color: white;
-
-  &:hover {
-    background: #555555;
-  }
-}

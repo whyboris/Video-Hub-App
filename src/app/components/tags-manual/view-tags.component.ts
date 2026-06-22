@@ -33,9 +33,11 @@ export class ViewTagsComponent {
   @Input()
   set tagsOnToggleBatch(toggleBatchMode: boolean) {
     this.toogleBatchModeValue = toggleBatchMode;
-    this._tags.forEach((item) => {
-      item.removable = toggleBatchMode;
-    });
+    if (this._tags) {
+      this._tags.forEach((item) => {
+        item.removable = toggleBatchMode;
+      });
+    }
   }
 
   readonly darkMode = input<boolean>(undefined);
