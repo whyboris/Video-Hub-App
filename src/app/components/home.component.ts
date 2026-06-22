@@ -332,6 +332,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   remoteSettings: RemoteSettings;
 
+  tagBatchModeSelectionChangedTrigger = 0;
+
   // Behavior Subjects for IPC events:
 
   inputSorceChosenBehaviorSubject: BehaviorSubject<string> = new BehaviorSubject(undefined);
@@ -1133,6 +1135,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     console.log(item);
 
     if (this.batchTaggingMode) {
+      this.tagBatchModeSelectionChangedTrigger = Date.now();
       item.selected = !item.selected;
 
       return;
