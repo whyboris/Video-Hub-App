@@ -80,6 +80,7 @@ import { ButtonStylePipe } from './components/button/button-style.pipe';
 import { CountPipe } from './pipes/count.pipe';
 import { DeleteFilePipe } from './pipes/delete-file.pipe';
 import { DuplicateFinderPipe } from './pipes/duplicateFinder.pipe';
+import { FavoritesOnlyPipe } from './pipes/favorites-only.pipe';
 import { FileSearchPipe } from './pipes/file-search.pipe';
 import { FileSizeFilterPipe } from './pipes/file-size-filter.pipe';
 import { FileSizePipe } from './pipes/file-size.pipe';
@@ -92,8 +93,8 @@ import { LengthFilterPipe } from './pipes/length-filter.pipe';
 import { LengthPipe } from './pipes/length.pipe';
 import { MagicSearchPipe } from './pipes/magic-search.pipe';
 import { ManualTagSortPipe } from './pipes/manual-tags-sort.pipe';
-import { PlaylistPipe } from './pipes/playlist.pipe';
 import { PlaylistOnlyPipe } from './pipes/playlist-only.pipe';
+import { PlaylistPipe } from './pipes/playlist.pipe';
 import { RegexSearchPipe } from './pipes/regex-search.pipe';
 import { ResolutionFilterPipe } from './pipes/resolution-filter.pipe';
 import { ReturnZeroPipe } from './pipes/return-zero.pipe';
@@ -130,6 +131,7 @@ import { YearPipe } from './pipes/year.pipe';
     DetailsComponent,
     DonutComponent,
     DuplicateFinderPipe,
+    FavoritesOnlyPipe,
     FileComponent,
     FileSearchPipe,
     FileSizeFilterPipe,

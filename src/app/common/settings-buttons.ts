@@ -52,6 +52,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'showFreq'
  | 'showFullView'
  | 'showMoreInfo'
+ | 'showOnlyFavorites'
  | 'showOnlyPlaylist'
  | 'showRecent'
  | 'showRecentlyPlayed'
@@ -154,10 +155,11 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'showFiles',
     'showClips',
   ],
-  [ // 5 - Folder view
+  [ // 5 - Explore videos
     'showFolders',
     'randomizeFoldersScreenshots',
     'showTags',
+    'showOnlyFavorites',
     'showOnlyPlaylist',
     'playPlaylist',
   ],
@@ -172,15 +174,15 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'compactView',
     'showMoreInfo',
     'fontSizeLarger',
+    'favorites',
     'shuffleGalleryNow',
   ],
-  [ // 8 - Auto-generated tags
+  [ // 8 - Tags
     'manualTags',
     'autoFileTags',
     'autoFolderTags',
     'showVideoNotes',
     'sortAutoTags',
-    'favorites',
   ],
   [ // 9 - Thumbnails view
     'hoverScrub',
@@ -384,7 +386,6 @@ export const SettingsButtons: SettingsButtonsType = {
     description: 'BUTTONS.favoritesDescription',
     hidden: false,
     iconName: 'icon-heart',
-    settingsHeading: 'SETTINGS.favorites',
     moreInfo: 'BUTTONS.favoritesMoreInfo',
     title: 'BUTTONS.favoritesHint',
     toggled: false
@@ -667,6 +668,14 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-show-more-info',
     title: 'BUTTONS.showMoreInfoHint',
     toggled: true
+  },
+  'showOnlyFavorites': {
+    description: 'BUTTONS.showOnlyFavoritesDescription',
+    hidden: false,
+    iconName: 'icon-heart',
+    moreInfo: 'BUTTONS.showOnlyFavoritesMoreInfo',
+    title: 'BUTTONS.showOnlyFavoritesHint',
+    toggled: false
   },
   'showOnlyPlaylist': {
     description: 'BUTTONS.showOnlyPlaylistDescription',
