@@ -26,7 +26,7 @@
 
 @if (renamingWIP === video.cleanName) {
   <span
-    class="fileSize"
+    class="file-size"
     [ngClass]="{ darkModeText: darkMode() }"
   >
     {{ video.durationDisplay }}
@@ -61,14 +61,14 @@
 
   @if (!renameError) {
     <span
-      class="fileSize renaming-message"
+      class="file-size renaming-message"
       [ngClass]="{ 'renaming-message-dark-mode': darkMode() }"
     >
       {{ 'SYSTEM.pressEscToStopRenaming' | translate }}
     </span>
   } @else {
     <span
-      class="fileSize renaming-message renaming-error"
+      class="file-size renaming-message renaming-error"
       [ngClass]="{ 'renaming-error-dark-mode': darkMode() }"
     >
       {{ 'SYSTEM.fileRenameError' | translate }}
@@ -123,7 +123,7 @@
 
 <!-- Times played -->
 @if (video.timesPlayed) {
-  <span class="fileSize times-played" [ngStyle]="{color: darkMode() ? '#DDDDDD' : '#000000'}" >
+  <span class="file-size times-played" [ngStyle]="{color: darkMode() ? '#DDDDDD' : '#000000'}" >
     {{ 'TAGS.timesPlayed' | translate }}: {{ video.timesPlayed }}
   </span>
 }
