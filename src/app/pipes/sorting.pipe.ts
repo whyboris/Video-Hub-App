@@ -22,6 +22,8 @@ export type SortType = 'default'
                      | 'lastPlayedDesc'
                      | 'modifiedAsc'
                      | 'modifiedDesc'
+                     | 'playlistAsc'
+                     | 'playlistDesc'
                      | 'random'
                      | 'sizeAsc'
                      | 'sizeDesc'
@@ -54,6 +56,8 @@ const sortMapping: Partial<Record<SortType, [SortOrderType, boolean]>> = {
   lastPlayedDesc:  ['lastPlayed',   false],
   modifiedAsc:     ['mtime',        true],
   modifiedDesc:    ['mtime',        false],
+  playlistAsc:     ['playlist',     true],
+  playlistDesc:    ['playlist',     false],
   sizeAsc:         ['fileSize',     true],
   sizeDesc:        ['fileSize',     false],
   starAsc:         ['stars',        true],
