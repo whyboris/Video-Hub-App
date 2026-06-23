@@ -1,8 +1,6 @@
 import type { PipeTransform } from '@angular/core';
 import { Pipe } from '@angular/core';
 
-import { PipeSideEffectService } from './pipe-side-effect.service';
-
 import type { ImageElement } from '../../../interfaces/final-object.interface';
 
 @Pipe({
@@ -11,9 +9,7 @@ import type { ImageElement } from '../../../interfaces/final-object.interface';
 })
 export class PlaylistOnlyPipe implements PipeTransform {
 
-  constructor(
-    public pipeSideEffectService: PipeSideEffectService
-  ) { }
+  constructor() { }
 
   /**
    * Return only items that match search string

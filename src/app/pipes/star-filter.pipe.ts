@@ -16,7 +16,7 @@ export class StarFilterPipe implements PipeTransform {
   ) { }
 
   /**
-   * Filter and show only videos that are within the resolution bounds
+   * Filter and show only videos that are within the star rating bounds
    * @param finalArray
    * @param render
    * @param leftBound

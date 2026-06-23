@@ -1,8 +1,6 @@
 import type { PipeTransform } from '@angular/core';
 import { Pipe } from '@angular/core';
 
-import { PipeSideEffectService } from './pipe-side-effect.service';
-
 import type { ImageElement } from '../../../interfaces/final-object.interface';
 
 @Pipe({
@@ -11,12 +9,10 @@ import type { ImageElement } from '../../../interfaces/final-object.interface';
 })
 export class FavoritesOnlyPipe implements PipeTransform {
 
-  constructor(
-    public pipeSideEffectService: PipeSideEffectService
-  ) { }
+  constructor() { }
 
   /**
-   * Return only items that match search string
+   * Return only items that are favorites (5-star rating) if `viewOnlyFavorites` is true
    * @param finalArray
    * @param viewOnlyFavorites - boolean toggle
    * @param refreshViewTrigger - to refresh pipe when needed

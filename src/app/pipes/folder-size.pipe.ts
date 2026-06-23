@@ -5,7 +5,13 @@ import { Pipe, PipeTransform } from '@angular/core';
   name: 'folderSizePipe'
 })
 export class FolderSizePipe implements PipeTransform {
-  transform(numberOfFiles: string): any {
+
+  /**
+   * Return e.g. "1k" when number is over 1,000
+   * @param numberOfFiles - string represeting a number
+   * @returns
+   */
+  transform(numberOfFiles: string): string {
     const fileCount = parseInt(numberOfFiles, 10);
     if (fileCount >= 1000) {
       return Math.floor(fileCount / 1000) + 'k';
