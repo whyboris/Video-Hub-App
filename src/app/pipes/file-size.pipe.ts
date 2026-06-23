@@ -15,8 +15,8 @@ export class FileSizePipe implements PipeTransform {
    * Return size of file formatted as ### MB or ### GB
    *
    * (!) base 10 vs base 2 depends on `GLOBALS.macVersion`
-   *     Macintosh uses base 10
-   *     Windows uses base 2
+   *     Mac uses base 10
+   *     Win uses base  2
    *
    * @param sizeInBytes -- file size in bytes
    * @param excludeParen - whether (2.3GB) or 2.3GB

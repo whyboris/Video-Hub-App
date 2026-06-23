@@ -122,7 +122,7 @@ export function alphabetizeFinalArray(imagesArray: ImageElement[]): ImageElement
  *
  * (!) depends on GLOBALS.macVersion
  *     Mac uses base 10
- *     Win uses base 2
+ *     Win uses base  2
  *
  * @param fileSize
  */
