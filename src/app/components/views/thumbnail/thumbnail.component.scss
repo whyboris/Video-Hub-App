@@ -41,9 +41,11 @@
 }
 
 .file-size {
-  display: inline-block;
+  float: right;
   font-size: 10px;
-  opacity: 0.8;
+  margin-right: 2px;
+  opacity: 0.5;
+  transform: translate(0, 1px);
 }
 
 .items-in-folder {
