@@ -16,7 +16,7 @@ export class PlaylistPipe implements PipeTransform {
   ) { }
 
   /**
-   * Return only items that match search string
+   * Return the input but notify Side Effect Service to store the current results
    * @param finalArray
    */
   transform(finalArray: ImageElement[]): ImageElement[] {

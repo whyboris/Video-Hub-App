@@ -10,7 +10,8 @@ import type { ImageElement } from '../../../interfaces/final-object.interface';
 export class ReturnZeroPipe implements PipeTransform {
 
   /**
-   * Return only items that match search string
+   * Return zero results when `returnZero` is toggled
+   * Used for clips view when no clips were extracted
    * @param finalArray
    * @param returnZero    {boolean} Hack to return zero results
    */

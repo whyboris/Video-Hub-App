@@ -7,10 +7,10 @@ import type { SettingsButtonsType} from '../common/settings-buttons';
 import { SettingsButtons } from '../common/settings-buttons';
 
 interface FolderProperties {
-  byteSize: number;    //                             corresponds to ImageElement `fileSize`
-  duration: number;    // in seconds,                 corresponds to ImageElement `duration`
-  mtime: number; //                                   corresponds to ImageElement `mtime`
-  birthtime: number; //                                   corresponds to ImageElement `birthtime`
+  byteSize: number;        //                 corresponds to ImageElement `fileSize`
+  duration: number;        // in seconds,     corresponds to ImageElement `duration`
+  mtime: number;           //                 corresponds to ImageElement `mtime`
+  birthtime: number;       //                 corresponds to ImageElement `birthtime`
   starAverage: StarRating; // averaged weight of stars rounded to nearest `StarRating`
 }
 

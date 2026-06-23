@@ -666,6 +666,18 @@
       </div>
     }
 
+      <!-- Favorites only view -->
+    @if (settingsButtons['showOnlyFavorites'].toggled) {
+      <div class="lev-distance">
+        <span
+          class="search-or-tag-general search-word"
+          (click)="settingsButtons['showOnlyFavorites'].toggled = false"
+        >
+          {{ 'SIDEBAR.favoritesShowingOnly' | translate }}
+        </span>
+      </div>
+    }
+
       <!-- Duplicates -->
     @if (settingsButtons['duplicateLength'].toggled
       || settingsButtons['duplicateSize'].toggled
@@ -779,6 +791,8 @@
       [items]="imageElementService.imageElements
 
                 | playlistOnlyPipe : settingsButtons['showOnlyPlaylist'].toggled : playlistViewRefresh
+
+                | favoritesOnlyPipe : settingsButtons['showOnlyFavorites'].toggled
 
                 | deleteFilePipe : deletePipeHack
 
