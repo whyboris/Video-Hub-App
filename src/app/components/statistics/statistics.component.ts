@@ -9,7 +9,7 @@ import { ImageElementService } from './../../services/image-element.service';
 import { SourceFolderService } from './source-folder.service';
 
 import type { AppStateInterface } from '../../common/app-state';
-import type { ImageElement, ScreenshotSettings, InputSources } from '../../../../interfaces/final-object.interface';
+import type { ImageElement, ScreenshotSettings, InputSources } from '@my/final-object.interface';
 
 import { metaAppear, breadcrumbWordAppear } from '../../common/animations';
 

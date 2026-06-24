@@ -5,8 +5,8 @@ import { autoFileTagsRegex } from './autotags.service';
 import { ManualTagsService } from '../tags-manual/manual-tags.service';
 
 import { Colors } from '../../common/colors';
-import type { ImageElement } from '../../../../interfaces/final-object.interface';
-import type { Tag } from '../../../../interfaces/shared-interfaces';
+import type { ImageElement } from '@my/final-object.interface';
+import type { Tag } from '@my/shared-interfaces';
 
 @Pipe({
   standalone: false,
