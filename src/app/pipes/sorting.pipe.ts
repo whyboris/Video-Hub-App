@@ -146,14 +146,14 @@ export class SortingPipe implements PipeTransform {
   /**
    * Return the same array randomized on next search
    * @param galleryArray
-   * @param sortingType         - sorting method
-   * @param forceSortUpdateHack - hack to force the sorting update
-   * @param skip                - whether to sort or return as is (needed for DUPLICATE SEARCH)
+   * @param sortingType            - sorting method
+   * @param forceSortUpdateTrigger - hack to force the sorting update
+   * @param skip                   - whether to sort or return as is (needed for DUPLICATE SEARCH)
    */
   transform(
     galleryArray: ImageElement[],
     sortingType: SortType,
-    forceSortUpdateHack: number | string, // changing input forces pipe to re-sort again
+    forceSortUpdateTrigger: number | string, // changing input forces pipe to re-sort again
     skip: boolean
   ): ImageElement[] {
 

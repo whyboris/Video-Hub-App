@@ -78,7 +78,7 @@
     [tagsOnToggleBatch]="batchTaggingMode()"
     [tags]="manualTagsService.tagsList | manualTagSortPipe : manualTagFilterString
                                                            : appState().sortTagsByFrequency
-                                                           : manualTagsService.pipeToggleHack"
+                                                           : manualTagsService.pipeToggleTrigger"
     (tagClicked)="handleTagWordClicked.emit($event)"
     (removeTagEmit)="removeThisTag($event)"
     (tagRightClick)="onTagRightClick($event)"

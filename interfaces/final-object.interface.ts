@@ -56,13 +56,14 @@ export interface ImageElement {
   // ========================================================================
   // Stripped out and not saved in the VHA file
   // ------------------------------------------------------------------------
-  deleted?: boolean;             // toggled after a successful delete of file; removed before saving .vha file
+  deleted?: boolean;             // toggled after a successful delete of file; ImageElement removed before saving .vha2 file
   durationDisplay: string;       // displayed duration in X:XX:XX format
   fileSizeDisplay: string;       // displayed as XXXmb or X.Xgb -- also co-opted for showing number of files in a *FOLDER*
   index: number;                 // for the `default` sort order
   resBucket: number;             // the resolution category the video falls into (for faster sorting)
   resolution: ResolutionString;  // e.g. `720`, `1080`, `SD`, `HD`, etc
   selected?: boolean;            // for batch-tagging of videos
+  uuid: string                   // to help track inside @for in home.component.html
 }
 
 export interface ImageElementPlus extends ImageElement {
@@ -93,6 +94,7 @@ export function NewImageElement(): ImageElement {
     screens: 0,
     stars: 0.5,
     timesPlayed: 0,
+    uuid: '',
     width: 0,
   };
 }

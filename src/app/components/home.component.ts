@@ -313,7 +313,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   timeExtractionStarted;   // time remaining calculator
   timeExtractionRemaining; // time remaining calculator
 
-  deletePipeHack = false; // to force deletePipe to update
+  deletePipeTrigger = false; // to force deletePipe to update
 
   playlistViewRefresh = false; // to force playlist view to refresh, if showing
 
@@ -657,7 +657,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         });
 
       if (somethingDeleted) {
-        this.deletePipeHack = !this.deletePipeHack;
+        this.deletePipeTrigger = !this.deletePipeTrigger;
       }
 
     });
@@ -676,7 +676,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           ) {
             console.log('FILE DELETED !!!', partialPath);
             element.deleted = true;
-            this.deletePipeHack = !this.deletePipeHack;
+            this.deletePipeTrigger = !this.deletePipeTrigger;
           }
         });
     });
@@ -842,7 +842,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       // just in case the message comes back after user has switched to view another hub
       if (element.fileName === this.imageElementService.imageElements[element.index].fileName) {
         this.imageElementService.imageElements[element.index].deleted = true;
-        this.deletePipeHack = !this.deletePipeHack;
+        this.deletePipeTrigger = !this.deletePipeTrigger;
         this.imageElementService.finalArrayNeedsSaving = true;
         this.cd.detectChanges();
       }
@@ -977,7 +977,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.imageElementService.finalArrayNeedsSaving = true;
       }
     });
-    this.deletePipeHack = !this.deletePipeHack;
+    this.deletePipeTrigger = !this.deletePipeTrigger;
   }
 
   /**

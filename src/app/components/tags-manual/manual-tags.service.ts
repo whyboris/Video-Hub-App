@@ -10,7 +10,7 @@ export class ManualTagsService {
   tagsMap: Map<string, number> = new Map(); // map tag name to its frequency
   tagsList: string[] = [];
   tagColors: Record<string, string> = {}; // map tag name to its color
-  pipeToggleHack = false;
+  pipeToggleTrigger = false;
 
   // Color picker state - shared across all components
   showColorPickerSubject = new Subject<{ tagName: string, currentColor: string, position: ContextMenuCoordinate }>();
@@ -98,7 +98,7 @@ export class ManualTagsService {
   }
 
   forceTagSortPipeUpdate(): void {
-    this.pipeToggleHack = !this.pipeToggleHack;
+    this.pipeToggleTrigger = !this.pipeToggleTrigger;
   }
 
   /**

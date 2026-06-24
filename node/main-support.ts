@@ -14,6 +14,7 @@ import * as path from 'path';
 const exec = require('child_process').exec;
 const ffprobePath = require('@ffprobe-installer/ffprobe').path.replace('app.asar', 'app.asar.unpacked');
 const fs = require('fs');
+const hash = require('object-hash');
 const hasher = require('crypto').createHash;
 import type { Stats } from 'fs';
 
@@ -263,6 +264,7 @@ function stripOutTemporaryFields(imagesArray: ImageElement[]): ImageElement[] {
     delete(element.resBucket);
     delete(element.resolution);
     delete(element.selected);
+    delete(element.uuid);
   });
   return imagesArray;
 }
@@ -585,6 +587,8 @@ export function insertTemporaryFieldsSingle(element: ImageElement): ImageElement
   element.bitrate = getBitrate(element.fileSize, element.duration);
   element.resBucket = resolution.bucket;
   element.resolution = resolution.label;
+  element.uuid = hash(element);
+
   return element;
 }
 

@@ -15,7 +15,7 @@ export class FileSearchPipe implements PipeTransform {
    * Return only items that match search string
    * @param finalArray
    * @param arrOfStrings    {string}  the search string array
-   * @param renderHack      {boolean} that is flipped just to trigger an pipe update
+   * @param renderTrigger   {boolean} that is flipped just to trigger an pipe update
    * @param union           {boolean} whether it's a union or intersection
    * @param searchType      {SearchType}
    * @param exclude         {boolean} whether excluding results that contain the word
@@ -26,7 +26,7 @@ export class FileSearchPipe implements PipeTransform {
   transform(
     finalArray: ImageElement[],
     arrOfStrings?: string[],
-    renderHack?: boolean,
+    renderTrigger?: boolean,
     union?: boolean,
     searchType?: SearchType,
     exclude?: boolean,

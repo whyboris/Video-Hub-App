@@ -42,10 +42,10 @@
 
 .file-size {
   float: right;
-  font-size: 10px;
-  margin-right: 2px;
+  font-size: 9px;
+  font-family: monospace;
   opacity: 0.5;
-  transform: translate(0, 1px);
+  transform: translate(-2px, 2px);
 }
 
 .items-in-folder {

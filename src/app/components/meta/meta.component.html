@@ -141,7 +141,7 @@
     [tags]="(video | tagDisplayPipe : showManualTags()
                                   : showAutoFileTags()
                                   : showAutoFolderTags()
-                                  : tagViewUpdateHack)
+                                  : tagViewUpdateTrigger)
                     | autoTagSortPipe : sortAutoTags"
     [darkMode]="darkMode()"
     [enableColorPicker]="true"
