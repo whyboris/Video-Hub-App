@@ -1083,7 +1083,7 @@
       <!-- ==================================== CLIPS ==================================== -->
 
     @if (appState.currentView === 'showClips') {
-      @for (item of scroll.viewPortItems; track item.index) {
+      @for (item of scroll.viewPortItems; track item.hash) {
         <app-clip-item
           (videoClick)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
           (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing()                               : rightMouseClicked($event.mouseEvent, $event.item)"
