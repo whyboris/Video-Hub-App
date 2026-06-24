@@ -11,6 +11,12 @@
   {{ 'SHORTCUTS.andClickAnyFileForExplorer' | translate }}
 </span>
 
+<span style="display: block; margin-bottom: 15px;">
+  {{ 'SHORTCUTS.hold' | translate }}<em class="shortcut-key modifier-key">Ctrl</em>
+  +<em class="shortcut-key modifier-key">Shift</em>
+  {{ 'SHORTCUTS.andClickToSetDefaultScreenshot' | translate }}
+</span>
+
 <span>{{ 'SHORTCUTS.hold' | translate }}<em class="shortcut-key modifier-key">Ctrl</em>
 @if (macVersion()) {
     {{ 'SHORTCUTS.or' | translate }}<em class="shortcut-key modifier-key">Command</em>
@@ -45,10 +51,14 @@
 }
 
   <!-- System reserved -->
-  <div class="shortcut-item"><em class="shortcut-key">w</em> - {{ 'SHORTCUTS.quit' | translate }}</div>
-  <div class="shortcut-item space-after"><em class="shortcut-key">q</em> - {{ 'SHORTCUTS.quit' | translate }}</div>
+  <div class="shortcut-item"><em class="shortcut-key disabled">w</em> - {{ 'SHORTCUTS.quit' | translate }}</div>
+  <div class="shortcut-item space-after"><em class="shortcut-key disabled">q</em> - {{ 'SHORTCUTS.quit' | translate }}</div>
 </div>
 
 <span>
   {{ 'SHORTCUTS.clickToRename' | translate }}
+</span>
+<br><br>
+<span>
+  {{ 'SHORTCUTS.clickToRemove' | translate }}
 </span>
