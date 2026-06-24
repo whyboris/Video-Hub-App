@@ -12,7 +12,7 @@
     "autoplayClipsHint": "Autoplay all clips",
     "clearAllFiltersDescription": "Clear all currently applied filters",
     "clearAllFiltersHint": "Clear all filters",
-    "clearAllFiltersMoreInfo": "Clears all currently applied filters and resets the search input",
+    "clearAllFiltersMoreInfo": "Clears all currently applied filters and resets the search input. You may also click on the number of videos found at the bottom of filters to clear all filters.",
     "clearHistoryDescription": "Clear the recently-opened history",
     "clearHistoryHint": "Clear history",
     "clipsThumbnailDescription": "Use default thumbnails instead of preview clip thumb",

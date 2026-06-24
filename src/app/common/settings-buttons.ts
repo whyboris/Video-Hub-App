@@ -97,6 +97,7 @@ export type SettingsButtonKey = 'autoFileTags'
 export const SettingsButtonsGroups: SettingsButtonKey[][] = [
   [ // 0 - Search & filter settings
     'hideSidebar',
+    'clearAllFilters',
   ],
   [ // 1 - Search filters
     'folderUnion',
@@ -113,7 +114,6 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'regex',
     'fuzzy',
     'startsWith',
-    'clearAllFilters',
   ],
   [ // 2 - Filters & sorting options
     'durationFilter',
