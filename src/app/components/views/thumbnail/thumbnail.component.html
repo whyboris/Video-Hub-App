@@ -180,13 +180,18 @@
       class="time"
       [ngClass]="{ 'dark-style': darkMode() }"
     >{{ video.durationDisplay }}</span>
-  }
 
-  @if (showMeta() && video.resolution) {
+    @if (video.resolution) {
+      <span
+        class="time rez-new"
+        [ngClass]="{ 'dark-style': darkMode() }"
+      >{{ video.resolution }}</span>
+    }
+
     <span
       class="rez"
       [ngClass]="{ 'dark-style': darkMode() }"
-    >{{ video.resolution }}</span>
+    >{{ video.fileSizeDisplay }}</span>
   }
 
   @if (!connected()) {
@@ -211,11 +216,6 @@
     class="title"
   >
     {{ video.cleanName }}
-
-    <div class="file-size">
-      {{ video.fileSizeDisplay }}
-    </div>
-
   </span>
 }
 

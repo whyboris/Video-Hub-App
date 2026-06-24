@@ -1,3 +1,5 @@
+@use "../../variables.scss";
+
 .folder-item {
   background-color: black;
   background-size: cover;
@@ -40,12 +42,13 @@
   padding: 2px;
 }
 
-.file-size {
-  float: right;
-  font-size: 9px;
-  font-family: monospace;
-  opacity: 0.5;
-  transform: translate(-2px, 2px);
+.rez-new {
+  background: none;
+  border: none;
+  color: white;
+  left: 37px;
+  opacity: 0.6;
+  right: unset;
 }
 
 .items-in-folder {

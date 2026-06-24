@@ -49,7 +49,12 @@
 
   </div>
 
-  <div class="full-path" [ngClass]="{ 'dark-path': darkMode() }" (click)="copyToClipboard()">
+  <div
+    class="full-path"
+    [ngClass]="{ 'dark-path': darkMode() }"
+    (click)="copyToClipboard()"
+    title="{{ 'BUTTONS.copyToClipboard' | translate }}"
+  >
     <div class="copy-to-clipboard">
       <app-icon [icon]="'icon-clipboard'" />
     </div>

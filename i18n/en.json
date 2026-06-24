@@ -21,6 +21,7 @@
     "compactViewDescription": "Compact view",
     "compactViewHint": "Compact view",
     "compactViewMoreInfo": "Hides file names. Only affects Thumbnails & Clips view",
+    "copyToClipboard": "Click to copy path to clipboard",
     "dangerousDelete": "Permanently delete files",
     "dangerousDeleteDescription": "Dangerously delete bypassing trash / recycling bin",
     "dangerousDeleteMoreInfo": "Useful for videos on a network drive",
