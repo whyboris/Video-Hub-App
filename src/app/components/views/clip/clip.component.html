@@ -93,8 +93,18 @@
   <div class="video-box" [ngStyle]="{ height: imgHeight() + 'px' }">
 
     @if (video.selected) { <app-icon class="selected" [icon]="'icon-show-more-info'" /> }
-    @if (showMeta()) {       <span class="time">{{ video.durationDisplay }}</span> }
-    @if (showMeta()) {       <span class="rez">{{ video.resolution }}</span> }
+
+    @if (showMeta()) {
+      <span class="rez" [ngClass]="{ 'dark-style': darkMode() }">{{ video.fileSizeDisplay }}</span>
+
+      @if (video.resolution) {
+        <span
+          class="time rez-new"
+        >{{ video.resolution }}</span>
+      }
+
+      <span class="time" [ngClass]="{ 'dark-style': darkMode() }">{{ video.durationDisplay }}</span>
+    }
 
     <!-- ========================== regular view ========================== -->
   @if (noError && !autoplay()) {
@@ -132,24 +142,23 @@
     ></video>
   }
 
+  @if (true) {
+    <app-icon
+      class="heart"
+      [ngClass]="{ 'heart-lit' : video.stars === 5.5 }"
+      (click)="toggleHeart()"
+      [icon]="'icon-heart'"
+      title="{{ video.stars === 5.5 ? ('BUTTONS.removeFromFavorites' | translate)
+                                    : ('BUTTONS.addToFavorites' | translate) }}"
+
+     />
+  }
+
   </div> <!-- end of video-box -->
-
-  <!-- ================================= TEXT ================================= -->
-@if (showMeta()) {
-  <span
-    [ngClass]="{ 'larger-font': largerFont() }"
-    [ngStyle]="{ color: darkMode() ? '#BBBBBB' : '#000000' }"
-    class="title"
-  >
-    {{ video.cleanName }}
-
-    <div class="file-size">
-      {{ '(' + video.fileSizeDisplay + ')' }}
-    </div>
-
-  </span>
-}
-
+  <!--
+  .sheet-icon needs to be the next sibling of .video-box
+  DO NOT SEPARATE!
+  -->
   <app-icon
     class="sheet-icon"
     [icon]="'icon-show-thumbnails'"
@@ -157,6 +166,19 @@
     [ngStyle]="{
       'opacity': (this.hover ? 1 : 0)
     }" />
+
+  <!-- ================================= TEXT ================================= -->
+
+@if (showMeta()) {
+  <span
+    [ngClass]="{ 'larger-font': largerFont() }"
+    [ngStyle]="{ color: darkMode() ? '#BBBBBB' : '#000000' }"
+    class="title"
+  >
+    {{ video.cleanName }}
+  </span>
+}
+
 
 } <!-- end of the @else -->
 

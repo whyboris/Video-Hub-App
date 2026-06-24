@@ -177,21 +177,20 @@
 
   @if (showMeta()) {
     <span
-      class="time"
+      class="rez"
       [ngClass]="{ 'dark-style': darkMode() }"
-    >{{ video.durationDisplay }}</span>
+    >{{ video.fileSizeDisplay }}</span>
 
     @if (video.resolution) {
       <span
         class="time rez-new"
-        [ngClass]="{ 'dark-style': darkMode() }"
       >{{ video.resolution }}</span>
     }
 
     <span
-      class="rez"
+      class="time"
       [ngClass]="{ 'dark-style': darkMode() }"
-    >{{ video.fileSizeDisplay }}</span>
+    >{{ video.durationDisplay }}</span>
   }
 
   @if (!connected()) {
