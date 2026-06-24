@@ -49,7 +49,9 @@
 .meta-title {
   background: transparent;
   border: 0;
+  height: 18px;
   outline: none;
+  padding-left: 0;
 }
 
 .renaming-message {
@@ -70,7 +72,6 @@
 
 .larger-font {
   font-size: 16px;
-  margin-top: 4px;
 }
 
 .star-rating {
