@@ -12,17 +12,26 @@
   z-index: 2;
 }
 
-.dark-style {
-  color: variables.$gray-20;
-  background: black;
-}
-
 .time {
   right: 2px;
 }
 
 .rez {
   left: 2px;
+}
+
+.rez-new {
+  background: none;
+  border: none;
+  color: white;
+  left: 37px;
+  opacity: 0.6;
+  right: unset;
+}
+
+.dark-style {
+  color: variables.$gray-20;
+  background: black;
 }
 
 .sheet-icon {
