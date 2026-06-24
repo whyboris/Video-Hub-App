@@ -47,7 +47,7 @@ export class MetaComponent implements OnInit, OnDestroy {
 
   yearHack: number;
 
-  tagViewUpdateHack = false;
+  tagViewUpdateTrigger = false;
 
   renamingWIP = '';
   renameError = false;
@@ -93,7 +93,7 @@ export class MetaComponent implements OnInit, OnDestroy {
 
     // Subscribe to tag color updates
     this.tagColorSubscription = this.manualTagsService.tagColorUpdatedSubject.subscribe(() => {
-      this.tagViewUpdateHack = !this.tagViewUpdateHack;
+      this.tagViewUpdateTrigger = !this.tagViewUpdateTrigger;
       this.cd.detectChanges();
     });
 
@@ -111,7 +111,7 @@ export class MetaComponent implements OnInit, OnDestroy {
         type: 'add'
       });
     }
-    this.tagViewUpdateHack = !this.tagViewUpdateHack;
+    this.tagViewUpdateTrigger = !this.tagViewUpdateTrigger;
   }
 
   filterThisTag(event: TagEmit) {
@@ -126,7 +126,7 @@ export class MetaComponent implements OnInit, OnDestroy {
       tag: tag,
       type: 'remove'
     });
-    this.tagViewUpdateHack = !this.tagViewUpdateHack;
+    this.tagViewUpdateTrigger = !this.tagViewUpdateTrigger;
   }
 
   /**

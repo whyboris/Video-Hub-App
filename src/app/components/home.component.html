@@ -420,7 +420,7 @@
           @slowFadeOut
         ></div>
       }
-        {{ (imageElementService.imageElements | deleteFilePipe : deletePipeHack).length | number }}
+        {{ (imageElementService.imageElements | deleteFilePipe : deletePipeTrigger).length | number }}
         {{ 'SIDEBAR.videos' | translate }}
       </div>
 
@@ -732,7 +732,7 @@
 
       <!-- total found -->
       <div class="filtering-total">
-        @if (numberOfVideosFound < (imageElementService.imageElements | deleteFilePipe : deletePipeHack).length) {
+        @if (numberOfVideosFound < (imageElementService.imageElements | deleteFilePipe : deletePipeTrigger).length) {
           <span
             title="{{ 'BUTTONS.clearAllFiltersHint' | translate }}"
             class="clear-all-filters"
@@ -794,7 +794,7 @@
 
                 | favoritesOnlyPipe : settingsButtons['showOnlyFavorites'].toggled
 
-                | deleteFilePipe : deletePipeHack
+                | deleteFilePipe : deletePipeTrigger
 
                 | hideOfflinePipe : settingsButtons['hideOffline'].toggled
 
