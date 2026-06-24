@@ -35,9 +35,6 @@ export interface DefaultScreenEmission {
 })
 export class SheetComponent implements OnInit {
 
-  readonly filmstripHolder = viewChild<ElementRef>('filmstripHolder');
-  readonly thumbHolder = viewChild<ElementRef>('thumbHolder');
-
   readonly filterTag = output<TagEmit>();
   readonly openVideoAtTime = output<object>();
 

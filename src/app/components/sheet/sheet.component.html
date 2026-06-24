@@ -69,10 +69,8 @@
           padding: 'calc(2% / ' + thumbnailsToDisplay + ')'
         }"
       class="filmstrip-container"
-      @modalAnimation
     >
       <div
-        #filmstripHolder
         class="video-box"
         (click)="openVideoAtTime.emit({ mouseEvent: $event, thumbIndex: i })"
         [ngStyle]="{
@@ -89,11 +87,11 @@
         >
           <app-icon [icon]="'icon-star'" />
         </div>
-      @if (showMeta()) {
-        <span class="time" @metaAppear>
+
+        <span class="time">
           {{ (video().duration / (video().screens + 1)) * (i+1) | lengthPipe }}
         </span>
-      }
+
       </div>
     </div>
   }
