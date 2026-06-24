@@ -77,6 +77,7 @@
 
     @if (showMeta()) {
       <span class="time folder-time">{{ video.duration | lengthPipe : 'folder' }}</span>
+      <span class="rez folder-time">{{ video.fileSize | fileSizePipe : true }}</span>
     }
 
     </div> <!-- end of (A) div --->
@@ -98,7 +99,7 @@
 
 
   @if (video.cleanName === '*FOLDER*' && video.fileName !== '*UP*') {
-    <div class="folder-icon">
+    <div class="folder-icon" style="pointer-events: none;">
       <app-icon [icon]="'icon-folder-blank'" />
       <div class="items-in-folder">{{ video.fileSizeDisplay | folderSizePipe }}</div>
     </div>
@@ -111,15 +112,6 @@
       class="title"
     >
       {{ video.fileName }}
-
-    @if (showMeta()) {
-      <div
-        class="file-size"
-      >
-        {{ video.fileSize | fileSizePipe }}
-      </div>
-    }
-
     </span>
   }
 
@@ -177,16 +169,20 @@
 
   @if (showMeta()) {
     <span
+      class="rez"
+      [ngClass]="{ 'dark-style': darkMode() }"
+    >{{ video.fileSizeDisplay }}</span>
+
+    @if (video.resolution) {
+      <span
+        class="time rez-new"
+      >{{ video.resolution }}</span>
+    }
+
+    <span
       class="time"
       [ngClass]="{ 'dark-style': darkMode() }"
     >{{ video.durationDisplay }}</span>
-  }
-
-  @if (showMeta() && video.resolution) {
-    <span
-      class="rez"
-      [ngClass]="{ 'dark-style': darkMode() }"
-    >{{ video.resolution }}</span>
   }
 
   @if (!connected()) {
@@ -211,11 +207,6 @@
     class="title"
   >
     {{ video.cleanName }}
-
-    <div class="file-size">
-      {{ video.fileSizeDisplay }}
-    </div>
-
   </span>
 }
 

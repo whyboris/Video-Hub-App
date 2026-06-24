@@ -17,8 +17,13 @@
         'background-size': 'auto ' + imgHeight() + 'px'
       }"
   >
-    @if (showMeta()) { <span class="time">{{ video().durationDisplay }}</span> }
-    @if (showMeta()) { <span class="rez">{{ video().resolution }}</span> }
+    @if (showMeta()) {
+      <span class="time">{{ video().durationDisplay }}</span>
+      <span class="rez">{{ video().fileSizeDisplay }}</span>
+      @if (video().resolution) {
+        <span class="time rez-new">{{ video().resolution }}</span>
+      }
+    }
   </div>
 
 @if (video().selected) {
@@ -41,11 +46,6 @@
     class="title"
   >
     {{ video().cleanName }}
-
-    <div class="file-size">
-      ({{ video().fileSizeDisplay }})
-    </div>
-
   </span>
 }
 

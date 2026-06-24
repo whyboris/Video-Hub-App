@@ -1,10 +1,12 @@
 @use "../../variables";
+
 .element-container {
   cursor: pointer;
   height: 20px;
-  margin: 0px 20px;
+  margin: 0px 10px 0 24px;
   padding: 5px 0;
   position: relative;
+
   &:hover {
     .folder-name,
     .title {
@@ -45,6 +47,7 @@
 .size {
   color: variables.$gray-50;
   display: block;
+  font-family: monospace;
   font-size: 10px;
   position: absolute;
   top: 6px;
@@ -56,7 +59,7 @@
 }
 
 .size {
-  left: 0;
+  left: 6px;
   text-align: right;
   width: 21px;
 }
@@ -77,6 +80,7 @@
 .file-size {
   color: variables.$gray-60;
   display: inline-block;
+  font-family: monospace;
   font-size: 10px;
   opacity: 0.8;
 }
@@ -144,9 +148,10 @@
 
 .larger-font {
   font-size: 16px;
+  margin-top: -2px;
 }
 
 .showing-meta {
   transform: translate(35px, 0);
-  width: calc(100% - 65px);
+  width: calc(100% - 80px);
 }

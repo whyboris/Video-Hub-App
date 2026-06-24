@@ -35,9 +35,6 @@ export interface DefaultScreenEmission {
 })
 export class SheetComponent implements OnInit {
 
-  readonly filmstripHolder = viewChild<ElementRef>('filmstripHolder');
-  readonly thumbHolder = viewChild<ElementRef>('thumbHolder');
-
   readonly filterTag = output<TagEmit>();
   readonly openVideoAtTime = output<object>();
 
@@ -68,6 +65,8 @@ export class SheetComponent implements OnInit {
   starRatingHack: StarRating;
   thumbnailsToDisplay = 4;
 
+  arrayHack: number[] = [];
+
   constructor(
     public filePathService: FilePathService,
     public imageElementService: ImageElementService,
@@ -76,6 +75,11 @@ export class SheetComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+
+    // creates e.g. [0, 1, 2, 3] when .screens == 4
+    // useful so that @for has something to `track`
+    this.arrayHack = Array.from({ length: this.video().screens }, (_, index) => index);
+
     this.pathToFilmstripJpg = this.filePathService.createFilePath(this.folderPath(), this.hubName(), 'filmstrips', this.video().hash);
     this.pathToVideoFile = path.join(this.selectedSourceFolder(), this.video().partialPath, this.video().fileName);
     this.percentOffset = (100 / (this.video().screens - 1));

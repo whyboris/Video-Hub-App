@@ -1,3 +1,5 @@
+@use "../../variables.scss";
+
 .folder-item {
   background-color: black;
   background-size: cover;
@@ -38,14 +40,6 @@
   color: white;
   display: block;
   padding: 2px;
-}
-
-.file-size {
-  float: right;
-  font-size: 9px;
-  font-family: monospace;
-  opacity: 0.5;
-  transform: translate(-2px, 2px);
 }
 
 .items-in-folder {

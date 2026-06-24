@@ -4,6 +4,7 @@ import { Component, HostListener, Input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { FilePathService } from '../file-path.service';
+import { ImageElementService } from './../../../services/image-element.service';
 
 import type { ImageElement } from '../../../../../interfaces/final-object.interface';
 import type { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/shared-interfaces';
@@ -54,9 +55,10 @@ export class ClipComponent implements OnInit {
   posterFolderType: any = 'clips';
 
   constructor(
+    public cd: ChangeDetectorRef,
     public filePathService: FilePathService,
-    public sanitizer: DomSanitizer,
-    public cd: ChangeDetectorRef
+    public imageElementService: ImageElementService,
+    public sanitizer: DomSanitizer
   ) { }
 
   @HostListener('mouseenter') onMouseEnter() {
@@ -108,6 +110,11 @@ export class ClipComponent implements OnInit {
       this.folderThumbPaths.push(this.pathToVideo);
       this.folderPosterPaths.push(this.poster);
     }
+  }
+
+  toggleHeart(): void {
+    this.imageElementService.toggleHeart(this.video.index);
+    event.stopPropagation();
   }
 
 }
