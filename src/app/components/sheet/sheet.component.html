@@ -85,6 +85,7 @@
           class="set-favorite-thumb"
           (click)="setDefaultScreenshot($event, i)"
           [ngClass]="{ 'star-selected' : video().defaultScreen === i }"
+          title="{{ 'BUTTONS.setFavoriteThumb' | translate }}"
         >
           <app-icon [icon]="'icon-star'" />
         </div>

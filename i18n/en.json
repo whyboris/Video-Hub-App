@@ -122,6 +122,7 @@
     "returnToFirstScreenshotDescription": "Reset thumbnail on leave",
     "returnToFirstScreenshotHint": "Return to first thumbnail",
     "returnToFirstScreenshotMoreInfo": "Return to first screenshot when your cursor leaves a thumbnail preview",
+    "setFavoriteThumb": "Click to toggle this thumbnail as the default thumbnail",
     "showClipsDescription": "Clip view",
     "showClipsHint": "Clips view",
     "showDeleteButton": "Allow deleting files",
