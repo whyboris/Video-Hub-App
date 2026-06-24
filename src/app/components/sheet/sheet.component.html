@@ -61,7 +61,7 @@
     <span [innerHtml]="pathToVideoFile | folderArrowsPipe"></span>
   </div>
 
-  @for (_ of ' '.repeat(video().screens).split(''); track _; let i = $index) {
+  @for (i of arrayHack; track imageElementService) {
     <div
       [ngStyle]="{
           height: 'calc((72vw / ' + thumbnailsToDisplay + ') * (9 / 16))',
