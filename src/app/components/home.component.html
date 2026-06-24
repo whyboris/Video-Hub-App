@@ -895,7 +895,7 @@
       <!-- ==================================== THUMBNAILS ==================================== -->
 
     @if (appState.currentView === 'showThumbnails') {
-      @for (item of scroll.viewPortItems; track item.hash) {
+      @for (item of scroll.viewPortItems; track item.uuid) {
         <app-thumbnail
           (videoClick)=" (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
           (rightClick)=" (item.cleanName === '*FOLDER*') ? doNothing()                               : rightMouseClicked($event.mouseEvent, $event.item)"
@@ -942,7 +942,7 @@
     <!-- ==================================== FILMSTRIP ==================================== -->
 
     @if (appState.currentView === 'showFilmstrip') {
-      @for (item of scroll.viewPortItems; track item.index) {
+      @for (item of scroll.viewPortItems; track item.uuid) {
         <app-filmstrip-item
           (videoClick)="handleClick($event, item)"
           (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
@@ -980,7 +980,7 @@
       <!-- ==================================== FULL VIEW ==================================== -->
 
     @if (appState.currentView === 'showFullView') {
-      @for (item of scroll.viewPortItems; track item.index) {
+      @for (item of scroll.viewPortItems; track item.uuid) {
         <app-full-item
           (videoClick)="handleClick($event, item)"
           (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
@@ -1011,7 +1011,7 @@
       <!-- ==================================== FILES / TEXT ==================================== -->
 
     @if (appState.currentView === 'showFiles') {
-      @for (item of scroll.viewPortItems; track item.index) {
+      @for (item of scroll.viewPortItems; track item.uuid) {
         <app-file-item
           (click)="      (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick({ mouseEvent: $event }, item)"
           (dblclick)="   (item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick({ mouseEvent: $event }, item, true)"
@@ -1036,7 +1036,7 @@
       <!-- ==================================== DETAILS / META ==================================== -->
 
     @if (appState.currentView === 'showDetails' || appState.currentView === 'showDetails2') {
-      @for (item of scroll.viewPortItems; track item.index) {
+      @for (item of scroll.viewPortItems; track item.uuid) {
         <app-details-item
           (videoClick)="handleClick($event, item)"
           (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
@@ -1083,7 +1083,7 @@
       <!-- ==================================== CLIPS ==================================== -->
 
     @if (appState.currentView === 'showClips') {
-      @for (item of scroll.viewPortItems; track item.hash) {
+      @for (item of scroll.viewPortItems; track item.uuid) {
         <app-clip-item
           (videoClick)="(item.cleanName === '*FOLDER*') ? handleFolderIconClicked(item.partialPath) : handleClick($event, item)"
           (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing()                               : rightMouseClicked($event.mouseEvent, $event.item)"
