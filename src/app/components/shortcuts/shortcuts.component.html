@@ -1,4 +1,4 @@
-<span style="display: block; margin-bottom: 15px;">
+<span class="shortcut-description">
   {{ 'SHORTCUTS.hold' | translate }}<em class="shortcut-key modifier-key">Ctrl</em>
   @if (macVersion()) {
     {{ 'SHORTCUTS.or' | translate }}<em class="shortcut-key modifier-key">Command</em>
@@ -6,10 +6,24 @@
   {{ 'SHORTCUTS.andClickAnyFile' | translate }}
 </span>
 
-<span style="display: block; margin-bottom: 15px;">
+<span class="shortcut-description">
   {{ 'SHORTCUTS.hold' | translate }}<em class="shortcut-key modifier-key">Shift</em>
   {{ 'SHORTCUTS.andClickAnyFileForExplorer' | translate }}
 </span>
+
+<span class="shortcut-description">
+  {{ 'SHORTCUTS.hold' | translate }}<em class="shortcut-key modifier-key">Ctrl</em>
+  +<em class="shortcut-key modifier-key">Shift</em>
+  {{ 'SHORTCUTS.andClickToSetDefaultScreenshot' | translate }}
+</span>
+
+<span class="shortcut-description">
+  {{ 'SHORTCUTS.hold' | translate }}<em class="shortcut-key modifier-key">Ctrl</em>
+  +<em class="shortcut-key modifier-key">Space</em>
+  {{ 'SHORTCUTS.openRandom' | translate }}
+</span>
+
+<br>
 
 <span>{{ 'SHORTCUTS.hold' | translate }}<em class="shortcut-key modifier-key">Ctrl</em>
 @if (macVersion()) {
@@ -45,10 +59,13 @@
 }
 
   <!-- System reserved -->
-  <div class="shortcut-item"><em class="shortcut-key">w</em> - {{ 'SHORTCUTS.quit' | translate }}</div>
-  <div class="shortcut-item space-after"><em class="shortcut-key">q</em> - {{ 'SHORTCUTS.quit' | translate }}</div>
+  <div class="shortcut-item"><em class="shortcut-key disabled">w</em> - {{ 'SHORTCUTS.quit' | translate }}</div>
+  <div class="shortcut-item space-after"><em class="shortcut-key disabled">q</em> - {{ 'SHORTCUTS.quit' | translate }}</div>
 </div>
 
-<span>
+<span class="shortcut-description">
   {{ 'SHORTCUTS.clickToRename' | translate }}
+</span>
+<span class="shortcut-description">
+  {{ 'SHORTCUTS.clickToRemove' | translate }}
 </span>

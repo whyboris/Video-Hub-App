@@ -75,7 +75,7 @@
 
     } <!-- end of `@else` -- the FOUR PREVIEWS template -->
 
-    @if (showMeta) {
+    @if (showMeta()) {
       <span class="time folder-time">{{ video.duration | lengthPipe : 'folder' }}</span>
     }
 
@@ -104,7 +104,7 @@
     </div>
   }
 
-  @if (showMeta && video.fileName !== '*UP*') {
+  @if (showMeta() && video.fileName !== '*UP*') {
     <span
       [ngClass]="{ 'larger-font': largerFont() }"
       [ngStyle]="{ color: darkMode() ? '#BBBBBB' : '#000000' }"
@@ -112,7 +112,7 @@
     >
       {{ video.fileName }}
 
-    @if (showMeta) {
+    @if (showMeta()) {
       <div
         class="file-size"
       >
@@ -175,14 +175,14 @@
       />
   </div>
 
-  @if (showMeta) {
+  @if (showMeta()) {
     <span
       class="time"
       [ngClass]="{ 'dark-style': darkMode() }"
     >{{ video.durationDisplay }}</span>
   }
 
-  @if (showMeta && video.resolution) {
+  @if (showMeta() && video.resolution) {
     <span
       class="rez"
       [ngClass]="{ 'dark-style': darkMode() }"
@@ -204,7 +204,7 @@
     [icon]="'icon-show-thumbnails'"
     (click)="sheetClick.emit()" />
 
-@if (showMeta) {
+@if (showMeta()) {
   <span
     [ngClass]="{ 'larger-font': largerFont() }"
     [ngStyle]="{ color: darkMode() ? '#BBBBBB' : '#000000' }"
