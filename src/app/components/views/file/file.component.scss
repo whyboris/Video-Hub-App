@@ -1,10 +1,12 @@
 @use "../../variables";
+
 .element-container {
   cursor: pointer;
   height: 20px;
-  margin: 0px 20px;
+  margin: 0px 10px 0 24px;
   padding: 5px 0;
   position: relative;
+
   &:hover {
     .folder-name,
     .title {
@@ -146,9 +148,10 @@
 
 .larger-font {
   font-size: 16px;
+  margin-top: -2px;
 }
 
 .showing-meta {
   transform: translate(35px, 0);
-  width: calc(100% - 65px);
+  width: calc(100% - 80px);
 }
