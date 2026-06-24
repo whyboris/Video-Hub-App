@@ -41,9 +41,16 @@
 
 .file-size {
   display: block;
+  font-family: monospace;
   font-size: 10px;
   margin: 5px 0;
   opacity: 0.8;
+
+  em {
+    color: variables.$gray-50;
+    font-style: unset;
+    opacity: 0.5;
+  }
 }
 
 .meta-title {
@@ -97,8 +104,9 @@
 
 .year {
   background-color: transparent;
-  border: 0;
   border-radius: 0;
+  border: 0;
+  font-family: monospace;
   font-size: 10px;
   outline: none;
   padding: 0;
@@ -116,7 +124,7 @@
 
 .times-played {
   display: inline-block;
-  margin: 6px 0 0 6px;
+  margin: 6px 0 0 12px;
   vertical-align: top;
 }
 
