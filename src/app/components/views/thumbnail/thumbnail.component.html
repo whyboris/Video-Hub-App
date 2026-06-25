@@ -171,13 +171,15 @@
     <span
       class="rez"
       [ngClass]="{ 'dark-style': darkMode() }"
-    >{{ video.fileSizeDisplay }}</span>
+    >{{ video.fileSizeDisplay }}
 
     @if (video.resolution) {
       <span
         class="time rez-new"
       >{{ video.resolution }}</span>
     }
+  </span>
+
 
     <span
       class="time"
