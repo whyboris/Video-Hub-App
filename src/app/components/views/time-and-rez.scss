@@ -83,9 +83,14 @@
   stroke: #ff2255;
 }
 
+.full-filmstrip {
+  pointer-events: none;
+}
+
 .meta-container,
 .video-box {
   .heart,
+  .sheet-icon,
   .playlist-icon {
     opacity: 0;
   }
@@ -97,6 +102,14 @@
   &:hover {
     .heart {
       opacity: 1;
+    }
+
+    .sheet-icon {
+      opacity: 0.6;
+
+      &:hover {
+        opacity: 1;
+      }
     }
 
     .playlist-icon {

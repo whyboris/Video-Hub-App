@@ -132,12 +132,15 @@
 
     (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
 
-    [ngStyle]="{
-        height: imgHeight() + 'px',
-        'background-image': 'url(' + (hover ? fullFilePath : firstFilePath) + ')',
-        'background-position-x': percentOffset + '%'
-      }"
+    [ngStyle]="{ height: imgHeight() + 'px' }"
   >
+
+    <img
+      class="full-filmstrip"
+      [ngStyle]="{ height: imgHeight() + 'px',
+                  transform: 'translate(' + (-percentOffset) + '%, 0)' }"
+      src="{{ fullFilePath }}"
+    >
 
   @if (video.selected) {
     <app-icon class="selected" [icon]="'icon-show-more-info'" />
@@ -151,40 +154,32 @@
       [icon]="'icon-heart'"
       title="{{ video.stars === 5.5 ? ('BUTTONS.removeFromFavorites' | translate)
                                     : ('BUTTONS.addToFavorites' | translate) }}"
-
      />
   }
 
-  <div
-    class="playlist-icon"
-    [ngClass]="{ 'playlist-icon-active' : video.playlist }"
-    (click)="togglePlaylist()"
-    title="{{ video.playlist ? ('BUTTONS.removeFromPlaylist' | translate)
-                             : ('BUTTONS.addToPlaylist' | translate) }}"
-  >
     <app-icon
-      [icon]="'icon-playlist'"
-      />
-  </div>
+      title="{{ 'BUTTONS.viewDetails' | translate }}"
+      class="sheet-icon"
+      [icon]="'icon-show-thumbnails'"
+      (click)="sheetClick.emit()"
+    />
+
+    <div
+      class="playlist-icon"
+      [ngClass]="{ 'playlist-icon-active' : video.playlist }"
+      (click)="togglePlaylist()"
+      title="{{ video.playlist ? ('BUTTONS.removeFromPlaylist' | translate)
+                              : ('BUTTONS.addToPlaylist' | translate) }}"
+    >
+      <app-icon [icon]="'icon-playlist'" />
+    </div>
 
   @if (showMeta()) {
-    <span
-      class="rez"
-      [ngClass]="{ 'dark-style': darkMode() }"
-    >{{ video.fileSizeDisplay }}
+    <span class="rez" [ngClass]="{ 'dark-style': darkMode() }">{{ video.fileSizeDisplay }}
+      @if (video.resolution) { <span class="time rez-new">{{ video.resolution }}</span>}
+    </span>
 
-    @if (video.resolution) {
-      <span
-        class="time rez-new"
-      >{{ video.resolution }}</span>
-    }
-  </span>
-
-
-    <span
-      class="time"
-      [ngClass]="{ 'dark-style': darkMode() }"
-    >{{ video.durationDisplay }}</span>
+    <span class="time" [ngClass]="{ 'dark-style': darkMode() }">{{ video.durationDisplay }}</span>
   }
 
   @if (!connected()) {
@@ -192,15 +187,7 @@
   }
 
   </div> <!-- end of (B) div --->
-  <!--
-  .sheet-icon needs to be the next sibling of .video-box aka `(B) div` for hover to work - SCSS rule
-  DO NOT SEPARATE!
-  -->
-  <app-icon
-    title="{{ 'BUTTONS.viewDetails' | translate }}"
-    class="sheet-icon"
-    [icon]="'icon-show-thumbnails'"
-    (click)="sheetClick.emit()" />
+
 
 @if (showMeta()) {
   <span

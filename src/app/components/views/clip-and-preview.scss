@@ -45,12 +45,6 @@
     transform: translate(-50%, -50%);
     width: 30%;
   }
-
-  &:hover {
-    + .sheet-icon {
-      opacity: 0.6;
-    }
-  }
 }
 
 .compact-margins {

@@ -103,7 +103,6 @@
         }
       </span>
 
-
       <span class="time" [ngClass]="{ 'dark-style': darkMode() }">{{ video.durationDisplay }}</span>
     }
 
@@ -155,18 +154,13 @@
      />
   }
 
-  </div> <!-- end of video-box -->
-  <!--
-  .sheet-icon needs to be the next sibling of .video-box
-  DO NOT SEPARATE!
-  -->
-  <app-icon
-    class="sheet-icon"
-    [icon]="'icon-show-thumbnails'"
-    (click)="sheetClick.emit()"
-    [ngStyle]="{
-      'opacity': (this.hover ? 1 : 0)
-    }" />
+    <app-icon
+      class="sheet-icon"
+      [icon]="'icon-show-thumbnails'"
+      (click)="sheetClick.emit()"
+    />
+
+  </div>
 
   <!-- ================================= TEXT ================================= -->
 
