@@ -27,7 +27,7 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
 
   readonly refreshPlaylist = output<void>();
   readonly rightClick = output<RightClickEmit>();
-  readonly sheetClick = output<any>(); // does not emit data of any kind
+  readonly sheetClick = output<void>();
   readonly videoClick = output<VideoClickEmit>();
 
   @Input() video: ImageElement;
@@ -127,15 +127,20 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
     clearInterval(this.scrollInterval);
   }
 
+  openDetailsView(): void {
+    event?.stopPropagation();
+    this.sheetClick.emit();
+  }
+
   toggleHeart(): void {
     this.imageElementService.toggleHeart(this.video.index);
-    event.stopPropagation();
+    event?.stopPropagation();
   }
 
   togglePlaylist(): void {
     this.imageElementService.updatePlaylist(this.video.index);
     this.refreshPlaylist.emit();
-    event.stopPropagation();
+    event?.stopPropagation();
   }
 
 }
