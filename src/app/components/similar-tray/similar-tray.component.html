@@ -19,7 +19,7 @@
                                                     | slice : 0 : 12)
                : (imageElementService.imageElements | similarityPipe : true : currentClickedItemName()
                                                     | slice : 0 : 12)
-              ); track item) {
+              ); track item.uuid) {
 
   <app-thumbnail
     (videoClick)="handleClick.emit({ expectedEvent: $event, item: item })"

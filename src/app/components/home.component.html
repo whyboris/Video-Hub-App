@@ -1137,7 +1137,10 @@
 
 </div> <!-- end of window -->
 
-<!-- BOTTOM TRAY SECTION -->
+<!-- ===========    Bottom Tray Section    =========== -->
+
+<!-- -----------       five tabs     ----------------- -->
+
 <div
   class="all-settings-tabs bottom-tray-tabs"
   [ngClass]="{
@@ -1195,7 +1198,9 @@
 }
 </div>
 
-  <!-- ===========    Bottom Tray Section - region below tabs   =========== -->
+<!-- -----------       bottom tray contents     ----------------- -->
+
+<!-- bottom tray container & close button -->
 
 @if (settingsButtons['showDetailsTray'].toggled
   || settingsButtons['showFreq'].toggled
@@ -1214,7 +1219,8 @@
   >
     <app-icon class="close-modal-icon" [icon]="'icon-close'" />
   </div>
-  <!-- MOST SIMILAR & RECENTLY PLAYED -->
+
+<!-- SIMILAR & RECENT -- similar to last clicked, and list of recently played -->
 @if (settingsButtons['showRelatedVideosTray'].toggled
   || settingsButtons['showRecentlyPlayed'].toggled) {
   <app-similar-tray
@@ -1231,7 +1237,8 @@
     [showRecentNotSimilar]="settingsButtons['showRecentlyPlayed'].toggled"
    />
 }
-  <!-- TAGS -->
+
+<!-- TAGS -->
 @if (settingsButtons['showTagTray'].toggled) {
   <app-tag-tray
     (handleTagWordClicked)="handleTagWordClicked($event.tag.name, $event.event)"
@@ -1244,7 +1251,8 @@
     [updateTotalSelectedTrigger]="tagBatchModeSelectionChangedTrigger"
    />
 }
-  <!-- WORD CLOUD -->
+
+<!-- WORD CLOUD -->
 @if (settingsButtons['showFreq'].toggled) {
   <div
     class="cloud-frequency"
@@ -1276,7 +1284,8 @@
   }
   </div>
 }
-  <!-- RECENT -- that is current (last-clicked) file -->
+
+<!-- DETAILS -- for the last-clicked file -->
 @if (settingsButtons['showDetailsTray'].toggled) {
   <div
     class="current-clicked"
@@ -1332,8 +1341,9 @@
     }
   </div>
 }
+
 </div>
-}   <!-- end of bottom tray section (just below all the tabs)    =========== -->
+}   <!-- end of bottom tray section (just below all the tabs) -->
 
 <!-- WIZARD -->
 @if (wizard.showWizard) {

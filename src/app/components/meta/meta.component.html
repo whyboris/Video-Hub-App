@@ -1,5 +1,5 @@
 <div
-  class="meta"
+  class="meta-container"
   [ngStyle]="{
     'min-height': imgHeight() + 'px',
     'width': maxWidth() + 'px'
@@ -26,7 +26,7 @@
 
 @if (renamingWIP === video.cleanName) {
   <span
-    class="file-size"
+    class="metadata-text"
     [ngClass]="{ darkModeText: darkMode() }"
   >
 
@@ -69,14 +69,14 @@
 
   @if (!renameError) {
     <span
-      class="file-size renaming-message"
+      class="metadata-text renaming-message"
       [ngClass]="{ 'renaming-message-dark-mode': darkMode() }"
     >
       {{ 'SYSTEM.pressEscToStopRenaming' | translate }}
     </span>
   } @else {
     <span
-      class="file-size renaming-message renaming-error"
+      class="metadata-text renaming-message renaming-error"
       [ngClass]="{ 'renaming-error-dark-mode': darkMode() }"
     >
       {{ 'SYSTEM.fileRenameError' | translate }}
@@ -131,7 +131,7 @@
 
 <!-- Times played -->
 @if (video.timesPlayed) {
-  <span class="file-size times-played" [ngStyle]="{color: darkMode() ? '#DDDDDD' : '#000000'}" >
+  <span class="metadata-text times-played" [ngStyle]="{color: darkMode() ? '#DDDDDD' : '#000000'}" >
     <em>{{ 'TAGS.timesPlayed' | translate }}:</em> {{ video.timesPlayed }}
   </span>
 }
@@ -139,13 +139,16 @@
 <!-- Add tags / view tags -->
 @if (showManualTags()) {
   <app-add-tag-component
+    style="display: block;"
     (tag)="addThisTag($event)"
     [darkMode]="darkMode()"
-    style="display: block;"
    />
 }
 
   <app-view-tags-component
+    class="view-tags-holder"
+    [ngStyle]="{ 'min-height': imgHeight() - 128 + 'px' }"
+
     [tags]="(video | tagDisplayPipe : showManualTags()
                                   : showAutoFileTags()
                                   : showAutoFolderTags()
@@ -153,19 +156,18 @@
                     | autoTagSortPipe : sortAutoTags"
     [darkMode]="darkMode()"
     [enableColorPicker]="true"
-    (tagClicked)="filterThisTag($event)"
+
     (removeTagEmit)="removeThisTag($event)"
+    (tagClicked)="filterThisTag($event)"
     (tagRightClick)="onTagRightClick($event)"
-    class="view-tags-holder"
-    [ngStyle]="{ 'min-height': imgHeight() - 128 + 'px' }"
    />
 
 @if (showVideoNotes()) {
   <textarea
     #videoNotes
+    [ngClass]="{ 'notes-dark-mode': darkMode() }"
     (blur)="saveVideoNotes($event)"
     placeholder="{{ 'TAGS.notes' | translate }}"
-    [ngClass]="{ 'notes-dark-mode': darkMode() }"
   >{{ video.notes }}</textarea>
 }
 
