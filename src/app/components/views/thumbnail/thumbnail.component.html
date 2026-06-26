@@ -139,7 +139,7 @@
       class="full-filmstrip"
       [ngStyle]="{ height: imgHeight() + 'px',
                   transform: 'translate(' + (-percentOffset) + '%, 0)' }"
-      src="{{ fullFilePath }}"
+      src="{{ hover ? fullFilePath : firstFilePath }}"
     >
 
   @if (video.selected) {
