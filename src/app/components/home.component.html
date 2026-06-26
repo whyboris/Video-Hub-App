@@ -1221,6 +1221,8 @@
     (handleClick)="handleClick($event.expectedEvent, $event.item)"
     (rightMouseClicked)="rightMouseClicked($event.mouseEvent, $event.item)"
     (showMoreRecentlyPlayed)="sortByRecentlyPlayed()"
+    (openDetailsView)="this.openThumbnailSheet($event)"
+
     [appState]="appState"
     [currentClickedItemName]="currentClickedItemName"
     [previewHeightRelated]="previewHeightRelated"
@@ -1274,7 +1276,7 @@
   }
   </div>
 }
-  <!-- CURRENT (last-clicked) FILE -->
+  <!-- RECENT -- that is current (last-clicked) file -->
 @if (settingsButtons['showDetailsTray'].toggled) {
   <div
     class="current-clicked"

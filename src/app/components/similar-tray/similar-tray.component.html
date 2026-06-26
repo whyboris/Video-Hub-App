@@ -24,6 +24,7 @@
   <app-thumbnail
     (videoClick)="handleClick.emit({ expectedEvent: $event, item: item })"
     (contextmenu)="rightMouseClicked.emit({ mouseEvent: $event, item: item })"
+    (sheetClick)="openDetailsView.emit(item)"
 
     [elHeight]="previewHeightRelated() + 50"
     [elWidth]="previewWidthRelated()"
