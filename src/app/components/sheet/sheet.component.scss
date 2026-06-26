@@ -68,6 +68,7 @@
   background-size: cover;
   border-radius: 6px;
   cursor: pointer;
+  height: 100%;
   overflow: hidden;
   position: relative;
 
@@ -78,6 +79,7 @@
   }
 
   .set-favorite-thumb {
+    cursor: cell;
     fill: yellow;
     height: 20px;
     opacity: 0;
@@ -86,6 +88,7 @@
     stroke-linejoin: round;
     stroke-width: 0.3px;
     stroke: #000000;
+    top: 0;
     width: 20px;
 
     &:hover {

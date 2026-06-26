@@ -81,7 +81,7 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
   }
 
   defaultScreenOffset(video: ImageElement): number {
-    return 100 * video.defaultScreen / (video.screens);
+    return 100 * video.defaultScreen / video.screens;
   }
 
   mouseEntered() {
@@ -91,7 +91,7 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
       this.hover = true;
 
       this.scrollInterval = setInterval(() => {
-        this.percentOffset = this.indexToShow * (100 / (this.video.screens - 1));
+        this.percentOffset = this.indexToShow * (100 / this.video.screens);
         this.indexToShow++;
       }, 750);
 
@@ -119,7 +119,7 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
     if (this.hoverScrub()) {
       const cursorX = $event.layerX;
       this.indexToShow = Math.floor(cursorX * (this.video.screens / this.containerWidth));
-      this.percentOffset = this.indexToShow * (100 / (this.video.screens));
+      this.percentOffset = this.indexToShow * (100 / this.video.screens);
     }
   }
 
