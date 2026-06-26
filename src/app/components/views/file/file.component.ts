@@ -27,9 +27,9 @@ export class FileComponent {
     public imageElementService: ImageElementService,
   ) { }
 
-  toggleHeart(): void {
+  toggleHeart(mouseClick: MouseEvent): void {
+    mouseClick.stopPropagation();
     this.imageElementService.toggleHeart(this.video.index);
-    event.stopPropagation();
   }
 
 }

@@ -3,7 +3,7 @@
 .element-container {
   cursor: pointer;
   height: 20px;
-  margin: 0px 10px 0 24px;
+  margin: 0px 10px 0 27px;
   padding: 5px 0;
   position: relative;
 
@@ -99,6 +99,7 @@
 .folder-size {
   color: variables.$gray-60;
   display: inline-block;
+  font-family: monospace;
   font-size: 10px;
 }
 
@@ -109,6 +110,7 @@
 .number-of-files {
   color: variables.$gray-60;
   display: block;
+  font-family: monospace;
   font-size: 10px;
   left: -25px;
   position: absolute;

@@ -140,7 +140,7 @@
     <app-icon
       class="heart"
       [ngClass]="{ 'heart-lit' : video.stars === 5.5 }"
-      (click)="toggleHeart()"
+      (click)="toggleHeart($event)"
       [icon]="'icon-heart'"
       title="{{ video.stars === 5.5 ? ('BUTTONS.removeFromFavorites' | translate)
                                     : ('BUTTONS.addToFavorites' | translate) }}"

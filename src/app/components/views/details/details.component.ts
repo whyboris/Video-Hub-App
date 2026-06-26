@@ -96,11 +96,11 @@ export class DetailsComponent implements OnInit {
     return 100 * video.defaultScreen / (video.screens - 1);
   }
 
-  toggleHeart(): void {
+  toggleHeart(mouseClick: MouseEvent): void {
+    mouseClick.stopPropagation();
     const video = this.video();
     this.imageElementService.toggleHeart(video.index);
     this.starRatingHack = video.stars;
-    event.stopPropagation();
   }
 
   ngOnInit() {
