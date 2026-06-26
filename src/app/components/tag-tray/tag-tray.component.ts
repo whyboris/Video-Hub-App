@@ -1,12 +1,12 @@
 import { Component, input, output, effect } from '@angular/core';
 
+import { ImageElementService } from './../../services/image-element.service';
 import { ManualTagsService } from '../tags-manual/manual-tags.service';
+
+import { modalAnimation } from '../../common/animations';
 
 import type { AppStateInterface } from '../../common/app-state';
 import type { TagEmit } from '../../../../interfaces/shared-interfaces';
-import { modalAnimation } from '../../common/animations';
-import type { SettingsButtonsType } from '../../common/settings-buttons';
-import { ImageElementService } from './../../services/image-element.service';
 
 @Component({
   standalone: false,
@@ -30,7 +30,6 @@ export class TagTrayComponent {
   readonly appState = input<AppStateInterface>();
   readonly batchTaggingMode = input();
   readonly darkMode = input<boolean>();
-  readonly settingsButtons = input<SettingsButtonsType>();
   readonly updateTotalSelectedTrigger = input<number>(0);
 
   manualTagFilterString = '';
