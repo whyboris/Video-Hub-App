@@ -1,8 +1,9 @@
 import { Component, input, output } from '@angular/core';
 
 import { ImageElementService } from './../../services/image-element.service';
-import { modalAnimation, similarResultsText } from '../../common/animations';
 import { SourceFolderService } from '../statistics/source-folder.service';
+
+import { modalAnimation, similarResultsText } from '../../common/animations';
 
 import type { ImageElement } from '../../../../interfaces/final-object.interface';
 import type { RightClickEmit } from '../../../../interfaces/shared-interfaces';
@@ -22,10 +23,9 @@ import type { SettingsButtonsType } from '../../common/settings-buttons';
 export class SimilarTrayComponent {
 
   readonly handleClick = output<any>(); // TODO: fix up the vague type
-  readonly rightMouseClicked = output<RightClickEmit>();
-  readonly showMoreRecentlyPlayed = output<any>();
-
   readonly openDetailsView = output<ImageElement>();
+  readonly rightMouseClicked = output<RightClickEmit>();
+  readonly showMoreRecentlyPlayed = output<void>();
 
   readonly appState = input(undefined);
   readonly currentClickedItemName = input(undefined);
