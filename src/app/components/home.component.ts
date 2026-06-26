@@ -1511,7 +1511,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Helper method for `toggleButton` to set `toggled` boolean true
    * @param uniqueKey
    */
-  toggleButtonTrue(uniqueKey: string): void {
+  toggleButtonTrue(uniqueKey: SettingsButtonKey): void {
     this.settingsButtons[uniqueKey].toggled = true;
   }
 
@@ -1519,7 +1519,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Helper method for `toggleButton` to set `toggled` boolean to its opposite
    * @param uniqueKey
    */
-  toggleButtonOpposite(uniqueKey: string): void {
+  toggleButtonOpposite(uniqueKey: SettingsButtonKey): void {
     this.settingsButtons[uniqueKey].toggled = !this.settingsButtons[uniqueKey].toggled;
   }
 
@@ -2550,11 +2550,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     // Clear starts-with filter
     this.startsWithSearchString = '';
-
-    // Clear sort filter
-    // this.sortType = 'default';
-    // this.appState.currentSort = 'default';
-    // this.toggleButtonOff('sortOrder');
 
     // Clear search strings
     this.fuzzySearchString = '';

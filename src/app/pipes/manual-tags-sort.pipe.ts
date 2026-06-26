@@ -29,11 +29,13 @@ export class ManualTagSortPipe implements PipeTransform {
     let sortedTags: string[];
 
     if (sortByFrequency) {
-      sortedTags = allTags.sort((a, b): any => {
+      sortedTags = allTags.sort((a, b) => {
         return this.manualTagService.tagsFrequencyMap.get(a) < this.manualTagService.tagsFrequencyMap.get(b) ? 1 : -1;
       });
     } else {
-      sortedTags = allTags.sort();
+      sortedTags = allTags.sort((a, b) => {
+        return a.localeCompare(b);
+      });
     }
 
     return sortedTags.slice(); // return shallow copy else the view does not update when adding new tags in details view
