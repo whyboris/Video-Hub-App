@@ -75,7 +75,6 @@ export class TagTrayComponent {
   }
 
   deselectAllPressed(): void {
-    console.log('pressed')
     this.recomputeTrigger = Date.now();
     this.selectNone.emit();
   }
