@@ -1,4 +1,4 @@
-@for (filter of filters(); track filter; let j = $index) {
+@for (filter of filters(); track filter.uniqueKey; let j = $index) {
 
   @if (settingsButtons[filter.uniqueKey].toggled) {
 

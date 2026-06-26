@@ -18,7 +18,7 @@
 
   <app-slider-filter
     (newSliderFilterSelected)="newStarFilterSelected.emit($event)"
-    [darkMode]="settingsButtons()['darkMode'].toggled"
+    [darkMode]="settingsButtons().darkMode.toggled"
     [maximumValue]="6"
     [minimumValue]="0"
     [steps]="6"
