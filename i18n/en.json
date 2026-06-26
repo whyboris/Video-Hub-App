@@ -405,10 +405,7 @@
     "tagExclusion": "tags do not have",
     "tagIntersection": "tags include",
     "tagUnion": "tags include any",
-    "totalFolders": "folder",
-    "totalFoldersPlural": "folders",
-    "videoNotes": "notes have",
-    "videos": "videos"
+    "videoNotes": "notes have"
   },
   "STATISTICS": {
     "addFolderToHub": "Add folder to hub",

@@ -44,11 +44,43 @@
 }
 
 .filtering-total {
-  color: variables.$gray-40;
-  cursor: default;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  justify-content: flex-end;
+  // flex controls
+
+  color: variables.$gray-60;
+  font-family: monospace;
   font-size: 12px;
-  margin: 15px 0 15px;
-  text-align: right;
+  margin: 0;
+
+  .container-icon-total {
+    display: inline-block;
+    fill: variables.$gray-40;
+    margin-left: 14px;
+    transform: translate(-4px, 2px);
+    width: 15px;
+  }
+}
+
+.total-found {
+  color: variables.$gray-40;
+  font-family: unset;
+
+  em {
+    color: variables.$gray-60;
+    font-style: unset;
+    font-family: monospace;
+  }
+}
+
+.total-found-dark {
+  color: variables.$gray-60;
+
+  em {
+    color: variables.$gray-40;
+  }
 }
 
 .clear-all-filters {
