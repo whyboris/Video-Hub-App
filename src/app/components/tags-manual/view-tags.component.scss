@@ -47,16 +47,15 @@
   }
 
   .frequency {
-    background-color: variables.$manual-tag-frequency;
-    border: 1px solid variables.$gray-20;
-    box-shadow: none;
     color: variables.$gray-90;
     cursor: initial;
+    font-family: monospace;
     font-size: 8px;
-    padding-left: 10px;
-    padding: 2px 4px 1px 8px;
-    transform: translate(-5px, 0);
-    z-index: 1;
+    margin-right: 1px;
+  }
+
+  .frequency-dark {
+    color: variables.$gray-30;
   }
 }
 
