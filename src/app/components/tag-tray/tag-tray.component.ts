@@ -26,6 +26,7 @@ export class TagTrayComponent {
   readonly toggleBatchTaggingMode = output<void>();
   readonly handleTagWordClicked = output<TagEmit>();
   readonly selectAll = output<void>();
+  readonly selectNone = output<void>();
 
   readonly appState = input<AppStateInterface>();
   readonly batchTaggingMode = input();
@@ -71,6 +72,12 @@ export class TagTrayComponent {
   selectAllPressed(): void {
     this.recomputeTrigger = Date.now();
     this.selectAll.emit();
+  }
+
+  deselectAllPressed(): void {
+    console.log('pressed')
+    this.recomputeTrigger = Date.now();
+    this.selectNone.emit();
   }
 
   /**

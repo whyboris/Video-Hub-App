@@ -2436,6 +2436,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
+   * Deselect all videos for batch tagging
+   */
+  unselectAllTags(): void {
+    this.pipeSideEffectService.selectNone();
+  }
+
+  /**
    * Check whether new version of the app is available
    */
   checkForNewVersion(): void {

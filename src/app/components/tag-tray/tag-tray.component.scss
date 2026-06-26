@@ -18,7 +18,7 @@
 
     .batch-mode-instructions {
       text-align: center;
-      margin-top: 23px;
+      margin-top: 11px;
     }
 
     .total-selected {
@@ -27,6 +27,21 @@
       font-size: 12px;
       margin-top: 16px;
       text-align: center;
+
+      &:hover {
+        cursor: not-allowed;
+        text-decoration: line-through;
+      }
+
+      em {
+        color: black;
+        font-style: unset;
+        font-family: monospace;
+      }
+
+      .em-dark-mode {
+        color: white !important;
+      }
     }
 
   }
@@ -44,10 +59,12 @@
   .manual-tag-tray-label {
     display: inline;
     margin: 16px 0 0 16px;
+    opacity: 0.6;
   }
 
   .more-info {
     display: inline-block;
+    font-family: monospace;
     margin-left: 2px;
   }
 
@@ -62,7 +79,7 @@
     pointer-events: none;
     position: absolute;
     text-align: left;
-    transform: translate(10px, 12px);
+    transform: translate(10px, 2px);
     width: 160px;
     z-index: 30;
   }
@@ -88,6 +105,11 @@
     &:hover {
       color: variables.$pretty-blue;
     }
+  }
+
+  .button-select-all,
+  .total-selected {
+    margin-top: 6px !important;
   }
 
   .all-the-tags {

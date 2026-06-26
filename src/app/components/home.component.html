@@ -1246,6 +1246,7 @@
   <app-tag-tray
     (handleTagWordClicked)="handleTagWordClicked($event.tag.name, $event.event)"
     (selectAll)="selectAllVisible()"
+    (selectNone)="unselectAllTags()"
     (toggleBatchTaggingMode)="toggleBatchTaggingMode()"
     [appState]="appState"
     [batchTaggingMode]="batchTaggingMode"
