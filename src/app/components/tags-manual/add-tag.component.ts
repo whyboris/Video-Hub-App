@@ -33,10 +33,10 @@ export class AddTagComponent {
     this.typeAhead = this.manualTagsService.getTypeahead(text);
   }
 
-  tabPressed($event): void {
+  tabPressed(keypress: KeyboardEvent): void {
     if (this.typeAhead !== '') {
       this.emitTag(this.typeAhead);
-      $event.preventDefault();
+      keypress.preventDefault();
     }
   }
 

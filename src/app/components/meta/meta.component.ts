@@ -189,7 +189,7 @@ export class MetaComponent implements OnInit, OnDestroy {
    * Prevent `e` and `.` input
    * @param event key press on the <input>
    */
-  preventUnwantedKeypress(event: any): void {
+  preventUnwantedKeypress(event: KeyboardEvent): void {
     if (event.key === '.'
      || event.key === 'e'
      || event.key === '-'

@@ -1,52 +1,31 @@
-<div
-  class="element-container"
->
-
-  <!-- FOLDER BLOCK -->
+<div class="element-container">
 
 @if (video.cleanName === '*FOLDER*') {
 
-  @if (video.fileName !== '*UP*') {
+  @if (video.fileName === '*UP*') {
+
+    <app-icon class="back-icon" [icon]="'icon-chevron-left'" [ngClass]="{ 'back-icon-dark-mode': darkMode() }" />
+
+  } @else {
+
+    @if (showMeta()) { <div class="number-of-files">{{ video.fileSizeDisplay | number }}</div> }
+
+    <app-icon [icon]="'icon-folder-blank'" class="icon-folder-lol" />
+
+    <div class="folder-name" [ngClass]="{ 'folder-name-dark-mode': darkMode() }">
+      {{ video.fileName }}
+      @if (showMeta()) { <div class="folder-size">{{ video.fileSize | fileSizePipe }}</div> }
+    </div>
 
     @if (showMeta()) {
-      <div class="number-of-files">
-        {{ video.fileSizeDisplay | number }}
-      </div>
-    }
-
-      <app-icon [icon]="'icon-folder-blank'" class="icon-folder-lol" />
-      <div
-        class="folder-name"
-        [ngClass]="{ 'folder-name-dark-mode': darkMode() }"
-      >{{ video.fileName }}
-
-      @if (showMeta()) {
-        <div class="folder-size">
-          {{ video.fileSize | fileSizePipe }}
-        </div>
-      }
-
-      </div>
-    @if (showMeta()) {
-      <div
-        class="length"
-        [ngClass]="{ 'meta-dark-mode': darkMode() }"
-      >
+      <div class="length" [ngClass]="{ 'meta-dark-mode': darkMode() }">
         {{ video.duration | lengthPipe : 'folder' }}
       </div>
     }
 
-    } @else {
-      <app-icon
-        class="back-icon"
-        [icon]="'icon-chevron-left'"
-        [ngClass]="{ 'back-icon-dark-mode': darkMode() }"
-       />
-    }
+  }
 
-  } @else {
-
-  <!-- INDIVIDUAL FILE BLOCK -->
+} @else { <!-- INDIVIDUAL FILE BLOCK -->
 
   @if (video.selected) {
     <app-icon class="selected-file-view" [icon]="'icon-show-more-info'" />
@@ -54,7 +33,7 @@
 
   @if (showFavorites()) {
     <app-icon
-      (click)="toggleHeart()"
+      (click)="toggleHeart($event)"
       class="heart"
       [ngClass]="{ 'heart-lit' : video.stars === 5.5, 'heart-selected' : video.selected }"
       [icon]="'icon-heart'"
@@ -62,13 +41,9 @@
   }
 
   @if (showMeta()) {
-    <div
-      [ngClass]="{ 'meta-dark-mode': darkMode() }"
-      class="size"
-      >
-      {{ video.resolution }}
-    </div>
+    <div [ngClass]="{ 'meta-dark-mode': darkMode() }" class="size">{{ video.resolution }}</div>
   }
+
     <div
       class="title"
       [ngClass]="{
@@ -79,25 +54,16 @@
     >
       {{ video.cleanName }}
 
-    @if (showMeta()) {
-      <div
-        class="file-size"
-        [ngClass]="{ 'meta-dark-mode': darkMode() }"
-      >
-        ({{ video.fileSizeDisplay }})
-      </div>
-    }
+      @if (showMeta()) {
+        <div class="file-size" [ngClass]="{ 'meta-dark-mode': darkMode() }">({{ video.fileSizeDisplay }})</div>
+      }
 
     </div>
 
   @if (showMeta()) {
-    <div
-      class="length"
-      [ngClass]="{ 'meta-dark-mode': darkMode() }"
-    >
-      {{ video.durationDisplay }}
-    </div>
+    <div class="length" [ngClass]="{ 'meta-dark-mode': darkMode() }">{{ video.durationDisplay }}</div>
   }
+
 }
 
 </div>
