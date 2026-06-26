@@ -1,6 +1,8 @@
 import { Component, Input, input, output } from '@angular/core';
 import { filterItemAppear } from '../../common/animations';
+
 import type { SettingsButtonsType } from '../../common/settings-buttons';
+import type { FilterObject } from '../../common/filters';
 
 interface FilterEmit {
   word: string;
@@ -26,7 +28,7 @@ export class SearchBoxesComponent {
   readonly removeThisFilter = output<{ item: number; origin: number; }>();
   readonly typeaheadTabPressed = output<number>();
 
-  readonly filters = input();
+  readonly filters = input<FilterObject[]>();
 
   @Input() settingsButtons: SettingsButtonsType;
 
