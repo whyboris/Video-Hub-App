@@ -1216,6 +1216,7 @@
   <div
     (click)="toggleAllTrayViewsButtonsOff()"
     class="close-bottom-tray"
+    [ngClass]="{ 'close-bottom-tray-dark': settingsButtons['darkMode'].toggled }"
     title="{{ 'SETTINGS.closeBottomTray' | translate }}"
   >
     <app-icon class="close-modal-icon" [icon]="'icon-close'" />

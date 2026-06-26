@@ -237,6 +237,10 @@
     top: 5px;
     z-index: 10;
   }
+
+  .close-bottom-tray-dark {
+    fill: variables.$gray-30;
+  }
 }
 
 .bottom-tray-tabs {
@@ -253,7 +257,7 @@
 }
 
 .bottom-tray-dark {
-  background: black;
+  background: variables.$gray-90;
   border-top: 1px solid variables.$gray-80;
 
   button,
@@ -276,13 +280,13 @@
 
 .bottom-tray-tabs-dark {
   button {
-    background: black !important;
+    background: variables.$gray-90 !important;
     border: 1px solid #333333 !important;
     color: white;
   }
 
   .active-tab {
-    border-bottom: 1px solid black !important;
+    border-bottom: 1px solid variables.$gray-90 !important;
   }
 }
 
