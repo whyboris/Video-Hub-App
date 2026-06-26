@@ -67,6 +67,11 @@
     z-index: 30;
   }
 
+  .manual-tag-tray-label-info-dark-mode {
+    background: variables.$gray-90;
+    color: variables.$gray-10;
+  }
+
   .more-info:hover + .manual-tag-tray-label-info {
     opacity: 1;
   }

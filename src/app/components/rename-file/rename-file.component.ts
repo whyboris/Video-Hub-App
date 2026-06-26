@@ -23,12 +23,12 @@ import type { RenameFileResponse } from '../../../../interfaces/shared-interface
 export class RenameFileComponent implements OnInit, OnDestroy {
   readonly renameFileInput = viewChild<ElementRef>('renameFileInput');
 
-  readonly currentRightClickedItem = input<ImageElement>(undefined);
-  readonly darkMode = input<boolean>(undefined);
-  readonly macVersion = input<boolean>(undefined);
-  readonly selectedSourceFolder = input<string>(undefined);
+  readonly currentRightClickedItem = input<ImageElement>();
+  readonly darkMode = input<boolean>();
+  readonly macVersion = input<boolean>();
+  readonly selectedSourceFolder = input<string>();
 
-  readonly renameResponse = input<Observable<RenameFileResponse>>(undefined);
+  readonly renameResponse = input<Observable<RenameFileResponse>>();
 
   renamingWIP: string;
   renamingExtension: string;

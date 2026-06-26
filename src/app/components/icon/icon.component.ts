@@ -9,7 +9,7 @@ import { Component, input } from '@angular/core';
 })
 export class IconComponent {
 
-  readonly icon = input<string>(undefined);
+  readonly icon = input<string>();
 
   constructor() { }
 

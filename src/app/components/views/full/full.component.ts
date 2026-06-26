@@ -1,6 +1,5 @@
 import type { OnInit} from '@angular/core';
 import { Component, Input, input, output } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 
 import { FilePathService } from '../file-path.service';
 
@@ -38,15 +37,15 @@ export class FullViewComponent implements OnInit {
     this.render();
   }
 
-  readonly video = input<ImageElement>(undefined);
+  readonly video = input<ImageElement>();
 
-  readonly darkMode = input<boolean>(undefined);
-  readonly elHeight = input<number>(undefined);
-  readonly folderPath = input<string>(undefined);
-  readonly hubName = input<string>(undefined);
-  readonly largerFont = input<boolean>(undefined);
-  readonly showMeta = input<boolean>(undefined);
-  readonly showFavorites = input<boolean>(undefined);
+  readonly darkMode = input<boolean>();
+  readonly elHeight = input<number>();
+  readonly folderPath = input<string>();
+  readonly hubName = input<string>();
+  readonly largerFont = input<boolean>();
+  readonly showMeta = input<boolean>();
+  readonly showFavorites = input<boolean>();
 
   _imgHeight: number;
   _metaWidth: number;
@@ -56,8 +55,7 @@ export class FullViewComponent implements OnInit {
 
   constructor(
     public filePathService: FilePathService,
-    public imageElementService: ImageElementService,
-    public sanitizer: DomSanitizer
+    public imageElementService: ImageElementService
   ) { }
 
   ngOnInit() {

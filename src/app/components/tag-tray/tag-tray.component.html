@@ -8,7 +8,7 @@
 
     <input
       class="filter-general manual-tag-tray-filter"
-      [ngClass]="{ 'manual-tag-tray-filter-dark': settingsButtons()['darkMode'].toggled }"
+      [ngClass]="{ 'manual-tag-tray-filter-dark': darkMode() }"
       (keyup.esc)="manualTagFilterString = ''"
       [(ngModel)]="manualTagFilterString"
       placeholder="{{ 'TAGS.filterTags' | translate }}"
@@ -40,7 +40,11 @@
 
       <span class="more-info">i</span>
 
-      <div class="manual-tag-tray-label-info" style="line-height: 20px">
+      <div
+        class="manual-tag-tray-label-info"
+        [ngClass]="{ 'manual-tag-tray-label-info-dark-mode': darkMode() }"
+        style="line-height: 20px"
+      >
         {{ 'TAGS.clickTagToAdd' | translate }}
       </div>
 

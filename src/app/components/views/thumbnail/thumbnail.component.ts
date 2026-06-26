@@ -30,6 +30,8 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
   readonly sheetClick = output<void>();
   readonly videoClick = output<VideoClickEmit>();
 
+  readonly heartPressed = output<void>();
+
   @Input() video: ImageElement;
 
   readonly compactView = input<boolean>();
@@ -137,6 +139,7 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
     leftClick.stopPropagation();
 
     this.imageElementService.toggleHeart(this.video.index);
+    this.heartPressed.emit();
   }
 
   togglePlaylist(leftClick: MouseEvent): void {

@@ -17,6 +17,7 @@
   display: block;
   font-family: monospace;
   font-size: 10px;
+  line-height: 16px;
   margin: 5px 0;
   opacity: 0.8;
 
@@ -25,6 +26,24 @@
     font-style: unset;
     opacity: 0.5;
   }
+}
+
+.year-container {
+  contain: inline-size;
+  display: inline-block;
+  vertical-align: top;
+}
+
+input[type=number] {
+  height: 30px;
+  position: absolute;
+  transform: translate(0, -7px);
+}
+
+input[type=number]:hover::-webkit-inner-spin-button {
+  cursor: ns-resize;
+  height: 30px;
+  width: 14px;
 }
 
 .meta-title {

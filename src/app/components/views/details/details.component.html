@@ -7,36 +7,40 @@
   [ngClass]="{ 'side-by-side': showTwoColumns() }"
 >
 
-  <div
-    #filmstripHolder
-    class="video-box"
-    (mousemove)="mouseIsMoving($event)"
-    (mouseenter)="mouseEnter()"
-    (mouseleave)="mouseLeave()"
-    (click)="   videoClick.emit({ mouseEvent: $event, thumbIndex: indexToShow })"
-    (dblclick)="videoClick.emit({ mouseEvent: $event, thumbIndex: indexToShow, doubleClick: true })"
+  <div class="video-box">
+
+   <app-thumbnail
     (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video() })"
+    (heartPressed)="toggleHeart()"
+    (refreshPlaylist)="refreshPlaylist.emit()"
+    (sheetClick)="sheetClick.emit()"
+    (videoClick)="videoClick.emit($event)"
+
+    [video]="video()"
+
+    [compactView]="true"
+    [connected]="connected()"
+    [darkMode]="darkMode()"
+    [draggable]="draggable()"
+    [elHeight]="imgHeight()"
+    [elWidth]="elWidth()"
+    [folderPath]="folderPath()"
+    [hoverScrub]="hoverScrub()"
+    [hubName]="hubName()"
+    [imgHeight]="elHeight()"
+    [returnToFirstScreenshot]="returnToFirstScreenshot()"
+    [showFavorites]="showFavorites()"
+    [showMeta]="false"
+    [thumbAutoAdvance]="thumbAutoAdvance()"
+
+    style="display: inline-block"
     [ngStyle]="{
         height: imgHeight() + 'px',
         width: elWidth() + 'px',
         'max-width': elWidth() + 'px',
-        'background-image': 'url(' + ((this.video().defaultScreen !== undefined) || hover ? filmstripPath : firstFilePath) + ')',
-        'background-position-x': percentOffset + '%'
       }"
-  >
+    />
 
-  @if (showFavorites()) {
-    <app-icon
-      (click)="toggleHeart($event)"
-      class="heart"
-      [ngClass]="{ 'heart-lit' : video().stars === 5.5 }"
-      [icon]="'icon-heart'"
-     />
-  }
-
-  @if (video().selected) {
-    <app-icon class="selected" [icon]="'icon-show-more-info'" />
-  }
   </div>
 
   <app-meta-item
@@ -44,20 +48,19 @@
 
     [video]="video()"
 
-    [imgHeight]="imgHeight()"
-    [maxWidth]="maxWidth() / (showTwoColumns() ? 2 : 1) - elWidth()"
-    [star]="this.star()"
-
-    [starRatingHack]="starRatingHack"
     [darkMode]="darkMode()"
+    [imgHeight]="imgHeight()"
     [largerFont]="largerFont()"
+    [maxWidth]="maxWidth() / (showTwoColumns() ? 2 : 1) - elWidth()"
+    [selectedSourceFolder]="selectedSourceFolder()"
     [showAutoFileTags]="showAutoFileTags()"
     [showAutoFolderTags]="showAutoFolderTags()"
     [showManualTags]="showManualTags()"
     [showMeta]="showMeta()"
     [showVideoNotes]="showVideoNotes()"
+    [star]="this.star()"
+    [starRatingHack]="starRatingHack"
 
-    [selectedSourceFolder]="selectedSourceFolder()"
     [renameResponse]="renameResponse().asObservable()"
    />
 

@@ -1037,37 +1037,38 @@
           (videoClick)="handleClick($event, item)"
           (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
           (filterTag)="handleTagWordClicked($event.tag.name, $event.event)"
+          (sheetClick)="this.openThumbnailSheet(item)"
 
           (drop)="droppedSomethingOverVideo($event, item)"
+
+          (refreshPlaylist)="refreshPlaylistIfShowing()"
 
           [draggable]="settingsButtons['dragVideoOutOfApp'].toggled"
           (dragstart)="draggingVideoFile($event, item)"
 
           [video]="item"
 
-          [showTwoColumns]="appState.currentView === 'showDetails2'"
-
-          [maxWidth]="galleryWidth - 40"
-
+          [connected]="sourceFolderService.sourceFolderConnected[item.inputSource]"
+          [darkMode]="settingsButtons['darkMode'].toggled"
           [elHeight]="previewHeight"
           [elWidth]="previewWidth"
           [folderPath]="appState.selectedOutputFolder"
+          [hoverScrub]="settingsButtons['hoverScrub'].toggled"
           [hubName]="appState.hubName"
           [imgHeight]="previewHeight"
-          [selectedSourceFolder]="sourceFolderService.selectedSourceFolder[item.inputSource]?.path"
-
-          [star]="item.stars"
-
-          [darkMode]="settingsButtons['darkMode'].toggled"
-          [hoverScrub]="settingsButtons['hoverScrub'].toggled"
           [largerFont]="settingsButtons['fontSizeLarger'].toggled"
+          [maxWidth]="galleryWidth - 40"
           [returnToFirstScreenshot]="settingsButtons['returnToFirstScreenshot'].toggled"
+          [selectedSourceFolder]="sourceFolderService.selectedSourceFolder[item.inputSource]?.path"
           [showAutoFileTags]="settingsButtons['autoFileTags'].toggled"
           [showAutoFolderTags]="settingsButtons['autoFolderTags'].toggled"
+          [showFavorites]="settingsButtons['favorites'].toggled"
           [showManualTags]="settingsButtons['manualTags'].toggled"
           [showMeta]="settingsButtons['showMoreInfo'].toggled"
+          [showTwoColumns]="appState.currentView === 'showDetails2'"
           [showVideoNotes]="settingsButtons['showVideoNotes'].toggled"
-          [showFavorites]="settingsButtons['favorites'].toggled"
+          [star]="item.stars"
+          [thumbAutoAdvance]="settingsButtons['thumbAutoAdvance'].toggled"
 
           [renameResponse]="renameFileResponseBehaviorSubject"
 
@@ -1215,6 +1216,7 @@
   <div
     (click)="toggleAllTrayViewsButtonsOff()"
     class="close-bottom-tray"
+    [ngClass]="{ 'close-bottom-tray-dark': settingsButtons['darkMode'].toggled }"
     title="{{ 'SETTINGS.closeBottomTray' | translate }}"
   >
     <app-icon class="close-modal-icon" [icon]="'icon-close'" />
@@ -1228,6 +1230,7 @@
     (openDetailsView)="this.openThumbnailSheet($event)"
     (rightMouseClicked)="rightMouseClicked($event.mouseEvent, $event.item)"
     (showMoreRecentlyPlayed)="sortByRecentlyPlayed()"
+    (refreshPlaylist)="refreshPlaylistIfShowing()"
 
     [appState]="appState"
     [currentClickedItemName]="currentClickedItemName"
@@ -1247,7 +1250,6 @@
     [appState]="appState"
     [batchTaggingMode]="batchTaggingMode"
     [darkMode]="settingsButtons['darkMode'].toggled"
-    [settingsButtons]="settingsButtons"
     [updateTotalSelectedTrigger]="tagBatchModeSelectionChangedTrigger"
    />
 }

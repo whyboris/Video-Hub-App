@@ -24,15 +24,16 @@ export class SimilarTrayComponent {
 
   readonly handleClick = output<any>(); // TODO: fix up the vague type
   readonly openDetailsView = output<ImageElement>();
+  readonly refreshPlaylist = output<void>();
   readonly rightMouseClicked = output<RightClickEmit>();
   readonly showMoreRecentlyPlayed = output<void>();
 
-  readonly appState = input(undefined);
-  readonly currentClickedItemName = input(undefined);
-  readonly previewHeightRelated = input(undefined);
-  readonly previewWidthRelated = input(undefined);
-  readonly settingsButtons = input<SettingsButtonsType>(undefined);
-  readonly showRecentNotSimilar = input(undefined);
+  readonly appState = input();
+  readonly currentClickedItemName = input();
+  readonly previewHeightRelated = input();
+  readonly previewWidthRelated = input();
+  readonly settingsButtons = input<SettingsButtonsType>();
+  readonly showRecentNotSimilar = input();
 
   constructor(
     public imageElementService: ImageElementService,

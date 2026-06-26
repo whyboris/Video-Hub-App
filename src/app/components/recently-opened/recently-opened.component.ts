@@ -12,7 +12,7 @@ export class RecentlyOpenedComponent {
   readonly openFromHistory = output<number>();
 
   @Input() settingsButtons: SettingsButtonsType;
-  readonly vhaFileHistory = input(undefined);
+  readonly vhaFileHistory = input();
 
   constructor() { }
 

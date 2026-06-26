@@ -10,9 +10,9 @@ import { ContextMenuCoordinate } from '../../../../interfaces/shared-interfaces'
 })
 export class TagColorPickerComponent implements OnInit {
 
-  readonly position = input<ContextMenuCoordinate>(undefined);
-  readonly currentColor = input<string>(undefined);
-  readonly darkMode = input<boolean>(undefined);
+  readonly position = input<ContextMenuCoordinate>();
+  readonly currentColor = input<string>();
+  readonly darkMode = input<boolean>();
 
   readonly colorSelected = output<string>();
   readonly close = output<void>();

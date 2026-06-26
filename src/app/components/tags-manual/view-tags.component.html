@@ -20,10 +20,8 @@
   </span>
 
 @if (displayFrequency()) {
-  <span
-    class="search-or-tag-general tag frequency"
-  >
-    {{ tagService.tagsMap.get(tag.name) }}
+  <span class="frequency" [ngClass]="{ 'frequency-dark': darkMode() }">
+    {{ tagService.tagsFrequencyMap.get(tag.name) }}
   </span>
 }
 

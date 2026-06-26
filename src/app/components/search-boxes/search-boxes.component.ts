@@ -26,9 +26,11 @@ export class SearchBoxesComponent {
   readonly removeThisFilter = output<{ item: number; origin: number; }>();
   readonly typeaheadTabPressed = output<number>();
 
-  readonly filters = input(undefined);
+  readonly filters = input();
+
   @Input() settingsButtons: SettingsButtonsType;
-  readonly tagTypeAhead = input(undefined);
+
+  readonly tagTypeAhead = input();
 
   constructor() { }
 
