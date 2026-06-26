@@ -1219,9 +1219,9 @@
   || settingsButtons['showRecentlyPlayed'].toggled) {
   <app-similar-tray
     (handleClick)="handleClick($event.expectedEvent, $event.item)"
+    (openDetailsView)="this.openThumbnailSheet($event)"
     (rightMouseClicked)="rightMouseClicked($event.mouseEvent, $event.item)"
     (showMoreRecentlyPlayed)="sortByRecentlyPlayed()"
-    (openDetailsView)="this.openThumbnailSheet($event)"
 
     [appState]="appState"
     [currentClickedItemName]="currentClickedItemName"

@@ -16,9 +16,9 @@
 
 @for (item of (showRecentNotSimilar()
                ? (imageElementService.imageElements | sortingPipe : 'lastPlayedDesc' : currentClickedItemName()
-                                                    | slice : 0 : 8)
+                                                    | slice : 0 : 12)
                : (imageElementService.imageElements | similarityPipe : true : currentClickedItemName()
-                                                    | slice : 0 : 8 )
+                                                    | slice : 0 : 12)
               ); track item) {
 
   <app-thumbnail
