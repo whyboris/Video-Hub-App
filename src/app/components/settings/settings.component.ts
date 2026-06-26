@@ -1,14 +1,15 @@
-import type { OnInit } from '@angular/core';
 import { Component, Input, input, output, viewChild } from '@angular/core';
-import type { OnChanges, SimpleChanges } from '@angular/core';
 
 import { TranslateService } from '@ngx-translate/core';
 
 import { ElectronService } from './../../providers/electron.service';
 import { ModalService } from './../modal/modal.service';
 
-import type { SettingsButtonsType } from '../../common/settings-buttons';
 import { SettingsMetaGroup, SettingsMetaGroupLabels } from '../../common/settings-buttons';
+
+import type { OnChanges, SimpleChanges } from '@angular/core';
+import type { OnInit } from '@angular/core';
+import type { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
   standalone: false,

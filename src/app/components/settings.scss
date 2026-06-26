@@ -297,6 +297,7 @@ input[type="radio"]:checked:before {
   color: variables.$pretty-blue;
   cursor: help;
   display: inline-block;
+  font-family: monospace;
   font-size: 11px;
   font-style: italic;
   height: 12px;

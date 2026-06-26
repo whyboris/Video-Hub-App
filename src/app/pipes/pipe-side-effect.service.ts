@@ -38,6 +38,15 @@ export class PipeSideEffectService {
   }
 
   /**
+   * Set all displayed videos to selected
+   */
+  selectNone(): void {
+    this.galleryShowing.forEach((element: ImageElement) => {
+      element.selected = false;
+    });
+  }
+
+  /**
    * If pipe has an
    * @param error
    */

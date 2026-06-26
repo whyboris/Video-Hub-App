@@ -45,7 +45,6 @@ export class ManualTagsService {
   }
 
   removeTagBatch(tag: string) {
-    const count = this.tagsFrequencyMap.get(tag);
     this.tagsFrequencyMap.set(tag, 0);
     this.tagsList.splice(this.tagsList.indexOf(tag), 1);
     this.forceTagSortPipeUpdate();
@@ -60,20 +59,22 @@ export class ManualTagsService {
   }
 
   /**
-   * Get the most likely tag
-   * TODO -- curently it gets the FIRST match; later get the MOST COMMON (confer with tagsFrequencyMap)
-   * @param text
+   * Get the most likely tag - returning the most common tag that starts with input string
+   * @param text - input from user
    */
   getTypeahead(text: string): string {
     let mostLikely = '';
+    let highest = 0;
 
     if (text) {
-      for (let i = 0; i < this.tagsList.length; i++) {
-        if (this.tagsList[i].startsWith(text)) {
-          mostLikely = this.tagsList[i];
-          break;
+      this.tagsList.forEach((tag) => {
+        if (tag.startsWith(text)) {
+          if (this.tagsFrequencyMap.get(tag) > highest) {
+            highest = this.tagsFrequencyMap.get(tag);
+            mostLikely = tag;
+          }
         }
-      }
+      });
     }
 
     return mostLikely;

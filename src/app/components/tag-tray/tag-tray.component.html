@@ -4,15 +4,15 @@
 
   <div class="tag-tray-menu-left">
 
-  @if (!batchTaggingMode()) {
+  <input
+    class="filter-general manual-tag-tray-filter"
+    [ngClass]="{ 'manual-tag-tray-filter-dark': darkMode() }"
+    (keyup.esc)="manualTagFilterString = ''"
+    [(ngModel)]="manualTagFilterString"
+    placeholder="{{ 'TAGS.filterTags' | translate }}"
+  >
 
-    <input
-      class="filter-general manual-tag-tray-filter"
-      [ngClass]="{ 'manual-tag-tray-filter-dark': darkMode() }"
-      (keyup.esc)="manualTagFilterString = ''"
-      [(ngModel)]="manualTagFilterString"
-      placeholder="{{ 'TAGS.filterTags' | translate }}"
-    >
+  @if (!batchTaggingMode()) {
 
     <button
       class="tag-sort-by-toggle"
@@ -50,7 +50,11 @@
 
     </div>
 
-    <span class="total-selected">Selected: {{ imageElementService.imageElements | totalSelectedPipe : recomputeTrigger }}</span>
+    <span class="total-selected" (click)="deselectAllPressed()">Selected:
+      <em [ngClass]="{ 'em-dark-mode': darkMode() }">
+        {{ (imageElementService.imageElements | totalSelectedPipe : recomputeTrigger) | number }}
+      </em>
+    </span>
 
     <button
       class="button-select-all"
