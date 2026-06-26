@@ -26,47 +26,43 @@ export interface YearEmission {
       '../selected.scss'
     ]
 })
-export class DetailsComponent implements OnInit {
+export class DetailsComponent {
 
   readonly filmstripHolder = viewChild<ElementRef>('filmstripHolder');
 
   readonly filterTag = output<TagEmit>();
   readonly videoClick = output<VideoClickEmit>();
   readonly rightClick = output<RightClickEmit>();
+  readonly sheetClick = output<void>();
 
-  readonly video = input<ImageElement>(undefined);
+  readonly video = input<ImageElement>();
 
-  readonly maxWidth = input<number>(undefined);
+  readonly connected = input<boolean>();
+  readonly darkMode = input<boolean>();
+  readonly draggable = input<boolean>();
+  readonly elHeight = input<number>();
+  readonly elWidth = input<number>();
+  readonly folderPath = input<string>();
+  readonly hoverScrub = input<boolean>();
+  readonly hubName = input<string>();
+  readonly imgHeight = input<number>();
+  readonly largerFont = input<boolean>();
+  readonly maxWidth = input<number>();
+  readonly returnToFirstScreenshot = input<boolean>();
+  readonly selectedSourceFolder = input<string>();
+  readonly showAutoFileTags = input<boolean>();
+  readonly showAutoFolderTags = input<boolean>();
+  readonly showFavorites = input<boolean>();
+  readonly showManualTags = input<boolean>();
+  readonly showMeta = input<boolean>();
+  readonly showTwoColumns = input<boolean>();
+  readonly showVideoNotes = input<boolean>();
+  readonly star = input<StarRating>();
+  readonly thumbAutoAdvance = input<boolean>();
 
-  readonly showTwoColumns = input<boolean>(undefined);
+  readonly renameResponse = input<BehaviorSubject<RenameFileResponse>>();
 
-  readonly darkMode = input<boolean>(undefined);
-  readonly elHeight = input<number>(undefined);
-  readonly elWidth = input<number>(undefined);
-  readonly folderPath = input<string>(undefined);
-  readonly hoverScrub = input<boolean>(undefined);
-  readonly hubName = input<string>(undefined);
-  readonly imgHeight = input<number>(undefined);
-  readonly largerFont = input<boolean>(undefined);
-  readonly returnToFirstScreenshot = input<boolean>(undefined);
-  readonly selectedSourceFolder = input<string>(undefined);
-  readonly showAutoFileTags = input<boolean>(undefined);
-  readonly showAutoFolderTags = input<boolean>(undefined);
-  readonly showManualTags = input<boolean>(undefined);
-  readonly showMeta = input<boolean>(undefined);
-  readonly showVideoNotes = input<boolean>(undefined);
-  readonly showFavorites = input<boolean>(undefined);
-  readonly star = input<StarRating>(undefined);
-
-  readonly renameResponse = input<BehaviorSubject<RenameFileResponse>>(undefined);
-
-  containerWidth: number;
-  filmstripPath = '';
-  firstFilePath = '';
-  hover: boolean;
-  indexToShow = 1;
-  percentOffset = 0;
-  starRatingHack: StarRating; // updates visuals of rating
+  starRatingHack: StarRating; // updates stars when heart toggled in app-thumbnail
 
   constructor(
     public filePathService: FilePathService,
@@ -75,48 +71,9 @@ export class DetailsComponent implements OnInit {
     public sanitizer: DomSanitizer
   ) { }
 
-  mouseEnter() {
-    if (this.hoverScrub()) {
-      this.containerWidth = this.filmstripHolder().nativeElement.getBoundingClientRect().width;
-      this.hover = true;
-    }
-  }
-
-  mouseLeave() {
-    if (this.hoverScrub() && this.returnToFirstScreenshot()) {
-      this.hover = false;
-      const video = this.video();
-      this.percentOffset = (video.defaultScreen !== undefined)
-                           ? this.getDefaultScreenOffset(video)
-                           : 0;
-    }
-  }
-
-  getDefaultScreenOffset(video: ImageElement): number {
-    return 100 * video.defaultScreen / (video.screens - 1);
-  }
-
-  toggleHeart(mouseClick: MouseEvent): void {
-    mouseClick.stopPropagation();
+  toggleHeart(): void {
     const video = this.video();
-    this.imageElementService.toggleHeart(video.index);
     this.starRatingHack = video.stars;
   }
 
-  ngOnInit() {
-    this.firstFilePath = this.filePathService.createFilePath(this.folderPath(), this.hubName(), 'thumbnails', this.video().hash);
-    this.filmstripPath =  this.filePathService.createFilePath(this.folderPath(), this.hubName(), 'filmstrips', this.video().hash);
-    const video = this.video();
-    if (video.defaultScreen !== undefined) {
-      this.percentOffset = this.getDefaultScreenOffset(video);
-    }
-  }
-
-  mouseIsMoving($event) {
-    if (this.hoverScrub()) {
-      const cursorX = $event.layerX;
-      this.indexToShow = Math.floor(cursorX * (this.video().screens / this.containerWidth));
-      this.percentOffset = this.indexToShow * (100 / (this.video().screens - 1));
-    }
-  }
 }

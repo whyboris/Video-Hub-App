@@ -26,7 +26,7 @@
 
 @if (renamingWIP === video.cleanName) {
   <span
-    class="metadata-text"
+    class="metadata-text "
     [ngClass]="{ darkModeText: darkMode() }"
   >
 
@@ -42,6 +42,9 @@
     {{ video.fps }} fps
   }
     <em>| </em><!-- do not delete the space after `|` here -->
+
+    <div class="year-container">
+
     <input
         #yearInput
 
@@ -62,6 +65,7 @@
         tabindex="-1"
         type="number"
       >
+    </div>
 
   </span>
 
