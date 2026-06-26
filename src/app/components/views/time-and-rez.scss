@@ -24,7 +24,8 @@
   background: none;
   border: none;
   color: white;
-  left: 37px;
+  left: 100%;
+  transform: translate(0, 2px);
   opacity: 0.6;
   right: unset;
 }
@@ -85,6 +86,7 @@
 .meta-container,
 .video-box {
   .heart,
+  .sheet-icon,
   .playlist-icon {
     opacity: 0;
   }
@@ -96,6 +98,14 @@
   &:hover {
     .heart {
       opacity: 1;
+    }
+
+    .sheet-icon {
+      opacity: 0.6;
+
+      &:hover {
+        opacity: 1;
+      }
     }
 
     .playlist-icon {

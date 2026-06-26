@@ -176,12 +176,14 @@ h3 {
 
 .button-description-text {
   -webkit-box-orient: vertical !important;
-  color: variables.$black;
+  -webkit-line-clamp: 3 !important;
   display: -webkit-box !important;
+  overflow: hidden;
+  // above all needed together for line-clamp
+
+  color: variables.$black;
   font-size: 14px;
   left: 80px;
-  -webkit-line-clamp: 3 !important;
-  overflow: hidden;
   position: absolute;
   top: 2px;
 }

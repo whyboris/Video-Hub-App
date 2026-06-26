@@ -70,15 +70,14 @@
         }"
       class="filmstrip-container"
     >
-      <div
-        class="video-box"
-        (click)="openVideoAtTime.emit({ mouseEvent: $event, thumbIndex: i })"
-        [ngStyle]="{
-            height: '100%',
-            'background-image': 'url(' + pathToFilmstripJpg + ')',
-            'background-position-x': (percentOffset * i) + '%'
-          }"
-      >
+      <div class="video-box">
+        <img
+          (click)="openVideoAtTime.emit({ mouseEvent: $event, thumbIndex: i })"
+          class="full-filmstrip"
+          [ngStyle]="{ height: '100%',
+                      transform: 'translate(' + (-percentOffset * i) + '%, 0)' }"
+          src="{{ pathToFilmstripJpg }}"
+        >
         <div
           class="set-favorite-thumb"
           (click)="setDefaultScreenshot($event, i)"

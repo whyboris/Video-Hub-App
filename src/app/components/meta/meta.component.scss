@@ -4,7 +4,7 @@
   color: variables.$gray-10;
 }
 
-.meta {
+.meta-container {
   box-sizing: border-box;
   display: inline-block;
   height: 190px;
@@ -13,33 +13,7 @@
   vertical-align: top;
 }
 
-.video-box {
-  background-color: black;
-  background-size: cover;
-  cursor: pointer;
-  display: inline-block;
-  overflow: hidden;
-  position: relative;
-}
-
-.title {
-  -webkit-box-orient: vertical;
-  display: -webkit-box;
-  font-size: 12px;
-  line-clamp: 3;
-  -webkit-line-clamp: 3;
-  max-height: 54px;
-  overflow: hidden;
-  text-align: left;
-  text-overflow: ellipsis;
-  transition: 300ms;
-  transition-property: font-size;
-  user-select: text;
-  width: 100%;
-  word-wrap: break-word;
-}
-
-.file-size {
+.metadata-text {
   display: block;
   font-family: monospace;
   font-size: 10px;

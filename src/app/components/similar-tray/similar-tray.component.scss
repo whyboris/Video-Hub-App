@@ -13,7 +13,13 @@
   }
 
   .most-similar-filename {
-    display: block;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 6;
+    display: -webkit-box;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    // above all needed together for line-clamp
+
     font-size: 14px;
     margin-top: 15px;
   }

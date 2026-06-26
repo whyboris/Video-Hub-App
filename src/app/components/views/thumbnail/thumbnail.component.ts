@@ -27,7 +27,7 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
 
   readonly refreshPlaylist = output<void>();
   readonly rightClick = output<RightClickEmit>();
-  readonly sheetClick = output<any>(); // does not emit data of any kind
+  readonly sheetClick = output<void>();
   readonly videoClick = output<VideoClickEmit>();
 
   @Input() video: ImageElement;
@@ -81,7 +81,7 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
   }
 
   defaultScreenOffset(video: ImageElement): number {
-    return 100 * video.defaultScreen / (video.screens - 1);
+    return 100 * video.defaultScreen / video.screens;
   }
 
   mouseEntered() {
@@ -91,7 +91,7 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
       this.hover = true;
 
       this.scrollInterval = setInterval(() => {
-        this.percentOffset = this.indexToShow * (100 / (this.video.screens - 1));
+        this.percentOffset = this.indexToShow * (100 / this.video.screens);
         this.indexToShow++;
       }, 750);
 
@@ -119,7 +119,7 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
     if (this.hoverScrub()) {
       const cursorX = $event.layerX;
       this.indexToShow = Math.floor(cursorX * (this.video.screens / this.containerWidth));
-      this.percentOffset = this.indexToShow * (100 / (this.video.screens - 1));
+      this.percentOffset = this.indexToShow * (100 / this.video.screens);
     }
   }
 
@@ -127,15 +127,20 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
     clearInterval(this.scrollInterval);
   }
 
+  openDetailsView(): void {
+    event?.stopPropagation();
+    this.sheetClick.emit();
+  }
+
   toggleHeart(): void {
     this.imageElementService.toggleHeart(this.video.index);
-    event.stopPropagation();
+    event?.stopPropagation();
   }
 
   togglePlaylist(): void {
     this.imageElementService.updatePlaylist(this.video.index);
     this.refreshPlaylist.emit();
-    event.stopPropagation();
+    event?.stopPropagation();
   }
 
 }

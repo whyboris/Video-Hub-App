@@ -82,7 +82,7 @@ export class SheetComponent implements OnInit {
 
     this.pathToFilmstripJpg = this.filePathService.createFilePath(this.folderPath(), this.hubName(), 'filmstrips', this.video().hash);
     this.pathToVideoFile = path.join(this.selectedSourceFolder(), this.video().partialPath, this.video().fileName);
-    this.percentOffset = (100 / (this.video().screens - 1));
+    this.percentOffset = (100 / this.video().screens);
     this.starRatingHack = this.star();
   }
 

@@ -9,15 +9,17 @@
 
 .title {
   -webkit-box-orient: vertical;
-  display: -webkit-box;
-  font-size: 12px;
   -webkit-line-clamp: 3;
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  // above all needed together for line-clamp
+
+  font-size: 12px;
   margin: 6px 2px 0px;
   max-height: 54px;
-  overflow: hidden;
   position: absolute;
   text-align: left;
-  text-overflow: ellipsis;
   transition: 300ms;
   transition-property: font-size;
   width: 100%;
@@ -44,12 +46,6 @@
     top: 36%;
     transform: translate(-50%, -50%);
     width: 30%;
-  }
-
-  &:hover {
-    + .sheet-icon {
-      opacity: 0.6;
-    }
   }
 }
 

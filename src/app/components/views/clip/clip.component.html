@@ -95,14 +95,9 @@
     @if (video.selected) { <app-icon class="selected" [icon]="'icon-show-more-info'" /> }
 
     @if (showMeta()) {
-      <span class="rez" [ngClass]="{ 'dark-style': darkMode() }">{{ video.fileSizeDisplay }}</span>
-
-      @if (video.resolution) {
-        <span
-          class="time rez-new"
-        >{{ video.resolution }}</span>
-      }
-
+      <span class="rez" [ngClass]="{ 'dark-style': darkMode() }">{{ video.fileSizeDisplay }}
+        @if (video.resolution) { <span class="time rez-new">{{ video.resolution }}</span> }
+      </span>
       <span class="time" [ngClass]="{ 'dark-style': darkMode() }">{{ video.durationDisplay }}</span>
     }
 
@@ -142,7 +137,6 @@
     ></video>
   }
 
-  @if (true) {
     <app-icon
       class="heart"
       [ngClass]="{ 'heart-lit' : video.stars === 5.5 }"
@@ -152,20 +146,10 @@
                                     : ('BUTTONS.addToFavorites' | translate) }}"
 
      />
-  }
 
-  </div> <!-- end of video-box -->
-  <!--
-  .sheet-icon needs to be the next sibling of .video-box
-  DO NOT SEPARATE!
-  -->
-  <app-icon
-    class="sheet-icon"
-    [icon]="'icon-show-thumbnails'"
-    (click)="sheetClick.emit()"
-    [ngStyle]="{
-      'opacity': (this.hover ? 1 : 0)
-    }" />
+    <app-icon class="sheet-icon" [icon]="'icon-show-thumbnails'" (click)="sheetClick.emit()" />
+
+  </div>
 
   <!-- ================================= TEXT ================================= -->
 
