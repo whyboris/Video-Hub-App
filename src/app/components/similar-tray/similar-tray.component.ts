@@ -24,6 +24,7 @@ export class SimilarTrayComponent {
 
   readonly handleClick = output<any>(); // TODO: fix up the vague type
   readonly openDetailsView = output<ImageElement>();
+  readonly refreshPlaylist = output<void>();
   readonly rightMouseClicked = output<RightClickEmit>();
   readonly showMoreRecentlyPlayed = output<void>();
 

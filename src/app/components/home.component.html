@@ -1041,6 +1041,8 @@
 
           (drop)="droppedSomethingOverVideo($event, item)"
 
+          (refreshPlaylist)="refreshPlaylistIfShowing()"
+
           [draggable]="settingsButtons['dragVideoOutOfApp'].toggled"
           (dragstart)="draggingVideoFile($event, item)"
 
@@ -1227,6 +1229,7 @@
     (openDetailsView)="this.openThumbnailSheet($event)"
     (rightMouseClicked)="rightMouseClicked($event.mouseEvent, $event.item)"
     (showMoreRecentlyPlayed)="sortByRecentlyPlayed()"
+    (refreshPlaylist)="refreshPlaylistIfShowing()"
 
     [appState]="appState"
     [currentClickedItemName]="currentClickedItemName"

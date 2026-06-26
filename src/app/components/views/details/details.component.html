@@ -12,10 +12,9 @@
    <app-thumbnail
     (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video() })"
     (heartPressed)="toggleHeart()"
+    (refreshPlaylist)="refreshPlaylist.emit()"
     (sheetClick)="sheetClick.emit()"
     (videoClick)="videoClick.emit($event)"
-
-    (refreshPlaylist)="false"
 
     [video]="video()"
 

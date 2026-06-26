@@ -25,6 +25,7 @@
     (videoClick)="handleClick.emit({ expectedEvent: $event, item: item })"
     (contextmenu)="rightMouseClicked.emit({ mouseEvent: $event, item: item })"
     (sheetClick)="openDetailsView.emit(item)"
+    (refreshPlaylist)="refreshPlaylist.emit()"
 
     [elHeight]="previewHeightRelated() + 50"
     [elWidth]="previewWidthRelated()"

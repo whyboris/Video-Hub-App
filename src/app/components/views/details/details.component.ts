@@ -33,6 +33,7 @@ export class DetailsComponent {
   readonly videoClick = output<VideoClickEmit>();
   readonly rightClick = output<RightClickEmit>();
   readonly sheetClick = output<void>();
+  readonly refreshPlaylist = output<void>();
 
   readonly video = input<ImageElement>();
 
