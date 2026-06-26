@@ -52,7 +52,7 @@ export class ManualTagsService {
   }
 
   /**
-   * Removes all the existing tags in {@code tagList} and {@code tagsFrequencyMap}
+   * Removes all the existing tags in `tagList` and `tagsFrequencyMap`
    */
   removeAllTags(): void {
     this.tagsFrequencyMap.clear();

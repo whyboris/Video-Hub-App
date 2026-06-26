@@ -1,14 +1,13 @@
-import type { ElementRef} from '@angular/core';
 import { Component, input, output, viewChild } from '@angular/core';
 
-import type { BehaviorSubject } from 'rxjs';
-
 import { FilePathService } from '../file-path.service';
+import { ImageElementService } from './../../../services/image-element.service';
 import { ManualTagsService } from '../../tags-manual/manual-tags.service';
 
+import type { BehaviorSubject } from 'rxjs';
+import type { ElementRef } from '@angular/core';
 import type { StarRating, ImageElement } from '../../../../../interfaces/final-object.interface';
 import type { VideoClickEmit, RightClickEmit, TagEmit, RenameFileResponse } from '../../../../../interfaces/shared-interfaces';
-import { ImageElementService } from './../../../services/image-element.service';
 
 export interface YearEmission {
   index: number;
