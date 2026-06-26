@@ -1,6 +1,5 @@
-import type { OnInit, ElementRef} from '@angular/core';
+import type { ElementRef} from '@angular/core';
 import { Component, input, output, viewChild } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 
 import type { BehaviorSubject } from 'rxjs';
 
@@ -67,8 +66,7 @@ export class DetailsComponent {
   constructor(
     public filePathService: FilePathService,
     public imageElementService: ImageElementService,
-    public manualTagsService: ManualTagsService,
-    public sanitizer: DomSanitizer
+    public manualTagsService: ManualTagsService
   ) { }
 
   toggleHeart(): void {

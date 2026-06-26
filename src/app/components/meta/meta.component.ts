@@ -1,7 +1,6 @@
 import type { OnInit, ElementRef, OnDestroy } from '@angular/core';
 import { ChangeDetectorRef, input, output, viewChild } from '@angular/core';
 import { Component, Input } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 
 import type { Subscription, Observable } from 'rxjs';
 
@@ -64,8 +63,7 @@ export class MetaComponent implements OnInit, OnDestroy {
     public electronService: ElectronService,
     public filePathService: FilePathService,
     public imageElementService: ImageElementService,
-    public manualTagsService: ManualTagsService,
-    public sanitizer: DomSanitizer,
+    public manualTagsService: ManualTagsService
   ) { }
 
   ngOnInit() {

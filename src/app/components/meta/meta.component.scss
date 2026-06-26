@@ -41,10 +41,9 @@ input[type=number] {
 }
 
 input[type=number]:hover::-webkit-inner-spin-button {
-  width: 14px;
-  height: 30px;
   cursor: ns-resize;
-  color: red;
+  height: 30px;
+  width: 14px;
 }
 
 .meta-title {

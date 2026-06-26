@@ -1,6 +1,5 @@
 import type { OnInit, ElementRef} from '@angular/core';
 import { Component, input, output, viewChild } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 
 import { FilePathService } from '../file-path.service';
 
@@ -48,8 +47,7 @@ export class FilmstripComponent implements OnInit {
 
   constructor(
     public filePathService: FilePathService,
-    public imageElementService: ImageElementService,
-    public sanitizer: DomSanitizer
+    public imageElementService: ImageElementService
   ) { }
 
   ngOnInit() {

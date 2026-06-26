@@ -1,6 +1,5 @@
 import type { OnInit} from '@angular/core';
 import { Component, Input, input, output } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 
 import { FilePathService } from '../file-path.service';
 
@@ -56,8 +55,7 @@ export class FullViewComponent implements OnInit {
 
   constructor(
     public filePathService: FilePathService,
-    public imageElementService: ImageElementService,
-    public sanitizer: DomSanitizer
+    public imageElementService: ImageElementService
   ) { }
 
   ngOnInit() {
