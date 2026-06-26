@@ -9,7 +9,7 @@
 
 @if (showFavorites()) {
   <app-icon
-    (click)="toggleHeart()"
+    (click)="toggleHeart($event)"
     class="heart"
     [ngClass]="{ 'heart-lit' : video().stars === 5.5 }"
     [icon]="'icon-heart'"
