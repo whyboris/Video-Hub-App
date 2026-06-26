@@ -10,11 +10,11 @@
   <div class="video-box">
 
    <app-thumbnail
-    (videoClick)="videoClick.emit($event)"
-    (sheetClick)="sheetClick.emit()"
+    (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video() })"
     (heartPressed)="toggleHeart()"
+    (sheetClick)="sheetClick.emit()"
+    (videoClick)="videoClick.emit($event)"
 
-    (rightClick)="false"
     (refreshPlaylist)="false"
 
     [video]="video()"
