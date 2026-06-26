@@ -31,8 +31,9 @@ export class WizardComponent {
   readonly selectOutputDirectory      = output<void>();
   readonly selectSourceDirectory      = output<void>();
 
-  readonly canCloseWizard = input<boolean>(undefined);
-  readonly importStage = input<ImportStage>(undefined);
+  readonly canCloseWizard = input<boolean>();
+  readonly importStage = input<ImportStage>();
+
   @Input() vhaFileHistory: HistoryItem[];
   @Input() wizard: WizardOptions;
 

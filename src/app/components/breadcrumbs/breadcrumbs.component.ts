@@ -14,9 +14,9 @@ export class BreadcrumbsComponent {
   readonly breadcrumbHomeIconClick = output<any>();
   readonly handleBbreadcrumbClicked = output<number>();
 
-  readonly appState = input(undefined);
+  readonly appState = input();
   @Input() settingsButtons: SettingsButtonsType;
-  readonly folderViewNavigationPath = input(undefined);
+  readonly folderViewNavigationPath = input();
 
   constructor() { }
 

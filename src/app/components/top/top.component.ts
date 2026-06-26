@@ -13,10 +13,10 @@ import type { ImageElement } from '../../../../interfaces/final-object.interface
 })
 export class TopComponent {
 
-  readonly currentImageElement = input<ImageElement>(undefined);
-  readonly darkMode = input<boolean>(undefined);
-  readonly folderPath = input<string>(undefined);
-  readonly hubName = input<string>(undefined);
+  readonly currentImageElement = input<ImageElement>();
+  readonly darkMode = input<boolean>();
+  readonly folderPath = input<string>();
+  readonly hubName = input<string>();
 
   // Handle folder input
   private _folder = '';

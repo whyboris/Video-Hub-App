@@ -27,10 +27,10 @@ export class TagTrayComponent {
   readonly handleTagWordClicked = output<TagEmit>();
   readonly selectAll = output<void>();
 
-  readonly appState = input<AppStateInterface>(undefined);
-  readonly batchTaggingMode = input(undefined);
-  readonly darkMode = input<boolean>(undefined);
-  readonly settingsButtons = input<SettingsButtonsType>(undefined);
+  readonly appState = input<AppStateInterface>();
+  readonly batchTaggingMode = input();
+  readonly darkMode = input<boolean>();
+  readonly settingsButtons = input<SettingsButtonsType>();
   readonly updateTotalSelectedTrigger = input<number>(0);
 
   manualTagFilterString = '';

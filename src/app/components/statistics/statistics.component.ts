@@ -38,20 +38,18 @@ export class StatisticsComponent implements OnInit, OnDestroy {
   readonly finalArrayNeedsSaving = output<any>();
   readonly startServerOnPort = output<number>();
 
-  readonly appState = input<AppStateInterface>(undefined);
-  readonly hubName = input<string>(undefined);
-  readonly inputFolders = input<InputSources>(undefined);
-  readonly numFolders = input<number>(undefined);
-  readonly pathToVhaFile = input<string>(undefined);
+  readonly appState = input<AppStateInterface>();
+  readonly hubName = input<string>();
+  readonly inputFolders = input<InputSources>();
+  readonly numFolders = input<number>();
+  readonly pathToVhaFile = input<string>();
+
   @Input() screenshotSettings: ScreenshotSettings;
 
-  readonly inputFolderChosen = input<Observable<string>>(undefined);
-  readonly numberScreenshotsDeleted = input<Observable<number>>(undefined);
-  readonly oldFolderReconnected = input<Observable<{
-    source: number;
-    path: string;
-}>>(undefined);
-  readonly serverDetails = input<Observable<any>>(undefined);
+  readonly inputFolderChosen = input<Observable<string>>();
+  readonly numberScreenshotsDeleted = input<Observable<number>>();
+  readonly oldFolderReconnected = input<Observable<{ source: number; path: string; }>>();
+  readonly serverDetails = input<Observable<any>>();
 
   eventSubscriptionMap: Map<string, Subscription> = new Map();
 

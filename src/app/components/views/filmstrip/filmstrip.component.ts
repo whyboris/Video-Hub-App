@@ -28,18 +28,18 @@ export class FilmstripComponent implements OnInit {
   readonly videoClick = output<VideoClickEmit>();
   readonly rightClick = output<RightClickEmit>();
 
-  readonly video = input<ImageElement>(undefined);
+  readonly video = input<ImageElement>();
 
-  readonly compactView = input<boolean>(undefined);
-  readonly darkMode = input<boolean>(undefined);
-  readonly elHeight = input<number>(undefined);
-  readonly folderPath = input<string>(undefined);
-  readonly hoverScrub = input<boolean>(undefined);
-  readonly hubName = input<string>(undefined);
-  readonly imgHeight = input<number>(undefined);
-  readonly largerFont = input<boolean>(undefined);
-  readonly showMeta = input<boolean>(undefined);
-  readonly showFavorites = input<boolean>(undefined);
+  readonly compactView = input<boolean>();
+  readonly darkMode = input<boolean>();
+  readonly elHeight = input<number>();
+  readonly folderPath = input<string>();
+  readonly hoverScrub = input<boolean>();
+  readonly hubName = input<string>();
+  readonly imgHeight = input<number>();
+  readonly largerFont = input<boolean>();
+  readonly showMeta = input<boolean>();
+  readonly showFavorites = input<boolean>();
 
   fullFilePath = '';
   filmXoffset = 0;

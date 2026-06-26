@@ -10,7 +10,7 @@ import { ManualTagsService } from './manual-tags.service';
 })
 export class AddTagComponent {
 
-  readonly darkMode = input<boolean>(undefined);
+  readonly darkMode = input<boolean>();
 
   readonly tag = output<string>();
 

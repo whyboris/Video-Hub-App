@@ -11,11 +11,11 @@ export class StarFilterComponent {
 
   readonly newStarFilterSelected = output<any>();
 
-  readonly settingsButtons = input<SettingsButtonsType>(undefined);
-  readonly starLeftBound = input<number>(undefined);
-  readonly starRatingFreqArr = input<number[]>(undefined);
-  readonly starRatingNames = input<string[]>(undefined);
-  readonly starRightBound = input<number>(undefined);
+  readonly settingsButtons = input<SettingsButtonsType>();
+  readonly starLeftBound = input<number>();
+  readonly starRatingFreqArr = input<number[]>();
+  readonly starRatingNames = input<string[]>();
+  readonly starRightBound = input<number>();
 
   constructor() { }
 

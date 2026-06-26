@@ -11,11 +11,11 @@ export class ResolutionFilterComponent {
 
   readonly newResFilterSelected = output<any>();
 
-  readonly freqLeftBound = input(undefined);
-  readonly freqRightBound = input(undefined);
-  readonly resolutionFreqArr = input(undefined);
-  readonly resolutionNames = input(undefined);
-  readonly settingsButtons = input<SettingsButtonsType>(undefined);
+  readonly freqLeftBound = input();
+  readonly freqRightBound = input();
+  readonly resolutionFreqArr = input();
+  readonly resolutionNames = input();
+  readonly settingsButtons = input<SettingsButtonsType>();
 
   constructor() { }
 

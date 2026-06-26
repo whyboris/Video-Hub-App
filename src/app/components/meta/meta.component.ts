@@ -29,20 +29,22 @@ export class MetaComponent implements OnInit, OnDestroy {
   readonly filterTag = output<TagEmit>();
 
   @Input() video: ImageElement;
-  readonly darkMode = input<boolean>(undefined);
-  readonly imgHeight = input<number>(undefined);
-  readonly largerFont = input<boolean>(undefined);
-  readonly maxWidth = input<number>(undefined);
-  readonly selectedSourceFolder = input<string>(undefined);
-  readonly showAutoFileTags = input<boolean>(undefined);
-  readonly showAutoFolderTags = input<boolean>(undefined);
-  readonly showManualTags = input<boolean>(undefined);
-  readonly showMeta = input<boolean>(undefined);
-  readonly showVideoNotes = input<boolean>(undefined);
-  readonly star = input<StarRating>(undefined);
+
+  readonly darkMode = input<boolean>();
+  readonly imgHeight = input<number>();
+  readonly largerFont = input<boolean>();
+  readonly maxWidth = input<number>();
+  readonly selectedSourceFolder = input<string>();
+  readonly showAutoFileTags = input<boolean>();
+  readonly showAutoFolderTags = input<boolean>();
+  readonly showManualTags = input<boolean>();
+  readonly showMeta = input<boolean>();
+  readonly showVideoNotes = input<boolean>();
+  readonly star = input<StarRating>();
+
   @Input() starRatingHack: StarRating;
 
-  readonly renameResponse = input<Observable<RenameFileResponse>>(undefined);
+  readonly renameResponse = input<Observable<RenameFileResponse>>();
 
   yearHack: number;
 

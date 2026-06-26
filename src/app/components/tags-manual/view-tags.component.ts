@@ -40,9 +40,9 @@ export class ViewTagsComponent {
     }
   }
 
-  readonly darkMode = input<boolean>(undefined);
-  readonly displayFrequency = input<boolean>(undefined);
-  readonly draggable = input<boolean>(undefined);
+  readonly darkMode = input<boolean>();
+  readonly displayFrequency = input<boolean>();
+  readonly draggable = input<boolean>();
   readonly enableColorPicker = input<boolean>(false);
 
   readonly removeTagEmit = output<string>();

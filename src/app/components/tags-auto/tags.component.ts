@@ -19,7 +19,7 @@ import { slowFadeIn, donutAppear, metaAppear } from '../../common/animations';
 })
 export class TagsComponent implements OnInit, OnDestroy {
 
-  readonly hubName = input<string>(undefined); // if hubName changes, tagsService will recalculate, otherwise it will show cached
+  readonly hubName = input<string>(); // if hubName changes, tagsService will recalculate, otherwise it will show cached
 
   readonly tagClicked = output<string>();
 
