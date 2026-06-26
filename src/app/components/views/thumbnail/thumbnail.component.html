@@ -150,7 +150,7 @@
     <app-icon
       class="heart"
       [ngClass]="{ 'heart-lit' : video.stars === 5.5 }"
-      (click)="toggleHeart()"
+      (click)="toggleHeart($event)"
       [icon]="'icon-heart'"
       title="{{ video.stars === 5.5 ? ('BUTTONS.removeFromFavorites' | translate)
                                     : ('BUTTONS.addToFavorites' | translate) }}"
@@ -161,13 +161,13 @@
       title="{{ 'BUTTONS.viewDetails' | translate }}"
       class="sheet-icon"
       [icon]="'icon-show-thumbnails'"
-      (click)="openDetailsView()"
+      (click)="openDetailsView($event)"
     />
 
     <div
       class="playlist-icon"
       [ngClass]="{ 'playlist-icon-active' : video.playlist }"
-      (click)="togglePlaylist()"
+      (click)="togglePlaylist($event)"
       title="{{ video.playlist ? ('BUTTONS.removeFromPlaylist' | translate)
                               : ('BUTTONS.addToPlaylist' | translate) }}"
     >

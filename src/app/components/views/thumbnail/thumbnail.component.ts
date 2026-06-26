@@ -127,20 +127,23 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
     clearInterval(this.scrollInterval);
   }
 
-  openDetailsView(): void {
-    event?.stopPropagation();
+  openDetailsView(leftClick: MouseEvent): void {
+    leftClick.stopPropagation()
+
     this.sheetClick.emit();
   }
 
-  toggleHeart(): void {
+  toggleHeart(leftClick: MouseEvent): void {
+    leftClick.stopPropagation();
+
     this.imageElementService.toggleHeart(this.video.index);
-    event?.stopPropagation();
   }
 
-  togglePlaylist(): void {
+  togglePlaylist(leftClick: MouseEvent): void {
+    leftClick.stopPropagation();
+
     this.imageElementService.updatePlaylist(this.video.index);
     this.refreshPlaylist.emit();
-    event?.stopPropagation();
   }
 
 }
