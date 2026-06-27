@@ -15,7 +15,7 @@
   .tag-draggable {
     &:active {
       transform: scale(1.5);
-      transition-delay: 30ms;
+      transition-delay: 150ms;
       transition-duration: 150ms;
       transition-property: transform;
     }
