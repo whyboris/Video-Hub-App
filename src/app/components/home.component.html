@@ -444,7 +444,11 @@
       <!-- magic search -->
     @if (settingsButtons['magic'].toggled) {
       <div @filterItemAppear>
-        <app-icon class="input-icon" [icon]="settingsButtons['magic'].iconName" />
+        <app-icon
+          class="input-icon"
+          [icon]="settingsButtons['magic'].iconName"
+          title="{{ settingsButtons['magic'].moreInfo | translate }}"
+        />
         <input
           #magicSearch
           (keydown.escape)="magicSearchString = ''"
@@ -471,7 +475,11 @@
     <!-- regex search -->
     @if (settingsButtons['regex'].toggled) {
       <div @filterItemAppear>
-        <app-icon class="input-icon" [icon]="settingsButtons['regex'].iconName" />
+        <app-icon
+        class="input-icon"
+        [icon]="settingsButtons['regex'].iconName"
+        title="{{ settingsButtons['regex'].moreInfo | translate }}"
+      />
         <input
           #regexSearch
           (keydown.escape)="regexSearchString = ''"
@@ -500,7 +508,11 @@
       <!-- fuzzy search -->
     @if (settingsButtons['fuzzy'].toggled) {
       <div @filterItemAppear>
-        <app-icon class="input-icon" [icon]="settingsButtons['fuzzy'].iconName" />
+        <app-icon
+          class="input-icon"
+          [icon]="settingsButtons['fuzzy'].iconName"
+          title="{{ settingsButtons['fuzzy'].moreInfo | translate }}"
+        />
         <input
           #fuzzySearch
           (keydown.escape)="fuzzySearchString = ''"
@@ -527,7 +539,11 @@
       <!-- starts-with search -->
     @if (settingsButtons['startsWith'].toggled) {
       <div @filterItemAppear>
-        <app-icon class="input-icon" [icon]="settingsButtons['startsWith'].iconName" />
+        <app-icon
+          class="input-icon"
+          [icon]="settingsButtons['startsWith'].iconName"
+          title="{{ settingsButtons['startsWith'].moreInfo | translate }}"
+        />
         <input
           #startsWithSearch
           (keydown.escape)="startsWithSearchString = ''"

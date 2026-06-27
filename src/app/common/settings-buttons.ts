@@ -719,7 +719,7 @@ export const SettingsButtons: SettingsButtonsType = {
   },
   'showTagTray': {
     description: 'BUTTONS.tagTrayDescription',
-    hidden: true,
+    hidden: false,
     iconName: 'icon-tag-tray',
     title: 'BUTTONS.tagTrayHint',
     toggled: false
@@ -870,7 +870,7 @@ export const SettingsButtons: SettingsButtonsType = {
   },
   'sortOptionYear': {
     description: 'BUTTONS.sortOptionYearDescription',
-    hidden: false,
+    hidden: true,
     moreInfo: 'BUTTONS.sortOptionYearMoreInfo',
     title: '',
     toggled: false
@@ -939,7 +939,7 @@ export const SettingsButtons: SettingsButtonsType = {
   },
   'yearFilter': {
     description: 'BUTTONS.yearSliderDescription',
-    hidden: false,
+    hidden: true,
     iconName: 'icon-times-played',
     moreInfo: 'BUTTONS.yearSliderMoreInfo',
     title: 'BUTTONS.yearSliderHint',
