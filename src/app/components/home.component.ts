@@ -1280,8 +1280,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Add filter to tag search when word in word cloud or tag tray is clicked
    * @param filter - particular tag clicked
    */
-  handleTagWordClicked(filter: string, event?): void {
-
+  handleTagWordClicked(filter: string, event?: PointerEvent): void {
     if (this.batchTaggingMode) {
       this.addTagToManyVideos(filter);
       return;
@@ -2610,10 +2609,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * hack to avoid a bug that's hard to diagnose
+   * HACK to avoid a bug that's hard to diagnose
    * without it, switching from one hub to another breaks tags (!)
    * while tray updates, clicking on a tag doesn't auto-show it
    * worse-yet, afterwards the tag in sidebar search isn't clickable
+   * that is - change happens, but UI doesn't update until you hover over thumbnail (or similar UI interaction)
+   *
+   * simplest replication:
+   * 1) start app
+   * 2) open tags (or have it open by default)
+   * 3) switch to another hub (notice tags update)
+   * 4) click a tag - it doesn't update until change-detection runs (hover over video)
    */
   fixManualTagTrayBreakingBug(): void {
       if (this.settingsButtons['showTagTray'].toggled) {

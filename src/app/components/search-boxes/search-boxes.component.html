@@ -1,6 +1,6 @@
 @for (filter of filters(); track filter.uniqueKey; let j = $index) {
 
-  @if (settingsButtons[filter.uniqueKey].toggled) {
+  @if (settingsButtons()[filter.uniqueKey].toggled) {
 
   <div
     class="filter-container"
@@ -8,8 +8,8 @@
   >
     <app-icon
       class="input-icon"
-      [icon]="settingsButtons[filter.uniqueKey].iconName"
-      title="{{ settingsButtons[filter.uniqueKey].moreInfo | translate }}" />
+      [icon]="settingsButtons()[filter.uniqueKey].iconName"
+      title="{{ settingsButtons()[filter.uniqueKey].moreInfo | translate }}" />
     <input
       id="{{ filter.uniqueKey }}"
       (keyup.enter)="onEnterKey.emit({ word: filter.string, index: j })"
@@ -18,7 +18,7 @@
       [(ngModel)]="filter.string"
       (keydown.Tab)="handleTabPress($event, filter.uniqueKey === 'tagIntersection', j, filter.string)"
       (ngModelChange)="handleInputChange($event, filter.uniqueKey === 'tagIntersection')"
-      [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
+      [ngStyle]="{ color: settingsButtons().darkMode.toggled ? 'white' : 'black' }"
       class="filter-general input-filter"
       placeholder="{{ filter.placeholder | translate }}"
       type="text"
@@ -38,7 +38,7 @@
 
         @if (i > 0) {
           <span
-            [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? '#CCCCCC' : 'black' }"
+            [ngStyle]="{ color: settingsButtons().darkMode.toggled ? '#CCCCCC' : 'black' }"
             class="conjunction"
           >
             {{ filter.conjunction | translate }}

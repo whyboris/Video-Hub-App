@@ -108,14 +108,14 @@ export const Filters: FilterObject[] = [
 ];
 
 export const filterKeyToIndex = {
-  folderUnion: 0,
+  folderUnion:        0,
   folderIntersection: 1,
-  folderExclusion: 2,
-  fileUnion: 3,
-  fileIntersection: 4,
-  exclude: 5,
-  tagUnion: 6,
-  tagIntersection: 7,
-  tagExclusion: 8,
-  videoNotes: 9,
+  folderExclusion:    2,
+  fileUnion:          3,
+  fileIntersection:   4,
+  exclude:            5,
+  tagUnion:           6,
+  tagIntersection:    7,
+  tagExclusion:       8,
+  videoNotes:         9,
 };
