@@ -13,7 +13,7 @@ export interface WordFreqAndHeight {
 }
 
 @Injectable()
-export class WordFrequencyService {
+export class WordFrequencyService { // Word Cloud
 
   wordMap: Map<string, number> = new Map();
   finalMapBehaviorSubject: BehaviorSubject<WordFreqAndHeight[]> = new BehaviorSubject([]);
@@ -102,7 +102,11 @@ export class WordFrequencyService {
    **/
   public computeFrequencyArray(elementsInHub: number, maximumToShow: number): void {
 
-    const finalResult: WordFreqAndHeight[] = [];
+    if (this.wordMap.size === 0) {
+      return;
+    }
+
+    let finalResult: WordFreqAndHeight[] = [];
 
     for (let i = 0; i < maximumToShow; i++) {
       if (this.wordMap.size > 0) {
@@ -125,6 +129,8 @@ export class WordFrequencyService {
         element.height = 12 + (element.freq - smallest) * scaleFactor;
       });
     }
+
+    finalResult = finalResult.filter(el => el.word);
 
     this.finalMapBehaviorSubject.next(finalResult);
   }

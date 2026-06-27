@@ -16,7 +16,11 @@ export class WordFrequencyPipe implements PipeTransform {
   ) { }
 
   /**
-   * Return only items that match search string
+   * Word Cloud
+   *
+   * Return the input without change
+   * if `render` is true then also calculate the `wordFrequency` (to display in sidebar via WordFrequencyService)
+   *
    * @param finalArray
    * @param render              whether to calculate the wordFrequency
    * @param showManualTags      boolean
