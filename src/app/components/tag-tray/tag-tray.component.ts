@@ -37,10 +37,9 @@ export class TagTrayComponent {
   manualTagShowFrequency = true;
   recomputeTrigger = 0;
 
-  selectedTagList = [];
   removeThisTag(tag: string) {
-    //get the list of all the videos that contain the selected tag for removal in batch
-    this.selectedTagList = this.imageElementService.imageElements
+    // get the list of all the videos that contain the selected tag for removal in batch
+    const listOfIndicesInGalleryContainingTag = this.imageElementService.imageElements
       .map((ele, idx) => {
         if (ele.tags?.includes(tag)) {
           return idx;
@@ -50,11 +49,11 @@ export class TagTrayComponent {
 
     this.manualTagsService.removeTagBatch(tag);
 
-    this.selectedTagList.forEach((item) => {
+    listOfIndicesInGalleryContainingTag.forEach((item) => {
       this.imageElementService.HandleEmission({
         index: item,
         tag: tag,
-        type: "remove",
+        type: 'remove',
       });
     });
   }
@@ -65,7 +64,6 @@ export class TagTrayComponent {
   ) {
     effect(() => {
       this.recomputeTrigger = this.updateTotalSelectedTrigger();
-
     })
   }
 

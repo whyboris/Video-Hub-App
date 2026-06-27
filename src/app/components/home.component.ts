@@ -753,15 +753,21 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.folderViewNavigationPath = '';
 
       this.manualTagsService.removeAllTags();
-      this.setTags(finalObject.addTags, finalObject.removeTags);
       this.manualTagsService.populateManualTagsService(finalObject.images);
       this.manualTagsService.loadTagColors(finalObject.tagColors);
+
+      this.setTags(finalObject.addTags, finalObject.removeTags); // auto-tags
 
       this.imageElementService.imageElements = this.demo ? finalObject.images.slice(0, 50) : finalObject.images;
 
       this.canCloseWizard = true;
       this.wizard.showWizard = false;
       this.flickerReduceOverlay = false;
+
+      // reset the Word Cloud
+      this.wordFrequencyService.computeFrequencyArray(this.imageElementService.imageElements.length, 165);
+
+      this.fixManualTagTrayBreakingBug(); // hack -- TODO: fix
 
       this.setUpDurationFilterValues(this.imageElementService.imageElements);
       this.setUpSizeFilterValues(this.imageElementService.imageElements);
@@ -2601,6 +2607,21 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if (this.settingsButtons['showOnlyPlaylist'].toggled) {
       this.playlistViewRefresh = !this.playlistViewRefresh;
     }
+  }
+
+  /**
+   * hack to avoid a bug that's hard to diagnose
+   * without it, switching from one hub to another breaks tags (!)
+   * while tray updates, clicking on a tag doesn't auto-show it
+   * worse-yet, afterwards the tag in sidebar search isn't clickable
+   */
+  fixManualTagTrayBreakingBug(): void {
+      if (this.settingsButtons['showTagTray'].toggled) {
+        this.settingsButtons['showTagTray'].toggled = false;
+        setTimeout(() => {
+          this.settingsButtons['showTagTray'].toggled = true;
+        }, 0);
+      }
   }
 
 }

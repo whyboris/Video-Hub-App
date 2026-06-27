@@ -93,16 +93,20 @@ export class WordFrequencyService {
   }
 
   /**
-   * Computes the array `numberOfTags` objects long with most frequent words
-   * Creates `height` property, scaled between 12 and 22 proportionally
-   * calls `.next` on BehaviorSubject
-   * @param total: total number of files displayed
+   * Computes the array with `maximumToShow` elements containing most frequent words in descending order
+   * Creates `height` property, scaled between 12 and 22 proportionally (used as pixel height)
+   * calls `.next` on BehaviorSubject with resulting array
+   *
+   * @param elementsInHub: number of ImageELements in current hub
+   * @param maximumToShow: maximum number to show in word cloud
    **/
-  public computeFrequencyArray(total: number, numberOfTags: number): void {
+  public computeFrequencyArray(elementsInHub: number, maximumToShow: number): void {
+
     const finalResult: WordFreqAndHeight[] = [];
-    for (let i = 0; i < numberOfTags; i++) {
+
+    for (let i = 0; i < maximumToShow; i++) {
       if (this.wordMap.size > 0) {
-        finalResult[i] = this.getMostFrequent(total);
+        finalResult[i] = this.getMostFrequent(elementsInHub);
       } else {
         finalResult[i] = {
           word: null,
