@@ -8,7 +8,7 @@
     >
       {{ settingsMetaGroupLabels[i] | translate }}
     </span>
-  @for (buttonKey of group; track buttonKey) {
+  @for (buttonKey of group; track childIndex; let childIndex = $index) {
     <div>
     @if (buttonKey !== 'break') {
       <div>
