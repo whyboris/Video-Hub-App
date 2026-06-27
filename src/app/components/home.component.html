@@ -454,7 +454,7 @@
           class="filter-general input-filter"
           placeholder="{{ 'SIDEBAR.magic' | translate }}"
         >
-        <div class="filteredWords">
+        <div class="filtered-words">
         @if (magicSearchString !== '') {
           <span
             (click)="magicSearchString = ''"
@@ -481,7 +481,7 @@
           class="filter-general input-filter"
           placeholder="{{ 'SIDEBAR.regex' | translate }}"
         >
-        <div class="filteredWords">
+        <div class="filtered-words">
         @if (regexSearchString !== '') {
           <span
             (click)="regexSearchString = ''"
@@ -510,7 +510,7 @@
           class="filter-general input-filter"
           placeholder="{{ 'SIDEBAR.fuzzy' | translate }}"
         >
-        <div class="filteredWords">
+        <div class="filtered-words">
         @if (fuzzySearchString !== '' && fuzzySearchString.length > 2) {
           <span
             (click)="fuzzySearchString = ''"
@@ -537,7 +537,7 @@
           class="filter-general input-filter"
           placeholder="{{ 'SIDEBAR.startsWith' | translate }}"
         />
-        <div class="filteredWords">
+        <div class="filtered-words">
           <span
             *ngIf="startsWithSearchString !== ''"
             (click)="startsWithSearchString = ''"
