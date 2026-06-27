@@ -1,7 +1,18 @@
 .sort-filter {
-  height: 64px; // to make the appear/disappear animation be smooth
+  height: 50px; // to make the appear/disappear animation be smooth match `sortFilterAppear` animation height
+  overflow: hidden;
 }
 
 .sort-dropdown {
+  height: 30px;
   cursor: pointer;
+  margin: 10px 0 0;
+  max-width: 168px;
+  min-width: 168px;
+  outline: none;
+}
+
+.sort-dropdown-dark-mode {
+  background: black;
+  color: white;
 }

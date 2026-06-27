@@ -18,6 +18,16 @@
     margin: 10px;
     max-width: 360px;
     min-width: 290px;
+
+    tr {
+      td:first-child:not(.span-both) {
+        color: variables.$gray-50;
+      }
+      td:nth-child(2) {
+        font-family: monospace;
+      }
+    }
+
   }
 }
 

@@ -30,7 +30,7 @@
     [video]="item"
 
     [connected]="sourceFolderService.sourceFolderConnected[item.inputSource]"
-    [darkMode]="settingsButtons()['darkMode'].toggled"
+    [darkMode]="settingsButtons().darkMode.toggled"
     [elHeight]="previewHeightRelated() + 50"
     [elWidth]="previewWidthRelated()"
     [folderPath]="appState().selectedOutputFolder"

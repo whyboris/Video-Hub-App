@@ -402,13 +402,6 @@
 
       <div class="filtering-total">
 
-      @if (appState.numOfFolders !== 0) {
-        {{ appState.numOfFolders | number }}
-        {{ (appState.numOfFolders === 1 ? 'SIDEBAR.totalFolders' : 'SIDEBAR.totalFoldersPlural') | translate }}
-      }
-
-        <br>
-
       @if (!allFinishedScanning || importStage === 'importingMeta') {
         <div
           class="scanning-indicator"
@@ -416,8 +409,23 @@
           @slowFadeOut
         ></div>
       }
+
+      @if (appState.numOfFolders !== 0) {
+
+        <div class="container-icon-total">
+          <app-icon [icon]="'icon-folder-blank'"></app-icon>
+        </div>
+
+        {{ appState.numOfFolders | number }}
+
+      }
+
+        <div class="container-icon-total">
+          <app-icon [icon]="'icon-video-blank'"></app-icon>
+        </div>
+
         {{ (imageElementService.imageElements | deleteFilePipe : deletePipeTrigger).length | number }}
-        {{ 'SIDEBAR.videos' | translate }}
+
       </div>
 
       <!-- Regular search boxes / filters -->
@@ -436,7 +444,11 @@
       <!-- magic search -->
     @if (settingsButtons['magic'].toggled) {
       <div @filterItemAppear>
-        <app-icon class="input-icon" [icon]="settingsButtons['magic'].iconName" />
+        <app-icon
+          class="input-icon"
+          [icon]="settingsButtons['magic'].iconName"
+          title="{{ settingsButtons['magic'].moreInfo | translate }}"
+        />
         <input
           #magicSearch
           (keydown.escape)="magicSearchString = ''"
@@ -446,7 +458,7 @@
           class="filter-general input-filter"
           placeholder="{{ 'SIDEBAR.magic' | translate }}"
         >
-        <div class="filteredWords">
+        <div class="filtered-words">
         @if (magicSearchString !== '') {
           <span
             (click)="magicSearchString = ''"
@@ -463,7 +475,11 @@
     <!-- regex search -->
     @if (settingsButtons['regex'].toggled) {
       <div @filterItemAppear>
-        <app-icon class="input-icon" [icon]="settingsButtons['regex'].iconName" />
+        <app-icon
+        class="input-icon"
+        [icon]="settingsButtons['regex'].iconName"
+        title="{{ settingsButtons['regex'].moreInfo | translate }}"
+      />
         <input
           #regexSearch
           (keydown.escape)="regexSearchString = ''"
@@ -473,7 +489,7 @@
           class="filter-general input-filter"
           placeholder="{{ 'SIDEBAR.regex' | translate }}"
         >
-        <div class="filteredWords">
+        <div class="filtered-words">
         @if (regexSearchString !== '') {
           <span
             (click)="regexSearchString = ''"
@@ -492,7 +508,11 @@
       <!-- fuzzy search -->
     @if (settingsButtons['fuzzy'].toggled) {
       <div @filterItemAppear>
-        <app-icon class="input-icon" [icon]="settingsButtons['fuzzy'].iconName" />
+        <app-icon
+          class="input-icon"
+          [icon]="settingsButtons['fuzzy'].iconName"
+          title="{{ settingsButtons['fuzzy'].moreInfo | translate }}"
+        />
         <input
           #fuzzySearch
           (keydown.escape)="fuzzySearchString = ''"
@@ -502,7 +522,7 @@
           class="filter-general input-filter"
           placeholder="{{ 'SIDEBAR.fuzzy' | translate }}"
         >
-        <div class="filteredWords">
+        <div class="filtered-words">
         @if (fuzzySearchString !== '' && fuzzySearchString.length > 2) {
           <span
             (click)="fuzzySearchString = ''"
@@ -519,7 +539,11 @@
       <!-- starts-with search -->
     @if (settingsButtons['startsWith'].toggled) {
       <div @filterItemAppear>
-        <app-icon class="input-icon" [icon]="settingsButtons['startsWith'].iconName" />
+        <app-icon
+          class="input-icon"
+          [icon]="settingsButtons['startsWith'].iconName"
+          title="{{ settingsButtons['startsWith'].moreInfo | translate }}"
+        />
         <input
           #startsWithSearch
           (keydown.escape)="startsWithSearchString = ''"
@@ -529,7 +553,7 @@
           class="filter-general input-filter"
           placeholder="{{ 'SIDEBAR.startsWith' | translate }}"
         />
-        <div class="filteredWords">
+        <div class="filtered-words">
           <span
             *ngIf="startsWithSearchString !== ''"
             (click)="startsWithSearchString = ''"
@@ -727,15 +751,15 @@
     }
 
       <!-- total found -->
-      <div class="filtering-total">
+      <div class="filtering-total total-found" [ngClass]="{ 'total-found-dark': settingsButtons['darkMode'].toggled }">
         @if (numberOfVideosFound < (imageElementService.imageElements | deleteFilePipe : deletePipeTrigger).length) {
           <span
             title="{{ 'BUTTONS.clearAllFiltersHint' | translate }}"
             class="clear-all-filters"
             (click)="clearAllFilters()"
-          >{{ numberOfVideosFound | number:'.0' }} {{ 'SIDEBAR.found' | translate }}</span>
+          ><em>{{ numberOfVideosFound | number:'.0' }}</em> {{ 'SIDEBAR.found' | translate }}</span>
         } @else {
-          <span>{{ numberOfVideosFound | number:'.0' }} {{ 'SIDEBAR.found' | translate }}</span>
+          <span><em>{{ numberOfVideosFound | number:'.0' }}</em> {{ 'SIDEBAR.found' | translate }}</span>
         }
       </div>
 

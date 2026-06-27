@@ -1,6 +1,6 @@
 <div
   (click)="closeRename.emit()"
-  [ngClass]="{ 'close-rename-dark': settingsButtons()['darkMode'].toggled }"
+  [ngClass]="{ 'close-rename-dark': settingsButtons().darkMode.toggled }"
   class="close-settings close-rename"
   title="{{ 'RIGHTCLICK.cancelRename' | translate }}"
 >
@@ -10,7 +10,7 @@
 <span class="rename-heading">{{ 'RIGHTCLICK.renameTitle' | translate }}</span>
 
 <app-filmstrip-item
-  [darkMode]="settingsButtons()['darkMode'].toggled"
+  [darkMode]="settingsButtons().darkMode.toggled"
   [elHeight]="150"
   [folderPath]="appState().selectedOutputFolder"
   [hoverScrub]="true"
@@ -28,7 +28,7 @@
   [selectedSourceFolder]="basePath()"
   [currentRightClickedItem]="currentRightClickedItem()"
   [macVersion]="macVersion()"
-  [darkMode]="settingsButtons()['darkMode'].toggled"
+  [darkMode]="settingsButtons().darkMode.toggled"
 
   [renameResponse]="renameResponse().asObservable()"
  />

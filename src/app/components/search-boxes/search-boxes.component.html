@@ -1,4 +1,4 @@
-@for (filter of filters(); track filter; let j = $index) {
+@for (filter of filters(); track filter.uniqueKey; let j = $index) {
 
   @if (settingsButtons[filter.uniqueKey].toggled) {
 
@@ -6,7 +6,10 @@
     class="filter-container"
     @filterItemAppear
   >
-    <app-icon class="input-icon" [icon]="settingsButtons[filter.uniqueKey].iconName" />
+    <app-icon
+      class="input-icon"
+      [icon]="settingsButtons[filter.uniqueKey].iconName"
+      title="{{ settingsButtons[filter.uniqueKey].moreInfo | translate }}" />
     <input
       id="{{ filter.uniqueKey }}"
       (keyup.enter)="onEnterKey.emit({ word: filter.string, index: j })"
@@ -27,7 +30,7 @@
       >{{ tagTypeAhead() }}</span>
     }
 
-    <div class="filteredWords">
+    <div class="filtered-words">
 
     @if (filter.array.length > 0) {
 

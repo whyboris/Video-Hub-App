@@ -1,6 +1,6 @@
 import { Colors } from './colors';
 
-interface FilterObject {
+export interface FilterObject {
   uniqueKey: string;
   string: string;  // search string
   array: string[]; // container for all search strings
