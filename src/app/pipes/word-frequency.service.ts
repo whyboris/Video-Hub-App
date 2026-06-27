@@ -13,7 +13,7 @@ export interface WordFreqAndHeight {
 }
 
 @Injectable()
-export class WordFrequencyService {
+export class WordFrequencyService { // Word Cloud
 
   wordMap: Map<string, number> = new Map();
   finalMapBehaviorSubject: BehaviorSubject<WordFreqAndHeight[]> = new BehaviorSubject([]);
@@ -93,16 +93,24 @@ export class WordFrequencyService {
   }
 
   /**
-   * Computes the array `numberOfTags` objects long with most frequent words
-   * Creates `height` property, scaled between 12 and 22 proportionally
-   * calls `.next` on BehaviorSubject
-   * @param total: total number of files displayed
+   * Computes the array with `maximumToShow` elements containing most frequent words in descending order
+   * Creates `height` property, scaled between 12 and 22 proportionally (used as pixel height)
+   * calls `.next` on BehaviorSubject with resulting array
+   *
+   * @param elementsInHub: number of ImageELements in current hub
+   * @param maximumToShow: maximum number to show in word cloud
    **/
-  public computeFrequencyArray(total: number, numberOfTags: number): void {
-    const finalResult: WordFreqAndHeight[] = [];
-    for (let i = 0; i < numberOfTags; i++) {
+  public computeFrequencyArray(elementsInHub: number, maximumToShow: number): void {
+
+    if (this.wordMap.size === 0) {
+      return;
+    }
+
+    let finalResult: WordFreqAndHeight[] = [];
+
+    for (let i = 0; i < maximumToShow; i++) {
       if (this.wordMap.size > 0) {
-        finalResult[i] = this.getMostFrequent(total);
+        finalResult[i] = this.getMostFrequent(elementsInHub);
       } else {
         finalResult[i] = {
           word: null,
@@ -121,6 +129,8 @@ export class WordFrequencyService {
         element.height = 12 + (element.freq - smallest) * scaleFactor;
       });
     }
+
+    finalResult = finalResult.filter(el => el.word);
 
     this.finalMapBehaviorSubject.next(finalResult);
   }

@@ -54,7 +54,7 @@ export class FilmstripComponent implements OnInit {
     this.fullFilePath = this.filePathService.createFilePath(this.folderPath(), this.hubName(), 'filmstrips', this.video().hash);
   }
 
-  updateFilmXoffset(mouseMove: MouseEvent) {
+  updateFilmXoffset(mouseMove: PointerEvent) {
     if (this.hoverScrub()) {
       const imgWidth = this.imgHeight() * (16 / 9); // hardcoded aspect ratio
       const containerWidth = this.filmstripHolder().nativeElement.getBoundingClientRect().width;
@@ -66,7 +66,7 @@ export class FilmstripComponent implements OnInit {
     }
   }
 
-  toggleHeart(mouseClick: MouseEvent): void {
+  toggleHeart(mouseClick: PointerEvent): void {
     mouseClick.stopPropagation();
     this.imageElementService.toggleHeart(this.video().index);
   }

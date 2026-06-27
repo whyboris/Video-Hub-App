@@ -1281,28 +1281,26 @@
 
 <!-- WORD CLOUD -->
 @if (settingsButtons['showFreq'].toggled) {
-  <div
-    class="cloud-frequency"
-  >
+  <div class="cloud-frequency">
     <div class="word-cloud-buttons">
       <app-button (toggleButton)="toggleButton($any($event))" [button]="'manualTags'"     [settingsButtons]="settingsButtons" />
       <app-button (toggleButton)="toggleButton($any($event))" [button]="'autoFileTags'"   [settingsButtons]="settingsButtons" />
       <app-button (toggleButton)="toggleButton($any($event))" [button]="'autoFolderTags'" [settingsButtons]="settingsButtons" />
+      <app-button (toggleButton)="toggleButton($any($event))" [button]="'sortAutoTags'"   [settingsButtons]="settingsButtons" />
     </div>
+
   @if (settingsButtons['manualTags'].toggled
     || settingsButtons['autoFileTags'].toggled
     || settingsButtons['autoFolderTags'].toggled) {
-    <div
-      class="word-cloud-tags"
-    >
-    @for (word of wordFreqArr; track word) {
+    <div class="word-cloud-tags">
+    @for (word of (wordFreqArr | wordCloudSortPipe : settingsButtons['sortAutoTags'].toggled); track $index) {
       <span
         [ngStyle]="{'font-size': word.height + 'px' }"
         (click)="handleTagWordClicked(word.word, $event)"
       >
         {{ word.word }}
       </span>
-  }
+    }
     </div>
   } @else {
       <span class="please-select-tag" @modalAnimation>

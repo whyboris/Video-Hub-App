@@ -35,13 +35,13 @@ export const AllSupportedBottomTrayViews: SupportedTrayView[] = [
 
 // Mouse click events
 export interface VideoClickEmit {
-  mouseEvent: MouseEvent;
+  mouseEvent: PointerEvent;
   thumbIndex?: number;
   doubleClick?: boolean;
 }
 
 export interface RightClickEmit {
-  mouseEvent: MouseEvent;
+  mouseEvent: PointerEvent;
   item: ImageElement;
 }
 
@@ -54,7 +54,7 @@ export interface Tag {
 
 export interface TagEmit {
   tag: Tag;
-  event: MouseEvent;
+  event: PointerEvent;
 }
 
 export interface TagEmission {

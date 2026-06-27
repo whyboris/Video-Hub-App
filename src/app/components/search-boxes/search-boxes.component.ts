@@ -1,4 +1,4 @@
-import { Component, Input, input, output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { filterItemAppear } from '../../common/animations';
 
 import type { SettingsButtonsType } from '../../common/settings-buttons';
@@ -30,7 +30,7 @@ export class SearchBoxesComponent {
 
   readonly filters = input<FilterObject[]>();
 
-  @Input() settingsButtons: SettingsButtonsType;
+  readonly settingsButtons = input<SettingsButtonsType>();
 
   readonly tagTypeAhead = input();
 

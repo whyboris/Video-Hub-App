@@ -110,6 +110,7 @@ import { TagsDisplayPipe } from './components/tags-auto/tag-display.pipe';
 import { TimesPlayedFilterPipe } from './pipes/times-played-filter.pipe';
 import { TimesPlayedPipe } from './pipes/times-played.pipe';
 import { TotalSelected } from './pipes/total-selected.pipe';
+import { WordCloudSortPipe } from './pipes/word-cloud-sort.pipe';
 import { WordFrequencyPipe } from './pipes/word-frequency.pipe';
 import { WrapperPipe } from './pipes/wrapper.pipe';
 import { YearFilterPipe } from './pipes/year-filter.pipe';
@@ -192,6 +193,7 @@ import { YearPipe } from './pipes/year.pipe';
     ViewTagsComponent,
     WelcomeComponent,
     WizardComponent,
+    WordCloudSortPipe,
     WordFrequencyPipe,
     WrapperPipe,
     YearFilterPipe,
