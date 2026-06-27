@@ -133,7 +133,7 @@ export class MetaComponent implements OnInit, OnDestroy {
    * Handle tag right-click event - show color picker via service
    * @param event - Object containing tag and mouse event
    */
-  onTagRightClick(event: { tag: any, event: MouseEvent }): void {
+  onTagRightClick(event: { tag: any, event: PointerEvent }): void {
     this.selectedTagForColor = event.tag.name;
 
     // Emit event to show color picker at home component level

@@ -47,7 +47,7 @@ export class ViewTagsComponent {
 
   readonly removeTagEmit = output<string>();
   readonly tagClicked = output<TagEmit>();
-  readonly tagRightClick = output<{ tag: Tag; event: MouseEvent; }>();
+  readonly tagRightClick = output<{ tag: Tag; event: PointerEvent; }>();
 
   readonly dragHack = viewChild<ElementRef>('dragHack');
 
@@ -58,7 +58,7 @@ export class ViewTagsComponent {
   /**
    * Emit to parent component a tag has been clicked
    */
-  tagClick(tag: Tag, event: MouseEvent): void {
+  tagClick(tag: Tag, event: PointerEvent): void {
     this.tagClicked.emit({ tag, event });
   }
 
@@ -104,10 +104,10 @@ export class ViewTagsComponent {
 
   /**
    * Handle right-click on tag - emit to parent to handle color picker
-   * @param event - MouseEvent
+   * @param event - PointerEvent
    * @param tag - Tag
    */
-  onTagRightClick(event: MouseEvent, tag: Tag): void {
+  onTagRightClick(event: PointerEvent, tag: Tag): void {
     if (!this.enableColorPicker()) {
       return;
     }

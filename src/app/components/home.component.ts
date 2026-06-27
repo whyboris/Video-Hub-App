@@ -2017,7 +2017,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
       });
     });
 
-    // console.log(objectKeys);
     return (objectKeys);
   }
 
@@ -2106,7 +2105,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   showSimilarNow(): void {
     this.findMostSimilar = this.currentRightClickedItem.cleanName;
-    // console.log(this.findMostSimilar);
     this.showSimilar = true;
   }
 
@@ -2117,7 +2115,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.handleFolderWordClicked(this.currentRightClickedItem.partialPath);
   }
 
-  rightMouseClicked(event: MouseEvent, item: ImageElement): void {
+  rightMouseClicked(event: PointerEvent, item: ImageElement): void {
     this.currentRightClickedItem = item;
 
     const winWidth: number = window.innerWidth;

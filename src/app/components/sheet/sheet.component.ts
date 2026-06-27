@@ -143,7 +143,7 @@ export class SheetComponent implements OnInit {
   /**
    * Set ImageElement defaultScreen property
    */
-  setDefaultScreenshot(event: MouseEvent, index: number): void {
+  setDefaultScreenshot(event: PointerEvent, index: number): void {
     event.stopPropagation();
 
     this.imageElementService.HandleEmission({

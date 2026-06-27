@@ -81,7 +81,7 @@ export class TagTrayComponent {
    * Handle tag right-click event - show color picker via service
    * @param event - Object containing tag and mouse event
    */
-  onTagRightClick(event: { tag: any, event: MouseEvent }): void {
+  onTagRightClick(event: { tag: any, event: PointerEvent }): void {
     // Emit event to show color picker at home component level
     this.manualTagsService.showColorPickerSubject.next({
       tagName: event.tag.name,

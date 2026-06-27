@@ -74,7 +74,7 @@ export class FullViewComponent implements OnInit {
     }
   }
 
-  toggleHeart(mouseClick: MouseEvent): void {
+  toggleHeart(mouseClick: PointerEvent): void {
     mouseClick.stopPropagation();
     this.imageElementService.toggleHeart(this.video().index);
   }
