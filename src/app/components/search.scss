@@ -88,6 +88,10 @@
     cursor: not-allowed;
     color: variables.$pretty-red;
     text-decoration: line-through !important;
+
+    em {
+      color: variables.$pretty-red;
+    }
   }
 }
 
