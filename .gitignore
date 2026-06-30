@@ -10,6 +10,12 @@
 /remote
 /.idea
 
+/ffmpeg/ffmpeg
+/ffmpeg/ffprobe
+
+/ffmpeg/ffmpeg.exe
+/ffmpeg/ffprobe.exe
+
 *.js
 *.js.map
 *.log

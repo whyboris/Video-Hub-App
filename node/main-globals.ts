@@ -1,9 +1,10 @@
 import type { ScreenshotSettings, InputSources } from '../interfaces/final-object.interface';
 
-// For release, update 4 values:                                                                          <---- !!! RELEASE !!!
+// For release, update 5 values:                                                                          <---- !!! RELEASE !!!
 //
 // `demo: true,`                 -- below
 // `version: 'X.X.X',`           -- below
+// `nvidiaBuild: true,           -- below (separate build, requires nvidia FFmpeg)
 // `productName: "... Demo'`     -- package.json
 // `"version": "X.X.X",`         -- package.json
 
@@ -11,6 +12,7 @@ export const GLOBALS: VhaGlobals = {
   angularApp: null,            // reference used to send messages back to Angular App
   currentlyOpenVhaFile: '',    // OFFICAL DECREE IN NODE WHICH FILE IS CURRENTLY OPEN !!!
   debug: false,
+  nvidiaBuild: true,          // make sure to use FFmpeg with nvidia cuda abilities                      <---- !!! RELEASE !!!
   demo: false,                 // change to `true` during release                                         <---- !!! RELEASE !!!
   hubName: 'untitled',         // in case user doesn't name their hub any name
   macVersion: false,           // auto updated by `main.ts`
@@ -40,6 +42,7 @@ export interface VhaGlobals {
   demo: boolean;
   hubName: string;
   macVersion: boolean;
+  nvidiaBuild: boolean;
   readyToQuit: boolean;
   screenshotSettings: ScreenshotSettings;
   selectedOutputFolder: string;
