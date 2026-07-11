@@ -818,7 +818,7 @@
 
                 | hideOfflinePipe : settingsButtons['hideOffline'].toggled
 
-                | returnZeroPipe : (appState.currentView === 'showClips' && currentScreenshotSettings.clipSnippets === 0)
+                | returnZeroPipe : ((appState.currentView === 'showClips' || appState.currentView === 'showSegments') && currentScreenshotSettings.clipSnippets === 0)
 
                 | fileSearchPipe : filters[0].array : filters[0].bool : true  : 'folder' : false
 
@@ -1138,6 +1138,44 @@
       }
     }
 
+      <!-- ==================================== SEGMENTS ==================================== -->
+
+    @if (appState.currentView === 'showSegments') {
+      @for (item of scroll.viewPortItems; track item.uuid) {
+        <app-segments-item
+          (videoClick)="handleClick($event, item)"
+          (rightClick)="(item.cleanName === '*FOLDER*') ? doNothing() : rightMouseClicked($event.mouseEvent, $event.item)"
+
+          (sheetClick)="this.openThumbnailSheet(item)"
+
+          (drop)="droppedSomethingOverVideo($event, item)"
+
+          [draggable]="settingsButtons['dragVideoOutOfApp'].toggled"
+          (dragstart)="draggingVideoFile($event, item)"
+
+          [video]="item"
+
+          [clipSnippets]="currentScreenshotSettings.clipSnippets"
+          [snippetLength]="currentScreenshotSettings.clipSnippetLength"
+
+          [folderPath]="appState.selectedOutputFolder"
+          [galleryWidth]="galleryWidth"
+          [hubName]="appState.hubName"
+          [previewWidth]="previewWidth"
+          [showFavorites]="settingsButtons['favorites'].toggled"
+
+          [autoplay]="settingsButtons['autoplayClips'].toggled"
+          [compactView]="settingsButtons['compactView'].toggled"
+          [darkMode]="settingsButtons['darkMode'].toggled"
+          [forceMute]="settingsButtons['muteClips'].toggled"
+          [largerFont]="settingsButtons['fontSizeLarger'].toggled"
+          [showMeta]="settingsButtons['showMoreInfo'].toggled"
+
+          style="display: block"
+         />
+      }
+    }
+
       <div class="bottom-of-scroller-spacer"></div>
 
     </virtual-scroller>
@@ -1150,7 +1188,7 @@
         'color': settingsButtons['darkMode'].toggled ? '#aaaaaa' : 'initial'
       }"
     >
-      @if ((appState.currentView === 'showClips' && currentScreenshotSettings.clipSnippets === 0)) {
+      @if (((appState.currentView === 'showClips' || appState.currentView === 'showSegments') && currentScreenshotSettings.clipSnippets === 0)) {
         {{ 'SETTINGS.noClipsExtracted' | translate }}
       } @else {
         {{ 'SETTINGS.noResultsFound' | translate }}

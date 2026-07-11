@@ -32,7 +32,8 @@ export class ShortcutsComponent {
     'showDetails',       // 4
     'showDetails2',      // 5
     'showFiles',         // 6
-    'showClips',         // 7 - space after
+    'showClips',         // 7
+    'showSegments',      // 8 - space after
 
     'focusOnFile',       // f
     'focusOnMagic',      // g
