@@ -3,7 +3,7 @@ import { Component, NgZone, computed, effect, input, output, viewChild } from '@
 
 import { FilePathService } from '../file-path.service';
 import { ImageElementService } from './../../../services/image-element.service';
-import { VideoDecodeBudgetService } from './../../../services/video-decode-budget.service';
+import { VideoAutoplaySchedulerService } from './../../../services/video-autoplay-scheduler.service';
 
 import type { ImageElement } from '../../../../../interfaces/final-object.interface';
 import type { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/shared-interfaces';
@@ -71,15 +71,16 @@ export class SegmentsComponent implements OnInit, AfterViewInit, OnDestroy {
   noError = true;
 
   private cleanupFns: (() => void)[] = [];
-  // videos this component currently holds a decode-budget slot for (autoplay-driven
-  // only; hover-triggered playback never requests a slot, so never appears here)
-  private autoplaySlotHeld = new Set<HTMLVideoElement>();
+  // cancel functions for scheduled-but-not-yet-started autoplay begins, keyed by
+  // the <video> they belong to (hover-triggered playback bypasses the scheduler
+  // entirely and is never tracked here)
+  private pendingAutoplayStarts = new Map<HTMLVideoElement, () => void>();
 
   constructor(
-    private decodeBudget: VideoDecodeBudgetService,
     public filePathService: FilePathService,
     public imageElementService: ImageElementService,
     private ngZone: NgZone,
+    private scheduler: VideoAutoplaySchedulerService,
   ) {
     // Mirrors clip.component's `@if(!autoplay()) / @if(autoplay())` template swap, which
     // naturally re-applies the current mode whenever the button is toggled. This component
@@ -99,7 +100,7 @@ export class SegmentsComponent implements OnInit, AfterViewInit, OnDestroy {
             v.pause();
             v.muted = true;
             v.currentTime = cell.start; // back to the parked poster-frame state
-            this.releaseAutoplaySlot(v);
+            this.cancelPendingAutoplayStart(v);
           }
         });
       });
@@ -162,15 +163,16 @@ export class SegmentsComponent implements OnInit, AfterViewInit, OnDestroy {
       on('timeupdate', loopBack, true);
       on('ended', loopBack, true);
 
-      // hover-to-play (default mode); in autoplay mode hovering only unmutes
+      // hover always plays immediately, bypassing the idle scheduler entirely --
+      // a deliberate user action must never wait on an autoplay video that's
+      // still in its idle-scheduled holding period
       on('mouseover', (event: Event) => {
         const cell = this.asSegmentVideo(event.target);
         if (!cell) { return; }
+        cell.video.muted = this.forceMute() || false; // real hover is a user gesture, so sound is allowed
+        this.tryPlay(cell.video);
         if (this.autoplay()) {
-          cell.video.muted = this.forceMute() || false; // already playing; just unmute (real hover = user gesture)
-        } else {
-          cell.video.muted = this.forceMute() || false; // real hover is a user gesture, so sound is allowed
-          this.tryPlay(cell.video);
+          this.cancelPendingAutoplayStart(cell.video); // now playing directly; no need for the deferred start to also fire
         }
       }, false);
 
@@ -187,7 +189,7 @@ export class SegmentsComponent implements OnInit, AfterViewInit, OnDestroy {
       // save the battery/fans when the app loses focus (autoplay mode)
       const onBlur = () => this.eachVideo((v) => {
         v.pause();
-        this.releaseAutoplaySlot(v); // re-requested on focus via tryAutoplayStart
+        this.cancelPendingAutoplayStart(v); // re-scheduled on focus via tryAutoplayStart
       });
       const onFocus = () => {
         if (this.autoplay()) {
@@ -206,8 +208,8 @@ export class SegmentsComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.cleanupFns.forEach((fn) => fn());
     this.cleanupFns = [];
-    this.autoplaySlotHeld.forEach(() => this.decodeBudget.releaseSlot());
-    this.autoplaySlotHeld.clear();
+    this.pendingAutoplayStarts.forEach((cancel) => cancel());
+    this.pendingAutoplayStarts.clear();
     // release decoder resources deterministically
     this.eachVideo((v) => {
       v.pause();
@@ -240,8 +242,7 @@ export class SegmentsComponent implements OnInit, AfterViewInit, OnDestroy {
       cell.video.currentTime = cell.start;
     }
     if (this.autoplay() && cell.video.paused) {
-      // stagger starts so a screenful of rows does not spin up every decoder in one frame
-      setTimeout(() => this.tryAutoplayStart(cell.video), Math.floor(Math.random() * 500));
+      this.tryAutoplayStart(cell.video);
     }
   }
 
@@ -256,25 +257,31 @@ export class SegmentsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   /**
-   * Budget-gated autoplay start -- only ever called from autoplay-driven code paths
-   * (staggered initial start, effect() toggle-on, focus resume). Hover-triggered
-   * playback always uses `tryPlay()` directly and must never go through here.
+   * Idle-scheduled autoplay start -- only ever called from autoplay-driven code
+   * paths (initial start, effect() toggle-on, focus resume). Hover-triggered
+   * playback always uses `tryPlay()` directly, bypassing the scheduler, and
+   * must never go through here. Scrolling a row away before the idle slot
+   * arrives (see `cancelPendingAutoplayStart`) means it never starts at all --
+   * a fast scroll-through never pays for decode on rows already passed.
    */
   private tryAutoplayStart(video: HTMLVideoElement): void {
-    if (this.autoplaySlotHeld.has(video)) {
-      this.tryPlay(video); // already holds a slot -- just (re)play
-      return;
+    if (this.pendingAutoplayStarts.has(video)) {
+      return; // already scheduled
     }
-    if (!this.decodeBudget.requestSlot()) {
-      return; // budget exhausted -- stays parked on its poster frame
-    }
-    this.autoplaySlotHeld.add(video);
-    this.tryPlay(video);
+    const cancel = this.scheduler.schedule(() => {
+      this.pendingAutoplayStarts.delete(video);
+      if (this.autoplay()) {
+        this.tryPlay(video);
+      }
+    });
+    this.pendingAutoplayStarts.set(video, cancel);
   }
 
-  private releaseAutoplaySlot(video: HTMLVideoElement): void {
-    if (this.autoplaySlotHeld.delete(video)) {
-      this.decodeBudget.releaseSlot();
+  private cancelPendingAutoplayStart(video: HTMLVideoElement): void {
+    const cancel = this.pendingAutoplayStarts.get(video);
+    if (cancel) {
+      cancel();
+      this.pendingAutoplayStarts.delete(video);
     }
   }
 

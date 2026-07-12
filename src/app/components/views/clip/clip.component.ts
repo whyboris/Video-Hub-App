@@ -5,7 +5,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 
 import { FilePathService } from '../file-path.service';
 import { ImageElementService } from './../../../services/image-element.service';
-import { VideoDecodeBudgetService } from './../../../services/video-decode-budget.service';
+import { VideoAutoplaySchedulerService } from './../../../services/video-autoplay-scheduler.service';
 
 import type { ImageElement } from '../../../../../interfaces/final-object.interface';
 import type { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/shared-interfaces';
@@ -55,17 +55,19 @@ export class ClipComponent implements OnInit, OnDestroy {
   poster: string;
   posterFolderType: any = 'clips';
 
-  // videos this component currently holds a decode-budget slot for (autoplay-driven only;
-  // hover-triggered playback never requests a slot, so it never appears here)
-  private autoplaySlotHeld = new Set<HTMLVideoElement>();
+  // cancel functions for scheduled-but-not-yet-started autoplay begins, keyed by
+  // the <video> they belong to, so a row that scrolls away before its idle slot
+  // arrives never actually starts decoding (hover-triggered playback bypasses
+  // this scheduler entirely and is never tracked here)
+  private pendingAutoplayStarts = new Map<HTMLVideoElement, () => void>();
 
   constructor(
     public cd: ChangeDetectorRef,
-    private decodeBudget: VideoDecodeBudgetService,
     private elementRef: ElementRef<HTMLElement>,
     public filePathService: FilePathService,
     public imageElementService: ImageElementService,
-    public sanitizer: DomSanitizer
+    public sanitizer: DomSanitizer,
+    private scheduler: VideoAutoplaySchedulerService,
   ) { }
 
   @HostListener('mouseenter') onMouseEnter() {
@@ -78,8 +80,8 @@ export class ClipComponent implements OnInit, OnDestroy {
   onBlur(event: any): void {
     this.appInFocus = false;
     // Angular's `@if(autoplay() && appInFocus)` is about to remove these video
-    // elements entirely -- release their slots now rather than leaking them.
-    this.releaseAllAutoplaySlots();
+    // elements entirely -- cancel any not-yet-fired scheduled starts.
+    this.cancelAllPendingAutoplayStarts();
   }
   @HostListener('window:focus', ['$event'])
   onFocus(event: any): void {
@@ -95,37 +97,34 @@ export class ClipComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Staggered, budget-gated autoplay start. Bound to `(loadeddata)` on every
-   * autoplay-mode <video> (folder previews + single clip). If the shared decode
-   * budget is exhausted the video simply stays parked on its poster frame --
-   * still real video, just not decoding until a slot frees up or it's hovered
-   * directly (hover playback bypasses the budget entirely, see template).
+   * Bound to `(loadeddata)` on every autoplay-mode <video> (folder previews +
+   * single clip). Defers the actual `.play()` to idle time via the scheduler --
+   * a fast scroll-through never pays for decode on rows already scrolled past
+   * (the scheduled start is cancelled on destroy/blur before it fires), but
+   * nothing is ever permanently blocked: once idle, every visible video plays.
+   * Hovering (see template) always plays immediately regardless of this.
    */
   onAutoplayReady(event: Event): void {
     const video = event.target as HTMLVideoElement;
-    setTimeout(() => {
-      if (!this.autoplay() || !this.appInFocus) {
-        return; // state changed during the stagger delay
-      }
-      if (this.autoplaySlotHeld.has(video)) {
+    if (this.pendingAutoplayStarts.has(video)) {
+      return; // already scheduled (e.g. metadata re-fired)
+    }
+    const cancel = this.scheduler.schedule(() => {
+      this.pendingAutoplayStarts.delete(video);
+      if (this.autoplay() && this.appInFocus) {
         video.play().catch(() => {});
-        return;
       }
-      if (!this.decodeBudget.requestSlot()) {
-        return;
-      }
-      this.autoplaySlotHeld.add(video);
-      video.play().catch(() => {});
-    }, Math.floor(Math.random() * 500));
+    });
+    this.pendingAutoplayStarts.set(video, cancel);
   }
 
-  private releaseAllAutoplaySlots(): void {
-    this.autoplaySlotHeld.forEach(() => this.decodeBudget.releaseSlot());
-    this.autoplaySlotHeld.clear();
+  private cancelAllPendingAutoplayStarts(): void {
+    this.pendingAutoplayStarts.forEach((cancel) => cancel());
+    this.pendingAutoplayStarts.clear();
   }
 
   ngOnDestroy(): void {
-    this.releaseAllAutoplaySlots();
+    this.cancelAllPendingAutoplayStarts();
     // deterministically release decoders rather than relying solely on Angular's
     // DOM removal (matches segments.component's teardown)
     this.elementRef.nativeElement.querySelectorAll('video').forEach((v: HTMLVideoElement) => {
