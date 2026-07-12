@@ -1,10 +1,11 @@
-import { ChangeDetectorRef, input, output } from '@angular/core';
-import type { OnInit } from '@angular/core';
+import { ChangeDetectorRef, ElementRef, input, output } from '@angular/core';
+import type { OnDestroy, OnInit } from '@angular/core';
 import { Component, HostListener, Input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { FilePathService } from '../file-path.service';
 import { ImageElementService } from './../../../services/image-element.service';
+import { VideoDecodeBudgetService } from './../../../services/video-decode-budget.service';
 
 import type { ImageElement } from '../../../../../interfaces/final-object.interface';
 import type { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/shared-interfaces';
@@ -23,7 +24,7 @@ import { metaAppear, textAppear } from '../../../common/animations';
     ],
   animations: [ textAppear, metaAppear ]
 })
-export class ClipComponent implements OnInit {
+export class ClipComponent implements OnInit, OnDestroy {
 
   readonly rightClick = output<RightClickEmit>();
   readonly sheetClick = output<any>(); // does not emit data of any kind
@@ -54,8 +55,14 @@ export class ClipComponent implements OnInit {
   poster: string;
   posterFolderType: any = 'clips';
 
+  // videos this component currently holds a decode-budget slot for (autoplay-driven only;
+  // hover-triggered playback never requests a slot, so it never appears here)
+  private autoplaySlotHeld = new Set<HTMLVideoElement>();
+
   constructor(
     public cd: ChangeDetectorRef,
+    private decodeBudget: VideoDecodeBudgetService,
+    private elementRef: ElementRef<HTMLElement>,
     public filePathService: FilePathService,
     public imageElementService: ImageElementService,
     public sanitizer: DomSanitizer
@@ -70,6 +77,9 @@ export class ClipComponent implements OnInit {
   @HostListener('window:blur', ['$event'])
   onBlur(event: any): void {
     this.appInFocus = false;
+    // Angular's `@if(autoplay() && appInFocus)` is about to remove these video
+    // elements entirely -- release their slots now rather than leaking them.
+    this.releaseAllAutoplaySlots();
   }
   @HostListener('window:focus', ['$event'])
   onFocus(event: any): void {
@@ -82,6 +92,47 @@ export class ClipComponent implements OnInit {
     } else {
       event.target.pause();
     }
+  }
+
+  /**
+   * Staggered, budget-gated autoplay start. Bound to `(loadeddata)` on every
+   * autoplay-mode <video> (folder previews + single clip). If the shared decode
+   * budget is exhausted the video simply stays parked on its poster frame --
+   * still real video, just not decoding until a slot frees up or it's hovered
+   * directly (hover playback bypasses the budget entirely, see template).
+   */
+  onAutoplayReady(event: Event): void {
+    const video = event.target as HTMLVideoElement;
+    setTimeout(() => {
+      if (!this.autoplay() || !this.appInFocus) {
+        return; // state changed during the stagger delay
+      }
+      if (this.autoplaySlotHeld.has(video)) {
+        video.play().catch(() => {});
+        return;
+      }
+      if (!this.decodeBudget.requestSlot()) {
+        return;
+      }
+      this.autoplaySlotHeld.add(video);
+      video.play().catch(() => {});
+    }, Math.floor(Math.random() * 500));
+  }
+
+  private releaseAllAutoplaySlots(): void {
+    this.autoplaySlotHeld.forEach(() => this.decodeBudget.releaseSlot());
+    this.autoplaySlotHeld.clear();
+  }
+
+  ngOnDestroy(): void {
+    this.releaseAllAutoplaySlots();
+    // deterministically release decoders rather than relying solely on Angular's
+    // DOM removal (matches segments.component's teardown)
+    this.elementRef.nativeElement.querySelectorAll('video').forEach((v: HTMLVideoElement) => {
+      v.pause();
+      v.removeAttribute('src');
+      v.load();
+    });
   }
 
   ngOnInit() {

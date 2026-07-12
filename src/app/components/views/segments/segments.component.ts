@@ -3,6 +3,7 @@ import { Component, NgZone, computed, effect, input, output, viewChild } from '@
 
 import { FilePathService } from '../file-path.service';
 import { ImageElementService } from './../../../services/image-element.service';
+import { VideoDecodeBudgetService } from './../../../services/video-decode-budget.service';
 
 import type { ImageElement } from '../../../../../interfaces/final-object.interface';
 import type { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/shared-interfaces';
@@ -70,8 +71,12 @@ export class SegmentsComponent implements OnInit, AfterViewInit, OnDestroy {
   noError = true;
 
   private cleanupFns: (() => void)[] = [];
+  // videos this component currently holds a decode-budget slot for (autoplay-driven
+  // only; hover-triggered playback never requests a slot, so never appears here)
+  private autoplaySlotHeld = new Set<HTMLVideoElement>();
 
   constructor(
+    private decodeBudget: VideoDecodeBudgetService,
     public filePathService: FilePathService,
     public imageElementService: ImageElementService,
     private ngZone: NgZone,
@@ -89,11 +94,12 @@ export class SegmentsComponent implements OnInit, AfterViewInit, OnDestroy {
           if (!cell || v.readyState < 1) { return; } // not loaded yet -- initCell() will apply the current mode once it is
           if (wantAutoplay) {
             v.muted = true;
-            this.tryPlay(v);
+            this.tryAutoplayStart(v);
           } else {
             v.pause();
             v.muted = true;
             v.currentTime = cell.start; // back to the parked poster-frame state
+            this.releaseAutoplaySlot(v);
           }
         });
       });
@@ -179,10 +185,13 @@ export class SegmentsComponent implements OnInit, AfterViewInit, OnDestroy {
       }, false);
 
       // save the battery/fans when the app loses focus (autoplay mode)
-      const onBlur = () => this.eachVideo((v) => v.pause());
+      const onBlur = () => this.eachVideo((v) => {
+        v.pause();
+        this.releaseAutoplaySlot(v); // re-requested on focus via tryAutoplayStart
+      });
       const onFocus = () => {
         if (this.autoplay()) {
-          this.eachVideo((v) => this.tryPlay(v));
+          this.eachVideo((v) => this.tryAutoplayStart(v));
         }
       };
       window.addEventListener('blur', onBlur);
@@ -197,6 +206,8 @@ export class SegmentsComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.cleanupFns.forEach((fn) => fn());
     this.cleanupFns = [];
+    this.autoplaySlotHeld.forEach(() => this.decodeBudget.releaseSlot());
+    this.autoplaySlotHeld.clear();
     // release decoder resources deterministically
     this.eachVideo((v) => {
       v.pause();
@@ -230,7 +241,7 @@ export class SegmentsComponent implements OnInit, AfterViewInit, OnDestroy {
     }
     if (this.autoplay() && cell.video.paused) {
       // stagger starts so a screenful of rows does not spin up every decoder in one frame
-      setTimeout(() => this.tryPlay(cell.video), Math.floor(Math.random() * 500));
+      setTimeout(() => this.tryAutoplayStart(cell.video), Math.floor(Math.random() * 500));
     }
   }
 
@@ -242,6 +253,29 @@ export class SegmentsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private tryPlay(video: HTMLVideoElement): void {
     video.play().catch(() => {}); // interrupted play() promises are expected noise
+  }
+
+  /**
+   * Budget-gated autoplay start -- only ever called from autoplay-driven code paths
+   * (staggered initial start, effect() toggle-on, focus resume). Hover-triggered
+   * playback always uses `tryPlay()` directly and must never go through here.
+   */
+  private tryAutoplayStart(video: HTMLVideoElement): void {
+    if (this.autoplaySlotHeld.has(video)) {
+      this.tryPlay(video); // already holds a slot -- just (re)play
+      return;
+    }
+    if (!this.decodeBudget.requestSlot()) {
+      return; // budget exhausted -- stays parked on its poster frame
+    }
+    this.autoplaySlotHeld.add(video);
+    this.tryPlay(video);
+  }
+
+  private releaseAutoplaySlot(video: HTMLVideoElement): void {
+    if (this.autoplaySlotHeld.delete(video)) {
+      this.decodeBudget.releaseSlot();
+    }
   }
 
   /**
