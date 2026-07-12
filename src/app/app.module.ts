@@ -53,6 +53,7 @@ import { RenameModalComponent } from './components/rename-modal/rename-modal.com
 import { ResolutionFilterComponent } from './components/resolution-filter/resolution-filter.component';
 import { RibbonComponent } from './components/ribbon/ribbon.component';
 import { SearchBoxesComponent } from './components/search-boxes/search-boxes.component';
+import { SegmentsComponent } from './components/views/segments/segments.component';
 import { SettingsComponent } from './components/settings/settings.component';
 import { SheetComponent } from './components/sheet/sheet.component';
 import { ShortcutsComponent } from './components/shortcuts/shortcuts.component';
@@ -163,6 +164,7 @@ import { YearPipe } from './pipes/year.pipe';
     ReturnZeroPipe,
     RibbonComponent,
     SearchBoxesComponent,
+    SegmentsComponent,
     SettingsComponent,
     SheetComponent,
     ShortcutsComponent,

@@ -155,6 +155,11 @@ const generatePreviewClipArgs = (
             '[v2]',
             '-map',
             '[a]',
+            // 8-bit 4:2:0 H.264 so clips are hardware-decodable everywhere (10-bit /
+            // 4:4:4 sources would otherwise produce clips that force software decode)
+            '-pix_fmt', 'yuv420p',
+            // moov atom up front: clips start playing without reading the whole file
+            '-movflags', '+faststart',
             savePath);
   // phfff glad that's over
 

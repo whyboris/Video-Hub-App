@@ -33,6 +33,7 @@ export interface RowNumbers {
   showDetails: number;
   showDetails2: number;
   showClips: number;
+  showSegments: number;
 }
 
 export const DefaultImagesPerRow: RowNumbers = {
@@ -43,6 +44,7 @@ export const DefaultImagesPerRow: RowNumbers = {
   showDetails: 4,
   showDetails2: 4,
   showClips: 4,
+  showSegments: 5, // segment tiles visible per row width; cells clamp to fill width when zoomed out
 };
 
 export const AppState: AppStateInterface = { // AppState is saved into `settings.json` so it persists
