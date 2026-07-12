@@ -45,15 +45,24 @@ export class SegmentsComponent implements OnInit, AfterViewInit, OnDestroy {
   readonly galleryWidth = input<number>();
   readonly hubName = input<string>();
   readonly largerFont = input<boolean>();
+  readonly maxVisibleTiles = input<number>();
   readonly previewWidth = input<number>();
   readonly showFavorites = input<boolean>();
   readonly showMeta = input<boolean>();
   readonly snippetLength = input<number>();
 
-  // 16:9 tiles: fill the gallery width with all snippets by default;
-  // zooming in (fewer imgsPerRow -> larger previewWidth) enlarges tiles and the row scrolls horizontally
+  // how many tiles actually get rendered at the current zoom -- never more
+  // than `clipSnippets`, and falls back to showing everything if the caller
+  // doesn't pass `maxVisibleTiles` at all
+  readonly renderedCount = computed(() => {
+    const total = Math.max(1, this.clipSnippets() || 1);
+    const max = this.maxVisibleTiles();
+    return max ? Math.max(1, Math.min(total, max)) : total;
+  });
+
+  // 16:9 tiles: fill the gallery width with exactly `renderedCount` tiles
   readonly cellWidth = computed(() => {
-    const n = Math.max(1, this.clipSnippets() || 1);
+    const n = this.renderedCount();
     const available = Math.max(0, (this.galleryWidth() || 0) - 40 - (n - 1) * 2); // margins + 2px gaps
     return Math.max(available / n, this.previewWidth() || 0);
   });
@@ -63,8 +72,30 @@ export class SegmentsComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.largerFont() ? Math.round(base * 1.33) : base;
   });
 
-  readonly segmentIndexes = computed(() =>
-    Array.from({ length: Math.max(0, this.clipSnippets() || 0) }, (_, i) => i));
+  /**
+   * Which snippet indices to actually render. When every snippet fits, show
+   * them all in order. Otherwise, evenly sample `renderedCount` indices
+   * across the full `[0, clipSnippets-1]` range -- always including the
+   * first and last snippet -- rather than always showing the first N (which
+   * would mean the back half of a long video is never visible without
+   * zooming out).
+   */
+  readonly segmentIndexes = computed(() => {
+    const total = Math.max(0, this.clipSnippets() || 0);
+    const shown = this.renderedCount();
+
+    if (total <= shown) {
+      return Array.from({ length: total }, (_, i) => i);
+    }
+
+    if (shown <= 1) {
+      return [0];
+    }
+
+    // standard "k evenly-spaced points across N items, including both
+    // endpoints" formula: index(i) = round(i * (N-1) / (k-1))
+    return Array.from({ length: shown }, (_, i) => Math.round(i * (total - 1) / (shown - 1)));
+  });
 
   pathToClip = '';
   noError = true;
