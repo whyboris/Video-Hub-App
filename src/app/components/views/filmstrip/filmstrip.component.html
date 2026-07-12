@@ -12,7 +12,7 @@
     class="filmstrip-container"
     [ngStyle]="{
         height: imgHeight() + 'px',
-        'background-image': 'url(' + fullFilePath + ')',
+        'background-image': rowVisible ? 'url(' + fullFilePath + ')' : 'none',
         'background-position-x': '-' + filmXoffset + 'px',
         'background-size': 'auto ' + imgHeight() + 'px'
       }"

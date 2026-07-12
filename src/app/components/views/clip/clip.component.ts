@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, ElementRef, input, output } from '@angular/core';
-import type { OnDestroy, OnInit } from '@angular/core';
+import type { AfterViewInit, OnDestroy, OnInit } from '@angular/core';
 import { Component, HostListener, Input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -24,7 +24,7 @@ import { metaAppear, textAppear } from '../../../common/animations';
     ],
   animations: [ textAppear, metaAppear ]
 })
-export class ClipComponent implements OnInit, OnDestroy {
+export class ClipComponent implements OnInit, AfterViewInit, OnDestroy {
 
   readonly rightClick = output<RightClickEmit>();
   readonly sheetClick = output<any>(); // does not emit data of any kind
@@ -55,11 +55,18 @@ export class ClipComponent implements OnInit, OnDestroy {
   poster: string;
   posterFolderType: any = 'clips';
 
+  // when false, every <video>'s [src] is unbound in the template -- releases the
+  // decoder for rows that are still mounted (e.g. just outside the visible
+  // viewport, ahead of virtual-scroller actually destroying them) but not
+  // actually on screen. The poster image keeps showing regardless.
+  rowVisible = true;
+
   // cancel functions for scheduled-but-not-yet-started autoplay begins, keyed by
   // the <video> they belong to, so a row that scrolls away before its idle slot
   // arrives never actually starts decoding (hover-triggered playback bypasses
   // this scheduler entirely and is never tracked here)
   private pendingAutoplayStarts = new Map<HTMLVideoElement, () => void>();
+  private intersectionObserver: IntersectionObserver;
 
   constructor(
     public cd: ChangeDetectorRef,
@@ -123,7 +130,33 @@ export class ClipComponent implements OnInit, OnDestroy {
     this.pendingAutoplayStarts.clear();
   }
 
+  /**
+   * virtual-scroller ([bufferAmount]="0") should destroy rows once they're off
+   * screen, but this reacts faster and independently of any buffer/overscan --
+   * the moment this row isn't actually intersecting the viewport, pause and
+   * release its decoders (same as ngOnDestroy), restoring automatically the
+   * instant it's visible again.
+   */
+  ngAfterViewInit(): void {
+    // root must be the actual scrolling element -- <virtual-scroller> scrolls
+    // internally (overflow-y: auto), it does not rely on the page/window
+    // scrolling, so the default root (the browser viewport) would never see
+    // these rows as "not intersecting" no matter how far they scroll past.
+    const scrollRoot = this.elementRef.nativeElement.closest('virtual-scroller');
+    this.intersectionObserver = new IntersectionObserver((entries) => {
+      const isIntersecting = entries[entries.length - 1].isIntersecting;
+      if (!isIntersecting) {
+        this.cancelAllPendingAutoplayStarts();
+        this.elementRef.nativeElement.querySelectorAll('video').forEach((v: HTMLVideoElement) => v.pause());
+      }
+      this.rowVisible = isIntersecting;
+      this.cd.markForCheck();
+    }, { root: scrollRoot, threshold: 0 });
+    this.intersectionObserver.observe(this.elementRef.nativeElement);
+  }
+
   ngOnDestroy(): void {
+    this.intersectionObserver?.disconnect();
     this.cancelAllPendingAutoplayStarts();
     // deterministically release decoders rather than relying solely on Angular's
     // DOM removal (matches segments.component's teardown)

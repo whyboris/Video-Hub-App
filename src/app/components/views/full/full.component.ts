@@ -1,5 +1,5 @@
-import type { OnInit} from '@angular/core';
-import { Component, Input, input, output } from '@angular/core';
+import type { AfterViewInit, OnDestroy, OnInit} from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, input, output } from '@angular/core';
 
 import { FilePathService } from '../file-path.service';
 
@@ -20,7 +20,7 @@ import type { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/s
     ],
   animations: [ textAppear, metaAppear ]
 })
-export class FullViewComponent implements OnInit {
+export class FullViewComponent implements OnInit, AfterViewInit, OnDestroy {
 
   readonly videoClick = output<VideoClickEmit>();
   readonly rightClick = output<RightClickEmit>();
@@ -53,7 +53,16 @@ export class FullViewComponent implements OnInit {
   fullFilePath = '';
   rowOffsets: number[];
 
+  // when false, the background-image is unset -- releases the decoded-image
+  // memory + cancels any in-flight fetch for a row that's still mounted but not
+  // actually on screen. Restores immediately (no idle delay) once visible again.
+  rowVisible = true;
+
+  private intersectionObserver: IntersectionObserver;
+
   constructor(
+    private cd: ChangeDetectorRef,
+    private elementRef: ElementRef<HTMLElement>,
     public filePathService: FilePathService,
     public imageElementService: ImageElementService
   ) { }
@@ -61,6 +70,19 @@ export class FullViewComponent implements OnInit {
   ngOnInit() {
     this.fullFilePath = this.filePathService.createFilePath(this.folderPath(), this.hubName(), 'filmstrips', this.video().hash);
     this.render();
+  }
+
+  ngAfterViewInit(): void {
+    const scrollRoot = this.elementRef.nativeElement.closest('virtual-scroller');
+    this.intersectionObserver = new IntersectionObserver((entries) => {
+      this.rowVisible = entries[entries.length - 1].isIntersecting;
+      this.cd.markForCheck();
+    }, { root: scrollRoot, threshold: 0 });
+    this.intersectionObserver.observe(this.elementRef.nativeElement);
+  }
+
+  ngOnDestroy(): void {
+    this.intersectionObserver?.disconnect();
   }
 
   render(): void {

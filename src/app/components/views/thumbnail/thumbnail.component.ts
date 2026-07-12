@@ -1,5 +1,5 @@
-import type { OnInit, ElementRef, OnDestroy } from '@angular/core';
-import { Component, Input, input, output, viewChild } from '@angular/core';
+import type { AfterViewInit, OnInit, OnDestroy } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, Input, input, output, viewChild } from '@angular/core';
 
 import { FilePathService } from '../file-path.service';
 
@@ -21,7 +21,7 @@ import type { VideoClickEmit, RightClickEmit } from '../../../../../interfaces/s
   ],
   animations: [textAppear, metaAppear]
 })
-export class ThumbnailComponent implements OnInit, OnDestroy {
+export class ThumbnailComponent implements OnInit, AfterViewInit, OnDestroy {
 
   readonly filmstripHolder = viewChild<ElementRef>('filmstripHolder');
 
@@ -58,10 +58,31 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
   percentOffset = 0;
   scrollInterval: any = null;
 
+  // when false, the template shows no image src/background-image at all --
+  // releases the decoded-image memory + cancels any in-flight fetch for a row
+  // that's still mounted (e.g. briefly during a fast flick-scroll) but not
+  // actually on screen. Restores immediately (no idle delay) once visible again,
+  // since -- unlike video -- a fast, always-current thumbnail IS the whole point
+  // of this view.
+  rowVisible = true;
+
+  private intersectionObserver: IntersectionObserver;
+
   constructor(
+    private cd: ChangeDetectorRef,
+    private elementRef: ElementRef<HTMLElement>,
     public filePathService: FilePathService,
     public imageElementService: ImageElementService,
   ) { }
+
+  ngAfterViewInit(): void {
+    const scrollRoot = this.elementRef.nativeElement.closest('virtual-scroller');
+    this.intersectionObserver = new IntersectionObserver((entries) => {
+      this.rowVisible = entries[entries.length - 1].isIntersecting;
+      this.cd.markForCheck();
+    }, { root: scrollRoot, threshold: 0 });
+    this.intersectionObserver.observe(this.elementRef.nativeElement);
+  }
 
   ngOnInit() {
     // multiple hashes == folder view
@@ -127,6 +148,7 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     clearInterval(this.scrollInterval);
+    this.intersectionObserver?.disconnect();
   }
 
   openDetailsView(leftClick: PointerEvent): void {

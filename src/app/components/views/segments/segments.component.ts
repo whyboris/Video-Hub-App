@@ -70,6 +70,11 @@ export class SegmentsComponent implements OnInit, AfterViewInit, OnDestroy {
   pathToClip = '';
   noError = true;
 
+  // when false, [src] is unbound in the template -- releases the decoder for a
+  // row that's still mounted (e.g. just outside the visible viewport, ahead of
+  // virtual-scroller actually destroying it) but not actually on screen.
+  isRowVisible = true;
+
   private cleanupFns: (() => void)[] = [];
   // cancel functions for scheduled-but-not-yet-started autoplay begins, keyed by
   // the <video> they belong to (hover-triggered playback bypasses the scheduler
@@ -202,6 +207,26 @@ export class SegmentsComponent implements OnInit, AfterViewInit, OnDestroy {
         window.removeEventListener('blur', onBlur);
         window.removeEventListener('focus', onFocus);
       });
+
+      // virtual-scroller ([bufferAmount]="0") should destroy this row once it's
+      // off screen, but this reacts faster and independently of any buffer/
+      // overscan -- the moment it isn't actually intersecting the viewport,
+      // release its decoders (same idea as ngOnDestroy), restoring the instant
+      // it's visible again. root must be the actual scrolling element --
+      // <virtual-scroller> scrolls internally (overflow-y: auto), not the page,
+      // so the default root (browser viewport) would never see this as hidden.
+      const scrollRoot = holder.closest('virtual-scroller');
+      const intersectionObserver = new IntersectionObserver((entries) => {
+        const isIntersecting = entries[entries.length - 1].isIntersecting;
+        if (!isIntersecting) {
+          this.eachVideo((v) => v.pause());
+          this.pendingAutoplayStarts.forEach((cancel) => cancel());
+          this.pendingAutoplayStarts.clear();
+        }
+        this.ngZone.run(() => { this.isRowVisible = isIntersecting; });
+      }, { root: scrollRoot, threshold: 0 });
+      intersectionObserver.observe(holder);
+      this.cleanupFns.push(() => intersectionObserver.disconnect());
     });
   }
 

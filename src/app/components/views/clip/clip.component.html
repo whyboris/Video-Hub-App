@@ -25,7 +25,7 @@
     @for (idx of [0, 1, 2, 3]; track idx) {
       @if (noError && !autoplay() && folderThumbPaths[idx]) {
         <video
-          [src]="folderThumbPaths[idx]"
+          [src]="rowVisible ? folderThumbPaths[idx] : null"
           [poster]="sanitizer.bypassSecurityTrustUrl(folderPosterPaths[idx])"
           class="mini-video-thumb {{ 'folder-preview-' + idx }}"
           [volume]="forceMute() ? 0 : 1"
@@ -41,7 +41,7 @@
     @for (idx of [0, 1, 2, 3]; track idx) {
       @if (noError && autoplay() && appInFocus && folderThumbPaths[idx]) {
         <video
-          [src]="folderThumbPaths[idx]"
+          [src]="rowVisible ? folderThumbPaths[idx] : null"
           [poster]="sanitizer.bypassSecurityTrustUrl(folderPosterPaths[idx])"
           class="mini-video-thumb {{ 'folder-preview-' + idx }}"
           [volume]="forceMute() ? 0 : 1"
@@ -107,7 +107,7 @@
     <!-- ========================== regular view ========================== -->
   @if (noError && !autoplay()) {
     <video
-      [src]="pathToVideo"
+      [src]="rowVisible ? pathToVideo : null"
       [poster]="sanitizer.bypassSecurityTrustUrl(poster)"
       [ngStyle]="{ 'height': imgHeight() + 'px' }"
       (click)="   videoClick.emit({ mouseEvent: $event })"
@@ -125,7 +125,7 @@
     <!-- ========================== AUTOPLAY view ========================== -->
   @if (noError && autoplay() && appInFocus) {
     <video
-      [src]="pathToVideo"
+      [src]="rowVisible ? pathToVideo : null"
       [poster]="sanitizer.bypassSecurityTrustUrl(poster)"
       [ngStyle]="{ 'height': imgHeight() + 'px' }"
       (click)="   videoClick.emit({ mouseEvent: $event })"

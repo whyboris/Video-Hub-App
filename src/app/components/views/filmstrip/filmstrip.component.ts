@@ -1,5 +1,5 @@
-import type { OnInit, ElementRef} from '@angular/core';
-import { Component, input, output, viewChild } from '@angular/core';
+import type { AfterViewInit, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, input, output, viewChild } from '@angular/core';
 
 import { FilePathService } from '../file-path.service';
 
@@ -21,7 +21,7 @@ import type { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/s
     ],
   animations: [ textAppear, metaAppear ]
 })
-export class FilmstripComponent implements OnInit {
+export class FilmstripComponent implements OnInit, AfterViewInit, OnDestroy {
 
   readonly filmstripHolder = viewChild<ElementRef>('filmstripHolder');
 
@@ -45,13 +45,35 @@ export class FilmstripComponent implements OnInit {
   filmXoffset = 0;
   indexToShow = 1;
 
+  // when false, the background-image is unset -- releases the decoded-image
+  // memory + cancels any in-flight fetch for a row that's still mounted but not
+  // actually on screen. Restores immediately (no idle delay) once visible again.
+  rowVisible = true;
+
+  private intersectionObserver: IntersectionObserver;
+
   constructor(
+    private cd: ChangeDetectorRef,
+    private elementRef: ElementRef<HTMLElement>,
     public filePathService: FilePathService,
     public imageElementService: ImageElementService
   ) { }
 
   ngOnInit() {
     this.fullFilePath = this.filePathService.createFilePath(this.folderPath(), this.hubName(), 'filmstrips', this.video().hash);
+  }
+
+  ngAfterViewInit(): void {
+    const scrollRoot = this.elementRef.nativeElement.closest('virtual-scroller');
+    this.intersectionObserver = new IntersectionObserver((entries) => {
+      this.rowVisible = entries[entries.length - 1].isIntersecting;
+      this.cd.markForCheck();
+    }, { root: scrollRoot, threshold: 0 });
+    this.intersectionObserver.observe(this.elementRef.nativeElement);
+  }
+
+  ngOnDestroy(): void {
+    this.intersectionObserver?.disconnect();
   }
 
   updateFilmXoffset(mouseMove: PointerEvent) {

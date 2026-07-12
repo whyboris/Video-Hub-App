@@ -27,7 +27,7 @@
       @for (i of segmentIndexes(); track i) {
         <video
           class="segment-cell"
-          [src]="pathToClip"
+          [src]="isRowVisible ? pathToClip : null"
           [attr.data-seg]="i"
           muted
           [ngStyle]="{

@@ -31,7 +31,7 @@
       <div
         class="folder-item-fullsize"
         [ngStyle]="{
-          'background-image': 'url(' + folderThumbPaths[0] + ')'
+          'background-image': rowVisible ? 'url(' + folderThumbPaths[0] + ')' : 'none'
         }"
       ></div>
 
@@ -41,7 +41,7 @@
         <div
           class="folder-item"
           [ngStyle]="{
-            'background-image': 'url(' + folderThumbPaths[0] + ')'
+            'background-image': rowVisible ? 'url(' + folderThumbPaths[0] + ')' : 'none'
           }"
         ></div>
       }
@@ -50,7 +50,7 @@
         <div
           class="folder-item"
           [ngStyle]="{ left: '50%', top: '0%',
-            'background-image': 'url(' + folderThumbPaths[1] + ')'
+            'background-image': rowVisible ? 'url(' + folderThumbPaths[1] + ')' : 'none'
           }"
         ></div>
       }
@@ -59,7 +59,7 @@
         <div
           class="folder-item"
           [ngStyle]="{ left: '0%', top: '50%',
-            'background-image': 'url(' + folderThumbPaths[2] + ')'
+            'background-image': rowVisible ? 'url(' + folderThumbPaths[2] + ')' : 'none'
           }"
         ></div>
       }
@@ -68,7 +68,7 @@
         <div
           class="folder-item"
           [ngStyle]="{ left: '50%', top: '50%',
-            'background-image': 'url(' + folderThumbPaths[3] + ')'
+            'background-image': rowVisible ? 'url(' + folderThumbPaths[3] + ')' : 'none'
           }"
         ></div>
       }
@@ -139,7 +139,7 @@
       class="full-filmstrip"
       [ngStyle]="{ height: imgHeight() + 'px',
                   transform: 'translate(' + (-percentOffset) + '%, 0)' }"
-      src="{{ hover ? fullFilePath : firstFilePath }}"
+      src="{{ rowVisible ? (hover ? fullFilePath : firstFilePath) : '' }}"
     >
 
   @if (video.selected) {
