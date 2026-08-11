@@ -2573,9 +2573,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if (this.settingsButtons['showOnlyFavorites'].toggled) {
       this.settingsButtons['showOnlyFavorites'].toggled = false;
     }
-
-    // Prevent ExpressionChangedAfterItHasBeenCheckedError
-    this.cd.detectChanges();
   }
 
   /**
