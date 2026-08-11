@@ -375,6 +375,7 @@ input[type="radio"]:checked:before {
     background-color: variables.$gray-10;
     border-bottom: 1px solid variables.$gray-10;
     text-shadow:0px 0px 1px black;
+    box-shadow: 0px 3px 0px variables.$gray-10; // cover over the horizontal line if it appears
     transition: 300ms;
     transition-property: text-shadow background-color;
     z-index: 10;
