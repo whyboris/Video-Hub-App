@@ -13,6 +13,7 @@ interface FolderProperties {
   birthtime: number;       //                 corresponds to ImageElement `birthtime`
   starAverage: StarRating; // averaged weight of stars rounded to nearest `StarRating`
   uuid: string             // so that @for can `track` uniquely
+  lastPlayed: number       // timestamp of last-played
 }
 
 
@@ -33,6 +34,7 @@ export class FolderViewPipe implements PipeTransform {
     let starAverage = 0;
     let totalStars = 0;
     let lastUpdated = 0;
+    let lastPlayed = 0;
     let firstCreated: number = Number.MAX_SAFE_INTEGER;
 
     const uuid = files[0].uuid;
@@ -40,6 +42,9 @@ export class FolderViewPipe implements PipeTransform {
     files.forEach((element: ImageElement) => {
       totalFileSize += element.fileSize;
       totalDuration += element.duration;
+      if (element.lastPlayed > lastPlayed) {
+        lastPlayed = element.lastPlayed;
+      }
       if (element.mtime > lastUpdated) {
         lastUpdated = element.mtime;
       }
@@ -56,6 +61,7 @@ export class FolderViewPipe implements PipeTransform {
     //                         since `totalStars` can be 0, sometimes this calculation results in NaN so we ^^^^^^^
 
     return {
+      lastPlayed: lastPlayed,
       byteSize: totalFileSize,
       duration: totalDuration,
       mtime: lastUpdated,
@@ -229,6 +235,7 @@ export class FolderViewPipe implements PipeTransform {
           folderWithStuff.partialPath     = (prefixPath || '/') + key, // must set this for the folder click to register!
           folderWithStuff.stars           = folderProperties.starAverage,
           folderWithStuff.uuid            = folderProperties.uuid,
+          folderWithStuff.lastPlayed      = folderProperties.lastPlayed,
 
           arrWithFolders.push(folderWithStuff);
         }
