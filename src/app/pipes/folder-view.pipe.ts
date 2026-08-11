@@ -39,7 +39,8 @@ export class FolderViewPipe implements PipeTransform {
     let totalFileSize = 0;
     let totalStars = 0;
 
-    const uuid = files[0].uuid;
+    // unsure if `folder` is needed here, but just in case to prevent uuid collision
+    const uuid = 'folder' + files[0].uuid;
 
     files.forEach((element: ImageElement) => {
       totalFileSize += element.fileSize;
