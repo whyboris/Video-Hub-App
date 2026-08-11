@@ -10,9 +10,9 @@ import { provideHttpClient } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 
 // External
-import { AnQrcodeModule } from 'an-qrcode';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { QrCodeComponent } from 'ng-qrcode';
 import { TranslateModule } from '@ngx-translate/core';
 import { VirtualScrollerModule } from '@iharbeck/ngx-virtual-scroller';
 
@@ -200,13 +200,13 @@ import { YearPipe } from './pipes/year.pipe';
     YearPipe,
   ],
   imports: [
-    // AnQrcodeModule, // TODO: enable and fix later!
     AppRoutingModule,
     BrowserAnimationsModule,
     BrowserModule,
     FormsModule,
     MatDialogModule,
     MatSnackBarModule,
+    QrCodeComponent,
     TranslateModule.forRoot(),
     VirtualScrollerModule
   ],
