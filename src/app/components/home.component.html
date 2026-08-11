@@ -402,7 +402,7 @@
 
       <div class="filtering-total">
 
-      @if (!allFinishedScanning || importStage === 'importingMeta') {
+      @if (!allFinishedScanning() || importStage === 'importingMeta') {
         <div
           class="scanning-indicator"
           title="{{ 'SIDEBAR.scanInProgress' | translate }}"

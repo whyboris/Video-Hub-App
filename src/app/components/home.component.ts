@@ -1,5 +1,5 @@
 import type { AfterViewInit, ElementRef, OnInit } from '@angular/core';
-import { ChangeDetectorRef, NgZone, viewChild } from '@angular/core';
+import { ChangeDetectorRef, NgZone, signal, viewChild } from '@angular/core';
 import { Component, HostListener } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
@@ -326,7 +326,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   tagTypeAhead = '';
 
-  allFinishedScanning = true;
+  allFinishedScanning = signal(true);
 
   lastRenamedFileHack: ImageElement;
 
@@ -621,7 +621,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     });
 
     this.electronService.ipcRenderer.on('started-watching-this-dir', (event, sourceIndex: number) => {
-      this.allFinishedScanning = false;
+      this.allFinishedScanning.set(false);
       this.sourceFolderService.addCurrentScanning(sourceIndex);
     });
 
@@ -633,8 +633,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       this.sourceFolderService.removeCurrentScanning(sourceIndex);
 
-      this.allFinishedScanning = this.sourceFolderService.areAllFinishedScanning();
-      if (this.allFinishedScanning) {
+      this.allFinishedScanning.set(this.sourceFolderService.areAllFinishedScanning());
+      if (this.allFinishedScanning()) {
         console.log('DONE SCANNING !!!!!!!');
         this.cd.detectChanges();
       }
