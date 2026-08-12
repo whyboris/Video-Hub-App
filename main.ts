@@ -136,8 +136,9 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
       allowRunningInsecureContent: true,
-      contextIsolation: false,
-      webSecurity: false  // allow files from hard disk to show up
+      webSecurity: false,  // allow files from hard disk to show up,
+      preload: path.join(__dirname, '/node/preload.js'), // to handle drag & drop
+      contextIsolation: true, // seems needed for the `preload` script to work
     },
     x: mainWindowState.x,
     y: mainWindowState.y,

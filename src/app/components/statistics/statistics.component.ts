@@ -4,7 +4,6 @@ import { Component, Input } from '@angular/core';
 
 import type { Observable, Subscription } from 'rxjs';
 
-import { ElectronService } from '../../providers/electron.service';
 import { ImageElementService } from './../../services/image-element.service';
 import { SourceFolderService } from './source-folder.service';
 
@@ -81,7 +80,6 @@ export class StatisticsComponent implements OnInit, OnDestroy {
 
   constructor(
     public cd: ChangeDetectorRef,
-    public electronService: ElectronService,
     public sourceFolderService: SourceFolderService,
     public imageElementService: ImageElementService
   ) { }
@@ -205,7 +203,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
       const nextIndex: number = this.pickNextIndex(this.inputFolders());
       this.inputFolders()[nextIndex] = { path: filePath, watch: false };
       this.sourceFolderService.sourceFolderConnected[nextIndex] = true;
-      this.electronService.ipcRenderer.send('start-watching-folder', nextIndex, filePath, false);
+      (window as any).myElectron.sendToMain('start-watching-folder', nextIndex, filePath, false);
     }
 
     this.cd.detectChanges();
@@ -263,7 +261,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
    */
   addMissingThumbnails() {
     console.log('trying to extract missing thumbnails');
-    this.electronService.ipcRenderer.send(
+    (window as any).myElectron.sendToMain(
       'add-missing-thumbnails',
       this.imageElementService.imageElements,
       this.screenshotSettings.clipSnippets > 0);
@@ -273,12 +271,12 @@ export class StatisticsComponent implements OnInit, OnDestroy {
    * Summon system modal to select folder
    */
   addAnotherFolder() {
-    this.electronService.ipcRenderer.send('choose-input');
+    (window as any).myElectron.sendToMain('choose-input');
   }
 
   reconnectThisFolder(itemSourceKey: number) {
     console.log('RECONNECT this folder:', itemSourceKey);
-    this.electronService.ipcRenderer.send('reconnect-this-folder', itemSourceKey);
+    (window as any).myElectron.sendToMain('reconnect-this-folder', itemSourceKey);
   }
 
   /**
@@ -300,7 +298,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
    */
   cleanScreenshotFolder(): void {
     console.log('cleaning screenshots!');
-    this.electronService.ipcRenderer.send('clean-old-thumbnails', this.imageElementService.imageElements);
+    (window as any).myElectron.sendToMain('clean-old-thumbnails', this.imageElementService.imageElements);
   }
 
   /**
@@ -308,7 +306,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
    * @param itemSourceKey from InputSources
    */
   tellNodeStopWatching(itemSourceKey: number) {
-    this.electronService.ipcRenderer.send('stop-watching-folder', itemSourceKey);
+    (window as any).myElectron.sendToMain('stop-watching-folder', itemSourceKey);
   }
 
   /**
@@ -316,7 +314,7 @@ export class StatisticsComponent implements OnInit, OnDestroy {
    * @param itemSourceKey from InputSources
    */
   tellNodeStartWatching(itemSourceKey: number, path: string, persistent: boolean) {
-    this.electronService.ipcRenderer.send('start-watching-folder', itemSourceKey, path, persistent);
+    (window as any).myElectron.sendToMain('start-watching-folder', itemSourceKey, path, persistent);
   }
 
   trackByFn(index, item) {

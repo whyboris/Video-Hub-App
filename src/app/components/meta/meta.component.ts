@@ -4,7 +4,6 @@ import { Component, Input } from '@angular/core';
 
 import type { Subscription, Observable } from 'rxjs';
 
-import { ElectronService } from '../../providers/electron.service';
 import { FilePathService } from '../views/file-path.service';
 import { ImageElementService } from './../../services/image-element.service';
 import { ManualTagsService } from '../tags-manual/manual-tags.service';
@@ -63,7 +62,6 @@ export class MetaComponent implements OnInit, OnDestroy {
 
   constructor(
     private cd: ChangeDetectorRef,
-    public electronService: ElectronService,
     public filePathService: FilePathService,
     public imageElementService: ImageElementService,
     public manualTagsService: ManualTagsService
@@ -247,7 +245,7 @@ export class MetaComponent implements OnInit, OnDestroy {
     console.log(sourceFolder);
 
     if (originalFile !== newFileName && this.renamingWIP.length !== 0) {
-      this.electronService.ipcRenderer.send(
+      (window as any).myElectron.sendToMain(
         'try-to-rename-this-file',
         sourceFolder,
         relativeFilePath,
