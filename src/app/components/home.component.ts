@@ -655,6 +655,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       if (somethingDeleted) {
         this.deletePipeTrigger = !this.deletePipeTrigger;
+        this.imageElementService.finalArrayNeedsSaving = true;
       }
 
     });
