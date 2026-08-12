@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { ElectronService } from './providers/electron.service';
 
 @Component({
   standalone: false,
@@ -7,16 +6,5 @@ import { ElectronService } from './providers/electron.service';
   templateUrl: './app.component.html'
 })
 export class AppComponent {
-
-  constructor(
-    public electronService: ElectronService
-  ) {
-
-    if (electronService.isElectron()) {
-      console.log('Mode electron');
-    } else {
-      console.log('Mode web');
-    }
-  }
 
 }

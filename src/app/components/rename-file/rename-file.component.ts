@@ -4,7 +4,6 @@ import { Component } from '@angular/core';
 
 import type { Observable, Subscription } from 'rxjs';
 
-import { ElectronService } from '../../providers/electron.service';
 import { FilePathService } from '../views/file-path.service';
 
 import type { ImageElement } from '../../../../interfaces/final-object.interface';
@@ -39,7 +38,6 @@ export class RenameFileComponent implements OnInit, OnDestroy {
 
   constructor(
     public cd: ChangeDetectorRef,
-    public electronService: ElectronService,
     public filePathService: FilePathService,
   ) { }
 
@@ -94,7 +92,7 @@ export class RenameFileComponent implements OnInit, OnDestroy {
       console.log(this.selectedSourceFolder());
       console.log(sourceFolder);
 
-      this.electronService.ipcRenderer.send(
+      (window as any).myElectron.sendToMain(
         'try-to-rename-this-file',
         sourceFolder,
         relativeFilePath,

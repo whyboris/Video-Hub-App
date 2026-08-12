@@ -27,6 +27,7 @@
   "include": [
     "i18n",
     "interfaces",
-    "src/main.ts"
+    "src/main.ts",
+    "preload.js"
   ]
 }

@@ -2,7 +2,6 @@ import { Component, Input, input, output, viewChild } from '@angular/core';
 
 import { TranslateService } from '@ngx-translate/core';
 
-import { ElectronService } from './../../providers/electron.service';
 import { ModalService } from './../modal/modal.service';
 
 import { SettingsMetaGroup, SettingsMetaGroupLabels } from '../../common/settings-buttons';
@@ -51,7 +50,6 @@ export class SettingsComponent implements OnInit, OnChanges {
   settingsMetaGroupLabels = SettingsMetaGroupLabels;
 
   constructor(
-    private electronService: ElectronService,
     private modalService: ModalService,
     private translate: TranslateService
   ) {}
@@ -74,7 +72,7 @@ export class SettingsComponent implements OnInit, OnChanges {
   applyAdditionalExtensions() {
     if (this.isAdditionalInputValid(this.additionalInput)) {
       this.appState.addtionalExtensions = this.additionalInput;
-      this.electronService.ipcRenderer.send('update-additional-extensions', this.additionalInput);
+      (window as any).myElectron.sendToMain('update-additional-extensions', this.additionalInput);
       this.editAdditional = false;
     } else {
       this.modalService.openSnackbar(this.translate.instant('SETTINGS.extensionsInputError'));

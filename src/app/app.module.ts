@@ -19,7 +19,6 @@ import { VirtualScrollerModule } from '@iharbeck/ngx-virtual-scroller';
 // Services
 import { AutoTagsSaveService } from './components/tags-auto/tags-save.service';
 import { AutoTagsService } from './components/tags-auto/autotags.service';
-import { ElectronService } from './providers/electron.service';
 import { FilePathService } from './components/views/file-path.service';
 import { ImageElementService } from './services/image-element.service';
 import { ManualTagsService } from './components/tags-manual/manual-tags.service';
@@ -214,7 +213,6 @@ import { YearPipe } from './pipes/year.pipe';
     provideHttpClient(),
     AutoTagsSaveService,
     AutoTagsService,
-    ElectronService,
     FilePathService,
     ImageElementService,
     ManualTagsService,

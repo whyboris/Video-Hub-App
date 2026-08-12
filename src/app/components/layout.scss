@@ -250,6 +250,10 @@
   transition-duration: 300ms;
   transition-property: bottom;
   z-index: 29 !important;
+
+  .active-tab {
+    box-shadow: unset !important;
+  }
 }
 
 .bottom-tray-tabs-open {

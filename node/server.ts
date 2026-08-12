@@ -13,6 +13,11 @@ const serve: boolean = args.some(val => val === '--serve');
 
 import { RemoteSettings } from '../interfaces/settings-object.interface';
 
+import type { Application } from 'express';
+import type { IpcMain } from 'electron';
+import type { Server } from 'http';
+import type { WebSocketServer } from 'ws';
+
 // =================================================================================================
 
 const remoteAppPath = serve
@@ -21,8 +26,8 @@ const remoteAppPath = serve
                       // Electron ^^^^^^^ extends `process` with `resourcesPath`
                       // https://www.electronjs.org/docs/api/process#processresourcespath-readonly
 
-let serverRef; // reference to express server
-let wss;       // reference to Web Socket Server
+let serverRef: Server; // reference to express server
+let wss: WebSocketServer;       // reference to Web Socket Server
 
 let currentHubImageElements: ImageElement[];
 
@@ -38,7 +43,7 @@ interface SocketMessage {
 
 // =================================================================================================
 
-export function setUpIpcForServer(ipc) {
+export function setUpIpcForServer(ipc: IpcMain) {
 
   ipc.on('latest-gallery-view', (event, data): void => {
     console.log('last message');
@@ -77,7 +82,7 @@ export function setUpIpcForServer(ipc) {
  * @param port - port to use
  */
 function startTheServer(pathToServe: string, port: number): void {
-  const app = express();
+  const app: Application = express();
 
   // app.use(bodyParser.json()); // to handle JSON POST requests ------ disabled
 
