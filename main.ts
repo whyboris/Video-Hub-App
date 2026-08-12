@@ -31,8 +31,8 @@ GLOBALS.settingsPath = pathToPortableApp ? pathToPortableApp : path.join(pathToA
 const English = require('./i18n/en.json');
 let systemMessages = English.SYSTEM; // Set English as default; update via `system-messages-updated`
 
-let screenWidth;
-let screenHeight;
+let screenWidth: number;
+let screenHeight: number;
 
 // TODO: CLEAN UP
 let macFirstRun = true; // detect if it's the 1st time Mac is opening the file or something like that
@@ -42,8 +42,8 @@ electron.Menu.setApplicationMenu(null);
 
 // =================================================================================================
 
-let win;
-let myWindow = null;
+let win: BrowserWindow;
+let myWindow: BrowserWindow = null;
 const args = process.argv.slice(1);
 const serve: boolean = args.some(val => val === '--serve');
 
