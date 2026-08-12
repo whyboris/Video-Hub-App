@@ -15,6 +15,8 @@ export class AddTagComponent implements OnInit {
 
   readonly darkMode = input<boolean>();
 
+  readonly autofocus = input<boolean>(false);
+
   readonly tag = output<string>();
 
   readonly tagInputField = viewChild<ElementRef<HTMLInputElement>>('tagInputField');
@@ -27,7 +29,9 @@ export class AddTagComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.tagInputField()?.nativeElement.focus();
+    if (this.autofocus()) {
+      this.tagInputField()?.nativeElement.focus();
+    }
   }
 
   emitTag(text: string) {

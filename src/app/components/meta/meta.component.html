@@ -144,6 +144,7 @@
   <app-add-tag-component
     style="display: block;"
     (tag)="addThisTag($event)"
+    [autofocus]="focusOnAddTag()"
     [darkMode]="darkMode()"
    />
 }

@@ -402,7 +402,7 @@
 
       <div class="filtering-total">
 
-      @if (!allFinishedScanning || importStage === 'importingMeta') {
+      @if (!allFinishedScanning() || importStage === 'importingMeta') {
         <div
           class="scanning-indicator"
           title="{{ 'SIDEBAR.scanInProgress' | translate }}"
@@ -1317,6 +1317,7 @@
     >
     @if (currentClickedItem) {
       <app-thumbnail
+        (rightClick)="rightMouseClicked($event.mouseEvent, $event.item)"
         (videoClick)="handleClick($event, currentClickedItem)"
         (sheetClick)="this.openThumbnailSheet(currentClickedItem)"
 
@@ -1348,6 +1349,7 @@
         [maxWidth]="galleryWidth - 80"
         [star]="currentClickedItem.stars"
 
+        [focusOnAddTag]="true"
         [darkMode]="settingsButtons['darkMode'].toggled"
         [largerFont]="settingsButtons['fontSizeLarger'].toggled"
         [showAutoFileTags]="settingsButtons['autoFileTags'].toggled"

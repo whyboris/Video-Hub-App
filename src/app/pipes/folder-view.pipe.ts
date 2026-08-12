@@ -7,11 +7,13 @@ import type { SettingsButtonsType} from '../common/settings-buttons';
 import { SettingsButtons } from '../common/settings-buttons';
 
 interface FolderProperties {
+  birthtime: number;       //                 corresponds to ImageElement `birthtime`
   byteSize: number;        //                 corresponds to ImageElement `fileSize`
   duration: number;        // in seconds,     corresponds to ImageElement `duration`
+  lastPlayed: number       //                 corresponds to ImageElement `lastPlayed`
   mtime: number;           //                 corresponds to ImageElement `mtime`
-  birthtime: number;       //                 corresponds to ImageElement `birthtime`
   starAverage: StarRating; // averaged weight of stars rounded to nearest `StarRating`
+  timesPlayed: number      //                 corresponds to ImageElement `timesPlayed`
   uuid: string             // so that @for can `track` uniquely
 }
 
@@ -28,18 +30,27 @@ export class FolderViewPipe implements PipeTransform {
    * @param files
    */
   determineFolderProperties(files: ImageElement[]): FolderProperties {
-    let totalFileSize = 0;
-    let totalDuration = 0;
-    let starAverage = 0;
-    let totalStars = 0;
-    let lastUpdated = 0;
     let firstCreated: number = Number.MAX_SAFE_INTEGER;
+    let lastPlayed = 0;
+    let lastUpdated = 0;
+    let starAverage = 0;
+    let timesPlayed = 0;
+    let totalDuration = 0;
+    let totalFileSize = 0;
+    let totalStars = 0;
 
-    const uuid = files[0].uuid;
+    // unsure if `folder` is needed here, but just in case to prevent uuid collision
+    const uuid = 'folder' + files[0].uuid;
 
     files.forEach((element: ImageElement) => {
       totalFileSize += element.fileSize;
       totalDuration += element.duration;
+      if (element.timesPlayed > timesPlayed) {
+        timesPlayed = element.timesPlayed;
+      }
+      if (element.lastPlayed > lastPlayed) {
+        lastPlayed = element.lastPlayed;
+      }
       if (element.mtime > lastUpdated) {
         lastUpdated = element.mtime;
       }
@@ -56,11 +67,13 @@ export class FolderViewPipe implements PipeTransform {
     //                         since `totalStars` can be 0, sometimes this calculation results in NaN so we ^^^^^^^
 
     return {
+      birthtime: firstCreated,
       byteSize: totalFileSize,
       duration: totalDuration,
+      lastPlayed: lastPlayed,
       mtime: lastUpdated,
-      birthtime: firstCreated,
       starAverage: starString,
+      timesPlayed: timesPlayed,
       uuid: uuid,
     };
   }
@@ -217,18 +230,20 @@ export class FolderViewPipe implements PipeTransform {
 
           const folderWithStuff: ImageElement = NewImageElement();
 
-          folderWithStuff.cleanName       = '*FOLDER*',
-          folderWithStuff.duration        = folderProperties.duration,
-          folderWithStuff.fileName        = key.replace('/', ''),
-          folderWithStuff.fileSize        = folderProperties.byteSize,
+          folderWithStuff.birthtime       = folderProperties.birthtime;
+          folderWithStuff.cleanName       = '*FOLDER*';
+          folderWithStuff.duration        = folderProperties.duration;
+          folderWithStuff.fileName        = key.replace('/', '');
+          folderWithStuff.fileSize        = folderProperties.byteSize;
           folderWithStuff.fileSizeDisplay = value.length.toString(), // indicates the number of files in the folder!
-          folderWithStuff.hash            = this.extractFourPreviewHashes(value),
+          folderWithStuff.hash            = this.extractFourPreviewHashes(value);
           folderWithStuff.index           = -1, // always show at the top (but after the `UP` folder) in the default view
-          folderWithStuff.mtime           = folderProperties.mtime,
-          folderWithStuff.birthtime       = folderProperties.birthtime,
+          folderWithStuff.lastPlayed      = folderProperties.lastPlayed;
+          folderWithStuff.mtime           = folderProperties.mtime;
           folderWithStuff.partialPath     = (prefixPath || '/') + key, // must set this for the folder click to register!
-          folderWithStuff.stars           = folderProperties.starAverage,
-          folderWithStuff.uuid            = folderProperties.uuid,
+          folderWithStuff.stars           = folderProperties.starAverage;
+          folderWithStuff.timesPlayed     = folderProperties.timesPlayed;
+          folderWithStuff.uuid            = folderProperties.uuid;
 
           arrWithFolders.push(folderWithStuff);
         }

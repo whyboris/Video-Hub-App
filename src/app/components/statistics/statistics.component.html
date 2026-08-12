@@ -197,7 +197,12 @@
         </span>
       </div>
 
-      <qrcode class="qrcode" [level]="1" [qrvalue]="'http://' + serverInfo.wifi + ':' + serverInfo.port" />
+      <qr-code
+        class="qrcode"
+        value="{{ 'http://' + serverInfo.wifi + ':' + serverInfo.port }}"
+        size="120"
+        margin="1"
+        errorCorrectionLevel="M" />
     </div>
   }
 
