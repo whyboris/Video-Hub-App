@@ -3,13 +3,9 @@ const { contextBridge, webUtils, ipcRenderer, webFrame } = require('electron');
 contextBridge.exposeInMainWorld('process', process)
 
 contextBridge.exposeInMainWorld('myAPI', {
-  getPathForFile: (file) => {
 
-    console.log('IHHIHIHIHI');
+  getPathForFile: (file) => webUtils.getPathForFile(file)
 
-    const path = webUtils.getPathForFile(file);
-    return path;
-  }
 });
 
 contextBridge.exposeInMainWorld('myElectron', {
