@@ -41,6 +41,19 @@
     <em>|</em>
     {{ video.fps }} fps
   }
+
+  <!-- Times played -->
+@if (video.timesPlayed) {
+  <em>|</em>
+  <span
+    title="{{ 'TAGS.timesPlayed' | translate }}"
+    class="times-played"
+    [class]="darkMode() ? 'times-played-dark-mode' : ''"
+  >
+    <em><app-icon [icon]="'icon-video-blank'" /></em> {{ video.timesPlayed }}
+  </span>
+}
+
     <em>| </em><!-- do not delete the space after `|` here -->
 
     <div class="year-container">
@@ -91,6 +104,8 @@
 
 
 <!-- Star rating -->
+<div class="star-container">
+
   <button
     (click)="setStarRating(1.5)"
     class="star-rating"
@@ -132,17 +147,12 @@
     <app-icon [icon]="'icon-star'" />
   </button>
 
-<!-- Times played -->
-@if (video.timesPlayed) {
-  <span class="metadata-text times-played" [ngStyle]="{color: darkMode() ? '#DDDDDD' : '#000000'}" >
-    <em>{{ 'TAGS.timesPlayed' | translate }}:</em> {{ video.timesPlayed }}
-  </span>
-}
+</div>
 
 <!-- Add tags / view tags -->
 @if (showManualTags()) {
   <app-add-tag-component
-    style="display: block;"
+    class="add-tag-component"
     (tag)="addThisTag($event)"
     [autofocus]="focusOnAddTag()"
     [darkMode]="darkMode()"
@@ -151,8 +161,6 @@
 
   <app-view-tags-component
     class="view-tags-holder"
-    [ngStyle]="{ 'min-height': imgHeight() - 128 + 'px' }"
-
     [tags]="(video | tagDisplayPipe : showManualTags()
                                   : showAutoFileTags()
                                   : showAutoFolderTags()

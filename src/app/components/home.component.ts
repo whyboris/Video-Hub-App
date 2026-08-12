@@ -655,6 +655,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       if (somethingDeleted) {
         this.deletePipeTrigger = !this.deletePipeTrigger;
+        this.imageElementService.finalArrayNeedsSaving = true;
       }
 
     });
@@ -889,7 +890,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   // =======================================================================================================================================
 
   ngAfterViewInit() {
-    this.computePreviewWidth(); // so that fullView knows its size // TODO -- check if still needed!
+    setTimeout(() => {
+      console.log('delay compute');
+      this.computePreviewWidth(); // so that fullView knows its size
+    }, 420); // to fix the annoying bug of gallery being the wrong size
 
     // this is required, otherwise when user drops the file, it opens as plaintext
     document.ondragover = document.ondrop = (ev) => {
@@ -1049,7 +1053,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * triggers function that grabs settings and sends them back with `settings-returning`
    */
   public justStarted(): void {
-    console.log('hi');
     (window as any).myElectron.sendToMain('just-started');
   }
 

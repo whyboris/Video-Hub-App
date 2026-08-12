@@ -18,7 +18,7 @@
   font-family: monospace;
   font-size: 10px;
   line-height: 16px;
-  margin: 5px 0;
+  margin: 5px 0 0;
   opacity: 0.8;
 
   em {
@@ -110,15 +110,22 @@ input[type=number]:hover::-webkit-inner-spin-button {
   @include variables.scrollBar;
   box-sizing: border-box;
   display: block;
-  height: 60px;
   overflow-y: visible; // changed from auto to allow color picker to show
   padding-bottom: 2px;
 }
 
 .times-played {
-  display: inline-block;
-  margin: 6px 0 0 12px;
-  vertical-align: top;
+  em {
+    width: 10px;
+    display: inline-block;
+    transform: translate(3px, 2px);
+  }
+}
+
+.times-played-dark-mode {
+  em {
+    fill: white;
+  }
 }
 
 textarea {
@@ -129,7 +136,7 @@ textarea {
   box-sizing: border-box;
   font-family: sans-serif;
   font-size: 12px;
-  margin-top: 5px;
+  margin-top: 10px;
   outline: none;
   padding: 0 5px;
   resize: none;
@@ -139,4 +146,14 @@ textarea {
 .notes-dark-mode {
   border-left: 1px solid variables.$gray-70;
   color: white;
+}
+
+.star-container {
+  transform: translate(-2px, 5px);
+  display: inline-block;
+}
+
+.add-tag-component {
+  display: inline-block;
+  margin-left: 20px;
 }
