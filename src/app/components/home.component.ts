@@ -899,11 +899,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     document.ondragover = document.ondrop = (ev) => {
       ev.preventDefault();
     };
+    // to handle dropping a `.vha2` file over the app
     document.body.ondrop = (ev) => {
       if (ev.dataTransfer.files.length > 0) {
-        // const fullPath: string = ev.dataTransfer.files[0].path;
-        console.warn("TODO: FIX - DRAG & DROP BROKEN");
-        const fullPath = "TODO";
+        const fullPath = (window as any).myAPI.getPathForFile(ev.dataTransfer.files[0]);
         ev.preventDefault();
         if (fullPath.endsWith('.vha2')) {
           this.loadThisVhaFile(fullPath);
