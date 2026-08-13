@@ -309,10 +309,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   sortType: SortType = 'default';
 
-  timeExtractionStarted;   // time remaining calculator
-  timeExtractionRemaining; // time remaining calculator
+  timeExtractionStarted: number;   // time remaining calculator
+  timeExtractionRemaining: number; // time remaining calculator
 
-  deletePipeTrigger = false; // to force deletePipe to update
+  deletePipeTrigger = signal(false); // to force deletePipe to update
 
   playlistViewRefresh = false; // to force playlist view to refresh, if showing
 
@@ -654,7 +654,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         });
 
       if (somethingDeleted) {
-        this.deletePipeTrigger = !this.deletePipeTrigger;
+        this.deletePipeTrigger.update(value => !value);
         this.imageElementService.finalArrayNeedsSaving = true;
       }
 
@@ -674,7 +674,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           ) {
             console.log('FILE DELETED !!!', partialPath);
             element.deleted = true;
-            this.deletePipeTrigger = !this.deletePipeTrigger;
+            this.deletePipeTrigger.update(value => !value);
           }
         });
     });
@@ -843,7 +843,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       // just in case the message comes back after user has switched to view another hub
       if (element.fileName === this.imageElementService.imageElements[element.index].fileName) {
         this.imageElementService.imageElements[element.index].deleted = true;
-        this.deletePipeTrigger = !this.deletePipeTrigger;
+        this.deletePipeTrigger.update(value => !value);
         this.imageElementService.finalArrayNeedsSaving = true;
         this.cd.detectChanges();
       }
@@ -981,7 +981,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.imageElementService.finalArrayNeedsSaving = true;
       }
     });
-    this.deletePipeTrigger = !this.deletePipeTrigger;
+    this.deletePipeTrigger.update(value => !value);
   }
 
   /**
