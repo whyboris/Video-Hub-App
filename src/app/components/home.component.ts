@@ -622,7 +622,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.sourceFolderService.addCurrentScanning(sourceIndex);
     });
 
-    // WIP -- delete any videos no longer found on the hard drive!
+    // remove from the hub any videos no longer found on the hard drive
     (window as any).myElectron.receiveFromMain('all-files-found-in-dir', (sourceIndex: number, allFilesMap: Map<string, 1>) => {
       // console.log('all files returning:');
       // console.log(sourceIndex, typeof(sourceIndex));
@@ -632,7 +632,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       this.allFinishedScanning.set(this.sourceFolderService.areAllFinishedScanning());
       if (this.allFinishedScanning()) {
-        console.log('DONE SCANNING !!!!!!!');
+        console.log('-- scan finished --');
         this.cd.detectChanges();
       }
 
@@ -645,7 +645,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         .filter((element: ImageElement) => { return element.inputSource == sourceIndex; })
         // notice the loosey-goosey comparison! this is because number  ^^  string comparison happening here!
         .forEach((element: ImageElement) => {
-          // console.log(element.fileName);
+          // mark `deleted: true` any videos no longer found in input folder
           if (!allFilesMap.has(path.join(rootFolder, element.partialPath, element.fileName))) {
             console.log('deleting: ', element.fileName);
             element.deleted = true;
