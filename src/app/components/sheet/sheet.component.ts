@@ -39,6 +39,8 @@ export class SheetComponent implements OnInit {
 
   readonly video = input<ImageElement>();
 
+  readonly settingsButtons = input<any>();
+
   readonly darkMode = input<boolean>();
   readonly elHeight = input<number>();
   readonly elWidth = input<number>();

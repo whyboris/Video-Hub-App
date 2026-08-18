@@ -4,11 +4,11 @@ import { GLOBALS } from './node/main-globals';
 GLOBALS.macVersion = process.platform === 'darwin';
 
 import * as path from 'path';
-
 const fs = require('fs');
+
 const electron = require('electron');
-const { nativeTheme } = require('electron');
-import { app, protocol, BrowserWindow, screen, dialog, systemPreferences, ipcMain } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain, nativeTheme, screen, systemPreferences } from 'electron';
+
 const windowStateKeeper = require('electron-window-state');
 
 // Methods

@@ -46,13 +46,14 @@ import {
 } from '../../../interfaces/shared-interfaces';
 
 // Constants, etc
-import type { SupportedLanguage, RowNumbers } from '../common/app-state';
 import { AppState, DefaultImagesPerRow } from '../common/app-state';
 import { Filters, filterKeyToIndex, FilterKeyNames } from '../common/filters';
 import { GLOBALS } from '../../../node/main-globals';
 import { LanguageLookup } from '../common/languages';
-import type { SettingsButtonKey, SettingsButtonsType } from '../common/settings-buttons';
 import { SettingsButtons, SettingsButtonsGroups } from '../common/settings-buttons';
+
+import type { SupportedLanguage, RowNumbers } from '../common/app-state';
+import type { SettingsButtonKey, SettingsButtonsType } from '../common/settings-buttons';
 
 // Animations
 import {
@@ -309,10 +310,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   sortType: SortType = 'default';
 
-  timeExtractionStarted;   // time remaining calculator
-  timeExtractionRemaining; // time remaining calculator
+  timeExtractionStarted: number;   // time remaining calculator
+  timeExtractionRemaining: number; // time remaining calculator
 
-  deletePipeTrigger = false; // to force deletePipe to update
+  deletePipeTrigger = signal(false); // to force deletePipe to update
 
   playlistViewRefresh = false; // to force playlist view to refresh, if showing
 
@@ -622,7 +623,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.sourceFolderService.addCurrentScanning(sourceIndex);
     });
 
-    // WIP -- delete any videos no longer found on the hard drive!
+    // remove from the hub any videos no longer found on the hard drive
     (window as any).myElectron.receiveFromMain('all-files-found-in-dir', (sourceIndex: number, allFilesMap: Map<string, 1>) => {
       // console.log('all files returning:');
       // console.log(sourceIndex, typeof(sourceIndex));
@@ -632,7 +633,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       this.allFinishedScanning.set(this.sourceFolderService.areAllFinishedScanning());
       if (this.allFinishedScanning()) {
-        console.log('DONE SCANNING !!!!!!!');
+        console.log('-- scan finished --');
         this.cd.detectChanges();
       }
 
@@ -645,7 +646,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         .filter((element: ImageElement) => { return element.inputSource == sourceIndex; })
         // notice the loosey-goosey comparison! this is because number  ^^  string comparison happening here!
         .forEach((element: ImageElement) => {
-          // console.log(element.fileName);
+          // mark `deleted: true` any videos no longer found in input folder
           if (!allFilesMap.has(path.join(rootFolder, element.partialPath, element.fileName))) {
             console.log('deleting: ', element.fileName);
             element.deleted = true;
@@ -654,7 +655,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         });
 
       if (somethingDeleted) {
-        this.deletePipeTrigger = !this.deletePipeTrigger;
+        this.deletePipeTrigger.update(value => !value);
         this.imageElementService.finalArrayNeedsSaving = true;
       }
 
@@ -674,7 +675,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
           ) {
             console.log('FILE DELETED !!!', partialPath);
             element.deleted = true;
-            this.deletePipeTrigger = !this.deletePipeTrigger;
+            this.deletePipeTrigger.update(value => !value);
           }
         });
     });
@@ -843,7 +844,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       // just in case the message comes back after user has switched to view another hub
       if (element.fileName === this.imageElementService.imageElements[element.index].fileName) {
         this.imageElementService.imageElements[element.index].deleted = true;
-        this.deletePipeTrigger = !this.deletePipeTrigger;
+        this.deletePipeTrigger.update(value => !value);
         this.imageElementService.finalArrayNeedsSaving = true;
         this.cd.detectChanges();
       }
@@ -899,11 +900,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     document.ondragover = document.ondrop = (ev) => {
       ev.preventDefault();
     };
+    // to handle dropping a `.vha2` file over the app
     document.body.ondrop = (ev) => {
       if (ev.dataTransfer.files.length > 0) {
-        // const fullPath: string = ev.dataTransfer.files[0].path;
-        console.warn("TODO: FIX - DRAG & DROP BROKEN");
-        const fullPath = "TODO";
+        const fullPath = (window as any).myAPI.getPathForFile(ev.dataTransfer.files[0]);
         ev.preventDefault();
         if (fullPath.endsWith('.vha2')) {
           this.loadThisVhaFile(fullPath);
@@ -981,7 +981,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.imageElementService.finalArrayNeedsSaving = true;
       }
     });
-    this.deletePipeTrigger = !this.deletePipeTrigger;
+    this.deletePipeTrigger.update(value => !value);
   }
 
   /**

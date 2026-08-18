@@ -128,6 +128,8 @@
     [imgHeight]="previewHeight"
     [star]="sheetItemToDisplay.stars"
 
+    [settingsButtons]="settingsButtons"
+
     [darkMode]="settingsButtons['darkMode'].toggled"
     [hoverScrub]="settingsButtons['hoverScrub'].toggled"
     [largerFont]="settingsButtons['fontSizeLarger'].toggled"
@@ -424,7 +426,7 @@
           <app-icon [icon]="'icon-video-blank'"></app-icon>
         </div>
 
-        {{ (imageElementService.imageElements | deleteFilePipe : deletePipeTrigger).length | number }}
+        {{ (imageElementService.imageElements | deleteFilePipe : deletePipeTrigger()).length | number }}
 
       </div>
 
@@ -752,7 +754,7 @@
 
       <!-- total found -->
       <div class="filtering-total total-found" [ngClass]="{ 'total-found-dark': settingsButtons['darkMode'].toggled }">
-        @if (numberOfVideosFound < (imageElementService.imageElements | deleteFilePipe : deletePipeTrigger).length) {
+        @if (numberOfVideosFound < (imageElementService.imageElements | deleteFilePipe : deletePipeTrigger()).length) {
           <span
             title="{{ 'BUTTONS.clearAllFiltersHint' | translate }}"
             class="clear-all-filters"
@@ -814,7 +816,7 @@
 
                 | favoritesOnlyPipe : settingsButtons['showOnlyFavorites'].toggled
 
-                | deleteFilePipe : deletePipeTrigger
+                | deleteFilePipe : deletePipeTrigger()
 
                 | hideOfflinePipe : settingsButtons['hideOffline'].toggled
 
@@ -824,7 +826,7 @@
 
                 | fileSearchPipe : filters[1].array : filters[1].bool : false : 'folder' : false
 
-                | fileSearchPipe : filters[2].array : filters[2].bool : true : 'folder' : true
+                | fileSearchPipe : filters[2].array : filters[2].bool : true  : 'folder' : true
 
                 | fileSearchPipe : filters[3].array : filters[3].bool : true  : 'file'   : false
 
@@ -1071,6 +1073,8 @@
           (dragstart)="draggingVideoFile($event, item)"
 
           [video]="item"
+
+          [settingsButtons]="settingsButtons"
 
           [connected]="sourceFolderService.sourceFolderConnected[item.inputSource]"
           [darkMode]="settingsButtons['darkMode'].toggled"
@@ -1344,6 +1348,8 @@
         (filterTag)="handleTagWordClicked($event.tag.name, $event.event)"
 
         [video]="currentClickedItem"
+
+        [settingsButtons]="settingsButtons"
 
         [imgHeight]="144"
         [maxWidth]="galleryWidth - 80"

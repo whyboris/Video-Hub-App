@@ -29,6 +29,8 @@ export class MetaComponent implements OnInit, OnDestroy {
 
   @Input() video: ImageElement;
 
+  readonly settingsButtons = input<any>();
+
   readonly focusOnAddTag = input<boolean>(false);
   readonly darkMode = input<boolean>();
   readonly imgHeight = input<number>();

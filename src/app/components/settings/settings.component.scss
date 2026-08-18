@@ -31,3 +31,43 @@
 .player-settings-launch-args {
   margin-top: 0;
 }
+
+// whole below section is a hack for the metadata details toggles
+.times-played { // this bit copied from `meta.component.scss`
+  em {
+    width: 10px;
+    display: inline-block;
+    transform: translate(0, 2px);
+  }
+}
+
+.meta-section-div {
+  display: block;
+  font-family: monospace;
+  font-size: 10px;
+  line-height: 16px;
+  margin: 5px 0 0;
+  opacity: 0.8;
+
+  em {
+    color: #808080;
+    font-style: unset;
+    opacity: 0.5;
+  }
+
+  span {
+    cursor: not-allowed;
+  }
+
+  .disabled {
+    opacity: 0.3;
+    cursor: pointer;
+  }
+}
+
+.meta-section-p {
+  font-size: 14px;
+  margin-top: 30px;
+}
+
+// ----------------- end of metadata details toggles hack ---------------

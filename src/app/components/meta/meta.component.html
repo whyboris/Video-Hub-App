@@ -22,7 +22,7 @@
     (keydown.enter)="tryRenamingFile()"
   >
 
-<!-- META DATA SECTION -->
+<!-- =========== Metadata Section =========== -->
 
 @if (renamingWIP === video.cleanName) {
   <span
@@ -30,54 +30,56 @@
     [ngClass]="{ darkModeText: darkMode() }"
   >
 
-    {{ video.durationDisplay }}
-    <em>|</em>
-    {{ video.fileSizeDisplay }}
-    <em>|</em>
-    {{ video.width }} x {{ video.height }}
-    <em>|</em>
-    {{ video.bitrate + ' mb/s' }}
-  @if (video.fps) {
-    <em>|</em>
-    {{ video.fps }} fps
+  @if (settingsButtons()['metaShowDuration'].toggled) {
+    <span>{{ video.durationDisplay }}</span>
   }
+  @if (settingsButtons()['metaShowSize'].toggled) {
+    <span>{{ video.fileSizeDisplay }}</span>
+  }
+  @if (settingsButtons()['metaShowResolution'].toggled) {
+    <span>{{ video.width }} x {{ video.height }}</span>
+  }
+  @if (settingsButtons()['metaShowBitrate'].toggled) {
+    <span>{{ video.bitrate + ' mb/s' }}</span>
+  }
+  @if (settingsButtons()['metaShowFps'].toggled && video.fps) {
+    <span>{{ video.fps }} fps</span>
+  }
+  @if (settingsButtons()['metaShowTimesPlayed'].toggled && video.timesPlayed) {
+    <span
+      title="{{ 'TAGS.timesPlayed' | translate }}"
+      class="times-played"
+      [class]="darkMode() ? 'times-played-dark-mode' : ''"
+    >
+      <em><app-icon [icon]="'icon-video-blank'" /></em> {{ video.timesPlayed }}
+    </span>
+  }
+  @if (settingsButtons()['metaShowYear'].toggled) {
+    <span>
+      <div class="year-container">
+        <input
+          #yearInput
 
-  <!-- Times played -->
-@if (video.timesPlayed) {
-  <em>|</em>
-  <span
-    title="{{ 'TAGS.timesPlayed' | translate }}"
-    class="times-played"
-    [class]="darkMode() ? 'times-played-dark-mode' : ''"
-  >
-    <em><app-icon [icon]="'icon-video-blank'" /></em> {{ video.timesPlayed }}
-  </span>
-}
+          class="year"
+          [ngStyle]="{color: darkMode() ? '#DDDDDD' : '#000000'}"
 
-    <em>| </em><!-- do not delete the space after `|` here -->
+          (change)="validateYear($event)"
+          (click)="autoFillYear()"
+          (keydown)="preventUnwantedKeypress($event)"
+          (keyup.enter)="validateYear($event)"
+          (keyup.esc)="validateYear($event)"
 
-    <div class="year-container">
-      <input
-        #yearInput
+          [(ngModel)]="yearHack"
 
-        class="year"
-        [ngStyle]="{color: darkMode() ? '#DDDDDD' : '#000000'}"
-
-        (change)="validateYear($event)"
-        (click)="autoFillYear()"
-        (keydown)="preventUnwantedKeypress($event)"
-        (keyup.enter)="validateYear($event)"
-        (keyup.esc)="validateYear($event)"
-
-        [(ngModel)]="yearHack"
-
-        max="3000"
-        min="1888"
-        placeholder="YYYY"
-        tabindex="-1"
-        type="number"
-      >
-    </div>
+          max="3000"
+          min="1888"
+          placeholder="YYYY"
+          tabindex="-1"
+          type="number"
+        >
+      </div>
+    </span>
+  }
 
   </span>
 

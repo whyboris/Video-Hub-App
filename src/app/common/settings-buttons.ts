@@ -33,6 +33,13 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'makeLarger'
  | 'makeSmaller'
  | 'manualTags'
+ | 'metaShowDuration'
+ | 'metaShowSize'
+ | 'metaShowResolution'
+ | 'metaShowBitrate'
+ | 'metaShowFps'
+ | 'metaShowTimesPlayed'
+ | 'metaShowYear'
  | 'muteClips'
  | 'openAtTimestamp'
  | 'playPlaylist'
@@ -175,7 +182,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'showMoreInfo',
     'fontSizeLarger',
     'favorites',
-    'shuffleGalleryNow',
+    'shuffleGalleryNow', // this specific property affects placement of metadata toggles `settings.component.html`
   ],
   [ // 8 - Tags
     'manualTags',
@@ -215,6 +222,16 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'dangerousDelete',
     'spacePlaysRandom',
     'openAtTimestamp',
+  ],
+  [ // 15 - hack - to help save the properties into settings
+    //           - hidden by not being included below in `SettingsMetaGrop`
+    'metaShowDuration',
+    'metaShowSize',
+    'metaShowResolution',
+    'metaShowBitrate',
+    'metaShowFps',
+    'metaShowTimesPlayed',
+    'metaShowYear',
   ]
 ];
 
@@ -523,6 +540,48 @@ export const SettingsButtons: SettingsButtonsType = {
     moreInfo: 'BUTTONS.manualTagsMoreInfo',
     settingsHeading: 'SETTINGS.manualTags',
     title: 'BUTTONS.manualTagsHint',
+    toggled: true
+  },
+  'metaShowDuration': {
+    description: 'BUTTONS.metaShowDuration',
+    hidden: true,
+    title: 'BUTTONS.metaShowDuration',
+    toggled: true
+  },
+  'metaShowSize':  {
+    description: 'BUTTONS.metaShowSize',
+    hidden: true,
+    title: 'BUTTONS.metaShowSize',
+    toggled: true
+  },
+  'metaShowResolution':  {
+    description: 'BUTTONS.metaShowResolution',
+    hidden: true,
+    title: 'BUTTONS.metaShowResolution',
+    toggled: true
+  },
+  'metaShowBitrate':  {
+    description: 'BUTTONS.metaShowBitrate',
+    hidden: true,
+    title: 'BUTTONS.metaShowBitrate',
+    toggled: true
+  },
+  'metaShowFps':  {
+    description: 'BUTTONS.metaShowFps',
+    hidden: true,
+    title: 'BUTTONS.metaShowFps',
+    toggled: true
+  },
+  'metaShowTimesPlayed':  {
+    description: 'BUTTONS.metaShowTimesPlayed',
+    hidden: true,
+    title: 'BUTTONS.metaShowTimesPlayed',
+    toggled: true
+  },
+  'metaShowYear': {
+    description: 'BUTTONS.metaShowYear',
+    hidden: true,
+    title: 'BUTTONS.metaShowYear',
     toggled: true
   },
   'muteClips': {
