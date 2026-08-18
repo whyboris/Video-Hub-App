@@ -21,10 +21,19 @@
   margin: 5px 0 0;
   opacity: 0.8;
 
-  em {
-    color: variables.$gray-50;
-    font-style: unset;
-    opacity: 0.5;
+  span {
+    em {
+      opacity: 0.5;
+    }
+
+    &:not(:last-child)::after {
+      color: variables.$gray-50;
+      content: "|";
+      display: inline-block;
+      font-style: unset;
+      margin: 0 6px;
+      opacity: 0.5;
+    }
   }
 }
 
@@ -37,7 +46,7 @@
 input[type=number] {
   height: 30px;
   position: absolute;
-  transform: translate(7px, -7px);
+  transform: translate(5px, -7px);
 }
 
 input[type=number]:hover::-webkit-inner-spin-button {
@@ -115,8 +124,6 @@ input[type=number]:hover::-webkit-inner-spin-button {
 }
 
 .times-played {
-  margin: 0 3px 0 6px;
-
   em {
     width: 10px;
     display: inline-block;

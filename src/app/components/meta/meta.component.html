@@ -31,24 +31,19 @@
   >
 
   @if (settingsButtons()['metaShowDuration'].toggled) {
-    {{ video.durationDisplay }}
-    <em>|</em>
+    <span>{{ video.durationDisplay }}</span>
   }
   @if (settingsButtons()['metaShowSize'].toggled) {
-    {{ video.fileSizeDisplay }}
-    <em>|</em>
+    <span>{{ video.fileSizeDisplay }}</span>
   }
   @if (settingsButtons()['metaShowResolution'].toggled) {
-    {{ video.width }} x {{ video.height }}
-    <em>|</em>
+    <span>{{ video.width }} x {{ video.height }}</span>
   }
   @if (settingsButtons()['metaShowBitrate'].toggled) {
-    {{ video.bitrate + ' mb/s' }}
-    <em>|</em>
+    <span>{{ video.bitrate + ' mb/s' }}</span>
   }
   @if (settingsButtons()['metaShowFps'].toggled && video.fps) {
-    {{ video.fps }} fps
-    <em>|</em>
+    <span>{{ video.fps }} fps</span>
   }
 
   <!-- Times played -->
@@ -60,10 +55,10 @@
   >
     <em><app-icon [icon]="'icon-video-blank'" /></em> {{ video.timesPlayed }}
   </span>
-  <em>|</em>
 }
 
 @if (settingsButtons()['metaShowYear'].toggled) {
+  <span>
     <div class="year-container">
       <input
         #yearInput
@@ -86,6 +81,7 @@
         type="number"
       >
     </div>
+  </span>
 }
 
   </span>
