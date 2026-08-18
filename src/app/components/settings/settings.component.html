@@ -59,7 +59,7 @@
       @if (buttonKey === "shuffleGalleryNow") {
         <div style="text-align: center;">
 
-          <p class="meta-section-p">Show / hide metadata from details view:</p>
+          <p class="meta-section-p">{{ 'SETTINGS.showHideMetadata' | translate }}</p>
 
           <div class="meta-section-div">
             <span
@@ -111,7 +111,7 @@
               [class.disabled]="!settingsButtons['metaShowYear'].toggled"
               (click)="settingsButtons['metaShowYear'].toggled = !settingsButtons['metaShowYear'].toggled"
             >
-                1999</span>
+                2026</span>
           </div>
 
         </div>

@@ -313,6 +313,7 @@
     "settings": "Settings",
     "showDetailsTray": "Details",
     "showHideText": "show / hide icon in the ribbon / toolbar",
+    "showHideMetadata": "Show / hide metadata from details view:",
     "showRecent": "Recently opened files",
     "sortingFilters": "Filters & sorting options",
     "systemDefault": "System default",
