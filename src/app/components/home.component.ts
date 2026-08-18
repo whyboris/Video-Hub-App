@@ -46,13 +46,14 @@ import {
 } from '../../../interfaces/shared-interfaces';
 
 // Constants, etc
-import type { SupportedLanguage, RowNumbers } from '../common/app-state';
 import { AppState, DefaultImagesPerRow } from '../common/app-state';
 import { Filters, filterKeyToIndex, FilterKeyNames } from '../common/filters';
 import { GLOBALS } from '../../../node/main-globals';
 import { LanguageLookup } from '../common/languages';
-import type { SettingsButtonKey, SettingsButtonsType } from '../common/settings-buttons';
 import { SettingsButtons, SettingsButtonsGroups } from '../common/settings-buttons';
+
+import type { SupportedLanguage, RowNumbers } from '../common/app-state';
+import type { SettingsButtonKey, SettingsButtonsType } from '../common/settings-buttons';
 
 // Animations
 import {

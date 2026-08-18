@@ -64,35 +64,35 @@
           <div class="meta-section-div">
             <span
               title="{{ settingsButtons['metaShowDuration'].title | translate }}"
-              [class.disabled]="settingsButtons['metaShowDuration'].toggled"
+              [class.disabled]="!settingsButtons['metaShowDuration'].toggled"
               (click)="settingsButtons['metaShowDuration'].toggled = !settingsButtons['metaShowDuration'].toggled"
             >
                 36:29</span>
             <em> | </em>
             <span
               title="{{ settingsButtons['metaShowSize'].title | translate }}"
-              [class.disabled]="settingsButtons['metaShowSize'].toggled"
+              [class.disabled]="!settingsButtons['metaShowSize'].toggled"
               (click)="settingsButtons['metaShowSize'].toggled = !settingsButtons['metaShowSize'].toggled"
             >
                 2.6 GB</span>
             <em> | </em>
             <span
               title="{{ settingsButtons['metaShowResolution'].title | translate }}"
-              [class.disabled]="settingsButtons['metaShowResolution'].toggled"
+              [class.disabled]="!settingsButtons['metaShowResolution'].toggled"
               (click)="settingsButtons['metaShowResolution'].toggled = !settingsButtons['metaShowResolution'].toggled"
             >
                 1920 x 1080</span>
             <em> | </em>
             <span
               title="{{ settingsButtons['metaShowBitrate'].title | translate }}"
-              [class.disabled]="settingsButtons['metaShowBitrate'].toggled"
+              [class.disabled]="!settingsButtons['metaShowBitrate'].toggled"
               (click)="settingsButtons['metaShowBitrate'].toggled = !settingsButtons['metaShowBitrate'].toggled"
             >
                 1.28 mb/s</span>
             <em> | </em>
             <span
               title="{{ settingsButtons['metaShowFps'].title | translate }}"
-              [class.disabled]="settingsButtons['metaShowFps'].toggled"
+              [class.disabled]="!settingsButtons['metaShowFps'].toggled"
               (click)="settingsButtons['metaShowFps'].toggled = !settingsButtons['metaShowFps'].toggled"
             >
                 30 fps</span>
@@ -100,15 +100,15 @@
             <span
               class="times-played"
               title="{{ settingsButtons['metaShowTimesPlayed'].title | translate }}"
-              [class.disabled]="settingsButtons['metaShowTimesPlayed'].toggled"
-              (click)="settingsButtons['metaShowTimesPlayed'] = !settingsButtons['metaShowTimesPlayed']"
+              [class.disabled]="!settingsButtons['metaShowTimesPlayed'].toggled"
+              (click)="settingsButtons['metaShowTimesPlayed'].toggled = !settingsButtons['metaShowTimesPlayed'].toggled"
             >
               <em><app-icon [icon]="'icon-video-blank'" /></em> 5
             </span>
             <em> | </em>
             <span
               title="{{ settingsButtons['metaShowYear'].title | translate }}"
-              [class.disabled]="settingsButtons['metaShowYear'].toggled"
+              [class.disabled]="!settingsButtons['metaShowYear'].toggled"
               (click)="settingsButtons['metaShowYear'].toggled = !settingsButtons['metaShowYear'].toggled"
             >
                 1999</span>

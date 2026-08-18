@@ -128,6 +128,8 @@
     [imgHeight]="previewHeight"
     [star]="sheetItemToDisplay.stars"
 
+    [settingsButtons]="settingsButtons"
+
     [darkMode]="settingsButtons['darkMode'].toggled"
     [hoverScrub]="settingsButtons['hoverScrub'].toggled"
     [largerFont]="settingsButtons['fontSizeLarger'].toggled"
@@ -1072,6 +1074,8 @@
 
           [video]="item"
 
+          [settingsButtons]="settingsButtons"
+
           [connected]="sourceFolderService.sourceFolderConnected[item.inputSource]"
           [darkMode]="settingsButtons['darkMode'].toggled"
           [elHeight]="previewHeight"
@@ -1344,6 +1348,8 @@
         (filterTag)="handleTagWordClicked($event.tag.name, $event.event)"
 
         [video]="currentClickedItem"
+
+        [settingsButtons]="settingsButtons"
 
         [imgHeight]="144"
         [maxWidth]="galleryWidth - 80"

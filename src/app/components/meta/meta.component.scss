@@ -37,7 +37,7 @@
 input[type=number] {
   height: 30px;
   position: absolute;
-  transform: translate(0, -7px);
+  transform: translate(7px, -7px);
 }
 
 input[type=number]:hover::-webkit-inner-spin-button {
@@ -115,10 +115,12 @@ input[type=number]:hover::-webkit-inner-spin-button {
 }
 
 .times-played {
+  margin: 0 3px 0 6px;
+
   em {
     width: 10px;
     display: inline-block;
-    transform: translate(3px, 2px);
+    transform: translate(1px, 2px);
   }
 }
 

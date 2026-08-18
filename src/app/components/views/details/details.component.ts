@@ -36,6 +36,8 @@ export class DetailsComponent {
 
   readonly video = input<ImageElement>();
 
+  readonly settingsButtons = input<any>();
+
   readonly connected = input<boolean>();
   readonly darkMode = input<boolean>();
   readonly draggable = input<boolean>();
