@@ -23,7 +23,8 @@ export type SupportedLanguage =
 | 'tr'
 | 'uk'
 | 'vi'
-| 'zh';
+| 'zh'
+| 'zh-hant';
 
 export interface RowNumbers {
   thumbnailSheet: number;
