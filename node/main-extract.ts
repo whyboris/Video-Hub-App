@@ -27,7 +27,7 @@ const fs = require('fs');
 import * as path from 'path';
 const spawn = require('child_process').spawn;
 
-const ffmpegPath: string = app.isPackaged ? './resources/ffmpeg/ffmpeg' : './ffmpeg/ffmpeg';
+const ffmpegPath: string = app.isPackaged ? '../Resources/ffmpeg/ffmpeg' : './ffmpeg/ffmpeg';
 
 import { GLOBALS } from './main-globals';
 

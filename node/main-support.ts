@@ -15,7 +15,7 @@ import * as path from 'path';
 
 const exec = require('child_process').exec;
 
-const ffprobePath: string = app.isPackaged ? './resources/ffmpeg/ffprobe' : './ffmpeg/ffprobe';
+const ffprobePath: string = app.isPackaged ? '../Resources/ffmpeg/ffprobe' : './ffmpeg/ffprobe';
 
 const fs = require('fs');
 const hash = require('object-hash');
