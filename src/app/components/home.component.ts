@@ -131,6 +131,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   appState = AppState;
 
   demo = GLOBALS.demo;
+  demoSavingDisabled = false;
   macVersion = GLOBALS.macVersion;
   versionNumber = GLOBALS.version;
 
@@ -755,6 +756,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       this.setTags(finalObject.addTags, finalObject.removeTags); // auto-tags
 
+      const currentVideos = finalObject.images.length;
+      if (this.demo && currentVideos > 50) {
+        this.modalService.openSnackbar("WARNING - your hub has more than 50 videos; saving disabled; please create a new hub", 5000);
+        this.demoSavingDisabled = true;
+      }
+
       this.imageElementService.imageElements = this.demo ? finalObject.images.slice(0, 50) : finalObject.images;
 
       this.canCloseWizard = true;
@@ -1112,6 +1119,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * completely depends on global variable `finalArrayNeedsSaving` or if any tags were added/removed in auto-tag-service
    */
   public getFinalObjectForSaving(): FinalObject {
+
+    if (this.demo && this.demoSavingDisabled) {
+      this.modalService.openSnackbar("Previous hub changes not saved because hub has more than 50 videos", 3000);
+      this.demoSavingDisabled = false;
+      return null;
+    }
+
+
     if (this.imageElementService.finalArrayNeedsSaving || this.autoTagsSaveService.needToSave()) {
       const propsToReturn: FinalObject = {
         addTags: this.autoTagsSaveService.getAddTags(),
