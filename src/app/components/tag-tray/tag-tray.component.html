@@ -1,83 +1,92 @@
-<div
-  class="manual-tag-tray"
->
-
-@if (!batchTaggingMode()) {
+<div class="manual-tag-tray">
 
   <div class="tag-tray-menu-left">
+
+  <input
+    class="filter-general manual-tag-tray-filter"
+    [ngClass]="{ 'manual-tag-tray-filter-dark': darkMode() }"
+    (keyup.esc)="manualTagFilterString = ''"
+    [(ngModel)]="manualTagFilterString"
+    placeholder="{{ 'TAGS.filterTags' | translate }}"
+  >
+
+  @if (!batchTaggingMode()) {
+
     <button
-      (click)="appState.sortTagsByFrequency = !appState.sortTagsByFrequency"
       class="tag-sort-by-toggle"
+      (click)="appState().sortTagsByFrequency = !appState().sortTagsByFrequency"
     >
       {{ (appState().sortTagsByFrequency ? 'TAGS.sortByFrequency'
-                                       : 'TAGS.sortAlphabetical') | translate }}
+                                         : 'TAGS.sortAlphabetical') | translate }}
     </button>
+
     <button
-      (click)="manualTagShowFrequency = !manualTagShowFrequency"
       class="show-frequency"
+      (click)="manualTagShowFrequency = !manualTagShowFrequency"
     >
       {{ (manualTagShowFrequency ? 'TAGS.showingFrequency'
                                  : 'TAGS.hidingFrequency') | translate }}
     </button>
-    <input
-      (keyup.esc)="manualTagFilterString = ''"
-      [(ngModel)]="manualTagFilterString"
-      class="filter-general manual-tag-tray-filter"
-      [ngClass]="{ 'manual-tag-tray-filter-dark': settingsButtons()['darkMode'].toggled }"
-      placeholder="{{ 'TAGS.filterTags' | translate }}"
-    >
-  </div>
 
-} @else {
+  } @else {
 
-    <div class="tag-tray-menu-left">
-      <span class="manual-tag-tray-label" [ngStyle]="{ color: darkMode() ? 'white' : 'black' }">
+    <div class="batch-mode-instructions">
+
+      <span class="manual-tag-tray-label" style="color: #4D4D4D">
         {{ 'TAGS.clickVideoToSelect' | translate }}
       </span>
 
-      <span class="more-info">
-        i
-      </span>
+      <span class="more-info">i</span>
 
-      <div class="manual-tag-tray-label-info" style="line-height: 24px">
+      <div
+        class="manual-tag-tray-label-info"
+        [ngClass]="{ 'manual-tag-tray-label-info-dark-mode': darkMode() }"
+        style="line-height: 20px"
+      >
         {{ 'TAGS.clickTagToAdd' | translate }}
       </div>
 
+    </div>
+
+    <span class="total-selected" (click)="deselectAllPressed()">Selected:
+      <em [ngClass]="{ 'em-dark-mode': darkMode() }">
+        {{ (imageElementService.imageElements | totalSelectedPipe : recomputeTrigger) | number }}
+      </em>
+    </span>
+
+    <button
+      class="button-select-all"
+      (click)="selectAllPressed()"
+    >
+      {{ 'TAGS.selectAllButton' | translate }}
+    </button>
+
+  }
+
+    <div class="batch-mode-button-container">
       <button
-        class="wizard-button wizard-button-small button-select-all"
-        [ngClass]="{ 'select-all-dark': settingsButtons()['darkMode'].toggled }"
-        (click)="selectAll.emit()"
+        class="button-toggle-batch-mode"
+        [ngClass]="{ 'batch-edit-mode-active': batchTaggingMode() }"
+        (click)="toggleBatchTaggingMode.emit()"
       >
-        {{ 'TAGS.selectAllButton' | translate }}
+        {{ 'TAGS.batchModeButton' | translate }}
       </button>
     </div>
 
-}
-
-  <button
-    class="wizard-button wizard-button-small button-toggle-batch-mode"
-    [ngClass]="{
-      'button-toggle-batch-mode-dark': settingsButtons()['darkMode'].toggled,
-      'button-toggle-batch-mode-dark-active': settingsButtons()['darkMode'].toggled && batchTaggingMode(),
-      'edit-mode-active': batchTaggingMode()
-    }"
-    (click)="toggleBatchTaggingMode.emit()"
-  >
-    {{ 'TAGS.batchModeButton' | translate }}
-  </button>
+  </div> <!-- end of `.manual-tag-tray` -->
 
   <app-view-tags-component
     class="all-the-tags"
-    [draggable]="true"
-    [displayFrequency]="manualTagShowFrequency"
-    [enableColorPicker]="true"
     [darkMode]="darkMode()"
+    [displayFrequency]="manualTagShowFrequency"
+    [draggable]="true"
+    [enableColorPicker]="true"
+    [tagsOnToggleBatch]="batchTaggingMode()"
     [tags]="manualTagsService.tagsList | manualTagSortPipe : manualTagFilterString
                                                            : appState().sortTagsByFrequency
-                                                           : manualTagsService.pipeToggleHack"
+                                                           : manualTagsService.pipeToggleTrigger"
     (tagClicked)="handleTagWordClicked.emit($event)"
     (removeTagEmit)="removeThisTag($event)"
-    [tagsOnToggleBatch]="batchTaggingMode()"
     (tagRightClick)="onTagRightClick($event)"
    />
 </div>

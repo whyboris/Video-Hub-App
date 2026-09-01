@@ -16,7 +16,7 @@ export class HideOfflinePipe implements PipeTransform {
   ) {}
 
   /**
-   * Return only items that match search string
+   * If `hideOffline` return only items are not offline
    * @param finalArray
    * @param hideOffline    {boolean} hide any element that is offline (from folder that is "not connected")
    */

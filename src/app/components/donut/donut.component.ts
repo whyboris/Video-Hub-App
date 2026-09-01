@@ -8,9 +8,9 @@ import { Component, input } from '@angular/core';
 })
 export class DonutComponent {
 
-  readonly darkMode = input<boolean>(undefined);
-  readonly percent = input<number>(undefined);
-  readonly timeRemaining = input<number>(undefined);
+  readonly darkMode = input<boolean>();
+  readonly percent = input<number>();
+  readonly timeRemaining = input<number>();
 
   constructor() { }
 

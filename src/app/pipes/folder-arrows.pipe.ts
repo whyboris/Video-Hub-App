@@ -8,7 +8,7 @@ import { Pipe } from '@angular/core';
 export class FolderArrowsPipe implements PipeTransform {
 
   /**
-   * Return only items that match search string
+   * Return HTML string with `>` arrow instead of the `/` path dividier
    * @param folderPath
    */
   transform(folderPath: string): string {

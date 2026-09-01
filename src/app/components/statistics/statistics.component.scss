@@ -18,6 +18,16 @@
     margin: 10px;
     max-width: 360px;
     min-width: 290px;
+
+    tr {
+      td:first-child:not(.span-both) {
+        color: variables.$gray-50;
+      }
+      td:nth-child(2) {
+        font-family: monospace;
+      }
+    }
+
   }
 }
 
@@ -212,8 +222,9 @@
 }
 
 .manual-tag-tray-label-info { // copied from `tag-tray.component.scss`
-  background-color: #eeeeee;
-  border: 1px solid #888888;
+  background-color: variables.$white;
+  box-shadow: 1px 4px 5px 1px rgba(0,0,0,0.07);
+  border: 1px solid variables.$gray-50;
   border-radius: 5px;
   font-size: 12px;
   left: calc(50% - 100px); // changed after copy/paste

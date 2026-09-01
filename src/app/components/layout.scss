@@ -44,36 +44,6 @@
   z-index: 99999;
 }
 
-.progress-modal {
-  background: variables.$gray-10;
-  border: 1px solid variables.$gray-20;
-  border-radius: 10px;
-  box-shadow: 1px 1px 5px rgba(0,0,0,0.2);
-  box-sizing: border-box;
-  left: 5vw;
-  padding: 20px;
-  position: fixed;
-  top: calc(50vh - 30px);
-  width: 90vw;
-  z-index: 101;
-}
-
-.progress-container {
-  background: variables.$gray-50;
-  border: 1px solid variables.$gray-60;
-  border-radius: 3px;
-  box-sizing: border-box;
-  height: 19px;
-  width: 100%;
-
-  .current-progress {
-    background: variables.$pretty-green;
-    border-radius: 3px;
-    height: 17px;
-    transition: 500ms;
-  }
-}
-
 // LAYOUT STYLING
 .window {
   height: 100vh;
@@ -166,7 +136,7 @@
   max-width: variables.$sidebar-width !important;
   overflow-x: hidden;
   overflow-y: scroll;
-  padding: 10px 0 60px 10px;
+  padding: 4px 0 60px 10px;
   position: absolute;
   top: variables.$settings-height;
   transform: translate(0, 0);
@@ -263,9 +233,13 @@
     cursor: pointer;
     display: block;
     position: absolute;
-    right: 12px;
+    right: 12px; // not 5px - to account for scrollbar when too many tags
     top: 5px;
     z-index: 10;
+  }
+
+  .close-bottom-tray-dark {
+    fill: variables.$gray-30;
   }
 }
 
@@ -276,6 +250,10 @@
   transition-duration: 300ms;
   transition-property: bottom;
   z-index: 29 !important;
+
+  .active-tab {
+    box-shadow: unset !important;
+  }
 }
 
 .bottom-tray-tabs-open {
@@ -283,7 +261,7 @@
 }
 
 .bottom-tray-dark {
-  background: black;
+  background: variables.$gray-90;
   border-top: 1px solid variables.$gray-80;
 
   button,
@@ -306,13 +284,14 @@
 
 .bottom-tray-tabs-dark {
   button {
-    background: black !important;
+    background: variables.$gray-90 !important;
     border: 1px solid #333333 !important;
     color: white;
   }
 
   .active-tab {
-    border-bottom: 1px solid black !important;
+    border-bottom: 1px solid variables.$gray-90 !important;
+    box-shadow: unset !important;
   }
 }
 

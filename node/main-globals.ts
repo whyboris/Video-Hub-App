@@ -5,8 +5,8 @@ import type { ScreenshotSettings, InputSources } from '../interfaces/final-objec
 // `demo: true,`                 -- below
 // `version: 'X.X.X',`           -- below
 // `nvidiaBuild: true,           -- below (separate build, requires nvidia FFmpeg)
-// `productName: "... Demo'`     -- package.json
 // `"version": "X.X.X",`         -- package.json
+// `"productName": "... Demo"    -- electron-builder.json
 
 export const GLOBALS: VhaGlobals = {
   angularApp: null,            // reference used to send messages back to Angular App

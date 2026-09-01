@@ -10,7 +10,7 @@ import type { SettingsButtonKey } from '../../common/settings-buttons';
 })
 export class ShortcutsComponent {
 
-  readonly macVersion = input<boolean>(undefined);
+  readonly macVersion = input<boolean>();
 
   isReadyToReceiveKey = false;
   shortcutToChange: SettingsButtonKey | CustomShortcutAction;

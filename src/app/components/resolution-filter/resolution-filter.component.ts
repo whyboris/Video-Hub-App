@@ -1,5 +1,7 @@
 import { Component, input, output } from '@angular/core';
+
 import type { SettingsButtonsType } from '../../common/settings-buttons';
+import type { ResolutionString } from '../../../../interfaces/final-object.interface';
 
 @Component({
   standalone: false,
@@ -11,11 +13,11 @@ export class ResolutionFilterComponent {
 
   readonly newResFilterSelected = output<any>();
 
-  readonly freqLeftBound = input(undefined);
-  readonly freqRightBound = input(undefined);
-  readonly resolutionFreqArr = input(undefined);
-  readonly resolutionNames = input(undefined);
-  readonly settingsButtons = input<SettingsButtonsType>(undefined);
+  readonly freqLeftBound = input<number>();
+  readonly freqRightBound = input<number>();
+  readonly resolutionFreqArr = input<number[]>();
+  readonly resolutionNames = input<ResolutionString[]>();
+  readonly settingsButtons = input<SettingsButtonsType>();
 
   constructor() { }
 

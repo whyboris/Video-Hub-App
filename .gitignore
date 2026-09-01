@@ -26,3 +26,4 @@ Thumbs.db
 !i18n/translate.js
 !i18n/update.js
 !remote/README.md
+!node/preload.js

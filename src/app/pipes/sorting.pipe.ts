@@ -22,6 +22,8 @@ export type SortType = 'default'
                      | 'lastPlayedDesc'
                      | 'modifiedAsc'
                      | 'modifiedDesc'
+                     | 'playlistAsc'
+                     | 'playlistDesc'
                      | 'random'
                      | 'sizeAsc'
                      | 'sizeDesc'
@@ -54,6 +56,8 @@ const sortMapping: Partial<Record<SortType, [SortOrderType, boolean]>> = {
   lastPlayedDesc:  ['lastPlayed',   false],
   modifiedAsc:     ['mtime',        true],
   modifiedDesc:    ['mtime',        false],
+  playlistAsc:     ['playlist',     true],
+  playlistDesc:    ['playlist',     false],
   sizeAsc:         ['fileSize',     true],
   sizeDesc:        ['fileSize',     false],
   starAsc:         ['stars',        true],
@@ -142,14 +146,14 @@ export class SortingPipe implements PipeTransform {
   /**
    * Return the same array randomized on next search
    * @param galleryArray
-   * @param sortingType         - sorting method
-   * @param forceSortUpdateHack - hack to force the sorting update
-   * @param skip                - whether to sort or return as is (needed for DUPLICATE SEARCH)
+   * @param sortingType            - sorting method
+   * @param forceSortUpdateTrigger - hack to force the sorting update
+   * @param skip                   - whether to sort or return as is (needed for DUPLICATE SEARCH)
    */
   transform(
     galleryArray: ImageElement[],
     sortingType: SortType,
-    forceSortUpdateHack: number | string, // changing input forces pipe to re-sort again
+    forceSortUpdateTrigger: number | string, // changing input forces pipe to re-sort again
     skip: boolean
   ): ImageElement[] {
 

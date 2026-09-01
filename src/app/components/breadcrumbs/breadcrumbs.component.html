@@ -1,12 +1,12 @@
-@if (settingsButtons['showFolders'].toggled
+@if (settingsButtons().showFolders.toggled
   && (   appState().currentView === 'showThumbnails'
       || appState().currentView === 'showFiles'
       || appState().currentView === 'showClips')) {
 
 <div
   [ngClass]="{
-      'breadcrumbs-full-width': settingsButtons['hideSidebar'].toggled,
-      'breadcrumbs-dark-mode': settingsButtons['darkMode'].toggled
+      'breadcrumbs-full-width': settingsButtons().hideSidebar.toggled,
+      'breadcrumbs-dark-mode': settingsButtons().darkMode.toggled
     }"
   class="breadcrumbs"
   @breadcrumbsAppear

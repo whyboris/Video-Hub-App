@@ -1,4 +1,6 @@
 import { Component, input, output } from '@angular/core';
+
+import type { AppStateInterface } from '../../common/app-state';
 import type { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
@@ -13,12 +15,12 @@ export class TitleBarComponent {
   readonly initiateMaximize = output<void>();
   readonly initiateMinimize = output<void>();
 
-  readonly appState = input(undefined);
-  readonly demo = input<boolean>(undefined);
-  readonly importStage = input(undefined);
-  readonly macVersion = input<boolean>(undefined);
-  readonly progressString = input(undefined);
-  readonly settingsButtons = input<SettingsButtonsType>(undefined);
+  readonly appState = input<AppStateInterface>();
+  readonly demo = input<boolean>();
+  readonly importStage = input();
+  readonly macVersion = input<boolean>();
+  readonly progressString = input();
+  readonly settingsButtons = input<SettingsButtonsType>();
 
   constructor() { }
 

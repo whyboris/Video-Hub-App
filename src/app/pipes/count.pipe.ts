@@ -16,7 +16,7 @@ export class CountPipe implements PipeTransform {
   ) { }
 
   /**
-   * Return only items that match search string
+   * Return the same input but notify Pipe Side Effect Service to show total count
    * @param finalArray
    */
   transform(finalArray: ImageElement[]): ImageElement[] {

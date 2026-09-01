@@ -4,11 +4,11 @@ import { GLOBALS } from './node/main-globals';
 GLOBALS.macVersion = process.platform === 'darwin';
 
 import * as path from 'path';
-
 const fs = require('fs');
+
 const electron = require('electron');
-const { nativeTheme } = require('electron');
-import { app, protocol, BrowserWindow, screen, dialog, systemPreferences, ipcMain } from 'electron';
+import { app, BrowserWindow, dialog, ipcMain, nativeTheme, screen, systemPreferences } from 'electron';
+
 const windowStateKeeper = require('electron-window-state');
 
 // Methods
@@ -31,8 +31,8 @@ GLOBALS.settingsPath = pathToPortableApp ? pathToPortableApp : path.join(pathToA
 const English = require('./i18n/en.json');
 let systemMessages = English.SYSTEM; // Set English as default; update via `system-messages-updated`
 
-let screenWidth;
-let screenHeight;
+let screenWidth: number;
+let screenHeight: number;
 
 // TODO: CLEAN UP
 let macFirstRun = true; // detect if it's the 1st time Mac is opening the file or something like that
@@ -42,8 +42,8 @@ electron.Menu.setApplicationMenu(null);
 
 // =================================================================================================
 
-let win;
-let myWindow = null;
+let win: BrowserWindow;
+let myWindow: BrowserWindow = null;
 const args = process.argv.slice(1);
 const serve: boolean = args.some(val => val === '--serve');
 
@@ -136,8 +136,9 @@ function createWindow() {
     webPreferences: {
       nodeIntegration: true,
       allowRunningInsecureContent: true,
-      contextIsolation: false,
-      webSecurity: false  // allow files from hard disk to show up
+      webSecurity: false,  // allow files from hard disk to show up,
+      preload: path.join(__dirname, '/node/preload.js'), // to handle drag & drop
+      contextIsolation: true, // seems needed for the `preload` script to work
     },
     x: mainWindowState.x,
     y: mainWindowState.y,
@@ -238,17 +239,6 @@ try {
     if (win === null) {
       createWindow();
     }
-  });
-
-
-  // TODO: `registerFileProtocol` may be deprecated:
-  // https://www.electronjs.org/blog/electron-33-0#behavior-changed-custom-protocol-url-handling-on-windows
-
-  app.whenReady().then(() => {
-    protocol.registerFileProtocol('file', (request, callback) => {
-      const pathname = request.url.replace('file:///', '');
-      callback(pathname);
-    });
   });
 
 } catch {}

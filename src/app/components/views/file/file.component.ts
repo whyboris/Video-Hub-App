@@ -18,18 +18,18 @@ export class FileComponent {
 
   @Input() video: ImageElement;
 
-  readonly darkMode = input<boolean>(undefined);
-  readonly largerFont = input<boolean>(undefined);
-  readonly showMeta = input<boolean>(undefined);
-  readonly showFavorites = input<boolean>(undefined);
+  readonly darkMode = input<boolean>();
+  readonly largerFont = input<boolean>();
+  readonly showMeta = input<boolean>();
+  readonly showFavorites = input<boolean>();
 
   constructor(
     public imageElementService: ImageElementService,
   ) { }
 
-  toggleHeart(): void {
+  toggleHeart(mouseClick: PointerEvent): void {
+    mouseClick.stopPropagation();
     this.imageElementService.toggleHeart(this.video.index);
-    event.stopPropagation();
   }
 
 }

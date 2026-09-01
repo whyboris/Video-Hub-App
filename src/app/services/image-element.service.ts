@@ -1,8 +1,9 @@
+import { Injectable } from '@angular/core';
+
+import type { DefaultScreenEmission, StarEmission } from '../components/sheet/sheet.component';
+import type { ImageElement } from './../../../interfaces/final-object.interface';
 import type { TagEmission } from './../../../interfaces/shared-interfaces';
 import type { YearEmission} from './../components/views/details/details.component';
-import type { ImageElement } from './../../../interfaces/final-object.interface';
-import { Injectable } from '@angular/core';
-import type { DefaultScreenEmission, StarEmission } from '../components/sheet/sheet.component';
 
 @Injectable({ providedIn: 'root' })
 export class ImageElementService {

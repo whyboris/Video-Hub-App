@@ -26,6 +26,8 @@ export class TagsDisplayPipe implements PipeTransform {
 
     const tags: Tag[] = [];
 
+    const alreadyAdded = new Set();
+
     if (manualTags) {
       if (video.tags) {
         video.tags.sort().forEach(tag => {
@@ -34,6 +36,7 @@ export class TagsDisplayPipe implements PipeTransform {
             colour: this.manualTagsService.getTagColor(tag) || Colors.manualTags,
             removable: true
           });
+          alreadyAdded.add(tag);
         });
       }
     }
@@ -41,12 +44,13 @@ export class TagsDisplayPipe implements PipeTransform {
     if (autoFileTags) {
       const cleanedFileNameAsArray: string[] = video.cleanName.toLowerCase().match(autoFileTagsRegex) || [];
       cleanedFileNameAsArray.forEach(word => {
-        if (word.length >= 3) { // TODO - fix hardcoding ?
+        if (word.length >= 3 && !alreadyAdded.has(word)) { // TODO - fix hardcoding ?
           tags.push({
             name: word,
             colour: Colors.autoFileTags,
             removable: false
           });
+          alreadyAdded.add(word);
         }
       });
     }
@@ -54,12 +58,13 @@ export class TagsDisplayPipe implements PipeTransform {
     if (autoFolderTags) {
       const cleanedFileName: string = video.partialPath.toLowerCase().replace('.', '');
       cleanedFileName.split('/').forEach(word => {
-        if (word.length >= 3) { // TODO - fix hardcoding ?
+        if (word.length >= 3 && !alreadyAdded.has(word)) { // TODO - fix hardcoding ?
           tags.push({
             name: word,
             colour: Colors.autoFolderTags,
             removable: false
           });
+          alreadyAdded.add(word);
         }
       });
     }

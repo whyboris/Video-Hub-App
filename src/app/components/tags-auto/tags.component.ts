@@ -19,7 +19,7 @@ import { slowFadeIn, donutAppear, metaAppear } from '../../common/animations';
 })
 export class TagsComponent implements OnInit, OnDestroy {
 
-  readonly hubName = input<string>(undefined); // if hubName changes, tagsService will recalculate, otherwise it will show cached
+  readonly hubName = input<string>(); // if hubName changes, tagsService will recalculate, otherwise it will show cached
 
   readonly tagClicked = output<string>();
 
@@ -144,7 +144,7 @@ export class TagsComponent implements OnInit, OnDestroy {
    * Clear current tag search if present, otherwise allow app to close the modal
    * @param event
    */
-  tagInputEscapePress(event: any): void {
+  tagInputEscapePress(event: KeyboardEvent): void {
     if (this.currentFiltering.length) {
       event.preventDefault();
       event.stopPropagation();

@@ -78,7 +78,7 @@
     >
       {{ video.fileName }}
 
-      <div class="fileSize">
+      <div class="file-size">
         {{ video.fileSize | fileSizePipe }} [{{ video.fileSizeDisplay }} files]
       </div>
 
@@ -93,8 +93,13 @@
   <div class="video-box" [ngStyle]="{ height: imgHeight() + 'px' }">
 
     @if (video.selected) { <app-icon class="selected" [icon]="'icon-show-more-info'" /> }
-    @if (showMeta()) {       <span class="time">{{ video.durationDisplay }}</span> }
-    @if (showMeta()) {       <span class="rez">{{ video.resolution }}</span> }
+
+    @if (showMeta()) {
+      <span class="rez" [ngClass]="{ 'dark-style': darkMode() }">{{ video.fileSizeDisplay }}
+        @if (video.resolution) { <span class="time rez-new">{{ video.resolution }}</span> }
+      </span>
+      <span class="time" [ngClass]="{ 'dark-style': darkMode() }">{{ video.durationDisplay }}</span>
+    }
 
     <!-- ========================== regular view ========================== -->
   @if (noError && !autoplay()) {
@@ -132,9 +137,22 @@
     ></video>
   }
 
-  </div> <!-- end of video-box -->
+    <app-icon
+      class="heart"
+      [ngClass]="{ 'heart-lit' : video.stars === 5.5 }"
+      (click)="toggleHeart($event)"
+      [icon]="'icon-heart'"
+      title="{{ video.stars === 5.5 ? ('BUTTONS.removeFromFavorites' | translate)
+                                    : ('BUTTONS.addToFavorites' | translate) }}"
+
+     />
+
+    <app-icon class="sheet-icon" [icon]="'icon-show-thumbnails'" (click)="sheetClick.emit()" />
+
+  </div>
 
   <!-- ================================= TEXT ================================= -->
+
 @if (showMeta()) {
   <span
     [ngClass]="{ 'larger-font': largerFont() }"
@@ -142,21 +160,9 @@
     class="title"
   >
     {{ video.cleanName }}
-
-    <div class="fileSize">
-      {{ '(' + video.fileSizeDisplay + ')' }}
-    </div>
-
   </span>
 }
 
-  <app-icon
-    class="sheet-icon"
-    [icon]="'icon-show-thumbnails'"
-    (click)="sheetClick.emit()"
-    [ngStyle]="{
-      'opacity': (this.hover ? 1 : 0)
-    }" />
 
 } <!-- end of the @else -->
 

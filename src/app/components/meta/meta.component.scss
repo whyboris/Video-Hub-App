@@ -1,10 +1,10 @@
 @use "../variables";
 
 .darkModeText {
-  color: variables.$gray-30;
+  color: variables.$gray-10;
 }
 
-.meta {
+.meta-container {
   box-sizing: border-box;
   display: inline-block;
   height: 190px;
@@ -13,43 +13,54 @@
   vertical-align: top;
 }
 
-.video-box {
-  background-color: black;
-  background-size: cover;
-  cursor: pointer;
-  display: inline-block;
-  overflow: hidden;
-  position: relative;
-}
-
-.title {
-  -webkit-box-orient: vertical;
-  display: -webkit-box;
-  font-size: 12px;
-  line-clamp: 3;
-  -webkit-line-clamp: 3;
-  max-height: 54px;
-  overflow: hidden;
-  text-align: left;
-  text-overflow: ellipsis;
-  transition: 300ms;
-  transition-property: font-size;
-  user-select: text;
-  width: 100%;
-  word-wrap: break-word;
-}
-
-.fileSize {
+.metadata-text {
   display: block;
+  font-family: monospace;
   font-size: 10px;
-  margin: 5px 0;
+  line-height: 16px;
+  margin: 5px 0 0;
   opacity: 0.8;
+
+  span {
+    em {
+      opacity: 0.5;
+    }
+
+    &:not(:last-child)::after {
+      color: variables.$gray-50;
+      content: "|";
+      display: inline-block;
+      font-style: unset;
+      margin: 0 6px;
+      opacity: 0.5;
+    }
+  }
+}
+
+.year-container {
+  contain: inline-size;
+  display: inline-block;
+  vertical-align: top;
+}
+
+input[type=number] {
+  height: 30px;
+  position: absolute;
+  transform: translate(5px, -7px);
+}
+
+input[type=number]:hover::-webkit-inner-spin-button {
+  cursor: ns-resize;
+  height: 30px;
+  width: 14px;
 }
 
 .meta-title {
   background: transparent;
   border: 0;
+  height: 18px;
   outline: none;
+  padding-left: 0;
 }
 
 .renaming-message {
@@ -70,7 +81,6 @@
 
 .larger-font {
   font-size: 16px;
-  margin-top: 4px;
 }
 
 .star-rating {
@@ -96,8 +106,9 @@
 
 .year {
   background-color: transparent;
-  border: 0;
   border-radius: 0;
+  border: 0;
+  font-family: monospace;
   font-size: 10px;
   outline: none;
   padding: 0;
@@ -108,15 +119,22 @@
   @include variables.scrollBar;
   box-sizing: border-box;
   display: block;
-  height: 60px;
   overflow-y: visible; // changed from auto to allow color picker to show
   padding-bottom: 2px;
 }
 
 .times-played {
-  display: inline-block;
-  margin: 6px 0 0 6px;
-  vertical-align: top;
+  em {
+    width: 10px;
+    display: inline-block;
+    transform: translate(1px, 2px);
+  }
+}
+
+.times-played-dark-mode {
+  em {
+    fill: white;
+  }
 }
 
 textarea {
@@ -127,7 +145,7 @@ textarea {
   box-sizing: border-box;
   font-family: sans-serif;
   font-size: 12px;
-  margin-top: 5px;
+  margin-top: 10px;
   outline: none;
   padding: 0 5px;
   resize: none;
@@ -137,4 +155,14 @@ textarea {
 .notes-dark-mode {
   border-left: 1px solid variables.$gray-70;
   color: white;
+}
+
+.star-container {
+  transform: translate(-2px, 5px);
+  display: inline-block;
+}
+
+.add-tag-component {
+  display: inline-block;
+  margin-left: 20px;
 }

@@ -7,10 +7,10 @@ import type { ContextMenuCoordinate } from '../../../../interfaces/shared-interf
 @Injectable()
 export class ManualTagsService {
 
-  tagsMap: Map<string, number> = new Map(); // map tag name to its frequency
-  tagsList: string[] = [];
+  pipeToggleTrigger = false;
   tagColors: Record<string, string> = {}; // map tag name to its color
-  pipeToggleHack = false;
+  tagsFrequencyMap: Map<string, number> = new Map(); // map tag name to its frequency
+  tagsList: string[] = []; // list of all tags
 
   // Color picker state - shared across all components
   showColorPickerSubject = new Subject<{ tagName: string, currentColor: string, position: ContextMenuCoordinate }>();
@@ -20,23 +20,23 @@ export class ManualTagsService {
   constructor() { }
 
   /**
-   * Update the tagsList & tagsMap with the tag
+   * Update the tagsList & tagsFrequencyMap with the tag
    * @param tag - tag to be added
    */
   addTag(tag: string): void {
-    if (this.tagsMap.get(tag)) {
-      const count = this.tagsMap.get(tag);
-      this.tagsMap.set(tag, count + 1);
+    if (this.tagsFrequencyMap.get(tag)) {
+      const count = this.tagsFrequencyMap.get(tag);
+      this.tagsFrequencyMap.set(tag, count + 1);
     } else {
-      this.tagsMap.set(tag, 1);
+      this.tagsFrequencyMap.set(tag, 1);
       this.tagsList.push(tag);
     }
     this.forceTagSortPipeUpdate();
   }
 
   removeTag(tag: string): void {
-    const count = this.tagsMap.get(tag);
-    this.tagsMap.set(tag, count - 1);
+    const count = this.tagsFrequencyMap.get(tag);
+    this.tagsFrequencyMap.set(tag, count - 1);
 
     if (count === 1) {
       this.tagsList.splice(this.tagsList.indexOf(tag), 1);
@@ -45,42 +45,43 @@ export class ManualTagsService {
   }
 
   removeTagBatch(tag: string) {
-    const count = this.tagsMap.get(tag);
-    this.tagsMap.set(tag, 0);
+    this.tagsFrequencyMap.set(tag, 0);
     this.tagsList.splice(this.tagsList.indexOf(tag), 1);
     this.forceTagSortPipeUpdate();
   }
 
   /**
-   * Removes all the existing tags in {@code tagList} and {@code tagsMap}
+   * Removes all the existing tags in `tagList` and `tagsFrequencyMap`
    */
   removeAllTags(): void {
-    this.tagsMap.clear();
+    this.tagsFrequencyMap.clear();
     this.tagsList = [];
   }
 
   /**
-   * Get the most likely tag
-   * TODO -- curently it gets the FIRST match; later get the MOST COMMON (confer with tagsMap)
-   * @param text
+   * Get the most likely tag - returning the most common tag that starts with input string
+   * @param text - input from user
    */
   getTypeahead(text: string): string {
     let mostLikely = '';
+    let highest = 0;
 
     if (text) {
-      for (let i = 0; i < this.tagsList.length; i++) {
-        if (this.tagsList[i].startsWith(text)) {
-          mostLikely = this.tagsList[i];
-          break;
+      this.tagsList.forEach((tag) => {
+        if (tag.startsWith(text)) {
+          if (this.tagsFrequencyMap.get(tag) > highest) {
+            highest = this.tagsFrequencyMap.get(tag);
+            mostLikely = tag;
+          }
         }
-      }
+      });
     }
 
     return mostLikely;
   }
 
   /**
-   * Generate the tagsList and tagsMap the first time a hub is opened
+   * Generate the tagsList and tagsFrequencyMap the first time a hub is opened
    * @param allFiles - ImageElement array
    */
   populateManualTagsService(allFiles: ImageElement[]): void {
@@ -91,14 +92,10 @@ export class ManualTagsService {
         });
       }
     });
-
-    // console.log('done populating manual tags:');
-    // console.log(this.tagsList);
-    // console.log(this.tagsMap);
   }
 
   forceTagSortPipeUpdate(): void {
-    this.pipeToggleHack = !this.pipeToggleHack;
+    this.pipeToggleTrigger = !this.pipeToggleTrigger;
   }
 
   /**
@@ -114,6 +111,7 @@ export class ManualTagsService {
     }
     // Notify all components that tag colors have been updated
     this.tagColorUpdatedSubject.next();
+    this.forceTagSortPipeUpdate();
   }
 
   /**

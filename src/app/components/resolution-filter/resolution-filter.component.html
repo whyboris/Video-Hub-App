@@ -1,6 +1,6 @@
 
   <div class="frequency-graph-container">
-    @for (resolution of resolutionFreqArr(); track resolution; let i = $index) {
+    @for (resolution of resolutionFreqArr(); track $index; let i = $index) {
       <div
         [ngClass]="{ resDisabled: (i < freqLeftBound()) || (i >= freqRightBound()) }"
         [ngStyle]="{ height: resolution + '%' }"
@@ -18,7 +18,7 @@
 
   <app-slider-filter
     (newSliderFilterSelected)="newResFilterSelected.emit($event)"
-    [darkMode]="settingsButtons()['darkMode'].toggled"
+    [darkMode]="settingsButtons().darkMode.toggled"
     [maximumValue]="4"
     [minimumValue]="0"
     [steps]="4"

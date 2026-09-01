@@ -18,6 +18,7 @@ const exec = require('child_process').exec;
 const ffprobePath: string = app.isPackaged ? './resources/ffmpeg/ffprobe' : './ffmpeg/ffprobe';
 
 const fs = require('fs');
+const hash = require('object-hash');
 const hasher = require('crypto').createHash;
 import type { Stats } from 'fs';
 
@@ -123,14 +124,28 @@ export function alphabetizeFinalArray(imagesArray: ImageElement[]): ImageElement
 /**
  * Generate the file size formatted as ### MB or #.# GB
  * THIS CODE DUPLICATES THE CODE IN `file-size.pipe.ts`
+ *
+ * (!) depends on GLOBALS.macVersion
+ *     Mac uses base 10
+ *     Win uses base  2
+ *
  * @param fileSize
  */
 function getFileSizeDisplay(sizeInBytes: number): string {
   if (sizeInBytes) {
-    const rounded = Math.round(sizeInBytes / 1000000);
-    return (rounded > 999
-              ? (rounded / 1000).toFixed(1) + ' GB'
-              : rounded + ' MB');
+
+    if (GLOBALS.macVersion) {
+      const rounded = Math.round(sizeInBytes / 1000000);
+      return (rounded > 999
+                ? (rounded / 1000).toFixed(1) + ' GB'
+                : rounded + ' MB');
+    } else {
+      const rounded = Math.round(sizeInBytes / 1048576);
+      return (rounded > 999
+                ? (rounded / 1024).toFixed(1) + ' GB'
+                : rounded + ' MB');
+    }
+
   } else {
     return '';
   }
@@ -253,6 +268,7 @@ function stripOutTemporaryFields(imagesArray: ImageElement[]): ImageElement[] {
     delete(element.resBucket);
     delete(element.resolution);
     delete(element.selected);
+    delete(element.uuid);
   });
   return imagesArray;
 }
@@ -575,6 +591,8 @@ export function insertTemporaryFieldsSingle(element: ImageElement): ImageElement
   element.bitrate = getBitrate(element.fileSize, element.duration);
   element.resBucket = resolution.bucket;
   element.resolution = resolution.label;
+  element.uuid = hash(element);
+
   return element;
 }
 

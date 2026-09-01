@@ -1,6 +1,6 @@
 <div
   class="title-bar"
-  [ngClass]="{ 'dark-mode-override': settingsButtons()['darkMode'].toggled }"
+  [ngClass]="{ 'dark-mode-override': settingsButtons().darkMode.toggled }"
 >
   <div
     class="draggable"
@@ -12,7 +12,7 @@
     <img width="16px" height="16px" class="top-logo" src="./assets/logo.png">
     <span
       class="heading-title"
-      [ngStyle]="{ 'color': settingsButtons()['darkMode'].toggled ? '#AAAAAA' : '#111111' }"
+      [ngStyle]="{ 'color': settingsButtons().darkMode.toggled ? '#AAAAAA' : '#111111' }"
     >
       Video Hub App 3
       <b>{{ demo() ? ' demo - limited to 50 video files ' : '' }}</b>

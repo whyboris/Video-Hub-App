@@ -1,6 +1,5 @@
 import type { OnInit, ElementRef} from '@angular/core';
 import { Component, input, output, viewChild } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 
 import { FilePathService } from '../file-path.service';
 
@@ -29,18 +28,18 @@ export class FilmstripComponent implements OnInit {
   readonly videoClick = output<VideoClickEmit>();
   readonly rightClick = output<RightClickEmit>();
 
-  readonly video = input<ImageElement>(undefined);
+  readonly video = input<ImageElement>();
 
-  readonly compactView = input<boolean>(undefined);
-  readonly darkMode = input<boolean>(undefined);
-  readonly elHeight = input<number>(undefined);
-  readonly folderPath = input<string>(undefined);
-  readonly hoverScrub = input<boolean>(undefined);
-  readonly hubName = input<string>(undefined);
-  readonly imgHeight = input<number>(undefined);
-  readonly largerFont = input<boolean>(undefined);
-  readonly showMeta = input<boolean>(undefined);
-  readonly showFavorites = input<boolean>(undefined);
+  readonly compactView = input<boolean>();
+  readonly darkMode = input<boolean>();
+  readonly elHeight = input<number>();
+  readonly folderPath = input<string>();
+  readonly hoverScrub = input<boolean>();
+  readonly hubName = input<string>();
+  readonly imgHeight = input<number>();
+  readonly largerFont = input<boolean>();
+  readonly showMeta = input<boolean>();
+  readonly showFavorites = input<boolean>();
 
   fullFilePath = '';
   filmXoffset = 0;
@@ -48,28 +47,27 @@ export class FilmstripComponent implements OnInit {
 
   constructor(
     public filePathService: FilePathService,
-    public imageElementService: ImageElementService,
-    public sanitizer: DomSanitizer
+    public imageElementService: ImageElementService
   ) { }
 
   ngOnInit() {
     this.fullFilePath = this.filePathService.createFilePath(this.folderPath(), this.hubName(), 'filmstrips', this.video().hash);
   }
 
-  updateFilmXoffset($event) {
+  updateFilmXoffset(mouseMove: PointerEvent) {
     if (this.hoverScrub()) {
       const imgWidth = this.imgHeight() * (16 / 9); // hardcoded aspect ratio
       const containerWidth = this.filmstripHolder().nativeElement.getBoundingClientRect().width;
       const howManyScreensOutsideCutoff = this.video().screens - Math.floor(containerWidth / imgWidth);
 
-      const cursorX = $event.layerX; // cursor's X position inside the filmstrip element
+      const cursorX = mouseMove.layerX; // cursor's X position inside the filmstrip element
       this.indexToShow = Math.floor(cursorX * (this.video().screens / containerWidth));
       this.filmXoffset = imgWidth * Math.floor(cursorX / (containerWidth / howManyScreensOutsideCutoff));
     }
   }
 
-  toggleHeart(): void {
+  toggleHeart(mouseClick: PointerEvent): void {
+    mouseClick.stopPropagation();
     this.imageElementService.toggleHeart(this.video().index);
-    event.stopPropagation();
   }
 }

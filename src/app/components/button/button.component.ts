@@ -13,9 +13,9 @@ import type { SettingsButtonKey, SettingsButtonsType } from '../../common/settin
 })
 export class ButtonComponent {
 
-  readonly button = input<SettingsButtonKey>(undefined);
-  readonly settingsButtons = input<SettingsButtonsType>(undefined);
-  readonly neverDarkMode = input<boolean>(undefined);
+  readonly button = input<SettingsButtonKey>();
+  readonly settingsButtons = input<SettingsButtonsType>();
+  readonly neverDarkMode = input<boolean>();
 
   readonly toggleButton = output<string>();
 

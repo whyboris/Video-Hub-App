@@ -75,8 +75,9 @@
 
     } <!-- end of `@else` -- the FOUR PREVIEWS template -->
 
-    @if (showMeta) {
+    @if (showMeta()) {
       <span class="time folder-time">{{ video.duration | lengthPipe : 'folder' }}</span>
+      <span class="rez folder-time">{{ video.fileSize | fileSizePipe : true }}</span>
     }
 
     </div> <!-- end of (A) div --->
@@ -98,28 +99,19 @@
 
 
   @if (video.cleanName === '*FOLDER*' && video.fileName !== '*UP*') {
-    <div class="folder-icon">
+    <div class="folder-icon" style="pointer-events: none;">
       <app-icon [icon]="'icon-folder-blank'" />
       <div class="items-in-folder">{{ video.fileSizeDisplay | folderSizePipe }}</div>
     </div>
   }
 
-  @if (showMeta && video.fileName !== '*UP*') {
+  @if (showMeta() && video.fileName !== '*UP*') {
     <span
       [ngClass]="{ 'larger-font': largerFont() }"
       [ngStyle]="{ color: darkMode() ? '#BBBBBB' : '#000000' }"
       class="title"
     >
       {{ video.fileName }}
-
-    @if (showMeta) {
-      <div
-        class="fileSize"
-      >
-        {{ video.fileSize | fileSizePipe }}
-      </div>
-    }
-
     </span>
   }
 
@@ -140,12 +132,15 @@
 
     (contextmenu)="rightClick.emit({ mouseEvent: $event, item: video })"
 
-    [ngStyle]="{
-        height: imgHeight() + 'px',
-        'background-image': 'url(' + (hover ? fullFilePath : firstFilePath) + ')',
-        'background-position-x': percentOffset + '%'
-      }"
+    [ngStyle]="{ height: imgHeight() + 'px' }"
   >
+
+    <img
+      class="full-filmstrip"
+      [ngStyle]="{ height: imgHeight() + 'px',
+                  transform: 'translate(' + (-percentOffset) + '%, 0)' }"
+      src="{{ hover ? fullFilePath : firstFilePath }}"
+    >
 
   @if (video.selected) {
     <app-icon class="selected" [icon]="'icon-show-more-info'" />
@@ -153,50 +148,54 @@
 
   @if (showFavorites()) {
     <app-icon
-      (click)="toggleHeart()"
       class="heart"
       [ngClass]="{ 'heart-lit' : video.stars === 5.5 }"
+      (click)="toggleHeart($event)"
       [icon]="'icon-heart'"
+      title="{{ video.stars === 5.5 ? ('BUTTONS.removeFromFavorites' | translate)
+                                    : ('BUTTONS.addToFavorites' | translate) }}"
      />
   }
 
-  @if (showMeta) {
-    <span
-      class="time"
-      [ngClass]="{ 'dark-style': darkMode() }"
-    >{{ video.durationDisplay }}</span>
-  }
+    <app-icon
+      title="{{ 'BUTTONS.viewDetails' | translate }}"
+      class="sheet-icon"
+      [icon]="'icon-show-thumbnails'"
+      (click)="openDetailsView($event)"
+    />
 
-  @if (showMeta && video.resolution) {
-    <span
-      class="rez"
-      [ngClass]="{ 'dark-style': darkMode() }"
-    >{{ video.resolution }}</span>
+    <div
+      class="playlist-icon"
+      [ngClass]="{ 'playlist-icon-active' : video.playlist }"
+      (click)="togglePlaylist($event)"
+      title="{{ video.playlist ? ('BUTTONS.removeFromPlaylist' | translate)
+                              : ('BUTTONS.addToPlaylist' | translate) }}"
+    >
+      <app-icon [icon]="'icon-playlist'" />
+    </div>
+
+  @if (showMeta()) {
+    <span class="rez" [ngClass]="{ 'dark-style': darkMode() }">{{ video.fileSizeDisplay }}
+      @if (video.resolution) { <span class="time rez-new">{{ video.resolution }}</span>}
+    </span>
+
+    <span class="time" [ngClass]="{ 'dark-style': darkMode() }">{{ video.durationDisplay }}</span>
   }
 
   @if (!connected()) {
-    <span class="not-connected"></span>
+    <span class="not-connected" title="{{ 'STATISTICS.notConnected' | translate }}"></span>
   }
 
   </div> <!-- end of (B) div --->
-  <!--
-  .sheet-icon needs to be the next sibling of .video-box aka `(B) div` for hover to work - SCSS rule
-  DO NOT SEPARATE!
-  -->
-  <app-icon class="sheet-icon" [icon]="'icon-show-thumbnails'" (click)="sheetClick.emit()" />
 
-@if (showMeta) {
+
+@if (showMeta()) {
   <span
     [ngClass]="{ 'larger-font': largerFont() }"
     [ngStyle]="{ color: darkMode() ? '#BBBBBB' : '#000000' }"
     class="title"
   >
     {{ video.cleanName }}
-
-    <div class="fileSize">
-      {{ '(' + video.fileSizeDisplay + ')' }}
-    </div>
-
   </span>
 }
 

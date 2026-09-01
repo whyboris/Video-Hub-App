@@ -1,5 +1,5 @@
-import type { ElementRef} from '@angular/core';
 import { Component, Input, input, output, viewChild } from '@angular/core';
+import type { ElementRef } from '@angular/core';
 
 import { ManualTagsService } from './manual-tags.service';
 
@@ -33,19 +33,21 @@ export class ViewTagsComponent {
   @Input()
   set tagsOnToggleBatch(toggleBatchMode: boolean) {
     this.toogleBatchModeValue = toggleBatchMode;
-    this._tags.forEach((item) => {
-      item.removable = toggleBatchMode;
-    });
+    if (this._tags) {
+      this._tags.forEach((item) => {
+        item.removable = toggleBatchMode;
+      });
+    }
   }
 
-  readonly darkMode = input<boolean>(undefined);
-  readonly displayFrequency = input<boolean>(undefined);
-  readonly draggable = input<boolean>(undefined);
+  readonly darkMode = input<boolean>();
+  readonly displayFrequency = input<boolean>();
+  readonly draggable = input<boolean>();
   readonly enableColorPicker = input<boolean>(false);
 
   readonly removeTagEmit = output<string>();
   readonly tagClicked = output<TagEmit>();
-  readonly tagRightClick = output<{ tag: Tag; event: MouseEvent; }>();
+  readonly tagRightClick = output<{ tag: Tag; event: PointerEvent; }>();
 
   readonly dragHack = viewChild<ElementRef>('dragHack');
 
@@ -56,7 +58,7 @@ export class ViewTagsComponent {
   /**
    * Emit to parent component a tag has been clicked
    */
-  tagClick(tag: Tag, event: MouseEvent): void {
+  tagClick(tag: Tag, event: PointerEvent): void {
     this.tagClicked.emit({ tag, event });
   }
 
@@ -88,22 +90,24 @@ export class ViewTagsComponent {
    * Set the dataTransfer with the current tag - to drop over video
    * @param event - DragEvent
    */
-  dragStart(event: DragEvent): void {
+  tagDragStart(event: DragEvent, tag: Tag): void {
+
     event.dataTransfer.setData('text/plain', (event.target as HTMLElement).innerText);
 
-    const quickHack: Element = this.dragHack().nativeElement;
+    const quickHack: HTMLElement = this.dragHack().nativeElement;
 
     quickHack.innerHTML = (event.target as HTMLElement).innerText;
+    quickHack.style.backgroundColor = tag.colour ? tag.colour : "#f5f5f5";
 
     event.dataTransfer.setDragImage(quickHack, event.offsetX * 1.5, 21);
   }
 
   /**
    * Handle right-click on tag - emit to parent to handle color picker
-   * @param event - MouseEvent
+   * @param event - PointerEvent
    * @param tag - Tag
    */
-  onTagRightClick(event: MouseEvent, tag: Tag): void {
+  onTagRightClick(event: PointerEvent, tag: Tag): void {
     if (!this.enableColorPicker()) {
       return;
     }

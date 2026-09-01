@@ -10,11 +10,11 @@ import type { ImageElement } from '../../../interfaces/final-object.interface';
 export class DeleteFilePipe implements PipeTransform {
 
   /**
-   * Return only items that match search string
+   * Return only items are not marked as `delted`
    * @param finalArray
-   * @param toggleHack    {boolean} Hack to return zero results
+   * @param toggleTrigger    {boolean} Hack to trigger a refresh
    */
-  transform(finalArray: ImageElement[], toggleHack: boolean): ImageElement[] {
+  transform(finalArray: ImageElement[], toggleTrigger: boolean): ImageElement[] {
 
     return finalArray.filter(element => !element.deleted);
 

@@ -9,15 +9,15 @@ import { Component, input, output } from '@angular/core';
 })
 export class SliderFilterComponent implements OnInit, OnDestroy {
 
-  readonly darkMode = input<boolean>(undefined);
-  readonly minimumValue = input<number>(undefined);
-  readonly maximumValue = input<number>(undefined);
-  readonly steps = input<number>(undefined);
+  readonly darkMode = input<boolean>();
+  readonly minimumValue = input<number>();
+  readonly maximumValue = input<number>();
+  readonly steps = input<number>();
   readonly lengthFilter = input<boolean>(false);
   readonly sizeFilter = input<boolean>(false);
   readonly timesPlayed = input<boolean>(false);
   readonly yearFilter = input<boolean>(false);
-  readonly labelFormatPipe = input<string>(undefined);
+  readonly labelFormatPipe = input<string>();
 
   readonly newSliderFilterSelected = output<number[]>();
 

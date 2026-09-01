@@ -5,15 +5,11 @@
   border-radius: 4px;
   bottom: 2px;
   color: black;
+  font-family: monospace;
   font-size: 9px;
-  padding: 1px 3px 0px 3px;
+  padding: 1px 3px 1px 3px;
   position: absolute;
   z-index: 2;
-}
-
-.dark-style {
-  color: variables.$gray-20;
-  background: black;
 }
 
 .time {
@@ -22,6 +18,21 @@
 
 .rez {
   left: 2px;
+}
+
+.rez-new {
+  background: none;
+  border: none;
+  color: white;
+  left: 100%;
+  transform: translate(0, 2px);
+  opacity: 0.6;
+  right: unset;
+}
+
+.dark-style {
+  color: variables.$gray-20;
+  background: black;
 }
 
 .sheet-icon {
@@ -55,6 +66,7 @@
 }
 
 .heart {
+  cursor: cell;
   fill: #00000047;
   left: 0;
   position: absolute;
@@ -66,13 +78,16 @@
 }
 
 .heart-lit {
-  stroke: #ff2255;
+  cursor: not-allowed;
   fill: #ff2255;
+  stroke: #ff2255;
 }
 
 .meta-container,
 .video-box {
-  .heart {
+  .heart,
+  .sheet-icon,
+  .playlist-icon {
     opacity: 0;
   }
 
@@ -82,7 +97,19 @@
 
   &:hover {
     .heart {
-      opacity: 1
+      opacity: 1;
+    }
+
+    .sheet-icon {
+      opacity: 0.6;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+
+    .playlist-icon {
+      opacity: 0.6;
     }
   }
 }

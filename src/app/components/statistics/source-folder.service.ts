@@ -20,8 +20,6 @@ export class SourceFolderService {
     Object.keys(this.selectedSourceFolder).forEach((key: string) => {
       this.sourceFolderConnected[key] = false;
     });
-    console.log(this.selectedSourceFolder);
-    console.log(this.sourceFolderConnected);
   }
 
   addCurrentScanning(sourceIndex: number): void {

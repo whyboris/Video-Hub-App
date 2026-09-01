@@ -16,29 +16,30 @@
 
 @for (item of (showRecentNotSimilar()
                ? (imageElementService.imageElements | sortingPipe : 'lastPlayedDesc' : currentClickedItemName()
-                                                    | slice : 0 : 8)
+                                                    | slice : 0 : 12)
                : (imageElementService.imageElements | similarityPipe : true : currentClickedItemName()
-                                                    | slice : 0 : 8 )
-              ); track item) {
+                                                    | slice : 0 : 12)
+              ); track item.uuid) {
 
   <app-thumbnail
-    (videoClick)="handleClick.emit({ expectedEvent: $event, item: item })"
     (contextmenu)="rightMouseClicked.emit({ mouseEvent: $event, item: item })"
-
-    [elHeight]="previewHeightRelated() + 50"
-    [elWidth]="previewWidthRelated()"
-    [folderPath]="appState().selectedOutputFolder"
-    [hubName]="appState().hubName"
-    [imgHeight]="previewHeightRelated()"
+    (refreshPlaylist)="refreshPlaylist.emit()"
+    (sheetClick)="openDetailsView.emit(item)"
+    (videoClick)="handleClick.emit({ expectedEvent: $event, item: item })"
 
     [video]="item"
 
     [connected]="sourceFolderService.sourceFolderConnected[item.inputSource]"
-
-    [darkMode]="settingsButtons()['darkMode'].toggled"
+    [darkMode]="settingsButtons().darkMode.toggled"
+    [elHeight]="previewHeightRelated() + 50"
+    [elWidth]="previewWidthRelated()"
+    [folderPath]="appState().selectedOutputFolder"
     [hoverScrub]="settingsButtons()['hoverScrub'].toggled"
+    [hubName]="appState().hubName"
+    [imgHeight]="previewHeightRelated()"
     [largerFont]="settingsButtons()['fontSizeLarger'].toggled"
     [returnToFirstScreenshot]="settingsButtons()['returnToFirstScreenshot'].toggled"
+    [showFavorites]="settingsButtons()['favorites'].toggled"
     [showMeta]="settingsButtons()['showMoreInfo'].toggled"
 
     style="display: inline-block; margin-bottom: 50px"

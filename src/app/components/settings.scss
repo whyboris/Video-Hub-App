@@ -176,12 +176,14 @@ h3 {
 
 .button-description-text {
   -webkit-box-orient: vertical !important;
-  color: variables.$black;
+  -webkit-line-clamp: 3 !important;
   display: -webkit-box !important;
+  overflow: hidden;
+  // above all needed together for line-clamp
+
+  color: variables.$black;
   font-size: 14px;
   left: 80px;
-  -webkit-line-clamp: 3 !important;
-  overflow: hidden;
   position: absolute;
   top: 2px;
 }
@@ -295,6 +297,7 @@ input[type="radio"]:checked:before {
   color: variables.$pretty-blue;
   cursor: help;
   display: inline-block;
+  font-family: monospace;
   font-size: 11px;
   font-style: italic;
   height: 12px;
@@ -323,18 +326,6 @@ input[type="radio"]:checked:before {
   transition-delay: 0ms;
   transition-duration: 0ms;
   transition-property: opacity;
-}
-
-.sort-dropdown {
-  margin: 15px 0 10px;
-  max-width: 168px;
-  min-width: 168px;
-  outline: none;
-}
-
-.sort-dropdown-dark-mode {
-  background: black;
-  color: white;
 }
 
 .zoom-buttons {
@@ -384,6 +375,7 @@ input[type="radio"]:checked:before {
     background-color: variables.$gray-10;
     border-bottom: 1px solid variables.$gray-10;
     text-shadow:0px 0px 1px black;
+    box-shadow: 0px 3px 0px variables.$gray-10; // cover over the horizontal line if it appears
     transition: 300ms;
     transition-property: text-shadow background-color;
     z-index: 10;

@@ -31,8 +31,9 @@ export class WizardComponent {
   readonly selectOutputDirectory      = output<void>();
   readonly selectSourceDirectory      = output<void>();
 
-  readonly canCloseWizard = input<boolean>(undefined);
-  readonly importStage = input<ImportStage>(undefined);
+  readonly canCloseWizard = input<boolean>();
+  readonly importStage = input<ImportStage>();
+
   @Input() vhaFileHistory: HistoryItem[];
   @Input() wizard: WizardOptions;
 
@@ -54,8 +55,8 @@ export class WizardComponent {
     return false;
   }
 
-  removeHistoryItem(event: MouseEvent, item: number) {
-    event.stopPropagation();
+  removeHistoryItem(mouseClick: PointerEvent, item: number) {
+    mouseClick.stopPropagation();
     this.removeFromHistory.emit(item);
   }
 

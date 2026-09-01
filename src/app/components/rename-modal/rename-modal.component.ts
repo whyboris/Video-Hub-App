@@ -21,13 +21,13 @@ export class RenameModalComponent {
 
   readonly closeRename = output<void>();
 
-  readonly appState = input<AppStateInterface>(undefined);
-  readonly basePath = input<string>(undefined);
-  readonly currentRightClickedItem = input<ImageElement>(undefined);
-  readonly macVersion = input<boolean>(undefined);
-  readonly settingsButtons = input<SettingsButtonsType>(undefined);
+  readonly appState = input<AppStateInterface>();
+  readonly basePath = input<string>();
+  readonly currentRightClickedItem = input<ImageElement>();
+  readonly macVersion = input<boolean>();
+  readonly settingsButtons = input<SettingsButtonsType>();
 
-  readonly renameResponse = input<BehaviorSubject<RenameFileResponse>>(undefined);
+  readonly renameResponse = input<BehaviorSubject<RenameFileResponse>>();
 
   constructor() { }
 

@@ -1,11 +1,9 @@
 import type { OnInit, ElementRef, OnDestroy } from '@angular/core';
 import { ChangeDetectorRef, input, output, viewChild } from '@angular/core';
 import { Component, Input } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
 
 import type { Subscription, Observable } from 'rxjs';
 
-import { ElectronService } from '../../providers/electron.service';
 import { FilePathService } from '../views/file-path.service';
 import { ImageElementService } from './../../services/image-element.service';
 import { ManualTagsService } from '../tags-manual/manual-tags.service';
@@ -30,24 +28,29 @@ export class MetaComponent implements OnInit, OnDestroy {
   readonly filterTag = output<TagEmit>();
 
   @Input() video: ImageElement;
-  readonly darkMode = input<boolean>(undefined);
-  readonly imgHeight = input<number>(undefined);
-  readonly largerFont = input<boolean>(undefined);
-  readonly maxWidth = input<number>(undefined);
-  readonly selectedSourceFolder = input<string>(undefined);
-  readonly showAutoFileTags = input<boolean>(undefined);
-  readonly showAutoFolderTags = input<boolean>(undefined);
-  readonly showManualTags = input<boolean>(undefined);
-  readonly showMeta = input<boolean>(undefined);
-  readonly showVideoNotes = input<boolean>(undefined);
-  readonly star = input<StarRating>(undefined);
+
+  readonly settingsButtons = input<any>();
+
+  readonly focusOnAddTag = input<boolean>(false);
+  readonly darkMode = input<boolean>();
+  readonly imgHeight = input<number>();
+  readonly largerFont = input<boolean>();
+  readonly maxWidth = input<number>();
+  readonly selectedSourceFolder = input<string>();
+  readonly showAutoFileTags = input<boolean>();
+  readonly showAutoFolderTags = input<boolean>();
+  readonly showManualTags = input<boolean>();
+  readonly showMeta = input<boolean>();
+  readonly showVideoNotes = input<boolean>();
+  readonly star = input<StarRating>();
+
   @Input() starRatingHack: StarRating;
 
-  readonly renameResponse = input<Observable<RenameFileResponse>>(undefined);
+  readonly renameResponse = input<Observable<RenameFileResponse>>();
 
   yearHack: number;
 
-  tagViewUpdateHack = false;
+  tagViewUpdateTrigger = false;
 
   renamingWIP = '';
   renameError = false;
@@ -61,11 +64,9 @@ export class MetaComponent implements OnInit, OnDestroy {
 
   constructor(
     private cd: ChangeDetectorRef,
-    public electronService: ElectronService,
     public filePathService: FilePathService,
     public imageElementService: ImageElementService,
-    public manualTagsService: ManualTagsService,
-    public sanitizer: DomSanitizer,
+    public manualTagsService: ManualTagsService
   ) { }
 
   ngOnInit() {
@@ -93,7 +94,7 @@ export class MetaComponent implements OnInit, OnDestroy {
 
     // Subscribe to tag color updates
     this.tagColorSubscription = this.manualTagsService.tagColorUpdatedSubject.subscribe(() => {
-      this.tagViewUpdateHack = !this.tagViewUpdateHack;
+      this.tagViewUpdateTrigger = !this.tagViewUpdateTrigger;
       this.cd.detectChanges();
     });
 
@@ -111,7 +112,7 @@ export class MetaComponent implements OnInit, OnDestroy {
         type: 'add'
       });
     }
-    this.tagViewUpdateHack = !this.tagViewUpdateHack;
+    this.tagViewUpdateTrigger = !this.tagViewUpdateTrigger;
   }
 
   filterThisTag(event: TagEmit) {
@@ -126,14 +127,14 @@ export class MetaComponent implements OnInit, OnDestroy {
       tag: tag,
       type: 'remove'
     });
-    this.tagViewUpdateHack = !this.tagViewUpdateHack;
+    this.tagViewUpdateTrigger = !this.tagViewUpdateTrigger;
   }
 
   /**
    * Handle tag right-click event - show color picker via service
    * @param event - Object containing tag and mouse event
    */
-  onTagRightClick(event: { tag: any, event: MouseEvent }): void {
+  onTagRightClick(event: { tag: any, event: PointerEvent }): void {
     this.selectedTagForColor = event.tag.name;
 
     // Emit event to show color picker at home component level
@@ -189,7 +190,7 @@ export class MetaComponent implements OnInit, OnDestroy {
    * Prevent `e` and `.` input
    * @param event key press on the <input>
    */
-  preventUnwantedKeypress(event: any): void {
+  preventUnwantedKeypress(event: KeyboardEvent): void {
     if (event.key === '.'
      || event.key === 'e'
      || event.key === '-'
@@ -246,7 +247,7 @@ export class MetaComponent implements OnInit, OnDestroy {
     console.log(sourceFolder);
 
     if (originalFile !== newFileName && this.renamingWIP.length !== 0) {
-      this.electronService.ipcRenderer.send(
+      (window as any).myElectron.sendToMain(
         'try-to-rename-this-file',
         sourceFolder,
         relativeFilePath,

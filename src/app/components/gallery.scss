@@ -40,16 +40,18 @@
 
 .title {
   -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  // above all needed together for line-clamp
+
   color: variables.$gray-70;
   cursor: pointer;
-  display: -webkit-box;
   font-size: 12px;
-  -webkit-line-clamp: 3;
   margin: 6px 2px 0px;
   max-height: 54px;
-  overflow: hidden;
   text-align: left;
-  text-overflow: ellipsis;
   width: 100%;
   word-wrap: break-word;
 }

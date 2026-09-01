@@ -4,7 +4,6 @@ import { Component } from '@angular/core';
 
 import type { Observable, Subscription } from 'rxjs';
 
-import { ElectronService } from '../../providers/electron.service';
 import { FilePathService } from '../views/file-path.service';
 
 import type { ImageElement } from '../../../../interfaces/final-object.interface';
@@ -23,12 +22,12 @@ import type { RenameFileResponse } from '../../../../interfaces/shared-interface
 export class RenameFileComponent implements OnInit, OnDestroy {
   readonly renameFileInput = viewChild<ElementRef>('renameFileInput');
 
-  readonly currentRightClickedItem = input<ImageElement>(undefined);
-  readonly darkMode = input<boolean>(undefined);
-  readonly macVersion = input<boolean>(undefined);
-  readonly selectedSourceFolder = input<string>(undefined);
+  readonly currentRightClickedItem = input<ImageElement>();
+  readonly darkMode = input<boolean>();
+  readonly macVersion = input<boolean>();
+  readonly selectedSourceFolder = input<string>();
 
-  readonly renameResponse = input<Observable<RenameFileResponse>>(undefined);
+  readonly renameResponse = input<Observable<RenameFileResponse>>();
 
   renamingWIP: string;
   renamingExtension: string;
@@ -39,7 +38,6 @@ export class RenameFileComponent implements OnInit, OnDestroy {
 
   constructor(
     public cd: ChangeDetectorRef,
-    public electronService: ElectronService,
     public filePathService: FilePathService,
   ) { }
 
@@ -94,7 +92,7 @@ export class RenameFileComponent implements OnInit, OnDestroy {
       console.log(this.selectedSourceFolder());
       console.log(sourceFolder);
 
-      this.electronService.ipcRenderer.send(
+      (window as any).myElectron.sendToMain(
         'try-to-rename-this-file',
         sourceFolder,
         relativeFilePath,

@@ -3,9 +3,11 @@ import { Component, input, output } from '@angular/core';
 import { ImageElementService } from './../../services/image-element.service';
 import { SourceFolderService } from '../statistics/source-folder.service';
 
+import { modalAnimation, similarResultsText } from '../../common/animations';
+
+import type { ImageElement } from '../../../../interfaces/final-object.interface';
 import type { RightClickEmit } from '../../../../interfaces/shared-interfaces';
 import type { SettingsButtonsType } from '../../common/settings-buttons';
-import { modalAnimation, similarResultsText } from '../../common/animations';
 
 @Component({
   standalone: false,
@@ -21,15 +23,17 @@ import { modalAnimation, similarResultsText } from '../../common/animations';
 export class SimilarTrayComponent {
 
   readonly handleClick = output<any>(); // TODO: fix up the vague type
+  readonly openDetailsView = output<ImageElement>();
+  readonly refreshPlaylist = output<void>();
   readonly rightMouseClicked = output<RightClickEmit>();
-  readonly showMoreRecentlyPlayed = output<any>();
+  readonly showMoreRecentlyPlayed = output<void>();
 
-  readonly appState = input(undefined);
-  readonly currentClickedItemName = input(undefined);
-  readonly previewHeightRelated = input(undefined);
-  readonly previewWidthRelated = input(undefined);
-  readonly settingsButtons = input<SettingsButtonsType>(undefined);
-  readonly showRecentNotSimilar = input(undefined);
+  readonly appState = input();
+  readonly currentClickedItemName = input();
+  readonly previewHeightRelated = input();
+  readonly previewWidthRelated = input();
+  readonly settingsButtons = input<SettingsButtonsType>();
+  readonly showRecentNotSimilar = input();
 
   constructor(
     public imageElementService: ImageElementService,

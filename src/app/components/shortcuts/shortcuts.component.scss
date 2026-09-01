@@ -23,6 +23,7 @@
   box-shadow: 1px 1px 3px rgba(0,0,0,0.1);
   color: black;
   display: inline-block;
+  font-family: monospace;
   font-style: normal;
   margin-right: 6px;
   padding: 3px 5px 3px 5px;
@@ -36,6 +37,11 @@
   margin-right: initial;
   padding: 3px 10px;
   width: initial;
+}
+
+.shortcut-description {
+  display: block;
+  margin-bottom: 15px;
 }
 
 .clickable {
@@ -52,6 +58,10 @@
 
 .space-after {
   margin-bottom: 50px;
+}
+
+.disabled {
+  cursor: not-allowed;
 }
 
 @media (max-width: 700px) {

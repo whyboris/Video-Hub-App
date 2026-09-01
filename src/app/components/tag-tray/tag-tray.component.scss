@@ -2,75 +2,114 @@
 
 .manual-tag-tray {
   display: flex;
-  height: 170px;
+  height: 170px; // for tag scrollbar to appear
 
   button {
     outline: none;
   }
 
   .tag-tray-menu-left {
-    margin-right: 10px;
-    min-width: 166px;
-    padding: 12px 0 0 5px;
-    position: relative;
-    text-align: right;
-    width: 166px;
+    min-width: 188px;
+
+    button {
+      text-align: center;
+      cursor: pointer;
+    }
+
+    .batch-mode-instructions {
+      text-align: center;
+      margin-top: 11px;
+    }
+
+    .total-selected {
+      color: variables.$gray-70;
+      display: block;
+      font-size: 12px;
+      margin-top: 16px;
+      text-align: center;
+
+      &:hover {
+        cursor: not-allowed;
+        text-decoration: line-through;
+      }
+
+      em {
+        color: black;
+        font-style: unset;
+        font-family: monospace;
+      }
+
+      .em-dark-mode {
+        color: white !important;
+      }
+    }
+
   }
 
   .manual-tag-tray-label,
   .tag-sort-by-toggle,
+  .button-select-all,
   .show-frequency {
     display: block;
     font-size: 12px;
     text-align: right;
-    width: 166px;
+    width: 100%;
   }
 
   .manual-tag-tray-label {
     display: inline;
-    margin-top: 16px;
+    margin: 16px 0 0 16px;
+    opacity: 0.6;
   }
 
   .more-info {
     display: inline-block;
+    font-family: monospace;
     margin-left: 2px;
   }
 
   .manual-tag-tray-label-info {
-    background-color: #eeeeee;
-    border: 1px solid #888888;
+    background-color: variables.$white;
+    border: 1px solid variables.$gray-50;
     border-radius: 5px;
+    box-shadow: 1px 4px 5px 1px rgba(0,0,0,0.07);
     font-size: 12px;
     opacity: 0;
     padding: 5px 10px;
     pointer-events: none;
     position: absolute;
     text-align: left;
-    width: 200px;
+    transform: translate(10px, 2px);
+    width: 160px;
     z-index: 30;
+  }
+
+  .manual-tag-tray-label-info-dark-mode {
+    background: variables.$gray-90;
+    color: variables.$gray-10;
   }
 
   .more-info:hover + .manual-tag-tray-label-info {
     opacity: 1;
   }
 
-  .button-select-all {
-    bottom: 42px;
-    left: 10px;
-    position: absolute;
-  }
-
-  .tag-sort-by-toggle,
-  .show-frequency {
+  .button-select-all,
+  .button-toggle-batch-mode,
+  .show-frequency,
+  .tag-sort-by-toggle {
     background: none;
     border: none;
     color: variables.$gray-70;
     margin-top: 14px;
-    padding-right: 0;
 
     &:hover {
       color: variables.$pretty-blue;
     }
+  }
+
+  .button-select-all,
+  .total-selected {
+    margin-top: 6px !important;
   }
 
   .all-the-tags {
@@ -83,15 +122,15 @@
 
   // added on top of .filter-general
   .manual-tag-tray-filter {
-    border-color: variables.$gray-80;
+    border-color: variables.$gray-50;
     font-size: 15px;
+    margin: 18px 10px 0;
     padding: 6px 6px 0;
-    position: absolute;
-    right:0;
-    width: 155px;
+    text-align: center;
+    width: 169px;
 
     &::placeholder {
-      color: variables.$gray-80;
+      color: variables.$gray-50;
     }
   }
 
@@ -99,42 +138,30 @@
     color: white;
 
     &::placeholder {
-      color: variables.$gray-20;
+      color: variables.$gray-50;
     }
   }
 }
 
-.button-toggle-batch-mode {
-  bottom: 8px;
-  color: black !important; // else in dark-mode color changes
-  left: 9px;
+.batch-mode-button-container {
   position: absolute;
+  bottom: 16px;
+  width: 188px;
 }
 
-.button-toggle-batch-mode-dark {
-  background: #333333;
-  color: white !important;
-
-  &:hover {
-    background: #555555;
-  }
+.button-toggle-batch-mode {
+  border-radius: 5px;
+  border: 1px solid transparent !important;
+  display: block;
+  font-size: 12px;
+  margin: 0 auto;
+  opacity: 0.8;
+  padding: 5px;
 }
 
-.button-toggle-batch-mode-dark-active {
-  background: variables.$pretty-red;
-  color: black !important;
-
-  &:hover {
-    background-color: variables.$pretty-red-lighter;
-  }
-}
-
-.select-all-dark {
-  background: #333333;
-  border: 1px solid #888888;
-  color: white;
-
-  &:hover {
-    background: #555555;
-  }
+.batch-edit-mode-active {
+  background-color: variables.$pretty-red !important;
+  border: 1px solid variables.$white !important;
+  color: variables.$white !important;
+  opacity: 1;
 }

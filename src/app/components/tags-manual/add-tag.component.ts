@@ -1,5 +1,8 @@
-import { Component, input, output } from '@angular/core';
+import { Component, input, output, viewChild } from '@angular/core';
+
 import { ManualTagsService } from './manual-tags.service';
+
+import type { OnInit, ElementRef } from '@angular/core';
 
 @Component({
   standalone: false,
@@ -8,11 +11,15 @@ import { ManualTagsService } from './manual-tags.service';
   styleUrls: ['../search-input.scss',
               'add-tag.component.scss']
 })
-export class AddTagComponent {
+export class AddTagComponent implements OnInit {
 
-  readonly darkMode = input<boolean>(undefined);
+  readonly darkMode = input<boolean>();
+
+  readonly autofocus = input<boolean>(false);
 
   readonly tag = output<string>();
+
+  readonly tagInputField = viewChild<ElementRef<HTMLInputElement>>('tagInputField');
 
   currentText = '';
   typeAhead = '';
@@ -20,6 +27,12 @@ export class AddTagComponent {
   constructor(
     public manualTagsService: ManualTagsService
   ) { }
+
+  ngOnInit(): void {
+    if (this.autofocus()) {
+      this.tagInputField()?.nativeElement.focus();
+    }
+  }
 
   emitTag(text: string) {
     if (text.trim()) { // if not empty
@@ -33,10 +46,10 @@ export class AddTagComponent {
     this.typeAhead = this.manualTagsService.getTypeahead(text);
   }
 
-  tabPressed($event): void {
+  tabPressed(keypress: KeyboardEvent): void {
     if (this.typeAhead !== '') {
       this.emitTag(this.typeAhead);
-      $event.preventDefault();
+      keypress.preventDefault();
     }
   }
 

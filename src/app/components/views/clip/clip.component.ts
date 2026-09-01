@@ -4,6 +4,7 @@ import { Component, HostListener, Input } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 
 import { FilePathService } from '../file-path.service';
+import { ImageElementService } from './../../../services/image-element.service';
 
 import type { ImageElement } from '../../../../../interfaces/final-object.interface';
 import type { RightClickEmit, VideoClickEmit } from '../../../../../interfaces/shared-interfaces';
@@ -30,19 +31,19 @@ export class ClipComponent implements OnInit {
 
   @Input() video: ImageElement;
 
-  readonly autoplay = input<boolean>(undefined);
-  readonly compactView = input<boolean>(undefined);
-  readonly darkMode = input<boolean>(undefined);
-  readonly elHeight = input<number>(undefined);
-  readonly elWidth = input<number>(undefined);
-  readonly folderPath = input<string>(undefined);
-  readonly forceMute = input<boolean>(undefined);
-  readonly defaultThumbnailMode = input<boolean>(undefined);
-  readonly returnToFirstScreenshot = input<boolean>(undefined);
-  readonly hubName = input<string>(undefined);
-  readonly imgHeight = input<number>(undefined);
-  readonly largerFont = input<boolean>(undefined);
-  readonly showMeta = input<boolean>(undefined);
+  readonly autoplay = input<boolean>();
+  readonly compactView = input<boolean>();
+  readonly darkMode = input<boolean>();
+  readonly elHeight = input<number>();
+  readonly elWidth = input<number>();
+  readonly folderPath = input<string>();
+  readonly forceMute = input<boolean>();
+  readonly defaultThumbnailMode = input<boolean>();
+  readonly returnToFirstScreenshot = input<boolean>();
+  readonly hubName = input<string>();
+  readonly imgHeight = input<number>();
+  readonly largerFont = input<boolean>();
+  readonly showMeta = input<boolean>();
 
   appInFocus = true;
   folderPosterPaths: string[] = [];
@@ -54,9 +55,10 @@ export class ClipComponent implements OnInit {
   posterFolderType: any = 'clips';
 
   constructor(
+    public cd: ChangeDetectorRef,
     public filePathService: FilePathService,
-    public sanitizer: DomSanitizer,
-    public cd: ChangeDetectorRef
+    public imageElementService: ImageElementService,
+    public sanitizer: DomSanitizer
   ) { }
 
   @HostListener('mouseenter') onMouseEnter() {
@@ -108,6 +110,11 @@ export class ClipComponent implements OnInit {
       this.folderThumbPaths.push(this.pathToVideo);
       this.folderPosterPaths.push(this.poster);
     }
+  }
+
+  toggleHeart(mouseClick: PointerEvent): void {
+    mouseClick.stopPropagation();
+    this.imageElementService.toggleHeart(this.video.index);
   }
 
 }

@@ -1,3 +1,5 @@
+@use "../../variables.scss";
+
 .folder-item {
   background-color: black;
   background-size: cover;
@@ -25,6 +27,7 @@
 .folder-icon {
   fill: white;
   filter: drop-shadow(0 0 10px black);
+  font-family: monospace;
   left: 0;
   position: absolute;
   top: 0;
@@ -40,10 +43,8 @@
   padding: 2px;
 }
 
-.fileSize {
-  display: inline-block;
-  font-size: 10px;
-  opacity: 0.8;
+.full-filmstrip {
+  pointer-events: none;
 }
 
 .items-in-folder {
@@ -53,4 +54,23 @@
   text-align: center;
   top: 8px;
   width: 18px;
+}
+
+.playlist-icon {
+  background: #cccccc;
+  border-radius: 4px;
+  bottom: 17px;
+  font-size: 10px;
+  height: 10px;
+  overflow: hidden;
+  padding: 1px;
+  position: absolute;
+  right: 3px;
+  width: 10px;
+  cursor: cell;
+}
+
+.playlist-icon-active {
+  opacity: 1 !important;
+  cursor: not-allowed;
 }

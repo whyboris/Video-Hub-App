@@ -168,6 +168,21 @@ export const filterItemAppear = trigger('filterItemAppear', [
   )]
 );
 
+export const sortFilterAppear = trigger('sortFilterAppear', [
+  transition(
+    ':enter', [
+      style({ height: 0, opacity: 0 }),
+      animate('300ms ease-in', style({ height: '50px', opacity: 1 }))
+    ]
+  ),
+  transition(
+    ':leave', [
+      style({ height: '50px', opacity: 1 }),
+      animate('300ms ease-out', style({ height: 0, opacity: 0 }))
+    ]
+  )]
+);
+
 export const myWizardAnimation = trigger('myWizardAnimation', [
   transition(
     ':leave', [

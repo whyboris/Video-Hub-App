@@ -1,8 +1,6 @@
-@for (tag of _tags; track tag) {
+@for (tag of _tags; track tag.name) {
 
-<div
-  class="singleTag"
->
+<div class="singleTag">
 
   <span
     class="search-or-tag-general tag"
@@ -14,16 +12,14 @@
     (click)="tagClick(tag, $event)"
     (contextmenu)="onTagRightClick($event, tag)"
     [draggable]='draggable()'
-    (dragstart)="dragStart($event)"
+    (dragstart)="tagDragStart($event, tag)"
   >
     {{ tag.name }}
   </span>
 
 @if (displayFrequency()) {
-  <span
-    class="search-or-tag-general tag frequency"
-  >
-    {{ tagService.tagsMap.get(tag.name) }}
+  <span class="frequency" [ngClass]="{ 'frequency-dark': darkMode() }">
+    {{ tagService.tagsFrequencyMap.get(tag.name) }}
   </span>
 }
 

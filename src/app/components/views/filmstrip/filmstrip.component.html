@@ -17,8 +17,14 @@
         'background-size': 'auto ' + imgHeight() + 'px'
       }"
   >
-    @if (showMeta()) { <span class="time">{{ video().durationDisplay }}</span> }
-    @if (showMeta()) { <span class="rez">{{ video().resolution }}</span> }
+    @if (showMeta()) {
+      <span class="time">{{ video().durationDisplay }}</span>
+      <span class="rez">{{ video().fileSizeDisplay }}
+        @if (video().resolution) {
+          <span class="time rez-new">{{ video().resolution }}</span>
+        }
+      </span>
+    }
   </div>
 
 @if (video().selected) {
@@ -27,7 +33,7 @@
 
 @if (showFavorites()) {
   <app-icon
-    (click)="toggleHeart()"
+    (click)="toggleHeart($event)"
     class="heart"
     [ngClass]="{ 'heart-lit' : video().stars === 5.5 }"
     [icon]="'icon-heart'"
@@ -41,11 +47,6 @@
     class="title"
   >
     {{ video().cleanName }}
-
-    <div class="fileSize">
-      ({{ video().fileSizeDisplay }})
-    </div>
-
   </span>
 }
 

@@ -3,6 +3,7 @@ import type { SettingsButton } from './settings-buttons.interface';
 export type SettingsButtonKey = 'autoFileTags'
  | 'autoFolderTags'
  | 'autoplayClips'
+ | 'clearAllFilters'
  | 'clearHistory'
  | 'clipsThumbnail'
  | 'compactView'
@@ -24,7 +25,6 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'folderUnion'
  | 'fontSizeLarger'
  | 'fuzzy'
- | 'startsWith'
  | 'hideOffline'
  | 'hideSidebar'
  | 'hideTop'
@@ -33,6 +33,13 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'makeLarger'
  | 'makeSmaller'
  | 'manualTags'
+ | 'metaShowDuration'
+ | 'metaShowSize'
+ | 'metaShowResolution'
+ | 'metaShowBitrate'
+ | 'metaShowFps'
+ | 'metaShowTimesPlayed'
+ | 'metaShowYear'
  | 'muteClips'
  | 'openAtTimestamp'
  | 'playPlaylist'
@@ -52,6 +59,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'showFreq'
  | 'showFullView'
  | 'showMoreInfo'
+ | 'showOnlyFavorites'
  | 'showOnlyPlaylist'
  | 'showRecent'
  | 'showRecentlyPlayed'
@@ -67,10 +75,11 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'sortOptionAlphabetical2'
  | 'sortOptionAspectRatio'
  | 'sortOptionCreated'
- | 'sortOptionLastPlayed'
  | 'sortOptionFolderSize'
  | 'sortOptionFps'
+ | 'sortOptionLastPlayed'
  | 'sortOptionModified'
+ | 'sortOptionPlaylist'
  | 'sortOptionSize'
  | 'sortOptionStar'
  | 'sortOptionTags'
@@ -80,6 +89,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'sortOrder'
  | 'spacePlaysRandom'
  | 'starFilter'
+ | 'startsWith'
  | 'startWizard'
  | 'tagExclusion'
  | 'tagIntersection'
@@ -87,14 +97,14 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'thumbAutoAdvance'
  | 'timesPlayedFilter'
  | 'videoNotes'
- | 'yearFilter'
- | 'clearAllFilters';
+ | 'yearFilter';
 
 // Add `SettingsButtons` items here so they show up in the buttons ribbon and in the settings
 // Each array separates buttons into their own button groups visually
 export const SettingsButtonsGroups: SettingsButtonKey[][] = [
   [ // 0 - Search & filter settings
     'hideSidebar',
+    'clearAllFilters',
   ],
   [ // 1 - Search filters
     'folderUnion',
@@ -111,7 +121,6 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'regex',
     'fuzzy',
     'startsWith',
-    'clearAllFilters',
   ],
   [ // 2 - Filters & sorting options
     'durationFilter',
@@ -134,6 +143,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'sortOptionCreated',
     'sortOptionTags',
     'sortOptionAspectRatio',
+    'sortOptionPlaylist',
     'sortOptionFps',
     'sortOptionFolderSize',
   ],
@@ -152,10 +162,11 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'showFiles',
     'showClips',
   ],
-  [ // 5 - Folder view
+  [ // 5 - Explore videos
     'showFolders',
     'randomizeFoldersScreenshots',
     'showTags',
+    'showOnlyFavorites',
     'showOnlyPlaylist',
     'playPlaylist',
   ],
@@ -170,15 +181,15 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'compactView',
     'showMoreInfo',
     'fontSizeLarger',
-    'shuffleGalleryNow',
+    'favorites',
+    'shuffleGalleryNow', // this specific property affects placement of metadata toggles `settings.component.html`
   ],
-  [ // 8 - Auto-generated tags
+  [ // 8 - Tags
     'manualTags',
     'autoFileTags',
     'autoFolderTags',
     'showVideoNotes',
     'sortAutoTags',
-    'favorites',
   ],
   [ // 9 - Thumbnails view
     'hoverScrub',
@@ -211,6 +222,16 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'dangerousDelete',
     'spacePlaysRandom',
     'openAtTimestamp',
+  ],
+  [ // 15 - hack - to help save the properties into settings
+    //           - hidden by not being included below in `SettingsMetaGrop`
+    'metaShowDuration',
+    'metaShowSize',
+    'metaShowResolution',
+    'metaShowBitrate',
+    'metaShowFps',
+    'metaShowTimesPlayed',
+    'metaShowYear',
   ]
 ];
 
@@ -382,7 +403,6 @@ export const SettingsButtons: SettingsButtonsType = {
     description: 'BUTTONS.favoritesDescription',
     hidden: false,
     iconName: 'icon-heart',
-    settingsHeading: 'SETTINGS.favorites',
     moreInfo: 'BUTTONS.favoritesMoreInfo',
     title: 'BUTTONS.favoritesHint',
     toggled: false
@@ -522,6 +542,48 @@ export const SettingsButtons: SettingsButtonsType = {
     title: 'BUTTONS.manualTagsHint',
     toggled: true
   },
+  'metaShowDuration': {
+    description: 'BUTTONS.metaShowDuration',
+    hidden: true,
+    title: 'BUTTONS.metaShowDuration',
+    toggled: true
+  },
+  'metaShowSize':  {
+    description: 'BUTTONS.metaShowSize',
+    hidden: true,
+    title: 'BUTTONS.metaShowSize',
+    toggled: true
+  },
+  'metaShowResolution':  {
+    description: 'BUTTONS.metaShowResolution',
+    hidden: true,
+    title: 'BUTTONS.metaShowResolution',
+    toggled: true
+  },
+  'metaShowBitrate':  {
+    description: 'BUTTONS.metaShowBitrate',
+    hidden: true,
+    title: 'BUTTONS.metaShowBitrate',
+    toggled: false
+  },
+  'metaShowFps':  {
+    description: 'BUTTONS.metaShowFps',
+    hidden: true,
+    title: 'BUTTONS.metaShowFps',
+    toggled: false
+  },
+  'metaShowTimesPlayed':  {
+    description: 'BUTTONS.metaShowTimesPlayed',
+    hidden: true,
+    title: 'BUTTONS.metaShowTimesPlayed',
+    toggled: true
+  },
+  'metaShowYear': {
+    description: 'BUTTONS.metaShowYear',
+    hidden: true,
+    title: 'BUTTONS.metaShowYear',
+    toggled: true
+  },
   'muteClips': {
     description: 'BUTTONS.muteClipsDescription',
     hidden: true,
@@ -550,6 +612,7 @@ export const SettingsButtons: SettingsButtonsType = {
   'randomizeFoldersScreenshots': {
     description: 'BUTTONS.randFolderScreenDesc',
     hidden: true,
+    moreInfo: 'BUTTONS.randFolderScreenMoreInfo',
     title: 'BUTTONS.randFolderScreen',
     toggled: true
   },
@@ -666,6 +729,14 @@ export const SettingsButtons: SettingsButtonsType = {
     title: 'BUTTONS.showMoreInfoHint',
     toggled: true
   },
+  'showOnlyFavorites': {
+    description: 'BUTTONS.showOnlyFavoritesDescription',
+    hidden: false,
+    iconName: 'icon-heart',
+    moreInfo: 'BUTTONS.showOnlyFavoritesMoreInfo',
+    title: 'BUTTONS.showOnlyFavoritesHint',
+    toggled: false
+  },
   'showOnlyPlaylist': {
     description: 'BUTTONS.showOnlyPlaylistDescription',
     hidden: false,
@@ -707,7 +778,7 @@ export const SettingsButtons: SettingsButtonsType = {
   },
   'showTagTray': {
     description: 'BUTTONS.tagTrayDescription',
-    hidden: true,
+    hidden: false,
     iconName: 'icon-tag-tray',
     title: 'BUTTONS.tagTrayHint',
     toggled: false
@@ -793,6 +864,13 @@ export const SettingsButtons: SettingsButtonsType = {
     title: '',
     toggled: false
   },
+  'sortOptionPlaylist': {
+    description: 'BUTTONS.sortOptionPlaylistDescription',
+    hidden: false,
+    moreInfo: 'BUTTONS.sortOptionPlaylistMoreInfo',
+    title: '',
+    toggled: false
+  },
   'sortOptionFps': {
     description: 'BUTTONS.sortOptionFpsDescription',
     hidden: false,
@@ -851,7 +929,7 @@ export const SettingsButtons: SettingsButtonsType = {
   },
   'sortOptionYear': {
     description: 'BUTTONS.sortOptionYearDescription',
-    hidden: false,
+    hidden: true,
     moreInfo: 'BUTTONS.sortOptionYearMoreInfo',
     title: '',
     toggled: false
@@ -920,7 +998,7 @@ export const SettingsButtons: SettingsButtonsType = {
   },
   'yearFilter': {
     description: 'BUTTONS.yearSliderDescription',
-    hidden: false,
+    hidden: true,
     iconName: 'icon-times-played',
     moreInfo: 'BUTTONS.yearSliderMoreInfo',
     title: 'BUTTONS.yearSliderHint',

@@ -10,16 +10,15 @@ import { provideHttpClient } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 
 // External
-import { AnQrcodeModule } from 'an-qrcode';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { QrCodeComponent } from 'ng-qrcode';
 import { TranslateModule } from '@ngx-translate/core';
 import { VirtualScrollerModule } from '@iharbeck/ngx-virtual-scroller';
 
 // Services
 import { AutoTagsSaveService } from './components/tags-auto/tags-save.service';
 import { AutoTagsService } from './components/tags-auto/autotags.service';
-import { ElectronService } from './providers/electron.service';
 import { FilePathService } from './components/views/file-path.service';
 import { ImageElementService } from './services/image-element.service';
 import { ManualTagsService } from './components/tags-manual/manual-tags.service';
@@ -80,6 +79,7 @@ import { ButtonStylePipe } from './components/button/button-style.pipe';
 import { CountPipe } from './pipes/count.pipe';
 import { DeleteFilePipe } from './pipes/delete-file.pipe';
 import { DuplicateFinderPipe } from './pipes/duplicateFinder.pipe';
+import { FavoritesOnlyPipe } from './pipes/favorites-only.pipe';
 import { FileSearchPipe } from './pipes/file-search.pipe';
 import { FileSizeFilterPipe } from './pipes/file-size-filter.pipe';
 import { FileSizePipe } from './pipes/file-size.pipe';
@@ -92,8 +92,8 @@ import { LengthFilterPipe } from './pipes/length-filter.pipe';
 import { LengthPipe } from './pipes/length.pipe';
 import { MagicSearchPipe } from './pipes/magic-search.pipe';
 import { ManualTagSortPipe } from './pipes/manual-tags-sort.pipe';
-import { PlaylistPipe } from './pipes/playlist.pipe';
 import { PlaylistOnlyPipe } from './pipes/playlist-only.pipe';
+import { PlaylistPipe } from './pipes/playlist.pipe';
 import { RegexSearchPipe } from './pipes/regex-search.pipe';
 import { ResolutionFilterPipe } from './pipes/resolution-filter.pipe';
 import { ReturnZeroPipe } from './pipes/return-zero.pipe';
@@ -108,6 +108,8 @@ import { TagMatchPipe } from './components/tags-auto/tag-match.pipe';
 import { TagsDisplayPipe } from './components/tags-auto/tag-display.pipe';
 import { TimesPlayedFilterPipe } from './pipes/times-played-filter.pipe';
 import { TimesPlayedPipe } from './pipes/times-played.pipe';
+import { TotalSelected } from './pipes/total-selected.pipe';
+import { WordCloudSortPipe } from './pipes/word-cloud-sort.pipe';
 import { WordFrequencyPipe } from './pipes/word-frequency.pipe';
 import { WrapperPipe } from './pipes/wrapper.pipe';
 import { YearFilterPipe } from './pipes/year-filter.pipe';
@@ -129,6 +131,7 @@ import { YearPipe } from './pipes/year.pipe';
     DetailsComponent,
     DonutComponent,
     DuplicateFinderPipe,
+    FavoritesOnlyPipe,
     FileComponent,
     FileSearchPipe,
     FileSizeFilterPipe,
@@ -148,8 +151,8 @@ import { YearPipe } from './pipes/year.pipe';
     ManualTagSortPipe,
     MetaComponent,
     ModalComponent,
-    PlaylistPipe,
     PlaylistOnlyPipe,
+    PlaylistPipe,
     RecentlyOpenedComponent,
     RegexSearchPipe,
     RenameFileComponent,
@@ -185,22 +188,24 @@ import { YearPipe } from './pipes/year.pipe';
     TimesPlayedPipe,
     TitleBarComponent,
     TopComponent,
+    TotalSelected,
     ViewTagsComponent,
     WelcomeComponent,
     WizardComponent,
+    WordCloudSortPipe,
     WordFrequencyPipe,
     WrapperPipe,
     YearFilterPipe,
     YearPipe,
   ],
   imports: [
-    // AnQrcodeModule, // TODO: enable and fix later!
     AppRoutingModule,
     BrowserAnimationsModule,
     BrowserModule,
     FormsModule,
     MatDialogModule,
     MatSnackBarModule,
+    QrCodeComponent,
     TranslateModule.forRoot(),
     VirtualScrollerModule
   ],
@@ -208,7 +213,6 @@ import { YearPipe } from './pipes/year.pipe';
     provideHttpClient(),
     AutoTagsSaveService,
     AutoTagsService,
-    ElectronService,
     FilePathService,
     ImageElementService,
     ManualTagsService,

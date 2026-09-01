@@ -1,5 +1,7 @@
-import { Component, Input, input, output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { breadcrumbsAppear, breadcrumbWordAppear } from '../../common/animations';
+
+import type { AppStateInterface } from '../../common/app-state';
 import type { SettingsButtonsType } from '../../common/settings-buttons';
 
 @Component({
@@ -14,9 +16,9 @@ export class BreadcrumbsComponent {
   readonly breadcrumbHomeIconClick = output<any>();
   readonly handleBbreadcrumbClicked = output<number>();
 
-  readonly appState = input(undefined);
-  @Input() settingsButtons: SettingsButtonsType;
-  readonly folderViewNavigationPath = input(undefined);
+  readonly appState = input<AppStateInterface>();
+  readonly settingsButtons = input<SettingsButtonsType>();
+  readonly folderViewNavigationPath = input();
 
   constructor() { }
 

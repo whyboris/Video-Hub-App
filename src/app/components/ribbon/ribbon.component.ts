@@ -16,7 +16,7 @@ export class RibbonComponent {
 
   readonly toggleButton = output<string>();
 
-  readonly appState = input(undefined);
+  readonly appState = input();
   @Input() settingsButtons: SettingsButtonsType;
   readonly settingsButtonsGroups = input<SettingsButtonKey[][]>();
 
