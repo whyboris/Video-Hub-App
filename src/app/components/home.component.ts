@@ -1121,7 +1121,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   public getFinalObjectForSaving(): FinalObject {
 
     if (this.demo && this.demoSavingDisabled) {
-      this.modalService.openSnackbar("SAVING DISABLED - your hub has more than 50 videos", 5000);
+      this.modalService.openSnackbar("Previous hub changes not saved because hub has more than 50 videos", 3000);
       this.demoSavingDisabled = false;
       return null;
     }
