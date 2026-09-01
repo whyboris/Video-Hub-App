@@ -1,9 +1,5 @@
 {
   "BUTTONS": {
-    "clearAllFilters": "Cancella tutti i filtri",
-    "clearAllFiltersMoreInfo": "Questo rimuoverà tutti i filtri e mostrerà tutti gli elementi.",
-    "clearAllFiltersHint": "Cancella tutti i filtri in una volta.",
-    "clearAllFiltersDescription": "Pulsante per cancellare tutti i filtri in una volta.",
     "autoFileTagsDescription": "Abilita i tag generati automaticamente in base ai nomi dei file video",
     "autoFileTagsHint": "Abilita tag automatici",
     "autoFileTagsMoreInfo": "Vedi questi nella vista Dettagli. Se abilitati, saranno anche ricercabili con il filtro Tag",
@@ -46,9 +42,9 @@
     "excludeDescription": "Nomi dei file senza",
     "excludeHint": "Escludi filtro",
     "excludeMoreInfo": "Filtro per escludere tutti i video che contengono la parola filtro",
-    "favoritesDescription": "Mostra l'icona dei preferiti.",
+    "favoritesDescription": "Mostra l'icona a forma di cuore sui video con valutazione a 5 stelle",
     "favoritesHint": "Mostra l'icona dei preferiti",
-    "favoritesMoreInfo": "Facendo clic sul cuore si imposta la valutazione a stelle su 5. Tutti i video a 5 stelle sono preferiti.",
+    "favoritesMoreInfo": "Cliccando sul cuore, la valutazione a stelle viene impostata a 5. Tutti i video a 5 stelle sono considerati preferiti.",
     "fileDescription": "Nomi di file con ciascuno",
     "fileHint": "Ricerca video",
     "fileMoreInfo": "Filtra i video contenenti ciascuna delle parole di ricerca",
@@ -100,7 +96,7 @@
     "playlistButtonDescription": "Apri tutti i video della galleria corrente come playlist",
     "playlistButtonMoreInfo": "Questo crea un file .pls e lo apre con il tuo lettore video predefinito. La playlist non includerà i file nelle cartelle se è selezionato \"Mostra cartelle\".",
     "randFolderScreen": "Schermate casuali di cartelle",
-    "randFolderScreenDesc": "Mostra schermate casuali nella vista Cartella",
+    "randFolderScreenDesc": "Mostra schermate casuali nell'anteprima della cartella",
     "regenerateLibraryDescription": "Rigenera tutti i metadati della libreria, ad eccezione delle anteprime e dei metadati immessi dall'utente",
     "regenerateLibraryHint": "Rigenera libreria",
     "regexDescription": "Ricerca con espressioni regolari",
@@ -223,7 +219,38 @@
     "videoPlayerSettings": "Impostazioni del lettore video",
     "yearSliderDescription": "Filtra per anno",
     "yearSliderHint": "Filtro anno",
-    "yearSliderMoreInfo": "Mostra il filtro di scorrimento dell'anno"
+    "yearSliderMoreInfo": "Mostra il filtro di scorrimento dell'anno",
+    "addToFavorites": "aggiungi ai preferiti",
+    "addToPlaylist": "aggiungi alla playlist",
+    "clearAllFiltersDescription": "Rimuovi tutti i filtri attualmente applicati",
+    "clearAllFiltersHint": "Cancella tutti i filtri",
+    "clearAllFiltersMoreInfo": "Cancella tutti i filtri attualmente applicati e reimposta i parametri di ricerca. Puoi anche cliccare sul numero di video visualizzato in fondo all'elenco dei filtri per cancellarli tutti.",
+    "copyToClipboard": "Fai clic per copiare il percorso negli appunti",
+    "metaShowBitrate": "Bitrate",
+    "metaShowDuration": "Durata",
+    "metaShowFps": "FPS",
+    "metaShowResolution": "Risoluzione",
+    "metaShowSize": "Misurare",
+    "metaShowTimesPlayed": "Tempi di gioco",
+    "metaShowYear": "Anno",
+    "randFolderScreenMoreInfo": "L'anteprima della cartella mostrerà quattro miniature di video casuali presenti all'interno della cartella.",
+    "removeFromFavorites": "rimuovi dai preferiti",
+    "removeFromPlaylist": "rimuovi dalla playlist",
+    "setFavoriteThumb": "Fai clic per impostare questa miniatura come miniatura predefinita",
+    "showOnlyFavoritesDescription": "Mostra solo i video che hai aggiunto ai preferiti",
+    "showOnlyFavoritesHint": "Mostra solo i preferiti",
+    "showOnlyFavoritesMoreInfo": "I video preferiti sono identici ai video a cui hai assegnato 5 stelle.",
+    "showOnlyPlaylistDescription": "Mostra i video che hai aggiunto alla playlist",
+    "showOnlyPlaylistHint": "Mostra la playlist",
+    "showOnlyPlaylistMoreInfo": "Fai clic sull'icona che appare sopra la durata nella visualizzazione delle miniature per aggiungere/rimuovere il video dalla playlist",
+    "sortOptionPlaylistDescription": "Playlist",
+    "sortOptionPlaylistMoreInfo": "Ordina i video in base all'ordine in cui sono stati aggiunti alla playlist",
+    "spacePlaysRandomDescription": "Premendo CTRL + barra spaziatrice viene riprodotto un video casuale da un orario di inizio casuale.",
+    "spacePlaysRandomMoreInfo": "L'avvio casuale funziona solo quando è impostato il lettore video preferito.",
+    "startsWithDescription": "Inizia con la ricerca",
+    "startsWithHint": "Inizia con la ricerca",
+    "startsWithMoreInfo": "Il filtro trova i video in cui una parola inizia con quello che hai digitato",
+    "viewDetails": "visualizza i dettagli"
   },
   "RIGHTCLICK": {
     "cancelRename": "annulla rinomina",
@@ -265,7 +292,6 @@
     "extensions": "Estensioni:",
     "extensionsInputError": "L'inserimento delle estensioni non è valido: inserisci le estensioni con una virgola separata",
     "FAQ": "Fare clic qui per aiuto, documentazione, domande frequenti o per segnalare un bug",
-    "favorites": "Mostra i preferiti",
     "fileNotFound": "File non trovato",
     "folderView": "Visualizzazione cartelle",
     "galleryAndView": "Galleria",
@@ -286,7 +312,7 @@
     "searchFilters": "Filtri di ricerca",
     "settings": "impostazioni",
     "showDetailsTray": "Dettagli",
-    "showHideText": "mostra / nascondi icona nella barra delle impostazioni",
+    "showHideText": "icona per mostrare/nascondere nella barra multifunzione/barra degli strumenti",
     "showRecent": "File aperti di recente",
     "sortingFilters": "Filtri e opzioni di ordinamento",
     "systemDefault": "Default del sistema",
@@ -303,7 +329,8 @@
     "versionError": "al momento non è possibile verificare la presenza di una nuova versione",
     "wordCloud": "Word cloud e file aperti di recente",
     "youHaveLatest": "hai l'ultima versione",
-    "zoom": "Zoom"
+    "zoom": "Zoom",
+    "showHideMetadata": "Mostra/nascondi i metadati dalla visualizzazione dei dettagli:"
   },
   "SHORTCUTS": {
     "andClickAnyFile": "e fai clic su qualsiasi file per vedere i dettagli del file",
@@ -333,7 +360,12 @@
     "shuffleGalleryNow": "Mischia i risultati attuali",
     "startWizard": "Attiva / disattiva la vista della procedura guidata",
     "toggleMinimalMode": "Attiva / disattiva la modalità minima (nasconde tutti i pannelli)",
-    "toggleSettings": "Attiva / disattiva le impostazioni"
+    "toggleSettings": "Attiva / disattiva le impostazioni",
+    "andClickAnyFileForExplorer": "e fai clic su qualsiasi file per aprirlo in Esplora risorse",
+    "andClickToSetDefaultScreenshot": "e fai clic mentre passi il mouse sopra una miniatura per impostarla come screenshot predefinito",
+    "clearAllFilters": "Cancella tutti i filtri",
+    "clickToRemove": "Per rimuovere la scorciatoia, fai clic su di essa e premi lo stesso tasto attualmente impostato.",
+    "openRandom": "per riprodurre un video casuale dai risultati correnti della galleria"
   },
   "SIDEBAR": {
     "and": "e",
@@ -376,10 +408,12 @@
     "tagExclusion": "i tag non hanno",
     "tagIntersection": "i tag includono",
     "tagUnion": "i tag includono any",
-    "totalFolders": "cartella",
-    "totalFoldersPlural": "cartelle",
     "videoNotes": "note hanno",
-    "videos": "video"
+    "playlistRemoveAll": "rimuovi tutti i video dalla playlist",
+    "playlistShowingOnly": "mostra solo la playlist",
+    "favoritesShowingOnly": "mostra solo i preferiti",
+    "sortPlaylist": "Playlist",
+    "startsWith": "inizia con la ricerca"
   },
   "STATISTICS": {
     "addFolderToHub": "Aggiungi cartella all'hub",
@@ -468,7 +502,8 @@
     "sortAlphabetical": "Ordinamento alfabetico",
     "sortByFrequency": "Ordinamento per frequenza",
     "starRating": "Stelle",
-    "timesPlayed": "I tempi hanno giocato"
+    "timesPlayed": "I tempi hanno giocato",
+    "showMore": "mostra altro"
   },
   "WELCOME": {
     "explore": "Si prega di esplorare altre impostazioni. Ci sono molte funzionalità che non sono abilitate per impostazione predefinita.",

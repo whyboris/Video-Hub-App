@@ -1,9 +1,5 @@
 {
   "BUTTONS": {
-    "clearAllFilters": "Vymazat všechny filtry",
-    "clearAllFiltersMoreInfo": "Tímto odstraníte všechny filtry a zobrazíte všechny položky.",
-    "clearAllFiltersHint": "Vymazat všechny filtry najednou.",
-    "clearAllFiltersDescription": "Tlačítko pro vymazání všech filtrů najednou.",
     "autoFileTagsDescription": "Povolit automaticky generované štítky na základě názvů video souborů",
     "autoFileTagsHint": "Povolit automatické štítky",
     "autoFileTagsMoreInfo": "Podívejte se na ně v zobrazení Podrobnosti. Pokud je povoleno, budou také prohledávatelné pomocí filtru štítky",
@@ -46,9 +42,9 @@
     "excludeDescription": "Názvy souborů bez",
     "excludeHint": "Vylučovací filtr",
     "excludeMoreInfo": "Filtr vyloučí všechna videa, která obsahují slovo filtru",
-    "favoritesDescription": "Zobrazit ikonu oblíbených položek.",
+    "favoritesDescription": "Zobrazit ikonu srdce u videí s 5hvězdičkovým hodnocením",
     "favoritesHint": "Zobrazit ikonu oblíbených položek",
-    "favoritesMoreInfo": "Kliknutím na srdce nastavíte hodnocení hvězdičkami na 5. Všechna 5hvězdičková videa jsou oblíbená.",
+    "favoritesMoreInfo": "Kliknutím na srdce se hodnocení nastaví na 5 hvězdiček. Všechna videa s 5 hvězdičkami se považují za oblíbená.",
     "fileDescription": "Názvy souborů s každým",
     "fileHint": "Hledání videa",
     "fileMoreInfo": "Filtr pro videa obsahující všechna hledaná slova",
@@ -100,7 +96,7 @@
     "playlistButtonDescription": "Otevřít všechna aktuální videa v galerii jako seznam skladeb",
     "playlistButtonMoreInfo": "Tímto se vytvoří soubor .pls a otevře se s výchozím přehrávačem videa. Seznam skladeb nezahrnuje soubory ve složkách, pokud je vybrána možnost 'Zobrazit složky'.",
     "randFolderScreen": "Náhodné snímky složky",
-    "randFolderScreenDesc": "Zobrazit náhodné snímky v zobrazení složky",
+    "randFolderScreenDesc": "Zobrazit náhodné snímky obrazovky v náhledu složky",
     "regenerateLibraryDescription": "Regenerovat všechna metadata knihovny, s výjimkou náhledů a metadat zadaných uživatelem",
     "regenerateLibraryHint": "Znovu vygenerovat knihovnu",
     "regexDescription": "Regex vyhledávání",
@@ -223,7 +219,38 @@
     "videoPlayerSettings": "Nastavení video přehrávače",
     "yearSliderDescription": "Filtrovat podle roku",
     "yearSliderHint": "Rok filtr",
-    "yearSliderMoreInfo": "Zobrazit posuvný filtr roku"
+    "yearSliderMoreInfo": "Zobrazit posuvný filtr roku",
+    "addToFavorites": "přidat k oblíbeným",
+    "addToPlaylist": "přidat do playlistu",
+    "clearAllFiltersDescription": "Vymazat všechny aktuálně použité filtry",
+    "clearAllFiltersHint": "Vymazat všechny filtry",
+    "clearAllFiltersMoreInfo": "Vymaže všechny aktuálně použité filtry a resetuje vyhledávací pole. Můžete také kliknout na počet nalezených videí ve spodní části filtrů a vymazat tak všechny filtry.",
+    "copyToClipboard": "Kliknutím zkopírujete cestu do schránky",
+    "metaShowBitrate": "Bitrate",
+    "metaShowDuration": "Trvání",
+    "metaShowFps": "FPS",
+    "metaShowResolution": "Rezoluce",
+    "metaShowSize": "Velikost",
+    "metaShowTimesPlayed": "Počet odehraných her",
+    "metaShowYear": "Rok",
+    "randFolderScreenMoreInfo": "Náhled složky bude obsahovat čtyři miniatury z náhodných videí uvnitř složky",
+    "removeFromFavorites": "odebrat z oblíbených",
+    "removeFromPlaylist": "odstranit ze seznamu skladeb",
+    "setFavoriteThumb": "Kliknutím přepnete tuto miniaturu jako výchozí miniaturu",
+    "showOnlyFavoritesDescription": "Zobrazit pouze videa, která jste si přidali do oblíbených",
+    "showOnlyFavoritesHint": "Zobrazit pouze oblíbené",
+    "showOnlyFavoritesMoreInfo": "Oblíbená videa jsou identická s videi, která jste ohodnotili 5 hvězdičkami.",
+    "showOnlyPlaylistDescription": "Zobrazit videa, která jste přidali do playlistu",
+    "showOnlyPlaylistHint": "Zobrazit playlist",
+    "showOnlyPlaylistMoreInfo": "Kliknutím na ikonu, která se zobrazuje v zobrazení miniatur v průběhu přehrávání, můžete přidat nebo odebrat video ze seznamu videí.",
+    "sortOptionPlaylistDescription": "Seznam skladeb",
+    "sortOptionPlaylistMoreInfo": "Seřadit videa podle pořadí, v jakém byla přidána do playlistu",
+    "spacePlaysRandomDescription": "Stisknutím CRTL + mezerníku se přehraje náhodné video od náhodného času začátku",
+    "spacePlaysRandomMoreInfo": "Náhodný čas spuštění funguje pouze tehdy, když je nastaven preferovaný přehrávač videa",
+    "startsWithDescription": "Začíná s vyhledáváním",
+    "startsWithHint": "Začíná s vyhledáváním",
+    "startsWithMoreInfo": "Filtr vyhledá videa, ve kterých nějaké slovo začíná napsaným textem.",
+    "viewDetails": "zobrazit podrobnosti"
   },
   "RIGHTCLICK": {
     "cancelRename": "zrušit přejmenování",
@@ -265,7 +292,6 @@
     "extensions": "Rozšíření:",
     "extensionsInputError": "Neplatná rošíření: zadaná rozšíření oddělte čárkou",
     "FAQ": "Klepnutím sem získáte nápovědu, dokumentaci, FAQ nebo můžete nahlásit chybu",
-    "favorites": "Zobrazit oblíbené",
     "fileNotFound": "Soubor nenalezen",
     "folderView": "Zobrazení složky",
     "galleryAndView": "Galerie",
@@ -286,7 +312,7 @@
     "searchFilters": "Vyhledávací filtry",
     "settings": "Nastavení",
     "showDetailsTray": "Detaily",
-    "showHideText": "zobrazit / skrýt ikonu v panelu nastavení",
+    "showHideText": "zobrazit / skrýt ikonu na pásu karet / panelu nástrojů",
     "showRecent": "Nedávno otevřené soubory",
     "sortingFilters": "Možnosti filtrů a třídění",
     "systemDefault": "Výchozí systému",
@@ -303,7 +329,8 @@
     "versionError": "v tuto chvíli nelze zkontrolovat novou verzi",
     "wordCloud": "Oblak slov a nedávno otevřené soubory",
     "youHaveLatest": "máte nejnovější verzi",
-    "zoom": "Zoom"
+    "zoom": "Zoom",
+    "showHideMetadata": "Zobrazit/skrýt metadata v zobrazení podrobností:"
   },
   "SHORTCUTS": {
     "andClickAnyFile": "a kliknutím na libovolný soubor zobrazíte podrobnosti o souboru",
@@ -333,7 +360,12 @@
     "shuffleGalleryNow": "Zamíchat aktuální výsledky",
     "startWizard": "Zapnout / vypnout průvodce",
     "toggleMinimalMode": "Přepnout kiosk / minimální režim (skrytí všech panelů)",
-    "toggleSettings": "Přepnout nastavení"
+    "toggleSettings": "Přepnout nastavení",
+    "andClickAnyFileForExplorer": "a kliknutím na libovolný soubor jej otevřete v Průzkumníku",
+    "andClickToSetDefaultScreenshot": "a kliknutím při podržení kurzoru nad miniaturou ji nastavíte jako výchozí snímek obrazovky",
+    "clearAllFilters": "Vymazat všechny filtry",
+    "clickToRemove": "Chcete-li zástupce odstranit, klikněte na něj a stiskněte stejnou klávesu, jakou má aktuálně nastavenou.",
+    "openRandom": "přehrát náhodné video z aktuálních výsledků galerie"
   },
   "SIDEBAR": {
     "and": "a",
@@ -376,10 +408,12 @@
     "tagExclusion": "štítky neobsahují",
     "tagIntersection": "štítky obsahují",
     "tagUnion": "štítky obsahují libovolné",
-    "totalFolders": "složka",
-    "totalFoldersPlural": "složky",
     "videoNotes": "má poznámky",
-    "videos": "videa"
+    "playlistRemoveAll": "odstranit všechna videa ze seznamu videí",
+    "playlistShowingOnly": "zobrazuje se pouze playlist",
+    "favoritesShowingOnly": "zobrazuji pouze oblíbené",
+    "sortPlaylist": "Seznam skladeb",
+    "startsWith": "začíná vyhledáváním"
   },
   "STATISTICS": {
     "addFolderToHub": "Přidat složku do knihovny (hubu)",
@@ -468,7 +502,8 @@
     "sortAlphabetical": "Třídění podle abecedy",
     "sortByFrequency": "Třídění podle četnosti výskytu",
     "starRating": "Hodnocení hvězdičkami",
-    "timesPlayed": "Počet přehrátí"
+    "timesPlayed": "Počet přehrátí",
+    "showMore": "zobrazit více"
   },
   "WELCOME": {
     "explore": "Prozkoumejte prosím další nastavení. Existuje mnoho funkcí, které nejsou ve výchozím nastavení povoleny.",

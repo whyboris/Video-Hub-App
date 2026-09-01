@@ -1,9 +1,5 @@
 {
   "BUTTONS": {
-    "clearAllFilters": "Wyczyść wszystkie filtry",
-    "clearAllFiltersMoreInfo": "To usunie wszystkie filtry i pokaże wszystkie elementy.",
-    "clearAllFiltersHint": "Wyczyść wszystkie filtry naraz.",
-    "clearAllFiltersDescription": "Przycisk do wyczyszczenia wszystkich filtrów naraz.",
     "autoFileTagsDescription": "Włącz automatyczne generowanie tagów na podstawie nazw plików wideo",
     "autoFileTagsHint": "Włącz automatyczne tagi",
     "autoFileTagsMoreInfo": "Znajdziesz je w widoku szczegółowym. Po włączeniu będą one również możliwe do wyszukiwania przy użyciu filtra Tagów",
@@ -46,9 +42,9 @@
     "excludeDescription": "Nazwy plików nie zawierają",
     "excludeHint": "Filtr wykluczający",
     "excludeMoreInfo": "Filtruj, aby wykluczyć filmy zawierające dane słowo",
-    "favoritesDescription": "Pokaż ikonę ulubionych.",
+    "favoritesDescription": "Pokaż ikonę serca nad filmami z oceną 5 gwiazdek",
     "favoritesHint": "Pokaż ikonę ulubionych",
-    "favoritesMoreInfo": "Kliknięcie w serce ustawia ocenę w gwiazdkach na 5. Wszystkie filmy z pięcioma gwiazdkami są ulubionymi.",
+    "favoritesMoreInfo": "Kliknięcie serduszka ustawia ocenę gwiazdkową na 5. Wszystkie filmy z 5 gwiazdkami są ulubionymi",
     "fileDescription": "Nazwa pliku zawiera każdy z wpisanych tagów",
     "fileHint": "Wyszukiwanie wideo",
     "fileMoreInfo": "Filtruj filmy zawierające każde z wpisanych słów",
@@ -100,7 +96,7 @@
     "playlistButtonDescription": "Otwórz wszystkie filmy z bieżącej galerii jako playlistę",
     "playlistButtonMoreInfo": "Ta opcja tworzy plik .pls i otwiera go przy użyciu domyślnego odtwarzacza wideo. Lista odtwarzania nie będzie zawierać plików wewnątrz folderów, jeśli wybrano opcję 'Pokaż foldery'.",
     "randFolderScreen": "Losowe zrzuty ekranu dla folderu",
-    "randFolderScreenDesc": "Pokaż losowe zrzuty ekranu w widoku folderu",
+    "randFolderScreenDesc": "Pokaż losowe zrzuty ekranu w podglądzie folderu",
     "regenerateLibraryDescription": "Wygeneruj ponownie wszystkie metadane biblioteki, z wyjątkiem miniatur i metadanych wprowadzonych przez użytkownika,",
     "regenerateLibraryHint": "Zregeneruj bibliotekę",
     "regexDescription": "Wyszukiwanie regularne",
@@ -223,7 +219,38 @@
     "videoPlayerSettings": "Ustawienia odtwarzacza wideo",
     "yearSliderDescription": "Filtruj według roku",
     "yearSliderHint": "Filtr roku",
-    "yearSliderMoreInfo": "Pokaż filtr suwaka roku"
+    "yearSliderMoreInfo": "Pokaż filtr suwaka roku",
+    "addToFavorites": "dodaj do ulubionych",
+    "addToPlaylist": "dodaj do listy odtwarzania",
+    "clearAllFiltersDescription": "Wyczyść wszystkie aktualnie zastosowane filtry",
+    "clearAllFiltersHint": "Wyczyść wszystkie filtry",
+    "clearAllFiltersMoreInfo": "Usuwa wszystkie aktualnie zastosowane filtry i resetuje pole wyszukiwania. Możesz również kliknąć liczbę znalezionych filmów u dołu filtrów, aby wyczyścić wszystkie filtry.",
+    "copyToClipboard": "Kliknij, aby skopiować ścieżkę do schowka",
+    "metaShowBitrate": "Szybkość transmisji bitów",
+    "metaShowDuration": "Czas trwania",
+    "metaShowFps": "FPS",
+    "metaShowResolution": "Rezolucja",
+    "metaShowSize": "Rozmiar",
+    "metaShowTimesPlayed": "Czasy gry",
+    "metaShowYear": "Rok",
+    "randFolderScreenMoreInfo": "Podgląd folderu będzie zawierał cztery miniatury z losowych filmów w folderze",
+    "removeFromFavorites": "usuń z ulubionych",
+    "removeFromPlaylist": "usuń z listy odtwarzania",
+    "setFavoriteThumb": "Kliknij, aby przełączyć tę miniaturę jako miniaturę domyślną",
+    "showOnlyFavoritesDescription": "Pokaż tylko filmy dodane do ulubionych",
+    "showOnlyFavoritesHint": "Pokaż tylko ulubione",
+    "showOnlyFavoritesMoreInfo": "Ulubione filmy są identyczne z filmami, którym dałeś 5 gwiazdek",
+    "showOnlyPlaylistDescription": "Pokaż filmy dodane do listy odtwarzania",
+    "showOnlyPlaylistHint": "Pokaż listę odtwarzania",
+    "showOnlyPlaylistMoreInfo": "Kliknij ikonę wyświetlaną w widoku miniatur, aby dodać lub usunąć film z listy odtwarzania",
+    "sortOptionPlaylistDescription": "Lista odtwarzania",
+    "sortOptionPlaylistMoreInfo": "Sortuj filmy według kolejności dodania ich do listy odtwarzania",
+    "spacePlaysRandomDescription": "Naciśnięcie klawiszy CRTL + spacja powoduje odtworzenie losowego filmu od losowego momentu rozpoczęcia",
+    "spacePlaysRandomMoreInfo": "Losowy czas rozpoczęcia działa tylko wtedy, gdy ustawiony jest preferowany odtwarzacz wideo",
+    "startsWithDescription": "Rozpoczyna się wyszukiwaniem",
+    "startsWithHint": "Rozpoczyna się wyszukiwaniem",
+    "startsWithMoreInfo": "Filtr wyszukuje filmy, w których jakieś słowo zaczyna się od wpisanego przez Ciebie słowa",
+    "viewDetails": "zobacz szczegóły"
   },
   "RIGHTCLICK": {
     "cancelRename": "anuluj zmianę nazwy",
@@ -265,7 +292,6 @@
     "extensions": "Rozszerzenia:",
     "extensionsInputError": "Dane wejściowe rozszerzeń są nieprawidłowe: oddziel rozszerzenia przecinkiem",
     "FAQ": "Kliknij tutaj, aby uzyskać pomoc, zapoznać się z dokumentacją, przeczytać FAQ lub zgłosić błąd",
-    "favorites": "Pokaż ulubione",
     "fileNotFound": "Nie znaleziono pliku",
     "folderView": "Widok folderu",
     "galleryAndView": "Galeria",
@@ -286,7 +312,7 @@
     "searchFilters": "Filtry wyszukiwania",
     "settings": "Ustawienia",
     "showDetailsTray": "Detale",
-    "showHideText": "pokaż / ukryj ikonę na pasku ustawień",
+    "showHideText": "pokaż/ukryj ikonę na wstążce/pasku narzędzi",
     "showRecent": "Ostatnio otwarte pliki",
     "sortingFilters": "Opcje filtrowania i sortowania",
     "systemDefault": "Domyślny systemowy",
@@ -303,7 +329,8 @@
     "versionError": "w tym momencie nie mogę sprawdzić dostępności nowej wersji",
     "wordCloud": "Dolny zasobnik",
     "youHaveLatest": "masz najnowszą wersję programu",
-    "zoom": "Powiększenie"
+    "zoom": "Powiększenie",
+    "showHideMetadata": "Pokaż/ukryj metadane w widoku szczegółów:"
   },
   "SHORTCUTS": {
     "andClickAnyFile": "i kliknij dowolny plik, aby wyświetlić jego szczegóły",
@@ -333,7 +360,12 @@
     "shuffleGalleryNow": "Losowa kolejność bieżących wyników",
     "startWizard": "Pokaż/ukryj okno kreatora",
     "toggleMinimalMode": "Pokaż/ukryj tryb kiosk/minimalny (ukrywa wszystkie panele)",
-    "toggleSettings": "Pokaż/ukryj ustawienia"
+    "toggleSettings": "Pokaż/ukryj ustawienia",
+    "andClickAnyFileForExplorer": "i kliknij dowolny plik, aby otworzyć go w Eksploratorze",
+    "andClickToSetDefaultScreenshot": "i kliknij, najeżdżając kursorem na miniaturę, aby ustawić ją jako domyślny zrzut ekranu",
+    "clearAllFilters": "Wyczyść wszystkie filtry",
+    "clickToRemove": "Aby usunąć skrót, kliknij na niego i naciśnij ten sam klawisz, który jest aktualnie ustawiony.",
+    "openRandom": "aby odtworzyć losowy film z bieżących wyników galerii"
   },
   "SIDEBAR": {
     "and": "oraz",
@@ -376,10 +408,12 @@
     "tagExclusion": "tag nie zawiera",
     "tagIntersection": "tag zawiera",
     "tagUnion": "tag zawiera dowolne ze słów",
-    "totalFolders": "folder",
-    "totalFoldersPlural": "folder(y/ów)",
     "videoNotes": "notatka zawiera",
-    "videos": "film(y/ów)"
+    "playlistRemoveAll": "usuń wszystkie filmy z playlisty",
+    "playlistShowingOnly": "pokazywana jest tylko lista odtwarzania",
+    "favoritesShowingOnly": "pokazywanie tylko ulubionych",
+    "sortPlaylist": "Lista odtwarzania",
+    "startsWith": "wyszukiwanie zaczyna się od"
   },
   "STATISTICS": {
     "addFolderToHub": "Dodaj folder do HUBa",
@@ -468,7 +502,8 @@
     "sortAlphabetical": "Sortuj tagi alfabetycznie",
     "sortByFrequency": "Sortuj tagi wg popularności",
     "starRating": "Sortowanie wg liczby gwiazdek",
-    "timesPlayed": "Ilość odtworzeń"
+    "timesPlayed": "Ilość odtworzeń",
+    "showMore": "pokaż więcej"
   },
   "WELCOME": {
     "explore": "Sprawdź inne ustawienia. Znajdziesz tu wiele funkcji, które nie są domyślnie włączone.",

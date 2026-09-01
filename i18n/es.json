@@ -1,9 +1,5 @@
 {
   "BUTTONS": {
-    "clearAllFilters": "Limpiar todos los filtros",
-    "clearAllFiltersMoreInfo": "Esto eliminará todos los filtros y mostrará todos los elementos.",
-    "clearAllFiltersHint": "Limpiar todos los filtros a la vez.",
-    "clearAllFiltersDescription": "Botón para limpiar todos los filtros a la vez.",
     "autoFileTagsDescription": "Habilite etiquetas autogeneradas basadas en nombres de archivos de video",
     "autoFileTagsHint": "Habilitar etiquetas automáticas",
     "autoFileTagsMoreInfo": "Véalos en la vista Detalles. Cuando esté habilitado, también se podrán buscar con el filtro Etiquetas",
@@ -46,9 +42,9 @@
     "excludeDescription": "Nombres de archivos sin",
     "excludeHint": "Excluir filtro",
     "excludeMoreInfo": "Filtrar para excluir cualquier video que contenga la palabra de filtro",
-    "favoritesDescription": "Mostrar icono de favoritos.",
+    "favoritesDescription": "Mostrar icono de corazón sobre vídeos con calificación de 5 estrellas",
     "favoritesHint": "Mostrar icono de favoritos",
-    "favoritesMoreInfo": "Al hacer clic en el corazón, la calificación de estrellas se establece en 5. Todos los videos de 5 estrellas son favoritos.",
+    "favoritesMoreInfo": "Al hacer clic en el corazón, la calificación se establece en 5 estrellas. Todos los videos con 5 estrellas son favoritos.",
     "fileDescription": "Nombres de archivo con cada",
     "fileHint": "Búsqueda de video",
     "fileMoreInfo": "Filtrar por videos que contengan cada una de las palabras de búsqueda",
@@ -100,7 +96,7 @@
     "playlistButtonDescription": "Abre todos los videos de la galería actual como una lista de reproducción",
     "playlistButtonMoreInfo": "Esto crea un archivo .pls y lo abre con su reproductor de video predeterminado. La lista de reproducción no incluirá archivos dentro de las carpetas si se selecciona \"Mostrar carpetas\".",
     "randFolderScreen": "Carpeta de capturas de pantalla aleatorias",
-    "randFolderScreenDesc": "Mostrar capturas de pantalla aleatorias en la vista Carpeta",
+    "randFolderScreenDesc": "Mostrar capturas de pantalla aleatorias en la vista previa de la carpeta",
     "regenerateLibraryDescription": "Regenere todos los metadatos de la biblioteca, excepto las miniaturas y los metadatos ingresados por el usuario",
     "regenerateLibraryHint": "Regenerar biblioteca",
     "regexDescription": "Búsqueda de expresiones regulares",
@@ -223,7 +219,38 @@
     "videoPlayerSettings": "Configuración del reproductor de video",
     "yearSliderDescription": "Filtrar por Año",
     "yearSliderHint": "Filtro de año",
-    "yearSliderMoreInfo": "Mostrar el filtro deslizante del año"
+    "yearSliderMoreInfo": "Mostrar el filtro deslizante del año",
+    "addToFavorites": "agregar a favoritos",
+    "addToPlaylist": "agregar a la lista de reproducción",
+    "clearAllFiltersDescription": "Borrar todos los filtros aplicados actualmente",
+    "clearAllFiltersHint": "Borrar todos los filtros",
+    "clearAllFiltersMoreInfo": "Borra todos los filtros aplicados y restablece el campo de búsqueda. También puedes hacer clic en el número de vídeos que aparecen al final de los filtros para borrarlos todos.",
+    "copyToClipboard": "Haz clic para copiar la ruta al portapapeles.",
+    "metaShowBitrate": "Tasa de bits",
+    "metaShowDuration": "Duración",
+    "metaShowFps": "FPS",
+    "metaShowResolution": "Resolución",
+    "metaShowSize": "Tamaño",
+    "metaShowTimesPlayed": "Tiempos jugados",
+    "metaShowYear": "Año",
+    "randFolderScreenMoreInfo": "La vista previa de la carpeta mostrará cuatro miniaturas de vídeos aleatorios dentro de la carpeta.",
+    "removeFromFavorites": "eliminar de favoritos",
+    "removeFromPlaylist": "eliminar de la lista de reproducción",
+    "setFavoriteThumb": "Haz clic para establecer esta miniatura como miniatura predeterminada.",
+    "showOnlyFavoritesDescription": "Mostrar solo los vídeos que has añadido a tus favoritos",
+    "showOnlyFavoritesHint": "Mostrar solo favoritos",
+    "showOnlyFavoritesMoreInfo": "Los vídeos favoritos son idénticos a los vídeos que calificaste con 5 estrellas.",
+    "showOnlyPlaylistDescription": "Mostrar los vídeos que has añadido a la lista de reproducción",
+    "showOnlyPlaylistHint": "Mostrar lista de reproducción",
+    "showOnlyPlaylistMoreInfo": "Haz clic en el icono que aparece sobre la duración en la vista de miniaturas para añadir o eliminar vídeos de la lista de reproducción.",
+    "sortOptionPlaylistDescription": "Lista de reproducción",
+    "sortOptionPlaylistMoreInfo": "Ordena los vídeos según el orden en que se añadieron a la lista de reproducción.",
+    "spacePlaysRandomDescription": "Al pulsar CTRL + barra espaciadora se reproduce un vídeo aleatorio desde un momento de inicio aleatorio.",
+    "spacePlaysRandomMoreInfo": "El tiempo de inicio aleatorio solo funciona cuando se ha configurado el reproductor de vídeo preferido.",
+    "startsWithDescription": "Comienza con la búsqueda",
+    "startsWithHint": "Comienza con la búsqueda",
+    "startsWithMoreInfo": "El filtro encuentra vídeos en los que alguna palabra empieza con lo que has escrito.",
+    "viewDetails": "ver detalles"
   },
   "RIGHTCLICK": {
     "cancelRename": "cancelar renombrar",
@@ -265,7 +292,6 @@
     "extensions": "Extensiones:",
     "extensionsInputError": "La entrada de extensiones no es válida: inserte extensiones separadas por comas",
     "FAQ": "Haga clic aquí para obtener ayuda, documentación, preguntas frecuentes o para informar un error",
-    "favorites": "Mostrar favoritos",
     "fileNotFound": "Archivo no encontrado",
     "folderView": "Vista de carpeta",
     "galleryAndView": "Galería",
@@ -286,7 +312,7 @@
     "searchFilters": "Filtros de búsqueda",
     "settings": "Configuraciones",
     "showDetailsTray": "Detalles",
-    "showHideText": "icono de mostrar / ocultar en la barra de configuración",
+    "showHideText": "Mostrar/ocultar icono en la cinta/barra de herramientas",
     "showRecent": "Archivos abiertos recientemente",
     "sortingFilters": "Filtros y opciones de clasificación",
     "systemDefault": "Sistema por defecto",
@@ -303,7 +329,8 @@
     "versionError": "no se puede buscar una nueva versión en este momento",
     "wordCloud": "Nube de palabras y archivos abiertos recientemente",
     "youHaveLatest": "Tienes la última versión",
-    "zoom": "Enfocar"
+    "zoom": "Enfocar",
+    "showHideMetadata": "Mostrar/ocultar metadatos en la vista de detalles:"
   },
   "SHORTCUTS": {
     "andClickAnyFile": "y haga clic en cualquier archivo para ver los detalles del archivo",
@@ -333,7 +360,12 @@
     "shuffleGalleryNow": "Barajar resultados actuales",
     "startWizard": "Alternar la vista del asistente",
     "toggleMinimalMode": "Alternar el modo mínimo (ocultar todos los paneles)",
-    "toggleSettings": "Cambiar configuración"
+    "toggleSettings": "Cambiar configuración",
+    "andClickAnyFileForExplorer": "y haz clic en cualquier archivo para abrirlo en tu explorador.",
+    "andClickToSetDefaultScreenshot": "y haz clic mientras pasas el cursor sobre una miniatura para establecerla como captura de pantalla predeterminada.",
+    "clearAllFilters": "Borrar todos los filtros",
+    "clickToRemove": "Para eliminar el acceso directo, haga clic en él y pulse la misma tecla que está configurada actualmente.",
+    "openRandom": "para reproducir un vídeo aleatorio de los resultados de la galería actual"
   },
   "SIDEBAR": {
     "and": "y",
@@ -376,10 +408,12 @@
     "tagExclusion": "las etiquetas no tienen",
     "tagIntersection": "las etiquetas incluyen",
     "tagUnion": "las etiquetas incluyen cualquier",
-    "totalFolders": "carpeta",
-    "totalFoldersPlural": "carpetas",
     "videoNotes": "notas tienen",
-    "videos": "videos"
+    "playlistRemoveAll": "eliminar todos los vídeos de la lista de reproducción",
+    "playlistShowingOnly": "mostrando solo la lista de reproducción",
+    "favoritesShowingOnly": "Mostrando solo favoritos",
+    "sortPlaylist": "Lista de reproducción",
+    "startsWith": "comienza con la búsqueda"
   },
   "STATISTICS": {
     "addFolderToHub": "Agregar carpeta al centro",
@@ -468,7 +502,8 @@
     "sortAlphabetical": "Ordenar alfabéticamente",
     "sortByFrequency": "Ordenar por frecuencia",
     "starRating": "Calificación de estrellas",
-    "timesPlayed": "Número de reproducciones"
+    "timesPlayed": "Número de reproducciones",
+    "showMore": "mostrar más"
   },
   "WELCOME": {
     "explore": "Explore otras configuraciones. Hay muchas funciones que no están habilitadas de forma predeterminada.",
