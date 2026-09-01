@@ -564,13 +564,13 @@ export const SettingsButtons: SettingsButtonsType = {
     description: 'BUTTONS.metaShowBitrate',
     hidden: true,
     title: 'BUTTONS.metaShowBitrate',
-    toggled: true
+    toggled: false
   },
   'metaShowFps':  {
     description: 'BUTTONS.metaShowFps',
     hidden: true,
     title: 'BUTTONS.metaShowFps',
-    toggled: true
+    toggled: false
   },
   'metaShowTimesPlayed':  {
     description: 'BUTTONS.metaShowTimesPlayed',
