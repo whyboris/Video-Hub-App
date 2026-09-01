@@ -18,6 +18,10 @@
   ],
   "extraResources": [
     {
+      "from": "ffmpeg",
+      "to": "ffmpeg"
+    },
+    {
       "from": "src/assets/icons/mac/touch-bar",
       "to": "assets"
     },
