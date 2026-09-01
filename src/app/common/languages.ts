@@ -4,6 +4,7 @@ import type { SupportedLanguage } from './app-state';
 const Arabic     = require('../../../i18n/ar.json');
 const Bengali    = require('../../../i18n/bn.json');
 const Chinese    = require('../../../i18n/zh.json');
+const ChineseTraditional = require('../../../i18n/zh-traditional.json');
 const Czech      = require('../../../i18n/cs.json');
 const Dutch      = require('../../../i18n/nl.json');
 const English    = require('../../../i18n/en.json');
@@ -43,4 +44,5 @@ export const LanguageLookup: Record<SupportedLanguage, any> = {
   'uk': Ukrainian,
   'vi': Vietnamese,
   'zh': Chinese,
+  'zh-hant' : ChineseTraditional
 };
