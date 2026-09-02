@@ -1189,7 +1189,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.currentRightClickedItem = item; // to make `openContainingFolderNow()` work correctly
       this.openContainingFolderNow();
     }else {
-      this.openVideo(item, eventObject.thumbIndex);
+      this.openVideo(item, eventObject.thumbIndex, eventObject.timeSeconds);
       //  `openVideo` method handles the `not connected` case
     }
   }
@@ -1200,8 +1200,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
    *
    * @param item                  clicked ImageElement
    * @param clickedThumbnailIndex an index of the thumbnail clicked
+   * @param timeSeconds           exact timestamp to open at (takes precedence over clickedThumbnailIndex)
    */
-  public openVideo(item: ImageElement, clickedThumbnailIndex?: number): void {
+  public openVideo(item: ImageElement, clickedThumbnailIndex?: number, timeSeconds?: number): void {
 
     if (!this.sourceFolderService.sourceFolderConnected[item.inputSource]) {
       console.log('not connected!');
@@ -1220,9 +1221,11 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.fullPathToCurrentFile = fullPath;
 
     if (this.appState.preferredVideoPlayer) {
-      const time: number = clickedThumbnailIndex
-        ? item.duration / (item.screens + 1) * ((clickedThumbnailIndex) + 1)
-        : 0;
+      const time: number = timeSeconds !== undefined
+        ? timeSeconds
+        : clickedThumbnailIndex
+          ? item.duration / (item.screens + 1) * ((clickedThumbnailIndex) + 1)
+          : 0;
 
       const execPath: string = this.appState.preferredVideoPlayer;
 
@@ -1515,13 +1518,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * A helper function for `toggleBotton`
    */
   toggleAllViewsButtonsOff(): void {
-    this.settingsButtons['showClips'].toggled = false;
-    this.settingsButtons['showDetails'].toggled = false;
-    this.settingsButtons['showDetails2'].toggled = false;
-    this.settingsButtons['showFiles'].toggled = false;
-    this.settingsButtons['showFilmstrip'].toggled = false;
-    this.settingsButtons['showFullView'].toggled = false;
-    this.settingsButtons['showThumbnails'].toggled = false;
+    AllSupportedViews.forEach((view: SupportedView) => {
+      this.settingsButtons[view].toggled = false;
+    });
   }
 
   /**
@@ -1564,6 +1563,19 @@ export class HomeComponent implements OnInit, AfterViewInit {
    */
   restoreViewSize(view: string): void {
     this.currentImgsPerRow = this.imgsPerRow[view] || 5; // showDetails2 view does not exist when upgrading to 2.2.3
+    this.clampSegmentsZoom();
+  }
+
+  /**
+   * In the Segments view `currentImgsPerRow` means "segment tiles per row width".
+   * More tiles than `clipSnippets` can never show, so clamp to it — otherwise
+   * zoom clicks between `clipSnippets` and larger stored values change nothing visually.
+   */
+  clampSegmentsZoom(): void {
+    if (this.appState.currentView === 'showSegments') {
+      const maxTiles: number = Math.max(1, this.currentScreenshotSettings.clipSnippets || 1);
+      this.currentImgsPerRow = Math.min(this.currentImgsPerRow, maxTiles);
+    }
   }
 
   /**
@@ -1831,6 +1843,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
     if (this.appState.currentView === 'showFiles') {
       return;
     }
+    if (this.appState.currentView === 'showSegments'
+        && this.currentImgsPerRow >= Math.max(1, this.currentScreenshotSettings.clipSnippets || 1)) {
+      return; // all snippets already fit the row width — nothing smaller to show
+    }
     this.currentImgsPerRow++;
     this.computePreviewWidth();
     this.virtualScroller().invalidateAllCachedMeasurements();
@@ -1852,6 +1868,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         this.currentImgsPerRow--;
       }
     } else if (this.currentImgsPerRow > 1) {
+      this.clampSegmentsZoom(); // skip the dead zone above the snippet count in one click
       this.currentImgsPerRow--;
     }
     this.computePreviewWidth();
@@ -1876,6 +1893,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     } else if (
          this.appState.currentView === 'showFilmstrip'
       || this.appState.currentView === 'showFullView'
+      || this.appState.currentView === 'showSegments'
     ) {
       this.previewWidth = ((this.galleryWidth - 30) / this.currentImgsPerRow);
     }
@@ -1912,6 +1930,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
         break;
 
       case 'showFilmstrip':
+      case 'showSegments':
         if (this.settingsButtons.compactView.toggled) {
           this.textPaddingHeight = 0;
         } else if (this.settingsButtons.showMoreInfo.toggled) {
@@ -2064,10 +2083,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
       if (!settingsObject.appState.imgsPerRow) {
         this.appState.imgsPerRow = DefaultImagesPerRow;
       }
+      if (!AllSupportedViews.includes(settingsObject.appState.currentView)) {
+        // settings.json written by a future version with a view this version doesn't know
+        this.appState.currentView = 'showThumbnails';
+      }
     }
     this.sortType = this.appState.currentSort;
     this.imgsPerRow = this.appState.imgsPerRow;
-    this.currentImgsPerRow = this.imgsPerRow[this.appState.currentView];
+    this.currentImgsPerRow = this.imgsPerRow[this.appState.currentView]
+                             || DefaultImagesPerRow[this.appState.currentView]
+                             || 5; // settings.json from before this view existed
+
     this.grabAllSettingsKeys().forEach(element => {
       if (settingsObject.buttonSettings[element]) {
         this.settingsButtons[element].toggled = settingsObject.buttonSettings[element].toggled;

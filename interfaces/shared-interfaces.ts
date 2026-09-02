@@ -7,7 +7,8 @@ export type SupportedView = 'showThumbnails'
                           | 'showDetails'
                           | 'showDetails2'
                           | 'showFiles'
-                          | 'showClips';
+                          | 'showClips'
+                          | 'showSegments';
 
 export const AllSupportedViews: SupportedView[] = [
                             'showThumbnails',
@@ -17,6 +18,7 @@ export const AllSupportedViews: SupportedView[] = [
                             'showDetails2',
                             'showFiles',
                             'showClips',
+                            'showSegments', // append-only: touch bar indexes into this array
 ];
 
 export type SupportedTrayView = 'showDetailsTray'
@@ -38,6 +40,7 @@ export interface VideoClickEmit {
   mouseEvent: PointerEvent;
   thumbIndex?: number;
   doubleClick?: boolean;
+  timeSeconds?: number; // exact timestamp to open the video at (takes precedence over thumbIndex)
 }
 
 export interface RightClickEmit {
