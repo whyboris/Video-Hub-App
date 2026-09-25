@@ -11,6 +11,7 @@ export type SupportedLanguage =
 | 'de'
 | 'es'
 | 'fr'
+| 'he'
 | 'hi'
 | 'it'
 | 'ja'

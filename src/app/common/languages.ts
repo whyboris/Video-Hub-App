@@ -9,6 +9,7 @@ const Czech      = require('../../../i18n/cs.json');
 const Dutch      = require('../../../i18n/nl.json');
 const English    = require('../../../i18n/en.json');
 const French     = require('../../../i18n/fr.json');
+const Hebrew    = require('../../../i18n/he.json');
 const German     = require('../../../i18n/de.json');
 const Hindi      = require('../../../i18n/hi.json');
 const Italian    = require('../../../i18n/it.json');
@@ -31,6 +32,7 @@ export const LanguageLookup: Record<SupportedLanguage, any> = {
   'en': English,
   'es': Spanish,
   'fr': French,
+  'he': Hebrew,
   'hi': Hindi,
   'it': Italian,
   'ja': Japanese,
