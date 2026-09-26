@@ -64,6 +64,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'showRecent'
  | 'showRecentlyPlayed'
  | 'showRelatedVideosTray'
+ | 'showSegments'
  | 'showTags'
  | 'showTagTray'
  | 'showThumbnails'
@@ -161,6 +162,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'showDetails2',
     'showFiles',
     'showClips',
+    'showSegments',
   ],
   [ // 5 - Explore videos
     'showFolders',
@@ -766,6 +768,13 @@ export const SettingsButtons: SettingsButtonsType = {
     iconName: 'icon-show-similar',
     moreInfo: 'BUTTONS.relatedTrayMoreInfo',
     title: 'BUTTONS.relatedTrayHint',
+    toggled: false
+  },
+  'showSegments': {
+    description: 'BUTTONS.showSegmentsDescription',
+    hidden: false,
+    iconName: 'icon-show-filmstrip',
+    title: 'BUTTONS.showSegmentsHint',
     toggled: false
   },
   'showTags': {

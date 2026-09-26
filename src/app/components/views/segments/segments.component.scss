@@ -1,0 +1,82 @@
+.segments-meta-container {
+  margin: 20px 20px 5px;
+  position: relative;
+  width: calc(100% - 40px);
+}
+
+.compact-margins {
+  margin: 5px 0 0 20px;
+}
+
+.segments-row {
+  background-color: black;
+  cursor: pointer;
+  display: flex;
+  gap: 2px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  position: relative;
+  scrollbar-width: thin;
+  width: 100%;
+}
+
+.segment-cell {
+  display: block;
+  flex: 0 0 auto;
+  object-fit: cover;
+}
+
+.title {
+  display: block;
+  font-size: 12px;
+  margin: 6px 2px 0;
+  overflow: hidden;
+  text-align: left;
+  text-overflow: ellipsis;
+  transition: 300ms;
+  transition-property: font-size;
+  white-space: nowrap;
+  width: 100%;
+}
+
+.heart {
+  cursor: pointer;
+  fill: white;
+  height: 22px;
+  left: 8px;
+  opacity: 0.5;
+  position: absolute;
+  top: 8px;
+  width: 22px;
+  z-index: 2;
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.heart-lit {
+  fill: #e94b4b;
+  opacity: 0.9;
+}
+
+.sheet-icon {
+  bottom: 8px;
+  cursor: pointer;
+  fill: white;
+  height: 20px;
+  opacity: 0;
+  position: absolute;
+  right: 8px;
+  transition: opacity 200ms;
+  width: 20px;
+  z-index: 2;
+}
+
+.segments-row:hover .sheet-icon {
+  opacity: 0.6;
+
+  &:hover {
+    opacity: 1;
+  }
+}

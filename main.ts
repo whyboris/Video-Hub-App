@@ -26,7 +26,21 @@ import { preventSleep, resetAllQueues } from './node/main-extract-async';
 // Variables
 const pathToAppData = app.getPath('appData');
 const pathToPortableApp = process.env.PORTABLE_EXECUTABLE_DIR;
-GLOBALS.settingsPath = pathToPortableApp ? pathToPortableApp : path.join(pathToAppData, 'video-hub-app-2');
+// The automated TEST harness build gets its own settings dir so it never clobbers the
+// real app's settings.json/hub history while running smoke tests. Other differently-named
+// builds (e.g. a side-by-side release) intentionally SHARE the canonical settings.json --
+// the schema is kept forward/backward compatible for exactly this reason -- so preferences
+// and hub history carry over naturally between installs. Detect via the packaged exe name
+// (the asar's package.json always says "Video Hub App 3", so app.getName() can't tell
+// builds apart) or an explicit env override.
+const isTestBuild = process.env.VHA_TEST_BUILD === '1' || process.execPath.includes('TEST');
+const settingsFolderName = isTestBuild ? 'video-hub-app-2-test' : 'video-hub-app-2';
+GLOBALS.settingsPath = pathToPortableApp ? pathToPortableApp : path.join(pathToAppData, settingsFolderName);
+if (isTestBuild && !pathToPortableApp) {
+  // the real 'video-hub-app-2' dir already exists; the test dir may not, and the
+  // settings-write path does not create it -> ensure it so the TEST build persists state
+  try { fs.mkdirSync(GLOBALS.settingsPath, { recursive: true }); } catch (e) { /* best effort */ }
+}
 
 const English = require('./i18n/en.json');
 let systemMessages = English.SYSTEM; // Set English as default; update via `system-messages-updated`
@@ -57,9 +71,13 @@ if (GLOBALS.debug) {
 process.env['ELECTRON_DISABLE_SECURITY_WARNINGS'] = 'true';
 
 // For windows -- when loading the app the first time
-if (args[0]) {
+// Only treat a NON-flag argument as a file to open, otherwise Chromium/Electron
+// switches (e.g. --remote-debugging-port, --inspect) get misread as file paths
+// and pop a spurious "File not found" dialog.
+const firstFileArg = args.find(val => !val.startsWith('-'));
+if (firstFileArg) {
   if (!serve) {
-    userWantedToOpen = args[0]; // TODO -- clean up file-opening code to not use variable
+    userWantedToOpen = firstFileArg; // TODO -- clean up file-opening code to not use variable
   }
 }
 
@@ -76,8 +94,9 @@ if (!gotTheLock) {
     //   buttons: ['OK']
     // });
 
-    if (argv.length > 1) {
-      openThisDamnFile(argv[argv.length - 1]);
+    const fileArg = argv.slice(1).reverse().find(val => !val.startsWith('-'));
+    if (fileArg) {
+      openThisDamnFile(fileArg);
     }
 
     // Someone tried to run a second instance, we should focus our window.
