@@ -44,7 +44,6 @@
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
-    "@ffprobe-installer/ffprobe": "2.1.2",
     "@iharbeck/ngx-virtual-scroller": "19.0.1",
     "@ngx-translate/core": "17.0.0",
     "async": "3.2.6",
@@ -53,7 +52,6 @@
     "electron-window-state": "5.0.3",
     "express": "5.1.0",
     "fdir": "6.5.0",
-    "ffmpeg-static": "5.3.0",
     "fuse.js": "7.1.0",
     "ip": "2.0.1",
     "natural-orderby": "5.0.0",
