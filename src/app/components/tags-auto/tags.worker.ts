@@ -19,7 +19,9 @@ function received(message: any): void {
  * Create the `twoWordFreqMap` by using the `potentialTwoWordMap` word map
  * Recount actual occurrences
  *
- *    Takes 4 seconds with 10,000 entries
+ *    Used to take 3-5 seconds with 10,000 entries by rescanning all file
+ *    names for every candidate pair. Now goes through file names once,
+ *    takes well under 100ms.
  */
 function getCleanTwoWordMap(
   potentialTwoWordMap: Map<string, number>,
@@ -28,25 +30,44 @@ function getCleanTwoWordMap(
 
   const twoWordFreqMap: Map<string, number> = new Map();
 
-  potentialTwoWordMap.forEach((val: number, key: string) => {
+  const candidatePairs: Set<string> = new Set();
+  for (const [key, val] of potentialTwoWordMap) {
+    if (val > 3) {
+      candidatePairs.add(key);
+    }
+  }
 
-    if (val > 3) { // set a variable here instead!
-      let newCounter: number = 0;
+  if (candidatePairs.size === 0) {
+    return twoWordFreqMap;
+  }
 
-      for (let i = 0; i < onlyFileNames.length; i++) {
-        if (onlyFileNames[i].includes(key)) {
-          newCounter++;
-          twoWordFreqMap.set(key, newCounter);
-        }
+  for (const fileName of onlyFileNames) {
+
+    const wordArray: string[] = fileName.split(' ');
+
+    // a file could contain the same pair twice - only count it once per file,
+    // same as the old .includes() check did
+    const pairsInThisFile: Set<string> = new Set();
+
+    for (let i = 0; i < wordArray.length - 1; i++) {
+      const pair = wordArray[i] + ' ' + wordArray[i + 1];
+      if (candidatePairs.has(pair)) {
+        pairsInThisFile.add(pair);
       }
     }
-  });
+
+    for (const pair of pairsInThisFile) {
+      twoWordFreqMap.set(pair, (twoWordFreqMap.get(pair) || 0) + 1);
+    }
+  }
 
   return twoWordFreqMap;
 }
 
 /**
  * Find potential two-word tags based on single word tags
+ * Used to loop through all file names once per single-word tag - now just
+ * goes through the file names once
  * @param onlyFileNames
  * @param oneWordFreqMap
  */
@@ -56,57 +77,29 @@ function getPotentialTwoWordTags(
 ): Map<string, number> {
   const potentialTwoWordMap: Map<string, number> = new Map();
 
-  oneWordFreqMap.forEach((val: number, key: string) => {
-    findTwoWords(
-      potentialTwoWordMap,
-      key,
-      onlyFileNames,
-      oneWordFreqMap
-    );
-  });
+  for (const fileName of onlyFileNames) {
+
+    const wordArray: string[] = fileName.split(' ');
+
+    // only the first occurrence of a word counts, same as the old indexOf() did
+    const seenWords: Set<string> = new Set();
+
+    for (let i = 0; i < wordArray.length; i++) {
+      const word = wordArray[i];
+
+      if (seenWords.has(word) || !oneWordFreqMap.has(word)) {
+        continue;
+      }
+      seenWords.add(word);
+
+      const nextWord = wordArray[i + 1];
+
+      if (nextWord !== undefined && oneWordFreqMap.has(nextWord)) {
+        const twoWordPair = word + ' ' + nextWord;
+        potentialTwoWordMap.set(twoWordPair, (potentialTwoWordMap.get(twoWordPair) || 0) + 1);
+      }
+    }
+  }
 
   return potentialTwoWordMap;
-}
-
-/**
- * Given a single word from tag list, look up following word
- * If on the list, add the two-word string to `potentialTwoWordMap`
- *
- * @param potentialTwoWordMap
- * @param singleWord
- * @param onlyFileNames
- * @param oneWordFreqMap
- */
-function findTwoWords(
-  potentialTwoWordMap: Map<string, number>, // THIS VARIABLE GETS UPDATED !!!
-  singleWord: string,
-  onlyFileNames: string[],
-  oneWordFreqMap: Map<string, number>
-): void {
-
-  const filesContainingTheSingleWord: string[] = [];
-
-  onlyFileNames.forEach((fileName) => {
-    if (fileName.includes(singleWord)) {
-      filesContainingTheSingleWord.push(fileName);
-    }
-  });
-
-  filesContainingTheSingleWord.forEach((fileName) => {
-
-    const filenameWordArray: string[] = fileName.split(' ');
-
-    const numberIndex: number = filenameWordArray.indexOf(singleWord);
-    const nextWord: string = filenameWordArray[numberIndex + 1];
-
-    if (oneWordFreqMap.has(nextWord)) {
-      const twoWordPair = singleWord + ' ' + nextWord;
-
-      let currentOccurrences = potentialTwoWordMap.get(twoWordPair) || 0;
-      currentOccurrences++;
-
-      potentialTwoWordMap.set(twoWordPair, currentOccurrences);
-    }
-
-  });
 }
