@@ -16,6 +16,7 @@ import { ImageElementService } from '../services/image-element.service';
 import { ManualTagsService } from './tags-manual/manual-tags.service';
 import { ModalService } from './modal/modal.service';
 import { PipeSideEffectService } from '../pipes/pipe-side-effect.service';
+import { ExportService } from '../services/export.service';
 import { PlayerService } from '../services/player.service';
 import { PlaylistService } from '../services/playlist.service';
 import { ResolutionFilterService } from '../pipes/resolution-filter.service';
@@ -405,6 +406,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     private http: HttpClient,
     public autoTagsSaveService: AutoTagsSaveService,
     public cd: ChangeDetectorRef,
+    public exportService: ExportService,
     public filePathService: FilePathService,
     public imageElementService: ImageElementService,
     public manualTagsService: ManualTagsService,

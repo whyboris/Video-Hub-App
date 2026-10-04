@@ -14,6 +14,7 @@ const windowStateKeeper = require('electron-window-state');
 // Methods
 import { createTouchBar } from './node/main-touch-bar';
 import { registerMediaScheme, setUpMediaPlayback } from './node/main-media';
+import { setUpExport } from './node/main-export';
 import { setUpIpcForPlaylists } from './node/main-playlists';
 import { setUpIpcForServer } from './node/server';
 import { setUpIpcMessages } from './node/main-ipc';
@@ -327,6 +328,8 @@ setUpIpcMessages(ipcMain, win, pathToAppData, systemMessages);
 setUpIpcForServer(ipcMain);
 
 setUpIpcForPlaylists(ipcMain);
+
+setUpExport(ipcMain);
 
 // built-in player: files Chromium can't decode are converted by ffmpeg while they play
 registerMediaScheme();

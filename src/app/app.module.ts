@@ -46,6 +46,7 @@ import { HomeComponent } from './components/home.component';
 import { IconComponent } from './components/icon/icon.component';
 import { MetaComponent } from './components/meta/meta.component';
 import { ModalComponent } from './components/modal/modal.component';
+import { ExportDialogComponent } from './components/playlists/export-dialog.component';
 import { PlayerComponent } from './components/player/player.component';
 import { PlaylistPickerComponent } from './components/playlists/playlist-picker.component';
 import { PlaylistsPanelComponent } from './components/playlists/playlists-panel.component';
@@ -157,6 +158,7 @@ import { YearPipe } from './pipes/year.pipe';
     MetaComponent,
     ModalComponent,
     PlaylistOnlyPipe,
+    ExportDialogComponent,
     PlayerComponent,
     PlaylistPickerComponent,
     PlaylistPipe,

@@ -48,6 +48,12 @@
       title="{{ 'PLAYLISTS.playExternally' | translate }}"
     >↗</button>
   }
+    <button
+      class="header-button"
+      (click)="exportService.open(playlist.id)"
+      [disabled]="!playlist.entries.length"
+      title="{{ 'EXPORT.menuItem' | translate }}"
+    >{{ 'EXPORT.button' | translate }}</button>
     <button class="header-button header-close" (click)="close()" title="{{ 'PLAYLISTS.backToGallery' | translate }} (Esc)">✕</button>
   </div>
 

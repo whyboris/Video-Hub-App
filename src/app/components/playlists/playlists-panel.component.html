@@ -23,6 +23,12 @@
     }
   }
 
+  @if (exportService.running && !exportService.dialogOpen) {
+    <div class="panel-note panel-export" (click)="exportService.open(exportService.playlistId)">
+      {{ 'EXPORT.inBackground' | translate: { name: exportService.playlistName, percent: exportPercent() } }}
+    </div>
+  }
+
   @if (playlistService.saveError()) {
     <div class="panel-warning" [title]="playlistService.saveError()">{{ 'PLAYLISTS.saveFailed' | translate }}</div>
   }
@@ -121,6 +127,7 @@
     }
       <li (click)="startRenaming(menuFor)">{{ 'PLAYLISTS.rename' | translate }}</li>
       <li (click)="duplicate()">{{ 'PLAYLISTS.duplicate' | translate }}</li>
+      <li (click)="exportVideo()">{{ 'EXPORT.menuItem' | translate }}</li>
     @if (selectedVideos.length) {
       <li (click)="addSelected()">{{ 'PLAYLISTS.addSelected' | translate: { count: selectedVideos.length } }}</li>
     }

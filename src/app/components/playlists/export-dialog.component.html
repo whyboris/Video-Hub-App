@@ -1,0 +1,113 @@
+<div appToBody>
+<div class="export-backdrop" (click)="backdropClicked()"></div>
+
+<div class="export-dialog" [ngClass]="{ 'export-dark': darkMode() }">
+
+  <h2 class="export-title">{{ 'EXPORT.title' | translate: { name: exportService.playlistName } }}</h2>
+
+  @switch (exportService.status) {
+
+    <!-- ---------------------------------------------------------------- options -->
+    @case ('options') {
+      <div class="export-summary">
+        {{ 'EXPORT.summary' | translate: { count: exportService.preparedClips().length, length: formatDuration(exportService.totalSeconds()) } }}
+      @if (exportService.preparedClips().length < exportService.entryCount()) {
+        <div class="export-warning">
+          {{ 'EXPORT.leftOut' | translate: { count: exportService.entryCount() - exportService.preparedClips().length } }}
+        </div>
+      }
+      </div>
+
+      <div class="export-option">
+        <div class="export-option-label">{{ 'EXPORT.size' | translate }}</div>
+        <label><input type="radio" name="size" value="1080" [(ngModel)]="exportService.size"> {{ 'EXPORT.size1080' | translate }}</label>
+        <label><input type="radio" name="size" value="720" [(ngModel)]="exportService.size"> {{ 'EXPORT.size720' | translate }}</label>
+        <label><input type="radio" name="size" value="source" [(ngModel)]="exportService.size"> {{ 'EXPORT.sizeSource' | translate }}</label>
+      </div>
+
+      <div class="export-option">
+        <div class="export-option-label">{{ 'EXPORT.frame' | translate }}</div>
+        <label><input type="radio" name="frame" value="landscape" [(ngModel)]="exportService.frame"> {{ 'EXPORT.landscape' | translate }}</label>
+        <label><input type="radio" name="frame" value="portrait" [(ngModel)]="exportService.frame"> {{ 'EXPORT.portrait' | translate }}</label>
+        <div class="export-hint">
+          {{ exportService.dimensions().width }} × {{ exportService.dimensions().height }} · {{ 'EXPORT.frameHint' | translate }}
+        </div>
+      </div>
+
+      <div class="export-option">
+        <label [ngClass]="{ 'export-disabled': !exportService.labelCount() }">
+          <input type="checkbox" [(ngModel)]="exportService.captions" [disabled]="!exportService.labelCount()">
+          {{ 'EXPORT.captions' | translate }}
+        </label>
+        <div class="export-hint">
+          {{ 'EXPORT.captionsHint' | translate: { count: exportService.labelCount(), total: exportService.preparedClips().length } }}
+        </div>
+      </div>
+
+      <div class="export-buttons">
+        <button class="export-button" (click)="exportService.hide()">{{ 'PLAYLISTS.cancel' | translate }}</button>
+        <button
+          class="export-button export-button-main"
+          [disabled]="!exportService.preparedClips().length"
+          (click)="exportService.chooseAndExport()"
+        >{{ 'EXPORT.chooseAndExport' | translate }}</button>
+      </div>
+    }
+
+    <!-- ---------------------------------------------------------------- choosing / running -->
+    @case ('choosing') {
+      <div class="export-summary">{{ 'EXPORT.choosing' | translate }}</div>
+    }
+
+    @case ('running') {
+      <div class="export-progress">
+        <div class="export-bar"><div class="export-bar-fill" [style.width.%]="percent()"></div></div>
+        <div class="export-progress-text">
+          <span>
+          @if (exportService.progress.clip > exportService.progress.clipCount) {
+            {{ 'EXPORT.joining' | translate }}
+          } @else {
+            {{ 'EXPORT.converting' | translate: { clip: exportService.progress.clip, count: exportService.progress.clipCount } }}
+          }
+          </span>
+          <span>{{ percent() }}%</span>
+        </div>
+      </div>
+      <div class="export-buttons">
+        <button class="export-button" (click)="exportService.cancel()">{{ 'EXPORT.cancelExport' | translate }}</button>
+        <button class="export-button" (click)="exportService.hide()">{{ 'EXPORT.background' | translate }}</button>
+      </div>
+    }
+
+    <!-- ---------------------------------------------------------------- outcome -->
+    @case ('done') {
+      <div class="export-done">✓ {{ 'EXPORT.done' | translate }}</div>
+      <div class="export-path" [title]="exportService.result.outputPath">{{ exportService.result.outputPath }}</div>
+    @if (exportService.result.skipped.length) {
+      <div class="export-warning">{{ 'EXPORT.skipped' | translate: { clips: skippedText() } }}</div>
+    }
+      <div class="export-buttons">
+        <button class="export-button" (click)="exportService.showInFolder()">{{ 'EXPORT.showInFolder' | translate }}</button>
+        <button class="export-button" (click)="exportService.playResult()">{{ 'EXPORT.play' | translate }}</button>
+        <button class="export-button export-button-main" (click)="exportService.hide()">{{ 'PLAYER.close' | translate }}</button>
+      </div>
+    }
+
+    @case ('cancelled') {
+      <div class="export-summary">{{ 'EXPORT.cancelled' | translate }}</div>
+      <div class="export-buttons">
+        <button class="export-button export-button-main" (click)="exportService.hide()">{{ 'PLAYER.close' | translate }}</button>
+      </div>
+    }
+
+    @case ('failed') {
+      <div class="export-warning">{{ 'EXPORT.failed' | translate }}</div>
+      <div class="export-path">{{ exportService.result?.error }}</div>
+      <div class="export-buttons">
+        <button class="export-button export-button-main" (click)="exportService.hide()">{{ 'PLAYER.close' | translate }}</button>
+      </div>
+    }
+  }
+
+</div>
+</div>

@@ -2,6 +2,7 @@ import type { ElementRef } from '@angular/core';
 import { Component, input, viewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
+import { ExportService } from '../../services/export.service';
 import { ImageElementService } from '../../services/image-element.service';
 import { ModalService } from '../modal/modal.service';
 import { PlayerService } from '../../services/player.service';
@@ -50,6 +51,7 @@ export class PlaylistsPanelComponent {
   formatDuration = formatDuration;
 
   constructor(
+    public exportService: ExportService,
     public imageElementService: ImageElementService,
     public modalService: ModalService,
     public playerService: PlayerService,
@@ -156,6 +158,17 @@ export class PlaylistsPanelComponent {
     if (!this.playerService.playPlaylist(playlist.id, undefined, shuffle, external)) {
       this.modalService.openSnackbar(this.translate.instant('PLAYLISTS.nothingToPlay'), 2500);
     }
+  }
+
+  exportVideo(): void {
+    const playlist: Playlist = this.menuFor;
+    this.closeMenu();
+    this.exportService.open(playlist.id);
+  }
+
+  exportPercent(): number {
+    this.exportService.version(); // re-evaluate on change
+    return Math.round(100 * this.exportService.progress.fraction);
   }
 
   duplicate(): void {

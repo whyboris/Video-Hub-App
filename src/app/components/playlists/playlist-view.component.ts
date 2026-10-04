@@ -2,6 +2,7 @@ import type { ElementRef } from '@angular/core';
 import { Component, input, viewChild } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
+import { ExportService } from '../../services/export.service';
 import { FilePathService } from '../views/file-path.service';
 import { ImageElementService } from '../../services/image-element.service';
 import { ModalService } from '../modal/modal.service';
@@ -86,6 +87,7 @@ export class PlaylistViewComponent {
   formatDuration = formatDuration;
 
   constructor(
+    public exportService: ExportService,
     public filePathService: FilePathService,
     public imageElementService: ImageElementService,
     public modalService: ModalService,

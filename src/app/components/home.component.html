@@ -1479,3 +1479,8 @@
 @if (playerService.isOpen()) {
   <app-player />
 }
+
+<!-- ===========   EXPORT A PLAYLIST AS ONE VIDEO   =========== -->
+@if (exportService.dialogOpen) {
+  <app-export-dialog [darkMode]="settingsButtons['darkMode'].toggled" />
+}
