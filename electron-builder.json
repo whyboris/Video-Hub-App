@@ -14,7 +14,9 @@
     "!src/",
     "!angular.json",
     "!tsconfig.json",
-    "!tslint.json"
+    "!tslint.json",
+    "!.angular/**/*",
+    "!release*/**/*"
   ],
   "extraResources": [
     {
