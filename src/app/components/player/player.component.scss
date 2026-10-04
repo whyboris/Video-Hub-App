@@ -8,7 +8,7 @@
   overflow: hidden;
   position: fixed;
   user-select: none;
-  z-index: 1000;
+  z-index: 950; // below the app's title bar (9999) and snackbars (1000)
 }
 
 // ------------------------------------------------ video
@@ -80,6 +80,68 @@
 
 .dot {
   margin: 0 6px;
+}
+
+.converting {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  font-size: 11px;
+  margin-left: 8px;
+  padding: 1px 6px;
+}
+
+.actions {
+  align-items: center;
+  display: flex;
+  flex: 0 0 auto;
+  gap: 6px;
+}
+
+.stars {
+  display: flex;
+  margin-right: 4px;
+}
+
+.star {
+  background: transparent;
+  border: 0;
+  color: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+  padding: 2px;
+
+  &:hover {
+    color: #ffd666;
+  }
+}
+
+.star-lit {
+  color: #ffc53d;
+}
+
+.stars:hover .star-lit {
+  color: #ffd666;
+}
+
+.heart-lit svg .heart {
+  fill: variables.$pretty-red;
+  stroke: variables.$pretty-red;
+}
+
+.add-button {
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  gap: 6px;
+  padding: 0 10px;
+
+  svg {
+    fill: none;
+    height: 18px;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-width: 1.8;
+    width: 18px;
+  }
 }
 
 .bottom-bar {

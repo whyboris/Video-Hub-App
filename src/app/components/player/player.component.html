@@ -54,12 +54,50 @@
         @if (player.title) { <span class="dot">·</span> }
         <span>{{ 'PLAYER.from' | translate }} {{ item.element.cleanName }} ({{ timing(item) }})</span>
       }
+      @if (converting) {
+        <span class="converting" title="{{ 'PLAYER.convertingHint' | translate }}">{{ 'PLAYER.converting' | translate }}</span>
+      }
       </div>
     </div>
-    <button class="icon-button" (click)="close()" title="{{ 'PLAYER.close' | translate }} (Esc)">
-      <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" /></svg>
-    </button>
+
+    <div class="actions">
+      <div class="stars" title="{{ 'PLAYER.rating' | translate }} (1–5, 0)">
+      @for (star of stars; track star) {
+        <button class="star" [ngClass]="{ 'star-lit': starsOf(item) >= star }" (click)="setStars(star)">★</button>
+      }
+      </div>
+
+      <button
+        class="icon-button"
+        [ngClass]="{ 'heart-lit': item.element.stars === 5.5 }"
+        (click)="toggleFavorite()"
+        title="{{ (item.element.stars === 5.5 ? 'BUTTONS.removeFromFavorites' : 'BUTTONS.addToFavorites') | translate }} (H)"
+      >
+        <svg viewBox="0 0 24 24"><path class="heart" d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z" /></svg>
+      </button>
+
+      <button class="text-button add-button" (click)="openPicker($event)" title="{{ 'PLAYER.addToPlaylistHint' | translate }} (A)">
+        <svg viewBox="0 0 24 24"><path d="M4 6h11M4 11h11M4 16h7M18 13v8M14 17h8" /></svg>
+        <span>{{ 'PLAYER.addToPlaylist' | translate }}</span>
+      </button>
+
+      <button class="icon-button" (click)="close()" title="{{ 'PLAYER.close' | translate }} (Esc)">
+        <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" /></svg>
+      </button>
+    </div>
   </div>
+  }
+
+  @if (pickerShowing && item) {
+    <app-playlist-picker
+      [darkMode]="true"
+      [hashToCheck]="isHighlight ? null : item.element.hash"
+      [mode]="'add'"
+      [newKind]="isHighlight ? 'compilation' : 'playlist'"
+      [position]="pickerPosition"
+      (picked)="addToPlaylist($event)"
+      (closed)="pickerShowing = false"
+    />
   }
 
   <!-- =====================================  MESSAGES  =================================== -->

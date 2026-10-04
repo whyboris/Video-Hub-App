@@ -1,28 +1,60 @@
 import type { ElementRef, OnDestroy, OnInit } from '@angular/core';
 import { Component, NgZone, effect, viewChild } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 import { FilePathService } from '../views/file-path.service';
 import { ImageElementService } from '../../services/image-element.service';
+import { MediaService } from '../../services/media.service';
+import { ModalService } from '../modal/modal.service';
 import { PlayerService } from '../../services/player.service';
+import { PlaylistService } from '../../services/playlist.service';
 
+import type { ContextMenuCoordinate } from '../../../../interfaces/shared-interfaces';
+import type { MediaPlan } from '../../../../interfaces/media-plan.interface';
 import type { PlayerItem } from '../../services/player.service';
+import type { StarRating } from '../../../../interfaces/final-object.interface';
 
 import { fileUrl } from './file-url';
 import { formatDuration } from '../playlists/playlist-utils';
 
-const LOAD_TIMEOUT_MS = 8000;        // no `canplay` by then => treat the file as unplayable
+const LOAD_TIMEOUT_MS = 15000;       // no `canplay` by then => treat the file as unplayable
 const SKIP_COUNTDOWN_S = 5;          // unplayable item in a queue => skip after this many seconds
 const HIDE_CONTROLS_MS = 2500;       // hide controls & cursor after this long without mouse movement
 const PRELOAD_DELAY_MS = 1500;       // start preloading the next item this long after playback starts
+const STREAM_SEEK_DELAY_MS = 250;    // converted streams restart on seek -- wait for key repeats to settle
 const SPEEDS: number[] = [0.5, 0.75, 1, 1.25, 1.5, 2];
 const STORAGE_KEY = 'vha-player';
 
 type Slot = 0 | 1;
 
 /**
+ * What one <video> element holds
+ *  - `direct`: the file itself; seeking is instant
+ *  - `stream`: converted by ffmpeg while it plays, starting at `offset` in the file;
+ *              the element's time 0 is `offset`, and seeking restarts the conversion
+ */
+interface SlotState {
+  item: PlayerItem;
+  startAt: number;         // where this item was asked to start
+  path: string;
+  src: string;
+  mode: 'direct' | 'stream';
+  offset: number;
+  copyAudio: boolean;
+  pendingSeek: number;     // direct: seek here once metadata is in
+  ready: boolean;          // `canplay` fired for the current src
+  token: number;           // bumps on every load -- answers for an older load are dropped
+}
+
+function emptySlot(): SlotState {
+  return { item: null, startAt: 0, path: '', src: '', mode: 'direct', offset: 0, copyAudio: false, pendingSeek: null, ready: false, token: 0 };
+}
+
+/**
  * Full-window built-in player
  * Two <video> elements take turns: one plays while the other preloads the next item,
- * so moving from clip to clip in a compilation is close to seamless
+ * so moving from clip to clip in a compilation is close to seamless.
+ * Files Chromium can't decode (old camera AVIs, MPG, AC3/DTS soundtracks…) are converted on the fly.
  */
 @Component({
   standalone: false,
@@ -37,13 +69,10 @@ export class PlayerComponent implements OnInit, OnDestroy {
   readonly videoB = viewChild<ElementRef<HTMLVideoElement>>('videoB');
 
   active: Slot = 0;
-  private slotKey: string[] = [null, null];          // which item each slot holds
-  private slotSrc: string[] = ['', ''];              // what was assigned to `src`
-  private slotPendingSeek: number[] = [null, null];  // seek here once metadata is in
-  private slotReady: boolean[] = [false, false];     // `canplay` fired for the current src
+  private slots: SlotState[] = [emptySlot(), emptySlot()];
 
   playing = false;
-  currentTime = 0;                  // of the active video
+  currentTime = 0;                  // position in the file of the active item
   duration = 0;
 
   muted = false;
@@ -54,23 +83,30 @@ export class PlayerComponent implements OnInit, OnDestroy {
   controlsHidden = false;
   isFullscreen = false;
   finished = false;                 // reached the end of the queue
+  converting = false;               // the active item is being converted while it plays
 
   errorItem: PlayerItem = null;     // current item could not be played
   skipCountdown = 0;
 
   scrubbing = false;
 
+  pickerShowing = false;            // `Add to playlist` popover
+  pickerPosition: ContextMenuCoordinate = { x: 0, y: 0 };
+
   topOffset = 0;                    // the app's title bar (window buttons) stays visible above the player
+
+  stars: number[] = [1, 2, 3, 4, 5];
 
   formatDuration = formatDuration;
 
-  private wantsPlay = true;          // false after the user pauses -- `canplay` must not resume
-
+  private wantsPlay = true;         // false after the user pauses -- `canplay` must not resume
   private loadTimer: any = null;
   private skipTimer: any = null;
   private hideTimer: any = null;
   private preloadTimer: any = null;
+  private streamSeekTimer: any = null;
   private frameCallbackToken = 0;
+  private showToken = 0;
   private countedPlayFor: string = null;
   private shownKey: string = null;  // item currently shown -- reacts when the service moves on
   private shownVersion = -1;
@@ -81,7 +117,11 @@ export class PlayerComponent implements OnInit, OnDestroy {
   constructor(
     public filePathService: FilePathService,
     public imageElementService: ImageElementService,
+    public mediaService: MediaService,
+    public modalService: ModalService,
     public player: PlayerService,
+    public playlistService: PlaylistService,
+    public translate: TranslateService,
     private zone: NgZone,
   ) {
     // follow the service: Next / Previous / queue clicks / repeat
@@ -109,6 +149,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
     clearTimeout(this.loadTimer);
     clearTimeout(this.preloadTimer);
     clearTimeout(this.hideTimer);
+    clearTimeout(this.streamSeekTimer);
     clearInterval(this.skipTimer);
     [0, 1].forEach((slot: Slot) => {
       const video: HTMLVideoElement = this.video(slot);
@@ -118,6 +159,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
         video.load(); // releases the file handle
       }
     });
+    this.mediaService.stopAll();
     if (document.fullscreenElement) {
       document.exitFullscreen().catch(() => {});
     }
@@ -162,6 +204,13 @@ export class PlayerComponent implements OnInit, OnDestroy {
   }
 
   /**
+   * Position in the file of what a slot shows now
+   */
+  private mediaTime(slot: Slot): number {
+    return this.video(slot).currentTime + this.slots[slot].offset;
+  }
+
+  /**
    * Called whenever the service changes -- shows the new current item if it changed
    */
   private syncWithService(): void {
@@ -181,37 +230,46 @@ export class PlayerComponent implements OnInit, OnDestroy {
   /**
    * Put an item on screen: use the preloaded slot if it holds this item, otherwise load it
    */
-  private show(item: PlayerItem): void {
+  private async show(item: PlayerItem): Promise<void> {
+    const showToken: number = ++this.showToken;
     this.shownKey = item.key;
     this.finished = false;
     this.wantsPlay = true;
+    this.pickerShowing = false;
     this.clearError();
     clearTimeout(this.preloadTimer);
+    clearTimeout(this.streamSeekTimer);
+    this.streamSeekTimer = null;
+    this.frameCallbackToken++;
 
-    const standby: Slot = this.other(this.active);
     const startAt: number = item.start !== undefined ? item.start : (this.player.startAt || 0);
+    const standby: Slot = this.other(this.active);
+    const preloaded: boolean = this.slots[standby].item === item && this.slots[standby].startAt === startAt && !!this.slots[standby].src;
 
-    let slot: Slot;
-    if (this.slotKey[standby] === item.key && this.slotSrc[standby] === this.srcFor(item)) {
-      slot = standby; // preloaded
-      const video: HTMLVideoElement = this.video(slot);
-      if (this.slotPendingSeek[slot] === null && Math.abs(video.currentTime - startAt) > 0.3) {
-        video.currentTime = startAt;
-      }
-    } else {
-      slot = this.active;
-      this.load(slot, item, startAt);
-    }
-
+    const slot: Slot = preloaded ? standby : this.active;
     this.video(this.other(slot)).pause();
     this.active = slot;
+    this.currentTime = startAt;
+    this.duration = item.element.duration;
+    this.playing = false;
+
+    if (preloaded) {
+      const s: SlotState = this.slots[slot];
+      if (s.mode === 'direct' && s.pendingSeek === null && Math.abs(this.mediaTime(slot) - startAt) > 0.3) {
+        this.video(slot).currentTime = startAt;
+      }
+    } else {
+      await this.load(slot, item, startAt);
+      if (showToken !== this.showToken) {
+        return; // the user moved on meanwhile
+      }
+    }
 
     const video: HTMLVideoElement = this.video(slot);
     video.muted = this.muted;
     video.volume = this.volume;
     video.playbackRate = this.speed;
-    this.currentTime = video.currentTime;
-    this.duration = video.duration || item.element.duration;
+    this.converting = this.slots[slot].mode === 'stream';
 
     this.startLoadTimer(slot);
     this.tryPlay(slot);
@@ -219,26 +277,77 @@ export class PlayerComponent implements OnInit, OnDestroy {
     this.poke();
   }
 
-  private load(slot: Slot, item: PlayerItem, startAt: number): void {
+  /**
+   * Load an item into a slot -- directly if Chromium can play it, otherwise as a converted stream
+   */
+  private async load(slot: Slot, item: PlayerItem, startAt: number): Promise<void> {
+    const s: SlotState = this.slots[slot];
+    const token: number = ++s.token;
+    const path: string = this.filePathService.getPathFromImageElement(item.element);
+
+    s.item = item;
+    s.startAt = startAt;
+
+    const plan: MediaPlan = await this.mediaService.plan(path);
+    if (token !== s.token) {
+      return;
+    }
+
+    s.path = path;
+    s.copyAudio = plan.copyAudio;
+
+    if (plan.mode === 'direct') {
+      this.loadDirect(slot, path, startAt);
+    } else {
+      this.loadStream(slot, startAt);
+    }
+  }
+
+  private loadDirect(slot: Slot, path: string, startAt: number): void {
+    const s: SlotState = this.slots[slot];
     const video: HTMLVideoElement = this.video(slot);
-    const src: string = this.srcFor(item);
+    const src: string = fileUrl(path);
 
-    this.slotKey[slot] = item.key;
-    this.slotPendingSeek[slot] = startAt;
+    if (s.mode === 'stream') {
+      this.mediaService.stop(this.streamId(slot));
+    }
+    s.mode = 'direct';
+    s.offset = 0;
 
-    if (this.slotSrc[slot] !== src) {
-      this.slotSrc[slot] = src;
-      this.slotReady[slot] = false;
+    if (s.src !== src) {
+      s.src = src;
+      s.ready = false;
+      s.pendingSeek = startAt;
       video.src = src;
       video.load();
     } else if (video.readyState >= 1) {
       video.currentTime = startAt; // same file already loaded -- just seek
-      this.slotPendingSeek[slot] = null;
+      s.pendingSeek = null;
+    } else {
+      s.pendingSeek = startAt;
     }
   }
 
-  private srcFor(item: PlayerItem): string {
-    return fileUrl(this.filePathService.getPathFromImageElement(item.element));
+  /**
+   * Convert from `startAt` -- for highlights only up to the clip end
+   */
+  private loadStream(slot: Slot, startAt: number): void {
+    const s: SlotState = this.slots[slot];
+    const video: HTMLVideoElement = this.video(slot);
+    const item: PlayerItem = s.item;
+    const length: number = item.end !== undefined ? Math.max(0.5, item.end - startAt + 0.5) : 0;
+
+    s.mode = 'stream';
+    s.offset = startAt;
+    s.pendingSeek = null;
+    s.ready = false;
+    s.src = this.mediaService.streamUrl(s.path, startAt, length, s.copyAudio, this.streamId(slot));
+    video.src = s.src;
+    video.load();
+  }
+
+  private streamId(slot: Slot): string {
+    return 'player-slot-' + slot;
   }
 
   /**
@@ -246,21 +355,21 @@ export class PlayerComponent implements OnInit, OnDestroy {
    */
   private schedulePreload(): void {
     clearTimeout(this.preloadTimer);
-    this.preloadTimer = setTimeout(() => {
+    this.preloadTimer = setTimeout(async () => {
       const next: PlayerItem = this.player.peekNext();
-      if (!next || !this.player.isOpen()) {
+      if (!next || !this.player.isOpen() || next === this.item) {
         return;
       }
       const standby: Slot = this.other(this.active);
-      const startAt: number = next.start !== undefined ? next.start : 0;
-      this.load(standby, next, startAt);
-      this.video(standby).pause();
+      await this.load(standby, next, next.start !== undefined ? next.start : 0);
+      if (standby !== this.active) {
+        this.video(standby).pause();
+      }
     }, PRELOAD_DELAY_MS);
   }
 
   private tryPlay(slot: Slot): void {
-    const video: HTMLVideoElement = this.video(slot);
-    const promise: Promise<void> = video.play();
+    const promise: Promise<void> = this.video(slot).play();
     if (promise) {
       promise.catch(() => {}); // a pending load interrupts play(); `canplay` retries
     }
@@ -271,18 +380,26 @@ export class PlayerComponent implements OnInit, OnDestroy {
   // -------------------------------------------------------------------------------------------
 
   onLoadedMetadata(slot: Slot): void {
+    const s: SlotState = this.slots[slot];
     const video: HTMLVideoElement = this.video(slot);
-    if (this.slotPendingSeek[slot] !== null) {
-      video.currentTime = Math.min(this.slotPendingSeek[slot], Math.max(0, video.duration - 0.1));
-      this.slotPendingSeek[slot] = null;
+
+    // plays sound but no picture (e.g. MPEG-4 Part 2 inside .mp4) -- convert instead
+    if (s.mode === 'direct' && video.videoWidth === 0 && s.item && s.item.element.width > 0) {
+      this.fallBackToStream(slot);
+      return;
     }
-    if (slot === this.active) {
+
+    if (s.pendingSeek !== null) {
+      video.currentTime = Math.min(s.pendingSeek, Math.max(0, video.duration - 0.1));
+      s.pendingSeek = null;
+    }
+    if (slot === this.active && s.mode === 'direct' && isFinite(video.duration)) {
       this.duration = video.duration;
     }
   }
 
   onCanPlay(slot: Slot): void {
-    this.slotReady[slot] = true;
+    this.slots[slot].ready = true;
     if (slot === this.active) {
       clearTimeout(this.loadTimer);
       if (!this.finished && !this.errorItem && this.video(slot).paused && this.wantsPlay) {
@@ -310,15 +427,15 @@ export class PlayerComponent implements OnInit, OnDestroy {
   }
 
   onTimeUpdate(slot: Slot): void {
-    if (slot !== this.active) {
+    if (slot !== this.active || !this.slots[slot].src) {
       return;
     }
-    const video: HTMLVideoElement = this.video(slot);
-    if (!this.scrubbing) {
-      this.currentTime = video.currentTime;
+    const position: number = this.mediaTime(slot);
+    if (!this.scrubbing && !this.streamSeekTimer) {
+      this.currentTime = position;
     }
     // fallback for the frame callback (e.g. when the window is hidden)
-    if (this.isHighlight && video.currentTime >= this.item.end) {
+    if (this.isHighlight && position >= this.item.end) {
       this.itemFinished();
     }
   }
@@ -330,12 +447,35 @@ export class PlayerComponent implements OnInit, OnDestroy {
   }
 
   onError(slot: Slot): void {
-    if (slot === this.active && this.slotSrc[slot]) {
+    const s: SlotState = this.slots[slot];
+    if (!s.src) {
+      return; // src was cleared on purpose
+    }
+    if (s.mode === 'direct') {
+      this.fallBackToStream(slot);
+    } else if (slot === this.active) {
       this.showError();
     } else {
       // preloading failed -- forget it, `show()` will load it again and report the error then
-      this.slotKey[slot] = null;
-      this.slotSrc[slot] = '';
+      this.slots[slot] = { ...emptySlot(), token: s.token + 1 };
+    }
+  }
+
+  /**
+   * Direct playback failed -- convert this file instead, from where it should have started
+   */
+  private fallBackToStream(slot: Slot): void {
+    const s: SlotState = this.slots[slot];
+    this.mediaService.markStreamOnly(s.path);
+    s.token++;
+    this.loadStream(slot, s.startAt);
+    if (slot === this.active) {
+      this.converting = true;
+      this.startLoadTimer(slot);
+      if (this.wantsPlay) {
+        this.tryPlay(slot);
+      }
+      this.watchHighlightEnd(slot, s.item);
     }
   }
 
@@ -355,7 +495,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
       if (token !== this.frameCallbackToken) {
         return; // a newer item took over
       }
-      if (meta.mediaTime >= item.end) {
+      if (meta.mediaTime + this.slots[slot].offset >= item.end) {
         this.zone.run(() => this.itemFinished());
       } else {
         video.requestVideoFrameCallback(check);
@@ -397,12 +537,12 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
   private startLoadTimer(slot: Slot): void {
     clearTimeout(this.loadTimer);
-    if (this.slotReady[slot]) {
+    if (this.slots[slot].ready) {
       return;
     }
     this.loadTimer = setTimeout(() => {
-      if (slot === this.active && !this.slotReady[slot]) {
-        this.zone.run(() => this.showError());
+      if (slot === this.active && !this.slots[slot].ready) {
+        this.zone.run(() => this.slots[slot].mode === 'direct' ? this.fallBackToStream(slot) : this.showError());
       }
     }, LOAD_TIMEOUT_MS);
   }
@@ -434,9 +574,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
   skip(): void {
     this.clearError();
-    // the broken file must not be reused from the slot
-    this.slotKey[this.active] = null;
-    this.slotSrc[this.active] = '';
+    this.slots[this.active] = { ...emptySlot(), token: this.slots[this.active].token + 1 };
     if (!this.player.next()) {
       this.finished = true;
     }
@@ -452,10 +590,72 @@ export class PlayerComponent implements OnInit, OnDestroy {
     if (!item) {
       return;
     }
-    const seconds: number = this.errorItem ? (item.start || 0) : this.video(this.active).currentTime;
+    const seconds: number = this.errorItem ? (item.start || 0) : this.currentTime;
     this.video(this.active).pause();
     this.stopCountdown();
     this.player.openExternally(item.element, seconds);
+  }
+
+  // ===========================================================================================
+  // Rating, favorite, playlists
+  // -------------------------------------------------------------------------------------------
+
+  /**
+   * Stars as the app stores them: 0.5 = none, 1.5 = 1 star … 5.5 = 5 stars (also "favorite")
+   */
+  starsOf(item: PlayerItem): number {
+    return item ? Math.round(item.element.stars - 0.5) : 0;
+  }
+
+  setStars(stars: number): void {
+    const item: PlayerItem = this.item;
+    if (!item) {
+      return;
+    }
+    const value = (this.starsOf(item) === stars ? 0.5 : stars + 0.5) as StarRating; // same star again clears
+    this.imageElementService.HandleEmission({ index: item.element.index, stars: value });
+    this.poke();
+  }
+
+  clearStars(): void {
+    const item: PlayerItem = this.item;
+    if (item && this.starsOf(item)) {
+      this.imageElementService.HandleEmission({ index: item.element.index, stars: 0.5 });
+    }
+  }
+
+  toggleFavorite(): void {
+    const item: PlayerItem = this.item;
+    if (item) {
+      this.imageElementService.toggleHeart(item.element.index);
+      this.poke();
+    }
+  }
+
+  openPicker(event?: MouseEvent): void {
+    const button: HTMLElement = event ? event.currentTarget as HTMLElement : null;
+    const rect: DOMRect = button ? button.getBoundingClientRect() : new DOMRect(window.innerWidth - 260, this.topOffset + 60, 0, 0);
+    this.pickerPosition = { x: rect.left, y: rect.bottom + 6 };
+    this.pickerShowing = true;
+    this.controlsHidden = false;
+  }
+
+  addToPlaylist(playlistId: string): void {
+    this.pickerShowing = false;
+    const item: PlayerItem = this.item;
+    const playlist = this.playlistService.get(playlistId);
+    if (!item || !playlist) {
+      return;
+    }
+    // a highlight being played is added as that highlight, a whole video as the whole video
+    const range = item.start !== undefined && item.end !== undefined
+      ? { start: item.start, end: item.end, label: item.label }
+      : undefined;
+    const added: number = this.playlistService.addVideos(playlistId, [item.element], range);
+    this.modalService.openSnackbar(
+      this.translate.instant(added ? 'PLAYLISTS.addedToSnack' : 'PLAYLISTS.alreadyIn', { count: added, name: playlist.name }),
+      1500
+    );
   }
 
   // ===========================================================================================
@@ -509,15 +709,43 @@ export class PlayerComponent implements OnInit, OnDestroy {
    * Seek relative to the item start; for highlights stays inside the clip
    */
   seekWithinItem(seconds: number): void {
-    const video: HTMLVideoElement = this.video(this.active);
+    const s: SlotState = this.slots[this.active];
     const clamped: number = Math.max(0, Math.min(seconds, Math.max(0, this.itemDuration - 0.05)));
-    video.currentTime = (this.isHighlight ? this.item.start : 0) + clamped;
-    this.currentTime = video.currentTime;
+    const target: number = (this.isHighlight ? this.item.start : 0) + clamped;
+
+    this.currentTime = target;
     if (this.finished) {
       this.finished = false;
     }
+
+    if (s.mode === 'direct') {
+      this.video(this.active).currentTime = target;
+      if (this.isHighlight) {
+        this.watchHighlightEnd(this.active, this.item);
+      }
+      return;
+    }
+
+    // converted stream -- restart the conversion there once the user stops moving
+    clearTimeout(this.streamSeekTimer);
+    this.streamSeekTimer = setTimeout(() => {
+      this.streamSeekTimer = null;
+      if (!this.scrubbing) {
+        this.restartStreamAt(this.currentTime);
+      }
+    }, STREAM_SEEK_DELAY_MS);
+  }
+
+  private restartStreamAt(position: number): void {
+    const slot: Slot = this.active;
+    this.slots[slot].token++;
+    this.loadStream(slot, position);
+    this.startLoadTimer(slot);
+    if (this.wantsPlay) {
+      this.tryPlay(slot);
+    }
     if (this.isHighlight) {
-      this.watchHighlightEnd(this.active, this.item);
+      this.watchHighlightEnd(slot, this.item);
     }
   }
 
@@ -591,6 +819,11 @@ export class PlayerComponent implements OnInit, OnDestroy {
     if (this.scrubbing) {
       this.scrubTo(event);
       this.scrubbing = false;
+      if (this.slots[this.active].mode === 'stream') {
+        clearTimeout(this.streamSeekTimer);
+        this.streamSeekTimer = null;
+        this.restartStreamAt(this.currentTime);
+      }
     }
   }
 
@@ -606,7 +839,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
     this.controlsHidden = false;
     clearTimeout(this.hideTimer);
     this.hideTimer = setTimeout(() => {
-      if (this.playing && !this.showQueue && !this.errorItem && !this.finished && !this.scrubbing) {
+      if (this.playing && !this.showQueue && !this.errorItem && !this.finished && !this.scrubbing && !this.pickerShowing) {
         this.controlsHidden = true;
       }
     }, HIDE_CONTROLS_MS);
@@ -619,12 +852,19 @@ export class PlayerComponent implements OnInit, OnDestroy {
       return;
     }
     const target = event.target as HTMLElement;
-    if (target && (target.tagName === 'INPUT' && (target as HTMLInputElement).type === 'text')) {
-      return; // typing (phase 3: highlight labels)
+    if (target && target.tagName === 'INPUT' && (target as HTMLInputElement).type === 'text') {
+      return; // typing a name in the playlist picker
     }
 
     // the player owns the keyboard while open -- nothing reaches the app underneath
     event.stopPropagation();
+
+    if (this.pickerShowing) {
+      if (event.key === 'Escape') {
+        this.zone.run(() => this.pickerShowing = false);
+      }
+      return;
+    }
 
     this.zone.run(() => {
       let handled = true;
@@ -646,6 +886,16 @@ export class PlayerComponent implements OnInit, OnDestroy {
         case 'S':          this.player.toggleShuffle(); break;
         case 'r':
         case 'R':          this.player.cycleRepeat(); break;
+        case 'a':
+        case 'A':          this.openPicker(); break;
+        case 'h':
+        case 'H':          this.toggleFavorite(); break;
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':          this.setStars(Number(event.key)); break;
+        case '0':          this.clearStars(); break;
         case '<':
         case ',':          this.changeSpeed(-1); break;
         case '>':

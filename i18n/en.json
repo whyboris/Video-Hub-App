@@ -259,9 +259,13 @@
     "yearSliderMoreInfo": "Show the year slider filter"
   },
   "PLAYER": {
+    "addToPlaylist": "Add to…",
+    "addToPlaylistHint": "Add to a playlist or compilation",
     "cannotPlay": "Can't play this video here",
     "cannotPlayDetail": "The built-in player doesn't support this file's format.",
     "close": "Close",
+    "converting": "converting while playing",
+    "convertingHint": "This file format is converted on the fly so the built-in player can show it. Seeking takes a moment.",
     "endOfPlaylist": "End of playlist",
     "endOfVideo": "End of video",
     "from": "from",
@@ -273,6 +277,7 @@
     "play": "Play",
     "previous": "Previous",
     "queue": "Queue",
+    "rating": "Rating",
     "repeatAll": "Repeat all",
     "repeatOff": "Repeat off",
     "repeatOne": "Repeat this one",
