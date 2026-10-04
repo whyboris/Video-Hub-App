@@ -3,6 +3,7 @@ import type { SettingsButton } from './settings-buttons.interface';
 export type SettingsButtonKey = 'autoFileTags'
  | 'autoFolderTags'
  | 'autoplayClips'
+ | 'builtInPlayer'
  | 'clearAllFilters'
  | 'clearHistory'
  | 'clipsThumbnail'
@@ -220,6 +221,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'showDeleteOption',
     'dangerousDelete',
     'spacePlaysRandom',
+    'builtInPlayer',
     'openAtTimestamp',
   ],
   [ // 15 - hack - to help save the properties into settings
@@ -591,12 +593,20 @@ export const SettingsButtons: SettingsButtonsType = {
     title: 'BUTTONS.muteClipsHint',
     toggled: true
   },
+  'builtInPlayer': {
+    description: 'BUTTONS.builtInPlayerDescription',
+    hidden: true,
+    iconName: 'icon-video-blank',
+    moreInfo: 'BUTTONS.builtInPlayerMoreInfo',
+    settingsHeading: 'BUTTONS.videoPlayerSettings',
+    title: 'BUTTONS.builtInPlayerHint',
+    toggled: true
+  },
   'openAtTimestamp': {
     description: 'BUTTONS.openAtTimestampDescription',
     hidden: true,
     iconName: 'icon-toggle-scrub',
     moreInfo: 'BUTTONS.openAtTimestampMoreInfo',
-    settingsHeading: 'BUTTONS.videoPlayerSettings',
     title: 'BUTTONS.openAtTimestampHint',
     toggled: false
   },

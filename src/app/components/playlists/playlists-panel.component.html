@@ -116,6 +116,9 @@
     <ul>
       <li (click)="play(false)">{{ 'PLAYLISTS.play' | translate }}</li>
       <li (click)="play(true)">{{ 'PLAYLISTS.shufflePlay' | translate }}</li>
+    @if (playerService.useBuiltIn()) {
+      <li (click)="play(false, true)">{{ 'PLAYLISTS.playExternally' | translate }}</li>
+    }
       <li (click)="startRenaming(menuFor)">{{ 'PLAYLISTS.rename' | translate }}</li>
       <li (click)="duplicate()">{{ 'PLAYLISTS.duplicate' | translate }}</li>
     @if (selectedVideos.length) {

@@ -16,6 +16,7 @@ import { ImageElementService } from '../services/image-element.service';
 import { ManualTagsService } from './tags-manual/manual-tags.service';
 import { ModalService } from './modal/modal.service';
 import { PipeSideEffectService } from '../pipes/pipe-side-effect.service';
+import { PlayerService } from '../services/player.service';
 import { PlaylistService } from '../services/playlist.service';
 import { ResolutionFilterService } from '../pipes/resolution-filter.service';
 import { ShortcutsService, CustomShortcutAction } from './shortcuts/shortcuts.service';
@@ -409,6 +410,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     public manualTagsService: ManualTagsService,
     public modalService: ModalService,
     public pipeSideEffectService: PipeSideEffectService,
+    public playerService: PlayerService,
     public playlistService: PlaylistService,
     public resolutionFilterService: ResolutionFilterService,
     public shortcutService: ShortcutsService,
@@ -423,6 +425,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.translate.setDefaultLang('en');
 
     this.playlistService.preferredPlayer = () => this.appState.preferredVideoPlayer;
+    this.playerService.useBuiltIn = () => this.settingsButtons['builtInPlayer'].toggled;
+    this.playerService.openExternally = (element: ImageElement, seconds: number) => this.openVideoExternally(element, seconds);
     this.changeLanguage('en');
 
     // this.modalService.openWelcomeMessage(); // WIP
@@ -1076,6 +1080,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public loadThisVhaFile(fullPath: string): void {
+    this.playerService.close();
     this.playlistService.flush();
     (window as any).myElectron.sendToMain('load-this-vha-file', fullPath, this.getFinalObjectForSaving());
   }
@@ -1209,13 +1214,14 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   /**
-   * Open the video with user's default media player
-   * or with their preferred media player, if chosen
+   * Open the video in the built-in player, or with the user's preferred / default media player
+   * (setting `builtInPlayer`; the right-click menu offers the other one)
    *
    * @param item                  clicked ImageElement
    * @param clickedThumbnailIndex an index of the thumbnail clicked
+   * @param forcePlayer           ignore the setting and use this player
    */
-  public openVideo(item: ImageElement, clickedThumbnailIndex?: number): void {
+  public openVideo(item: ImageElement, clickedThumbnailIndex?: number, forcePlayer?: 'builtIn' | 'external'): void {
 
     if (!this.sourceFolderService.sourceFolderConnected[item.inputSource]) {
       console.log('not connected!');
@@ -1224,20 +1230,35 @@ export class HomeComponent implements OnInit, AfterViewInit {
       return;
     }
 
-    this.imageElementService.updateNumberOfTimesPlayed(item.index);
-
     this.updateCurrentClickedItem(item);
 
     this.currentPlayingFolder = item.partialPath;
     this.currentClickedItemName = item.cleanName;
+
+    const time: number = clickedThumbnailIndex
+      ? item.duration / (item.screens + 1) * ((clickedThumbnailIndex) + 1)
+      : 0;
+
+    const builtIn: boolean = forcePlayer ? forcePlayer === 'builtIn' : this.settingsButtons['builtInPlayer'].toggled;
+
+    if (builtIn) {
+      // the player counts the play once it starts
+      this.fullPathToCurrentFile = this.filePathService.getPathFromImageElement(item);
+      this.playerService.playVideo(item, this.settingsButtons['openAtTimestamp'].toggled ? time : 0);
+    } else {
+      this.imageElementService.updateNumberOfTimesPlayed(item.index);
+      this.openVideoExternally(item, time);
+    }
+  }
+
+  /**
+   * Open the video with the user's preferred media player (at `time` if supported), or the system default
+   */
+  public openVideoExternally(item: ImageElement, time: number): void {
     const fullPath = this.filePathService.getPathFromImageElement(item);
     this.fullPathToCurrentFile = fullPath;
 
     if (this.appState.preferredVideoPlayer) {
-      const time: number = clickedThumbnailIndex
-        ? item.duration / (item.screens + 1) * ((clickedThumbnailIndex) + 1)
-        : 0;
-
       const execPath: string = this.appState.preferredVideoPlayer;
 
       const finalArgs = `${this.getVideoPlayerArgs(execPath, time)} ${this.appState.videoPlayerArgs}`;
@@ -2181,7 +2202,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const howFarFromBottom: number = winHeight - clientY;
 
     this.rightClickPosition.x = (howFarFromRight < 150) ? clientX - 150 + (howFarFromRight) : clientX;
-    this.rightClickPosition.y = (howFarFromBottom < 240) ? clientY - 240 + (howFarFromBottom) : clientY;
+    this.rightClickPosition.y = (howFarFromBottom < 270) ? clientY - 270 + (howFarFromBottom) : clientY;
 
     this.rightClickShowing = true;
   }

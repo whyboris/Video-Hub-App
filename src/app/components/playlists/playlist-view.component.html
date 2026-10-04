@@ -40,6 +40,14 @@
     <button class="header-button" (click)="play(undefined, true)" [disabled]="!playlist.entries.length">
       {{ 'PLAYLISTS.shufflePlay' | translate }}
     </button>
+  @if (playerService.useBuiltIn()) {
+    <button
+      class="header-button"
+      (click)="play(undefined, false, true)"
+      [disabled]="!playlist.entries.length"
+      title="{{ 'PLAYLISTS.playExternally' | translate }}"
+    >↗</button>
+  }
     <button class="header-button header-close" (click)="close()" title="{{ 'PLAYLISTS.backToGallery' | translate }} (Esc)">✕</button>
   </div>
 
@@ -129,6 +137,9 @@
   >
     <ul>
       <li (click)="play(menuRow.entry.id); closeMenu()">{{ 'PLAYLISTS.playFromHere' | translate }}</li>
+    @if (playerService.useBuiltIn()) {
+      <li (click)="play(menuRow.entry.id, false, true); closeMenu()">{{ 'PLAYLISTS.playFromHereExternally' | translate }}</li>
+    }
       <li (click)="openPicker('move')">{{ 'PLAYLISTS.moveToEllipsis' | translate }}</li>
       <li (click)="openPicker('copy')">{{ 'PLAYLISTS.copyToEllipsis' | translate }}</li>
     @if (menuRow.element) {

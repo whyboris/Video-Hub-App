@@ -88,6 +88,17 @@
     @rightClickAnimation
   >
     <ul @rightClickContentAnimation>
+    @if (settingsButtons['builtInPlayer'].toggled) {
+      <li
+        (click)="openVideo(currentRightClickedItem, undefined, 'external')"
+        [ngClass]="{ 'right-click-disabled': !sourceFolderService.sourceFolderConnected[currentRightClickedItem.inputSource] }"
+      >                                                         {{ 'RIGHTCLICK.playExternally' | translate }}</li>
+    } @else {
+      <li
+        (click)="openVideo(currentRightClickedItem, undefined, 'builtIn')"
+        [ngClass]="{ 'right-click-disabled': !sourceFolderService.sourceFolderConnected[currentRightClickedItem.inputSource] }"
+      >                                                         {{ 'RIGHTCLICK.playBuiltIn' | translate }}</li>
+    }
     @if (settingsButtons['showPlaylists'].toggled) {
       <li (click)="openPlaylistPickerNow()">                    {{ 'RIGHTCLICK.addToPlaylist' | translate }}</li>
     }
@@ -1462,4 +1473,9 @@
   (colorSelected)="onTagColorSelected($event)"
   (close)="onTagColorPickerClose()"
  />
+}
+
+<!-- ===========   BUILT-IN PLAYER -- covers everything   =========== -->
+@if (playerService.isOpen()) {
+  <app-player />
 }

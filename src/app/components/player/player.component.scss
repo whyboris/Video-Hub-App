@@ -1,0 +1,366 @@
+@use "../variables.scss";
+
+.player {
+  background: variables.$black;
+  color: variables.$white;
+  font-size: 13px;
+  inset: 0;
+  overflow: hidden;
+  position: fixed;
+  user-select: none;
+  z-index: 1000;
+}
+
+// ------------------------------------------------ video
+
+.stage {
+  inset: 0;
+  position: absolute;
+}
+
+.player-video {
+  height: 100%;
+  left: 0;
+  object-fit: contain;
+  position: absolute;
+  top: 0;
+  visibility: hidden;   // the standby video preloads unseen
+  width: 100%;
+}
+
+.player-video-active {
+  visibility: visible;
+}
+
+// ------------------------------------------------ bars
+
+.bar {
+  left: 0;
+  position: absolute;
+  right: 0;
+  transition: opacity 300ms;
+}
+
+.controls-hidden {
+  cursor: none;
+
+  .bar {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.top-bar {
+  align-items: flex-start;
+  background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+  display: flex;
+  gap: 16px;
+  padding: 16px 18px 40px;
+  top: 0;
+}
+
+.top-title {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.title-main {
+  font-size: 18px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.title-sub {
+  color: variables.$gray-30;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.dot {
+  margin: 0 6px;
+}
+
+.bottom-bar {
+  background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8));
+  bottom: 0;
+  padding: 40px 18px 12px;
+}
+
+// ------------------------------------------------ scrubber
+
+.scrubber {
+  cursor: pointer;
+  padding: 8px 0;
+  touch-action: none;
+}
+
+.scrubber-track {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 2px;
+  height: 4px;
+  position: relative;
+}
+
+.scrubber:hover .scrubber-track {
+  height: 6px;
+  margin-top: -1px;
+}
+
+.scrubber-fill {
+  background: variables.$pretty-blue;
+  border-radius: 2px;
+  height: 100%;
+}
+
+.scrubber-knob {
+  background: variables.$white;
+  border-radius: 50%;
+  height: 12px;
+  margin-left: -6px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+}
+
+// ------------------------------------------------ buttons
+
+.controls-row {
+  align-items: center;
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.time {
+  color: variables.$gray-15;
+  font-variant-numeric: tabular-nums;
+  margin: 0 10px 0 6px;
+  white-space: nowrap;
+}
+
+.icon-button,
+.text-button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  color: variables.$white;
+  cursor: pointer;
+  display: inline-flex;
+  height: 36px;
+  justify-content: center;
+  min-width: 36px;
+  padding: 0 6px;
+  position: relative;
+
+  &:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.35;
+  }
+
+  svg {
+    fill: none;
+    height: 22px;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+    width: 22px;
+
+    .fill {
+      fill: currentColor;
+      stroke: none;
+    }
+  }
+}
+
+.icon-button-big svg {
+  height: 30px;
+  width: 30px;
+}
+
+.icon-button-on {
+  color: variables.$pretty-blue;
+}
+
+.text-button {
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.badge {
+  background: variables.$pretty-blue;
+  border-radius: 6px;
+  color: variables.$white;
+  font-size: 9px;
+  line-height: 12px;
+  min-width: 12px;
+  position: absolute;
+  right: 3px;
+  top: 4px;
+}
+
+.volume {
+  accent-color: variables.$pretty-blue;
+  cursor: pointer;
+  width: 90px;
+}
+
+// ------------------------------------------------ messages
+
+.message-panel {
+  background: rgba(30, 30, 30, 0.92);
+  border: 1px solid variables.$gray-70;
+  border-radius: 12px;
+  left: 50%;
+  max-width: 460px;
+  padding: 22px 26px;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+}
+
+.message-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.message-detail {
+  color: variables.$gray-30;
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+}
+
+.message-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 18px;
+}
+
+.message-button {
+  background: variables.$gray-70;
+  border: 0;
+  border-radius: 6px;
+  color: variables.$white;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 8px 16px;
+
+  &:hover {
+    background: variables.$gray-60;
+  }
+}
+
+.message-button-main {
+  background: variables.$pretty-blue;
+
+  &:hover {
+    background: #8eaeff;
+  }
+}
+
+.message-countdown {
+  color: variables.$gray-30;
+  font-size: 12px;
+  margin-top: 14px;
+}
+
+.message-link {
+  color: variables.$pretty-blue;
+  cursor: pointer;
+  margin-left: 6px;
+  text-decoration: underline;
+}
+
+// ------------------------------------------------ queue
+
+.queue {
+  background: rgba(20, 20, 20, 0.94);
+  border: 1px solid variables.$gray-80;
+  border-radius: 10px;
+  bottom: 100px;           // clear of the bottom bar
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  right: 12px;
+  top: 76px;               // clear of the top bar
+  width: 320px;
+}
+
+.queue-header {
+  color: variables.$gray-30;
+  font-size: 12px;
+  padding: 18px 16px 10px;
+  text-transform: uppercase;
+}
+
+.queue-count {
+  margin-left: 6px;
+}
+
+.queue-list {
+  flex: 1 1 auto;
+  margin: 0;
+  overflow-y: auto;
+  padding: 0 8px 16px;
+
+  @include variables.scrollBar;
+
+  li {
+    align-items: center;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    gap: 8px;
+    list-style: none;
+    padding: 7px 8px;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+  }
+}
+
+.queue-current {
+  background: rgba(114, 154, 255, 0.25) !important;
+}
+
+.queue-played {
+  opacity: 0.5;
+}
+
+.queue-number {
+  color: variables.$gray-50;
+  flex: 0 0 22px;
+  font-size: 11px;
+  text-align: right;
+}
+
+.queue-title {
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.queue-timing {
+  color: variables.$gray-40;
+  flex: 0 0 auto;
+  font-size: 11px;
+}

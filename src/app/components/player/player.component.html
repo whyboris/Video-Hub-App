@@ -1,0 +1,228 @@
+<div appToBody>
+<div
+  #root
+  class="player"
+  [ngClass]="{ 'controls-hidden': controlsHidden }"
+  [style.top.px]="isFullscreen ? 0 : topOffset"
+  (mousemove)="poke()"
+>
+
+  <!-- =====================================  VIDEO  ===================================== -->
+
+  <div class="stage" (click)="togglePlay()" (dblclick)="toggleFullscreen()">
+    <video
+      #videoA
+      class="player-video"
+      [ngClass]="{ 'player-video-active': active === 0 }"
+      preload="auto"
+      (loadedmetadata)="onLoadedMetadata(0)"
+      (canplay)="onCanPlay(0)"
+      (playing)="onPlaying(0)"
+      (pause)="onPause(0)"
+      (timeupdate)="onTimeUpdate(0)"
+      (ended)="onEnded(0)"
+      (error)="onError(0)"
+    ></video>
+    <video
+      #videoB
+      class="player-video"
+      [ngClass]="{ 'player-video-active': active === 1 }"
+      preload="auto"
+      (loadedmetadata)="onLoadedMetadata(1)"
+      (canplay)="onCanPlay(1)"
+      (playing)="onPlaying(1)"
+      (pause)="onPause(1)"
+      (timeupdate)="onTimeUpdate(1)"
+      (ended)="onEnded(1)"
+      (error)="onError(1)"
+    ></video>
+  </div>
+
+  <!-- =====================================  TOP BAR  ==================================== -->
+
+  @if (item; as item) {
+  <div class="top-bar bar">
+    <div class="top-title">
+      <div class="title-main" [title]="title(item)">{{ title(item) }}</div>
+      <div class="title-sub">
+      @if (player.title) {
+        <span>{{ player.title }}</span>
+        <span class="dot">·</span>
+        <span>{{ player.position + 1 }} / {{ player.order.length }}</span>
+      }
+      @if (isHighlight) {
+        @if (player.title) { <span class="dot">·</span> }
+        <span>{{ 'PLAYER.from' | translate }} {{ item.element.cleanName }} ({{ timing(item) }})</span>
+      }
+      </div>
+    </div>
+    <button class="icon-button" (click)="close()" title="{{ 'PLAYER.close' | translate }} (Esc)">
+      <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" /></svg>
+    </button>
+  </div>
+  }
+
+  <!-- =====================================  MESSAGES  =================================== -->
+
+  @if (errorItem) {
+    <div class="message-panel">
+      <div class="message-title">{{ 'PLAYER.cannotPlay' | translate }}</div>
+      <div class="message-detail">{{ title(errorItem) }}</div>
+      <div class="message-detail">{{ 'PLAYER.cannotPlayDetail' | translate }}</div>
+      <div class="message-buttons">
+        <button class="message-button message-button-main" (click)="openExternally()">{{ 'PLAYER.openExternally' | translate }}</button>
+      @if (player.hasNext) {
+        <button class="message-button" (click)="skip()">{{ 'PLAYER.skip' | translate }}</button>
+      }
+        <button class="message-button" (click)="close()">{{ 'PLAYER.close' | translate }}</button>
+      </div>
+    @if (skipCountdown > 0) {
+      <div class="message-countdown">
+        {{ 'PLAYER.skippingIn' | translate: { seconds: skipCountdown } }}
+        <span class="message-link" (click)="stopCountdown()">{{ 'PLAYER.stay' | translate }}</span>
+      </div>
+    }
+    </div>
+  }
+
+  @if (finished) {
+    <div class="message-panel">
+      <div class="message-title">{{ (player.title ? 'PLAYER.endOfPlaylist' : 'PLAYER.endOfVideo') | translate }}</div>
+      <div class="message-buttons">
+        <button class="message-button message-button-main" (click)="replay()">{{ 'PLAYER.replay' | translate }}</button>
+        <button class="message-button" (click)="close()">{{ 'PLAYER.close' | translate }}</button>
+      </div>
+    </div>
+  }
+
+  <!-- =====================================  BOTTOM BAR  ================================= -->
+
+  <div class="bottom-bar bar">
+
+    <div
+      class="scrubber"
+      (pointerdown)="scrubStart($event)"
+      (pointermove)="scrubMove($event)"
+      (pointerup)="scrubEnd($event)"
+    >
+      <div class="scrubber-track">
+        <div class="scrubber-fill" [style.width.%]="progressPercent"></div>
+        <div class="scrubber-knob" [style.left.%]="progressPercent"></div>
+      </div>
+    </div>
+
+    <div class="controls-row">
+
+      <button class="icon-button" (click)="previous()" title="{{ 'PLAYER.previous' | translate }} (P)">
+        <svg viewBox="0 0 24 24"><path class="fill" d="M7 6h2v12H7zM19 6v12l-9-6z" /></svg>
+      </button>
+
+      <button class="icon-button icon-button-big" (click)="togglePlay()" title="{{ (playing ? 'PLAYER.pause' : 'PLAYER.play') | translate }} (Space)">
+      @if (playing) {
+        <svg viewBox="0 0 24 24"><path class="fill" d="M7 5h4v14H7zM13 5h4v14h-4z" /></svg>
+      } @else {
+        <svg viewBox="0 0 24 24"><path class="fill" d="M8 5v14l11-7z" /></svg>
+      }
+      </button>
+
+      <button class="icon-button" (click)="next()" [disabled]="!player.hasNext" title="{{ 'PLAYER.next' | translate }} (N)">
+        <svg viewBox="0 0 24 24"><path class="fill" d="M15 6h2v12h-2zM5 6v12l9-6z" /></svg>
+      </button>
+
+      <span class="time">{{ formatDuration(itemTime) }} / {{ formatDuration(itemDuration) }}</span>
+
+      <button class="icon-button" (click)="toggleMute()" title="{{ (muted ? 'PLAYER.unmute' : 'PLAYER.mute') | translate }} (M)">
+      @if (muted || volume === 0) {
+        <svg viewBox="0 0 24 24"><path class="fill" d="M4 9h4l5-4v14l-5-4H4z" /><path d="M16 9l5 6M21 9l-5 6" /></svg>
+      } @else {
+        <svg viewBox="0 0 24 24"><path class="fill" d="M4 9h4l5-4v14l-5-4H4z" /><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" /></svg>
+      }
+      </button>
+      <input
+        class="volume"
+        type="range"
+        min="0"
+        max="1"
+        step="0.05"
+        [value]="muted ? 0 : volume"
+        (input)="setVolume($event)"
+        (keydown)="$event.preventDefault()"
+      >
+
+      <span class="spacer"></span>
+
+      <button class="text-button" (click)="cycleSpeed()" title="{{ 'PLAYER.speed' | translate }} (&lt; &gt;)">{{ speed }}×</button>
+
+    @if (player.order.length > 1) {
+      <button
+        class="icon-button"
+        [ngClass]="{ 'icon-button-on': player.shuffle }"
+        (click)="player.toggleShuffle()"
+        title="{{ 'PLAYER.shuffle' | translate }} (S)"
+      >
+        <svg viewBox="0 0 24 24"><path d="M4 7h3c5 0 5 10 10 10h3M4 17h3c2 0 3-1.5 4-3.5M13 9.5C14 8 15 7 17 7h3M18 4l3 3-3 3M18 14l3 3-3 3" /></svg>
+      </button>
+    }
+
+      <button
+        class="icon-button"
+        [ngClass]="{ 'icon-button-on': player.repeat !== 'off' }"
+        (click)="player.cycleRepeat()"
+        title="{{ (player.repeat === 'one' ? 'PLAYER.repeatOne' : (player.repeat === 'all' ? 'PLAYER.repeatAll' : 'PLAYER.repeatOff')) | translate }} (R)"
+      >
+        <svg viewBox="0 0 24 24"><path d="M5 11V9a2 2 0 0 1 2-2h11M15 4l3 3-3 3M19 13v2a2 2 0 0 1-2 2H6M9 20l-3-3 3-3" /></svg>
+      @if (player.repeat === 'one') {
+        <span class="badge">1</span>
+      }
+      </button>
+
+    @if (player.order.length > 1) {
+      <button
+        class="icon-button"
+        [ngClass]="{ 'icon-button-on': showQueue }"
+        (click)="showQueue = !showQueue"
+        title="{{ 'PLAYER.queue' | translate }} (Q)"
+      >
+        <svg viewBox="0 0 24 24"><path d="M4 6h12M4 11h12M4 16h7M15 14v6l5-3z" /></svg>
+      </button>
+    }
+
+      <button class="icon-button" (click)="openExternally()" title="{{ 'PLAYER.openExternally' | translate }}">
+        <svg viewBox="0 0 24 24"><path d="M14 4h6v6M20 4l-9 9M18 14v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h5" /></svg>
+      </button>
+
+      <button class="icon-button" (click)="toggleFullscreen()" title="{{ 'PLAYER.fullscreen' | translate }} (F)">
+      @if (isFullscreen) {
+        <svg viewBox="0 0 24 24"><path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5" /></svg>
+      } @else {
+        <svg viewBox="0 0 24 24"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5" /></svg>
+      }
+      </button>
+    </div>
+  </div>
+
+  <!-- =====================================  QUEUE  ====================================== -->
+
+  @if (showQueue) {
+    <div class="queue">
+      <div class="queue-header">
+        {{ 'PLAYER.upNext' | translate }}
+        <span class="queue-count">{{ player.order.length }}</span>
+      </div>
+      <ul class="queue-list">
+      @for (itemIndex of player.order; track $index; let i = $index) {
+        <li
+          [ngClass]="{ 'queue-current': i === player.position, 'queue-played': i < player.position }"
+          (click)="jumpTo(itemIndex)"
+        >
+          <span class="queue-number">{{ i + 1 }}</span>
+          <span class="queue-title">{{ title(player.items[itemIndex]) }}</span>
+          <span class="queue-timing">{{ timing(player.items[itemIndex]) }}</span>
+        </li>
+      }
+      </ul>
+    </div>
+  }
+
+</div>
+</div>

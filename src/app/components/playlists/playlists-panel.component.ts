@@ -4,6 +4,7 @@ import { TranslateService } from '@ngx-translate/core';
 
 import { ImageElementService } from '../../services/image-element.service';
 import { ModalService } from '../modal/modal.service';
+import { PlayerService } from '../../services/player.service';
 import { PlaylistService } from '../../services/playlist.service';
 
 import type { ContextMenuCoordinate } from '../../../../interfaces/shared-interfaces';
@@ -51,6 +52,7 @@ export class PlaylistsPanelComponent {
   constructor(
     public imageElementService: ImageElementService,
     public modalService: ModalService,
+    public playerService: PlayerService,
     public playlistService: PlaylistService,
     public translate: TranslateService,
   ) { }
@@ -148,10 +150,10 @@ export class PlaylistsPanelComponent {
     this.confirmingDelete = false;
   }
 
-  play(shuffle: boolean): void {
+  play(shuffle: boolean, external?: boolean): void {
     const playlist: Playlist = this.menuFor;
     this.closeMenu();
-    if (!this.playlistService.playExternally(playlist.id, undefined, shuffle)) {
+    if (!this.playerService.playPlaylist(playlist.id, undefined, shuffle, external)) {
       this.modalService.openSnackbar(this.translate.instant('PLAYLISTS.nothingToPlay'), 2500);
     }
   }

@@ -5,6 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { FilePathService } from '../views/file-path.service';
 import { ImageElementService } from '../../services/image-element.service';
 import { ModalService } from '../modal/modal.service';
+import { PlayerService } from '../../services/player.service';
 import { PlaylistService } from '../../services/playlist.service';
 import { SourceFolderService } from '../statistics/source-folder.service';
 
@@ -84,6 +85,7 @@ export class PlaylistViewComponent {
     public filePathService: FilePathService,
     public imageElementService: ImageElementService,
     public modalService: ModalService,
+    public playerService: PlayerService,
     public playlistService: PlaylistService,
     public sourceFolderService: SourceFolderService,
     public translate: TranslateService,
@@ -173,8 +175,8 @@ export class PlaylistViewComponent {
 
   // ---------------------------------------------------------------- header actions
 
-  play(fromEntryId?: string, shuffle?: boolean): void {
-    if (!this.playlistService.playExternally(this.playlist().id, fromEntryId, shuffle)) {
+  play(fromEntryId?: string, shuffle?: boolean, external?: boolean): void {
+    if (!this.playerService.playPlaylist(this.playlist().id, fromEntryId, shuffle, external)) {
       this.modalService.openSnackbar(this.translate.instant('PLAYLISTS.nothingToPlay'), 2500);
     }
   }
