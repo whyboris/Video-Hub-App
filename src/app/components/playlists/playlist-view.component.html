@@ -99,7 +99,22 @@
       </div>
 
       <div class="row-text">
+      @if (labelingEntryId === row.entry.id) {
+        <input
+          #labelInput
+          class="row-label-input"
+          type="text"
+          [(ngModel)]="labelValue"
+          (keydown)="labelKey($event)"
+          (blur)="finishLabeling()"
+          (click)="$event.stopPropagation()"
+          (dblclick)="$event.stopPropagation()"
+          draggable="false"
+          placeholder="{{ 'PLAYER.labelPlaceholder' | translate }}"
+        >
+      } @else {
         <div class="row-title" [title]="row.title">{{ row.title }}</div>
+      }
         <div class="row-detail">
         @if (row.missing) {
           <span class="row-warning">{{ 'PLAYLISTS.missingVideo' | translate }}</span>
@@ -139,6 +154,9 @@
       <li (click)="play(menuRow.entry.id); closeMenu()">{{ 'PLAYLISTS.playFromHere' | translate }}</li>
     @if (playerService.useBuiltIn()) {
       <li (click)="play(menuRow.entry.id, false, true); closeMenu()">{{ 'PLAYLISTS.playFromHereExternally' | translate }}</li>
+    }
+    @if (menuRow.isHighlight && selected.size === 1) {
+      <li (click)="startLabeling(menuRow)">{{ 'PLAYLISTS.renameHighlight' | translate }}</li>
     }
       <li (click)="openPicker('move')">{{ 'PLAYLISTS.moveToEllipsis' | translate }}</li>
       <li (click)="openPicker('copy')">{{ 'PLAYLISTS.copyToEllipsis' | translate }}</li>

@@ -174,6 +174,99 @@
   background: variables.$pretty-blue;
   border-radius: 2px;
   height: 100%;
+  position: absolute;
+}
+
+.clip-window {
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 2px;
+  height: 100%;
+  position: absolute;
+}
+
+// ------------------------------------------------ highlights on the timeline
+
+.scrubber {
+  position: relative;
+}
+
+.band {
+  background: rgba(255, 197, 61, 0.35);
+  border: 1px solid rgba(255, 197, 61, 0.8);
+  border-radius: 3px;
+  box-sizing: border-box;
+  height: 14px;
+  min-width: 4px;
+  position: absolute;
+  top: 3px;
+
+  &:hover {
+    background: rgba(255, 197, 61, 0.55);
+
+    .band-edge {
+      opacity: 1;
+    }
+  }
+}
+
+.band-current {
+  border-color: #ffc53d;
+  border-width: 2px;
+}
+
+.band-dragging {
+  background: rgba(255, 197, 61, 0.6);
+
+  .band-edge {
+    opacity: 1;
+  }
+}
+
+.band-edge {
+  background: #ffc53d;
+  bottom: -3px;
+  cursor: ew-resize;
+  opacity: 0;
+  position: absolute;
+  top: -3px;
+  touch-action: none;
+  transition: opacity 120ms;
+  width: 6px;
+}
+
+.band-edge-start {
+  border-radius: 3px 0 0 3px;
+  left: -3px;
+}
+
+.band-edge-end {
+  border-radius: 0 3px 3px 0;
+  right: -3px;
+}
+
+.mark-range {
+  background: rgba(255, 102, 102, 0.45);
+  border-radius: 3px;
+  height: 14px;
+  pointer-events: none;
+  position: absolute;
+  top: 3px;
+}
+
+.mark-pin {
+  background: variables.$pretty-red;
+  border-radius: 1px;
+  height: 20px;
+  margin-left: -1px;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  width: 2px;
+}
+
+.scrubber-knob {
+  pointer-events: none;
+  z-index: 1;
 }
 
 .scrubber-knob {
@@ -271,6 +364,167 @@
   position: absolute;
   right: 3px;
   top: 4px;
+}
+
+// ------------------------------------------------ marking
+
+.mark-row {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+  margin-bottom: 4px;
+  white-space: nowrap;
+}
+
+.mark-button {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  font-size: 12px;
+  gap: 6px;
+  height: 30px;
+}
+
+.key {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 0 5px;
+}
+
+.mark-pill {
+  background: rgba(255, 102, 102, 0.3);
+  border-radius: 12px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  margin-left: 4px;
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+
+.mark-save {
+  background: variables.$pretty-red;
+  white-space: nowrap;
+  font-size: 12px;
+  height: 30px;
+
+  &:hover:not(:disabled) {
+    background: #ff8585;
+  }
+}
+
+.mark-cancel {
+  height: 30px;
+  min-width: 30px;
+
+  svg {
+    height: 16px;
+    width: 16px;
+  }
+}
+
+.target-chip {
+  color: #ffc53d;
+  font-size: 12px;
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.label-box {
+  background: rgba(30, 30, 30, 0.96);
+  border: 1px solid variables.$gray-70;
+  border-radius: 10px;
+  bottom: 150px;
+  left: 50%;
+  padding: 14px 16px;
+  position: absolute;
+  transform: translateX(-50%);
+  width: 420px;
+  z-index: 3;
+}
+
+.label-box[style*="top"] {
+  transform: none;
+}
+
+.label-box-title {
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.label-range {
+  color: variables.$gray-30;
+  margin-left: 6px;
+}
+
+.label-input {
+  background: variables.$gray-90;
+  border: 1px solid variables.$gray-60;
+  border-radius: 6px;
+  box-sizing: border-box;
+  color: variables.$white;
+  font-size: 14px;
+  padding: 8px 10px;
+  width: 100%;
+
+  &:focus {
+    border-color: variables.$pretty-blue;
+    outline: none;
+  }
+}
+
+.label-hint {
+  color: variables.$gray-40;
+  font-size: 11px;
+  margin-top: 6px;
+}
+
+.menu-overlay {
+  inset: 0;
+  position: absolute;
+  z-index: 2;
+}
+
+.band-menu {
+  background: rgba(30, 30, 30, 0.97);
+  border: 1px solid variables.$gray-70;
+  border-radius: 10px;
+  font-size: 13px;
+  max-width: 280px;
+  min-width: 190px;
+  position: fixed;
+  z-index: 3;
+
+  ul {
+    margin: 0;
+    padding: 6px;
+
+    li {
+      border-radius: 6px;
+      cursor: pointer;
+      list-style: none;
+      padding: 7px 10px;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+}
+
+.band-menu-title {
+  border-bottom: 1px solid variables.$gray-70;
+  color: #ffc53d;
+  font-size: 12px;
+  overflow: hidden;
+  padding: 9px 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.band-menu-delete {
+  color: variables.$pretty-red;
 }
 
 .volume {

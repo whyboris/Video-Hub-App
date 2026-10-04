@@ -10,7 +10,9 @@ import { PlayerService } from '../../services/player.service';
 import { PlaylistService } from '../../services/playlist.service';
 
 import type { ContextMenuCoordinate } from '../../../../interfaces/shared-interfaces';
+import type { HighlightRef, Playlist } from '../../../../interfaces/playlist.interface';
 import type { MediaPlan } from '../../../../interfaces/media-plan.interface';
+import type { PlaylistPickerMode } from '../playlists/playlist-picker.component';
 import type { PlayerItem } from '../../services/player.service';
 import type { StarRating } from '../../../../interfaces/final-object.interface';
 
@@ -23,6 +25,7 @@ const HIDE_CONTROLS_MS = 2500;       // hide controls & cursor after this long w
 const PRELOAD_DELAY_MS = 1500;       // start preloading the next item this long after playback starts
 const STREAM_SEEK_DELAY_MS = 250;    // converted streams restart on seek -- wait for key repeats to settle
 const SPEEDS: number[] = [0.5, 0.75, 1, 1.25, 1.5, 2];
+const MIN_HIGHLIGHT_S = 1;           // shortest highlight
 const STORAGE_KEY = 'vha-player';
 
 type Slot = 0 | 1;
@@ -65,6 +68,9 @@ function emptySlot(): SlotState {
 export class PlayerComponent implements OnInit, OnDestroy {
 
   readonly root = viewChild<ElementRef<HTMLElement>>('root');
+  readonly scrubber = viewChild<ElementRef<HTMLElement>>('scrubber');
+  readonly labelInput = viewChild<ElementRef<HTMLInputElement>>('labelInput');
+  readonly renameInput = viewChild<ElementRef<HTMLInputElement>>('renameInput');
   readonly videoA = viewChild<ElementRef<HTMLVideoElement>>('videoA');
   readonly videoB = viewChild<ElementRef<HTMLVideoElement>>('videoB');
 
@@ -90,8 +96,25 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
   scrubbing = false;
 
-  pickerShowing = false;            // `Add to playlist` popover
+  pickerShowing = false;            // playlist popover -- `Add to…`, highlight target, `Move to…`
   pickerPosition: ContextMenuCoordinate = { x: 0, y: 0 };
+  pickerMode: PlaylistPickerMode = 'add';
+
+  // ---------------- marking highlights
+  markIn: number = null;            // seconds in the file
+  markOut: number = null;
+  labeling = false;                 // asking for the optional label before saving
+  labelText = '';
+  private saveAfterTarget = false;  // the target was missing -- save once one is picked
+
+  // ---------------- existing highlights of this video, shown on the timeline
+  bandMenu: HighlightRef = null;
+  bandMenuPosition: ContextMenuCoordinate = { x: 0, y: 0 };
+  renaming: HighlightRef = null;
+  renameText = '';
+  dragEdge: { ref: HighlightRef, edge: 'start' | 'end', start: number, end: number } = null;
+  private movingRef: HighlightRef = null;
+  private highlightCache: { key: string, refs: HighlightRef[] } = { key: '', refs: [] };
 
   topOffset = 0;                    // the app's title bar (window buttons) stays visible above the player
 
@@ -191,8 +214,11 @@ export class PlayerComponent implements OnInit, OnDestroy {
     return this.isHighlight ? this.item.end - this.item.start : this.duration;
   }
 
+  /**
+   * Knob position on the timeline
+   */
   get progressPercent(): number {
-    return this.itemDuration > 0 ? Math.min(100, 100 * this.itemTime / this.itemDuration) : 0;
+    return this.percentOf(this.currentTime);
   }
 
   title(item: PlayerItem): string {
@@ -243,6 +269,12 @@ export class PlayerComponent implements OnInit, OnDestroy {
     clearTimeout(this.streamSeekTimer);
     this.streamSeekTimer = null;
     this.frameCallbackToken++;
+
+    if (!this.slots[this.active].item || this.slots[this.active].item.element !== item.element) {
+      this.cancelMark(); // marks belong to the video they were made in
+    }
+    this.bandMenu = null;
+    this.renaming = null;
 
     const startAt: number = item.start !== undefined ? item.start : (this.player.startAt || 0);
     const standby: Slot = this.other(this.active);
@@ -638,12 +670,46 @@ export class PlayerComponent implements OnInit, OnDestroy {
     }
   }
 
-  openPicker(event?: MouseEvent): void {
+  openPicker(event?: MouseEvent, mode: PlaylistPickerMode = 'add'): void {
     const button: HTMLElement = event ? event.currentTarget as HTMLElement : null;
-    const rect: DOMRect = button ? button.getBoundingClientRect() : new DOMRect(window.innerWidth - 260, this.topOffset + 60, 0, 0);
-    this.pickerPosition = { x: rect.left, y: rect.bottom + 6 };
+    const fallback: DOMRect = mode === 'add'
+      ? new DOMRect(window.innerWidth - 260, this.topOffset + 60, 0, 0)
+      : new DOMRect(window.innerWidth / 2 - 115, window.innerHeight - 110, 0, 0);
+    const rect: DOMRect = button ? button.getBoundingClientRect() : fallback;
+    // from the top bar it opens downwards, from the bottom bar upwards
+    this.pickerPosition = { x: rect.left, y: mode === 'add' ? rect.bottom + 6 : rect.top - 346 };
+    this.pickerMode = mode;
     this.pickerShowing = true;
     this.controlsHidden = false;
+  }
+
+  picked(playlistId: string): void {
+    this.pickerShowing = false;
+    if (this.pickerMode === 'target') {
+      this.playlistService.setHighlightTarget(playlistId);
+      if (this.saveAfterTarget) {
+        this.saveAfterTarget = false;
+        this.askForLabel();
+      }
+    } else if (this.pickerMode === 'move' && this.movingRef) {
+      const ref: HighlightRef = this.movingRef;
+      this.movingRef = null;
+      const target: Playlist = this.playlistService.get(playlistId);
+      this.playlistService.transferEntries(ref.playlist.id, playlistId, [ref.entry.id], false);
+      this.modalService.openSnackbar(this.translate.instant('PLAYLISTS.movedToSnack', { count: 1, name: target.name }), 1500);
+    } else {
+      this.addToPlaylist(playlistId);
+    }
+  }
+
+  movingRefPlaylistId(): string {
+    return this.movingRef ? this.movingRef.playlist.id : null;
+  }
+
+  pickerClosed(): void {
+    this.pickerShowing = false;
+    this.saveAfterTarget = false;
+    this.movingRef = null;
   }
 
   addToPlaylist(playlistId: string): void {
@@ -662,6 +728,269 @@ export class PlayerComponent implements OnInit, OnDestroy {
       this.translate.instant(added ? 'PLAYLISTS.addedToSnack' : 'PLAYLISTS.alreadyIn', { count: added, name: playlist.name }),
       1500
     );
+  }
+
+  // ===========================================================================================
+  // Marking highlights:  I = start,  O = end,  Enter = save (asks for an optional label)
+  // -------------------------------------------------------------------------------------------
+
+  /**
+   * What plays: the whole video, or just the clip when playing a highlight
+   */
+  get rangeStart(): number {
+    return this.isHighlight ? this.item.start : 0;
+  }
+
+  get rangeEnd(): number {
+    return this.isHighlight ? this.item.end : this.duration;
+  }
+
+  /**
+   * What the timeline shows: for a highlight, the clip plus some video either side (dimmed),
+   * so the clip edges can be dragged outwards as well as inwards
+   */
+  get timelineStart(): number {
+    return this.isHighlight ? Math.max(0, this.rangeStart - this.contextPadding) : 0;
+  }
+
+  get timelineEnd(): number {
+    const videoLength: number = this.item ? (this.item.element.duration || this.duration) : this.duration;
+    return this.isHighlight ? Math.min(videoLength, this.rangeEnd + this.contextPadding) : this.duration;
+  }
+
+  private get contextPadding(): number {
+    return Math.max(5, (this.rangeEnd - this.rangeStart) / 2);
+  }
+
+  percentOf(seconds: number): number {
+    const span: number = this.timelineEnd - this.timelineStart;
+    return span > 0 ? Math.max(0, Math.min(100, 100 * (seconds - this.timelineStart) / span)) : 0;
+  }
+
+  markStart(): void {
+    this.markIn = this.currentTime;
+    if (this.markOut !== null && this.markOut <= this.markIn) {
+      this.markOut = null;
+    }
+    this.labeling = false;
+    this.poke();
+  }
+
+  markEnd(): void {
+    if (this.markIn === null) {
+      this.modalService.openSnackbar(this.translate.instant('PLAYER.markStartFirst'), 2500);
+      return;
+    }
+    this.markOut = this.currentTime;
+    this.normalizeMark();
+    this.poke();
+  }
+
+  /**
+   * End before start => swapped; at least one second long; inside the video
+   */
+  private normalizeMark(): void {
+    const videoLength: number = this.item.element.duration || this.duration || Infinity;
+    let start: number = Math.max(0, Math.min(this.markIn, this.markOut));
+    let end: number = Math.min(videoLength, Math.max(this.markIn, this.markOut));
+    if (end - start < MIN_HIGHLIGHT_S) {
+      end = Math.min(videoLength, start + MIN_HIGHLIGHT_S);
+      start = Math.max(0, end - MIN_HIGHLIGHT_S);
+    }
+    this.markIn = start;
+    this.markOut = end;
+  }
+
+  /**
+   * Enter / Save: ends the mark at the current moment if needed, then asks for a label
+   */
+  saveMark(): void {
+    if (this.markIn === null) {
+      this.modalService.openSnackbar(this.translate.instant('PLAYER.markStartFirst'), 2500);
+      return;
+    }
+    if (this.markOut === null) {
+      this.markOut = this.currentTime;
+    }
+    this.normalizeMark();
+
+    if (!this.playlistService.highlightTarget) {
+      this.saveAfterTarget = true;
+      this.openPicker(undefined, 'target');
+      return;
+    }
+    this.askForLabel();
+  }
+
+  private askForLabel(): void {
+    this.labeling = true;
+    this.labelText = '';
+    this.controlsHidden = false;
+    setTimeout(() => this.labelInput()?.nativeElement.focus(), 0);
+  }
+
+  labelKey(event: KeyboardEvent): void {
+    event.stopPropagation(); // typing must not reach the app or the player shortcuts
+    if (event.key === 'Enter') {
+      this.finishSave();
+    } else if (event.key === 'Escape') {
+      this.labeling = false; // back to the marks, nothing saved
+    }
+  }
+
+  finishSave(): void {
+    const target: Playlist = this.playlistService.highlightTarget;
+    const item: PlayerItem = this.item;
+    if (!target || !item || this.markIn === null || this.markOut === null) {
+      this.labeling = false;
+      return;
+    }
+    this.playlistService.addVideos(target.id, [item.element], { start: this.markIn, end: this.markOut, label: this.labelText.trim() });
+    this.modalService.openSnackbar(
+      this.translate.instant('PLAYER.savedHighlight', {
+        range: formatDuration(this.markIn) + ' – ' + formatDuration(this.markOut),
+        name: target.name,
+      }),
+      2500
+    );
+    this.cancelMark();
+  }
+
+  cancelMark(): void {
+    this.markIn = null;
+    this.markOut = null;
+    this.labeling = false;
+    this.labelText = '';
+    this.saveAfterTarget = false;
+  }
+
+  // ------------------------------------------------------------- existing highlights on the timeline
+
+  /**
+   * Highlights of the video on screen (from every compilation) that fall inside the timeline
+   */
+  highlights(): HighlightRef[] {
+    const item: PlayerItem = this.item;
+    if (!item) {
+      return [];
+    }
+    const key: string = item.element.hash + ':' + this.playlistService.version() + ':' + this.timelineStart + ':' + this.timelineEnd;
+    if (key !== this.highlightCache.key) {
+      this.highlightCache = {
+        key: key,
+        refs: this.playlistService.highlightsFor(item.element.hash)
+          .filter((ref: HighlightRef) => ref.entry.end > this.timelineStart && ref.entry.start < this.timelineEnd),
+      };
+    }
+    return this.highlightCache.refs;
+  }
+
+  bandStart(ref: HighlightRef): number {
+    return this.dragEdge && this.dragEdge.ref === ref ? this.dragEdge.start : ref.entry.start;
+  }
+
+  bandEnd(ref: HighlightRef): number {
+    return this.dragEdge && this.dragEdge.ref === ref ? this.dragEdge.end : ref.entry.end;
+  }
+
+  bandTitle(ref: HighlightRef): string {
+    return (ref.entry.label ? ref.entry.label + ' · ' : '')
+      + formatDuration(ref.entry.start) + ' – ' + formatDuration(ref.entry.end)
+      + ' · ' + ref.playlist.name;
+  }
+
+  openBandMenu(event: MouseEvent, ref: HighlightRef): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.bandMenu = ref;
+    this.bandMenuPosition = {
+      x: Math.min(event.clientX, window.innerWidth - 220),
+      y: Math.max(this.topOffset + 8, event.clientY - 190),
+    };
+    this.controlsHidden = false;
+  }
+
+  jumpToHighlight(ref: HighlightRef): void {
+    this.bandMenu = null;
+    this.seekWithinItem(ref.entry.start - this.rangeStart);
+  }
+
+  startRename(ref: HighlightRef): void {
+    this.bandMenu = null;
+    this.renaming = ref;
+    this.renameText = ref.entry.label || '';
+    setTimeout(() => this.renameInput()?.nativeElement.select(), 0);
+  }
+
+  renameKey(event: KeyboardEvent): void {
+    event.stopPropagation();
+    if (event.key === 'Enter') {
+      const ref: HighlightRef = this.renaming;
+      this.playlistService.updateEntry(ref.playlist.id, ref.entry.id, { label: this.renameText });
+      this.player.updateItem(ref.entry.id, { label: this.renameText });
+      this.renaming = null;
+    } else if (event.key === 'Escape') {
+      this.renaming = null;
+    }
+  }
+
+  moveHighlight(ref: HighlightRef, event: MouseEvent): void {
+    this.bandMenu = null;
+    this.movingRef = ref;
+    this.pickerMode = 'move';
+    this.pickerPosition = { x: event.clientX, y: event.clientY };
+    this.pickerShowing = true;
+  }
+
+  deleteHighlight(ref: HighlightRef): void {
+    this.bandMenu = null;
+    this.playlistService.removeEntries(ref.playlist.id, [ref.entry.id]);
+    this.modalService.openSnackbar(this.translate.instant('PLAYER.deletedHighlight', { name: ref.playlist.name }), 2000);
+  }
+
+  // dragging the edge of a band adjusts that highlight
+
+  edgeDown(event: PointerEvent, ref: HighlightRef, edge: 'start' | 'end'): void {
+    if (event.button !== 0) {
+      return;
+    }
+    event.stopPropagation(); // not a scrub
+    event.preventDefault();
+    (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
+    this.dragEdge = { ref: ref, edge: edge, start: ref.entry.start, end: ref.entry.end };
+  }
+
+  edgeMove(event: PointerEvent): void {
+    if (!this.dragEdge) {
+      return;
+    }
+    const seconds: number = this.timeAt(event.clientX);
+    const videoLength: number = this.item.element.duration || this.duration;
+    if (this.dragEdge.edge === 'start') {
+      this.dragEdge.start = Math.max(0, Math.min(seconds, this.dragEdge.end - MIN_HIGHLIGHT_S));
+    } else {
+      this.dragEdge.end = Math.min(videoLength, Math.max(seconds, this.dragEdge.start + MIN_HIGHLIGHT_S));
+    }
+  }
+
+  edgeUp(): void {
+    const drag = this.dragEdge;
+    if (!drag) {
+      return;
+    }
+    this.dragEdge = null;
+    if (drag.start !== drag.ref.entry.start || drag.end !== drag.ref.entry.end) {
+      this.playlistService.updateEntry(drag.ref.playlist.id, drag.ref.entry.id, { start: drag.start, end: drag.end });
+      this.player.updateItem(drag.ref.entry.id, { start: drag.start, end: drag.end });
+      // show where the moved edge now is
+      this.seekWithinItem((drag.edge === 'start' ? drag.start : Math.max(drag.start, drag.end - 2)) - this.rangeStart);
+    }
+  }
+
+  private timeAt(clientX: number): number {
+    const rect: DOMRect = this.scrubber().nativeElement.getBoundingClientRect();
+    const fraction: number = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+    return this.timelineStart + fraction * (this.timelineEnd - this.timelineStart);
   }
 
   // ===========================================================================================
@@ -809,6 +1138,9 @@ export class PlayerComponent implements OnInit, OnDestroy {
   // ------------------------------------------------------------- scrubber
 
   scrubStart(event: PointerEvent): void {
+    if (event.button !== 0) {
+      return; // right-click is for the highlight menu
+    }
     const bar: HTMLElement = event.currentTarget as HTMLElement;
     bar.setPointerCapture(event.pointerId);
     this.scrubbing = true;
@@ -834,9 +1166,8 @@ export class PlayerComponent implements OnInit, OnDestroy {
   }
 
   private scrubTo(event: PointerEvent): void {
-    const rect: DOMRect = (event.currentTarget as HTMLElement).getBoundingClientRect();
-    const fraction: number = Math.max(0, Math.min(1, (event.clientX - rect.left) / rect.width));
-    this.seekWithinItem(fraction * this.itemDuration);
+    // outside a highlight's clip the seek stops at the clip edge
+    this.seekWithinItem(this.timeAt(event.clientX) - this.rangeStart);
   }
 
   // ------------------------------------------------------------- controls auto-hide
@@ -876,7 +1207,8 @@ export class PlayerComponent implements OnInit, OnDestroy {
     clearTimeout(this.hideTimer);
     this.hideTimer = setTimeout(() => {
       this.hideTimer = null;
-      if (this.playing && !this.showQueue && !this.errorItem && !this.finished && !this.scrubbing && !this.pickerShowing) {
+      if (this.playing && !this.showQueue && !this.errorItem && !this.finished && !this.scrubbing && !this.pickerShowing
+          && this.markIn === null && !this.labeling && !this.bandMenu && !this.renaming && !this.dragEdge) {
         this.controlsHidden = true;
       }
     }, HIDE_CONTROLS_MS);
@@ -896,9 +1228,12 @@ export class PlayerComponent implements OnInit, OnDestroy {
     // the player owns the keyboard while open -- nothing reaches the app underneath
     event.stopPropagation();
 
-    if (this.pickerShowing) {
+    if (this.pickerShowing || this.bandMenu) {
       if (event.key === 'Escape') {
-        this.zone.run(() => this.pickerShowing = false);
+        this.zone.run(() => {
+          this.pickerClosed();
+          this.bandMenu = null;
+        });
       }
       return;
     }
@@ -939,8 +1274,15 @@ export class PlayerComponent implements OnInit, OnDestroy {
         case '.':          this.changeSpeed(1); break;
         case 'q':
         case 'Q':          this.showQueue = !this.showQueue; break;
+        case 'i':
+        case 'I':          this.markStart(); break;
+        case 'o':
+        case 'O':          this.markEnd(); break;
+        case 'Enter':      this.saveMark(); break;
         case 'Escape':
-          if (document.fullscreenElement) {
+          if (this.markIn !== null) {
+            this.cancelMark(); // Esc first drops the marks, then leaves full screen, then closes
+          } else if (document.fullscreenElement) {
             this.toggleFullscreen();
           } else {
             this.close();

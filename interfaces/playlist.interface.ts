@@ -30,7 +30,14 @@ export interface PlaylistFile {
   version: 1;
   hubName: string;
   lastUsedPlaylistId?: string;   // target for the thumbnail playlist icon
+  highlightTargetId?: string;    // compilation that highlights marked in the player go into
   playlists: Playlist[];
+}
+
+// A highlight of one video, wherever it is stored
+export interface HighlightRef {
+  playlist: Playlist;
+  entry: PlaylistEntry;
 }
 
 // What the renderer sends to node to build an `.m3u8` for an external player

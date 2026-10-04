@@ -7,6 +7,7 @@ import { SourceFolderService } from '../components/statistics/source-folder.serv
 import type { ImageElement } from '../../../interfaces/final-object.interface';
 import type {
   ExternalPlaylistItem,
+  HighlightRef,
   Playlist,
   PlaylistEntry,
   PlaylistFile,
@@ -33,6 +34,7 @@ export class PlaylistService {
 
   openPlaylistId: string = null;     // playlist shown in place of the gallery
   lastUsedPlaylistId: string = null; // target of the thumbnail playlist icon
+  highlightTargetId: string = null;  // where highlights marked in the player go
 
   // set by `HomeComponent` -- its `appState` object is replaced when settings load, so it is read through this
   preferredPlayer: () => string = () => '';
@@ -103,6 +105,7 @@ export class PlaylistService {
     this.playlists = [];
     this.openPlaylistId = null;
     this.lastUsedPlaylistId = null;
+    this.highlightTargetId = null;
     this.loaded = false;
     this.savingBlocked = false;
     this.dirty = false;
@@ -131,6 +134,7 @@ export class PlaylistService {
     } else if (data) {
       this.playlists = data.playlists;
       this.lastUsedPlaylistId = data.lastUsedPlaylistId || null;
+      this.highlightTargetId = data.highlightTargetId || null;
       if (status === 'restoredFromBackup') {
         this.dirty = true;
       }
@@ -172,6 +176,7 @@ export class PlaylistService {
       version: 1,
       hubName: this.hubName,
       lastUsedPlaylistId: this.lastUsedPlaylistId || undefined,
+      highlightTargetId: this.highlightTargetId || undefined,
       playlists: this.playlists,
     };
 
@@ -271,6 +276,9 @@ export class PlaylistService {
     }
     if (this.lastUsedPlaylistId === playlistId) {
       this.lastUsedPlaylistId = null;
+    }
+    if (this.highlightTargetId === playlistId) {
+      this.highlightTargetId = null;
     }
     this.changed();
   }
@@ -403,6 +411,60 @@ export class PlaylistService {
     } else {
       this.addVideos(playlist.id, [element]);
     }
+  }
+
+  // ===========================================================================================
+  // Highlights
+  // -------------------------------------------------------------------------------------------
+
+  get highlightTarget(): Playlist {
+    return this.highlightTargetId ? this.get(this.highlightTargetId) : undefined;
+  }
+
+  setHighlightTarget(playlistId: string): void {
+    if (this.ready && this.get(playlistId) && this.highlightTargetId !== playlistId) {
+      this.highlightTargetId = playlistId;
+      this.changed();
+    }
+  }
+
+  /**
+   * All highlights of one video, in every playlist and compilation, earliest first
+   */
+  highlightsFor(hash: string): HighlightRef[] {
+    const found: HighlightRef[] = [];
+    this.playlists.forEach((playlist: Playlist) => {
+      playlist.entries.forEach((entry: PlaylistEntry) => {
+        if (entry.hash === hash && entry.start !== undefined && entry.end !== undefined) {
+          found.push({ playlist: playlist, entry: entry });
+        }
+      });
+    });
+    return found.sort((a: HighlightRef, b: HighlightRef) => a.entry.start - b.entry.start);
+  }
+
+  /**
+   * Change a highlight's range and/or label -- an empty label removes it
+   */
+  updateEntry(playlistId: string, entryId: string, changes: { start?: number, end?: number, label?: string }): void {
+    const playlist: Playlist = this.get(playlistId);
+    const entry: PlaylistEntry = playlist && playlist.entries.find((e: PlaylistEntry) => e.id === entryId);
+    if (!this.ready || !entry) {
+      return;
+    }
+    if (changes.start !== undefined && changes.end !== undefined) {
+      entry.start = Math.round(changes.start * 1000) / 1000;
+      entry.end = Math.round(changes.end * 1000) / 1000;
+    }
+    if (changes.label !== undefined) {
+      const label: string = changes.label.trim();
+      if (label) {
+        entry.label = label;
+      } else {
+        delete entry.label;
+      }
+    }
+    this.changed(playlist);
   }
 
   isInLastUsed(hash: string): boolean {

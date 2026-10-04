@@ -213,6 +213,15 @@
   white-space: nowrap;
 }
 
+.row-label-input {
+  border: 1px solid variables.$pretty-blue;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 13px;
+  padding: 3px 6px;
+  width: 100%;
+}
+
 .row-detail {
   color: variables.$gray-50;
   display: flex;

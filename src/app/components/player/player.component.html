@@ -91,13 +91,45 @@
   @if (pickerShowing && item) {
     <app-playlist-picker
       [darkMode]="true"
-      [hashToCheck]="isHighlight ? null : item.element.hash"
-      [mode]="'add'"
-      [newKind]="isHighlight ? 'compilation' : 'playlist'"
+      [excludePlaylistId]="pickerMode === 'move' && movingRefPlaylistId() ? movingRefPlaylistId() : null"
+      [hashToCheck]="pickerMode === 'add' && !isHighlight ? item.element.hash : null"
+      [mode]="pickerMode"
+      [newKind]="pickerMode === 'target' || pickerMode === 'move' || isHighlight ? 'compilation' : 'playlist'"
       [position]="pickerPosition"
-      (picked)="addToPlaylist($event)"
-      (closed)="pickerShowing = false"
+      (picked)="picked($event)"
+      (closed)="pickerClosed()"
     />
+  }
+
+  <!-- =====================================  HIGHLIGHT MENU  ============================= -->
+
+  @if (bandMenu) {
+    <div class="menu-overlay" (click)="bandMenu = null" (contextmenu)="$event.preventDefault(); bandMenu = null"></div>
+    <div class="band-menu" [ngStyle]="{ left: bandMenuPosition.x + 'px', top: bandMenuPosition.y + 'px' }">
+      <div class="band-menu-title">{{ bandTitle(bandMenu) }}</div>
+      <ul>
+        <li (click)="jumpToHighlight(bandMenu)">{{ 'PLAYER.jumpToHighlight' | translate }}</li>
+        <li (click)="startRename(bandMenu)">{{ 'PLAYER.renameHighlight' | translate }}</li>
+        <li (click)="moveHighlight(bandMenu, $event)">{{ 'PLAYLISTS.moveToEllipsis' | translate }}</li>
+        <li class="band-menu-delete" (click)="deleteHighlight(bandMenu)">{{ 'PLAYER.deleteHighlight' | translate }}</li>
+      </ul>
+    </div>
+  }
+
+  @if (renaming) {
+    <div class="menu-overlay" (click)="renaming = null"></div>
+    <div class="label-box" [ngStyle]="{ left: bandMenuPosition.x + 'px', top: bandMenuPosition.y + 'px', bottom: 'auto' }">
+      <div class="label-box-title">{{ 'PLAYER.renameHighlight' | translate }}</div>
+      <input
+        #renameInput
+        class="label-input"
+        type="text"
+        [(ngModel)]="renameText"
+        (keydown)="renameKey($event)"
+        placeholder="{{ 'PLAYER.labelPlaceholder' | translate }}"
+      >
+      <div class="label-hint">{{ 'PLAYER.renameHint' | translate }}</div>
+    </div>
   }
 
   <!-- =====================================  MESSAGES  =================================== -->
@@ -137,16 +169,86 @@
 
   <div class="bottom-bar bar">
 
+    <div class="mark-row">
+      <button class="text-button mark-button" (click)="markStart()" title="{{ 'PLAYER.markStartHint' | translate }} (I)">
+        <span class="key">I</span> {{ 'PLAYER.markStart' | translate }}
+      </button>
+      <button class="text-button mark-button" (click)="markEnd()" [disabled]="markIn === null" title="{{ 'PLAYER.markEndHint' | translate }} (O)">
+        <span class="key">O</span> {{ 'PLAYER.markEnd' | translate }}
+      </button>
+    @if (markIn !== null) {
+      <span class="mark-pill">
+        {{ formatDuration(markIn) }} – {{ markOut !== null ? formatDuration(markOut) : '…' }}
+      </span>
+      <button class="text-button mark-save" (click)="saveMark()" title="{{ 'PLAYER.saveHighlightHint' | translate }} (Enter)">
+        {{ 'PLAYER.saveHighlight' | translate }}
+      </button>
+      <button class="icon-button mark-cancel" (click)="cancelMark()" title="{{ 'PLAYER.cancelMark' | translate }} (Esc)">
+        <svg viewBox="0 0 24 24"><path d="M7 7l10 10M17 7L7 17" /></svg>
+      </button>
+    }
+      <span class="spacer"></span>
+      <button class="text-button target-chip" (click)="openPicker($event, 'target')" title="{{ 'PLAYER.targetHint' | translate }}">
+        → {{ playlistService.highlightTarget ? playlistService.highlightTarget.name : ('PLAYER.chooseTarget' | translate) }} ▾
+      </button>
+    </div>
+
     <div
+      #scrubber
       class="scrubber"
       (pointerdown)="scrubStart($event)"
       (pointermove)="scrubMove($event)"
       (pointerup)="scrubEnd($event)"
     >
       <div class="scrubber-track">
+      @if (isHighlight) {
+        <!-- the part that plays; the rest is context for adjusting the clip -->
+        <div class="clip-window" [style.left.%]="percentOf(rangeStart)" [style.width.%]="percentOf(rangeEnd) - percentOf(rangeStart)"></div>
+        <div class="scrubber-fill" [style.left.%]="percentOf(rangeStart)" [style.width.%]="progressPercent - percentOf(rangeStart)"></div>
+      } @else {
         <div class="scrubber-fill" [style.width.%]="progressPercent"></div>
-        <div class="scrubber-knob" [style.left.%]="progressPercent"></div>
+      }
       </div>
+
+      <!-- highlights of this video (all compilations) -->
+    @for (ref of highlights(); track ref.entry.id) {
+      <div
+        class="band"
+        [ngClass]="{ 'band-current': item?.entryId === ref.entry.id, 'band-dragging': dragEdge?.ref === ref }"
+        [style.left.%]="percentOf(bandStart(ref))"
+        [style.width.%]="percentOf(bandEnd(ref)) - percentOf(bandStart(ref))"
+        [title]="bandTitle(ref)"
+        (contextmenu)="openBandMenu($event, ref)"
+      >
+        <div
+          class="band-edge band-edge-start"
+          (pointerdown)="edgeDown($event, ref, 'start')"
+          (pointermove)="edgeMove($event)"
+          (pointerup)="edgeUp()"
+        ></div>
+        <div
+          class="band-edge band-edge-end"
+          (pointerdown)="edgeDown($event, ref, 'end')"
+          (pointermove)="edgeMove($event)"
+          (pointerup)="edgeUp()"
+        ></div>
+      </div>
+    }
+
+      <!-- the highlight being marked -->
+    @if (markIn !== null) {
+      <div
+        class="mark-range"
+        [style.left.%]="percentOf(markOut !== null ? markIn : (currentTime < markIn ? currentTime : markIn))"
+        [style.width.%]="percentOf(markOut !== null ? markOut : (currentTime < markIn ? markIn : currentTime)) - percentOf(markOut !== null ? markIn : (currentTime < markIn ? currentTime : markIn))"
+      ></div>
+      <div class="mark-pin" [style.left.%]="percentOf(markIn)"></div>
+      @if (markOut !== null) {
+        <div class="mark-pin" [style.left.%]="percentOf(markOut)"></div>
+      }
+    }
+
+      <div class="scrubber-knob" [style.left.%]="progressPercent"></div>
     </div>
 
     <div class="controls-row">
@@ -168,6 +270,7 @@
       </button>
 
       <span class="time">{{ formatDuration(itemTime) }} / {{ formatDuration(itemDuration) }}</span>
+
 
       <button class="icon-button" (click)="toggleMute()" title="{{ (muted ? 'PLAYER.unmute' : 'PLAYER.mute') | translate }} (M)">
       @if (muted || volume === 0) {
@@ -238,6 +341,26 @@
       </button>
     </div>
   </div>
+
+  <!-- =====================================  LABEL  ====================================== -->
+
+  @if (labeling) {
+    <div class="label-box">
+      <div class="label-box-title">
+        {{ 'PLAYER.savingInto' | translate: { name: playlistService.highlightTarget?.name } }}
+        <span class="label-range">{{ formatDuration(markIn) }} – {{ formatDuration(markOut) }}</span>
+      </div>
+      <input
+        #labelInput
+        class="label-input"
+        type="text"
+        [(ngModel)]="labelText"
+        (keydown)="labelKey($event)"
+        placeholder="{{ 'PLAYER.labelPlaceholder' | translate }}"
+      >
+      <div class="label-hint">{{ 'PLAYER.labelHint' | translate }}</div>
+    </div>
+  }
 
   <!-- =====================================  QUEUE  ====================================== -->
 

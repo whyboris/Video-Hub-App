@@ -51,6 +51,7 @@ export interface PlaylistRow {
 export class PlaylistViewComponent {
 
   readonly renameInput = viewChild<ElementRef>('renameInput');
+  readonly labelInput = viewChild<ElementRef>('labelInput');
 
   readonly darkMode = input<boolean>(false);
   readonly hubName = input<string>('');
@@ -71,6 +72,9 @@ export class PlaylistViewComponent {
 
   renaming = false;
   renameValue = '';
+
+  labelingEntryId: string = null;  // highlight whose label is being edited in its row
+  labelValue = '';
 
   // rows are cached -- rebuilt only when the playlist or the hub's videos change
   private cachedRows: PlaylistRow[] = [];
@@ -308,6 +312,29 @@ export class PlaylistViewComponent {
       this.translate.instant(copy ? 'PLAYLISTS.copiedToSnack' : 'PLAYLISTS.movedToSnack', { count: count, name: target.name }),
       2000
     );
+  }
+
+  startLabeling(row: PlaylistRow): void {
+    this.closeMenu();
+    this.labelingEntryId = row.entry.id;
+    this.labelValue = row.entry.label || '';
+    setTimeout(() => this.labelInput()?.nativeElement.select(), 0);
+  }
+
+  labelKey(event: KeyboardEvent): void {
+    event.stopPropagation();
+    if (event.key === 'Enter') {
+      this.finishLabeling();
+    } else if (event.key === 'Escape') {
+      this.labelingEntryId = null;
+    }
+  }
+
+  finishLabeling(): void {
+    if (this.labelingEntryId) {
+      this.playlistService.updateEntry(this.playlist().id, this.labelingEntryId, { label: this.labelValue });
+      this.labelingEntryId = null;
+    }
   }
 
   openContainingFolder(): void {

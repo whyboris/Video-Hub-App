@@ -209,6 +209,28 @@ export class PlayerService {
     this.bump();
   }
 
+  /**
+   * A highlight was edited (range or label) -- keep queued copies of it in step
+   */
+  updateItem(entryId: string, changes: { start?: number, end?: number, label?: string }): void {
+    let touched = false;
+    this.items.forEach((item: PlayerItem) => {
+      if (item.entryId === entryId) {
+        if (changes.start !== undefined && changes.end !== undefined && item.start !== undefined) {
+          item.start = changes.start;
+          item.end = changes.end;
+        }
+        if (changes.label !== undefined) {
+          item.label = changes.label.trim() || undefined;
+        }
+        touched = true;
+      }
+    });
+    if (touched) {
+      this.bump();
+    }
+  }
+
   toggleShuffle(): void {
     this.shuffle = !this.shuffle;
     this.setOrder(this.order[this.position]);

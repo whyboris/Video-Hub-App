@@ -15,6 +15,7 @@
     @switch (mode()) {
       @case ('move') { {{ 'PLAYLISTS.moveTo' | translate }} }
       @case ('copy') { {{ 'PLAYLISTS.copyTo' | translate }} }
+      @case ('target') { {{ 'PLAYER.saveHighlightsInto' | translate }} }
       @default       { {{ 'PLAYLISTS.addTo' | translate }} }
     }
   </div>

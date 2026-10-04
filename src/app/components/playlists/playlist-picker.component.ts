@@ -6,7 +6,7 @@ import { PlaylistService } from '../../services/playlist.service';
 import type { ContextMenuCoordinate } from '../../../../interfaces/shared-interfaces';
 import type { Playlist, PlaylistKind } from '../../../../interfaces/playlist.interface';
 
-export type PlaylistPickerMode = 'add' | 'move' | 'copy';
+export type PlaylistPickerMode = 'add' | 'move' | 'copy' | 'target';
 
 const PICKER_WIDTH = 230;
 const PICKER_MAX_HEIGHT = 340;
