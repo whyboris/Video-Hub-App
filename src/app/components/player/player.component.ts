@@ -103,6 +103,8 @@ export class PlayerComponent implements OnInit, OnDestroy {
   private loadTimer: any = null;
   private skipTimer: any = null;
   private hideTimer: any = null;
+  private lastMouseX: number = null;
+  private lastMouseY: number = null;
   private preloadTimer: any = null;
   private streamSeekTimer: any = null;
   private frameCallbackToken = 0;
@@ -274,7 +276,7 @@ export class PlayerComponent implements OnInit, OnDestroy {
     this.startLoadTimer(slot);
     this.tryPlay(slot);
     this.watchHighlightEnd(slot, item);
-    this.poke();
+    this.keepHiding(); // moving on to the next item doesn't bring the controls back
   }
 
   /**
@@ -416,13 +418,17 @@ export class PlayerComponent implements OnInit, OnDestroy {
     clearTimeout(this.loadTimer);
     this.countPlay(this.item); // only once it really plays -- an unplayable file is not a play
     this.schedulePreload();
-    this.poke();
+    this.keepHiding();
   }
 
   onPause(slot: Slot): void {
     if (slot === this.active) {
       this.playing = false;
-      this.poke();
+      if (this.wantsPlay) {
+        this.keepHiding(); // a pause on the way to the next item, not the user's
+      } else {
+        this.poke();
+      }
     }
   }
 
@@ -835,10 +841,41 @@ export class PlayerComponent implements OnInit, OnDestroy {
 
   // ------------------------------------------------------------- controls auto-hide
 
+  /**
+   * Mouse moved over the player -- Chromium also sends a move without movement when the page under
+   * a still cursor changes (like the next video appearing), which must not bring the controls back
+   */
+  onMouseMove(event: MouseEvent): void {
+    if (event.screenX === this.lastMouseX && event.screenY === this.lastMouseY) {
+      return;
+    }
+    this.lastMouseX = event.screenX;
+    this.lastMouseY = event.screenY;
+    this.poke();
+  }
+
+  /**
+   * Playback moved on by itself (next item, started playing): never brings hidden controls back,
+   * and doesn't extend the countdown of showing ones -- only starts one if none is running
+   */
+  private keepHiding(): void {
+    if (!this.controlsHidden && !this.hideTimer) {
+      this.startHideCountdown();
+    }
+  }
+
+  /**
+   * Show the controls, then hide them after a few seconds of playing without user activity
+   */
   poke(): void {
     this.controlsHidden = false;
+    this.startHideCountdown();
+  }
+
+  private startHideCountdown(): void {
     clearTimeout(this.hideTimer);
     this.hideTimer = setTimeout(() => {
+      this.hideTimer = null;
       if (this.playing && !this.showQueue && !this.errorItem && !this.finished && !this.scrubbing && !this.pickerShowing) {
         this.controlsHidden = true;
       }

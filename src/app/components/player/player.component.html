@@ -4,7 +4,7 @@
   class="player"
   [ngClass]="{ 'controls-hidden': controlsHidden }"
   [style.top.px]="isFullscreen ? 0 : topOffset"
-  (mousemove)="poke()"
+  (mousemove)="onMouseMove($event)"
 >
 
   <!-- =====================================  VIDEO  ===================================== -->
