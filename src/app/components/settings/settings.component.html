@@ -235,8 +235,9 @@
           flatSettingsButton:    settingsButtons['flatIcons'].toggled
         }"
         style="margin: 0 10px; max-width: initial; padding: 0 15px;"
+        [title]="'SETTINGS.resetZoomTo100' | translate"
       >
-        <span>{{ 'SETTINGS.resetZoom' | translate }}</span>
+        <span>{{ (appState.currentZoomLevel || 1) * 100 | number: '1.0-0' }}%</span>
       </button>
       <button
         (click)="increaseZoomLevel.emit()"
