@@ -116,9 +116,13 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
    */
   ipc.on('select-default-video-player', (event) => {
     console.log('asking for default video player');
+    // Linux programs have no extension (`/usr/bin/vlc`), and GTK turns the `*` filter into `*.*`,
+    // which hides them -- so on Linux: no filter, starting in /usr/bin
+    const onLinux: boolean = process.platform === 'linux';
     dialog.showOpenDialog(win, {
       title: systemMessages.selectDefaultPlayer, // TODO: check if errors out now that this is in `main-ipc.ts`
-      filters: [
+      defaultPath: onLinux ? '/usr/bin' : undefined,
+      filters: onLinux ? [] : [
         {
           name: 'Executable', // TODO: i18n fixme
           extensions: ['exe', 'app']
