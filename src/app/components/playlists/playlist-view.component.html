@@ -1,0 +1,157 @@
+@if (playlist(); as playlist) {
+
+<div class="playlist-view" [ngClass]="{ 'playlist-view-dark': darkMode() }">
+
+  <div class="view-header">
+    <button class="header-button header-back" (click)="close()" title="{{ 'PLAYLISTS.backToGallery' | translate }} (Esc)">
+      ← {{ 'PLAYLISTS.allVideos' | translate }}
+    </button>
+
+    <app-icon
+      class="header-icon"
+      [icon]="playlist.kind === 'compilation' ? 'icon-compilation' : 'icon-playlist'"
+    />
+
+  @if (renaming) {
+    <input
+      #renameInput
+      class="header-rename"
+      type="text"
+      [(ngModel)]="renameValue"
+      (keydown)="renameKey($event)"
+      (blur)="finishRenaming()"
+    >
+  } @else {
+    <h2 class="header-name" (dblclick)="startRenaming()" title="{{ 'PLAYLISTS.doubleClickRename' | translate }}">
+      {{ playlist.name }}
+    </h2>
+  }
+
+    <span class="header-meta">
+      {{ countKey(playlist) | translate: { count: playlist.entries.length } }}
+      · {{ totalDuration() }}
+    </span>
+
+    <span class="header-spacer"></span>
+
+    <button class="header-button header-play" (click)="play()" [disabled]="!playlist.entries.length">
+      ▶ {{ 'PLAYLISTS.play' | translate }}
+    </button>
+    <button class="header-button" (click)="play(undefined, true)" [disabled]="!playlist.entries.length">
+      {{ 'PLAYLISTS.shufflePlay' | translate }}
+    </button>
+    <button class="header-button header-close" (click)="close()" title="{{ 'PLAYLISTS.backToGallery' | translate }} (Esc)">✕</button>
+  </div>
+
+@if (!playlist.entries.length) {
+  <div class="view-empty">
+    {{ 'PLAYLISTS.emptyPlaylist' | translate }}
+  </div>
+}
+
+  <ul class="view-rows" (dragover)="dragOverEnd($event)" (drop)="drop($event)">
+  @for (row of rows(); track row.entry.id; let i = $index) {
+    <li
+      class="view-row"
+      draggable="true"
+      [ngClass]="{
+        'row-selected': selected.has(row.entry.id),
+        'row-missing': row.missing,
+        'row-offline': row.offline,
+        'row-drop-before': dropBeforeId === row.entry.id
+      }"
+      (click)="rowClicked($event, row)"
+      (dblclick)="play(row.entry.id)"
+      (contextmenu)="openMenu($event, row)"
+      (dragstart)="dragStart($event, row)"
+      (dragend)="dragEnd()"
+      (dragover)="dragOverRow($event, row, i); $event.stopPropagation()"
+      (drop)="drop($event); $event.stopPropagation()"
+    >
+      <span class="row-number">{{ row.number }}</span>
+
+      <div class="row-thumb">
+      @if (row.thumbnail) {
+        @if (row.isHighlight) {
+          <img
+            class="thumb-filmstrip"
+            loading="lazy"
+            draggable="false"
+            [src]="row.thumbnail"
+            [style.width.%]="row.screens * 100"
+            [style.transform]="'translateX(' + (-100 * row.frame / row.screens) + '%)'"
+          >
+        } @else {
+          <img class="thumb-single" loading="lazy" draggable="false" [src]="row.thumbnail">
+        }
+      }
+      @if (row.isHighlight) {
+        <span class="thumb-badge">{{ formatDuration(row.entry.end - row.entry.start) }}</span>
+      }
+      </div>
+
+      <div class="row-text">
+        <div class="row-title" [title]="row.title">{{ row.title }}</div>
+        <div class="row-detail">
+        @if (row.missing) {
+          <span class="row-warning">{{ 'PLAYLISTS.missingVideo' | translate }}</span>
+        } @else if (row.offline) {
+          <span class="row-warning">{{ 'PLAYLISTS.offlineVideo' | translate }}</span>
+        }
+        @if (row.isHighlight && row.entry.label && row.element) {
+          <span class="row-source">{{ row.element.cleanName }}</span>
+        }
+          <span class="row-folder" [title]="row.folder">{{ row.folder }}</span>
+        </div>
+      </div>
+
+      <span class="row-timing">{{ row.timing }}</span>
+    </li>
+  }
+  @if (dropAtEnd) {
+    <li class="view-drop-end"></li>
+  }
+  </ul>
+
+</div>
+
+@if (menuRow) {
+<div appToBody>
+  <div
+    class="view-menu-overlay"
+    (click)="closeMenu()"
+    (contextmenu)="$event.preventDefault(); closeMenu()"
+  ></div>
+  <div
+    class="view-menu"
+    [ngClass]="{ 'view-menu-dark': darkMode() }"
+    [ngStyle]="{ left: menuPosition.x + 'px', top: menuPosition.y + 'px' }"
+  >
+    <ul>
+      <li (click)="play(menuRow.entry.id); closeMenu()">{{ 'PLAYLISTS.playFromHere' | translate }}</li>
+      <li (click)="openPicker('move')">{{ 'PLAYLISTS.moveToEllipsis' | translate }}</li>
+      <li (click)="openPicker('copy')">{{ 'PLAYLISTS.copyToEllipsis' | translate }}</li>
+    @if (menuRow.element) {
+      <li (click)="openContainingFolder()">{{ 'RIGHTCLICK.openFolder' | translate }}</li>
+    }
+      <li class="menu-remove" (click)="removeSelected(); closeMenu()">
+        {{ 'PLAYLISTS.removeCount' | translate: { count: selected.size } }}
+      </li>
+    </ul>
+  </div>
+</div>
+}
+
+@if (pickerMode) {
+  <app-playlist-picker
+    [darkMode]="darkMode()"
+    [excludePlaylistId]="playlist.id"
+    [mode]="pickerMode"
+    [newKind]="playlist.kind"
+    [position]="pickerPosition"
+    (picked)="picked($event)"
+    (closed)="pickerMode = null"
+  />
+}
+
+}

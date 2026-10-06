@@ -61,6 +61,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'showMoreInfo'
  | 'showOnlyFavorites'
  | 'showOnlyPlaylist'
+ | 'showPlaylists'
  | 'showRecent'
  | 'showRecentlyPlayed'
  | 'showRelatedVideosTray'
@@ -143,7 +144,6 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'sortOptionCreated',
     'sortOptionTags',
     'sortOptionAspectRatio',
-    'sortOptionPlaylist',
     'sortOptionFps',
     'sortOptionFolderSize',
   ],
@@ -167,8 +167,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'randomizeFoldersScreenshots',
     'showTags',
     'showOnlyFavorites',
-    'showOnlyPlaylist',
-    'playPlaylist',
+    'showPlaylists', // replaced the legacy single playlist: `showOnlyPlaylist`, `playPlaylist`, `sortOptionPlaylist`
   ],
   [ // 6 - Bottom tray -- hidden from ribbon via !== 6 in ribbon.component.html
     'showFreq',
@@ -744,6 +743,14 @@ export const SettingsButtons: SettingsButtonsType = {
     moreInfo: 'BUTTONS.showOnlyPlaylistMoreInfo',
     title: 'BUTTONS.showOnlyPlaylistHint',
     toggled: false
+  },
+  'showPlaylists': {
+    description: 'BUTTONS.showPlaylistsDescription',
+    hidden: false,
+    iconName: 'icon-playlist',
+    moreInfo: 'BUTTONS.showPlaylistsMoreInfo',
+    title: 'BUTTONS.showPlaylistsHint',
+    toggled: true
   },
   'showRecent': {
     description: 'BUTTONS.showRecentDescription',

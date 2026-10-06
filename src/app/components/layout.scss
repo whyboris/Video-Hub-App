@@ -170,6 +170,10 @@
   @include variables.scrollBarSquare;
 }
 
+.playlist-view-container {
+  z-index: 2; // above the gallery it covers
+}
+
 .gallery-container-dark-mode {
   background: variables.$black;
 }
