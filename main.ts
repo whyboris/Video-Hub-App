@@ -28,6 +28,22 @@ const pathToAppData = app.getPath('appData');
 const pathToPortableApp = process.env.PORTABLE_EXECUTABLE_DIR;
 GLOBALS.settingsPath = pathToPortableApp ? pathToPortableApp : path.join(pathToAppData, 'video-hub-app-2');
 
+// Background errors (e.g. while scanning folders) used to pop up "A JavaScript error occurred in
+// the main process". They are logged to `vha-errors.log` in the settings folder instead.
+function logMainProcessError(kind: string, error: any): void {
+  console.log(kind, error);
+  try {
+    const logPath: string = path.join(GLOBALS.settingsPath, 'vha-errors.log');
+    if (fs.existsSync(logPath) && fs.statSync(logPath).size > 1024 * 1024) {
+      fs.renameSync(logPath, logPath + '.old');
+    }
+    const details: string = error && error.stack ? error.stack : String(error);
+    fs.appendFileSync(logPath, new Date().toISOString() + ' ' + kind + ': ' + details + '\n');
+  } catch {}
+}
+process.on('uncaughtException', (error) => logMainProcessError('uncaughtException', error));
+process.on('unhandledRejection', (reason) => logMainProcessError('unhandledRejection', reason));
+
 const English = require('./i18n/en.json');
 let systemMessages = English.SYSTEM; // Set English as default; update via `system-messages-updated`
 
