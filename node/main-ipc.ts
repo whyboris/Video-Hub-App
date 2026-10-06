@@ -116,9 +116,13 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
    */
   ipc.on('select-default-video-player', (event) => {
     console.log('asking for default video player');
+    // Linux programs have no extension (`/usr/bin/vlc`), and GTK turns the `*` filter into `*.*`,
+    // which hides them -- so on Linux: no filter, starting in /usr/bin
+    const onLinux: boolean = process.platform === 'linux';
     dialog.showOpenDialog(win, {
       title: systemMessages.selectDefaultPlayer, // TODO: check if errors out now that this is in `main-ipc.ts`
-      filters: [
+      defaultPath: onLinux ? '/usr/bin' : undefined,
+      filters: onLinux ? [] : [
         {
           name: 'Executable', // TODO: i18n fixme
           extensions: ['exe', 'app']
@@ -352,6 +356,37 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
     }
 
     event.sender.send('rename-file-response', index, success, renameTo, file, errMsg);
+  });
+
+  /**
+   * Autosave the library while the app is open -- replies `autosave-vha-done` (vhaPath, errorMessage)
+   * The path is checked so a late autosave can never land in a hub opened since
+   */
+  ipc.on('autosave-vha', (event, vhaPath: string, finalObjectToSave: FinalObject) => {
+    if (!finalObjectToSave || vhaPath !== GLOBALS.currentlyOpenVhaFile) {
+      event.sender.send('autosave-vha-done', vhaPath, 'hub changed');
+      return;
+    }
+    writeVhaFileToDisk(finalObjectToSave, vhaPath, (err) => {
+      try {
+        event.sender.send('autosave-vha-done', vhaPath, err ? String(err.message || err) : '');
+      } catch {} // window closed meanwhile
+    });
+  });
+
+  /**
+   * Autosave app settings (buttons, player, recent hubs) -- same file as on close
+   */
+  ipc.on('autosave-settings', (event, settingsToSave: SettingsObject) => {
+    try {
+      settingsToSave.shortcuts = <any>Object.fromEntries(settingsToSave.shortcuts);
+      const settingsPath: string = path.join(GLOBALS.settingsPath, 'settings.json');
+      fs.mkdirSync(GLOBALS.settingsPath, { recursive: true });
+      fs.writeFileSync(settingsPath + '.tmp', JSON.stringify(settingsToSave), 'utf8');
+      fs.renameSync(settingsPath + '.tmp', settingsPath);
+    } catch (err) {
+      console.log('could not autosave settings', err);
+    }
   });
 
   /**
