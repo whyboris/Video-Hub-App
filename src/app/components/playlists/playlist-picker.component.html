@@ -1,0 +1,52 @@
+<div appToBody>
+
+<div
+  class="picker-overlay"
+  (click)="closed.emit()"
+  (contextmenu)="$event.preventDefault(); closed.emit()"
+></div>
+
+<div
+  class="picker"
+  [ngClass]="{ 'picker-dark': darkMode() }"
+  [ngStyle]="{ left: clampedPosition().x + 'px', top: clampedPosition().y + 'px' }"
+>
+  <div class="picker-title">
+    @switch (mode()) {
+      @case ('move') { {{ 'PLAYLISTS.moveTo' | translate }} }
+      @case ('copy') { {{ 'PLAYLISTS.copyTo' | translate }} }
+      @default       { {{ 'PLAYLISTS.addTo' | translate }} }
+    }
+  </div>
+
+  <ul class="picker-list">
+  @for (playlist of choices(); track playlist.id) {
+    <li (click)="pick(playlist.id)" [title]="playlist.name">
+      <span class="picker-check">{{ holdsVideo(playlist) ? '✓' : '' }}</span>
+      <app-icon
+        class="picker-icon"
+        [icon]="playlist.kind === 'compilation' ? 'icon-compilation' : 'icon-playlist'"
+      />
+      <span class="picker-name">{{ playlist.name }}</span>
+      <span class="picker-count">{{ playlist.entries.length }}</span>
+    </li>
+  }
+  </ul>
+
+  @if (creatingNew) {
+    <input
+      #newNameInput
+      class="picker-new-input"
+      type="text"
+      [(ngModel)]="newName"
+      (keydown)="onNewNameKey($event)"
+      placeholder="{{ (newKind() === 'compilation' ? 'PLAYLISTS.newCompilationName' : 'PLAYLISTS.newPlaylistName') | translate }}"
+    >
+  } @else {
+    <div class="picker-new" (click)="startCreating()">
+      + {{ (newKind() === 'compilation' ? 'PLAYLISTS.newCompilation' : 'PLAYLISTS.newPlaylist') | translate }}
+    </div>
+  }
+</div>
+
+</div>

@@ -3,6 +3,7 @@ import type { SettingsButton } from './settings-buttons.interface';
 export type SettingsButtonKey = 'autoFileTags'
  | 'autoFolderTags'
  | 'autoplayClips'
+ | 'builtInPlayer'
  | 'clearAllFilters'
  | 'clearHistory'
  | 'clipsThumbnail'
@@ -61,6 +62,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'showMoreInfo'
  | 'showOnlyFavorites'
  | 'showOnlyPlaylist'
+ | 'showPlaylists'
  | 'showRecent'
  | 'showRecentlyPlayed'
  | 'showRelatedVideosTray'
@@ -143,7 +145,6 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'sortOptionCreated',
     'sortOptionTags',
     'sortOptionAspectRatio',
-    'sortOptionPlaylist',
     'sortOptionFps',
     'sortOptionFolderSize',
   ],
@@ -167,8 +168,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'randomizeFoldersScreenshots',
     'showTags',
     'showOnlyFavorites',
-    'showOnlyPlaylist',
-    'playPlaylist',
+    'showPlaylists', // replaced the legacy single playlist: `showOnlyPlaylist`, `playPlaylist`, `sortOptionPlaylist`
   ],
   [ // 6 - Bottom tray -- hidden from ribbon via !== 6 in ribbon.component.html
     'showFreq',
@@ -221,6 +221,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'showDeleteOption',
     'dangerousDelete',
     'spacePlaysRandom',
+    'builtInPlayer',
     'openAtTimestamp',
   ],
   [ // 15 - hack - to help save the properties into settings
@@ -592,12 +593,20 @@ export const SettingsButtons: SettingsButtonsType = {
     title: 'BUTTONS.muteClipsHint',
     toggled: true
   },
+  'builtInPlayer': {
+    description: 'BUTTONS.builtInPlayerDescription',
+    hidden: true,
+    iconName: 'icon-video-blank',
+    moreInfo: 'BUTTONS.builtInPlayerMoreInfo',
+    settingsHeading: 'BUTTONS.videoPlayerSettings',
+    title: 'BUTTONS.builtInPlayerHint',
+    toggled: true
+  },
   'openAtTimestamp': {
     description: 'BUTTONS.openAtTimestampDescription',
     hidden: true,
     iconName: 'icon-toggle-scrub',
     moreInfo: 'BUTTONS.openAtTimestampMoreInfo',
-    settingsHeading: 'BUTTONS.videoPlayerSettings',
     title: 'BUTTONS.openAtTimestampHint',
     toggled: false
   },
@@ -744,6 +753,14 @@ export const SettingsButtons: SettingsButtonsType = {
     moreInfo: 'BUTTONS.showOnlyPlaylistMoreInfo',
     title: 'BUTTONS.showOnlyPlaylistHint',
     toggled: false
+  },
+  'showPlaylists': {
+    description: 'BUTTONS.showPlaylistsDescription',
+    hidden: false,
+    iconName: 'icon-playlist',
+    moreInfo: 'BUTTONS.showPlaylistsMoreInfo',
+    title: 'BUTTONS.showPlaylistsHint',
+    toggled: true
   },
   'showRecent': {
     description: 'BUTTONS.showRecentDescription',

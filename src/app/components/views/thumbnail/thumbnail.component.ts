@@ -6,6 +6,7 @@ import { FilePathService } from '../file-path.service';
 import { metaAppear, textAppear } from '../../../common/animations';
 
 import { ImageElementService } from './../../../services/image-element.service';
+import { PlaylistService } from './../../../services/playlist.service';
 import type { ImageElement } from '../../../../../interfaces/final-object.interface';
 import type { VideoClickEmit, RightClickEmit } from '../../../../../interfaces/shared-interfaces';
 
@@ -61,6 +62,7 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
   constructor(
     public filePathService: FilePathService,
     public imageElementService: ImageElementService,
+    public playlistService: PlaylistService,
   ) { }
 
   ngOnInit() {
@@ -142,10 +144,22 @@ export class ThumbnailComponent implements OnInit, OnDestroy {
     this.heartPressed.emit();
   }
 
+  inLastUsedPlaylist(): boolean {
+    this.playlistService.version(); // re-evaluate on change
+    return this.playlistService.isInLastUsed(this.video.hash);
+  }
+
+  lastUsedPlaylistName(): string {
+    return this.playlistService.lastUsedPlaylist?.name || 'Playlist';
+  }
+
+  /**
+   * Add to / remove from the last used playlist
+   */
   togglePlaylist(leftClick: PointerEvent): void {
     leftClick.stopPropagation();
 
-    this.imageElementService.updatePlaylist(this.video.index);
+    this.playlistService.toggleInLastUsed(this.video);
     this.refreshPlaylist.emit();
   }
 

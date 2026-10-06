@@ -13,6 +13,8 @@ const windowStateKeeper = require('electron-window-state');
 
 // Methods
 import { createTouchBar } from './node/main-touch-bar';
+import { registerMediaScheme, setUpMediaPlayback } from './node/main-media';
+import { setUpIpcForPlaylists } from './node/main-playlists';
 import { setUpIpcForServer } from './node/server';
 import { setUpIpcMessages } from './node/main-ipc';
 import { sendFinalObjectToAngular, setUpDirectoryWatchers, upgradeToVersion3, writeVhaFileToDisk, parseAdditionalExtensions } from './node/main-support';
@@ -323,6 +325,12 @@ function openThisDamnFile(pathToVhaFile: string): void {
 setUpIpcMessages(ipcMain, win, pathToAppData, systemMessages);
 
 setUpIpcForServer(ipcMain);
+
+setUpIpcForPlaylists(ipcMain);
+
+// built-in player: files Chromium can't decode are converted by ffmpeg while they play
+registerMediaScheme();
+app.whenReady().then(() => setUpMediaPlayback(ipcMain));
 
 /**
  * Once Angular loads it sends over the `ready` status
