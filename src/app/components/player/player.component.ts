@@ -1,0 +1,1328 @@
+import type { ElementRef, OnDestroy, OnInit } from '@angular/core';
+import { Component, NgZone, effect, viewChild } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
+
+import { FilePathService } from '../views/file-path.service';
+import { ImageElementService } from '../../services/image-element.service';
+import { MediaService } from '../../services/media.service';
+import { ModalService } from '../modal/modal.service';
+import { PlayerService } from '../../services/player.service';
+import { PlaylistService } from '../../services/playlist.service';
+
+import type { ContextMenuCoordinate } from '../../../../interfaces/shared-interfaces';
+import type { HighlightRef, Playlist } from '../../../../interfaces/playlist.interface';
+import type { MediaPlan } from '../../../../interfaces/media-plan.interface';
+import type { PlaylistPickerMode } from '../playlists/playlist-picker.component';
+import type { PlayerItem } from '../../services/player.service';
+import type { StarRating } from '../../../../interfaces/final-object.interface';
+
+import { fileUrl } from './file-url';
+import { formatDuration } from '../playlists/playlist-utils';
+
+const LOAD_TIMEOUT_MS = 15000;       // no `canplay` by then => treat the file as unplayable
+const SKIP_COUNTDOWN_S = 5;          // unplayable item in a queue => skip after this many seconds
+const HIDE_CONTROLS_MS = 2500;       // hide controls & cursor after this long without mouse movement
+const PRELOAD_DELAY_MS = 1500;       // start preloading the next item this long after playback starts
+const STREAM_SEEK_DELAY_MS = 250;    // converted streams restart on seek -- wait for key repeats to settle
+const SPEEDS: number[] = [0.5, 0.75, 1, 1.25, 1.5, 2];
+const MIN_HIGHLIGHT_S = 1;           // shortest highlight
+const STORAGE_KEY = 'vha-player';
+
+type Slot = 0 | 1;
+
+/**
+ * What one <video> element holds
+ *  - `direct`: the file itself; seeking is instant
+ *  - `stream`: converted by ffmpeg while it plays, starting at `offset` in the file;
+ *              the element's time 0 is `offset`, and seeking restarts the conversion
+ */
+interface SlotState {
+  item: PlayerItem;
+  startAt: number;         // where this item was asked to start
+  path: string;
+  src: string;
+  mode: 'direct' | 'stream';
+  offset: number;
+  copyAudio: boolean;
+  pendingSeek: number;     // direct: seek here once metadata is in
+  ready: boolean;          // `canplay` fired for the current src
+  token: number;           // bumps on every load -- answers for an older load are dropped
+}
+
+function emptySlot(): SlotState {
+  return { item: null, startAt: 0, path: '', src: '', mode: 'direct', offset: 0, copyAudio: false, pendingSeek: null, ready: false, token: 0 };
+}
+
+/**
+ * Full-window built-in player
+ * Two <video> elements take turns: one plays while the other preloads the next item,
+ * so moving from clip to clip in a compilation is close to seamless.
+ * Files Chromium can't decode (old camera AVIs, MPG, AC3/DTS soundtracks…) are converted on the fly.
+ */
+@Component({
+  standalone: false,
+  selector: 'app-player',
+  templateUrl: './player.component.html',
+  styleUrls: ['./player.component.scss']
+})
+export class PlayerComponent implements OnInit, OnDestroy {
+
+  readonly root = viewChild<ElementRef<HTMLElement>>('root');
+  readonly scrubber = viewChild<ElementRef<HTMLElement>>('scrubber');
+  readonly labelInput = viewChild<ElementRef<HTMLInputElement>>('labelInput');
+  readonly renameInput = viewChild<ElementRef<HTMLInputElement>>('renameInput');
+  readonly videoA = viewChild<ElementRef<HTMLVideoElement>>('videoA');
+  readonly videoB = viewChild<ElementRef<HTMLVideoElement>>('videoB');
+
+  active: Slot = 0;
+  private slots: SlotState[] = [emptySlot(), emptySlot()];
+
+  playing = false;
+  currentTime = 0;                  // position in the file of the active item
+  duration = 0;
+
+  muted = false;
+  volume = 1;
+  speed = 1;
+
+  showQueue = false;
+  controlsHidden = false;
+  isFullscreen = false;
+  finished = false;                 // reached the end of the queue
+  converting = false;               // the active item is being converted while it plays
+
+  errorItem: PlayerItem = null;     // current item could not be played
+  skipCountdown = 0;
+
+  scrubbing = false;
+
+  pickerShowing = false;            // playlist popover -- `Add to…`, highlight target, `Move to…`
+  pickerPosition: ContextMenuCoordinate = { x: 0, y: 0 };
+  pickerMode: PlaylistPickerMode = 'add';
+
+  // ---------------- marking highlights
+  markIn: number = null;            // seconds in the file
+  markOut: number = null;
+  labeling = false;                 // asking for the optional label before saving
+  labelText = '';
+  private saveAfterTarget = false;  // the target was missing -- save once one is picked
+
+  // ---------------- existing highlights of this video, shown on the timeline
+  bandMenu: HighlightRef = null;
+  bandMenuPosition: ContextMenuCoordinate = { x: 0, y: 0 };
+  renaming: HighlightRef = null;
+  renameText = '';
+  dragEdge: { ref: HighlightRef, edge: 'start' | 'end', start: number, end: number } = null;
+  private movingRef: HighlightRef = null;
+  private highlightCache: { key: string, refs: HighlightRef[] } = { key: '', refs: [] };
+
+  topOffset = 0;                    // the app's title bar (window buttons) stays visible above the player
+
+  stars: number[] = [1, 2, 3, 4, 5];
+
+  formatDuration = formatDuration;
+
+  private wantsPlay = true;         // false after the user pauses -- `canplay` must not resume
+  private loadTimer: any = null;
+  private skipTimer: any = null;
+  private hideTimer: any = null;
+  private lastMouseX: number = null;
+  private lastMouseY: number = null;
+  private preloadTimer: any = null;
+  private streamSeekTimer: any = null;
+  private frameCallbackToken = 0;
+  private showToken = 0;
+  private countedPlayFor: string = null;
+  private shownKey: string = null;  // item currently shown -- reacts when the service moves on
+  private shownVersion = -1;
+
+  private keyListener = (event: KeyboardEvent) => this.onKey(event);
+  private fullscreenListener = () => this.zone.run(() => this.isFullscreen = !!document.fullscreenElement);
+
+  constructor(
+    public filePathService: FilePathService,
+    public imageElementService: ImageElementService,
+    public mediaService: MediaService,
+    public modalService: ModalService,
+    public player: PlayerService,
+    public playlistService: PlaylistService,
+    public translate: TranslateService,
+    private zone: NgZone,
+  ) {
+    // follow the service: Next / Previous / queue clicks / repeat
+    effect(() => {
+      const version: number = this.player.version();
+      if (version !== this.shownVersion) {
+        this.shownVersion = version;
+        setTimeout(() => this.syncWithService(), 0);
+      }
+    });
+  }
+
+  ngOnInit(): void {
+    const titleBar: Element = document.querySelector('.title-bar');
+    this.topOffset = titleBar ? Math.max(0, Math.round(titleBar.getBoundingClientRect().bottom)) : 0;
+    this.restorePreferences();
+    window.addEventListener('keydown', this.keyListener, true); // capture: before the app's own shortcuts
+    document.addEventListener('fullscreenchange', this.fullscreenListener);
+    this.poke();
+  }
+
+  ngOnDestroy(): void {
+    window.removeEventListener('keydown', this.keyListener, true);
+    document.removeEventListener('fullscreenchange', this.fullscreenListener);
+    clearTimeout(this.loadTimer);
+    clearTimeout(this.preloadTimer);
+    clearTimeout(this.hideTimer);
+    clearTimeout(this.streamSeekTimer);
+    clearInterval(this.skipTimer);
+    [0, 1].forEach((slot: Slot) => {
+      const video: HTMLVideoElement = this.video(slot);
+      if (video) {
+        video.pause();
+        video.removeAttribute('src');
+        video.load(); // releases the file handle
+      }
+    });
+    this.mediaService.stopAll();
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+    }
+  }
+
+  // ===========================================================================================
+  // What is playing
+  // -------------------------------------------------------------------------------------------
+
+  get item(): PlayerItem {
+    return this.player.current();
+  }
+
+  get isHighlight(): boolean {
+    const item: PlayerItem = this.item;
+    return !!item && item.start !== undefined && item.end !== undefined;
+  }
+
+  /**
+   * Position within the item -- for highlights the clip, not the whole video
+   */
+  get itemTime(): number {
+    return this.isHighlight ? Math.max(0, this.currentTime - this.item.start) : this.currentTime;
+  }
+
+  get itemDuration(): number {
+    return this.isHighlight ? this.item.end - this.item.start : this.duration;
+  }
+
+  /**
+   * Knob position on the timeline
+   */
+  get progressPercent(): number {
+    return this.percentOf(this.currentTime);
+  }
+
+  title(item: PlayerItem): string {
+    return item.label || item.element.cleanName;
+  }
+
+  timing(item: PlayerItem): string {
+    return item.start !== undefined && item.end !== undefined
+      ? formatDuration(item.start) + ' – ' + formatDuration(item.end)
+      : formatDuration(item.element.duration);
+  }
+
+  /**
+   * Position in the file of what a slot shows now
+   */
+  private mediaTime(slot: Slot): number {
+    return this.video(slot).currentTime + this.slots[slot].offset;
+  }
+
+  /**
+   * Called whenever the service changes -- shows the new current item if it changed
+   */
+  private syncWithService(): void {
+    if (!this.player.isOpen()) {
+      return;
+    }
+    const item: PlayerItem = this.item;
+    if (!item) {
+      return;
+    }
+    // `repeat one` replays the same key -- `shownKey` is reset by `itemFinished` for that
+    if (item.key !== this.shownKey) {
+      this.show(item);
+    }
+  }
+
+  /**
+   * Put an item on screen: use the preloaded slot if it holds this item, otherwise load it
+   */
+  private async show(item: PlayerItem): Promise<void> {
+    const showToken: number = ++this.showToken;
+    this.shownKey = item.key;
+    this.finished = false;
+    this.wantsPlay = true;
+    this.pickerShowing = false;
+    this.clearError();
+    clearTimeout(this.preloadTimer);
+    clearTimeout(this.streamSeekTimer);
+    this.streamSeekTimer = null;
+    this.frameCallbackToken++;
+
+    if (!this.slots[this.active].item || this.slots[this.active].item.element !== item.element) {
+      this.cancelMark(); // marks belong to the video they were made in
+    }
+    this.bandMenu = null;
+    this.renaming = null;
+
+    const startAt: number = item.start !== undefined ? item.start : (this.player.startAt || 0);
+    const standby: Slot = this.other(this.active);
+    const preloaded: boolean = this.slots[standby].item === item && this.slots[standby].startAt === startAt && !!this.slots[standby].src;
+
+    const slot: Slot = preloaded ? standby : this.active;
+    this.video(this.other(slot)).pause();
+    this.active = slot;
+    this.currentTime = startAt;
+    this.duration = item.element.duration;
+    this.playing = false;
+
+    if (preloaded) {
+      const s: SlotState = this.slots[slot];
+      if (s.mode === 'direct' && s.pendingSeek === null && Math.abs(this.mediaTime(slot) - startAt) > 0.3) {
+        this.video(slot).currentTime = startAt;
+      }
+    } else {
+      await this.load(slot, item, startAt);
+      if (showToken !== this.showToken) {
+        return; // the user moved on meanwhile
+      }
+    }
+
+    const video: HTMLVideoElement = this.video(slot);
+    video.muted = this.muted;
+    video.volume = this.volume;
+    video.playbackRate = this.speed;
+    this.converting = this.slots[slot].mode === 'stream';
+
+    this.startLoadTimer(slot);
+    this.tryPlay(slot);
+    this.watchHighlightEnd(slot, item);
+    this.keepHiding(); // moving on to the next item doesn't bring the controls back
+  }
+
+  /**
+   * Load an item into a slot -- directly if Chromium can play it, otherwise as a converted stream
+   */
+  private async load(slot: Slot, item: PlayerItem, startAt: number): Promise<void> {
+    const s: SlotState = this.slots[slot];
+    const token: number = ++s.token;
+    const path: string = this.filePathService.getPathFromImageElement(item.element);
+
+    s.item = item;
+    s.startAt = startAt;
+
+    const plan: MediaPlan = await this.mediaService.plan(path);
+    if (token !== s.token) {
+      return;
+    }
+
+    s.path = path;
+    s.copyAudio = plan.copyAudio;
+
+    if (plan.mode === 'direct') {
+      this.loadDirect(slot, path, startAt);
+    } else {
+      this.loadStream(slot, startAt);
+    }
+  }
+
+  private loadDirect(slot: Slot, path: string, startAt: number): void {
+    const s: SlotState = this.slots[slot];
+    const video: HTMLVideoElement = this.video(slot);
+    const src: string = fileUrl(path);
+
+    if (s.mode === 'stream') {
+      this.mediaService.stop(this.streamId(slot));
+    }
+    s.mode = 'direct';
+    s.offset = 0;
+
+    if (s.src !== src) {
+      s.src = src;
+      s.ready = false;
+      s.pendingSeek = startAt;
+      video.src = src;
+      video.load();
+    } else if (video.readyState >= 1) {
+      video.currentTime = startAt; // same file already loaded -- just seek
+      s.pendingSeek = null;
+    } else {
+      s.pendingSeek = startAt;
+    }
+  }
+
+  /**
+   * Convert from `startAt` -- for highlights only up to the clip end
+   */
+  private loadStream(slot: Slot, startAt: number): void {
+    const s: SlotState = this.slots[slot];
+    const video: HTMLVideoElement = this.video(slot);
+    const item: PlayerItem = s.item;
+    const length: number = item.end !== undefined ? Math.max(0.5, item.end - startAt + 0.5) : 0;
+
+    s.mode = 'stream';
+    s.offset = startAt;
+    s.pendingSeek = null;
+    s.ready = false;
+    s.src = this.mediaService.streamUrl(s.path, startAt, length, s.copyAudio, this.streamId(slot));
+    video.src = s.src;
+    video.load();
+  }
+
+  private streamId(slot: Slot): string {
+    return 'player-slot-' + slot;
+  }
+
+  /**
+   * Preload whatever plays next into the idle slot
+   */
+  private schedulePreload(): void {
+    clearTimeout(this.preloadTimer);
+    this.preloadTimer = setTimeout(async () => {
+      const next: PlayerItem = this.player.peekNext();
+      if (!next || !this.player.isOpen() || next === this.item) {
+        return;
+      }
+      const standby: Slot = this.other(this.active);
+      await this.load(standby, next, next.start !== undefined ? next.start : 0);
+      if (standby !== this.active) {
+        this.video(standby).pause();
+      }
+    }, PRELOAD_DELAY_MS);
+  }
+
+  private tryPlay(slot: Slot): void {
+    const promise: Promise<void> = this.video(slot).play();
+    if (promise) {
+      promise.catch(() => {}); // a pending load interrupts play(); `canplay` retries
+    }
+  }
+
+  // ===========================================================================================
+  // <video> events -- bound in the template for both slots
+  // -------------------------------------------------------------------------------------------
+
+  onLoadedMetadata(slot: Slot): void {
+    const s: SlotState = this.slots[slot];
+    const video: HTMLVideoElement = this.video(slot);
+
+    // plays sound but no picture (e.g. MPEG-4 Part 2 inside .mp4) -- convert instead
+    if (s.mode === 'direct' && video.videoWidth === 0 && s.item && s.item.element.width > 0) {
+      this.fallBackToStream(slot);
+      return;
+    }
+
+    if (s.pendingSeek !== null) {
+      video.currentTime = Math.min(s.pendingSeek, Math.max(0, video.duration - 0.1));
+      s.pendingSeek = null;
+    }
+    if (slot === this.active && s.mode === 'direct' && isFinite(video.duration)) {
+      this.duration = video.duration;
+    }
+  }
+
+  onCanPlay(slot: Slot): void {
+    this.slots[slot].ready = true;
+    if (slot === this.active) {
+      clearTimeout(this.loadTimer);
+      if (!this.finished && !this.errorItem && this.video(slot).paused && this.wantsPlay) {
+        this.tryPlay(slot);
+      }
+    }
+  }
+
+  onPlaying(slot: Slot): void {
+    if (slot !== this.active) {
+      return;
+    }
+    this.playing = true;
+    clearTimeout(this.loadTimer);
+    this.countPlay(this.item); // only once it really plays -- an unplayable file is not a play
+    this.schedulePreload();
+    this.keepHiding();
+  }
+
+  onPause(slot: Slot): void {
+    if (slot === this.active) {
+      this.playing = false;
+      if (this.wantsPlay) {
+        this.keepHiding(); // a pause on the way to the next item, not the user's
+      } else {
+        this.poke();
+      }
+    }
+  }
+
+  onTimeUpdate(slot: Slot): void {
+    if (slot !== this.active || !this.slots[slot].src) {
+      return;
+    }
+    const position: number = this.mediaTime(slot);
+    if (!this.scrubbing && !this.streamSeekTimer) {
+      this.currentTime = position;
+    }
+    // fallback for the frame callback (e.g. when the window is hidden)
+    if (this.isHighlight && position >= this.item.end) {
+      this.itemFinished();
+    }
+  }
+
+  onEnded(slot: Slot): void {
+    if (slot === this.active) {
+      this.itemFinished();
+    }
+  }
+
+  onError(slot: Slot): void {
+    const s: SlotState = this.slots[slot];
+    if (!s.src) {
+      return; // src was cleared on purpose
+    }
+    if (s.mode === 'direct') {
+      this.fallBackToStream(slot);
+    } else if (slot === this.active) {
+      this.showError();
+    } else {
+      // preloading failed -- forget it, `show()` will load it again and report the error then
+      this.slots[slot] = { ...emptySlot(), token: s.token + 1 };
+    }
+  }
+
+  /**
+   * Direct playback failed -- convert this file instead, from where it should have started
+   */
+  private fallBackToStream(slot: Slot): void {
+    const s: SlotState = this.slots[slot];
+    this.mediaService.markStreamOnly(s.path);
+    s.token++;
+    this.loadStream(slot, s.startAt);
+    if (slot === this.active) {
+      this.converting = true;
+      this.startLoadTimer(slot);
+      if (this.wantsPlay) {
+        this.tryPlay(slot);
+      }
+      this.watchHighlightEnd(slot, s.item);
+    }
+  }
+
+  /**
+   * Highlights end at `end` -- check every frame rather than on `timeupdate` (only ~4 times a second)
+   */
+  private watchHighlightEnd(slot: Slot, item: PlayerItem): void {
+    const token: number = ++this.frameCallbackToken;
+    if (item.end === undefined) {
+      return;
+    }
+    const video: any = this.video(slot);
+    if (!video.requestVideoFrameCallback) {
+      return; // `timeupdate` fallback handles it
+    }
+    const check = (_now: number, meta: any) => {
+      if (token !== this.frameCallbackToken) {
+        return; // a newer item took over
+      }
+      if (meta.mediaTime + this.slots[slot].offset >= item.end) {
+        this.zone.run(() => this.itemFinished());
+      } else {
+        video.requestVideoFrameCallback(check);
+      }
+    };
+    video.requestVideoFrameCallback(check);
+  }
+
+  private itemFinished(): void {
+    if (this.finished || this.errorItem) {
+      return;
+    }
+    this.frameCallbackToken++; // stop the frame watcher
+    const wasKey: string = this.shownKey;
+    if (this.player.advance()) {
+      if (this.item && this.item.key === wasKey) {
+        this.shownKey = null; // `repeat one` -- show the same item again
+        this.syncWithService();
+      }
+    } else {
+      this.video(this.active).pause();
+      this.finished = true;
+      this.controlsHidden = false;
+    }
+  }
+
+  private countPlay(item: PlayerItem): void {
+    // whole videos count as a play, like opening them externally; highlights don't
+    // once per visit to a queue position -- resuming after pause or `repeat one` doesn't count again
+    if (item && item.start === undefined && this.countedPlayFor !== item.key + ':' + this.player.position) {
+      this.countedPlayFor = item.key + ':' + this.player.position;
+      this.imageElementService.updateNumberOfTimesPlayed(item.element.index);
+    }
+  }
+
+  // ===========================================================================================
+  // Unplayable files
+  // -------------------------------------------------------------------------------------------
+
+  private startLoadTimer(slot: Slot): void {
+    clearTimeout(this.loadTimer);
+    if (this.slots[slot].ready) {
+      return;
+    }
+    this.loadTimer = setTimeout(() => {
+      if (slot === this.active && !this.slots[slot].ready) {
+        this.zone.run(() => this.slots[slot].mode === 'direct' ? this.fallBackToStream(slot) : this.showError());
+      }
+    }, LOAD_TIMEOUT_MS);
+  }
+
+  private showError(): void {
+    clearTimeout(this.loadTimer);
+    this.frameCallbackToken++;
+    this.video(this.active).pause();
+    this.errorItem = this.item;
+    this.controlsHidden = false;
+
+    if (this.player.hasNext) {
+      this.skipCountdown = SKIP_COUNTDOWN_S;
+      clearInterval(this.skipTimer);
+      this.skipTimer = setInterval(() => this.zone.run(() => {
+        this.skipCountdown--;
+        if (this.skipCountdown <= 0) {
+          this.skip();
+        }
+      }), 1000);
+    }
+  }
+
+  private clearError(): void {
+    clearInterval(this.skipTimer);
+    this.errorItem = null;
+    this.skipCountdown = 0;
+  }
+
+  skip(): void {
+    this.clearError();
+    this.slots[this.active] = { ...emptySlot(), token: this.slots[this.active].token + 1 };
+    if (!this.player.next()) {
+      this.finished = true;
+    }
+  }
+
+  stopCountdown(): void {
+    clearInterval(this.skipTimer);
+    this.skipCountdown = 0;
+  }
+
+  openExternally(): void {
+    const item: PlayerItem = this.item;
+    if (!item) {
+      return;
+    }
+    const seconds: number = this.errorItem ? (item.start || 0) : this.currentTime;
+    this.video(this.active).pause();
+    this.stopCountdown();
+    this.player.openExternally(item.element, seconds);
+  }
+
+  // ===========================================================================================
+  // Rating, favorite, playlists
+  // -------------------------------------------------------------------------------------------
+
+  /**
+   * Stars as the app stores them: 0.5 = none, 1.5 = 1 star … 5.5 = 5 stars (also "favorite")
+   */
+  starsOf(item: PlayerItem): number {
+    return item ? Math.round(item.element.stars - 0.5) : 0;
+  }
+
+  setStars(stars: number): void {
+    const item: PlayerItem = this.item;
+    if (!item) {
+      return;
+    }
+    const value = (this.starsOf(item) === stars ? 0.5 : stars + 0.5) as StarRating; // same star again clears
+    this.imageElementService.HandleEmission({ index: item.element.index, stars: value });
+    this.poke();
+  }
+
+  clearStars(): void {
+    const item: PlayerItem = this.item;
+    if (item && this.starsOf(item)) {
+      this.imageElementService.HandleEmission({ index: item.element.index, stars: 0.5 });
+    }
+  }
+
+  toggleFavorite(): void {
+    const item: PlayerItem = this.item;
+    if (item) {
+      this.imageElementService.toggleHeart(item.element.index);
+      this.poke();
+    }
+  }
+
+  openPicker(event?: MouseEvent, mode: PlaylistPickerMode = 'add'): void {
+    const button: HTMLElement = event ? event.currentTarget as HTMLElement : null;
+    const fallback: DOMRect = mode === 'add'
+      ? new DOMRect(window.innerWidth - 260, this.topOffset + 60, 0, 0)
+      : new DOMRect(window.innerWidth / 2 - 115, window.innerHeight - 110, 0, 0);
+    const rect: DOMRect = button ? button.getBoundingClientRect() : fallback;
+    // from the top bar it opens downwards, from the bottom bar upwards
+    this.pickerPosition = { x: rect.left, y: mode === 'add' ? rect.bottom + 6 : rect.top - 346 };
+    this.pickerMode = mode;
+    this.pickerShowing = true;
+    this.controlsHidden = false;
+  }
+
+  picked(playlistId: string): void {
+    this.pickerShowing = false;
+    if (this.pickerMode === 'target') {
+      this.playlistService.setHighlightTarget(playlistId);
+      if (this.saveAfterTarget) {
+        this.saveAfterTarget = false;
+        this.askForLabel();
+      }
+    } else if (this.pickerMode === 'move' && this.movingRef) {
+      const ref: HighlightRef = this.movingRef;
+      this.movingRef = null;
+      const target: Playlist = this.playlistService.get(playlistId);
+      this.playlistService.transferEntries(ref.playlist.id, playlistId, [ref.entry.id], false);
+      this.modalService.openSnackbar(this.translate.instant('PLAYLISTS.movedToSnack', { count: 1, name: target.name }), 1500);
+    } else {
+      this.addToPlaylist(playlistId);
+    }
+  }
+
+  movingRefPlaylistId(): string {
+    return this.movingRef ? this.movingRef.playlist.id : null;
+  }
+
+  pickerClosed(): void {
+    this.pickerShowing = false;
+    this.saveAfterTarget = false;
+    this.movingRef = null;
+  }
+
+  addToPlaylist(playlistId: string): void {
+    this.pickerShowing = false;
+    const item: PlayerItem = this.item;
+    const playlist = this.playlistService.get(playlistId);
+    if (!item || !playlist) {
+      return;
+    }
+    // a highlight being played is added as that highlight, a whole video as the whole video
+    const range = item.start !== undefined && item.end !== undefined
+      ? { start: item.start, end: item.end, label: item.label }
+      : undefined;
+    const added: number = this.playlistService.addVideos(playlistId, [item.element], range);
+    this.modalService.openSnackbar(
+      this.translate.instant(added ? 'PLAYLISTS.addedToSnack' : 'PLAYLISTS.alreadyIn', { count: added, name: playlist.name }),
+      1500
+    );
+  }
+
+  // ===========================================================================================
+  // Marking highlights:  I = start,  O = end,  Enter = save (asks for an optional label)
+  // -------------------------------------------------------------------------------------------
+
+  /**
+   * What plays: the whole video, or just the clip when playing a highlight
+   */
+  get rangeStart(): number {
+    return this.isHighlight ? this.item.start : 0;
+  }
+
+  get rangeEnd(): number {
+    return this.isHighlight ? this.item.end : this.duration;
+  }
+
+  /**
+   * What the timeline shows: for a highlight, the clip plus some video either side (dimmed),
+   * so the clip edges can be dragged outwards as well as inwards
+   */
+  get timelineStart(): number {
+    return this.isHighlight ? Math.max(0, this.rangeStart - this.contextPadding) : 0;
+  }
+
+  get timelineEnd(): number {
+    const videoLength: number = this.item ? (this.item.element.duration || this.duration) : this.duration;
+    return this.isHighlight ? Math.min(videoLength, this.rangeEnd + this.contextPadding) : this.duration;
+  }
+
+  private get contextPadding(): number {
+    return Math.max(5, (this.rangeEnd - this.rangeStart) / 2);
+  }
+
+  percentOf(seconds: number): number {
+    const span: number = this.timelineEnd - this.timelineStart;
+    return span > 0 ? Math.max(0, Math.min(100, 100 * (seconds - this.timelineStart) / span)) : 0;
+  }
+
+  markStart(): void {
+    this.markIn = this.currentTime;
+    if (this.markOut !== null && this.markOut <= this.markIn) {
+      this.markOut = null;
+    }
+    this.labeling = false;
+    this.poke();
+  }
+
+  markEnd(): void {
+    if (this.markIn === null) {
+      this.modalService.openSnackbar(this.translate.instant('PLAYER.markStartFirst'), 2500);
+      return;
+    }
+    this.markOut = this.currentTime;
+    this.normalizeMark();
+    this.poke();
+  }
+
+  /**
+   * End before start => swapped; at least one second long; inside the video
+   */
+  private normalizeMark(): void {
+    const videoLength: number = this.item.element.duration || this.duration || Infinity;
+    let start: number = Math.max(0, Math.min(this.markIn, this.markOut));
+    let end: number = Math.min(videoLength, Math.max(this.markIn, this.markOut));
+    if (end - start < MIN_HIGHLIGHT_S) {
+      end = Math.min(videoLength, start + MIN_HIGHLIGHT_S);
+      start = Math.max(0, end - MIN_HIGHLIGHT_S);
+    }
+    this.markIn = start;
+    this.markOut = end;
+  }
+
+  /**
+   * Enter / Save: ends the mark at the current moment if needed, then asks for a label
+   */
+  saveMark(): void {
+    if (this.markIn === null) {
+      this.modalService.openSnackbar(this.translate.instant('PLAYER.markStartFirst'), 2500);
+      return;
+    }
+    if (this.markOut === null) {
+      this.markOut = this.currentTime;
+    }
+    this.normalizeMark();
+
+    if (!this.playlistService.highlightTarget) {
+      this.saveAfterTarget = true;
+      this.openPicker(undefined, 'target');
+      return;
+    }
+    this.askForLabel();
+  }
+
+  private askForLabel(): void {
+    this.labeling = true;
+    this.labelText = '';
+    this.controlsHidden = false;
+    setTimeout(() => this.labelInput()?.nativeElement.focus(), 0);
+  }
+
+  labelKey(event: KeyboardEvent): void {
+    event.stopPropagation(); // typing must not reach the app or the player shortcuts
+    if (event.key === 'Enter') {
+      this.finishSave();
+    } else if (event.key === 'Escape') {
+      this.labeling = false; // back to the marks, nothing saved
+    }
+  }
+
+  finishSave(): void {
+    const target: Playlist = this.playlistService.highlightTarget;
+    const item: PlayerItem = this.item;
+    if (!target || !item || this.markIn === null || this.markOut === null) {
+      this.labeling = false;
+      return;
+    }
+    this.playlistService.addVideos(target.id, [item.element], { start: this.markIn, end: this.markOut, label: this.labelText.trim() });
+    this.modalService.openSnackbar(
+      this.translate.instant('PLAYER.savedHighlight', {
+        range: formatDuration(this.markIn) + ' – ' + formatDuration(this.markOut),
+        name: target.name,
+      }),
+      2500
+    );
+    this.cancelMark();
+  }
+
+  cancelMark(): void {
+    this.markIn = null;
+    this.markOut = null;
+    this.labeling = false;
+    this.labelText = '';
+    this.saveAfterTarget = false;
+  }
+
+  // ------------------------------------------------------------- existing highlights on the timeline
+
+  /**
+   * Highlights of the video on screen (from every compilation) that fall inside the timeline
+   */
+  highlights(): HighlightRef[] {
+    const item: PlayerItem = this.item;
+    if (!item) {
+      return [];
+    }
+    const key: string = item.element.hash + ':' + this.playlistService.version() + ':' + this.timelineStart + ':' + this.timelineEnd;
+    if (key !== this.highlightCache.key) {
+      this.highlightCache = {
+        key: key,
+        refs: this.playlistService.highlightsFor(item.element.hash)
+          .filter((ref: HighlightRef) => ref.entry.end > this.timelineStart && ref.entry.start < this.timelineEnd),
+      };
+    }
+    return this.highlightCache.refs;
+  }
+
+  bandStart(ref: HighlightRef): number {
+    return this.dragEdge && this.dragEdge.ref === ref ? this.dragEdge.start : ref.entry.start;
+  }
+
+  bandEnd(ref: HighlightRef): number {
+    return this.dragEdge && this.dragEdge.ref === ref ? this.dragEdge.end : ref.entry.end;
+  }
+
+  bandTitle(ref: HighlightRef): string {
+    return (ref.entry.label ? ref.entry.label + ' · ' : '')
+      + formatDuration(ref.entry.start) + ' – ' + formatDuration(ref.entry.end)
+      + ' · ' + ref.playlist.name;
+  }
+
+  openBandMenu(event: MouseEvent, ref: HighlightRef): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.bandMenu = ref;
+    this.bandMenuPosition = {
+      x: Math.min(event.clientX, window.innerWidth - 220),
+      y: Math.max(this.topOffset + 8, event.clientY - 190),
+    };
+    this.controlsHidden = false;
+  }
+
+  jumpToHighlight(ref: HighlightRef): void {
+    this.bandMenu = null;
+    this.seekWithinItem(ref.entry.start - this.rangeStart);
+  }
+
+  startRename(ref: HighlightRef): void {
+    this.bandMenu = null;
+    this.renaming = ref;
+    this.renameText = ref.entry.label || '';
+    setTimeout(() => this.renameInput()?.nativeElement.select(), 0);
+  }
+
+  renameKey(event: KeyboardEvent): void {
+    event.stopPropagation();
+    if (event.key === 'Enter') {
+      const ref: HighlightRef = this.renaming;
+      this.playlistService.updateEntry(ref.playlist.id, ref.entry.id, { label: this.renameText });
+      this.player.updateItem(ref.entry.id, { label: this.renameText });
+      this.renaming = null;
+    } else if (event.key === 'Escape') {
+      this.renaming = null;
+    }
+  }
+
+  moveHighlight(ref: HighlightRef, event: MouseEvent): void {
+    this.bandMenu = null;
+    this.movingRef = ref;
+    this.pickerMode = 'move';
+    this.pickerPosition = { x: event.clientX, y: event.clientY };
+    this.pickerShowing = true;
+  }
+
+  deleteHighlight(ref: HighlightRef): void {
+    this.bandMenu = null;
+    this.playlistService.removeEntries(ref.playlist.id, [ref.entry.id]);
+    this.modalService.openSnackbar(this.translate.instant('PLAYER.deletedHighlight', { name: ref.playlist.name }), 2000);
+  }
+
+  // dragging the edge of a band adjusts that highlight
+
+  edgeDown(event: PointerEvent, ref: HighlightRef, edge: 'start' | 'end'): void {
+    if (event.button !== 0) {
+      return;
+    }
+    event.stopPropagation(); // not a scrub
+    event.preventDefault();
+    (event.currentTarget as HTMLElement).setPointerCapture(event.pointerId);
+    this.dragEdge = { ref: ref, edge: edge, start: ref.entry.start, end: ref.entry.end };
+  }
+
+  edgeMove(event: PointerEvent): void {
+    if (!this.dragEdge) {
+      return;
+    }
+    const seconds: number = this.timeAt(event.clientX);
+    const videoLength: number = this.item.element.duration || this.duration;
+    if (this.dragEdge.edge === 'start') {
+      this.dragEdge.start = Math.max(0, Math.min(seconds, this.dragEdge.end - MIN_HIGHLIGHT_S));
+    } else {
+      this.dragEdge.end = Math.min(videoLength, Math.max(seconds, this.dragEdge.start + MIN_HIGHLIGHT_S));
+    }
+  }
+
+  edgeUp(): void {
+    const drag = this.dragEdge;
+    if (!drag) {
+      return;
+    }
+    this.dragEdge = null;
+    if (drag.start !== drag.ref.entry.start || drag.end !== drag.ref.entry.end) {
+      this.playlistService.updateEntry(drag.ref.playlist.id, drag.ref.entry.id, { start: drag.start, end: drag.end });
+      this.player.updateItem(drag.ref.entry.id, { start: drag.start, end: drag.end });
+      // show where the moved edge now is
+      this.seekWithinItem((drag.edge === 'start' ? drag.start : Math.max(drag.start, drag.end - 2)) - this.rangeStart);
+    }
+  }
+
+  private timeAt(clientX: number): number {
+    const rect: DOMRect = this.scrubber().nativeElement.getBoundingClientRect();
+    const fraction: number = Math.max(0, Math.min(1, (clientX - rect.left) / rect.width));
+    return this.timelineStart + fraction * (this.timelineEnd - this.timelineStart);
+  }
+
+  // ===========================================================================================
+  // Controls
+  // -------------------------------------------------------------------------------------------
+
+  togglePlay(): void {
+    if (this.finished) {
+      this.replay();
+      return;
+    }
+    const video: HTMLVideoElement = this.video(this.active);
+    if (video.paused) {
+      this.wantsPlay = true;
+      this.tryPlay(this.active);
+    } else {
+      this.wantsPlay = false;
+      video.pause();
+    }
+  }
+
+  next(): void {
+    this.player.next();
+  }
+
+  previous(): void {
+    // like most players: restart the item unless near its beginning
+    if (this.itemTime > 3 || !this.player.hasPrevious) {
+      this.seekWithinItem(0);
+    } else {
+      this.player.previous();
+    }
+  }
+
+  replay(): void {
+    this.finished = false;
+    this.shownKey = null;
+    this.player.restart();
+    this.syncWithService();
+  }
+
+  jumpTo(itemIndex: number): void {
+    this.player.jumpTo(itemIndex);
+  }
+
+  close(): void {
+    this.player.close();
+  }
+
+  /**
+   * Seek relative to the item start; for highlights stays inside the clip
+   */
+  seekWithinItem(seconds: number): void {
+    const s: SlotState = this.slots[this.active];
+    const clamped: number = Math.max(0, Math.min(seconds, Math.max(0, this.itemDuration - 0.05)));
+    const target: number = (this.isHighlight ? this.item.start : 0) + clamped;
+
+    this.currentTime = target;
+    if (this.finished) {
+      this.finished = false;
+    }
+
+    if (s.mode === 'direct') {
+      this.video(this.active).currentTime = target;
+      if (this.isHighlight) {
+        this.watchHighlightEnd(this.active, this.item);
+      }
+      return;
+    }
+
+    // converted stream -- restart the conversion there once the user stops moving
+    clearTimeout(this.streamSeekTimer);
+    this.streamSeekTimer = setTimeout(() => {
+      this.streamSeekTimer = null;
+      if (!this.scrubbing) {
+        this.restartStreamAt(this.currentTime);
+      }
+    }, STREAM_SEEK_DELAY_MS);
+  }
+
+  private restartStreamAt(position: number): void {
+    const slot: Slot = this.active;
+    this.slots[slot].token++;
+    this.loadStream(slot, position);
+    this.startLoadTimer(slot);
+    if (this.wantsPlay) {
+      this.tryPlay(slot);
+    }
+    if (this.isHighlight) {
+      this.watchHighlightEnd(slot, this.item);
+    }
+  }
+
+  seekBy(seconds: number): void {
+    this.seekWithinItem(this.itemTime + seconds);
+  }
+
+  stepFrame(direction: 1 | -1): void {
+    const video: HTMLVideoElement = this.video(this.active);
+    video.pause();
+    this.wantsPlay = false;
+    const fps: number = this.item.element.fps || 30;
+    this.seekBy(direction / fps);
+  }
+
+  toggleMute(): void {
+    this.muted = !this.muted;
+    this.video(this.active).muted = this.muted;
+    this.savePreferences();
+  }
+
+  setVolume(event: Event): void {
+    this.volume = Number((event.target as HTMLInputElement).value);
+    this.muted = this.volume === 0;
+    const video: HTMLVideoElement = this.video(this.active);
+    video.volume = this.volume;
+    video.muted = this.muted;
+    this.savePreferences();
+  }
+
+  changeSpeed(direction: 1 | -1): void {
+    const index: number = SPEEDS.indexOf(this.speed);
+    const nextIndex: number = Math.max(0, Math.min(SPEEDS.length - 1, (index === -1 ? 2 : index) + direction));
+    this.speed = SPEEDS[nextIndex];
+    this.video(this.active).playbackRate = this.speed;
+    this.video(this.other(this.active)).playbackRate = this.speed;
+    this.savePreferences();
+  }
+
+  cycleSpeed(): void {
+    const index: number = SPEEDS.indexOf(this.speed);
+    this.speed = SPEEDS[(index + 1) % SPEEDS.length];
+    this.video(this.active).playbackRate = this.speed;
+    this.savePreferences();
+  }
+
+  toggleFullscreen(): void {
+    if (document.fullscreenElement) {
+      document.exitFullscreen().catch(() => {});
+    } else {
+      this.root()?.nativeElement.requestFullscreen().catch(() => {});
+    }
+  }
+
+  // ------------------------------------------------------------- scrubber
+
+  scrubStart(event: PointerEvent): void {
+    if (event.button !== 0) {
+      return; // right-click is for the highlight menu
+    }
+    const bar: HTMLElement = event.currentTarget as HTMLElement;
+    bar.setPointerCapture(event.pointerId);
+    this.scrubbing = true;
+    this.scrubTo(event);
+  }
+
+  scrubMove(event: PointerEvent): void {
+    if (this.scrubbing) {
+      this.scrubTo(event);
+    }
+  }
+
+  scrubEnd(event: PointerEvent): void {
+    if (this.scrubbing) {
+      this.scrubTo(event);
+      this.scrubbing = false;
+      if (this.slots[this.active].mode === 'stream') {
+        clearTimeout(this.streamSeekTimer);
+        this.streamSeekTimer = null;
+        this.restartStreamAt(this.currentTime);
+      }
+    }
+  }
+
+  private scrubTo(event: PointerEvent): void {
+    // outside a highlight's clip the seek stops at the clip edge
+    this.seekWithinItem(this.timeAt(event.clientX) - this.rangeStart);
+  }
+
+  // ------------------------------------------------------------- controls auto-hide
+
+  /**
+   * Mouse moved over the player -- Chromium also sends a move without movement when the page under
+   * a still cursor changes (like the next video appearing), which must not bring the controls back
+   */
+  onMouseMove(event: MouseEvent): void {
+    if (event.screenX === this.lastMouseX && event.screenY === this.lastMouseY) {
+      return;
+    }
+    this.lastMouseX = event.screenX;
+    this.lastMouseY = event.screenY;
+    this.poke();
+  }
+
+  /**
+   * Playback moved on by itself (next item, started playing): never brings hidden controls back,
+   * and doesn't extend the countdown of showing ones -- only starts one if none is running
+   */
+  private keepHiding(): void {
+    if (!this.controlsHidden && !this.hideTimer) {
+      this.startHideCountdown();
+    }
+  }
+
+  /**
+   * Show the controls, then hide them after a few seconds of playing without user activity
+   */
+  poke(): void {
+    this.controlsHidden = false;
+    this.startHideCountdown();
+  }
+
+  private startHideCountdown(): void {
+    clearTimeout(this.hideTimer);
+    this.hideTimer = setTimeout(() => {
+      this.hideTimer = null;
+      if (this.playing && !this.showQueue && !this.errorItem && !this.finished && !this.scrubbing && !this.pickerShowing
+          && this.markIn === null && !this.labeling && !this.bandMenu && !this.renaming && !this.dragEdge) {
+        this.controlsHidden = true;
+      }
+    }, HIDE_CONTROLS_MS);
+  }
+
+  // ------------------------------------------------------------- keyboard
+
+  private onKey(event: KeyboardEvent): void {
+    if (!this.player.isOpen()) {
+      return;
+    }
+    const target = event.target as HTMLElement;
+    if (target && target.tagName === 'INPUT' && (target as HTMLInputElement).type === 'text') {
+      return; // typing a name in the playlist picker
+    }
+
+    // the player owns the keyboard while open -- nothing reaches the app underneath
+    event.stopPropagation();
+
+    if (this.pickerShowing || this.bandMenu) {
+      if (event.key === 'Escape') {
+        this.zone.run(() => {
+          this.pickerClosed();
+          this.bandMenu = null;
+        });
+      }
+      return;
+    }
+
+    this.zone.run(() => {
+      let handled = true;
+      switch (event.key) {
+        case ' ':
+        case 'k':
+        case 'K':          this.togglePlay(); break;
+        case 'ArrowLeft':  event.shiftKey ? this.stepFrame(-1) : this.seekBy(-5); break;
+        case 'ArrowRight': event.shiftKey ? this.stepFrame(1)  : this.seekBy(5);  break;
+        case 'n':
+        case 'N':          this.next(); break;
+        case 'p':
+        case 'P':          this.previous(); break;
+        case 'f':
+        case 'F':          this.toggleFullscreen(); break;
+        case 'm':
+        case 'M':          this.toggleMute(); break;
+        case 's':
+        case 'S':          this.player.toggleShuffle(); break;
+        case 'r':
+        case 'R':          this.player.cycleRepeat(); break;
+        case 'a':
+        case 'A':          this.openPicker(); break;
+        case 'h':
+        case 'H':          this.toggleFavorite(); break;
+        case '1':
+        case '2':
+        case '3':
+        case '4':
+        case '5':          this.setStars(Number(event.key)); break;
+        case '0':          this.clearStars(); break;
+        case '<':
+        case ',':          this.changeSpeed(-1); break;
+        case '>':
+        case '.':          this.changeSpeed(1); break;
+        case 'q':
+        case 'Q':          this.showQueue = !this.showQueue; break;
+        case 'i':
+        case 'I':          this.markStart(); break;
+        case 'o':
+        case 'O':          this.markEnd(); break;
+        case 'Enter':      this.saveMark(); break;
+        case 'Escape':
+          if (this.markIn !== null) {
+            this.cancelMark(); // Esc first drops the marks, then leaves full screen, then closes
+          } else if (document.fullscreenElement) {
+            this.toggleFullscreen();
+          } else {
+            this.close();
+          }
+          break;
+        default:           handled = false;
+      }
+      if (handled) {
+        event.preventDefault();
+        this.poke();
+      }
+    });
+  }
+
+  // ===========================================================================================
+  // Helpers
+  // -------------------------------------------------------------------------------------------
+
+  video(slot: Slot): HTMLVideoElement {
+    const ref: ElementRef<HTMLVideoElement> = slot === 0 ? this.videoA() : this.videoB();
+    return ref ? ref.nativeElement : undefined;
+  }
+
+  private other(slot: Slot): Slot {
+    return slot === 0 ? 1 : 0;
+  }
+
+  private restorePreferences(): void {
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
+      this.muted = !!saved.muted;
+      this.volume = typeof saved.volume === 'number' ? saved.volume : 1;
+      this.speed = SPEEDS.includes(saved.speed) ? saved.speed : 1;
+    } catch {}
+  }
+
+  private savePreferences(): void {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ muted: this.muted, volume: this.volume, speed: this.speed }));
+    } catch {}
+  }
+
+}

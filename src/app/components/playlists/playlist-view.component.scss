@@ -1,0 +1,314 @@
+@use "../variables.scss";
+
+:host {
+  display: block;
+  outline: none;
+}
+
+.playlist-view {
+  color: variables.$gray-90;
+  font-size: 13px;
+  min-height: 100%;
+  padding: 0 18px 160px;
+}
+
+.playlist-view-dark {
+  color: variables.$gray-10;
+}
+
+// ------------------------------------------------ header
+
+.view-header {
+  align-items: center;
+  background: inherit;
+  display: flex;
+  gap: 10px;
+  padding: 16px 0 12px;
+}
+
+.header-icon {
+  height: 22px;
+  width: 22px;
+}
+
+.playlist-view-dark .header-icon {
+  fill: variables.$gray-30;
+}
+
+.header-name {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.header-rename {
+  border: 1px solid variables.$gray-40;
+  border-radius: 6px;
+  font-size: 18px;
+  padding: 3px 8px;
+}
+
+.header-meta {
+  color: variables.$gray-50;
+  white-space: nowrap;
+}
+
+.header-spacer {
+  flex: 1 1 auto;
+}
+
+.header-button {
+  background: variables.$gray-05;
+  border: 1px solid variables.$gray-30;
+  border-radius: 6px;
+  color: variables.$gray-90;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 6px 12px;
+  white-space: nowrap;
+
+  &:hover:not(:disabled) {
+    border-color: variables.$pretty-blue;
+  }
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.5;
+  }
+}
+
+.header-play {
+  background: variables.$pretty-blue;
+  border-color: variables.$pretty-blue;
+  color: variables.$white;
+}
+
+.header-back {
+  margin-right: 6px;
+}
+
+.header-close {
+  padding: 6px 10px;
+}
+
+.playlist-view-dark .header-button:not(.header-play) {
+  background: variables.$gray-80;
+  border-color: variables.$gray-60;
+  color: variables.$gray-10;
+}
+
+.view-empty {
+  color: variables.$gray-50;
+  padding: 40px 0;
+  text-align: center;
+}
+
+// ------------------------------------------------ rows
+
+.view-rows {
+  margin: 0;
+  padding: 0;
+}
+
+.view-row {
+  align-items: center;
+  border-radius: 8px;
+  border-top: 2px solid transparent;
+  cursor: default;
+  display: flex;
+  gap: 12px;
+  list-style: none;
+  padding: 5px 8px;
+  user-select: none;
+
+  &:hover {
+    background: rgba(114, 154, 255, 0.12);
+  }
+}
+
+.row-selected,
+.row-selected:hover {
+  background: rgba(114, 154, 255, 0.3);
+}
+
+.row-drop-before {
+  border-top-color: variables.$pretty-blue;
+}
+
+.view-drop-end {
+  border-top: 2px solid variables.$pretty-blue;
+  list-style: none;
+}
+
+.row-missing,
+.row-offline {
+  .row-thumb,
+  .row-title {
+    opacity: 0.45;
+  }
+}
+
+.row-number {
+  color: variables.$gray-50;
+  flex: 0 0 26px;
+  font-size: 11px;
+  text-align: right;
+}
+
+.row-thumb {
+  background: variables.$gray-30;
+  border-radius: 4px;
+  flex: 0 0 96px;
+  height: 54px;
+  overflow: hidden;
+  position: relative;
+  width: 96px;
+
+  img {
+    display: block;
+    pointer-events: none;
+  }
+}
+
+.playlist-view-dark .row-thumb {
+  background: variables.$gray-80;
+}
+
+.thumb-single {
+  height: 100%;
+  object-fit: cover;
+  width: 100%;
+}
+
+.thumb-filmstrip {
+  height: auto;
+  left: 0;
+  position: absolute;
+  top: 50%;
+  margin-top: -27px;   // roughly centered; frames vary slightly in aspect
+}
+
+.thumb-badge {
+  background: rgba(0, 0, 0, 0.7);
+  border-radius: 3px;
+  bottom: 3px;
+  color: variables.$white;
+  font-size: 10px;
+  padding: 0 4px;
+  position: absolute;
+  right: 3px;
+}
+
+.row-text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.row-title {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.row-label-input {
+  border: 1px solid variables.$pretty-blue;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 13px;
+  padding: 3px 6px;
+  width: 100%;
+}
+
+.row-detail {
+  color: variables.$gray-50;
+  display: flex;
+  font-size: 11px;
+  gap: 8px;
+  margin-top: 3px;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.row-warning {
+  color: variables.$pretty-red;
+  flex: 0 0 auto;
+}
+
+.row-source {
+  flex: 0 0 auto;
+}
+
+.row-folder {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.row-timing {
+  color: variables.$gray-60;
+  flex: 0 0 auto;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.playlist-view-dark .row-timing {
+  color: variables.$gray-30;
+}
+
+// ------------------------------------------------ right-click menu
+
+.view-menu-overlay {
+  height: 100vh;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  z-index: 40;
+}
+
+.view-menu {
+  background: variables.$gray-10;
+  border: 1px solid variables.$gray-50;
+  border-radius: 10px;
+  box-shadow: 0 3px 7px 3px rgba(0, 0, 0, 0.3);
+  color: variables.$gray-90;
+  font-size: 12px;
+  min-width: 170px;
+  position: fixed;
+  z-index: 41;
+
+  ul {
+    margin: 0;
+    padding: 8px;
+
+    li {
+      border-radius: 5px;
+      cursor: pointer;
+      list-style: none;
+      padding: 6px;
+
+      &:hover {
+        background: rgba(114, 154, 255, 0.25);
+      }
+    }
+  }
+
+  .menu-remove {
+    border-top: 1px solid variables.$gray-20;
+    color: variables.$dark-red;
+    margin-top: 4px;
+  }
+}
+
+.view-menu-dark {
+  background: variables.$gray-80;
+  border-color: variables.$gray-60;
+  color: variables.$gray-10;
+
+  .menu-remove {
+    border-top-color: variables.$gray-60;
+    color: variables.$pretty-red-lighter;
+  }
+}

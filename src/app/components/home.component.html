@@ -88,6 +88,20 @@
     @rightClickAnimation
   >
     <ul @rightClickContentAnimation>
+    @if (settingsButtons['builtInPlayer'].toggled) {
+      <li
+        (click)="openVideo(currentRightClickedItem, undefined, 'external')"
+        [ngClass]="{ 'right-click-disabled': !sourceFolderService.sourceFolderConnected[currentRightClickedItem.inputSource] }"
+      >                                                         {{ 'RIGHTCLICK.playExternally' | translate }}</li>
+    } @else {
+      <li
+        (click)="openVideo(currentRightClickedItem, undefined, 'builtIn')"
+        [ngClass]="{ 'right-click-disabled': !sourceFolderService.sourceFolderConnected[currentRightClickedItem.inputSource] }"
+      >                                                         {{ 'RIGHTCLICK.playBuiltIn' | translate }}</li>
+    }
+    @if (settingsButtons['showPlaylists'].toggled) {
+      <li (click)="openPlaylistPickerNow()">                    {{ 'RIGHTCLICK.addToPlaylist' | translate }}</li>
+    }
       <li
         (click)="renamingNow = true"
         [ngClass]="{ 'right-click-disabled': !sourceFolderService.sourceFolderConnected[currentRightClickedItem.inputSource] }"
@@ -111,6 +125,18 @@
     }
     </ul>
   </div>
+}
+
+<!-- ===========   Add to playlist popover   =========== -->
+@if (playlistPickerShowing) {
+  <app-playlist-picker
+    [darkMode]="settingsButtons['darkMode'].toggled"
+    [hashToCheck]="currentRightClickedItem?.hash"
+    [mode]="'add'"
+    [position]="playlistPickerPosition"
+    (picked)="addRightClickedToPlaylist($event)"
+    (closed)="playlistPickerShowing = false"
+  />
 }
 
   <!-- ===========   Thumbnail Sheet Display   =========== -->
@@ -430,8 +456,16 @@
 
       </div>
 
+      <!-- Playlists & compilations -->
+    @if (settingsButtons['showPlaylists'].toggled) {
+      <app-playlists-panel
+        [darkMode]="settingsButtons['darkMode'].toggled"
+       />
+    }
+
       <!-- Regular search boxes / filters -->
       <app-search-boxes
+        (input)="playlistService.close()"
         (checkTagTypeahead)="checkTagTypeahead($event)"
         (onBackspace)="onBackspace($event.word, $event.index)"
         (onEnterKey)="onEnterKey($event.word, $event.index)"
@@ -455,6 +489,7 @@
           #magicSearch
           (keydown.escape)="magicSearchString = ''"
           [(ngModel)]="magicSearchString"
+          (input)="playlistService.close()"
           [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
           type="text"
           class="filter-general input-filter"
@@ -486,6 +521,7 @@
           #regexSearch
           (keydown.escape)="regexSearchString = ''"
           [(ngModel)]="regexSearchString"
+          (input)="playlistService.close()"
           [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
           type="text"
           class="filter-general input-filter"
@@ -519,6 +555,7 @@
           #fuzzySearch
           (keydown.escape)="fuzzySearchString = ''"
           [(ngModel)]="fuzzySearchString"
+          (input)="playlistService.close()"
           [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
           type="text"
           class="filter-general input-filter"
@@ -550,6 +587,7 @@
           #startsWithSearch
           (keydown.escape)="startsWithSearchString = ''"
           [(ngModel)]="startsWithSearchString"
+          (input)="playlistService.close()"
           [ngStyle]="{ color: settingsButtons['darkMode'].toggled ? 'white' : 'black' }"
           type="text"
           class="filter-general input-filter"
@@ -1146,7 +1184,34 @@
 
     </virtual-scroller>
 
-  @if (numberOfVideosFound === 0) {
+    <!-- ===========   OPEN PLAYLIST -- covers the gallery   =========== -->
+  @if (settingsButtons['showPlaylists'].toggled && playlistService.openPlaylist) {
+    <app-playlist-view
+      class="gallery-container playlist-view-container"
+      [ngStyle]="{
+          'height': 'calc(100vh - ' + (
+                        appState.menuHidden | sidebarHeightPipe
+                          : settingsButtons['hideTop'].toggled
+                          : (
+                                 settingsButtons['showDetailsTray'].toggled
+                              || settingsButtons['showFreq'].toggled
+                              || settingsButtons['showRecentlyPlayed'].toggled
+                              || settingsButtons['showRelatedVideosTray'].toggled
+                              || settingsButtons['showTagTray'].toggled
+                            )
+                      ) + 'px)'
+        }"
+      [ngClass]="{
+          'gallery-container-full-width': settingsButtons['hideSidebar'].toggled,
+          'gallery-container-dark-mode': settingsButtons['darkMode'].toggled
+        }"
+      [darkMode]="settingsButtons['darkMode'].toggled"
+      [hubName]="appState.hubName"
+      [outputFolder]="appState.selectedOutputFolder"
+     />
+  }
+
+  @if (numberOfVideosFound === 0 && !(settingsButtons['showPlaylists'].toggled && playlistService.openPlaylist)) {
     <div
       class="no-results"
       [ngStyle]="{
@@ -1408,4 +1473,14 @@
   (colorSelected)="onTagColorSelected($event)"
   (close)="onTagColorPickerClose()"
  />
+}
+
+<!-- ===========   BUILT-IN PLAYER -- covers everything   =========== -->
+@if (playerService.isOpen()) {
+  <app-player />
+}
+
+<!-- ===========   EXPORT A PLAYLIST AS ONE VIDEO   =========== -->
+@if (exportService.dialogOpen) {
+  <app-export-dialog [darkMode]="settingsButtons['darkMode'].toggled" />
 }

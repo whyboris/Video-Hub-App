@@ -1,0 +1,682 @@
+@use "../variables.scss";
+
+.player {
+  background: variables.$black;
+  color: variables.$white;
+  font-size: 13px;
+  inset: 0;
+  overflow: hidden;
+  position: fixed;
+  user-select: none;
+  z-index: 950; // below the app's title bar (9999) and snackbars (1000)
+}
+
+// ------------------------------------------------ video
+
+.stage {
+  inset: 0;
+  position: absolute;
+}
+
+.player-video {
+  height: 100%;
+  left: 0;
+  object-fit: contain;
+  position: absolute;
+  top: 0;
+  visibility: hidden;   // the standby video preloads unseen
+  width: 100%;
+}
+
+.player-video-active {
+  visibility: visible;
+}
+
+// ------------------------------------------------ bars
+
+.bar {
+  left: 0;
+  position: absolute;
+  right: 0;
+  transition: opacity 300ms;
+}
+
+.controls-hidden {
+  cursor: none;
+
+  .bar {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.top-bar {
+  align-items: flex-start;
+  background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+  display: flex;
+  gap: 16px;
+  padding: 16px 18px 40px;
+  top: 0;
+}
+
+.top-title {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.title-main {
+  font-size: 18px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.title-sub {
+  color: variables.$gray-30;
+  font-size: 12px;
+  margin-top: 4px;
+}
+
+.dot {
+  margin: 0 6px;
+}
+
+.converting {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 4px;
+  font-size: 11px;
+  margin-left: 8px;
+  padding: 1px 6px;
+}
+
+.actions {
+  align-items: center;
+  display: flex;
+  flex: 0 0 auto;
+  gap: 6px;
+}
+
+.stars {
+  display: flex;
+  margin-right: 4px;
+}
+
+.star {
+  background: transparent;
+  border: 0;
+  color: rgba(255, 255, 255, 0.35);
+  cursor: pointer;
+  font-size: 20px;
+  line-height: 1;
+  padding: 2px;
+
+  &:hover {
+    color: #ffd666;
+  }
+}
+
+.star-lit {
+  color: #ffc53d;
+}
+
+.stars:hover .star-lit {
+  color: #ffd666;
+}
+
+.heart-lit svg .heart {
+  fill: variables.$pretty-red;
+  stroke: variables.$pretty-red;
+}
+
+.add-button {
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  gap: 6px;
+  padding: 0 10px;
+
+  svg {
+    fill: none;
+    height: 18px;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-width: 1.8;
+    width: 18px;
+  }
+}
+
+.bottom-bar {
+  background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.8));
+  bottom: 0;
+  padding: 40px 18px 12px;
+}
+
+// ------------------------------------------------ scrubber
+
+.scrubber {
+  cursor: pointer;
+  padding: 8px 0;
+  touch-action: none;
+}
+
+.scrubber-track {
+  background: rgba(255, 255, 255, 0.25);
+  border-radius: 2px;
+  height: 4px;
+  position: relative;
+}
+
+.scrubber:hover .scrubber-track {
+  height: 6px;
+  margin-top: -1px;
+}
+
+.scrubber-fill {
+  background: variables.$pretty-blue;
+  border-radius: 2px;
+  height: 100%;
+  position: absolute;
+}
+
+.clip-window {
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: 2px;
+  height: 100%;
+  position: absolute;
+}
+
+// ------------------------------------------------ highlights on the timeline
+
+.scrubber {
+  position: relative;
+}
+
+.band {
+  background: rgba(255, 197, 61, 0.35);
+  border: 1px solid rgba(255, 197, 61, 0.8);
+  border-radius: 3px;
+  box-sizing: border-box;
+  height: 14px;
+  min-width: 4px;
+  position: absolute;
+  top: 3px;
+
+  &:hover {
+    background: rgba(255, 197, 61, 0.55);
+
+    .band-edge {
+      opacity: 1;
+    }
+  }
+}
+
+.band-current {
+  border-color: #ffc53d;
+  border-width: 2px;
+}
+
+.band-dragging {
+  background: rgba(255, 197, 61, 0.6);
+
+  .band-edge {
+    opacity: 1;
+  }
+}
+
+.band-edge {
+  background: #ffc53d;
+  bottom: -3px;
+  cursor: ew-resize;
+  opacity: 0;
+  position: absolute;
+  top: -3px;
+  touch-action: none;
+  transition: opacity 120ms;
+  width: 6px;
+}
+
+.band-edge-start {
+  border-radius: 3px 0 0 3px;
+  left: -3px;
+}
+
+.band-edge-end {
+  border-radius: 0 3px 3px 0;
+  right: -3px;
+}
+
+.mark-range {
+  background: rgba(255, 102, 102, 0.45);
+  border-radius: 3px;
+  height: 14px;
+  pointer-events: none;
+  position: absolute;
+  top: 3px;
+}
+
+.mark-pin {
+  background: variables.$pretty-red;
+  border-radius: 1px;
+  height: 20px;
+  margin-left: -1px;
+  pointer-events: none;
+  position: absolute;
+  top: 0;
+  width: 2px;
+}
+
+.scrubber-knob {
+  pointer-events: none;
+  z-index: 1;
+}
+
+.scrubber-knob {
+  background: variables.$white;
+  border-radius: 50%;
+  height: 12px;
+  margin-left: -6px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 12px;
+}
+
+// ------------------------------------------------ buttons
+
+.controls-row {
+  align-items: center;
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.time {
+  color: variables.$gray-15;
+  font-variant-numeric: tabular-nums;
+  margin: 0 10px 0 6px;
+  white-space: nowrap;
+}
+
+.icon-button,
+.text-button {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: 6px;
+  color: variables.$white;
+  cursor: pointer;
+  display: inline-flex;
+  height: 36px;
+  justify-content: center;
+  min-width: 36px;
+  padding: 0 6px;
+  position: relative;
+
+  &:hover:not(:disabled) {
+    background: rgba(255, 255, 255, 0.15);
+  }
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.35;
+  }
+
+  svg {
+    fill: none;
+    height: 22px;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.8;
+    width: 22px;
+
+    .fill {
+      fill: currentColor;
+      stroke: none;
+    }
+  }
+}
+
+.icon-button-big svg {
+  height: 30px;
+  width: 30px;
+}
+
+.icon-button-on {
+  color: variables.$pretty-blue;
+}
+
+.text-button {
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
+}
+
+.badge {
+  background: variables.$pretty-blue;
+  border-radius: 6px;
+  color: variables.$white;
+  font-size: 9px;
+  line-height: 12px;
+  min-width: 12px;
+  position: absolute;
+  right: 3px;
+  top: 4px;
+}
+
+// ------------------------------------------------ marking
+
+.mark-row {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+  margin-bottom: 4px;
+  white-space: nowrap;
+}
+
+.mark-button {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  font-size: 12px;
+  gap: 6px;
+  height: 30px;
+}
+
+.key {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+  font-size: 11px;
+  font-weight: bold;
+  padding: 0 5px;
+}
+
+.mark-pill {
+  background: rgba(255, 102, 102, 0.3);
+  border-radius: 12px;
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  margin-left: 4px;
+  padding: 4px 10px;
+  white-space: nowrap;
+}
+
+.mark-save {
+  background: variables.$pretty-red;
+  white-space: nowrap;
+  font-size: 12px;
+  height: 30px;
+
+  &:hover:not(:disabled) {
+    background: #ff8585;
+  }
+}
+
+.mark-cancel {
+  height: 30px;
+  min-width: 30px;
+
+  svg {
+    height: 16px;
+    width: 16px;
+  }
+}
+
+.target-chip {
+  color: #ffc53d;
+  font-size: 12px;
+  max-width: 320px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.label-box {
+  background: rgba(30, 30, 30, 0.96);
+  border: 1px solid variables.$gray-70;
+  border-radius: 10px;
+  bottom: 150px;
+  left: 50%;
+  padding: 14px 16px;
+  position: absolute;
+  transform: translateX(-50%);
+  width: 420px;
+  z-index: 3;
+}
+
+.label-box[style*="top"] {
+  transform: none;
+}
+
+.label-box-title {
+  font-size: 13px;
+  margin-bottom: 8px;
+}
+
+.label-range {
+  color: variables.$gray-30;
+  margin-left: 6px;
+}
+
+.label-input {
+  background: variables.$gray-90;
+  border: 1px solid variables.$gray-60;
+  border-radius: 6px;
+  box-sizing: border-box;
+  color: variables.$white;
+  font-size: 14px;
+  padding: 8px 10px;
+  width: 100%;
+
+  &:focus {
+    border-color: variables.$pretty-blue;
+    outline: none;
+  }
+}
+
+.label-hint {
+  color: variables.$gray-40;
+  font-size: 11px;
+  margin-top: 6px;
+}
+
+.menu-overlay {
+  inset: 0;
+  position: absolute;
+  z-index: 2;
+}
+
+.band-menu {
+  background: rgba(30, 30, 30, 0.97);
+  border: 1px solid variables.$gray-70;
+  border-radius: 10px;
+  font-size: 13px;
+  max-width: 280px;
+  min-width: 190px;
+  position: fixed;
+  z-index: 3;
+
+  ul {
+    margin: 0;
+    padding: 6px;
+
+    li {
+      border-radius: 6px;
+      cursor: pointer;
+      list-style: none;
+      padding: 7px 10px;
+
+      &:hover {
+        background: rgba(255, 255, 255, 0.1);
+      }
+    }
+  }
+}
+
+.band-menu-title {
+  border-bottom: 1px solid variables.$gray-70;
+  color: #ffc53d;
+  font-size: 12px;
+  overflow: hidden;
+  padding: 9px 12px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.band-menu-delete {
+  color: variables.$pretty-red;
+}
+
+.volume {
+  accent-color: variables.$pretty-blue;
+  cursor: pointer;
+  width: 90px;
+}
+
+// ------------------------------------------------ messages
+
+.message-panel {
+  background: rgba(30, 30, 30, 0.92);
+  border: 1px solid variables.$gray-70;
+  border-radius: 12px;
+  left: 50%;
+  max-width: 460px;
+  padding: 22px 26px;
+  position: absolute;
+  text-align: center;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+}
+
+.message-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.message-detail {
+  color: variables.$gray-30;
+  margin-top: 4px;
+  overflow-wrap: anywhere;
+}
+
+.message-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 18px;
+}
+
+.message-button {
+  background: variables.$gray-70;
+  border: 0;
+  border-radius: 6px;
+  color: variables.$white;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 8px 16px;
+
+  &:hover {
+    background: variables.$gray-60;
+  }
+}
+
+.message-button-main {
+  background: variables.$pretty-blue;
+
+  &:hover {
+    background: #8eaeff;
+  }
+}
+
+.message-countdown {
+  color: variables.$gray-30;
+  font-size: 12px;
+  margin-top: 14px;
+}
+
+.message-link {
+  color: variables.$pretty-blue;
+  cursor: pointer;
+  margin-left: 6px;
+  text-decoration: underline;
+}
+
+// ------------------------------------------------ queue
+
+.queue {
+  background: rgba(20, 20, 20, 0.94);
+  border: 1px solid variables.$gray-80;
+  border-radius: 10px;
+  bottom: 100px;           // clear of the bottom bar
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  right: 12px;
+  top: 76px;               // clear of the top bar
+  width: 320px;
+}
+
+.queue-header {
+  color: variables.$gray-30;
+  font-size: 12px;
+  padding: 18px 16px 10px;
+  text-transform: uppercase;
+}
+
+.queue-count {
+  margin-left: 6px;
+}
+
+.queue-list {
+  flex: 1 1 auto;
+  margin: 0;
+  overflow-y: auto;
+  padding: 0 8px 16px;
+
+  @include variables.scrollBar;
+
+  li {
+    align-items: center;
+    border-radius: 6px;
+    cursor: pointer;
+    display: flex;
+    gap: 8px;
+    list-style: none;
+    padding: 7px 8px;
+
+    &:hover {
+      background: rgba(255, 255, 255, 0.08);
+    }
+  }
+}
+
+.queue-current {
+  background: rgba(114, 154, 255, 0.25) !important;
+}
+
+.queue-played {
+  opacity: 0.5;
+}
+
+.queue-number {
+  color: variables.$gray-50;
+  flex: 0 0 22px;
+  font-size: 11px;
+  text-align: right;
+}
+
+.queue-title {
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.queue-timing {
+  color: variables.$gray-40;
+  flex: 0 0 auto;
+  font-size: 11px;
+}

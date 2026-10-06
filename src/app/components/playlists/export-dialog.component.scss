@@ -1,0 +1,148 @@
+@use "../variables.scss";
+
+.export-backdrop {
+  background: rgba(0, 0, 0, 0.35);
+  inset: 0;
+  position: fixed;
+  z-index: 60;
+}
+
+.export-dialog {
+  background: variables.$gray-05;
+  border: 1px solid variables.$gray-40;
+  border-radius: 12px;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.35);
+  color: variables.$gray-90;
+  font-size: 13px;
+  left: 50%;
+  max-width: calc(100vw - 32px);
+  padding: 22px 26px;
+  position: fixed;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 480px;
+  z-index: 61;
+}
+
+.export-dark {
+  background: variables.$gray-80;
+  border-color: variables.$gray-60;
+  color: variables.$gray-10;
+}
+
+.export-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.export-summary {
+  margin-bottom: 14px;
+}
+
+.export-warning {
+  color: variables.$dark-red;
+  margin-top: 6px;
+}
+
+.export-dark .export-warning {
+  color: variables.$pretty-red-lighter;
+}
+
+.export-option {
+  border-top: 1px solid rgba(128, 128, 128, 0.25);
+  padding: 10px 0;
+
+  label {
+    cursor: pointer;
+    display: inline-flex;
+    gap: 5px;
+    margin-right: 16px;
+  }
+}
+
+.export-option-label {
+  color: variables.$gray-50;
+  font-size: 11px;
+  margin-bottom: 6px;
+  text-transform: uppercase;
+}
+
+.export-hint {
+  color: variables.$gray-50;
+  font-size: 11px;
+  margin-top: 6px;
+}
+
+.export-disabled {
+  opacity: 0.5;
+}
+
+.export-buttons {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+
+.export-button {
+  background: transparent;
+  border: 1px solid variables.$gray-40;
+  border-radius: 6px;
+  color: inherit;
+  cursor: pointer;
+  font-size: 13px;
+  padding: 7px 14px;
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.5;
+  }
+}
+
+.export-button-main {
+  background: variables.$pretty-blue;
+  border-color: variables.$pretty-blue;
+  color: variables.$white;
+}
+
+.export-progress {
+  margin: 8px 0;
+}
+
+.export-bar {
+  background: rgba(128, 128, 128, 0.25);
+  border-radius: 4px;
+  height: 8px;
+  overflow: hidden;
+}
+
+.export-bar-fill {
+  background: variables.$pretty-blue;
+  height: 100%;
+  transition: width 300ms;
+}
+
+.export-progress-text {
+  color: variables.$gray-50;
+  display: flex;
+  font-size: 12px;
+  justify-content: space-between;
+  margin-top: 6px;
+}
+
+.export-done {
+  color: variables.$pretty-green;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.export-path {
+  color: variables.$gray-50;
+  font-size: 12px;
+  margin-top: 6px;
+  overflow-wrap: anywhere;
+}

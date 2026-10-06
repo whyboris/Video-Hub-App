@@ -1,0 +1,147 @@
+<div class="playlists-panel" [ngClass]="{ 'playlists-dark': darkMode() }">
+
+  <div class="panel-header">
+    <span class="panel-label">{{ 'PLAYLISTS.title' | translate }}</span>
+    <span
+      class="panel-add"
+      (click)="startCreating('playlist')"
+      title="{{ 'PLAYLISTS.newPlaylist' | translate }}"
+    >+<app-icon class="panel-add-icon" [icon]="'icon-playlist'" /></span>
+    <span
+      class="panel-add"
+      (click)="startCreating('compilation')"
+      title="{{ 'PLAYLISTS.newCompilation' | translate }}"
+    >+<app-icon class="panel-add-icon" [icon]="'icon-compilation'" /></span>
+  </div>
+
+  @switch (playlistService.loadProblem()) {
+    @case ('unreadable') {
+      <div class="panel-warning">{{ 'PLAYLISTS.unreadable' | translate }}</div>
+    }
+    @case ('restoredFromBackup') {
+      <div class="panel-note">{{ 'PLAYLISTS.restoredFromBackup' | translate }}</div>
+    }
+  }
+
+  @if (exportService.running && !exportService.dialogOpen) {
+    <div class="panel-note panel-export" (click)="exportService.open(exportService.playlistId)">
+      {{ 'EXPORT.inBackground' | translate: { name: exportService.playlistName, percent: exportPercent() } }}
+    </div>
+  }
+
+  @if (playlistService.saveError()) {
+    <div class="panel-warning" [title]="playlistService.saveError()">{{ 'PLAYLISTS.saveFailed' | translate }}</div>
+  }
+
+  @if (creatingKind) {
+    <input
+      #newNameInput
+      class="panel-input"
+      type="text"
+      [(ngModel)]="newName"
+      (keydown)="newNameKey($event)"
+      (blur)="finishCreating()"
+      placeholder="{{ (creatingKind === 'compilation' ? 'PLAYLISTS.newCompilationName' : 'PLAYLISTS.newPlaylistName') | translate }}"
+    >
+  }
+
+  <ul class="panel-list">
+    <li
+      class="item-all-videos"
+      [ngClass]="{ 'item-open': !playlistService.openPlaylistId }"
+      (click)="playlistService.close()"
+    >
+      <app-icon class="item-icon" [icon]="'icon-video-blank'" />
+      <span class="item-name">{{ 'PLAYLISTS.allVideos' | translate }}</span>
+    </li>
+  @for (playlist of list(); track playlist.id) {
+    <li
+      draggable="true"
+      (dragstart)="dragPlaylistStart($event, playlist)"
+      (dragover)="dragOver($event, playlist)"
+      (dragleave)="dragLeave()"
+      (drop)="drop($event, playlist)"
+      (click)="open(playlist)"
+      (dblclick)="startRenaming(playlist)"
+      (contextmenu)="openMenu($event, playlist)"
+      [ngClass]="{
+        'item-open': playlistService.openPlaylistId === playlist.id,
+        'item-drop-target': dropTargetId === playlist.id,
+        'item-drop-before': dropBeforeId === playlist.id
+      }"
+      title="{{ playlist.name }} · {{ formatDuration(playlistService.playlistDuration(playlist)) }}"
+    >
+      <app-icon
+        class="item-icon"
+        [icon]="playlist.kind === 'compilation' ? 'icon-compilation' : 'icon-playlist'"
+      />
+    @if (renamingId === playlist.id) {
+      <input
+        #renameInput
+        class="panel-input item-rename"
+        type="text"
+        [(ngModel)]="renameValue"
+        (keydown)="renameKey($event, playlist)"
+        (blur)="finishRenaming(playlist)"
+        (click)="$event.stopPropagation()"
+      >
+    } @else {
+      <span class="item-name">{{ playlist.name }}</span>
+      <span class="item-count">{{ playlist.entries.length }}</span>
+    }
+    </li>
+  }
+  </ul>
+
+  <div
+    class="panel-end-drop"
+    (dragover)="dragOverEnd($event)"
+    (drop)="dropAtEnd($event)"
+  >
+  @if (!list().length && !creatingKind) {
+    <span class="panel-empty">{{ 'PLAYLISTS.emptyPanel' | translate }}</span>
+  }
+  </div>
+
+</div>
+
+@if (menuFor) {
+<div appToBody>
+  <div
+    class="panel-menu-overlay"
+    (click)="closeMenu()"
+    (contextmenu)="$event.preventDefault(); closeMenu()"
+  ></div>
+
+  <div
+    class="panel-menu"
+    [ngClass]="{ 'panel-menu-dark': darkMode() }"
+    [ngStyle]="{ left: menuPosition.x + 'px', top: menuPosition.y + 'px' }"
+  >
+  @if (!confirmingDelete) {
+    <ul>
+      <li (click)="play(false)">{{ 'PLAYLISTS.play' | translate }}</li>
+      <li (click)="play(true)">{{ 'PLAYLISTS.shufflePlay' | translate }}</li>
+    @if (playerService.useBuiltIn()) {
+      <li (click)="play(false, true)">{{ 'PLAYLISTS.playExternally' | translate }}</li>
+    }
+      <li (click)="startRenaming(menuFor)">{{ 'PLAYLISTS.rename' | translate }}</li>
+      <li (click)="duplicate()">{{ 'PLAYLISTS.duplicate' | translate }}</li>
+      <li (click)="exportVideo()">{{ 'EXPORT.menuItem' | translate }}</li>
+    @if (selectedVideos.length) {
+      <li (click)="addSelected()">{{ 'PLAYLISTS.addSelected' | translate: { count: selectedVideos.length } }}</li>
+    }
+      <li class="menu-delete" (click)="delete()">{{ 'PLAYLISTS.delete' | translate }}</li>
+    </ul>
+  } @else {
+    <div class="menu-confirm">
+      {{ 'PLAYLISTS.deleteConfirm' | translate: { name: menuFor.name } }}
+      <div class="menu-confirm-buttons">
+        <span class="menu-confirm-yes" (click)="delete()">{{ 'PLAYLISTS.delete' | translate }}</span>
+        <span (click)="closeMenu()">{{ 'PLAYLISTS.cancel' | translate }}</span>
+      </div>
+    </div>
+  }
+  </div>
+</div>
+}

@@ -46,7 +46,13 @@ import { HomeComponent } from './components/home.component';
 import { IconComponent } from './components/icon/icon.component';
 import { MetaComponent } from './components/meta/meta.component';
 import { ModalComponent } from './components/modal/modal.component';
+import { ExportDialogComponent } from './components/playlists/export-dialog.component';
+import { PlayerComponent } from './components/player/player.component';
+import { PlaylistPickerComponent } from './components/playlists/playlist-picker.component';
+import { PlaylistsPanelComponent } from './components/playlists/playlists-panel.component';
+import { PlaylistViewComponent } from './components/playlists/playlist-view.component';
 import { RecentlyOpenedComponent } from './components/recently-opened/recently-opened.component';
+import { ToBodyDirective } from './components/playlists/to-body.directive';
 import { RenameFileComponent } from './components/rename-file/rename-file.component';
 import { RenameModalComponent } from './components/rename-modal/rename-modal.component';
 import { ResolutionFilterComponent } from './components/resolution-filter/resolution-filter.component';
@@ -152,7 +158,12 @@ import { YearPipe } from './pipes/year.pipe';
     MetaComponent,
     ModalComponent,
     PlaylistOnlyPipe,
+    ExportDialogComponent,
+    PlayerComponent,
+    PlaylistPickerComponent,
     PlaylistPipe,
+    PlaylistsPanelComponent,
+    PlaylistViewComponent,
     RecentlyOpenedComponent,
     RegexSearchPipe,
     RenameFileComponent,
@@ -185,6 +196,7 @@ import { YearPipe } from './pipes/year.pipe';
     TagTrayComponent,
     ThumbnailComponent,
     TimesPlayedFilterPipe,
+    ToBodyDirective,
     TimesPlayedPipe,
     TitleBarComponent,
     TopComponent,
