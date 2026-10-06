@@ -61,7 +61,7 @@
     ]
   },
   "linux": {
-    "icon": "src/assets/icons.icns",
+    "icon": "src/assets/icons/png",
     "target": [
       "AppImage"
     ]
