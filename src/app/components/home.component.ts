@@ -363,7 +363,15 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       const key: string = event.key;
 
-      if (this.shortcutService.keyToActionMap.has(key)) {
+      // Ctrl + / Ctrl - change the text and interface size, unless those keys were given to a shortcut
+      if (['+', '=', '-', '_'].includes(key) && !this.shortcutService.keyToActionMap.has(key)) {
+        event.preventDefault();
+        if (key === '-' || key === '_') {
+          this.decreaseZoomLevel();
+        } else {
+          this.increaseZoomLevel();
+        }
+      } else if (this.shortcutService.keyToActionMap.has(key)) {
         const shortcutAction: SettingsButtonKey | CustomShortcutAction = this.shortcutService.keyToActionMap.get(key);
 
         if (this.shortcutService.regularShortcuts.includes(shortcutAction as SettingsButtonKey)) {
@@ -1274,24 +1282,31 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public increaseZoomLevel(): void {
-    if (this.appState.currentZoomLevel < 2.5) {
-      this.appState.currentZoomLevel = this.appState.currentZoomLevel + 0.1;
-      this.setAppZoomLevel(this.appState.currentZoomLevel);
-    }
+    this.changeZoomLevel(+0.1);
   }
 
   public decreaseZoomLevel(): void {
-    if (this.appState.currentZoomLevel > 0.6) {
-      this.appState.currentZoomLevel = this.appState.currentZoomLevel - 0.1;
-      this.setAppZoomLevel(this.appState.currentZoomLevel);
-    }
+    this.changeZoomLevel(-0.1);
   }
 
   public resetZoomLevel(): void {
-    if (this.appState.currentZoomLevel !== 1) {
-      this.appState.currentZoomLevel = 1;
-      this.setAppZoomLevel(this.appState.currentZoomLevel);
+    this.changeZoomLevel(1 - this.appState.currentZoomLevel);
+  }
+
+  /**
+   * Text and interface size, 60% .. 250% in steps of 10% -- rounded so repeated steps stay on whole percents
+   */
+  private changeZoomLevel(step: number): void {
+    const level: number = Math.round(Math.min(2.5, Math.max(0.6, this.appState.currentZoomLevel + step)) * 10) / 10;
+    if (level === this.appState.currentZoomLevel) {
+      return;
     }
+    this.appState.currentZoomLevel = level;
+    this.setAppZoomLevel(level);
+    setTimeout(() => {
+      this.computePreviewWidth();
+      this.cd.detectChanges();
+    }, 10);
   }
 
   setAppZoomLevel(factor: number) {
