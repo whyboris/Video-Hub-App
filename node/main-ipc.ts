@@ -359,6 +359,37 @@ export function setUpIpcMessages(ipc, win, pathToAppData, systemMessages) {
   });
 
   /**
+   * Autosave the library while the app is open -- replies `autosave-vha-done` (vhaPath, errorMessage)
+   * The path is checked so a late autosave can never land in a hub opened since
+   */
+  ipc.on('autosave-vha', (event, vhaPath: string, finalObjectToSave: FinalObject) => {
+    if (!finalObjectToSave || vhaPath !== GLOBALS.currentlyOpenVhaFile) {
+      event.sender.send('autosave-vha-done', vhaPath, 'hub changed');
+      return;
+    }
+    writeVhaFileToDisk(finalObjectToSave, vhaPath, (err) => {
+      try {
+        event.sender.send('autosave-vha-done', vhaPath, err ? String(err.message || err) : '');
+      } catch {} // window closed meanwhile
+    });
+  });
+
+  /**
+   * Autosave app settings (buttons, player, recent hubs) -- same file as on close
+   */
+  ipc.on('autosave-settings', (event, settingsToSave: SettingsObject) => {
+    try {
+      settingsToSave.shortcuts = <any>Object.fromEntries(settingsToSave.shortcuts);
+      const settingsPath: string = path.join(GLOBALS.settingsPath, 'settings.json');
+      fs.mkdirSync(GLOBALS.settingsPath, { recursive: true });
+      fs.writeFileSync(settingsPath + '.tmp', JSON.stringify(settingsToSave), 'utf8');
+      fs.renameSync(settingsPath + '.tmp', settingsPath);
+    } catch (err) {
+      console.log('could not autosave settings', err);
+    }
+  });
+
+  /**
    * Close the window / quit / exit the app
    */
   ipc.on('close-window', (event, settingsToSave: SettingsObject, finalObjectToSave: FinalObject) => {

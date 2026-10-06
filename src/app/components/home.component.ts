@@ -74,6 +74,8 @@ import {
   topAnimation
 } from '../common/animations';
 
+const AUTOSAVE_INTERVAL_MS = 60 * 1000;
+
 @Component({
   standalone: false,
   selector: 'app-home',
@@ -241,6 +243,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
   rightClickPosition: ContextMenuCoordinate = { x: 0, y: 0 };
   rightClickShowing = false;
 
+  // autosave -- the library used to be written only when the app closed, so a crash lost the session
+  private autosaveTimer: any = null;
+  private autosaveInFlight = false;
+  private autosaveErrorShown = false;
+  private lastSavedSettings = '';
+
   // ========================================================================
   // Thumbnail Sheet Overlay Display
   // ------------------------------------------------------------------------
@@ -393,6 +401,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.debounceUpdateMax();
   }
 
+  // switching to another window is a good moment to save
+  @HostListener('window:blur')
+  handleWindowBlur() {
+    this.autosave();
+  }
+
   constructor(
     private http: HttpClient,
     public autoTagsSaveService: AutoTagsSaveService,
@@ -413,6 +427,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.translate.setDefaultLang('en');
+    this.autosaveTimer = setInterval(() => this.autosave(), AUTOSAVE_INTERVAL_MS);
     this.changeLanguage('en');
 
     // this.modalService.openWelcomeMessage(); // WIP
@@ -717,6 +732,17 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.extractionPercent = percentProgress;
 
       this.cd.detectChanges(); // seems needed to update the donut
+    });
+
+    (window as any).myElectron.receiveFromMain('autosave-vha-done', (vhaPath: string, errorMessage: string) => {
+      this.autosaveInFlight = false;
+      if (errorMessage && errorMessage !== 'hub changed' && vhaPath === this.appState.currentVhaFile) {
+        this.imageElementService.finalArrayNeedsSaving = true; // try again next time
+        if (!this.autosaveErrorShown) {
+          this.autosaveErrorShown = true; // once per session -- a network share that went away would repeat every minute
+          this.zone.run(() => this.modalService.openSnackbar(this.translate.instant('SETTINGS.autosaveFailed', { error: errorMessage }), 6000));
+        }
+      }
     });
 
     // Final object returns
@@ -1107,8 +1133,35 @@ export class HomeComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Save the library and settings if anything changed -- every minute and when the window loses focus
+   * The save on close still happens as before
+   */
+  public autosave(): void {
+    if (this.isClosing || !this.appState.currentVhaFile || this.autosaveInFlight || this.demo) {
+      return;
+    }
+
+    const finalObject: FinalObject = this.getFinalObjectForSaving();
+    if (finalObject) {
+      this.autosaveInFlight = true;
+      this.imageElementService.finalArrayNeedsSaving = false;
+      this.autoTagsSaveService.needToSaveTags = false;
+      (window as any).myElectron.sendToMain('autosave-vha', this.appState.currentVhaFile, finalObject);
+    }
+
+    this.appState.imgsPerRow = this.imgsPerRow;
+    const settings = this.getSettingsForSave();
+    const settingsJson: string = JSON.stringify({ ...settings, shortcuts: Array.from((settings.shortcuts as any) || []) });
+    if (settingsJson !== this.lastSavedSettings) {
+      this.lastSavedSettings = settingsJson;
+      (window as any).myElectron.sendToMain('autosave-settings', settings);
+    }
+  }
+
   public initiateClose(): void {
     this.isClosing = true;
+    clearInterval(this.autosaveTimer);
     this.savePreviousViewSize();
     this.appState.imgsPerRow = this.imgsPerRow;
     (window as any).myElectron.sendToMain('close-window', this.getSettingsForSave(), this.getFinalObjectForSaving());

@@ -272,6 +272,7 @@
     "viewFolder": "View folder"
   },
   "SETTINGS": {
+    "autosaveFailed": "Could not save the library automatically ({{error}}). Changes are kept and saved again later.",
     "FAQ": "Click here for help, documentation, FAQ, or to report a bug",
     "additionalExtensions": "Support additional extensions",
     "applyAdditionalExtensions": "apply",
