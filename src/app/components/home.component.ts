@@ -16,6 +16,7 @@ import { ImageElementService } from '../services/image-element.service';
 import { ManualTagsService } from './tags-manual/manual-tags.service';
 import { ModalService } from './modal/modal.service';
 import { PipeSideEffectService } from '../pipes/pipe-side-effect.service';
+import { PlaylistService } from '../services/playlist.service';
 import { ResolutionFilterService } from '../pipes/resolution-filter.service';
 import { ShortcutsService, CustomShortcutAction } from './shortcuts/shortcuts.service';
 import { SourceFolderService } from './statistics/source-folder.service';
@@ -241,6 +242,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
   rightClickPosition: ContextMenuCoordinate = { x: 0, y: 0 };
   rightClickShowing = false;
 
+  // `Add to playlist` popover opened from the right-click menu
+  playlistPickerShowing = false;
+  playlistPickerPosition: ContextMenuCoordinate = { x: 0, y: 0 };
+
   // ========================================================================
   // Thumbnail Sheet Overlay Display
   // ------------------------------------------------------------------------
@@ -385,6 +390,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.toggleButton('showTags');
     } else if (event.key === 'Escape' && this.showTagColorPicker) {
       this.showTagColorPicker = false;
+    } else if (event.key === 'Escape' && this.playlistService.openPlaylist) {
+      this.playlistService.close();
     }
   }
 
@@ -402,6 +409,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     public manualTagsService: ManualTagsService,
     public modalService: ModalService,
     public pipeSideEffectService: PipeSideEffectService,
+    public playlistService: PlaylistService,
     public resolutionFilterService: ResolutionFilterService,
     public shortcutService: ShortcutsService,
     public sourceFolderService: SourceFolderService,
@@ -413,6 +421,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.translate.setDefaultLang('en');
+
+    this.playlistService.preferredPlayer = () => this.appState.preferredVideoPlayer;
     this.changeLanguage('en');
 
     // this.modalService.openWelcomeMessage(); // WIP
@@ -756,6 +766,8 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
       this.setTags(finalObject.addTags, finalObject.removeTags); // auto-tags
 
+      this.playlistService.loadForHub(pathToFile, finalObject.hubName, finalObject.images);
+
       const currentVideos = finalObject.images.length;
       if (this.demo && currentVideos > 50) {
         this.modalService.openSnackbar("WARNING - your hub has more than 50 videos; saving disabled; please create a new hub", 5000);
@@ -1064,6 +1076,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   public loadThisVhaFile(fullPath: string): void {
+    this.playlistService.flush();
     (window as any).myElectron.sendToMain('load-this-vha-file', fullPath, this.getFinalObjectForSaving());
   }
 
@@ -1111,6 +1124,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
     this.isClosing = true;
     this.savePreviousViewSize();
     this.appState.imgsPerRow = this.imgsPerRow;
+    this.playlistService.flush(); // handled by node before `close-window`
     (window as any).myElectron.sendToMain('close-window', this.getSettingsForSave(), this.getFinalObjectForSaving());
   }
 
@@ -1655,6 +1669,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param   fromIpc     boolean value indicate, call from IPC
    */
   toggleButton(uniqueKey: SettingsButtonKey | SupportedView | SupportedTrayView, fromIpc = false): void {
+    if (this.buttonShowsGallery(uniqueKey)) {
+      this.playlistService.close();
+    }
+
     // ======== View buttons ================
     if (AllSupportedViews.includes(<SupportedView>uniqueKey)) {
       this.savePreviousViewSize();
@@ -1770,6 +1788,9 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.toggleButtonOpposite(uniqueKey);
       if (uniqueKey === 'showMoreInfo') {
         this.computeTextBufferAmount();
+      }
+      if (uniqueKey === 'showPlaylists' && !this.settingsButtons['showPlaylists'].toggled) {
+        this.playlistService.close();
       }
       if (uniqueKey === 'hideSidebar') {
         setTimeout(() => {
@@ -1946,6 +1967,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param origin -- number in filter array of the filter to target
    */
   onEnterKey(value: string, origin: number): void {
+    this.playlistService.close(); // a new search shows the gallery
     const trimmed = value.trim();
 
     if (origin === 6) {
@@ -2082,6 +2104,12 @@ export class HomeComponent implements OnInit, AfterViewInit {
 
     this.settingsButtons['showTags'].toggled = false; // never show tags on load (they don't load right anyway)
 
+    // the legacy single playlist became named playlists -- its filter & sort have no UI any more
+    this.settingsButtons['showOnlyPlaylist'].toggled = false;
+    if (this.sortType === 'playlistAsc' || this.sortType === 'playlistDesc') {
+      this.sortType = 'default';
+    }
+
     if (this.settingsButtons['showTagTray'].toggled) {
       this.settingsButtons['showTagTray'].toggled = false;
       setTimeout(() => {
@@ -2128,6 +2156,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * Handle right-click and `Show similar`
    */
   showSimilarNow(): void {
+    this.playlistService.close();
     this.findMostSimilar = this.currentRightClickedItem.cleanName;
     this.showSimilar = true;
   }
@@ -2152,9 +2181,56 @@ export class HomeComponent implements OnInit, AfterViewInit {
     const howFarFromBottom: number = winHeight - clientY;
 
     this.rightClickPosition.x = (howFarFromRight < 150) ? clientX - 150 + (howFarFromRight) : clientX;
-    this.rightClickPosition.y = (howFarFromBottom < 210) ? clientY - 210 + (howFarFromBottom) : clientY;
+    this.rightClickPosition.y = (howFarFromBottom < 240) ? clientY - 240 + (howFarFromBottom) : clientY;
 
     this.rightClickShowing = true;
+  }
+
+  /**
+   * Whether a button changes what the gallery shows -- if so, the open playlist steps aside
+   */
+  buttonShowsGallery(uniqueKey: SettingsButtonKey | SupportedView | SupportedTrayView): boolean {
+    return AllSupportedViews.includes(<SupportedView>uniqueKey)
+      || FilterKeyNames.includes(uniqueKey)
+      || [
+        'clearAllFilters',
+        'duplicateHash',
+        'duplicateLength',
+        'duplicateSize',
+        'durationFilter',
+        'fuzzy',
+        'hideOffline',
+        'magic',
+        'regex',
+        'resolutionFilter',
+        'showFolders',
+        'showOnlyFavorites',
+        'shuffleGalleryNow',
+        'sizeFilter',
+        'sortOrder',
+        'starFilter',
+        'startsWith',
+        'timesPlayedFilter',
+        'yearFilter',
+      ].includes(uniqueKey);
+  }
+
+  /**
+   * Right-click menu `Add to playlist…` -- shows the playlist picker where the menu was
+   */
+  openPlaylistPickerNow(): void {
+    this.playlistPickerPosition = { ...this.rightClickPosition };
+    this.playlistPickerShowing = true;
+  }
+
+  addRightClickedToPlaylist(playlistId: string): void {
+    this.playlistPickerShowing = false;
+    const name: string = this.playlistService.get(playlistId)?.name;
+    const added: number = this.playlistService.addVideos(playlistId, [this.currentRightClickedItem]);
+    this.modalService.openSnackbar(
+      this.translate.instant(added ? 'PLAYLISTS.addedToSnack' : 'PLAYLISTS.alreadyIn', { count: added, name: name }),
+      1500
+    );
   }
 
   /**
@@ -2269,6 +2345,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * @param type
    */
   selectFilterOrder(type: SortType): void {
+    this.playlistService.close();
     this.sortType = type;
     this.appState.currentSort = type;
   }
@@ -2545,6 +2622,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
    * It resets all filter arrays, bounds, and toggles all filter buttons off
    */
   clearAllFilters(): void {
+    this.playlistService.close();
     // Clear all filter arrays and bools
     this.filters.forEach((filter) => {
       filter.array = [];

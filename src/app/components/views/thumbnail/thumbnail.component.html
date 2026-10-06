@@ -166,10 +166,10 @@
 
     <div
       class="playlist-icon"
-      [ngClass]="{ 'playlist-icon-active' : video.playlist }"
+      [ngClass]="{ 'playlist-icon-active' : inLastUsedPlaylist() }"
       (click)="togglePlaylist($event)"
-      title="{{ video.playlist ? ('BUTTONS.removeFromPlaylist' | translate)
-                              : ('BUTTONS.addToPlaylist' | translate) }}"
+      title="{{ inLastUsedPlaylist() ? ('PLAYLISTS.removeFromNamed' | translate: { name: lastUsedPlaylistName() })
+                                     : ('PLAYLISTS.addToNamed'      | translate: { name: lastUsedPlaylistName() }) }}"
     >
       <app-icon [icon]="'icon-playlist'" />
     </div>

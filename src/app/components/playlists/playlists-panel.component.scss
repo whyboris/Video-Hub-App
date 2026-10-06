@@ -1,0 +1,231 @@
+@use "../variables.scss";
+
+.playlists-panel {
+  color: variables.$gray-80;
+  font-size: 12px;
+  margin: 10px 0 14px;
+}
+
+.playlists-dark {
+  color: variables.$gray-20;
+}
+
+.panel-header {
+  align-items: center;
+  display: flex;
+  gap: 6px;
+  margin-bottom: 6px;
+}
+
+.panel-label {
+  color: variables.$gray-50;
+  flex: 1 1 auto;
+  font-size: 10px;
+  font-style: italic;
+}
+
+.panel-add {
+  align-items: center;
+  border-radius: 4px;
+  color: variables.$gray-50;
+  cursor: pointer;
+  display: flex;
+  font-size: 11px;
+  padding: 1px 3px;
+
+  &:hover {
+    background: rgba(114, 154, 255, 0.25);
+    color: variables.$pretty-blue;
+  }
+}
+
+.panel-add-icon {
+  height: 13px;
+  width: 13px;
+}
+
+.panel-input {
+  border: 1px solid variables.$gray-40;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font-size: 12px;
+  margin-bottom: 4px;
+  padding: 3px 6px;
+  width: 100%;
+}
+
+.panel-warning,
+.panel-note {
+  border-radius: 5px;
+  font-size: 11px;
+  margin-bottom: 6px;
+  padding: 4px 6px;
+}
+
+.panel-warning {
+  background: rgba(255, 102, 102, 0.2);
+  color: variables.$dark-red;
+}
+
+.playlists-dark .panel-warning {
+  color: variables.$pretty-red-lighter;
+}
+
+.panel-note {
+  background: rgba(114, 154, 255, 0.2);
+}
+
+.panel-list {
+  margin: 0;
+  padding: 0;
+
+  li {
+    align-items: center;
+    border-radius: 5px;
+    border-top: 2px solid transparent;
+    cursor: pointer;
+    display: flex;
+    gap: 6px;
+    list-style: none;
+    padding: 3px 5px;
+
+    &:hover {
+      background: rgba(114, 154, 255, 0.15);
+    }
+  }
+
+  .item-open {
+    background: rgba(114, 154, 255, 0.3);
+    color: variables.$dark-blue;
+  }
+
+  .item-drop-target {
+    background: rgba(102, 180, 82, 0.35);
+    outline: 1px dashed variables.$pretty-green;
+  }
+
+  .item-drop-before {
+    border-top-color: variables.$pretty-blue;
+  }
+}
+
+.playlists-dark .panel-list .item-open {
+  color: variables.$light-blue;
+}
+
+.panel-list .item-all-videos {
+  border-bottom: 1px solid rgba(128, 128, 128, 0.3);
+  border-radius: 5px 5px 0 0;
+  margin-bottom: 3px;
+}
+
+.item-icon {
+  flex: 0 0 14px;
+  height: 14px;
+  width: 14px;
+}
+
+.item-name {
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.item-count {
+  color: variables.$gray-50;
+  flex: 0 0 auto;
+  font-size: 11px;
+}
+
+.item-rename {
+  margin: 0;
+}
+
+.panel-end-drop {
+  min-height: 10px;
+}
+
+.panel-empty {
+  color: variables.$gray-50;
+  display: block;
+  font-size: 11px;
+  padding: 2px 5px;
+}
+
+// ------------------------------------------------ right-click menu
+
+.panel-menu-overlay {
+  height: 100vh;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  z-index: 40;
+}
+
+.panel-menu {
+  background: variables.$gray-10;
+  border: 1px solid variables.$gray-50;
+  border-radius: 10px;
+  box-shadow: 0 3px 7px 3px rgba(0, 0, 0, 0.3);
+  color: variables.$gray-90;
+  font-size: 12px;
+  min-width: 170px;
+  position: fixed;
+  z-index: 41;
+
+  ul {
+    margin: 0;
+    padding: 8px;
+
+    li {
+      border-radius: 5px;
+      cursor: pointer;
+      list-style: none;
+      padding: 6px;
+
+      &:hover {
+        background: rgba(114, 154, 255, 0.25);
+      }
+    }
+  }
+
+  .menu-delete {
+    border-top: 1px solid variables.$gray-20;
+    color: variables.$dark-red;
+    margin-top: 4px;
+  }
+}
+
+.panel-menu-dark {
+  background: variables.$gray-80;
+  border-color: variables.$gray-60;
+  color: variables.$gray-10;
+
+  .menu-delete {
+    border-top-color: variables.$gray-60;
+    color: variables.$pretty-red-lighter;
+  }
+}
+
+.menu-confirm {
+  max-width: 200px;
+  padding: 12px;
+}
+
+.menu-confirm-buttons {
+  display: flex;
+  gap: 14px;
+  justify-content: flex-end;
+  margin-top: 10px;
+
+  span {
+    cursor: pointer;
+  }
+}
+
+.menu-confirm-yes {
+  color: variables.$pretty-red;
+  font-weight: bold;
+}
