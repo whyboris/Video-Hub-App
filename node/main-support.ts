@@ -211,15 +211,88 @@ function markDuplicatesAsDeleted(imagesArray: ImageElement[]): ImageElement[] {
   return imagesArray;
 }
 
+// Library writes run one at a time -- an autosave and the save on close never touch the file together
+const vhaWriteQueue: Array<() => void> = [];
+let vhaWriteRunning = false;
+
+// files backed up during this session -- `.bak` keeps the library as it was before the session's first save
+const vhaBackedUp: Set<string> = new Set();
+
 /**
  * Write the final object into `vha` file
  *  -- this correctly alphabetizes all the videos
  *  -- it adds the correct number of folders in final array
+ *  -- written to `.tmp` and renamed over the file, so a crash mid-write never leaves a broken library
  * @param finalObject   -- finalObject
  * @param pathToFile    -- the path with name of `vha` file to write to disk
- * @param done          -- function to execute when done writing the file
+ * @param done          -- called when done, with the error if the write failed
  */
-export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: string, done): void {
+export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: string, done: (err?: any) => void): void {
+
+  const finish = (err?: any): void => {
+    try {
+      done(err);
+    } catch (e) {
+      console.log(e);
+    }
+    const next = vhaWriteQueue.shift();
+    if (next) {
+      next();
+    } else {
+      vhaWriteRunning = false;
+    }
+  };
+
+  const job = (): void => {
+    let json: string;
+    try {
+      json = prepareVhaJson(finalObject);
+    } catch (err) {
+      finish(err);
+      return;
+    }
+
+    try {
+      if (!vhaBackedUp.has(pathToTheFile) && fs.existsSync(pathToTheFile)) {
+        fs.copyFileSync(pathToTheFile, pathToTheFile + '.bak');
+      }
+      vhaBackedUp.add(pathToTheFile);
+    } catch (err) {
+      console.log('Error backing up file! Moving on...', err);
+    }
+
+    const tempPath: string = pathToTheFile + '.tmp';
+    fs.writeFile(tempPath, json, 'utf8', (writeError) => {
+      if (writeError) {
+        finish(writeError);
+        return;
+      }
+      fs.rename(tempPath, pathToTheFile, (renameError) => {
+        if (!renameError) {
+          finish();
+          return;
+        }
+        // e.g. antivirus briefly holding the file -- write it in place instead
+        fs.writeFile(pathToTheFile, json, 'utf8', (directError) => {
+          fs.unlink(tempPath, () => {});
+          finish(directError);
+        });
+      });
+    });
+  };
+
+  if (vhaWriteRunning) {
+    vhaWriteQueue.push(job);
+  } else {
+    vhaWriteRunning = true;
+    job();
+  }
+}
+
+/**
+ * Clean up and serialize the final object for saving
+ */
+function prepareVhaJson(finalObject: FinalObject): string {
 
   finalObject.images = finalObject.images.filter(element => !element.deleted);
 
@@ -237,19 +310,7 @@ export function writeVhaFileToDisk(finalObject: FinalObject, pathToTheFile: stri
 
   finalObject.numOfFolders = countFoldersInFinalArray(finalObject.images);
 
-  const json = JSON.stringify(finalObject);
-
-  // backup current file
-  try {
-    fs.renameSync(pathToTheFile, pathToTheFile + '.bak');
-  } catch (err) {
-    console.log('Error backup up file! Moving on...');
-    console.log(err);
-  }
-
-  // write the file
-  fs.writeFile(pathToTheFile, json, 'utf8', done);
-  // TODO ? CATCH ERRORS ?
+  return JSON.stringify(finalObject);
 }
 
 /**
@@ -418,6 +479,8 @@ function computeNumberOfScreenshots(screenshotSettings: ScreenshotSettings, dura
 
 /**
  * Hash a given file using its size
+ * Rejects when the file can't be read (locked, still copying, deleted mid-scan) -- the file is
+ * skipped this time and picked up on the next scan. Throwing here used to crash the main process.
  * @param pathToFile  -- path to file
  * @param stats -- Stats from `fs.stat(pathToFile)`
  */
@@ -430,7 +493,10 @@ function hashFileAsync(pathToFile: string, stats: Stats): Promise<string> {
 
     if (fileSize < sampleThreshold) {
       fs.readFile(pathToFile, (err, data2) => {
-        if (err) { throw err; }
+        if (err) {
+          reject(err);
+          return;
+        }
         // append the file size to the data
         const buf = Buffer.concat([data2, Buffer.from(fileSize.toString())]);
         // make the magic happen!
@@ -440,9 +506,17 @@ function hashFileAsync(pathToFile: string, stats: Stats): Promise<string> {
     } else {
       data = Buffer.alloc(sampleSize * 3);
       fs.open(pathToFile, 'r', (err, fd) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        const fail = (readError) => fs.close(fd, () => reject(readError));
         fs.read(fd, data, 0, sampleSize, 0, (err2, bytesRead, buffer) => { // read beginning of file
+          if (err2) { fail(err2); return; }
           fs.read(fd, data, sampleSize, sampleSize, Math.floor(fileSize / 2), (err3, bytesRead2, buffer2) => {
+            if (err3) { fail(err3); return; }
             fs.read(fd, data, sampleSize * 2, sampleSize, fileSize - sampleSize, (err4, bytesRead3, buffer3) => {
+              if (err4) { fail(err4); return; }
               fs.close(fd, (err5) => {
                 // append the file size to the data
                 const buf = Buffer.concat([data, Buffer.from(fileSize.toString())]);
@@ -477,7 +551,13 @@ export function extractMetadataAsync(
       if (err) {
         reject();
       } else {
-        const metadata: ffprobeJSON = JSON.parse(data);
+        let metadata: ffprobeJSON;
+        try {
+          metadata = JSON.parse(data);
+        } catch (parseError) {
+          reject(parseError); // damaged file -- ffprobe printed something that is not JSON
+          return;
+        }
         const stream = getBestStream(metadata);
         const fileDuration = getFileDuration(metadata);
         const realFps = getFps(metadata);
@@ -488,7 +568,8 @@ export function extractMetadataAsync(
 
         fs.stat(filePath, (err2, fileStat) => {
           if (err2) {
-            reject();
+            reject(); // gone or locked since the scan listed it
+            return;   // without this, `fileStat` is undefined below and the main process crashes
           }
 
           const imageElement = NewImageElement();
@@ -504,7 +585,7 @@ export function extractMetadataAsync(
           hashFileAsync(filePath, fileStat).then((hash) => {
             imageElement.hash = hash;
             resolve(imageElement);
-          });
+          }, reject); // a failed hash must still free the import queue slot
 
         });
 
