@@ -75,6 +75,7 @@ export type SettingsButtonKey = 'autoFileTags'
  | 'sortOptionAlphabetical2'
  | 'sortOptionAspectRatio'
  | 'sortOptionCreated'
+ | 'sortOptionDateAdded'
  | 'sortOptionFolderSize'
  | 'sortOptionFps'
  | 'sortOptionLastPlayed'
@@ -141,6 +142,7 @@ export const SettingsButtonsGroups: SettingsButtonKey[][] = [
     'sortOptionYear',
     'sortOptionModified',
     'sortOptionCreated',
+    'sortOptionDateAdded',
     'sortOptionTags',
     'sortOptionAspectRatio',
     'sortOptionPlaylist',
@@ -847,6 +849,13 @@ export const SettingsButtons: SettingsButtonsType = {
     description: 'BUTTONS.sortOptionCreatedDescription',
     hidden: false,
     moreInfo: 'BUTTONS.sortOptionCreatedMoreInfo',
+    title: '',
+    toggled: false
+  },
+  'sortOptionDateAdded': {
+    description: 'BUTTONS.sortOptionDateAddedDescription',
+    hidden: false,
+    moreInfo: 'BUTTONS.sortOptionDateAddedMoreInfo',
     title: '',
     toggled: false
   },

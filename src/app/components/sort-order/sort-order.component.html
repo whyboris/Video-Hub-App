@@ -118,6 +118,16 @@
       &#x25BC; {{ 'SIDEBAR.sortCreated' | translate }}
     </option>
   }
+  @if(settingsButtons['sortOptionDateAdded'].toggled) {
+    <option value="dateAddedAsc">
+      &#x25B2; {{ 'SIDEBAR.sortDateAdded' | translate }}
+    </option>
+  }
+  @if(settingsButtons['sortOptionDateAdded'].toggled) {
+    <option value="dateAddedDesc">
+      &#x25BC; {{ 'SIDEBAR.sortDateAdded' | translate }}
+    </option>
+  }
   @if(settingsButtons['sortOptionTags'].toggled) {
     <option value="tagsAsc">
       &#x25B2; {{ 'SIDEBAR.sortTags' | translate }}
