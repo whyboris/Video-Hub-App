@@ -13,6 +13,8 @@ export type SortType = 'default'
                      | 'aspectRatioDesc'
                      | 'createdAsc'
                      | 'createdDesc'
+                     | 'dateAddedAsc'
+                     | 'dateAddedDesc'
                      | 'folderSizeAsc'
                      | 'folderSizeDesc'
                      | 'fpsAsc'
@@ -47,6 +49,8 @@ const sortMapping: Partial<Record<SortType, [SortOrderType, boolean]>> = {
   aspectRatioDesc: ['aspectRatio',  false],
   createdAsc:      ['birthtime',    true],
   createdDesc:     ['birthtime',    false],
+  dateAddedAsc:    ['index',        true],
+  dateAddedDesc:   ['index',        false],
   folderSizeAsc:   ['folderSize',   true],
   folderSizeDesc:  ['folderSize',   false],
   fpsAsc:          ['fps',          true],
