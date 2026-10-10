@@ -1,3 +1,5 @@
+import { app } from "electron";
+
 /**
  * This file contains all the logic for extracting:
  * first thumbnail,
@@ -25,7 +27,7 @@ const fs = require('fs');
 import * as path from 'path';
 const spawn = require('child_process').spawn;
 
-const ffmpegPath = require('ffmpeg-static').replace('app.asar', 'app.asar.unpacked');
+const ffmpegPath: string = app.isPackaged ? './resources/ffmpeg/ffmpeg' : './ffmpeg/ffmpeg';
 
 import { GLOBALS } from './main-globals';
 
@@ -35,6 +37,20 @@ import type { ImageElement, ScreenshotSettings } from '../interfaces/final-objec
 // ========================================================================================
 //          FFMPEG arg generating functions
 // ========================================================================================
+
+/**
+ * nVidia-accelerated GPU decoding for screenshot generation
+ * added conditionally on `nvidiaBuild` variable
+ */
+const prependNvidiaAccelerationArgumentsIfEnabled = (args: string[]): string[] => {
+
+  if (GLOBALS.nvidiaBuild) {
+    args.push('-hwaccel');
+    args.push('cuda');
+  }
+
+  return args;
+}
 
 /**
  * Generate the ffmpeg args to extract a single frame according to settings
@@ -52,7 +68,12 @@ const extractSingleFrameArgs = (
 
   const ssWidth: number = screenshotHeight * (16 / 9);
 
+  const nvidia: string[] = [];
+
+  prependNvidiaAccelerationArgumentsIfEnabled(nvidia);
+
   const args: string[] = [
+    ...nvidia,
     '-ss', (duration / 10).toString(),
     '-i', pathToVideo,
     '-frames', '1',
@@ -88,6 +109,8 @@ const generateScreenshotStripArgs = (
   const totalCount = numberOfScreenshots;
   const step: number = duration / (totalCount + 1);
   const args: string[] = [];
+  prependNvidiaAccelerationArgumentsIfEnabled(args);
+
   let allFramesFiltered = '';
   let outputFrames = '';
 
@@ -137,6 +160,8 @@ const generatePreviewClipArgs = (
   const totalCount = clipSnippets;
   const step: number = duration / (totalCount + 1);
   const args: string[] = [];
+  prependNvidiaAccelerationArgumentsIfEnabled(args);
+
   let concat = '';
 
   // make the magic filter
