@@ -34,7 +34,7 @@ export class FilePathService {
       folderPath,
       'vha-' + hubName,
       subfolder,
-      hash + (video ? '.mp4' : '.jpg')
+      hash + (video ? '.mp4' : '.jxl')
     )).replace(/\\/g, '/')
       .replace(/[ \(\)]/g, (match) => { return this.replaceMap[match]; });
       //         ^^^^^ replace the ` ` (space) as well as parentheses `(` and `)` with URL encoding from the `replaceMap`
