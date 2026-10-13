@@ -27,7 +27,7 @@ import { SortOrderComponent } from './sort-order/sort-order.component';
 
 // Interfaces
 import type { ContextMenuCoordinate } from '../../../interfaces/shared-interfaces';
-import type { FinalObject, ImageElement, ScreenshotSettings, ResolutionString } from '../../../interfaces/final-object.interface';
+import type { FinalObject, ImageElement, ScreenshotSettings, ResolutionString, StarRating } from '../../../interfaces/final-object.interface';
 import type { ImportStage } from '../../../node/main-support';
 import type { ServerDetails } from './statistics/statistics.component';
 import type { RemoteSettings, SettingsButtonSavedProperties, SettingsObject } from '../../../interfaces/settings-object.interface';
@@ -665,15 +665,16 @@ export class HomeComponent implements OnInit, AfterViewInit {
     // When `watch` folder and `chokidar` detects a file was deleted (can happen when renamed too!)
     // mark the element in `imageElements[]` as `deleted`
     (window as any).myElectron.receiveFromMain('single-file-deleted', (sourceIndex: number, partialPath: string) => {
+      // chokidar gives `2014/a.mp4` on Linux and `2014\a.mp4` on Windows; the hub has `/2014` + `a.mp4`.
+      // Compared as written, Linux never matched -- and the file came back as one more entry when re-added
+      const normalized = (p: string): string => p.replace(/\\/g, '/').replace(/^\/+/, '');
+      const removed: string = normalized(partialPath);
       this.imageElementService.imageElements
         // tslint:disable-next-line:triple-equals
         .filter((element: ImageElement) => { return element.inputSource == sourceIndex; })
         // notice the loosey-goosey comparison! this is because number  ^^  string comparison happening here!
         .forEach((element: ImageElement) => {
-          if (
-            '\\' + partialPath === path.join(element.partialPath, element.fileName)
-            ||     partialPath === path.join(element.partialPath, element.fileName)
-          ) {
+          if (!element.deleted && removed === normalized((element.partialPath || '') + '/' + element.fileName)) {
             console.log('FILE DELETED !!!', partialPath);
             element.deleted = true;
             this.deletePipeTrigger.update(value => !value);
@@ -749,6 +750,10 @@ export class HomeComponent implements OnInit, AfterViewInit {
       this.updateVhaFileHistory(pathToFile, finalObject.hubName);
 
       this.folderViewNavigationPath = '';
+
+      if (this.mergeRepeatedEntries(finalObject.images)) {
+        this.imageElementService.finalArrayNeedsSaving = true; // the extra entries are dropped on the next save
+      }
 
       this.manualTagsService.removeAllTags();
       this.manualTagsService.populateManualTagsService(finalObject.images);
@@ -882,6 +887,13 @@ export class HomeComponent implements OnInit, AfterViewInit {
           }
         });
 
+      // a file the hub already lists is never added a second time
+      const key: string = this.fileKey(element);
+      if (this.imageElementService.imageElements.some((e: ImageElement) => !e.deleted && this.fileKey(e) === key)) {
+        console.log('SKIPPING -- already in the hub:', element.fileName);
+        return;
+      }
+
       if (!this.demo || this.imageElementService.imageElements.length <= 50) {
         element.index = this.imageElementService.imageElements.length;
         this.imageElementService.imageElements.push(element); // not enough for view to update; we need `.slice()`
@@ -917,6 +929,55 @@ export class HomeComponent implements OnInit, AfterViewInit {
         }
       }
     };
+  }
+
+  /**
+   * Folder + file name, the same however the path was written
+   */
+  fileKey(element: ImageElement): string {
+    const folder: string = (element.partialPath || '').replace(/\\/g, '/').replace(/^\/+|\/+$/g, '');
+    return String(element.inputSource) + '|' + folder + '|' + element.fileName;
+  }
+
+  /**
+   * One entry per file: further entries for the same file (left by an earlier glitch) are marked deleted,
+   * after their stars, tags, notes and plays are merged into the first
+   * @returns whether any were found
+   */
+  mergeRepeatedEntries(images: ImageElement[]): boolean {
+    const first: Map<string, ImageElement> = new Map();
+    let found = 0;
+    images.forEach((element: ImageElement) => {
+      if (element.deleted || element.cleanName === '*FOLDER*') {
+        return;
+      }
+      const key: string = this.fileKey(element);
+      const keeper: ImageElement = first.get(key);
+      if (!keeper) {
+        first.set(key, element);
+        return;
+      }
+      keeper.stars = Math.max(keeper.stars || 0, element.stars || 0) as StarRating;
+      (element.tags || []).forEach((tag: string) => {
+        keeper.tags = keeper.tags || [];
+        if (!keeper.tags.includes(tag)) {
+          keeper.tags.push(tag);
+        }
+      });
+      if (!(keeper.notes || '').trim() && element.notes) {
+        keeper.notes = element.notes;
+      }
+      keeper.timesPlayed = Math.max(keeper.timesPlayed || 0, element.timesPlayed || 0); // the same file -- not added up
+      keeper.lastPlayed = Math.max(keeper.lastPlayed || 0, element.lastPlayed || 0);
+      keeper.year = keeper.year || element.year;
+      keeper.playlist = keeper.playlist || element.playlist;
+      element.deleted = true;
+      found++;
+    });
+    if (found) {
+      console.log('merged', found, 'repeated entries');
+    }
+    return found > 0;
   }
 
   /**

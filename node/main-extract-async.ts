@@ -51,6 +51,17 @@ let alreadyInAngular: Map<string, 1> = new Map(); // full paths to videos we hav
 
 // These two are together:
 const watcherMap:       Map<number, FSWatcher> = new Map();
+
+// Deleted files land in these (Linux and Mac trash on other drives, Windows and NAS recycle bins) --
+// scanning them brought deleted videos back as new ones
+const TRASH_FOLDER: RegExp = /^(\.Trash(-\d+)?|\.Trashes|\$RECYCLE\.BIN|RECYCLER|#recycle|@Recycle|\.recycle)$/i;
+
+/**
+ * Folders never scanned: the app's own `vha-…` screenshot folders, and trash / recycle bins
+ */
+function isSkippedFolder(name: string): boolean {
+  return name.startsWith('vha-') || TRASH_FOLDER.test(name);
+}
 let allFoundFilesMap: Map<number, Map<string, 1>> = new Map();
 // both these numbers     ^^^^^^ match up - they refer to the same `inputSource`
 
@@ -225,7 +236,7 @@ function superFastSystemScan(inputDir: string, inputSource: number): void {
   thumbQueue.pause();
 
   const crawler = new fdir()
-    .exclude((dir: string) => dir.startsWith('vha-')) // .exclude `dir` is the folder name, not full path
+    .exclude((dir: string) => isSkippedFolder(dir)) // .exclude `dir` is the folder name, not full path
     .withFullPaths()
     .crawl(inputDir);
 
@@ -308,7 +319,8 @@ export function startFileSystemWatching(inputDir: string, inputSource: number, p
   const watcherConfig = {
     cwd: inputDir,
     disableGlobbing: true,
-    ignored: 'vha-*', // WARNING - dangerously ignores any path that includes `vha-` anywhere!!!
+    // chokidar 4 takes no wildcards -- check each folder below `inputDir` by name
+    ignored: (fullPath: string) => path.relative(inputDir, fullPath).split(/[\\/]/).some((name: string) => isSkippedFolder(name)),
     persistent: true, // NOTE: if `!persistent` we use `superFastSystemScan()` instead !!!
     usePolling: isNetworkAddress ? true : false,
   };
