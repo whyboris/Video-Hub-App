@@ -106,6 +106,13 @@ export function resetAllQueues(): void {
 
     thumbQueue.resume();
 
+    // no screenshots to make (e.g. every new file failed to read): `thumbQueue.drain` never fires,
+    // so say we're done here -- otherwise the progress stays at its last number (98 %) for good
+    if (thumbQueue.idle()) {
+      sendCurrentProgress(1, 1, 'done');
+      allowSleep();
+    }
+
     logPerformance('META QUEUE took ', metaExtractionStartTime);
   });
 
@@ -218,6 +225,7 @@ export function metadataQueueRunner(file: TempMetadataQueueObject, done): void {
       sendNewVideoMetadata(imageElement);
       done();
     }, () => {
+      console.log('could not read, skipped:', file.fullPath);
       done(); // error, just continue
     });
 
